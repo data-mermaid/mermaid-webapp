@@ -9,10 +9,10 @@ import { formikPropType } from '../../../../library/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { H2 } from '../../../generic/text'
-import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import { InputWrapper } from '../../../generic/form'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
+import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 
 const DEPTH_VALIDATION_PATH = 'data.quadrat_transect.depth'
 const LABEL_VALIDATION_PATH = 'data.quadrat_transect.label'
@@ -40,13 +40,10 @@ const TransectInputs = ({
 }) => {
   const { currents, relativedepths, tides, visibilities } = choices
 
-  const currentOptions = [...getOptions(currents.data), { label: 'not reported', value: '' }]
-  const relativeDepthOptions = [
-    ...getOptions(relativedepths.data),
-    { label: 'not reported', value: '' },
-  ]
-  const tideOptions = [...getOptions(tides.data), { label: 'not reported', value: '' }]
-  const visibilityOptions = [...getOptions(visibilities.data), { label: 'not reported', value: '' }]
+  const visibilityOptions = getOptions(visibilities.data)
+  const currentOptions = getOptions(currents.data)
+  const relativeDepthOptions = getOptions(relativedepths.data)
+  const tideOptions = getOptions(tides.data)
   const quadrat_transect = validationsApiData?.quadrat_transect
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
@@ -374,10 +371,10 @@ const TransectInputs = ({
           value={formik.values.num_points_per_quadrat}
           onChange={handleNumberOfPointsPerQuadratChange}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Visibility"
+          required={false}
           id="visibility"
-          name="visibility"
           testId="visibility"
           options={visibilityOptions}
           ignoreNonObservationFieldValidations={() => {
@@ -387,14 +384,18 @@ const TransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
           }}
           {...visibilityValidationProperties}
-          value={formik.values.visibility}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            visibilityValidationProperties,
+            'visibility',
+          )}
           onBlur={formik.handleBlur}
+          value={formik.values.visibility}
           onChange={handleVisibilityChange}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Current"
+          required={false}
           id="current"
-          name="current"
           testId="current"
           options={currentOptions}
           ignoreNonObservationFieldValidations={() => {
@@ -404,14 +405,18 @@ const TransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
           }}
           {...currentValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            currentValidationProperties,
+            'current',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.current}
           onChange={handleCurrentChange}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Relative Depth"
+          required={false}
           id="relative_depth"
-          name="relative_depth"
           testId="relative_depth"
           options={relativeDepthOptions}
           ignoreNonObservationFieldValidations={() => {
@@ -421,14 +426,18 @@ const TransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
           }}
           {...relativeDepthValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            relativeDepthValidationProperties,
+            'relative_depth',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Tide"
+          required={false}
           id="tide"
-          name="tide"
           testId="tide"
           options={tideOptions}
           ignoreNonObservationFieldValidations={() => {
@@ -438,6 +447,7 @@ const TransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
           }}
           {...tideValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(tideValidationProperties, 'tide')}
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
