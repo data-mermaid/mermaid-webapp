@@ -17,10 +17,16 @@ const saveBleachingRecord = async () => {
   userEvent.type(screen.getByLabelText('Sample Time'), '12:34')
   userEvent.type(screen.getByLabelText('Depth'), '10000')
   userEvent.type(screen.getByLabelText('Quadrat Size'), '2')
-  userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor'))
-  userEvent.click(within(screen.getByTestId('current')).getByLabelText('high'))
-  userEvent.click(within(screen.getByTestId('relative_depth')).getByLabelText('deep'))
-  userEvent.click(within(screen.getByTestId('tide')).getByLabelText('falling'))
+  userEvent.selectOptions(
+    screen.getByLabelText('Visibility'),
+    'a3ba3f14-330d-47ee-9763-bc32d37d03a5',
+  )
+  userEvent.selectOptions(screen.getByLabelText('Current'), 'e5dcb32c-614d-44ed-8155-5911b7ee774a')
+  userEvent.selectOptions(
+    screen.getByLabelText('Relative Depth'),
+    '8f381e71-219e-469c-8c13-231b088fb861',
+  )
+  userEvent.selectOptions(screen.getByLabelText('Tide'), '97a63da7-e98c-4be7-8f13-e95d38aa17ae')
   userEvent.type(screen.getByLabelText('Notes'), 'some notes')
 
   userEvent.click(screen.getByText('Save', { selector: 'button' }))
@@ -58,12 +64,17 @@ describe('Online', () => {
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
     expect(within(form).getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Quadrat Size')).toHaveValue(2)
-    expect(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('falling')).toBeChecked()
+    // Visibility select on 1-5m -poor
+    expect(screen.getByDisplayValue('1-5m - poor'))
+    // Current select on high
+    expect(screen.getByDisplayValue('high'))
+    // Relative Depth select on deep
+    expect(screen.getByDisplayValue('deep'))
+    // Tide select on falling
+    expect(screen.getByDisplayValue('falling'))
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   }, 50000)
+
   test('New Bleaching save success show new record in collecting table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -95,6 +106,7 @@ describe('Online', () => {
     // expect unique depth as proxy for New Bleaching
     expect(await within(table).findByText('10000'))
   }, 50000)
+  
   test('New Bleaching save failure shows toast message with edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

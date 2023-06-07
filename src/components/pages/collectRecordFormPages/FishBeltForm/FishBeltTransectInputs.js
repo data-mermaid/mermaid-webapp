@@ -59,9 +59,9 @@ const FishBeltTransectInputs = ({
   )
   const fishSizeBinSelectOptions = getOptions(fishsizebins.data)
   const reefSlopeSelectOptions = getOptions(reefslopes.data)
-  const relativeDepthOptions = getOptions(relativedepths.data)
   const visibilityOptions = getOptions(visibilities.data)
   const currentOptions = getOptions(currents.data)
+  const relativeDepthOptions = getOptions(relativedepths.data)
   const tideOptions = getOptions(tides.data)
   const fishbelt_transect = validationsApiData?.fishbelt_transect
   // account for empty starter row

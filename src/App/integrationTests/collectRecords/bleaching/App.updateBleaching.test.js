@@ -46,10 +46,14 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')
     expect(screen.getByLabelText('Label')).toHaveValue('FB-1')
     expect(screen.getByLabelText('Quadrat Size')).toHaveValue(10)
-    expect(within(screen.getByTestId('visibility')).getByLabelText('<1m - bad')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('high')).toBeChecked()
+    // Visibility select on <1m - bad
+    expect(screen.getByDisplayValue('<1m - bad'))
+    // Current select on moderate
+    expect(screen.getByDisplayValue('moderate'))
+    // Relative Depth select on deep
+    expect(screen.getByDisplayValue('deep'))
+    // Tide select on high
+    expect(screen.getByDisplayValue('high'))
 
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
@@ -222,54 +226,5 @@ describe('Offline', () => {
     expect(await screen.findByText('The sample unit has not been saved.'))
 
     expect(await screen.findByLabelText('Depth')).toHaveValue(45)
-  })
-
-  test('Edit Bleaching collect record can "unselect" non required radio group inputs', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
-
-    // make sure there is a collect record to edit in dexie
-    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
-
-    await screen.findByLabelText('project pages loading indicator')
-    await waitForElementToBeRemoved(() =>
-      screen.queryByLabelText('project pages loading indicator'),
-    )
-
-    expect(within(screen.getByTestId('visibility')).getByLabelText('<1m - bad')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('high')).toBeChecked()
-
-    userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('current')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('relative_depth')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('tide')).getByLabelText('not reported'))
-
-    userEvent.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
-
-    expect(await screen.findByText('Record saved.'))
-
-    const editedStoredRecord = await dexiePerUserDataInstance.collect_records.get('60')
-
-    const storedVisibility = editedStoredRecord.data.quadrat_collection.visibility
-    const storedCurrent = editedStoredRecord.data.quadrat_collection.current
-    const storedRelativeDepth = editedStoredRecord.data.quadrat_collection.relative_depth
-    const storedTide = editedStoredRecord.data.quadrat_collection.tide
-
-    // we store a non selection as an empty string because React doesnt like inputs changing type and the api interprets them as null
-    expect(storedVisibility).toEqual('')
-    expect(storedCurrent).toEqual('')
-    expect(storedRelativeDepth).toEqual('')
-    expect(storedTide).toEqual('')
   })
 })

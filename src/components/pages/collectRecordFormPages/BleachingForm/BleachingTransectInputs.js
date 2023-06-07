@@ -10,9 +10,9 @@ import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
+import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 
 const CURRENT_VALIDATION_PATH = 'data.quadrat_collection.current'
 const DEPTH_VALIDATION_PATH = 'data.quadrat_collection.depth'
@@ -35,13 +35,10 @@ const BleachingTransectInputs = ({
 }) => {
   const { relativedepths, visibilities, currents, tides } = choices
 
-  const relativeDepthOptions = [
-    ...getOptions(relativedepths.data),
-    { label: 'not reported', value: '' },
-  ]
-  const visibilityOptions = [...getOptions(visibilities.data), { label: 'not reported', value: '' }]
-  const currentOptions = [...getOptions(currents.data), { label: 'not reported', value: '' }]
-  const tideOptions = [...getOptions(tides.data), { label: 'not reported', value: '' }]
+  const visibilityOptions = getOptions(visibilities.data)
+  const currentOptions = getOptions(currents.data)
+  const relativeDepthOptions = getOptions(relativedepths.data)
+  const tideOptions = getOptions(tides.data)
   const quadratCollection = validationsApiData?.quadrat_collection
 
   const labelValidationProperties = getValidationPropertiesForInput(
@@ -235,7 +232,7 @@ const BleachingTransectInputs = ({
           unit="m²"
         />
 
-        <InputRadioWithLabelAndValidation
+        {/* <InputRadioWithLabelAndValidation
           label="Visibility"
           id="visibility"
           testId="visibility"
@@ -301,6 +298,87 @@ const BleachingTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           name="tide"
+          onChange={handleTideChange}
+        /> */}
+        <InputSelectWithLabelAndValidation
+          label="Visibility"
+          required={false}
+          id="visibility"
+          testId="visibility"
+          options={visibilityOptions}
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
+          }}
+          {...visibilityValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            visibilityValidationProperties,
+            'visibility',
+          )}
+          onBlur={formik.handleBlur}
+          value={formik.values.visibility}
+          onChange={handleVisibilityChange}
+        />
+        <InputSelectWithLabelAndValidation
+          label="Current"
+          required={false}
+          id="current"
+          testId="current"
+          options={currentOptions}
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
+          }}
+          {...currentValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            currentValidationProperties,
+            'current',
+          )}
+          onBlur={formik.handleBlur}
+          value={formik.values.current}
+          onChange={handleCurrentChange}
+        />
+        <InputSelectWithLabelAndValidation
+          label="Relative Depth"
+          required={false}
+          id="relative_depth"
+          testId="relative_depth"
+          options={relativeDepthOptions}
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
+          }}
+          {...relativeDepthValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            relativeDepthValidationProperties,
+            'relative_depth',
+          )}
+          onBlur={formik.handleBlur}
+          value={formik.values.relative_depth}
+          onChange={handleRelativeDepthChange}
+        />
+        <InputSelectWithLabelAndValidation
+          label="Tide"
+          required={false}
+          id="tide"
+          testId="tide"
+          options={tideOptions}
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
+          }}
+          {...tideValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(tideValidationProperties, 'tide')}
+          onBlur={formik.handleBlur}
+          value={formik.values.tide}
           onChange={handleTideChange}
         />
         <TextareaWithLabelAndValidation
