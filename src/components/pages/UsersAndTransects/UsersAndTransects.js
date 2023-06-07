@@ -265,7 +265,6 @@ const UsersAndTransects = () => {
         return accumulator
       }, {})
 
-      console.log('submittedTransectNumbersRow ', submittedTransectNumbersRow)
       return submittedTransectNumbersRow
     },
     [submittedTransectNumbers],

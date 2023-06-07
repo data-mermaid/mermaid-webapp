@@ -133,7 +133,7 @@ test('Management Regime component - form inputs are initialized with the correct
       exact: false,
     }),
   ).not.toBeChecked()
-  
+
   expect(screen.getByLabelText('Compliance')).toHaveDisplayValue('none')
   expect(screen.getByLabelText('Notes')).toHaveValue('Some notes')
 })

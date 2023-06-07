@@ -106,7 +106,7 @@ describe('Online', () => {
     // expect unique depth as proxy for New Bleaching
     expect(await within(table).findByText('10000'))
   }, 50000)
-  
+
   test('New Bleaching save failure shows toast message with edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

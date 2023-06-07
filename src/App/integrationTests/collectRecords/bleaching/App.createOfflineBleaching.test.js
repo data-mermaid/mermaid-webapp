@@ -73,7 +73,7 @@ describe('Offline', () => {
     expect(screen.getByDisplayValue('falling'))
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
-  
+
   test('New Bleaching save success show new record in collecting table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event'
 import {
   screen,
   renderAuthenticatedOffline,
-  waitForElementToBeRemoved,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
