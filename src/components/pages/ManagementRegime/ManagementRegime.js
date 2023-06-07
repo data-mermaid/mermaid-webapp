@@ -33,7 +33,6 @@ import DeleteRecordButton from '../../DeleteRecordButton'
 import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputCheckboxGroupWithLabelAndValidation from '../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
-import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
 import LoadingModal from '../../LoadingModal/LoadingModal'
@@ -45,6 +44,7 @@ import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabe
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
+import InputSelectWithLabelAndValidation from '../../mermaidInputs/InputSelectWithLabelAndValidation'
 
 const ReadOnlyManagementRegimeContent = ({
   managementRegimeFormikValues,
@@ -165,9 +165,10 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           data-testid="rules"
           required={true}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Compliance"
           id="compliance"
+          required={false}
           options={managementComplianceOptions}
           {...formik.getFieldProps('compliance')}
         />
