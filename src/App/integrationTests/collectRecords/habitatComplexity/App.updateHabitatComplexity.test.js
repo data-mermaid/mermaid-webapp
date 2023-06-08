@@ -103,7 +103,7 @@ describe('Offline', () => {
     expect(newObservation.score).toEqual('1dda77b4-0e00-47ae-8b46-063bc7aed349')
     expect(newObservation.interval).toEqual(7)
   })
-  
+
   test('Edit Habitat Complexity save failure shows toast message with new edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

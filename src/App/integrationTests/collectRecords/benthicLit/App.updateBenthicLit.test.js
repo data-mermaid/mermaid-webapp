@@ -53,7 +53,7 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Tide')).toHaveDisplayValue('high')
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
-  
+
   test('Edit Benthic LIT save stores properly formatted Benthic LIT observations in dexie', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

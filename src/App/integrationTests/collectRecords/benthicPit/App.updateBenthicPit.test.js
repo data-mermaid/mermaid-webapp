@@ -111,7 +111,7 @@ describe('Offline', () => {
     expect(newObservation.interval).toEqual('6.0')
     expect(newObservation.growth_form).toEqual('cbff6080-6387-44e5-b7ad-35f35f3db3a7')
   })
-  
+
   test('Edit Benthic PIT save failure shows toast message with new edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

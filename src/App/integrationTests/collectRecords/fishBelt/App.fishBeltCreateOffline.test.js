@@ -114,7 +114,7 @@ describe('Offline', () => {
     // expect unique depth as proxy for new fishbelt
     expect(await within(table).findByText('10000'))
   })
-  
+
   test('New fishbelt save failure shows toast message with edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

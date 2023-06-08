@@ -79,7 +79,7 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Tide')).toHaveDisplayValue('falling')
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
-  
+
   test('New Habitat Complexity save success show new record in collecting table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
