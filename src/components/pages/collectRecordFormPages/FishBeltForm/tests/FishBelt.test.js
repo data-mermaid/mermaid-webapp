@@ -141,22 +141,20 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  // Site select
-  expect(screen.getByDisplayValue('Site D'))
-  // Management select
-  expect(screen.getByDisplayValue('Management Regimes C [Management Regimes 3]'))
+  expect(screen.getByLabelText('Site')).toHaveDisplayValue('Site D')
+  expect(screen.getByLabelText('Management')).toHaveDisplayValue(
+    'Management Regimes C [Management Regimes 3]',
+  )
   expect(screen.getByLabelText('Depth')).toHaveValue(10)
   expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-03-02')
   expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')
   expect(screen.getByLabelText('Transect Number')).toHaveValue(2)
   expect(screen.getByLabelText('Label')).toHaveValue('FB-2')
   expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(6)
-  // Width select on 2m
-  expect(screen.getByDisplayValue('2m'))
-  // Fish size bin select on 5
-  expect(screen.getByDisplayValue('5'))
-  // Reef Slope select on flat
   expect(screen.getByDisplayValue('flat'))
+  expect(screen.getByLabelText('Width')).toHaveDisplayValue('2m')
+  expect(screen.getByLabelText('Fish Size Bin (cm)')).toHaveDisplayValue('5')
+  expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
   expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
 
   const observationsTable = screen.getByLabelText('Observations')

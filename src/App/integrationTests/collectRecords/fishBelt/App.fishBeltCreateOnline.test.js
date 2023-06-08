@@ -19,16 +19,13 @@ const saveFishbeltRecord = async () => {
   userEvent.type(screen.getByLabelText('Transect Number'), '56')
   userEvent.type(screen.getByLabelText('Label'), 'some label')
   userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
+  userEvent.selectOptions(screen.getByLabelText('Width'), '228c932d-b5da-4464-b0df-d15a05c05c02')
   userEvent.selectOptions(
-    await screen.findByLabelText('Width'),
-    '228c932d-b5da-4464-b0df-d15a05c05c02',
-  )
-  userEvent.selectOptions(
-    await screen.findByLabelText('Fish Size Bin (cm)'),
+    screen.getByLabelText('Fish Size Bin (cm)'),
     '67c1356f-e0a7-4383-8034-77b2f36e1a49',
   )
   userEvent.selectOptions(
-    await screen.findByLabelText('Reef Slope'),
+    screen.getByLabelText('Reef Slope'),
     'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
   )
   userEvent.selectOptions(
@@ -76,22 +73,16 @@ describe('Online', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    // Width select on 10m
-    expect(screen.getByDisplayValue('10m'))
-    // Fish size bin select on 1
-    expect(screen.getByDisplayValue('1'))
-    // Reef slope select on flat
-    expect(screen.getByDisplayValue('flat'))
-    // Visibility select on 1-5m -poor
-    expect(screen.getByDisplayValue('1-5m - poor'))
-    // Current select on high
-    expect(screen.getByDisplayValue('high'))
-    // Relative Depth select on deep
-    expect(screen.getByDisplayValue('deep'))
-    // Tide select on falling
-    expect(screen.getByDisplayValue('falling'))
+    expect(screen.getByLabelText('Width')).toHaveDisplayValue('10m')
+    expect(screen.getByLabelText('Fish Size Bin (cm)')).toHaveDisplayValue('1')
+    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
+    expect(screen.getByLabelText('Visibility')).toHaveDisplayValue('1-5m - poor')
+    expect(screen.getByLabelText('Current')).toHaveDisplayValue('high')
+    expect(screen.getByLabelText('Relative Depth')).toHaveDisplayValue('deep')
+    expect(screen.getByLabelText('Tide')).toHaveDisplayValue('falling')
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   }, 50000)
+
   test('New fishbelt save success show new record in collecting table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -145,23 +136,23 @@ describe('Online', () => {
       }),
     )
 
-    // Site select
-    expect(screen.getByDisplayValue('Site A'))
-    // Management select
-    expect(screen.getByDisplayValue('Management Regimes B [Management Regimes 2]'))
+    expect(screen.getByLabelText('Site')).toHaveDisplayValue('Site A')
+    expect(screen.getByLabelText('Management')).toHaveDisplayValue(
+      'Management Regimes B [Management Regimes 2]',
+    )
     expect(screen.getByLabelText('Depth')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    // Width select on 10m
-    expect(screen.getByDisplayValue('10m'))
-    // Fish size bin select on 1
-    expect(screen.getByDisplayValue('1'))
-    // Reef Slope select on flat
-    expect(screen.getByDisplayValue('flat'))
-
+    expect(screen.getByLabelText('Width')).toHaveDisplayValue('10m')
+    expect(screen.getByLabelText('Fish Size Bin (cm)')).toHaveDisplayValue('1')
+    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
+    expect(screen.getByLabelText('Visibility')).toHaveDisplayValue('1-5m - poor')
+    expect(screen.getByLabelText('Current')).toHaveDisplayValue('high')
+    expect(screen.getByLabelText('Relative Depth')).toHaveDisplayValue('deep')
+    expect(screen.getByLabelText('Tide')).toHaveDisplayValue('falling')
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   }, 50000)
 })

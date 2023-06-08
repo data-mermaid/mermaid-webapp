@@ -36,28 +36,24 @@ describe('Offline', () => {
 
     expect(await screen.findByText('Record saved.'))
 
-    // Site select
-    expect(screen.getByDisplayValue('Site C'))
-    // Management select
-    expect(screen.getByDisplayValue('Management Regimes C [Management Regimes 3]'))
+    expect(screen.getByLabelText('Site')).toHaveDisplayValue('Site C')
+    expect(screen.getByLabelText('Management')).toHaveDisplayValue(
+      'Management Regimes C [Management Regimes 3]',
+    )
     expect(screen.getByLabelText('Depth')).toHaveValue(45)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2020-04-19')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')
     expect(screen.getByLabelText('Transect Number')).toHaveValue(5)
     expect(screen.getByLabelText('Label')).toHaveValue('FB-1')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(10)
-    // Reef slope select on flat
-    expect(screen.getByDisplayValue('flat'))
-    // Visibility select on <1m - bad
-    expect(screen.getByDisplayValue('<1m - bad'))
-    // Current select on moderate
-    expect(screen.getByDisplayValue('moderate'))
-    // Relative Depth select on deep
-    expect(screen.getByDisplayValue('deep'))
-    // Tide select on high
-    expect(screen.getByDisplayValue('high'))
+    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
+    expect(screen.getByLabelText('Visibility')).toHaveDisplayValue('<1m - bad')
+    expect(screen.getByLabelText('Current')).toHaveDisplayValue('moderate')
+    expect(screen.getByLabelText('Relative Depth')).toHaveDisplayValue('deep')
+    expect(screen.getByLabelText('Tide')).toHaveDisplayValue('high')
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
+  
   test('Edit Benthic LIT save stores properly formatted Benthic LIT observations in dexie', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -118,6 +114,7 @@ describe('Offline', () => {
     expect(newObservation.growth_form).toEqual('cbff6080-6387-44e5-b7ad-35f35f3db3a7')
     expect(newObservation.length).toEqual('43')
   })
+
   test('Edit Benthic LIT save failure shows toast message with new edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

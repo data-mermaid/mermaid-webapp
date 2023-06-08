@@ -471,6 +471,7 @@ test('Habitat Complexity validation: user edits non-observation input with ignor
     expect(within(intervalSizeRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
+  // Reef Slope select on crest
   userEvent.selectOptions(
     within(reefSlopeRow).getByLabelText('Reef Slope'),
     '12dc11ae-3a4b-4309-8fae-66f51398d96f',

@@ -22,7 +22,7 @@ const saveHabitatComplexityRecord = async () => {
   userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
   userEvent.type(screen.getByLabelText('Interval Size'), '7')
   userEvent.selectOptions(
-    await screen.findByLabelText('Reef Slope'),
+    screen.getByLabelText('Reef Slope'),
     'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
   )
   userEvent.selectOptions(
@@ -61,10 +61,10 @@ describe('Offline', () => {
     // we constrain some queries to the form element because the form title has similar text that will also be selected
     const form = screen.getByRole('form')
 
-    // Site select
-    expect(screen.getByDisplayValue('Site A'))
-    // Management select
-    expect(screen.getByDisplayValue('Management Regimes B [Management Regimes 2]'))
+    expect(screen.getByLabelText('Site')).toHaveDisplayValue('Site A')
+    expect(screen.getByLabelText('Management')).toHaveDisplayValue(
+      'Management Regimes B [Management Regimes 2]',
+    )
     expect(screen.getByLabelText('Depth')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
@@ -72,18 +72,14 @@ describe('Offline', () => {
     expect(within(form).getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
     expect(screen.getByLabelText('Interval Size')).toHaveValue(7)
-    // Reef slope select on flat
-    expect(screen.getByDisplayValue('flat'))
-    // Visibility select on 1-5m - poor
-    expect(screen.getByDisplayValue('1-5m - poor'))
-    // Current select on high
-    expect(screen.getByDisplayValue('high'))
-    // Relative Depth select on deep
-    expect(screen.getByDisplayValue('deep'))
-    // Tide select on falling
-    expect(screen.getByDisplayValue('falling'))
+    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
+    expect(screen.getByLabelText('Visibility')).toHaveDisplayValue('1-5m - poor')
+    expect(screen.getByLabelText('Current')).toHaveDisplayValue('high')
+    expect(screen.getByLabelText('Relative Depth')).toHaveDisplayValue('deep')
+    expect(screen.getByLabelText('Tide')).toHaveDisplayValue('falling')
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
+  
   test('New Habitat Complexity save success show new record in collecting table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -116,6 +112,7 @@ describe('Offline', () => {
     // expect unique depth as proxy for New Habitat Complexity
     expect(await within(table).findByText('10000'))
   })
+
   test('New Habitat Complexity save failure shows toast message with edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -139,10 +136,10 @@ describe('Offline', () => {
       }),
     )
 
-    // Site select
-    expect(screen.getByDisplayValue('Site A'))
-    // Management select
-    expect(screen.getByDisplayValue('Management Regimes B [Management Regimes 2]'))
+    expect(screen.getByLabelText('Site')).toHaveDisplayValue('Site A')
+    expect(screen.getByLabelText('Management')).toHaveDisplayValue(
+      'Management Regimes B [Management Regimes 2]',
+    )
     expect(screen.getByLabelText('Depth')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
@@ -150,10 +147,11 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
     expect(screen.getByLabelText('Interval Size')).toHaveValue(7)
-
-    // Reef Slope select on flat
-    expect(screen.getByDisplayValue('flat'))
-
+    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
+    expect(screen.getByLabelText('Visibility')).toHaveDisplayValue('1-5m - poor')
+    expect(screen.getByLabelText('Current')).toHaveDisplayValue('high')
+    expect(screen.getByLabelText('Relative Depth')).toHaveDisplayValue('deep')
+    expect(screen.getByLabelText('Tide')).toHaveDisplayValue('falling')
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
 })
