@@ -1,23 +1,34 @@
-import PropTypes from 'prop-types'
-import React, { useState, useEffect, useCallback, useReducer } from 'react'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React, { useState, useEffect, useCallback, useReducer, useMemo } from 'react'
 
-import fishbeltObservationReducer from './fishbeltObservationReducer'
 import {
   getFishNameConstants,
   getFishNameOptions,
 } from '../../../../App/mermaidData/fishNameHelpers'
+import {
+  getCollectRecordDataInitialValues,
+  getSampleInfoInitialValues,
+  getTransectInitialValues,
+} from '../collectRecordFormInitialValues'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import language from '../../../../language'
+import { reformatFormValuesIntoFishBeltRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import useIsMounted from '../../../../library/useIsMounted'
-import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import CollectRecordFormPage from '../CollectRecordFormPage'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
+import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
 import ErrorBoundary from '../../../ErrorBoundary'
+import fishbeltObservationReducer from './fishbeltObservationReducer'
+import FishBeltObservationTable from './FishBeltObservationTable'
+import FishBeltTransectInputs from './FishBeltTransectInputs'
+import language from '../../../../language'
+import NewAttributeModal from '../../../NewAttributeModal'
+import useIsMounted from '../../../../library/useIsMounted'
 
 const FishBeltForm = ({ isNewRecord }) => {
   const { recordId, projectId } = useParams()
@@ -27,28 +38,25 @@ const FishBeltForm = ({ isNewRecord }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
-  const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
-
+  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
-  const [fishNameOptions, setFishNameOptions] = useState([])
   const [fishNameConstants, setFishNameConstants] = useState([])
-  const [observerProfiles, setObserverProfiles] = useState([])
+  const [fishNameOptions, setFishNameOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [subNavNode, setSubNavNode] = useState(null)
-  const [sites, setSites] = useState([])
-  const [managementRegimes, setManagementRegimes] = useState([])
-  const [choices, setChoices] = useState({})
-  const [newObservationToAdd, setNewObservationToAdd] = useState()
+  const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
   const [modalAttributeOptions, setModalAttributeOptions] = useState([])
+  const [observationIdToAddNewBenthicAttributeTo, setObservationIdToAddNewBenthicAttributeTo] =
+    useState()
+  const [observationsState, observationsDispatch] = observationsReducer
+  const [sites, setSites] = useState([])
+  const [subNavNode, setSubNavNode] = useState(null)
+  const { currentUser } = useCurrentUser()
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
-        databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
-        databaseSwitchboardInstance.getChoices(),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
@@ -62,14 +70,10 @@ const FishBeltForm = ({ isNewRecord }) => {
         .then(
           ([
             sitesResponse,
-            managementRegimesResponse,
-            choicesResponse,
-            projectProfilesResponse,
             species,
             genera,
             families,
             projectResponse,
-
             // collectRecord needs to be last in array because its pushed to the promise array conditionally
             collectRecordResponse,
           ]) => {
@@ -78,7 +82,9 @@ const FishBeltForm = ({ isNewRecord }) => {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
               if (!projectResponse && projectId) {
-                setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
+                setIdsNotAssociatedWithData((previousState) =>
+                  Array.from(new Set([...previousState, projectId])),
+                )
               }
               const updateFishNameConstants = getFishNameConstants({
                 species,
@@ -104,9 +110,6 @@ const FishBeltForm = ({ isNewRecord }) => {
               )
 
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
-              setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
-              setChoices(choicesResponse)
-              setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
               setCollectRecordBeingEdited(collectRecordResponse)
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
@@ -138,6 +141,26 @@ const FishBeltForm = ({ isNewRecord }) => {
     isSyncInProgress,
   ])
 
+  const closeNewObservationModal = () => {
+    setIsNewFishNameModalOpen(false)
+  }
+  const { getPersistedUnsavedFormData: getPersistedUnsavedFormikData } =
+    useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedSampleInfoInputs`)
+
+  const initialFormikFormValues = useMemo(() => {
+    const collectRecordInitialValues = getPersistedUnsavedFormikData() ?? {
+      ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
+      ...getSampleInfoInitialValues(collectRecordBeingEdited),
+    }
+
+    return (
+      getPersistedUnsavedFormikData() ?? {
+        ...collectRecordInitialValues,
+        ...getTransectInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
+      }
+    )
+  }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
+
   const handleCollectRecordChange = (collectRecordResponse) => {
     setCollectRecordBeingEdited(collectRecordResponse)
     setSubNavNode(
@@ -149,14 +172,6 @@ const FishBeltForm = ({ isNewRecord }) => {
       }),
     )
   }
-
-  const handleNewObservationAdd = (observationAttributeId) =>
-    setNewObservationToAdd(observationAttributeId)
-
-  const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
-
-  const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
-    setManagementRegimes(updatedManagementRegimeRecords)
 
   const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
@@ -187,7 +202,7 @@ const FishBeltForm = ({ isNewRecord }) => {
         observationsDispatch({
           type: 'updateFishName',
           payload: {
-            observationId: newObservationToAdd,
+            observationId: observationIdToAddNewBenthicAttributeTo,
             newFishName: newFishSpecies.id,
           },
         })
@@ -201,7 +216,7 @@ const FishBeltForm = ({ isNewRecord }) => {
           observationsDispatch({
             type: 'updateFishName',
             payload: {
-              observationId: newObservationToAdd,
+              observationId: observationIdToAddNewBenthicAttributeTo,
               newFishName: error.existingSpecies.id,
             },
           })
@@ -218,29 +233,68 @@ const FishBeltForm = ({ isNewRecord }) => {
     return Promise.resolve()
   }
 
+  const PartiallyAppliedFishBeltObservationsTable = useCallback(
+    (props) => {
+      // the conditional here makes tests happy
+      if (fishNameConstants.length && fishNameOptions.length) {
+        return (
+          <FishBeltObservationTable
+            fishNameConstants={fishNameConstants}
+            fishNameOptions={fishNameOptions}
+            {...props}
+          />
+        )
+      }
+
+      return null
+    },
+
+    [fishNameConstants, fishNameOptions],
+  )
+
+  const PartiallyAppliedFishBeltTransectInputs = useCallback(
+    (props) => {
+      return (
+        <FishBeltTransectInputs
+          observationsState={observationsState}
+          observationsDispatch={observationsDispatch}
+          {...props}
+        />
+      )
+    },
+    [observationsDispatch, observationsState],
+  )
+
   return (
     <ErrorBoundary>
-      <CollectRecordFormPage
-        isNewRecord={isNewRecord}
-        sampleUnitName="fishbelt"
+      <CollectRecordFormPageAlternative
+        areObservationsInputsDirty={areObservationsInputsDirty}
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}
-        handleNewObservationAdd={handleNewObservationAdd}
-        handleSubmitNewObservation={onSubmitNewFishSpecies}
-        observationsReducer={observationsReducer}
-        sites={sites}
-        handleSitesChange={handleSitesChange}
-        managementRegimes={managementRegimes}
-        handleManagementRegimesChange={handleManagementRegimesChange}
-        choices={choices}
         idsNotAssociatedWithData={idsNotAssociatedWithData}
-        isLoading={isLoading}
+        initialFormikFormValues={initialFormikFormValues}
+        isNewRecord={isNewRecord}
+        isParentDataLoading={isLoading}
+        observationsTable1Reducer={observationsReducer}
+        ObservationTable1={PartiallyAppliedFishBeltObservationsTable}
+        sampleUnitFormatSaveFunction={reformatFormValuesIntoFishBeltRecord}
+        sampleUnitName="fishbelt"
+        SampleUnitTransectInputs={PartiallyAppliedFishBeltTransectInputs}
+        setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+        setIdsNotAssociatedWithData={setIdsNotAssociatedWithData}
+        setIsNewBenthicAttributeModalOpen={setIsNewFishNameModalOpen}
+        setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
         subNavNode={subNavNode}
-        observerProfiles={observerProfiles}
-        observationOptions={fishNameOptions}
-        modalAttributeOptions={modalAttributeOptions}
-        fishNameConstants={fishNameConstants}
       />
+      {!!projectId && !!currentUser && (
+        <NewAttributeModal
+          isFishBeltSampleUnit={true}
+          isOpen={isNewFishNameModalOpen}
+          onDismiss={closeNewObservationModal}
+          onSubmit={onSubmitNewFishSpecies}
+          modalAttributeOptions={modalAttributeOptions}
+        />
+      )}
     </ErrorBoundary>
   )
 }

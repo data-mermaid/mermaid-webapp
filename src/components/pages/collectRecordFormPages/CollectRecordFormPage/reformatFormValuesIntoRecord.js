@@ -1,8 +1,8 @@
-export const reformatFormValuesIntoFishBeltRecord = (
+export const reformatFormValuesIntoFishBeltRecord = ({
   formikValues,
-  observationsValues,
+  observationsTable1State,
   collectRecordBeingEdited,
-) => {
+}) => {
   const {
     depth,
     label,
@@ -46,7 +46,7 @@ export const reformatFormValuesIntoFishBeltRecord = (
         sample_date,
         site,
       },
-      obs_belt_fishes: observationsValues,
+      obs_belt_fishes: observationsTable1State,
       observers,
     },
   }

@@ -27,7 +27,7 @@ test('FishBelt observations size shows a numeric pattern when fish size bin is 1
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,
@@ -56,7 +56,7 @@ test('FishBelt observations size shows a select input when fish size bin is 5', 
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,
@@ -87,7 +87,7 @@ test('FishBelt observations size shows a select input when fish size bin is 10',
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,
@@ -118,7 +118,7 @@ test('FishBelt observations size shows a select input when fish size bin is AGRR
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,
@@ -149,7 +149,7 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,

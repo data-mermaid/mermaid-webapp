@@ -1,28 +1,13 @@
 import PropTypes from 'prop-types'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { ButtonPrimary } from '../../../generic/buttons'
 import {
   choicesPropType,
-  fishBeltPropType,
   observationsReducerPropType,
   fishNameConstantsPropType,
+  fishBeltPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { formikPropType } from '../../../../library/formikPropType'
-import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
-import { getFishBinLabel } from './fishBeltBins'
-import { getObservationBiomass } from './fishBeltBiomass'
-import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus } from '../../../icons'
-import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { InputWrapper, RequiredIndicator } from '../../../generic/form'
-import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
-import { Tr, Td, Th } from '../../../generic/Table/table'
-import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
-import language from '../../../../language'
 import {
   ButtonRemoveRow,
   InputAutocompleteContainer,
@@ -34,10 +19,24 @@ import {
   UnderTableRow,
   UnderTableRowButtonArea,
 } from '../CollectingFormPage.Styles'
+import { ButtonPrimary } from '../../../generic/buttons'
+import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
+import { getFishBinLabel } from './fishBeltBins'
+import { getObservationBiomass } from './fishBeltBiomass'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
+import { H2 } from '../../../generic/text'
+import { IconClose, IconPlus } from '../../../icons'
+import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
+import { InputWrapper, RequiredIndicator } from '../../../generic/form'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
+import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
-import ObservationValidationInfo from '../ObservationValidationInfo'
+import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
+import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
+import language from '../../../../language'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
+import ObservationValidationInfo from '../ObservationValidationInfo'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -77,82 +76,34 @@ const getObservationValidations = (observationId, collectRecord) => {
 }
 
 const FishBeltObservationTable = ({
-  areObservationsInputsDirty,
   areValidationsShowing,
-  formik,
   choices,
   collectRecord,
-  fishNameConstants,
-  fishNameOptions,
+  formik,
   ignoreObservationValidations,
   observationsReducer,
-  openNewObservationModal,
-  persistUnsavedObservationsUtilities,
   resetObservationValidations,
   setAreObservationsInputsDirty,
+  setIsNewBenthicAttributeModalOpen,
+  setObservationIdToAddNewBenthicAttributeTo,
+  fishNameConstants,
+  fishNameOptions,
+  testId,
 }) => {
   const {
     size_bin: fishBinSelected,
     len_surveyed: transectLengthSurveyed,
     width: widthId,
   } = formik?.values
-  const [isObservationReducerInitialized, setIsObservationReducerInitialized] = useState(false)
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
-
-  const {
-    persistUnsavedFormData: persistUnsavedObservationsData,
-    getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
-  } = persistUnsavedObservationsUtilities
-
-  const _ensureUnsavedObservationsArePersisted = useEffect(() => {
-    if (areObservationsInputsDirty) {
-      persistUnsavedObservationsData(observationsState)
-    }
-  }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
-
-  const handleAddEmptyInitialObservation = useCallback(() => {
-    setAreObservationsInputsDirty(true)
-    observationsDispatch({ type: 'addObservation' })
-  }, [observationsDispatch, setAreObservationsInputsDirty])
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
-
-  const _initializeObservationReducer = useEffect(() => {
-    if (!isObservationReducerInitialized && collectRecord) {
-      const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
-      const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
-      const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
-
-      if (initialObservationsToLoad.length) {
-        observationsDispatch({
-          type: 'loadObservationsFromApi',
-          payload: initialObservationsToLoad,
-        })
-      }
-      if (!initialObservationsToLoad.length) {
-        handleAddEmptyInitialObservation()
-      }
-
-      setIsObservationReducerInitialized(true)
-    }
-    if (!isObservationReducerInitialized && !collectRecord) {
-      handleAddEmptyInitialObservation()
-      setIsObservationReducerInitialized(true)
-    }
-  }, [
-    collectRecord,
-    getPersistedUnsavedObservationsData,
-    isObservationReducerInitialized,
-    observationsDispatch,
-    handleAddEmptyInitialObservation,
-    observationsState.length,
-  ])
 
   const observationsBiomass = useMemo(
     () =>
@@ -311,7 +262,10 @@ const FishBeltObservationTable = ({
         })
       }
 
-      const proposeNewSpeciesClick = () => openNewObservationModal(observationId)
+      const proposeNewSpeciesClick = () => {
+        setObservationIdToAddNewBenthicAttributeTo(observationId)
+        setIsNewBenthicAttributeModalOpen(true)
+      }
 
       const {
         isObservationValid,
@@ -398,21 +352,22 @@ const FishBeltObservationTable = ({
     })
   }, [
     areValidationsShowing,
+    autoFocusAllowed,
+    collectRecord,
     fishBinSelectedLabel,
     fishNameOptions,
-    collectRecord,
     ignoreObservationValidations,
-    autoFocusAllowed,
     observationsBiomass,
     observationsDispatch,
     observationsState,
-    openNewObservationModal,
     resetObservationValidations,
     setAreObservationsInputsDirty,
+    setIsNewBenthicAttributeModalOpen,
+    setObservationIdToAddNewBenthicAttributeTo,
   ])
 
   return (
-    <InputWrapper>
+    <InputWrapper data-testid={testId}>
       <H2 id="table-label">Observations</H2>
       <StyledOverflowWrapper>
         <StickyObservationTable data-testid="fish-observations-table" aria-labelledby="table-label">
@@ -479,29 +434,30 @@ const FishBeltObservationTable = ({
 }
 
 FishBeltObservationTable.propTypes = {
-  areObservationsInputsDirty: PropTypes.bool.isRequired,
   areValidationsShowing: PropTypes.bool.isRequired,
-  formik: formikPropType,
   choices: choicesPropType.isRequired,
   collectRecord: fishBeltPropType,
   fishNameConstants: fishNameConstantsPropType.isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
-  openNewObservationModal: PropTypes.func.isRequired,
-  persistUnsavedObservationsUtilities: PropTypes.shape({
-    persistUnsavedFormData: PropTypes.func,
-    clearPersistedUnsavedFormData: PropTypes.func,
-    getPersistedUnsavedFormData: PropTypes.func,
-  }).isRequired,
   resetObservationValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
+  formik: PropTypes.shape({
+    values: PropTypes.shape({
+      interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      interval_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    }),
+    setFieldValue: PropTypes.func,
+  }).isRequired,
+  setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
+  setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
+  testId: PropTypes.string.isRequired,
 }
 
 FishBeltObservationTable.defaultProps = {
   collectRecord: undefined,
   observationsReducer: [],
-  formik: undefined,
 }
 
 export default FishBeltObservationTable
