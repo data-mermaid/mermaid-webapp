@@ -19,7 +19,7 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
-import { Tr, Td, Th } from '../../../generic/Table/table'
+import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'
@@ -27,7 +27,6 @@ import {
   ButtonRemoveRow,
   InputAutocompleteContainer,
   NewOptionButton,
-  ObservationsSummaryStats,
   ObservationTr,
   StyledOverflowWrapper,
   StickyObservationTable,
@@ -469,7 +468,7 @@ const FishBeltObservationTable = ({
             </Tr>
             <Tr>
               <Th>{language.pages.collectRecord.totalAbundanceLabel}</Th>
-              <Td>{totalAbundance}</Td>
+              <Td>{totalAbundance.toFixed(1)}</Td>
             </Tr>
           </tbody>
         </ObservationsSummaryStats>
