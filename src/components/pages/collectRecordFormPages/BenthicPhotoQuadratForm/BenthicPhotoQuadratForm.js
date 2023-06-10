@@ -24,7 +24,7 @@ import {
   getSampleInfoInitialValues,
 } from '../collectRecordFormInitialValues'
 import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
-import { reformatFormValuesIntoBenthicPQTRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
+import { reformatFormValuesIntoBenthicPQTRecord } from '../reformatFormValuesIntoRecord'
 import BenthicAttributeTransectInputs from './BenthicAttributeTransectInputs'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord }) => {

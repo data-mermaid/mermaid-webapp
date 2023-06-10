@@ -14,7 +14,7 @@ import {
 } from '../collectRecordFormInitialValues'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import { reformatFormValuesIntoFishBeltRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
+import { reformatFormValuesIntoFishBeltRecord } from '../reformatFormValuesIntoRecord'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'

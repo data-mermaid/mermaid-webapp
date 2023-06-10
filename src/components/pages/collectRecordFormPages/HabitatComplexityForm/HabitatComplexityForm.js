@@ -12,19 +12,19 @@ import {
 
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import { reformatFormValuesIntoHabitatComplexityRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
+import { reformatFormValuesIntoHabitatComplexityRecord } from '../reformatFormValuesIntoRecord'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
+import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
+import ErrorBoundary from '../../../ErrorBoundary'
 import habitatComplexityObservationsReducer from './habitatComplexityObservationsReducer'
 import HabitatComplexityObservationsTable from './HabitatComplexityObservationTable'
 import HabitatComplexityTransectInputs from './HabitatComplexityTransectInputs'
-import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
 import language from '../../../../language'
 import useIsMounted from '../../../../library/useIsMounted'
-import ErrorBoundary from '../../../ErrorBoundary'
 
 const HabitatComplexityForm = ({ isNewRecord }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
