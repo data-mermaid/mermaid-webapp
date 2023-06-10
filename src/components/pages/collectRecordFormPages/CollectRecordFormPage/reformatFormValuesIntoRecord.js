@@ -52,11 +52,11 @@ export const reformatFormValuesIntoFishBeltRecord = ({
   }
 }
 
-export const reformatFormValuesIntoBenthicPQTRecord = (
-  formikValues,
-  observationsValues,
+export const reformatFormValuesIntoBenthicPQTRecord = ({
   collectRecordBeingEdited,
-) => {
+  formikValues,
+  observationsTable1State,
+}) => {
   const {
     depth,
     label,
@@ -102,7 +102,7 @@ export const reformatFormValuesIntoBenthicPQTRecord = (
         sample_date,
         site,
       },
-      obs_benthic_photo_quadrats: observationsValues,
+      obs_benthic_photo_quadrats: observationsTable1State,
       observers,
     },
   }
