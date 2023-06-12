@@ -5,17 +5,18 @@ import {
   submittedFishBeltPropType,
   fishNameConstantsPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { SubmittedObservationStickyTable, Tr, Td, Th } from '../../../generic/Table/table'
+import {
+  ObservationsSummaryStats,
+  SubmittedObservationStickyTable,
+  Tr,
+  Td,
+  Th,
+} from '../../../generic/Table/table'
 import { getObservationBiomass } from '../../collectRecordFormPages/FishBeltForm/fishBeltBiomass'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import language from '../../../../language'
-import {
-  TheadItem,
-  FormSubTitle,
-  ObservationsSummaryStats,
-  UnderTableRow,
-} from '../SubmittedFormPage.styles'
+import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.styles'
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 
@@ -93,7 +94,7 @@ const SubmittedFishBeltObservationTable = ({
             </Tr>
             <Tr>
               <Th>{language.pages.collectRecord.totalAbundanceLabel}</Th>
-              <Td>{totalAbundance}</Td>
+              <Td>{totalAbundance.toFixed(1)}</Td>
             </Tr>
           </tbody>
         </ObservationsSummaryStats>
