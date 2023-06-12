@@ -5,7 +5,12 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { InlineCell, Table } from '../../generic/Table/table'
 import TableRowItem from '../../generic/Table/TableRowItem'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
-import { PopupLink, SampleUnitNumber, SampleUnitPopup } from '../SampleUnitPopups.styles'
+import {
+  TooltipText,
+  PopupLink,
+  SampleUnitNumber,
+  SampleUnitPopup,
+} from '../SampleUnitPopups.styles'
 import language from '../../../language'
 import { API_NULL_NAME } from '../../../library/constants/constants'
 
@@ -28,9 +33,9 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
       <SampleUnitNumber tabIndex="0" id={index} key={keyName}>
         {transectNumberLabel}
         <SampleUnitPopup role="tooltip">
-          <div>
+          <TooltipText>
             {popupTitle} {transectNumberLabel}
-          </div>
+          </TooltipText>
           <Table>
             <tbody>
               <TableRowItem title="Last edited by" value={updated_by} />
@@ -44,7 +49,7 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
             {language.popoverTexts.viewSubmittedSampleUnit}
           </PopupLink>
         </SampleUnitPopup>
-        {index < sampleUnitNumbersRow.length - 1 && ','}
+        {index < sampleUnitNumbersRow.length - 1 && ' '}
       </SampleUnitNumber>
     )
   })

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import { EmptyCellPopup } from '../SampleUnitPopups.styles'
+import { EmptyCellPopup, TooltipText } from '../SampleUnitPopups.styles'
 import language from '../../../language'
 
 const EmptySampleUnitPopup = ({ tableCellData, collectRecordsByProfile }) => {
@@ -29,16 +29,15 @@ const EmptySampleUnitPopup = ({ tableCellData, collectRecordsByProfile }) => {
 
     return (
       <EmptyCellPopup>
-        <div>
-          {language.popoverTexts.inCollectingWith} <strong>{profileNames}</strong>
-        </div>
+        <TooltipText>{language.popoverTexts.inCollectingWith}</TooltipText>
+        <p>{profileNames}</p>
       </EmptyCellPopup>
     )
   }
 
   return (
     <EmptyCellPopup>
-      <div>{language.popoverTexts.noSampleUnitMatch}</div>
+      <TooltipText>{language.popoverTexts.noSampleUnitMatch}</TooltipText>
       <h4>{Header}</h4>
       <h4>{values.method}</h4>
       <h4>{values.site}</h4>
