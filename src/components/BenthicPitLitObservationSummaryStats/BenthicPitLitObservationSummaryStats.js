@@ -2,10 +2,9 @@ import PropTypes from 'prop-types'
 import React, { useMemo } from 'react'
 
 import { inputOptionsPropTypes } from '../../library/miscPropTypes'
-import { ObservationsSummaryStats } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
 import { roundToOneDecimal } from '../../library/numbers/roundToOneDecimal'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
-import { Td, Th, Tr } from '../generic/Table/table'
+import { ObservationsSummaryStats, Td, Th, Tr } from '../generic/Table/table'
 
 const BenthicPitLitObservationSummaryStats = ({ benthicAttributeSelectOptions, observations }) => {
   const observationTopLevelAttributeCategoryOccurance = useMemo(() => {

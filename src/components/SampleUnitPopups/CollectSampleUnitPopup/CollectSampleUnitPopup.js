@@ -4,7 +4,12 @@ import React from 'react'
 import { InlineCell, Table } from '../../generic/Table/table'
 import TableRowItem from '../../generic/Table/TableRowItem'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
-import { SampleUnitNumber, SampleUnitPopup } from '../SampleUnitPopups.styles'
+import {
+  TooltipSampleUnitStatus,
+  SampleUnitNumber,
+  SampleUnitPopup,
+  TooltipText,
+} from '../SampleUnitPopups.styles'
 import language from '../../../language'
 import { sortArray } from '../../../library/arrays/sortArray'
 import { API_NULL_NAME } from '../../../library/constants/constants'
@@ -30,7 +35,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
       <SampleUnitNumber tabIndex="0" id={index} key={keyName}>
         {transectNumberLabel}
         <SampleUnitPopup role="tooltip">
-          <div>{popupTitle}</div>
+          <TooltipText>{popupTitle}</TooltipText>
           <Table>
             <tbody>
               <TableRowItem title="Last edited by" value={profile_name} />
@@ -40,9 +45,11 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
               <TableRowItem title="Sample Date" value={getSampleDateLabel(sample_date)} />
             </tbody>
           </Table>
-          <div>{language.popoverTexts.notSubmittedSampleUnit}</div>
+          <TooltipSampleUnitStatus>
+            {language.popoverTexts.notSubmittedSampleUnit}
+          </TooltipSampleUnitStatus>
         </SampleUnitPopup>
-        {index < recordProfileSummary.collect_records.length - 1 && ','}
+        {index < recordProfileSummary.collect_records.length - 1 && ' '}
       </SampleUnitNumber>
     )
   })

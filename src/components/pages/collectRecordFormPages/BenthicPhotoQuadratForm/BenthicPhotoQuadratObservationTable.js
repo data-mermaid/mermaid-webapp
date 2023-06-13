@@ -6,7 +6,6 @@ import {
   ButtonRemoveRow,
   InputAutocompleteContainer,
   NewOptionButton,
-  ObservationsSummaryStats,
   ObservationTr,
   StyledOverflowWrapper,
   StickyObservationTable,
@@ -26,7 +25,7 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
-import { Tr, Td, Th } from '../../../generic/Table/table'
+import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'

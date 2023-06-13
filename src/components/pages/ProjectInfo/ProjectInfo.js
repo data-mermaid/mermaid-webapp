@@ -115,12 +115,6 @@ const InputAutocompleteWrapper = styled(InputRow)`
   height: 100px;
 `
 
-const ReadOnlyContentWrapper = styled(InputWrapper)`
-  p {
-    font-style: italic;
-  }
-`
-
 const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
   return (
     organizations && (
@@ -351,15 +345,21 @@ const ProjectInfo = () => {
 
   const { name, notes, tags } = formik.values
   const readOnlyContent = (
-    <ReadOnlyContentWrapper>
+    <InputWrapper>
       <H2>{name}</H2>
-      <H3>Notes</H3>
-      <P>{notes.length ? notes : language.pages.projectInfo.noNotes}</P>
-      <H3>Organizations</H3>
-      {tags.map((org) => (
-        <li key={org}>{org}</li>
-      ))}
-    </ReadOnlyContentWrapper>
+      <H3>{language.pages.projectInfo.notes}</H3>
+      <P>{notes.length ? notes : <em>{language.pages.projectInfo.noNotes}</em>}</P>
+      <H3>{language.pages.projectInfo.organizations}</H3>
+      {tags.length ? (
+        <ul>
+          {tags.map((org) => (
+            <li key={org}>{org}</li>
+          ))}
+        </ul>
+      ) : (
+        <em>{language.pages.projectInfo.noOrganization}</em>
+      )}
+    </InputWrapper>
   )
 
   const contentViewByRole = isAdminUser ? adminContent : readOnlyContent
