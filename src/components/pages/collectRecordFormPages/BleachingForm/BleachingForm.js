@@ -18,7 +18,7 @@ import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHa
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import BleachingTransectInputs from './BleachingTransectInputs'
-import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
+import CollectRecordFormPage from '../CollectRecordFormPage'
 import coloniesBleachedObservationReducer from './coloniesBleachedObservationsReducer'
 import ColoniesBleachedObservationsTable from './ColoniesBleachedObservationsTable'
 import language from '../../../../language'
@@ -213,7 +213,7 @@ const BleachingForm = ({ isNewRecord }) => {
 
   return (
     <ErrorBoundary>
-      <CollectRecordFormPageAlternative
+      <CollectRecordFormPage
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}
         idsNotAssociatedWithData={idsNotAssociatedWithData}

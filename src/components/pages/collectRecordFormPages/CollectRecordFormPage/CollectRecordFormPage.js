@@ -91,7 +91,7 @@ function loadObservationsFromCollectRecordIntoTableState({
   }
 }
 
-const CollectRecordFormPageAlternative = ({
+const CollectRecordFormPage = ({
   areObservationsInputsDirty,
   collectRecordBeingEdited,
   handleCollectRecordChange,
@@ -621,7 +621,7 @@ const CollectRecordFormPageAlternative = ({
   )
 }
 
-CollectRecordFormPageAlternative.propTypes = {
+CollectRecordFormPage.propTypes = {
   areObservationsInputsDirty: PropTypes.bool.isRequired,
   collectRecordBeingEdited: PropTypes.oneOfType([fishBeltPropType, benthicPhotoQuadratPropType]),
   handleCollectRecordChange: PropTypes.func.isRequired,
@@ -644,7 +644,7 @@ CollectRecordFormPageAlternative.propTypes = {
   subNavNode: subNavNodePropTypes,
 }
 
-CollectRecordFormPageAlternative.defaultProps = {
+CollectRecordFormPage.defaultProps = {
   collectRecordBeingEdited: undefined,
   observationsTable1Reducer: [],
   observationsTable2Reducer: [],
@@ -654,4 +654,4 @@ CollectRecordFormPageAlternative.defaultProps = {
   subNavNode: null,
 }
 
-export default CollectRecordFormPageAlternative
+export default CollectRecordFormPage

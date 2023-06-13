@@ -22,7 +22,7 @@ import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsaved
 import benthicPitObservationReducer from './benthicPitObservationReducer'
 import BenthicPitObservationsTable from './BenthicPitObservationTable'
 import BenthicPitTransectInputs from './BenthicPitTransectInputs'
-import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
+import CollectRecordFormPage from '../CollectRecordFormPage'
 import language from '../../../../language'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
@@ -218,7 +218,7 @@ const BenthicPitForm = ({ isNewRecord }) => {
 
   return (
     <ErrorBoundary>
-      <CollectRecordFormPageAlternative
+      <CollectRecordFormPage
         areObservationsInputsDirty={areObservationsInputsDirty}
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}

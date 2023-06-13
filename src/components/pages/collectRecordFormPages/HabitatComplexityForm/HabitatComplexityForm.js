@@ -18,7 +18,7 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
-import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
+import CollectRecordFormPage from '../CollectRecordFormPage'
 import ErrorBoundary from '../../../ErrorBoundary'
 import habitatComplexityObservationsReducer from './habitatComplexityObservationsReducer'
 import HabitatComplexityObservationsTable from './HabitatComplexityObservationTable'
@@ -129,7 +129,7 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
 
   return (
     <ErrorBoundary>
-      <CollectRecordFormPageAlternative
+      <CollectRecordFormPage
         areObservationsInputsDirty={areObservationsInputsDirty}
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}

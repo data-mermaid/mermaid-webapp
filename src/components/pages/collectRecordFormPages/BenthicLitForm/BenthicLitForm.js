@@ -18,7 +18,7 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
-import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
+import CollectRecordFormPage from '../CollectRecordFormPage'
 import language from '../../../../language'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
@@ -215,7 +215,7 @@ const BenthicLitform = ({ isNewRecord }) => {
 
   return (
     <>
-      <CollectRecordFormPageAlternative
+      <CollectRecordFormPage
         areObservationsInputsDirty={areObservationsInputsDirty}
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}
