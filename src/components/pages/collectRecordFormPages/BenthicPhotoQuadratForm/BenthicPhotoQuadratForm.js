@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 
 import {
   getCollectRecordDataInitialValues,
-  getBenthicPhotoQuadratAdditionalValues,
+  getTransectInitialValues,
   getSampleInfoInitialValues,
 } from '../collectRecordFormInitialValues'
 
@@ -27,8 +27,6 @@ import ErrorBoundary from '../../../ErrorBoundary'
 import BenthicPhotoQuadratTransectInputs from './BenthicPhotoQuadratTransectInputs'
 import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
 import benthicpqtObservationReducer from './benthicpqtObservationReducer'
-
-// import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -124,7 +122,8 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
       getPersistedUnsavedFormikData() ?? {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
         ...getSampleInfoInitialValues(collectRecordBeingEdited),
-        ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
+        ...getTransectInitialValues(collectRecordBeingEdited, 'quadrat_transect'),
+        // ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
       }
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
@@ -145,8 +144,6 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
       }),
     )
   }
-
-  console.log({ collectRecordBeingEdited })
 
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {

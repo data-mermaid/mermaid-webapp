@@ -78,8 +78,6 @@ export const reformatFormValuesIntoBenthicPQTRecord = ({
     tide,
   } = formikValues
 
-  console.log({ formikValues })
-
   return {
     ...collectRecordBeingEdited,
     data: {
