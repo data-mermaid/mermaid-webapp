@@ -29,7 +29,7 @@ const CURRENT_VALIDATION_PATH = 'data.quadrat_transect.current'
 const RELATIVE_DEPTH_VALIDATION_PATH = 'data.quadrat_transect.relative_depth'
 const TIDE_VALIDATION_PATH = 'data.quadrat_transect.tide'
 
-const TransectInputs = ({
+const BenthicPhotoQuadratTransectInputs = ({
   areValidationsShowing,
   choices,
   formik,
@@ -108,87 +108,101 @@ const TransectInputs = ({
   )
 
   const handleTransectNumberChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'number',
       validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleLabelChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'label',
       validationPath: LABEL_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleSampleTimeChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'sample_time',
       validationPath: SAMPLE_TIME_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleDepthChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'depth',
       validationPath: DEPTH_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleLengthSurveyedChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'len_surveyed',
       validationPath: LENGTH_SURVEYED_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleQuadratNumberStartChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'quadrat_number_start',
       validationPath: QUADRAT_NUMBER_START_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleQuadratSizeChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'quadrat_size',
       validationPath: QUADRAT_SIZE_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleNumberOfQuadratsChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'num_quadrats',
       validationPath: NUM_QUADRATS_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleNumberOfPointsPerQuadratChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'num_points_per_quadrat',
       validationPath: NUM_POINTS_PER_QUADRAT_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleVisibilityChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'visibility',
       validationPath: VISIBILITY_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleCurrentChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'current',
       validationPath: CURRENT_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleRelativeDepthChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'relative_depth',
       validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
   const handleTideChange = (event) => {
+    formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'tide',
       validationPath: TIDE_VALIDATION_PATH,
     })
-    formik.handleChange(event)
   }
 
   const handleNotesChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
+      inputName: 'notes',
       validationPath: NOTES_VALIDATION_PATH,
     })
   }
@@ -462,7 +476,7 @@ const TransectInputs = ({
   )
 }
 
-TransectInputs.propTypes = {
+BenthicPhotoQuadratTransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
@@ -473,4 +487,4 @@ TransectInputs.propTypes = {
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
-export default TransectInputs
+export default BenthicPhotoQuadratTransectInputs

@@ -3,72 +3,73 @@ import React, { useState, useEffect, useCallback, useReducer, useMemo } from 're
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 
-import benthicpqtObservationReducer from './benthicpqtObservationReducer'
-import { getBenthicOptions } from '../../../../library/getOptions'
-import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
-import { getToastArguments } from '../../../../library/getToastArguments'
-import language from '../../../../language'
-import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
-import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import useIsMounted from '../../../../library/useIsMounted'
-import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import ErrorBoundary from '../../../ErrorBoundary'
-import NewAttributeModal from '../../../NewAttributeModal'
-import { useCurrentUser } from '../../../../App/CurrentUserContext'
-import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
-import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import {
   getCollectRecordDataInitialValues,
   getBenthicPhotoQuadratAdditionalValues,
   getSampleInfoInitialValues,
 } from '../collectRecordFormInitialValues'
-import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
+
+import { getBenthicOptions } from '../../../../library/getOptions'
+import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
+import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoBenthicPQTRecord } from '../reformatFormValuesIntoRecord'
-import BenthicAttributeTransectInputs from './BenthicAttributeTransectInputs'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
+import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
+import language from '../../../../language'
+import NewAttributeModal from '../../../NewAttributeModal'
+import useIsMounted from '../../../../library/useIsMounted'
+import ErrorBoundary from '../../../ErrorBoundary'
+
+import BenthicPhotoQuadratTransectInputs from './BenthicPhotoQuadratTransectInputs'
+import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
+import benthicpqtObservationReducer from './benthicpqtObservationReducer'
+
+// import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
-  const { recordId, projectId } = useParams()
-  const { isSyncInProgress } = useSyncStatus()
-  const isMounted = useIsMounted()
-
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const handleHttpResponseError = useHttpResponseErrorHandler()
-  const observationsReducer = useReducer(benthicpqtObservationReducer, [])
-  const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
-
+  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
+  const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
-
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [subNavNode, setSubNavNode] = useState(null)
-  const [sites, setSites] = useState([])
   const [isNewBenthicAttributeModalOpen, setIsNewBenthicAttributeModalOpen] = useState(false)
-  const { currentUser } = useCurrentUser()
-  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [observationIdToAddNewBenthicAttributeTo, setObservationIdToAddNewBenthicAttributeTo] =
     useState()
-  const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
+  const [subNavNode, setSubNavNode] = useState(null)
 
-  const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
-      const promises = [
-        databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
-        databaseSwitchboardInstance.getBenthicAttributes(),
-      ]
+  const { currentUser } = useCurrentUser()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
+  const { recordId, projectId } = useParams()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+  const isMounted = useIsMounted()
+  const observationsReducer = useReducer(benthicpqtObservationReducer, [])
+  const [sites, setSites] = useState([])
 
-      if (recordId && !isNewRecord) {
-        promises.push(databaseSwitchboardInstance.getCollectRecord(recordId))
-      }
-      Promise.all(promises)
-        .then(
-          ([
-            sitesResponse,
-            benthicAttributesResponse,
+  const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
 
-            // collectRecord needs to be last in array because its pushed to the promise array conditionally
-            collectRecordResponse,
-          ]) => {
+  useEffect(
+    function loadSupportingData() {
+      if (databaseSwitchboardInstance && !isSyncInProgress) {
+        if (isNewRecord) {
+          setIsLoading(false)
+        }
+
+        const promises = [
+          databaseSwitchboardInstance.getBenthicAttributes(),
+          databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
+        ]
+
+        if (recordId && !isNewRecord) {
+          promises.push(databaseSwitchboardInstance.getCollectRecord(recordId))
+        }
+
+        Promise.all(promises)
+          .then(([benthicAttributesResponse, sitesResponse, collectRecordResponse]) => {
             if (isMounted.current) {
               if (!isNewRecord && !collectRecordResponse && recordId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
@@ -85,34 +86,36 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
 
               setCollectRecordBeingEdited(collectRecordResponse)
               setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributesResponse))
-              setSites(sortArrayByObjectKey(sitesResponse, 'name'))
+              setSites(sitesResponse)
 
               setIsLoading(false)
             }
-          },
-        )
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              const errorMessage = isNewRecord
-                ? language.error.collectRecordSupportingDataUnavailable
-                : language.error.collectRecordUnavailable
-
-              toast.error(...getToastArguments(errorMessage))
-            },
           })
-        })
-    }
-  }, [
-    databaseSwitchboardInstance,
-    isMounted,
-    isNewRecord,
-    recordId,
-    projectId,
-    isSyncInProgress,
-    handleHttpResponseError,
-  ])
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                const errorMessage = isNewRecord
+                  ? language.error.collectRecordSupportingDataUnavailable
+                  : language.error.collectRecordUnavailable
+
+                toast.error(...getToastArguments(errorMessage))
+              },
+            })
+          })
+      }
+    },
+    [
+      databaseSwitchboardInstance,
+      isMounted,
+      isNewRecord,
+      recordId,
+      projectId,
+      handleHttpResponseError,
+      isSyncInProgress,
+    ],
+  )
+
   const { getPersistedUnsavedFormData: getPersistedUnsavedFormikData } =
     useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedSampleInfoInputs`)
 
@@ -142,6 +145,8 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
       }),
     )
   }
+
+  console.log({ collectRecordBeingEdited })
 
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
@@ -237,7 +242,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
         ObservationTable1={PartiallyAppliedBenthicPhotoQuadratObservationsTable}
         sampleUnitFormatSaveFunction={reformatFormValuesIntoBenthicPQTRecord}
         sampleUnitName="benthicpqt"
-        SampleUnitTransectInputs={BenthicAttributeTransectInputs}
+        SampleUnitTransectInputs={BenthicPhotoQuadratTransectInputs}
         setAreObservationsInputsDirty={setAreObservationsInputsDirty}
         setIdsNotAssociatedWithData={setIdsNotAssociatedWithData}
         setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
