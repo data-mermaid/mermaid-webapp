@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import {
   choicesPropType,
   fishbeltValidationPropType,
-  observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
@@ -17,6 +16,7 @@ import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithL
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import ClearSizeValuesModal from './ClearSizeValueModal'
 import language from '../../../../language'
+import { getFishBinLabel } from './fishBeltBins'
 
 const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.depth'
@@ -37,13 +37,12 @@ const FishBeltTransectInputs = ({
   choices,
   formik,
   ignoreNonObservationFieldValidations,
-  onSizeBinChange,
-  observationsReducer,
+  observationsDispatch,
+  observationsState,
   resetNonObservationFieldValidations,
-  validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
+  validationsApiData,
 }) => {
-  const [observationsState, observationsDispatch] = observationsReducer
   const {
     belttransectwidths,
     fishsizebins,
@@ -72,9 +71,23 @@ const FishBeltTransectInputs = ({
   const fishbelt_transect = validationsApiData?.fishbelt_transect
   // account for empty starter row
   const hasFishBeltObservations =
-    !!observationsState.length > 0 && observationsState[0]?.fish_attribute
+    !!observationsState?.length > 0 && observationsState[0]?.fish_attribute
   const [isClearSizeValueModalOpen, setIsClearSizeValueModalOpen] = useState(false)
   const [sizeBinEvent, setSizeBinEvent] = useState({})
+
+  const onSizeBinChange = (event) => {
+    const sizeBinId = event.target.value
+
+    formik.setFieldValue('size_bin', sizeBinId)
+
+    const fishBinSelectedLabel = getFishBinLabel(choices, sizeBinId)
+
+    const isSizeBinATypeThatRequiresSizeResetting = fishBinSelectedLabel !== '1'
+
+    if (isSizeBinATypeThatRequiresSizeResetting) {
+      observationsDispatch({ type: 'resetFishSizes' })
+    }
+  }
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.number,
@@ -317,6 +330,7 @@ const FishBeltTransectInputs = ({
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
         />
+
         <InputWithLabelAndValidation
           label="Depth"
           required={true}
@@ -513,15 +527,16 @@ FishBeltTransectInputs.propTypes = {
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
-  onSizeBinChange: PropTypes.func.isRequired,
-  observationsReducer: observationsReducerPropType,
+  observationsState: PropTypes.arrayOf(PropTypes.shape({ fish_attribute: PropTypes.string })),
+  observationsDispatch: PropTypes.func,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: PropTypes.shape({ fishbelt_transect: fishbeltValidationPropType }).isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
 FishBeltTransectInputs.defaultProps = {
-  observationsReducer: [],
+  observationsState: [],
+  observationsDispatch: () => {},
 }
 
 export default FishBeltTransectInputs

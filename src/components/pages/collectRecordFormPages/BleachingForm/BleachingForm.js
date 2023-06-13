@@ -11,14 +11,14 @@ import {
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import { reformatFormValuesIntoBleachingRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
+import { reformatFormValuesIntoBleachingRecord } from '../reformatFormValuesIntoRecord'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import BleachingTransectInputs from './BleachingTransectInputs'
-import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
+import CollectRecordFormPage from '../CollectRecordFormPage'
 import coloniesBleachedObservationReducer from './coloniesBleachedObservationsReducer'
 import ColoniesBleachedObservationsTable from './ColoniesBleachedObservationsTable'
 import language from '../../../../language'
@@ -213,7 +213,7 @@ const BleachingForm = ({ isNewRecord }) => {
 
   return (
     <ErrorBoundary>
-      <CollectRecordFormPageAlternative
+      <CollectRecordFormPage
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}
         idsNotAssociatedWithData={idsNotAssociatedWithData}
