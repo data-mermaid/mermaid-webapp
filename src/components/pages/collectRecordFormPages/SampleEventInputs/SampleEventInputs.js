@@ -71,14 +71,15 @@ const SampleEventInputs = ({
     formik.handleChange(event)
   }
 
-  const updateValueAndResetValidationForSite = (siteValue, siteOptions) => {
-    formik.setFieldValue('site', siteValue)
-    handleSitesChange(siteOptions)
+  const updateValueAndResetValidationForSite = (value, options) => {
+    formik.setFieldValue('site', value)
+    handleSitesChange(options)
     resetNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
   }
-  const updateValueAndResetValidationForMR = (managementRegimeValue, managementRegimeOptions) => {
-    formik.setFieldValue('management', managementRegimeValue)
-    handleManagementRegimesChange(managementRegimeOptions)
+
+  const updateValueAndResetValidationForMR = (value, options) => {
+    formik.setFieldValue('management', value)
+    handleManagementRegimesChange(options)
     resetNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
   }
 
