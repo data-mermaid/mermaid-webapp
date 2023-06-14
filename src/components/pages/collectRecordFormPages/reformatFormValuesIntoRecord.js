@@ -1,8 +1,8 @@
-export const reformatFormValuesIntoFishBeltRecord = (
+export const reformatFormValuesIntoFishBeltRecord = ({
   formikValues,
-  observationsValues,
+  observationsTable1State,
   collectRecordBeingEdited,
-) => {
+}) => {
   const {
     depth,
     label,
@@ -46,17 +46,17 @@ export const reformatFormValuesIntoFishBeltRecord = (
         sample_date,
         site,
       },
-      obs_belt_fishes: observationsValues,
+      obs_belt_fishes: observationsTable1State,
       observers,
     },
   }
 }
 
-export const reformatFormValuesIntoBenthicPQTRecord = (
-  formikValues,
-  observationsValues,
+export const reformatFormValuesIntoBenthicPQTRecord = ({
   collectRecordBeingEdited,
-) => {
+  formikValues,
+  observationsTable1State,
+}) => {
   const {
     depth,
     label,
@@ -95,14 +95,14 @@ export const reformatFormValuesIntoBenthicPQTRecord = (
         visibility,
         current,
         tide,
+        notes,
       },
       sample_event: {
         management,
-        notes,
         sample_date,
         site,
       },
-      obs_benthic_photo_quadrats: observationsValues,
+      obs_benthic_photo_quadrats: observationsTable1State,
       observers,
     },
   }

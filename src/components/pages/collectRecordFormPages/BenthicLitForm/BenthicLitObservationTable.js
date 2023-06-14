@@ -25,7 +25,7 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats/BenthicPitLitObservationSummaryStats'
-import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
+import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
@@ -66,7 +66,7 @@ const BenthicLitObservationsTable = ({
   }
 
   const observationsRows = useMemo(() => {
-    const growthFormSelectOptions = getOptions(choices.growthforms.data)
+    const growthFormOptions = getOptions(choices.growthforms.data)
 
     const handleKeyDown = ({ event, index, observation, isLastCell }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
@@ -214,7 +214,7 @@ const BenthicLitObservationsTable = ({
               onKeyDown={handleObservationKeyDown}
             >
               <option value=""> </option>
-              {growthFormSelectOptions.map((item) => (
+              {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
                 </option>

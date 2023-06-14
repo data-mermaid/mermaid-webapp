@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
   ButtonRemoveRow,
   InputAutocompleteContainer,
   NewOptionButton,
-  ObservationsSummaryStats,
   ObservationTr,
   StyledOverflowWrapper,
   StickyObservationTable,
@@ -26,8 +25,8 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
-import { Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
+import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
+import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
@@ -60,38 +59,20 @@ const StyledColgroup = styled('colgroup')`
 `
 
 const BenthicPhotoQuadratObservationTable = ({
-  areObservationsInputsDirty,
   areValidationsShowing,
-  benthicAttributeOptions,
+  benthicAttributeSelectOptions,
   choices,
   collectRecord,
-  observationsReducer,
-  openNewObservationModal,
-  persistUnsavedObservationsUtilities,
   ignoreObservationValidations,
+  observationsReducer,
   resetObservationValidations,
   setAreObservationsInputsDirty,
+  setIsNewBenthicAttributeModalOpen,
+  setObservationIdToAddNewBenthicAttributeTo,
+  testId,
 }) => {
-  const [isObservationReducerInitialized, setIsObservationReducerInitialized] = useState(false)
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
-
-  const {
-    persistUnsavedFormData: persistUnsavedObservationsData,
-    getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
-  } = persistUnsavedObservationsUtilities
-
-  const _ensureUnsavedObservationsArePersisted = useEffect(() => {
-    if (areObservationsInputsDirty) {
-      persistUnsavedObservationsData(observationsState)
-    }
-  }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
-
-  const handleAddEmptyInitialObservation = useCallback(() => {
-    setAreObservationsInputsDirty(true)
-
-    observationsDispatch({ type: 'addObservation' })
-  }, [observationsDispatch, setAreObservationsInputsDirty])
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -99,40 +80,9 @@ const BenthicPhotoQuadratObservationTable = ({
     observationsDispatch({ type: 'addObservation' })
   }
 
-  const _initializeObservationReducer = useEffect(() => {
-    if (!isObservationReducerInitialized && collectRecord) {
-      const observationsFromApi = collectRecord.data.obs_benthic_photo_quadrats ?? []
-
-      const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
-      const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
-
-      if (initialObservationsToLoad.length) {
-        observationsDispatch({
-          type: 'loadObservationsFromApi',
-          payload: initialObservationsToLoad,
-        })
-      }
-      if (!initialObservationsToLoad.length) {
-        handleAddEmptyInitialObservation()
-      }
-
-      setIsObservationReducerInitialized(true)
-    }
-    if (!isObservationReducerInitialized && !collectRecord) {
-      handleAddEmptyInitialObservation()
-      setIsObservationReducerInitialized(true)
-    }
-  }, [
-    collectRecord,
-    getPersistedUnsavedObservationsData,
-    isObservationReducerInitialized,
-    observationsDispatch,
-    handleAddEmptyInitialObservation,
-  ])
-
   const observationCategoryPercentages = useMemo(() => {
     const getCategory = (benthicAttributeId) =>
-      benthicAttributeOptions.find((benthic) => benthic.value === benthicAttributeId)
+      benthicAttributeSelectOptions.find((benthic) => benthic.value === benthicAttributeId)
 
     const addTopCategoryInfoToObservation = observationsState.map((obs) => {
       const benthicAttribute = getCategory(obs.attribute)
@@ -167,7 +117,7 @@ const BenthicPhotoQuadratObservationTable = ({
     })
 
     return categoryPercentages
-  }, [observationsState, benthicAttributeOptions])
+  }, [observationsState, benthicAttributeSelectOptions])
 
   const observationsRows = useMemo(() => {
     const growthFormOptions = getOptions(choices.growthforms.data)
@@ -284,7 +234,10 @@ const BenthicPhotoQuadratObservationTable = ({
         })
       }
 
-      const proposeNewBenthicAttributeClick = () => openNewObservationModal(observationId)
+      const proposeNewBenthicAttributeClick = () => {
+        setObservationIdToAddNewBenthicAttributeTo(observationId)
+        setIsNewBenthicAttributeModalOpen(true)
+      }
 
       const handleObservationKeyDown = (event) => {
         handleKeyDown({ event, index, observation })
@@ -306,16 +259,17 @@ const BenthicPhotoQuadratObservationTable = ({
             />
           </Td>
           <Td align="left">
-            {benthicAttributeOptions.length && (
+            {benthicAttributeSelectOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
                   aria-labelledby="benthic-attribute-label"
+                  autoFocus={autoFocusAllowed}
                   isLastRow={observationsState.length === rowNumber}
-                  options={benthicAttributeOptions}
-                  onChange={handleBenthicAttributeChange}
-                  value={attribute}
                   noResultsText={language.autocomplete.noResultsDefault}
+                  onChange={handleBenthicAttributeChange}
+                  options={benthicAttributeSelectOptions}
+                  value={attribute}
                   noResultsAction={
                     <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
                       {language.pages.collectRecord.newBenthicAttributeLink}
@@ -380,19 +334,20 @@ const BenthicPhotoQuadratObservationTable = ({
   }, [
     areValidationsShowing,
     autoFocusAllowed,
-    benthicAttributeOptions,
+    benthicAttributeSelectOptions,
+    choices.growthforms.data,
     collectRecord,
-    choices,
+    ignoreObservationValidations,
     observationsDispatch,
     observationsState,
-    openNewObservationModal,
-    ignoreObservationValidations,
     resetObservationValidations,
     setAreObservationsInputsDirty,
+    setIsNewBenthicAttributeModalOpen,
+    setObservationIdToAddNewBenthicAttributeTo,
   ])
 
   return (
-    <InputWrapper>
+    <InputWrapper data-testid={testId}>
       <H2 id="table-label">Observations</H2>
       <StyledOverflowWrapper>
         <StickyObservationTable aria-labelledby="table-label">
@@ -455,21 +410,23 @@ const BenthicPhotoQuadratObservationTable = ({
 }
 
 BenthicPhotoQuadratObservationTable.propTypes = {
-  areObservationsInputsDirty: PropTypes.bool.isRequired,
   areValidationsShowing: PropTypes.bool.isRequired,
-  benthicAttributeOptions: inputOptionsPropTypes.isRequired,
+  benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: benthicPhotoQuadratPropType,
-  observationsReducer: observationsReducerPropType,
-  openNewObservationModal: PropTypes.func.isRequired,
-  persistUnsavedObservationsUtilities: PropTypes.shape({
-    persistUnsavedFormData: PropTypes.func,
-    clearPersistedUnsavedFormData: PropTypes.func,
-    getPersistedUnsavedFormData: PropTypes.func,
-  }).isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  observationsReducer: observationsReducerPropType,
   resetObservationValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
+  formik: PropTypes.shape({
+    values: PropTypes.shape({
+      interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      interval_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    }),
+  }).isRequired,
+  setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
+  setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
+  testId: PropTypes.string.isRequired,
 }
 
 BenthicPhotoQuadratObservationTable.defaultProps = {

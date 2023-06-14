@@ -37,7 +37,7 @@ const BenthicLitTransectInputs = ({
 }) => {
   const { reefslopes, relativedepths, visibilities, currents, tides } = choices
 
-  const reefSlopeSelectOptions = getOptions(reefslopes.data)
+  const reefSlopeOptions = getOptions(reefslopes.data)
   const relativeDepthOptions = getOptions(relativedepths.data)
   const visibilityOptions = getOptions(visibilities.data)
   const currentOptions = getOptions(currents.data)
@@ -285,7 +285,7 @@ const BenthicLitTransectInputs = ({
           required={false}
           id="reef_slope"
           testId="reef_slope"
-          options={reefSlopeSelectOptions}
+          options={reefSlopeOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
           }}

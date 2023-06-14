@@ -1,7 +1,6 @@
 import React from 'react'
 import { observationsColoniesBleachedPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { Td, Th, Tr } from '../generic/Table/table'
-import { ObservationsSummaryStats } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
+import { ObservationsSummaryStats, Td, Th, Tr } from '../generic/Table/table'
 
 const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached }) => {
   const getTotalOfColonies = () => {

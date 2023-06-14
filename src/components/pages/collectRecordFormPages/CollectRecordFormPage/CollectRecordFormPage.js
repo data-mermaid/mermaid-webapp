@@ -1,61 +1,19 @@
-import PropTypes from 'prop-types'
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useHistory, useParams } from 'react-router-dom'
-import { H2 } from '../../../generic/text'
+import PropTypes from 'prop-types'
+import React, { useState, useEffect, useRef } from 'react'
+
 import {
-  managementRegimePropType,
-  sitePropType,
-  choicesPropType,
   subNavNodePropTypes,
-  observationsReducerPropType,
-  observersPropType,
   fishBeltPropType,
   benthicPhotoQuadratPropType,
-  fishNameConstantsPropType,
+  observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import {
-  getCollectRecordDataInitialValues,
-  getSampleInfoInitialValues,
-  getTransectInitialValues,
-  getBenthicPhotoQuadratAdditionalValues,
-} from '../collectRecordFormInitialValues'
-import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
-import { useCurrentUser } from '../../../../App/CurrentUserContext'
-import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
-import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-import {
-  reformatFormValuesIntoFishBeltRecord,
-  reformatFormValuesIntoBenthicPQTRecord,
-} from './reformatFormValuesIntoRecord'
-import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
-import { getFishBinLabel } from '../FishBeltForm/fishBeltBins'
-import { getToastArguments } from '../../../../library/getToastArguments'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import EnhancedPrompt from '../../../generic/EnhancedPrompt'
-import NewAttributeModal from '../../../NewAttributeModal'
-import ObserversInput from '../ObserversInput'
-import DeleteRecordButton from '../../../DeleteRecordButton'
-import SampleEventInputs from '../SampleEventInputs'
-import BenthicAttributeTransectInputs from '../BenthicPhotoQuadratForm/BenthicAttributeTransectInputs'
-import BenthicPhotoQuadratObservationTable from '../BenthicPhotoQuadratForm/BenthicPhotoQuadratObservationTable'
-import LoadingModal from '../../../LoadingModal/LoadingModal'
-import RecordFormTitle from '../../../RecordFormTitle'
-import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
-import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
-import FishBeltObservationTable from '../FishBeltForm/FishBeltObservationTable'
-import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import IdsNotFound from '../../IdsNotFound/IdsNotFound'
-import FishBeltTransectInputs from '../FishBeltForm/FishBeltTransectInputs'
-import language from '../../../../language'
-import { getIsUserReadOnlyForProject } from '../../../../App/currentUserProfileHelpers'
-import PageUnavailable from '../../PageUnavailable'
-import { getIsFishBelt } from '../../../../App/mermaidData/recordProtocolHelpers'
-import { useScrollCheckError } from '../../../../library/useScrollCheckError'
+import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import {
   ErrorBox,
   ErrorText,
@@ -63,98 +21,140 @@ import {
   ErrorTextSubmit,
   ErrorBoxSubmit,
 } from '../CollectingFormPage.Styles'
+import { getIsUserReadOnlyForProject } from '../../../../App/currentUserProfileHelpers'
+import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
+import { getToastArguments } from '../../../../library/getToastArguments'
+import { H2 } from '../../../generic/text'
+import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import { useScrollCheckError } from '../../../../library/useScrollCheckError'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
+import DeleteRecordButton from '../../../DeleteRecordButton'
+import EnhancedPrompt from '../../../generic/EnhancedPrompt'
+import IdsNotFound from '../../IdsNotFound/IdsNotFound'
+import language from '../../../../language'
+import LoadingModal from '../../../LoadingModal/LoadingModal'
+import ObserversInput from '../ObserversInput'
+import PageUnavailable from '../../PageUnavailable'
+import RecordFormTitle from '../../../RecordFormTitle'
+import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
+import SampleEventInputs from '../SampleEventInputs'
+import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
+import useCollectRecordValidation from './useCollectRecordValidation'
+import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
+import useIsMounted from '../../../../library/useIsMounted'
+
+function loadObservationsFromCollectRecordIntoTableState({
+  collectRecordBeingEdited,
+  formik,
+  getPersistedUnsavedObservationsTableData,
+  isNewRecord,
+  observationsPropertyName,
+  observationsTableDispatch,
+  setObservationsTableReducerInitialized,
+}) {
+  const handleAddEmptyInitialObservation = () => {
+    const { interval_size: intervalSize, interval_start: intervalStart } = formik.values
+
+    observationsTableDispatch({
+      type: 'addObservation',
+      payload: { intervalSize, intervalStart },
+    })
+  }
+
+  if (collectRecordBeingEdited && !isNewRecord) {
+    const observationsFromApiTable = collectRecordBeingEdited.data[observationsPropertyName] ?? []
+
+    const persistedUnsavedObservationsTable = getPersistedUnsavedObservationsTableData()
+    const initialObservationsToLoadTable =
+      persistedUnsavedObservationsTable ?? observationsFromApiTable
+
+    if (initialObservationsToLoadTable.length) {
+      observationsTableDispatch({
+        type: 'loadObservationsFromApi',
+        payload: initialObservationsToLoadTable,
+      })
+    }
+    if (!initialObservationsToLoadTable.length) {
+      handleAddEmptyInitialObservation()
+    }
+
+    setObservationsTableReducerInitialized(true)
+  }
+
+  if (isNewRecord) {
+    handleAddEmptyInitialObservation()
+    setObservationsTableReducerInitialized(true)
+  }
+}
 
 const CollectRecordFormPage = ({
-  isNewRecord,
-  sampleUnitName,
+  areObservationsInputsDirty,
   collectRecordBeingEdited,
   handleCollectRecordChange,
-  handleNewObservationAdd,
-  handleSubmitNewObservation,
-  observationsReducer,
-  sites,
-  handleSitesChange,
-  managementRegimes,
-  handleManagementRegimesChange,
-  choices,
   idsNotAssociatedWithData,
-  isLoading,
+  initialFormikFormValues,
+  isNewRecord,
+  isParentDataLoading,
+  observationsTable1Reducer,
+  observationsTable2Reducer,
+  ObservationTable1,
+  ObservationTable2,
+  sampleUnitFormatSaveFunction,
+  sampleUnitName,
+  SampleUnitTransectInputs,
+  setAreObservationsInputsDirty,
+  setIdsNotAssociatedWithData,
+  setIsNewBenthicAttributeModalOpen,
+  setObservationIdToAddNewBenthicAttributeTo,
   subNavNode,
-  observerProfiles,
-  observationOptions,
-  modalAttributeOptions,
-  fishNameConstants,
 }) => {
-  const observationTableRef = useRef(null)
-  const currentProjectPath = useCurrentProjectPath()
-  const { recordId, projectId } = useParams()
-  const history = useHistory()
-  const handleHttpResponseError = useHttpResponseErrorHandler()
-  const { currentUser } = useCurrentUser()
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const [observationsState, observationsDispatch] = observationsReducer
-
-  const [isFormDirty, setIsFormDirty] = useState(false)
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
-  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
+  const [choices, setChoices] = useState({})
+  const [isCommonProtocolDataLoading, setIsCommonProtocolDataLoading] = useState(true)
+  const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
+  const [isDeletingRecord, setIsDeletingRecord] = useState(false)
+  const [isFormDirty, setIsFormDirty] = useState(false)
+  const [managementRegimes, setManagementRegimes] = useState([])
+  const [isObservationsTable1ReducerInitialized, setObservationsTable1ReducerInitialized] =
+    useState(false)
+  const [isObservationsTable2ReducerInitialized, setObservationsTable2ReducerInitialized] =
+    useState(false)
+  const [observationsTable1State, observationsTable1Dispatch] = observationsTable1Reducer
+  const [observationsTable2State, observationsTable2Dispatch = () => {}] = observationsTable2Reducer
+  const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(
     isNewRecord ? buttonGroupStates.untouchedEmptyForm : buttonGroupStates.saved,
   )
+  const [sites, setSites] = useState([])
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
-  const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)
-  const [isDeletingRecord, setIsDeletingRecord] = useState(false)
-  const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
-  const [isSubmitWarningVisible, setIsSubmitWarningVisible] = useState(false)
-
-  const openDeleteRecordModal = () => {
-    setIsDeleteRecordModalOpen(true)
-  }
-  const closeDeleteRecordModal = () => {
-    setIsDeleteRecordModalOpen(false)
-  }
-
-  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
-  const isFishBeltSampleUnit = getIsFishBelt(sampleUnitName)
-  const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
-  const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
-
   const displayLoadingModal =
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating ||
     submitButtonState === buttonGroupStates.submitting
+  const isLoading = isParentDataLoading || isCommonProtocolDataLoading
+  const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
+  const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
+  const [isSubmitWarningVisible, setIsSubmitWarningVisible] = useState(false)
 
-  const { isErrorAbove, isErrorBelow } = useScrollCheckError()
+  const { currentUser } = useCurrentUser()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
+  const { recordId, projectId } = useParams()
+  const currentProjectPath = useCurrentProjectPath()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+  const history = useHistory()
+  const isMounted = useIsMounted()
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
+  const observationTableRef = useRef(null)
 
-  const getValidationButtonStatus = (collectRecord) => {
-    return collectRecord?.validations?.status === 'ok'
-      ? buttonGroupStates.validated
-      : buttonGroupStates.validatable
-  }
-
-  const openNewObservationModal = useCallback(
-    (observationId) => {
-      handleNewObservationAdd(observationId)
-      setIsNewObservationModalOpen(true)
-    },
-    [handleNewObservationAdd],
-  )
-
-  const closeNewObservationModal = () => {
-    setIsNewObservationModalOpen(false)
-  }
-
-  const _checkValidateButton = useEffect(() => {
-    if (!isLoading) {
-      setValidateButtonState(getValidationButtonStatus(collectRecordBeingEdited))
-    }
-  }, [isLoading, collectRecordBeingEdited])
-
-  const handleScrollToObservation = () => {
-    observationTableRef.current.scrollIntoView({
-      behavior: 'smooth',
-    })
-  }
+  const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
+  const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
+    setManagementRegimes(updatedManagementRegimeRecords)
 
   const {
     persistUnsavedFormData: persistUnsavedFormikData,
@@ -162,37 +162,103 @@ const CollectRecordFormPage = ({
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
   } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedSampleInfoInputs`)
 
-  const persistUnsavedObservationsUtilities = useUnsavedDirtyFormDataUtilities(
-    `${currentUser.id}-unsavedObservations`,
-  )
+  const {
+    persistUnsavedFormData: persistUnsavedObservationsTable1Data,
+    clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsTable1Data,
+    getPersistedUnsavedFormData: getPersistedUnsavedObservationsTable1Data,
+  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedObservationsTable1`)
 
   const {
-    clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
-    getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
-  } = persistUnsavedObservationsUtilities
+    persistUnsavedFormData: persistUnsavedObservationsTable2Data,
+    clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsTable2Data,
+    getPersistedUnsavedFormData: getPersistedUnsavedObservationsTable2Data,
+  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedObservationsTable2`)
 
-  const initialFormikFormValues = useMemo(() => {
-    const collectRecordInitialValues = getPersistedUnsavedFormikData() ?? {
-      ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
-      ...getSampleInfoInitialValues(collectRecordBeingEdited),
-    }
+  useEffect(
+    function loadDataCommonToCertainProtocols() {
+      if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+        const promises = [
+          databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
+          databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
+          databaseSwitchboardInstance.getProjectProfiles(projectId),
+          databaseSwitchboardInstance.getChoices(),
+          databaseSwitchboardInstance.getProject(projectId),
+        ]
 
-    switch (sampleUnitName) {
-      case 'fishbelt':
-        return {
-          ...collectRecordInitialValues,
-          ...getTransectInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
-        }
-      case 'benthicpqt':
-        return {
-          ...collectRecordInitialValues,
-          ...getTransectInitialValues(collectRecordBeingEdited, 'quadrat_transect'),
-          ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
-        }
-      default:
-        return collectRecordInitialValues
-    }
-  }, [collectRecordBeingEdited, getPersistedUnsavedFormikData, sampleUnitName])
+        Promise.all(promises)
+          .then(
+            ([
+              sitesResponse,
+              managementRegimesResponse,
+              projectProfilesResponse,
+              choicesResponse,
+              projectResponse,
+            ]) => {
+              if (isMounted.current) {
+                if (!projectResponse && projectId) {
+                  setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
+                }
+
+                setSites(sortArrayByObjectKey(sitesResponse, 'name'))
+                setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
+                setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
+                setChoices(choicesResponse)
+
+                setIsCommonProtocolDataLoading(false)
+              }
+            },
+          )
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                const errorMessage = isNewRecord
+                  ? language.error.collectRecordSupportingDataUnavailable
+                  : language.error.collectRecordUnavailable
+
+                toast.error(...getToastArguments(errorMessage))
+              },
+            })
+          })
+      }
+    },
+    [
+      databaseSwitchboardInstance,
+      isSyncInProgress,
+      projectId,
+      handleHttpResponseError,
+      isNewRecord,
+      isMounted,
+      setIdsNotAssociatedWithData,
+    ],
+  )
+
+  useEffect(
+    function ensureUnsavedObservationsArePersisted() {
+      if (areObservationsInputsDirty) {
+        persistUnsavedObservationsTable1Data(observationsTable1State)
+        persistUnsavedObservationsTable2Data(observationsTable2State)
+      }
+    },
+    [
+      areObservationsInputsDirty,
+      observationsTable1State,
+      observationsTable2State,
+      persistUnsavedObservationsTable1Data,
+      persistUnsavedObservationsTable2Data,
+    ],
+  )
+
+  useEffect(
+    function setCollectButtonsUnsavedIfFormDirty() {
+      if (isFormDirty) {
+        setSaveButtonState(buttonGroupStates.unsaved)
+      }
+    },
+    [isFormDirty, setSaveButtonState],
+  )
+
+  const { isErrorAbove, isErrorBelow } = useScrollCheckError()
 
   const formik = useFormik({
     initialValues: initialFormikFormValues,
@@ -200,21 +266,104 @@ const CollectRecordFormPage = ({
     validate: persistUnsavedFormikData,
   })
 
-  const handleSave = () => {
-    const getRecordBySampleUnitType = {
-      fishbelt: reformatFormValuesIntoFishBeltRecord(
-        formik.values,
-        observationsState,
-        collectRecordBeingEdited,
-      ),
-      benthicpqt: reformatFormValuesIntoBenthicPQTRecord(
-        formik.values,
-        observationsState,
-        collectRecordBeingEdited,
-      ),
-    }
+  const _setIsFormDirty = useEffect(() => {
+    setIsFormDirty(
+      areObservationsInputsDirty ||
+        !!formik.dirty ||
+        !!getPersistedUnsavedFormikData() ||
+        !!getPersistedUnsavedObservationsTable1Data() ||
+        !!getPersistedUnsavedObservationsTable2Data(),
+    )
+  }, [
+    areObservationsInputsDirty,
+    formik.dirty,
+    getPersistedUnsavedFormikData,
+    getPersistedUnsavedObservationsTable1Data,
+    getPersistedUnsavedObservationsTable2Data,
+  ])
 
-    const recordToSubmit = getRecordBySampleUnitType[sampleUnitName]
+  useEffect(
+    function initializeObservationReducerTable1() {
+      if (!isObservationsTable1ReducerInitialized) {
+        loadObservationsFromCollectRecordIntoTableState({
+          collectRecordBeingEdited,
+          formik,
+          getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable1Data,
+          isNewRecord,
+          observationsPropertyName: getObservationsPropertyNames(collectRecordBeingEdited)[0],
+          observationsTableDispatch: observationsTable1Dispatch,
+          setObservationsTableReducerInitialized: setObservationsTable1ReducerInitialized,
+        })
+      }
+    },
+
+    [
+      collectRecordBeingEdited,
+      formik,
+      getPersistedUnsavedObservationsTable1Data,
+      isNewRecord,
+      isObservationsTable1ReducerInitialized,
+      observationsTable1Dispatch,
+    ],
+  )
+
+  useEffect(
+    function initializeObservationReducerTable2() {
+      if (!isObservationsTable2ReducerInitialized) {
+        loadObservationsFromCollectRecordIntoTableState({
+          collectRecordBeingEdited,
+          formik,
+          getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable2Data,
+          isNewRecord,
+          observationsPropertyName: getObservationsPropertyNames(collectRecordBeingEdited)[1],
+          observationsTableDispatch: observationsTable2Dispatch,
+          setObservationsTableReducerInitialized: setObservationsTable2ReducerInitialized,
+        })
+      }
+    },
+
+    [
+      collectRecordBeingEdited,
+      formik,
+      getPersistedUnsavedObservationsTable2Data,
+      isNewRecord,
+      isObservationsTable2ReducerInitialized,
+      observationsTable2Dispatch,
+    ],
+  )
+
+  const {
+    handleScrollToObservation,
+    handleValidate,
+    ignoreNonObservationFieldValidations,
+    ignoreObservationValidations,
+    ignoreRecordLevelValidation,
+    resetNonObservationFieldValidations,
+    resetObservationValidations,
+    resetRecordLevelValidation,
+    validationPropertiesWithDirtyResetOnInputChange,
+  } = useCollectRecordValidation({
+    collectRecordBeingEdited,
+    databaseSwitchboardInstance,
+    formikInstance: formik,
+    handleCollectRecordChange,
+    isParentDataLoading,
+    observationTableRef,
+    projectId,
+    recordId,
+    setAreValidationsShowing,
+    setIsFormDirty,
+    setValidateButtonState,
+    setIsSubmitWarningVisible,
+  })
+
+  const handleSave = () => {
+    const recordToSubmit = sampleUnitFormatSaveFunction({
+      collectRecordBeingEdited,
+      formikValues: formik.values,
+      observationsTable1State,
+      observationsTable2State,
+    })
 
     setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
@@ -230,7 +379,8 @@ const CollectRecordFormPage = ({
       .then((collectRecordResponse) => {
         toast.success(...getToastArguments(language.success.collectRecordSave))
         clearPersistedUnsavedFormikData()
-        clearPersistedUnsavedObservationsData()
+        clearPersistedUnsavedObservationsTable1Data()
+        clearPersistedUnsavedObservationsTable2Data()
         setAreObservationsInputsDirty(false)
         setSaveButtonState(buttonGroupStates.saved)
         setValidateButtonState(buttonGroupStates.validatable)
@@ -250,32 +400,6 @@ const CollectRecordFormPage = ({
           error,
           callback: () => {
             toast.error(...getToastArguments(language.error.collectRecordSave))
-          },
-        })
-      })
-  }
-
-  const handleValidate = () => {
-    setValidateButtonState(buttonGroupStates.validating)
-
-    databaseSwitchboardInstance
-      .validateSampleUnit({ recordId, projectId })
-      .then((validatedRecordResponse) => {
-        setAreValidationsShowing(true)
-        handleCollectRecordChange(validatedRecordResponse)
-        setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
-
-        validatedRecordResponse.validations.status === 'error' ||
-        validatedRecordResponse.validations.status === 'warning'
-          ? setIsSubmitWarningVisible(true)
-          : setIsSubmitWarningVisible(false)
-      })
-      .catch((error) => {
-        setValidateButtonState(buttonGroupStates.validatable)
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            toast.error(...getToastArguments(language.error.collectRecordValidation))
           },
         })
       })
@@ -301,209 +425,11 @@ const CollectRecordFormPage = ({
       })
   }
 
-  const ignoreRecordLevelValidation = useCallback(
-    ({ validationId }) => {
-      databaseSwitchboardInstance
-        .ignoreRecordLevelValidation({
-          record: collectRecordBeingEdited,
-          validationId,
-        })
-        .then((recordWithIgnoredValidations) => {
-          handleCollectRecordChange(recordWithIgnoredValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
-            },
-          })
-        })
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      handleCollectRecordChange,
-    ],
-  )
-
-  const ignoreObservationValidations = useCallback(
-    ({ observationId }) => {
-      databaseSwitchboardInstance
-        .ignoreObservationValidations({
-          recordId: collectRecordBeingEdited.id,
-          observationId,
-        })
-        .then((recordWithIgnoredValidations) => {
-          handleCollectRecordChange(recordWithIgnoredValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
-            },
-          })
-        })
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      handleCollectRecordChange,
-    ],
-  )
-
-  const ignoreNonObservationFieldValidations = useCallback(
-    ({ validationPath }) => {
-      if (collectRecordBeingEdited && validationPath) {
-        databaseSwitchboardInstance
-          .ignoreNonObservationFieldValidations({
-            record: collectRecordBeingEdited,
-            validationPath,
-          })
-          .then((recordWithIgnoredValidations) => {
-            handleCollectRecordChange(recordWithIgnoredValidations)
-            setIsFormDirty(true)
-          })
-          .catch((error) => {
-            handleHttpResponseError({
-              error,
-              callback: () => {
-                toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
-              },
-            })
-          })
-      }
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      handleCollectRecordChange,
-    ],
-  )
-
-  const resetObservationValidations = useCallback(
-    ({ observationId }) => {
-      if (collectRecordBeingEdited && observationId) {
-        databaseSwitchboardInstance
-          .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
-          .then((recordWithResetValidations) => {
-            handleCollectRecordChange(recordWithResetValidations)
-
-            setIsFormDirty(true)
-          })
-          .catch((error) => {
-            handleHttpResponseError({
-              error,
-              callback: () => {
-                toast.error(...getToastArguments(language.error.collectRecordValidationReset))
-              },
-            })
-          })
-      }
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      handleCollectRecordChange,
-    ],
-  )
-
-  const resetRecordLevelValidation = useCallback(
-    ({ validationId }) => {
-      databaseSwitchboardInstance
-        .resetRecordLevelValidation({
-          record: collectRecordBeingEdited,
-          validationId,
-        })
-        .then((recordWithResetValidations) => {
-          handleCollectRecordChange(recordWithResetValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
-            },
-          })
-        })
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      handleCollectRecordChange,
-    ],
-  )
-
-  const resetNonObservationFieldValidations = useCallback(
-    ({ validationPath }) => {
-      if (collectRecordBeingEdited && validationPath) {
-        databaseSwitchboardInstance
-          .resetNonObservationFieldValidations({
-            record: collectRecordBeingEdited,
-            validationPath,
-          })
-          .then((recordWithResetValidations) => {
-            handleCollectRecordChange(recordWithResetValidations)
-            setIsFormDirty(true)
-          })
-          .catch((error) => {
-            handleHttpResponseError({
-              error,
-              callback: () => {
-                toast.error(...getToastArguments(language.error.collectRecordValidationReset))
-              },
-            })
-          })
-      }
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      handleCollectRecordChange,
-    ],
-  )
-
-  const _setIsFormDirty = useEffect(() => {
-    setIsFormDirty(
-      areObservationsInputsDirty ||
-        !!formik.dirty ||
-        !!getPersistedUnsavedFormikData() ||
-        !!getPersistedUnsavedObservationsData(),
-    )
-  }, [
-    areObservationsInputsDirty,
-    formik.dirty,
-    getPersistedUnsavedFormikData,
-    getPersistedUnsavedObservationsData,
-  ])
-
-  const _setCollectButtonsUnsaved = useEffect(() => {
-    if (isFormDirty) {
-      setSaveButtonState(buttonGroupStates.unsaved)
-    }
-  }, [isFormDirty, setSaveButtonState])
-
-  const validationPropertiesWithDirtyResetOnInputChange = (validationProperties, property) => {
-    // for UX purpose only, validation is cleared when input is on change after page is validated
-    const validationDirtyCheck =
-      formik.values[property] !== formik.initialValues[property]
-        ? null
-        : validationProperties.validationType
-
-    return {
-      ...validationProperties,
-      validationType: validationDirtyCheck,
-    }
+  const openDeleteRecordModal = () => {
+    setIsDeleteRecordModalOpen(true)
+  }
+  const closeDeleteRecordModal = () => {
+    setIsDeleteRecordModalOpen(false)
   }
 
   const deleteRecord = () => {
@@ -517,7 +443,8 @@ const CollectRecordFormPage = ({
       })
       .then(() => {
         clearPersistedUnsavedFormikData()
-        clearPersistedUnsavedObservationsData()
+        clearPersistedUnsavedObservationsTable1Data()
+        clearPersistedUnsavedObservationsTable2Data()
         closeDeleteRecordModal()
         setIsDeletingRecord(false)
         toast.success(...getToastArguments(language.success.collectRecordDelete))
@@ -534,83 +461,9 @@ const CollectRecordFormPage = ({
       })
   }
 
-  const handleSizeBinChange = (event) => {
-    const sizeBinId = event.target.value
-
-    formik.setFieldValue('size_bin', sizeBinId)
-
-    const fishBinSelectedLabel = getFishBinLabel(choices, sizeBinId)
-
-    const isSizeBinATypeThatRequiresSizeResetting = fishBinSelectedLabel !== '1'
-
-    if (isSizeBinATypeThatRequiresSizeResetting) {
-      observationsDispatch({ type: 'resetFishSizes' })
-    }
-  }
-
   const handleDismissSubmitWarning = () => {
     setIsSubmitWarningVisible(false)
   }
-
-  const sampleUnitTransectInputs = isFishBeltSampleUnit ? (
-    <FishBeltTransectInputs
-      areValidationsShowing={areValidationsShowing}
-      choices={choices}
-      formik={formik}
-      ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-      onSizeBinChange={handleSizeBinChange}
-      observationsReducer={observationsReducer}
-      resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-      validationsApiData={validationsApiData}
-      validationPropertiesWithDirtyResetOnInputChange={
-        validationPropertiesWithDirtyResetOnInputChange
-      }
-    />
-  ) : (
-    <BenthicAttributeTransectInputs
-      areValidationsShowing={areValidationsShowing}
-      choices={choices}
-      formik={formik}
-      ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-      resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-      validationsApiData={validationsApiData}
-      validationPropertiesWithDirtyResetOnInputChange={
-        validationPropertiesWithDirtyResetOnInputChange
-      }
-    />
-  )
-
-  const observationTable = isFishBeltSampleUnit ? (
-    <FishBeltObservationTable
-      areObservationsInputsDirty={areObservationsInputsDirty}
-      areValidationsShowing={areValidationsShowing}
-      formik={formik}
-      choices={choices}
-      collectRecord={collectRecordBeingEdited}
-      fishNameConstants={fishNameConstants}
-      fishNameOptions={observationOptions}
-      ignoreObservationValidations={ignoreObservationValidations}
-      observationsReducer={observationsReducer}
-      openNewObservationModal={openNewObservationModal}
-      persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-      resetObservationValidations={resetObservationValidations}
-      setAreObservationsInputsDirty={setAreObservationsInputsDirty}
-    />
-  ) : (
-    <BenthicPhotoQuadratObservationTable
-      areObservationsInputsDirty={areObservationsInputsDirty}
-      areValidationsShowing={areValidationsShowing}
-      benthicAttributeOptions={observationOptions}
-      choices={choices}
-      collectRecord={collectRecordBeingEdited}
-      observationsReducer={observationsReducer}
-      openNewObservationModal={openNewObservationModal}
-      persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-      ignoreObservationValidations={ignoreObservationValidations}
-      resetObservationValidations={resetObservationValidations}
-      setAreObservationsInputsDirty={setAreObservationsInputsDirty}
-    />
-  )
 
   const errorBoxContent = (
     <ErrorBox>
@@ -647,7 +500,18 @@ const CollectRecordFormPage = ({
             validationPropertiesWithDirtyResetOnInputChange
           }
         />
-        {sampleUnitTransectInputs}
+        <SampleUnitTransectInputs
+          areValidationsShowing={areValidationsShowing}
+          choices={choices}
+          formik={formik}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+          validationsApiData={validationsApiData}
+          validationPropertiesWithDirtyResetOnInputChange={
+            validationPropertiesWithDirtyResetOnInputChange
+          }
+        />
+
         <ObserversInput
           data-testid="observers"
           areValidationsShowing={areValidationsShowing}
@@ -660,7 +524,36 @@ const CollectRecordFormPage = ({
             validationPropertiesWithDirtyResetOnInputChange
           }
         />
-        <div ref={observationTableRef}>{observationTable}</div>
+        <div ref={observationTableRef}>
+          <ObservationTable1
+            testId="observations-section"
+            areValidationsShowing={areValidationsShowing}
+            choices={choices}
+            collectRecord={collectRecordBeingEdited}
+            formik={formik}
+            ignoreObservationValidations={ignoreObservationValidations}
+            observationsReducer={observationsTable1Reducer}
+            resetObservationValidations={resetObservationValidations}
+            setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+            setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
+            setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
+          />
+        </div>
+        {ObservationTable2 ? (
+          <ObservationTable2
+            testId="observations2-section"
+            areValidationsShowing={areValidationsShowing}
+            choices={choices}
+            collectRecord={collectRecordBeingEdited}
+            formik={formik}
+            ignoreObservationValidations={ignoreObservationValidations}
+            observationsReducer={observationsTable2Reducer}
+            resetObservationValidations={resetObservationValidations}
+            setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+            setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
+            setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
+          />
+        ) : null}
       </form>
       <DeleteRecordButton
         isLoading={isDeletingRecord}
@@ -722,15 +615,6 @@ const CollectRecordFormPage = ({
         }
       />
 
-      {!!projectId && !!currentUser && (
-        <NewAttributeModal
-          isFishBeltSampleUnit={isFishBeltSampleUnit}
-          isOpen={isNewObservationModalOpen}
-          onDismiss={closeNewObservationModal}
-          onSubmit={handleSubmitNewObservation}
-          modalAttributeOptions={modalAttributeOptions}
-        />
-      )}
       {displayLoadingModal && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
@@ -738,32 +622,36 @@ const CollectRecordFormPage = ({
 }
 
 CollectRecordFormPage.propTypes = {
-  isNewRecord: PropTypes.bool.isRequired,
-  sampleUnitName: PropTypes.string.isRequired,
+  areObservationsInputsDirty: PropTypes.bool.isRequired,
   collectRecordBeingEdited: PropTypes.oneOfType([fishBeltPropType, benthicPhotoQuadratPropType]),
   handleCollectRecordChange: PropTypes.func.isRequired,
-  handleNewObservationAdd: PropTypes.func.isRequired,
-  handleSubmitNewObservation: PropTypes.func.isRequired,
-  observationsReducer: observationsReducerPropType,
-  sites: PropTypes.arrayOf(sitePropType).isRequired,
-  handleSitesChange: PropTypes.func.isRequired,
-  managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
-  handleManagementRegimesChange: PropTypes.func.isRequired,
-  choices: choicesPropType.isRequired,
   idsNotAssociatedWithData: PropTypes.arrayOf(PropTypes.string).isRequired,
-  isLoading: PropTypes.bool.isRequired,
+  initialFormikFormValues: PropTypes.shape({}).isRequired,
+  isNewRecord: PropTypes.bool.isRequired,
+  isParentDataLoading: PropTypes.bool.isRequired,
+  observationsTable1Reducer: observationsReducerPropType,
+  // eslint-disable-next-line react/forbid-prop-types
+  observationsTable2Reducer: PropTypes.array,
+  ObservationTable1: PropTypes.elementType.isRequired,
+  ObservationTable2: PropTypes.elementType,
+  sampleUnitFormatSaveFunction: PropTypes.func.isRequired,
+  sampleUnitName: PropTypes.string.isRequired,
+  SampleUnitTransectInputs: PropTypes.elementType.isRequired,
+  setAreObservationsInputsDirty: PropTypes.func.isRequired,
+  setIdsNotAssociatedWithData: PropTypes.func.isRequired,
+  setIsNewBenthicAttributeModalOpen: PropTypes.func,
+  setObservationIdToAddNewBenthicAttributeTo: PropTypes.func,
   subNavNode: subNavNodePropTypes,
-  observerProfiles: observersPropType.isRequired,
-  observationOptions: inputOptionsPropTypes.isRequired,
-  fishNameConstants: fishNameConstantsPropType,
-  modalAttributeOptions: inputOptionsPropTypes.isRequired,
 }
 
 CollectRecordFormPage.defaultProps = {
   collectRecordBeingEdited: undefined,
+  observationsTable1Reducer: [],
+  observationsTable2Reducer: [],
+  ObservationTable2: undefined,
+  setIsNewBenthicAttributeModalOpen: () => {},
+  setObservationIdToAddNewBenthicAttributeTo: () => {},
   subNavNode: null,
-  observationsReducer: [],
-  fishNameConstants: [],
 }
 
 export default CollectRecordFormPage

@@ -12,13 +12,13 @@ import {
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import { reformatFormValuesIntoBenthicLitRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
+import { reformatFormValuesIntoBenthicLitRecord } from '../reformatFormValuesIntoRecord'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
-import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
+import CollectRecordFormPage from '../CollectRecordFormPage'
 import language from '../../../../language'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
@@ -215,7 +215,7 @@ const BenthicLitform = ({ isNewRecord }) => {
 
   return (
     <>
-      <CollectRecordFormPageAlternative
+      <CollectRecordFormPage
         areObservationsInputsDirty={areObservationsInputsDirty}
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}

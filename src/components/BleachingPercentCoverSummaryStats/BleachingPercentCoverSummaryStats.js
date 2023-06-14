@@ -2,8 +2,7 @@ import React from 'react'
 
 import { observationsPercentCoverProptype } from '../../App/mermaidData/mermaidDataProptypes'
 import { getAverage } from '../../library/getAverage'
-import { ObservationsSummaryStats } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
-import { Tr, Td, Th } from '../generic/Table/table'
+import { ObservationsSummaryStats, Tr, Td, Th } from '../generic/Table/table'
 
 const BleachingPercentCoverSummaryStats = ({ observations }) => {
   const hardPercentages = observations.map((item) => Number(item.percent_hard))
