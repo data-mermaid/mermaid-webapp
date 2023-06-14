@@ -111,7 +111,7 @@ const TableRadioLabel = styled.label(
   (props) => css`
     top: 0;
     right: 0;
-    cursor: ${props.disabled ? 'auto' : 'pointer'};
+    cursor: ${props.cursor};
     bottom: 0;
     left: 0;
     position: absolute;
@@ -125,7 +125,7 @@ const TableRadioLabel = styled.label(
 
 const TableRadioInput = styled.input(
   (props) => css`
-    cursor: ${props.disabled ? 'auto' : 'pointer'};
+    cursor: ${props.cursor};
   `,
 )
 
@@ -533,6 +533,17 @@ const Users = () => {
       const isCurrentUser = userId === currentUser.id
       const isActiveSampleUnitsWarningShowing = userHasActiveSampleUnits && isUserRoleReadOnly
 
+      const getCursorType = () => {
+        if (isCurrentUser) {
+          return 'not-allowed'
+        }
+        if (isTableUpdating) {
+          return 'wait'
+        }
+
+        return 'pointer'
+      }
+
       return {
         name: (
           <NameCellStyle>
@@ -542,11 +553,9 @@ const Users = () => {
         ),
         email,
         admin: (
-          <TableRadioLabel
-            htmlFor={`admin-${projectProfileId}`}
-            disabled={isCurrentUser || isTableUpdating}
-          >
+          <TableRadioLabel htmlFor={`admin-${projectProfileId}`} cursor={getCursorType()}>
             <TableRadioInput
+              cursor={getCursorType()}
               type="radio"
               value={userRole.admin}
               name={projectProfileId}
@@ -560,11 +569,9 @@ const Users = () => {
           </TableRadioLabel>
         ),
         collector: (
-          <TableRadioLabel
-            htmlFor={`collector-${projectProfileId}`}
-            disabled={isCurrentUser || isTableUpdating}
-          >
+          <TableRadioLabel htmlFor={`collector-${projectProfileId}`} cursor={getCursorType()}>
             <TableRadioInput
+              cursor={getCursorType()}
               type="radio"
               value={userRole.collector}
               name={projectProfileId}
@@ -578,11 +585,9 @@ const Users = () => {
           </TableRadioLabel>
         ),
         readonly: (
-          <TableRadioLabel
-            htmlFor={`readonly-${projectProfileId}`}
-            disabled={isCurrentUser || isTableUpdating}
-          >
-            <input
+          <TableRadioLabel htmlFor={`readonly-${projectProfileId}`} cursor={getCursorType()}>
+            <TableRadioInput
+              cursor={getCursorType()}
               type="radio"
               value={userRole.read_only}
               name={projectProfileId}
