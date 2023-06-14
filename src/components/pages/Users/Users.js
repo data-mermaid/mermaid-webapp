@@ -107,18 +107,27 @@ const NameCellStyle = styled('div')`
 const UserTableTd = styled(Td)`
   position: relative;
 `
-const TableRadioLabel = styled('label')`
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  display: grid;
-  place-items: center;
-  ${hoverState(css`
-    border: solid 1px ${theme.color.primaryColor};
-  `)}
-`
+const TableRadioLabel = styled.label(
+  (props) => css`
+    top: 0;
+    right: 0;
+    cursor: ${props.disabled ? 'auto' : 'pointer'};
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    display: grid;
+    place-items: center;
+    ${hoverState(css`
+      border: solid 1px ${theme.color.primaryColor};
+    `)}
+  `,
+)
+
+const TableRadioInput = styled.input(
+  (props) => css`
+    cursor: ${props.disabled ? 'auto' : 'pointer'};
+  `,
+)
 
 const getRoleLabel = (roleCode) => {
   return {
@@ -533,8 +542,11 @@ const Users = () => {
         ),
         email,
         admin: (
-          <TableRadioLabel htmlFor={`admin-${projectProfileId}`}>
-            <input
+          <TableRadioLabel
+            htmlFor={`admin-${projectProfileId}`}
+            disabled={isCurrentUser || isTableUpdating}
+          >
+            <TableRadioInput
               type="radio"
               value={userRole.admin}
               name={projectProfileId}
@@ -548,8 +560,11 @@ const Users = () => {
           </TableRadioLabel>
         ),
         collector: (
-          <TableRadioLabel htmlFor={`collector-${projectProfileId}`}>
-            <input
+          <TableRadioLabel
+            htmlFor={`collector-${projectProfileId}`}
+            disabled={isCurrentUser || isTableUpdating}
+          >
+            <TableRadioInput
               type="radio"
               value={userRole.collector}
               name={projectProfileId}
@@ -563,7 +578,10 @@ const Users = () => {
           </TableRadioLabel>
         ),
         readonly: (
-          <TableRadioLabel htmlFor={`readonly-${projectProfileId}`}>
+          <TableRadioLabel
+            htmlFor={`readonly-${projectProfileId}`}
+            disabled={isCurrentUser || isTableUpdating}
+          >
             <input
               type="radio"
               value={userRole.read_only}
