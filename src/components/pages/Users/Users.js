@@ -107,18 +107,25 @@ const NameCellStyle = styled('div')`
 const UserTableTd = styled(Td)`
   position: relative;
 `
-const TableRadioLabel = styled('label')`
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  display: grid;
-  place-items: center;
-  ${hoverState(css`
-    border: solid 1px ${theme.color.primaryColor};
-  `)}
-`
+const TableRadioLabel = styled.label(
+  (props) => css`
+    top: 0;
+    right: 0;
+    cursor: ${props.cursor};
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    display: grid;
+    place-items: center;
+    ${hoverState(css`
+      border: solid 1px ${theme.color.primaryColor};
+    `)}
+
+    input {
+      cursor: ${props.cursor};
+    }
+  `,
+)
 
 const getRoleLabel = (roleCode) => {
   return {
@@ -524,6 +531,17 @@ const Users = () => {
       const isCurrentUser = userId === currentUser.id
       const isActiveSampleUnitsWarningShowing = userHasActiveSampleUnits && isUserRoleReadOnly
 
+      const getCursorType = () => {
+        if (isCurrentUser) {
+          return 'not-allowed'
+        }
+        if (isTableUpdating) {
+          return 'wait'
+        }
+
+        return 'pointer'
+      }
+
       return {
         name: (
           <NameCellStyle>
@@ -533,7 +551,7 @@ const Users = () => {
         ),
         email,
         admin: (
-          <TableRadioLabel htmlFor={`admin-${projectProfileId}`}>
+          <TableRadioLabel htmlFor={`admin-${projectProfileId}`} cursor={getCursorType()}>
             <input
               type="radio"
               value={userRole.admin}
@@ -548,7 +566,7 @@ const Users = () => {
           </TableRadioLabel>
         ),
         collector: (
-          <TableRadioLabel htmlFor={`collector-${projectProfileId}`}>
+          <TableRadioLabel htmlFor={`collector-${projectProfileId}`} cursor={getCursorType()}>
             <input
               type="radio"
               value={userRole.collector}
@@ -563,7 +581,7 @@ const Users = () => {
           </TableRadioLabel>
         ),
         readonly: (
-          <TableRadioLabel htmlFor={`readonly-${projectProfileId}`}>
+          <TableRadioLabel htmlFor={`readonly-${projectProfileId}`} cursor={getCursorType()}>
             <input
               type="radio"
               value={userRole.read_only}
