@@ -616,7 +616,7 @@ const CollectRecordFormPage = ({
       />
 
       {displayLoadingModal && <LoadingModal />}
-      <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
+      <EnhancedPrompt shouldPromptTrigger={formik.dirty || areObservationsInputsDirty} />
     </>
   )
 }
