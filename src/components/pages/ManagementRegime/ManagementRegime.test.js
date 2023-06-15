@@ -116,11 +116,24 @@ test('Management Regime component - form inputs are initialized with the correct
   expect(screen.getByLabelText('Secondary Name')).toHaveValue('Management Regimes 2')
   expect(screen.getByLabelText('Year Established')).toHaveValue(null)
   expect(screen.getByLabelText('Area')).toHaveValue(10)
+  const parties = screen.getByLabelText('Parties')
 
-  expect(screen.getByLabelText('government')).toBeChecked()
+  expect(within(parties).getByLabelText('NGO')).not.toBeChecked()
+  expect(within(parties).getByLabelText('community/local government')).not.toBeChecked()
+  expect(within(parties).getByLabelText('government')).toBeChecked()
+  expect(within(parties).getByLabelText('private sector')).not.toBeChecked()
+  expect(
+    within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
+  ).toBeChecked()
+  expect(
+    within(screen.getByLabelText('Rules')).getByLabelText('No Take', { exact: false }),
+  ).not.toBeChecked()
+  expect(
+    within(screen.getByLabelText('Rules')).getByLabelText('Partial Restrictions', {
+      exact: false,
+    }),
+  ).not.toBeChecked()
 
-  expect(screen.getByLabelText(/Open Access/)).toBeChecked()
-
-  expect(screen.getByLabelText('none')).toBeChecked()
+  expect(screen.getByLabelText('Compliance')).toHaveDisplayValue('none')
   expect(screen.getByLabelText('Notes')).toHaveValue('Some notes')
 })

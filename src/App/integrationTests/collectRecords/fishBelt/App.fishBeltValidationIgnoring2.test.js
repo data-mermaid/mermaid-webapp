@@ -480,13 +480,25 @@ test('Validation: user edits non-observation input with ignored validation reset
     expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  userEvent.click(within(widthRow).getByLabelText('10m'))
+  // Width selection 10m
+  userEvent.selectOptions(
+    within(widthRow).getByLabelText('Width'),
+    '228c932d-b5da-4464-b0df-d15a05c05c02',
+  )
   await waitFor(() => expect(within(widthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.click(within(sizeBinRow).getByLabelText('AGRRA'))
+  // Fish Size Bin selection AGRRA
+  userEvent.selectOptions(
+    within(sizeBinRow).getByLabelText('Fish Size Bin (cm)'),
+    'ccef720a-a1c9-4956-906d-09ed56f16249',
+  )
   await waitFor(() => expect(within(sizeBinRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.click(within(reefSlopeRow).getByLabelText('crest'))
+  // Reef Slope select on crest
+  userEvent.selectOptions(
+    within(reefSlopeRow).getByLabelText('Reef Slope'),
+    '12dc11ae-3a4b-4309-8fae-66f51398d96f',
+  )
   await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   userEvent.type(within(notesRow).getByLabelText('Notes'), '1')

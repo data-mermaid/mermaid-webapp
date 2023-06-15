@@ -30,8 +30,8 @@ const SampleEventInputs = ({
   resetNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
-  const managementSelectOptions = getManagementRegimeOptions(managementRegimes)
-  const siteSelectOptions = getOptions(sites)
+  const managementRegimeOptions = getManagementRegimeOptions(managementRegimes)
+  const siteOptions = getOptions(sites)
   const validationsApiData = collectRecord?.validations?.results?.data
   const sample_event = validationsApiData?.sample_event
 
@@ -71,14 +71,15 @@ const SampleEventInputs = ({
     formik.handleChange(event)
   }
 
-  const updateValueAndResetValidationForSite = (siteValue, siteOptions) => {
-    formik.setFieldValue('site', siteValue)
-    handleSitesChange(siteOptions)
+  const updateValueAndResetValidationForSite = (value, options) => {
+    formik.setFieldValue('site', value)
+    handleSitesChange(options)
     resetNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
   }
-  const updateValueAndResetValidationForMR = (managementRegimeValue, managementRegimeOptions) => {
-    formik.setFieldValue('management', managementRegimeValue)
-    handleManagementRegimesChange(managementRegimeOptions)
+
+  const updateValueAndResetValidationForMR = (value, options) => {
+    formik.setFieldValue('management', value)
+    handleManagementRegimesChange(options)
     resetNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
   }
 
@@ -91,7 +92,7 @@ const SampleEventInputs = ({
           required={true}
           id="site"
           testId="site"
-          options={siteSelectOptions}
+          options={siteOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
           }}
@@ -110,7 +111,7 @@ const SampleEventInputs = ({
           required={true}
           id="management"
           testId="management"
-          options={managementSelectOptions}
+          options={managementRegimeOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
           }}

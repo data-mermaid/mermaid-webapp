@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event'
 import {
   screen,
   renderAuthenticatedOffline,
-  waitForElementToBeRemoved,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -37,24 +36,23 @@ describe('Offline', () => {
 
     expect(await screen.findByText('Record saved.'))
 
-    // Site select
-    expect(screen.getByDisplayValue('Site D'))
-    // Management select
-    expect(screen.getByDisplayValue('Management Regimes C [Management Regimes 3]'))
+    expect(screen.getByLabelText('Site')).toHaveDisplayValue('Site D')
+    expect(screen.getByLabelText('Management')).toHaveDisplayValue(
+      'Management Regimes C [Management Regimes 3]',
+    )
     expect(screen.getByLabelText('Depth')).toHaveValue(45)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-03-02')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')
     expect(screen.getByLabelText('Transect Number')).toHaveValue(2)
     expect(screen.getByLabelText('Label')).toHaveValue('FB-2')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(6)
-    expect(within(screen.getByTestId('width')).getByLabelText('2m')).toBeChecked()
-    expect(within(screen.getByTestId('size_bin')).getByLabelText('5')).toBeChecked()
-    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
-    expect(within(screen.getByTestId('visibility')).getByLabelText('<1m - bad')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('high')).toBeChecked()
-
+    expect(screen.getByLabelText('Width')).toHaveDisplayValue('2m')
+    expect(screen.getByLabelText('Fish Size Bin (cm)')).toHaveDisplayValue('5')
+    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
+    expect(screen.getByLabelText('Visibility')).toHaveDisplayValue('<1m - bad')
+    expect(screen.getByLabelText('Current')).toHaveDisplayValue('moderate')
+    expect(screen.getByLabelText('Relative Depth')).toHaveDisplayValue('deep')
+    expect(screen.getByLabelText('Tide')).toHaveDisplayValue('high')
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
   test('Edit fishbelt save stores properly formatted fish belt observations in dexie', async () => {
@@ -197,58 +195,5 @@ describe('Offline', () => {
     expect(await screen.findByText('The sample unit has not been saved.'))
 
     expect(await screen.findByLabelText('Depth')).toHaveValue(45)
-  })
-
-  test('Edit fishbelt can "unselect" non required radio group inputs', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
-
-    // make sure there is a collect record to edit in dexie
-    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
-
-    await screen.findByLabelText('project pages loading indicator')
-    await waitForElementToBeRemoved(() =>
-      screen.queryByLabelText('project pages loading indicator'),
-    )
-
-    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
-    expect(within(screen.getByTestId('visibility')).getByLabelText('<1m - bad')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('high')).toBeChecked()
-
-    userEvent.click(within(screen.getByTestId('reef_slope')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('current')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('relative_depth')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('tide')).getByLabelText('not reported'))
-
-    userEvent.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
-
-    expect(await screen.findByText('Record saved.'))
-
-    const editedStoredRecord = await dexiePerUserDataInstance.collect_records.get('2')
-
-    const storedReefSlope = editedStoredRecord.data.fishbelt_transect.reef_slope
-    const storedVisibility = editedStoredRecord.data.fishbelt_transect.visibility
-    const storedCurrent = editedStoredRecord.data.fishbelt_transect.current
-    const storedRelativeDepth = editedStoredRecord.data.fishbelt_transect.relative_depth
-    const storedTide = editedStoredRecord.data.fishbelt_transect.tide
-
-    // we store a non selection as an empty string because React doesnt like inputs changing type and the api interprets them as null
-    expect(storedReefSlope).toEqual('')
-    expect(storedVisibility).toEqual('')
-    expect(storedCurrent).toEqual('')
-    expect(storedRelativeDepth).toEqual('')
-    expect(storedTide).toEqual('')
   })
 })

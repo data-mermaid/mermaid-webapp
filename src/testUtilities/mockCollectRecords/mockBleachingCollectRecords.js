@@ -29,7 +29,7 @@ export default [
         quadrat_size: 10,
         relative_depth: '8f381e71-219e-469c-8c13-231b088fb861',
         visibility: '40702fad-754a-4982-8ca5-9b97106eca31',
-        current: 'e5dcb32c-614d-44ed-8155-5911b7ee774a',
+        current: '60e11188-60d7-4f83-9658-27eb5a09c803',
         tide: '79693274-4ec6-4052-afe1-4bb02eaa04ec',
       },
       obs_colonies_bleached: [

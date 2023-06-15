@@ -21,9 +21,15 @@ const saveSite = async () => {
   userEvent.selectOptions(countryAutocompleteList, canadaOption)
   userEvent.type(screen.getByLabelText('Latitude'), '54')
   userEvent.type(screen.getByLabelText('Longitude'), '45')
-  userEvent.click(within(screen.getByLabelText('Exposure')).getByLabelText('very sheltered'))
-  userEvent.click(within(screen.getByLabelText('Reef Type')).getByLabelText('atoll'))
-  userEvent.click(within(screen.getByLabelText('Reef Zone')).getByLabelText('back reef'))
+  userEvent.selectOptions(screen.getByLabelText('Exposure'), 'baa54e1d-4263-4273-80f5-35812304b592')
+  userEvent.selectOptions(
+    screen.getByLabelText('Reef Type'),
+    '16a0a961-df6d-42a5-86b8-bc30f87bab42',
+  )
+  userEvent.selectOptions(
+    screen.getByLabelText('Reef Zone'),
+    '06ea17cd-5d1d-46ae-a654-64901e2a9f96',
+  )
   userEvent.type(screen.getByLabelText('Notes'), 'la dee dah')
 
   userEvent.click(screen.getByText('Save', { selector: 'button' }))
@@ -55,24 +61,9 @@ describe('offline', () => {
     expect(screen.getByLabelText('Country')).toHaveDisplayValue('')
     expect(screen.getByLabelText('Latitude')).toHaveDisplayValue('')
     expect(screen.getByLabelText('Longitude')).toHaveDisplayValue('')
-    expect(
-      within(screen.getByLabelText('Exposure')).getByLabelText('very sheltered'),
-    ).not.toBeChecked()
-    expect(within(screen.getByLabelText('Exposure')).getByLabelText('sheltered')).not.toBeChecked()
-    expect(
-      within(screen.getByLabelText('Exposure')).getByLabelText('semi-exposed'),
-    ).not.toBeChecked()
-    expect(within(screen.getByLabelText('Exposure')).getByLabelText('exposed')).not.toBeChecked()
-    expect(within(screen.getByLabelText('Reef Type')).getByLabelText('atoll')).not.toBeChecked()
-    expect(within(screen.getByLabelText('Reef Type')).getByLabelText('barrier')).not.toBeChecked()
-    expect(within(screen.getByLabelText('Reef Type')).getByLabelText('fringing')).not.toBeChecked()
-    expect(within(screen.getByLabelText('Reef Type')).getByLabelText('lagoon')).not.toBeChecked()
-    expect(within(screen.getByLabelText('Reef Type')).getByLabelText('patch')).not.toBeChecked()
-
-    expect(within(screen.getByLabelText('Reef Zone')).getByLabelText('back reef')).not.toBeChecked()
-    expect(within(screen.getByLabelText('Reef Zone')).getByLabelText('crest')).not.toBeChecked()
-    expect(within(screen.getByLabelText('Reef Zone')).getByLabelText('fore reef')).not.toBeChecked()
-    expect(within(screen.getByLabelText('Reef Zone')).getByLabelText('pinnacle')).not.toBeChecked()
+    expect(screen.getByLabelText('Exposure')).toHaveDisplayValue('Choose...')
+    expect(screen.getByLabelText('Reef Type')).toHaveDisplayValue('Choose...')
+    expect(screen.getByLabelText('Reef Zone')).toHaveDisplayValue('Choose...')
 
     expect(screen.getByLabelText('Notes')).toHaveDisplayValue('')
   })
@@ -102,9 +93,9 @@ describe('offline', () => {
     expect(screen.getByLabelText('Country')).toHaveDisplayValue('Canada')
     expect(screen.getByLabelText('Latitude')).toHaveDisplayValue('54')
     expect(screen.getByLabelText('Longitude')).toHaveDisplayValue('45')
-    expect(within(screen.getByLabelText('Exposure')).getByLabelText('very sheltered')).toBeChecked()
-    expect(within(screen.getByLabelText('Reef Type')).getByLabelText('atoll')).toBeChecked()
-    expect(within(screen.getByLabelText('Reef Zone')).getByLabelText('back reef')).toBeChecked()
+    expect(screen.getByLabelText('Exposure')).toHaveDisplayValue('very sheltered')
+    expect(screen.getByLabelText('Reef Type')).toHaveDisplayValue('atoll')
+    expect(screen.getByLabelText('Reef Zone')).toHaveDisplayValue('back reef')
     expect(screen.getByLabelText('Notes')).toHaveDisplayValue('la dee dah')
   })
   test('new site save success show new record in site table', async () => {
@@ -172,9 +163,9 @@ describe('offline', () => {
     expect(screen.getByLabelText('Country')).toHaveDisplayValue('Canada')
     expect(screen.getByLabelText('Latitude')).toHaveDisplayValue('54')
     expect(screen.getByLabelText('Longitude')).toHaveDisplayValue('45')
-    expect(within(screen.getByLabelText('Exposure')).getByLabelText('very sheltered')).toBeChecked()
-    expect(within(screen.getByLabelText('Reef Type')).getByLabelText('atoll')).toBeChecked()
-    expect(within(screen.getByLabelText('Reef Zone')).getByLabelText('back reef')).toBeChecked()
+    expect(screen.getByLabelText('Exposure')).toHaveDisplayValue('very sheltered')
+    expect(screen.getByLabelText('Reef Type')).toHaveDisplayValue('atoll')
+    expect(screen.getByLabelText('Reef Zone')).toHaveDisplayValue('back reef')
     expect(screen.getByLabelText('Notes')).toHaveDisplayValue('la dee dah')
   })
 })

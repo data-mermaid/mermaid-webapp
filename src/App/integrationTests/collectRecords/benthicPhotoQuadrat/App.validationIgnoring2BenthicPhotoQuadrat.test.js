@@ -556,25 +556,41 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
     expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  userEvent.click(within(relativeDepthRow).getByLabelText('shallow'))
+  // Relative Depth select on shallow
+  userEvent.selectOptions(
+    within(relativeDepthRow).getByLabelText('Relative Depth'),
+    'e88cc7bc-bdeb-49cf-b211-99f28c3cd2c3',
+  )
   await waitFor(() =>
     expect(within(relativeDepthRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  userEvent.click(within(visibilityRow).getByLabelText('not reported'))
+  // Visibility select on <1m - bad
+  userEvent.selectOptions(
+    within(visibilityRow).getByLabelText('Visibility'),
+    '40702fad-754a-4982-8ca5-9b97106eca31',
+  )
   await waitFor(() => expect(within(visibilityRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.click(within(currentRow).getByLabelText('moderate'))
+  // Current select on moderate
+  userEvent.selectOptions(
+    within(currentRow).getByLabelText('Current'),
+    '60e11188-60d7-4f83-9658-27eb5a09c803',
+  )
   await waitFor(() => expect(within(currentRow).queryByText('Ignored')).not.toBeInTheDocument())
+
+  // Tide select on low
+  userEvent.selectOptions(
+    within(tideRow).getByLabelText('Tide'),
+    'bca0273a-51a3-4274-8425-457ca3afcfea',
+  )
+  await waitFor(() => expect(within(tideRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   userEvent.type(within(notesRow).getByLabelText('Notes'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   userEvent.click(within(observersRow).getByLabelText('Melissa Nunes'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
-
-  userEvent.click(within(tideRow).getByLabelText('low'))
-  await waitFor(() => expect(within(tideRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   userEvent.type(within(quadratNumberStartRow).getByLabelText('Quadrat Number Start'), '99')
   await waitFor(() =>

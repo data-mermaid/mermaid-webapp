@@ -89,7 +89,7 @@ const BenthicPitObservationsTable = ({
   )
 
   const observationsRows = useMemo(() => {
-    const growthFormSelectOptions = getOptions(choices.growthforms.data)
+    const growthFormOptions = getOptions(choices.growthforms.data)
 
     const handleKeyDown = ({ event, index, observation, isGrowthForm }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
@@ -222,7 +222,7 @@ const BenthicPitObservationsTable = ({
               aria-labelledby="growth-form-label"
             >
               <option value=""> </option>
-              {growthFormSelectOptions.map((item) => (
+              {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
                 </option>

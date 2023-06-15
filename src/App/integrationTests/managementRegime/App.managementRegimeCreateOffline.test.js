@@ -19,7 +19,10 @@ const saveMR = async () => {
   userEvent.click(
     within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
   )
-  userEvent.click(within(screen.getByLabelText('Compliance')).getByLabelText('somewhat'))
+  userEvent.selectOptions(
+    screen.getByLabelText('Compliance'),
+    'f76d7866-5b0d-428d-928c-738c2912d6e0',
+  )
   userEvent.type(screen.getByLabelText('Notes'), 'some notes')
 
   userEvent.click(screen.getByText('Save', { selector: 'button' }))
@@ -69,11 +72,9 @@ describe('Offline', () => {
         exact: false,
       }),
     ).not.toBeChecked()
-    expect(within(screen.getByLabelText('Compliance')).getByLabelText('full')).not.toBeChecked()
-    expect(within(screen.getByLabelText('Compliance')).getByLabelText('low')).not.toBeChecked()
-    expect(within(screen.getByLabelText('Compliance')).getByLabelText('none')).not.toBeChecked()
-    expect(within(screen.getByLabelText('Compliance')).getByLabelText('somewhat')).not.toBeChecked()
+    expect(screen.getByLabelText('Compliance')).toHaveDisplayValue('Choose...')
   })
+
   test('New MR save success shows saved inputs, toast, and navigates to the edit MR page for the newly created MR', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -100,8 +101,9 @@ describe('Offline', () => {
     expect(
       within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
     ).toBeChecked()
-    expect(within(screen.getByLabelText('Compliance')).getByLabelText('somewhat')).toBeChecked()
+    expect(screen.getByLabelText('Compliance')).toHaveDisplayValue('somewhat')
   })
+
   test('New MR save success show new record in MR table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -132,6 +134,7 @@ describe('Offline', () => {
 
     expect(await within(table).findByText('Rebecca'))
   })
+
   test('New MR save failure shows toast message with edits persisting', async () => {
     const consoleSpy = jest.spyOn(console, 'error')
 
@@ -172,6 +175,6 @@ describe('Offline', () => {
     expect(
       within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
     ).toBeChecked()
-    expect(within(screen.getByLabelText('Compliance')).getByLabelText('somewhat')).toBeChecked()
+    expect(screen.getByLabelText('Compliance')).toHaveDisplayValue('somewhat')
   })
 })
