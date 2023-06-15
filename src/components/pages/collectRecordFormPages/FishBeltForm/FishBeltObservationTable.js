@@ -135,7 +135,7 @@ const FishBeltObservationTable = ({
       const isEnterKey = event.code === 'Enter'
       const isLastRow = index === observationsState.length - 1
 
-      if (isTabKey && isLastRow && isCount) {
+      if (isTabKey && isLastRow && isCount && fishBinSelectedLabel) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
@@ -145,7 +145,7 @@ const FishBeltObservationTable = ({
         setAreObservationsInputsDirty(true)
       }
 
-      if (isEnterKey) {
+      if (isEnterKey && fishBinSelectedLabel) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
@@ -224,6 +224,7 @@ const FishBeltObservationTable = ({
         <InputNumberNumericCharactersOnly
           value={sizeOrEmptyStringToAvoidInputValueErrors}
           step="any"
+          disabled={!fishBinSelectedLabel}
           aria-labelledby="fish-size-label"
           onChange={handleUpdateSizeEvent}
           onKeyDown={handleObservationKeyDown}
@@ -288,6 +289,7 @@ const FishBeltObservationTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
+                  disabled={!fishBinSelectedLabel}
                   // we only want autofocus to take over focus after the user adds
                   // new observations, not before. Otherwise initial page load focus
                   // is on the most recently painted observation instead of default focus.
@@ -317,6 +319,7 @@ const FishBeltObservationTable = ({
               step="any"
               aria-labelledby="fish-count-label"
               onChange={handleUpdateCount}
+              disabled={!fishBinSelectedLabel}
               onKeyDown={(event) => {
                 handleKeyDown({ event, index, observation, isCount: true })
               }}
