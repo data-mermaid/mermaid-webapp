@@ -120,12 +120,10 @@ const TableRadioLabel = styled.label(
     ${hoverState(css`
       border: solid 1px ${theme.color.primaryColor};
     `)}
-  `,
-)
 
-const TableRadioInput = styled.input(
-  (props) => css`
-    cursor: ${props.cursor};
+    input {
+      cursor: ${props.cursor};
+    }
   `,
 )
 
@@ -554,8 +552,7 @@ const Users = () => {
         email,
         admin: (
           <TableRadioLabel htmlFor={`admin-${projectProfileId}`} cursor={getCursorType()}>
-            <TableRadioInput
-              cursor={getCursorType()}
+            <input
               type="radio"
               value={userRole.admin}
               name={projectProfileId}
@@ -570,8 +567,7 @@ const Users = () => {
         ),
         collector: (
           <TableRadioLabel htmlFor={`collector-${projectProfileId}`} cursor={getCursorType()}>
-            <TableRadioInput
-              cursor={getCursorType()}
+            <input
               type="radio"
               value={userRole.collector}
               name={projectProfileId}
@@ -586,8 +582,7 @@ const Users = () => {
         ),
         readonly: (
           <TableRadioLabel htmlFor={`readonly-${projectProfileId}`} cursor={getCursorType()}>
-            <TableRadioInput
-              cursor={getCursorType()}
+            <input
               type="radio"
               value={userRole.read_only}
               name={projectProfileId}
