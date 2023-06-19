@@ -21,7 +21,7 @@ import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
+import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 
 const StyledColgroup = styled('colgroup')`

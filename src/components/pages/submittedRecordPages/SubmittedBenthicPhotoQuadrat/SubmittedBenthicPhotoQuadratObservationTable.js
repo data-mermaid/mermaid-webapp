@@ -8,13 +8,8 @@ import { getObjectById } from '../../../../library/getObjectById'
 import { getOptions } from '../../../../library/getOptions'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
-import { Table, Tr, Td, Th } from '../../../generic/Table/table'
-import {
-  TheadItem,
-  FormSubTitle,
-  ObservationsSummaryStats,
-  UnderTableRow,
-} from '../SubmittedFormPage.styles'
+import { ObservationsSummaryStats, Table, Tr, Td, Th } from '../../../generic/Table/table'
+import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.styles'
 
 const SubmittedBenthicPhotoQuadratObservationTable = ({
   choices,

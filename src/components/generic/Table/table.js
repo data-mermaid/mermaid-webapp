@@ -217,6 +217,29 @@ export const OverviewTd = styled(Td)`
     display: block;
   }
 `
+
+export const ObservationsSummaryStats = styled(Table)`
+  width: 25%;
+  table-layout: auto;
+  min-width: 25rem;
+  max-width: 40rem;
+  background: none;
+  border: none;
+  tr:nth-child(even),
+  tr:nth-child(odd) {
+    &,
+    &:hover {
+      background-color: ${theme.color.white};
+    }
+    td {
+      text-align: right;
+      border: none;
+    }
+  }
+  ${mediaQueryTabletLandscapeOnly(css`
+    font-size: smaller;
+  `)}
+`
 export const HeaderCenter = styled.p`
   text-align: center;
   white-space: nowrap;
@@ -267,7 +290,6 @@ export const GenericStickyTable = styled(Table)`
   tr th {
     ${stickyStyles}
   }
-  cursor: ${(props) => props.cursor || 'pointer'};
 `
 export const GenericStickyTableTextWrapTh = styled(GenericStickyTable)`
   tr th {

@@ -68,8 +68,8 @@ const benthicpqtObservationReducer = (state, action) => {
           : observation
       })
 
-    case 'updateBenthicAttribute':
-      return state.map((observation) => {
+    case 'updateBenthicAttribute': {
+      const newState = state.map((observation) => {
         const isObservationToUpdate = observation.id === action.payload.observationId
 
         return isObservationToUpdate
@@ -79,6 +79,9 @@ const benthicpqtObservationReducer = (state, action) => {
             }
           : observation
       })
+
+      return newState
+    }
 
     case 'updateGrowthForm':
       return state.map((observation) => {

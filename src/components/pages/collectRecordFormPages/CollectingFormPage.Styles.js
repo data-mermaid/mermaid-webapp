@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components/macro'
 import theme from '../../../theme'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../library/styling/mediaQueries'
 import { ButtonCaution, ButtonThatLooksLikeLink, ButtonSecondary } from '../../generic/buttons'
-import { Table, TableOverflowWrapper, Tr, Td, GenericStickyTable } from '../../generic/Table/table'
+import { TableOverflowWrapper, Tr, Td, GenericStickyTable } from '../../generic/Table/table'
 import { inputTextareaSelectStyles } from '../../generic/form'
 
 export const NewOptionButton = styled(ButtonThatLooksLikeLink)`
@@ -25,21 +25,6 @@ export const InputAutocompleteContainer = styled.div`
   padding: 0;
   border: none;
   background: transparent;
-`
-
-export const ObservationsSummaryStats = styled(Table)`
-  width: 25%;
-  table-layout: auto;
-  min-width: auto;
-  max-width: 40rem;
-  border: solid 1px ${theme.color.secondaryColor};
-  tr:nth-child(even),
-  tr:nth-child(odd) {
-    background-color: ${theme.color.white};
-  }
-  ${mediaQueryTabletLandscapeOnly(css`
-    font-size: smaller;
-  `)}
 `
 
 export const ButtonRemoveRow = styled(ButtonCaution)`

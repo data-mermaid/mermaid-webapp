@@ -19,11 +19,20 @@ const saveNewRecord = async () => {
   userEvent.type(screen.getByLabelText('Transect Number'), '56')
   userEvent.type(screen.getByLabelText('Label'), 'some label')
   userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
-  userEvent.click(within(screen.getByTestId('reef_slope')).getByLabelText('flat'))
-  userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor'))
-  userEvent.click(within(screen.getByTestId('current')).getByLabelText('high'))
-  userEvent.click(within(screen.getByTestId('relative_depth')).getByLabelText('deep'))
-  userEvent.click(within(screen.getByTestId('tide')).getByLabelText('falling'))
+  userEvent.selectOptions(
+    screen.getByLabelText('Reef Slope'),
+    'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+  )
+  userEvent.selectOptions(
+    screen.getByLabelText('Visibility'),
+    'a3ba3f14-330d-47ee-9763-bc32d37d03a5',
+  )
+  userEvent.selectOptions(screen.getByLabelText('Current'), 'e5dcb32c-614d-44ed-8155-5911b7ee774a')
+  userEvent.selectOptions(
+    screen.getByLabelText('Relative Depth'),
+    '8f381e71-219e-469c-8c13-231b088fb861',
+  )
+  userEvent.selectOptions(screen.getByLabelText('Tide'), '97a63da7-e98c-4be7-8f13-e95d38aa17ae')
   userEvent.type(screen.getByLabelText('Notes'), 'some notes')
 
   userEvent.click(screen.getByText('Save', { selector: 'button' }))
@@ -52,23 +61,24 @@ describe('Online', () => {
     // we constrain some queries to the form element because the form title has similar text that will also be selected
     const form = screen.getByRole('form')
 
-    // Site select
-    expect(screen.getByDisplayValue('Site A'))
-    // Management select
-    expect(screen.getByDisplayValue('Management Regimes B [Management Regimes 2]'))
+    expect(screen.getByLabelText('Site')).toHaveDisplayValue('Site A')
+    expect(screen.getByLabelText('Management')).toHaveDisplayValue(
+      'Management Regimes B [Management Regimes 2]',
+    )
     expect(screen.getByLabelText('Depth')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
     expect(within(form).getByLabelText('Transect Number')).toHaveValue(56)
     expect(within(form).getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
-    expect(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('falling')).toBeChecked()
+    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
+    expect(screen.getByLabelText('Visibility')).toHaveDisplayValue('1-5m - poor')
+    expect(screen.getByLabelText('Current')).toHaveDisplayValue('high')
+    expect(screen.getByLabelText('Relative Depth')).toHaveDisplayValue('deep')
+    expect(screen.getByLabelText('Tide')).toHaveDisplayValue('falling')
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   }, 50000)
+
   test('New Benthic LIT save success show new record in collecting table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -121,18 +131,17 @@ describe('Online', () => {
       }),
     )
 
-    // Site select
-    expect(screen.getByDisplayValue('Site A'))
-    // Management select
-    expect(screen.getByDisplayValue('Management Regimes B [Management Regimes 2]'))
+    expect(screen.getByLabelText('Site')).toHaveDisplayValue('Site A')
+    expect(screen.getByLabelText('Management')).toHaveDisplayValue(
+      'Management Regimes B [Management Regimes 2]',
+    )
     expect(screen.getByLabelText('Depth')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    // reef slope radio checked on flat value
-    expect(screen.getByLabelText('flat')).toBeChecked()
+    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
 
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   }, 50000)

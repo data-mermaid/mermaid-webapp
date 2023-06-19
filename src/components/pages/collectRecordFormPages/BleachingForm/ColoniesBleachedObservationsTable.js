@@ -25,7 +25,7 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBleachedSummaryStats/BleachingColoniesBleachedSummaryStats'
-import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
+import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
@@ -72,7 +72,7 @@ const ColoniesBleachedObservationTable = ({
   }
 
   const observationRows = useMemo(() => {
-    const growthFormSelectOptions = getOptions(choices.growthforms.data)
+    const growthFormOptions = getOptions(choices.growthforms.data)
 
     const handleKeyDown = ({ event, index, observation, isLastCell }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
@@ -207,6 +207,7 @@ const ColoniesBleachedObservationTable = ({
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
                   autoFocus={autoFocusAllowed}
+                  isLastRow={observationsState.length === rowNumber}
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
@@ -229,7 +230,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             >
               <option value=""> </option>
-              {growthFormSelectOptions.map((item) => (
+              {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
                 </option>

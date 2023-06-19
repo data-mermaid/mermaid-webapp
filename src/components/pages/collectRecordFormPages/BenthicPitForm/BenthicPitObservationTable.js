@@ -23,7 +23,7 @@ import { IconClose, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
+import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import language from '../../../../language'
 import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats/BenthicPitLitObservationSummaryStats'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
@@ -89,7 +89,7 @@ const BenthicPitObservationsTable = ({
   )
 
   const observationsRows = useMemo(() => {
-    const growthFormSelectOptions = getOptions(choices.growthforms.data)
+    const growthFormOptions = getOptions(choices.growthforms.data)
 
     const handleKeyDown = ({ event, index, observation, isGrowthForm }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
@@ -197,6 +197,7 @@ const BenthicPitObservationsTable = ({
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
                   autoFocus={autoFocusAllowed}
+                  isLastRow={observationsState.length === rowNumber}
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
@@ -221,7 +222,7 @@ const BenthicPitObservationsTable = ({
               aria-labelledby="growth-form-label"
             >
               <option value=""> </option>
-              {growthFormSelectOptions.map((item) => (
+              {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
                 </option>
