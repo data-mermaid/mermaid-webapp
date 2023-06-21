@@ -24,6 +24,7 @@ import { splitSearchQueryStrings } from '../../../library/splitSearchQueryString
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import AddSampleUnitButton from './AddSampleUnitButton'
+import MethodsFilterDropDown from './MethodFilterDropDown'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
@@ -181,6 +182,7 @@ const Collect = () => {
         },
       ],
       globalFilter: '',
+      methodsColumnFilter: [],
     }
   }, [])
 
@@ -220,7 +222,8 @@ const Collect = () => {
     previousPage,
     setPageSize,
     setGlobalFilter,
-    state: { pageIndex, pageSize, sortBy, globalFilter },
+    setMethodsColumnFilter,
+    state: { pageIndex, pageSize, sortBy, globalFilter, methodsColumnFilter },
   } = useTable(
     {
       columns: tableColumns,
@@ -229,6 +232,7 @@ const Collect = () => {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
+        methodsColumnFilter: tableUserPrefs.methodsColumnFilter,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -244,6 +248,8 @@ const Collect = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const handleMethodsColumnFilterChange = (value) => setMethodsColumnFilter(value)
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -251,6 +257,13 @@ const Collect = () => {
   const _setFilterPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
+
+  const _setMethodsColumnFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({
+      propertyKey: 'methodsColumnFilter',
+      currentValue: methodsColumnFilter,
+    })
+  }, [methodsColumnFilter, handleSetTableUserPrefs])
 
   const _setPageSizePrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
@@ -347,6 +360,11 @@ const Collect = () => {
                 disabled={collectRecordsForUiDisplay.length === 0}
               />
               <AddSampleUnitButton />
+              <MethodsFilterDropDown
+                value={tableUserPrefs.methodsColumnFilter}
+                handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
+                disabled={collectRecordsForUiDisplay.length === 0}
+              />
             </ToolBarRow>
           )}
         </>
