@@ -16,8 +16,6 @@ const getTableRowValuesToFilter = (allowedKeys, row) => {
  * @returns {Array<Row>} Array of rows where one or more key matches the query terms.
  */
 export const getTableFilteredRows = (rows, keys, queryTerms) => {
-  console.log({ rows, keys, queryTerms })
-
   return rows.filter((row) => {
     const relevantValues = getTableRowValuesToFilter(keys, row)
 

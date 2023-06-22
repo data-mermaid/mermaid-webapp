@@ -56,6 +56,8 @@ const Collect = () => {
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
+  const [methodsFilterEnabled, setMethodsFilterEnabled] = useState(false)
+  const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -165,6 +167,12 @@ const Collect = () => {
     [collectRecordsForUiDisplay, currentProjectPath],
   )
 
+  const tableMethodFilters = useCallback((rows, filterValue) => {
+    const filteredRows = rows.filter((row) => filterValue.includes(row.method.props.children))
+
+    setMethodsFilteredTableCellData(filteredRows)
+  }, [])
+
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -182,7 +190,7 @@ const Collect = () => {
         },
       ],
       globalFilter: '',
-      methodsColumnFilter: [],
+      columnFilters: [],
     }
   }, [])
 
@@ -222,17 +230,16 @@ const Collect = () => {
     previousPage,
     setPageSize,
     setGlobalFilter,
-    setMethodsColumnFilter,
-    state: { pageIndex, pageSize, sortBy, globalFilter, methodsColumnFilter },
+    state: { pageIndex, pageSize, sortBy, globalFilter },
   } = useTable(
     {
       columns: tableColumns,
-      data: tableCellData,
+      data: methodsFilterEnabled ? methodsFilteredTableCellData : tableCellData,
       initialState: {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
-        methodsColumnFilter: tableUserPrefs.methodsColumnFilter,
+        columnFilters: tableUserPrefs.columnFilters,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -248,7 +255,14 @@ const Collect = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const handleMethodsColumnFilterChange = (value) => setMethodsColumnFilter(value)
+  const handleMethodsColumnFilterChange = (value) => {
+    if (value.length) {
+      setMethodsFilterEnabled(true)
+      tableMethodFilters(tableCellData, value)
+    } else {
+      setMethodsFilterEnabled(false)
+    }
+  }
 
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
@@ -257,13 +271,6 @@ const Collect = () => {
   const _setFilterPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
-
-  const _setMethodsColumnFilterPrefs = useEffect(() => {
-    handleSetTableUserPrefs({
-      propertyKey: 'methodsColumnFilter',
-      currentValue: methodsColumnFilter,
-    })
-  }, [methodsColumnFilter, handleSetTableUserPrefs])
 
   const _setPageSizePrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
@@ -361,7 +368,7 @@ const Collect = () => {
               />
               <AddSampleUnitButton />
               <MethodsFilterDropDown
-                value={tableUserPrefs.methodsColumnFilter}
+                value={tableUserPrefs.columnFilter}
                 handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
                 disabled={collectRecordsForUiDisplay.length === 0}
               />
