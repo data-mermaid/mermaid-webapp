@@ -139,33 +139,32 @@ const Collect = () => {
     [],
   )
 
-  const tableCellData = useMemo(
-    () =>
-      collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
-        const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
+  const tableCellData = useMemo(() => {
+    const data = collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
+      const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
 
-        return {
-          method: (
-            <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
-              {uiLabels.protocol}
-            </Link>
-          ),
-          site: uiLabels.site,
-          management: uiLabels.management,
-          sampleUnitNumber: uiLabels.sampleUnitNumber,
-          size: (
-            <>
-              {uiLabels.size}{' '}
-              {isQuadratSampleUnit && uiLabels.size !== noLabelSymbol && <sup>2</sup>}
-            </>
-          ),
-          depth: uiLabels.depth,
-          sampleDate: uiLabels.sampleDate,
-          observers: uiLabels.observers,
-        }
-      }),
-    [collectRecordsForUiDisplay, currentProjectPath],
-  )
+      return {
+        method: (
+          <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
+            {uiLabels.protocol}
+          </Link>
+        ),
+        site: uiLabels.site,
+        management: uiLabels.management,
+        sampleUnitNumber: uiLabels.sampleUnitNumber,
+        size: (
+          <>
+            {uiLabels.size} {isQuadratSampleUnit && uiLabels.size !== noLabelSymbol && <sup>2</sup>}
+          </>
+        ),
+        depth: uiLabels.depth,
+        sampleDate: uiLabels.sampleDate,
+        observers: uiLabels.observers,
+      }
+    })
+
+    return setMethodsFilteredTableCellData(data)
+  }, [collectRecordsForUiDisplay, currentProjectPath])
 
   const tableMethodFilters = useCallback((rows, filterValue) => {
     const filteredRows = rows.filter((row) => filterValue.includes(row.method.props.children))
@@ -234,7 +233,8 @@ const Collect = () => {
   } = useTable(
     {
       columns: tableColumns,
-      data: methodsFilterEnabled ? methodsFilteredTableCellData : tableCellData,
+      // data: methodsFilterEnabled ? methodsFilteredTableCellData : tableCellData,
+      data: methodsFilteredTableCellData,
       initialState: {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
@@ -256,12 +256,12 @@ const Collect = () => {
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const handleMethodsColumnFilterChange = (value) => {
-    if (value.length) {
-      setMethodsFilterEnabled(true)
-      tableMethodFilters(tableCellData, value)
-    } else {
-      setMethodsFilterEnabled(false)
-    }
+    // if (value.length && collectRecordsForUiDisplay.length) {
+    //   setMethodsFilterEnabled(true)
+    tableMethodFilters(tableCellData, value)
+    // } else {
+    //   setMethodsFilterEnabled(false)
+    // }
   }
 
   const _setSortByPrefs = useEffect(() => {
