@@ -20,6 +20,12 @@ const MenuProps = {
   },
 }
 
+const FormStyle = {
+  m: 1,
+  width: 200,
+  margin: 0,
+}
+
 const methods = [
   'Fish Belt',
   'Benthic PIT',
@@ -30,8 +36,7 @@ const methods = [
 ]
 
 const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, disabled }) => {
-  console.log({ value })
-  const [selectedMethods, setSelectedMethods] = React.useState(methods)
+  const [selectedMethods, setSelectedMethods] = React.useState([])
 
   const handleChange = (event) => {
     const eventValue = event.target.value
@@ -42,7 +47,7 @@ const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, dis
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 200, margin: 0 }}>
+      <FormControl sx={FormStyle}>
         <InputLabel id="method-filer-label">Filter Method</InputLabel>
         <Select
           sx={{ borderRadius: 0, height: '36px' }}
@@ -52,7 +57,7 @@ const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, dis
           value={selectedMethods}
           onChange={(e) => handleChange(e)}
           input={<OutlinedInput label="Filter Method" />}
-          renderValue={() => 'Select Items'}
+          renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
           disabled={disabled}
         >
@@ -70,7 +75,7 @@ const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, dis
 
 MethodsFilterDropDown.defaultProps = {
   id: 'methods-filter-search',
-  value: methods,
+  value: [],
   disabled: false,
 }
 

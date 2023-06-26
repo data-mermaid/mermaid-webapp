@@ -24,7 +24,7 @@ import { splitSearchQueryStrings } from '../../../library/splitSearchQueryString
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import AddSampleUnitButton from './AddSampleUnitButton'
-import MethodsFilterDropDown from './MethodFilterDropDown'
+import MethodsFilterDropDown from './MethodsFilterDropDown'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
@@ -56,8 +56,8 @@ const Collect = () => {
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
-  const [methodsFilterEnabled, setMethodsFilterEnabled] = useState(false)
   const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
+  const [methodsFilterEnabled, setMethodsFilterEnabled] = useState(false)
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -140,7 +140,7 @@ const Collect = () => {
   )
 
   const tableCellData = useMemo(() => {
-    const data = collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
+    const preparedTableCellData = collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
       const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
 
       return {
@@ -163,11 +163,13 @@ const Collect = () => {
       }
     })
 
-    return setMethodsFilteredTableCellData(data)
+    setMethodsFilteredTableCellData(preparedTableCellData)
+
+    return preparedTableCellData
   }, [collectRecordsForUiDisplay, currentProjectPath])
 
-  const tableMethodFilters = useCallback((rows, filterValue) => {
-    const filteredRows = rows.filter((row) => filterValue.includes(row.method.props.children))
+  const addMethodsTableFilters = useCallback((rows, filterValue) => {
+    const filteredRows = rows?.filter((row) => filterValue.includes(row.method.props.children))
 
     setMethodsFilteredTableCellData(filteredRows)
   }, [])
@@ -189,7 +191,6 @@ const Collect = () => {
         },
       ],
       globalFilter: '',
-      columnFilters: [],
     }
   }, [])
 
@@ -233,13 +234,11 @@ const Collect = () => {
   } = useTable(
     {
       columns: tableColumns,
-      // data: methodsFilterEnabled ? methodsFilteredTableCellData : tableCellData,
-      data: methodsFilteredTableCellData,
+      data: methodsFilterEnabled ? methodsFilteredTableCellData : tableCellData,
       initialState: {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
-        columnFilters: tableUserPrefs.columnFilters,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -256,12 +255,12 @@ const Collect = () => {
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const handleMethodsColumnFilterChange = (value) => {
-    // if (value.length && collectRecordsForUiDisplay.length) {
-    //   setMethodsFilterEnabled(true)
-    tableMethodFilters(tableCellData, value)
-    // } else {
-    //   setMethodsFilterEnabled(false)
-    // }
+    if (value.length && collectRecordsForUiDisplay.length) {
+      setMethodsFilterEnabled(true)
+      addMethodsTableFilters(tableCellData, value)
+    } else {
+      setMethodsFilterEnabled(false)
+    }
   }
 
   const _setSortByPrefs = useEffect(() => {
