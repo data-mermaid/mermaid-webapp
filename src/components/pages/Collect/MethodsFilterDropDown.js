@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { string } from 'prop-types'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -41,14 +41,11 @@ const methods = [
   'Habitat Complexity',
 ]
 
-const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, id, disabled }) => {
-  const [selectedMethods, setSelectedMethods] = React.useState([])
-
+const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, disabled }) => {
   const handleChange = (event) => {
     const eventValue = event.target.value
 
     handleMethodsColumnFilterChange(eventValue)
-    setSelectedMethods(eventValue)
   }
 
   return (
@@ -60,7 +57,7 @@ const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, id, disabled }
           labelId="method-filter-multiple-checkbox-label"
           id={id}
           multiple
-          value={selectedMethods}
+          value={value}
           onChange={(e) => handleChange(e)}
           input={<OutlinedInput label="Filter Method" />}
           renderValue={(selected) => selected.join(', ')}
@@ -69,7 +66,7 @@ const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, id, disabled }
         >
           {methods.map((method) => (
             <MenuItem key={method} value={method}>
-              <Checkbox style={CheckboxStyle} checked={selectedMethods.indexOf(method) > -1} />
+              <Checkbox style={CheckboxStyle} checked={value.indexOf(method) > -1} />
               <ListItemText primary={method} />
             </MenuItem>
           ))}
@@ -82,11 +79,13 @@ const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, id, disabled }
 MethodsFilterDropDown.defaultProps = {
   id: 'methods-filter-search',
   disabled: false,
+  value: [],
 }
 
 MethodsFilterDropDown.propTypes = {
   handleMethodsColumnFilterChange: PropTypes.func.isRequired,
   id: PropTypes.string,
+  value: PropTypes.arrayOf(string),
   disabled: PropTypes.bool,
 }
 
