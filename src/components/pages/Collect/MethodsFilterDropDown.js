@@ -8,6 +8,7 @@ import FormControl from '@mui/material/FormControl'
 import ListItemText from '@mui/material/ListItemText'
 import Select from '@mui/material/Select'
 import Checkbox from '@mui/material/Checkbox'
+import theme from '../../../theme'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -16,6 +17,7 @@ const MenuProps = {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
       width: 200,
+      color: theme.color.textColor,
     },
   },
 }
@@ -26,6 +28,10 @@ const FormStyle = {
   margin: 0,
 }
 
+const SelectStyle = { borderRadius: 0, height: '36px' }
+
+const CheckboxStyle = { color: theme.color.textColor }
+
 const methods = [
   'Fish Belt',
   'Benthic PIT',
@@ -35,7 +41,7 @@ const methods = [
   'Habitat Complexity',
 ]
 
-const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, disabled }) => {
+const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, id, disabled }) => {
   const [selectedMethods, setSelectedMethods] = React.useState([])
 
   const handleChange = (event) => {
@@ -50,7 +56,7 @@ const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, dis
       <FormControl sx={FormStyle}>
         <InputLabel id="method-filer-label">Filter Method</InputLabel>
         <Select
-          sx={{ borderRadius: 0, height: '36px' }}
+          sx={SelectStyle}
           labelId="method-filter-multiple-checkbox-label"
           id={id}
           multiple
@@ -63,7 +69,7 @@ const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, dis
         >
           {methods.map((method) => (
             <MenuItem key={method} value={method}>
-              <Checkbox checked={selectedMethods.indexOf(method) > -1} />
+              <Checkbox style={CheckboxStyle} checked={selectedMethods.indexOf(method) > -1} />
               <ListItemText primary={method} />
             </MenuItem>
           ))}
@@ -75,14 +81,12 @@ const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, dis
 
 MethodsFilterDropDown.defaultProps = {
   id: 'methods-filter-search',
-  value: [],
   disabled: false,
 }
 
 MethodsFilterDropDown.propTypes = {
   handleMethodsColumnFilterChange: PropTypes.func.isRequired,
   id: PropTypes.string,
-  value: PropTypes.arrayOf(PropTypes.string),
   disabled: PropTypes.bool,
 }
 
