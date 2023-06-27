@@ -57,6 +57,8 @@ const Collect = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
+  const tableSessionStorage = JSON.parse(window.sessionStorage[`${currentUser.id}-collectTable`])
+  const [methodsFilter, setMethodsFilter] = useState(tableSessionStorage.methodsFilter)
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -173,6 +175,12 @@ const Collect = () => {
     setMethodsFilteredTableCellData(filteredRows)
   }, [])
 
+  const _applyMethodsFilterOnLoad = useEffect(() => {
+    if (methodsFilter.length) {
+      applyMethodsTableFilters(tableCellData, methodsFilter)
+    }
+  }, [methodsFilter, tableCellData, applyMethodsTableFilters])
+
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -197,8 +205,6 @@ const Collect = () => {
     key: `${currentUser.id}-collectTable`,
     defaultValue: tableDefaultPrefs,
   })
-
-  const [methodsFilter, setMethodsFilter] = useState(tableUserPrefs.methodsFilter)
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -263,12 +269,6 @@ const Collect = () => {
       setMethodsFilter([])
     }
   }
-
-  const _applyMethodsFilterOnLoad = useEffect(() => {
-    if (methodsFilter.length) {
-      applyMethodsTableFilters(tableCellData, methodsFilter)
-    }
-  }, [methodsFilter, tableCellData, applyMethodsTableFilters])
 
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
