@@ -58,7 +58,7 @@ const Collect = () => {
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
   const tableSessionStorage = JSON.parse(window.sessionStorage[`${currentUser.id}-collectTable`])
-  const [methodsFilter, setMethodsFilter] = useState(tableSessionStorage.methodsFilter)
+  const [methodsFilter, setMethodsFilter] = useState(tableSessionStorage?.methodsFilter)
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -241,7 +241,7 @@ const Collect = () => {
   } = useTable(
     {
       columns: tableColumns,
-      data: methodsFilter ? methodsFilteredTableCellData : tableCellData,
+      data: methodsFilter.length ? methodsFilteredTableCellData : tableCellData,
       initialState: {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
