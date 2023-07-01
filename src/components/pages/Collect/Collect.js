@@ -1,7 +1,7 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import {
   Tr,
   Th,
@@ -57,8 +57,10 @@ const Collect = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
-  const tableSessionStorage = JSON.parse(window.sessionStorage[`${currentUser.id}-collectTable`])
-  const [methodsFilter, setMethodsFilter] = useState(tableSessionStorage?.methodsFilter)
+  // const tableSessionStorage = JSON.parse(window.sessionStorage[`${currentUser.id}-collectTable`])
+  // const [methodsFilter, setMethodsFilter] = useState(tableSessionStorage?.methodsFilter)
+  const [methodsFilter, setMethodsFilter] = useState([])
+  const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -205,6 +207,19 @@ const Collect = () => {
     key: `${currentUser.id}-collectTable`,
     defaultValue: tableDefaultPrefs,
   })
+
+  useEffect(
+    function initializeMethodFilterWithPersistedTablePreferences() {
+      if (
+        !isMethodFilterInitializedWithPersistedTablePreferences.current &&
+        tableUserPrefs?.methodsFilter
+      ) {
+        setMethodsFilter(tableUserPrefs.methodsFilter)
+        isMethodFilterInitializedWithPersistedTablePreferences.current = true
+      }
+    },
+    [tableUserPrefs],
+  )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
