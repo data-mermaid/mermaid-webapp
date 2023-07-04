@@ -10,7 +10,7 @@ import { IconDownload } from '../../icons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
-import MethodsFilterDropDown from '../../MethodFilterDropDown/MethodsFilterDropDown'
+import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import theme from '../../../theme'
 
 const DropdownItemStyle = styled.button`
