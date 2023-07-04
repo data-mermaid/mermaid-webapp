@@ -253,8 +253,7 @@ const Collect = () => {
   } = useTable(
     {
       columns: tableColumns,
-      // data: methodsFilter.length ? methodsFilteredTableCellData : tableCellData,
-      data: tableCellData,
+      data: methodsFilter.length ? methodsFilteredTableCellData : tableCellData,
       initialState: {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
