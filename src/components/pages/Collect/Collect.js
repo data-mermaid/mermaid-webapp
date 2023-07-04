@@ -1,7 +1,7 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import {
   Tr,
   Th,
@@ -24,6 +24,7 @@ import { splitSearchQueryStrings } from '../../../library/splitSearchQueryString
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import AddSampleUnitButton from './AddSampleUnitButton'
+import MethodsFilterDropDown from './MethodsFilterDropDown'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
@@ -55,6 +56,9 @@ const Collect = () => {
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
+  const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
+  const [methodsFilter, setMethodsFilter] = useState([])
+  const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -136,33 +140,46 @@ const Collect = () => {
     [],
   )
 
-  const tableCellData = useMemo(
-    () =>
-      collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
-        const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
+  const tableCellData = useMemo(() => {
+    const preparedTableCellData = collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
+      const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
 
-        return {
-          method: (
-            <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
-              {uiLabels.protocol}
-            </Link>
-          ),
-          site: uiLabels.site,
-          management: uiLabels.management,
-          sampleUnitNumber: uiLabels.sampleUnitNumber,
-          size: (
-            <>
-              {uiLabels.size}{' '}
-              {isQuadratSampleUnit && uiLabels.size !== noLabelSymbol && <sup>2</sup>}
-            </>
-          ),
-          depth: uiLabels.depth,
-          sampleDate: uiLabels.sampleDate,
-          observers: uiLabels.observers,
-        }
-      }),
-    [collectRecordsForUiDisplay, currentProjectPath],
-  )
+      return {
+        method: (
+          <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
+            {uiLabels.protocol}
+          </Link>
+        ),
+        site: uiLabels.site,
+        management: uiLabels.management,
+        sampleUnitNumber: uiLabels.sampleUnitNumber,
+        size: (
+          <>
+            {uiLabels.size} {isQuadratSampleUnit && uiLabels.size !== noLabelSymbol && <sup>2</sup>}
+          </>
+        ),
+        depth: uiLabels.depth,
+        sampleDate: uiLabels.sampleDate,
+        observers: uiLabels.observers,
+      }
+    })
+
+    setMethodsFilteredTableCellData(preparedTableCellData)
+
+    return preparedTableCellData
+  }, [collectRecordsForUiDisplay, currentProjectPath])
+
+  const applyMethodsTableFilters = useCallback((rows, filterValue) => {
+    const filteredRows = rows?.filter((row) => filterValue.includes(row.method.props.children))
+
+    setMethodsFilteredTableCellData(filteredRows)
+  }, [])
+
+  const _applyMethodsFilterOnLoad = useEffect(() => {
+    if (methodsFilter.length) {
+      applyMethodsTableFilters(tableCellData, methodsFilter)
+    }
+  }, [methodsFilter, tableCellData, applyMethodsTableFilters])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -188,6 +205,19 @@ const Collect = () => {
     key: `${currentUser.id}-collectTable`,
     defaultValue: tableDefaultPrefs,
   })
+
+  useEffect(
+    function initializeMethodFilterWithPersistedTablePreferences() {
+      if (
+        !isMethodFilterInitializedWithPersistedTablePreferences.current &&
+        tableUserPrefs?.methodsFilter
+      ) {
+        setMethodsFilter(tableUserPrefs.methodsFilter)
+        isMethodFilterInitializedWithPersistedTablePreferences.current = true
+      }
+    },
+    [tableUserPrefs],
+  )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -224,7 +254,7 @@ const Collect = () => {
   } = useTable(
     {
       columns: tableColumns,
-      data: tableCellData,
+      data: methodsFilter.length ? methodsFilteredTableCellData : tableCellData,
       initialState: {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
@@ -244,6 +274,15 @@ const Collect = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const handleMethodsColumnFilterChange = (filters) => {
+    if (filters.length && collectRecordsForUiDisplay.length) {
+      setMethodsFilter(filters)
+      applyMethodsTableFilters(tableCellData, filters)
+    } else {
+      setMethodsFilter([])
+    }
+  }
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -255,6 +294,10 @@ const Collect = () => {
   const _setPageSizePrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
+
+  const _setMethodsFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'methodsFilter', currentValue: methodsFilter })
+  }, [methodsFilter, handleSetTableUserPrefs])
 
   const table = collectRecordsForUiDisplay.length ? (
     <>
@@ -347,6 +390,11 @@ const Collect = () => {
                 disabled={collectRecordsForUiDisplay.length === 0}
               />
               <AddSampleUnitButton />
+              <MethodsFilterDropDown
+                value={tableUserPrefs.methodsFilter}
+                handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
+                disabled={collectRecordsForUiDisplay.length === 0}
+              />
             </ToolBarRow>
           )}
         </>
