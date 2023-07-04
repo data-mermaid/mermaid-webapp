@@ -140,34 +140,33 @@ const Collect = () => {
     [],
   )
 
-  const tableCellData = useMemo(() => {
-    const preparedTableCellData = collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
-      const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
+  const tableCellData = useMemo(
+    () =>
+      collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
+        const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
 
-      return {
-        method: (
-          <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
-            {uiLabels.protocol}
-          </Link>
-        ),
-        site: uiLabels.site,
-        management: uiLabels.management,
-        sampleUnitNumber: uiLabels.sampleUnitNumber,
-        size: (
-          <>
-            {uiLabels.size} {isQuadratSampleUnit && uiLabels.size !== noLabelSymbol && <sup>2</sup>}
-          </>
-        ),
-        depth: uiLabels.depth,
-        sampleDate: uiLabels.sampleDate,
-        observers: uiLabels.observers,
-      }
-    })
-
-    setMethodsFilteredTableCellData(preparedTableCellData)
-
-    return preparedTableCellData
-  }, [collectRecordsForUiDisplay, currentProjectPath])
+        return {
+          method: (
+            <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
+              {uiLabels.protocol}
+            </Link>
+          ),
+          site: uiLabels.site,
+          management: uiLabels.management,
+          sampleUnitNumber: uiLabels.sampleUnitNumber,
+          size: (
+            <>
+              {uiLabels.size}{' '}
+              {isQuadratSampleUnit && uiLabels.size !== noLabelSymbol && <sup>2</sup>}
+            </>
+          ),
+          depth: uiLabels.depth,
+          sampleDate: uiLabels.sampleDate,
+          observers: uiLabels.observers,
+        }
+      }),
+    [collectRecordsForUiDisplay, currentProjectPath],
+  )
 
   const applyMethodsTableFilters = useCallback((rows, filterValue) => {
     const filteredRows = rows?.filter((row) => filterValue.includes(row.method.props.children))
