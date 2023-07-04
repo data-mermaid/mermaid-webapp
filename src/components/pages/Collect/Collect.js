@@ -57,8 +57,6 @@ const Collect = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
-  // const tableSessionStorage = JSON.parse(window.sessionStorage[`${currentUser.id}-collectTable`])
-  // const [methodsFilter, setMethodsFilter] = useState(tableSessionStorage?.methodsFilter)
   const [methodsFilter, setMethodsFilter] = useState([])
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
 
