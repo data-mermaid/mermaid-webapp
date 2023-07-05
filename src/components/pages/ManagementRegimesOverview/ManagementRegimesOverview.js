@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
 
 import { ContentPageLayout } from '../../Layout'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
-import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import { H2 } from '../../generic/text'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
@@ -67,9 +66,6 @@ const ManagementRegimesOverview = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
   const handleHttpResponseError = useHttpResponseErrorHandler()
-  const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
-  const [methodsFilter, setMethodsFilter] = useState([])
-  const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -189,21 +185,6 @@ const ManagementRegimesOverview = () => {
     [sampleUnitWithManagementRegimeRecords, populateSampleUnitNumbersByManagementRegimeRow],
   )
 
-  const applyMethodsTableFilters = useCallback((rows, filterValue) => {
-    const filteredRows = rows?.filter((row) => filterValue.includes(row.method))
-
-    setMethodsFilteredTableCellData(filteredRows)
-  }, [])
-
-  console.log('outside func', { tableCellData })
-
-  const _applyMethodsFilterOnLoad = useEffect(() => {
-    if (methodsFilter.length) {
-      console.log('inside apply methods filter', { tableCellData })
-      applyMethodsTableFilters(tableCellData, methodsFilter)
-    }
-  }, [methodsFilter, tableCellData, applyMethodsTableFilters])
-
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -220,25 +201,6 @@ const ManagementRegimesOverview = () => {
     key: `${currentUser.id}-managementRegimesOverviewTable`,
     defaultValue: tableDefaultPrefs,
   })
-
-  useEffect(
-    function initializeMethodFilterWithPersistedTablePreferences() {
-      if (
-        !isMethodFilterInitializedWithPersistedTablePreferences.current &&
-        tableUserPrefs?.methodsFilter
-      ) {
-        setMethodsFilter(tableUserPrefs.methodsFilter)
-        isMethodFilterInitializedWithPersistedTablePreferences.current = true
-      }
-    },
-    [
-      applyMethodsTableFilters,
-      methodsFilter,
-      methodsFilteredTableCellData,
-      tableCellData,
-      tableUserPrefs,
-    ],
-  )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.site', 'values.method']
@@ -270,7 +232,7 @@ const ManagementRegimesOverview = () => {
   } = useTable(
     {
       columns: tableColumns,
-      data: methodsFilter.length ? methodsFilteredTableCellData : tableCellData,
+      data: tableCellData,
       initialState: {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
@@ -288,15 +250,6 @@ const ManagementRegimesOverview = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const handleMethodsColumnFilterChange = (filters) => {
-    if (filters.length && sampleUnitWithManagementRegimeRecords.length) {
-      setMethodsFilter(filters)
-      applyMethodsTableFilters(tableCellData, filters)
-    } else {
-      setMethodsFilter([])
-    }
-  }
-
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -308,10 +261,6 @@ const ManagementRegimesOverview = () => {
   const _setPageSizePrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
-
-  const _setMethodsFilterPrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'methodsFilter', currentValue: methodsFilter })
-  }, [methodsFilter, handleSetTableUserPrefs])
 
   const table = sampleUnitWithManagementRegimeRecords.length ? (
     <>
@@ -461,11 +410,6 @@ const ManagementRegimesOverview = () => {
             name={language.pages.usersAndTransectsTable.filterToolbarText}
             value={tableUserPrefs.globalFilter}
             handleGlobalFilterChange={handleGlobalFilterChange}
-            disabled={sampleUnitWithManagementRegimeRecords.length === 0}
-          />
-          <MethodsFilterDropDown
-            value={tableUserPrefs.methodsFilter}
-            handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
             disabled={sampleUnitWithManagementRegimeRecords.length === 0}
           />
         </ToolBarRow>
