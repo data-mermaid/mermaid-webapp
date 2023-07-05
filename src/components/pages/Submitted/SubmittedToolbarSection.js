@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import PropTypes from 'prop-types'
+import PropTypes, { string } from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
@@ -10,6 +10,7 @@ import { IconDownload } from '../../icons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
+import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import theme from '../../../theme'
 
 const DropdownItemStyle = styled.button`
@@ -23,7 +24,14 @@ const DropdownItemStyle = styled.button`
   `)}
 `
 
-const SubmittedToolbarSection = ({ name, handleGlobalFilterChange, filterValue, disabled }) => {
+const SubmittedToolbarSection = ({
+  name,
+  handleGlobalFilterChange,
+  handleMethodsColumnFilterChange,
+  searchFilterValue,
+  methodFilterValue,
+  disabled,
+}) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
 
@@ -44,7 +52,12 @@ const SubmittedToolbarSection = ({ name, handleGlobalFilterChange, filterValue, 
         <FilterSearchToolbar
           name={name}
           handleGlobalFilterChange={handleGlobalFilterChange}
-          value={filterValue}
+          value={searchFilterValue}
+          disabled={disabled}
+        />
+        <MethodsFilterDropDown
+          value={methodFilterValue}
+          handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
           disabled={disabled}
         />
         <ButtonSecondaryDropdown label={label}>
@@ -78,14 +91,17 @@ const SubmittedToolbarSection = ({ name, handleGlobalFilterChange, filterValue, 
 }
 
 SubmittedToolbarSection.defaultProps = {
-  filterValue: undefined,
+  searchFilterValue: undefined,
+  methodFilterValue: [],
   disabled: false,
 }
 
 SubmittedToolbarSection.propTypes = {
   name: PropTypes.string.isRequired,
   handleGlobalFilterChange: PropTypes.func.isRequired,
-  filterValue: PropTypes.string,
+  handleMethodsColumnFilterChange: PropTypes.func.isRequired,
+  searchFilterValue: PropTypes.string,
+  methodFilterValue: PropTypes.arrayOf(string),
   disabled: PropTypes.bool,
 }
 

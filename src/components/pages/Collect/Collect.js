@@ -24,7 +24,7 @@ import { splitSearchQueryStrings } from '../../../library/splitSearchQueryString
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import AddSampleUnitButton from './AddSampleUnitButton'
-import MethodsFilterDropDown from './MethodsFilterDropDown'
+import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
@@ -140,34 +140,33 @@ const Collect = () => {
     [],
   )
 
-  const tableCellData = useMemo(() => {
-    const preparedTableCellData = collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
-      const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
+  const tableCellData = useMemo(
+    () =>
+      collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
+        const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
 
-      return {
-        method: (
-          <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
-            {uiLabels.protocol}
-          </Link>
-        ),
-        site: uiLabels.site,
-        management: uiLabels.management,
-        sampleUnitNumber: uiLabels.sampleUnitNumber,
-        size: (
-          <>
-            {uiLabels.size} {isQuadratSampleUnit && uiLabels.size !== noLabelSymbol && <sup>2</sup>}
-          </>
-        ),
-        depth: uiLabels.depth,
-        sampleDate: uiLabels.sampleDate,
-        observers: uiLabels.observers,
-      }
-    })
-
-    setMethodsFilteredTableCellData(preparedTableCellData)
-
-    return preparedTableCellData
-  }, [collectRecordsForUiDisplay, currentProjectPath])
+        return {
+          method: (
+            <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
+              {uiLabels.protocol}
+            </Link>
+          ),
+          site: uiLabels.site,
+          management: uiLabels.management,
+          sampleUnitNumber: uiLabels.sampleUnitNumber,
+          size: (
+            <>
+              {uiLabels.size}{' '}
+              {isQuadratSampleUnit && uiLabels.size !== noLabelSymbol && <sup>2</sup>}
+            </>
+          ),
+          depth: uiLabels.depth,
+          sampleDate: uiLabels.sampleDate,
+          observers: uiLabels.observers,
+        }
+      }),
+    [collectRecordsForUiDisplay, currentProjectPath],
+  )
 
   const applyMethodsTableFilters = useCallback((rows, filterValue) => {
     const filteredRows = rows?.filter((row) => filterValue.includes(row.method.props.children))
