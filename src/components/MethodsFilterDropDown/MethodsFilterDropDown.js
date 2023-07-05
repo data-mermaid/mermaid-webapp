@@ -22,6 +22,8 @@ const MenuProps = {
   },
 }
 
+const fontStyle = { fontFamily: 'Open Sans' }
+
 const FormStyle = {
   m: 1,
   width: 200,
@@ -67,7 +69,7 @@ const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, dis
           {methods.map((method) => (
             <MenuItem key={method} value={method}>
               <Checkbox style={CheckboxStyle} checked={value.indexOf(method) > -1} />
-              <ListItemText primary={method} />
+              <ListItemText primary={method} primaryTypographyProps={fontStyle} />
             </MenuItem>
           ))}
         </Select>
