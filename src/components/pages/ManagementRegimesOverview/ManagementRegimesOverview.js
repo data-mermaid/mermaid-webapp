@@ -189,6 +189,8 @@ const ManagementRegimesOverview = () => {
     [sampleUnitWithManagementRegimeRecords, populateSampleUnitNumbersByManagementRegimeRow],
   )
 
+  console.log('outside function', { tableCellData })
+
   const applyMethodsTableFilters = useCallback((rows, filterValue) => {
     const filteredRows = rows?.filter((row) => filterValue.includes(row.method))
 
@@ -197,6 +199,7 @@ const ManagementRegimesOverview = () => {
 
   const _applyMethodsFilterOnLoad = useEffect(() => {
     if (methodsFilter.length) {
+      console.log('inside onLoad function: ', { tableCellData })
       applyMethodsTableFilters(tableCellData, methodsFilter)
     }
   }, [methodsFilter, tableCellData, applyMethodsTableFilters])
