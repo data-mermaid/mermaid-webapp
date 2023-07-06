@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { toast } from 'react-toastify'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
@@ -37,6 +37,7 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 
 const groupManagementRegimes = (records) => {
   return records.reduce((accumulator, record) => {
@@ -66,6 +67,9 @@ const ManagementRegimesOverview = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
+  const [methodsFilter, setMethodsFilter] = useState([])
+  const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -185,6 +189,18 @@ const ManagementRegimesOverview = () => {
     [sampleUnitWithManagementRegimeRecords, populateSampleUnitNumbersByManagementRegimeRow],
   )
 
+  const applyMethodsTableFilters = useCallback((rows, filterValue) => {
+    const filteredRows = rows?.filter((row) => filterValue.includes(row.method))
+
+    setMethodsFilteredTableCellData(filteredRows)
+  }, [])
+
+  const _applyMethodsFilterOnLoad = useEffect(() => {
+    if (methodsFilter.length) {
+      applyMethodsTableFilters(tableCellData, methodsFilter)
+    }
+  }, [methodsFilter, tableCellData, applyMethodsTableFilters])
+
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -201,6 +217,19 @@ const ManagementRegimesOverview = () => {
     key: `${currentUser.id}-managementRegimesOverviewTable`,
     defaultValue: tableDefaultPrefs,
   })
+
+  useEffect(
+    function initializeMethodFilterWithPersistedTablePreferences() {
+      if (
+        !isMethodFilterInitializedWithPersistedTablePreferences.current &&
+        tableUserPrefs?.methodsFilter
+      ) {
+        setMethodsFilter(tableUserPrefs.methodsFilter)
+        isMethodFilterInitializedWithPersistedTablePreferences.current = true
+      }
+    },
+    [tableUserPrefs],
+  )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.site', 'values.method']
@@ -232,7 +261,7 @@ const ManagementRegimesOverview = () => {
   } = useTable(
     {
       columns: tableColumns,
-      data: tableCellData,
+      data: methodsFilter.length ? methodsFilteredTableCellData : tableCellData,
       initialState: {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
@@ -250,6 +279,15 @@ const ManagementRegimesOverview = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const handleMethodsColumnFilterChange = (filters) => {
+    if (filters.length && sampleUnitWithManagementRegimeRecords.length) {
+      setMethodsFilter(filters)
+      applyMethodsTableFilters(tableCellData, filters)
+    } else {
+      setMethodsFilter([])
+    }
+  }
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -261,6 +299,10 @@ const ManagementRegimesOverview = () => {
   const _setPageSizePrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
+
+  const _setMethodsFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'methodsFilter', currentValue: methodsFilter })
+  }, [methodsFilter, handleSetTableUserPrefs])
 
   const table = sampleUnitWithManagementRegimeRecords.length ? (
     <>
@@ -310,8 +352,8 @@ const ManagementRegimesOverview = () => {
                 (cell) => cell.value !== '-',
               )
 
-              const mrTransectNumberRowCellValues = mrTransectNumberRowCellsWithNonEmptyValue.map(
-                (cell) => cell.value.props.sampleUnitNumbersRow.length,
+              const mrTransectNumberRowCellValues = mrTransectNumberRowCellsWithNonEmptyValue?.map(
+                (cell) => cell?.value?.props?.sampleUnitNumbersRow?.length,
               )
 
               const maxSampleUnitCount = Math.max(...mrTransectNumberRowCellValues)
@@ -338,11 +380,11 @@ const ManagementRegimesOverview = () => {
 
                     const isCellValueLessThanMaxSampleUnitCount =
                       managementRegimeCellNonEmpty &&
-                      cell.value.props.sampleUnitNumbersRow.length < maxSampleUnitCount
+                      cell?.value?.props?.sampleUnitNumbersRow.length < maxSampleUnitCount
 
                     const isCellValueEqualToMaxSampleUnitCount =
                       managementRegimeCellNonEmpty &&
-                      cell.value.props.sampleUnitNumbersRow.length === maxSampleUnitCount
+                      cell?.value?.props?.sampleUnitNumbersRow.length === maxSampleUnitCount
 
                     const isManagementRegimeCellHighlighted = isEveryMRLabelsSameAsMax
                       ? isCellValueEqualToMaxSampleUnitCount
@@ -410,6 +452,11 @@ const ManagementRegimesOverview = () => {
             name={language.pages.usersAndTransectsTable.filterToolbarText}
             value={tableUserPrefs.globalFilter}
             handleGlobalFilterChange={handleGlobalFilterChange}
+            disabled={sampleUnitWithManagementRegimeRecords.length === 0}
+          />
+          <MethodsFilterDropDown
+            value={tableUserPrefs.methodsFilter}
+            handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
             disabled={sampleUnitWithManagementRegimeRecords.length === 0}
           />
         </ToolBarRow>
