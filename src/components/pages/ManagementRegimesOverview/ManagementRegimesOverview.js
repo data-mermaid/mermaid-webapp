@@ -355,8 +355,8 @@ const ManagementRegimesOverview = () => {
                 (cell) => cell.value !== '-',
               )
 
-              const mrTransectNumberRowCellValues = mrTransectNumberRowCellsWithNonEmptyValue.map(
-                (cell) => cell.value.props.sampleUnitNumbersRow.length,
+              const mrTransectNumberRowCellValues = mrTransectNumberRowCellsWithNonEmptyValue?.map(
+                (cell) => cell?.value?.props?.sampleUnitNumbersRow?.length,
               )
 
               const maxSampleUnitCount = Math.max(...mrTransectNumberRowCellValues)
@@ -383,11 +383,11 @@ const ManagementRegimesOverview = () => {
 
                     const isCellValueLessThanMaxSampleUnitCount =
                       managementRegimeCellNonEmpty &&
-                      cell.value.props.sampleUnitNumbersRow.length < maxSampleUnitCount
+                      cell?.value?.props?.sampleUnitNumbersRow.length < maxSampleUnitCount
 
                     const isCellValueEqualToMaxSampleUnitCount =
                       managementRegimeCellNonEmpty &&
-                      cell.value.props.sampleUnitNumbersRow.length === maxSampleUnitCount
+                      cell?.value?.props?.sampleUnitNumbersRow.length === maxSampleUnitCount
 
                     const isManagementRegimeCellHighlighted = isEveryMRLabelsSameAsMax
                       ? isCellValueEqualToMaxSampleUnitCount
