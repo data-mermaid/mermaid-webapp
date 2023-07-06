@@ -486,6 +486,14 @@ const getValidationMessage = (validation, projectId = '') => {
   return (validationMessages[code] || validationMessages.default)()
 }
 
+const helperText = {
+  name: 'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
+  latitude:
+    'Latitude in decimal degrees. Should be a number between -90 and 90, representing the north-south position on the Earth&#39;s surface. A positive value indicates a location north of the equator, while a negative value indicates a location south of the equator. If you need to convert from degrees-minutes-seconds, an online calculator is here.',
+  longitude:
+    'Longitude in decimal degrees. Should be a number between -180 and 180, representing the east-west position on the Earth&#39;s surface. A positive value indicates a location to the east of the Prime Meridian, while a negative value indicates a location to the west of the Prime Meridian. If you need to convert from degrees-minutes-seconds, an online calculator is here.',
+}
+
 export default {
   apiDataTableNames,
   autocomplete,
@@ -496,6 +504,7 @@ export default {
   getResolveModalLanguage,
   getValidationMessage,
   header,
+  helperText,
   inlineMessage,
   loadingIndicator,
   map,
