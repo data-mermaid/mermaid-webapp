@@ -27,14 +27,6 @@ export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
     }
   }, [sessionStorageName])
 
-  const _clearPersistedUnsavedFormDataBeforeUnload = useEffect(() => {
-    window.addEventListener('beforeunload', clearPersistedUnsavedFormData)
-
-    return () => {
-      window.removeEventListener('beforeunload', clearPersistedUnsavedFormData)
-    }
-  }, [clearPersistedUnsavedFormData])
-
   const _clearPersistedUnsavedFormDataBeforeReactRouterChange = useEffect(() => {
     history.listen(() => {
       clearPersistedUnsavedFormData()
