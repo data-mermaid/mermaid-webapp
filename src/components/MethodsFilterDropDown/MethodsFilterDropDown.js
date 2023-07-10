@@ -22,7 +22,7 @@ const MenuProps = {
   },
 }
 
-const fontStyle = { fontFamily: 'Open Sans' }
+const fontStyle = { fontFamily: 'Open Sans', fontSize: 12.5 }
 
 const FormStyle = {
   m: 1,
