@@ -16,17 +16,17 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 200,
+      width: 230,
       color: theme.color.textColor,
     },
   },
 }
 
-const fontStyle = { fontFamily: 'Open Sans', fontSize: 12.5 }
+const fontStyle = { fontFamily: 'Open Sans', fontSize: 15 }
 
 const FormStyle = {
   m: 1,
-  width: 200,
+  width: 230,
   margin: 0,
 }
 
