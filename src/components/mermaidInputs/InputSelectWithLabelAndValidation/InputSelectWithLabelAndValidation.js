@@ -1,17 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components/macro'
-import { InputRow, Select, HelperText, RequiredIndicator } from '../../generic/form'
+import { InputRow, Select, HelperText, LabelContainer, RequiredIndicator } from '../../generic/form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import InfoIconButton from '../../generic/InfoIconButton/InfoIconButton'
-
-const LabelContainer = styled.div`
-  display: flex !important;
-  flex-direction: row;
-`
+import { IconButton } from '../../generic/buttons'
+import { IconInfo } from '../../icons'
+import language from '../../../language'
 
 const InputSelectWithLabelAndValidation = ({
   label,
@@ -28,11 +23,19 @@ const InputSelectWithLabelAndValidation = ({
   updateValueAndResetValidationForDuplicateWarning,
   ...restOfProps
 }) => {
+  const [displayHelperText, setDisplayHelperText] = useState(false)
+
   const optionList = options.map((item) => (
     <option key={item.value} value={item.value}>
       {item.label}
     </option>
   ))
+
+  const handleInfoIconClick = (event) => {
+    displayHelperText ? setDisplayHelperText(false) : setDisplayHelperText(true)
+
+    event.stopPropagation()
+  }
 
   return (
     <InputRow validationType={validationType} data-testid={testId}>
@@ -42,7 +45,11 @@ const InputSelectWithLabelAndValidation = ({
             {label}
           </label>
         </div>
-        <InfoIconButton className="info-icon" />
+        {helperText ? (
+          <IconButton type="button" onClick={(event) => handleInfoIconClick(event, label)}>
+            <IconInfo aria-label="info" />
+          </IconButton>
+        ) : null}
         <div>{required ? <RequiredIndicator /> : null}</div>
       </LabelContainer>
 
@@ -57,7 +64,7 @@ const InputSelectWithLabelAndValidation = ({
           <option value="">Choose...</option>
           {optionList}
         </Select>
-        {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
+        {displayHelperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
