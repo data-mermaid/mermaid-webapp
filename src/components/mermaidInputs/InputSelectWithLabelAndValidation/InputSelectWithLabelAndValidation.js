@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
-import { IconContainer, InputRow, Select, HelperText, RequiredIndicator } from '../../generic/form'
+import { InputRow, Select, HelperText, RequiredIndicator } from '../../generic/form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import { IconInfo } from '../../icons'
+import InfoIconButton from '../../generic/InfoIconButton/InfoIconButton'
 
 const LabelContainer = styled.div`
   display: flex !important;
@@ -42,9 +42,7 @@ const InputSelectWithLabelAndValidation = ({
             {label}
           </label>
         </div>
-        <IconContainer>
-          <IconInfo aria-label="info" />
-        </IconContainer>
+        <InfoIconButton className="info-icon" />
         <div>{required ? <RequiredIndicator /> : null}</div>
       </LabelContainer>
 
