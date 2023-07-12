@@ -1,10 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { InputRow, Select, HelperText, RequiredIndicator } from '../../generic/form'
+import styled from 'styled-components/macro'
+import { IconContainer, InputRow, Select, HelperText, RequiredIndicator } from '../../generic/form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
+import { IconInfo } from '../../icons'
+
+const LabelContainer = styled.div`
+  display: flex !important;
+  flex-direction: row;
+`
 
 const InputSelectWithLabelAndValidation = ({
   label,
@@ -29,10 +36,18 @@ const InputSelectWithLabelAndValidation = ({
 
   return (
     <InputRow validationType={validationType} data-testid={testId}>
-      <label id={`aria-label${id}`} htmlFor={id}>
-        {label}
-        {required ? <RequiredIndicator /> : null}
-      </label>
+      <LabelContainer>
+        <div>
+          <label id={`aria-label${id}`} htmlFor={id}>
+            {label}
+          </label>
+        </div>
+        <IconContainer>
+          <IconInfo aria-label="info" />
+        </IconContainer>
+        <div>{required ? <RequiredIndicator /> : null}</div>
+      </LabelContainer>
+
       <div>
         <Select
           aria-labelledby={`aria-label${id}`}

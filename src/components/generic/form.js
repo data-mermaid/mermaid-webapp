@@ -138,3 +138,11 @@ export const Textarea = styled.textarea`
   resize: vertical;
   ${inputTextareaSelectStyles}
 `
+export const IconContainer = styled.button`
+  margin-left: 0.3em;
+  margin-right: 0.1em;
+  cursor: pointer;
+  padding: 0;
+  background-color: transparent;
+  border-style: none;
+`
