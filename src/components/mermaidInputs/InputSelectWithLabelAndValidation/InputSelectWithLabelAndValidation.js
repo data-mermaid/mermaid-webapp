@@ -6,7 +6,6 @@ import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import { IconButton } from '../../generic/buttons'
 import { IconInfo } from '../../icons'
-import language from '../../../language'
 
 const InputSelectWithLabelAndValidation = ({
   label,
@@ -81,7 +80,7 @@ const InputSelectWithLabelAndValidation = ({
 }
 
 InputSelectWithLabelAndValidation.propTypes = {
-  helperText: PropTypes.string,
+  helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
   required: PropTypes.bool.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,

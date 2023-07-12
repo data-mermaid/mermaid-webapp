@@ -85,7 +85,7 @@ const InputWithLabelAndValidation = ({
 
 InputWithLabelAndValidation.propTypes = {
   required: PropTypes.bool,
-  helperText: PropTypes.string,
+  helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,

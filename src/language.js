@@ -7,6 +7,7 @@ import {
   getDuplicateSampleUnitLink,
   goToManagementOverviewPageLink,
 } from './library/validationMessageHelpers'
+import { HelperTextLink } from './components/generic/links'
 
 const inlineMessage = {
   ignore: 'ignored',
@@ -487,15 +488,82 @@ const getValidationMessage = (validation, projectId = '') => {
 }
 
 const helperText = {
-  name: 'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
-  latitude:
-    'Latitude in decimal degrees. Should be a number between -90 and 90, representing the north-south position on the Earth&#39;s surface. A positive value indicates a location north of the equator, while a negative value indicates a location south of the equator. If you need to convert from degrees-minutes-seconds, an online calculator is here.',
-  longitude:
-    'Longitude in decimal degrees. Should be a number between -180 and 180, representing the east-west position on the Earth&#39;s surface. A positive value indicates a location to the east of the Prime Meridian, while a negative value indicates a location to the west of the Prime Meridian. If you need to convert from degrees-minutes-seconds, an online calculator is here.',
+  current: 'Water speed during the survey.',
+  depth: 'Depth of sample unit, in meters (e.g. 3).',
+  intervalSize:
+    'Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).',
+  intervalStart:
+    'Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5). Default is interval size (i.e. not counting 0).',
+  label:
+    'Arbitrary text to distinguish sample units that are distinct but should be combined analytically (i.e. all other properties are identical). For example: Long swim. Rarely used.',
+  latitude: () => (
+    <>
+      Latitude in decimal degrees. Should be a number between -90 and 90, representing the
+      north-south position on the Earth&apos;s surface. A positive value indicates a location north
+      of the equator, while a negative value indicates a location south of the equator. If you need
+      to convert from degrees-minutes-seconds, an online calculator is{' '}
+      <HelperTextLink
+        href="https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  longitude: () => (
+    <>
+      Latitude in decimal degrees. Should be a number between -90 and 90, representing the
+      north-south position on the Earth&#39;s surface. A positive value indicates a location north
+      of the equator, while a negative value indicates a location south of the equator. If you need
+      to convert from degrees-minutes-seconds, an online calculator is{' '}
+      <HelperTextLink
+        href="https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
   management:
     'The management designation at the time of survey, e.g., no-take zone, partial restrictions, or open access.',
+  name: 'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
+  notes: '',
+  reefSlope: () => (
+    <>
+      An indication of coral reef profile of the survey location. See definitions{' '}
+      <HelperTextLink
+        href="https://reefresilience.org/wp-content/uploads/REEF-COVER-CLASS-DEFINITIONS.pdf"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  relativeDepth: () => (
+    <>
+      Whether the survey is &#39;deep&#39; or &#39;shallow&#39; relative to other transects
+      surveyed, regardless of numerical depth in meters.
+    </>
+  ),
   sampleDate: 'Date when data was collected',
+  sampleTime: 'Time when data was collected',
   site: 'A unique name of a site where data was collected.',
+  tide: () => (
+    <>
+      Tide characteristics during the survey{' '}
+      <HelperTextLink
+        href="https://oceanservice.noaa.gov/education/tutorial_tides/tides01_intro.html"
+        target="_blank"
+      >
+        (more detail).
+      </HelperTextLink>
+    </>
+  ),
+  transectLengthSurveyed:
+    'Length of transect for a sample unit, in meters. May include decimal (e.g. 50.0).',
+  transectNumber:
+    'Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.',
+  visibility: 'The horizontal distance at which an object underwater can still be identified. ',
 }
 
 export default {
