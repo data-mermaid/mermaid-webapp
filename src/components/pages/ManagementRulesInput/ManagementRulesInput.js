@@ -1,10 +1,19 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { InputRow, CheckRadioLabel, CheckRadioWrapper, RequiredIndicator } from '../../generic/form'
+import {
+  InputRow,
+  CheckRadioLabel,
+  CheckRadioWrapper,
+  HelperText,
+  LabelContainer,
+  RequiredIndicator,
+} from '../../generic/form'
 import { managementRegimePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../../mermaidInputs/mermaidInputsPropTypes'
+import { IconButton } from '../../generic/buttons'
+import { IconInfo } from '../../icons'
 
 const partialRestrictionOptions = [
   { value: 'periodic_closure', label: 'Periodic Closure' },
@@ -34,6 +43,7 @@ const ManagementRulesInput = ({
   managementFormValues,
   onChange,
   required,
+  helperText,
   validationMessages,
   validationType,
   ...restOfProps
@@ -80,6 +90,14 @@ const ManagementRulesInput = ({
   const [partialRestrictionCheckboxValues, setPartialRestrictionCheckboxValues] = useState(
     getPartialRestrictionCheckboxValues(managementFormValues),
   )
+
+  const [displayHelperText, setDisplayHelperText] = useState(false)
+
+  const handleInfoIconClick = (event) => {
+    displayHelperText ? setDisplayHelperText(false) : setDisplayHelperText(true)
+
+    event.stopPropagation()
+  }
 
   const resetPartialRestrictionRulesAndUpdateFormikOnChange = (formikProperty) => {
     const updatePartialRestrictionRuleValues = { ...partialRestrictionCheckboxValues }
@@ -150,10 +168,17 @@ const ManagementRulesInput = ({
   return (
     <InputRow {...restOfProps} validationType={validationType}>
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label id={`${id}-management-rules-input`}>
-        {label}
-        {required ? <RequiredIndicator /> : null}
-      </label>
+      <LabelContainer>
+        <div>
+          <label id={`${id}-management-rules-input`}>{label}</label>
+        </div>
+        {helperText ? (
+          <IconButton type="button" onClick={(event) => handleInfoIconClick(event, label)}>
+            <IconInfo aria-label="info" />
+          </IconButton>
+        ) : null}
+        <div>{required ? <RequiredIndicator /> : null}</div>
+      </LabelContainer>
       <div aria-labelledby={`${id}-management-rules-input`}>
         <StyledCheckRadioWrapper>
           <input
@@ -200,6 +225,7 @@ const ManagementRulesInput = ({
           </StyledCheckRadioLabel>
           {showPartialRestrictionChoices}
         </StyledCheckRadioWrapper>
+        {displayHelperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
       <InputValidationInfo
         validationType={validationType}
@@ -211,6 +237,7 @@ const ManagementRulesInput = ({
 
 ManagementRulesInput.propTypes = {
   id: PropTypes.string,
+  helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   label: PropTypes.string,
   managementFormValues: managementRegimePropType,
   onChange: PropTypes.func.isRequired,
@@ -222,6 +249,7 @@ ManagementRulesInput.propTypes = {
 ManagementRulesInput.defaultProps = {
   id: 'rules',
   label: 'Rules',
+  helperText: undefined,
   managementFormValues: {},
   validationMessages: undefined,
   validationType: undefined,

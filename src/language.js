@@ -488,11 +488,15 @@ const getValidationMessage = (validation, projectId = '') => {
 }
 
 const helperText = {
+  accessRestrictions:
+    'Access is restricted, e.g., people outside a community are not allowed to fish here',
+  compliance: 'Effectiveness of the rules in the managed area - low compliance to high compliance',
   current: 'Water speed during the survey.',
   depth: 'Depth of sample unit, in meters (e.g. 3).',
   exposure: '',
   fishSizeBin:
     'Name of bin scheme used to estimate fish size for the transect. Choose 1 cm if the fish size recorded does not use bins.',
+  gearRestrictions: 'There are restrictions on what types of fishing gear can be used',
   intervalSize:
     'Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).',
   intervalStart:
@@ -529,11 +533,29 @@ const helperText = {
   ),
   management:
     'The management designation at the time of survey, e.g., no-take zone, partial restrictions, or open access.',
+  managementRegimeName: () => (
+    <>
+      Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a
+      governmental or standardized source such as{' '}
+      <HelperTextLink href="http://protectedseas.net/" target="_blank">
+        protectedseas.net
+      </HelperTextLink>
+      ; alternatively, a descriptive local label like &#39;Northeast Point seasonal closure&#39;can
+      be used.
+    </>
+  ),
   name: 'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
+  noTake: 'Total extraction ban',
   notes: '',
   number: 'Number of quadrat in sample unit collection (e.g. 1).',
   numberOfPointsPerQuadrat: 'Total number of points per quadrat used in a transect (e.g. 100).',
   numberOfQuadrats: 'Total number of quadrats in the transect (e.g. 10).',
+  openAccess: 'Open for fishing and entering',
+  partialRestrictions:
+    'e.g. periodic closures, size limits, gear restrictions, species restrictions',
+  parties: 'Who is responsible for managing this area.',
+  periodicCloser:
+    'The area is open and closed as a fisheries management strategy, e.g., rotating octopus closures',
   quadratSize: 'Quadrat size used per transect, in square meters (e.g. 1).',
   reefSlope: () => (
     <>
@@ -576,9 +598,12 @@ const helperText = {
   ),
   sampleDate: 'Date when data was collected',
   sampleTime: 'Time when data was collected',
+  secondaryName: 'Optional secondary name, e.g., Nusa Penida Fisheries Zone',
   site: 'A unique name of a site where data was collected.',
   siteName:
     'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
+  sizeLimits: 'There are restrictions on the size of certain target species',
+  speciesRestrictions: 'There are restrictions on what types of species can be caught',
   tide: () => (
     <>
       Tide characteristics during the survey{' '}
