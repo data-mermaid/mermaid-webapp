@@ -490,6 +490,7 @@ const getValidationMessage = (validation, projectId = '') => {
 const helperText = {
   current: 'Water speed during the survey.',
   depth: 'Depth of sample unit, in meters (e.g. 3).',
+  exposure: '',
   fishSizeBin:
     'Name of bin scheme used to estimate fish size for the transect. Choose 1 cm if the fish size recorded does not use bins.',
   intervalSize:
@@ -530,6 +531,7 @@ const helperText = {
     'The management designation at the time of survey, e.g., no-take zone, partial restrictions, or open access.',
   name: 'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
   notes: '',
+  number: 'Number of quadrat in sample unit collection (e.g. 1).',
   numberOfPointsPerQuadrat: 'Total number of points per quadrat used in a transect (e.g. 100).',
   numberOfQuadrats: 'Total number of quadrats in the transect (e.g. 10).',
   quadratSize: 'Quadrat size used per transect, in square meters (e.g. 1).',
@@ -538,6 +540,28 @@ const helperText = {
       An indication of coral reef profile of the survey location. See definitions{' '}
       <HelperTextLink
         href="https://reefresilience.org/wp-content/uploads/REEF-COVER-CLASS-DEFINITIONS.pdf"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  reefType: () => (
+    <>
+      The geomorpholgy of a reef and its relation to land. See definitions{' '}
+      <HelperTextLink
+        href="https://www.livingoceansfoundation.org/wp-content/uploads/2015/04/U10-Reef-Types-complete-teacher.pdf"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  reefZone: () => (
+    <>
+      Location and abiotic factors that characterize the location within the reef. See definitions{' '}
+      <HelperTextLink
+        href="https://www.livingoceansfoundation.org/wp-content/uploads/2015/04/U11-Reef-Zonation-Background.pdf"
         target="_blank"
       >
         here.
@@ -553,6 +577,8 @@ const helperText = {
   sampleDate: 'Date when data was collected',
   sampleTime: 'Time when data was collected',
   site: 'A unique name of a site where data was collected.',
+  siteName:
+    'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
   tide: () => (
     <>
       Tide characteristics during the survey{' '}
