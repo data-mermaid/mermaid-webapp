@@ -490,6 +490,8 @@ const getValidationMessage = (validation, projectId = '') => {
 const helperText = {
   current: 'Water speed during the survey.',
   depth: 'Depth of sample unit, in meters (e.g. 3).',
+  fishSizeBin:
+    'Name of bin scheme used to estimate fish size for the transect. Choose 1 cm if the fish size recorded does not use bins.',
   intervalSize:
     'Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).',
   intervalStart:
@@ -528,6 +530,9 @@ const helperText = {
     'The management designation at the time of survey, e.g., no-take zone, partial restrictions, or open access.',
   name: 'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
   notes: '',
+  numberOfPointsPerQuadrat: 'Total number of points per quadrat used in a transect (e.g. 100).',
+  numberOfQuadrats: 'Total number of quadrats in the transect (e.g. 10).',
+  quadratSize: 'Quadrat size used per transect, in square meters (e.g. 1).',
   reefSlope: () => (
     <>
       An indication of coral reef profile of the survey location. See definitions{' '}
@@ -564,6 +569,8 @@ const helperText = {
   transectNumber:
     'Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.',
   visibility: 'The horizontal distance at which an object underwater can still be identified. ',
+  width:
+    'The total width (NOT width to one side of the tape) of the fish belt transect, in meters.',
 }
 
 export default {
