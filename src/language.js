@@ -7,6 +7,7 @@ import {
   getDuplicateSampleUnitLink,
   goToManagementOverviewPageLink,
 } from './library/validationMessageHelpers'
+import { HelperTextLink } from './components/generic/links'
 
 const inlineMessage = {
   ignore: 'ignored',
@@ -486,6 +487,143 @@ const getValidationMessage = (validation, projectId = '') => {
   return (validationMessages[code] || validationMessages.default)()
 }
 
+const helperText = {
+  accessRestrictions:
+    'Access is restricted, e.g., people outside a community are not allowed to fish here',
+  compliance: 'Effectiveness of the rules in the managed area - low compliance to high compliance',
+  current: 'Water speed during the survey.',
+  depth: 'Depth of sample unit, in meters (e.g. 3).',
+  exposure: '',
+  fishSizeBin:
+    'Name of bin scheme used to estimate fish size for the transect. Choose 1 cm if the fish size recorded does not use bins.',
+  gearRestrictions: 'There are restrictions on what types of fishing gear can be used',
+  intervalSize:
+    'Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).',
+  intervalStart:
+    'Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5). Default is interval size (i.e. not counting 0).',
+  label:
+    'Arbitrary text to distinguish sample units that are distinct but should be combined analytically (i.e. all other properties are identical). For example: Long swim. Rarely used.',
+  latitude: () => (
+    <>
+      Latitude in decimal degrees. Should be a number between -90 and 90, representing the
+      north-south position on the Earth&apos;s surface. A positive value indicates a location north
+      of the equator, while a negative value indicates a location south of the equator. If you need
+      to convert from degrees-minutes-seconds, an online calculator is{' '}
+      <HelperTextLink
+        href="https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  longitude: () => (
+    <>
+      Latitude in decimal degrees. Should be a number between -90 and 90, representing the
+      north-south position on the Earth&#39;s surface. A positive value indicates a location north
+      of the equator, while a negative value indicates a location south of the equator. If you need
+      to convert from degrees-minutes-seconds, an online calculator is{' '}
+      <HelperTextLink
+        href="https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  management:
+    'The management designation at the time of survey, e.g., no-take zone, partial restrictions, or open access.',
+  managementRegimeName: () => (
+    <>
+      Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a
+      governmental or standardized source such as{' '}
+      <HelperTextLink href="http://protectedseas.net/" target="_blank">
+        protectedseas.net
+      </HelperTextLink>
+      ; alternatively, a descriptive local label like &#39;Northeast Point seasonal closure&#39;can
+      be used.
+    </>
+  ),
+  name: 'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
+  noTake: 'Total extraction ban',
+  notes: '',
+  number: 'Number of quadrat in sample unit collection (e.g. 1).',
+  numberOfPointsPerQuadrat: 'Total number of points per quadrat used in a transect (e.g. 100).',
+  numberOfQuadrats: 'Total number of quadrats in the transect (e.g. 10).',
+  openAccess: 'Open for fishing and entering',
+  partialRestrictions:
+    'e.g. periodic closures, size limits, gear restrictions, species restrictions',
+  parties: 'Who is responsible for managing this area.',
+  periodicCloser:
+    'The area is open and closed as a fisheries management strategy, e.g., rotating octopus closures',
+  quadratSize: 'Quadrat size used per transect, in square meters (e.g. 1).',
+  reefSlope: () => (
+    <>
+      An indication of coral reef profile of the survey location. See definitions{' '}
+      <HelperTextLink
+        href="https://reefresilience.org/wp-content/uploads/REEF-COVER-CLASS-DEFINITIONS.pdf"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  reefType: () => (
+    <>
+      The geomorpholgy of a reef and its relation to land. See definitions{' '}
+      <HelperTextLink
+        href="https://www.livingoceansfoundation.org/wp-content/uploads/2015/04/U10-Reef-Types-complete-teacher.pdf"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  reefZone: () => (
+    <>
+      Location and abiotic factors that characterize the location within the reef. See definitions{' '}
+      <HelperTextLink
+        href="https://www.livingoceansfoundation.org/wp-content/uploads/2015/04/U11-Reef-Zonation-Background.pdf"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  relativeDepth: () => (
+    <>
+      Whether the survey is &#39;deep&#39; or &#39;shallow&#39; relative to other transects
+      surveyed, regardless of numerical depth in meters.
+    </>
+  ),
+  sampleDate: 'Date when data was collected',
+  sampleTime: 'Time when data was collected',
+  secondaryName: 'Optional secondary name, e.g., Nusa Penida Fisheries Zone',
+  site: 'A unique name of a site where data was collected.',
+  siteName:
+    'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
+  sizeLimits: 'There are restrictions on the size of certain target species',
+  speciesRestrictions: 'There are restrictions on what types of species can be caught',
+  tide: () => (
+    <>
+      Tide characteristics during the survey{' '}
+      <HelperTextLink
+        href="https://oceanservice.noaa.gov/education/tutorial_tides/tides01_intro.html"
+        target="_blank"
+      >
+        (more detail).
+      </HelperTextLink>
+    </>
+  ),
+  transectLengthSurveyed:
+    'Length of transect for a sample unit, in meters. May include decimal (e.g. 50.0).',
+  transectNumber:
+    'Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.',
+  visibility: 'The horizontal distance at which an object underwater can still be identified. ',
+  width:
+    'The total width (NOT width to one side of the tape) of the fish belt transect, in meters.',
+}
+
 export default {
   apiDataTableNames,
   autocomplete,
@@ -496,6 +634,7 @@ export default {
   getResolveModalLanguage,
   getValidationMessage,
   header,
+  helperText,
   inlineMessage,
   loadingIndicator,
   map,

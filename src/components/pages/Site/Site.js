@@ -127,6 +127,7 @@ const SiteForm = ({
           validationType={formik.errors.name && formik.touched.name ? 'error' : null}
           validationMessages={formik.errors.name}
           testId="name"
+          helperText={language.helperText.siteName}
         />
         <InputRow
           validationType={formik.errors.country && formik.touched.country ? 'error' : null}
@@ -161,7 +162,7 @@ const SiteForm = ({
           validationType={formik.errors.latitude && formik.touched.latitude ? 'error' : null}
           validationMessages={formik.errors.latitude}
           testId="latitude"
-          helperText="Decimal Degrees"
+          helperText={language.helperText.latitude()}
         />
         <InputWithLabelAndValidation
           required
@@ -173,7 +174,7 @@ const SiteForm = ({
           validationType={formik.errors.longitude && formik.touched.longitude ? 'error' : null}
           validationMessages={formik.errors.longitude}
           testId="longitude"
-          helperText="Decimal Degrees"
+          helperText={language.helperText.longitude()}
         />
         {isAppOnline && (
           <SingleSiteMap
@@ -200,6 +201,7 @@ const SiteForm = ({
           {...formik.getFieldProps('reef_type')}
           validationType={formik.errors.reef_type && formik.touched.reef_type ? 'error' : null}
           validationMessages={formik.errors.reef_type}
+          helperText={language.helperText.reefType()}
         />
         <InputSelectWithLabelAndValidation
           label="Reef Zone"
@@ -209,6 +211,7 @@ const SiteForm = ({
           {...formik.getFieldProps('reef_zone')}
           validationType={formik.errors.reef_zone && formik.touched.reef_zone ? 'error' : null}
           validationMessages={formik.errors.reef_zone}
+          helperText={language.helperText.reefZone()}
         />
         <TextareaWithLabelAndValidation
           label="Notes"

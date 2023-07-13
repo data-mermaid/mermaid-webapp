@@ -140,3 +140,12 @@ export const ToolbarButtonWrapper = styled('div')`
     margin: 0 -1px;
   }
 `
+
+export const IconButton = styled.button`
+  margin-left: 0.3em;
+  margin-right: 0.1em;
+  cursor: pointer;
+  padding: 0;
+  background-color: transparent;
+  border-style: none;
+`
