@@ -91,10 +91,10 @@ const ManagementRulesInput = ({
     getPartialRestrictionCheckboxValues(managementFormValues),
   )
 
-  const [displayHelperText, setDisplayHelperText] = useState(false)
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
 
   const handleInfoIconClick = (event) => {
-    displayHelperText ? setDisplayHelperText(false) : setDisplayHelperText(true)
+    isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
 
     event.stopPropagation()
   }
@@ -225,7 +225,7 @@ const ManagementRulesInput = ({
           </StyledCheckRadioLabel>
           {showPartialRestrictionChoices}
         </StyledCheckRadioWrapper>
-        {displayHelperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
+        {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
       <InputValidationInfo
         validationType={validationType}

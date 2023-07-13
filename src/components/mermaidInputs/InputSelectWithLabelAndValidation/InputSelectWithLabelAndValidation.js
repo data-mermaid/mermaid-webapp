@@ -22,7 +22,7 @@ const InputSelectWithLabelAndValidation = ({
   updateValueAndResetValidationForDuplicateWarning,
   ...restOfProps
 }) => {
-  const [displayHelperText, setDisplayHelperText] = useState(false)
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
 
   const optionList = options.map((item) => (
     <option key={item.value} value={item.value}>
@@ -31,7 +31,7 @@ const InputSelectWithLabelAndValidation = ({
   ))
 
   const handleInfoIconClick = (event) => {
-    displayHelperText ? setDisplayHelperText(false) : setDisplayHelperText(true)
+    isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
 
     event.stopPropagation()
   }
@@ -63,7 +63,7 @@ const InputSelectWithLabelAndValidation = ({
           <option value="">Choose...</option>
           {optionList}
         </Select>
-        {displayHelperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
+        {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}

@@ -27,10 +27,10 @@ const InputWithLabelAndValidation = ({
 
   useStopInputScrollingIncrementNumber(textFieldRef)
 
-  const [displayHelperText, setDisplayHelperText] = useState(false)
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
 
   const handleInfoIconClick = (event) => {
-    displayHelperText ? setDisplayHelperText(false) : setDisplayHelperText(true)
+    isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
 
     event.stopPropagation()
   }
@@ -71,7 +71,7 @@ const InputWithLabelAndValidation = ({
 
       <div>
         {inputType}
-        {displayHelperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
+        {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
       <InputValidationInfo
         validationType={validationType}
