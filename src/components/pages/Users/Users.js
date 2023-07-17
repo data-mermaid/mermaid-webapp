@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 
-import { ButtonSecondary, ButtonCaution } from '../../generic/buttons'
+import { ButtonSecondary, ButtonCaution, IconButton } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
@@ -17,6 +17,7 @@ import {
   IconAccount,
   IconAccountConvert,
   IconPlus,
+  IconInfo,
   IconAlert,
   IconAccountRemove,
 } from '../../icons'
@@ -61,6 +62,8 @@ import {
 } from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+import { LabelContainer } from '../../generic/form'
+import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -146,6 +149,8 @@ const Users = () => {
     useState(false)
   const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
   const [isSendEmailToNewUserPromptOpen, setIsSendEmailToNewUserPromptOpen] = useState(false)
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
 
   const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
   const [newUserEmail, setNewUserEmail] = useState('')
@@ -409,6 +414,14 @@ const Users = () => {
   }
 
   const tableColumnsForAdmin = useMemo(() => {
+    const handleInfoIconClick = (event, label) => {
+      console.log(label)
+      // if (currentHelperTextLabel === label ) {}
+      isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+
+      event.stopPropagation()
+    }
+
     return [
       {
         Header: 'Name',
@@ -421,7 +434,19 @@ const Users = () => {
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Admin',
+        Header: () => (
+          <>
+            {isHelperTextShowing ? (
+              <ColumnHeaderToolTip helperText={language.tooltipText.admin} />
+            ) : null}
+            <LabelContainer>
+              <div>Admin</div>
+              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'header')}>
+                <IconInfo aria-label="info" />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
         accessor: 'admin',
         disableSortBy: true,
       },
@@ -447,7 +472,7 @@ const Users = () => {
         disableSortBy: true,
       },
     ]
-  }, [])
+  }, [isHelperTextShowing])
 
   const tableColumnsForNonAdmin = useMemo(() => {
     return [

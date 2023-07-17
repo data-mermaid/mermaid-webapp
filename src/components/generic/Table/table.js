@@ -82,7 +82,7 @@ export const Th = styled.th(
     padding: ${theme.spacing.medium};
     background: ${theme.color.white};
     vertical-align: top;
-    pointer-events: ${props.disabledHover && 'none'};
+    // pointer-events: ${props.disabledHover && 'none'};
     &::after {
       content: ${props.isSortingEnabled ? ' \u25b2' : ''};
       font-size: small;
@@ -155,7 +155,7 @@ export const OverviewTr = styled.tr`
       position: absolute;
       background-color: hsl(0 0% 90%);
       mix-blend-mode: multiply;
-      pointer-events: none;
+      pointer-events: auto;
       top: 0;
       left: 0;
       right: 0;

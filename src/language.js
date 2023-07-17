@@ -624,6 +624,12 @@ const helperText = {
     'The total width (NOT width to one side of the tape) of the fish belt transect, in meters.',
 }
 
+const tooltipText = {
+  admin: 'An admin can manage users, data sharing, and edit submitted data',
+  collector: 'A collector can only create and submit data',
+  readOnly: 'A read-only user can only view and download the data',
+}
+
 export default {
   apiDataTableNames,
   autocomplete,
@@ -646,4 +652,5 @@ export default {
   success,
   table,
   title,
+  tooltipText,
 }
