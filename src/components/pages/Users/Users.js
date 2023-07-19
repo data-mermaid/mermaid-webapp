@@ -413,11 +413,22 @@ const Users = () => {
     return Promise.resolve()
   }
 
+  const _useOnClickOutsideOfRef = useEffect(() => {
+    document.body.addEventListener('click', () => {
+      if (isHelperTextShowing === true) {
+        setIsHelperTextShowing(false)
+      }
+    })
+  }, [isHelperTextShowing])
+
   const tableColumnsForAdmin = useMemo(() => {
     const handleInfoIconClick = (event, label) => {
-      console.log(label)
-      // if (currentHelperTextLabel === label ) {}
-      isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+      if (currentHelperTextLabel === label) {
+        isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+      } else {
+        setIsHelperTextShowing(true)
+        setCurrentHelperTextLabel(label)
+      }
 
       event.stopPropagation()
     }
@@ -436,12 +447,12 @@ const Users = () => {
       {
         Header: () => (
           <>
-            {isHelperTextShowing ? (
+            {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
               <ColumnHeaderToolTip helperText={language.tooltipText.admin} />
             ) : null}
             <LabelContainer>
               <div>Admin</div>
-              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'header')}>
+              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'admin')}>
                 <IconInfo aria-label="info" />
               </IconButton>
             </LabelContainer>
@@ -451,12 +462,40 @@ const Users = () => {
         disableSortBy: true,
       },
       {
-        Header: 'Collector',
+        Header: () => (
+          <>
+            {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
+              <ColumnHeaderToolTip helperText={language.tooltipText.collector} />
+            ) : null}
+            <LabelContainer>
+              <div>Collector</div>
+              <IconButton
+                type="button"
+                onClick={(event) => handleInfoIconClick(event, 'collector')}
+              >
+                <IconInfo aria-label="info" />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
+
         accessor: 'collector',
         disableSortBy: true,
       },
       {
-        Header: 'Read-Only',
+        Header: () => (
+          <>
+            {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
+              <ColumnHeaderToolTip helperText={language.tooltipText.readOnly} />
+            ) : null}
+            <LabelContainer>
+              <div>Read-Only</div>
+              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'readOnly')}>
+                <IconInfo aria-label="info" />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
         accessor: 'readonly',
         disableSortBy: true,
       },
@@ -472,7 +511,7 @@ const Users = () => {
         disableSortBy: true,
       },
     ]
-  }, [isHelperTextShowing])
+  }, [isHelperTextShowing, currentHelperTextLabel])
 
   const tableColumnsForNonAdmin = useMemo(() => {
     return [
@@ -776,7 +815,7 @@ const Users = () => {
                       isSortingEnabled={!column.disableSortBy}
                       disabledHover={column.disableSortBy}
                     >
-                      <span>{column.render('Header')}</span>
+                      <span id="header-span">{column.render('Header')}</span>
                     </Th>
                   )
                 })}
