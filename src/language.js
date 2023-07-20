@@ -626,6 +626,16 @@ const helperText = {
 
 const tooltipText = {
   admin: 'An admin can manage users, data sharing, and edit submitted data',
+  benthicAttribute: () => (
+    <>
+      Benthic attribute observed. A benthic attribute can be a taxonomic name for a coral or other
+      sessile organism, or an abiotic classification. MERMAID benthic attributes are organized
+      hierarchically and are consistent with{' '}
+      <HelperTextLink href="https://www.marinespecies.org/" target="_blank" color="#fff">
+        WoRMS.
+      </HelperTextLink>
+    </>
+  ),
   collector: 'A collector can only create and submit data',
   fishName: () => (
     <>

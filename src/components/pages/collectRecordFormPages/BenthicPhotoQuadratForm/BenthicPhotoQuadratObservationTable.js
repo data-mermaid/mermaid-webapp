@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -11,7 +11,7 @@ import {
   StickyObservationTable,
   UnderTableRow,
 } from '../CollectingFormPage.Styles'
-import { ButtonPrimary } from '../../../generic/buttons'
+import { ButtonPrimary, IconButton } from '../../../generic/buttons'
 import {
   choicesPropType,
   benthicPhotoQuadratPropType,
@@ -20,9 +20,9 @@ import {
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus } from '../../../icons'
+import { IconClose, IconPlus, IconInfo } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
+import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
@@ -31,6 +31,7 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
+import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -73,11 +74,32 @@ const BenthicPhotoQuadratObservationTable = ({
 }) => {
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
+  }
+
+  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
+    document.body.addEventListener('click', () => {
+      if (isHelperTextShowing === true) {
+        setIsHelperTextShowing(false)
+      }
+    })
+  }, [isHelperTextShowing])
+
+  const handleInfoIconClick = (event, label) => {
+    if (currentHelperTextLabel === label) {
+      isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+    } else {
+      setIsHelperTextShowing(true)
+      setCurrentHelperTextLabel(label)
+    }
+
+    event.stopPropagation()
   }
 
   const observationCategoryPercentages = useMemo(() => {
@@ -367,7 +389,24 @@ const BenthicPhotoQuadratObservationTable = ({
                 Quadrat <RequiredIndicator />
               </Th>
               <Th align="left" id="benthic-attribute-label">
-                Benthic Attribute <RequiredIndicator />
+                <LabelContainer>
+                  <div>
+                    Benthic Attribute <RequiredIndicator />
+                  </div>
+                  {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
+                    <ColumnHeaderToolTip
+                      helperText={language.tooltipText.benthicAttribute()}
+                      paddingBottom="3.5em"
+                      left="4.8em"
+                    />
+                  ) : null}
+                  <IconButton
+                    type="button"
+                    onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
+                  >
+                    <IconInfo aria-label="info" />
+                  </IconButton>
+                </LabelContainer>
               </Th>
               <Th align="right" id="growth-form-label">
                 Growth Form
