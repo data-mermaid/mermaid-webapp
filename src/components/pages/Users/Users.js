@@ -413,7 +413,7 @@ const Users = () => {
     return Promise.resolve()
   }
 
-  const _useOnClickOutsideOfRef = useEffect(() => {
+  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
     document.body.addEventListener('click', () => {
       if (isHelperTextShowing === true) {
         setIsHelperTextShowing(false)

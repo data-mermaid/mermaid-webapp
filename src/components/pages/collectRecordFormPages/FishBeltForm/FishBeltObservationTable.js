@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -18,15 +18,15 @@ import {
   UnderTableRow,
   UnderTableRowButtonArea,
 } from '../CollectingFormPage.Styles'
-import { ButtonPrimary } from '../../../generic/buttons'
+import { ButtonPrimary, IconButton } from '../../../generic/buttons'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
 import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishBeltBiomass'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus } from '../../../icons'
+import { IconClose, IconPlus, IconInfo } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { InputWrapper, RequiredIndicator } from '../../../generic/form'
+import { InputWrapper, LabelContainer, RequiredIndicator } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
@@ -36,6 +36,7 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
+import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -97,6 +98,8 @@ const FishBeltObservationTable = ({
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -128,6 +131,25 @@ const FishBeltObservationTable = ({
     () => summarizeArrayObjectValuesByProperty(observationsState, 'count'),
     [observationsState],
   )
+
+  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
+    document.body.addEventListener('click', () => {
+      if (isHelperTextShowing === true) {
+        setIsHelperTextShowing(false)
+      }
+    })
+  }, [isHelperTextShowing])
+
+  const handleInfoIconClick = (event, label) => {
+    if (currentHelperTextLabel === label) {
+      isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+    } else {
+      setIsHelperTextShowing(true)
+      setCurrentHelperTextLabel(label)
+    }
+
+    event.stopPropagation()
+  }
 
   const observationsRows = useMemo(() => {
     const handleKeyDown = ({ event, index, observation, isCount }) => {
@@ -386,7 +408,24 @@ const FishBeltObservationTable = ({
             <Tr>
               <Th> </Th>
               <Th align="left" id="fish-name-label">
-                Fish Name <RequiredIndicator />
+                {isHelperTextShowing && currentHelperTextLabel === 'fishName' ? (
+                  <ColumnHeaderToolTip
+                    helperText={language.tooltipText.fishName}
+                    bottom="5em"
+                    left="2.8em"
+                  />
+                ) : null}
+                <LabelContainer>
+                  <div>
+                    Fish Name <RequiredIndicator />
+                  </div>
+                  <IconButton
+                    type="button"
+                    onClick={(event) => handleInfoIconClick(event, 'fishName')}
+                  >
+                    <IconInfo aria-label="info" />
+                  </IconButton>
+                </LabelContainer>
               </Th>
               <Th align="right" id="fish-size-label">
                 Size (cm) <RequiredIndicator />
