@@ -28,10 +28,11 @@ import { summarizeArrayObjectValuesByProperty } from '../../../../library/summar
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
-import language from '../../../../language'
+
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import language from '../../../../language'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -386,7 +387,20 @@ const BenthicPhotoQuadratObservationTable = ({
             <Tr>
               <Th> </Th>
               <Th align="right" id="quadrat-number-label">
-                Quadrat <RequiredIndicator />
+                <LabelContainer>
+                  <div>
+                    Quadrat <RequiredIndicator />
+                  </div>
+                  {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
+                    <ColumnHeaderToolTip helperText={language.tooltipText.quadrat} left="-1.2em" />
+                  ) : null}
+                  <IconButton
+                    type="button"
+                    onClick={(event) => handleInfoIconClick(event, 'quadrat')}
+                  >
+                    <IconInfo aria-label="info" />
+                  </IconButton>
+                </LabelContainer>
               </Th>
               <Th align="left" id="benthic-attribute-label">
                 <LabelContainer>
@@ -412,7 +426,23 @@ const BenthicPhotoQuadratObservationTable = ({
                 Growth Form
               </Th>
               <Th align="right" id="number-of-points-label">
-                Number of Points <RequiredIndicator />
+                <LabelContainer>
+                  <div>
+                    Number of Points <RequiredIndicator />
+                  </div>
+                  {isHelperTextShowing && currentHelperTextLabel === 'numberOfPoints' ? (
+                    <ColumnHeaderToolTip
+                      helperText={language.tooltipText.numberOfPoints}
+                      paddingBottom="3em"
+                    />
+                  ) : null}
+                  <IconButton
+                    type="button"
+                    onClick={(event) => handleInfoIconClick(event, 'numberOfPoints')}
+                  >
+                    <IconInfo aria-label="info" />
+                  </IconButton>
+                </LabelContainer>
               </Th>
               {areValidationsShowing ? <Th align="center">Validations</Th> : null}
               <Th> </Th>
