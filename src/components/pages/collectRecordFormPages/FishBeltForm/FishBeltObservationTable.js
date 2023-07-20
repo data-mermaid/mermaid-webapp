@@ -408,17 +408,17 @@ const FishBeltObservationTable = ({
             <Tr>
               <Th> </Th>
               <Th align="left" id="fish-name-label">
-                {isHelperTextShowing && currentHelperTextLabel === 'fishName' ? (
-                  <ColumnHeaderToolTip
-                    helperText={language.tooltipText.fishName}
-                    bottom="5em"
-                    left="2.8em"
-                  />
-                ) : null}
                 <LabelContainer>
                   <div>
                     Fish Name <RequiredIndicator />
                   </div>
+                  {isHelperTextShowing && currentHelperTextLabel === 'fishName' ? (
+                    <ColumnHeaderToolTip
+                      helperText={language.tooltipText.fishName()}
+                      bottom="5.8em"
+                      paddingBottom="3.5em"
+                    />
+                  ) : null}
                   <IconButton
                     type="button"
                     onClick={(event) => handleInfoIconClick(event, 'fishName')}
@@ -428,10 +428,45 @@ const FishBeltObservationTable = ({
                 </LabelContainer>
               </Th>
               <Th align="right" id="fish-size-label">
-                Size (cm) <RequiredIndicator />
+                <LabelContainer>
+                  <div>
+                    Size (cm) <RequiredIndicator />
+                  </div>
+                  {isHelperTextShowing && currentHelperTextLabel === 'fishSize' ? (
+                    <ColumnHeaderToolTip
+                      helperText={language.tooltipText.fishSize}
+                      bottom="5.8em"
+                      left="-1em"
+                    />
+                  ) : null}
+
+                  <IconButton
+                    type="button"
+                    onClick={(event) => handleInfoIconClick(event, 'fishSize')}
+                  >
+                    <IconInfo aria-label="info" />
+                  </IconButton>
+                </LabelContainer>
               </Th>
               <Th align="right" id="fish-count-label">
-                Count <RequiredIndicator />
+                <LabelContainer>
+                  <div>
+                    Count <RequiredIndicator />
+                  </div>
+                  {isHelperTextShowing && currentHelperTextLabel === 'fishCount' ? (
+                    <ColumnHeaderToolTip
+                      helperText={language.tooltipText.fishCount}
+                      bottom="5.8em"
+                      left="-3em"
+                    />
+                  ) : null}
+                  <IconButton
+                    type="button"
+                    onClick={(event) => handleInfoIconClick(event, 'fishCount')}
+                  >
+                    <IconInfo aria-label="info" />
+                  </IconButton>
+                </LabelContainer>
               </Th>
               <Th align="right">
                 Biomass

@@ -27,4 +27,5 @@ export const NavLinkThatLooksLikeButtonIcon = styled(NavLinkThatLooksLikeButton)
 
 export const HelperTextLink = styled('a')`
   font-size: 1.2rem;
+  color: ${(props) => props.color || '#000000'};
 `

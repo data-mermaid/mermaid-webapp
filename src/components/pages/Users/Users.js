@@ -447,11 +447,11 @@ const Users = () => {
       {
         Header: () => (
           <>
-            {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
-              <ColumnHeaderToolTip helperText={language.tooltipText.admin} />
-            ) : null}
             <LabelContainer>
               <div>Admin</div>
+              {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
+                <ColumnHeaderToolTip helperText={language.tooltipText.admin} left="-4em" />
+              ) : null}
               <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'admin')}>
                 <IconInfo aria-label="info" />
               </IconButton>
@@ -464,11 +464,11 @@ const Users = () => {
       {
         Header: () => (
           <>
-            {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
-              <ColumnHeaderToolTip helperText={language.tooltipText.collector} />
-            ) : null}
             <LabelContainer>
               <div>Collector</div>
+              {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
+                <ColumnHeaderToolTip helperText={language.tooltipText.collector} left="-2em" />
+              ) : null}
               <IconButton
                 type="button"
                 onClick={(event) => handleInfoIconClick(event, 'collector')}
@@ -485,11 +485,11 @@ const Users = () => {
       {
         Header: () => (
           <>
-            {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
-              <ColumnHeaderToolTip helperText={language.tooltipText.readOnly} />
-            ) : null}
             <LabelContainer>
               <div>Read-Only</div>
+              {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
+                <ColumnHeaderToolTip helperText={language.tooltipText.readOnly} left="-1em" />
+              ) : null}
               <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'readOnly')}>
                 <IconInfo aria-label="info" />
               </IconButton>

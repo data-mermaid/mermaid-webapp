@@ -627,18 +627,18 @@ const helperText = {
 const tooltipText = {
   admin: 'An admin can manage users, data sharing, and edit submitted data',
   collector: 'A collector can only create and submit data',
-  fishCount: () => (
+  fishName: () => (
     <>
       Name of the fish species, genus, or family observed. For genus-level observations or an
       unknown species, enter the genus rather than proposing a new species with &lsquo;spp&lsquo;.
       All fish names in MERMAID are consistent with{' '}
-      <HelperTextLink href="https://fishbase.mnhn.fr/search.php" target="_blank">
+      <HelperTextLink href="https://fishbase.mnhn.fr/search.php" target="_blank" color="#fff">
         fishbase.
       </HelperTextLink>
     </>
   ),
-  fishName: 'Size of fish observed, in cm (e.g. 4.5 or 5-10).',
-  fishSize: 'Number of fish observed, of the same species/genus/family and size.',
+  fishSize: 'Size of fish observed, in cm (e.g. 4.5 or 5-10).',
+  fishCount: 'Number of fish observed, of the same species/genus/family and size.',
   readOnly: 'A read-only user can only view and download the data',
 }
 
