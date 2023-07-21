@@ -11,9 +11,25 @@ export const TooltipPopup = styled('span')`
   color: ${theme.color.white};
   position: absolute;
   font-size: ${theme.typography.smallFontSize};
-  clip-path: polygon(0% 0%, 100% 0%, 100% 83%, 53% 83%, 47% 100%, 40% 83%, 0 83%);
+  clip-path: polygon(
+    //top left
+    0 0,
+    //top right
+    100% 0,
+    //bottom right
+    100% calc(100% - 15px),
+    // right size of arrow
+    calc(50% + 10px) calc(100% - 15px),
+    //bottom peak
+    50% 100%,
+    // left side of arrow
+    calc(50% - 10px) calc(100% - 15px),
+    //bottom left
+    0 calc(100% - 15px)
+  );
+}
   padding: 1em;
-  padding-bottom: ${(props) => props.paddingBottom || `calc(4rem - 15px)`};
+  padding-bottom: calc(1rem + 15px);
   bottom: ${(props) => props.bottom || '4em'};
   left: ${(props) => props.left || '0'};
   white-space: normal;
@@ -21,15 +37,9 @@ export const TooltipPopup = styled('span')`
   text-align: left;
 `
 
-const ColumnHeaderToolTip = ({ helperText, bottom, left, paddingBottom }) => {
+const ColumnHeaderToolTip = ({ helperText, bottom, left }) => {
   return (
-    <TooltipPopup
-      role="tooltip"
-      aria-labelledby="tooltip"
-      bottom={bottom}
-      left={left}
-      paddingBottom={paddingBottom}
-    >
+    <TooltipPopup role="tooltip" aria-labelledby="tooltip" bottom={bottom} left={left}>
       {helperText}
     </TooltipPopup>
   )
@@ -40,12 +50,10 @@ export default ColumnHeaderToolTip
 ColumnHeaderToolTip.defaultProps = {
   bottom: '4em',
   left: '0em',
-  paddingBottom: 'calc(4rem - 15px)',
 }
 
 ColumnHeaderToolTip.propTypes = {
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   bottom: PropTypes.string,
   left: PropTypes.string,
-  paddingBottom: PropTypes.string,
 }

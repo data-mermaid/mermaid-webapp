@@ -450,7 +450,7 @@ const Users = () => {
             <LabelContainer>
               <div>Admin</div>
               {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
-                <ColumnHeaderToolTip helperText={language.tooltipText.admin} left="-4em" />
+                <ColumnHeaderToolTip helperText={language.tooltipText.admin} left="-4.2em" />
               ) : null}
               <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'admin')}>
                 <IconInfo aria-label="info" />
@@ -467,7 +467,7 @@ const Users = () => {
             <LabelContainer>
               <div>Collector</div>
               {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
-                <ColumnHeaderToolTip helperText={language.tooltipText.collector} left="-2em" />
+                <ColumnHeaderToolTip helperText={language.tooltipText.collector} left="-2.5em" />
               ) : null}
               <IconButton
                 type="button"
@@ -488,7 +488,7 @@ const Users = () => {
             <LabelContainer>
               <div>Read-Only</div>
               {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
-                <ColumnHeaderToolTip helperText={language.tooltipText.readOnly} left="-1em" />
+                <ColumnHeaderToolTip helperText={language.tooltipText.readOnly} left="-1.8em" />
               ) : null}
               <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'readOnly')}>
                 <IconInfo aria-label="info" />

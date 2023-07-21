@@ -278,7 +278,7 @@ const PercentCoverObservationTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'hardCoralPercentage' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.hardCoralPercentage}
-                          left="5.5em"
+                          left="5em"
                         />
                       ) : null}
                       <IconButton
@@ -297,7 +297,7 @@ const PercentCoverObservationTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'softCoralPercentage' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.softCoralPercentage}
-                          left="5em"
+                          left="4.5em"
                         />
                       ) : null}
                       <IconButton
@@ -316,7 +316,7 @@ const PercentCoverObservationTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'microalgaePercentage' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.microalgaePercentage}
-                          left="6em"
+                          left="5.3em"
                         />
                       ) : null}
                       <IconButton

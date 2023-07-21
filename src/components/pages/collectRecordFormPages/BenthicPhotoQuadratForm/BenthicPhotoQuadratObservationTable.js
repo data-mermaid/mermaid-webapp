@@ -392,7 +392,7 @@ const BenthicPhotoQuadratObservationTable = ({
                     Quadrat <RequiredIndicator />
                   </div>
                   {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
-                    <ColumnHeaderToolTip helperText={language.tooltipText.quadrat} left="-1.2em" />
+                    <ColumnHeaderToolTip helperText={language.tooltipText.quadrat} left="-2em" />
                   ) : null}
                   <IconButton
                     type="button"
@@ -410,8 +410,7 @@ const BenthicPhotoQuadratObservationTable = ({
                   {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                     <ColumnHeaderToolTip
                       helperText={language.tooltipText.benthicAttribute()}
-                      paddingBottom="3.5em"
-                      left="4.8em"
+                      left="4.2em"
                     />
                   ) : null}
                   <IconButton
@@ -431,10 +430,7 @@ const BenthicPhotoQuadratObservationTable = ({
                     Number of Points <RequiredIndicator />
                   </div>
                   {isHelperTextShowing && currentHelperTextLabel === 'numberOfPoints' ? (
-                    <ColumnHeaderToolTip
-                      helperText={language.tooltipText.numberOfPoints}
-                      paddingBottom="3em"
-                    />
+                    <ColumnHeaderToolTip helperText={language.tooltipText.numberOfPoints} />
                   ) : null}
                   <IconButton
                     type="button"

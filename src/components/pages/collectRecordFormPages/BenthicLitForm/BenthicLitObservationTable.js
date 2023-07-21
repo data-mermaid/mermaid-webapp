@@ -320,8 +320,7 @@ const BenthicLitObservationsTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.benthicAttribute()}
-                          paddingBottom="3.5em"
-                          left="4.8em"
+                          left="4.2em"
                         />
                       ) : null}
                       <IconButton
