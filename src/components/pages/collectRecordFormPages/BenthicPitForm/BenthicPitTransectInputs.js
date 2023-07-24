@@ -367,7 +367,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.reef_slope}
           onChange={handleReefSlopeChange}
-          helperText={language.helperText.reefSlope()}
+          helperText={language.helperText.getReefSlope()}
         />
         <InputSelectWithLabelAndValidation
           label="Visibility"
@@ -433,7 +433,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
-          helperText={language.helperText.relativeDepth()}
+          helperText={language.helperText.getRelativeDepth()}
         />
         <InputSelectWithLabelAndValidation
           label="Tide"
@@ -452,7 +452,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
-          helperText={language.helperText.tide()}
+          helperText={language.helperText.getTide()}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
