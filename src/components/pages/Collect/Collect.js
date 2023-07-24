@@ -347,7 +347,12 @@ const Collect = () => {
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
           pageType="sample units"
-          rowLength={collectRecordsForUiDisplay.length}
+          rowLength={
+            methodsFilter.length
+              ? methodsFilteredTableCellData.length
+              : collectRecordsForUiDisplay.length
+          }
+          // filteredRowLength={}
         />
         <PageSelector
           onPreviousClick={previousPage}

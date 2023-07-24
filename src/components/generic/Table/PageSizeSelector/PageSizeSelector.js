@@ -8,7 +8,14 @@ const PageSizeSelect = styled(Select)`
   min-width: auto;
 `
 
-const PageSizeSelector = ({ pageSize, pageType, pageSizeOptions, onChange, rowLength }) => {
+const PageSizeSelector = ({
+  pageSize,
+  pageType,
+  pageSizeOptions,
+  onChange,
+  rowLength,
+  filteredRowLength,
+}) => {
   const [pageOptionsToDisplay, setPageOptionsToDisplay] = useState([])
 
   const _findPageOptionsToDisplay = useEffect(() => {
@@ -24,6 +31,8 @@ const PageSizeSelector = ({ pageSize, pageType, pageSizeOptions, onChange, rowLe
 
     setPageOptionsToDisplay(pageOptionsLessThanRowLength)
   }, [pageSizeOptions, rowLength])
+
+  console.log({ filteredRowLength })
 
   return (
     <label htmlFor="page-size-selector">
@@ -45,8 +54,13 @@ const PageSizeSelector = ({ pageSize, pageType, pageSizeOptions, onChange, rowLe
   )
 }
 
+PageSizeSelector.defaultProps = {
+  filteredRowLength: null,
+}
+
 PageSizeSelector.propTypes = {
   rowLength: PropTypes.number.isRequired,
+  filteredRowLength: PropTypes.number,
   pageType: PropTypes.string.isRequired,
   pageSize: PropTypes.number.isRequired,
   pageSizeOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
