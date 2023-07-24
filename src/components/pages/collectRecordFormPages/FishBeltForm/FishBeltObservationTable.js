@@ -414,7 +414,7 @@ const FishBeltObservationTable = ({
                   </div>
                   {isHelperTextShowing && currentHelperTextLabel === 'fishName' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.fishName()}
+                      helperText={language.tooltipText.getFishName()}
                       bottom="5.8em"
                       paddingBottom="3.5em"
                     />

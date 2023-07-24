@@ -323,7 +323,7 @@ const BenthicPitObservationsTable = ({
                       </div>
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.benthicAttribute()}
+                          helperText={language.tooltipText.getBenthicAttribute()}
                           left="4.2em"
                         />
                       ) : null}
