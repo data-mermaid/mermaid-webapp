@@ -503,7 +503,7 @@ const helperText = {
     'Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5). Default is interval size (i.e. not counting 0).',
   label:
     'Arbitrary text to distinguish sample units that are distinct but should be combined analytically (i.e. all other properties are identical). For example: Long swim. Rarely used.',
-  latitude: () => (
+  getLatitude: () => (
     <>
       Latitude in decimal degrees. Should be a number between -90 and 90, representing the
       north-south position on the Earth&apos;s surface. A positive value indicates a location north
@@ -517,7 +517,7 @@ const helperText = {
       </HelperTextLink>
     </>
   ),
-  longitude: () => (
+  getLongitude: () => (
     <>
       Latitude in decimal degrees. Should be a number between -90 and 90, representing the
       north-south position on the Earth&#39;s surface. A positive value indicates a location north
@@ -533,7 +533,7 @@ const helperText = {
   ),
   management:
     'The management designation at the time of survey, e.g., no-take zone, partial restrictions, or open access.',
-  managementRegimeName: () => (
+  getManagementRegimeName: () => (
     <>
       Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a
       governmental or standardized source such as{' '}
@@ -557,7 +557,7 @@ const helperText = {
   periodicCloser:
     'The area is open and closed as a fisheries management strategy, e.g., rotating octopus closures',
   quadratSize: 'Quadrat size used per transect, in square meters (e.g. 1).',
-  reefSlope: () => (
+  getReefSlope: () => (
     <>
       An indication of coral reef profile of the survey location. See definitions{' '}
       <HelperTextLink
@@ -568,7 +568,7 @@ const helperText = {
       </HelperTextLink>
     </>
   ),
-  reefType: () => (
+  getReefType: () => (
     <>
       The geomorpholgy of a reef and its relation to land. See definitions{' '}
       <HelperTextLink
@@ -579,7 +579,7 @@ const helperText = {
       </HelperTextLink>
     </>
   ),
-  reefZone: () => (
+  getReefZone: () => (
     <>
       Location and abiotic factors that characterize the location within the reef. See definitions{' '}
       <HelperTextLink
@@ -590,7 +590,7 @@ const helperText = {
       </HelperTextLink>
     </>
   ),
-  relativeDepth: () => (
+  getRelativeDepth: () => (
     <>
       Whether the survey is &#39;deep&#39; or &#39;shallow&#39; relative to other transects
       surveyed, regardless of numerical depth in meters.
@@ -604,7 +604,7 @@ const helperText = {
     'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
   sizeLimits: 'There are restrictions on the size of certain target species',
   speciesRestrictions: 'There are restrictions on what types of species can be caught',
-  tide: () => (
+  getTide: () => (
     <>
       Tide characteristics during the survey{' '}
       <HelperTextLink
@@ -622,6 +622,40 @@ const helperText = {
   visibility: 'The horizontal distance at which an object underwater can still be identified. ',
   width:
     'The total width (NOT width to one side of the tape) of the fish belt transect, in meters.',
+}
+
+const tooltipText = {
+  admin: 'An admin can manage users, data sharing, and edit submitted data',
+  getBenthicAttribute: () => (
+    <>
+      Benthic attribute observed. A benthic attribute can be a taxonomic name for a coral or other
+      sessile organism, or an abiotic classification. MERMAID benthic attributes are organized
+      hierarchically and are consistent with{' '}
+      <HelperTextLink href="https://www.marinespecies.org/" target="_blank" color="#fff">
+        WoRMS.
+      </HelperTextLink>
+    </>
+  ),
+  collector: 'A collector can only create and submit data',
+  getFishName: () => (
+    <>
+      Name of the fish species, genus, or family observed. For genus-level observations or an
+      unknown species, enter the genus rather than proposing a new species with &lsquo;spp&lsquo;.
+      All fish names in MERMAID are consistent with{' '}
+      <HelperTextLink href="https://fishbase.mnhn.fr/search.php" target="_blank" color="#fff">
+        fishbase.
+      </HelperTextLink>
+    </>
+  ),
+  fishSize: 'Size of fish observed, in cm (e.g. 4.5 or 5-10).',
+  fishCount: 'Number of fish observed, of the same species/genus/family and size.',
+  hardCoralPercentage: 'Hard coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
+  microalgaePercentage: 'Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).',
+  numberOfPoints:
+    'Number of points with unique benthic attribute (/growth form) for the quadrat. The sum of points for all benthic attributes in a quadrat must equal the value set above.',
+  quadrat: 'Quadrat size used per transect, in square meters (e.g. 1).',
+  readOnly: 'A read-only user can only view and download the data',
+  softCoralPercentage: 'Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
 }
 
 export default {
@@ -646,4 +680,5 @@ export default {
   success,
   table,
   title,
+  tooltipText,
 }

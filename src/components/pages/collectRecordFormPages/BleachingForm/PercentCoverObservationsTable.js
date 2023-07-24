@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -13,16 +13,18 @@ import {
   bleachingRecordPropType,
   observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonPrimary } from '../../../generic/buttons'
+import { ButtonPrimary, IconButton } from '../../../generic/buttons'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus } from '../../../icons'
-import { InputWrapper, RequiredIndicator } from '../../../generic/form'
+import { IconClose, IconPlus, IconInfo } from '../../../icons'
+import { InputWrapper, LabelContainer, RequiredIndicator } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import BleachingPercentCoverSummaryStats from '../../../BleachingPercentCoverSummaryStats/BleachingPercentCoverSummaryStats'
 import ObservationValidationInfo from '../ObservationValidationInfo'
+import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import language from '../../../../language'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -52,12 +54,33 @@ const PercentCoverObservationTable = ({
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
 
     observationsDispatch({ type: 'addObservation' })
+  }
+
+  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
+    document.body.addEventListener('click', () => {
+      if (isHelperTextShowing === true) {
+        setIsHelperTextShowing(false)
+      }
+    })
+  }, [isHelperTextShowing])
+
+  const handleInfoIconClick = (event, label) => {
+    if (currentHelperTextLabel === label) {
+      isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+    } else {
+      setIsHelperTextShowing(true)
+      setCurrentHelperTextLabel(label)
+    }
+
+    event.stopPropagation()
   }
 
   const observationRows = useMemo(() => {
@@ -248,13 +271,61 @@ const PercentCoverObservationTable = ({
                     Quadrat
                   </Th>
                   <Th align="center" id="hard-coral-percent-cover-label">
-                    Hard coral % cover <RequiredIndicator />
+                    <LabelContainer>
+                      <div>
+                        Hard coral % cover <RequiredIndicator />
+                      </div>
+                      {isHelperTextShowing && currentHelperTextLabel === 'hardCoralPercentage' ? (
+                        <ColumnHeaderToolTip
+                          helperText={language.tooltipText.hardCoralPercentage}
+                          left="5em"
+                        />
+                      ) : null}
+                      <IconButton
+                        type="button"
+                        onClick={(event) => handleInfoIconClick(event, 'hardCoralPercentage')}
+                      >
+                        <IconInfo aria-label="info" />
+                      </IconButton>
+                    </LabelContainer>
                   </Th>
                   <Th align="center" id="soft-coral-percent-cover-label">
-                    Soft coral % cover <RequiredIndicator />
+                    <LabelContainer>
+                      <div>
+                        Soft coral % cover <RequiredIndicator />
+                      </div>
+                      {isHelperTextShowing && currentHelperTextLabel === 'softCoralPercentage' ? (
+                        <ColumnHeaderToolTip
+                          helperText={language.tooltipText.softCoralPercentage}
+                          left="4.5em"
+                        />
+                      ) : null}
+                      <IconButton
+                        type="button"
+                        onClick={(event) => handleInfoIconClick(event, 'softCoralPercentage')}
+                      >
+                        <IconInfo aria-label="info" />
+                      </IconButton>
+                    </LabelContainer>
                   </Th>
                   <Th align="center" id="microalgae-percent-cover-label">
-                    Microalgae % cover <RequiredIndicator />
+                    <LabelContainer>
+                      <div>
+                        Microalgae % cover <RequiredIndicator />
+                      </div>
+                      {isHelperTextShowing && currentHelperTextLabel === 'microalgaePercentage' ? (
+                        <ColumnHeaderToolTip
+                          helperText={language.tooltipText.microalgaePercentage}
+                          left="5.3em"
+                        />
+                      ) : null}
+                      <IconButton
+                        type="button"
+                        onClick={(event) => handleInfoIconClick(event, 'microalgaePercentage')}
+                      >
+                        <IconInfo aria-label="info" />
+                      </IconButton>
+                    </LabelContainer>
                   </Th>
                   {areValidationsShowing ? <Th align="center">Validations</Th> : null}
                   <Th />
