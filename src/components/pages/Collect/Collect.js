@@ -59,6 +59,7 @@ const Collect = () => {
   const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
   const [methodsFilter, setMethodsFilter] = useState([])
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
+  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -232,7 +233,11 @@ const Collect = () => {
       return rows
     }
 
-    return getTableFilteredRows(rows, keys, queryTerms)
+    const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
+
+    setSearchFilteredRowsLength(tableFilteredRows.length)
+
+    return tableFilteredRows
   }, [])
 
   const {
@@ -347,12 +352,11 @@ const Collect = () => {
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
           pageType="sample units"
-          rowLength={
-            methodsFilter.length
-              ? methodsFilteredTableCellData.length
-              : collectRecordsForUiDisplay.length
-          }
-          // filteredRowLength={}
+          unfilteredRowLength={collectRecordsForUiDisplay.length}
+          methodFilteredRowLength={methodsFilteredTableCellData.length}
+          searchFilteredRowLength={searchFilteredRowsLength}
+          isSearchFilterEnabled={!!globalFilter?.length}
+          isMethodFilterEnabled={!!methodsFilter.length}
         />
         <PageSelector
           onPreviousClick={previousPage}

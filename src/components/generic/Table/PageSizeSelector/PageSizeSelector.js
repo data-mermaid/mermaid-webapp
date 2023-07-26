@@ -13,26 +13,54 @@ const PageSizeSelector = ({
   pageType,
   pageSizeOptions,
   onChange,
-  rowLength,
-  filteredRowLength,
+  unfilteredRowLength,
+  methodFilteredRowLength,
+  searchFilteredRowLength,
+  isMethodFilterEnabled,
+  isSearchFilterEnabled,
 }) => {
   const [pageOptionsToDisplay, setPageOptionsToDisplay] = useState([])
+  const [filteredAmountToDisplay, setFilteredAmountToDisplay] = useState(null)
+
+  const _findFilteredAmountToDisplay = useEffect(() => {
+    // the search results will be method filtered already, which is not the case the opposite way around
+    if (isSearchFilterEnabled && isMethodFilterEnabled) {
+      return setFilteredAmountToDisplay(searchFilteredRowLength)
+    }
+    if (!isSearchFilterEnabled && isMethodFilterEnabled) {
+      return setFilteredAmountToDisplay(methodFilteredRowLength)
+    }
+    if (isSearchFilterEnabled && !isMethodFilterEnabled) {
+      return setFilteredAmountToDisplay(searchFilteredRowLength)
+    }
+
+    return setFilteredAmountToDisplay(unfilteredRowLength)
+  }, [
+    isMethodFilterEnabled,
+    isSearchFilterEnabled,
+    methodFilteredRowLength,
+    searchFilteredRowLength,
+    unfilteredRowLength,
+  ])
 
   const _findPageOptionsToDisplay = useEffect(() => {
-    let pageOptionsLessThanRowLength = pageSizeOptions.filter((option) => option < rowLength)
+    let pageOptionsLessThanRowLength = pageSizeOptions.filter(
+      (option) => option < filteredAmountToDisplay,
+    )
 
     if (pageOptionsLessThanRowLength.length === 0) {
       // show the exact number of items as the only selection in the drop down
-      pageOptionsLessThanRowLength = [rowLength]
-    } else if (pageOptionsLessThanRowLength[pageOptionsLessThanRowLength.length - 1] < rowLength) {
+      pageOptionsLessThanRowLength = [filteredAmountToDisplay]
+    } else if (
+      pageOptionsLessThanRowLength[pageOptionsLessThanRowLength.length - 1] <
+      filteredAmountToDisplay
+    ) {
       // show the exact number of items as the last selection in the drop down
-      pageOptionsLessThanRowLength.push(rowLength)
+      pageOptionsLessThanRowLength.push(filteredAmountToDisplay)
     }
 
     setPageOptionsToDisplay(pageOptionsLessThanRowLength)
-  }, [pageSizeOptions, rowLength])
-
-  console.log({ filteredRowLength })
+  }, [pageSizeOptions, filteredAmountToDisplay])
 
   return (
     <label htmlFor="page-size-selector">
@@ -49,18 +77,27 @@ const PageSizeSelector = ({
           </option>
         ))}
       </PageSizeSelect>{' '}
-      of {rowLength} {pageType}
+      of {filteredAmountToDisplay} {pageType}{' '}
+      {isSearchFilterEnabled || isMethodFilterEnabled
+        ? `(filtered from ${unfilteredRowLength})`
+        : null}
     </label>
   )
 }
 
 PageSizeSelector.defaultProps = {
-  filteredRowLength: null,
+  methodFilteredRowLength: null,
+  searchFilteredRowLength: null,
+  isMethodFilterEnabled: false,
+  isSearchFilterEnabled: false,
 }
 
 PageSizeSelector.propTypes = {
-  rowLength: PropTypes.number.isRequired,
-  filteredRowLength: PropTypes.number,
+  unfilteredRowLength: PropTypes.number.isRequired,
+  methodFilteredRowLength: PropTypes.number,
+  searchFilteredRowLength: PropTypes.number,
+  isMethodFilterEnabled: PropTypes.bool,
+  isSearchFilterEnabled: PropTypes.bool,
   pageType: PropTypes.string.isRequired,
   pageSize: PropTypes.number.isRequired,
   pageSizeOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
