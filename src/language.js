@@ -432,7 +432,9 @@ const getValidationMessage = (validation, projectId = '') => {
     high_density: () => `Fish biomass greater than ${context?.biomass_range[1]} kg/ha`,
     incorrect_observation_count: () =>
       `Incorrect number of observations; expected ${context?.expected_count}`,
-    interval_size_not_positive: () => 'Interval size must be a positive number',
+    invalid_interval_size: () => 'Interval size must be a positive number',
+    max_interval_size: () => `Interval size greater than ${context?.interval_size_range[1]} m`,
+    max_interval_start: () => `Interval start greater than ${context?.interval_start_range[1]} m`,
     invalid_benthic_transect: () =>
       'One or more invalid transect fields: site, management, date, number, depth',
     invalid_depth: () => `Depth invalid or not greater than ${context?.depth_range[0]} m`,
@@ -445,7 +447,8 @@ const getValidationMessage = (validation, projectId = '') => {
     invalid_percent_value: () => 'Percent value must be a non-negative number',
     invalid_quadrat_collection: () =>
       'One or more invalid transect fields: site, management, date, depth',
-    invalid_quadrat_size: () => 'Invalid quadrat size',
+    invalid_quadrat_size: () => 'Quadrat size must be a positive number',
+    max_quadrat_size: () => `Quadrat size greater than ${context?.quadrat_size_range[1]} m2`,
     invalid_quadrat_transect: () =>
       'One or more invalid transect fields: site, management, date, number, depth',
     invalid_sample_date: () => 'Invalid date',
@@ -463,7 +466,7 @@ const getValidationMessage = (validation, projectId = '') => {
     missing_quadrat_numbers: () => `Missing quadrat numbers ${context?.missing_quadrat_numbers}`,
     no_region_match: () => 'Coral or fish not previously observed in site region',
     not_part_of_fish_family_subset: () => `Fish is not part of project-defined fish families`,
-    not_positive_integer: () => 'Value is not greater or equal to zero',
+    not_positive_integer: () => 'Value is not an integer greater or equal to zero',
     not_unique_site: () => 'Site: Similar records detected',
     not_unique_management: () => goToManagementOverviewPageLink(projectId),
     obs_total_length_toolarge: () =>
