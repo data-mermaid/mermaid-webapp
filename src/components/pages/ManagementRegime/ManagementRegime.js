@@ -108,7 +108,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           validationType={formik.errors.name && formik.touched.name ? 'error' : null}
           validationMessages={formik.errors.name}
           testId="name"
-          helperText={language.helperText.managementRegimeName()}
+          helperText={language.helperText.getManagementRegimeName()}
         />
         <InputWithLabelAndValidation
           label="Secondary Name"
