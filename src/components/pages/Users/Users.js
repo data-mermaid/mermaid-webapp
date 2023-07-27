@@ -847,7 +847,7 @@ const Users = () => {
           pageSize={pageSize}
           pageType="users"
           pageSizeOptions={[15, 50, 100]}
-          rowLength={observerProfiles.length}
+          unfilteredRowLength={observerProfiles.length}
         />
         <PageSelector
           onPreviousClick={previousPage}

@@ -369,7 +369,7 @@ const Sites = () => {
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
           pageType="sites"
-          rowLength={siteRecordsForUiDisplay.length}
+          unfilteredRowLength={siteRecordsForUiDisplay.length}
         />
         <PageSelector
           onPreviousClick={previousPage}
