@@ -168,6 +168,7 @@ const Users = () => {
   const { setIsSyncInProgress } = useSyncStatus()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const isMounted = useIsMounted()
+  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
@@ -740,7 +741,11 @@ const Users = () => {
         return rows
       }
 
-      return getTableFilteredRows(rows, keys, queryTerms)
+      const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
+
+      setSearchFilteredRowsLength(tableFilteredRows.length)
+
+      return tableFilteredRows
     },
     [isAdminUser],
   )
@@ -847,7 +852,9 @@ const Users = () => {
           pageSize={pageSize}
           pageType="users"
           pageSizeOptions={[15, 50, 100]}
-          rowLength={observerProfiles.length}
+          unfilteredRowLength={observerProfiles.length}
+          searchFilteredRowLength={searchFilteredRowsLength}
+          isSearchFilterEnabled={!!globalFilter?.length}
         />
         <PageSelector
           onPreviousClick={previousPage}
