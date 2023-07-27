@@ -557,6 +557,7 @@ const helperText = {
   periodicCloser:
     'The area is open and closed as a fisheries management strategy, e.g., rotating octopus closures',
   quadratSize: 'Quadrat size used per transect, in square meters (e.g. 1).',
+  quadratNumberStart: 'Number of the first quadrat/photo along the transect (e.g. 1).',
   getReefSlope: () => (
     <>
       An indication of coral reef profile of the survey location. See definitions{' '}
