@@ -72,6 +72,7 @@ const Sites = () => {
   const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
   const openCopySitesModal = () => setIsCopySitesModalOpen(true)
   const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
+  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
@@ -196,6 +197,7 @@ const Sites = () => {
       )
 
       setSitesForMapMarkers(filteredSiteRecords)
+      setSearchFilteredRowsLength(filteredSiteRecords.length)
 
       return filteredRows
     },
@@ -370,6 +372,8 @@ const Sites = () => {
           pageSizeOptions={[15, 50, 100]}
           pageType="sites"
           unfilteredRowLength={siteRecordsForUiDisplay.length}
+          searchFilteredRowLength={searchFilteredRowsLength}
+          isSearchFilterEnabled={!!globalFilter?.length}
         />
         <PageSelector
           onPreviousClick={previousPage}

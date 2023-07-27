@@ -113,6 +113,7 @@ const UsersAndTransects = () => {
   const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
   const [methodsFilter, setMethodsFilter] = useState([])
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
+  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -365,7 +366,11 @@ const UsersAndTransects = () => {
       return rows
     }
 
-    return getTableFilteredRows(rows, keys, queryTerms)
+    const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
+
+    setSearchFilteredRowsLength(tableFilteredRows.length)
+
+    return tableFilteredRows
   }, [])
 
   const {
@@ -557,6 +562,10 @@ const UsersAndTransects = () => {
           pageSizeOptions={[15, 50, 100]}
           pageType="records"
           unfilteredRowLength={submittedRecords.length}
+          methodFilteredRowLength={methodsFilteredTableCellData.length}
+          searchFilteredRowLength={searchFilteredRowsLength}
+          isSearchFilterEnabled={!!globalFilter?.length}
+          isMethodFilterEnabled={!!methodsFilter.length}
         />
         <PageSelector
           onPreviousClick={previousPage}
