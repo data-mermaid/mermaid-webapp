@@ -333,7 +333,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_number_start}
           onChange={handleQuadratNumberStartChange}
-          helperText={language.helperText.intervalSize}
+          helperText={language.helperText.quadratNumberStart}
         />
         <InputWithLabelAndValidation
           label="Quadrat Size"
