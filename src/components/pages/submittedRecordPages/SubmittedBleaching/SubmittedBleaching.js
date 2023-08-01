@@ -125,7 +125,7 @@ const SubmittedBleaching = () => {
       .moveToCollect({
         projectId,
         submittedRecordId,
-        sampleUnitMethod: 'bleachingtransectmethods',
+        sampleUnitMethod: 'bleachingquadratcollectionmethods',
       })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
