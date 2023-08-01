@@ -560,7 +560,7 @@ const UsersAndTransects = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="records"
+          pageType="record"
           unfilteredRowLength={submittedRecords.length}
           methodFilteredRowLength={methodsFilteredTableCellData.length}
           searchFilteredRowLength={searchFilteredRowsLength}

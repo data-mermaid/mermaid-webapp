@@ -370,7 +370,7 @@ const Sites = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="sites"
+          pageType="site"
           unfilteredRowLength={siteRecordsForUiDisplay.length}
           searchFilteredRowLength={searchFilteredRowsLength}
           isSearchFilterEnabled={!!globalFilter?.length}

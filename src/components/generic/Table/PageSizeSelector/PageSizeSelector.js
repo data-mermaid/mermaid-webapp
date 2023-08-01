@@ -76,10 +76,12 @@ const PageSizeSelector = ({
             {size}
           </option>
         ))}
-      </PageSizeSelect>{' '}
-      of {filteredAmountToDisplay} {pageType}{' '}
+      </PageSizeSelect>
+      of {filteredAmountToDisplay}
       {isSearchFilterEnabled || isMethodFilterEnabled
-        ? `(filtered from ${unfilteredRowLength})`
+        ? `${' '}(filtered from ${unfilteredRowLength}${' '}${pageType}${
+            unfilteredRowLength > 1 ? 's' : ''
+          })`
         : null}
     </label>
   )
