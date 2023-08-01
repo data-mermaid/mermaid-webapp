@@ -850,7 +850,7 @@ const Users = () => {
         <PageSizeSelector
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
-          pageType="users"
+          pageType="user"
           pageSizeOptions={[15, 50, 100]}
           unfilteredRowLength={observerProfiles.length}
           searchFilteredRowLength={searchFilteredRowsLength}

@@ -327,7 +327,7 @@ const Submitted = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="sample units"
+          pageType="sample unit"
           unfilteredRowLength={submittedRecordsForUiDisplay.length}
           methodFilteredRowLength={methodsFilteredTableCellData.length}
           searchFilteredRowLength={searchFilteredRowsLength}
