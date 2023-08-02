@@ -422,7 +422,7 @@ const ManagementRegimesOverview = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="records"
+          pageType="record"
           unfilteredRowLength={sampleUnitWithManagementRegimeRecords.length}
           methodFilteredRowLength={methodsFilteredTableCellData.length}
           searchFilteredRowLength={searchFilteredRowsLength}
