@@ -30,7 +30,7 @@ import {
   OverviewTr,
   OverviewTd,
 } from '../../generic/Table/table'
-import { ToolBarRow } from '../../generic/positioning'
+import { FilterItems, ToolBarItemsRow } from '../../generic/positioning'
 import theme from '../../../theme'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -592,19 +592,21 @@ const UsersAndTransects = () => {
     <>
       <H2>{language.pages.usersAndTransectsTable.title}</H2>
       {isAppOnline && (
-        <ToolBarRow>
-          <FilterSearchToolbar
-            name={language.pages.usersAndTransectsTable.filterToolbarText}
-            value={tableUserPrefs.globalFilter}
-            handleGlobalFilterChange={handleGlobalFilterChange}
-            disabled={submittedRecords.length === 0}
-          />
-          <MethodsFilterDropDown
-            value={tableUserPrefs.methodsFilter}
-            handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
-            disabled={submittedRecords.length === 0}
-          />
-        </ToolBarRow>
+        <ToolBarItemsRow>
+          <FilterItems>
+            <FilterSearchToolbar
+              name={language.pages.usersAndTransectsTable.filterToolbarText}
+              value={tableUserPrefs.globalFilter}
+              handleGlobalFilterChange={handleGlobalFilterChange}
+              disabled={submittedRecords.length === 0}
+            />
+            <MethodsFilterDropDown
+              value={tableUserPrefs.methodsFilter}
+              handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
+              disabled={submittedRecords.length === 0}
+            />
+          </FilterItems>
+        </ToolBarItemsRow>
       )}
     </>
   )

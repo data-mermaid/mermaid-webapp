@@ -17,7 +17,7 @@ import {
 } from '../../generic/Table/reactTableNaturalSort'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
-import { ToolBarRow } from '../../generic/positioning'
+import { ToolBarItemsRow, FilterItems } from '../../generic/positioning'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
@@ -390,20 +390,22 @@ const Collect = () => {
         <>
           <H2>{language.pages.collectTable.title}</H2>
           {!isReadOnlyUser && (
-            <ToolBarRow>
-              <FilterSearchToolbar
-                name={language.pages.collectTable.filterToolbarText}
-                value={tableUserPrefs.globalFilter}
-                handleGlobalFilterChange={handleGlobalFilterChange}
-                disabled={collectRecordsForUiDisplay.length === 0}
-              />
+            <ToolBarItemsRow>
+              <FilterItems>
+                <FilterSearchToolbar
+                  name={language.pages.collectTable.filterToolbarText}
+                  value={tableUserPrefs.globalFilter}
+                  handleGlobalFilterChange={handleGlobalFilterChange}
+                  disabled={collectRecordsForUiDisplay.length === 0}
+                />
+                <MethodsFilterDropDown
+                  value={tableUserPrefs.methodsFilter}
+                  handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
+                  disabled={collectRecordsForUiDisplay.length === 0}
+                />
+              </FilterItems>
               <AddSampleUnitButton />
-              <MethodsFilterDropDown
-                value={tableUserPrefs.methodsFilter}
-                handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
-                disabled={collectRecordsForUiDisplay.length === 0}
-              />
-            </ToolBarRow>
+            </ToolBarItemsRow>
           )}
         </>
       }

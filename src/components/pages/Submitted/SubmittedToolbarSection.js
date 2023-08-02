@@ -3,7 +3,7 @@ import PropTypes, { string } from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { Column, ToolBarRow } from '../../generic/positioning'
+import { Column, FilterItems, ToolBarItemsRow } from '../../generic/positioning'
 import { H2 } from '../../generic/text'
 import { hoverState } from '../../../library/styling/mediaQueries'
 import { IconDownload } from '../../icons'
@@ -48,18 +48,20 @@ const SubmittedToolbarSection = ({
   return (
     <>
       <H2>Submitted</H2>
-      <ToolBarRow>
-        <FilterSearchToolbar
-          name={name}
-          handleGlobalFilterChange={handleGlobalFilterChange}
-          value={searchFilterValue}
-          disabled={disabled}
-        />
-        <MethodsFilterDropDown
-          value={methodFilterValue}
-          handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
-          disabled={disabled}
-        />
+      <ToolBarItemsRow>
+        <FilterItems>
+          <FilterSearchToolbar
+            name={name}
+            handleGlobalFilterChange={handleGlobalFilterChange}
+            value={searchFilterValue}
+            disabled={disabled}
+          />
+          <MethodsFilterDropDown
+            value={methodFilterValue}
+            handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
+            disabled={disabled}
+          />
+        </FilterItems>
         <ButtonSecondaryDropdown label={label}>
           <Column as="nav" data-testid="export-to-csv">
             <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('fishbelt')}>
@@ -85,7 +87,7 @@ const SubmittedToolbarSection = ({
             </DropdownItemStyle>
           </Column>
         </ButtonSecondaryDropdown>
-      </ToolBarRow>
+      </ToolBarItemsRow>
     </>
   )
 }
