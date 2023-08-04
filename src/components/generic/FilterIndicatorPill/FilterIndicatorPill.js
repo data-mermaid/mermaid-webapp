@@ -1,8 +1,31 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
+import { IconClose } from '../../icons'
+import theme from '../../../theme'
 
-const FilterIndictorPillContainer = styled.div``
+const FilterIndictorPillContainer = styled.div`
+  border: solid 1px ${theme.color.border};
+  color: ${theme.color.textColor};
+  padding: ${theme.spacing.xxsmall} ${theme.spacing.medium};
+  border-radius: 5px;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  background-color: ${theme.color.getMessageColorBackground('warning')};
+`
+
+const IconContainer = styled.div`
+  cursor: pointer;
+`
+
+const FilterAmount = styled.p`
+  font-weight: bold;
+  padding: 0 0.4em;
+`
 
 const FilterIndicatorPill = ({
   isMethodFilterEnabled,
@@ -36,7 +59,13 @@ const FilterIndicatorPill = ({
 
   return (
     <FilterIndictorPillContainer>
-      showing {filteredAmountToDisplay}/{unfilteredRowLength}
+      Filtered{' '}
+      <FilterAmount>
+        {filteredAmountToDisplay} / {unfilteredRowLength}
+      </FilterAmount>{' '}
+      <IconContainer>
+        <IconClose />
+      </IconContainer>
     </FilterIndictorPillContainer>
   )
 }
