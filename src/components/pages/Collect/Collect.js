@@ -25,6 +25,7 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import AddSampleUnitButton from './AddSampleUnitButton'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
+import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
@@ -351,7 +352,7 @@ const Collect = () => {
           methodFilteredRowLength={methodsFilteredTableCellData.length}
           searchFilteredRowLength={searchFilteredRowsLength}
           isSearchFilterEnabled={!!globalFilter?.length}
-          isMethodFilterEnabled={!!methodsFilter.length}
+          isMethodFilterEnabled={!!methodsFilter?.length}
         />
         <PageSelector
           onPreviousClick={previousPage}
@@ -398,6 +399,15 @@ const Collect = () => {
                   handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
                   disabled={collectRecordsForUiDisplay.length === 0}
                 />
+                {globalFilter?.length || methodsFilter?.length ? (
+                  <FilterIndicatorPill
+                    unfilteredRowLength={collectRecordsForUiDisplay.length}
+                    methodFilteredRowLength={methodsFilteredTableCellData.length}
+                    searchFilteredRowLength={searchFilteredRowsLength}
+                    isSearchFilterEnabled={!!globalFilter?.length}
+                    isMethodFilterEnabled={!!methodsFilter?.length}
+                  />
+                ) : null}
               </FilterItems>
               <AddSampleUnitButton />
             </ToolBarItemsRow>

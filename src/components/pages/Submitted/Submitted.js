@@ -357,6 +357,11 @@ const Submitted = () => {
       methodFilterValue={tableUserPrefs.methodsFilter}
       handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
       disabled={submittedRecordsForUiDisplay.length === 0}
+      unfilteredRowLength={submittedRecordsForUiDisplay.length}
+      methodFilteredRowLength={methodsFilteredTableCellData.length}
+      searchFilteredRowLength={searchFilteredRowsLength}
+      isSearchFilterEnabled={!!globalFilter?.length}
+      isMethodFilterEnabled={!!methodsFilter?.length}
     />
   ) : (
     <H2>{language.pages.submittedTable.title}</H2>
