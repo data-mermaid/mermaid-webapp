@@ -292,7 +292,7 @@ const pages = {
   },
   submittedTable: {
     title: 'Submitted',
-    filterToolbarText: 'Filter this table by method, site, management, or observer',
+    filterToolbarText: 'Filter this table by site, management, or observer',
     noDataMainText: `This project has no submitted sample units.`,
   },
   userTable: {
@@ -319,7 +319,7 @@ const pages = {
   },
   collectTable: {
     title: 'Collecting',
-    filterToolbarText: 'Filter this table by method, site, management, or observer',
+    filterToolbarText: 'Filter this table by site, management, or observer',
     noDataMainText: `You do not have any active sample units`,
   },
   siteForm: {
@@ -343,7 +343,7 @@ const pages = {
   },
   usersAndTransectsTable: {
     title: 'Observers and Transects',
-    filterToolbarText: 'Filter this table by site or method',
+    filterToolbarText: 'Filter this table by site',
     missingSiteName: '(Missing Site Name)',
     missingMRName: '(Missing MR Name)',
     missingLabelNumber: 'missing number',

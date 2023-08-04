@@ -233,7 +233,7 @@ const ManagementRegimesOverview = () => {
   )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = ['values.site', 'values.method']
+    const keys = ['values.site']
 
     const queryTerms = splitSearchQueryStrings(query)
 

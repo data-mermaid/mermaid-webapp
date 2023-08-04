@@ -197,12 +197,7 @@ const Submitted = () => {
   )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = [
-      'values.method.props.children',
-      'values.site',
-      'values.management',
-      'values.observers',
-    ]
+    const keys = ['values.site', 'values.management', 'values.observers']
 
     const queryTerms = splitSearchQueryStrings(query)
 
