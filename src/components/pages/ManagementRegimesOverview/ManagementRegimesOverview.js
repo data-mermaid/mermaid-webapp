@@ -28,7 +28,7 @@ import {
   OverviewTh,
   OverviewThead,
 } from '../../generic/Table/table'
-import { ToolBarRow } from '../../generic/positioning'
+import { FilterItems, ToolBarItemsRow } from '../../generic/positioning'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
@@ -456,19 +456,21 @@ const ManagementRegimesOverview = () => {
     <>
       <H2>{language.pages.managementRegimesOverview.title}</H2>
       {isAppOnline && (
-        <ToolBarRow>
-          <FilterSearchToolbar
-            name={language.pages.usersAndTransectsTable.filterToolbarText}
-            value={tableUserPrefs.globalFilter}
-            handleGlobalFilterChange={handleGlobalFilterChange}
-            disabled={sampleUnitWithManagementRegimeRecords.length === 0}
-          />
-          <MethodsFilterDropDown
-            value={tableUserPrefs.methodsFilter}
-            handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
-            disabled={sampleUnitWithManagementRegimeRecords.length === 0}
-          />
-        </ToolBarRow>
+        <ToolBarItemsRow>
+          <FilterItems>
+            <FilterSearchToolbar
+              name={language.pages.usersAndTransectsTable.filterToolbarText}
+              value={tableUserPrefs.globalFilter}
+              handleGlobalFilterChange={handleGlobalFilterChange}
+              disabled={sampleUnitWithManagementRegimeRecords.length === 0}
+            />
+            <MethodsFilterDropDown
+              value={tableUserPrefs.methodsFilter}
+              handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
+              disabled={sampleUnitWithManagementRegimeRecords.length === 0}
+            />
+          </FilterItems>
+        </ToolBarItemsRow>
       )}
     </>
   )

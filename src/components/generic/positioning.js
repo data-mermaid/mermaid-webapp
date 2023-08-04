@@ -34,3 +34,18 @@ export const ToolBarRow = styled(Row)`
   align-items: flex-end;
   gap: 1rem 1rem;
 `
+
+// new to accomodate methods filter
+export const ToolBarItemsRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  gap: 1rem 1rem;
+`
+
+export const FilterItems = styled.div`
+  display: flex;
+  flex-grow: 2;
+  align-items: end;
+  gap: 1rem 1rem;
+`
