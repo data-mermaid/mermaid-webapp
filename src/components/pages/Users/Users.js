@@ -449,7 +449,7 @@ const Users = () => {
         Header: () => (
           <>
             <LabelContainer>
-              <div>Admin</div>
+              Admin
               {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
                 <ColumnHeaderToolTip helperText={language.tooltipText.admin} left="-4.2em" />
               ) : null}
@@ -466,7 +466,7 @@ const Users = () => {
         Header: () => (
           <>
             <LabelContainer>
-              <div>Collector</div>
+              Collector
               {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
                 <ColumnHeaderToolTip helperText={language.tooltipText.collector} left="-2.5em" />
               ) : null}
@@ -487,7 +487,7 @@ const Users = () => {
         Header: () => (
           <>
             <LabelContainer>
-              <div>Read-Only</div>
+              Read-Only
               {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
                 <ColumnHeaderToolTip helperText={language.tooltipText.readOnly} left="-1.8em" />
               ) : null}
