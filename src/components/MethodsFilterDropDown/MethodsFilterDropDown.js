@@ -42,7 +42,7 @@ const FormStyle = {
     fontFamily: 'Open Sans',
     fontSize: '1.6rem',
     color: theme.color.textColor,
-    height: '30px',
+    height: '30.5px',
   },
   '& .MuiFormLabel-root': {
     fontSize: '1.6rem',
