@@ -28,11 +28,30 @@ const FormStyle = {
   m: 1,
   width: 230,
   margin: 0,
+
   '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
     border: '2px solid #264b7e',
   },
-  '& .MuiOuntlinedInput': {
+  '& .MuiOutlinedInput-notchedOutline': {
+    border: `1px solid ${theme.color.border}`,
+    '& legend': {
+      display: 'none',
+    },
+  },
+  '& .MuiOutlinedInput-root': {
     fontFamily: 'Open Sans',
+    fontSize: '1.6rem',
+    color: theme.color.textColor,
+    height: '30px',
+  },
+  '& .MuiFormLabel-root': {
+    fontSize: '1.6rem',
+    paddingBottom: '0.2em',
+    color: `${theme.color.textColor} !important`,
+    position: 'inherit',
+    fontFamily: 'Open Sans',
+    transition: 'none',
+    transform: 'none',
   },
 }
 
