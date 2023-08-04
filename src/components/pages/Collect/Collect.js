@@ -283,6 +283,11 @@ const Collect = () => {
     }
   }
 
+  const clearFilters = () => {
+    setGlobalFilter('')
+    setMethodsFilter([])
+  }
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -298,6 +303,8 @@ const Collect = () => {
   const _setMethodsFilterPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'methodsFilter', currentValue: methodsFilter })
   }, [methodsFilter, handleSetTableUserPrefs])
+
+  console.log({ globalFilter })
 
   const table = collectRecordsForUiDisplay.length ? (
     <>
@@ -406,6 +413,7 @@ const Collect = () => {
                     searchFilteredRowLength={searchFilteredRowsLength}
                     isSearchFilterEnabled={!!globalFilter?.length}
                     isMethodFilterEnabled={!!methodsFilter?.length}
+                    clearFilters={clearFilters}
                   />
                 ) : null}
               </FilterItems>

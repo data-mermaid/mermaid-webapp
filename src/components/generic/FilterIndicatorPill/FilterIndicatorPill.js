@@ -3,6 +3,7 @@ import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
 import { IconClose } from '../../icons'
 import theme from '../../../theme'
+import { IconButton } from '../buttons'
 
 const FilterIndictorPillContainer = styled.div`
   border: solid 1px ${theme.color.border};
@@ -18,10 +19,6 @@ const FilterIndictorPillContainer = styled.div`
   background-color: ${theme.color.getMessageColorBackground('warning')};
 `
 
-const IconContainer = styled.div`
-  cursor: pointer;
-`
-
 const FilterAmount = styled.p`
   font-weight: bold;
   padding: 0 0.4em;
@@ -33,6 +30,7 @@ const FilterIndicatorPill = ({
   methodFilteredRowLength,
   searchFilteredRowLength,
   unfilteredRowLength,
+  clearFilters,
 }) => {
   const [filteredAmountToDisplay, setFilteredAmountToDisplay] = useState(null)
 
@@ -63,9 +61,9 @@ const FilterIndicatorPill = ({
       <FilterAmount>
         {filteredAmountToDisplay} / {unfilteredRowLength}
       </FilterAmount>{' '}
-      <IconContainer>
+      <IconButton type="button" onClick={() => clearFilters()}>
         <IconClose />
-      </IconContainer>
+      </IconButton>
     </FilterIndictorPillContainer>
   )
 }
@@ -83,6 +81,7 @@ FilterIndicatorPill.propTypes = {
   searchFilteredRowLength: PropTypes.number,
   isMethodFilterEnabled: PropTypes.bool,
   isSearchFilterEnabled: PropTypes.bool,
+  clearFilters: PropTypes.func.isRequired,
 }
 
 export default FilterIndicatorPill
