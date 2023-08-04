@@ -169,15 +169,13 @@ const ManagementRulesInput = ({
     <InputRow {...restOfProps} validationType={validationType}>
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <LabelContainer>
-        <div>
-          <label id={`${id}-management-rules-input`}>{label}</label>
-        </div>
+        <label id={`${id}-management-rules-input`}>{label}</label>
+        <span>{required ? <RequiredIndicator /> : null}</span>
         {helperText ? (
           <IconButton type="button" onClick={(event) => handleInfoIconClick(event, label)}>
             <IconInfo aria-label="info" />
           </IconButton>
         ) : null}
-        <div>{required ? <RequiredIndicator /> : null}</div>
       </LabelContainer>
       <div aria-labelledby={`${id}-management-rules-input`}>
         <StyledCheckRadioWrapper>
