@@ -419,6 +419,11 @@ const UsersAndTransects = () => {
     }
   }
 
+  const clearFilters = () => {
+    setMethodsFilter([])
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: '' })
+  }
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -613,6 +618,7 @@ const UsersAndTransects = () => {
                 searchFilteredRowLength={searchFilteredRowsLength}
                 isSearchFilterEnabled={!!globalFilter?.length}
                 isMethodFilterEnabled={!!methodsFilter?.length}
+                clearFilters={clearFilters}
               />
             ) : null}
           </FilterItems>
