@@ -38,6 +38,7 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
+import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
 
 const groupManagementRegimes = (records) => {
   return records.reduce((accumulator, record) => {
@@ -293,6 +294,11 @@ const ManagementRegimesOverview = () => {
     }
   }
 
+  const clearFilters = () => {
+    setMethodsFilter([])
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: '' })
+  }
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -469,6 +475,16 @@ const ManagementRegimesOverview = () => {
               handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
               disabled={sampleUnitWithManagementRegimeRecords.length === 0}
             />
+            {globalFilter?.length || methodsFilter?.length ? (
+              <FilterIndicatorPill
+                unfilteredRowLength={sampleUnitWithManagementRegimeRecords.length}
+                methodFilteredRowLength={methodsFilteredTableCellData.length}
+                searchFilteredRowLength={searchFilteredRowsLength}
+                isSearchFilterEnabled={!!globalFilter?.length}
+                isMethodFilterEnabled={!!methodsFilter?.length}
+                clearFilters={clearFilters}
+              />
+            ) : null}
           </FilterItems>
         </ToolBarItemsRow>
       )}

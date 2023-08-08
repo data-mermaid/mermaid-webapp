@@ -44,6 +44,7 @@ import EmptySampleUnitPopup from '../../SampleUnitPopups/EmptySampleUnitPopup/Em
 import CollectSampleUnitPopup from '../../SampleUnitPopups/CollectSampleUnitPopup/CollectSampleUnitPopup'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
+import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
 
 const EMPTY_VALUE = '-'
 
@@ -418,6 +419,11 @@ const UsersAndTransects = () => {
     }
   }
 
+  const clearFilters = () => {
+    setMethodsFilter([])
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: '' })
+  }
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -605,6 +611,16 @@ const UsersAndTransects = () => {
               handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
               disabled={submittedRecords.length === 0}
             />
+            {globalFilter?.length || methodsFilter?.length ? (
+              <FilterIndicatorPill
+                unfilteredRowLength={submittedRecords.length}
+                methodFilteredRowLength={methodsFilteredTableCellData.length}
+                searchFilteredRowLength={searchFilteredRowsLength}
+                isSearchFilterEnabled={!!globalFilter?.length}
+                isMethodFilterEnabled={!!methodsFilter?.length}
+                clearFilters={clearFilters}
+              />
+            ) : null}
           </FilterItems>
         </ToolBarItemsRow>
       )}

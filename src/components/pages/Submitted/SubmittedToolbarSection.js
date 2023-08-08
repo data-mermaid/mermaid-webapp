@@ -11,6 +11,7 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
+import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
 import theme from '../../../theme'
 
 const DropdownItemStyle = styled.button`
@@ -31,6 +32,13 @@ const SubmittedToolbarSection = ({
   searchFilterValue,
   methodFilterValue,
   disabled,
+  unfilteredRowLength,
+  methodFilteredRowLength,
+  searchFilteredRowLength,
+  isSearchFilterEnabled,
+  isMethodFilterEnabled,
+  setMethodsFilter,
+  handleSetTableUserPrefs,
 }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
@@ -43,6 +51,11 @@ const SubmittedToolbarSection = ({
 
   const handleExportSubmitted = (protocol) => {
     databaseSwitchboardInstance.exportSubmittedRecords({ projectId, protocol })
+  }
+
+  const clearFilters = () => {
+    setMethodsFilter([])
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: '' })
   }
 
   return (
@@ -61,6 +74,16 @@ const SubmittedToolbarSection = ({
             handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
             disabled={disabled}
           />
+          {isSearchFilterEnabled || isMethodFilterEnabled ? (
+            <FilterIndicatorPill
+              unfilteredRowLength={unfilteredRowLength}
+              methodFilteredRowLength={methodFilteredRowLength}
+              searchFilteredRowLength={searchFilteredRowLength}
+              isSearchFilterEnabled={isSearchFilterEnabled}
+              isMethodFilterEnabled={isMethodFilterEnabled}
+              clearFilters={clearFilters}
+            />
+          ) : null}
         </FilterItems>
         <ButtonSecondaryDropdown label={label}>
           <Column as="nav" data-testid="export-to-csv">
@@ -96,6 +119,10 @@ SubmittedToolbarSection.defaultProps = {
   searchFilterValue: undefined,
   methodFilterValue: [],
   disabled: false,
+  methodFilteredRowLength: null,
+  searchFilteredRowLength: null,
+  isMethodFilterEnabled: false,
+  isSearchFilterEnabled: false,
 }
 
 SubmittedToolbarSection.propTypes = {
@@ -105,6 +132,13 @@ SubmittedToolbarSection.propTypes = {
   searchFilterValue: PropTypes.string,
   methodFilterValue: PropTypes.arrayOf(string),
   disabled: PropTypes.bool,
+  unfilteredRowLength: PropTypes.number.isRequired,
+  methodFilteredRowLength: PropTypes.number,
+  searchFilteredRowLength: PropTypes.number,
+  isMethodFilterEnabled: PropTypes.bool,
+  isSearchFilterEnabled: PropTypes.bool,
+  setMethodsFilter: PropTypes.func.isRequired,
+  handleSetTableUserPrefs: PropTypes.func.isRequired,
 }
 
 export default SubmittedToolbarSection
