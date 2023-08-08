@@ -284,8 +284,8 @@ const Collect = () => {
   }
 
   const clearFilters = () => {
-    setGlobalFilter('')
     setMethodsFilter([])
+    tableUserPrefs.globalFilter = ''
   }
 
   const _setSortByPrefs = useEffect(() => {
@@ -303,8 +303,6 @@ const Collect = () => {
   const _setMethodsFilterPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'methodsFilter', currentValue: methodsFilter })
   }, [methodsFilter, handleSetTableUserPrefs])
-
-  console.log({ globalFilter })
 
   const table = collectRecordsForUiDisplay.length ? (
     <>
