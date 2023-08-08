@@ -362,6 +362,8 @@ const Submitted = () => {
       searchFilteredRowLength={searchFilteredRowsLength}
       isSearchFilterEnabled={!!globalFilter?.length}
       isMethodFilterEnabled={!!methodsFilter?.length}
+      setMethodsFilter={setMethodsFilter}
+      handleSetTableUserPrefs={handleSetTableUserPrefs}
     />
   ) : (
     <H2>{language.pages.submittedTable.title}</H2>

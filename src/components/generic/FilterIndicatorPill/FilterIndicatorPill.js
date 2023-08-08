@@ -61,7 +61,7 @@ const FilterIndicatorPill = ({
       <FilterAmount>
         {filteredAmountToDisplay} / {unfilteredRowLength}
       </FilterAmount>{' '}
-      <IconButton type="button" onClick={() => clearFilters()}>
+      <IconButton type="button" onClick={clearFilters}>
         <IconClose />
       </IconButton>
     </FilterIndictorPillContainer>

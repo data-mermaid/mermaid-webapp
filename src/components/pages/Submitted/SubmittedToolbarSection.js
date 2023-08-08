@@ -37,6 +37,8 @@ const SubmittedToolbarSection = ({
   searchFilteredRowLength,
   isSearchFilterEnabled,
   isMethodFilterEnabled,
+  setMethodsFilter,
+  handleSetTableUserPrefs,
 }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
@@ -49,6 +51,11 @@ const SubmittedToolbarSection = ({
 
   const handleExportSubmitted = (protocol) => {
     databaseSwitchboardInstance.exportSubmittedRecords({ projectId, protocol })
+  }
+
+  const clearFilters = () => {
+    setMethodsFilter([])
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: '' })
   }
 
   return (
@@ -74,6 +81,7 @@ const SubmittedToolbarSection = ({
               searchFilteredRowLength={searchFilteredRowLength}
               isSearchFilterEnabled={isSearchFilterEnabled}
               isMethodFilterEnabled={isMethodFilterEnabled}
+              clearFilters={clearFilters}
             />
           ) : null}
         </FilterItems>
@@ -129,6 +137,8 @@ SubmittedToolbarSection.propTypes = {
   searchFilteredRowLength: PropTypes.number,
   isMethodFilterEnabled: PropTypes.bool,
   isSearchFilterEnabled: PropTypes.bool,
+  setMethodsFilter: PropTypes.func.isRequired,
+  handleSetTableUserPrefs: PropTypes.func.isRequired,
 }
 
 export default SubmittedToolbarSection
