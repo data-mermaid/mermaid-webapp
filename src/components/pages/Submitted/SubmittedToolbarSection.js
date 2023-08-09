@@ -56,6 +56,7 @@ const SubmittedToolbarSection = ({
   const clearFilters = () => {
     setMethodsFilter([])
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: '' })
+    handleGlobalFilterChange('')
   }
 
   return (

@@ -349,6 +349,7 @@ const Submitted = () => {
   ) : (
     <PageUnavailable mainText={language.error.pageUnavailableOffline} />
   )
+
   const toolbar = isAppOnline ? (
     <SubmittedToolbarSection
       name={language.pages.submittedTable.filterToolbarText}

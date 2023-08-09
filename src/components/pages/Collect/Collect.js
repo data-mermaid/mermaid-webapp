@@ -286,6 +286,7 @@ const Collect = () => {
   const clearFilters = () => {
     setMethodsFilter([])
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: '' })
+    handleGlobalFilterChange('')
   }
 
   const _setSortByPrefs = useEffect(() => {
