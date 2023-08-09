@@ -409,9 +409,7 @@ const FishBeltObservationTable = ({
               <Th> </Th>
               <Th align="left" id="fish-name-label">
                 <LabelContainer>
-                  <div>
-                    Fish Name <RequiredIndicator />
-                  </div>
+                  Fish Name <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishName' ? (
                     <ColumnHeaderToolTip
                       helperText={language.tooltipText.getFishName()}
@@ -429,9 +427,7 @@ const FishBeltObservationTable = ({
               </Th>
               <Th align="right" id="fish-size-label">
                 <LabelContainer>
-                  <div>
-                    Size (cm) <RequiredIndicator />
-                  </div>
+                  Size (cm) <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishSize' ? (
                     <ColumnHeaderToolTip
                       helperText={language.tooltipText.fishSize}
@@ -439,7 +435,6 @@ const FishBeltObservationTable = ({
                       left="-1em"
                     />
                   ) : null}
-
                   <IconButton
                     type="button"
                     onClick={(event) => handleInfoIconClick(event, 'fishSize')}
@@ -450,9 +445,7 @@ const FishBeltObservationTable = ({
               </Th>
               <Th align="right" id="fish-count-label">
                 <LabelContainer>
-                  <div>
-                    Count <RequiredIndicator />
-                  </div>
+                  Count <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishCount' ? (
                     <ColumnHeaderToolTip
                       helperText={language.tooltipText.fishCount}

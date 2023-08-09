@@ -388,9 +388,7 @@ const BenthicPhotoQuadratObservationTable = ({
               <Th> </Th>
               <Th align="right" id="quadrat-number-label">
                 <LabelContainer>
-                  <div>
-                    Quadrat <RequiredIndicator />
-                  </div>
+                  Quadrat <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
                     <ColumnHeaderToolTip helperText={language.tooltipText.quadrat} left="-2em" />
                   ) : null}
@@ -404,9 +402,7 @@ const BenthicPhotoQuadratObservationTable = ({
               </Th>
               <Th align="left" id="benthic-attribute-label">
                 <LabelContainer>
-                  <div>
-                    Benthic Attribute <RequiredIndicator />
-                  </div>
+                  Benthic Attribute <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                     <ColumnHeaderToolTip
                       helperText={language.tooltipText.getBenthicAttribute()}
@@ -426,9 +422,7 @@ const BenthicPhotoQuadratObservationTable = ({
               </Th>
               <Th align="right" id="number-of-points-label">
                 <LabelContainer>
-                  <div>
-                    Number of Points <RequiredIndicator />
-                  </div>
+                  Number of Points <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'numberOfPoints' ? (
                     <ColumnHeaderToolTip helperText={language.tooltipText.numberOfPoints} />
                   ) : null}

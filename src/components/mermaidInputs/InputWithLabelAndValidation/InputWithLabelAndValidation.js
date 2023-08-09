@@ -56,17 +56,15 @@ const InputWithLabelAndValidation = ({
   return (
     <InputRow required={required} validationType={validationType} data-testid={testId}>
       <LabelContainer>
-        <div>
-          <label id={`aria-label${id}`} htmlFor={id}>
-            {label}
-          </label>
-        </div>
+        <label id={`aria-label${id}`} htmlFor={id}>
+          {label}
+        </label>
+        <span>{required ? <RequiredIndicator /> : null}</span>
         {helperText ? (
           <IconButton type="button" onClick={(event) => handleInfoIconClick(event, label)}>
             <IconInfo aria-label="info" />
           </IconButton>
         ) : null}
-        <div>{required ? <RequiredIndicator /> : null}</div>
       </LabelContainer>
 
       <div>

@@ -318,9 +318,7 @@ const BenthicPitObservationsTable = ({
                   </Th>
                   <Th align="left" id="benthic-attribute-label">
                     <LabelContainer>
-                      <div>
-                        Benthic Attribute <RequiredIndicator />
-                      </div>
+                      Benthic Attribute <RequiredIndicator />
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.getBenthicAttribute()}

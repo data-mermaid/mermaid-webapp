@@ -85,7 +85,7 @@ export const RequiredIndicator = styled.span`
 `
 export const InputRow = styled.div`
   display: grid;
-  grid-template-columns: 22rem 31rem 1fr;
+  grid-template-columns: 23rem 31rem 1fr;
   max-width: ${theme.spacing.maxWidth};
   margin: 1px 0;
   padding: ${theme.spacing.medium};
@@ -104,13 +104,6 @@ export const InputRow = styled.div`
     grid-template-rows: minmax(30px, auto) 1fr;
     margin: 5px 0;
     gap: 10px;
-    & > :nth-child(1) {
-      /* label */
-      grid-row: 1 / 3;
-      grid-column: 1 / 2;
-      display: block;
-      white-space: nowrap;
-    }
     & > :nth-child(2) {
       /* input */
       grid-row: 2 / 3;
@@ -138,7 +131,4 @@ export const Textarea = styled.textarea`
   resize: vertical;
   ${inputTextareaSelectStyles}
 `
-export const LabelContainer = styled.div`
-  display: flex !important;
-  flex-direction: row;
-`
+export const LabelContainer = styled.div``
