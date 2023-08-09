@@ -154,7 +154,7 @@ export const OverviewTr = styled.tr`
       position: absolute;
       background-color: hsl(0 0% 90%);
       mix-blend-mode: multiply;
-      pointer-events: auto;
+      pointer-events: none;
       top: 0;
       left: 0;
       right: 0;
