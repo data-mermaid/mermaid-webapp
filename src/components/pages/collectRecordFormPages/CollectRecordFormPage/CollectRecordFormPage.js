@@ -79,7 +79,8 @@ function loadObservationsFromCollectRecordIntoTableState({
         payload: initialObservationsToLoadTable,
       })
     }
-    if (!initialObservationsToLoadTable.length) {
+
+    if (isNewRecord && !initialObservationsToLoadTable.length) {
       handleAddEmptyInitialObservation()
     }
 

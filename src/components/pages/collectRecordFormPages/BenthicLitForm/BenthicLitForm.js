@@ -70,7 +70,6 @@ const BenthicLitform = ({ isNewRecord }) => {
               if (!isNewRecord && !collectRecordResponse && recordId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
-
               setSubNavNode(
                 getDataForSubNavNode({
                   isNewRecord,
