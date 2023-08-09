@@ -82,7 +82,6 @@ export const Th = styled.th(
     padding: ${theme.spacing.medium};
     background: ${theme.color.white};
     vertical-align: top;
-    // pointer-events: ${props.disabledHover && 'none'};
     &::after {
       content: ${props.isSortingEnabled ? ' \u25b2' : ''};
       font-size: small;
