@@ -76,6 +76,8 @@ const getHeaderSortAfter = (isMultiSortColumn, sortedIndex, isSortedDescending) 
   `
 }
 
+console.log('test')
+
 export const Th = styled.th(
   (props) => css`
     text-align: ${props.align || 'left'};
