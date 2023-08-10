@@ -1,5 +1,5 @@
 import moment from 'moment'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import styled from 'styled-components/macro'
 import { useParams } from 'react-router-dom'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
@@ -30,7 +30,7 @@ import {
   OverviewTr,
   OverviewTd,
 } from '../../generic/Table/table'
-import { ToolBarRow } from '../../generic/positioning'
+import { FilterItems, ToolBarItemsRow } from '../../generic/positioning'
 import theme from '../../../theme'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -43,6 +43,8 @@ import SubmittedSampleUnitPopup from '../../SampleUnitPopups/SubmittedSampleUnit
 import EmptySampleUnitPopup from '../../SampleUnitPopups/EmptySampleUnitPopup/EmptySampleUnitPopup'
 import CollectSampleUnitPopup from '../../SampleUnitPopups/CollectSampleUnitPopup/CollectSampleUnitPopup'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
+import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
 
 const EMPTY_VALUE = '-'
 
@@ -109,6 +111,10 @@ const UsersAndTransects = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
+  const [methodsFilter, setMethodsFilter] = useState([])
+  const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
+  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -310,6 +316,18 @@ const UsersAndTransects = () => {
     [submittedRecords, populateTransectNumberRow, populateCollectNumberRow],
   )
 
+  const applyMethodsTableFilters = useCallback((rows, filterValue) => {
+    const filteredRows = rows?.filter((row) => filterValue.includes(row.method))
+
+    setMethodsFilteredTableCellData(filteredRows)
+  }, [])
+
+  const _applyMethodsFilterOnLoad = useEffect(() => {
+    if (methodsFilter.length) {
+      applyMethodsTableFilters(tableCellData, methodsFilter)
+    }
+  }, [methodsFilter, tableCellData, applyMethodsTableFilters])
+
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -327,8 +345,21 @@ const UsersAndTransects = () => {
     defaultValue: tableDefaultPrefs,
   })
 
+  useEffect(
+    function initializeMethodFilterWithPersistedTablePreferences() {
+      if (
+        !isMethodFilterInitializedWithPersistedTablePreferences.current &&
+        tableUserPrefs?.methodsFilter
+      ) {
+        setMethodsFilter(tableUserPrefs.methodsFilter)
+        isMethodFilterInitializedWithPersistedTablePreferences.current = true
+      }
+    },
+    [tableUserPrefs],
+  )
+
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = ['values.site', 'values.method']
+    const keys = ['values.site']
 
     const queryTerms = splitSearchQueryStrings(query)
 
@@ -336,7 +367,11 @@ const UsersAndTransects = () => {
       return rows
     }
 
-    return getTableFilteredRows(rows, keys, queryTerms)
+    const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
+
+    setSearchFilteredRowsLength(tableFilteredRows.length)
+
+    return tableFilteredRows
   }, [])
 
   const {
@@ -357,7 +392,7 @@ const UsersAndTransects = () => {
   } = useTable(
     {
       columns: tableColumns,
-      data: tableCellData,
+      data: methodsFilter.length ? methodsFilteredTableCellData : tableCellData,
       initialState: {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
@@ -375,6 +410,21 @@ const UsersAndTransects = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const handleMethodsColumnFilterChange = (filters) => {
+    if (filters.length && submittedRecords.length) {
+      setMethodsFilter(filters)
+      applyMethodsTableFilters(tableCellData, filters)
+    } else {
+      setMethodsFilter([])
+    }
+  }
+
+  const clearFilters = () => {
+    setMethodsFilter([])
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: '' })
+    handleGlobalFilterChange('')
+  }
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -386,6 +436,10 @@ const UsersAndTransects = () => {
   const _setPageSizePrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
+
+  const _setMethodsFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'methodsFilter', currentValue: methodsFilter })
+  }, [methodsFilter, handleSetTableUserPrefs])
 
   const pageNoDataAvailable = (
     <>
@@ -513,8 +567,12 @@ const UsersAndTransects = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="records"
-          rowLength={submittedRecords.length}
+          pageType="record"
+          unfilteredRowLength={submittedRecords.length}
+          methodFilteredRowLength={methodsFilteredTableCellData.length}
+          searchFilteredRowLength={searchFilteredRowsLength}
+          isSearchFilterEnabled={!!globalFilter?.length}
+          isMethodFilterEnabled={!!methodsFilter.length}
         />
         <PageSelector
           onPreviousClick={previousPage}
@@ -541,14 +599,31 @@ const UsersAndTransects = () => {
     <>
       <H2>{language.pages.usersAndTransectsTable.title}</H2>
       {isAppOnline && (
-        <ToolBarRow>
-          <FilterSearchToolbar
-            name={language.pages.usersAndTransectsTable.filterToolbarText}
-            value={tableUserPrefs.globalFilter}
-            handleGlobalFilterChange={handleGlobalFilterChange}
-            disabled={submittedRecords.length === 0}
-          />
-        </ToolBarRow>
+        <ToolBarItemsRow>
+          <FilterItems>
+            <FilterSearchToolbar
+              name={language.pages.usersAndTransectsTable.filterToolbarText}
+              value={tableUserPrefs.globalFilter}
+              handleGlobalFilterChange={handleGlobalFilterChange}
+              disabled={submittedRecords.length === 0}
+            />
+            <MethodsFilterDropDown
+              value={tableUserPrefs.methodsFilter}
+              handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
+              disabled={submittedRecords.length === 0}
+            />
+            {globalFilter?.length || methodsFilter?.length ? (
+              <FilterIndicatorPill
+                unfilteredRowLength={submittedRecords.length}
+                methodFilteredRowLength={methodsFilteredTableCellData.length}
+                searchFilteredRowLength={searchFilteredRowsLength}
+                isSearchFilterEnabled={!!globalFilter?.length}
+                isMethodFilterEnabled={!!methodsFilter?.length}
+                clearFilters={clearFilters}
+              />
+            ) : null}
+          </FilterItems>
+        </ToolBarItemsRow>
       )}
     </>
   )

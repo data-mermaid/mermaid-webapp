@@ -13,6 +13,7 @@ import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAn
 import { InputWrapper } from '../../../generic/form'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
+import language from '../../../../language'
 
 const DEPTH_VALIDATION_PATH = 'data.quadrat_transect.depth'
 const LABEL_VALIDATION_PATH = 'data.quadrat_transect.label'
@@ -229,6 +230,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.number}
           onChange={handleTransectNumberChange}
+          helperText={language.helperText.transectNumber}
         />
         <InputWithLabelAndValidation
           label="Label"
@@ -245,6 +247,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
+          helperText={language.helperText.label}
         />
         <InputWithLabelAndValidation
           label="Sample Time"
@@ -264,6 +267,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
+          helperText={language.helperText.sampleTime}
         />
         <InputWithLabelAndValidation
           label="Depth"
@@ -282,6 +286,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           value={formik.values.depth}
           onChange={handleDepthChange}
           unit="m"
+          helperText={language.helperText.depth}
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
@@ -305,6 +310,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
           unit="m"
+          helperText={language.helperText.transectLengthSurveyed}
         />
         <InputWithLabelAndValidation
           label="Quadrat Number Start"
@@ -327,6 +333,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_number_start}
           onChange={handleQuadratNumberStartChange}
+          helperText={language.helperText.quadratNumberStart}
         />
         <InputWithLabelAndValidation
           label="Quadrat Size"
@@ -346,6 +353,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_size}
           onChange={handleQuadratSizeChange}
+          helperText={language.helperText.quadratSize}
         />
         <InputWithLabelAndValidation
           label="Number of Quadrats"
@@ -363,6 +371,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.num_quadrats}
           onChange={handleNumberOfQuadratsChange}
+          helperText={language.helperText.numberOfQuadrats}
         />
         <InputWithLabelAndValidation
           label="Number of Points per Quadrat"
@@ -384,6 +393,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.num_points_per_quadrat}
           onChange={handleNumberOfPointsPerQuadratChange}
+          helperText={language.helperText.numberOfPointsPerQuadrat}
         />
         <InputSelectWithLabelAndValidation
           label="Visibility"
@@ -405,6 +415,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
           onChange={handleVisibilityChange}
+          helperText={language.helperText.visibility}
         />
         <InputSelectWithLabelAndValidation
           label="Current"
@@ -426,6 +437,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.current}
           onChange={handleCurrentChange}
+          helperText={language.helperText.current}
         />
         <InputSelectWithLabelAndValidation
           label="Relative Depth"
@@ -447,6 +459,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
+          helperText={language.helperText.getRelativeDepth()}
         />
         <InputSelectWithLabelAndValidation
           label="Tide"
@@ -465,6 +478,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
+          helperText={language.helperText.getTide()}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
@@ -480,6 +494,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
+          helperText={language.helperText.notes}
         />
       </InputWrapper>
     </>

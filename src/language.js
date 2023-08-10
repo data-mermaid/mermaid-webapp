@@ -7,6 +7,7 @@ import {
   getDuplicateSampleUnitLink,
   goToManagementOverviewPageLink,
 } from './library/validationMessageHelpers'
+import { HelperTextLink } from './components/generic/links'
 
 const inlineMessage = {
   ignore: 'ignored',
@@ -291,7 +292,7 @@ const pages = {
   },
   submittedTable: {
     title: 'Submitted',
-    filterToolbarText: 'Filter this table by method, site, management, or observer',
+    filterToolbarText: 'Filter this table by site, management, or observer',
     noDataMainText: `This project has no submitted sample units.`,
   },
   userTable: {
@@ -318,7 +319,7 @@ const pages = {
   },
   collectTable: {
     title: 'Collecting',
-    filterToolbarText: 'Filter this table by method, site, management, or observer',
+    filterToolbarText: 'Filter this table by site, management, or observer',
     noDataMainText: `You do not have any active sample units`,
   },
   siteForm: {
@@ -342,7 +343,7 @@ const pages = {
   },
   usersAndTransectsTable: {
     title: 'Observers and Transects',
-    filterToolbarText: 'Filter this table by site or method',
+    filterToolbarText: 'Filter this table by site',
     missingSiteName: '(Missing Site Name)',
     missingMRName: '(Missing MR Name)',
     missingLabelNumber: 'missing number',
@@ -431,7 +432,9 @@ const getValidationMessage = (validation, projectId = '') => {
     high_density: () => `Fish biomass greater than ${context?.biomass_range[1]} kg/ha`,
     incorrect_observation_count: () =>
       `Incorrect number of observations; expected ${context?.expected_count}`,
-    interval_size_not_positive: () => 'Interval size must be a positive number',
+    invalid_interval_size: () => 'Interval size must be a positive number',
+    max_interval_size: () => `Interval size greater than ${context?.interval_size_range[1]} m`,
+    max_interval_start: () => `Interval start greater than ${context?.interval_start_range[1]} m`,
     invalid_benthic_transect: () =>
       'One or more invalid transect fields: site, management, date, number, depth',
     invalid_depth: () => `Depth invalid or not greater than ${context?.depth_range[0]} m`,
@@ -444,7 +447,8 @@ const getValidationMessage = (validation, projectId = '') => {
     invalid_percent_value: () => 'Percent value must be a non-negative number',
     invalid_quadrat_collection: () =>
       'One or more invalid transect fields: site, management, date, depth',
-    invalid_quadrat_size: () => 'Invalid quadrat size',
+    invalid_quadrat_size: () => 'Quadrat size must be a positive number',
+    max_quadrat_size: () => `Quadrat size greater than ${context?.quadrat_size_range[1]} m2`,
     invalid_quadrat_transect: () =>
       'One or more invalid transect fields: site, management, date, number, depth',
     invalid_sample_date: () => 'Invalid date',
@@ -462,7 +466,7 @@ const getValidationMessage = (validation, projectId = '') => {
     missing_quadrat_numbers: () => `Missing quadrat numbers ${context?.missing_quadrat_numbers}`,
     no_region_match: () => 'Coral or fish not previously observed in site region',
     not_part_of_fish_family_subset: () => `Fish is not part of project-defined fish families`,
-    not_positive_integer: () => 'Value is not greater or equal to zero',
+    not_positive_integer: () => 'Value is not an integer greater or equal to zero',
     not_unique_site: () => 'Site: Similar records detected',
     not_unique_management: () => goToManagementOverviewPageLink(projectId),
     obs_total_length_toolarge: () =>
@@ -486,6 +490,178 @@ const getValidationMessage = (validation, projectId = '') => {
   return (validationMessages[code] || validationMessages.default)()
 }
 
+const helperText = {
+  accessRestrictions:
+    'Access is restricted, e.g., people outside a community are not allowed to fish here',
+  compliance: 'Effectiveness of the rules in the managed area - low compliance to high compliance',
+  current: 'Water speed during the survey.',
+  depth: 'Depth of sample unit, in meters (e.g. 3).',
+  exposure: '',
+  fishSizeBin:
+    'Name of bin scheme used to estimate fish size for the transect. Choose 1 cm if the fish size recorded does not use bins.',
+  gearRestrictions: 'There are restrictions on what types of fishing gear can be used',
+  intervalSize:
+    'Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).',
+  intervalStart:
+    'Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5). Default is interval size (i.e. not counting 0).',
+  label:
+    'Arbitrary text to distinguish sample units that are distinct but should be combined analytically (i.e. all other properties are identical). For example: Long swim. Rarely used.',
+  getLatitude: () => (
+    <>
+      Latitude in decimal degrees. Should be a number between -90 and 90, representing the
+      north-south position on the Earth&apos;s surface. A positive value indicates a location north
+      of the equator, while a negative value indicates a location south of the equator. If you need
+      to convert from degrees-minutes-seconds, an online calculator is{' '}
+      <HelperTextLink
+        href="https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  getLongitude: () => (
+    <>
+      Latitude in decimal degrees. Should be a number between -90 and 90, representing the
+      north-south position on the Earth&#39;s surface. A positive value indicates a location north
+      of the equator, while a negative value indicates a location south of the equator. If you need
+      to convert from degrees-minutes-seconds, an online calculator is{' '}
+      <HelperTextLink
+        href="https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  management:
+    'The management designation at the time of survey, e.g., no-take zone, partial restrictions, or open access.',
+  getManagementRegimeName: () => (
+    <>
+      Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a
+      governmental or standardized source such as{' '}
+      <HelperTextLink href="http://protectedseas.net/" target="_blank">
+        protectedseas.net
+      </HelperTextLink>
+      ; alternatively, a descriptive local label like &#39;Northeast Point seasonal closure&#39;can
+      be used.
+    </>
+  ),
+  name: 'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
+  noTake: 'Total extraction ban',
+  notes: '',
+  number: 'Number of quadrat in sample unit collection (e.g. 1).',
+  numberOfPointsPerQuadrat: 'Total number of points per quadrat used in a transect (e.g. 100).',
+  numberOfQuadrats: 'Total number of quadrats in the transect (e.g. 10).',
+  openAccess: 'Open for fishing and entering',
+  partialRestrictions:
+    'e.g. periodic closures, size limits, gear restrictions, species restrictions',
+  parties: 'Who is responsible for managing this area.',
+  periodicCloser:
+    'The area is open and closed as a fisheries management strategy, e.g., rotating octopus closures',
+  quadratSize: 'Quadrat size used per transect, in square meters (e.g. 1).',
+  quadratNumberStart: 'Number of the first quadrat/photo along the transect (e.g. 1).',
+  getReefSlope: () => (
+    <>
+      An indication of coral reef profile of the survey location. See definitions{' '}
+      <HelperTextLink
+        href="https://reefresilience.org/wp-content/uploads/REEF-COVER-CLASS-DEFINITIONS.pdf"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  getReefType: () => (
+    <>
+      The geomorpholgy of a reef and its relation to land. See definitions{' '}
+      <HelperTextLink
+        href="https://www.livingoceansfoundation.org/wp-content/uploads/2015/04/U10-Reef-Types-complete-teacher.pdf"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  getReefZone: () => (
+    <>
+      Location and abiotic factors that characterize the location within the reef. See definitions{' '}
+      <HelperTextLink
+        href="https://www.livingoceansfoundation.org/wp-content/uploads/2015/04/U11-Reef-Zonation-Background.pdf"
+        target="_blank"
+      >
+        here.
+      </HelperTextLink>
+    </>
+  ),
+  getRelativeDepth: () => (
+    <>
+      Whether the survey is &#39;deep&#39; or &#39;shallow&#39; relative to other transects
+      surveyed, regardless of numerical depth in meters.
+    </>
+  ),
+  sampleDate: 'Date when data was collected',
+  sampleTime: 'Time when data was collected',
+  secondaryName: 'Optional secondary name, e.g., Nusa Penida Fisheries Zone',
+  site: 'A unique name of a site where data was collected.',
+  siteName:
+    'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
+  sizeLimits: 'There are restrictions on the size of certain target species',
+  speciesRestrictions: 'There are restrictions on what types of species can be caught',
+  getTide: () => (
+    <>
+      Tide characteristics during the survey{' '}
+      <HelperTextLink
+        href="https://oceanservice.noaa.gov/education/tutorial_tides/tides01_intro.html"
+        target="_blank"
+      >
+        (more detail).
+      </HelperTextLink>
+    </>
+  ),
+  transectLengthSurveyed:
+    'Length of transect for a sample unit, in meters. May include decimal (e.g. 50.0).',
+  transectNumber:
+    'Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.',
+  visibility: 'The horizontal distance at which an object underwater can still be identified. ',
+  width:
+    'The total width (NOT width to one side of the tape) of the fish belt transect, in meters.',
+}
+
+const tooltipText = {
+  admin: 'An admin can manage users, data sharing, and edit submitted data',
+  getBenthicAttribute: () => (
+    <>
+      Benthic attribute observed. A benthic attribute can be a taxonomic name for a coral or other
+      sessile organism, or an abiotic classification. MERMAID benthic attributes are organized
+      hierarchically and are consistent with{' '}
+      <HelperTextLink href="https://www.marinespecies.org/" target="_blank" color="#fff">
+        WoRMS.
+      </HelperTextLink>
+    </>
+  ),
+  collector: 'A collector can only create and submit data',
+  getFishName: () => (
+    <>
+      Name of the fish species, genus, or family observed. For genus-level observations or an
+      unknown species, enter the genus rather than proposing a new species with &lsquo;spp&lsquo;.
+      All fish names in MERMAID are consistent with{' '}
+      <HelperTextLink href="https://fishbase.mnhn.fr/search.php" target="_blank" color="#fff">
+        fishbase.
+      </HelperTextLink>
+    </>
+  ),
+  fishSize: 'Size of fish observed, in cm (e.g. 4.5 or 5-10).',
+  fishCount: 'Number of fish observed, of the same species/genus/family and size.',
+  hardCoralPercentage: 'Hard coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
+  microalgaePercentage: 'Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).',
+  numberOfPoints:
+    'Number of points with unique benthic attribute (/growth form) for the quadrat. The sum of points for all benthic attributes in a quadrat must equal the value set above.',
+  quadrat: 'Quadrat size used per transect, in square meters (e.g. 1).',
+  readOnly: 'A read-only user can only view and download the data',
+  softCoralPercentage: 'Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
+}
+
 export default {
   apiDataTableNames,
   autocomplete,
@@ -496,6 +672,7 @@ export default {
   getResolveModalLanguage,
   getValidationMessage,
   header,
+  helperText,
   inlineMessage,
   loadingIndicator,
   map,
@@ -507,4 +684,5 @@ export default {
   success,
   table,
   title,
+  tooltipText,
 }

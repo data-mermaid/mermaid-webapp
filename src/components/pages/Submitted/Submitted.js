@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
@@ -48,6 +48,10 @@ const Submitted = () => {
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
+  const [methodsFilter, setMethodsFilter] = useState([])
+  const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
+  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${language.pages.submittedTable.title} - ${language.title.mermaid}`)
 
@@ -150,6 +154,18 @@ const Submitted = () => {
     [submittedRecordsForUiDisplay, currentProjectPath],
   )
 
+  const applyMethodsTableFilters = useCallback((rows, filterValue) => {
+    const filteredRows = rows?.filter((row) => filterValue.includes(row.method.props.children))
+
+    setMethodsFilteredTableCellData(filteredRows)
+  }, [])
+
+  const _applyMethodsFilterOnLoad = useEffect(() => {
+    if (methodsFilter.length) {
+      applyMethodsTableFilters(tableCellData, methodsFilter)
+    }
+  }, [methodsFilter, tableCellData, applyMethodsTableFilters])
+
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -167,13 +183,21 @@ const Submitted = () => {
     defaultValue: tableDefaultPrefs,
   })
 
+  useEffect(
+    function initializeMethodFilterWithPersistedTablePreferences() {
+      if (
+        !isMethodFilterInitializedWithPersistedTablePreferences.current &&
+        tableUserPrefs?.methodsFilter
+      ) {
+        setMethodsFilter(tableUserPrefs.methodsFilter)
+        isMethodFilterInitializedWithPersistedTablePreferences.current = true
+      }
+    },
+    [tableUserPrefs],
+  )
+
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = [
-      'values.method.props.children',
-      'values.site',
-      'values.management',
-      'values.observers',
-    ]
+    const keys = ['values.site', 'values.management', 'values.observers']
 
     const queryTerms = splitSearchQueryStrings(query)
 
@@ -181,7 +205,11 @@ const Submitted = () => {
       return rows
     }
 
-    return getTableFilteredRows(rows, keys, queryTerms)
+    const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
+
+    setSearchFilteredRowsLength(tableFilteredRows.length)
+
+    return tableFilteredRows
   }, [])
 
   const {
@@ -202,7 +230,7 @@ const Submitted = () => {
   } = useTable(
     {
       columns: tableColumns,
-      data: tableCellData,
+      data: methodsFilter.length ? methodsFilteredTableCellData : tableCellData,
       initialState: {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
@@ -221,6 +249,15 @@ const Submitted = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const handleMethodsColumnFilterChange = (filters) => {
+    if (filters.length && submittedRecordsForUiDisplay.length) {
+      setMethodsFilter(filters)
+      applyMethodsTableFilters(tableCellData, filters)
+    } else {
+      setMethodsFilter([])
+    }
+  }
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -232,6 +269,10 @@ const Submitted = () => {
   const _setPageSizePrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
+
+  const _setMethodsFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'methodsFilter', currentValue: methodsFilter })
+  }, [methodsFilter, handleSetTableUserPrefs])
 
   const table = submittedRecordsForUiDisplay.length ? (
     <>
@@ -281,8 +322,12 @@ const Submitted = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="sample units"
-          rowLength={submittedRecordsForUiDisplay.length}
+          pageType="sample unit"
+          unfilteredRowLength={submittedRecordsForUiDisplay.length}
+          methodFilteredRowLength={methodsFilteredTableCellData.length}
+          searchFilteredRowLength={searchFilteredRowsLength}
+          isSearchFilterEnabled={!!globalFilter?.length}
+          isMethodFilterEnabled={!!methodsFilter.length}
         />
         <PageSelector
           onPreviousClick={previousPage}
@@ -304,12 +349,22 @@ const Submitted = () => {
   ) : (
     <PageUnavailable mainText={language.error.pageUnavailableOffline} />
   )
+
   const toolbar = isAppOnline ? (
     <SubmittedToolbarSection
       name={language.pages.submittedTable.filterToolbarText}
       handleGlobalFilterChange={handleGlobalFilterChange}
-      filterValue={tableUserPrefs.globalFilter}
+      searchFilterValue={tableUserPrefs.globalFilter}
+      methodFilterValue={tableUserPrefs.methodsFilter}
+      handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
       disabled={submittedRecordsForUiDisplay.length === 0}
+      unfilteredRowLength={submittedRecordsForUiDisplay.length}
+      methodFilteredRowLength={methodsFilteredTableCellData.length}
+      searchFilteredRowLength={searchFilteredRowsLength}
+      isSearchFilterEnabled={!!globalFilter?.length}
+      isMethodFilterEnabled={!!methodsFilter?.length}
+      setMethodsFilter={setMethodsFilter}
+      handleSetTableUserPrefs={handleSetTableUserPrefs}
     />
   ) : (
     <H2>{language.pages.submittedTable.title}</H2>

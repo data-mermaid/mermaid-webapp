@@ -13,6 +13,7 @@ import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
+import language from '../../../../language'
 
 const CURRENT_VALIDATION_PATH = 'data.benthic_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.benthic_transect.depth'
@@ -218,6 +219,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.number}
           onChange={handleTransectNumberChange}
+          helperText={language.helperText.transectNumber}
         />
         <InputWithLabelAndValidation
           label="Label"
@@ -234,6 +236,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
+          helperText={language.helperText.label}
         />
         <InputWithLabelAndValidation
           label="Sample Time"
@@ -253,6 +256,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
+          helperText={language.helperText.sampleTime}
         />
         <InputWithLabelAndValidation
           label="Depth"
@@ -271,6 +275,7 @@ const BenthicPitTransectInputs = ({
           value={formik.values.depth}
           onChange={handleDepthChange}
           unit="m"
+          helperText={language.helperText.depth}
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
@@ -294,6 +299,7 @@ const BenthicPitTransectInputs = ({
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
           unit="m"
+          helperText={language.helperText.transectLengthSurveyed}
         />
         <InputWithLabelAndValidation
           label="Interval Size"
@@ -315,6 +321,7 @@ const BenthicPitTransectInputs = ({
           value={formik.values.interval_size}
           onChange={handleIntervalSizeChange}
           unit="m"
+          helperText={language.helperText.intervalSize}
         />
         <InputWithLabelAndValidation
           label="Interval Start"
@@ -338,6 +345,7 @@ const BenthicPitTransectInputs = ({
           value={formik.values.interval_start}
           onChange={handleIntervalStartChange}
           unit="m"
+          helperText={language.helperText.intervalStart}
         />
         <InputSelectWithLabelAndValidation
           label="Reef Slope"
@@ -359,6 +367,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.reef_slope}
           onChange={handleReefSlopeChange}
+          helperText={language.helperText.getReefSlope()}
         />
         <InputSelectWithLabelAndValidation
           label="Visibility"
@@ -380,6 +389,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
           onChange={handleVisibilityChange}
+          helperText={language.helperText.visibility}
         />
         <InputSelectWithLabelAndValidation
           label="Current"
@@ -401,6 +411,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.current}
           onChange={handleCurrentChange}
+          helperText={language.helperText.current}
         />
         <InputSelectWithLabelAndValidation
           label="Relative Depth"
@@ -422,6 +433,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
+          helperText={language.helperText.getRelativeDepth()}
         />
         <InputSelectWithLabelAndValidation
           label="Tide"
@@ -440,6 +452,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
+          helperText={language.helperText.getTide()}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
@@ -455,6 +468,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
+          helperText={language.helperText.notes}
         />
       </InputWrapper>
     </>

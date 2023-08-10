@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { InputRow, Select, HelperText, RequiredIndicator } from '../../generic/form'
+import { InputRow, Select, HelperText, LabelContainer, RequiredIndicator } from '../../generic/form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
+import { IconButton } from '../../generic/buttons'
+import { IconInfo } from '../../icons'
 
 const InputSelectWithLabelAndValidation = ({
   label,
@@ -21,18 +22,34 @@ const InputSelectWithLabelAndValidation = ({
   updateValueAndResetValidationForDuplicateWarning,
   ...restOfProps
 }) => {
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+
   const optionList = options.map((item) => (
     <option key={item.value} value={item.value}>
       {item.label}
     </option>
   ))
 
+  const handleInfoIconClick = (event) => {
+    isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+
+    event.stopPropagation()
+  }
+
   return (
     <InputRow validationType={validationType} data-testid={testId}>
-      <label id={`aria-label${id}`} htmlFor={id}>
-        {label}
-        {required ? <RequiredIndicator /> : null}
-      </label>
+      <LabelContainer>
+        <label id={`aria-label${id}`} htmlFor={id}>
+          {label}
+        </label>
+        <span>{required ? <RequiredIndicator /> : null}</span>
+        {helperText ? (
+          <IconButton type="button" onClick={(event) => handleInfoIconClick(event, label)}>
+            <IconInfo aria-label="info" />
+          </IconButton>
+        ) : null}
+      </LabelContainer>
+
       <div>
         <Select
           aria-labelledby={`aria-label${id}`}
@@ -44,7 +61,7 @@ const InputSelectWithLabelAndValidation = ({
           <option value="">Choose...</option>
           {optionList}
         </Select>
-        {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
+        {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
@@ -61,7 +78,7 @@ const InputSelectWithLabelAndValidation = ({
 }
 
 InputSelectWithLabelAndValidation.propTypes = {
-  helperText: PropTypes.string,
+  helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
   required: PropTypes.bool.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,

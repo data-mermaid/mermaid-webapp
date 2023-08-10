@@ -65,10 +65,11 @@ function loadObservationsFromCollectRecordIntoTableState({
     })
   }
 
+  const persistedUnsavedObservationsTable = getPersistedUnsavedObservationsTableData()
+
   if (collectRecordBeingEdited && !isNewRecord) {
     const observationsFromApiTable = collectRecordBeingEdited.data[observationsPropertyName] ?? []
 
-    const persistedUnsavedObservationsTable = getPersistedUnsavedObservationsTableData()
     const initialObservationsToLoadTable =
       persistedUnsavedObservationsTable ?? observationsFromApiTable
 
@@ -78,7 +79,8 @@ function loadObservationsFromCollectRecordIntoTableState({
         payload: initialObservationsToLoadTable,
       })
     }
-    if (!initialObservationsToLoadTable.length) {
+
+    if (isNewRecord && !initialObservationsToLoadTable.length) {
       handleAddEmptyInitialObservation()
     }
 
@@ -87,6 +89,14 @@ function loadObservationsFromCollectRecordIntoTableState({
 
   if (isNewRecord) {
     handleAddEmptyInitialObservation()
+
+    if (persistedUnsavedObservationsTable?.length) {
+      observationsTableDispatch({
+        type: 'loadObservationsFromApi',
+        payload: persistedUnsavedObservationsTable,
+      })
+    }
+
     setObservationsTableReducerInitialized(true)
   }
 }

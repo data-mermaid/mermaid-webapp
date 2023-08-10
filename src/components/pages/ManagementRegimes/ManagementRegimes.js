@@ -70,6 +70,7 @@ const ManagementRegimes = () => {
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const closeCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(false)
   const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
+  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
@@ -227,7 +228,11 @@ const ManagementRegimes = () => {
       return rows
     }
 
-    return getTableFilteredRows(rows, keys, queryTerms)
+    const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
+
+    setSearchFilteredRowsLength(tableFilteredRows.length)
+
+    return tableFilteredRows
   }, [])
 
   const getDataForCSV = useMemo(() => {
@@ -411,8 +416,10 @@ const ManagementRegimes = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="management regimes"
-          rowLength={managementRegimeRecordsForUiDisplay.length}
+          pageType="management regime"
+          unfilteredRowLength={managementRegimeRecordsForUiDisplay.length}
+          searchFilteredRowLength={searchFilteredRowsLength}
+          isSearchFilterEnabled={!!globalFilter?.length}
         />
         <PageSelector
           onPreviousClick={previousPage}

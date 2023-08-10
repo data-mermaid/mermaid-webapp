@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 
-import { ButtonSecondary, ButtonCaution } from '../../generic/buttons'
+import { ButtonSecondary, ButtonCaution, IconButton } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
@@ -17,6 +17,7 @@ import {
   IconAccount,
   IconAccountConvert,
   IconPlus,
+  IconInfo,
   IconAlert,
   IconAccountRemove,
 } from '../../icons'
@@ -61,6 +62,8 @@ import {
 } from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+import { LabelContainer } from '../../generic/form'
+import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -146,6 +149,8 @@ const Users = () => {
     useState(false)
   const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
   const [isSendEmailToNewUserPromptOpen, setIsSendEmailToNewUserPromptOpen] = useState(false)
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
 
   const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
   const [newUserEmail, setNewUserEmail] = useState('')
@@ -163,6 +168,7 @@ const Users = () => {
   const { setIsSyncInProgress } = useSyncStatus()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const isMounted = useIsMounted()
+  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
@@ -408,7 +414,26 @@ const Users = () => {
     return Promise.resolve()
   }
 
+  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
+    document.body.addEventListener('click', () => {
+      if (isHelperTextShowing === true) {
+        setIsHelperTextShowing(false)
+      }
+    })
+  }, [isHelperTextShowing])
+
   const tableColumnsForAdmin = useMemo(() => {
+    const handleInfoIconClick = (event, label) => {
+      if (currentHelperTextLabel === label) {
+        isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+      } else {
+        setIsHelperTextShowing(true)
+        setCurrentHelperTextLabel(label)
+      }
+
+      event.stopPropagation()
+    }
+
     return [
       {
         Header: 'Name',
@@ -421,17 +446,57 @@ const Users = () => {
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Admin',
+        Header: () => (
+          <>
+            <LabelContainer>
+              Admin
+              {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
+                <ColumnHeaderToolTip helperText={language.tooltipText.admin} left="-4.2em" />
+              ) : null}
+              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'admin')}>
+                <IconInfo aria-label="info" />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
         accessor: 'admin',
         disableSortBy: true,
       },
       {
-        Header: 'Collector',
+        Header: () => (
+          <>
+            <LabelContainer>
+              Collector
+              {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
+                <ColumnHeaderToolTip helperText={language.tooltipText.collector} left="-2.5em" />
+              ) : null}
+              <IconButton
+                type="button"
+                onClick={(event) => handleInfoIconClick(event, 'collector')}
+              >
+                <IconInfo aria-label="info" />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
+
         accessor: 'collector',
         disableSortBy: true,
       },
       {
-        Header: 'Read-Only',
+        Header: () => (
+          <>
+            <LabelContainer>
+              Read-Only
+              {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
+                <ColumnHeaderToolTip helperText={language.tooltipText.readOnly} left="-1.8em" />
+              ) : null}
+              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'readOnly')}>
+                <IconInfo aria-label="info" />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
         accessor: 'readonly',
         disableSortBy: true,
       },
@@ -447,7 +512,7 @@ const Users = () => {
         disableSortBy: true,
       },
     ]
-  }, [])
+  }, [isHelperTextShowing, currentHelperTextLabel])
 
   const tableColumnsForNonAdmin = useMemo(() => {
     return [
@@ -676,7 +741,11 @@ const Users = () => {
         return rows
       }
 
-      return getTableFilteredRows(rows, keys, queryTerms)
+      const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
+
+      setSearchFilteredRowsLength(tableFilteredRows.length)
+
+      return tableFilteredRows
     },
     [isAdminUser],
   )
@@ -751,7 +820,7 @@ const Users = () => {
                       isSortingEnabled={!column.disableSortBy}
                       disabledHover={column.disableSortBy}
                     >
-                      <span>{column.render('Header')}</span>
+                      <span id="header-span">{column.render('Header')}</span>
                     </Th>
                   )
                 })}
@@ -781,9 +850,11 @@ const Users = () => {
         <PageSizeSelector
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
-          pageType="users"
+          pageType="user"
           pageSizeOptions={[15, 50, 100]}
-          rowLength={observerProfiles.length}
+          unfilteredRowLength={observerProfiles.length}
+          searchFilteredRowLength={searchFilteredRowsLength}
+          isSearchFilterEnabled={!!globalFilter?.length}
         />
         <PageSelector
           onPreviousClick={previousPage}

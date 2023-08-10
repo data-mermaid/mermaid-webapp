@@ -108,12 +108,14 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           validationType={formik.errors.name && formik.touched.name ? 'error' : null}
           validationMessages={formik.errors.name}
           testId="name"
+          helperText={language.helperText.getManagementRegimeName()}
         />
         <InputWithLabelAndValidation
           label="Secondary Name"
           id="name_secondary"
           type="text"
           {...formik.getFieldProps('name_secondary')}
+          helperText={language.helperText.secondaryName}
         />
         <InputWithLabelAndValidation
           label="Year Established"
@@ -137,6 +139,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           onChange={({ selectedItems }) => {
             formik.setFieldValue('parties', selectedItems)
           }}
+          helperText={language.helperText.parties}
         />
         <ManagementRulesInput
           managementFormValues={formik.values}
@@ -164,6 +167,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           validationMessages={formik.errors.rules}
           data-testid="rules"
           required={true}
+          helperText={language.helperText.compliance}
         />
         <InputSelectWithLabelAndValidation
           label="Compliance"
@@ -171,6 +175,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           required={false}
           options={managementComplianceOptions}
           {...formik.getFieldProps('compliance')}
+          helperText={language.helperText.compliance}
         />
         <TextareaWithLabelAndValidation
           label="Notes"

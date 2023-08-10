@@ -13,6 +13,7 @@ import { H2 } from '../../../generic/text'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import { InputWrapper } from '../../../generic/form'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
+import language from '../../../../language'
 
 const MANAGEMENT_VALIDATION_PATH = 'data.sample_event.management'
 const SAMPLE_DATE_VALIDATION_PATH = 'data.sample_event.sample_date'
@@ -105,6 +106,7 @@ const SampleEventInputs = ({
           value={formik.values.site}
           onChange={handleSiteChange}
           updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForSite}
+          helperText={language.helperText.site}
         />
         <InputSelectWithLabelAndValidation
           label="Management"
@@ -126,6 +128,7 @@ const SampleEventInputs = ({
           value={formik.values.management}
           onChange={handleManagementChange}
           updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForMR}
+          helperText={language.helperText.management}
         />
         <InputWithLabelAndValidation
           label="Sample Date"
@@ -147,6 +150,7 @@ const SampleEventInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_date}
           onChange={handleSampleDateChange}
+          helperText={language.helperText.sampleDate}
         />
       </InputWrapper>
     </>

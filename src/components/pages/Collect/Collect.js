@@ -1,7 +1,7 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import {
   Tr,
   Th,
@@ -17,13 +17,15 @@ import {
 } from '../../generic/Table/reactTableNaturalSort'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
-import { ToolBarRow } from '../../generic/positioning'
+import { ToolBarItemsRow, FilterItems } from '../../generic/positioning'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import AddSampleUnitButton from './AddSampleUnitButton'
+import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
+import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
@@ -55,6 +57,10 @@ const Collect = () => {
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
+  const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
+  const [methodsFilter, setMethodsFilter] = useState([])
+  const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
+  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -164,6 +170,18 @@ const Collect = () => {
     [collectRecordsForUiDisplay, currentProjectPath],
   )
 
+  const applyMethodsTableFilters = useCallback((rows, filterValue) => {
+    const filteredRows = rows?.filter((row) => filterValue.includes(row.method.props.children))
+
+    setMethodsFilteredTableCellData(filteredRows)
+  }, [])
+
+  const _applyMethodsFilterOnLoad = useEffect(() => {
+    if (methodsFilter.length) {
+      applyMethodsTableFilters(tableCellData, methodsFilter)
+    }
+  }, [methodsFilter, tableCellData, applyMethodsTableFilters])
+
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -189,13 +207,21 @@ const Collect = () => {
     defaultValue: tableDefaultPrefs,
   })
 
+  useEffect(
+    function initializeMethodFilterWithPersistedTablePreferences() {
+      if (
+        !isMethodFilterInitializedWithPersistedTablePreferences.current &&
+        tableUserPrefs?.methodsFilter
+      ) {
+        setMethodsFilter(tableUserPrefs.methodsFilter)
+        isMethodFilterInitializedWithPersistedTablePreferences.current = true
+      }
+    },
+    [tableUserPrefs],
+  )
+
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = [
-      'values.method.props.children',
-      'values.site',
-      'values.management',
-      'values.observers',
-    ]
+    const keys = ['values.site', 'values.management', 'values.observers']
 
     const queryTerms = splitSearchQueryStrings(query)
 
@@ -203,7 +229,11 @@ const Collect = () => {
       return rows
     }
 
-    return getTableFilteredRows(rows, keys, queryTerms)
+    const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
+
+    setSearchFilteredRowsLength(tableFilteredRows.length)
+
+    return tableFilteredRows
   }, [])
 
   const {
@@ -224,7 +254,7 @@ const Collect = () => {
   } = useTable(
     {
       columns: tableColumns,
-      data: tableCellData,
+      data: methodsFilter.length ? methodsFilteredTableCellData : tableCellData,
       initialState: {
         pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
@@ -244,6 +274,21 @@ const Collect = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const handleMethodsColumnFilterChange = (filters) => {
+    if (filters.length && collectRecordsForUiDisplay.length) {
+      setMethodsFilter(filters)
+      applyMethodsTableFilters(tableCellData, filters)
+    } else {
+      setMethodsFilter([])
+    }
+  }
+
+  const clearFilters = () => {
+    setMethodsFilter([])
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: '' })
+    handleGlobalFilterChange('')
+  }
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -255,6 +300,10 @@ const Collect = () => {
   const _setPageSizePrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
+
+  const _setMethodsFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'methodsFilter', currentValue: methodsFilter })
+  }, [methodsFilter, handleSetTableUserPrefs])
 
   const table = collectRecordsForUiDisplay.length ? (
     <>
@@ -304,8 +353,12 @@ const Collect = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="sample units"
-          rowLength={collectRecordsForUiDisplay.length}
+          pageType="sample unit"
+          unfilteredRowLength={collectRecordsForUiDisplay.length}
+          methodFilteredRowLength={methodsFilteredTableCellData.length}
+          searchFilteredRowLength={searchFilteredRowsLength}
+          isSearchFilterEnabled={!!globalFilter?.length}
+          isMethodFilterEnabled={!!methodsFilter?.length}
         />
         <PageSelector
           onPreviousClick={previousPage}
@@ -339,15 +392,32 @@ const Collect = () => {
         <>
           <H2>{language.pages.collectTable.title}</H2>
           {!isReadOnlyUser && (
-            <ToolBarRow>
-              <FilterSearchToolbar
-                name={language.pages.collectTable.filterToolbarText}
-                value={tableUserPrefs.globalFilter}
-                handleGlobalFilterChange={handleGlobalFilterChange}
-                disabled={collectRecordsForUiDisplay.length === 0}
-              />
+            <ToolBarItemsRow>
+              <FilterItems>
+                <FilterSearchToolbar
+                  name={language.pages.collectTable.filterToolbarText}
+                  value={tableUserPrefs.globalFilter}
+                  handleGlobalFilterChange={handleGlobalFilterChange}
+                  disabled={collectRecordsForUiDisplay.length === 0}
+                />
+                <MethodsFilterDropDown
+                  value={tableUserPrefs.methodsFilter}
+                  handleMethodsColumnFilterChange={handleMethodsColumnFilterChange}
+                  disabled={collectRecordsForUiDisplay.length === 0}
+                />
+                {globalFilter?.length || methodsFilter?.length ? (
+                  <FilterIndicatorPill
+                    unfilteredRowLength={collectRecordsForUiDisplay.length}
+                    methodFilteredRowLength={methodsFilteredTableCellData.length}
+                    searchFilteredRowLength={searchFilteredRowsLength}
+                    isSearchFilterEnabled={!!globalFilter?.length}
+                    isMethodFilterEnabled={!!methodsFilter?.length}
+                    clearFilters={clearFilters}
+                  />
+                ) : null}
+              </FilterItems>
               <AddSampleUnitButton />
-            </ToolBarRow>
+            </ToolBarItemsRow>
           )}
         </>
       }

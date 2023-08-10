@@ -52,10 +52,7 @@ const FishBeltTransectInputs = ({
     currents,
     tides,
   } = choices
-  const transectWidthOptions = sortArrayByObjectKey(
-    getOptions(belttransectwidths.data),
-    'label',
-  )
+  const transectWidthOptions = sortArrayByObjectKey(getOptions(belttransectwidths.data), 'label')
   const fishSizeBinOptions = getOptions(fishsizebins.data)
   const reefSlopeOptions = getOptions(reefslopes.data)
   const visibilityOptions = getOptions(visibilities.data)
@@ -288,6 +285,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.number}
           onChange={handleTransectNumberChange}
+          helperText={language.helperText.transectNumber}
         />
         <InputWithLabelAndValidation
           label="Label"
@@ -304,6 +302,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
+          helperText={language.helperText.label}
         />
         <InputWithLabelAndValidation
           label="Sample Time"
@@ -323,6 +322,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
+          helperText={language.helperText.sampleTime}
         />
 
         <InputWithLabelAndValidation
@@ -342,6 +342,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.depth}
           onChange={handleDepthChange}
+          helperText={language.helperText.depth}
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
@@ -365,6 +366,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
+          helperText={language.helperText.transectLengthSurveyed}
         />
         <InputSelectWithLabelAndValidation
           label="Width"
@@ -383,6 +385,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.width}
           onChange={handleWidthChange}
+          helperText={language.helperText.width}
         />
         <InputSelectWithLabelAndValidation
           label="Fish Size Bin (cm)"
@@ -404,6 +407,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.size_bin}
           onChange={handleSizeBinChange}
+          helperText={language.helperText.fishSizeBin}
         />
         <InputSelectWithLabelAndValidation
           label="Reef Slope"
@@ -425,6 +429,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.reef_slope}
           onChange={handleReefSlopeChange}
+          helperText={language.helperText.getReefSlope()}
         />
         <InputSelectWithLabelAndValidation
           label="Visibility"
@@ -446,6 +451,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
           onChange={handleVisibilityChange}
+          helperText={language.helperText.visibility}
         />
         <InputSelectWithLabelAndValidation
           label="Current"
@@ -467,6 +473,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.current}
           onChange={handleCurrentChange}
+          helperText={language.helperText.current}
         />
         <InputSelectWithLabelAndValidation
           label="Relative Depth"
@@ -488,6 +495,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
+          helperText={language.helperText.getRelativeDepth()}
         />
         <InputSelectWithLabelAndValidation
           label="Tide"
@@ -506,6 +514,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
+          helperText={language.helperText.getTide()}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
@@ -521,6 +530,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
+          helperText={language.helperText.notes}
         />
       </InputWrapper>
       <ClearSizeValuesModal

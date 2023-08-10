@@ -1,12 +1,14 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { Input, InputRow, HelperText, RequiredIndicator } from '../../generic/form'
+import { Input, InputRow, HelperText, LabelContainer, RequiredIndicator } from '../../generic/form'
 import { useStopInputScrollingIncrementNumber } from '../../../library/useStopInputScrollingIncrementNumber'
 import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit'
 
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
+import { IconButton } from '../../generic/buttons'
+import { IconInfo } from '../../icons'
 
 const InputWithLabelAndValidation = ({
   required,
@@ -24,6 +26,14 @@ const InputWithLabelAndValidation = ({
   const textFieldRef = useRef()
 
   useStopInputScrollingIncrementNumber(textFieldRef)
+
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+
+  const handleInfoIconClick = (event) => {
+    isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+
+    event.stopPropagation()
+  }
 
   const inputType = unit ? (
     <InputNumberNoScrollWithUnit
@@ -45,13 +55,21 @@ const InputWithLabelAndValidation = ({
 
   return (
     <InputRow required={required} validationType={validationType} data-testid={testId}>
-      <label id={`aria-label${id}`} htmlFor={id}>
-        {label}
-        {required ? <RequiredIndicator /> : null}
-      </label>
+      <LabelContainer>
+        <label id={`aria-label${id}`} htmlFor={id}>
+          {label}
+        </label>
+        <span>{required ? <RequiredIndicator /> : null}</span>
+        {helperText ? (
+          <IconButton type="button" onClick={(event) => handleInfoIconClick(event, label)}>
+            <IconInfo aria-label="info" />
+          </IconButton>
+        ) : null}
+      </LabelContainer>
+
       <div>
         {inputType}
-        {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
+        {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
       <InputValidationInfo
         validationType={validationType}
@@ -65,7 +83,7 @@ const InputWithLabelAndValidation = ({
 
 InputWithLabelAndValidation.propTypes = {
   required: PropTypes.bool,
-  helperText: PropTypes.string,
+  helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
