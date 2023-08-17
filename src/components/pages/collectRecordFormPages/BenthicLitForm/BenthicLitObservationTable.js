@@ -75,7 +75,7 @@ const BenthicLitObservationsTable = ({
       }
     })
 
-    return document.body.removeEventListener('click')
+    return document.body.removeEventListener('click', setIsHelperTextShowing(false))
   }, [isHelperTextShowing])
 
   const handleInfoIconClick = (event, label) => {
