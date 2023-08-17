@@ -138,6 +138,8 @@ const FishBeltObservationTable = ({
         setIsHelperTextShowing(false)
       }
     })
+
+    return document.body.removeEventListener('click')
   }, [isHelperTextShowing])
 
   const handleInfoIconClick = (event, label) => {

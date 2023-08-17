@@ -420,6 +420,8 @@ const Users = () => {
         setIsHelperTextShowing(false)
       }
     })
+
+    return document.body.removeEventListener('click')
   }, [isHelperTextShowing])
 
   const tableColumnsForAdmin = useMemo(() => {
