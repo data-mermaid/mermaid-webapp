@@ -654,7 +654,7 @@ const tooltipText = {
   fishSize: 'Size of fish observed, in cm (e.g. 4.5 or 5-10).',
   fishCount: 'Number of fish observed, of the same species/genus/family and size.',
   hardCoralPercentage: 'Hard coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
-  microalgaePercentage: 'Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).',
+  macroalgaePercentage: 'Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).',
   numberOfPoints:
     'Number of points with unique benthic attribute (/growth form) for the quadrat. The sum of points for all benthic attributes in a quadrat must equal the value set above.',
   quadrat: 'Quadrat size used per transect, in square meters (e.g. 1).',
