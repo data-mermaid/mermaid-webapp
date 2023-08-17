@@ -90,6 +90,8 @@ const BenthicPhotoQuadratObservationTable = ({
         setIsHelperTextShowing(false)
       }
     })
+
+    return document.body.removeEventListener('click', setIsHelperTextShowing(false))
   }, [isHelperTextShowing])
 
   const handleInfoIconClick = (event, label) => {
@@ -418,7 +420,21 @@ const BenthicPhotoQuadratObservationTable = ({
                 </LabelContainer>
               </Th>
               <Th align="right" id="growth-form-label">
-                Growth Form
+                <LabelContainer>
+                  <div>Growth Form</div>
+                  {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
+                    <ColumnHeaderToolTip
+                      helperText={language.tooltipText.getBenthicAttribute()}
+                      left="0.2em"
+                    />
+                  ) : null}
+                  <IconButton
+                    type="button"
+                    onClick={(event) => handleInfoIconClick(event, 'growthForm')}
+                  >
+                    <IconInfo aria-label="info" />
+                  </IconButton>
+                </LabelContainer>
               </Th>
               <Th align="right" id="number-of-points-label">
                 <LabelContainer>

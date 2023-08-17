@@ -131,4 +131,7 @@ export const Textarea = styled.textarea`
   resize: vertical;
   ${inputTextareaSelectStyles}
 `
-export const LabelContainer = styled.div``
+export const LabelContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`
