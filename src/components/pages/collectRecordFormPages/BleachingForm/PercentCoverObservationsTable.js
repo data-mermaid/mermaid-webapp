@@ -311,17 +311,17 @@ const PercentCoverObservationTable = ({
                   <Th align="center" id="microalgae-percent-cover-label">
                     <LabelContainer>
                       <div>
-                        Microalgae % cover <RequiredIndicator />
+                        Macroalgae % cover <RequiredIndicator />
                       </div>
-                      {isHelperTextShowing && currentHelperTextLabel === 'microalgaePercentage' ? (
+                      {isHelperTextShowing && currentHelperTextLabel === 'macroalgaePercentage' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.microalgaePercentage}
+                          helperText={language.tooltipText.macroalgaePercentage}
                           left="5.3em"
                         />
                       ) : null}
                       <IconButton
                         type="button"
-                        onClick={(event) => handleInfoIconClick(event, 'microalgaePercentage')}
+                        onClick={(event) => handleInfoIconClick(event, 'macroalgaePercentage')}
                       >
                         <IconInfo aria-label="info" />
                       </IconButton>
