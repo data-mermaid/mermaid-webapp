@@ -75,7 +75,6 @@ const HabitatComplexityObservationsTable = ({
       }
     })
 
-    return document.body.removeEventListener('click', setIsHelperTextShowing(false))
   }, [isHelperTextShowing])
 
   const handleInfoIconClick = (event, label) => {
