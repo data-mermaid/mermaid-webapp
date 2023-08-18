@@ -132,7 +132,7 @@ const DataSharing = () => {
         return language.success.getDataSharingPolicyChangeSuccess('Fish Belt', policy)
       case 'data_policy_benthiclit':
         return language.success.getDataSharingPolicyChangeSuccess(
-          'Benthic: PIT, LIT, and Habitat Complexity',
+          'Benthic: PIT, LIT, PQT, and Habitat Complexity',
           policy,
         )
       case 'data_policy_bleachingqc':
@@ -255,7 +255,7 @@ const DataSharing = () => {
                 ))}
               </Tr>
               <Tr>
-                <Td>Benthic: PIT, LIT, and Habitat Complexity</Td>
+                <Td>Benthic: PIT, LIT, PQT, and Habitat Complexity</Td>
                 {dataPolicyOptions.map((item) => (
                   <Td key={item.value}>
                     <Label
