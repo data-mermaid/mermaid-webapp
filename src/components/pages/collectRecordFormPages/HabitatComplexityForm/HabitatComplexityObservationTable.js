@@ -74,6 +74,7 @@ const HabitatComplexityObservationsTable = ({
         setIsHelperTextShowing(false)
       }
     })
+
   }, [isHelperTextShowing])
 
   const handleInfoIconClick = (event, label) => {
