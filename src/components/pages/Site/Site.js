@@ -92,6 +92,7 @@ const enforceNumberInput = (event) => {
     'Delete',
     '-',
     '.',
+    'Tab',
   ]
 
   const isModifiersKeyPressed = event.metaKey || event.ctrlKey || event.shiftKey
@@ -146,6 +147,7 @@ const SiteForm = ({
             onChange={(selectedItem) => {
               formik.setFieldValue('country', selectedItem.value)
             }}
+            isLastRow={false}
           />
           <InputValidationInfo
             validationType={formik.errors.country && formik.touched.country ? 'error' : null}
