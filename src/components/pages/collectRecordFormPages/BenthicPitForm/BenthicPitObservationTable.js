@@ -338,7 +338,7 @@ const BenthicPitObservationsTable = ({
                       <div>Growth Form</div>
                       {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.getBenthicAttribute()}
+                          helperText={language.tooltipText.growthForm}
                           left="0.2em"
                         />
                       ) : null}

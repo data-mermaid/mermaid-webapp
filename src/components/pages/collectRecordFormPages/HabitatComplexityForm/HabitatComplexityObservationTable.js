@@ -74,7 +74,6 @@ const HabitatComplexityObservationsTable = ({
         setIsHelperTextShowing(false)
       }
     })
-
   }, [isHelperTextShowing])
 
   const handleInfoIconClick = (event, label) => {
@@ -260,7 +259,7 @@ const HabitatComplexityObservationsTable = ({
                       Habitat Complexity Score <RequiredIndicator />
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.getBenthicAttribute()}
+                          helperText={language.tooltipText.habitatComplexityScore}
                           left="9em"
                         />
                       ) : null}
