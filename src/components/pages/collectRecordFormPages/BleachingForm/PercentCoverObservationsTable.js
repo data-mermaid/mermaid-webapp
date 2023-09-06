@@ -267,8 +267,22 @@ const PercentCoverObservationTable = ({
               <thead>
                 <Tr>
                   <Th />
-                  <Th align="center" id="quadrat-number">
-                    Quadrat
+                  <Th align="right" id="quadrat-number-label">
+                    <LabelContainer>
+                      Quadrat <RequiredIndicator />
+                      {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
+                        <ColumnHeaderToolTip
+                          helperText={language.tooltipText.quadrat}
+                          left="-2em"
+                        />
+                      ) : null}
+                      <IconButton
+                        type="button"
+                        onClick={(event) => handleInfoIconClick(event, 'quadrat')}
+                      >
+                        <IconInfo aria-label="info" />
+                      </IconButton>
+                    </LabelContainer>
                   </Th>
                   <Th align="center" id="hard-coral-percent-cover-label">
                     <LabelContainer>
