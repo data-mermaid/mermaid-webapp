@@ -65,9 +65,15 @@ const RecordLevelValidationInfo = ({
     }
   }
 
+  // suppress redundent validation error, unless it's the only validation error
+  const filteredValidations =
+    validations.length > 1
+      ? validations.filter((validation) => validation.code !== 'invalid_benthic_transect')
+      : validations
+
   return (
     <ValidationList data-testid="record-level-validations">
-      {validations.map((validation) => {
+      {filteredValidations.map((validation) => {
         const { status, validation_id } = validation
         const isWarning = status === 'warning'
         const isError = status === 'error'
