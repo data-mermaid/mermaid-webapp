@@ -68,7 +68,7 @@ const RecordLevelValidationInfo = ({
   // suppress redundent validation error, unless it's the only validation error
   const filteredValidations =
     validations.length > 1
-      ? validations.filter((validation) => validation.code !== 'invalid_benthic_transect')
+      ? validations.filter((validation) => validation.code !== 'unsuccessful_dry_submit')
       : validations
 
   return (
