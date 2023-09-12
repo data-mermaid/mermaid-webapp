@@ -4,12 +4,14 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
 import {
+  AdminPill,
   CardWrapper,
   CheckBoxLabel,
   ProjectCardHeader,
   DateAndCountryLabel,
   ProjectCardHeaderButtonsAndDate,
   ProjectCardHeaderButtonWrapper,
+  ProjectTitleContainer,
 } from './ProjectCard.styles'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
@@ -23,7 +25,10 @@ import { ButtonSecondary } from '../generic/buttons'
 import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
 import ProjectModal from './ProjectModal'
-import { getIsUserReadOnlyForProject } from '../../App/currentUserProfileHelpers'
+import {
+  getIsUserReadOnlyForProject,
+  getIsUserAdminForProject,
+} from '../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 
@@ -43,6 +48,8 @@ const ProjectCard = ({
   const projectUrl = `projects/${id}`
 
   const handleHttpResponseError = useHttpResponseErrorHandler()
+
+  const isAdminUser = getIsUserAdminForProject(currentUser, id)
 
   const handleProjectOfflineReadyClick = (event) => {
     const isChecked = event.target.checked
@@ -107,6 +114,8 @@ const ProjectCard = ({
 
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
 
+  console.log({ name })
+
   return (
     <CardWrapper
       onClick={handleCardClick}
@@ -116,7 +125,10 @@ const ProjectCard = ({
     >
       <ProjectCardHeader>
         <div>
-          <h2>{name}</h2>
+          <ProjectTitleContainer>
+            <h2>{name}</h2>
+            {isAdminUser ? <AdminPill>admin</AdminPill> : null}
+          </ProjectTitleContainer>
           <DateAndCountryLabel>{countries.join(', ')}</DateAndCountryLabel>
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
