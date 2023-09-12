@@ -56,6 +56,10 @@ const BellNotificationDropDown = () => {
       {sortedNotifications.map((notification) => {
         const dateTime = moment(notification.created_on)
 
+        const dirtyHTML = notification.description
+
+        const cleanHTML = sanitizeHtml(dirtyHTML, { ADD_ATTR: ['target'] })
+
         return (
           <NotificationCard key={`notification-card-${notification.id}`}>
             <NotificationStatus status={notification.status} />
@@ -69,7 +73,7 @@ const BellNotificationDropDown = () => {
                 </NotificationCloseButton>
               </NotificationHeader>
               {/*  eslint-disable-next-line react/no-danger */}
-              <p dangerouslySetInnerHTML={{ __html: sanitizeHtml(notification.description) }} />
+              <p dangerouslySetInnerHTML={{ __html: cleanHTML }} />
               <NotificationDateWrapper>
                 <NotificationTimeAgoDate>{dateTime.fromNow()}</NotificationTimeAgoDate>
                 <NotificationActualDate>{dateTime.format('LLLL')}</NotificationActualDate>
