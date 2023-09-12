@@ -114,8 +114,6 @@ const ProjectCard = ({
 
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
 
-  console.log({ name })
-
   return (
     <CardWrapper
       onClick={handleCardClick}
