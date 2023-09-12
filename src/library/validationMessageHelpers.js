@@ -7,9 +7,10 @@ const SystemValidationMessageBlock = styled.span`
 
 export const getSystemValidationErrorMessage = (drySubmitContext) => {
   const errors = Object.entries(drySubmitContext)
+
   const errorMap = errors.map((errorPart) => (
     <SystemValidationMessageBlock key={errorPart[0]}>
-      {errorPart[0]}: {errorPart[1]}
+      {errorPart[0]} : {errorPart[1]}
     </SystemValidationMessageBlock>
   ))
 
