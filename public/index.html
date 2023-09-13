@@ -9,25 +9,29 @@
     <meta
       name="description"
       content="Transform your underwater insights into data-driven actions that save coral reefs"
-    >
+    />
 
     <!-- Facebook Meta Tags -->
-    <meta property="og:url" content="%PUBLIC_URL%">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="MERMAID - Marine Ecological Research Management Aid">
-    <meta property="og:description"
-      content="Transform your underwater insights into data-driven actions that save coral reefs">
-    <meta property="og:image" content="%PUBLIC_URL%/mermaid_opengraph.png">
+    <meta property="og:url" content="%PUBLIC_URL%" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MERMAID - Marine Ecological Research Management Aid" />
+    <meta
+      property="og:description"
+      content="Transform your underwater insights into data-driven actions that save coral reefs"
+    />
+    <meta property="og:image" content="%PUBLIC_URL%/mermaid_opengraph.png" />
     <meta property="og:site_name" content="MERMAID - Marine Ecological Research Management Aid" />
     <meta property="og:locale" content="en_US" />
     <!-- Twitter Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="twitter:domain" content="%PUBLIC_URL%">
-    <meta property="twitter:url" content="%PUBLIC_URL%">
-    <meta name="twitter:title" content="MERMAID - Marine Ecological Research Management Aid">
-    <meta name="twitter:description"
-      content="Transform your underwater insights into data-driven actions that save coral reefs">
-    <meta name="twitter:image" content="%PUBLIC_URL%/mermaid_opengraph.png">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="%PUBLIC_URL%" />
+    <meta property="twitter:url" content="%PUBLIC_URL%" />
+    <meta name="twitter:title" content="MERMAID - Marine Ecological Research Management Aid" />
+    <meta
+      name="twitter:description"
+      content="Transform your underwater insights into data-driven actions that save coral reefs"
+    />
+    <meta name="twitter:image" content="%PUBLIC_URL%/mermaid_opengraph.png" />
 
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/mermaid_favicon.png" />
     <!--
@@ -35,6 +39,18 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NG1KXL2TSG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+
+      gtag('config', 'G-NG1KXL2TSG')
+    </script>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
