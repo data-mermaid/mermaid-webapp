@@ -59,7 +59,7 @@ const SingleSiteMap = ({
       customAttribution: language.map.attribution,
     })
 
-    recordMarker.current = new maplibregl.Marker(markerElement, { draggable: !isReadOnlyUser })
+    recordMarker.current = new maplibregl.Marker({ draggable: !isReadOnlyUser })
 
     addMapController(map.current)
 
