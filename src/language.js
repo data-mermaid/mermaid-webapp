@@ -436,7 +436,7 @@ const getValidationMessage = (validation, projectId = '') => {
     max_interval_size: () => `Interval size greater than ${context?.interval_size_range[1]} m`,
     max_interval_start: () => `Interval start greater than ${context?.interval_start_range[1]} m`,
     invalid_benthic_transect: () =>
-      'One or more invalid transect fields: site, management, date, number, depth',
+      'One or more invalid fields: site, management, sample date, transect number, width, depth',
     invalid_depth: () => `Depth invalid or not greater than ${context?.depth_range[0]} m`,
     invalid_fish_count: () => 'Fish count must be a non-negative integer',
     invalid_fish_size: () => `Invalid fish size`,
