@@ -450,7 +450,7 @@ const getValidationMessage = (validation, projectId = '') => {
     invalid_quadrat_size: () => 'Quadrat size must be a positive number',
     max_quadrat_size: () => `Quadrat size greater than ${context?.quadrat_size_range[1]} m2`,
     invalid_quadrat_transect: () =>
-      'One or more invalid fields: site, management, sample date, transect number, width, depth',
+      'One or more invalid fields: site, management, sample date, transect number, depth',
     invalid_sample_date: () => 'Invalid date',
     invalid_score: () => `Invalid score`,
     invalid_total_percent: () => `Sum of percents must not be less than 0 or greater than 100`,
