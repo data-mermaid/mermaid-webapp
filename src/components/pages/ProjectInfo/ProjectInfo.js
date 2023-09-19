@@ -35,6 +35,7 @@ import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { getIsUserAdminForProject } from '../../../App/currentUserProfileHelpers'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+import DeleteProjectButton from '../../DeleteProjectButton/DeleteProjectButton'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -158,6 +159,7 @@ const ProjectInfo = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const [projectNameError, setProjectNameError] = useState(false)
+  const [isDeletingProject, setIsDeletingProject] = useState(false)
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
@@ -279,6 +281,11 @@ const ProjectInfo = () => {
     return errorMessage
   }
 
+  const isDeleteProjectModalOpen = false
+  const deleteProject = () => console.log('deleting record ...')
+  const closeDeleteProjectModal = () => console.log('closing modal...')
+  const openDeleteProjectModal = () => console.log('opening modal ...')
+
   const adminContent = (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
@@ -329,6 +336,15 @@ const ProjectInfo = () => {
 
             formik.setFieldValue('tags', existingOrganizations)
           }}
+        />
+        <DeleteProjectButton
+          isLoading={isDeletingProject}
+          hasSampleUnits={projectBeingEdited?.num_active_sample_units}
+          isOpen={isDeleteProjectModalOpen}
+          modalText={language.deleteProject('Project')}
+          deleteProject={deleteProject}
+          onDismiss={closeDeleteProjectModal}
+          openModal={openDeleteProjectModal}
         />
       </InputWrapper>
       <NewOrganizationModal

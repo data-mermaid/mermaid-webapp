@@ -179,6 +179,18 @@ const deleteRecord = (pageName) => {
   }
 }
 
+const deleteProject = (project) => {
+  return {
+    title: `Delete project`,
+    prompt: `Are you sure you want to delete ${project}?`,
+    yes: `Delete ${project}`,
+    no: 'Cancel',
+    hasSampleUnits: 'You must delete all the sample units in this project to delete this project',
+    confirmDeleteText1: `You cannot delete this ${project} because it is used in the following sample units:`,
+    confirmDeleteText2: `You have to remove this ${project} from all sample units before you can delete it.`,
+  }
+}
+
 const loadingIndicator = {
   loadingPrimary: 'Loading',
   loadingSecondary: 'Still working...',
@@ -672,6 +684,7 @@ export default {
   clearSizeValuesModal,
   createNewOptionModal,
   deleteRecord,
+  deleteProject,
   error,
   getResolveModalLanguage,
   getValidationMessage,
