@@ -160,6 +160,7 @@ const ProjectInfo = () => {
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const [projectNameError, setProjectNameError] = useState(false)
   const [isDeletingProject, setIsDeletingProject] = useState(false)
+  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false)
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
@@ -281,10 +282,41 @@ const ProjectInfo = () => {
     return errorMessage
   }
 
-  const isDeleteProjectModalOpen = false
-  const deleteProject = () => console.log('deleting record ...')
-  const closeDeleteProjectModal = () => console.log('closing modal...')
-  const openDeleteProjectModal = () => console.log('opening modal ...')
+  const openDeleteProjectModal = () => {
+    setIsDeleteProjectModalOpen(true)
+  }
+  const closeDeleteProjectModal = () => {
+    setIsDeleteProjectModalOpen(false)
+  }
+
+  const deleteProject = () => {
+    setIsDeletingProject(true)
+
+    databaseSwitchboardInstance
+      // .deleteProject({
+      //   record: collectRecordBeingEdited,
+      //   profileId: currentUser.id,
+      //   projectId,
+      // })
+      .then(() => {
+        // clearPersistedUnsavedFormikData()
+        // clearPersistedUnsavedObservationsTable1Data()
+        // clearPersistedUnsavedObservationsTable2Data()
+        closeDeleteProjectModal()
+        setIsDeletingProject(false)
+        toast.success(...getToastArguments(language.success.projectDelete))
+        // history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+      })
+      .catch((error) => {
+        setIsDeletingProject(false)
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.projectDelete))
+          },
+        })
+      })
+  }
 
   const adminContent = (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
@@ -339,7 +371,7 @@ const ProjectInfo = () => {
         />
         <DeleteProjectButton
           isLoading={isDeletingProject}
-          hasSampleUnits={projectBeingEdited?.num_active_sample_units}
+          hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
           isOpen={isDeleteProjectModalOpen}
           modalText={language.deleteProject('Project')}
           deleteProject={deleteProject}

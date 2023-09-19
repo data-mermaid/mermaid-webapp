@@ -73,6 +73,7 @@ const error = {
   notificationsUnavailable: 'Notifications are unavailable.',
   notificationNotDeleted: 'Notification could not be removed.',
   notificationsNotDeleted: 'Notifications could not be removed',
+  projectDelete: 'This project has not been deleted.',
   projectSave: 'The project has not been saved.',
   projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
@@ -143,6 +144,7 @@ const success = {
   projectSave: 'Project saved',
   projectCopied: 'Project copied',
   projectCreated: 'Project created',
+  projectDeleted: 'Project deleted',
   getMermaidDataSaveSuccess: ({ mermaidDataTypeLabel, isAppOnline }) =>
     isAppOnline
       ? `The ${mermaidDataTypeLabel} has been saved on your computer and online.`
