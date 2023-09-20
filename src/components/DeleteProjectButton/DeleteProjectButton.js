@@ -73,7 +73,7 @@ const DeleteProjectButton = ({
   return (
     <>
       <DeleteProjectButtonCautionWrapper>
-        <ButtonCaution onClick={openModal} disabled={hasSampleUnits}>
+        <ButtonCaution type="button" onClick={openModal} disabled={hasSampleUnits}>
           <IconDeleteForever />
           {modalText.title}
         </ButtonCaution>

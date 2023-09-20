@@ -1,6 +1,6 @@
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
@@ -155,6 +155,7 @@ const ProjectInfo = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const { currentUser } = useCurrentUser()
+  const history = useHistory()
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
@@ -293,19 +294,14 @@ const ProjectInfo = () => {
     setIsDeletingProject(true)
 
     databaseSwitchboardInstance
-      // .deleteProject({
-      //   record: collectRecordBeingEdited,
-      //   profileId: currentUser.id,
-      //   projectId,
-      // })
+      .deleteProject({
+        projectId,
+      })
       .then(() => {
-        // clearPersistedUnsavedFormikData()
-        // clearPersistedUnsavedObservationsTable1Data()
-        // clearPersistedUnsavedObservationsTable2Data()
         closeDeleteProjectModal()
         setIsDeletingProject(false)
         toast.success(...getToastArguments(language.success.projectDelete))
-        // history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+        history.push(`/projects`)
       })
       .catch((error) => {
         setIsDeletingProject(false)
