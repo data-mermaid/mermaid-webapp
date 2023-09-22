@@ -247,27 +247,49 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    deleteProject = async function deleteProject(projectId) {
-      if (this._isAuthenticatedAndReady) {
+    deleteProject = async function deleteProject(project, projectId) {
+      const hasCorrespondingRecordInTheApi = !!project._last_revision_num
+
+      const projectToBeDeleted = {
+        ...project,
+        uiStatePush_pushToApi: true,
+        _deleted: true,
+      }
+
+      if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
         return axios
-          .delete(
-            `${this._apiBaseUrl}/projects/${projectId}`,
-            await getAuthorizationHeaders(this._getAccessToken),
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            { projects: [projectToBeDeleted] },
+            {
+              params: { force: true },
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
+            },
           )
           .then((response) => {
-            const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
+            const [recordResponseFromApiPush] = response.data.projects
+            const isRecordStatusCodeSuccessful = this._isStatusCodeSuccessful(
+              recordResponseFromApiPush.status_code,
+            )
 
-            if (isApiResponseSuccessful) {
-              return this._apiSyncInstance.pullAllProjects().then((pullResponse) => {
-                return pullResponse.data.projects.updates[0]
-              })
+            if (isRecordStatusCodeSuccessful) {
+              return this._apiSyncInstance
+                .pushThenPullAllProjectDataExceptChoices(projectId)
+                .then(({ pullData }) => {
+                  return pullData
+                })
             }
 
-            return Promise.reject(new Error('The API status is unsuccessful'))
+            return Promise.reject(
+              new Error(
+                'the API record returned from deleteProject doesnt have a successful status code',
+              ),
+            )
           })
-          .catch((error) => {
-            return Promise.reject(error)
-          })
+      }
+
+      if (!hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
+        return this._dexiePerUserDataInstance.projects.delete(project.id)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)

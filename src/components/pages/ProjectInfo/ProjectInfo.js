@@ -295,6 +295,7 @@ const ProjectInfo = () => {
 
     databaseSwitchboardInstance
       .deleteProject({
+        projectBeingEdited,
         projectId,
       })
       .then(() => {
@@ -368,6 +369,7 @@ const ProjectInfo = () => {
         <DeleteProjectButton
           isLoading={isDeletingProject}
           hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
+          hasOtherUsers={projectBeingEdited?.members.length > 1}
           isOpen={isDeleteProjectModalOpen}
           modalText={language.deleteProject('Project')}
           deleteProject={deleteProject}

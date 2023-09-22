@@ -17,6 +17,7 @@ const DeleteProjectButton = ({
   errorData,
   isLoading,
   hasSampleUnits,
+  hasOtherUsers,
   isOpen,
   modalText,
   deleteProject,
@@ -73,13 +74,16 @@ const DeleteProjectButton = ({
   return (
     <>
       <DeleteProjectButtonCautionWrapper>
-        <ButtonCaution type="button" onClick={openModal} disabled={hasSampleUnits}>
+        <ButtonCaution type="button" onClick={openModal} disabled={hasSampleUnits || hasOtherUsers}>
           <IconDeleteForever />
           {modalText.title}
         </ButtonCaution>
       </DeleteProjectButtonCautionWrapper>
       {hasSampleUnits ? (
         <WarningText>{language.deleteProject('Project').hasSampleUnits}</WarningText>
+      ) : null}
+      {hasOtherUsers ? (
+        <WarningText>{language.deleteProject('Project').hasOtherUsers}</WarningText>
       ) : null}
       <Modal
         title={modalText.title}
@@ -104,6 +108,7 @@ DeleteProjectButton.propTypes = {
   ),
   isLoading: PropTypes.bool.isRequired,
   hasSampleUnits: PropTypes.bool.isRequired,
+  hasOtherUsers: PropTypes.bool.isRequired,
   isOpen: PropTypes.bool.isRequired,
   modalText: PropTypes.shape({
     title: PropTypes.string,
