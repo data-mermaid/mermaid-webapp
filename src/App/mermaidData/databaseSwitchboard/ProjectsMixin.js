@@ -268,11 +268,8 @@ const ProjectsMixin = (Base) =>
           )
           .then((response) => {
             const [recordResponseFromApiPush] = response.data.projects
-            const isRecordStatusCodeSuccessful = this._isStatusCodeSuccessful(
-              recordResponseFromApiPush.status_code,
-            )
 
-            console.log({ response })
+            const isRecordStatusCodeSuccessful = recordResponseFromApiPush.status_code === 202
 
             if (isRecordStatusCodeSuccessful) {
               return this._apiSyncInstance

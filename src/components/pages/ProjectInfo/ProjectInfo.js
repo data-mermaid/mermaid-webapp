@@ -298,7 +298,7 @@ const ProjectInfo = () => {
       .then(() => {
         closeDeleteProjectModal()
         setIsDeletingProject(false)
-        toast.success(...getToastArguments(language.success.projectDelete))
+        toast.success(...getToastArguments(language.success.projectDeleted))
         history.push(`/projects`)
       })
       .catch((error) => {
