@@ -294,10 +294,7 @@ const ProjectInfo = () => {
     setIsDeletingProject(true)
 
     databaseSwitchboardInstance
-      .deleteProject({
-        projectBeingEdited,
-        projectId,
-      })
+      .deleteProject(projectBeingEdited, projectId)
       .then(() => {
         closeDeleteProjectModal()
         setIsDeletingProject(false)

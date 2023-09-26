@@ -272,6 +272,8 @@ const ProjectsMixin = (Base) =>
               recordResponseFromApiPush.status_code,
             )
 
+            console.log({ response })
+
             if (isRecordStatusCodeSuccessful) {
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
