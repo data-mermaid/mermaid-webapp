@@ -368,7 +368,7 @@ const ProjectInfo = () => {
           hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
           hasOtherUsers={projectBeingEdited?.members.length > 1}
           isOpen={isDeleteProjectModalOpen}
-          modalText={language.deleteProject('Project')}
+          modalText={language.deleteProject(projectBeingEdited?.name)}
           deleteProject={deleteProject}
           onDismiss={closeDeleteProjectModal}
           openModal={openDeleteProjectModal}
