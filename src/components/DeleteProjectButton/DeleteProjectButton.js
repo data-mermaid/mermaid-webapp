@@ -59,15 +59,15 @@ const DeleteProjectButton = ({
 
   const mainContent = (
     <>
-      {currentPage === 1 && modalText.prompt}
-      {currentPage === 2 && mainContentPageTwo}
+      {currentPage === 1 ? modalText.prompt : null}
+      {currentPage === 2 ? mainContentPageTwo : null}
     </>
   )
 
   const footerContent = (
     <>
-      {currentPage === 1 && footerContentPageOne}
-      {currentPage === 2 && footerContentPageTwo}
+      {currentPage === 1 ? footerContentPageOne : null}
+      {currentPage === 2 ? footerContentPageTwo : null}
     </>
   )
 

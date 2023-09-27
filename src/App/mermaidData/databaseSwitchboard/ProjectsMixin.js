@@ -248,7 +248,7 @@ const ProjectsMixin = (Base) =>
     }
 
     deleteProject = async function deleteProject(project, projectId) {
-      const hasCorrespondingRecordInTheApi = !!project._last_revision_num
+      const hasCorrespondingProjectInTheApi = !!project._last_revision_num
 
       const projectToBeDeleted = {
         ...project,
@@ -256,7 +256,7 @@ const ProjectsMixin = (Base) =>
         _deleted: true,
       }
 
-      if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
+      if (hasCorrespondingProjectInTheApi && this._isOnlineAuthenticatedAndReady) {
         return axios
           .post(
             `${this._apiBaseUrl}/push/`,
@@ -287,7 +287,7 @@ const ProjectsMixin = (Base) =>
           })
       }
 
-      if (!hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
+      if (!hasCorrespondingProjectInTheApi && this._isOnlineAuthenticatedAndReady) {
         return this._dexiePerUserDataInstance.projects.delete(project.id)
       }
 
