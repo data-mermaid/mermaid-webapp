@@ -1,6 +1,6 @@
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
@@ -35,6 +35,7 @@ import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { getIsUserAdminForProject } from '../../../App/currentUserProfileHelpers'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+import DeleteProjectButton from '../../DeleteProjectButton/DeleteProjectButton'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -154,10 +155,13 @@ const ProjectInfo = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const { currentUser } = useCurrentUser()
+  const history = useHistory()
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const [projectNameError, setProjectNameError] = useState(false)
+  const [isDeletingProject, setIsDeletingProject] = useState(false)
+  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false)
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
@@ -279,6 +283,35 @@ const ProjectInfo = () => {
     return errorMessage
   }
 
+  const openDeleteProjectModal = () => {
+    setIsDeleteProjectModalOpen(true)
+  }
+  const closeDeleteProjectModal = () => {
+    setIsDeleteProjectModalOpen(false)
+  }
+
+  const deleteProject = () => {
+    setIsDeletingProject(true)
+
+    databaseSwitchboardInstance
+      .deleteProject(projectBeingEdited, projectId)
+      .then(() => {
+        closeDeleteProjectModal()
+        setIsDeletingProject(false)
+        toast.success(...getToastArguments(language.success.projectDeleted))
+        history.push(`/projects`)
+      })
+      .catch((error) => {
+        setIsDeletingProject(false)
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.projectDelete))
+          },
+        })
+      })
+  }
+
   const adminContent = (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
@@ -329,6 +362,16 @@ const ProjectInfo = () => {
 
             formik.setFieldValue('tags', existingOrganizations)
           }}
+        />
+        <DeleteProjectButton
+          isLoading={isDeletingProject}
+          hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
+          hasOtherUsers={projectBeingEdited?.members.length > 1}
+          isOpen={isDeleteProjectModalOpen}
+          modalText={language.deleteProject('Project')}
+          deleteProject={deleteProject}
+          onDismiss={closeDeleteProjectModal}
+          openModal={openDeleteProjectModal}
         />
       </InputWrapper>
       <NewOrganizationModal

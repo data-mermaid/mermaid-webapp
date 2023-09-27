@@ -73,6 +73,7 @@ const error = {
   notificationsUnavailable: 'Notifications are unavailable.',
   notificationNotDeleted: 'Notification could not be removed.',
   notificationsNotDeleted: 'Notifications could not be removed',
+  projectDelete: 'This project has not been deleted.',
   projectSave: 'The project has not been saved.',
   projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
@@ -143,6 +144,7 @@ const success = {
   projectSave: 'Project saved',
   projectCopied: 'Project copied',
   projectCreated: 'Project created',
+  projectDeleted: 'Project deleted',
   getMermaidDataSaveSuccess: ({ mermaidDataTypeLabel, isAppOnline }) =>
     isAppOnline
       ? `The ${mermaidDataTypeLabel} has been saved on your computer and online.`
@@ -176,6 +178,19 @@ const deleteRecord = (pageName) => {
     no: 'Cancel',
     confirmDeleteText1: `You cannot delete this ${pageName.toLowerCase()} because it is used in the following sample units:`,
     confirmDeleteText2: `You have to remove this ${pageName.toLowerCase()} from all sample units before you can delete it.`,
+  }
+}
+
+const deleteProject = (project) => {
+  return {
+    title: `Delete project`,
+    prompt: `Are you sure you want to delete ${project}?`,
+    yes: `Delete ${project}`,
+    no: 'Cancel',
+    hasSampleUnits: 'You must delete all the sample units in this project to delete this project.',
+    hasOtherUsers: 'Other users must be removed from this project before deletion.',
+    confirmDeleteText1: `You cannot delete this ${project} because it is used in the following sample units:`,
+    confirmDeleteText2: `You have to remove this ${project} from all sample units before you can delete it.`,
   }
 }
 
@@ -672,6 +687,7 @@ export default {
   clearSizeValuesModal,
   createNewOptionModal,
   deleteRecord,
+  deleteProject,
   error,
   getResolveModalLanguage,
   getValidationMessage,

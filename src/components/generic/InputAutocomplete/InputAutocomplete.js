@@ -187,7 +187,7 @@ const InputAutocomplete = ({
 InputAutocomplete.propTypes = {
   className: PropTypes.string,
   helperText: PropTypes.string,
-  isLastRow: PropTypes.bool.isRequired,
+  isLastRow: PropTypes.bool,
   id: PropTypes.string.isRequired,
   noResultsAction: PropTypes.node,
   noResultsText: PropTypes.string,
@@ -206,6 +206,7 @@ InputAutocomplete.defaultProps = {
   onKeyDown: undefined,
   isTabUsedToSelectHighlighted: false,
   value: '',
+  isLastRow: false,
 }
 
 export default InputAutocomplete

@@ -17,6 +17,7 @@ import circleEditOutline from '@iconify-icons/mdi/circle-edit-outline'
 import closeIcon from '@iconify-icons/mdi/close'
 import contentCopy from '@iconify-icons/mdi/content-copy'
 import contentSave from '@iconify-icons/mdi/content-save'
+import deleteForeverOutline from '@iconify-icons/mdi/delete-forever-outline'
 import download from '@iconify-icons/mdi/download'
 import excel from '@iconify-icons/mdi/microsoft-excel'
 import fileAccountOutline from '@iconify-icons/mdi/file-account-outline'
@@ -73,6 +74,7 @@ export const IconClose = (props) => <InlineIcon icon={closeIcon} {...props} />
 export const IconCollect = (props) => <InlineIcon icon={circleEditOutline} {...props} />
 export const IconCopy = (props) => <InlineIcon icon={contentCopy} {...props} />
 export const IconData = (props) => <InlineIcon icon={checkCircleOutline} {...props} />
+export const IconDeleteForever = (props) => <InlineIcon icon={deleteForeverOutline} {...props} />
 export const IconDown = (props) => <InlineIcon icon={menuDown} {...props} />
 export const IconDownload = (props) => <InlineIcon icon={download} {...props} />
 export const IconExternalLink = (props) => <InlineIcon icon={launch} {...props} />
