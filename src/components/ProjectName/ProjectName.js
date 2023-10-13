@@ -8,13 +8,22 @@ import {
 } from '../../library/styling/mediaQueries'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../library/useIsMounted'
+import { IconGlobe } from '../icons'
 
 const ProjectNameWrapper = styled('div')`
   background: ${theme.color.white};
+  display: flex;
+  align-items: center;
   h2 {
     padding: ${theme.spacing.medium};
     min-height: 60px;
     margin: 0;
+  }
+  svg {
+    width: 2rem;
+    height: 2rem;
+    background-color: rgb(19, 18, 74);
+    color: #fff;
   }
   a {
     border: none;
@@ -62,6 +71,7 @@ const ProjectName = () => {
   return (
     <ProjectNameWrapper>
       <h2>{projectName}</h2>
+      <IconGlobe />
     </ProjectNameWrapper>
   )
 }
