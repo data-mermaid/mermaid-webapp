@@ -19,19 +19,16 @@ const ProjectNameWrapper = styled('div')`
     min-height: 60px;
     margin: 0;
   }
-  svg {
-    width: 2rem;
-    height: 2rem;
-    background-color: rgb(19, 18, 74);
-    color: #fff;
-  }
   a {
     border: none;
     background: none;
     text-align: center;
+    padding-bottom: 0.2em;
     svg {
-      width: ${(props) => props.theme.typography.largeIconSize};
-      height: ${(props) => props.theme.typography.largeIconSize};
+      width: 2rem;
+      height: 2rem;
+      background-color: rgb(19, 18, 74);
+      color: #fff;
     }
   }
   ${mediaQueryTabletLandscapeOnly(css`
@@ -52,11 +49,19 @@ const ProjectNameWrapper = styled('div')`
     }
   `)}
 `
+
+const ProjectNameLink = styled('a')`
+  display: flex;
+  align-items: center;
+  height: 2em;
+  width: 2em;
+`
 const ProjectName = () => {
   const [projectName, setProjectName] = useState('')
   const isMounted = useIsMounted()
   const { projectId } = useParams()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DASHBOARD_LINK
 
   const _getProjectName = useEffect(() => {
     if (databaseSwitchboardInstance) {
@@ -71,7 +76,13 @@ const ProjectName = () => {
   return (
     <ProjectNameWrapper>
       <h2>{projectName}</h2>
-      <IconGlobe />
+      <ProjectNameLink
+        href={`${mermaidDashboardLink}/?project=${projectName}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        <IconGlobe />
+      </ProjectNameLink>
     </ProjectNameWrapper>
   )
 }
