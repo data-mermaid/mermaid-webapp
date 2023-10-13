@@ -44,6 +44,10 @@ export const CurrentUserImg = styled('img')`
     margin-top: 7px;
   `)}
 `
+
+export const HeaderIconWrapper = styled('div')`
+  margin-right: 0.3em;
+`
 export const LogoImg = styled('img')`
   height: calc(${theme.spacing.headerHeight} - 10px);
   padding: 0 ${theme.spacing.small};
@@ -85,6 +89,7 @@ export const StyledNavLink = styled('a')`
       pointer-events: none;
     `} 
   }
+  display: flex;
 `
 
 export const WhatsNewLink = styled(StyledNavLink)`

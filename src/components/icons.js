@@ -23,6 +23,7 @@ import excel from '@iconify-icons/mdi/microsoft-excel'
 import fileAccountOutline from '@iconify-icons/mdi/file-account-outline'
 import filterOutline from '@iconify-icons/mdi/filter-outline'
 import fish from '@iconify-icons/mdi/fish'
+import globe from '@iconify-icons/mdi/web'
 import heartOutline from '@iconify-icons/mdi/heart-outline'
 import homeOutline from '@iconify-icons/mdi/home-outline'
 import informationIcon from '@iconify-icons/mdi/information-outline'
@@ -80,6 +81,7 @@ export const IconDownload = (props) => <InlineIcon icon={download} {...props} />
 export const IconExternalLink = (props) => <InlineIcon icon={launch} {...props} />
 export const IconFilter = (props) => <InlineIcon icon={filterOutline} {...props} />
 export const IconFish = (props) => <InlineIcon icon={fish} {...props} />
+export const IconGlobe = (props) => <InlineIcon icon={globe} {...props} />
 export const IconGraph = (props) => <InlineIcon icon={chartBar} {...props} />
 export const IconHeart = (props) => <InlineIcon icon={heartOutline} {...props} />
 export const IconHome = (props) => <InlineIcon icon={homeOutline} {...props} />
