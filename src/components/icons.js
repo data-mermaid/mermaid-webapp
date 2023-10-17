@@ -75,7 +75,6 @@ export const IconClose = (props) => <InlineIcon icon={closeIcon} {...props} />
 export const IconCollect = (props) => <InlineIcon icon={circleEditOutline} {...props} />
 export const IconCopy = (props) => <InlineIcon icon={contentCopy} {...props} />
 export const IconData = (props) => <InlineIcon icon={checkCircleOutline} {...props} />
-export const IconDeleteForever = (props) => <InlineIcon icon={deleteForeverOutline} {...props} />
 export const IconDown = (props) => <InlineIcon icon={menuDown} {...props} />
 export const IconDownload = (props) => <InlineIcon icon={download} {...props} />
 export const IconExternalLink = (props) => <InlineIcon icon={launch} {...props} />

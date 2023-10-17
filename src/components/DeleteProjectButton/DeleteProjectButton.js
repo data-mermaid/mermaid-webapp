@@ -10,7 +10,6 @@ import {
 import LoadingModal from '../LoadingModal/LoadingModal'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import language from '../../language'
-import { IconDeleteForever } from '../icons'
 
 const DeleteProjectButton = ({
   currentPage,
@@ -75,7 +74,6 @@ const DeleteProjectButton = ({
     <>
       <DeleteProjectButtonCautionWrapper>
         <ButtonCaution type="button" onClick={openModal} disabled={hasSampleUnits || hasOtherUsers}>
-          <IconDeleteForever />
           {modalText.title}
         </ButtonCaution>
       </DeleteProjectButtonCautionWrapper>
