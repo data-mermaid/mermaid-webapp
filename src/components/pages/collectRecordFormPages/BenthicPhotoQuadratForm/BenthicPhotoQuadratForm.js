@@ -7,6 +7,7 @@ import {
   getCollectRecordDataInitialValues,
   getTransectInitialValues,
   getSampleInfoInitialValues,
+  getBenthicPhotoQuadratAdditionalValues,
 } from '../collectRecordFormInitialValues'
 
 import { getBenthicOptions } from '../../../../library/getOptions'
@@ -123,7 +124,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
         ...getSampleInfoInitialValues(collectRecordBeingEdited),
         ...getTransectInitialValues(collectRecordBeingEdited, 'quadrat_transect'),
-        // ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
+        ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
       }
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
