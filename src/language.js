@@ -386,6 +386,7 @@ const pages = {
     filterToolbarText: 'Filter management regimes by name, project, or year',
     copyButtonText: 'Copy selected MRs to project',
   },
+  goToDashboard: 'View on Dashboard',
 }
 
 const navigateAwayPrompt =

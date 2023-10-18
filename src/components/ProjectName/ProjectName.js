@@ -2,59 +2,36 @@ import { useParams } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
-import {
-  mediaQueryTabletLandscapeOnly,
-  mediaQueryPhoneOnly,
-} from '../../library/styling/mediaQueries'
+import language from '../../language'
+import { mediaQueryPhoneOnly, hoverState } from '../../library/styling/mediaQueries'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../library/useIsMounted'
 import { IconGlobe } from '../icons'
 
 const ProjectNameWrapper = styled('div')`
   background: ${theme.color.white};
-  display: flex;
-  align-items: center;
-  h2 {
-    padding: ${theme.spacing.medium};
-    min-height: 60px;
-    margin: 0;
-  }
-  a {
-    border: none;
-    background: none;
-    text-align: center;
-    padding-bottom: 0.2em;
-    svg {
-      width: 2rem;
-      height: 2rem;
-      background-color: rgb(19, 18, 74);
-      color: #fff;
-    }
-  }
-  ${mediaQueryTabletLandscapeOnly(css`
-    h2 {
-      padding-left: ${(props) => props.theme.spacing.medium};
-    }
-  `)}
+  padding: ${theme.spacing.medium};
   ${mediaQueryPhoneOnly(css`
-    h2 {
-      padding: ${theme.spacing.small};
-    }
-    a {
-      font-size: initial;
-      svg {
-        width: ${(props) => props.theme.typography.defaultIconSize};
-        height: ${(props) => props.theme.typography.defaultIconSize};
-      }
-    }
+    padding: ${theme.spacing.small};
   `)}
 `
-
+const ProjectNameHeader = styled('h2')`
+  display: inline;
+  margin: 0 ${theme.spacing.small} 0 0;
+`
 const ProjectNameLink = styled('a')`
-  display: flex;
+  padding: 0 ${theme.spacing.small};
+  font-size: ${theme.typography.smallFontSize};
+  display: inline-flex;
   align-items: center;
-  height: 2em;
-  width: 2em;
+  gap: ${theme.spacing.small};
+  white-space: nowrap;
+  text-decoration: none;
+  border: solid 1px ${theme.color.border};
+  opacity: 0.7;
+  ${hoverState(css`
+    background: ${theme.color.secondaryHover};
+  `)}
 `
 const ProjectName = () => {
   const [projectName, setProjectName] = useState('')
@@ -75,13 +52,10 @@ const ProjectName = () => {
 
   return (
     <ProjectNameWrapper>
-      <h2>{projectName}</h2>
-      <ProjectNameLink
-        href={`${mermaidDashboardLink}/?project=${projectName}`}
-        target="_blank"
-        rel="noreferrer"
-      >
+      <ProjectNameHeader>{projectName}</ProjectNameHeader>
+      <ProjectNameLink href={`${mermaidDashboardLink}/?project=${projectName}`} target="_blank">
         <IconGlobe />
+        <span>{language.pages.goToDashboard}</span>
       </ProjectNameLink>
     </ProjectNameWrapper>
   )
