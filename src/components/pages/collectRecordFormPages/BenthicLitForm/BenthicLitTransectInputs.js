@@ -182,7 +182,7 @@ const BenthicLitTransectInputs = ({
   return (
     <>
       <InputWrapper>
-        <H2>Transect</H2>
+        <H2>{language.pages.collectRecord.formSectionTitle.transect}</H2>
         <InputWithLabelAndValidation
           label="Transect Number"
           required={true}

@@ -145,7 +145,7 @@ const BleachingTransectInputs = ({
   return (
     <>
       <InputWrapper>
-        <H2>Quadrat</H2>
+        <H2>{language.pages.collectRecord.formSectionTitle.quadratCollection}</H2>
 
         <InputWithLabelAndValidation
           disabled

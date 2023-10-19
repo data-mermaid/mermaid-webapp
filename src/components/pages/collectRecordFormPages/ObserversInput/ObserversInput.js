@@ -11,6 +11,7 @@ import {
   observersValidationPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
+import language from '../../../../language'
 
 const ObserversInput = ({
   areValidationsShowing,
@@ -46,7 +47,7 @@ const ObserversInput = ({
 
   return (
     <InputWrapper {...restOfProps}>
-      <H2>Observers</H2>
+      <H2>{language.pages.collectRecord.formSectionTitle.observers}</H2>
       <InputCheckboxGroupWithLabelAndValidation
         label="Observers"
         required={true}
