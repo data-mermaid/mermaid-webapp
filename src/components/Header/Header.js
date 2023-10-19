@@ -31,10 +31,11 @@ import HideShow from '../generic/HideShow'
 import Logo from '../../assets/mermaid-logo.svg'
 import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
+import { getMermaidDashboardLink } from '../../library/urls/getMermaidDashboardLink'
 
 const GlobalLinks = () => {
   const { isAppOnline } = useOnlineStatus()
-  const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DASHBOARD_LINK
+  const mermaidDashboardLink = getMermaidDashboardLink()
   const mermaidWhatsNewLink = process.env.REACT_APP_MERMAID_WHATS_NEW_LINK
 
   const handleReferenceMouseOver = (event) => {

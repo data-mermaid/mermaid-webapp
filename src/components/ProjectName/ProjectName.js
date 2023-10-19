@@ -7,6 +7,7 @@ import { mediaQueryPhoneOnly, hoverState } from '../../library/styling/mediaQuer
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../library/useIsMounted'
 import { IconGlobe } from '../icons'
+import { getMermaidDashboardLink } from '../../library/urls/getMermaidDashboardLink'
 
 const ProjectNameWrapper = styled('div')`
   background: ${theme.color.white};
@@ -38,7 +39,7 @@ const ProjectName = () => {
   const isMounted = useIsMounted()
   const { projectId } = useParams()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DASHBOARD_LINK
+  const mermaidDashboardLink = getMermaidDashboardLink()
 
   const _getProjectName = useEffect(() => {
     if (databaseSwitchboardInstance) {

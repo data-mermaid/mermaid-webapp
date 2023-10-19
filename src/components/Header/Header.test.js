@@ -10,7 +10,7 @@ import {
 import Header from '.'
 
 const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
-const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DASHBOARD_LINK
+const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DEV_DASHBOARD_LINK
 
 test('Header component shows projects, whats new, reference, and global dashboard links and their proper href links when online', () => {
   renderAuthenticatedOnline(<Header />)

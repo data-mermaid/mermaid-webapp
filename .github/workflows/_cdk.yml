@@ -11,6 +11,7 @@ env:
   # defaults
   REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
   REACT_APP_MERMAID_DASHBOARD_LINK: https://dashboard.datamermaid.org
+  REACT_APP_MERMAID_DEV_DASHBOARD_LINK: https://dev-dashboard.datamermaid.org
   REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
   REACT_APP_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
   # dev specific
