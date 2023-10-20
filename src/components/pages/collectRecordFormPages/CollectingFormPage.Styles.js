@@ -107,10 +107,10 @@ export const TableValidationList = styled.ul`
 `
 
 export const DeleteRecordButtonCautionWrapper = styled('div')`
-  padding: 0 ${theme.spacing.medium};
-  text-align: right;
+  padding: ${theme.spacing.medium};
+  text-align: end;
   ${mediaQueryTabletLandscapeOnly(css`
-    text-align: left;
+    text-align: start;
   `)}
 `
 

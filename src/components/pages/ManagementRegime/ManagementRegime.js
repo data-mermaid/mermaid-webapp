@@ -167,7 +167,6 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           validationMessages={formik.errors.rules}
           data-testid="rules"
           required={true}
-          helperText={language.helperText.compliance}
         />
         <InputSelectWithLabelAndValidation
           label="Compliance"
