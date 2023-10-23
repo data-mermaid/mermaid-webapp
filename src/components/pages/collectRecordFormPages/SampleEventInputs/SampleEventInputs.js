@@ -87,7 +87,7 @@ const SampleEventInputs = ({
   return (
     <>
       <InputWrapper>
-        <H2>Sample Event</H2>
+        <H2>{language.pages.collectRecord.formSectionTitle.sampleEvent}</H2>
         <InputSelectWithLabelAndValidation
           label="Site"
           required={true}
