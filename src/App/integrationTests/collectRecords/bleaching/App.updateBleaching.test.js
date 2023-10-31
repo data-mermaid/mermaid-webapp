@@ -173,11 +173,11 @@ describe('Offline', () => {
 
     const newHardCoralInput = screen.getAllByLabelText('Hard coral % cover')[3]
     const newSoftCoralInput = screen.getAllByLabelText('Soft coral % cover')[3]
-    const newMicroalgaeInput = screen.getAllByLabelText('Microalgae % cover')[3]
+    const newMacroalgaeInput = screen.getAllByLabelText('Macroalgae % cover')[3]
 
     userEvent.type(newHardCoralInput, '8')
     userEvent.type(newSoftCoralInput, '8')
-    userEvent.type(newMicroalgaeInput, '8')
+    userEvent.type(newMacroalgaeInput, '8')
 
     userEvent.click(
       screen.getByText('Save', {

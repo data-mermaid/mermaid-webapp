@@ -43,7 +43,6 @@ const InputAutocomplete = ({
   onChange,
   onKeyDown,
   options,
-  isTabUsedToSelectHighlighted,
   value,
   ...restOfProps
 }) => {
@@ -67,9 +66,10 @@ const InputAutocomplete = ({
         // This causes the tab key to behave like the enter
         // key and select the item associated with the key press
         // blurInput = tab or shift+tab for Downshift
+
         return {
           ...changes,
-          selectedItem: isTabUsedToSelectHighlighted ? menuItems[state.highlightedIndex] : null,
+          selectedItem: menuItems[state.highlightedIndex],
         }
       }
       default:
@@ -187,14 +187,13 @@ const InputAutocomplete = ({
 InputAutocomplete.propTypes = {
   className: PropTypes.string,
   helperText: PropTypes.string,
-  isLastRow: PropTypes.bool.isRequired,
+  isLastRow: PropTypes.bool,
   id: PropTypes.string.isRequired,
   noResultsAction: PropTypes.node,
   noResultsText: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func,
   options: inputOptionsPropTypes.isRequired,
-  isTabUsedToSelectHighlighted: PropTypes.bool,
   value: PropTypes.string,
 }
 
@@ -204,8 +203,8 @@ InputAutocomplete.defaultProps = {
   noResultsAction: undefined,
   noResultsText: undefined,
   onKeyDown: undefined,
-  isTabUsedToSelectHighlighted: false,
   value: '',
+  isLastRow: false,
 }
 
 export default InputAutocomplete

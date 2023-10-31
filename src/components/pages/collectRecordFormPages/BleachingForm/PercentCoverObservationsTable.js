@@ -267,8 +267,22 @@ const PercentCoverObservationTable = ({
               <thead>
                 <Tr>
                   <Th />
-                  <Th align="center" id="quadrat-number">
-                    Quadrat
+                  <Th align="right" id="quadrat-number-label">
+                    <LabelContainer>
+                      Quadrat <RequiredIndicator />
+                      {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
+                        <ColumnHeaderToolTip
+                          helperText={language.tooltipText.quadrat}
+                          left="-2em"
+                        />
+                      ) : null}
+                      <IconButton
+                        type="button"
+                        onClick={(event) => handleInfoIconClick(event, 'quadrat')}
+                      >
+                        <IconInfo aria-label="info" />
+                      </IconButton>
+                    </LabelContainer>
                   </Th>
                   <Th align="center" id="hard-coral-percent-cover-label">
                     <LabelContainer>
@@ -311,17 +325,17 @@ const PercentCoverObservationTable = ({
                   <Th align="center" id="microalgae-percent-cover-label">
                     <LabelContainer>
                       <div>
-                        Microalgae % cover <RequiredIndicator />
+                        Macroalgae % cover <RequiredIndicator />
                       </div>
-                      {isHelperTextShowing && currentHelperTextLabel === 'microalgaePercentage' ? (
+                      {isHelperTextShowing && currentHelperTextLabel === 'macroalgaePercentage' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.microalgaePercentage}
+                          helperText={language.tooltipText.macroalgaePercentage}
                           left="5.3em"
                         />
                       ) : null}
                       <IconButton
                         type="button"
-                        onClick={(event) => handleInfoIconClick(event, 'microalgaePercentage')}
+                        onClick={(event) => handleInfoIconClick(event, 'macroalgaePercentage')}
                       >
                         <IconInfo aria-label="info" />
                       </IconButton>

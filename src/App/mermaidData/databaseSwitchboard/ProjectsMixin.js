@@ -247,6 +247,53 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    deleteProject = async function deleteProject(project, projectId) {
+      const hasCorrespondingProjectInTheApi = !!project._last_revision_num
+
+      const projectToBeDeleted = {
+        ...project,
+        uiStatePush_pushToApi: true,
+        _deleted: true,
+      }
+
+      if (hasCorrespondingProjectInTheApi && this._isOnlineAuthenticatedAndReady) {
+        return axios
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            { projects: [projectToBeDeleted] },
+            {
+              params: { force: true },
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
+            },
+          )
+          .then((response) => {
+            const [recordResponseFromApiPush] = response.data.projects
+
+            const isRecordStatusCodeSuccessful = recordResponseFromApiPush.status_code === 202
+
+            if (isRecordStatusCodeSuccessful) {
+              return this._apiSyncInstance
+                .pushThenPullAllProjectDataExceptChoices(projectId)
+                .then(({ pullData }) => {
+                  return pullData
+                })
+            }
+
+            return Promise.reject(
+              new Error(
+                'the API record returned from deleteProject doesnt have a successful status code',
+              ),
+            )
+          })
+      }
+
+      if (!hasCorrespondingProjectInTheApi && this._isOnlineAuthenticatedAndReady) {
+        return this._dexiePerUserDataInstance.projects.delete(project.id)
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     transferSampleUnits = async function transferSampleUnits(
       projectId,
       fromProfileId,

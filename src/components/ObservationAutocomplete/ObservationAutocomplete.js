@@ -12,7 +12,7 @@ export const StyledInputAutocomplete = styled(InputAutocomplete)`
 `
 
 const ObservationAutocomplete = (props) => {
-  return <StyledInputAutocomplete {...props} isTabUsedToSelectHighlighted={true} />
+  return <StyledInputAutocomplete {...props} />
 }
 
 export default ObservationAutocomplete

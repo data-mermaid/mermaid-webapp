@@ -20,9 +20,10 @@ import {
   MediumIconOpenInNew,
   BiggerIconMenu,
   LoggedInAs,
+  HeaderIconWrapper,
 } from './Header.styles'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { IconDown } from '../icons'
+import { IconDown, IconGlobe, IconLibraryBooks } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
@@ -51,6 +52,9 @@ const GlobalLinks = () => {
   return (
     <>
       <StyledNavLink as={Link} to="/projects">
+        <HeaderIconWrapper>
+          <IconLibraryBooks />
+        </HeaderIconWrapper>
         Projects
       </StyledNavLink>
       <StyledNavLink
@@ -60,16 +64,24 @@ const GlobalLinks = () => {
         download
         onMouseOver={handleReferenceMouseOver}
       >
+        <HeaderIconWrapper>
+          <MediumIconExcel />
+        </HeaderIconWrapper>
         Reference&nbsp;
-        <MediumIconExcel />
       </StyledNavLink>
       <OfflineHide>
         <StyledNavLink href={mermaidDashboardLink} target="_blank" rel="noreferrer">
+          <HeaderIconWrapper>
+            <IconGlobe />
+          </HeaderIconWrapper>
           Global Dashboard
         </StyledNavLink>
+
         <WhatsNewLink href={mermaidWhatsNewLink} target="_blank" rel="noreferrer">
           What&apos;s new&nbsp;
-          <MediumIconOpenInNew />
+          <div>
+            <MediumIconOpenInNew />
+          </div>
         </WhatsNewLink>
       </OfflineHide>
     </>

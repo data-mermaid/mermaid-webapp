@@ -23,6 +23,11 @@ export const MapWrapper = styled.div`
     height: 44px;
     cursor: pointer;
   }
+
+  svg {
+    width: 3rem;
+    height: 3rem;
+  }
 `
 
 export const MapZoomHelpMessage = styled('div')`

@@ -103,15 +103,19 @@ export const CellValidationButton = styled(ButtonSecondary)`
 export const TableValidationList = styled.ul`
   padding: ${theme.spacing.xsmall};
   margin: 0;
-  list-style: none; ;
+  list-style: none;
 `
 
 export const DeleteRecordButtonCautionWrapper = styled('div')`
-  padding: 0 ${theme.spacing.medium};
-  text-align: right;
+  padding: ${theme.spacing.medium};
+  text-align: end;
   ${mediaQueryTabletLandscapeOnly(css`
-    text-align: left;
+    text-align: start;
   `)}
+`
+
+export const DeleteProjectButtonCautionWrapper = styled(DeleteRecordButtonCautionWrapper)`
+  display: flex;
 `
 
 export const ErrorText = styled.div`
@@ -183,4 +187,8 @@ export const ErrorTextButton = styled('button')`
   font-size: 12px;
   margin-left: 0.8em;
   padding: 0;
+`
+
+export const WarningText = styled('p')`
+  margin-left: 0.8em;
 `

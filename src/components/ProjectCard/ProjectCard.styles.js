@@ -191,3 +191,23 @@ export const OfflineOrReadOnlyContent = styled('span')`
   text-align: center;
   padding: 1rem;
 `
+
+export const ProjectTitleContainer = styled('div')`
+  display: flex;
+`
+
+export const AdminPill = styled('div')`
+  margin-left: 1em;
+  margin-top: 0.2em;
+  display: flex;
+  align-items: center;
+  border: solid 1px #ffffff8c;
+  text-transform: uppercase;
+  background: ${(props) => theme.color.getMessageColorBackground(props.type)};
+  color: #ffffffde;
+  padding: ${theme.spacing.xxsmall} ${theme.spacing.medium};
+  border-radius: 5px;
+  white-space: nowrap;
+  font-size: smaller;
+  height: 2em;
+`
