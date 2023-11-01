@@ -99,3 +99,7 @@ Since this app can exist in multiple states (online, offline, various states of 
 ### Infrastructure as Code (IaC)
 
 - see `iac/README.md`
+
+### Google Analytics
+
+To opt into tracking with Google Analytics, add the following to a deployment's environment variables: `REACT_APP_CAPTURE_GOOGLE_ANALYTICS=true`. Currently we only want to track activity in our production deployment, so this value to true should only be done for production deploys. This value will default to false.

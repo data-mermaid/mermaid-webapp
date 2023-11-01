@@ -18,6 +18,7 @@ env:
   REACT_APP_MERMAID_DASHBOARD_LINK: https://dev-dashboard.datamermaid.org
   REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
   REACT_APP_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
+  REACT_APP_CAPTURE_GOOGLE_ANALYTICS: false
 
 jobs:
   build-and-push-to-s3:
