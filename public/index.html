@@ -43,13 +43,17 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NG1KXL2TSG"></script>
     <script>
-      window.dataLayer = window.dataLayer || []
-      function gtag() {
-        dataLayer.push(arguments)
-      }
-      gtag('js', new Date())
+      const shouldCaptureGoogleAnalytics =
+        '%REACT_APP_CAPTURE_GOOGLE_ANALYTICS%'.toLowerCase() === 'true' // defaults to false
+      if (shouldCaptureGoogleAnalytics) {
+        window.dataLayer = window.dataLayer || []
+        function gtag() {
+          dataLayer.push(arguments)
+        }
+        gtag('js', new Date())
 
-      gtag('config', 'G-NG1KXL2TSG')
+        gtag('config', 'G-NG1KXL2TSG')
+      }
     </script>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
