@@ -568,7 +568,9 @@ test('Bleaching validation: user edits non-observation input with ignored valida
   userEvent.type(within(notesRow).getByLabelText('Notes'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.click(within(observersRow).getByLabelText('Melissa Nunes'))
+  const observersList = within(observersRow).getByLabelText('Observers')
+
+  userEvent.click(within(observersList).getByText('Melissa Nunes'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // make act error go away

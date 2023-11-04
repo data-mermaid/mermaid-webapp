@@ -12,6 +12,7 @@ import {
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import language from '../../../../language'
+import InputMuiChipSelectWithLabelAndValidation from '../../../mermaidInputs/InputMuiChipSelectWithLabelAndValidation/InputMuiChipSelectWithLabelAndValidation'
 
 const ObserversInput = ({
   areValidationsShowing,
@@ -48,7 +49,7 @@ const ObserversInput = ({
   return (
     <InputWrapper {...restOfProps}>
       <H2>{language.pages.collectRecord.formSectionTitle.observers}</H2>
-      <InputCheckboxGroupWithLabelAndValidation
+      <InputMuiChipSelectWithLabelAndValidation
         label="Observers"
         required={true}
         id="observers"

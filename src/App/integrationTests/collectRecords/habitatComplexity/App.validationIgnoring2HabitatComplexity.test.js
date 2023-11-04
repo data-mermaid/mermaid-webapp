@@ -480,8 +480,9 @@ test('Habitat Complexity validation: user edits non-observation input with ignor
 
   userEvent.type(within(notesRow).getByLabelText('Notes'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
+  const observersList = within(observersRow).getByLabelText('Observers')
 
-  userEvent.click(within(observersRow).getByLabelText('Melissa Nunes'))
+  userEvent.click(within(observersList).getByText('Melissa Nunes'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // make act error go away
