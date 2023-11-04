@@ -4,7 +4,6 @@ import React from 'react'
 import { formikPropType } from '../../../../library/formikPropType'
 import { getObserverNameOptions } from '../../../../library/observerHelpers'
 import { H2 } from '../../../generic/text'
-import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import { InputWrapper } from '../../../generic/form'
 import {
   observersPropType,

@@ -486,5 +486,7 @@ test('Habitat Complexity validation: user edits non-observation input with ignor
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // make act error go away
-  await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })))
+  expect(
+    await within(screen.getByTestId('collect-record-form-buttons')).findByText('Save'),
+  ).toBeEnabled()
 })

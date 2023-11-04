@@ -616,5 +616,7 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
   )
 
   // make act error go away
-  await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })))
+  expect(
+    await within(screen.getByTestId('collect-record-form-buttons')).findByText('Save'),
+  ).toBeEnabled()
 })
