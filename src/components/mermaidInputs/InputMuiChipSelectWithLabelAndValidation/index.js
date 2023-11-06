@@ -1,0 +1,3 @@
+import InputMuiChipSelectWithLabelAndValidation from './InputMuiChipSelectWithLabelAndValidation'
+
+export default InputMuiChipSelectWithLabelAndValidation

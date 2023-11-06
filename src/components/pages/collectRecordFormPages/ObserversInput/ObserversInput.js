@@ -4,7 +4,6 @@ import React from 'react'
 import { formikPropType } from '../../../../library/formikPropType'
 import { getObserverNameOptions } from '../../../../library/observerHelpers'
 import { H2 } from '../../../generic/text'
-import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import { InputWrapper } from '../../../generic/form'
 import {
   observersPropType,
@@ -12,6 +11,7 @@ import {
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import language from '../../../../language'
+import InputMuiChipSelectWithLabelAndValidation from '../../../mermaidInputs/InputMuiChipSelectWithLabelAndValidation/InputMuiChipSelectWithLabelAndValidation'
 
 const ObserversInput = ({
   areValidationsShowing,
@@ -48,7 +48,7 @@ const ObserversInput = ({
   return (
     <InputWrapper {...restOfProps}>
       <H2>{language.pages.collectRecord.formSectionTitle.observers}</H2>
-      <InputCheckboxGroupWithLabelAndValidation
+      <InputMuiChipSelectWithLabelAndValidation
         label="Observers"
         required={true}
         id="observers"
