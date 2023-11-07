@@ -6,7 +6,7 @@ const _sampleEventPropType = PropTypes.shape({
   sample_date: PropTypes.string,
 })
 
-const _observerPropType = PropTypes.shape({
+export const observerPropType = PropTypes.shape({
   id: PropTypes.string,
   updated_by: PropTypes.string,
   profile_name: PropTypes.string,
@@ -160,7 +160,7 @@ export const fishBeltPropType = PropTypes.shape({
     protocol: PropTypes.string,
     sample_event: _sampleEventPropType,
     fishbelt_transect: _fishBeltTransectPropType,
-    observers: PropTypes.arrayOf(_observerPropType),
+    observers: PropTypes.arrayOf(observerPropType),
   }),
 })
 
@@ -170,7 +170,7 @@ export const benthicPhotoQuadratPropType = PropTypes.shape({
     protocol: PropTypes.string,
     sample_event: _sampleEventPropType,
     quadrat_transect: _benthicPhotoQuadratTransectPropType,
-    observers: PropTypes.arrayOf(_observerPropType),
+    observers: PropTypes.arrayOf(observerPropType),
     obs_benthic_photo_quadrats: PropTypes.arrayOf(_benthicPhotoQuadratObservationPropType),
   }),
 })
@@ -179,7 +179,7 @@ export const submittedFishBeltPropType = PropTypes.shape({
   id: PropTypes.string,
   sample_event: _sampleEventPropType,
   fishbelt_transect: _fishBeltTransectPropType,
-  observers: PropTypes.arrayOf(_observerPropType),
+  observers: PropTypes.arrayOf(observerPropType),
   obs_belt_fishes: PropTypes.arrayOf(_submittedFishBeltObservationPropType),
 })
 
@@ -188,7 +188,7 @@ export const submittedBenthicPhotoQuadratPropType = PropTypes.shape({
   collect_record_id: PropTypes.string,
   sample_event: _sampleEventPropType,
   quadrat_transect: _benthicPhotoQuadratTransectPropType,
-  observers: PropTypes.arrayOf(_observerPropType),
+  observers: PropTypes.arrayOf(observerPropType),
   obs_benthic_photo_quadrats: PropTypes.arrayOf(_submittedBenthicPhotoQuadratObservationPropType),
 })
 
@@ -356,7 +356,7 @@ export const choicesPropType = PropTypes.shape({
   reefslopes: _reefSlopePropType,
 })
 
-export const observersPropType = PropTypes.arrayOf(_observerPropType)
+export const observersPropType = PropTypes.arrayOf(observerPropType)
 
 export const observationsReducerPropType = (props, propName, componentName) => {
   if (!Array.isArray(props[propName])) {

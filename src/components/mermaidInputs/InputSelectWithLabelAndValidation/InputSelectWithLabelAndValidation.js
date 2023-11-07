@@ -6,6 +6,7 @@ import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import { IconButton } from '../../generic/buttons'
 import { IconInfo } from '../../icons'
+import language from '../../../language'
 
 const InputSelectWithLabelAndValidation = ({
   label,
@@ -58,7 +59,7 @@ const InputSelectWithLabelAndValidation = ({
           value={value}
           {...restOfProps}
         >
-          <option value="">Choose...</option>
+          <option value="">{language.placeholders.select}</option>
           {optionList}
         </Select>
         {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}

@@ -111,7 +111,7 @@ const TransferSampleUnitsModal = ({
                 }}
               >
                 <option value="" disabled>
-                  Choose...
+                  {language.placeholders.select}
                 </option>
                 {optionList}
               </Select>

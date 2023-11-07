@@ -1,8 +1,9 @@
-import { Box, MenuItem, OutlinedInput } from '@mui/material'
+import { Box, OutlinedInput } from '@mui/material'
 import PropTypes from 'prop-types'
 import React from 'react'
 
 import {
+  CustomMenuItem,
   CustomMuiChip,
   CustomMuiSelect,
   getMenuItemStyle,
@@ -11,6 +12,7 @@ import { InputRow, RequiredIndicator } from '../../generic/form'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import theme from '../../../theme'
+import language from '../../../language'
 
 const InputMuiChipSelectWithLabelAndValidation = ({
   id,
@@ -23,6 +25,7 @@ const InputMuiChipSelectWithLabelAndValidation = ({
   validationMessages,
   validationType,
   value,
+  additionalInputContent,
 }) => {
   const handleCheckboxGroupChange = (event) => {
     onChange({ selectedItems: event.target.value, event })
@@ -44,27 +47,31 @@ const InputMuiChipSelectWithLabelAndValidation = ({
         {label}
         {required ? <RequiredIndicator /> : null}
       </label>
+      <div>
+        <CustomMuiSelect
+          labelId={`${id}-mui-chip-select-with-label-and-validation`}
+          multiple
+          value={value}
+          onChange={handleCheckboxGroupChange}
+          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+          renderValue={(selected) => (selected.length ? chips : language.placeholders.select)}
+          label=""
+          displayEmpty={true}
+        >
+          {options.map((option) => (
+            <CustomMenuItem
+              key={option.value}
+              value={option.value}
+              sx={{ fontSize: theme.typography.defaultFontSize }}
+              style={getMenuItemStyle({ option, selectedItems: value, theme })}
+            >
+              {option.label}
+            </CustomMenuItem>
+          ))}
+        </CustomMuiSelect>
+        <div>{additionalInputContent}</div>
+      </div>
 
-      <CustomMuiSelect
-        labelId={`${id}-mui-chip-select-with-label-and-validation`}
-        multiple
-        value={value}
-        onChange={handleCheckboxGroupChange}
-        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-        renderValue={() => chips}
-        label=""
-      >
-        {options.map((option) => (
-          <MenuItem
-            key={option.value}
-            value={option.value}
-            sx={{ fontSize: theme.typography.defaultFontSize }}
-            style={getMenuItemStyle({ option, selectedItems: value, theme })}
-          >
-            {option.label}
-          </MenuItem>
-        ))}
-      </CustomMuiSelect>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
@@ -76,6 +83,7 @@ const InputMuiChipSelectWithLabelAndValidation = ({
 }
 
 InputMuiChipSelectWithLabelAndValidation.propTypes = {
+  additionalInputContent: PropTypes.node,
   id: PropTypes.string.isRequired,
   required: PropTypes.bool.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
@@ -102,6 +110,7 @@ InputMuiChipSelectWithLabelAndValidation.propTypes = {
 }
 
 InputMuiChipSelectWithLabelAndValidation.defaultProps = {
+  additionalInputContent: undefined,
   ignoreNonObservationFieldValidations: () => {},
   resetNonObservationFieldValidations: () => {},
   validationMessages: [],

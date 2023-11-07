@@ -1,4 +1,4 @@
-import { Chip, Select } from '@mui/material'
+import { Chip, MenuItem, Select } from '@mui/material'
 import styled from 'styled-components/macro'
 
 import theme from '../../../theme'
@@ -9,16 +9,23 @@ export const getMenuItemStyle = ({ option, selectedItems }) => {
   }
 }
 
-export const CustomMuiChip = styled(Chip)`
+export const CustomMuiChip = styled(Chip).attrs(() => ({
+  sx: { fontSize: theme.typography.smallFontSize },
+}))`
   margin-left: ${theme.spacing.small};
 `
 
-CustomMuiChip.defaultProps = {
-  sx: { fontSize: theme.typography.smallFontSize },
-}
+export const CustomMuiSelect = styled(Select).attrs(() => ({
+  sx: {
+    borderRadius: 0,
+    border: '.4px solid',
+    width: '100%',
+    fontSize: theme.typography.defaultFontSize,
+  },
+}))``
 
-export const CustomMuiSelect = styled(Select)``
-
-CustomMuiSelect.defaultProps = {
-  sx: { borderRadius: 0, border: '.4px solid' },
-}
+export const CustomMenuItem = styled(MenuItem).attrs(() => ({
+  sx: {
+    fontSize: theme.typography.defaultFontSize,
+  },
+}))``
