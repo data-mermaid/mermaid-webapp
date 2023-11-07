@@ -134,6 +134,10 @@ export const ButtonThatLooksLikeLink = styled('button')`
     color: ${theme.color.secondaryDisabledText};
   }
 `
+
+export const ButtonThatLooksLikeLinkUnderlined = styled(ButtonThatLooksLikeLink)`
+  text-decoration: underline;
+`
 export const ToolbarButtonWrapper = styled('div')`
   button,
   a {
