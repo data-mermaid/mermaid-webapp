@@ -1,7 +1,12 @@
 import styled, { css } from 'styled-components/macro'
 import theme from '../../../theme'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../library/styling/mediaQueries'
-import { ButtonCaution, ButtonThatLooksLikeLink, ButtonSecondary } from '../../generic/buttons'
+import {
+  ButtonCaution,
+  ButtonThatLooksLikeLink,
+  ButtonSecondary,
+  Button,
+} from '../../generic/buttons'
 import { TableOverflowWrapper, Tr, Td, GenericStickyTable } from '../../generic/Table/table'
 import { inputTextareaSelectStyles } from '../../generic/form'
 
@@ -30,6 +35,24 @@ export const InputAutocompleteContainer = styled.div`
 export const ButtonRemoveRow = styled(ButtonCaution)`
   display: none;
   padding: 0;
+`
+
+export const ButtonPopover = styled(Button)`
+  display: none;
+  background-color: inherit;
+
+  & > svg {
+    height: ${theme.typography.mediumIconSize};
+    width: ${theme.typography.mediumIconSize};
+  }
+`
+export const Popover = styled('div')`
+  border: solid thin grey;
+  position: absolute;
+  bottom: 1.4rem;
+  right: calc(${theme.typography.xLargeIconSize} + 2px);
+  z-index: 3;
+  background-color: ${theme.color.white};
 `
 
 export const StyledOverflowWrapper = styled(TableOverflowWrapper)`
