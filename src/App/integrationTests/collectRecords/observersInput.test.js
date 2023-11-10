@@ -25,7 +25,7 @@ test('Observers input shows users that have been removed from the project and al
   const observersRow = await screen.findByTestId('observers')
 
   expect(observersRow).toHaveTextContent(
-    'Betsy Craig was an observer on this sample unit but is no longer in this project.',
+    'Betsy Craig was an observer on this sample unit but is no longer a part of this project.',
   )
   fireEvent.click(within(observersRow).getByRole('button', { name: 'Remove as observer' }))
 
