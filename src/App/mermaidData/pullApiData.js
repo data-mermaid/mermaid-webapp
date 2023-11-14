@@ -69,6 +69,7 @@ export const pullApiData = async ({
       dexiePerUserDataInstance.choices,
       dexiePerUserDataInstance.collect_records,
       dexiePerUserDataInstance.fish_families,
+      dexiePerUserDataInstance.fish_groupings,
       dexiePerUserDataInstance.fish_genera,
       dexiePerUserDataInstance.fish_species,
       dexiePerUserDataInstance.project_managements,
