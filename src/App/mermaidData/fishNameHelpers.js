@@ -16,8 +16,8 @@ export const fishReferenceEndpoint = {
   grouping: 'groupings',
 }
 
-export const getFishNameConstants = ({ species, genera, families }) => {
-  const fishNameMergedObject = [...species, ...genera, ...families]
+export const getFishNameConstants = ({ species, genera, families, groupings = [] }) => {
+  const fishNameMergedObject = [...species, ...genera, ...families, ...groupings]
 
   return fishNameMergedObject.map((fishNameObject) => {
     const { id, biomass_constant_a, biomass_constant_b, biomass_constant_c } = fishNameObject
@@ -42,13 +42,13 @@ export const getFishNameConstants = ({ species, genera, families }) => {
   })
 }
 
-export const getFishNameOptions = ({ species, genera, families }) => {
+export const getFishNameOptions = ({ species, genera, families, groupings = [] }) => {
   const speciesOptions = species.map(({ id, display_name }) => ({
     label: display_name,
     value: id,
   }))
 
-  const generaAndFamiliesOptions = [...genera, ...families].map(({ id, name }) => ({
+  const generaAndFamiliesOptions = [...genera, ...families, ...groupings].map(({ id, name }) => ({
     label: name,
     value: id,
   }))

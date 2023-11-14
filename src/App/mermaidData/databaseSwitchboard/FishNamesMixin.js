@@ -73,6 +73,12 @@ const FishNameMixin = (Base) =>
         ? this._dexiePerUserDataInstance.fish_families.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    getFishGroupings = function getFishGroupings() {
+      return this._isAuthenticatedAndReady
+        ? this._dexiePerUserDataInstance.fish_groupings.toArray()
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default FishNameMixin

@@ -22,6 +22,7 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexiePerUserDataInsta
         'benthic_attributes',
         'collect_records',
         'fish_families',
+        'fish_groupings',
         'fish_genera',
         'fish_species',
         'project_managements',
