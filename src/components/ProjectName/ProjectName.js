@@ -35,6 +35,7 @@ const ProjectNameLink = styled('a')`
 `
 const ProjectName = () => {
   const [projectName, setProjectName] = useState('')
+  const [isTestProject, setIsTestProject] = useState(false)
   const isMounted = useIsMounted()
   const { projectId } = useParams()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -45,6 +46,7 @@ const ProjectName = () => {
       databaseSwitchboardInstance.getProject(projectId).then((projectResponse) => {
         if (isMounted.current) {
           setProjectName(projectResponse?.name)
+          setIsTestProject(projectResponse.status < 90)
         }
       })
     }
@@ -53,10 +55,12 @@ const ProjectName = () => {
   return (
     <ProjectNameWrapper>
       <ProjectNameHeader>{projectName}</ProjectNameHeader>
-      <ProjectNameLink href={`${mermaidDashboardLink}/?project=${projectName}`} target="_blank">
-        <IconGlobe />
-        <span>{language.pages.goToDashboard}</span>
-      </ProjectNameLink>
+      {!isTestProject ? (
+        <ProjectNameLink href={`${mermaidDashboardLink}/?project=${projectName}`} target="_blank">
+          <IconGlobe />
+          <span>{language.pages.goToDashboard}</span>
+        </ProjectNameLink>
+      ) : null}
     </ProjectNameWrapper>
   )
 }

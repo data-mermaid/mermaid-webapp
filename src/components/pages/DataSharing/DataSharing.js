@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
+import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 import { Table, Tr, Th, Td, TableOverflowWrapper } from '../../generic/Table/table'
 import { hoverState } from '../../../library/styling/mediaQueries'
 import { ButtonPrimary } from '../../generic/buttons'
@@ -87,6 +88,7 @@ const DataSharing = () => {
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const [isDataUpdating, setIsDataUpdating] = useState(false)
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const history = useHistory()
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
@@ -189,6 +191,9 @@ const DataSharing = () => {
     const editedValues = { ...projectBeingEdited, status }
 
     handleSaveProject(editedValues, language.success.projectStatusSaved)
+
+    // hack to refresh page and show or hide the dashboard link depending on potentially changed test project status
+    history.push(history.location.pathname)
   }
 
   const findToolTipDescription = (policy) =>
