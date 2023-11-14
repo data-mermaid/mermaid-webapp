@@ -310,6 +310,15 @@ const pages = {
       removeObserverSubmitButton: 'Remove user',
       removeObserverCancelButton: 'Cancel',
     },
+    fishNamePopover: {
+      family: 'Family',
+      biomasConstants: 'Biomass Constants',
+      maxLength: 'Max Length (cm)',
+      groupSize: 'Group Size',
+      maxType: 'Max Type',
+      functionalGroup: 'Functional Group',
+      trophicGroup: 'Trophic Group',
+    },
   },
   projectInfo: {
     createOrganizationTitle: 'Suggest a new organization',

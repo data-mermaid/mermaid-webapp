@@ -500,3 +500,38 @@ export const mermaidRecordPropType = PropTypes.oneOfType([
   fishBeltPropType,
   habitatComplexityPropType,
 ])
+
+export const fishFamiliyPropType = PropTypes.shape({
+  id: PropTypes.string,
+  biomass_constant_a: PropTypes.number,
+  biomass_constant_b: PropTypes.number,
+  biomass_constant_c: PropTypes.number,
+  name: PropTypes.string,
+})
+
+export const fishGeneraSingluarPropType = PropTypes.shape({
+  id: PropTypes.string,
+  biomass_constant_a: PropTypes.number,
+  biomass_constant_b: PropTypes.number,
+  biomass_constant_c: PropTypes.number,
+  name: PropTypes.string,
+  family: PropTypes.string,
+})
+
+export const fishSpeciesSingluarPropType = PropTypes.shape({
+  id: PropTypes.string,
+  biomass_constant_a: PropTypes.number,
+  biomass_constant_b: PropTypes.number,
+  biomass_constant_c: PropTypes.number,
+  name: PropTypes.string,
+  display_name: PropTypes.string,
+  functional_group: PropTypes.string,
+  trophic_group: PropTypes.string,
+  max_length: PropTypes.number,
+  max_length_type: PropTypes.string,
+  group_size: PropTypes.string,
+})
+
+export const fishFamiliesPropType = PropTypes.arrayOf(fishFamiliyPropType)
+export const fishSpeciesPropType = PropTypes.arrayOf(fishSpeciesSingluarPropType)
+export const fishGeneraPropType = PropTypes.arrayOf(fishGeneraSingluarPropType)
