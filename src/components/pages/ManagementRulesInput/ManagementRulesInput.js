@@ -1,26 +1,42 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import {
   InputRow,
   CheckRadioLabel,
   CheckRadioWrapper,
-  HelperText,
   LabelContainer,
   RequiredIndicator,
 } from '../../generic/form'
 import { managementRegimePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../../mermaidInputs/mermaidInputsPropTypes'
-import { IconButton } from '../../generic/buttons'
-import { IconInfo } from '../../icons'
+import language from '../../../language'
+
+const regimeRulesLanguage = language.helperText.managementRegimeRules
 
 const partialRestrictionOptions = [
-  { value: 'periodic_closure', label: 'Periodic Closure' },
-  { value: 'size_limits', label: 'Size Limits' },
-  { value: 'gear_restriction', label: 'Gear Restriction' },
-  { value: 'species_restriction', label: 'Species Restriction' },
-  { value: 'access_restriction', label: 'Access Restriction' },
+  {
+    value: 'periodic_closure',
+    label: 'Periodic Closure',
+    helperText: regimeRulesLanguage.periodicClosure,
+  },
+  { value: 'size_limits', label: 'Size Limits', helperText: regimeRulesLanguage.sizeLimits },
+  {
+    value: 'gear_restriction',
+    label: 'Gear Restriction',
+    helperText: regimeRulesLanguage.gearRestrictions,
+  },
+  {
+    value: 'species_restriction',
+    label: 'Species Restriction',
+    helperText: regimeRulesLanguage.speciesRestrictions,
+  },
+  {
+    value: 'access_restriction',
+    label: 'Access Restriction',
+    helperText: regimeRulesLanguage.accessRestrictions,
+  },
 ]
 
 const StyledCheckRadioWrapper = styled(CheckRadioWrapper)`
@@ -36,6 +52,18 @@ const StyledCheckRadioLabel = styled(CheckRadioLabel)`
     padding-left: 2rem;
   }
 `
+const helperTextStyles = css`
+  display: block;
+  font-size: x-small;
+`
+const RadioHelperText = styled('div')`
+  ${helperTextStyles}
+  padding-left: 2rem;
+`
+const NestedCheckboxHelperText = styled('div')`
+  ${helperTextStyles}
+  padding-left: 4rem;
+`
 
 const ManagementRulesInput = ({
   id,
@@ -43,7 +71,6 @@ const ManagementRulesInput = ({
   managementFormValues,
   onChange,
   required,
-  helperText,
   validationMessages,
   validationType,
   ...restOfProps
@@ -90,14 +117,6 @@ const ManagementRulesInput = ({
   const [partialRestrictionCheckboxValues, setPartialRestrictionCheckboxValues] = useState(
     getPartialRestrictionCheckboxValues(managementFormValues),
   )
-
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-
-  const handleInfoIconClick = (event) => {
-    isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
-
-    event.stopPropagation()
-  }
 
   const resetPartialRestrictionRulesAndUpdateFormikOnChange = (formikProperty) => {
     const updatePartialRestrictionRuleValues = { ...partialRestrictionCheckboxValues }
@@ -148,22 +167,25 @@ const ManagementRulesInput = ({
     onChange('partial_restrictions', updatePartialRestrictionRuleValues)
   }
 
-  const showPartialRestrictionChoices =
-    managementRulesRadioInputValue.partial_restrictions &&
-    partialRestrictionOptions.map(({ value, label: optionLabel }) => (
-      <PartialRestrictionsCheckboxCheckRadioWrapper key={value}>
-        <input
-          id={value}
-          type="checkbox"
-          value={value}
-          checked={partialRestrictionCheckboxValues[value]}
-          onChange={handlePartialRestrictionChoicesChange}
-        />
-        <CheckRadioLabel htmlFor={value} key={value}>
-          {optionLabel}
-        </CheckRadioLabel>
-      </PartialRestrictionsCheckboxCheckRadioWrapper>
-    ))
+  const showPartialRestrictionChoices = managementRulesRadioInputValue.partial_restrictions
+    ? partialRestrictionOptions.map(({ value, label: optionLabel, helperText }) => (
+        <>
+          <PartialRestrictionsCheckboxCheckRadioWrapper key={value}>
+            <input
+              id={value}
+              type="checkbox"
+              value={value}
+              checked={partialRestrictionCheckboxValues[value]}
+              onChange={handlePartialRestrictionChoicesChange}
+            />
+            <CheckRadioLabel htmlFor={value} key={value}>
+              {optionLabel}
+            </CheckRadioLabel>
+          </PartialRestrictionsCheckboxCheckRadioWrapper>
+          <NestedCheckboxHelperText>{helperText}</NestedCheckboxHelperText>
+        </>
+      ))
+    : null
 
   return (
     <InputRow {...restOfProps} validationType={validationType}>
@@ -171,11 +193,6 @@ const ManagementRulesInput = ({
       <LabelContainer>
         <label id={`${id}-management-rules-input`}>{label}</label>
         <span>{required ? <RequiredIndicator /> : null}</span>
-        {helperText ? (
-          <IconButton type="button" onClick={(event) => handleInfoIconClick(event, label)}>
-            <IconInfo aria-label="info" />
-          </IconButton>
-        ) : null}
       </LabelContainer>
       <div aria-labelledby={`${id}-management-rules-input`}>
         <StyledCheckRadioWrapper>
@@ -187,10 +204,8 @@ const ManagementRulesInput = ({
             checked={managementRulesRadioInputValue.open_access}
             onChange={handleOpenAccessChange}
           />
-          <StyledCheckRadioLabel htmlFor="open-access">
-            Open Access
-            <span>Open for fishing and entering</span>
-          </StyledCheckRadioLabel>
+          <StyledCheckRadioLabel htmlFor="open-access">Open Access</StyledCheckRadioLabel>
+          <RadioHelperText>{regimeRulesLanguage.openAccess}</RadioHelperText>
         </StyledCheckRadioWrapper>
         <StyledCheckRadioWrapper>
           <input
@@ -201,10 +216,8 @@ const ManagementRulesInput = ({
             checked={managementRulesRadioInputValue.no_take}
             onChange={handleNoTakeChange}
           />
-          <StyledCheckRadioLabel htmlFor="no-take">
-            No Take
-            <span>Total extraction ban</span>
-          </StyledCheckRadioLabel>
+          <StyledCheckRadioLabel htmlFor="no-take">No Take</StyledCheckRadioLabel>
+          <RadioHelperText>{regimeRulesLanguage.noTake}</RadioHelperText>
         </StyledCheckRadioWrapper>
         <StyledCheckRadioWrapper>
           <input
@@ -217,13 +230,10 @@ const ManagementRulesInput = ({
           />
           <StyledCheckRadioLabel htmlFor="partial-restrictions">
             Partial Restrictions
-            <span>
-              e.g. periodic closures, size limits, gear restrictions, species restrictions
-            </span>
           </StyledCheckRadioLabel>
+          <RadioHelperText>{regimeRulesLanguage.partialRestrictions}</RadioHelperText>
           {showPartialRestrictionChoices}
         </StyledCheckRadioWrapper>
-        {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
       <InputValidationInfo
         validationType={validationType}
@@ -235,7 +245,6 @@ const ManagementRulesInput = ({
 
 ManagementRulesInput.propTypes = {
   id: PropTypes.string,
-  helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   label: PropTypes.string,
   managementFormValues: managementRegimePropType,
   onChange: PropTypes.func.isRequired,
@@ -247,7 +256,6 @@ ManagementRulesInput.propTypes = {
 ManagementRulesInput.defaultProps = {
   id: 'rules',
   label: 'Rules',
-  helperText: undefined,
   managementFormValues: {},
   validationMessages: undefined,
   validationType: undefined,
