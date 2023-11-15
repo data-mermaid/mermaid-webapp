@@ -166,6 +166,8 @@ const SiteForm = ({
           validationMessages={formik.errors.latitude}
           testId="latitude"
           helperText={language.helperText.getLatitude()}
+          shouldShowSteps={true}
+          step="0.000001"
         />
         <InputWithLabelAndValidation
           required
@@ -178,6 +180,8 @@ const SiteForm = ({
           validationMessages={formik.errors.longitude}
           testId="longitude"
           helperText={language.helperText.getLongitude()}
+          shouldShowSteps={true}
+          step="0.000001"
         />
         {isAppOnline && (
           <SingleSiteMap
