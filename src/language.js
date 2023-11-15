@@ -374,6 +374,7 @@ const pages = {
   },
   siteForm: {
     title: 'Site',
+    nonAdminDelete: 'Only admins can delete a site.',
   },
   siteTable: {
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',
@@ -384,6 +385,7 @@ const pages = {
   },
   managementRegimeForm: {
     title: 'Management Regime',
+    nonAdminDelete: 'Only admins can delete a management regime.',
   },
   managementRegimeTable: {
     copyManagementRegimeButtonText: 'Copy MRs from other projects',
