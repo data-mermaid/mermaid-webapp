@@ -68,7 +68,7 @@ export const inputTextareaSelectStyles = css`
   }
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+    -webkit-appearance: ${(props) => (props.shouldShowSteps ? 'auto' : 'none')};
   }
   -moz-appearance: textfield;
   &:disabled {

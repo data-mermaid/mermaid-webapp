@@ -16,6 +16,7 @@ import { ButtonSecondary } from '../../generic/buttons'
 import { IconMapMarker } from '../../icons'
 import { MapInputRow, MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 import theme from '../../../theme'
+import { roundToSixDecimalPlaces } from '../../../library/numbers/roundToSixDecimalPlaces'
 
 const StyledPlaceMarkerButton = styled(ButtonSecondary)`
   padding: 0 5px;
@@ -45,7 +46,7 @@ const SingleSiteMap = ({
   const map = useRef(null)
   const recordMarker = useRef(null)
   const [displayHelpText, setDisplayHelpText] = useState(false)
-  const [isMarkerBeingPlaced, setIsMarkerBeingPlaces] = useState(false)
+  const [isMarkerBeingPlaced, setIsMarkerBeingPlaced] = useState(false)
 
   const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
   const handleMarkerLocationChange = useCallback(
@@ -59,8 +60,8 @@ const SingleSiteMap = ({
         adjustedLng = lngLat.lng - 360
       }
 
-      handleLatitudeChange(lngLat.lat)
-      handleLongitudeChange(adjustedLng)
+      handleLatitudeChange(roundToSixDecimalPlaces(lngLat.lat))
+      handleLongitudeChange(roundToSixDecimalPlaces(adjustedLng))
     },
     [handleLatitudeChange, handleLongitudeChange],
   )
@@ -174,7 +175,7 @@ const SingleSiteMap = ({
       : language.pages.siteForm.placeMarker
 
   const handlePlaceMarkerClick = () => {
-    setIsMarkerBeingPlaces(!isMarkerBeingPlaced)
+    setIsMarkerBeingPlaced(!isMarkerBeingPlaced)
   }
 
   const placeMarkerButton = (
