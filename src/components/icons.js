@@ -32,6 +32,7 @@ import informationIcon from '@iconify-icons/mdi/information-outline'
 import launch from '@iconify-icons/mdi/launch'
 import libraryBooks from '@iconify-icons/mdi/library-books'
 import mapMarkerRadiusOutline from '@iconify-icons/mdi/map-marker-radius-outline'
+import mapMarker from '@iconify-icons/mdi/map-marker'
 import menu from '@iconify-icons/mdi/menu'
 import menuDown from '@iconify-icons/mdi/menu-down'
 import menuUp from '@iconify-icons/mdi/menu-up'
@@ -98,6 +99,7 @@ export const IconSave = (props) => <InlineIcon icon={contentSave} {...props} />
 export const IconSend = (props) => <InlineIcon icon={send} {...props} />
 export const IconSharing = (props) => <InlineIcon icon={shareVariantOutline} {...props} />
 export const IconSites = (props) => <InlineIcon icon={mapMarkerRadiusOutline} {...props} />
+export const IconMapMarker = (props) => <InlineIcon icon={mapMarker} {...props} />
 export const IconSortDown = (props) => <InlineIcon icon={sortDescending} {...props} />
 export const IconSortUp = (props) => <InlineIcon icon={sortAscending} {...props} />
 export const IconUp = (props) => <InlineIcon icon={menuUp} {...props} />

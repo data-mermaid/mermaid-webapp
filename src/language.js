@@ -375,6 +375,9 @@ const pages = {
   siteForm: {
     title: 'Site',
     nonAdminDelete: 'Only admins can delete a site.',
+    placeMarker: 'Place Site Marker',
+    replaceMarker: 'Replace Site Marker',
+    done: 'Done',
   },
   siteTable: {
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',

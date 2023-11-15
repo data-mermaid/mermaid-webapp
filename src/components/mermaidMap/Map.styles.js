@@ -21,7 +21,7 @@ export const MapWrapper = styled.div`
     background-size: cover;
     width: 35px;
     height: 44px;
-    cursor: pointer;
+    cursor: move;
   }
 
   svg {

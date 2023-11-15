@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
+import styled from 'styled-components'
 import language from '../../../language'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import {
@@ -11,7 +12,24 @@ import {
   loadACALayers,
   handleMapOnWheel,
 } from '../mapService'
+import { ButtonSecondary } from '../../generic/buttons'
+import { IconMapMarker } from '../../icons'
 import { MapInputRow, MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
+import theme from '../../../theme'
+
+const StyledPlaceMarkerButton = styled(ButtonSecondary)`
+  padding: 0 5px;
+  position: absolute;
+  top: 10px;
+  left: 50px;
+  height: 29px;
+  border-radius: 4px;
+  border: none;
+  outline: solid 2px ${theme.color.black.fade(0.9)};
+  & > svg {
+    margin-right: 1px;
+  }
+`
 
 const defaultCenter = [0, 0]
 const defaultZoom = 1
@@ -27,11 +45,11 @@ const SingleSiteMap = ({
   const map = useRef(null)
   const recordMarker = useRef(null)
   const [displayHelpText, setDisplayHelpText] = useState(false)
+  const [isMarkerBeingPlaced, setIsMarkerBeingPlaces] = useState(false)
 
   const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
-
-  const _initializeMap = useEffect(() => {
-    const handleMarkerLocationChange = (lngLat) => {
+  const handleMarkerLocationChange = useCallback(
+    (lngLat) => {
       // Adjust lng at international dateline
       let adjustedLng = lngLat.lng
 
@@ -43,12 +61,11 @@ const SingleSiteMap = ({
 
       handleLatitudeChange(lngLat.lat)
       handleLongitudeChange(adjustedLng)
-    }
+    },
+    [handleLatitudeChange, handleLongitudeChange],
+  )
 
-    const markerElement = document.createElement('div')
-
-    markerElement.id = 'marker'
-
+  const _initializeMap = useEffect(() => {
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: satelliteBaseMap,
@@ -60,22 +77,15 @@ const SingleSiteMap = ({
     })
 
     recordMarker.current = new maplibregl.Marker({ draggable: !isReadOnlyUser })
+    const recordMarkerElement = recordMarker.current.getElement()
+
+    recordMarkerElement.id = 'marker'
 
     addMapController(map.current)
 
     map.current.on('load', () => {
       loadACALayers(map.current)
       handleMapOnWheel(map.current, handleZoomDisplayHelpText)
-    })
-
-    map.current.on('click', (event) => {
-      if (!isReadOnlyUser) {
-        const { lngLat } = event
-
-        recordMarker.current.setLngLat(lngLat)
-
-        handleMarkerLocationChange(lngLat)
-      }
     })
 
     recordMarker.current.on('dragend', () => {
@@ -89,7 +99,34 @@ const SingleSiteMap = ({
       map.current.remove()
       recordMarker.current.remove()
     }
-  }, [isReadOnlyUser, handleLatitudeChange, handleLongitudeChange])
+  }, [isReadOnlyUser, handleLatitudeChange, handleLongitudeChange, handleMarkerLocationChange])
+
+  const handleMapClick = useCallback(
+    (event) => {
+      if (!isReadOnlyUser) {
+        const { lngLat } = event
+
+        recordMarker.current.setLngLat(lngLat)
+
+        handleMarkerLocationChange(lngLat)
+      }
+    },
+    [handleMarkerLocationChange, isReadOnlyUser],
+  )
+
+  useEffect(
+    function enableDisableMarkerPlacement() {
+      if (isMarkerBeingPlaced) {
+        map.current.getCanvas().style.cursor = 'crosshair'
+        map.current.on('click', handleMapClick)
+      }
+      if (!isMarkerBeingPlaced) {
+        map.current.getCanvas().style.cursor = 'grab'
+        map.current.off('click', handleMapClick)
+      }
+    },
+    [handleMapClick, isMarkerBeingPlaced],
+  )
 
   useEffect(
     function centerMapOnMarker() {
@@ -131,11 +168,27 @@ const SingleSiteMap = ({
 
   const updateBenthicLayers = (dataLayerFromLocalStorage) =>
     setGeomorphicOrBenthicLayerProperty(map.current, 'atlas-benthic', dataLayerFromLocalStorage)
+  const placeMarkerButtonText =
+    formLatitudeValue && formLongitudeValue
+      ? language.pages.siteForm.replaceMarker
+      : language.pages.siteForm.placeMarker
+
+  const handlePlaceMarkerClick = () => {
+    setIsMarkerBeingPlaces(!isMarkerBeingPlaced)
+  }
+
+  const placeMarkerButton = (
+    <StyledPlaceMarkerButton type="button" onClick={handlePlaceMarkerClick}>
+      <IconMapMarker />
+      {isMarkerBeingPlaced ? language.pages.siteForm.done : placeMarkerButtonText}
+    </StyledPlaceMarkerButton>
+  )
 
   return (
     <MapInputRow noBorderWidth={isReadOnlyUser}>
       <MapContainer>
         <MapWrapper ref={mapContainer} />
+        {!isReadOnlyUser ? placeMarkerButton : null}
         {displayHelpText && (
           <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
         )}
