@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import { ContentPageLayout } from '../../../Layout'
@@ -33,7 +33,7 @@ const SubmittedBleaching = () => {
 
   const { isAppOnline } = useOnlineStatus()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const history = useHistory()
+  const navigate = useNavigate()
   const { submittedRecordId, projectId } = useParams()
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
@@ -129,7 +129,7 @@ const SubmittedBleaching = () => {
       })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
-        history.push(
+        navigate(
           `${ensureTrailingSlash(currentProjectPath)}collecting/bleachingqc/${submittedRecordId}`,
         )
       })

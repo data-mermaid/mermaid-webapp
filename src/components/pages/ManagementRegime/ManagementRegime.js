@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import { useParams, useHistory } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo } from 'react'
 
@@ -194,7 +194,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { managementRegimeId, projectId } = useParams()
-  const history = useHistory()
+  const navigate = useNavigate()
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
@@ -346,9 +346,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           formikActions.resetForm({ values: formikValues })
 
           if (isNewManagementRegime) {
-            history.push(
-              `${ensureTrailingSlash(currentProjectPath)}management-regimes/${response.id}`,
-            )
+            navigate(`${ensureTrailingSlash(currentProjectPath)}management-regimes/${response.id}`)
           }
         })
         .catch((error) => {
@@ -436,7 +434,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         toast.success(
           ...getToastArguments(language.success.getMermaidDataDeleteSuccess('management regime')),
         )
-        history.push(`${ensureTrailingSlash(currentProjectPath)}management-regimes/`)
+        navigate(`${ensureTrailingSlash(currentProjectPath)}management-regimes/`)
       })
       .catch((error) => {
         const { isSyncError, isDeleteRejectedError } = error

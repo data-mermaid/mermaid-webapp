@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect, useLocation, useHistory } from 'react-router-dom'
+import { Route, useLocation, Routes, Navigate, useNavigate } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
 import { toast } from 'react-toastify'
 import React, { useCallback, useMemo } from 'react'
@@ -38,7 +38,7 @@ function App({ dexieCurrentUserInstance }) {
   const { isAppOnline, setServerNotReachable } = useOnlineStatus()
   const { isOfflineStorageHydrated, syncErrors, isSyncInProgress } = useSyncStatus()
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
-  const history = useHistory()
+  const navigate = useNavigate()
   const isMounted = useIsMounted()
   const location = useLocation()
 
@@ -64,9 +64,9 @@ function App({ dexieCurrentUserInstance }) {
 
   const handleUserDeniedSyncPull = useCallback(
     (projectName) => {
-      history.push(projectName ? `/noProjectAccess/${projectName}` : '/noProjectAccess')
+      navigate(projectName ? `/noProjectAccess/${projectName}` : '/noProjectAccess')
     },
-    [history],
+    [navigate],
   )
 
   const handleUserDeniedSyncPush = useCallback(
@@ -226,13 +226,13 @@ function App({ dexieCurrentUserInstance }) {
                      */
                     isMermaidAuthenticated ? (
                       <ErrorBoundary>
-                        <Switch>
+                        <Routes>
                           {routes.map(({ path, Component }) => (
                             <Route
                               exact
                               path={path}
                               key={path}
-                              render={() =>
+                              element={
                                 isMermaidAuthenticatedAndReady ? (
                                   <Component />
                                 ) : (
@@ -241,17 +241,15 @@ function App({ dexieCurrentUserInstance }) {
                               }
                             />
                           ))}
-                          <Route exact path="/">
-                            <Redirect to="/projects" />
-                          </Route>
+                          <Route exact path="/" element={<Navigate to="/projects" replace />} />
+
                           {/* The following route is required b/c of how Cloudfront handles root paths. This is
                             required for preview urls. When viewing a preview, you will need to append /index.html
                             like so: https://preview.app2.datamermaid.org/123/index.html */}
-                          <Route exact path="/index.html">
-                            <Redirect to="/projects" />
-                          </Route>
-                          <Route component={PageNotFound} />
-                        </Switch>
+                          <Route exact path="/index.html" element={<Navigate to="/projects" />} />
+
+                          <Route path="*" element={PageNotFound} />
+                        </Routes>
                       </ErrorBoundary>
                     ) : (
                       <LoadingIndicator />

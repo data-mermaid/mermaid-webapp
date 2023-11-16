@@ -156,7 +156,7 @@ const NavMenu = ({ subNavNode }) => {
           <ul>
             {!isReadOnlyUser && (
               <LiCollecting>
-                <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
+                <NavLinkSidebar end to={`${projectUrl}/collecting`}>
                   {currentUser.picture ? (
                     <CollectionAvatar src={currentUser.picture} onError={handleImageError} />
                   ) : null}
@@ -169,7 +169,7 @@ const NavMenu = ({ subNavNode }) => {
             {isCollectingSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             <OfflineHide>
               <li>
-                <NavLinkSidebar exact to={`${projectUrl}/submitted`}>
+                <NavLinkSidebar end to={`${projectUrl}/submitted`}>
                   <IconData />
                   <span>Submitted</span>
                 </NavLinkSidebar>
@@ -182,14 +182,14 @@ const NavMenu = ({ subNavNode }) => {
           <NavHeaderSecondary>Metadata</NavHeaderSecondary>
           <ul>
             <li>
-              <NavLinkSidebar exact to={`${projectUrl}/sites`}>
+              <NavLinkSidebar end to={`${projectUrl}/sites`}>
                 <IconSites />
                 <span>Sites</span>
               </NavLinkSidebar>
             </li>
             {isSiteSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             <li>
-              <NavLinkSidebar exact to={`${projectUrl}/management-regimes`}>
+              <NavLinkSidebar end to={`${projectUrl}/management-regimes`}>
                 <IconMgmt />
                 <span>Management Regimes</span>
               </NavLinkSidebar>

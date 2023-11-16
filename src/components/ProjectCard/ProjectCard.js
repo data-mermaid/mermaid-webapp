@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
@@ -44,8 +44,8 @@ const ProjectCard = ({
   const { currentUser } = useCurrentUser()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, id)
   const { setIsSyncInProgress } = useSyncStatus()
-  const history = useHistory()
-  const projectUrl = `projects/${id}`
+  const navigate = useNavigate()
+  const projectUrl = `/projects/${id}`
 
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
@@ -109,7 +109,7 @@ const ProjectCard = ({
       ? `${projectUrl}/observers-and-transects`
       : `${projectUrl}/collecting`
 
-    history.push(destinationUrl)
+    navigate(destinationUrl)
   }
 
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)

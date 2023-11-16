@@ -10,19 +10,20 @@ const EnhancedPrompt = ({ shouldPromptTrigger }) => {
 
   // Display prompt for fornt end/react router routing
   return (
-      <Prompt
-        when={shouldPromptTrigger}
-        message={language.navigateAwayPrompt}
-      />
+    // <Prompt
+    //   when={shouldPromptTrigger}
+    //   message={language.navigateAwayPrompt}
+    // />
+    <div>foo</div>
   )
 }
 
 EnhancedPrompt.defaultProps = {
-  shouldPromptTrigger: false
+  shouldPromptTrigger: false,
 }
 
 EnhancedPrompt.propTypes = {
-  shouldPromptTrigger: PropTypes.bool
+  shouldPromptTrigger: PropTypes.bool,
 }
 
 export default EnhancedPrompt

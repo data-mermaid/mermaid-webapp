@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 
 import { ButtonSecondary } from '../../../generic/buttons'
@@ -31,7 +31,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
   const { currentUser } = useCurrentUser()
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const history = useHistory()
+  const navigate = useNavigate()
   const { isAppOnline } = useOnlineStatus()
   const isMounted = useIsMounted()
   const { isSyncInProgress } = useSyncStatus()
@@ -128,7 +128,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
       })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
-        history.push(
+        navigate(
           `${ensureTrailingSlash(currentProjectPath)}collecting/benthicpqt/${submittedRecordId}`,
         )
       })

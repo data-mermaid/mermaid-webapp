@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import { useHistory, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useRef } from 'react'
 
@@ -157,7 +157,8 @@ const CollectRecordFormPage = ({
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const handleHttpResponseError = useHttpResponseErrorHandler()
-  const history = useHistory()
+  const navigate = useNavigate()
+  const location = useLocation()
   const isMounted = useIsMounted()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const observationTableRef = useRef(null)
@@ -399,9 +400,7 @@ const CollectRecordFormPage = ({
         handleCollectRecordChange(collectRecordResponse)
 
         if (isNewRecord) {
-          history.push(
-            `${ensureTrailingSlash(history.location.pathname)}${collectRecordResponse.id}`,
-          )
+          navigate(`${ensureTrailingSlash(location.pathname)}${collectRecordResponse.id}`)
         }
       })
       .catch((error) => {
@@ -422,7 +421,7 @@ const CollectRecordFormPage = ({
       .submitSampleUnit({ recordId, projectId })
       .then(() => {
         toast.success(...getToastArguments(language.success.collectRecordSubmit))
-        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
       })
       .catch((error) => {
         setSubmitButtonState(buttonGroupStates.submittable)
@@ -458,7 +457,7 @@ const CollectRecordFormPage = ({
         closeDeleteRecordModal()
         setIsDeletingRecord(false)
         toast.success(...getToastArguments(language.success.collectRecordDelete))
-        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
       })
       .catch((error) => {
         setIsDeletingRecord(false)

@@ -1,11 +1,11 @@
 import { useCallback, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 /**
  * this hook was made so that data a user entered in a form would persist through network status change
  * which causes a rerender because of the way react state via props or context work
  */
 export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
-  const history = useHistory()
+  const location = useLocation()
 
   const persistUnsavedFormData = useCallback(
     (values) => {
@@ -36,10 +36,8 @@ export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
   }, [clearPersistedUnsavedFormData])
 
   const _clearPersistedUnsavedFormDataBeforeReactRouterChange = useEffect(() => {
-    history.listen(() => {
-      clearPersistedUnsavedFormData()
-    })
-  }, [history, clearPersistedUnsavedFormData])
+    clearPersistedUnsavedFormData()
+  }, [location.pathname, clearPersistedUnsavedFormData])
 
   return {
     persistUnsavedFormData,
