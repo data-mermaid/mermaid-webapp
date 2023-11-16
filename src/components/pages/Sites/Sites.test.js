@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
@@ -19,9 +19,9 @@ test('Site component renders with the expected headers', async () => {
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/sites">
-      <Sites />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/sites" element={<Sites />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
@@ -47,9 +47,9 @@ test('Site Records table sorts properly by Name column', async () => {
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/sites">
-      <Sites />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/sites" element={<Sites />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
@@ -89,9 +89,9 @@ test('Site Records table sorts properly by Reef Type column', async () => {
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/sites">
-      <Sites />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/sites" element={<Sites />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
@@ -131,9 +131,9 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/sites">
-      <Sites />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/sites" element={<Sites />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
@@ -173,9 +173,9 @@ test('Site Records table sorts properly by Exposure column', async () => {
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/sites">
-      <Sites />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/sites" element={<Sites />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],

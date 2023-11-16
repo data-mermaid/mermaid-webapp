@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
-import { Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 
@@ -19,9 +19,12 @@ test('Edit Management Regime - shows name and rules required', async () => {
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes/:managementRegimeId">
-      <ManagementRegime isNewManagementRegime={false} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/management-regimes/:managementRegimeId"
+        element={<ManagementRegime isNewManagementRegime={false} />}
+      />
+    </Routes>,
     {
       initialEntries: ['/projects/5/management-regimes/1'],
       dexiePerUserDataInstance,
@@ -66,9 +69,12 @@ test('Management Regime component renders with the expected UI elements', async 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes/:managementRegimeId">
-      <ManagementRegime isNewManagementRegime={false} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/management-regimes/:managementRegimeId"
+        element={<ManagementRegime isNewManagementRegime={false} />}
+      />
+    </Routes>,
     {
       initialEntries: ['/projects/5/management-regimes/2'],
       dexiePerUserDataInstance,
@@ -100,9 +106,12 @@ test('Management Regime component - form inputs are initialized with the correct
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes/:managementRegimeId">
-      <ManagementRegime isNewManagementRegime={false} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/management-regimes/:managementRegimeId"
+        element={<ManagementRegime isNewManagementRegime={false} />}
+      />
+    </Routes>,
     {
       initialEntries: ['/projects/5/management-regimes/2'],
       dexiePerUserDataInstance,

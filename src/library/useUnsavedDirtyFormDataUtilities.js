@@ -1,12 +1,10 @@
+import { createBrowserHistory } from 'history'
 import { useCallback, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 /**
  * this hook was made so that data a user entered in a form would persist through network status change
  * which causes a rerender because of the way react state via props or context work
  */
 export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
-  const location = useLocation()
-
   const persistUnsavedFormData = useCallback(
     (values) => {
       window.sessionStorage.setItem(sessionStorageName, JSON.stringify(values))
@@ -14,10 +12,9 @@ export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
     [sessionStorageName],
   )
 
-  const clearPersistedUnsavedFormData = useCallback(
-    () => window.sessionStorage.removeItem(sessionStorageName),
-    [sessionStorageName],
-  )
+  const clearPersistedUnsavedFormData = useCallback(() => {
+    window.sessionStorage.removeItem(sessionStorageName)
+  }, [sessionStorageName])
 
   const getPersistedUnsavedFormData = useCallback(() => {
     try {
@@ -36,8 +33,12 @@ export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
   }, [clearPersistedUnsavedFormData])
 
   const _clearPersistedUnsavedFormDataBeforeReactRouterChange = useEffect(() => {
-    clearPersistedUnsavedFormData()
-  }, [location.pathname, clearPersistedUnsavedFormData])
+    const history = createBrowserHistory()
+
+    history.listen(() => {
+      clearPersistedUnsavedFormData()
+    })
+  }, [clearPersistedUnsavedFormData])
 
   return {
     persistUnsavedFormData,

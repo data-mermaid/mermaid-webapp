@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
-import { Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 
@@ -26,9 +26,13 @@ test('FishBelt observations size shows a numeric pattern when fish size bin is 1
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt"
+        element={<FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />}
+      />
+    </Routes>,
+
     {
       isSyncInProgressOverride: true,
       dexiePerUserDataInstance,
@@ -57,9 +61,12 @@ test('FishBelt observations size shows a select input when fish size bin is 5', 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt"
+        element={<FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />}
+      />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       dexiePerUserDataInstance,
@@ -90,9 +97,12 @@ test('FishBelt observations size shows a select input when fish size bin is 10',
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt"
+        element={<FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />}
+      />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       dexiePerUserDataInstance,
@@ -123,9 +133,12 @@ test('FishBelt observations size shows a select input when fish size bin is AGRR
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt"
+        element={<FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />}
+      />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       dexiePerUserDataInstance,
@@ -156,9 +169,12 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt"
+        element={<FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />}
+      />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       dexiePerUserDataInstance,

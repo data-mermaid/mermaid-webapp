@@ -6,6 +6,7 @@ import {
   renderAuthenticatedOnline,
   within,
   renderAuthenticated,
+  waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -48,7 +49,7 @@ test('Unsaved NEW fishbelt form edits clear when the user navigates away and bac
 
   const formAfterNav = await screen.findByRole('form')
 
-  expect(within(formAfterNav).getByLabelText('Depth')).not.toHaveValue()
+  waitFor(() => expect(within(formAfterNav).getByLabelText('Depth')).not.toHaveValue())
 })
 
 test('Unsaved EDIT fishbelt form edits clear when the user navigates away and back', async () => {
@@ -90,7 +91,7 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
   const formAfterNav = await screen.findByRole('form')
 
   // initial unedited depth value
-  expect(within(formAfterNav).getByLabelText('Depth')).toHaveValue(20)
+  waitFor(() => expect(within(formAfterNav).getByLabelText('Depth')).toHaveValue(20))
 })
 test('Unsaved NEW fishbelt form edits persist through change in online/offline status', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()

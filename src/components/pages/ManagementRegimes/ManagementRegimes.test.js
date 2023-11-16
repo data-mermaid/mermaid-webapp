@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
@@ -19,9 +19,9 @@ test('ManagementRegimes component renders with the expected headers', async () =
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes">
-      <ManagementRegimes />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
@@ -53,9 +53,9 @@ test('Management Regime Records table sorts properly by Name column', async () =
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes">
-      <ManagementRegimes />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
@@ -95,9 +95,9 @@ test('Management Regime Records table sorts properly by Year Est. column', async
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes">
-      <ManagementRegimes />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
@@ -138,9 +138,9 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes">
-      <ManagementRegimes />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
@@ -181,9 +181,9 @@ test('Management Regime Records table sorts properly by Open Access column', asy
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes">
-      <ManagementRegimes />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
@@ -223,9 +223,9 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes">
-      <ManagementRegimes />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
@@ -265,9 +265,9 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes">
-      <ManagementRegimes />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
@@ -307,9 +307,9 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes">
-      <ManagementRegimes />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
@@ -349,9 +349,9 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes">
-      <ManagementRegimes />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
@@ -391,9 +391,9 @@ test('Management Regime Records table sorts properly by Species Restrictions col
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes">
-      <ManagementRegimes />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
@@ -433,9 +433,9 @@ test('Management Regime Records table sorts properly by No Take column', async (
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/management-regimes">
-      <ManagementRegimes />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
