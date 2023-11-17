@@ -29,6 +29,8 @@ const EnhancedPrompt = ({ shouldPromptTrigger }) => {
     //   when={shouldPromptTrigger}
     //   message={language.navigateAwayPrompt}
     // />
+
+    // monday carry on here https://reactrouter.com/en/main/upgrading/v6-data#but-ive-got-stuff-between-browserrouter-and-routes
     <div>foo</div>
   )
 }
