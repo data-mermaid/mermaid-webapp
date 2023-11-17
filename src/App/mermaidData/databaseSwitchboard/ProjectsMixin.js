@@ -382,6 +382,22 @@ const ProjectsMixin = (Base) =>
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    setProjectAsOfflineReady = function setProjectAsOfflineReady(projectId) {
+      if (!projectId) {
+        return Promise.reject(new Error('missing projectId parameter'))
+      }
+
+      return this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId)
+    }
+
+    unsetProjectAsOfflineReady = function unsetProjectAsOfflineReady(projectId) {
+      if (!projectId) {
+        return Promise.reject(new Error('missing projectId parameter'))
+      }
+
+      return this._apiSyncInstance.pushThenRemoveProjectFromOfflineStorage(projectId)
+    }
   }
 
 export default ProjectsMixin

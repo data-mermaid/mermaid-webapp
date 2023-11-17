@@ -27,11 +27,11 @@ import SubmittedHabitatComplexity from '../components/pages/submittedRecordPages
 import SubmittedBenthicLit from '../components/pages/submittedRecordPages/SubmittedBenthicLit/SubmittedBenthicLit'
 import UserDoesntHaveProjectAccess from '../components/pages/UserDoesntHaveProjectAccess'
 
-export const useRoutes = ({ apiSyncInstance }) => {
+export const useRoutes = () => {
   const routes = [
     {
       path: '/projects',
-      Component: () => <Projects apiSyncInstance={apiSyncInstance} />,
+      Component: () => <Projects />,
     },
     {
       path: '/projects/:projectId/observers-and-transects',

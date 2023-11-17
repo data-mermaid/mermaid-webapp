@@ -169,7 +169,7 @@ function App({ dexieCurrentUserInstance }) {
     apiSyncInstance,
   ])
 
-  const { routes } = useRoutes({ apiSyncInstance })
+  const { routes } = useRoutes() // convert this to const instead of hook so we can use it with data router
 
   const { notifications, deleteNotification, deleteAllNotifications } =
     useInitializeBellNotifications({

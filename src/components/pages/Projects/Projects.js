@@ -24,7 +24,7 @@ import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandl
 /**
  * All Projects page (lists projects)
  */
-const Projects = ({ apiSyncInstance }) => {
+const Projects = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isProjectSortAsc, setIsProjectSortAsc] = useState(true)
   const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
@@ -141,7 +141,6 @@ const Projects = ({ apiSyncInstance }) => {
           <ProjectCard
             role="listitem"
             project={{ ...project }}
-            apiSyncInstance={apiSyncInstance}
             isOfflineReady={getIsProjectOffline(project.id)}
             addProjectToProjectsPage={addProjectToProjectsPage}
           />
@@ -167,10 +166,6 @@ const Projects = ({ apiSyncInstance }) => {
       bottomRow={<div role="list">{projectCardsList}</div>}
     />
   )
-}
-
-Projects.propTypes = {
-  apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage).isRequired,
 }
 
 export default Projects
