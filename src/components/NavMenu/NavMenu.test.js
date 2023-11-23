@@ -31,10 +31,6 @@ test('NavMenu component shows Metadata links; and hide Overview, data, admin lin
     expect(screen.queryByText('Overview')).not.toBeInTheDocument()
   })
 
-  await waitFor(() => {
-    expect(screen.queryByText('Overview')).not.toBeInTheDocument()
-  })
-
   expect(screen.getByText('Data')).toBeInTheDocument()
   expect(screen.getByText('Metadata')).toBeInTheDocument()
   expect(screen.getByText('Collecting')).toBeInTheDocument()

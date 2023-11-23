@@ -1,12 +1,11 @@
 import { useCallback, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useRouterFromClearPersistedFormDataHack } from '../App/ClearDirtyFormDataHackContext'
 /**
  * this hook was made so that data a user entered in a form would persist through network status change
  * which causes a rerender because of the way react state via props or context work
  */
 export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
-  const history = useHistory()
-
+  const router = useRouterFromClearPersistedFormDataHack()
   const persistUnsavedFormData = useCallback(
     (values) => {
       window.sessionStorage.setItem(sessionStorageName, JSON.stringify(values))
@@ -14,10 +13,9 @@ export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
     [sessionStorageName],
   )
 
-  const clearPersistedUnsavedFormData = useCallback(
-    () => window.sessionStorage.removeItem(sessionStorageName),
-    [sessionStorageName],
-  )
+  const clearPersistedUnsavedFormData = useCallback(() => {
+    window.sessionStorage.removeItem(sessionStorageName)
+  }, [sessionStorageName])
 
   const getPersistedUnsavedFormData = useCallback(() => {
     try {
@@ -36,10 +34,10 @@ export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
   }, [clearPersistedUnsavedFormData])
 
   const _clearPersistedUnsavedFormDataBeforeReactRouterChange = useEffect(() => {
-    history.listen(() => {
+    router.subscribe(() => {
       clearPersistedUnsavedFormData()
     })
-  }, [history, clearPersistedUnsavedFormData])
+  }, [clearPersistedUnsavedFormData, router])
 
   return {
     persistUnsavedFormData,

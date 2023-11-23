@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -50,7 +50,7 @@ const ResolveDuplicateMRButtonAndModal = ({
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId } = useParams()
-  const history = useHistory()
+  const navigate = useNavigate()
   const currentProjectPath = useCurrentProjectPath()
   const isMounted = useIsMounted()
 
@@ -218,9 +218,7 @@ const ResolveDuplicateMRButtonAndModal = ({
   }
 
   const handleEditManagementRegime = (managementRegimeId) => {
-    history.push(
-      `${ensureTrailingSlash(currentProjectPath)}management-regimes/${managementRegimeId}`,
-    )
+    navigate(`${ensureTrailingSlash(currentProjectPath)}management-regimes/${managementRegimeId}`)
   }
 
   const handleKeepBoth = () => {

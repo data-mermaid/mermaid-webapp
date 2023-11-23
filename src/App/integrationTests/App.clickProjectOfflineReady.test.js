@@ -9,6 +9,7 @@ import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
+  waitFor,
   waitForElementToBeRemoved,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
@@ -81,7 +82,7 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
     (await screen.findAllByTestId('project-card'))[4],
   ).getByRole('checkbox', { name: 'Offline Ready' })
 
-  expect(project5OfflineCheckboxAfterProjectSetOffline).toBeChecked()
+  await waitFor(() => expect(project5OfflineCheckboxAfterProjectSetOffline).toBeChecked())
 
   expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(22)
   expect((await dexiePerUserDataInstance.project_managements.toArray()).length).toEqual(
@@ -114,9 +115,13 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
     (await screen.findAllByTestId('project-card'))[4],
   ).getByRole('checkbox', { name: 'Offline Ready' })
 
+  await waitFor(() => expect(project5OfflineCheckboxAfterFirstClick).toBeChecked())
+
   userEvent.click(project5OfflineCheckboxAfterFirstClick)
 
-  expect(await screen.findByText('Project V has been removed from being offline ready'))
+  await waitFor(() =>
+    expect(screen.getByText('Project V has been removed from being offline ready')),
+  )
 
   const project5OfflineCheckboxAfterProjectSetOffline = within(
     (await screen.findAllByRole('listitem'))[4],
