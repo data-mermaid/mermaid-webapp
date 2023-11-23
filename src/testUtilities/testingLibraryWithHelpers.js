@@ -1,5 +1,5 @@
 import { Auth0Context } from '@auth0/auth0-react'
-import { MemoryRouter } from 'react-router-dom'
+import { RouterProvider, createMemoryRouter } from 'react-router-dom'
 import { render } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components/macro'
 import PropTypes from 'prop-types'
@@ -20,6 +20,7 @@ import { getMockDexieInstancesAllSuccess } from './mockDexie'
 import { DexiePerUserDataInstanceProvider } from '../App/dexiePerUserDataInstanceContext'
 import { BellNotificationProvider } from '../App/BellNotificationContext'
 import mockMermaidData from './mockMermaidData'
+import { ClearPersistedFormDataHackProvider } from '../App/ClearDirtyFormDataHackContext'
 
 const fakeCurrentUser = {
   id: 'fake-id',
@@ -29,7 +30,7 @@ const fakeCurrentUser = {
   projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
 }
 
-const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOverride }) => (
+const AuthenticatedProviders = ({ children, isSyncInProgressOverride }) => (
   <Auth0Context.Provider
     value={{
       isAuthenticated: true,
@@ -38,28 +39,26 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
       getAccessTokenSilently: () => Promise.resolve('fake-token'),
     }}
   >
-    <MemoryRouter initialEntries={initialEntries}>
-      <ThemeProvider theme={theme}>
-        <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
-          <CurrentUserProvider value={{ currentUser: fakeCurrentUser }}>
-            <HttpResponseErrorHandlerProvider value={() => {}}>
-              <BellNotificationProvider
-                value={{
-                  notifications: mockMermaidData.notifications,
-                  deleteNotification: () => {},
-                }}
-              >
-                {children}
-              </BellNotificationProvider>
-            </HttpResponseErrorHandlerProvider>
-          </CurrentUserProvider>
-        </SyncStatusProvider>
-      </ThemeProvider>
-    </MemoryRouter>
+    <ThemeProvider theme={theme}>
+      <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
+        <CurrentUserProvider value={{ currentUser: fakeCurrentUser }}>
+          <HttpResponseErrorHandlerProvider value={() => {}}>
+            <BellNotificationProvider
+              value={{
+                notifications: mockMermaidData.notifications,
+                deleteNotification: () => {},
+              }}
+            >
+              {children}
+            </BellNotificationProvider>
+          </HttpResponseErrorHandlerProvider>
+        </CurrentUserProvider>
+      </SyncStatusProvider>
+    </ThemeProvider>
   </Auth0Context.Provider>
 )
 
-const UnauthenticatedProviders = ({ children, initialEntries }) => (
+const UnauthenticatedProviders = ({ children }) => (
   <Auth0Context.Provider
     value={{
       isAuthenticated: false,
@@ -67,36 +66,29 @@ const UnauthenticatedProviders = ({ children, initialEntries }) => (
       getAccessTokenSilently: getFakeAccessToken,
     }}
   >
-    <MemoryRouter initialEntries={initialEntries}>
-      <ThemeProvider theme={theme}>
-        <SyncStatusProvider>
-          <CurrentUserProvider value={undefined}>
-            <HttpResponseErrorHandlerProvider value={() => {}}>
-              <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
-            </HttpResponseErrorHandlerProvider>
-          </CurrentUserProvider>
-        </SyncStatusProvider>
-      </ThemeProvider>
-    </MemoryRouter>
+    <ThemeProvider theme={theme}>
+      <SyncStatusProvider>
+        <CurrentUserProvider value={undefined}>
+          <HttpResponseErrorHandlerProvider value={() => {}}>
+            <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
+          </HttpResponseErrorHandlerProvider>
+        </CurrentUserProvider>
+      </SyncStatusProvider>
+    </ThemeProvider>
   </Auth0Context.Provider>
 )
 
 AuthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
-  initialEntries: PropTypes.arrayOf(PropTypes.string),
   isSyncInProgressOverride: PropTypes.bool,
 }
 AuthenticatedProviders.defaultProps = {
-  initialEntries: undefined,
   isSyncInProgressOverride: false,
 }
 UnauthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
-  initialEntries: PropTypes.arrayOf(PropTypes.string),
 }
-UnauthenticatedProviders.defaultProps = {
-  initialEntries: undefined,
-}
+
 const renderAuthenticated = (
   ui,
   { renderOptions, initialEntries, dexiePerUserDataInstance, isSyncInProgressOverride } = {},
@@ -105,12 +97,13 @@ const renderAuthenticated = (
     getMockDexieInstancesAllSuccess()
   const dexieUserDataDatabaseInstanceToUse =
     dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
+
+  const router = createMemoryRouter([{ path: '*', element: ui }], {
+    initialEntries,
+  })
   const wrapper = ({ children }) => {
     return (
-      <AuthenticatedProviders
-        initialEntries={initialEntries}
-        isSyncInProgressOverride={isSyncInProgressOverride}
-      >
+      <AuthenticatedProviders isSyncInProgressOverride={isSyncInProgressOverride}>
         <DatabaseSwitchboardInstanceProvider
           value={getMockOnlineDatabaseSwitchboardInstance({
             dexiePerUserDataInstance,
@@ -120,7 +113,9 @@ const renderAuthenticated = (
             <DexiePerUserDataInstanceProvider
               value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
             >
-              {children}
+              <ClearPersistedFormDataHackProvider value={router}>
+                <RouterProvider router={router}>{children}</RouterProvider>
+              </ClearPersistedFormDataHackProvider>
             </DexiePerUserDataInstanceProvider>
           </OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
@@ -142,12 +137,21 @@ const renderAuthenticatedOnline = (
     getMockDexieInstancesAllSuccess()
   const dexieUserDataDatabaseInstanceToUse =
     dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
+
+  const router = createMemoryRouter(
+    [
+      {
+        path: '*',
+        element: ui,
+      },
+    ],
+    {
+      initialEntries,
+    },
+  )
   const wrapper = ({ children }) => {
     return (
-      <AuthenticatedProviders
-        initialEntries={initialEntries}
-        isSyncInProgressOverride={isSyncInProgressOverride}
-      >
+      <AuthenticatedProviders isSyncInProgressOverride={isSyncInProgressOverride}>
         <DatabaseSwitchboardInstanceProvider
           value={getMockOnlineDatabaseSwitchboardInstance({
             dexiePerUserDataInstance,
@@ -157,7 +161,9 @@ const renderAuthenticatedOnline = (
             <DexiePerUserDataInstanceProvider
               value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
             >
-              {children}
+              <ClearPersistedFormDataHackProvider value={router}>
+                <RouterProvider router={router}>{children}</RouterProvider>
+              </ClearPersistedFormDataHackProvider>
             </DexiePerUserDataInstanceProvider>
           </OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
@@ -179,14 +185,20 @@ const renderUnauthenticatedOnline = (
     getMockDexieInstancesAllSuccess()
   const dexieUserDataDatabaseInstanceToUse =
     dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
+
+  const router = createMemoryRouter([{ path: '*', element: ui }], {
+    initialEntries,
+  })
   const wrapper = ({ children }) => {
     return (
-      <UnauthenticatedProviders initialEntries={initialEntries}>
+      <UnauthenticatedProviders>
         <OnlineStatusProvider value={{ isAppOnline: true }}>
           <DexiePerUserDataInstanceProvider
             value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
           >
-            {children}
+            <ClearPersistedFormDataHackProvider value={router}>
+              <RouterProvider router={router}>{children}</RouterProvider>
+            </ClearPersistedFormDataHackProvider>
           </DexiePerUserDataInstanceProvider>
         </OnlineStatusProvider>
       </UnauthenticatedProviders>
@@ -204,12 +216,14 @@ const renderAuthenticatedOffline = (
     getMockDexieInstancesAllSuccess()
   const dexieUserDataDatabaseInstanceToUse =
     dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
+
+  const router = createMemoryRouter([{ path: '*', element: ui }], {
+    initialEntries,
+  })
+
   const wrapper = ({ children }) => {
     return (
-      <AuthenticatedProviders
-        initialEntries={initialEntries}
-        isSyncInProgressOverride={isSyncInProgressOverride}
-      >
+      <AuthenticatedProviders isSyncInProgressOverride={isSyncInProgressOverride}>
         <DatabaseSwitchboardInstanceProvider
           value={getMockOfflineDatabaseSwitchboardInstance({
             dexiePerUserDataInstance,
@@ -219,7 +233,9 @@ const renderAuthenticatedOffline = (
             <DexiePerUserDataInstanceProvider
               value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
             >
-              {children}
+              <ClearPersistedFormDataHackProvider value={router}>
+                <RouterProvider router={router}>{children}</RouterProvider>
+              </ClearPersistedFormDataHackProvider>
             </DexiePerUserDataInstanceProvider>
           </OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
@@ -241,14 +257,21 @@ const renderUnauthenticatedOffline = (
     getMockDexieInstancesAllSuccess()
   const dexieUserDataDatabaseInstanceToUse =
     dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
+
+  const router = createMemoryRouter([{ path: '*', element: ui }], {
+    initialEntries,
+  })
+
   const wrapper = ({ children }) => {
     return (
-      <UnauthenticatedProviders initialEntries={initialEntries}>
+      <UnauthenticatedProviders>
         <OnlineStatusProvider value={{ isAppOnline: false }}>
           <DexiePerUserDataInstanceProvider
             value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
           >
-            {children}
+            <ClearPersistedFormDataHackProvider value={router}>
+              <RouterProvider router={router}>{children}</RouterProvider>
+            </ClearPersistedFormDataHackProvider>
           </DexiePerUserDataInstanceProvider>
         </OnlineStatusProvider>
       </UnauthenticatedProviders>

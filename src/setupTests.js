@@ -11,6 +11,7 @@ import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSucces
 
 jest.setTimeout(300000)
 window.URL.createObjectURL = () => {}
+window.confirm = () => true // simulates user clicking OK
 
 jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
   return {

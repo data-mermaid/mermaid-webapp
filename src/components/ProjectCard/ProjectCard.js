@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
@@ -18,7 +18,6 @@ import { useOnlineStatus } from '../../library/onlineStatusContext'
 import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import stopEventPropagation from '../../library/stopEventPropagation'
-import SyncApiDataIntoOfflineStorage from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { IconCopy } from '../icons'
 import { ButtonSecondary } from '../generic/buttons'
@@ -31,21 +30,17 @@ import {
 } from '../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
+import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
-const ProjectCard = ({
-  project,
-  apiSyncInstance,
-  isOfflineReady,
-  addProjectToProjectsPage,
-  ...restOfProps
-}) => {
+const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...restOfProps }) => {
+  const { currentUser } = useCurrentUser()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { name, countries, updated_on, id } = project
-  const { currentUser } = useCurrentUser()
-  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, id)
   const { setIsSyncInProgress } = useSyncStatus()
-  const history = useHistory()
-  const projectUrl = `projects/${id}`
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, id)
+  const navigate = useNavigate()
+  const projectUrl = `/projects/${id}`
 
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
@@ -56,8 +51,8 @@ const ProjectCard = ({
 
     if (isChecked) {
       setIsSyncInProgress(true)
-      apiSyncInstance
-        .pushThenPullAllProjectDataExceptChoices(project.id)
+      databaseSwitchboardInstance
+        .setProjectAsOfflineReady(project.id)
         .then(() => {
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
@@ -78,8 +73,8 @@ const ProjectCard = ({
     }
     if (!isChecked) {
       setIsSyncInProgress(true)
-      apiSyncInstance
-        .pushThenRemoveProjectFromOfflineStorage(project.id)
+      databaseSwitchboardInstance
+        .unsetProjectAsOfflineReady(project.id)
         .then(() => {
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
@@ -109,7 +104,7 @@ const ProjectCard = ({
       ? `${projectUrl}/observers-and-transects`
       : `${projectUrl}/collecting`
 
-    history.push(destinationUrl)
+    navigate(destinationUrl)
   }
 
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
@@ -170,7 +165,6 @@ const ProjectCard = ({
 }
 
 ProjectCard.propTypes = {
-  apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage).isRequired,
   project: projectPropType.isRequired,
   isOfflineReady: PropTypes.bool.isRequired,
   addProjectToProjectsPage: PropTypes.func.isRequired,

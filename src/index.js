@@ -1,5 +1,5 @@
 import { Auth0Provider } from '@auth0/auth0-react'
-import { BrowserRouter } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -13,6 +13,13 @@ import { OnlineStatusProvider } from './library/onlineStatusContext'
 import { SyncStatusProvider } from './App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import dexieCurrentUserInstance from './App/dexieCurrentUserInstance'
 import { DexiePerUserDataInstanceProvider } from './App/dexiePerUserDataInstanceContext'
+import { ClearPersistedFormDataHackProvider } from './App/ClearDirtyFormDataHackContext'
+
+// Upgrading to react router v6 because of dependabot issues and data routers (createBrowserRouter) which is necessary for many functions we use(eg: useNavigate).
+// We keep the jsx routes as defined in app.js instead of having ALL routes defined here because we were not able to have conditional rendering of the loader otherwise
+const router = createBrowserRouter([
+  { path: '*', element: <App dexieCurrentUserInstance={dexieCurrentUserInstance} /> },
+])
 
 ReactDOM.render(
   <React.StrictMode>
@@ -30,15 +37,15 @@ ReactDOM.render(
       cacheLocation="localstorage"
       scope="read:current_user update:current_user_metadata"
     >
-      <BrowserRouter basename={process.env.PUBLIC_URL}>
-        <OnlineStatusProvider>
-          <SyncStatusProvider>
-            <DexiePerUserDataInstanceProvider>
-              <App dexieCurrentUserInstance={dexieCurrentUserInstance} />
-            </DexiePerUserDataInstanceProvider>
-          </SyncStatusProvider>
-        </OnlineStatusProvider>
-      </BrowserRouter>
+      <OnlineStatusProvider>
+        <SyncStatusProvider>
+          <DexiePerUserDataInstanceProvider>
+            <ClearPersistedFormDataHackProvider value={router}>
+              <RouterProvider router={router} />
+            </ClearPersistedFormDataHackProvider>
+          </DexiePerUserDataInstanceProvider>
+        </SyncStatusProvider>
+      </OnlineStatusProvider>
     </Auth0Provider>
   </React.StrictMode>,
   document.getElementById('root'),

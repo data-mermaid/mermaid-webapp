@@ -1,28 +1,47 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Prompt } from 'react-router-dom'
+import { useBlocker } from 'react-router-dom'
 import useBeforeUnloadPrompt from '../../../library/useBeforeUnloadPrompt'
 import language from '../../../language'
+
+function Prompt({ shouldPromptTrigger, message }) {
+  useBlocker(() => {
+    if (shouldPromptTrigger) {
+      // eslint-disable-next-line no-alert
+      return !window.confirm(message)
+    }
+
+    return false
+  })
+
+  return <></>
+}
+
+Prompt.propTypes = {
+  shouldPromptTrigger: PropTypes.bool,
+}
 
 const EnhancedPrompt = ({ shouldPromptTrigger }) => {
   // Capture browser navigation (will not capture front end/react router routing)
   useBeforeUnloadPrompt({ shouldPromptTrigger })
 
   // Display prompt for fornt end/react router routing
-  return (
-      <Prompt
-        when={shouldPromptTrigger}
-        message={language.navigateAwayPrompt}
-      />
-  )
-}
-
-EnhancedPrompt.defaultProps = {
-  shouldPromptTrigger: false
+  return <Prompt shouldPromptTrigger={shouldPromptTrigger} message={language.navigateAwayPrompt} />
 }
 
 EnhancedPrompt.propTypes = {
-  shouldPromptTrigger: PropTypes.bool
+  shouldPromptTrigger: PropTypes.bool,
+}
+EnhancedPrompt.defaultProps = {
+  shouldPromptTrigger: false,
+}
+Prompt.propTypes = {
+  shouldPromptTrigger: PropTypes.bool,
+  message: PropTypes.string.isRequired,
+}
+
+Prompt.defaultProps = {
+  shouldPromptTrigger: false,
 }
 
 export default EnhancedPrompt

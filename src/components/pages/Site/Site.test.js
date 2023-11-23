@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
-import { Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 
@@ -19,9 +19,9 @@ test('Edit Site page - Save button initially disabled, then enabled when form di
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/sites/:siteId">
-      <Site isNewSite={false} />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/sites/:siteId" element={<Site isNewSite={false} />} />
+    </Routes>,
     {
       initialEntries: ['/projects/5/sites/1'],
       dexiePerUserDataInstance,
@@ -48,9 +48,9 @@ test('Edit Site page - Save button disabled and "Required" error valudation mess
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/sites/:siteId">
-      <Site isNewSite={false} />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/sites/:siteId" element={<Site isNewSite={false} />} />
+    </Routes>,
     {
       initialEntries: ['/projects/5/sites/1'],
       dexiePerUserDataInstance,
@@ -77,9 +77,9 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/sites/:siteId">
-      <Site isNewSite={false} />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/sites/:siteId" element={<Site isNewSite={false} />} />
+    </Routes>,
     {
       initialEntries: ['/projects/5/sites/1'],
       dexiePerUserDataInstance,
@@ -131,9 +131,9 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/sites/:siteId">
-      <Site isNewSite={false} />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/sites/:siteId" element={<Site isNewSite={false} />} />
+    </Routes>,
     {
       initialEntries: ['/projects/5/sites/1'],
       dexiePerUserDataInstance,
@@ -171,9 +171,10 @@ test('Edit Site page - enter invalid inputs to longitude shows inline error vali
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/sites/:siteId">
-      <Site isNewSite={false} />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/sites/:siteId" element={<Site isNewSite={false} />} />
+    </Routes>,
+
     {
       initialEntries: ['/projects/5/sites/1'],
       dexiePerUserDataInstance,
