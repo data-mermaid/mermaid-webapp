@@ -31,6 +31,11 @@ import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 
+const StickyObservationTableWrapTh = styled(StickyObservationTable)`
+  tr th {
+    white-space: normal;
+  }
+`
 const StyledColgroup = styled('colgroup')`
   col {
     &.number {
@@ -371,7 +376,7 @@ const ColoniesBleachedObservationTable = ({
         <H2 id="colonies-bleached-label">Observations - Colonies Bleached</H2>
         <>
           <StyledOverflowWrapper>
-            <StickyObservationTable aria-labelledby="colonies-bleached-label">
+            <StickyObservationTableWrapTh aria-labelledby="colonies-bleached-label">
               <StyledColgroup>
                 <col className="number" />
                 <col className="autoWidth" />
@@ -428,7 +433,7 @@ const ColoniesBleachedObservationTable = ({
                 </Tr>
               </thead>
               <tbody>{observationRows}</tbody>
-            </StickyObservationTable>
+            </StickyObservationTableWrapTh>
           </StyledOverflowWrapper>
           <UnderTableRow>
             <ButtonPrimary type="button" onClick={handleAddObservation}>
