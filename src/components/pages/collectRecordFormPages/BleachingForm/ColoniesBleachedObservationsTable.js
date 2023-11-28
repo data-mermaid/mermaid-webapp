@@ -7,7 +7,7 @@ import {
   NewOptionButton,
   ObservationTr,
   StyledOverflowWrapper,
-  StickyObservationTable,
+  StickyObservationTableWrapTh,
   UnderTableRow,
   ButtonRemoveRow,
 } from '../CollectingFormPage.Styles'
@@ -31,11 +31,6 @@ import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 
-const StickyObservationTableWrapTh = styled(StickyObservationTable)`
-  tr th {
-    white-space: normal;
-  }
-`
 const StyledColgroup = styled('colgroup')`
   col {
     &.number {

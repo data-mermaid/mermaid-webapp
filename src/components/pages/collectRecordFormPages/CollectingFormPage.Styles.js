@@ -96,6 +96,11 @@ export const StickyObservationTable = styled(GenericStickyTable)`
     }
   }
 `
+export const StickyObservationTableWrapTh = styled(StickyObservationTable)`
+  tr th {
+    white-space: normal;
+  }
+`
 
 export const UnderTableRow = styled('div')`
   display: flex;
