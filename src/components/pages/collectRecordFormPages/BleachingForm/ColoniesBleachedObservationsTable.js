@@ -7,7 +7,7 @@ import {
   NewOptionButton,
   ObservationTr,
   StyledOverflowWrapper,
-  StickyObservationTable,
+  StickyObservationTableWrapTh,
   UnderTableRow,
   ButtonRemoveRow,
 } from '../CollectingFormPage.Styles'
@@ -371,7 +371,7 @@ const ColoniesBleachedObservationTable = ({
         <H2 id="colonies-bleached-label">Observations - Colonies Bleached</H2>
         <>
           <StyledOverflowWrapper>
-            <StickyObservationTable aria-labelledby="colonies-bleached-label">
+            <StickyObservationTableWrapTh aria-labelledby="colonies-bleached-label">
               <StyledColgroup>
                 <col className="number" />
                 <col className="autoWidth" />
@@ -428,7 +428,7 @@ const ColoniesBleachedObservationTable = ({
                 </Tr>
               </thead>
               <tbody>{observationRows}</tbody>
-            </StickyObservationTable>
+            </StickyObservationTableWrapTh>
           </StyledOverflowWrapper>
           <UnderTableRow>
             <ButtonPrimary type="button" onClick={handleAddObservation}>
