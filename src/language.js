@@ -592,15 +592,15 @@ const helperText = {
   managementRegimeRules: {
     accessRestrictions:
       'Access is restricted, e.g., people outside a community are not allowed to fish here',
-    gearRestrictions: 'There are restrictions on what types of fishing gear can be used',
+    gearRestrictions: 'Restrictions on what types of fishing gear can be used',
     noTake: 'Total extraction ban',
     openAccess: 'Open for fishing and entering',
     partialRestrictions:
       'e.g. periodic closures, size limits, gear restrictions, species restrictions',
     periodicClosure:
       'The area is open and closed as a fisheries management strategy, e.g., rotating octopus closures',
-    sizeLimits: 'There are restrictions on the size of certain target species',
-    speciesRestrictions: 'There are restrictions on what types of species can be caught',
+    sizeLimits: 'Restrictions on the size of certain target species',
+    speciesRestrictions: 'Restrictions on what types of species can be caught',
   },
   getManagementRegimeName: () => (
     <>
