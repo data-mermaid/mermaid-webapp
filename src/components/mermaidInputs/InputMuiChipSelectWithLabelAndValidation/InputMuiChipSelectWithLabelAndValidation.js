@@ -6,7 +6,6 @@ import {
   CustomMenuItem,
   CustomMuiChip,
   CustomMuiSelect,
-  getMenuItemStyle,
 } from './InputMuiChipSelectWithLabelAndValidation.styles'
 import { InputRow, RequiredIndicator } from '../../generic/form'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
@@ -63,7 +62,6 @@ const InputMuiChipSelectWithLabelAndValidation = ({
               key={option.value}
               value={option.value}
               sx={{ fontSize: theme.typography.defaultFontSize }}
-              style={getMenuItemStyle({ option, selectedItems: value, theme })}
             >
               {option.label}
             </CustomMenuItem>
