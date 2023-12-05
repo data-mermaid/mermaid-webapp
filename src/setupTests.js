@@ -12,6 +12,7 @@ import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSucces
 jest.setTimeout(300000)
 window.URL.createObjectURL = () => {}
 window.confirm = () => true // simulates user clicking OK
+window.scrollTo = () => {}
 
 jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
   return {
@@ -57,6 +58,7 @@ configure({ asyncUtilTimeout: 10000 })
 
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen()
+  global.IS_REACT_ACT_ENVIRONMENT = !!process.env.REACT_APP_IGNORE_TESTING_ACT_WARNINGS // suppress missing act warnings or not, defaults to false
 })
 afterEach(() => {
   mockMermaidApiAllSuccessful.resetHandlers()

@@ -1,6 +1,5 @@
 import { rest } from 'msw'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
@@ -17,35 +16,38 @@ import {
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-const saveMR = async () => {
-  userEvent.type(await screen.findByLabelText('Name'), 'Rebecca')
-  userEvent.type(screen.getByLabelText('Secondary Name'), 'Becca')
-  userEvent.type(screen.getByLabelText('Year Established'), '1980')
-  userEvent.type(screen.getByLabelText('Area'), '40')
-  userEvent.click(within(screen.getByLabelText('Parties')).getByLabelText('NGO'))
-  userEvent.click(
+const saveMR = async (user) => {
+  await user.type(await screen.findByLabelText('Name'), 'Rebecca')
+  await user.type(screen.getByLabelText('Secondary Name'), 'Becca')
+  await user.type(screen.getByLabelText('Year Established'), '1980')
+  await user.type(screen.getByLabelText('Area'), '40')
+  await user.click(within(screen.getByLabelText('Parties')).getByLabelText('NGO'))
+  await user.click(
     within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
   )
-  userEvent.selectOptions(
+  await user.selectOptions(
     screen.getByLabelText('Compliance'),
     'f76d7866-5b0d-428d-928c-738c2912d6e0',
   )
-  userEvent.type(screen.getByLabelText('Notes'), 'some notes')
+  await user.type(screen.getByLabelText('Notes'), 'some notes')
 
-  userEvent.click(screen.getByText('Save', { selector: 'button' }))
+  await user.click(screen.getByText('Save', { selector: 'button' }))
 }
 
 describe('Online', () => {
   test('New MR button navigates to new MR form properly', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/management-regimes/'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOnline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/management-regimes/'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    userEvent.click(await screen.findByRole('link', { name: 'New MR' }))
+    await user.click(await screen.findByRole('link', { name: 'New MR' }))
 
     // ensure the were not in edit mode, but new management regime mode
     expect(
@@ -83,13 +85,16 @@ describe('Online', () => {
   test('New MR save success shows saved inputs, toast, and navigates to the edit MR page for the newly created MR', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/management-regimes/new'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOnline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/management-regimes/new'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveMR()
+    await saveMR(user)
 
     expect(
       await screen.findByText('The management regime has been saved on your computer and online.'),
@@ -111,13 +116,16 @@ describe('Online', () => {
   test('New MR save success show new record in MR table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/management-regimes/new'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOnline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/management-regimes/new'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveMR()
+    await saveMR(user)
 
     expect(
       await screen.findByText('The management regime has been saved on your computer and online.'),
@@ -125,10 +133,10 @@ describe('Online', () => {
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
-    userEvent.click(within(sideNav).getByText('Management Regimes'))
+    await user.click(within(sideNav).getByText('Management Regimes'))
 
     // show all the records
-    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '4')
+    await user.selectOptions(await screen.findByTestId('page-size-selector'), '4')
     const table = await screen.findByRole('table')
 
     const tableRows = await screen.findAllByRole('row')
@@ -148,13 +156,16 @@ describe('Online', () => {
       }),
     )
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/management-regimes/new'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOnline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/management-regimes/new'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveMR()
+    await saveMR(user)
 
     expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
       'The management regime has been saved on your computer, but not online.',
@@ -194,13 +205,16 @@ describe('Online', () => {
     )
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/management-regimes/new'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOnline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/management-regimes/new'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveMR()
+    await saveMR(user)
 
     expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
       'The management regime has been saved on your computer, but not online.',

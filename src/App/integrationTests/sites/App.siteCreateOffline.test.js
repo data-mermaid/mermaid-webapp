@@ -1,38 +1,47 @@
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import {
   renderAuthenticatedOffline,
   screen,
+  waitFor,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import App from '../../App'
 
-const saveSite = async () => {
-  userEvent.type(await screen.findByLabelText('Name'), 'Rebecca')
-  userEvent.type(screen.getByLabelText('Country'), 'canad')
+const saveSite = async (user) => {
+  const nameInput = await screen.findByLabelText('Name')
+
+  await user.type(nameInput, 'Rebecca')
+  await waitFor(() => expect(screen.getByLabelText('Name')).toHaveValue('Rebecca'))
+  await user.type(screen.getByLabelText('Country'), 'canad')
   const canadaOption = within(screen.getByTestId('country-select')).getByRole('option', {
     name: 'Canada',
   })
   const countryAutocompleteList = within(screen.getByTestId('country-select')).getByRole('listbox')
 
-  userEvent.selectOptions(countryAutocompleteList, canadaOption)
-  userEvent.type(screen.getByLabelText('Latitude'), '54')
-  userEvent.type(screen.getByLabelText('Longitude'), '45')
-  userEvent.selectOptions(screen.getByLabelText('Exposure'), 'baa54e1d-4263-4273-80f5-35812304b592')
-  userEvent.selectOptions(
+  await user.selectOptions(countryAutocompleteList, canadaOption)
+  await user.type(screen.getByLabelText('Latitude'), '54')
+  await user.type(screen.getByLabelText('Longitude'), '45')
+  await user.selectOptions(
+    screen.getByLabelText('Exposure'),
+    'baa54e1d-4263-4273-80f5-35812304b592',
+  )
+  await user.selectOptions(
     screen.getByLabelText('Reef Type'),
     '16a0a961-df6d-42a5-86b8-bc30f87bab42',
   )
-  userEvent.selectOptions(
+  await user.selectOptions(
     screen.getByLabelText('Reef Zone'),
     '06ea17cd-5d1d-46ae-a654-64901e2a9f96',
   )
-  userEvent.type(screen.getByLabelText('Notes'), 'la dee dah')
 
-  userEvent.click(screen.getByText('Save', { selector: 'button' }))
+  await user.type(screen.getByLabelText('Notes'), 'la dee dah')
+  const saveButton = screen.getByText('Save', { selector: 'button' })
+
+  await waitFor(() => expect(saveButton).toBeEnabled())
+  await user.click(saveButton)
 }
 
 describe('offline', () => {
@@ -41,13 +50,16 @@ describe('offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/sites/'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/sites/'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    userEvent.click(await screen.findByRole('link', { name: 'New site' }))
+    await user.click(await screen.findByRole('link', { name: 'New site' }))
 
     // ensure the were not in edit mode, but new site mode
     expect(
@@ -72,13 +84,16 @@ describe('offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/sites/new'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/sites/new'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveSite()
+    await saveSite(user)
 
     expect(await screen.findByText('The site has been saved on your computer.'))
 
@@ -103,22 +118,25 @@ describe('offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/sites/new'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/sites/new'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveSite()
+    await saveSite(user)
 
     expect(await screen.findByText('The site has been saved on your computer.'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
-    userEvent.click(within(sideNav).getByText('Sites'))
+    await user.click(within(sideNav).getByText('Sites'))
 
     // show all the records
-    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '5')
+    await user.selectOptions(await screen.findByTestId('page-size-selector'), '5')
     const table = await screen.findByRole('table')
 
     const tableRows = await screen.findAllByRole('row')
@@ -138,13 +156,16 @@ describe('offline', () => {
 
     dexiePerUserDataInstance.project_sites.put = () => Promise.reject(dexieError)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/sites/new'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/sites/new'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveSite()
+    await saveSite(user)
 
     expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
       `The site failed to save both on your computer and online.`,

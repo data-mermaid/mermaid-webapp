@@ -100,11 +100,9 @@ const FishBeltObservationTable = ({
   fishGenera,
   fishSpecies,
 }) => {
-  const {
-    size_bin: fishBinSelected,
-    len_surveyed: transectLengthSurveyed,
-    width: widthId,
-  } = formik?.values
+  const fishBinSelected = formik?.values?.size_bin
+  const transectLengthSurveyed = formik?.values?.len_surveyed
+  const widthId = formik?.values?.width
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
@@ -577,6 +575,9 @@ FishBeltObservationTable.propTypes = {
     values: PropTypes.shape({
       interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       interval_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      size_bin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     }),
     setFieldValue: PropTypes.func,
   }).isRequired,

@@ -1,7 +1,7 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { rest } from 'msw'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import {
   screen,
   renderAuthenticatedOnline,
@@ -18,20 +18,23 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 test('Edit Bleaching collect record - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/bleachingqc/60'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
-  userEvent.clear(await screen.findByLabelText('Depth'))
-  userEvent.type(screen.getByLabelText('Depth'), '45')
+  await user.clear(await screen.findByLabelText('Depth'))
+  await user.type(screen.getByLabelText('Depth'), '45')
 
   expect(screen.getByText('Save', { selector: 'button' }))
 
   expect(screen.getByText('Validate', { selector: 'button' })).toBeDisabled()
 
-  userEvent.click(
+  await user.click(
     screen.getByText('Save', {
       selector: 'button',
     }),
@@ -49,13 +52,16 @@ test('Edit Bleaching collect record - Save button starts with Saved status, make
 test('Validate Bleaching collect record: fails to validate, shows button able to run validation again.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/bleachingqc/60'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
-  userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
+  await user.click(await screen.findByText('Validate', { selector: 'button' }))
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
@@ -93,11 +99,14 @@ test('Validate Bleaching collect record: fails to validate, shows button able to
 test('Validate & submit Bleaching collect record: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/bleachingqc/60'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
@@ -145,7 +154,7 @@ test('Validate & submit Bleaching collect record: validation passes, shows valid
     }),
   )
 
-  userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
+  await user.click(await screen.findByText('Validate', { selector: 'button' }))
 
   expect(await screen.findByText('Validating', { selector: 'button' }))
 
@@ -156,7 +165,7 @@ test('Validate & submit Bleaching collect record: validation passes, shows valid
 
   expect(await screen.findByText('Submit', { selector: 'button' })).toBeEnabled()
 
-  userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
+  await user.click(await screen.findByText('Submit', { selector: 'button' }))
 
   expect(await screen.findByText('Submitting', { selector: 'button' })).toBeDisabled()
 })
@@ -164,13 +173,16 @@ test('Validate & submit Bleaching collect record: validation passes, shows valid
 test('Initial load of successfully validated record', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/bleachingqc/60'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
-  userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
+  await user.click(await screen.findByText('Validate', { selector: 'button' }))
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself

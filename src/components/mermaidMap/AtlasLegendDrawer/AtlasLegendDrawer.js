@@ -180,7 +180,12 @@ const AtlasLegendDrawer = ({
       <SliderLegendPanel isOpen={drawerOpen}>
         <LegendHeader>
           Allen Coral Atlas{' '}
-          <a href="https://allencoralatlas.org/atlas" target="_blank" rel="noreferrer">
+          <a
+            href="https://allencoralatlas.org/atlas"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Visit Allan Coral Atlas"
+          >
             <IconExternalLink />
           </a>
         </LegendHeader>

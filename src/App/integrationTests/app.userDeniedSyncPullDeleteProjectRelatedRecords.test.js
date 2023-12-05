@@ -1,7 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { rest } from 'msw'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import {
   screen,
@@ -22,11 +21,14 @@ project managements, project sites, and project profiles`, async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-    initialEntries: ['/projects/5/collecting/'],
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+      initialEntries: ['/projects/5/collecting/'],
+    },
+  )
 
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
@@ -144,7 +146,7 @@ project managements, project sites, and project profiles`, async () => {
   // click another project-related page to trigger a sync and use the mock api with sync errors
   const sitesSideNavLink = screen.getByRole('link', { name: 'Sites' })
 
-  userEvent.click(sitesSideNavLink)
+  await user.click(sitesSideNavLink)
 
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))

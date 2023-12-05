@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import {
   screen,
   renderAuthenticatedOffline,
@@ -17,18 +17,21 @@ describe('Offline', () => {
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthicpit/50'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/benthicpit/50'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     // make a change
 
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
+    await user.clear(await screen.findByLabelText('Depth'))
+    await user.type(screen.getByLabelText('Depth'), '45')
 
-    userEvent.click(
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),
@@ -59,18 +62,21 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthicpit/50'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/benthicpit/50'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     // test all observers format too
     const addObservationButton = await screen.findByRole('button', {
       name: 'Add Row',
     })
 
-    userEvent.click(addObservationButton)
+    await user.click(addObservationButton)
 
     const observationsTable = (await screen.findAllByRole('table'))[0]
 
@@ -82,7 +88,7 @@ describe('Offline', () => {
     const newBenthicAttributeInput = screen.getAllByLabelText('Benthic Attribute')[3]
     const newGrowthFromInput = screen.getAllByLabelText('Growth Form')[3]
 
-    userEvent.type(newBenthicAttributeInput, 'dead')
+    await user.type(newBenthicAttributeInput, 'dead')
 
     const benthicAttributeList = screen.getAllByRole('listbox')[3]
 
@@ -90,11 +96,11 @@ describe('Offline', () => {
       name: 'Dead Coral with Algae',
     })
 
-    userEvent.selectOptions(benthicAttributeList, deadCoralOption)
+    await user.selectOptions(benthicAttributeList, deadCoralOption)
 
-    userEvent.selectOptions(newGrowthFromInput, 'Columnar')
+    await user.selectOptions(newGrowthFromInput, 'Columnar')
 
-    userEvent.click(
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),
@@ -120,18 +126,21 @@ describe('Offline', () => {
     // make sure the next save will fail
     dexiePerUserDataInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthicpit/50'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/benthicpit/50'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     // make an unsaved change
     const depthInput = await screen.findByLabelText('Depth')
 
-    userEvent.clear(depthInput)
-    userEvent.type(depthInput, '45')
-    userEvent.click(
+    await user.clear(depthInput)
+    await user.type(depthInput, '45')
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),

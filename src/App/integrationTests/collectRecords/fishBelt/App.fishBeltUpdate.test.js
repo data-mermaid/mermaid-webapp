@@ -1,10 +1,12 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import {
   screen,
   renderAuthenticatedOffline,
   within,
+  waitFor,
+  waitForElementToBeRemoved,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -17,18 +19,25 @@ describe('Offline', () => {
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/fishbelt/2'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
+    await screen.findByLabelText('project pages loading indicator')
+    await waitForElementToBeRemoved(() =>
+      screen.queryByLabelText('project pages loading indicator'),
+    )
     // make a change
 
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
+    await user.clear(screen.getByLabelText('Depth'))
+    await user.type(screen.getByLabelText('Depth'), '45')
 
-    userEvent.click(
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),
@@ -60,18 +69,21 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/fishbelt/2'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     // test all observers format too
     const addObservationButton = await screen.findByRole('button', {
       name: 'Add Row',
     })
 
-    userEvent.click(addObservationButton)
+    await user.click(addObservationButton)
 
     const observationsTable = (await screen.findAllByRole('table'))[0]
 
@@ -85,7 +97,7 @@ describe('Offline', () => {
     const newSizeInput = screen.getAllByLabelText('Size (cm)')[4]
     const newCountInput = screen.getAllByLabelText('Count')[3]
 
-    userEvent.type(newFishNameInput, 'neb')
+    await user.type(newFishNameInput, 'neb')
 
     const fishNameList = screen.getAllByRole('listbox')[3]
 
@@ -93,13 +105,13 @@ describe('Offline', () => {
       name: 'Nebrius',
     })
 
-    userEvent.selectOptions(fishNameList, nebriusOption)
+    await user.selectOptions(fishNameList, nebriusOption)
 
-    userEvent.selectOptions(newSizeInput, '37.5')
+    await user.selectOptions(newSizeInput, '37.5')
 
-    userEvent.type(newCountInput, '88')
+    await user.type(newCountInput, '88')
 
-    userEvent.click(
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),
@@ -121,18 +133,21 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/fishbelt/2'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     // test all observers format too
     const addObservationButton = await screen.findByRole('button', {
       name: 'Add Row',
     })
 
-    userEvent.click(addObservationButton)
+    await user.click(addObservationButton)
 
     const observationsTable = (await screen.findAllByRole('table'))[0]
 
@@ -144,15 +159,15 @@ describe('Offline', () => {
     // the first record technically has two size inputs (because its 50+), so this one is at index 4
     const newSizeInput = screen.getAllByLabelText('Size (cm)')[4]
 
-    userEvent.selectOptions(newSizeInput, '50')
+    await user.selectOptions(newSizeInput, '50')
 
     const newSizePlus50Input = screen.getAllByLabelText('Size (cm)')[5]
 
-    // we cant use userEvent.clear or {backspace} for whatever reason here. Maybe related to this issue https://github.com/testing-library/user-event/issues/356
+    // we cant use user.clear or {backspace} for whatever reason here. Maybe related to this issue https://github.com/testing-library/user-event/issues/356
     // so this typing is just appending to the existing '50' in the input.
-    userEvent.type(newSizePlus50Input, '367')
+    await user.type(newSizePlus50Input, '367')
 
-    userEvent.click(
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),
@@ -175,18 +190,28 @@ describe('Offline', () => {
     // make sure the next save will fail
     dexiePerUserDataInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/fishbelt/2'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
+
+    await screen.findByLabelText('project pages loading indicator')
+    await waitForElementToBeRemoved(() =>
+      screen.queryByLabelText('project pages loading indicator'),
+    )
 
     // make an unsaved change
-    const depthInput = await screen.findByLabelText('Depth')
+    const depthInput = screen.getByLabelText('Depth')
 
-    userEvent.clear(depthInput)
-    userEvent.type(depthInput, '45')
-    userEvent.click(
+    await user.clear(depthInput)
+    await user.type(depthInput, '45')
+    await waitFor(() => expect(depthInput).toHaveValue(45))
+
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),

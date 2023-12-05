@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import { rest } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
@@ -91,7 +91,7 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
@@ -100,7 +100,7 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
   expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
 
@@ -123,7 +123,7 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
     within(coloniesBleachedObservationTable).queryAllByLabelText('Passed Validation').length,
   ).toEqual(2)
 
-  userEvent.click(
+  await user.click(
     within(coloniesBleachedObservationTable).getByRole('checkbox', { name: 'Ignore warning' }),
   )
 
@@ -220,7 +220,7 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
@@ -229,7 +229,7 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
   expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
 
@@ -250,7 +250,7 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
     within(percentCoverObservationTable).queryAllByLabelText('Passed Validation').length,
   ).toEqual(2)
 
-  userEvent.click(
+  await user.click(
     within(percentCoverObservationTable).getByRole('checkbox', { name: 'Ignore warning' }),
   )
 
@@ -310,7 +310,7 @@ test('user can reset dismissed record-level warnings', async () => {
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
@@ -319,7 +319,7 @@ test('user can reset dismissed record-level warnings', async () => {
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
   expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
 
@@ -327,7 +327,7 @@ test('user can reset dismissed record-level warnings', async () => {
 
   expect(within(recordLevelValidationsSection).getByText('ignored')).toBeInTheDocument()
 
-  userEvent.click(
+  await user.click(
     await within(recordLevelValidationsSection).findByRole('checkbox', { name: 'Ignore warning' }),
   )
 
@@ -502,7 +502,7 @@ test('Bleaching validation: user edits non-observation input with ignored valida
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
@@ -511,7 +511,7 @@ test('Bleaching validation: user edits non-observation input with ignored valida
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
   expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
 
@@ -544,33 +544,33 @@ test('Bleaching validation: user edits non-observation input with ignored valida
   expect(within(observersRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(observersRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
-  userEvent.selectOptions(within(siteRow).getByLabelText('Site'), '1')
+  await user.selectOptions(within(siteRow).getByLabelText('Site'), '1')
   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.selectOptions(within(managementRow).getByLabelText('Management'), '1')
+  await user.selectOptions(within(managementRow).getByLabelText('Management'), '1')
   await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(depthRow).getByLabelText('Depth'), '1')
+  await user.type(within(depthRow).getByLabelText('Depth'), '1')
   await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(sampleDateRow).getByLabelText('Sample Date'), '2021-11-09')
+  await user.type(within(sampleDateRow).getByLabelText('Sample Date'), '2021-11-09')
   await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(sampleTimeRow).getByLabelText('Sample Time'), '02:39 PM')
+  await user.type(within(sampleTimeRow).getByLabelText('Sample Time'), '02:39 PM')
   await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(labelRow).getByLabelText('Label'), '1')
+  await user.type(within(labelRow).getByLabelText('Label'), '1')
   await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(quadratSizeRow).getByLabelText('Quadrat Size'), '1')
+  await user.type(within(quadratSizeRow).getByLabelText('Quadrat Size'), '1')
   await waitFor(() => expect(within(quadratSizeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(notesRow).getByLabelText('Notes'), '1')
+  await user.type(within(notesRow).getByLabelText('Notes'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   const observersList = within(observersRow).getByLabelText('Observers')
 
-  userEvent.click(within(observersList).getByText('Melissa Nunes'))
+  await user.click(within(observersList).getByText('Melissa Nunes'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // make act error go away

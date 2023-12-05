@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
@@ -226,7 +226,7 @@ test('Projects can be sorted by countries', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<Projects />, {
+  const { user } = renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -237,7 +237,7 @@ test('Projects can be sorted by countries', async () => {
 
   const selectMenu = screen.getAllByRole('combobox')[0]
 
-  userEvent.selectOptions(selectMenu, ['countries'])
+  await user.selectOptions(selectMenu, ['countries'])
 
   const topProjectCard = screen.getAllByRole('listitem')[0]
 
@@ -250,7 +250,7 @@ test('Projects can be sorted by number of sites', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<Projects />, {
+  const { user } = renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -261,7 +261,7 @@ test('Projects can be sorted by number of sites', async () => {
 
   const selectMenu = screen.getAllByRole('combobox')[0]
 
-  userEvent.selectOptions(selectMenu, ['num_sites'])
+  await user.selectOptions(selectMenu, ['num_sites'])
 
   const topProjectCard = screen.getAllByRole('listitem')[0]
 
@@ -274,7 +274,7 @@ test('Projects can be sorted by updated on date', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<Projects />, {
+  const { user } = renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -285,7 +285,7 @@ test('Projects can be sorted by updated on date', async () => {
 
   const selectMenu = screen.getAllByRole('combobox')[0]
 
-  userEvent.selectOptions(selectMenu, ['updated_on'])
+  await user.selectOptions(selectMenu, ['updated_on'])
 
   const topProjectCard = screen.getAllByRole('listitem')[0]
 
@@ -298,7 +298,7 @@ test('Project sorted descending', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<Projects />, {
+  const { user } = renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -309,7 +309,7 @@ test('Project sorted descending', async () => {
 
   const sortProjects = screen.getByLabelText('sort-projects')
 
-  userEvent.click(sortProjects)
+  await user.click(sortProjects)
 
   const topProjectCard = screen.getAllByRole('listitem')[0]
 
@@ -321,7 +321,7 @@ test('Project filter filters by name and country', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<Projects />, {
+  const { user } = renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -335,7 +335,7 @@ test('Project filter filters by name and country', async () => {
   })
 
   // Filter by name
-  userEvent.type(filterProjects, '"Project V"')
+  await user.type(filterProjects, '"Project V"')
 
   let projectCards = screen.getAllByTestId('project-card')
 
@@ -343,7 +343,7 @@ test('Project filter filters by name and country', async () => {
   expect(within(projectCards[0]).getByText('Project V'))
 
   // Filter by name and country
-  userEvent.type(filterProjects, '{selectall}{del} "Project V" America')
+  await user.type(filterProjects, '{selectall}{del} "Project V" America')
 
   projectCards = screen.getAllByTestId('project-card')
 
@@ -354,7 +354,7 @@ test('Project filter can accomodate words containing apostrophes', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<Projects />, {
+  const { user } = renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -368,7 +368,7 @@ test('Project filter can accomodate words containing apostrophes', async () => {
   })
 
   // Filter by name
-  userEvent.type(filterProjects, '"foo\'s"')
+  await user.type(filterProjects, '"foo\'s"')
 
   const projectCards = screen.getAllByTestId('project-card')
 

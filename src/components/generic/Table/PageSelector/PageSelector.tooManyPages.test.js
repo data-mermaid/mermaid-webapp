@@ -1,5 +1,5 @@
-import '@testing-library/jest-dom/extend-expect'
-import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
+
 import React from 'react'
 import {
   renderAuthenticatedOnline,
@@ -72,10 +72,10 @@ test('PageSelector with more than 8 pages shows the next and previous buttons as
   expect(screen.getByRole('button', { name: /back/i })).toBeDisabled()
   expect(screen.getByRole('button', { name: /next/i })).toBeDisabled()
 })
-test('PageSelector with more than 8 pages calls onGoToPage with the correct page when a page button is clicked', () => {
+test('PageSelector with more than 8 pages calls onGoToPage with the correct page when a page button is clicked', async () => {
   const mockFunction = jest.fn()
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={1}
       nextDisabled
@@ -89,16 +89,16 @@ test('PageSelector with more than 8 pages calls onGoToPage with the correct page
 
   expect(mockFunction).not.toHaveBeenCalled()
 
-  userEvent.click(screen.getByText('1'))
+  await user.click(screen.getByText('1'))
   expect(mockFunction).toHaveBeenCalledWith(0)
 
-  userEvent.click(screen.getByText('9'))
+  await user.click(screen.getByText('9'))
   expect(mockFunction).toHaveBeenCalledWith(8)
 })
 test('PageSelector with more than 8 pages calls onNextClick when the next button is clicked', async () => {
   const mockFunction = jest.fn()
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={1}
       nextDisabled={false}
@@ -112,15 +112,15 @@ test('PageSelector with more than 8 pages calls onNextClick when the next button
 
   expect(mockFunction).not.toHaveBeenCalled()
 
-  userEvent.click(screen.getByRole('button', { name: /next/i }))
+  await user.click(screen.getByRole('button', { name: /next/i }))
 
   await waitFor(() => expect(mockFunction).toHaveBeenCalledTimes(1))
 })
 
-test('PageSelector with more than 8 pages calls onPreviousClick when the next button is clicked', () => {
+test('PageSelector with more than 8 pages calls onPreviousClick when the next button is clicked', async () => {
   const mockFunction = jest.fn()
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={1}
       nextDisabled={false}
@@ -134,7 +134,7 @@ test('PageSelector with more than 8 pages calls onPreviousClick when the next bu
 
   expect(mockFunction).not.toHaveBeenCalled()
 
-  userEvent.click(screen.getByRole('button', { name: /back/i }))
+  await user.click(screen.getByRole('button', { name: /back/i }))
 
   expect(mockFunction).toHaveBeenCalledTimes(1)
 })

@@ -1,5 +1,4 @@
-import '@testing-library/jest-dom/extend-expect'
-import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -46,7 +45,7 @@ test('Site Records table sorts properly by Name column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/sites" element={<Sites />} />
     </Routes>,
@@ -64,19 +63,19 @@ test('Site Records table sorts properly by Name column', async () => {
   const tableRows = within(table).getAllByRole('row')
 
   // click the Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Name'))
+  await user.dblClick(within(table).getByText('Name'))
 
   expect(within(tableRows[1]).getByText('Site A'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Name'))
+  await user.click(within(table).getByText('Name'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Site A'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Name'))
+  await user.click(within(table).getByText('Name'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -88,7 +87,7 @@ test('Site Records table sorts properly by Reef Type column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/sites" element={<Sites />} />
     </Routes>,
@@ -106,19 +105,19 @@ test('Site Records table sorts properly by Reef Type column', async () => {
   const tableRows = within(table).getAllByRole('row')
 
   // click the Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Name'))
+  await user.dblClick(within(table).getByText('Name'))
 
   expect(within(tableRows[1]).getByText('fringing'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Reef Type'))
+  await user.click(within(table).getByText('Reef Type'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('atoll'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Reef Type'))
+  await user.click(within(table).getByText('Reef Type'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -130,7 +129,7 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/sites" element={<Sites />} />
     </Routes>,
@@ -148,19 +147,19 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
   const tableRows = within(table).getAllByRole('row')
 
   // click the Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Name'))
+  await user.dblClick(within(table).getByText('Name'))
 
   expect(within(tableRows[1]).getByText('fore reef'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Reef Zone'))
+  await user.click(within(table).getByText('Reef Zone'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('back reef'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Reef Zone'))
+  await user.click(within(table).getByText('Reef Zone'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -172,7 +171,7 @@ test('Site Records table sorts properly by Exposure column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/sites" element={<Sites />} />
     </Routes>,
@@ -192,17 +191,17 @@ test('Site Records table sorts properly by Exposure column', async () => {
   expect(within(tableRows[1]).getByText('exposed'))
 
   // click the Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Name'))
+  await user.dblClick(within(table).getByText('Name'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Exposure'))
+  await user.click(within(table).getByText('Exposure'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('exposed'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Exposure'))
+  await user.click(within(table).getByText('Exposure'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 

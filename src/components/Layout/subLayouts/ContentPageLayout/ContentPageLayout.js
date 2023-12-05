@@ -96,9 +96,9 @@ const ContentPageLayout = ({
                       {toolbar && (
                         <ContentToolbar isToolbarSticky={isToolbarSticky}>{toolbar}</ContentToolbar>
                       )}
-                        <ErrorBoundary>
-                          <Content>{content}</Content>
-                        </ErrorBoundary>
+                      <ErrorBoundary>
+                        <Content>{content}</Content>
+                      </ErrorBoundary>
                     </>
                   )}
                 </ContentWrapper>

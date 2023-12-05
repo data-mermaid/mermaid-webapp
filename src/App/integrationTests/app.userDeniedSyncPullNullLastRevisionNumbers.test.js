@@ -1,7 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { rest } from 'msw'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import {
   screen,
@@ -23,10 +22,13 @@ and project profiles to ensure the user can pull fresh data if they are given pe
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   expect(await screen.findByText('Projects', { selector: 'h1' }))
 
@@ -164,7 +166,7 @@ and project profiles to ensure the user can pull fresh data if they are given pe
     { name: 'Collect' },
   )
 
-  userEvent.click(linkToCollectingPageForProjectWithId1)
+  await user.click(linkToCollectingPageForProjectWithId1)
 
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))

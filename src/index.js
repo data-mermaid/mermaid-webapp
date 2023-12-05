@@ -1,7 +1,7 @@
 import { Auth0Provider } from '@auth0/auth0-react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import './index.css'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -21,7 +21,10 @@ const router = createBrowserRouter([
   { path: '*', element: <App dexieCurrentUserInstance={dexieCurrentUserInstance} /> },
 ])
 
-ReactDOM.render(
+const container = document.getElementById('root')
+const root = createRoot(container)
+
+root.render(
   <React.StrictMode>
     <Auth0Provider
       domain={process.env.REACT_APP_AUTH0_DOMAIN}
@@ -48,7 +51,6 @@ ReactDOM.render(
       </OnlineStatusProvider>
     </Auth0Provider>
   </React.StrictMode>,
-  document.getElementById('root'),
 )
 
 // If you want your app to work offline and load faster, you can change

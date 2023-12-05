@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { rest } from 'msw'
 import React from 'react'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
@@ -21,6 +21,7 @@ test('Appropriate online status message shows when navigator is online', async (
     dexieCurrentUserInstance,
   })
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
+
   expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
     "You're ONLINE",
   )
@@ -37,6 +38,7 @@ test('Appropriate online status message shows when navigator is offline', async 
     dexieCurrentUserInstance,
   })
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
+
   expect(await screen.findByTestId('offline-toggle-switch-label')).not.toHaveTextContent(
     "You're ONLINE",
   )
@@ -53,6 +55,7 @@ test('Appropriate online status message shows when server is reachable', async (
     dexieCurrentUserInstance,
   })
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
+
   expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
     "You're ONLINE",
   )
