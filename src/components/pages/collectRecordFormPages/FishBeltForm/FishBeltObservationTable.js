@@ -166,14 +166,12 @@ const FishBeltObservationTable = ({
 
   const handlePopoverButtonClick = useCallback(
     ({ observationId, fishNameId }) => {
-      const fishNameInfo = [...fishSpecies, ...fishGenera, ...fishFamilies].find(
-        (item) => item.id === fishNameId,
-      )
-
       const popoverTable = getFishNameTable({
-        fishNameInfo,
         fishFamilies,
         choices,
+        fishGenera,
+        fishSpecies,
+        fishNameId,
       })
 
       setFishNamePopoverContent(popoverTable)
