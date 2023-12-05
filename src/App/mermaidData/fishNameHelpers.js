@@ -56,7 +56,17 @@ export const getFishNameOptions = ({ species, genera, families, groupings = [] }
   return [...speciesOptions, ...generaAndFamiliesOptions]
 }
 
-export const getFishNameTable = ({ fishNameInfo, fishFamilies, choices }) => {
+export const getFishNameTable = ({
+  fishFamilies,
+  choices,
+  fishGenera,
+  fishSpecies,
+  fishNameId,
+}) => {
+  const fishNameInfo = [...fishSpecies, ...fishGenera, ...fishFamilies].find(
+    (item) => item.id === fishNameId,
+  )
+
   const tableLanguage = language.pages.collectRecord.fishNamePopover
 
   const TableContainer = styled('div')`
@@ -104,15 +114,20 @@ export const getFishNameTable = ({ fishNameInfo, fishFamilies, choices }) => {
     ? `${fishNameInfo.max_length} (${fishNameInfo.max_length_type})`
     : fishNameInfo.max_length
 
+  const fishFamilyId =
+    fishNameInfo.family ??
+    fishGenera.find((genusInfo) => genusInfo.id === fishNameInfo.genus)?.family
+  const fishFamilyName = fishFamilies.find((item) => item.id === fishFamilyId)?.name
+
   return (
     <TableContainer>
       <label htmlFor="popoverTable">{fishNameInfo.display_name ?? fishNameInfo.name}</label>
       <Table id="popoverTable">
         <tbody>
-          {fishNameInfo.family ? (
+          {fishFamilyName ? (
             <Tr>
               <Td as="th">{tableLanguage.family}</Td>
-              <Td>{fishFamilies.find((item) => item.id === fishNameInfo.family).name}</Td>
+              <Td>{fishFamilyName}</Td>
             </Tr>
           ) : null}
           <Tr>
