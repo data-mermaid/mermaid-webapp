@@ -186,6 +186,7 @@ const HabitatComplexityObservationsTable = ({
               aria-labelledby="habitat-complexity-score-label"
               autoFocus={autoFocusAllowed}
             >
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <option value=""> </option>
               {habitatComplexityScoreOptions.map((item) => (
                 <option key={item.value} value={item.value}>

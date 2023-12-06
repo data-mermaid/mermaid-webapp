@@ -162,6 +162,7 @@ const CollectRecordFormPage = ({
   const isMounted = useIsMounted()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const observationTableRef = useRef(null)
+  const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new record is saved (and that triggers a navigation to its new page)
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
   const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
@@ -388,6 +389,8 @@ const CollectRecordFormPage = ({
         protocol: sampleUnitName,
       })
       .then((collectRecordResponse) => {
+        setIsFormDirty(false)
+        formik.resetForm({ values: formik.values }) // this resets formik's dirty state
         toast.success(...getToastArguments(language.success.collectRecordSave))
         clearPersistedUnsavedFormikData()
         clearPersistedUnsavedObservationsTable1Data()
@@ -395,8 +398,6 @@ const CollectRecordFormPage = ({
         setAreObservationsInputsDirty(false)
         setSaveButtonState(buttonGroupStates.saved)
         setValidateButtonState(buttonGroupStates.validatable)
-        setIsFormDirty(false)
-        formik.resetForm({ values: formik.values }) // this resets formik's dirty state
         handleCollectRecordChange(collectRecordResponse)
 
         if (isNewRecord) {
@@ -625,7 +626,7 @@ const CollectRecordFormPage = ({
       />
 
       {displayLoadingModal && <LoadingModal />}
-      <EnhancedPrompt shouldPromptTrigger={formik.dirty || areObservationsInputsDirty} />
+      <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
     </>
   )
 }

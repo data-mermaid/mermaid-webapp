@@ -1,5 +1,5 @@
-import '@testing-library/jest-dom/extend-expect'
-import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
+
 import React from 'react'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
@@ -11,10 +11,13 @@ test('Clicking anywhere on a project card navigates to the project collect page 
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOffline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   expect(
     await screen.findByText('Projects', {
@@ -24,7 +27,7 @@ test('Clicking anywhere on a project card navigates to the project collect page 
 
   const projectCard = screen.getAllByRole('listitem')[0]
 
-  userEvent.click(projectCard)
+  await user.click(projectCard)
 
   expect(
     await screen.findByText('Collecting', {

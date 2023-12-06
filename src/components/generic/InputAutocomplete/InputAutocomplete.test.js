@@ -1,5 +1,5 @@
-import '@testing-library/jest-dom/extend-expect'
-import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
+
 import React from 'react'
 import {
   renderAuthenticatedOffline,
@@ -20,8 +20,8 @@ const options = [
   { label: 'label10', value: 'value10' },
 ]
 
-test('InputAutocomplete: default no results view', () => {
-  renderAuthenticatedOffline(
+test('InputAutocomplete: default no results view', async () => {
+  const { user } = renderAuthenticatedOffline(
     <InputAutocomplete options={options} onChange={() => {}} id="someId" />,
   )
 
@@ -29,13 +29,13 @@ test('InputAutocomplete: default no results view', () => {
 
   expect(noResults).not.toBeInTheDocument()
 
-  userEvent.type(screen.getByRole('textbox'), 'teiwhjfkdsjfskdl')
+  await user.type(screen.getByRole('textbox'), 'teiwhjfkdsjfskdl')
 
   expect(screen.getByTestId('noResult')).toBeInTheDocument()
 })
 
-test('InputAutocomplete: custom no results view', () => {
-  renderAuthenticatedOffline(
+test('InputAutocomplete: custom no results view', async () => {
+  const { user } = renderAuthenticatedOffline(
     <InputAutocomplete
       id="someId"
       options={options}
@@ -48,7 +48,7 @@ test('InputAutocomplete: custom no results view', () => {
   expect(screen.queryByText('No Results')).not.toBeInTheDocument()
   expect(screen.queryByText('Custom View')).not.toBeInTheDocument()
 
-  userEvent.type(screen.getByRole('textbox'), 'teiwhjfkdsjfskdl')
+  await user.type(screen.getByRole('textbox'), 'teiwhjfkdsjfskdl')
 
   expect(screen.getByText('Custom View')).toBeInTheDocument()
 })

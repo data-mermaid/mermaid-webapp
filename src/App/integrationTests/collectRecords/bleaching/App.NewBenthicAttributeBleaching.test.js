@@ -1,12 +1,12 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { rest } from 'msw'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
+  waitFor,
   waitForElementToBeRemoved,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
@@ -17,11 +17,14 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 test('Bleaching collect record observations add new benthic attribute - filling out new attribute form adds a new attribute to dexie and the observation benthic attribute input', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/bleachingqc/60'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   // loading indicator is weird in integration tests, so we wait for the page title
   await screen.findByTestId('edit-collect-record-form-title')
@@ -53,20 +56,20 @@ test('Bleaching collect record observations add new benthic attribute - filling 
   const firstBenthicAttributeInput =
     within(observationsTable).getAllByDisplayValue('Dead Coral with Algae')[0]
 
-  userEvent.type(firstBenthicAttributeInput, 'supercalifragilistic')
+  await user.type(firstBenthicAttributeInput, 'supercalifragilistic')
 
   const noResultsButton = await screen.findByRole('button', {
     name: 'Propose New Benthic Attribute...',
   })
 
-  userEvent.click(noResultsButton)
+  await user.click(noResultsButton)
 
   const modal = screen.getByLabelText('Add New Benthic Attribute')
 
   const parentInput = await within(modal).findByLabelText('Parent')
   const nameInput = within(modal).getByLabelText('Name')
 
-  userEvent.type(parentInput, 'Dead')
+  await user.type(parentInput, 'Dead')
 
   const parentAutocompleteList = within(modal).getByRole('listbox')
 
@@ -74,15 +77,15 @@ test('Bleaching collect record observations add new benthic attribute - filling 
     name: 'Dead Coral with Algae',
   })
 
-  userEvent.selectOptions(parentAutocompleteList, deadCoralOption)
+  await user.selectOptions(parentAutocompleteList, deadCoralOption)
 
-  userEvent.type(nameInput, 'unicorn')
+  await user.type(nameInput, 'unicorn')
 
   const nextScreenButton = within(modal).getByRole('button', {
     name: 'Next',
   })
 
-  userEvent.click(nextScreenButton)
+  await user.click(nextScreenButton)
 
   expect(
     await within(modal).findByText(
@@ -102,7 +105,7 @@ test('Bleaching collect record observations add new benthic attribute - filling 
     name: 'Send to MERMAID for review',
   })
 
-  userEvent.click(submitButton)
+  await user.click(submitButton)
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('Add New Benthic Attribute'))
   const benthicPitFormAfterSubmit = screen.getByRole('form')
@@ -128,11 +131,14 @@ test('Bleaching collect record observations add new benthic attribute - filling 
 test('Bleaching collect record observations add new benthic attribute - proposing new attribute that already exists results in no added attribute, and a toast message warning.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/bleachingqc/60'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   // loading indicator is weird in integration tests, so we wait for the page title
 
@@ -151,20 +157,20 @@ test('Bleaching collect record observations add new benthic attribute - proposin
   const firstBenthicAttributeInput =
     within(observationsTable).getAllByDisplayValue('Dead Coral with Algae')[0]
 
-  userEvent.type(firstBenthicAttributeInput, 'supercalifragilistic')
+  await user.type(firstBenthicAttributeInput, 'supercalifragilistic')
 
   const noResultsButton = await screen.findByRole('button', {
     name: 'Propose New Benthic Attribute...',
   })
 
-  userEvent.click(noResultsButton)
+  await user.click(noResultsButton)
 
   const modal = screen.getByLabelText('Add New Benthic Attribute')
 
   const parentInput = await within(modal).findByLabelText('Parent')
   const nameInput = within(modal).getByLabelText('Name')
 
-  userEvent.type(parentInput, 'Dead')
+  await user.type(parentInput, 'Dead')
 
   const parentAutocompleteList = within(modal).getByRole('listbox')
 
@@ -172,23 +178,25 @@ test('Bleaching collect record observations add new benthic attribute - proposin
     name: 'Dead Coral with Algae',
   })
 
-  userEvent.selectOptions(parentAutocompleteList, deadCoralOption)
+  await user.selectOptions(parentAutocompleteList, deadCoralOption)
 
-  userEvent.type(nameInput, 'Zosteraceae')
+  await user.type(nameInput, 'Zosteraceae')
 
   const nextScreenButton = await within(modal).findByRole('button', {
     name: 'Next',
   })
 
-  userEvent.click(nextScreenButton)
+  await user.click(nextScreenButton)
 
   const submitButton = await within(modal).findByRole('button', {
     name: 'Send to MERMAID for review',
   })
 
-  userEvent.click(submitButton)
+  await user.click(submitButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('Add New Benthic Attribute'))
+  await waitFor(() =>
+    expect(screen.queryByLabelText('Add New Benthic Attribute')).not.toBeInTheDocument(),
+  )
   const proposedBenthicAttributeDuplicateToast = await screen.findByText(
     'The proposed benthic attribute already exists in the list. The observation has been edited to show the existing benthic attribute selected.',
   )

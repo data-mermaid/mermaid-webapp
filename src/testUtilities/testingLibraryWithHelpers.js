@@ -4,6 +4,7 @@ import { render } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components/macro'
 import PropTypes from 'prop-types'
 import React from 'react'
+import userEvent from '@testing-library/user-event'
 
 import theme from '../theme'
 import { OnlineStatusProvider } from '../library/onlineStatusContext'
@@ -123,10 +124,13 @@ const renderAuthenticated = (
     )
   }
 
-  return render(ui, {
-    wrapper,
-    ...renderOptions,
-  })
+  return {
+    render: render(ui, {
+      wrapper,
+      ...renderOptions,
+    }),
+    user: userEvent.setup(),
+  }
 }
 
 const renderAuthenticatedOnline = (
@@ -171,10 +175,13 @@ const renderAuthenticatedOnline = (
     )
   }
 
-  return render(ui, {
-    wrapper,
-    ...renderOptions,
-  })
+  return {
+    render: render(ui, {
+      wrapper,
+      ...renderOptions,
+    }),
+    user: userEvent.setup(),
+  }
 }
 
 const renderUnauthenticatedOnline = (
@@ -205,7 +212,13 @@ const renderUnauthenticatedOnline = (
     )
   }
 
-  render(ui, { wrapper, ...renderOptions })
+  return {
+    render: render(ui, {
+      wrapper,
+      ...renderOptions,
+    }),
+    user: userEvent.setup(),
+  }
 }
 
 const renderAuthenticatedOffline = (
@@ -243,10 +256,13 @@ const renderAuthenticatedOffline = (
     )
   }
 
-  return render(ui, {
-    wrapper,
-    ...renderOptions,
-  })
+  return {
+    render: render(ui, {
+      wrapper,
+      ...renderOptions,
+    }),
+    user: userEvent.setup(),
+  }
 }
 
 const renderUnauthenticatedOffline = (
@@ -278,7 +294,13 @@ const renderUnauthenticatedOffline = (
     )
   }
 
-  return render(ui, { wrapper, ...renderOptions })
+  return {
+    render: render(ui, {
+      wrapper,
+      ...renderOptions,
+    }),
+    user: userEvent.setup(),
+  }
 }
 
 const renderOverride = () => {
@@ -289,6 +311,7 @@ const renderOverride = () => {
 
 export { default as mockMermaidApiAllSuccessful } from './mockMermaidApiAllSuccessful'
 export * from '@testing-library/react'
+export { waitFor, waitForElementToBeRemoved } from '@testing-library/react' // helps with auto imports
 export {
   renderOverride as render,
   renderAuthenticated,

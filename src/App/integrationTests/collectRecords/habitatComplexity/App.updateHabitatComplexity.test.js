@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import {
   screen,
   renderAuthenticatedOffline,
@@ -17,18 +17,21 @@ describe('Offline', () => {
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     // make a change
 
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
+    await user.clear(await screen.findByLabelText('Depth'))
+    await user.type(screen.getByLabelText('Depth'), '45')
 
-    userEvent.click(
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),
@@ -60,18 +63,21 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     // test all observers format too
     const addObservationButton = await screen.findByRole('button', {
       name: 'Add Row',
     })
 
-    userEvent.click(addObservationButton)
+    await user.click(addObservationButton)
 
     const observationsTable = await screen.findByLabelText('Observations')
 
@@ -82,12 +88,12 @@ describe('Offline', () => {
 
     const newHabitatComplexityScoreInput = screen.getAllByLabelText('Habitat Complexity Score')[3]
 
-    userEvent.selectOptions(
+    await user.selectOptions(
       newHabitatComplexityScoreInput,
       '3 widespread moderately complex (30-60cm) relief',
     )
 
-    userEvent.click(
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),
@@ -112,18 +118,21 @@ describe('Offline', () => {
     // make sure the next save will fail
     dexiePerUserDataInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     // make an unsaved change
     const depthInput = await screen.findByLabelText('Depth')
 
-    userEvent.clear(depthInput)
-    userEvent.type(depthInput, '45')
-    userEvent.click(
+    await user.clear(depthInput)
+    await user.type(depthInput, '45')
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),

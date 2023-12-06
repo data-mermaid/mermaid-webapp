@@ -14,7 +14,7 @@ const LayoutContainer = styled(Column)`
   height: 100vh;
 `
 const OfflineIndicatorStyles = styled.div`
-  ${props =>
+  ${(props) =>
     !props.isAppOnline &&
     css`
       border: solid ${theme.spacing.borderXLarge} ${theme.color.cautionColor};
@@ -34,15 +34,11 @@ const Layout = ({ children, footer, header }) => {
       <ErrorBoundary>
         <OfflineIndicatorStyles isAppOnline={isAppOnline} />
       </ErrorBoundary>
-      <ErrorBoundary>
-        {header}
-      </ErrorBoundary>
+      <ErrorBoundary>{header}</ErrorBoundary>
       <ErrorBoundary>
         <main>{children}</main>
       </ErrorBoundary>
-      <ErrorBoundary>
-        {footer}
-      </ErrorBoundary>
+      <ErrorBoundary>{footer}</ErrorBoundary>
     </LayoutContainer>
   )
 }

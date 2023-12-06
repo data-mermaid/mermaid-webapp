@@ -1,5 +1,5 @@
-import '@testing-library/jest-dom/extend-expect'
-import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
+
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -52,7 +52,7 @@ test('Management Regime Records table sorts properly by Name column', async () =
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
     </Routes>,
@@ -70,19 +70,19 @@ test('Management Regime Records table sorts properly by Name column', async () =
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByText('Management Regime Name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Management Regime Name'))
+  await user.click(within(table).getByText('Management Regime Name'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Management Regime Name'))
+  await user.click(within(table).getByText('Management Regime Name'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -94,7 +94,7 @@ test('Management Regime Records table sorts properly by Year Est. column', async
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
     </Routes>,
@@ -112,12 +112,12 @@ test('Management Regime Records table sorts properly by Year Est. column', async
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByText('Management Regime Name'))
 
   expect(within(tableRows[1]).getByText('2021'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Year Est.'))
+  await user.click(within(table).getByText('Year Est.'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
@@ -125,7 +125,7 @@ test('Management Regime Records table sorts properly by Year Est. column', async
   expect(within(tableRowsAfter[3]).getByText('2021'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Year Est.'))
+  await user.click(within(table).getByText('Year Est.'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -137,7 +137,7 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
     </Routes>,
@@ -156,19 +156,19 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
   // we test last row because it will have a non empty value which is easier to query
 
   // click the Management Regime Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByText('Management Regime Name'))
 
   expect(within(tableRows[3]).getByText('somewhat'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Compliance'))
+  await user.click(within(table).getByText('Compliance'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[3]).getByText('somewhat'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Compliance'))
+  await user.click(within(table).getByText('Compliance'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -180,7 +180,7 @@ test('Management Regime Records table sorts properly by Open Access column', asy
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
     </Routes>,
@@ -198,19 +198,19 @@ test('Management Regime Records table sorts properly by Open Access column', asy
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByText('Management Regime Name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Open Access'))
+  await user.click(within(table).getByText('Open Access'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Open Access'))
+  await user.click(within(table).getByText('Open Access'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -222,7 +222,7 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
     </Routes>,
@@ -240,19 +240,19 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByText('Management Regime Name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Access Restrictions'))
+  await user.click(within(table).getByText('Access Restrictions'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes C'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Access Restrictions'))
+  await user.click(within(table).getByText('Access Restrictions'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -264,7 +264,7 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
     </Routes>,
@@ -282,19 +282,19 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByText('Management Regime Name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Periodic Closure'))
+  await user.click(within(table).getByText('Periodic Closure'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes C'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Periodic Closure'))
+  await user.click(within(table).getByText('Periodic Closure'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -306,7 +306,7 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
     </Routes>,
@@ -324,19 +324,19 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByText('Management Regime Name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Size Limits'))
+  await user.click(within(table).getByText('Size Limits'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes C'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Size Limits'))
+  await user.click(within(table).getByText('Size Limits'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -348,7 +348,7 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
     </Routes>,
@@ -366,19 +366,19 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByText('Management Regime Name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Gear Restrictions'))
+  await user.click(within(table).getByText('Gear Restrictions'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Gear Restrictions'))
+  await user.click(within(table).getByText('Gear Restrictions'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -390,7 +390,7 @@ test('Management Regime Records table sorts properly by Species Restrictions col
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
     </Routes>,
@@ -408,19 +408,19 @@ test('Management Regime Records table sorts properly by Species Restrictions col
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByText('Management Regime Name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Species Restrictions'))
+  await user.click(within(table).getByText('Species Restrictions'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Species Restrictions'))
+  await user.click(within(table).getByText('Species Restrictions'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -432,7 +432,7 @@ test('Management Regime Records table sorts properly by No Take column', async (
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
     </Routes>,
@@ -450,19 +450,19 @@ test('Management Regime Records table sorts properly by No Take column', async (
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByText('Management Regime Name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('No Take'))
+  await user.click(within(table).getByText('No Take'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('No Take'))
+  await user.click(within(table).getByText('No Take'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 

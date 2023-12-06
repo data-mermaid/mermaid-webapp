@@ -1,6 +1,5 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -17,18 +16,21 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/sites/1'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOffline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/sites/1'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   const siteNameInput = await screen.findByLabelText('Name')
 
-  userEvent.clear(siteNameInput)
-  userEvent.type(siteNameInput, 'OOF')
+  await user.clear(siteNameInput)
+  await user.type(siteNameInput, 'OOF')
 
-  userEvent.click(
+  await user.click(
     screen.getByText('Save', {
       selector: 'button',
     }),
@@ -42,18 +44,21 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
 test('Online: Edit Site shows toast and edited record info', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/sites/1'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/sites/1'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   const siteNameInput = await screen.findByLabelText('Name')
 
-  userEvent.clear(siteNameInput)
-  userEvent.type(siteNameInput, 'OOF')
+  await user.clear(siteNameInput)
+  await user.type(siteNameInput, 'OOF')
 
-  userEvent.click(
+  await user.click(
     screen.getByText('Save', {
       selector: 'button',
     }),
@@ -71,18 +76,21 @@ test('Offline: edit site save stored site in dexie', async () => {
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/sites/1'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOffline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/sites/1'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   const siteNameInput = await screen.findByLabelText('Name')
 
-  userEvent.clear(siteNameInput)
-  userEvent.type(siteNameInput, 'OOF')
+  await user.clear(siteNameInput)
+  await user.type(siteNameInput, 'OOF')
 
-  userEvent.click(
+  await user.click(
     screen.getByText('Save', {
       selector: 'button',
     }),
@@ -110,18 +118,21 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/sites/1'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOffline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/sites/1'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   const siteNameInput = await screen.findByLabelText('Name')
 
-  userEvent.clear(siteNameInput)
-  userEvent.type(siteNameInput, 'OOF')
+  await user.clear(siteNameInput)
+  await user.type(siteNameInput, 'OOF')
 
-  userEvent.click(
+  await user.click(
     screen.getByText('Save', {
       selector: 'button',
     }),

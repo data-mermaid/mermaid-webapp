@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import { rest } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
@@ -89,7 +89,7 @@ test('Benthic PIT validation: user can reset ignored observation warnings ', asy
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
@@ -98,7 +98,7 @@ test('Benthic PIT validation: user can reset ignored observation warnings ', asy
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
   expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
 
@@ -115,7 +115,7 @@ test('Benthic PIT validation: user can reset ignored observation warnings ', asy
   // other two passing
   expect(within(observationsTable).queryAllByLabelText('Passed Validation').length).toEqual(2)
 
-  userEvent.click(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' }))
 
   const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
 
@@ -171,7 +171,7 @@ test('user can reset dismissed record-level warnings', async () => {
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
@@ -180,7 +180,7 @@ test('user can reset dismissed record-level warnings', async () => {
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
   expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
 
@@ -188,7 +188,7 @@ test('user can reset dismissed record-level warnings', async () => {
 
   expect(within(recordLevelValidationsSection).getByText('ignored')).toBeInTheDocument()
 
-  userEvent.click(
+  await user.click(
     await within(recordLevelValidationsSection).findByRole('checkbox', { name: 'Ignore warning' }),
   )
 
@@ -399,7 +399,7 @@ test('Benthic PIT validation: user edits non-observation input with ignored vali
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
@@ -408,7 +408,7 @@ test('Benthic PIT validation: user edits non-observation input with ignored vali
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
   expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
 
@@ -453,57 +453,57 @@ test('Benthic PIT validation: user edits non-observation input with ignored vali
   expect(within(observersRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(observersRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
-  userEvent.selectOptions(within(siteRow).getByLabelText('Site'), '1')
+  await user.selectOptions(within(siteRow).getByLabelText('Site'), '1')
   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.selectOptions(within(managementRow).getByLabelText('Management'), '1')
+  await user.selectOptions(within(managementRow).getByLabelText('Management'), '1')
   await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(depthRow).getByLabelText('Depth'), '1')
+  await user.type(within(depthRow).getByLabelText('Depth'), '1')
   await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(sampleDateRow).getByLabelText('Sample Date'), '2021-11-09')
+  await user.type(within(sampleDateRow).getByLabelText('Sample Date'), '2021-11-09')
   await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(sampleTimeRow).getByLabelText('Sample Time'), '02:39 PM')
+  await user.type(within(sampleTimeRow).getByLabelText('Sample Time'), '02:39 PM')
   await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(transectNumberRow).getByLabelText('Transect Number'), '12')
+  await user.type(within(transectNumberRow).getByLabelText('Transect Number'), '12')
   await waitFor(() =>
     expect(within(transectNumberRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  userEvent.type(within(labelRow).getByLabelText('Label'), '1')
+  await user.type(within(labelRow).getByLabelText('Label'), '1')
   await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(lengthSurveyedRow).getByLabelText('Transect Length Surveyed'), '1')
+  await user.type(within(lengthSurveyedRow).getByLabelText('Transect Length Surveyed'), '1')
   await waitFor(() =>
     expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  userEvent.type(within(intervalSizeRow).getByLabelText('Interval Size'), '10')
+  await user.type(within(intervalSizeRow).getByLabelText('Interval Size'), '10')
   await waitFor(() =>
     expect(within(intervalSizeRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  userEvent.type(within(intervalStartRow).getByLabelText('Interval Start'), '10')
+  await user.type(within(intervalStartRow).getByLabelText('Interval Start'), '10')
   await waitFor(() =>
     expect(within(intervalStartRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
   // Reef Slope select on crest
-  userEvent.selectOptions(
+  await user.selectOptions(
     within(reefSlopeRow).getByLabelText('Reef Slope'),
     '12dc11ae-3a4b-4309-8fae-66f51398d96f',
   )
   await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(notesRow).getByLabelText('Notes'), '1')
+  await user.type(within(notesRow).getByLabelText('Notes'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   const observersList = within(observersRow).getByLabelText('Observers')
 
-  userEvent.click(within(observersList).getByText('Melissa Nunes'))
+  await user.click(within(observersList).getByText('Melissa Nunes'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // make act error go away

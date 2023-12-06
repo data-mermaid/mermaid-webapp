@@ -1,10 +1,11 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import {
   screen,
   renderAuthenticatedOffline,
   within,
+  waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -17,19 +18,22 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/fishbelt/2'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    userEvent.click(await screen.findByText('Delete Record'))
+    await user.click(await screen.findByText('Delete Record'))
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
     const modal = screen.getByLabelText('Delete Record')
 
-    userEvent.click(
+    await user.click(
       within(modal).getByText('Delete Record', {
         selector: 'button',
       }),
@@ -44,7 +48,10 @@ describe('Offline', () => {
       }),
     )
 
-    userEvent.selectOptions(screen.getByTestId('page-size-selector'), '20')
+    const pageSizeSelector = await screen.findByTestId('page-size-selector')
+
+    await waitFor(() => expect(pageSizeSelector))
+    await user.selectOptions(pageSizeSelector, '20')
 
     const table = await screen.findByRole('table')
 

@@ -1,7 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { rest } from 'msw'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import {
   screen,
@@ -18,11 +17,14 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 test('Submit fishbelt success shows toast message and redirects to collect record list page', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/fishbelt/1'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
@@ -70,10 +72,10 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
     }),
   )
 
-  userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
+  await user.click(await screen.findByText('Validate', { selector: 'button' }))
   expect(await screen.findByText('Validated', { selector: 'button' }))
 
-  userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
+  await user.click(await screen.findByText('Submit', { selector: 'button' }))
 
   expect(await screen.findByText('Record submitted.'))
   expect(await screen.findByText('Collecting', { selector: 'h2' }))
@@ -85,11 +87,14 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
 test('Submit fishbelt failure shows toast message and an enabled submit button', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/fishbelt/1'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
@@ -140,9 +145,9 @@ test('Submit fishbelt failure shows toast message and an enabled submit button',
     }),
   )
 
-  userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
+  await user.click(await screen.findByText('Validate', { selector: 'button' }))
   expect(await screen.findByText('Validated', { selector: 'button' })) // just to make act errors silence
-  userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
+  await user.click(await screen.findByText('Submit', { selector: 'button' }))
   expect(await screen.findByText('Submitting', { selector: 'button' }))
 
   expect(await screen.findByText('The sample unit has not been submitted.'))

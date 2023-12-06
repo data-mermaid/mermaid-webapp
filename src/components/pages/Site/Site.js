@@ -101,10 +101,7 @@ const enforceNumberInput = (event) => {
   const isNumbersKeyPressed =
     (event.keyCode >= 48 && event.keyCode <= 58) || (event.keyCode >= 96 && event.keyCode <= 105)
 
-  return (
-    !(isModifiersKeyPressed || isMovingAndSpecialCharactersKeyPressed || isNumbersKeyPressed) &&
-    event.preventDefault()
-  )
+  return !(isModifiersKeyPressed || isMovingAndSpecialCharactersKeyPressed || isNumbersKeyPressed)
 }
 
 const SiteForm = ({
@@ -254,6 +251,8 @@ const Site = ({ isNewSite }) => {
   const [isDeletingSite, setIsDeletingSite] = useState(false)
   const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
   const [currentDeleteRecordModalPage, setCurrentDeleteRecordModalPage] = useState(1)
+
+  const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new site is saved (and that triggers a navigation to its new page)
 
   const goToPageOneOfDeleteRecordModal = () => {
     setCurrentDeleteRecordModalPage(1)
@@ -561,7 +560,7 @@ const Site = ({ isNewSite }) => {
         </DeleteRecordButtonCautionWrapper>
       ) : null}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
-      <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
+      <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
     </>
   )
 

@@ -1,13 +1,11 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { rest } from 'msw'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
-  waitForElementToBeRemoved,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 
@@ -17,11 +15,14 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 test('Fishbelt observations add new species - filling out new species form adds a new species to dexie and the observation fish name input', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/fishbelt/2'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   // loading indicator is weird in integration tests, so we wait for the page title
   await screen.findByTestId('edit-collect-record-form-title')
@@ -54,20 +55,20 @@ test('Fishbelt observations add new species - filling out new species form adds 
     'Lethrinus rubrioperculatus',
   )
 
-  userEvent.type(firstFishNameInput, 'supercalifragilistic')
+  await user.type(firstFishNameInput, 'supercalifragilistic')
 
   const noResultsButton = await screen.findByRole('button', {
     name: 'Propose New Species...',
   })
 
-  userEvent.click(noResultsButton)
+  await user.click(noResultsButton)
 
   const modal = screen.getByLabelText('Add New Fish Species')
 
   const genusInput = await within(modal).findByLabelText('Genus')
   const speciesInput = within(modal).getByLabelText('Species')
 
-  userEvent.type(genusInput, 'Neb')
+  await user.type(genusInput, 'Neb')
 
   const genusAutocompleteList = within(modal).getByRole('listbox')
 
@@ -75,16 +76,16 @@ test('Fishbelt observations add new species - filling out new species form adds 
     name: 'Nebrius',
   })
 
-  userEvent.selectOptions(genusAutocompleteList, nebriusOption)
+  await user.selectOptions(genusAutocompleteList, nebriusOption)
 
   // note uppercase first letter. Species names must be transformed to lowercase
-  userEvent.type(speciesInput, 'Ridens')
+  await user.type(speciesInput, 'Ridens')
 
   const nextScreenButton = within(modal).getByRole('button', {
     name: 'Next',
   })
 
-  userEvent.click(nextScreenButton)
+  await user.click(nextScreenButton)
 
   expect(
     await within(modal).findByText(
@@ -104,9 +105,9 @@ test('Fishbelt observations add new species - filling out new species form adds 
     name: 'Send to MERMAID for review',
   })
 
-  userEvent.click(submitButton)
+  await user.click(submitButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('Add New Fish Species'))
+  expect(screen.queryByLabelText('Add New Fish Species')).not.toBeInTheDocument()
   const fishbeltFormAfterSubmit = screen.getByRole('form')
 
   expect(await within(fishbeltFormAfterSubmit).findByDisplayValue('Nebrius ridens'))
@@ -129,11 +130,14 @@ test('Fishbelt observations add new species - filling out new species form adds 
 test('Fishbelt observations add new species - proposing new species that already exists results in no added species, and a toast message warning.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/fishbelt/2'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   // loading indicator is weird in integration tests, so we wait for the page title
 
@@ -152,20 +156,20 @@ test('Fishbelt observations add new species - proposing new species that already
     'Lethrinus rubrioperculatus',
   )
 
-  userEvent.type(firstFishNameInput, 'supercalifragilistic')
+  await user.type(firstFishNameInput, 'supercalifragilistic')
 
   const noResultsButton = await screen.findByRole('button', {
     name: 'Propose New Species...',
   })
 
-  userEvent.click(noResultsButton)
+  await user.click(noResultsButton)
 
   const modal = screen.getByLabelText('Add New Fish Species')
 
   const genusInput = await within(modal).findByLabelText('Genus')
   const speciesInput = within(modal).getByLabelText('Species')
 
-  userEvent.type(genusInput, 'holo')
+  await user.type(genusInput, 'holo')
 
   const genusAutocompleteList = within(modal).getByRole('listbox')
 
@@ -173,24 +177,24 @@ test('Fishbelt observations add new species - proposing new species that already
     name: 'Hologymnosus',
   })
 
-  userEvent.selectOptions(genusAutocompleteList, hologymnosusOption)
+  await user.selectOptions(genusAutocompleteList, hologymnosusOption)
 
   // note uppercase first letter. Species names must be transformed to lowercase
-  userEvent.type(speciesInput, 'Longipes')
+  await user.type(speciesInput, 'Longipes')
 
   const nextScreenButton = await within(modal).findByRole('button', {
     name: 'Next',
   })
 
-  userEvent.click(nextScreenButton)
+  await user.click(nextScreenButton)
 
   const submitButton = await within(modal).findByRole('button', {
     name: 'Send to MERMAID for review',
   })
 
-  userEvent.click(submitButton)
+  await user.click(submitButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('Add New Fish Species'))
+  expect(screen.queryByLabelText('Add New Fish Species')).not.toBeInTheDocument()
   const fishbeltFormAfterSubmit = screen.getByRole('form')
 
   // input display value is updated with *existing* species selected

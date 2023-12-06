@@ -1,13 +1,13 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { Route, Routes } from 'react-router-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   screen,
+  waitFor,
   waitForElementToBeRemoved,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
@@ -18,7 +18,7 @@ test('Edit Management Regime - shows name and rules required', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route
         path="/projects/:projectId/management-regimes/:managementRegimeId"
@@ -34,21 +34,20 @@ test('Edit Management Regime - shows name and rules required', async () => {
 
   // check that name and rules validations appear
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
-
   const nameInput = screen.getByLabelText('Name')
   const secondaryNameInput = screen.getByLabelText('Secondary Name')
 
-  userEvent.clear(nameInput)
-  userEvent.click(secondaryNameInput)
+  await user.click(nameInput)
+  await user.clear(nameInput)
+  await user.click(secondaryNameInput)
 
   expect(
     await within(screen.getByTestId('name')).findByText('This field is required'),
   ).toBeInTheDocument()
 
-  const gearRestrictionCheckbox = screen.getByLabelText('Gear Restriction')
+  const gearRestrictionCheckbox = await screen.findByLabelText('Gear Restriction')
 
-  expect(gearRestrictionCheckbox).toBeChecked()
-  userEvent.click(gearRestrictionCheckbox)
+  await user.click(gearRestrictionCheckbox)
 
   expect(
     await within(screen.getByTestId('rules')).findByText('At least one rule is required'),
@@ -57,10 +56,14 @@ test('Edit Management Regime - shows name and rules required', async () => {
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 
   // fix name and rules inputs, and make sure save button enables
-  userEvent.type(nameInput, 'fjkdlsfjd')
-  userEvent.click(gearRestrictionCheckbox)
+  await user.type(nameInput, 'fjkdlsfjd')
+  await user.click(gearRestrictionCheckbox)
 
-  expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
+  await waitFor(() => expect(gearRestrictionCheckbox).toBeChecked())
+
+  await waitFor(() => expect(nameInput).toHaveValue('fjkdlsfjd')) // name input doesnt update in test, so button cant be enabled
+
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled())
 })
 
 test('Management Regime component renders with the expected UI elements', async () => {

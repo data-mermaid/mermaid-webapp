@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { Route, Routes } from 'react-router-dom'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
@@ -8,6 +8,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexi
 import {
   renderAuthenticatedOnline,
   screen,
+  waitFor,
   waitForElementToBeRemoved,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
@@ -18,7 +19,7 @@ test('Edit Site page - Save button initially disabled, then enabled when form di
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/sites/:siteId" element={<Site isNewSite={false} />} />
     </Routes>,
@@ -35,7 +36,7 @@ test('Edit Site page - Save button initially disabled, then enabled when form di
 
   const siteNameInput = screen.getByRole('textbox', { name: 'Name' })
 
-  userEvent.type(siteNameInput, 'updated name')
+  await user.type(siteNameInput, 'updated name')
 
   const saveButtonAfterFormDirty = await screen.findByRole('button', { name: 'Save' })
 
@@ -47,7 +48,7 @@ test('Edit Site page - Save button disabled and "Required" error valudation mess
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/sites/:siteId" element={<Site isNewSite={false} />} />
     </Routes>,
@@ -61,8 +62,8 @@ test('Edit Site page - Save button disabled and "Required" error valudation mess
   const siteNameInput = await screen.findByRole('textbox', { name: 'Name' })
   const countryInput = await screen.findByRole('textbox', { name: 'Country' })
 
-  userEvent.clear(siteNameInput)
-  userEvent.click(countryInput)
+  await user.clear(siteNameInput)
+  await user.click(countryInput)
 
   expect(
     await within(screen.getByTestId('name')).findByText('This field is required'),
@@ -76,7 +77,7 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/sites/:siteId" element={<Site isNewSite={false} />} />
     </Routes>,
@@ -93,8 +94,8 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
   const latitudeInput = screen.getByLabelText('Latitude')
   const countryInput = await screen.findByRole('textbox', { name: 'Country' })
 
-  userEvent.clear(latitudeInput)
-  userEvent.click(countryInput)
+  await user.clear(latitudeInput)
+  await user.click(countryInput)
 
   expect(
     await within(screen.getByTestId('latitude')).findByText('This field is required'),
@@ -103,15 +104,15 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 
   // insert a number to latitude input, "Required" in validation message disappeared, Save button enabled
-  userEvent.type(latitudeInput, '12')
+  await user.type(latitudeInput, '12')
 
-  expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled())
 
   // Clear longitude input field => "Required" in validation message showed, Save button disabled
   const longitudeInput = screen.getByLabelText('Longitude')
 
-  userEvent.clear(longitudeInput)
-  userEvent.click(countryInput)
+  await user.clear(longitudeInput)
+  await user.click(countryInput)
 
   expect(
     await within(screen.getByTestId('longitude')).findByText('This field is required'),
@@ -120,9 +121,9 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 
   // insert a number to longitude input, "Required" in validation message disappeared, Save button enabled
-  userEvent.type(longitudeInput, '20')
+  await user.type(longitudeInput, '20')
 
-  expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled())
 })
 
 test('Edit Site page - enter invalid inputs to latitude shows inline error validation message "latitude should be between -90° and 90°"', async () => {
@@ -130,7 +131,7 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/sites/:siteId" element={<Site isNewSite={false} />} />
     </Routes>,
@@ -146,9 +147,9 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
   const latitudeInput = screen.getByLabelText('Latitude')
   const countryInput = screen.getByLabelText('Country')
 
-  userEvent.clear(latitudeInput)
-  userEvent.type(latitudeInput, '91')
-  userEvent.click(countryInput)
+  await user.clear(latitudeInput)
+  await user.type(latitudeInput, '91')
+  await user.click(countryInput)
 
   expect(
     await within(screen.getByTestId('latitude')).findByText(
@@ -158,17 +159,18 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 
-  userEvent.clear(latitudeInput)
-  userEvent.type(latitudeInput, '20')
-  userEvent.click(countryInput)
+  await user.clear(latitudeInput)
+  await user.type(latitudeInput, '20')
+  await user.click(countryInput)
 
-  expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled())
 })
 
 test('Edit Site page - enter invalid inputs to longitude shows inline error validation message "longitude should be between -180° and 180°"', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+  const user = userEvent.setup()
 
   renderAuthenticatedOnline(
     <Routes>
@@ -187,21 +189,25 @@ test('Edit Site page - enter invalid inputs to longitude shows inline error vali
   const longitudeInput = screen.getByLabelText('Longitude')
   const countryInput = screen.getByLabelText('Country')
 
-  userEvent.clear(longitudeInput)
-  userEvent.type(longitudeInput, '181')
-  userEvent.click(countryInput)
+  await user.click(longitudeInput)
+  await user.clear(longitudeInput)
+  await user.type(longitudeInput, '181')
+  await waitFor(() => expect(longitudeInput).toHaveValue(181))
+  await user.click(countryInput)
 
-  expect(
-    await within(screen.getByTestId('longitude')).findByText(
-      'Longitude should be between -180° and 180°',
-    ),
-  ).toBeInTheDocument()
+  await waitFor(() =>
+    expect(
+      within(screen.getByTestId('longitude')).getByText(
+        'Longitude should be between -180° and 180°',
+      ),
+    ).toBeInTheDocument(),
+  )
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 
-  userEvent.clear(longitudeInput)
-  userEvent.type(longitudeInput, '20')
-  userEvent.click(countryInput)
+  await user.clear(longitudeInput)
+  await user.type(longitudeInput, '20')
+  await user.click(countryInput)
 
-  expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled())
 })

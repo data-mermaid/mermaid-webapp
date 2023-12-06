@@ -1,5 +1,5 @@
-import '@testing-library/jest-dom/extend-expect'
-import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
+
 import { rest } from 'msw'
 import React from 'react'
 
@@ -142,10 +142,13 @@ test('Sync: initial page load on project page', async () => {
 test('Sync: initial page load already done, navigate to non project page', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   await screen.findByLabelText('projects list loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
@@ -167,7 +170,7 @@ test('Sync: initial page load already done, navigate to non project page', async
 
   const projectWithId5 = screen.getAllByTestId('project-card')[4]
 
-  userEvent.click(projectWithId5)
+  await user.click(projectWithId5)
 
   /**
    * api syncing can cause the loading indicator to initially be absent,

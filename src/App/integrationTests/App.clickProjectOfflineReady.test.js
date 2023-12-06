@@ -1,5 +1,5 @@
-import '@testing-library/jest-dom/extend-expect'
-import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
+
 import { rest } from 'msw'
 import React from 'react'
 
@@ -53,15 +53,19 @@ beforeEach(() => {
 test('Sync: select project to be offline ready, shows toast, syncs and stores data, shows project as selected', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
   /**
    * api syncing can cause the loading indicator to initially be absent,
    * and then show up. for the test to work, we need to wait for
    * the loading indicator to show first before we wait for it to disappear
    */
+
   await screen.findByLabelText('projects list loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
 
@@ -74,7 +78,7 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
     (await screen.findAllByTestId('project-card'))[4],
   ).getByRole('checkbox', { name: 'Offline Ready' })
 
-  userEvent.click(project5OfflineCheckboxBeforeFirstClick)
+  await user.click(project5OfflineCheckboxBeforeFirstClick)
 
   expect(await screen.findByText('Project V is now offline ready'))
 
@@ -98,16 +102,19 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
 test('Sync: select project to NOT be offline ready, shows toast, removes data, shows project as not selected', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   const project5OfflineCheckboxBeforeFirstClick = within(
     (await screen.findAllByTestId('project-card'))[4],
   ).getByRole('checkbox', { name: 'Offline Ready' })
 
-  userEvent.click(project5OfflineCheckboxBeforeFirstClick)
+  await user.click(project5OfflineCheckboxBeforeFirstClick)
 
   expect(await screen.findByText('Project V is now offline ready'))
 
@@ -117,7 +124,7 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
 
   await waitFor(() => expect(project5OfflineCheckboxAfterFirstClick).toBeChecked())
 
-  userEvent.click(project5OfflineCheckboxAfterFirstClick)
+  await user.click(project5OfflineCheckboxAfterFirstClick)
 
   await waitFor(() =>
     expect(screen.getByText('Project V has been removed from being offline ready')),

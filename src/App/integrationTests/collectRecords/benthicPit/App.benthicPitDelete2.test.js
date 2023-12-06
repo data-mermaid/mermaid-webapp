@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import {
   screen,
   renderAuthenticatedOffline,
@@ -16,24 +16,27 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthicpit/50'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/benthicpit/50'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     // make an unsaved change
 
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
+    await user.clear(await screen.findByLabelText('Depth'))
+    await user.type(screen.getByLabelText('Depth'), '45')
 
-    userEvent.click(screen.getByText('Delete Record'))
+    await user.click(screen.getByText('Delete Record'))
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
     const modal = screen.getByLabelText('Delete Record')
 
-    userEvent.click(
+    await user.click(
       within(modal).getByText('Cancel', {
         selector: 'button',
       }),

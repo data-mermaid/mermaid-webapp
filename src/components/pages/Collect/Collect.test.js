@@ -1,5 +1,5 @@
-import '@testing-library/jest-dom/extend-expect'
-import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
+
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -7,6 +7,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexi
 import {
   renderAuthenticatedOnline,
   screen,
+  waitFor,
   waitForElementToBeRemoved,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
@@ -17,7 +18,7 @@ test('Collect Records table sorts properly by method column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/collecting" element={<Collect />} />
     </Routes>,
@@ -32,22 +33,27 @@ test('Collect Records table sorts properly by method column', async () => {
 
   const table = screen.getByRole('table')
 
-  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '21')
+  const pageSizeSelector = await screen.findByTestId('page-size-selector')
+
+  await waitFor(() => within(pageSizeSelector).getByText('21'))
+
+  // show all the records
+  await user.selectOptions(pageSizeSelector, '21')
 
   // Double click all of the default sort columns twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Site'))
-  userEvent.dblClick(within(table).getByText('Method'))
-  userEvent.dblClick(within(table).getByText('Sample Date'))
-  userEvent.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByText('Site'))
+  await user.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByText('Sample Date'))
+  await user.dblClick(within(table).getByText('Sample Unit #'))
 
   // click twice to change to descending order
-  userEvent.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByText('Method'))
 
   const tableRowsAfterDescending = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfterDescending[1]).getByText('Habitat Complexity'))
 
-  userEvent.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByText('Method'))
 
   const tableRowsAfterAscending = within(table).getAllByRole('row')
 
@@ -59,7 +65,7 @@ test('Collect Records table sorts properly by site column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/collecting" element={<Collect />} />
     </Routes>,
@@ -79,20 +85,20 @@ test('Collect Records table sorts properly by site column', async () => {
   expect(within(tableRows[1]).getByText('Site C'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Site'))
-  userEvent.dblClick(within(table).getByText('Method'))
-  userEvent.dblClick(within(table).getByText('Sample Date'))
-  userEvent.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByText('Site'))
+  await user.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByText('Sample Date'))
+  await user.dblClick(within(table).getByText('Sample Unit #'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Site'))
+  await user.click(within(table).getByText('Site'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Site C'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Site'))
+  await user.click(within(table).getByText('Site'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -104,7 +110,7 @@ test('Collect Records table sorts properly by management column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/collecting" element={<Collect />} />
     </Routes>,
@@ -124,20 +130,20 @@ test('Collect Records table sorts properly by management column', async () => {
   expect(within(tableRows[1]).getByText('Management Regimes C'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Site'))
-  userEvent.dblClick(within(table).getByText('Method'))
-  userEvent.dblClick(within(table).getByText('Sample Date'))
-  userEvent.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByText('Site'))
+  await user.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByText('Sample Date'))
+  await user.dblClick(within(table).getByText('Sample Unit #'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Management Regime'))
+  await user.click(within(table).getByText('Management Regime'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Management Regime'))
+  await user.click(within(table).getByText('Management Regime'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -149,7 +155,7 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/collecting" element={<Collect />} />
     </Routes>,
@@ -169,20 +175,20 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
   expect(within(tableRows[1]).getByText('5 FB-1'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Site'))
-  userEvent.dblClick(within(table).getByText('Method'))
-  userEvent.dblClick(within(table).getByText('Sample Date'))
-  userEvent.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByText('Site'))
+  await user.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByText('Sample Date'))
+  await user.dblClick(within(table).getByText('Sample Unit #'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Sample Unit #'))
+  await user.click(within(table).getByText('Sample Unit #'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('2'))
 
   // // click again to change to descending order
-  userEvent.click(within(table).getByText('Sample Unit #'))
+  await user.click(within(table).getByText('Sample Unit #'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -194,7 +200,7 @@ test('Collect Records table sorts properly by size column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/collecting" element={<Collect />} />
     </Routes>,
@@ -211,25 +217,25 @@ test('Collect Records table sorts properly by size column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '21')
+  await user.selectOptions(screen.getByTestId('page-size-selector'), '21')
 
   expect(within(tableRows[1]).getByText('10m'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Site'))
-  userEvent.dblClick(within(table).getByText('Method'))
-  userEvent.dblClick(within(table).getByText('Sample Date'))
-  userEvent.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByText('Site'))
+  await user.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByText('Sample Date'))
+  await user.dblClick(within(table).getByText('Sample Unit #'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Size'))
+  await user.click(within(table).getByText('Size'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('5m x 2m'))
 
   // // click again to change to descending order
-  userEvent.click(within(table).getByText('Size'))
+  await user.click(within(table).getByText('Size'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -241,7 +247,7 @@ test('Collect Records table sorts properly by depth column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/collecting" element={<Collect />} />
     </Routes>,
@@ -261,20 +267,20 @@ test('Collect Records table sorts properly by depth column', async () => {
   expect(within(tableRows[1]).getByText('20'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Site'))
-  userEvent.dblClick(within(table).getByText('Method'))
-  userEvent.dblClick(within(table).getByText('Sample Date'))
-  userEvent.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByText('Site'))
+  await user.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByText('Sample Date'))
+  await user.dblClick(within(table).getByText('Sample Unit #'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Depth (m)'))
+  await user.click(within(table).getByText('Depth (m)'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('10'))
 
   // // click again to change to descending order
-  userEvent.click(within(table).getByText('Depth (m)'))
+  await user.click(within(table).getByText('Depth (m)'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -285,7 +291,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/collecting" element={<Collect />} />
     </Routes>,
@@ -300,23 +306,23 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   const table = screen.getByRole('table')
 
-  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '21')
+  await user.selectOptions(screen.getByTestId('page-size-selector'), '21')
 
   // Double click all of the default sort columns twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Site'))
-  userEvent.dblClick(within(table).getByText('Method'))
-  userEvent.dblClick(within(table).getByText('Sample Date'))
-  userEvent.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByText('Site'))
+  await user.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByText('Sample Date'))
+  await user.dblClick(within(table).getByText('Sample Unit #'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Sample Date'))
+  await user.click(within(table).getByText('Sample Date'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('November 22, 2001'))
 
   // // click again to change to descending order
-  userEvent.click(within(table).getByText('Sample Date'))
+  await user.click(within(table).getByText('Sample Date'))
 
   const tableRowsAfterSecondClick = within(table).getAllByRole('row')
 
@@ -329,7 +335,7 @@ test('Collect Records table sorts properly by observers column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/collecting" element={<Collect />} />
     </Routes>,
@@ -349,13 +355,13 @@ test('Collect Records table sorts properly by observers column', async () => {
   expect(within(tableRows[1]).getByText('Al Leonard, Melissa Nunes'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Site'))
-  userEvent.dblClick(within(table).getByText('Method'))
-  userEvent.dblClick(within(table).getByText('Sample Date'))
-  userEvent.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByText('Site'))
+  await user.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByText('Sample Date'))
+  await user.dblClick(within(table).getByText('Sample Unit #'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Observers'))
+  await user.click(within(table).getByText('Observers'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
@@ -364,7 +370,7 @@ test('Collect Records table sorts properly by observers column', async () => {
   expect(within(tableCellsFromTableRowsAfter[7]).getByText('Al Leonard'))
 
   // // click again to change to descending order
-  userEvent.click(within(table).getByText('Observers'))
+  await user.click(within(table).getByText('Observers'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -376,7 +382,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/collecting" element={<Collect />} />
     </Routes>,
@@ -392,20 +398,20 @@ test('Collect Records table sorts properly by sample date column', async () => {
   const table = screen.getByRole('table')
 
   // Double click all of the default sort columns twice to disable default sorting
-  userEvent.dblClick(within(table).getByText('Site'))
-  userEvent.dblClick(within(table).getByText('Method'))
-  userEvent.dblClick(within(table).getByText('Sample Date'))
-  userEvent.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByText('Site'))
+  await user.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByText('Sample Date'))
+  await user.dblClick(within(table).getByText('Sample Unit #'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Sample Date'))
+  await user.click(within(table).getByText('Sample Date'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('November 22, 2001'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Sample Date'))
+  await user.click(within(table).getByText('Sample Date'))
 
   const tableRowsAfterSecondClick = within(table).getAllByRole('row')
 
@@ -417,7 +423,7 @@ test('Collect Records table changes number of rows visible size when pagination 
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/collecting" element={<Collect />} />
     </Routes>,
@@ -427,6 +433,7 @@ test('Collect Records table changes number of rows visible size when pagination 
       initialEntries: ['/projects/5/collecting'],
     },
   )
+
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const table = screen.getByRole('table')
 
@@ -435,7 +442,7 @@ test('Collect Records table changes number of rows visible size when pagination 
   // 15 + header row
   expect(tableRows.length).toEqual(16)
 
-  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '21')
+  await user.selectOptions(screen.getByTestId('page-size-selector'), '21')
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
@@ -448,7 +455,7 @@ test('Collect Records table change pages when different page is selected ', asyn
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route path="/projects/:projectId/collecting" element={<Collect />} />
     </Routes>,
@@ -458,6 +465,7 @@ test('Collect Records table change pages when different page is selected ', asyn
       initialEntries: ['/projects/5/collecting'],
     },
   )
+
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
@@ -469,7 +477,7 @@ test('Collect Records table change pages when different page is selected ', asyn
   // 15 + header row
   expect(tableRows.length).toEqual(16)
 
-  userEvent.click(within(PageSelector).getByText('2'))
+  await user.click(within(PageSelector).getByText('2'))
 
   const linksToCollectRecords = within(table).getAllByRole('link')
 

@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
-import {
-  InputRow,
-  CheckRadioLabel,
-  CheckRadioWrapper,
-  LabelContainer,
-  RequiredIndicator,
-} from '../../generic/form'
+import { InputRow, CheckRadioLabel, LabelContainer, RequiredIndicator } from '../../generic/form'
 import { managementRegimePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../../mermaidInputs/mermaidInputsPropTypes'
 import language from '../../../language'
+import {
+  NestedCheckboxHelperText,
+  PartialRestrictionsCheckboxCheckRadioWrapper,
+  RadioHelperText,
+  StyledCheckRadioLabel,
+  StyledCheckRadioWrapper,
+} from './managementRulesInput.styles'
 
 const regimeRulesLanguage = language.helperText.managementRegimeRules
 
@@ -38,32 +38,6 @@ const partialRestrictionOptions = [
     helperText: regimeRulesLanguage.accessRestrictions,
   },
 ]
-
-const StyledCheckRadioWrapper = styled(CheckRadioWrapper)`
-  display: block;
-`
-const PartialRestrictionsCheckboxCheckRadioWrapper = styled(CheckRadioWrapper)`
-  margin-left: 2rem;
-`
-const StyledCheckRadioLabel = styled(CheckRadioLabel)`
-  > span {
-    display: block;
-    font-size: x-small;
-    padding-left: 2rem;
-  }
-`
-const helperTextStyles = css`
-  display: block;
-  font-size: x-small;
-`
-const RadioHelperText = styled('div')`
-  ${helperTextStyles}
-  padding-left: 2rem;
-`
-const NestedCheckboxHelperText = styled('div')`
-  ${helperTextStyles}
-  padding-left: 4rem;
-`
 
 const ManagementRulesInput = ({
   id,
@@ -110,14 +84,30 @@ const ManagementRulesInput = ({
     }
   }
 
-  const [managementRulesRadioInputValue, setManagementRulesRadioInputValue] = useState(
-    getManagementRulesRadioInputValue(managementFormValues),
+  const [managementRulesRadioInputValue, setManagementRulesRadioInputValue] = useState({})
+
+  const [partialRestrictionCheckboxValues, setPartialRestrictionCheckboxValues] = useState({})
+
+  const [isPartialRestrictionsExpanded, setIsPartialRestrictionsExpanded] = useState(
+    managementRulesRadioInputValue.partial_restrictions,
   )
 
-  const [partialRestrictionCheckboxValues, setPartialRestrictionCheckboxValues] = useState(
-    getPartialRestrictionCheckboxValues(managementFormValues),
+  useEffect(
+    function keepPartialRestrictionRulesExpandedWhenAppropriate() {
+      if (getManagementRulesRadioInputValue(managementFormValues).partial_restrictions) {
+        setIsPartialRestrictionsExpanded(true)
+      }
+    },
+    [isPartialRestrictionsExpanded, managementFormValues],
   )
 
+  useEffect(
+    function initializeManagementFormValues() {
+      setManagementRulesRadioInputValue(getManagementRulesRadioInputValue(managementFormValues))
+      setPartialRestrictionCheckboxValues(getPartialRestrictionCheckboxValues(managementFormValues))
+    },
+    [managementFormValues],
+  )
   const resetPartialRestrictionRulesAndUpdateFormikOnChange = (formikProperty) => {
     const updatePartialRestrictionRuleValues = { ...partialRestrictionCheckboxValues }
     const partialRestrictionOptionValues = partialRestrictionOptions.map((item) => item.value)
@@ -137,6 +127,7 @@ const ManagementRulesInput = ({
       partial_restrictions: false,
     })
     resetPartialRestrictionRulesAndUpdateFormikOnChange('open_access')
+    setIsPartialRestrictionsExpanded(false)
   }
 
   const handleNoTakeChange = () => {
@@ -146,6 +137,7 @@ const ManagementRulesInput = ({
       partial_restrictions: false,
     })
     resetPartialRestrictionRulesAndUpdateFormikOnChange('no_take')
+    setIsPartialRestrictionsExpanded(false)
   }
 
   const handlePartialRestrictionChange = () => {
@@ -155,6 +147,7 @@ const ManagementRulesInput = ({
       partial_restrictions: true,
     })
     resetPartialRestrictionRulesAndUpdateFormikOnChange('partial_restrictions')
+    setIsPartialRestrictionsExpanded(true)
   }
 
   const handlePartialRestrictionChoicesChange = (e) => {
@@ -167,10 +160,10 @@ const ManagementRulesInput = ({
     onChange('partial_restrictions', updatePartialRestrictionRuleValues)
   }
 
-  const showPartialRestrictionChoices = managementRulesRadioInputValue.partial_restrictions
+  const showPartialRestrictionChoices = isPartialRestrictionsExpanded
     ? partialRestrictionOptions.map(({ value, label: optionLabel, helperText }) => (
-        <>
-          <PartialRestrictionsCheckboxCheckRadioWrapper key={value}>
+        <div key={value}>
+          <PartialRestrictionsCheckboxCheckRadioWrapper>
             <input
               id={value}
               type="checkbox"
@@ -183,7 +176,7 @@ const ManagementRulesInput = ({
             </CheckRadioLabel>
           </PartialRestrictionsCheckboxCheckRadioWrapper>
           <NestedCheckboxHelperText>{helperText}</NestedCheckboxHelperText>
-        </>
+        </div>
       ))
     : null
 

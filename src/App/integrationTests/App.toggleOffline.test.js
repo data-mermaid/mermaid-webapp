@@ -1,7 +1,7 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { rest } from 'msw'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import {
@@ -20,7 +20,7 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticated(
+  const { user } = renderAuthenticated(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/'],
@@ -32,7 +32,7 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
 
   const offlineToggleSwitchTestIdBeforeFirstClick = screen.getByTestId('offline-toggle-switch-test')
 
-  userEvent.click(offlineToggleSwitchTestIdBeforeFirstClick)
+  await user.click(offlineToggleSwitchTestIdBeforeFirstClick)
 
   expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
     "You're OFFLINE. Some contents may be out of date.",
@@ -45,7 +45,7 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
 
   const offlineToggleSwitchTestIdAfterFirstClick = screen.getByTestId('offline-toggle-switch-test')
 
-  userEvent.click(offlineToggleSwitchTestIdAfterFirstClick)
+  await user.click(offlineToggleSwitchTestIdAfterFirstClick)
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
@@ -53,10 +53,10 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
     "You're ONLINE",
   )
 
-  expect(within(sideNav).queryByRole('link', { name: 'Submitted' })).toBeInTheDocument()
-  expect(within(sideNav).queryByRole('link', { name: 'Project Info' })).toBeInTheDocument()
-  expect(within(sideNav).queryByRole('link', { name: 'Users' })).toBeInTheDocument()
-  expect(within(sideNav).queryByRole('link', { name: 'Data Sharing' })).toBeInTheDocument()
+  expect(within(sideNav).getByRole('link', { name: 'Submitted' })).toBeInTheDocument()
+  expect(within(sideNav).getByRole('link', { name: 'Project Info' })).toBeInTheDocument()
+  expect(within(sideNav).getByRole('link', { name: 'Users' })).toBeInTheDocument()
+  expect(within(sideNav).getByRole('link', { name: 'Data Sharing' })).toBeInTheDocument()
 })
 
 test('Navigator online - Toggle switch is not checked, and is enabled', async () => {

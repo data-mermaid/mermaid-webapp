@@ -1,7 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { rest } from 'msw'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import {
   screen,
@@ -23,11 +22,14 @@ a page that informs the user that they dont have permisison for a project`, asyn
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-    initialEntries: ['/projects/5/collecting/'],
-  })
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+      initialEntries: ['/projects/5/collecting/'],
+    },
+  )
 
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
@@ -116,7 +118,7 @@ a page that informs the user that they dont have permisison for a project`, asyn
   // click another project-related page to trigger a sync and use the mock api with sync errors
   const sitesSideNavLink = screen.getByRole('link', { name: 'Sites' })
 
-  userEvent.click(sitesSideNavLink)
+  await user.click(sitesSideNavLink)
 
   expect(
     await screen.findByText('You do not have permission to access this project.'),

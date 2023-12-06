@@ -229,6 +229,7 @@ const ColoniesBleachedObservationTable = ({
               aria-labelledby="growth-form-label"
               onKeyDown={handleObservationKeyDown}
             >
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <option value=""> </option>
               {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>
