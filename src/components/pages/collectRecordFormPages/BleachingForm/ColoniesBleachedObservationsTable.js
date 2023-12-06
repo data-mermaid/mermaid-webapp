@@ -207,7 +207,6 @@ const ColoniesBleachedObservationTable = ({
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
                   autoFocus={autoFocusAllowed}
-                  isLastRow={observationsState.length === rowNumber}
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
