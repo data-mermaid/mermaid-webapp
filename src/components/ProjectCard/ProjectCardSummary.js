@@ -33,7 +33,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
   } = project
 
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, id)
-  const projectUrl = `projects/${id}`
+  const projectUrl = `/projects/${id}`
 
   const userCollectCount = useMemo(() => {
     return (

@@ -9,10 +9,18 @@ export default [
         {
           profile: '9d48bef5-728b-489e-8cb5-dc47c6452ef4',
           profile_name: 'Al Leonard',
+          email: 'al@email.com',
         },
         {
           profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
           profile_name: 'Melissa Nunes',
+          email: 'melissa@email.com',
+        },
+        {
+          id: 'removedUserId',
+          profile: 'userWhoHasBeenRemovedFromProject',
+          profile_name: 'Betsy Craig',
+          email: 'betsy@email.com',
         },
       ],
       sample_event: {

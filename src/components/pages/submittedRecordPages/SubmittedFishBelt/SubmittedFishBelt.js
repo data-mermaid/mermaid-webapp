@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 
 import { ButtonSecondary } from '../../../generic/buttons'
@@ -44,7 +44,7 @@ const SubmittedFishBelt = () => {
   const { isAppOnline } = useOnlineStatus()
   const { submittedRecordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
-  const history = useHistory()
+  const navigate = useNavigate()
   const isMounted = useIsMounted()
   const observers = submittedRecord?.observers ?? []
   const { currentUser } = useCurrentUser()
@@ -147,7 +147,7 @@ const SubmittedFishBelt = () => {
       .moveToCollect({ projectId, submittedRecordId, sampleUnitMethod: 'beltfishtransectmethods' })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
-        history.push(
+        navigate(
           `${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${submittedRecordId}`,
         )
       })

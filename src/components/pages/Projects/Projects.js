@@ -1,6 +1,5 @@
 import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 
 import { HomePageLayout } from '../../Layout'
 import language from '../../../language'
@@ -12,7 +11,6 @@ import ProjectToolBarSection from '../../ProjectToolBarSection'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../../library/useIsMounted'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { getObjectById } from '../../../library/getObjectById'
 import PageUnavailable from '../PageUnavailable'
@@ -24,7 +22,7 @@ import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandl
 /**
  * All Projects page (lists projects)
  */
-const Projects = ({ apiSyncInstance }) => {
+const Projects = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isProjectSortAsc, setIsProjectSortAsc] = useState(true)
   const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
@@ -141,7 +139,6 @@ const Projects = ({ apiSyncInstance }) => {
           <ProjectCard
             role="listitem"
             project={{ ...project }}
-            apiSyncInstance={apiSyncInstance}
             isOfflineReady={getIsProjectOffline(project.id)}
             addProjectToProjectsPage={addProjectToProjectsPage}
           />
@@ -167,10 +164,6 @@ const Projects = ({ apiSyncInstance }) => {
       bottomRow={<div role="list">{projectCardsList}</div>}
     />
   )
-}
-
-Projects.propTypes = {
-  apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage).isRequired,
 }
 
 export default Projects

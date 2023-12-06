@@ -11,6 +11,7 @@ import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSucces
 
 jest.setTimeout(300000)
 window.URL.createObjectURL = () => {}
+window.confirm = () => true // simulates user clicking OK
 
 jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
   return {
@@ -21,15 +22,22 @@ jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
         getLayer: jest.fn(),
         jumpTo: jest.fn(),
         on: jest.fn(),
+        off: jest.fn(),
         remove: jest.fn(),
         touchZoomRotate: { disableRotation: jest.fn() },
         getSource: jest.fn(() => ({ setData: jest.fn() })),
         fitBounds: jest.fn(),
         getZoom: jest.fn(),
+        getCanvas: jest.fn(() => ({ style: {} })),
       }
     },
     Marker: function () {
-      return { setLngLat: jest.fn(() => ({ addTo: jest.fn() })), on: jest.fn(), remove: jest.fn() }
+      return {
+        setLngLat: jest.fn(() => ({ addTo: jest.fn() })),
+        on: jest.fn(),
+        remove: jest.fn(),
+        getElement: jest.fn(() => ({})),
+      }
     },
     Popup: function () {
       return {

@@ -10,6 +10,7 @@ export const apiDataTypes = {
   choices: 'choices',
   collectRecords: 'collect_records',
   fishFamilies: 'fish_families',
+  fishGroupings: 'fish_groupings',
   fishGenera: 'fish_genera',
   fishSpecies: 'fish_species',
   projectManagements: 'project_managements',

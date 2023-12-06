@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
@@ -87,6 +87,8 @@ const DataSharing = () => {
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const [isDataUpdating, setIsDataUpdating] = useState(false)
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
@@ -153,6 +155,9 @@ const DataSharing = () => {
           setIsDataUpdating(false)
           setProjectBeingEdited(updatedProject)
           toast.success(...getToastArguments(toastMessage))
+
+          // hack to refresh page and show or hide the dashboard link depending on potentially changed test project status
+          navigate(location.pathname)
         })
         .catch((error) => {
           handleHttpResponseError({
@@ -161,7 +166,7 @@ const DataSharing = () => {
           })
         })
     },
-    [databaseSwitchboardInstance, projectId, handleHttpResponseError],
+    [databaseSwitchboardInstance, projectId, navigate, location.pathname, handleHttpResponseError],
   )
 
   const handleDataPolicyChange = (event, propertyToUpdate) => {

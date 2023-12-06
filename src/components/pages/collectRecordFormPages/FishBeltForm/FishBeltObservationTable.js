@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -7,6 +7,9 @@ import {
   observationsReducerPropType,
   fishNameConstantsPropType,
   fishBeltPropType,
+  fishFamiliesPropType,
+  fishGeneraPropType,
+  fishSpeciesPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import {
   ButtonRemoveRow,
@@ -17,6 +20,8 @@ import {
   StickyObservationTable,
   UnderTableRow,
   UnderTableRowButtonArea,
+  ButtonPopover,
+  Popover,
 } from '../CollectingFormPage.Styles'
 import { ButtonPrimary, IconButton } from '../../../generic/buttons'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
@@ -24,7 +29,7 @@ import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishBeltBiomass'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus, IconInfo } from '../../../icons'
+import { IconClose, IconPlus, IconInfo, IconBook } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, LabelContainer, RequiredIndicator } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
@@ -37,6 +42,8 @@ import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import theme from '../../../../theme'
+import { getFishNameTable } from '../../../../App/mermaidData/fishNameHelpers'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -89,6 +96,9 @@ const FishBeltObservationTable = ({
   fishNameConstants,
   fishNameOptions,
   testId,
+  fishFamilies,
+  fishGenera,
+  fishSpecies,
 }) => {
   const {
     size_bin: fishBinSelected,
@@ -100,6 +110,9 @@ const FishBeltObservationTable = ({
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+  const [observationIdWithFishNamePopoverShowing, setObservationIdWithFishNamePopoverShowing] =
+    useState()
+  const [fishNamePopoverContent, setFishNamePopoverContent] = useState()
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -151,6 +164,26 @@ const FishBeltObservationTable = ({
     event.stopPropagation()
   }
 
+  const handlePopoverButtonClick = useCallback(
+    ({ observationId, fishNameId }) => {
+      const popoverTable = getFishNameTable({
+        fishFamilies,
+        choices,
+        fishGenera,
+        fishSpecies,
+        fishNameId,
+      })
+
+      setFishNamePopoverContent(popoverTable)
+      setObservationIdWithFishNamePopoverShowing(observationId)
+    },
+    [choices, fishFamilies, fishGenera, fishSpecies],
+  )
+
+  const resetObservationIdWithFishNamePopoverShowing = () => {
+    setObservationIdWithFishNamePopoverShowing(null)
+  }
+
   const observationsRows = useMemo(() => {
     const handleKeyDown = ({ event, index, observation, isCount }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
@@ -181,7 +214,9 @@ const FishBeltObservationTable = ({
     }
 
     return observationsState.map((observation, index) => {
-      const { id: observationId, count, size, fish_attribute } = observation
+      const { id: observationId, count, size, fish_attribute: fishNameId } = observation
+      const shouldShowObservationFishnamePopover =
+        observationId === observationIdWithFishNamePopoverShowing
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -323,7 +358,7 @@ const FishBeltObservationTable = ({
                   aria-labelledby="fish-name-label"
                   options={fishNameOptions}
                   onChange={handleFishNameChange}
-                  value={fish_attribute}
+                  value={fishNameId}
                   noResultsText={language.autocomplete.noResultsDefault}
                   noResultsAction={
                     <NewOptionButton type="button" onClick={proposeNewSpeciesClick}>
@@ -331,6 +366,23 @@ const FishBeltObservationTable = ({
                     </NewOptionButton>
                   }
                 />
+                {shouldShowObservationFishnamePopover ? (
+                  <Popover>{fishNamePopoverContent}</Popover>
+                ) : null}
+                {fishNameId ? (
+                  <ButtonPopover
+                    tabIndex="-1"
+                    type="button"
+                    aria-label="view fish name information"
+                    onClick={() => handlePopoverButtonClick({ observationId, fishNameId })}
+                  >
+                    {/* we set height ahd with here in addition in the styled component to suppress svg errors */}
+                    <IconBook
+                      height={theme.typography.mediumIconSize}
+                      width={theme.typography.mediumIconSize}
+                    />
+                  </ButtonPopover>
+                ) : null}
               </InputAutocompleteContainer>
             )}
           </Td>
@@ -380,7 +432,10 @@ const FishBeltObservationTable = ({
     collectRecord,
     fishBinSelectedLabel,
     fishNameOptions,
+    fishNamePopoverContent,
+    handlePopoverButtonClick,
     ignoreObservationValidations,
+    observationIdWithFishNamePopoverShowing,
     observationsBiomass,
     observationsDispatch,
     observationsState,
@@ -394,7 +449,11 @@ const FishBeltObservationTable = ({
     <InputWrapper data-testid={testId}>
       <H2 id="table-label">Observations</H2>
       <StyledOverflowWrapper>
-        <StickyObservationTable data-testid="fish-observations-table" aria-labelledby="table-label">
+        <StickyObservationTable
+          data-testid="fish-observations-table"
+          aria-labelledby="table-label"
+          onMouseLeave={resetObservationIdWithFishNamePopoverShowing}
+        >
           <StyledColgroup>
             <col className="number" />
             <col className="fishName" />
@@ -522,6 +581,9 @@ FishBeltObservationTable.propTypes = {
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
   testId: PropTypes.string.isRequired,
+  fishFamilies: fishFamiliesPropType.isRequired,
+  fishGenera: fishGeneraPropType.isRequired,
+  fishSpecies: fishSpeciesPropType.isRequired,
 }
 
 FishBeltObservationTable.defaultProps = {

@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import { useParams, useHistory } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo } from 'react'
 
@@ -16,7 +16,7 @@ import {
 import { getManagementRegimeInitialValues } from './managementRegimeFormInitialValues'
 import { getOptions } from '../../../library/getOptions'
 import { getToastArguments } from '../../../library/getToastArguments'
-import { H2 } from '../../generic/text'
+import { H2, ItalicizedInfo } from '../../generic/text'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import { InputWrapper } from '../../generic/form'
 import { managementRegimePropType } from '../../../App/mermaidData/mermaidDataProptypes'
@@ -45,6 +45,7 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import InputSelectWithLabelAndValidation from '../../mermaidInputs/InputSelectWithLabelAndValidation'
+import { DeleteRecordButtonCautionWrapper } from '../collectRecordFormPages/CollectingFormPage.Styles'
 
 const ReadOnlyManagementRegimeContent = ({
   managementRegimeFormikValues,
@@ -193,7 +194,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { managementRegimeId, projectId } = useParams()
-  const history = useHistory()
+  const navigate = useNavigate()
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
@@ -345,9 +346,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           formikActions.resetForm({ values: formikValues })
 
           if (isNewManagementRegime) {
-            history.push(
-              `${ensureTrailingSlash(currentProjectPath)}management-regimes/${response.id}`,
-            )
+            navigate(`${ensureTrailingSlash(currentProjectPath)}management-regimes/${response.id}`)
           }
         })
         .catch((error) => {
@@ -435,7 +434,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         toast.success(
           ...getToastArguments(language.success.getMermaidDataDeleteSuccess('management regime')),
         )
-        history.push(`${ensureTrailingSlash(currentProjectPath)}management-regimes/`)
+        navigate(`${ensureTrailingSlash(currentProjectPath)}management-regimes/`)
       })
       .catch((error) => {
         const { isSyncError, isDeleteRejectedError } = error
@@ -483,7 +482,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         managementComplianceOptions={managementComplianceOptions}
         managementPartyOptions={managementPartyOptions}
       />
-      {isAdminUser && isAppOnline && (
+      {isAdminUser && isAppOnline ? (
         <DeleteRecordButton
           currentPage={currentDeleteRecordModalPage}
           errorData={deleteErrorData}
@@ -495,7 +494,12 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           onDismiss={closeDeleteRecordModal}
           openModal={openDeleteRecordModal}
         />
-      )}
+      ) : null}
+      {!isAdminUser && isAppOnline ? (
+        <DeleteRecordButtonCautionWrapper>
+          <ItalicizedInfo>{language.pages.managementRegimeForm.nonAdminDelete}</ItalicizedInfo>
+        </DeleteRecordButtonCautionWrapper>
+      ) : null}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
     </>

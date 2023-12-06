@@ -34,11 +34,12 @@ const useDexiePerUserDataInstance = ({ currentUser }) => {
     if (userId) {
       const dexiePerUserDataInstance = new Dexie(userId)
 
-      dexiePerUserDataInstance.version(1).stores({
+      dexiePerUserDataInstance.version(2).stores({
         benthic_attributes: 'id',
         choices: 'id',
         collect_records: 'id, project',
         fish_families: 'id',
+        fish_groupings: 'id',
         fish_genera: 'id',
         fish_species: 'id',
         project_managements: 'id, project',

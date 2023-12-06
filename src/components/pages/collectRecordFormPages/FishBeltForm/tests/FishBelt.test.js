@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
-import { Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 
@@ -21,9 +21,12 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBeltForm isNewRecord={false} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt/:recordId"
+        element={<FishBeltForm isNewRecord={false} />}
+      />
+    </Routes>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,
@@ -75,9 +78,9 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBeltForm />
-    </Route>,
+    <Routes>
+      <Route path="/projects/:projectId/collecting/fishbelt/:recordId" element={<FishBeltForm />} />
+    </Routes>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,
@@ -129,9 +132,12 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBeltForm isNewRecord={false} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt/:recordId"
+        element={<FishBeltForm isNewRecord={false} />}
+      />
+    </Routes>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,
@@ -183,9 +189,12 @@ test('FishBelt component in EDIT mode - button group shows save, validate and su
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBeltForm isNewRecord={false} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt/:recordId"
+        element={<FishBeltForm isNewRecord={false} />}
+      />
+    </Routes>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,
@@ -219,9 +228,12 @@ test('FishBelt component in EDIT mode - button group shows only save button when
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOffline(
-    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBeltForm isNewRecord={false} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt/:recordId"
+        element={<FishBeltForm isNewRecord={false} />}
+      />
+    </Routes>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,
@@ -255,9 +267,12 @@ test('Fishbelt observations: add row button adds a row', async () => {
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBeltForm isNewRecord={false} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt/:recordId"
+        element={<FishBeltForm isNewRecord={false} />}
+      />
+    </Routes>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,
@@ -284,9 +299,12 @@ test('Fishbelt observations: delete observation button deleted observation', asy
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBeltForm isNewRecord={false} />
-    </Route>,
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt/:recordId"
+        element={<FishBeltForm isNewRecord={false} />}
+      />
+    </Routes>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,

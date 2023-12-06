@@ -18,6 +18,7 @@ env:
   REACT_APP_MERMAID_API: https://dev-api.datamermaid.org/v1
   REACT_APP_MERMAID_DASHBOARD_LINK: https://dev-dashboard.datamermaid.org
   REACT_APP_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
+  REACT_APP_CAPTURE_GOOGLE_ANALYTICS: false
   TARGET: dev
 
 jobs:
@@ -56,6 +57,7 @@ jobs:
           echo "REACT_APP_MERMAID_API=https://api.datamermaid.org/v1" >> "$GITHUB_ENV"
           echo "REACT_APP_MERMAID_DASHBOARD_LINK=https://dashboard.datamermaid.org" >> "$GITHUB_ENV"
           echo "REACT_APP_MERMAID_REFERENCE_LINK=https://public.datamermaid.org/mermaid_attributes.xlsx" >> "$GITHUB_ENV"
+          echo "REACT_APP_CAPTURE_GOOGLE_ANALYTICS=true"
           echo "export const versionNumber = '${{ github.ref_name }}'" > src/version.js
           cat src/version.js
 

@@ -52,6 +52,9 @@ const FishBeltForm = ({ isNewRecord }) => {
   const [sites, setSites] = useState([])
   const [subNavNode, setSubNavNode] = useState(null)
   const { currentUser } = useCurrentUser()
+  const [fishSpecies, setFishSpecies] = useState([])
+  const [fishGenera, setFishGenera] = useState([])
+  const [fishFamilies, setFishFamilies] = useState([])
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -60,6 +63,7 @@ const FishBeltForm = ({ isNewRecord }) => {
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
+        databaseSwitchboardInstance.getFishGroupings(),
         databaseSwitchboardInstance.getProject(projectId),
       ]
 
@@ -70,9 +74,10 @@ const FishBeltForm = ({ isNewRecord }) => {
         .then(
           ([
             sitesResponse,
-            species,
-            genera,
-            families,
+            fishSpeciesResponse,
+            fishGeneraResponse,
+            fishFamiliesResponse,
+            fishGroupingsResponse,
             projectResponse,
             // collectRecord needs to be last in array because its pushed to the promise array conditionally
             collectRecordResponse,
@@ -87,18 +92,23 @@ const FishBeltForm = ({ isNewRecord }) => {
                 )
               }
               const updateFishNameConstants = getFishNameConstants({
-                species,
-                genera,
-                families,
+                species: fishSpeciesResponse,
+                genera: fishGeneraResponse,
+                families: fishFamiliesResponse,
+                groupings: fishGroupingsResponse,
               })
 
               const updateFishNameOptions = getFishNameOptions({
-                species,
-                genera,
-                families,
+                species: fishSpeciesResponse,
+                genera: fishGeneraResponse,
+                families: fishFamiliesResponse,
+                groupings: fishGroupingsResponse,
               })
 
-              const generaOptions = genera.map((genus) => ({ label: genus.name, value: genus.id }))
+              const generaOptions = fishGeneraResponse.map((genus) => ({
+                label: genus.name,
+                value: genus.id,
+              }))
 
               setSubNavNode(
                 getDataForSubNavNode({
@@ -114,6 +124,9 @@ const FishBeltForm = ({ isNewRecord }) => {
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
               setModalAttributeOptions(generaOptions)
+              setFishSpecies(fishSpeciesResponse)
+              setFishGenera(fishGeneraResponse)
+              setFishFamilies(fishFamiliesResponse)
               setIsLoading(false)
             }
           },
@@ -241,6 +254,9 @@ const FishBeltForm = ({ isNewRecord }) => {
           <FishBeltObservationTable
             fishNameConstants={fishNameConstants}
             fishNameOptions={fishNameOptions}
+            fishFamilies={fishFamilies}
+            fishGenera={fishGenera}
+            fishSpecies={fishSpecies}
             {...props}
           />
         )
@@ -249,7 +265,7 @@ const FishBeltForm = ({ isNewRecord }) => {
       return null
     },
 
-    [fishNameConstants, fishNameOptions],
+    [fishFamilies, fishGenera, fishNameConstants, fishNameOptions, fishSpecies],
   )
 
   const PartiallyAppliedFishBeltTransectInputs = useCallback(

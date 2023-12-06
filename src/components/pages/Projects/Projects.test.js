@@ -1,8 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
-import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
-import { getFakeAccessToken } from '../../../testUtilities/getFakeAccessToken'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
@@ -17,18 +15,9 @@ import Projects from './Projects'
 test('Projects component renders with the expected UI elements', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -64,18 +53,9 @@ test('Projects component renders with the expected UI elements', async () => {
 test('A project card renders with the expected UI elements for button groups', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -103,18 +83,9 @@ test('A project card renders with the expected UI elements for button groups', a
 test('A project card shows relevant data for a project', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -161,16 +132,7 @@ test('A project card renders appropriately when offline', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
-  renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOffline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -206,16 +168,7 @@ test('A project card renders appropriately when online', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -254,16 +207,7 @@ test('Hide new project button in project toolbar when offline', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
-  renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOffline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -282,16 +226,7 @@ test('Projects can be sorted by countries', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -315,16 +250,7 @@ test('Projects can be sorted by number of sites', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -348,16 +274,7 @@ test('Projects can be sorted by updated on date', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -381,16 +298,7 @@ test('Project sorted descending', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -413,16 +321,7 @@ test('Project filter filters by name and country', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
@@ -455,16 +354,7 @@ test('Project filter can accomodate words containing apostrophes', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexiePerUserDataInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    handleUserDeniedSyncPush: () => {},
-    handleNested500SyncError: () => {},
-  })
-
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+  renderAuthenticatedOnline(<Projects />, {
     dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })

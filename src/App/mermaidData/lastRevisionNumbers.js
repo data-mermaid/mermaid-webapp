@@ -10,6 +10,7 @@ const persistLastRevisionNumbersPulled = ({ dexiePerUserDataInstance, apiData, p
         'choices',
         'collect_records',
         'fish_families',
+        'fish_groupings',
         'fish_genera',
         'fish_species',
         'project_managements',

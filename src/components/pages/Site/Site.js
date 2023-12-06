@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
@@ -16,7 +16,7 @@ import {
 import { getOptions } from '../../../library/getOptions'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { getToastArguments } from '../../../library/getToastArguments'
-import { H2 } from '../../generic/text'
+import { H2, ItalicizedInfo } from '../../generic/text'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import { InputRow, InputWrapper, RequiredIndicator } from '../../generic/form'
 import { showSyncToastError } from '../../../library/showSyncToastError'
@@ -45,6 +45,7 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import InputSelectWithLabelAndValidation from '../../mermaidInputs/InputSelectWithLabelAndValidation'
+import { DeleteRecordButtonCautionWrapper } from '../collectRecordFormPages/CollectingFormPage.Styles'
 
 const ReadOnlySiteContent = ({
   site,
@@ -165,6 +166,8 @@ const SiteForm = ({
           validationMessages={formik.errors.latitude}
           testId="latitude"
           helperText={language.helperText.getLatitude()}
+          shouldShowSteps={true}
+          step="0.000001"
         />
         <InputWithLabelAndValidation
           required
@@ -177,6 +180,8 @@ const SiteForm = ({
           validationMessages={formik.errors.longitude}
           testId="longitude"
           helperText={language.helperText.getLongitude()}
+          shouldShowSteps={true}
+          step="0.000001"
         />
         {isAppOnline && (
           <SingleSiteMap
@@ -230,7 +235,7 @@ const Site = ({ isNewSite }) => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { siteId, projectId } = useParams()
-  const history = useHistory()
+  const navigate = useNavigate()
   const isMounted = useIsMounted()
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
@@ -362,7 +367,7 @@ const Site = ({ isNewSite }) => {
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
 
           if (isNewSite) {
-            history.push(`${ensureTrailingSlash(currentProjectPath)}sites/${response.id}`)
+            navigate(`${ensureTrailingSlash(currentProjectPath)}sites/${response.id}`)
           }
         })
         .catch((error) => {
@@ -480,7 +485,7 @@ const Site = ({ isNewSite }) => {
         closeDeleteRecordModal()
         setIsDeletingSite(false)
         toast.success(...getToastArguments(language.success.getMermaidDataDeleteSuccess('site')))
-        history.push(`${ensureTrailingSlash(currentProjectPath)}sites/`)
+        navigate(`${ensureTrailingSlash(currentProjectPath)}sites/`)
       })
       .catch((error) => {
         const { isSyncError, isDeleteRejectedError } = error
@@ -550,6 +555,11 @@ const Site = ({ isNewSite }) => {
           openModal={openDeleteRecordModal}
         />
       )}
+      {!isAdminUser && isAppOnline ? (
+        <DeleteRecordButtonCautionWrapper>
+          <ItalicizedInfo>{language.pages.siteForm.nonAdminDelete}</ItalicizedInfo>
+        </DeleteRecordButtonCautionWrapper>
+      ) : null}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
     </>
