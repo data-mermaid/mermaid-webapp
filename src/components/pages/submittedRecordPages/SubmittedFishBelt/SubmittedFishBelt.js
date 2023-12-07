@@ -216,7 +216,7 @@ const SubmittedFishBelt = () => {
                 </p>
                 <ButtonSecondary
                   onClick={handleMoveToCollect}
-                  disabled={currentUserProfile.is_admin ? isMoveToButtonDisabled : 'false'}
+                  disabled={currentUserProfile.is_admin ? isMoveToButtonDisabled : false}
                 >
                   <IconPen />
                   {language.pages.submittedForm.moveSampleUnitButton}

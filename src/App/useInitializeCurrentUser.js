@@ -10,7 +10,6 @@ export const useInitializeCurrentUser = ({
   dexieCurrentUserInstance,
   isMermaidAuthenticated,
   isAppOnline,
-  isSyncInProgress,
   handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
 }) => {
   const [currentUser, setCurrentUser] = useState()
@@ -25,7 +24,6 @@ export const useInitializeCurrentUser = ({
         dexieCurrentUserInstance,
         isMermaidAuthenticated,
         isAppOnline,
-        isSyncInProgress,
       })
         .then((user) => {
           if (isMounted && user) {
@@ -51,7 +49,6 @@ export const useInitializeCurrentUser = ({
     dexieCurrentUserInstance,
     isMermaidAuthenticated,
     isAppOnline,
-    isSyncInProgress,
     handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
   ])
 

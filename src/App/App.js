@@ -36,7 +36,7 @@ import { routes } from './routes'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline, setServerNotReachable } = useOnlineStatus()
-  const { isOfflineStorageHydrated, syncErrors, isSyncInProgress } = useSyncStatus()
+  const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const navigate = useNavigate()
   const isMounted = useIsMounted()
@@ -108,7 +108,6 @@ function App({ dexieCurrentUserInstance }) {
     dexieCurrentUserInstance,
     isMermaidAuthenticated,
     isAppOnline,
-    isSyncInProgress,
     handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
   })
 
