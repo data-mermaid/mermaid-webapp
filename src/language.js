@@ -204,6 +204,7 @@ const loadingIndicator = {
 const createNewOptionModal = {
   addNewAttributeTitle: (attribute) => `Add New ${attribute}`,
   genus: 'Genus',
+  genusNotFound: 'Genus not found in MERMAID',
   species: 'Species',
   newBenthicAttribute: 'Benthic Attribute',
   benthicAttributeParent: 'Parent',
