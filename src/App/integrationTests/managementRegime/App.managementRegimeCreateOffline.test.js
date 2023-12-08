@@ -5,6 +5,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexi
 import {
   renderAuthenticatedOffline,
   screen,
+  waitFor,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
@@ -131,8 +132,11 @@ describe('Offline', () => {
 
     await user.click(within(sideNav).getByText('Management Regimes'))
 
+    const pageSizeSelector = await screen.findByTestId('page-size-selector')
+
     // show all the records
-    await user.selectOptions(await screen.findByTestId('page-size-selector'), '4')
+    await waitFor(() => expect(pageSizeSelector))
+    await user.selectOptions(pageSizeSelector, '4')
     const table = await screen.findByRole('table')
 
     const tableRows = await screen.findAllByRole('row')

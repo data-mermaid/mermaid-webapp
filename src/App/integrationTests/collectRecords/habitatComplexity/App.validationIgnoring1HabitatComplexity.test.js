@@ -623,7 +623,13 @@ test('Habitat Complexity validation: user can dismiss observation warnings ', as
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const observationsTable = screen.getByLabelText('Observations')
 

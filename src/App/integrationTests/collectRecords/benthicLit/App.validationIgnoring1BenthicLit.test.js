@@ -483,7 +483,13 @@ test('Benthic LIT validation: user can dismiss record-level warnings ', async ()
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 

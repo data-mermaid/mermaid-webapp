@@ -6,6 +6,7 @@ import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
+  waitFor,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
@@ -71,13 +72,11 @@ test('Validating an empty Habitat Complexity collect record shows validations (p
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
   // record level validations
