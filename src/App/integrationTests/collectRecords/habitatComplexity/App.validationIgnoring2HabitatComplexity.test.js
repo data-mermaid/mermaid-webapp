@@ -100,7 +100,13 @@ test('Habitat Complexity validation: user can reset ignored observation warnings
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const observationsTable = screen.getByLabelText('Observations')
 
@@ -182,7 +188,13 @@ test('user can reset dismissed record-level warnings', async () => {
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
@@ -197,7 +209,7 @@ test('user can reset dismissed record-level warnings', async () => {
   )
   expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
 
-  const isFormDirtyAfterReset = screen.getByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
 
   expect(isFormDirtyAfterReset)
 })
@@ -398,7 +410,13 @@ test('Habitat Complexity validation: user edits non-observation input with ignor
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')

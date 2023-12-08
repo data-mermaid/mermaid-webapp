@@ -102,7 +102,13 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const coloniesBleachedObservationTable = screen.getByLabelText('Observations - Colonies Bleached')
 
@@ -231,7 +237,13 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const percentCoverObservationTable = screen.getByLabelText('Observations - Percent Cover')
 
@@ -321,7 +333,13 @@ test('user can reset dismissed record-level warnings', async () => {
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
@@ -513,7 +531,13 @@ test('Bleaching validation: user edits non-observation input with ignored valida
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
