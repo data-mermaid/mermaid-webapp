@@ -99,7 +99,7 @@ describe('Offline', () => {
     // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-management-regime-form-title'))
 
-    expect(screen.getByLabelText('Name')).toHaveValue('Rebecca')
+    await waitFor(() => expect(screen.getByLabelText('Name')).toHaveValue('Rebecca'))
     expect(screen.getByLabelText('Secondary Name')).toHaveValue('Becca')
     expect(screen.getByLabelText('Year Established')).toHaveValue(1980)
     expect(screen.getByLabelText('Area')).toHaveValue(40)

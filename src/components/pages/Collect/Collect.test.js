@@ -442,7 +442,7 @@ test('Collect Records table changes number of rows visible size when pagination 
   // 15 + header row
   expect(tableRows.length).toEqual(16)
 
-  //await user.selectOptions(screen.getByTestId('page-size-selector'), '21')
+  // await user.selectOptions(screen.getByTestId('page-size-selector'), '21')
 
   const pageSizeSelector = await screen.findByTestId('page-size-selector')
 
