@@ -66,7 +66,7 @@ const MainContentPages = ({
             aria-labelledby="attribute-label"
             options={modalAttributeOptions}
             value={pageOneFirstInputValue}
-            noResultsText={language.createNewOptionModal.genusNotFound}
+            noResultsText={language.createNewOptionModal.genusNotFound()}
             onChange={handleFormikPageOneValueChange}
           />
           {pageOneFirstInputError && <span id="attribute-required">{pageOneFirstInputError}</span>}
