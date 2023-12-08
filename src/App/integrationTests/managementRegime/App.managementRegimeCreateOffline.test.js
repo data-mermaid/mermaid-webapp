@@ -102,7 +102,7 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Secondary Name')).toHaveValue('Becca')
     expect(screen.getByLabelText('Year Established')).toHaveValue(1980)
     expect(screen.getByLabelText('Area')).toHaveValue(40)
-    expect(within(screen.getByLabelText('Parties')).getByLabelText('NGO')).toBeChecked()
+    expect(await within(screen.getByLabelText('Parties')).findByLabelText('NGO')).toBeChecked()
     expect(
       within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
     ).toBeChecked()

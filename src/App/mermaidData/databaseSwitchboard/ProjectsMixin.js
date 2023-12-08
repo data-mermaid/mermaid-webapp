@@ -73,7 +73,7 @@ const ProjectsMixin = (Base) =>
       return this._isOnlineAuthenticatedAndReady
         ? axios
             .get(
-              `${this._apiBaseUrl}/projecttags`,
+              `${this._apiBaseUrl}/projecttags/`,
               await getAuthorizationHeaders(this._getAccessToken),
             )
             .then((apiResults) => apiResults.data.results)
@@ -138,7 +138,7 @@ const ProjectsMixin = (Base) =>
 
       return this._isAuthenticatedAndReady
         ? axios
-            .get(`${this._apiBaseUrl}/profiles`, {
+            .get(`${this._apiBaseUrl}/profiles/`, {
               params: {
                 email,
               },
