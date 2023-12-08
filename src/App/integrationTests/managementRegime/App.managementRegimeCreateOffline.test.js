@@ -5,6 +5,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexi
 import {
   renderAuthenticatedOffline,
   screen,
+  waitFor,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
@@ -98,11 +99,13 @@ describe('Offline', () => {
     // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-management-regime-form-title'))
 
-    expect(screen.getByLabelText('Name')).toHaveValue('Rebecca')
+    await waitFor(() => expect(screen.getByLabelText('Name')).toHaveValue('Rebecca'))
     expect(screen.getByLabelText('Secondary Name')).toHaveValue('Becca')
     expect(screen.getByLabelText('Year Established')).toHaveValue(1980)
     expect(screen.getByLabelText('Area')).toHaveValue(40)
-    expect(within(screen.getByLabelText('Parties')).getByLabelText('NGO')).toBeChecked()
+    await waitFor(() =>
+      expect(within(screen.getByLabelText('Parties')).getByLabelText('NGO')).toBeChecked(),
+    )
     expect(
       within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
     ).toBeChecked()
@@ -131,8 +134,11 @@ describe('Offline', () => {
 
     await user.click(within(sideNav).getByText('Management Regimes'))
 
+    const pageSizeSelector = await screen.findByTestId('page-size-selector')
+
     // show all the records
-    await user.selectOptions(await screen.findByTestId('page-size-selector'), '4')
+    await waitFor(() => expect(pageSizeSelector))
+    await user.selectOptions(pageSizeSelector, '4')
     const table = await screen.findByRole('table')
 
     const tableRows = await screen.findAllByRole('row')

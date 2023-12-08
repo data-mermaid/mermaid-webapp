@@ -132,7 +132,7 @@ test('Management Regime component - form inputs are initialized with the correct
 
   expect(within(parties).getByLabelText('NGO')).not.toBeChecked()
   expect(within(parties).getByLabelText('community/local government')).not.toBeChecked()
-  expect(within(parties).getByLabelText('government')).toBeChecked()
+  expect(await within(parties).findByLabelText('government')).toBeChecked()
   expect(within(parties).getByLabelText('private sector')).not.toBeChecked()
   expect(
     within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),

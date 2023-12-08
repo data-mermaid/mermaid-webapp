@@ -7,6 +7,7 @@ import {
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
   screen,
+  waitFor,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 
@@ -66,7 +67,7 @@ test('Online: Edit Site shows toast and edited record info', async () => {
 
   expect(await screen.findByText('The site has been saved on your computer and online.'))
 
-  expect(siteNameInput).toHaveValue('OOF')
+  await waitFor(() => expect(siteNameInput).toHaveValue('OOF'))
 })
 
 test('Offline: edit site save stored site in dexie', async () => {
@@ -102,7 +103,7 @@ test('Offline: edit site save stored site in dexie', async () => {
 
   const updatedSite = savedSites.filter((record) => record.id === '1')[0]
 
-  expect(updatedSite.name).toEqual('OOF')
+  await waitFor(() => expect(updatedSite.name).toEqual('OOF'))
 })
 test('Offline: Edit site  save failure shows toast message with new edits persisting', async () => {
   const consoleSpy = jest.spyOn(console, 'error')
