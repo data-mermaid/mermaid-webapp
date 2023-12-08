@@ -292,10 +292,10 @@ const pages = {
       observers: 'Observers',
       transect: 'Transect',
     },
-    observersSelectHelper: 'Select an observer to add',
+    observersSelectHelper: 'Select one or more observers to add',
     getObserverRemovedFromProjectMessage: (userName) => (
       <>
-        <strong>{userName}</strong> was an observer on this sample unit but is no longer a part of
+        <strong>{userName}</strong> is an observer on this sample unit but is no longer a part of
         this project.
       </>
     ),
