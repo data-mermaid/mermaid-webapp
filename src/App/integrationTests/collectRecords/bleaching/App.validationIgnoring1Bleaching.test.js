@@ -227,7 +227,13 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
@@ -434,7 +440,13 @@ test('Bleaching collect record validation: user can dismiss record-level warning
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
@@ -546,7 +558,13 @@ test('Bleaching collect record validation: user can dismiss colonies bleached ob
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const coloniesBleachedObservationsTable = screen.getByLabelText(
     'Observations - Colonies Bleached',
@@ -662,7 +680,13 @@ test('Bleaching collect record validation: user can dismiss percent cover observ
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const percentCoverObservationTable = screen.getByLabelText('Observations - Percent Cover')
 
@@ -935,7 +959,13 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
 
   await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
