@@ -28,7 +28,7 @@ const DatabaseSwitchboardState = class {
     // If there is no special error format from the API, we stick to a standard JS error instance.
     // For 500 and 40x, there is an error object with isSyncError and
     // isDeleteRejectedError booleans. isSyncError helps the component differentiate
-    // between an http errsor and a nested error from a push. isDeleteRejectedError
+    // between an http error and a nested error from a push. isDeleteRejectedError
     //  helps the DatabaseSwitchboard know it should rollback the _deleted
     // and uiState_pushToApi property in
     // browser storage so that the UI doesnt keep trying to push a record that
