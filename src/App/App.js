@@ -102,7 +102,7 @@ function App({ dexieCurrentUserInstance }) {
     [location],
   )
 
-  const { currentUser, saveUserProfile } = useInitializeCurrentUser({
+  const { currentUser, saveUserProfile, refreshCurrentUser } = useInitializeCurrentUser({
     apiBaseUrl,
     getAccessToken,
     dexieCurrentUserInstance,
@@ -203,7 +203,7 @@ function App({ dexieCurrentUserInstance }) {
   return (
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
-        <CurrentUserProvider value={{ currentUser, saveUserProfile }}>
+        <CurrentUserProvider value={{ currentUser, saveUserProfile, refreshCurrentUser }}>
           <HttpResponseErrorHandlerProvider
             value={handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied}
           >

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import language from '../language'
 import { getToastArguments } from '../library/getToastArguments'
@@ -14,7 +14,7 @@ export const useInitializeCurrentUser = ({
 }) => {
   const [currentUser, setCurrentUser] = useState()
 
-  const _initializeUserOnAuthentication = useEffect(() => {
+  const getCurrentUser = useCallback(() => {
     let isMounted = true
 
     if (isMermaidAuthenticated && apiBaseUrl && dexieCurrentUserInstance) {
@@ -52,6 +52,8 @@ export const useInitializeCurrentUser = ({
     handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
   ])
 
+  const _initializeUserOnAuthentication = useEffect(getCurrentUser, [getCurrentUser])
+
   const saveUserProfile = (userProfile) => {
     if (isMermaidAuthenticated && apiBaseUrl && dexieCurrentUserInstance) {
       setCurrentUserProfile({
@@ -75,5 +77,5 @@ export const useInitializeCurrentUser = ({
     }
   }
 
-  return { currentUser, saveUserProfile }
+  return { currentUser, saveUserProfile, refreshCurrentUser: getCurrentUser }
 }
