@@ -56,7 +56,7 @@ const error = {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
     required: 'This field is required',
-    projectNameExists: 'Project name already exists',
+    projectNameExists: 'Project name already exists in MERMAID',
     managementPartialRestrictionRequired: 'At least one rule is required',
   },
   generic: 'MERMAID error.',
