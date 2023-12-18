@@ -38,7 +38,6 @@ test('Collect page only shows records that arent marked to be deleted next sync'
 
   // show all the records
   await user.selectOptions(pageSizeSelector, '20')
-  await user.selectOptions(await screen.findByTestId('page-size-selector'), '20')
 
   const rows = await screen.findAllByRole('row')
 
@@ -94,7 +93,10 @@ test('Management Regimes page only shows records that arent marked to be deleted
     },
   )
 
-  await user.selectOptions(await screen.findByTestId('page-size-selector'), '2')
+  const pageSizeSelector = await screen.findByTestId('page-size-selector')
+
+  await waitFor(() => expect(pageSizeSelector))
+  await user.selectOptions(pageSizeSelector, '2')
 
   const rows = await screen.findAllByRole('row')
 

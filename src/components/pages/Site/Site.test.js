@@ -151,11 +151,11 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
   await user.type(latitudeInput, '91')
   await user.click(countryInput)
 
-  expect(
-    await within(screen.getByTestId('latitude')).findByText(
-      'Latitude should be between -90° and 90°',
-    ),
-  ).toBeInTheDocument()
+  await waitFor(() =>
+    expect(
+      within(screen.getByTestId('latitude')).getByText('Latitude should be between -90° and 90°'),
+    ).toBeInTheDocument(),
+  )
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 
