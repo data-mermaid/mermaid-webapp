@@ -56,7 +56,7 @@ const SubmittedRecordsMixin = (Base) =>
       return this._isOnlineAuthenticatedAndReady
         ? axios
             .get(
-              `${this._apiBaseUrl}/projects/${projectId}/${sampleUnitMethod}/${id}`,
+              `${this._apiBaseUrl}/projects/${projectId}/${sampleUnitMethod}/${id}/`,
               await getAuthorizationHeaders(this._getAccessToken),
             )
             .then((apiResults) => apiResults.data)

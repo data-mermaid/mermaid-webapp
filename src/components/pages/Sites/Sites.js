@@ -260,23 +260,25 @@ const Sites = () => {
     const reefZoneChoices = choices?.reefzones?.data
     const exposureChoices = choices?.reefexposures?.data
 
-    return siteRecordsForUiDisplay.map((site) => {
-      const countryName = getObjectById(countryChoices, site.country)?.name
-      const reefTypeName = getObjectById(reefTypeChoices, site.reef_type)?.name
-      const reefZoneName = getObjectById(reefZoneChoices, site.reef_zone)?.name
-      const exposureName = getObjectById(exposureChoices, site.exposure)?.name
+    return siteRecordsForUiDisplay
+      .map((site) => {
+        const countryName = getObjectById(countryChoices, site.country)?.name
+        const reefTypeName = getObjectById(reefTypeChoices, site.reef_type)?.name
+        const reefZoneName = getObjectById(reefZoneChoices, site.reef_zone)?.name
+        const exposureName = getObjectById(exposureChoices, site.exposure)?.name
 
-      return {
-        Country: countryName,
-        Name: site.name,
-        Latitude: site.location.coordinates[1],
-        Longitude: site.location.coordinates[0],
-        'Reef type': reefTypeName,
-        'Reef zone': reefZoneName,
-        'Reef exposure': exposureName,
-        Notes: site.notes,
-      }
-    })
+        return {
+          Country: countryName,
+          Name: site.name,
+          Latitude: site.location.coordinates[1],
+          Longitude: site.location.coordinates[0],
+          'Reef type': reefTypeName,
+          'Reef zone': reefZoneName,
+          'Reef exposure': exposureName,
+          Notes: site.notes,
+        }
+      })
+      .toSorted((firstSite, secondSite) => firstSite.Name - secondSite.Name)
   }, [siteRecordsForUiDisplay, choices])
 
   const readOnlySitesHeaderContent = (

@@ -56,7 +56,7 @@ const error = {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
     required: 'This field is required',
-    projectNameExists: 'Project name already exists',
+    projectNameExists: 'Project name already exists in MERMAID',
     managementPartialRestrictionRequired: 'At least one rule is required',
   },
   generic: 'MERMAID error.',
@@ -302,10 +302,10 @@ const pages = {
       observers: 'Observers',
       transect: 'Transect',
     },
-    observersSelectHelper: 'Select an observer to add',
+    observersSelectHelper: 'Select one or more observers to add',
     getObserverRemovedFromProjectMessage: (userName) => (
       <>
-        <strong>{userName}</strong> was an observer on this sample unit but is no longer a part of
+        <strong>{userName}</strong> is an observer on this sample unit but is no longer a part of
         this project.
       </>
     ),
@@ -585,10 +585,10 @@ const helperText = {
   ),
   getLongitude: () => (
     <>
-      Latitude in decimal degrees. Should be a number between -90 and 90, representing the
-      north-south position on the Earth&#39;s surface. A positive value indicates a location north
-      of the equator, while a negative value indicates a location south of the equator. If you need
-      to convert from degrees-minutes-seconds, an online calculator is{' '}
+      Longitude in decimal degrees. Should be a number between -180 and 180, representing the
+      east-west position on the Earth&apos;s surface. A positive value indicates a location to the
+      east of the Prime Meridian, while a negative value indicates a location to the west of the
+      Prime Meridian. If you need to convert from degrees-minutes-seconds, an online calculator is{' '}
       <HelperTextLink
         href="https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees"
         target="_blank"

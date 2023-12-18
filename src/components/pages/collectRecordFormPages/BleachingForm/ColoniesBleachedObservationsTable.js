@@ -77,9 +77,8 @@ const ColoniesBleachedObservationTable = ({
     const handleKeyDown = ({ event, index, observation, isLastCell }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
-      const isLastRow = index === observationsState.length - 1
 
-      if (isTabKey && isLastRow && isLastCell) {
+      if (isTabKey && isLastCell) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
@@ -207,7 +206,6 @@ const ColoniesBleachedObservationTable = ({
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
                   autoFocus={autoFocusAllowed}
-                  isLastRow={observationsState.length === rowNumber}
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}

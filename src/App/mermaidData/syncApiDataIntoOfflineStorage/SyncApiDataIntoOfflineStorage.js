@@ -281,6 +281,7 @@ const SyncApiDataIntoOfflineStorage = class {
   }
 
   pullAllProjectDataExceptChoices = async (projectId) => {
+    // usage notes. This function skips pulling choices data because it rarely changes
     const apiDataNamesToPull = [
       'benthic_attributes',
       'collect_records',
@@ -310,6 +311,7 @@ const SyncApiDataIntoOfflineStorage = class {
   }
 
   pushThenPullAllProjectDataExceptChoices = async (projectId) => {
+    // usage notes. This function skips pulling choices data because it rarely changes
     return this.pushChanges().then(async (pushResponse) => {
       const pullData = await this.pullAllProjectDataExceptChoices(projectId)
       const pushData = pushResponse
