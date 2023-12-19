@@ -458,7 +458,6 @@ const ManagementRegimes = () => {
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.managementRegimeTable.filterToolbarText}
-              value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
               disabled={managementRegimeRecordsForUiDisplay.length === 0}
             />

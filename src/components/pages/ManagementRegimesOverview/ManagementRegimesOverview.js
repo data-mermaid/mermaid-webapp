@@ -467,7 +467,6 @@ const ManagementRegimesOverview = () => {
           <FilterItems>
             <FilterSearchToolbar
               name={language.pages.usersAndTransectsTable.filterToolbarText}
-              value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
               disabled={sampleUnitWithManagementRegimeRecords.length === 0}
             />

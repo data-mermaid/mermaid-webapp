@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import { Input, inputStyles } from '../generic/form'
@@ -14,10 +14,13 @@ const FilterInput = styled(Input)`
   ${inputStyles};
 `
 
-const FilterSearchToolbar = ({ name, handleGlobalFilterChange, value, id, disabled }) => {
-  const handleFilterChange = (event) => {
-    const { value: eventValue } = event.target
+const FilterSearchToolbar = ({ name, handleGlobalFilterChange, id, disabled }) => {
+  const [searchText, setSearchText] = useState([])
 
+  const handleFilterChange = (event) => {
+    const eventValue = event.target.value
+
+    setSearchText(eventValue)
     handleGlobalFilterChange(eventValue)
   }
 
@@ -27,7 +30,7 @@ const FilterSearchToolbar = ({ name, handleGlobalFilterChange, value, id, disabl
       <FilterInput
         type="text"
         id={id}
-        value={value}
+        value={searchText}
         onChange={handleFilterChange}
         disabled={disabled}
       />
@@ -37,7 +40,6 @@ const FilterSearchToolbar = ({ name, handleGlobalFilterChange, value, id, disabl
 
 FilterSearchToolbar.defaultProps = {
   id: 'filter-search',
-  value: undefined,
   disabled: false,
 }
 
@@ -45,7 +47,6 @@ FilterSearchToolbar.propTypes = {
   handleGlobalFilterChange: PropTypes.func.isRequired,
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
-  value: PropTypes.string,
   disabled: PropTypes.bool,
 }
 

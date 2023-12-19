@@ -603,7 +603,6 @@ const UsersAndTransects = () => {
           <FilterItems>
             <FilterSearchToolbar
               name={language.pages.usersAndTransectsTable.filterToolbarText}
-              value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
               disabled={submittedRecords.length === 0}
             />
