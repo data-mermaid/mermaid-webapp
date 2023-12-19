@@ -29,7 +29,6 @@ const SubmittedToolbarSection = ({
   name,
   handleGlobalFilterChange,
   handleMethodsColumnFilterChange,
-  searchFilterValue,
   methodFilterValue,
   disabled,
   unfilteredRowLength,
@@ -67,7 +66,6 @@ const SubmittedToolbarSection = ({
           <FilterSearchToolbar
             name={name}
             handleGlobalFilterChange={handleGlobalFilterChange}
-            value={searchFilterValue}
             disabled={disabled}
           />
           <MethodsFilterDropDown
@@ -117,7 +115,6 @@ const SubmittedToolbarSection = ({
 }
 
 SubmittedToolbarSection.defaultProps = {
-  searchFilterValue: undefined,
   methodFilterValue: [],
   disabled: false,
   methodFilteredRowLength: null,
@@ -130,7 +127,6 @@ SubmittedToolbarSection.propTypes = {
   name: PropTypes.string.isRequired,
   handleGlobalFilterChange: PropTypes.func.isRequired,
   handleMethodsColumnFilterChange: PropTypes.func.isRequired,
-  searchFilterValue: PropTypes.string,
   methodFilterValue: PropTypes.arrayOf(string),
   disabled: PropTypes.bool,
   unfilteredRowLength: PropTypes.number.isRequired,
