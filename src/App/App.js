@@ -138,12 +138,12 @@ function App({ dexieCurrentUserInstance }) {
 
   useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,
-    getAccessToken,
     dexiePerUserDataInstance,
     isMounted,
     isAppOnline,
     handleHttpResponseError: handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
     syncApiDataIntoOfflineStorage: apiSyncInstance,
+    refreshCurrentUser,
   })
 
   const databaseSwitchboardInstance = useMemo(() => {

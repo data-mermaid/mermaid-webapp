@@ -8,47 +8,41 @@ import { useSyncStatus } from './SyncStatusContext'
 
 export const useInitializeSyncApiDataIntoOfflineStorage = ({
   apiBaseUrl,
-  getAccessToken,
   dexiePerUserDataInstance,
   isMounted,
   isAppOnline,
   handleHttpResponseError,
   syncApiDataIntoOfflineStorage,
+  refreshCurrentUser,
 }) => {
   const location = useLocation()
   const isPageReload = useRef(true)
 
   const { setIsSyncInProgress, setIsOfflineStorageHydrated, setSyncErrors } = useSyncStatus()
 
-  const _conditionallySyncOfflineStorageWithApiData = useEffect(() => {
+  const isOnlineAndReady =
+    apiBaseUrl && dexiePerUserDataInstance && isMounted.current && isAppOnline
+
+  const projectId = getProjectIdFromLocation(location)
+
+  const isProjectPage = !!projectId
+
+  const isOfflineAndReadyAndAlreadyInitiated =
+    apiBaseUrl && dexiePerUserDataInstance && isMounted.current && !isAppOnline
+
+  const isProjectsListPage = location.pathname === '/projects' || location.pathname === '/projects/'
+
+  const isUserDeniedProjectAccessPage = location.pathname.includes('noProjectAccess')
+
+  const isProjectsListPageAndOnline = isProjectsListPage && isOnlineAndReady
+
+  const _conditionallySyncOfflineStorageWithApiDataForProjectListPage = useEffect(() => {
     const resetSyncErrors = () => {
       setSyncErrors([])
     }
     const appendSyncError = (newError) => {
       setSyncErrors((previousState) => [...previousState, newError])
     }
-
-    const isOnlineAndReady =
-      apiBaseUrl && dexiePerUserDataInstance && isMounted.current && isAppOnline
-
-    const projectId = getProjectIdFromLocation(location)
-
-    const isProjectPage = !!projectId
-
-    const isOfflineAndReadyAndAlreadyInitiated =
-      apiBaseUrl && dexiePerUserDataInstance && isMounted.current && !isAppOnline
-
-    const isProjectsListPage =
-      location.pathname === '/projects' || location.pathname === '/projects/'
-
-    const isUserDeniedProjectAccessPage = location.pathname.includes('noProjectAccess')
-
-    const isProjectsListPageAndOnline = isProjectsListPage && isOnlineAndReady
-
-    const isInitialLoadOnProjectPageAndOnline =
-      isPageReload.current && isProjectPage && isOnlineAndReady
-    const isNotInitialLoadOnProjectPageAndOnline =
-      !isPageReload.current && isProjectPage && isOnlineAndReady
 
     if (isOfflineAndReadyAndAlreadyInitiated || isUserDeniedProjectAccessPage) {
       setIsOfflineStorageHydrated(true)
@@ -57,6 +51,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
 
     if (isProjectsListPageAndOnline) {
       // this captures when a user returns to being online after being offline
+      refreshCurrentUser() // this ensures accurate info in project card summaries (eg, active sample units for a user, which is stored in the user profile)
       setIsSyncInProgress(true)
       resetSyncErrors()
       syncApiDataIntoOfflineStorage
@@ -78,6 +73,37 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
             },
           })
         })
+    }
+  }, [
+    handleHttpResponseError,
+    isMounted,
+    isOfflineAndReadyAndAlreadyInitiated,
+    isProjectsListPageAndOnline,
+    isUserDeniedProjectAccessPage,
+    refreshCurrentUser,
+    setIsOfflineStorageHydrated,
+    setIsSyncInProgress,
+    setSyncErrors,
+    syncApiDataIntoOfflineStorage,
+  ])
+
+  const _conditionallySyncOfflineStorageWithApiDataForProjectPages = useEffect(() => {
+    const resetSyncErrors = () => {
+      setSyncErrors([])
+    }
+    const appendSyncError = (newError) => {
+      setSyncErrors((previousState) => [...previousState, newError])
+    }
+
+    const isInitialLoadOnProjectPageAndOnline =
+      isPageReload.current && isProjectPage && isOnlineAndReady
+
+    const isNotInitialLoadOnProjectPageAndOnline =
+      !isPageReload.current && isProjectPage && isOnlineAndReady
+
+    if (isOfflineAndReadyAndAlreadyInitiated || isUserDeniedProjectAccessPage) {
+      setIsOfflineStorageHydrated(true)
+      setIsSyncInProgress(false)
     }
 
     if (isInitialLoadOnProjectPageAndOnline) {
@@ -126,13 +152,13 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         })
     }
   }, [
-    apiBaseUrl,
-    dexiePerUserDataInstance,
-    getAccessToken,
-    isAppOnline,
-    isMounted,
     handleHttpResponseError,
-    location,
+    isMounted,
+    isOfflineAndReadyAndAlreadyInitiated,
+    isOnlineAndReady,
+    isProjectPage,
+    isUserDeniedProjectAccessPage,
+    projectId,
     setIsOfflineStorageHydrated,
     setIsSyncInProgress,
     setSyncErrors,
