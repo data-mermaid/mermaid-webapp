@@ -207,6 +207,7 @@ const createNewOptionModal = {
     <>
       Genus not found in MERMAID
       <br />
+      {/* eslint-disable-next-line react/jsx-no-target-blank */}
       <a target="_blank" href="https://datamermaid.org/contact-us">
         Contact us for help
       </a>
