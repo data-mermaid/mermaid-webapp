@@ -239,44 +239,46 @@ const ManagementRegimes = () => {
     const managementPartiesChoices = choices?.managementparties?.data
     const complianceChoices = choices?.managementcompliances?.data
 
-    return managementRegimeRecordsForUiDisplay.map((managementRegime) => {
-      const complianceName = getObjectById(complianceChoices, managementRegime.compliance)?.name
-      const governance = managementRegime.parties
-        .map((party) => getObjectById(managementPartiesChoices, party)?.name)
-        .join(', ')
+    return managementRegimeRecordsForUiDisplay
+      .map((managementRegime) => {
+        const complianceName = getObjectById(complianceChoices, managementRegime.compliance)?.name
+        const governance = managementRegime.parties
+          .map((party) => getObjectById(managementPartiesChoices, party)?.name)
+          .join(', ')
 
-      const isPartialRestrict =
-        managementRegime.periodic_closure ||
-        managementRegime.size_limits ||
-        managementRegime.gear_restriction ||
-        managementRegime.species_restriction ||
-        managementRegime.access_restriction
+        const isPartialRestrict =
+          managementRegime.periodic_closure ||
+          managementRegime.size_limits ||
+          managementRegime.gear_restriction ||
+          managementRegime.species_restriction ||
+          managementRegime.access_restriction
 
-      const no_take = managementRegime.no_take && 'No Take'
-      const open_access = managementRegime.open_access && 'Open Access'
-      const partial_restrictions =
-        isPartialRestrict &&
-        `${[
-          managementRegime.periodic_closure && 'Periodic Closures',
-          managementRegime.size_limits && 'Size Limits',
-          managementRegime.gear_restriction && 'Gear Restrictions',
-          managementRegime.species_restriction && 'Species Restrictions',
-          managementRegime.access_restriction && 'Access Restrictions',
-        ].filter((restriction) => restriction)}`
+        const no_take = managementRegime.no_take && 'No Take'
+        const open_access = managementRegime.open_access && 'Open Access'
+        const partial_restrictions =
+          isPartialRestrict &&
+          `${[
+            managementRegime.periodic_closure && 'Periodic Closures',
+            managementRegime.size_limits && 'Size Limits',
+            managementRegime.gear_restriction && 'Gear Restrictions',
+            managementRegime.species_restriction && 'Species Restrictions',
+            managementRegime.access_restriction && 'Access Restrictions',
+          ].filter((restriction) => restriction)}`
 
-      const rules = open_access || no_take || partial_restrictions || ''
+        const rules = open_access || no_take || partial_restrictions || ''
 
-      return {
-        Name: managementRegime.name,
-        'Secondary name': managementRegime.name_secondary,
-        'Year established': managementRegime.est_year,
-        Size: managementRegime.size,
-        Governance: governance,
-        'Estimate compliance': complianceName,
-        Rules: rules,
-        Notes: managementRegime.notes,
-      }
-    })
+        return {
+          Name: managementRegime.name,
+          'Secondary name': managementRegime.name_secondary,
+          'Year established': managementRegime.est_year,
+          Size: managementRegime.size,
+          Governance: governance,
+          'Estimate compliance': complianceName,
+          Rules: rules,
+          Notes: managementRegime.notes,
+        }
+      })
+      .toSorted((a, b) => a.Name.localeCompare(b.Name))
   }, [managementRegimeRecordsForUiDisplay, choices])
 
   const {

@@ -278,7 +278,7 @@ const Sites = () => {
           Notes: site.notes,
         }
       })
-      .toSorted((firstSite, secondSite) => firstSite.Name - secondSite.Name)
+      .toSorted((a, b) => a.Name.localeCompare(b.Name))
   }, [siteRecordsForUiDisplay, choices])
 
   const readOnlySitesHeaderContent = (
