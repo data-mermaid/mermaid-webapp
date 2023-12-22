@@ -51,7 +51,7 @@ jobs:
           cat src/version.js
 
       - name: Yarn Build
-        run: yarn build
+        run: NODE_OPTIONS=--openssl-legacy-provider yarn build
 
       - name: Upload files to S3 with AWS CLI
         env:
