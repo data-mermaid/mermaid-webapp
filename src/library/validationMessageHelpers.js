@@ -43,3 +43,9 @@ export const goToManagementOverviewPageLink = (projectId) => {
     </span>
   )
 }
+
+export const getDuplicateIndexes = (duplicateIndexes) => {
+  const indexList = duplicateIndexes.map((duplicate) => duplicate.index + 1)
+
+  return indexList.join(', ')
+}
