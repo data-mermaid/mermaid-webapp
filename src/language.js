@@ -6,7 +6,7 @@ import {
   getSystemValidationErrorMessage,
   getDuplicateSampleUnitLink,
   goToManagementOverviewPageLink,
-  getDuplicateIndexes,
+  getDuplicateValuesValidationMessage,
 } from './library/validationMessageHelpers'
 import { HelperTextLink } from './components/generic/links'
 
@@ -479,7 +479,7 @@ const getResolveModalLanguage = (siteOrManagementRegime) => {
 }
 
 const getValidationMessage = (validation, projectId = '') => {
-  const { code, context, name } = validation
+  const { code, context, fields, name } = validation
 
   const validationMessages = {
     all_attributes_same_category: () => `All benthic attributes are ${context?.category}`,
@@ -494,8 +494,7 @@ const getValidationMessage = (validation, projectId = '') => {
     duplicate_quadrat_transect: () =>
       getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
     duplicate_transect: () => 'Transect already exists',
-    duplicate_values: () =>
-      `Duplicate colonies bleached observations: ${getDuplicateIndexes(context?.duplicates[0])}`,
+    duplicate_values: () => getDuplicateValuesValidationMessage(fields[0], context?.duplicates[0]),
     exceed_total_colonies: () => 'Maximum number of colonies exceeded',
     future_sample_date: () => 'Sample date is in the future',
     high_density: () => `Fish biomass greater than ${context?.biomass_range[1]} kg/ha`,
