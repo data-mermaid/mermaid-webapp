@@ -1,4 +1,4 @@
-import { Chip, MenuItem, OutlinedInput, Select } from '@mui/material'
+import { Chip, MenuItem, Select } from '@mui/material'
 import styled from 'styled-components/macro'
 
 import theme from '../../../theme'
