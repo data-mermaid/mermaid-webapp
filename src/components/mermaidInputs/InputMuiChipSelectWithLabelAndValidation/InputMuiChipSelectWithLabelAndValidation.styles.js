@@ -1,4 +1,4 @@
-import { Chip, MenuItem, Select } from '@mui/material'
+import { Chip, MenuItem, OutlinedInput, Select } from '@mui/material'
 import styled from 'styled-components/macro'
 
 import theme from '../../../theme'
@@ -19,6 +19,11 @@ export const CustomMuiSelect = styled(Select).attrs(() => ({
     '&.Mui-focused': {
       color: `${theme.color.primaryColor}`,
       border: '2.5px solid',
+    },
+
+    '&.MuiOutlinedInput-root': {
+      color: `${theme.color.textColor}`,
+      borderColor: `${theme.color.border}`,
     },
 
     fieldset: {
