@@ -153,3 +153,16 @@ export const IconButton = styled.button`
   background-color: transparent;
   border-style: none;
 `
+
+export const ViewLink = styled.button`
+  padding: ${theme.spacing.small};
+  border: solid ${theme.spacing.borderSmall} ${theme.color.border};
+  background-color: ${theme.color.inputBackground};
+  text-align: inherit;
+  cursor: pointer;
+  &:disabled {
+    color: ${theme.color.secondaryDisabledText};
+    background-color: ${theme.color.secondaryDisabledColor};
+    cursor: not-allowed;
+  }
+`

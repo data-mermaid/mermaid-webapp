@@ -107,6 +107,7 @@ const SampleEventInputs = ({
           onChange={handleSiteChange}
           updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForSite}
           helperText={language.helperText.site}
+          displayViewLink={true}
         />
         <InputSelectWithLabelAndValidation
           label="Management"
@@ -129,6 +130,7 @@ const SampleEventInputs = ({
           onChange={handleManagementChange}
           updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForMR}
           helperText={language.helperText.management}
+          displayViewLink={true}
         />
         <InputWithLabelAndValidation
           label="Sample Date"

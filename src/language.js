@@ -297,6 +297,7 @@ const pages = {
     totalAbundanceLabel: 'Total Abundance',
     totalBiomassLabel: 'Total Biomass (kg/ha)',
     newBenthicAttributeLink: 'Propose New Benthic Attribute...',
+    viewLink: 'View',
     formSectionTitle: {
       sampleEvent: 'Sample Event',
       quadratCollection: 'Quadrat Collection',

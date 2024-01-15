@@ -1,10 +1,19 @@
 import React, { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { InputRow, Select, HelperText, LabelContainer, RequiredIndicator } from '../../generic/form'
+import { getProjectIdFromLocation } from '../../../library/getProjectIdFromLocation'
+import {
+  InputRow,
+  Select,
+  HelperText,
+  InputLinkContainer,
+  LabelContainer,
+  RequiredIndicator,
+} from '../../generic/form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import { IconButton } from '../../generic/buttons'
+import { IconButton, ViewLink } from '../../generic/buttons'
 import { IconInfo } from '../../icons'
 import language from '../../../language'
 
@@ -21,9 +30,15 @@ const InputSelectWithLabelAndValidation = ({
   testId,
   value,
   updateValueAndResetValidationForDuplicateWarning,
+  displayViewLink,
   ...restOfProps
 }) => {
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const projectId = getProjectIdFromLocation(location)
 
   const optionList = options.map((item) => (
     <option key={item.value} value={item.value}>
@@ -35,6 +50,23 @@ const InputSelectWithLabelAndValidation = ({
     isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
 
     event.stopPropagation()
+  }
+
+  const handleViewLinkClick = (event, linkType, linkValue) => {
+    event.stopPropagation()
+    let navLink
+
+    if (linkType === 'Site') {
+      navLink = `/projects/${projectId}/sites/${linkValue}`
+
+      navigate(navLink)
+    } else if (linkType === 'Management') {
+      navLink = `/projects/${projectId}/management-regimes/${linkValue}`
+
+      navigate(navLink)
+    }
+
+    return
   }
 
   return (
@@ -52,16 +84,27 @@ const InputSelectWithLabelAndValidation = ({
       </LabelContainer>
 
       <div>
-        <Select
-          aria-labelledby={`aria-label${id}`}
-          aria-describedby={`aria-descp${id}`}
-          id={id}
-          value={value}
-          {...restOfProps}
-        >
-          <option value="">{language.placeholders.select}</option>
-          {optionList}
-        </Select>
+        <InputLinkContainer>
+          <Select
+            aria-labelledby={`aria-label${id}`}
+            aria-describedby={`aria-descp${id}`}
+            id={id}
+            value={value}
+            {...restOfProps}
+          >
+            <option value="">{language.placeholders.select}</option>
+            {optionList}
+          </Select>
+          {displayViewLink ? (
+            <ViewLink
+              type="button"
+              disabled={!value}
+              onClick={(event) => handleViewLinkClick(event, label, value)}
+            >
+              {language.pages.collectRecord.viewLink}
+            </ViewLink>
+          ) : null}
+        </InputLinkContainer>
         {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
       <InputValidationInfo
@@ -79,6 +122,7 @@ const InputSelectWithLabelAndValidation = ({
 }
 
 InputSelectWithLabelAndValidation.propTypes = {
+  displayViewLink: PropTypes.bool,
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
   required: PropTypes.bool.isRequired,
@@ -102,5 +146,6 @@ InputSelectWithLabelAndValidation.defaultProps = {
   ignoreNonObservationFieldValidations: () => {},
   resetNonObservationFieldValidations: () => {},
   updateValueAndResetValidationForDuplicateWarning: () => {},
+  displayViewLink: false,
 }
 export default InputSelectWithLabelAndValidation
