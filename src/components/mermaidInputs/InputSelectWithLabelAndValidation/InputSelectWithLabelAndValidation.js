@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { getProjectIdFromLocation } from '../../../library/getProjectIdFromLocation'
 import {
+  IconContainer,
   InputRow,
   Select,
   HelperText,
@@ -14,7 +15,7 @@ import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import { IconButton, ViewLink } from '../../generic/buttons'
-import { IconInfo } from '../../icons'
+import { IconInfo, IconSites, IconMgmt } from '../../icons'
 import language from '../../../language'
 
 const InputSelectWithLabelAndValidation = ({
@@ -101,6 +102,7 @@ const InputSelectWithLabelAndValidation = ({
               disabled={!value}
               onClick={(event) => handleViewLinkClick(event, label, value)}
             >
+              <IconContainer>{label === 'Site' ? <IconSites /> : <IconMgmt />}</IconContainer>
               {language.pages.collectRecord.viewLink}
             </ViewLink>
           ) : null}

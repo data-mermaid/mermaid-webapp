@@ -155,6 +155,10 @@ export const IconButton = styled.button`
 `
 
 export const ViewLink = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: small;
   padding: ${theme.spacing.small};
   border: solid ${theme.spacing.borderSmall} ${theme.color.border};
   background-color: ${theme.color.inputBackground};

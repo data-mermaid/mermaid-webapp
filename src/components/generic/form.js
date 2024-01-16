@@ -139,3 +139,7 @@ export const InputLinkContainer = styled.div`
   display: flex;
   flex-direction: row;
 `
+
+export const IconContainer = styled.div`
+  margin-right: 0.2em;
+`
