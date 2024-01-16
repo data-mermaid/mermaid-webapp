@@ -137,7 +137,9 @@ export const ButtonThatLooksLikeLink = styled('button')`
 
 export const ButtonThatLooksLikeLinkUnderlined = styled(ButtonThatLooksLikeLink)`
   text-decoration: underline;
+  padding: 0;
 `
+
 export const ToolbarButtonWrapper = styled('div')`
   button,
   a {

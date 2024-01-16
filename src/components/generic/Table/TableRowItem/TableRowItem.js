@@ -1,7 +1,10 @@
-import PropTypes from 'prop-types'
 import React from 'react'
+import PropTypes from 'prop-types'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { getProjectIdFromLocation } from '../../../../library/getProjectIdFromLocation'
 import { getObjectById } from '../../../../library/getObjectById'
 import { Tr, TableRowTdKey, TableRowTd } from '../table'
+import { ButtonThatLooksLikeLinkUnderlined } from '../../buttons'
 
 const getItemLabelOrName = (itemOptions, itemValue) =>
   getObjectById(itemOptions, itemValue)?.name || getObjectById(itemOptions, itemValue)?.label
@@ -20,6 +23,7 @@ const TableRowItem = ({
   isOriginalSelected,
   isDuplicateSelected,
   isAllowNewlines,
+  isLink,
 }) => {
   const rowItemValue = options ? getOptionsByItemLabelOrName(value, options) : value
   const extraRowItemValue = options ? getOptionsByItemLabelOrName(extraValue, options) : extraValue
@@ -27,12 +31,45 @@ const TableRowItem = ({
   const highlightedCurrentSite = isOriginalSelected ? 'highlighted' : undefined
   const highlightedDuplicateSite = isDuplicateSelected ? 'highlighted' : undefined
 
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const projectId = getProjectIdFromLocation(location)
+
+  const handleViewLinkClick = (event, linkType, linkValue) => {
+    event.stopPropagation()
+    let navLink
+
+    if (linkType === 'Site') {
+      navLink = `/projects/${projectId}/sites/${linkValue}`
+
+      navigate(navLink)
+    } else if (linkType === 'Management') {
+      navLink = `/projects/${projectId}/management-regimes/${linkValue}`
+
+      navigate(navLink)
+    }
+
+    return
+  }
+
   return (
     <Tr>
       <TableRowTdKey>{title}</TableRowTdKey>
-      <TableRowTd hightedBackground={highlightedDuplicateSite} isAllowNewLines={isAllowNewlines}>
-        {rowItemValue}
-      </TableRowTd>
+      {isLink ? (
+        <TableRowTd hightedBackground={highlightedDuplicateSite} isAllowNewLines={isAllowNewlines}>
+          <ButtonThatLooksLikeLinkUnderlined
+            type="button"
+            onClick={(event) => handleViewLinkClick(event, title, value)}
+          >
+            {rowItemValue}
+          </ButtonThatLooksLikeLinkUnderlined>
+        </TableRowTd>
+      ) : (
+        <TableRowTd hightedBackground={highlightedDuplicateSite} isAllowNewLines={isAllowNewlines}>
+          {rowItemValue}
+        </TableRowTd>
+      )}
       {hasExtraRowForDuplicateRecord && (
         <TableRowTd hightedBackground={highlightedCurrentSite} isAllowNewLines={isAllowNewlines}>
           {extraRowItemValue}
@@ -62,6 +99,7 @@ TableRowItem.propTypes = {
   isOriginalSelected: PropTypes.bool,
   isDuplicateSelected: PropTypes.bool,
   isAllowNewlines: PropTypes.bool,
+  isLink: PropTypes.bool,
 }
 
 TableRowItem.defaultProps = {
@@ -71,6 +109,7 @@ TableRowItem.defaultProps = {
   isOriginalSelected: false,
   isDuplicateSelected: false,
   isAllowNewlines: false,
+  isLink: false,
 }
 
 export default TableRowItem
