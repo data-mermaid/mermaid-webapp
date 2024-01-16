@@ -21,11 +21,6 @@ export const CustomMuiSelect = styled(Select).attrs(() => ({
       border: '2.5px solid',
     },
 
-    '&.MuiOutlinedInput-root': {
-      color: `${theme.color.textColor}`,
-      borderColor: `${theme.color.border}`,
-    },
-
     fieldset: {
       display: 'none',
     },
