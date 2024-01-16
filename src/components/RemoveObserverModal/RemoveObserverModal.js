@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
+import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { getObserverNameToUse } from '../../library/observerHelpers'
@@ -17,9 +17,9 @@ const RemoveObserverModal = ({ isOpen, onDismiss, observer, onSubmit }) => {
       <ButtonSecondary type="button" onClick={onDismiss}>
         {modalLanguage.removeObserverCancelButton}
       </ButtonSecondary>
-      <ButtonPrimary type="button" onClick={onSubmit}>
+      <ButtonCaution type="button" onClick={onSubmit}>
         {modalLanguage.removeObserverSubmitButton}
-      </ButtonPrimary>
+      </ButtonCaution>
     </RightFooter>
   )
 
