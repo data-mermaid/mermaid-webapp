@@ -1,12 +1,13 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import { rest } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
   within,
+  waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import mockBenthicLitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
@@ -89,7 +90,7 @@ test('Benthic LIT validations will show the all warnings when there are multiple
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -98,7 +99,7 @@ test('Benthic LIT validations will show the all warnings when there are multiple
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -113,18 +114,16 @@ test('Benthic LIT validations will show the all warnings when there are multiple
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
   // regular inputs
-  expect(within(screen.getByTestId('site')).queryByText('firstWarning')).toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('secondWarning')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('secondWarning')).toBeInTheDocument()
 
   const observationsTable = screen.getByLabelText('Observations')
 
@@ -188,7 +187,7 @@ test('Validating an empty collect record, and then editing an input with errors 
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -197,7 +196,7 @@ test('Validating an empty collect record, and then editing an input with errors 
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -212,19 +211,17 @@ test('Validating an empty collect record, and then editing an input with errors 
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
 
   expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
 
-  userEvent.type(screen.getByLabelText('Depth'), '1')
+  await user.type(screen.getByLabelText('Depth'), '1')
 
   // validations remain showing, except Depth is changed
   expect(await within(screen.getByTestId('site')).findByText('Required')).toBeInTheDocument()
@@ -242,9 +239,9 @@ test('Validating an empty collect record, and then editing an input with errors 
     within(screen.getByLabelText('Observations')).getByText('observation error'),
   ).toBeInTheDocument()
 
-  userEvent.type(screen.getByLabelText('Depth'), '{backspace}')
+  await user.type(screen.getByLabelText('Depth'), '{backspace}')
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole('button', {
       name: 'Save',
     }),
@@ -278,7 +275,7 @@ test('Validating an empty collect record, and then editing an input with errors 
     within(screen.getByLabelText('Observations')).queryByText('observation error'),
   ).not.toBeInTheDocument()
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -293,13 +290,11 @@ test('Validating an empty collect record, and then editing an input with errors 
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
 
@@ -351,7 +346,7 @@ test('Benthic LIT validations will show passed input validations', async () => {
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -360,7 +355,7 @@ test('Benthic LIT validations will show passed input validations', async () => {
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -375,13 +370,11 @@ test('Benthic LIT validations will show passed input validations', async () => {
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
 

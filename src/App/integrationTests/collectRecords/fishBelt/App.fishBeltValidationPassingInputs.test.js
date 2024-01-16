@@ -1,12 +1,13 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import { rest } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
   within,
+  waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -60,7 +61,7 @@ test('Fishbelt validations show check for valid inputs', async () => {
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
@@ -69,7 +70,7 @@ test('Fishbelt validations show check for valid inputs', async () => {
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -84,13 +85,11 @@ test('Fishbelt validations show check for valid inputs', async () => {
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
 

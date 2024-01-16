@@ -1,14 +1,17 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import {
   screen,
   renderAuthenticatedOffline,
   within,
+  waitFor,
+  waitForElementToBeRemoved,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+
 // test suite cut up into 2 parts for performance reasons
 describe('Offline', () => {
   test('Delete fishbelt prompt cancel closes prompt and does nothing (edits persisted)', async () => {
@@ -16,24 +19,31 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/fishbelt/2'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
+    await screen.findByLabelText('project pages loading indicator')
+    await waitForElementToBeRemoved(() =>
+      screen.queryByLabelText('project pages loading indicator'),
+    )
     // make an unsaved change
 
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
+    await user.clear(screen.getByLabelText('Depth'))
+    await user.type(screen.getByLabelText('Depth'), '45')
 
-    userEvent.click(screen.getByText('Delete Record'))
+    await user.click(screen.getByText('Delete Record'))
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
     const modal = screen.getByLabelText('Delete Record')
 
-    userEvent.click(
+    await user.click(
       within(modal).getByText('Cancel', {
         selector: 'button',
       }),
@@ -43,6 +53,6 @@ describe('Offline', () => {
       screen.queryByText('Are you sure you want to delete this record?'),
     ).not.toBeInTheDocument()
 
-    expect(await screen.findByLabelText('Depth')).toHaveValue(45)
+    await waitFor(async () => expect(screen.getByLabelText('Depth')).toHaveValue(45))
   })
 })

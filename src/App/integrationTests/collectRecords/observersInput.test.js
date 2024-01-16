@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
 import {
   fireEvent,
@@ -24,8 +24,10 @@ test('Observers input shows users that have been removed from the project and al
 
   const observersRow = await screen.findByTestId('observers')
 
-  expect(observersRow).toHaveTextContent(
-    'Betsy Craig was an observer on this sample unit but is no longer a part of this project.',
+  await waitFor(() =>
+    expect(observersRow).toHaveTextContent(
+      'Betsy Craig is an observer on this sample unit but is no longer a part of this project.',
+    ),
   )
   fireEvent.click(within(observersRow).getByRole('button', { name: 'Remove as observer' }))
 
@@ -39,8 +41,8 @@ test('Observers input shows users that have been removed from the project and al
   fireEvent.click(screen.getByRole('button', { name: 'Save' }))
 
   expect(await screen.findByText('Record saved.'))
-  waitFor(() =>
-    expect(observersRow).toHaveTextContent(
+  await waitFor(() =>
+    expect(observersRow).not.toHaveTextContent(
       'Betsy Craig was an observer on this sample unit but is no longer in this project.',
     ),
   )

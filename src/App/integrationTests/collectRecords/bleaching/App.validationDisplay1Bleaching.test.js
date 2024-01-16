@@ -1,12 +1,13 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import { rest } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
   within,
+  waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -92,7 +93,7 @@ test('Bleaching collect record validations will show the all warnings when there
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
@@ -101,7 +102,7 @@ test('Bleaching collect record validations will show the all warnings when there
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -116,18 +117,16 @@ test('Bleaching collect record validations will show the all warnings when there
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
   // regular inputs
-  expect(within(screen.getByTestId('site')).queryByText('firstWarning')).toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('secondWarning')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('secondWarning')).toBeInTheDocument()
 
   const coloniesBleachedObservationsTable = screen.getByLabelText(
     'Observations - Colonies Bleached',
@@ -222,7 +221,7 @@ test('Validating an empty collect record, and then editing an input with errors 
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
@@ -231,7 +230,7 @@ test('Validating an empty collect record, and then editing an input with errors 
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -246,19 +245,17 @@ test('Validating an empty collect record, and then editing an input with errors 
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
 
   expect(await within(screen.getByTestId('depth')).findByText('Required')).toBeInTheDocument()
 
-  userEvent.type(screen.getByLabelText('Depth'), '1')
+  await user.type(screen.getByLabelText('Depth'), '1')
 
   // validations remain showing, except Depth is changed
   expect(await within(screen.getByTestId('site')).findByText('Required')).toBeInTheDocument()
@@ -279,9 +276,9 @@ test('Validating an empty collect record, and then editing an input with errors 
     within(screen.getByLabelText('Observations - Percent Cover')).getByText('observation error'),
   ).toBeInTheDocument()
 
-  userEvent.type(screen.getByLabelText('Depth'), '{backspace}')
+  await user.type(screen.getByLabelText('Depth'), '{backspace}')
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole('button', {
       name: 'Save',
     }),
@@ -316,7 +313,7 @@ test('Validating an empty collect record, and then editing an input with errors 
     within(screen.getByLabelText('Observations - Percent Cover')).queryByText('observation error'),
   ).not.toBeInTheDocument()
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -331,13 +328,11 @@ test('Validating an empty collect record, and then editing an input with errors 
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
 
@@ -392,7 +387,7 @@ test('Bleaching collect record validations will show passed input validations', 
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
@@ -401,7 +396,7 @@ test('Bleaching collect record validations will show passed input validations', 
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -416,13 +411,11 @@ test('Bleaching collect record validations will show passed input validations', 
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
 

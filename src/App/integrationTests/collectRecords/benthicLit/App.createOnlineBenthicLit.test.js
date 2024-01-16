@@ -1,48 +1,117 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import {
   screen,
   within,
   renderAuthenticatedOnline,
+  waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
-const saveNewRecord = async () => {
-  userEvent.selectOptions(await screen.findByLabelText('Site'), '1')
-  userEvent.selectOptions(screen.getByLabelText('Management'), '2')
-  userEvent.type(screen.getByLabelText('Depth'), '10000')
-  userEvent.type(screen.getByLabelText('Sample Date'), '2021-04-21')
-  userEvent.type(screen.getByLabelText('Sample Time'), '12:34')
+const saveNewRecord = async (user) => {
+  const siteInput = await screen.findByLabelText('Site')
+  const managementRegimeInput = screen.getByLabelText('Management')
+  const depthInput = screen.getByLabelText('Depth')
+  const sampleDateInput = screen.getByLabelText('Sample Date')
+  const sampleTimeInput = screen.getByLabelText('Sample Time')
+  const transectNumberInput = screen.getByLabelText('Transect Number')
+  const labelInput = screen.getByLabelText('Label')
+  const transectLengthInput = screen.getByLabelText('Transect Length Surveyed')
+  const reefSlopeInput = screen.getByLabelText('Reef Slope')
+  const visibilityInput = screen.getByLabelText('Visibility')
+  const currentInput = screen.getByLabelText('Current')
+  const relativeDepthInput = screen.getByLabelText('Relative Depth')
+  const tideInput = screen.getByLabelText('Tide')
+  const notesInput = screen.getByLabelText('Notes')
 
-  userEvent.type(screen.getByLabelText('Transect Number'), '56')
-  userEvent.type(screen.getByLabelText('Label'), 'some label')
-  userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
-  userEvent.selectOptions(
-    screen.getByLabelText('Reef Slope'),
-    'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+  await user.selectOptions(siteInput, '1')
+  await waitFor(() =>
+    expect(within(siteInput).getByRole('option', { name: 'Site A' }).selected).toBe(true),
   )
-  userEvent.selectOptions(
-    screen.getByLabelText('Visibility'),
-    'a3ba3f14-330d-47ee-9763-bc32d37d03a5',
-  )
-  userEvent.selectOptions(screen.getByLabelText('Current'), 'e5dcb32c-614d-44ed-8155-5911b7ee774a')
-  userEvent.selectOptions(
-    screen.getByLabelText('Relative Depth'),
-    '8f381e71-219e-469c-8c13-231b088fb861',
-  )
-  userEvent.selectOptions(screen.getByLabelText('Tide'), '97a63da7-e98c-4be7-8f13-e95d38aa17ae')
-  userEvent.type(screen.getByLabelText('Notes'), 'some notes')
 
-  userEvent.click(screen.getByText('Save', { selector: 'button' }))
+  await user.selectOptions(managementRegimeInput, '2')
+  await waitFor(() =>
+    expect(
+      within(managementRegimeInput).getByRole('option', {
+        name: 'Management Regimes B [Management Regimes 2]',
+      }).selected,
+    ).toBe(true),
+  )
+
+  await user.type(depthInput, '10000')
+  expect(depthInput).toHaveValue(10000)
+
+  await user.type(sampleDateInput, '2021-04-21')
+  expect(sampleDateInput).toHaveValue('2021-04-21')
+
+  await user.type(sampleTimeInput, '12:34')
+  expect(sampleTimeInput).toHaveValue('12:34')
+
+  await user.type(transectNumberInput, '56')
+  expect(transectNumberInput).toHaveValue(56)
+
+  await user.type(labelInput, 'some label')
+  expect(labelInput).toHaveValue('some label')
+
+  await user.type(transectLengthInput, '2')
+  expect(transectLengthInput).toHaveValue(2)
+
+  await user.selectOptions(reefSlopeInput, 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa')
+  await waitFor(() =>
+    expect(
+      within(reefSlopeInput).getByRole('option', {
+        name: 'flat',
+      }).selected,
+    ).toBe(true),
+  )
+
+  await user.selectOptions(visibilityInput, 'a3ba3f14-330d-47ee-9763-bc32d37d03a5')
+  await waitFor(() =>
+    expect(
+      within(visibilityInput).getByRole('option', {
+        name: '1-5m - poor',
+      }).selected,
+    ).toBe(true),
+  )
+
+  await user.selectOptions(currentInput, 'e5dcb32c-614d-44ed-8155-5911b7ee774a')
+  await waitFor(() =>
+    expect(
+      within(currentInput).getByRole('option', {
+        name: 'high',
+      }).selected,
+    ).toBe(true),
+  )
+  await user.selectOptions(relativeDepthInput, '8f381e71-219e-469c-8c13-231b088fb861')
+  await waitFor(() =>
+    expect(
+      within(relativeDepthInput).getByRole('option', {
+        name: 'deep',
+      }).selected,
+    ).toBe(true),
+  )
+  await user.selectOptions(tideInput, '97a63da7-e98c-4be7-8f13-e95d38aa17ae')
+  await waitFor(() =>
+    expect(
+      within(tideInput).getByRole('option', {
+        name: 'falling',
+      }).selected,
+    ).toBe(true),
+  )
+
+  await user.type(notesInput, 'some notes')
+  expect(notesInput).toHaveValue('some notes')
+
+  await user.click(screen.getByText('Save', { selector: 'button' }))
 }
 
 describe('Online', () => {
   test('New Benthic LIT save success shows toast, and navigates to edit fishbelt page for new record', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(
+    const { user } = renderAuthenticatedOnline(
       <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
       {
         initialEntries: ['/projects/5/collecting/benthiclit'],
@@ -51,7 +120,7 @@ describe('Online', () => {
       dexieCurrentUserInstance,
     )
 
-    await saveNewRecord()
+    await saveNewRecord(user)
 
     expect(await screen.findByText('Record saved.'))
 
@@ -82,7 +151,7 @@ describe('Online', () => {
   test('New Benthic LIT save success show new record in collecting table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(
+    const { user } = renderAuthenticatedOnline(
       <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
       {
         initialEntries: ['/projects/5/collecting/benthiclit'],
@@ -91,16 +160,20 @@ describe('Online', () => {
       dexieCurrentUserInstance,
     )
 
-    await saveNewRecord()
+    await saveNewRecord(user)
 
     expect(await screen.findByText('Record saved.'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
-    userEvent.click(within(sideNav).getByText('Collecting'))
+    await user.click(within(sideNav).getByText('Collecting'))
+    const pageSizeSelector = await screen.findByTestId('page-size-selector')
+
+    await waitFor(() => within(pageSizeSelector).getByText('22'))
 
     // show all the records
-    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '22')
+    await user.selectOptions(pageSizeSelector, '22')
+
     const table = await screen.findByRole('table')
 
     const linksToBenthicLitRecords = within(table).getAllByRole('link', { name: 'Benthic LIT' })
@@ -114,13 +187,16 @@ describe('Online', () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     dexiePerUserDataInstance.collect_records.put = () => Promise.reject()
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthiclit'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOnline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/benthiclit'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveNewRecord()
+    await saveNewRecord(user)
 
     expect(await screen.findByText('The sample unit has not been saved.'))
 

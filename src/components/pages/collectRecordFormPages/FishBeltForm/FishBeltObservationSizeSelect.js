@@ -25,7 +25,7 @@ export const FishBeltObservationSizeSelect = ({
     }
   }, [value])
 
-  const handleSelectOnChange = event => {
+  const handleSelectOnChange = (event) => {
     const selectedValue = event.target.value
     const isSelectedValue50 = selectedValue === '50'
     const valueToSubmit = isSelectedValue50 ? plus50Value : selectedValue
@@ -34,11 +34,11 @@ export const FishBeltObservationSizeSelect = ({
     onValueEntered(valueToSubmit)
   }
 
-  const handlePlus50OnChange = event => {
+  const handlePlus50OnChange = (event) => {
     setPlus50Value(event.target.value)
   }
 
-  const handlePlus50OnBlur = event => {
+  const handlePlus50OnBlur = (event) => {
     const eventValue = event.target.value
     const validPlus50Value = eventValue < 50 ? '' : eventValue
 
@@ -53,6 +53,7 @@ export const FishBeltObservationSizeSelect = ({
         aria-labelledby={labelledBy}
         {...restOfProps}
       >
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <option value=""> </option>
         {binsToUse.map(({ value: optionValue, label }) => {
           return (

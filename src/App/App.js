@@ -36,7 +36,7 @@ import { routes } from './routes'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline, setServerNotReachable } = useOnlineStatus()
-  const { isOfflineStorageHydrated, syncErrors, isSyncInProgress } = useSyncStatus()
+  const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const navigate = useNavigate()
   const isMounted = useIsMounted()
@@ -102,13 +102,12 @@ function App({ dexieCurrentUserInstance }) {
     [location],
   )
 
-  const { currentUser, saveUserProfile } = useInitializeCurrentUser({
+  const { currentUser, saveUserProfile, refreshCurrentUser } = useInitializeCurrentUser({
     apiBaseUrl,
     getAccessToken,
     dexieCurrentUserInstance,
     isMermaidAuthenticated,
     isAppOnline,
-    isSyncInProgress,
     handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
   })
 
@@ -139,12 +138,12 @@ function App({ dexieCurrentUserInstance }) {
 
   useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,
-    getAccessToken,
     dexiePerUserDataInstance,
     isMounted,
     isAppOnline,
     handleHttpResponseError: handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
     syncApiDataIntoOfflineStorage: apiSyncInstance,
+    refreshCurrentUser,
   })
 
   const databaseSwitchboardInstance = useMemo(() => {
@@ -204,7 +203,7 @@ function App({ dexieCurrentUserInstance }) {
   return (
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
-        <CurrentUserProvider value={{ currentUser, saveUserProfile }}>
+        <CurrentUserProvider value={{ currentUser, saveUserProfile, refreshCurrentUser }}>
           <HttpResponseErrorHandlerProvider
             value={handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied}
           >

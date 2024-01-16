@@ -209,6 +209,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const [isDeletingRecord, setIsDeletingRecord] = useState(false)
   const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
   const [currentDeleteRecordModalPage, setCurrentDeleteRecordModalPage] = useState(1)
+  const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new MR is saved (and that triggers a navigation to its new page)
 
   const goToPageOneOfDeleteRecordModal = () => {
     setCurrentDeleteRecordModalPage(1)
@@ -501,7 +502,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         </DeleteRecordButtonCautionWrapper>
       ) : null}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
-      <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
+      <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
     </>
   )
 

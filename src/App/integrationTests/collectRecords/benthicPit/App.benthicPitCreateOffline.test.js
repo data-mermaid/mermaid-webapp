@@ -1,42 +1,43 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import {
   screen,
   within,
   renderAuthenticatedOffline,
+  waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
-const saveBenthicPitRecord = async () => {
-  userEvent.selectOptions(await screen.findByLabelText('Site'), '1')
-  userEvent.selectOptions(screen.getByLabelText('Management'), '2')
-  userEvent.type(screen.getByLabelText('Depth'), '10000')
-  userEvent.type(screen.getByLabelText('Sample Date'), '2021-04-21')
-  userEvent.type(screen.getByLabelText('Sample Time'), '12:34')
+const saveBenthicPitRecord = async (user) => {
+  await user.selectOptions(await screen.findByLabelText('Site'), '1')
+  await user.selectOptions(screen.getByLabelText('Management'), '2')
+  await user.type(screen.getByLabelText('Depth'), '10000')
+  await user.type(screen.getByLabelText('Sample Date'), '2021-04-21')
+  await user.type(screen.getByLabelText('Sample Time'), '12:34')
 
-  userEvent.type(screen.getByLabelText('Transect Number'), '56')
-  userEvent.type(screen.getByLabelText('Label'), 'some label')
-  userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
-  userEvent.selectOptions(
+  await user.type(screen.getByLabelText('Transect Number'), '56')
+  await user.type(screen.getByLabelText('Label'), 'some label')
+  await user.type(screen.getByLabelText('Transect Length Surveyed'), '2')
+  await user.selectOptions(
     screen.getByLabelText('Reef Slope'),
     'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
   )
-  userEvent.selectOptions(
+  await user.selectOptions(
     screen.getByLabelText('Visibility'),
     'a3ba3f14-330d-47ee-9763-bc32d37d03a5',
   )
-  userEvent.selectOptions(screen.getByLabelText('Current'), 'e5dcb32c-614d-44ed-8155-5911b7ee774a')
-  userEvent.selectOptions(
+  await user.selectOptions(screen.getByLabelText('Current'), 'e5dcb32c-614d-44ed-8155-5911b7ee774a')
+  await user.selectOptions(
     screen.getByLabelText('Relative Depth'),
     '8f381e71-219e-469c-8c13-231b088fb861',
   )
-  userEvent.selectOptions(screen.getByLabelText('Tide'), '97a63da7-e98c-4be7-8f13-e95d38aa17ae')
-  userEvent.type(screen.getByLabelText('Notes'), 'some notes')
+  await user.selectOptions(screen.getByLabelText('Tide'), '97a63da7-e98c-4be7-8f13-e95d38aa17ae')
+  await user.type(screen.getByLabelText('Notes'), 'some notes')
 
-  userEvent.click(screen.getByText('Save', { selector: 'button' }))
+  await user.click(screen.getByText('Save', { selector: 'button' }))
 }
 
 describe('Offline', () => {
@@ -45,13 +46,16 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthicpit/'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/benthicpit/'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveBenthicPitRecord()
+    await saveBenthicPitRecord(user)
 
     expect(await screen.findByText('Record saved.'))
 
@@ -83,22 +87,27 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthicpit/'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/benthicpit/'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveBenthicPitRecord()
+    await saveBenthicPitRecord(user)
 
     expect(await screen.findByText('Record saved.'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
-    userEvent.click(within(sideNav).getByText('Collecting'))
+    await user.click(within(sideNav).getByText('Collecting'))
 
-    // show all the records
-    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '22')
+    const pageSizeSelector = await screen.findByTestId('page-size-selector')
+
+    await waitFor(() => within(pageSizeSelector).getByText('22'))
+    await user.selectOptions(pageSizeSelector, '22')
     const table = await screen.findByRole('table')
 
     const linksToBenthicPitRecords = within(table).getAllByRole('link', { name: 'Benthic PIT' })
@@ -115,13 +124,16 @@ describe('Offline', () => {
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     dexiePerUserDataInstance.collect_records.put = () => Promise.reject()
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthicpit/'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/benthicpit/'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveBenthicPitRecord()
+    await saveBenthicPitRecord(user)
 
     expect(await screen.findByText('The sample unit has not been saved.'))
 

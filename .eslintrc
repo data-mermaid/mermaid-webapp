@@ -1,7 +1,6 @@
 {
   "extends": [
     "@sparkgeo/eslint-config-react",
-    "plugin:testing-library/recommended",
     "plugin:testing-library/react",
     "plugin:jest-dom/recommended"
   ],

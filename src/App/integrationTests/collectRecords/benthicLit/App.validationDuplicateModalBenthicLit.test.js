@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import { rest } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
@@ -18,8 +18,8 @@ import mockSampleEventValidationObject from '../../../../testUtilities/mockColle
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-const validateCollectRecord = async () => {
-  userEvent.click(
+const validateCollectRecord = async (user) => {
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -34,13 +34,11 @@ const validateCollectRecord = async () => {
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
 }
@@ -76,7 +74,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -85,13 +83,13 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecord()
+  await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
   ).toBeInTheDocument()
 
-  userEvent.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+  await user.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
 
   const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
   const originalSite = await within(resolveModal).findByLabelText('Original Site')
@@ -99,7 +97,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     name: 'Keep site',
   })
 
-  userEvent.click(keepOriginalSiteButton)
+  await user.click(keepOriginalSiteButton)
 
   const confirmationModal = screen.getByLabelText('Confirm Merge Site Modal')
 
@@ -111,7 +109,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
 
   const mergeButton = await within(confirmationModal).findByRole('button', { name: 'Merge' })
 
-  userEvent.click(mergeButton)
+  await user.click(mergeButton)
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('Resolve Duplicate Site Modal'))
 
@@ -153,7 +151,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -162,13 +160,13 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecord()
+  await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
   ).toBeInTheDocument()
 
-  userEvent.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+  await user.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
 
   const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
   const duplicateSite = await within(resolveModal).findByLabelText('Duplicate Site')
@@ -176,7 +174,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     name: 'Keep site',
   })
 
-  userEvent.click(keepDuplicateSiteButton, { id: '4' })
+  await user.click(keepDuplicateSiteButton, { id: '4' })
 
   const confirmationModal = screen.getByLabelText('Confirm Merge Site Modal')
 
@@ -188,7 +186,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
 
   const mergeButton = await within(confirmationModal).findByRole('button', { name: 'Merge' })
 
-  userEvent.click(mergeButton)
+  await user.click(mergeButton)
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('Resolve Duplicate Site Modal'))
 
@@ -230,7 +228,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -239,13 +237,13 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecord()
+  await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
   ).toBeInTheDocument()
 
-  userEvent.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+  await user.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
 
   const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
   const originalSite = await within(resolveModal).findByLabelText('Original Site')
@@ -253,7 +251,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     name: 'Edit site',
   })
 
-  userEvent.click(editOriginalSiteButton)
+  await user.click(editOriginalSiteButton)
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const siteCPage = await screen.findByText('Site C', {
@@ -294,7 +292,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -303,13 +301,13 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecord()
+  await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
   ).toBeInTheDocument()
 
-  userEvent.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+  await user.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
 
   const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
   const duplicateSite = await within(resolveModal).findByLabelText('Duplicate Site')
@@ -317,7 +315,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     name: 'Edit site',
   })
 
-  userEvent.click(editDuplicateSiteButton)
+  await user.click(editDuplicateSiteButton)
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const siteCPage = await screen.findByText('Site D', {
@@ -358,7 +356,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -367,18 +365,18 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecord()
+  await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
   ).toBeInTheDocument()
 
-  userEvent.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+  await user.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
 
   const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
   const keepBothSiteButton = await within(resolveModal).findByRole('button', { name: 'Keep both' })
 
-  userEvent.click(keepBothSiteButton)
+  await user.click(keepBothSiteButton)
 
   await waitFor(() =>
     expect(within(screen.getByTestId('site')).queryByText('warning')).not.toBeInTheDocument(),
@@ -418,7 +416,7 @@ test('Validate Benthic LIT collect record, get management similar name warning, 
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -427,15 +425,17 @@ test('Validate Benthic LIT collect record, get management similar name warning, 
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecord()
+  await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).queryByText(
+    within(screen.getByTestId('management')).getByText(
       'Another Management Regime is similar to this one.',
     ),
   ).toBeInTheDocument()
 
-  userEvent.click(within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }))
+  await user.click(
+    within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }),
+  )
 
   const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
   const originalManagement = await within(resolveModal).findByLabelText('Original Management')
@@ -443,7 +443,7 @@ test('Validate Benthic LIT collect record, get management similar name warning, 
     name: 'Keep MR',
   })
 
-  userEvent.click(keepOriginalManagementButton)
+  await user.click(keepOriginalManagementButton)
 
   const confirmationModal = screen.getByLabelText('Confirm Merge Management Modal')
 
@@ -455,7 +455,7 @@ test('Validate Benthic LIT collect record, get management similar name warning, 
 
   const mergeButton = await within(confirmationModal).findByRole('button', { name: 'Merge' })
 
-  userEvent.click(mergeButton)
+  await user.click(mergeButton)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('Resolve Duplicate Management Modal'),
@@ -501,7 +501,7 @@ test('Validate Benthic LIT collect record, get management similar name warning, 
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -510,15 +510,17 @@ test('Validate Benthic LIT collect record, get management similar name warning, 
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecord()
+  await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).queryByText(
+    within(screen.getByTestId('management')).getByText(
       'Another Management Regime is similar to this one.',
     ),
   ).toBeInTheDocument()
 
-  userEvent.click(within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }))
+  await user.click(
+    within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }),
+  )
 
   const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
   const duplicateManagement = await within(resolveModal).findByLabelText('Duplicate Management')
@@ -526,7 +528,7 @@ test('Validate Benthic LIT collect record, get management similar name warning, 
     name: 'Keep MR',
   })
 
-  userEvent.click(keepDuplicateManagementButton)
+  await user.click(keepDuplicateManagementButton)
 
   const confirmationModal = screen.getByLabelText('Confirm Merge Management Modal')
 
@@ -538,7 +540,7 @@ test('Validate Benthic LIT collect record, get management similar name warning, 
 
   const mergeButton = await within(confirmationModal).findByRole('button', { name: 'Merge' })
 
-  userEvent.click(mergeButton)
+  await user.click(mergeButton)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('Resolve Duplicate Management Modal'),
@@ -584,7 +586,7 @@ test('Validate Benthic LIT collect record, get management duplicate warning, sho
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -593,15 +595,17 @@ test('Validate Benthic LIT collect record, get management duplicate warning, sho
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecord()
+  await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).queryByText(
+    within(screen.getByTestId('management')).getByText(
       'Another Management Regime is similar to this one.',
     ),
   ).toBeInTheDocument()
 
-  userEvent.click(within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }))
+  await user.click(
+    within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }),
+  )
 
   const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
   const originalManagement = await within(resolveModal).findByLabelText('Original Management')
@@ -609,7 +613,7 @@ test('Validate Benthic LIT collect record, get management duplicate warning, sho
     name: 'Edit MR',
   })
 
-  userEvent.click(editOriginalManagementButton)
+  await user.click(editOriginalManagementButton)
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const managementRegimeCPage = await screen.findByText('Management Regimes C', {
@@ -650,7 +654,7 @@ test('Validate Benthic LIT collect record, get management duplicate warning, sho
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -659,15 +663,17 @@ test('Validate Benthic LIT collect record, get management duplicate warning, sho
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecord()
+  await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).queryByText(
+    within(screen.getByTestId('management')).getByText(
       'Another Management Regime is similar to this one.',
     ),
   ).toBeInTheDocument()
 
-  userEvent.click(within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }))
+  await user.click(
+    within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }),
+  )
 
   const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
   const duplicateManagement = await within(resolveModal).findByLabelText('Duplicate Management')
@@ -675,7 +681,7 @@ test('Validate Benthic LIT collect record, get management duplicate warning, sho
     name: 'Edit MR',
   })
 
-  userEvent.click(editDuplicateManagementButton)
+  await user.click(editDuplicateManagementButton)
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const managementRegimeAPage = await screen.findByText('Management Regimes A', {
@@ -716,7 +722,7 @@ test('Validate Benthic LIT collect record, get management duplicate warning, sho
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
@@ -725,22 +731,24 @@ test('Validate Benthic LIT collect record, get management duplicate warning, sho
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecord()
+  await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).queryByText(
+    within(screen.getByTestId('management')).getByText(
       'Another Management Regime is similar to this one.',
     ),
   ).toBeInTheDocument()
 
-  userEvent.click(within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }))
+  await user.click(
+    within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }),
+  )
 
   const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
   const keepBothManagementRegimeButton = await within(resolveModal).findByRole('button', {
     name: 'Keep both',
   })
 
-  userEvent.click(keepBothManagementRegimeButton)
+  await user.click(keepBothManagementRegimeButton)
 
   await waitFor(() =>
     expect(within(screen.getByTestId('management')).queryByText('warning')).not.toBeInTheDocument(),

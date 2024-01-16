@@ -77,6 +77,7 @@ The purpose of this list is to provide a list of features to be manually checked
 ## Users
 
 - [ ] add user
+- [ ] change user role level
 - [ ] remove user from project
 
 ## Data sharing

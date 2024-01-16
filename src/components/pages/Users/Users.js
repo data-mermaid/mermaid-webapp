@@ -919,7 +919,6 @@ const Users = () => {
                   : language.pages.userTable.filterToolbarTextForNonAdmin
               }
               handleGlobalFilterChange={handleGlobalFilterChange}
-              value={tableUserPrefs.globalFilter}
             />
             {isAdminUser && (
               <InputAndButton

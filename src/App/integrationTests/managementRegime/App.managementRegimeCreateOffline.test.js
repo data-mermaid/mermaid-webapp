@@ -1,31 +1,31 @@
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOffline,
   screen,
+  waitFor,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 
-const saveMR = async () => {
-  userEvent.type(await screen.findByLabelText('Name'), 'Rebecca')
-  userEvent.type(screen.getByLabelText('Secondary Name'), 'Becca')
-  userEvent.type(screen.getByLabelText('Year Established'), '1980')
-  userEvent.type(screen.getByLabelText('Area'), '40')
-  userEvent.click(within(screen.getByLabelText('Parties')).getByLabelText('NGO'))
-  userEvent.click(
+const saveMR = async (user) => {
+  await user.type(await screen.findByLabelText('Name'), 'Rebecca')
+  await user.type(screen.getByLabelText('Secondary Name'), 'Becca')
+  await user.type(screen.getByLabelText('Year Established'), '1980')
+  await user.type(screen.getByLabelText('Area'), '40')
+  await user.click(within(screen.getByLabelText('Parties')).getByLabelText('NGO'))
+  await user.click(
     within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
   )
-  userEvent.selectOptions(
+  await user.selectOptions(
     screen.getByLabelText('Compliance'),
     'f76d7866-5b0d-428d-928c-738c2912d6e0',
   )
-  userEvent.type(screen.getByLabelText('Notes'), 'some notes')
+  await user.type(screen.getByLabelText('Notes'), 'some notes')
 
-  userEvent.click(screen.getByText('Save', { selector: 'button' }))
+  await user.click(screen.getByText('Save', { selector: 'button' }))
 }
 
 describe('Offline', () => {
@@ -34,13 +34,16 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/management-regimes/'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/management-regimes/'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    userEvent.click(await screen.findByRole('link', { name: 'New MR' }))
+    await user.click(await screen.findByRole('link', { name: 'New MR' }))
 
     // ensure we're not in edit mode, but new management regime mode
     expect(
@@ -80,24 +83,29 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/management-regimes/new'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/management-regimes/new'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveMR()
+    await saveMR(user)
 
     expect(await screen.findByText('The management regime has been saved on your computer.'))
 
     // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-management-regime-form-title'))
 
-    expect(screen.getByLabelText('Name')).toHaveValue('Rebecca')
+    await waitFor(() => expect(screen.getByLabelText('Name')).toHaveValue('Rebecca'))
     expect(screen.getByLabelText('Secondary Name')).toHaveValue('Becca')
     expect(screen.getByLabelText('Year Established')).toHaveValue(1980)
     expect(screen.getByLabelText('Area')).toHaveValue(40)
-    expect(within(screen.getByLabelText('Parties')).getByLabelText('NGO')).toBeChecked()
+    await waitFor(() =>
+      expect(within(screen.getByLabelText('Parties')).getByLabelText('NGO')).toBeChecked(),
+    )
     expect(
       within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
     ).toBeChecked()
@@ -109,22 +117,28 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/management-regimes/new'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/management-regimes/new'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveMR()
+    await saveMR(user)
 
     expect(await screen.findByText('The management regime has been saved on your computer.'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
-    userEvent.click(within(sideNav).getByText('Management Regimes'))
+    await user.click(within(sideNav).getByText('Management Regimes'))
+
+    const pageSizeSelector = await screen.findByTestId('page-size-selector')
 
     // show all the records
-    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '4')
+    await waitFor(() => expect(pageSizeSelector))
+    await user.selectOptions(pageSizeSelector, '4')
     const table = await screen.findByRole('table')
 
     const tableRows = await screen.findAllByRole('row')
@@ -146,13 +160,16 @@ describe('Offline', () => {
 
     dexiePerUserDataInstance.project_managements.put = () => Promise.reject(dexieError)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/management-regimes/new'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/management-regimes/new'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
-    await saveMR()
+    await saveMR(user)
 
     expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
       'The management regime failed to save both on your computer and online.',

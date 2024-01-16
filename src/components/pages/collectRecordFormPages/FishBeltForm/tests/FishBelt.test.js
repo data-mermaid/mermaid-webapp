@@ -1,7 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import { Route, Routes } from 'react-router-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
 
 import {
   renderAuthenticatedOnline,
@@ -266,7 +265,7 @@ test('Fishbelt observations: add row button adds a row', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route
         path="/projects/:projectId/collecting/fishbelt/:recordId"
@@ -286,7 +285,7 @@ test('Fishbelt observations: add row button adds a row', async () => {
 
   expect(within(observationsBeforeAdd).getAllByRole('row').length).toEqual(4)
 
-  userEvent.click(screen.getByRole('button', { name: 'Add Row' }))
+  await user.click(screen.getByRole('button', { name: 'Add Row' }))
 
   const observationsAfterAdd = screen.getAllByRole('table')[0]
 
@@ -298,7 +297,7 @@ test('Fishbelt observations: delete observation button deleted observation', asy
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <Routes>
       <Route
         path="/projects/:projectId/collecting/fishbelt/:recordId"
@@ -320,7 +319,7 @@ test('Fishbelt observations: delete observation button deleted observation', asy
   expect(within(observationsTableBeforeDelete).getAllByRole('row').length).toEqual(4)
   expect(within(observationsTableBeforeDelete).getByDisplayValue(2))
 
-  userEvent.click(within(observationsTableBeforeDelete).getAllByLabelText('Delete Observation')[1])
+  await user.click(within(observationsTableBeforeDelete).getAllByLabelText('Delete Observation')[1])
 
   const formAfterDelete = screen.getByRole('form')
   const observationsTableAfterDelete = within(formAfterDelete).getAllByRole('table')[0]

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import language from '../../../language'
@@ -40,7 +40,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       zoom: defaultZoom,
       maxZoom: 17,
       attributionControl: true,
-      customAttribution: language.map.attribution
+      customAttribution: language.map.attribution,
     })
 
     addMapController(map.current)
@@ -85,10 +85,11 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
 
     map.current.on('click', 'mapMarkers', (e) => {
       const popupNode = document.createElement('div')
+      const reactRoot = createRoot(popupNode)
       const coordinates = e.features[0].geometry.coordinates.slice()
       const markerProperty = e.features[0].properties
 
-      ReactDOM.render(<Popup properties={markerProperty} choices={choices} />, popupNode)
+      reactRoot.render(<Popup properties={markerProperty} choices={choices} />)
       popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
     })
 

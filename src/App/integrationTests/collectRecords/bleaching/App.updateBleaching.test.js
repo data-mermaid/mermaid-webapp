@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import {
   screen,
   renderAuthenticatedOffline,
@@ -17,18 +17,21 @@ describe('Offline', () => {
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     // make a change
 
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
+    await user.clear(await screen.findByLabelText('Depth'))
+    await user.type(screen.getByLabelText('Depth'), '45')
 
-    userEvent.click(
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),
@@ -61,11 +64,14 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     const addObservationButton = (
       await screen.findAllByRole('button', {
@@ -73,7 +79,7 @@ describe('Offline', () => {
       })
     )[0]
 
-    userEvent.click(addObservationButton)
+    await user.click(addObservationButton)
 
     const coloniesBleachedObservationTable = screen.getByLabelText(
       'Observations - Colonies Bleached',
@@ -94,7 +100,7 @@ describe('Offline', () => {
     const new100BleachedInput = screen.getAllByLabelText('80-100% bleached')[3]
     const newRecentlyDeadInput = screen.getAllByLabelText('Recently dead')[3]
 
-    userEvent.type(newBenthicAttributeInput, 'dead')
+    await user.type(newBenthicAttributeInput, 'dead')
 
     const benthicAttributeList = screen.getAllByRole('listbox')[3]
 
@@ -102,27 +108,27 @@ describe('Offline', () => {
       name: 'Dead Coral with Algae',
     })
 
-    userEvent.selectOptions(benthicAttributeList, deadCoralOption)
+    await user.selectOptions(benthicAttributeList, deadCoralOption)
 
-    userEvent.selectOptions(newGrowthFromInput, 'Columnar')
+    await user.selectOptions(newGrowthFromInput, 'Columnar')
 
-    userEvent.clear(newNormalInput)
-    userEvent.clear(newPaleInput)
-    userEvent.clear(new20BleachedInput)
-    userEvent.clear(new50BleachedInput)
-    userEvent.clear(new80BleachedInput)
-    userEvent.clear(new100BleachedInput)
-    userEvent.clear(newRecentlyDeadInput)
+    await user.clear(newNormalInput)
+    await user.clear(newPaleInput)
+    await user.clear(new20BleachedInput)
+    await user.clear(new50BleachedInput)
+    await user.clear(new80BleachedInput)
+    await user.clear(new100BleachedInput)
+    await user.clear(newRecentlyDeadInput)
 
-    userEvent.type(newNormalInput, '1')
-    userEvent.type(newPaleInput, '1')
-    userEvent.type(new20BleachedInput, '1')
-    userEvent.type(new50BleachedInput, '1')
-    userEvent.type(new80BleachedInput, '1')
-    userEvent.type(new100BleachedInput, '1')
-    userEvent.type(newRecentlyDeadInput, '1')
+    await user.type(newNormalInput, '1')
+    await user.type(newPaleInput, '1')
+    await user.type(new20BleachedInput, '1')
+    await user.type(new50BleachedInput, '1')
+    await user.type(new80BleachedInput, '1')
+    await user.type(new100BleachedInput, '1')
+    await user.type(newRecentlyDeadInput, '1')
 
-    userEvent.click(
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),
@@ -150,11 +156,14 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     const addObservationButton = (
       await screen.findAllByRole('button', {
@@ -162,7 +171,7 @@ describe('Offline', () => {
       })
     )[1]
 
-    userEvent.click(addObservationButton)
+    await user.click(addObservationButton)
 
     const percentCoverObservationsTable = (await screen.findAllByRole('table'))[1]
 
@@ -175,11 +184,11 @@ describe('Offline', () => {
     const newSoftCoralInput = screen.getAllByLabelText('Soft coral % cover')[3]
     const newMacroalgaeInput = screen.getAllByLabelText('Macroalgae % cover')[3]
 
-    userEvent.type(newHardCoralInput, '8')
-    userEvent.type(newSoftCoralInput, '8')
-    userEvent.type(newMacroalgaeInput, '8')
+    await user.type(newHardCoralInput, '8')
+    await user.type(newSoftCoralInput, '8')
+    await user.type(newMacroalgaeInput, '8')
 
-    userEvent.click(
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),
@@ -205,18 +214,21 @@ describe('Offline', () => {
     // make sure the next save will fail
     dexiePerUserDataInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     // make an unsaved change
     const depthInput = await screen.findByLabelText('Depth')
 
-    userEvent.clear(depthInput)
-    userEvent.type(depthInput, '45')
-    userEvent.click(
+    await user.clear(depthInput)
+    await user.type(depthInput, '45')
+    await user.click(
       screen.getByText('Save', {
         selector: 'button',
       }),

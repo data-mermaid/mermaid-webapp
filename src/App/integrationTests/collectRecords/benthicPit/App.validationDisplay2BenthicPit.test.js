@@ -1,12 +1,13 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import { rest } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
   within,
+  waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -47,7 +48,7 @@ test('Validating an empty benthic PIT collect record shows validations (proof of
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
@@ -56,7 +57,7 @@ test('Validating an empty benthic PIT collect record shows validations (proof of
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -71,13 +72,11 @@ test('Validating an empty benthic PIT collect record shows validations (proof of
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
   // record level validations
@@ -212,7 +211,7 @@ test('Benthic PIT validations will show only the first error when there are mult
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
@@ -221,7 +220,7 @@ test('Benthic PIT validations will show only the first error when there are mult
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(
+  await user.click(
     await screen.findByRole(
       'button',
       {
@@ -236,13 +235,11 @@ test('Benthic PIT validations will show only the first error when there are mult
       name: 'Validating',
     }),
   )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
         name: 'Validate',
-      },
-      { timeout: 10000 },
+      }),
     ),
   )
 

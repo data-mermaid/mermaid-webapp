@@ -1,7 +1,12 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
-import { screen, renderAuthenticatedOffline } from '../../testUtilities/testingLibraryWithHelpers'
+
+import {
+  screen,
+  renderAuthenticatedOffline,
+  waitFor,
+  within,
+} from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -18,13 +23,21 @@ test('Collect page only shows records that arent marked to be deleted next sync'
     _deleted: true,
   })
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOffline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
-  userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '20')
+  const pageSizeSelector = await screen.findByTestId('page-size-selector')
+
+  await waitFor(() => expect(within(pageSizeSelector).getByText('20')))
+
+  // show all the records
+  await user.selectOptions(pageSizeSelector, '20')
 
   const rows = await screen.findAllByRole('row')
 
@@ -43,13 +56,16 @@ test('Sites page only shows records that arent marked to be deleted next sync', 
     _deleted: true,
   })
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/sites/'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOffline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/sites/'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
-  userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '3')
+  await user.selectOptions(await screen.findByTestId('page-size-selector'), '3')
 
   const rows = await screen.findAllByRole('row')
 
@@ -68,13 +84,19 @@ test('Management Regimes page only shows records that arent marked to be deleted
     _deleted: true,
   })
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/management-regimes/'],
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
+  const { user } = renderAuthenticatedOffline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/management-regimes/'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
-  userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '2')
+  const pageSizeSelector = await screen.findByTestId('page-size-selector')
+
+  await waitFor(() => expect(pageSizeSelector))
+  await user.selectOptions(pageSizeSelector, '2')
 
   const rows = await screen.findAllByRole('row')
 

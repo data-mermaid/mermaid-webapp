@@ -15,6 +15,7 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 import theme from '../../theme'
 import InputWithLabelAndValidation from '../mermaidInputs/InputWithLabelAndValidation'
 import LoadingModal from '../LoadingModal/LoadingModal'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 
 const CheckBoxLabel = styled.label`
   display: inline-block;
@@ -29,6 +30,7 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
   const [isLoading, setIsLoading] = useState(false)
   const [nameAlreadyExists, setNameAlreadyExists] = useState(false)
   const [existingName, setExistingName] = useState('')
+  const { refreshCurrentUser } = useCurrentUser()
   // using same error format as Formik so message can be used in InputWithLabelAndValidation
   const nameExistsError = [
     { code: language.error.formValidation.projectNameExists, id: 'Name Exists' },
@@ -81,6 +83,7 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
   }
 
   const handleSuccessResponse = (response, languageSuccessMessage) => {
+    refreshCurrentUser() // this ensures the user has the right privaleges to the newly created project
     toast.success(...getToastArguments(languageSuccessMessage))
     formik.resetForm()
     addProjectToProjectsPage(response)

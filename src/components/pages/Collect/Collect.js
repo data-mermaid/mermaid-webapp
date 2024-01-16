@@ -396,7 +396,6 @@ const Collect = () => {
               <FilterItems>
                 <FilterSearchToolbar
                   name={language.pages.collectTable.filterToolbarText}
-                  value={tableUserPrefs.globalFilter}
                   handleGlobalFilterChange={handleGlobalFilterChange}
                   disabled={collectRecordsForUiDisplay.length === 0}
                 />

@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import React from 'react'
-import userEvent from '@testing-library/user-event'
+
 import { rest } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
@@ -89,7 +89,7 @@ test('Benthic photo quadrat validation: user can reset ignored observation warni
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthicpqt/90'],
@@ -98,9 +98,15 @@ test('Benthic photo quadrat validation: user can reset ignored observation warni
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const observationsTable = screen.getByLabelText('Observations')
 
@@ -115,7 +121,7 @@ test('Benthic photo quadrat validation: user can reset ignored observation warni
   // other two passing
   expect(within(observationsTable).queryAllByLabelText('Passed Validation').length).toEqual(2)
 
-  userEvent.click(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' }))
 
   const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
 
@@ -171,7 +177,7 @@ test('user can reset dismissed record-level warnings', async () => {
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthicpqt/90'],
@@ -180,15 +186,21 @@ test('user can reset dismissed record-level warnings', async () => {
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
   expect(within(recordLevelValidationsSection).getByText('ignored')).toBeInTheDocument()
 
-  userEvent.click(
+  await user.click(
     await within(recordLevelValidationsSection).findByRole('checkbox', { name: 'Ignore warning' }),
   )
 
@@ -459,7 +471,7 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
     }),
   )
 
-  renderAuthenticatedOnline(
+  const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/benthicpqt/90'],
@@ -468,9 +480,15 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
     dexieCurrentUserInstance,
   )
 
-  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
   expect(await screen.findByRole('button', { name: 'Validating' }))
-  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  await waitFor(() =>
+    expect(
+      screen.getByRole('button', {
+        name: 'Validate',
+      }),
+    ),
+  )
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
@@ -528,36 +546,36 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
   expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
-  userEvent.selectOptions(within(siteRow).getByLabelText('Site'), '1')
+  await user.selectOptions(within(siteRow).getByLabelText('Site'), '1')
   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.selectOptions(within(managementRow).getByLabelText('Management'), '1')
+  await user.selectOptions(within(managementRow).getByLabelText('Management'), '1')
   await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(depthRow).getByLabelText('Depth'), '1')
+  await user.type(within(depthRow).getByLabelText('Depth'), '1')
   await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(sampleDateRow).getByLabelText('Sample Date'), '2021-11-09')
+  await user.type(within(sampleDateRow).getByLabelText('Sample Date'), '2021-11-09')
   await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(sampleTimeRow).getByLabelText('Sample Time'), '02:39 PM')
+  await user.type(within(sampleTimeRow).getByLabelText('Sample Time'), '02:39 PM')
   await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(transectNumberRow).getByLabelText('Transect Number'), '12')
+  await user.type(within(transectNumberRow).getByLabelText('Transect Number'), '12')
   await waitFor(() =>
     expect(within(transectNumberRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  userEvent.type(within(labelRow).getByLabelText('Label'), '1')
+  await user.type(within(labelRow).getByLabelText('Label'), '1')
   await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(lengthSurveyedRow).getByLabelText('Transect Length Surveyed'), '1')
+  await user.type(within(lengthSurveyedRow).getByLabelText('Transect Length Surveyed'), '1')
   await waitFor(() =>
     expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
   // Relative Depth select on shallow
-  userEvent.selectOptions(
+  await user.selectOptions(
     within(relativeDepthRow).getByLabelText('Relative Depth'),
     'e88cc7bc-bdeb-49cf-b211-99f28c3cd2c3',
   )
@@ -566,48 +584,48 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
   )
 
   // Visibility select on <1m - bad
-  userEvent.selectOptions(
+  await user.selectOptions(
     within(visibilityRow).getByLabelText('Visibility'),
     '40702fad-754a-4982-8ca5-9b97106eca31',
   )
   await waitFor(() => expect(within(visibilityRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // Current select on moderate
-  userEvent.selectOptions(
+  await user.selectOptions(
     within(currentRow).getByLabelText('Current'),
     '60e11188-60d7-4f83-9658-27eb5a09c803',
   )
   await waitFor(() => expect(within(currentRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // Tide select on low
-  userEvent.selectOptions(
+  await user.selectOptions(
     within(tideRow).getByLabelText('Tide'),
     'bca0273a-51a3-4274-8425-457ca3afcfea',
   )
   await waitFor(() => expect(within(tideRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(notesRow).getByLabelText('Notes'), '1')
+  await user.type(within(notesRow).getByLabelText('Notes'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   const observersList = within(observersRow).getByLabelText('Observers')
 
-  userEvent.click(within(observersList).getByText('Melissa Nunes'))
+  await user.click(within(observersList).getByText('Melissa Nunes'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(quadratNumberStartRow).getByLabelText('Quadrat Number Start'), '99')
+  await user.type(within(quadratNumberStartRow).getByLabelText('Quadrat Number Start'), '99')
   await waitFor(() =>
     expect(within(quadratNumberStartRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  userEvent.type(within(quadratSizeRow).getByLabelText('Quadrat Size'), '99')
+  await user.type(within(quadratSizeRow).getByLabelText('Quadrat Size'), '99')
   await waitFor(() => expect(within(quadratSizeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(numberOfQuadratsRow).getByLabelText('Number of Quadrats'), '99')
+  await user.type(within(numberOfQuadratsRow).getByLabelText('Number of Quadrats'), '99')
   await waitFor(() =>
     expect(within(numberOfQuadratsRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  userEvent.type(
+  await user.type(
     within(numberOfPointsPerQuadratRow).getByLabelText('Number of Points per Quadrat'),
     '99',
   )
