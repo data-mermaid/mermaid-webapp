@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { getProjectIdFromLocation } from '../../../library/getProjectIdFromLocation'
 import {
@@ -14,7 +14,8 @@ import {
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import { IconButton, ViewLink } from '../../generic/buttons'
+import { IconButton } from '../../generic/buttons'
+import { ViewLink } from '../../generic/links'
 import { IconInfo, IconSites, IconMgmt } from '../../icons'
 import language from '../../../language'
 
@@ -36,7 +37,7 @@ const InputSelectWithLabelAndValidation = ({
 }) => {
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const location = useLocation()
 
   const projectId = getProjectIdFromLocation(location)
@@ -53,22 +54,9 @@ const InputSelectWithLabelAndValidation = ({
     event.stopPropagation()
   }
 
-  const handleViewLinkClick = (event, linkType, linkValue) => {
-    event.stopPropagation()
-    let navLink
-
-    if (linkType === 'Site') {
-      navLink = `/projects/${projectId}/sites/${linkValue}`
-
-      navigate(navLink)
-    } else if (linkType === 'Management') {
-      navLink = `/projects/${projectId}/management-regimes/${linkValue}`
-
-      navigate(navLink)
-    }
-
-    return
-  }
+  const linkToSiteOrMR = `/projects/${projectId}/${
+    label === 'Site' ? 'sites' : 'management-regimes'
+  }/${value}`
 
   return (
     <InputRow validationType={validationType} data-testid={testId}>
@@ -96,12 +84,9 @@ const InputSelectWithLabelAndValidation = ({
             <option value="">{language.placeholders.select}</option>
             {optionList}
           </Select>
+
           {displayViewLink ? (
-            <ViewLink
-              type="button"
-              disabled={!value}
-              onClick={(event) => handleViewLinkClick(event, label, value)}
-            >
+            <ViewLink disabled={!value} target="_blank" rel="noreferrer" href={linkToSiteOrMR}>
               <IconContainer>{label === 'Site' ? <IconSites /> : <IconMgmt />}</IconContainer>
               {language.pages.collectRecord.viewLink}
             </ViewLink>

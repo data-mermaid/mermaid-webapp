@@ -156,7 +156,24 @@ export const IconButton = styled.button`
   border-style: none;
 `
 
-export const ViewLink = styled.button`
+// export const ViewLink = styled.button`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   font-size: small;
+//   padding: ${theme.spacing.small};
+//   border: solid ${theme.spacing.borderSmall} ${theme.color.border};
+//   background-color: ${theme.color.inputBackground};
+//   text-align: inherit;
+//   cursor: pointer;
+//   &:disabled {
+//     color: ${theme.color.secondaryDisabledText};
+//     background-color: ${theme.color.secondaryDisabledColor};
+//     cursor: not-allowed;
+//   }
+// `
+
+export const ViewLink = styled.a`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -170,5 +187,6 @@ export const ViewLink = styled.button`
     color: ${theme.color.secondaryDisabledText};
     background-color: ${theme.color.secondaryDisabledColor};
     cursor: not-allowed;
+    pointer-events: none;
   }
 `

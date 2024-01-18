@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { getProjectIdFromLocation } from '../../../../library/getProjectIdFromLocation'
 import { getObjectById } from '../../../../library/getObjectById'
 import { Tr, TableRowTdKey, TableRowTd } from '../table'
-import { ButtonThatLooksLikeLinkUnderlined } from '../../buttons'
 
 const getItemLabelOrName = (itemOptions, itemValue) =>
   getObjectById(itemOptions, itemValue)?.name || getObjectById(itemOptions, itemValue)?.label
@@ -31,39 +30,22 @@ const TableRowItem = ({
   const highlightedCurrentSite = isOriginalSelected ? 'highlighted' : undefined
   const highlightedDuplicateSite = isDuplicateSelected ? 'highlighted' : undefined
 
-  const navigate = useNavigate()
   const location = useLocation()
 
   const projectId = getProjectIdFromLocation(location)
 
-  const handleViewLinkClick = (event, linkType, linkValue) => {
-    event.stopPropagation()
-    let navLink
-
-    if (linkType === 'Site') {
-      navLink = `/projects/${projectId}/sites/${linkValue}`
-
-      navigate(navLink)
-    } else if (linkType === 'Management') {
-      navLink = `/projects/${projectId}/management-regimes/${linkValue}`
-
-      navigate(navLink)
-    }
-
-    return
-  }
+  const linkToSiteOrMR = `/projects/${projectId}/${
+    title === 'Site' ? 'sites' : 'management-regimes'
+  }/${value}`
 
   return (
     <Tr>
       <TableRowTdKey>{title}</TableRowTdKey>
       {isLink ? (
         <TableRowTd hightedBackground={highlightedDuplicateSite} isAllowNewLines={isAllowNewlines}>
-          <ButtonThatLooksLikeLinkUnderlined
-            type="button"
-            onClick={(event) => handleViewLinkClick(event, title, value)}
-          >
+          <a target="_blank" rel="noreferrer" href={linkToSiteOrMR}>
             {rowItemValue}
-          </ButtonThatLooksLikeLinkUnderlined>
+          </a>
         </TableRowTd>
       ) : (
         <TableRowTd hightedBackground={highlightedDuplicateSite} isAllowNewLines={isAllowNewlines}>
