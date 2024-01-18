@@ -31,8 +31,13 @@ const SubmittedBenthicLitInfoTable = ({ choices, sites, managementRegimes, submi
   return (
     <Table>
       <tbody>
-        <TableRowItem title="Site" options={sites} value={site} />
-        <TableRowItem title="Management" options={managementRegimes} value={management} />
+        <TableRowItem title="Site" options={sites} value={site} isLink={true} />
+        <TableRowItem
+          title="Management"
+          options={managementRegimes}
+          value={management}
+          isLink={true}
+        />
         <TableRowItem title="Sample Date Time" value={`${sample_date} ${sample_time || ''}`} />
         <TableRowItem title="Depth (m)" value={depth} />
         <TableRowItem title="Transect Number" value={number} />
