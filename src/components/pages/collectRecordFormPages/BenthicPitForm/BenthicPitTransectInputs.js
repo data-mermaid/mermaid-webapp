@@ -360,8 +360,9 @@ const BenthicPitTransectInputs = ({
           onChange={handleIntervalStartChange}
           unit="m"
           helperText={language.helperText.intervalStart}
-          addSyncCheckbox={true}
-          handleSyncIntervalChange={handleSyncIntervalChange}
+          addCheckbox={true}
+          handleCheckboxUpdate={handleSyncIntervalChange}
+          checkboxLabel={language.pages.collectRecord.benthicPitSyncCheckbox}
         />
         <InputSelectWithLabelAndValidation
           label="Reef Slope"
