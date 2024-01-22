@@ -331,6 +331,7 @@ const pages = {
       functionalGroup: 'Functional Group',
       trophicGroup: 'Trophic Group',
     },
+    benthicPitSyncCheckbox: 'Use Interval Size as Interval Start',
   },
   projectInfo: {
     createOrganizationTitle: 'Suggest a new organization',
@@ -568,7 +569,7 @@ const helperText = {
   intervalSize:
     'Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).',
   intervalStart:
-    'Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5). Default is interval size (i.e. not counting 0).',
+    'Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5). Default is 1 (i.e. not counting 0).',
   label:
     'Arbitrary text to distinguish sample units that are distinct but should be combined analytically (i.e. all other properties are identical). For example: Long swim. Rarely used.',
   getLatitude: () => (

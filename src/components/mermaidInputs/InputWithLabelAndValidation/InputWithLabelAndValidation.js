@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 import { Input, InputRow, HelperText, LabelContainer, RequiredIndicator } from '../../generic/form'
 import { useStopInputScrollingIncrementNumber } from '../../../library/useStopInputScrollingIncrementNumber'
@@ -9,6 +10,20 @@ import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import { IconButton } from '../../generic/buttons'
 import { IconInfo } from '../../icons'
+import language from '../../../language'
+import theme from '../../../theme'
+
+const CheckBoxLabel = styled.label`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: ${theme.spacing.small};
+
+  input {
+    margin: 0 ${theme.spacing.small} 0 0;
+    cursor: pointer;
+  }
+`
 
 const InputWithLabelAndValidation = ({
   required,
@@ -21,6 +36,9 @@ const InputWithLabelAndValidation = ({
   unit,
   validationMessages,
   validationType,
+  addSyncCheckbox,
+  handleSyncIntervalChange,
+
   ...restOfProps
 }) => {
   const textFieldRef = useRef()
@@ -28,6 +46,7 @@ const InputWithLabelAndValidation = ({
   useStopInputScrollingIncrementNumber(textFieldRef)
 
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [isSyncItemChecked, setIsSyncItemChecked] = useState(false)
 
   const handleInfoIconClick = (event) => {
     isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
@@ -41,6 +60,7 @@ const InputWithLabelAndValidation = ({
       aria-describedby={`aria-descp${id}`}
       id={id}
       unit={unit}
+      disabled={isSyncItemChecked}
       {...restOfProps}
     />
   ) : (
@@ -52,6 +72,11 @@ const InputWithLabelAndValidation = ({
       ref={textFieldRef}
     />
   )
+
+  const handleSyncChange = (checked) => {
+    setIsSyncItemChecked(checked)
+    handleSyncIntervalChange(checked)
+  }
 
   return (
     <InputRow required={required} validationType={validationType} data-testid={testId}>
@@ -68,9 +93,21 @@ const InputWithLabelAndValidation = ({
       </LabelContainer>
 
       <div>
+        {addSyncCheckbox ? (
+          <CheckBoxLabel>
+            <input
+              id="interval-sync-toggle"
+              type="checkbox"
+              checked={isSyncItemChecked}
+              onChange={(event) => handleSyncChange(event.target.checked)}
+            />
+            {language.pages.collectRecord.benthicPitSyncCheckbox}
+          </CheckBoxLabel>
+        ) : null}
         {inputType}
         {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
+
       <InputValidationInfo
         validationType={validationType}
         validationMessages={validationMessages}
@@ -82,7 +119,9 @@ const InputWithLabelAndValidation = ({
 }
 
 InputWithLabelAndValidation.propTypes = {
+  addSyncCheckbox: PropTypes.bool,
   required: PropTypes.bool,
+  handleSyncIntervalChange: PropTypes.func,
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
@@ -95,8 +134,10 @@ InputWithLabelAndValidation.propTypes = {
 }
 
 InputWithLabelAndValidation.defaultProps = {
+  addSyncCheckbox: false,
   required: false,
   helperText: undefined,
+  handleSyncIntervalChange: () => {},
   ignoreNonObservationFieldValidations: () => {},
   resetNonObservationFieldValidations: () => {},
   testId: undefined,
