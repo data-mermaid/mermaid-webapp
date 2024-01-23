@@ -126,6 +126,11 @@ export const Input = styled.input`
   &[type='number'] {
     text-align: right;
   }
+  &:disabled {
+    background: ${theme.color.disabledInputBackground};
+    cursor: not-allowed;
+    color: ${theme.color.disabledTextDark};
+  }
 `
 export const Textarea = styled.textarea`
   resize: vertical;

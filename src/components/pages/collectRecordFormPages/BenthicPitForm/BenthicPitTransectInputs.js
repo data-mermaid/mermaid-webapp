@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -46,6 +46,8 @@ const BenthicPitTransectInputs = ({
   const currentOptions = getOptions(currents.data)
   const tideOptions = getOptions(tides.data)
   const benthic_transect = validationsApiData?.benthic_transect
+
+  const [isSyncIntervalStart, setIsSyncIntervalStart] = useState(false)
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     benthic_transect?.number,
@@ -181,6 +183,9 @@ const BenthicPitTransectInputs = ({
   }
 
   const handleIntervalSizeChange = (event) => {
+    if (isSyncIntervalStart) {
+      formik.setFieldValue('interval_start', event.target.value)
+    }
     formik.handleChange(event)
     resetNonObservationFieldValidations({
       validationPath: INTERVAL_SIZE_VALIDATION_PATH,
@@ -192,6 +197,15 @@ const BenthicPitTransectInputs = ({
     resetNonObservationFieldValidations({
       validationPath: INTERVAL_START_VALIDATION_PATH,
     })
+  }
+
+  const handleSyncIntervalChange = (checked) => {
+    if (checked) {
+      setIsSyncIntervalStart(true)
+      formik.setFieldValue('interval_start', formik.values.interval_size)
+    } else {
+      setIsSyncIntervalStart(false)
+    }
   }
 
   return (
@@ -346,6 +360,9 @@ const BenthicPitTransectInputs = ({
           onChange={handleIntervalStartChange}
           unit="m"
           helperText={language.helperText.intervalStart}
+          addCheckbox={true}
+          handleCheckboxUpdate={handleSyncIntervalChange}
+          checkboxLabel={language.pages.collectRecord.benthicPitSyncCheckbox}
         />
         <InputSelectWithLabelAndValidation
           label="Reef Slope"

@@ -53,7 +53,7 @@ const getBenthicPhotoQuadratAdditionalValues = (collectRecord) => {
 
 const getBenthicPitAdditionalValues = (collectRecord) => {
   return {
-    interval_start: collectRecord?.data?.interval_start ?? 1,
+    interval_start: collectRecord?.data?.interval_start ?? '',
     interval_size: collectRecord?.data?.interval_size ?? '',
   }
 }
