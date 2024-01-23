@@ -46,7 +46,7 @@ const InputWithLabelAndValidation = ({
   useStopInputScrollingIncrementNumber(textFieldRef)
 
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [isChecked, setIsChecked] = useState(false)
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
 
   const handleInfoIconClick = (event) => {
     isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
@@ -60,7 +60,7 @@ const InputWithLabelAndValidation = ({
       aria-describedby={`aria-descp${id}`}
       id={id}
       unit={unit}
-      disabled={isChecked}
+      disabled={isCheckboxChecked}
       {...restOfProps}
     />
   ) : (
@@ -73,8 +73,9 @@ const InputWithLabelAndValidation = ({
     />
   )
 
+  // example use case is in Benthic Pit Transect Inputs for Interval Start
   const handleCheckboxChange = (checked) => {
-    setIsChecked(checked)
+    setIsCheckboxChecked(checked)
     handleCheckboxUpdate(checked)
   }
 
@@ -98,7 +99,7 @@ const InputWithLabelAndValidation = ({
             <input
               id="checkbox-sync"
               type="checkbox"
-              checked={isChecked}
+              checked={isCheckboxChecked}
               onChange={(event) => handleCheckboxChange(event.target.checked)}
             />
             {checkboxLabel}
