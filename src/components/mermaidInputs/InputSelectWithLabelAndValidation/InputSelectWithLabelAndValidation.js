@@ -86,7 +86,7 @@ const InputSelectWithLabelAndValidation = ({
           </Select>
 
           {displayViewLink ? (
-            <ViewLink disabled={!value} target="_blank" rel="noreferrer" href={linkToSiteOrMR}>
+            <ViewLink disabled={!value} href={linkToSiteOrMR}>
               <IconContainer>{label === 'Site' ? <IconSites /> : <IconMgmt />}</IconContainer>
               {language.pages.collectRecord.viewLink}
             </ViewLink>
