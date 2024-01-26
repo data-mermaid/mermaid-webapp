@@ -43,9 +43,7 @@ const TableRowItem = ({
       <TableRowTdKey>{title}</TableRowTdKey>
       {isLink ? (
         <TableRowTd hightedBackground={highlightedDuplicateSite} isAllowNewLines={isAllowNewlines}>
-          <a target="_blank" rel="noreferrer" href={linkToSiteOrMR}>
-            {rowItemValue}
-          </a>
+          <a href={linkToSiteOrMR}>{rowItemValue}</a>
         </TableRowTd>
       ) : (
         <TableRowTd hightedBackground={highlightedDuplicateSite} isAllowNewLines={isAllowNewlines}>
