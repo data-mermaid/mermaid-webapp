@@ -1,5 +1,6 @@
 import styled from 'styled-components/macro'
 import { InputRow } from '../generic/form'
+import MapPin from '../../assets/map-pin.png'
 
 export const MapInputRow = styled(InputRow)`
   grid-template-columns: 1fr;
@@ -17,14 +18,16 @@ export const MapWrapper = styled.div`
   min-height: ${(props) => (props.minHeight ? props.minHeight : '70vh')};
 
   #marker {
-    background-image: url('https://maplibre.org/maplibre-gl-js-docs/assets/custom_marker.png');
+    // background-image: url('https://maplibre.org/maplibre-gl-js-docs/assets/custom_marker.png');
+    background-image: url(${MapPin});
     background-size: cover;
-    width: 35px;
-    height: 44px;
+    width: 31px;
+    height: 31px;
     cursor: move;
   }
 
   svg {
+    display: none;
     width: 3rem;
     height: 3rem;
   }

@@ -48,6 +48,12 @@ const SingleSiteMap = ({
   const [displayHelpText, setDisplayHelpText] = useState(false)
   const [isMarkerBeingPlaced, setIsMarkerBeingPlaced] = useState(false)
 
+  const outOfRangeLatitude = formLatitudeValue > 90 || formLatitudeValue < -90
+
+  const nullishLatitudeOrLongitude =
+    (!formLatitudeValue && formLatitudeValue !== 0) ||
+    (!formLongitudeValue && formLongitudeValue !== 0)
+
   const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
   const handleMarkerLocationChange = useCallback(
     (lngLat) => {
@@ -71,7 +77,7 @@ const SingleSiteMap = ({
       container: mapContainer.current,
       style: satelliteBaseMap,
       center: defaultCenter,
-      zoom: defaultZoom,
+      zoom: nullishLatitudeOrLongitude ? defaultZoom : 13,
       maxZoom: 16,
       attributionControl: true,
       customAttribution: language.map.attribution,
@@ -100,7 +106,13 @@ const SingleSiteMap = ({
       map.current.remove()
       recordMarker.current.remove()
     }
-  }, [isReadOnlyUser, handleLatitudeChange, handleLongitudeChange, handleMarkerLocationChange])
+  }, [
+    isReadOnlyUser,
+    handleLatitudeChange,
+    handleLongitudeChange,
+    handleMarkerLocationChange,
+    nullishLatitudeOrLongitude,
+  ])
 
   const handleMapClick = useCallback(
     (event) => {
@@ -135,12 +147,6 @@ const SingleSiteMap = ({
         return
       }
 
-      const outOfRangeLatitude = formLatitudeValue > 90 || formLatitudeValue < -90
-
-      const nullishLatitudeOrLongitude =
-        (!formLatitudeValue && formLatitudeValue !== 0) ||
-        (!formLongitudeValue && formLongitudeValue !== 0)
-
       if (outOfRangeLatitude || nullishLatitudeOrLongitude) {
         recordMarker.current.remove()
       } else {
@@ -158,7 +164,7 @@ const SingleSiteMap = ({
         })
       }
     },
-    [formLatitudeValue, formLongitudeValue],
+    [formLatitudeValue, formLongitudeValue, nullishLatitudeOrLongitude, outOfRangeLatitude],
   )
 
   const updateCoralMosaicLayer = (dataLayerFromLocalStorage) =>
