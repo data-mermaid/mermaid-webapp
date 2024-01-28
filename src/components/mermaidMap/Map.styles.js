@@ -18,7 +18,6 @@ export const MapWrapper = styled.div`
   min-height: ${(props) => (props.minHeight ? props.minHeight : '70vh')};
 
   #marker {
-    // background-image: url('https://maplibre.org/maplibre-gl-js-docs/assets/custom_marker.png');
     background-image: url(${MapPin});
     background-size: cover;
     width: 31px;
@@ -28,8 +27,6 @@ export const MapWrapper = styled.div`
 
   svg {
     display: none;
-    width: 3rem;
-    height: 3rem;
   }
 `
 
