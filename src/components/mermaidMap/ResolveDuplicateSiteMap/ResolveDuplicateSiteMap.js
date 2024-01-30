@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import language from '../../../language'
-import { satelliteBaseMap } from '../mapService'
+import { satelliteBaseMap, addMapController } from '../mapService'
 import { MapInputRow, MapContainer, MapWrapper } from '../Map.styles'
 
 const defaultCenter = [0, 0]
@@ -27,6 +27,9 @@ const ResolveDuplicateSiteMap = ({ formLatitudeValue, formLongitudeValue }) => {
       attributionControl: true,
       customAttribution: language.map.attribution,
     })
+
+    // adds zoom and rotation controls to the map.
+    addMapController(map.current)
 
     recordMarker.current = new maplibregl.Marker(markerElement, { draggable: false })
 

@@ -43,6 +43,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       customAttribution: language.map.attribution,
     })
 
+    // adds zoom and rotation controls to the map.
     addMapController(map.current)
 
     map.current.on('load', () => {
