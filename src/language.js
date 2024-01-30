@@ -131,6 +131,7 @@ const error = {
 const success = {
   collectRecordSave: 'Record saved.',
   collectRecordSubmit: 'Record submitted.',
+  collectRecordValidated: 'Record successfully validated.',
   collectRecordDelete: 'Record deleted.',
   newOrganizationAdd: 'Organization added.',
   fishSpeciesSave:
