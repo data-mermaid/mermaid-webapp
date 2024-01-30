@@ -9,7 +9,7 @@ import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUn
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import { IconButton } from '../../generic/buttons'
-import { IconInfo } from '../../icons'
+import { IconInfo, IconSwap } from '../../icons'
 import theme from '../../../theme'
 
 const CheckBoxLabel = styled.label`
@@ -22,6 +22,11 @@ const CheckBoxLabel = styled.label`
     margin: 0 ${theme.spacing.small} 0 0;
     cursor: pointer;
   }
+`
+
+const SwapButton = styled.div`
+  display: flex;
+  flex-direction: row;
 `
 
 const InputWithLabelAndValidation = ({
@@ -38,6 +43,7 @@ const InputWithLabelAndValidation = ({
   addCheckbox,
   handleCheckboxUpdate,
   checkboxLabel,
+  addSwapButton,
 
   ...restOfProps
 }) => {
@@ -102,10 +108,18 @@ const InputWithLabelAndValidation = ({
               checked={isCheckboxChecked}
               onChange={(event) => handleCheckboxChange(event.target.checked)}
             />
+
             {checkboxLabel}
           </CheckBoxLabel>
         ) : null}
+
         {inputType}
+
+        {addSwapButton ? (
+          <div>
+            <IconSwap />
+          </div>
+        ) : null}
         {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
 
@@ -121,6 +135,7 @@ const InputWithLabelAndValidation = ({
 
 InputWithLabelAndValidation.propTypes = {
   addCheckbox: PropTypes.bool,
+  addSwapButton: PropTypes.bool,
   checkboxLabel: PropTypes.string,
   required: PropTypes.bool,
   handleCheckboxUpdate: PropTypes.func,
@@ -137,6 +152,7 @@ InputWithLabelAndValidation.propTypes = {
 
 InputWithLabelAndValidation.defaultProps = {
   addCheckbox: false,
+  addSwapButton: false,
   checkboxLabel: '',
   required: false,
   helperText: undefined,
