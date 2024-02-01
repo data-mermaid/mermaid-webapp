@@ -182,7 +182,7 @@ const SingleSiteMap = ({
 
   useEffect(
     function updatePlaceMarkerButtonText() {
-      if ((!isMarkerBeingPlaced && !formLatitudeValue) || !formLongitudeValue) {
+      if (!isMarkerBeingPlaced && (!formLatitudeValue || !formLongitudeValue)) {
         setPlaceMarkerButtonText(language.pages.siteForm.placeMarker)
       }
       if (!isMarkerBeingPlaced && formLatitudeValue && formLongitudeValue) {
