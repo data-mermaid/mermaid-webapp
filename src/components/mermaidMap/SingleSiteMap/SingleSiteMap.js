@@ -47,6 +47,10 @@ const SingleSiteMap = ({
   const recordMarker = useRef(null)
   const [displayHelpText, setDisplayHelpText] = useState(false)
   const [isMarkerBeingPlaced, setIsMarkerBeingPlaced] = useState(false)
+  const [placeMarkerButtonText, setPlaceMarkerButtonText] = useState(
+    language.pages.siteForm.placeMarker,
+  )
+  const [hasLatLngChanged, setHasLatLngChanged] = useState(false)
 
   const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
   const handleMarkerLocationChange = useCallback(
@@ -62,6 +66,7 @@ const SingleSiteMap = ({
 
       handleLatitudeChange(roundToSixDecimalPlaces(lngLat.lat))
       handleLongitudeChange(roundToSixDecimalPlaces(adjustedLng))
+      setHasLatLngChanged(true)
     },
     [handleLatitudeChange, handleLongitudeChange],
   )
@@ -169,19 +174,34 @@ const SingleSiteMap = ({
 
   const updateBenthicLayers = (dataLayerFromLocalStorage) =>
     setGeomorphicOrBenthicLayerProperty(map.current, 'atlas-benthic', dataLayerFromLocalStorage)
-  const placeMarkerButtonText =
-    formLatitudeValue && formLongitudeValue
-      ? language.pages.siteForm.replaceMarker
-      : language.pages.siteForm.placeMarker
 
   const handlePlaceMarkerClick = () => {
     setIsMarkerBeingPlaced(!isMarkerBeingPlaced)
+    hasLatLngChanged && setHasLatLngChanged(false)
   }
+
+  useEffect(
+    function updatePlaceMarkerButtonText() {
+      if ((!isMarkerBeingPlaced && !formLatitudeValue) || !formLongitudeValue) {
+        setPlaceMarkerButtonText(language.pages.siteForm.placeMarker)
+      }
+      if (!isMarkerBeingPlaced && formLatitudeValue && formLongitudeValue) {
+        setPlaceMarkerButtonText(language.pages.siteForm.replaceMarker)
+      }
+      if (isMarkerBeingPlaced && !hasLatLngChanged) {
+        setPlaceMarkerButtonText(language.pages.siteForm.cancelPlaceMarker)
+      }
+      if (isMarkerBeingPlaced && hasLatLngChanged) {
+        setPlaceMarkerButtonText(language.pages.siteForm.done)
+      }
+    },
+    [isMarkerBeingPlaced, formLatitudeValue, formLongitudeValue, hasLatLngChanged],
+  )
 
   const placeMarkerButton = (
     <StyledPlaceMarkerButton type="button" onClick={handlePlaceMarkerClick}>
       <IconMapMarker />
-      {isMarkerBeingPlaced ? language.pages.siteForm.done : placeMarkerButtonText}
+      {placeMarkerButtonText}
     </StyledPlaceMarkerButton>
   )
 
