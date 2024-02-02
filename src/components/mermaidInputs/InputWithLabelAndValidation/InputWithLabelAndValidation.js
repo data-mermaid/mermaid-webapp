@@ -15,8 +15,7 @@ import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUn
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import { IconButton, CheckBoxLabel, InputButton } from '../../generic/buttons'
-import { IconInfo, IconSwap } from '../../icons'
-import language from '../../../language'
+import { IconInfo } from '../../icons'
 
 const InputWithLabelAndValidation = ({
   required,
@@ -35,6 +34,8 @@ const InputWithLabelAndValidation = ({
   addInputButton,
   isInputButtonDisabled,
   handleInputButtonClick,
+  buttonLabel,
+  buttonIcon,
 
   ...restOfProps
 }) => {
@@ -112,8 +113,8 @@ const InputWithLabelAndValidation = ({
               disabled={isInputButtonDisabled}
               onClick={handleInputButtonClick}
             >
-              <IconSwap />
-              <span>{language.pages.siteForm.swapButton}</span>
+              {buttonIcon || null}
+              <span>{buttonLabel}</span>
             </InputButton>
           ) : null}
         </InputContainer>
@@ -133,6 +134,8 @@ const InputWithLabelAndValidation = ({
 InputWithLabelAndValidation.propTypes = {
   addCheckbox: PropTypes.bool,
   addInputButton: PropTypes.bool,
+  buttonIcon: PropTypes.node,
+  buttonLabel: PropTypes.string,
   checkboxLabel: PropTypes.string,
   required: PropTypes.bool,
   handleCheckboxUpdate: PropTypes.func,
@@ -152,6 +155,8 @@ InputWithLabelAndValidation.propTypes = {
 InputWithLabelAndValidation.defaultProps = {
   addCheckbox: false,
   addInputButton: false,
+  buttonLabel: '',
+  buttonIcon: undefined,
   checkboxLabel: '',
   required: false,
   helperText: undefined,

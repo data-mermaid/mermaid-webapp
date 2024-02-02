@@ -46,6 +46,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import InputSelectWithLabelAndValidation from '../../mermaidInputs/InputSelectWithLabelAndValidation'
 import { DeleteRecordButtonCautionWrapper } from '../collectRecordFormPages/CollectingFormPage.Styles'
+import { IconSwap } from '../../icons'
 
 const ReadOnlySiteContent = ({
   site,
@@ -173,6 +174,8 @@ const SiteForm = ({
           addInputButton={true}
           isInputButtonDisabled={!formik.values.latitude && !formik.values.longitude}
           handleInputButtonClick={handleLngLatSwap}
+          buttonLabel={language.pages.siteForm.swapButton}
+          buttonIcon={<IconSwap />}
         />
         <InputWithLabelAndValidation
           required
@@ -190,6 +193,8 @@ const SiteForm = ({
           addInputButton={true}
           isInputButtonDisabled={!formik.values.latitude && !formik.values.longitude}
           handleInputButtonClick={handleLngLatSwap}
+          buttonLabel={language.pages.siteForm.swapButton}
+          buttonIcon={<IconSwap />}
         />
         {isAppOnline && (
           <SingleSiteMap
