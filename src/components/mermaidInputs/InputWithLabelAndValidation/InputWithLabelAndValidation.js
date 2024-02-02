@@ -14,8 +14,9 @@ import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUn
 
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import { IconButton, CheckBoxLabel, SwapButton } from '../../generic/buttons'
+import { IconButton, CheckBoxLabel, InputButton } from '../../generic/buttons'
 import { IconInfo, IconSwap } from '../../icons'
+import language from '../../../language'
 
 const InputWithLabelAndValidation = ({
   required,
@@ -33,6 +34,7 @@ const InputWithLabelAndValidation = ({
   checkboxLabel,
   addInputButton,
   isInputButtonDisabled,
+  handleInputButtonClick,
 
   ...restOfProps
 }) => {
@@ -105,10 +107,14 @@ const InputWithLabelAndValidation = ({
           {inputType}
 
           {addInputButton ? (
-            <SwapButton disabled={isInputButtonDisabled}>
+            <InputButton
+              type="button"
+              disabled={isInputButtonDisabled}
+              onClick={handleInputButtonClick}
+            >
               <IconSwap />
-              <p>Swap</p>
-            </SwapButton>
+              <span>{language.pages.siteForm.swapButton}</span>
+            </InputButton>
           ) : null}
         </InputContainer>
         {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
@@ -130,6 +136,7 @@ InputWithLabelAndValidation.propTypes = {
   checkboxLabel: PropTypes.string,
   required: PropTypes.bool,
   handleCheckboxUpdate: PropTypes.func,
+  handleInputButtonClick: PropTypes.func,
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
@@ -149,6 +156,7 @@ InputWithLabelAndValidation.defaultProps = {
   required: false,
   helperText: undefined,
   handleCheckboxUpdate: () => {},
+  handleInputButtonClick: () => {},
   ignoreNonObservationFieldValidations: () => {},
   isInputButtonDisabled: false,
   resetNonObservationFieldValidations: () => {},

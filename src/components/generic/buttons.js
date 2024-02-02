@@ -186,7 +186,7 @@ export const CheckBoxLabel = styled.label`
   }
 `
 
-export const SwapButton = styled('button')`
+export const InputButton = styled('button')`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -194,7 +194,7 @@ export const SwapButton = styled('button')`
   border: solid ${theme.spacing.borderSmall} ${theme.color.border};
   background-color: ${theme.color.inputBackground};
 
-  p {
+  span {
     font-size: ${theme.typography.smallFontSize};
   }
 

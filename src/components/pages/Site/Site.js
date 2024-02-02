@@ -114,6 +114,11 @@ const SiteForm = ({
   handleLatitudeChange,
   handleLongitudeChange,
 }) => {
+  const handleLngLatSwap = () => {
+    handleLatitudeChange(formik.getFieldProps('longitude').value)
+    handleLongitudeChange(formik.getFieldProps('latitude').value)
+  }
+
   return (
     <form id="site-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
@@ -167,6 +172,7 @@ const SiteForm = ({
           step="0.000001"
           addInputButton={true}
           isInputButtonDisabled={!formik.values.latitude && !formik.values.longitude}
+          handleInputButtonClick={handleLngLatSwap}
         />
         <InputWithLabelAndValidation
           required
@@ -183,6 +189,7 @@ const SiteForm = ({
           step="0.000001"
           addInputButton={true}
           isInputButtonDisabled={!formik.values.latitude && !formik.values.longitude}
+          handleInputButtonClick={handleLngLatSwap}
         />
         {isAppOnline && (
           <SingleSiteMap
