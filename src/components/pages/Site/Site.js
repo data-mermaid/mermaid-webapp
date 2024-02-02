@@ -165,7 +165,8 @@ const SiteForm = ({
           helperText={language.helperText.getLatitude()}
           shouldShowSteps={true}
           step="0.000001"
-          addSwapButton={true}
+          addInputButton={true}
+          isInputButtonDisabled={!formik.values.latitude && !formik.values.longitude}
         />
         <InputWithLabelAndValidation
           required
@@ -180,7 +181,8 @@ const SiteForm = ({
           helperText={language.helperText.getLongitude()}
           shouldShowSteps={true}
           step="0.000001"
-          addSwapButton={true}
+          addInputButton={true}
+          isInputButtonDisabled={!formik.values.latitude && !formik.values.longitude}
         />
         {isAppOnline && (
           <SingleSiteMap

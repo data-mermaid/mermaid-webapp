@@ -140,7 +140,7 @@ export const LabelContainer = styled.div`
   display: flex;
   flex-direction: row;
 `
-export const InputLinkContainer = styled.div`
+export const InputContainer = styled.div`
   display: flex;
   flex-direction: row;
 `

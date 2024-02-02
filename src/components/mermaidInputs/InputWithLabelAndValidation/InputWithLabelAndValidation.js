@@ -1,33 +1,21 @@
 import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
-import { Input, InputRow, HelperText, LabelContainer, RequiredIndicator } from '../../generic/form'
+import {
+  Input,
+  InputContainer,
+  InputRow,
+  HelperText,
+  LabelContainer,
+  RequiredIndicator,
+} from '../../generic/form'
 import { useStopInputScrollingIncrementNumber } from '../../../library/useStopInputScrollingIncrementNumber'
 import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit'
 
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import { IconButton } from '../../generic/buttons'
+import { IconButton, CheckBoxLabel, SwapButton } from '../../generic/buttons'
 import { IconInfo, IconSwap } from '../../icons'
-import theme from '../../../theme'
-
-const CheckBoxLabel = styled.label`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: ${theme.spacing.small};
-
-  input {
-    margin: 0 ${theme.spacing.small} 0 0;
-    cursor: pointer;
-  }
-`
-
-const SwapButton = styled.div`
-  display: flex;
-  flex-direction: row;
-`
 
 const InputWithLabelAndValidation = ({
   required,
@@ -43,7 +31,8 @@ const InputWithLabelAndValidation = ({
   addCheckbox,
   handleCheckboxUpdate,
   checkboxLabel,
-  addSwapButton,
+  addInputButton,
+  isInputButtonDisabled,
 
   ...restOfProps
 }) => {
@@ -112,14 +101,16 @@ const InputWithLabelAndValidation = ({
             {checkboxLabel}
           </CheckBoxLabel>
         ) : null}
+        <InputContainer>
+          {inputType}
 
-        {inputType}
-
-        {addSwapButton ? (
-          <div>
-            <IconSwap />
-          </div>
-        ) : null}
+          {addInputButton ? (
+            <SwapButton disabled={isInputButtonDisabled}>
+              <IconSwap />
+              <p>Swap</p>
+            </SwapButton>
+          ) : null}
+        </InputContainer>
         {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
 
@@ -135,13 +126,14 @@ const InputWithLabelAndValidation = ({
 
 InputWithLabelAndValidation.propTypes = {
   addCheckbox: PropTypes.bool,
-  addSwapButton: PropTypes.bool,
+  addInputButton: PropTypes.bool,
   checkboxLabel: PropTypes.string,
   required: PropTypes.bool,
   handleCheckboxUpdate: PropTypes.func,
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
+  isInputButtonDisabled: PropTypes.bool,
   label: PropTypes.string.isRequired,
   resetNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
@@ -152,12 +144,13 @@ InputWithLabelAndValidation.propTypes = {
 
 InputWithLabelAndValidation.defaultProps = {
   addCheckbox: false,
-  addSwapButton: false,
+  addInputButton: false,
   checkboxLabel: '',
   required: false,
   helperText: undefined,
   handleCheckboxUpdate: () => {},
   ignoreNonObservationFieldValidations: () => {},
+  isInputButtonDisabled: false,
   resetNonObservationFieldValidations: () => {},
   testId: undefined,
   unit: undefined,

@@ -156,23 +156,6 @@ export const IconButton = styled.button`
   border-style: none;
 `
 
-// export const ViewLink = styled.button`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   font-size: small;
-//   padding: ${theme.spacing.small};
-//   border: solid ${theme.spacing.borderSmall} ${theme.color.border};
-//   background-color: ${theme.color.inputBackground};
-//   text-align: inherit;
-//   cursor: pointer;
-//   &:disabled {
-//     color: ${theme.color.secondaryDisabledText};
-//     background-color: ${theme.color.secondaryDisabledColor};
-//     cursor: not-allowed;
-//   }
-// `
-
 export const ViewLink = styled.a`
   display: flex;
   justify-content: center;
@@ -188,5 +171,36 @@ export const ViewLink = styled.a`
     background-color: ${theme.color.secondaryDisabledColor};
     cursor: not-allowed;
     pointer-events: none;
+  }
+`
+
+export const CheckBoxLabel = styled.label`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: ${theme.spacing.small};
+
+  input {
+    margin: 0 ${theme.spacing.small} 0 0;
+    cursor: pointer;
+  }
+`
+
+export const SwapButton = styled('button')`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  border: solid ${theme.spacing.borderSmall} ${theme.color.border};
+  background-color: ${theme.color.inputBackground};
+
+  p {
+    font-size: ${theme.typography.smallFontSize};
+  }
+
+  &:disabled {
+    color: ${theme.color.secondaryDisabledText};
+    background-color: ${theme.color.secondaryDisabledColor};
+    cursor: not-allowed;
   }
 `

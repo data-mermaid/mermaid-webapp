@@ -7,7 +7,7 @@ import {
   InputRow,
   Select,
   HelperText,
-  InputLinkContainer,
+  InputContainer,
   LabelContainer,
   RequiredIndicator,
 } from '../../generic/form'
@@ -73,7 +73,7 @@ const InputSelectWithLabelAndValidation = ({
       </LabelContainer>
 
       <div>
-        <InputLinkContainer>
+        <InputContainer>
           <Select
             aria-labelledby={`aria-label${id}`}
             aria-describedby={`aria-descp${id}`}
@@ -91,7 +91,7 @@ const InputSelectWithLabelAndValidation = ({
               {language.pages.collectRecord.viewLink}
             </ViewLink>
           ) : null}
-        </InputLinkContainer>
+        </InputContainer>
         {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
       <InputValidationInfo
