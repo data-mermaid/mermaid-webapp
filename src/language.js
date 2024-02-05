@@ -391,6 +391,7 @@ const pages = {
     nonAdminDelete: 'Only admins can delete a site.',
     placeMarker: 'Place Site Marker',
     replaceMarker: 'Replace Site Marker',
+    cancelPlaceMarker: 'Cancel',
     done: 'Done',
   },
   siteTable: {
