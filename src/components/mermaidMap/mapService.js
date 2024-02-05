@@ -138,7 +138,7 @@ export const satelliteBaseMap = {
   ],
 }
 
-export const addMapController = (map) => {
+export const addZoomController = (map) => {
   map.addControl(
     new maplibregl.NavigationControl({
       showCompass: false,

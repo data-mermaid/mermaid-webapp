@@ -4,7 +4,7 @@ import maplibregl from 'maplibre-gl'
 import language from '../../../language'
 import {
   satelliteBaseMap,
-  addMapController,
+  addZoomController,
   getMapMarkersFeature,
   loadMapMarkersLayer,
   handleMapOnWheel,
@@ -36,7 +36,7 @@ const CopySitesMap = ({ sitesForMapMarkers }) => {
       customAttribution: language.map.attribution,
     })
 
-    addMapController(map.current)
+    addZoomController(map.current)
 
     map.current.on('load', () => {
       loadMapMarkersLayer(map.current)
