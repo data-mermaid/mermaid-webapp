@@ -28,7 +28,6 @@ const ResolveDuplicateSiteMap = ({ formLatitudeValue, formLongitudeValue }) => {
       customAttribution: language.map.attribution,
     })
 
-    // adds zoom and rotation controls to the map.
     addZoomController(map.current)
 
     recordMarker.current = new maplibregl.Marker(markerElement, { draggable: false })
