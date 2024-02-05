@@ -7,7 +7,7 @@ import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import { sitePropType, choicesPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import {
   satelliteBaseMap,
-  addMapController,
+  addZoomController,
   setCoralMosaicLayerProperty,
   setGeomorphicOrBenthicLayerProperty,
   loadACALayers,
@@ -43,8 +43,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       customAttribution: language.map.attribution,
     })
 
-    // adds zoom and rotation controls to the map.
-    addMapController(map.current)
+    addZoomController(map.current)
 
     map.current.on('load', () => {
       loadACALayers(map.current)

@@ -6,7 +6,7 @@ import language from '../../../language'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import {
   satelliteBaseMap,
-  addMapController,
+  addZoomController,
   setCoralMosaicLayerProperty,
   setGeomorphicOrBenthicLayerProperty,
   loadACALayers,
@@ -88,7 +88,7 @@ const SingleSiteMap = ({
 
     recordMarkerElement.id = 'marker'
 
-    addMapController(map.current)
+    addZoomController(map.current)
 
     map.current.on('load', () => {
       loadACALayers(map.current)
