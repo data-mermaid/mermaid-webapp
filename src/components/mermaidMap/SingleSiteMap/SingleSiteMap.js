@@ -177,7 +177,9 @@ const SingleSiteMap = ({
 
   const handlePlaceMarkerClick = () => {
     setIsMarkerBeingPlaced(!isMarkerBeingPlaced)
-    hasLatLngChanged && setHasLatLngChanged(false)
+    if (hasLatLngChanged) {
+      setHasLatLngChanged(false)
+    }
   }
 
   useEffect(
