@@ -167,7 +167,7 @@ const PercentCoverObservationTable = ({
       }
 
       return (
-        <ObservationTr key={observationId}>
+        <ObservationTr key={observationId} messageType={observationValidationType}>
           <Td align="center">{rowNumber}</Td>
           <Td align="center">{quadrat_number}</Td>
 

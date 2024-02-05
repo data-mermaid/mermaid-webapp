@@ -208,7 +208,7 @@ const BenthicPitObservationsTable = ({
       }
 
       return (
-        <ObservationTr key={observationId}>
+        <ObservationTr key={observationId} messageType={observationValidationType}>
           <Td align="center">{rowNumber}</Td>
           <Td align="right" aria-labelledby="interval-label">
             {interval}m
