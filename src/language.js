@@ -393,6 +393,7 @@ const pages = {
     replaceMarker: 'Replace Site Marker',
     cancelPlaceMarker: 'Cancel',
     done: 'Done',
+    swapButton: 'Swap',
   },
   siteTable: {
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',

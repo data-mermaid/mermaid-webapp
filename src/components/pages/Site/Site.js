@@ -46,6 +46,8 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import InputSelectWithLabelAndValidation from '../../mermaidInputs/InputSelectWithLabelAndValidation'
 import { DeleteRecordButtonCautionWrapper } from '../collectRecordFormPages/CollectingFormPage.Styles'
+import { IconSwap } from '../../icons'
+import { InputButton } from '../../generic/buttons'
 
 const ReadOnlySiteContent = ({
   site,
@@ -82,6 +84,15 @@ const ReadOnlySiteContent = ({
   )
 }
 
+const SwapButton = ({ isDisabled, handleSwapClick, swapLabel }) => {
+  return (
+    <InputButton type="button" disabled={isDisabled} onClick={handleSwapClick}>
+      <IconSwap />
+      <span>{swapLabel}</span>
+    </InputButton>
+  )
+}
+
 const enforceNumberInput = (event) => {
   // Allow only numbers, special key presses, and copy paste shortcuts.
   const specialActionAndCharacterKeys = [
@@ -114,6 +125,11 @@ const SiteForm = ({
   handleLatitudeChange,
   handleLongitudeChange,
 }) => {
+  const handleLngLatSwap = () => {
+    handleLatitudeChange(formik.getFieldProps('longitude').value)
+    handleLongitudeChange(formik.getFieldProps('latitude').value)
+  }
+
   return (
     <form id="site-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
@@ -165,6 +181,13 @@ const SiteForm = ({
           helperText={language.helperText.getLatitude()}
           shouldShowSteps={true}
           step="0.000001"
+          renderItemWithinInput={
+            <SwapButton
+              isDisabled={!formik.values.latitude && !formik.values.longitude}
+              handleSwapClick={handleLngLatSwap}
+              swapLabel={language.pages.siteForm.swapButton}
+            />
+          }
         />
         <InputWithLabelAndValidation
           required
@@ -179,6 +202,13 @@ const SiteForm = ({
           helperText={language.helperText.getLongitude()}
           shouldShowSteps={true}
           step="0.000001"
+          renderItemWithinInput={
+            <SwapButton
+              isDisabled={!formik.values.latitude && !formik.values.longitude}
+              handleSwapClick={handleLngLatSwap}
+              swapLabel={language.pages.siteForm.swapButton}
+            />
+          }
         />
         {isAppOnline && (
           <SingleSiteMap
@@ -611,6 +641,12 @@ SiteForm.propTypes = {
   reefZoneOptions: inputOptionsPropTypes.isRequired,
   handleLatitudeChange: PropTypes.func.isRequired,
   handleLongitudeChange: PropTypes.func.isRequired,
+}
+
+SwapButton.propTypes = {
+  isDisabled: PropTypes.bool.isRequired,
+  handleSwapClick: PropTypes.func.isRequired,
+  swapLabel: PropTypes.string.isRequired,
 }
 
 Site.propTypes = { isNewSite: PropTypes.bool.isRequired }

@@ -1,8 +1,14 @@
 import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
-import { Input, InputRow, HelperText, LabelContainer, RequiredIndicator } from '../../generic/form'
+import {
+  Input,
+  InputContainer,
+  InputRow,
+  HelperText,
+  LabelContainer,
+  RequiredIndicator,
+} from '../../generic/form'
 import { useStopInputScrollingIncrementNumber } from '../../../library/useStopInputScrollingIncrementNumber'
 import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit'
 
@@ -10,19 +16,6 @@ import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import { IconButton } from '../../generic/buttons'
 import { IconInfo } from '../../icons'
-import theme from '../../../theme'
-
-const CheckBoxLabel = styled.label`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: ${theme.spacing.small};
-
-  input {
-    margin: 0 ${theme.spacing.small} 0 0;
-    cursor: pointer;
-  }
-`
 
 const InputWithLabelAndValidation = ({
   required,
@@ -35,9 +28,9 @@ const InputWithLabelAndValidation = ({
   unit,
   validationMessages,
   validationType,
-  addCheckbox,
-  handleCheckboxUpdate,
-  checkboxLabel,
+  renderItemWithinInput,
+  renderItemAboveInput,
+  isInputDisabled,
 
   ...restOfProps
 }) => {
@@ -46,7 +39,6 @@ const InputWithLabelAndValidation = ({
   useStopInputScrollingIncrementNumber(textFieldRef)
 
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
 
   const handleInfoIconClick = (event) => {
     isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
@@ -60,7 +52,7 @@ const InputWithLabelAndValidation = ({
       aria-describedby={`aria-descp${id}`}
       id={id}
       unit={unit}
-      disabled={isCheckboxChecked}
+      disabled={isInputDisabled}
       {...restOfProps}
     />
   ) : (
@@ -72,12 +64,6 @@ const InputWithLabelAndValidation = ({
       ref={textFieldRef}
     />
   )
-
-  // example use case is in Benthic Pit Transect Inputs for Interval Start
-  const handleCheckboxChange = (checked) => {
-    setIsCheckboxChecked(checked)
-    handleCheckboxUpdate(checked)
-  }
 
   return (
     <InputRow required={required} validationType={validationType} data-testid={testId}>
@@ -94,18 +80,12 @@ const InputWithLabelAndValidation = ({
       </LabelContainer>
 
       <div>
-        {addCheckbox ? (
-          <CheckBoxLabel>
-            <input
-              id="checkbox-sync"
-              type="checkbox"
-              checked={isCheckboxChecked}
-              onChange={(event) => handleCheckboxChange(event.target.checked)}
-            />
-            {checkboxLabel}
-          </CheckBoxLabel>
-        ) : null}
-        {inputType}
+        {renderItemAboveInput || null}
+        <InputContainer>
+          {inputType}
+
+          {renderItemWithinInput || null}
+        </InputContainer>
         {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
 
@@ -120,14 +100,14 @@ const InputWithLabelAndValidation = ({
 }
 
 InputWithLabelAndValidation.propTypes = {
-  addCheckbox: PropTypes.bool,
-  checkboxLabel: PropTypes.string,
   required: PropTypes.bool,
-  handleCheckboxUpdate: PropTypes.func,
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
+  isInputDisabled: PropTypes.bool,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
+  renderItemAboveInput: PropTypes.node,
+  renderItemWithinInput: PropTypes.node,
   resetNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
   unit: PropTypes.string,
@@ -136,12 +116,12 @@ InputWithLabelAndValidation.propTypes = {
 }
 
 InputWithLabelAndValidation.defaultProps = {
-  addCheckbox: false,
-  checkboxLabel: '',
   required: false,
   helperText: undefined,
-  handleCheckboxUpdate: () => {},
   ignoreNonObservationFieldValidations: () => {},
+  isInputDisabled: false,
+  renderItemAboveInput: undefined,
+  renderItemWithinInput: undefined,
   resetNonObservationFieldValidations: () => {},
   testId: undefined,
   unit: undefined,
