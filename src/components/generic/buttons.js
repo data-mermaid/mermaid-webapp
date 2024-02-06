@@ -174,7 +174,7 @@ export const ViewLink = styled.a`
   }
 `
 
-export const CheckBoxLabel = styled.label`
+export const CheckBoxContainer = styled.label`
   display: flex;
   flex-direction: row;
   align-items: center;
