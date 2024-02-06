@@ -14,7 +14,7 @@ import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUn
 
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import { IconButton, CheckBoxLabel, InputButton } from '../../generic/buttons'
+import { IconButton, CheckBoxLabel } from '../../generic/buttons'
 import { IconInfo } from '../../icons'
 
 const InputWithLabelAndValidation = ({
@@ -31,11 +31,7 @@ const InputWithLabelAndValidation = ({
   addCheckbox,
   handleCheckboxUpdate,
   checkboxLabel,
-  addInputButton,
-  isInputButtonDisabled,
-  handleInputButtonClick,
-  buttonLabel,
-  buttonIcon,
+  renderItemWithinInput,
 
   ...restOfProps
 }) => {
@@ -107,16 +103,7 @@ const InputWithLabelAndValidation = ({
         <InputContainer>
           {inputType}
 
-          {addInputButton ? (
-            <InputButton
-              type="button"
-              disabled={isInputButtonDisabled}
-              onClick={handleInputButtonClick}
-            >
-              {buttonIcon || null}
-              <span>{buttonLabel}</span>
-            </InputButton>
-          ) : null}
+          {renderItemWithinInput || null}
         </InputContainer>
         {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
@@ -133,18 +120,14 @@ const InputWithLabelAndValidation = ({
 
 InputWithLabelAndValidation.propTypes = {
   addCheckbox: PropTypes.bool,
-  addInputButton: PropTypes.bool,
-  buttonIcon: PropTypes.node,
-  buttonLabel: PropTypes.string,
   checkboxLabel: PropTypes.string,
   required: PropTypes.bool,
   handleCheckboxUpdate: PropTypes.func,
-  handleInputButtonClick: PropTypes.func,
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
-  isInputButtonDisabled: PropTypes.bool,
   label: PropTypes.string.isRequired,
+  renderItemWithinInput: PropTypes.node,
   resetNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
   unit: PropTypes.string,
@@ -154,16 +137,12 @@ InputWithLabelAndValidation.propTypes = {
 
 InputWithLabelAndValidation.defaultProps = {
   addCheckbox: false,
-  addInputButton: false,
-  buttonLabel: '',
-  buttonIcon: undefined,
   checkboxLabel: '',
   required: false,
   helperText: undefined,
   handleCheckboxUpdate: () => {},
-  handleInputButtonClick: () => {},
   ignoreNonObservationFieldValidations: () => {},
-  isInputButtonDisabled: false,
+  renderItemWithinInput: undefined,
   resetNonObservationFieldValidations: () => {},
   testId: undefined,
   unit: undefined,
