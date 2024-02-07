@@ -126,9 +126,29 @@ const SiteForm = ({
   handleLongitudeChange,
 }) => {
   const handleLngLatSwap = () => {
-    handleLatitudeChange(formik.getFieldProps('longitude').value)
-    handleLongitudeChange(formik.getFieldProps('latitude').value)
+    const currentLatitude = formik.getFieldProps('latitude').value
+    const currentLongitude = formik.getFieldProps('longitude').value
+
+    handleLatitudeChange(currentLongitude)
+    handleLongitudeChange(currentLatitude)
+
+    formik.setFieldTouched({ latitude: true, longitude: true })
+    console.log({ currentLatitude, currentLongitude })
+
+    console.log(formik)
   }
+
+  useEffect(
+    () => {
+      console.log('Updated Latitude:', formik.getFieldProps('latitude').value)
+      console.log('Updated Longitude:', formik.getFieldProps('longitude').value)
+      console.log('updated long error: ', formik.errors.longitude)
+      console.log('updated lat error: ', formik.errors.latitude)
+    },
+    [formik.getFieldProps('latitude').value, formik.getFieldProps('longitude').value],
+    formik.errors.longitude,
+    formik.errors.latitude,
+  )
 
   return (
     <form id="site-form" onSubmit={formik.handleSubmit}>
