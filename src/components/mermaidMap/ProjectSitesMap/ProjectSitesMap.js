@@ -69,12 +69,15 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       isMapInitialized ||
       JSON.stringify(sitesForMapMarkers) !== JSON.stringify(previousSitesForMapMarkers)
     ) {
-      if (map.current.getSource('mapMarkers') !== undefined) {
-        map.current.getSource('mapMarkers').setData(markersData)
-      }
-      if (sitesForMapMarkers.length > 0) {
-        map.current.fitBounds(bounds, { padding: 25, animate: false })
-      }
+      // Add event listener for sourcedata event
+      map.current.on('sourcedata', () => {
+        if (map.current.getSource('mapMarkers') !== undefined) {
+          map.current.getSource('mapMarkers').setData(markersData)
+        }
+        if (sitesForMapMarkers.length > 0) {
+          map.current.fitBounds(bounds, { padding: 25, animate: false })
+        }
+      })
     }
   }, [isMapInitialized, sitesForMapMarkers, previousSitesForMapMarkers])
 
