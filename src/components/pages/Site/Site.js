@@ -132,23 +132,15 @@ const SiteForm = ({
     handleLatitudeChange(currentLongitude)
     handleLongitudeChange(currentLatitude)
 
-    formik.setFieldTouched({ latitude: true, longitude: true })
-    console.log({ currentLatitude, currentLongitude })
-
-    console.log(formik)
+    formik.setFieldTouched('longitude', true)
+    formik.setFieldTouched('latitude', true)
   }
 
-  useEffect(
-    () => {
-      console.log('Updated Latitude:', formik.getFieldProps('latitude').value)
-      console.log('Updated Longitude:', formik.getFieldProps('longitude').value)
-      console.log('updated long error: ', formik.errors.longitude)
-      console.log('updated lat error: ', formik.errors.latitude)
-    },
-    [formik.getFieldProps('latitude').value, formik.getFieldProps('longitude').value],
-    formik.errors.longitude,
-    formik.errors.latitude,
-  )
+  // hack to ensure formik values are updated before manually triggering validation
+  useEffect(() => {
+    formik.validateForm()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.getFieldProps('latitude').value, formik.getFieldProps('longitude').value])
 
   return (
     <form id="site-form" onSubmit={formik.handleSubmit}>
