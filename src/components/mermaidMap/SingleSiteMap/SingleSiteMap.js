@@ -17,6 +17,7 @@ import { IconMapMarker } from '../../icons'
 import { MapInputRow, MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 import theme from '../../../theme'
 import { roundToSixDecimalPlaces } from '../../../library/numbers/roundToSixDecimalPlaces'
+import MiniMap from '../MiniMap'
 
 const StyledPlaceMarkerButton = styled(ButtonSecondary)`
   padding: 0 5px;
@@ -30,6 +31,14 @@ const StyledPlaceMarkerButton = styled(ButtonSecondary)`
   & > svg {
     margin-right: 1px;
   }
+`
+
+const MiniMapContainer = styled.div`
+  position: absolute;
+  bottom: 5px;
+  left: 15px;
+  width: 200px;
+  height: 150px;
 `
 
 const defaultCenter = [0, 0]
@@ -226,6 +235,10 @@ const SingleSiteMap = ({
           updateGeomorphicLayers={updateGeomorphicLayers}
           updateBenthicLayers={updateBenthicLayers}
         />
+        {/* Integration of MiniMap component */}
+        <MiniMapContainer>
+          <MiniMap mainMap={map.current} />
+        </MiniMapContainer>
       </MapContainer>
     </MapInputRow>
   )
