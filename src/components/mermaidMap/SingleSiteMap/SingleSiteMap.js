@@ -235,10 +235,11 @@ const SingleSiteMap = ({
           updateGeomorphicLayers={updateGeomorphicLayers}
           updateBenthicLayers={updateBenthicLayers}
         />
-        {/* Integration of MiniMap component */}
-        <MiniMapContainer>
-          <MiniMap mainMap={map.current} />
-        </MiniMapContainer>
+        {map.current ? (
+          <MiniMapContainer>
+            <MiniMap mainMap={map.current} />
+          </MiniMapContainer>
+        ) : null}
       </MapContainer>
     </MapInputRow>
   )
