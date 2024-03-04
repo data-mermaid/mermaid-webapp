@@ -140,7 +140,7 @@ const SiteForm = ({
   useEffect(() => {
     formik.validateForm()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.getFieldProps('latitude').value, formik.getFieldProps('longitude').value])
+  }, [formik.values.latitude, formik.values.longitude])
 
   return (
     <form id="site-form" onSubmit={formik.handleSubmit}>
