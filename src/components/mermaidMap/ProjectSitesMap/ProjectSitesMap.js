@@ -65,16 +65,26 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
 
     const { markersData, bounds } = getMapMarkersFeature(sitesForMapMarkers)
 
+    const handleSourceData = () => {
+      if (map.current.getSource('mapMarkers') !== undefined) {
+        map.current.getSource('mapMarkers').setData(markersData)
+      }
+    }
+
     if (
       isMapInitialized ||
       JSON.stringify(sitesForMapMarkers) !== JSON.stringify(previousSitesForMapMarkers)
     ) {
-      if (map.current.getSource('mapMarkers') !== undefined) {
-        map.current.getSource('mapMarkers').setData(markersData)
-      }
+      map.current.on('sourcedata', handleSourceData)
+
       if (sitesForMapMarkers.length > 0) {
         map.current.fitBounds(bounds, { padding: 25, animate: false })
       }
+    }
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      map.current.off('sourcedata', handleSourceData)
     }
   }, [isMapInitialized, sitesForMapMarkers, previousSitesForMapMarkers])
 
