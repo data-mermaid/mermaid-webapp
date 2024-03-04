@@ -75,7 +75,6 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       isMapInitialized ||
       JSON.stringify(sitesForMapMarkers) !== JSON.stringify(previousSitesForMapMarkers)
     ) {
-      // Add event listener for sourcedata event
       map.current.on('sourcedata', handleSourceData)
 
       if (sitesForMapMarkers.length > 0) {
