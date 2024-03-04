@@ -1,4 +1,5 @@
 import maplibregl from 'maplibre-gl'
+import mapPin from '../../assets/map-pin.png'
 
 const coralAtlasAppId = process.env.REACT_APP_CORAL_ATLAS_APP_ID
 
@@ -287,25 +288,30 @@ export const getMapMarkersFeature = (records) => {
 }
 
 export const loadMapMarkersLayer = (map) => {
-  map.addSource('mapMarkers', {
-    type: 'geojson',
-    data: {
-      type: 'FeatureCollection',
-      features: [],
-    },
-  })
+  map.loadImage(mapPin, (error, image) => {
+    if (error) {
+      throw error
+    }
 
-  map.addLayer({
-    id: 'mapMarkers',
-    source: 'mapMarkers',
-    type: 'circle',
-    paint: {
-      'circle-radius': 5,
-      'circle-color': '#f0e0b3',
-      'circle-stroke-color': '#ff0000',
-      'circle-stroke-width': 3,
-      'circle-opacity': 0.8,
-    },
+    map.addImage('custom-marker', image)
+
+    map.addSource('mapMarkers', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: [],
+      },
+    })
+
+    map.addLayer({
+      id: 'mapMarkers',
+      source: 'mapMarkers',
+      type: 'symbol',
+      layout: {
+        'icon-image': 'custom-marker',
+        'icon-size': 1,
+      },
+    })
   })
 }
 
