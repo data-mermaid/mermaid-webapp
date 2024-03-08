@@ -6,15 +6,38 @@ import { satelliteBaseMap } from '../mapService'
 
 const MiniMapWrapper = styled.div`
   position: absolute;
-  width: 150px;
-  height: 100px;
+  width: 200px;
+  height: 150px;
+  border: 2px solid white;
 `
 
-const defaultZoom = 1
+const defaultZoom = 2
 
 const MiniMap = ({ mainMap }) => {
   const miniMapContainer = useRef(null)
   const miniMap = useRef(null)
+  const trackingRectSource = useRef(null)
+
+  const updateTrackingRectangle = (bounds) => {
+    if (trackingRectSource.current) {
+      trackingRectSource.current.setData({
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [bounds.getWest(), bounds.getNorth()],
+              [bounds.getEast(), bounds.getNorth()],
+              [bounds.getEast(), bounds.getSouth()],
+              [bounds.getWest(), bounds.getSouth()],
+              [bounds.getWest(), bounds.getNorth()],
+            ],
+          ],
+        },
+      })
+    }
+  }
 
   const _initializeMap = useEffect(() => {
     if (!miniMapContainer.current || !mainMap) {
@@ -28,12 +51,53 @@ const MiniMap = ({ mainMap }) => {
       zoom: defaultZoom,
       interactive: false,
     })
-    // Sync main map movements with mini-map
+
     mainMap.on('move', () => {
       miniMap.current.jumpTo({
         center: mainMap.getCenter(),
-        zoom: mainMap.getZoom() - 9,
+        zoom: mainMap.getZoom() - 5,
       })
+    })
+
+    miniMap.current.on('load', () => {
+      miniMap.current.addSource('trackingRect', {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Polygon',
+            coordinates: [[]],
+          },
+        },
+      })
+
+      miniMap.current.addLayer({
+        id: 'trackingRectOutline',
+        type: 'line',
+        source: 'trackingRect',
+        paint: {
+          'line-color': '#FF0000',
+          'line-width': 2,
+        },
+      })
+
+      miniMap.current.addLayer({
+        id: 'trackingRectFill',
+        type: 'fill',
+        source: 'trackingRect',
+        paint: {
+          'fill-color': '#FF0000',
+          'fill-opacity': 0.3,
+        },
+      })
+
+      trackingRectSource.current = miniMap.current.getSource('trackingRect')
+      updateTrackingRectangle(mainMap.getBounds())
+    })
+
+    mainMap.on('move', () => {
+      updateTrackingRectangle(mainMap.getBounds())
     })
 
     // eslint-disable-next-line consistent-return
