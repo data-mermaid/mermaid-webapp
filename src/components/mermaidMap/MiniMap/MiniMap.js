@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { satelliteBaseMap } from '../mapService'
+import { lightBaseMap } from '../mapService'
 
 const MiniMapWrapper = styled.div`
   position: absolute;
@@ -46,7 +46,7 @@ const MiniMap = ({ mainMap }) => {
 
     miniMap.current = new maplibregl.Map({
       container: miniMapContainer.current,
-      style: satelliteBaseMap,
+      style: lightBaseMap,
       center: mainMap.getCenter(),
       zoom: defaultZoom,
       interactive: false,
