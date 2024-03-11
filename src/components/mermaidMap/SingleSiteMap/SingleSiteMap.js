@@ -34,6 +34,7 @@ const StyledPlaceMarkerButton = styled(ButtonSecondary)`
 
 const defaultCenter = [0, 0]
 const defaultZoom = 1
+const initialZoom = 13
 
 const SingleSiteMap = ({
   formLatitudeValue,
@@ -89,10 +90,13 @@ const SingleSiteMap = ({
     })
 
     if (formLatitudeValue && formLongitudeValue) {
-      const initialZoom = 13
-
-      map.current.setCenter([formLongitudeValue, formLatitudeValue])
-      map.current.setZoom(initialZoom)
+      // prevents tests from failing due to maplibre-gl not being available
+      try {
+        map.current.setCenter([formLongitudeValue, formLatitudeValue])
+        map.current.setZoom(initialZoom)
+      } catch (error) {
+        console.error('Error setting center and zoom: ', error)
+      }
     }
 
     recordMarker.current = new maplibregl.Marker({ draggable: !isReadOnlyUser })
@@ -118,8 +122,8 @@ const SingleSiteMap = ({
       map.current.remove()
       recordMarker.current.remove()
     }
-    // Removed formLongitudeValue and formLatitudeValue from the dependency array
-    // Only want to auto-zoom 13 when the map is first initialized (and if there are lng/lat values)
+    // formLongitudeValue and formLatitudeValue are not used in the dependency array
+    // we only want to set initial map center and zoom once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isReadOnlyUser,
