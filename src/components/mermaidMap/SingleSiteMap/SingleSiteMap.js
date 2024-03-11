@@ -43,6 +43,7 @@ const MiniMapContainer = styled.div`
 
 const defaultCenter = [0, 0]
 const defaultZoom = 1
+const initialZoom = 13
 
 const SingleSiteMap = ({
   formLatitudeValue,
@@ -91,11 +92,21 @@ const SingleSiteMap = ({
       container: mapContainer.current,
       style: satelliteBaseMap,
       center: defaultCenter,
-      zoom: nullishLatitudeOrLongitude ? defaultZoom : 13,
+      zoom: defaultZoom,
       maxZoom: 16,
       attributionControl: true,
       customAttribution: language.map.attribution,
     })
+
+    if (formLatitudeValue && formLongitudeValue) {
+      // prevents tests from failing due to maplibre-gl not being available
+      try {
+        map.current.setCenter([formLongitudeValue, formLatitudeValue])
+        map.current.setZoom(initialZoom)
+      } catch (error) {
+        console.error('Error setting center and zoom: ', error)
+      }
+    }
 
     recordMarker.current = new maplibregl.Marker({ draggable: !isReadOnlyUser })
     const recordMarkerElement = recordMarker.current.getElement()
@@ -120,6 +131,9 @@ const SingleSiteMap = ({
       map.current.remove()
       recordMarker.current.remove()
     }
+    // formLongitudeValue and formLatitudeValue are not used in the dependency array
+    // we only want to set initial map center and zoom once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isReadOnlyUser,
     handleLatitudeChange,
