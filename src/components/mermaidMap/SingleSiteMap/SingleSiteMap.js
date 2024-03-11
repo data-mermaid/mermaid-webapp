@@ -82,11 +82,18 @@ const SingleSiteMap = ({
       container: mapContainer.current,
       style: satelliteBaseMap,
       center: defaultCenter,
-      zoom: nullishLatitudeOrLongitude ? defaultZoom : 13,
+      zoom: defaultZoom,
       maxZoom: 16,
       attributionControl: true,
       customAttribution: language.map.attribution,
     })
+
+    if (formLatitudeValue && formLongitudeValue) {
+      const initialZoom = 13
+
+      map.current.setCenter([formLongitudeValue, formLatitudeValue])
+      map.current.setZoom(initialZoom)
+    }
 
     recordMarker.current = new maplibregl.Marker({ draggable: !isReadOnlyUser })
     const recordMarkerElement = recordMarker.current.getElement()
@@ -111,6 +118,9 @@ const SingleSiteMap = ({
       map.current.remove()
       recordMarker.current.remove()
     }
+    // Removed formLongitudeValue and formLatitudeValue from the dependency array
+    // Only want to auto-zoom 13 when the map is first initialized (and if there are lng/lat values)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isReadOnlyUser,
     handleLatitudeChange,
