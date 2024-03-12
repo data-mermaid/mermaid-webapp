@@ -53,9 +53,16 @@ const MiniMap = ({ mainMap }) => {
     })
 
     mainMap.on('move', () => {
+      const mainMapZoom = mainMap.getZoom()
+
+      let zoomDiff = Math.max(0, mainMapZoom - 5)
+
+      // Clamp zoom difference to prevent going below 0
+      zoomDiff = Math.min(zoomDiff, mainMapZoom)
+
       miniMap.current.jumpTo({
         center: mainMap.getCenter(),
-        zoom: mainMap.getZoom() - 5,
+        zoom: zoomDiff,
       })
     })
 
@@ -90,6 +97,11 @@ const MiniMap = ({ mainMap }) => {
           'fill-color': '#FF0000',
           'fill-opacity': 0.3,
         },
+      })
+
+      miniMap.current.jumpTo({
+        center: mainMap.getCenter(),
+        zoom: mainMap.getZoom() - 5,
       })
 
       trackingRectSource.current = miniMap.current.getSource('trackingRect')
