@@ -103,13 +103,13 @@ const MiniMap = ({ mainMap }) => {
   }
 
   const handleMapMove = () => {
-    setIsVisible(getIsMiniMapVisible())
     miniMap.current.jumpTo({
       center: mainMap.getCenter(),
       zoom: mainMap.getZoom() - zoomAdjustment,
     })
-    updateTrackingRectGeometry(mainMap.getBounds())
+
     setIsVisible(getIsMiniMapVisible())
+    updateTrackingRectGeometry(mainMap.getBounds())
   }
 
   useEffect(() => {
