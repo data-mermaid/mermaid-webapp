@@ -15,7 +15,8 @@ import {
   loadMapMarkersLayer,
   handleMapOnWheel,
 } from '../mapService'
-import { MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
+import { MapContainer, MiniMapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
+import MiniMap from '../MiniMap'
 import Popup from '../Popup'
 import usePrevious from '../../../library/usePrevious'
 
@@ -134,6 +135,11 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
         updateGeomorphicLayers={updateGeomorphicLayers}
         updateBenthicLayers={updateBenthicLayers}
       />
+      {map.current ? (
+        <MiniMapContainer>
+          <MiniMap mainMap={map.current} />
+        </MiniMapContainer>
+      ) : null}
     </MapContainer>
   )
 }

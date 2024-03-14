@@ -14,7 +14,13 @@ import {
 } from '../mapService'
 import { ButtonSecondary } from '../../generic/buttons'
 import { IconMapMarker } from '../../icons'
-import { MapInputRow, MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
+import {
+  MapInputRow,
+  MapContainer,
+  MiniMapContainer,
+  MapWrapper,
+  MapZoomHelpMessage,
+} from '../Map.styles'
 import theme from '../../../theme'
 import { roundToSixDecimalPlaces } from '../../../library/numbers/roundToSixDecimalPlaces'
 import MiniMap from '../MiniMap'
@@ -31,14 +37,6 @@ const StyledPlaceMarkerButton = styled(ButtonSecondary)`
   & > svg {
     margin-right: 1px;
   }
-`
-
-const MiniMapContainer = styled.div`
-  position: absolute;
-  bottom: 5px;
-  left: 15px;
-  width: 200px;
-  height: 150px;
 `
 
 const defaultCenter = [0, 0]
