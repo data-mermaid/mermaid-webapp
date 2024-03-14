@@ -40,19 +40,68 @@ const MiniMap = ({ mainMap }) => {
     }
   }
 
-  const _initializeMap = useEffect(() => {
-    if (!miniMapContainer.current || !mainMap) {
-      return
-    }
+  const getIsTrackingRectVisibile = () =>
+    mainMap.getZoom() > minZoomLevelForTrackingRectToDisplay ? 'visible' : 'none'
 
-    const updateTrackingRectVisibility = () => {
-      const isVisible =
-        mainMap.getZoom() > minZoomLevelForTrackingRectToDisplay ? 'visible' : 'none'
+  const updateTrackingRectVisibility = () => {
+    miniMap.current.setLayoutProperty(
+      'trackingRectOutline',
+      'visibility',
+      getIsTrackingRectVisibile(),
+    )
+    miniMap.current.setLayoutProperty('trackingRectFill', 'visibility', getIsTrackingRectVisibile())
+  }
 
-      miniMap.current.setLayoutProperty('trackingRectOutline', 'visibility', isVisible)
-      miniMap.current.setLayoutProperty('trackingRectFill', 'visibility', isVisible)
-    }
+  const addTrackingRectLayers = () => {
+    miniMap.current.addLayer({
+      id: 'trackingRectOutline',
+      type: 'line',
+      source: 'trackingRect',
+      paint: {
+        'line-color': '#FF0000',
+        'line-width': 2,
+      },
+      layout: {
+        visibility: getIsTrackingRectVisibile(),
+      },
+    })
 
+    miniMap.current.addLayer({
+      id: 'trackingRectFill',
+      type: 'fill',
+      source: 'trackingRect',
+      paint: {
+        'fill-color': '#FF0000',
+        'fill-opacity': 0.3,
+      },
+      layout: {
+        visibility: getIsTrackingRectVisibile(),
+      },
+    })
+  }
+
+  const onMapLoad = () => {
+    miniMap.current.addSource('trackingRect', {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: { type: 'Polygon', coordinates: [[]] },
+      },
+    })
+
+    addTrackingRectLayers()
+
+    miniMap.current.jumpTo({
+      center: mainMap.getCenter(),
+      zoom: mainMap.getZoom() - zoomAdjustment,
+    })
+
+    trackingRectSource.current = miniMap.current.getSource('trackingRect')
+    updateTrackingRectGeometry(mainMap.getBounds())
+  }
+
+  const initializeMap = () => {
     miniMap.current = new maplibregl.Map({
       container: miniMapContainer.current,
       style: lightBaseMap,
@@ -61,65 +110,31 @@ const MiniMap = ({ mainMap }) => {
       interactive: false,
     })
 
-    miniMap.current.on('load', () => {
-      miniMap.current.addSource('trackingRect', {
-        type: 'geojson',
-        data: {
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Polygon',
-            coordinates: [[]],
-          },
-        },
-      })
+    miniMap.current.on('load', onMapLoad)
+  }
 
-      miniMap.current.addLayer({
-        id: 'trackingRectOutline',
-        type: 'line',
-        source: 'trackingRect',
-        paint: {
-          'line-color': '#FF0000',
-          'line-width': 2,
-        },
-        layout: {
-          visibility: mainMap.getZoom() > minZoomLevelForTrackingRectToDisplay ? 'visible' : 'none',
-        },
-      })
-
-      miniMap.current.addLayer({
-        id: 'trackingRectFill',
-        type: 'fill',
-        source: 'trackingRect',
-        paint: {
-          'fill-color': '#FF0000',
-          'fill-opacity': 0.3,
-        },
-        layout: {
-          visibility: mainMap.getZoom() > minZoomLevelForTrackingRectToDisplay ? 'visible' : 'none',
-        },
-      })
-
-      miniMap.current.jumpTo({
-        center: mainMap.getCenter(),
-        zoom: mainMap.getZoom() - zoomAdjustment,
-      })
-
-      trackingRectSource.current = miniMap.current.getSource('trackingRect')
-      updateTrackingRectGeometry(mainMap.getBounds())
+  const handleMapMove = () => {
+    miniMap.current.jumpTo({
+      center: mainMap.getCenter(),
+      zoom: mainMap.getZoom() - zoomAdjustment,
     })
+    updateTrackingRectGeometry(mainMap.getBounds())
+    updateTrackingRectVisibility()
+  }
 
-    mainMap.on('move', () => {
-      miniMap.current.jumpTo({
-        center: mainMap.getCenter(),
-        zoom: mainMap.getZoom() - zoomAdjustment,
-      })
-      updateTrackingRectGeometry(mainMap.getBounds())
-      updateTrackingRectVisibility()
-    })
+  useEffect(() => {
+    if (!miniMapContainer.current || !mainMap) {
+      return
+    }
+
+    initializeMap()
+    mainMap.on('move', handleMapMove)
 
     // eslint-disable-next-line consistent-return
     return () => miniMap.current.remove()
+
+    // avoid unncessary re-renders for initializeMap and handleMapMove
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainMap])
 
   return <MiniMapWrapper ref={miniMapContainer} />
