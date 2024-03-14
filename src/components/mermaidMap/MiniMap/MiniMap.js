@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import maplibregl from 'maplibre-gl'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -9,6 +9,7 @@ const MiniMapWrapper = styled.div`
   width: 200px;
   height: 150px;
   border: 2px solid white;
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
 `
 
 const MiniMap = ({ mainMap }) => {
@@ -18,6 +19,10 @@ const MiniMap = ({ mainMap }) => {
   const defaultZoom = 2
   const zoomAdjustment = 5
   const minZoomLevelForTrackingRectToDisplay = 2
+
+  const getIsMiniMapVisible = () => mainMap.getZoom() > minZoomLevelForTrackingRectToDisplay
+
+  const [isVisible, setIsVisible] = useState(getIsMiniMapVisible())
 
   const updateTrackingRectGeometry = (bounds) => {
     if (trackingRectSource.current) {
@@ -40,18 +45,6 @@ const MiniMap = ({ mainMap }) => {
     }
   }
 
-  const getIsTrackingRectVisibile = () =>
-    mainMap.getZoom() > minZoomLevelForTrackingRectToDisplay ? 'visible' : 'none'
-
-  const updateTrackingRectVisibility = () => {
-    miniMap.current.setLayoutProperty(
-      'trackingRectOutline',
-      'visibility',
-      getIsTrackingRectVisibile(),
-    )
-    miniMap.current.setLayoutProperty('trackingRectFill', 'visibility', getIsTrackingRectVisibile())
-  }
-
   const addTrackingRectLayers = () => {
     miniMap.current.addLayer({
       id: 'trackingRectOutline',
@@ -60,9 +53,6 @@ const MiniMap = ({ mainMap }) => {
       paint: {
         'line-color': '#FF0000',
         'line-width': 2,
-      },
-      layout: {
-        visibility: getIsTrackingRectVisibile(),
       },
     })
 
@@ -73,9 +63,6 @@ const MiniMap = ({ mainMap }) => {
       paint: {
         'fill-color': '#FF0000',
         'fill-opacity': 0.3,
-      },
-      layout: {
-        visibility: getIsTrackingRectVisibile(),
       },
     })
   }
@@ -89,6 +76,8 @@ const MiniMap = ({ mainMap }) => {
         geometry: { type: 'Polygon', coordinates: [[]] },
       },
     })
+
+    setIsVisible(getIsMiniMapVisible())
 
     addTrackingRectLayers()
 
@@ -114,12 +103,13 @@ const MiniMap = ({ mainMap }) => {
   }
 
   const handleMapMove = () => {
+    setIsVisible(getIsMiniMapVisible())
     miniMap.current.jumpTo({
       center: mainMap.getCenter(),
       zoom: mainMap.getZoom() - zoomAdjustment,
     })
     updateTrackingRectGeometry(mainMap.getBounds())
-    updateTrackingRectVisibility()
+    setIsVisible(getIsMiniMapVisible())
   }
 
   useEffect(() => {
@@ -137,7 +127,7 @@ const MiniMap = ({ mainMap }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainMap])
 
-  return <MiniMapWrapper ref={miniMapContainer} />
+  return <MiniMapWrapper ref={miniMapContainer} visible={isVisible} />
 }
 
 MiniMap.propTypes = {
