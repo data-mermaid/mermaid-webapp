@@ -11,12 +11,12 @@ const MiniMapWrapper = styled.div`
   border: 2px solid white;
 `
 
-const defaultZoom = 2
-
 const MiniMap = ({ mainMap }) => {
   const miniMapContainer = useRef(null)
   const miniMap = useRef(null)
   const trackingRectSource = useRef(null)
+  const defaultZoom = 2
+  const zoomAdjustment = 5
 
   const updateTrackingRectangle = (bounds) => {
     if (trackingRectSource.current) {
@@ -50,20 +50,6 @@ const MiniMap = ({ mainMap }) => {
       center: mainMap.getCenter(),
       zoom: defaultZoom,
       interactive: false,
-    })
-
-    mainMap.on('move', () => {
-      const mainMapZoom = mainMap.getZoom()
-
-      let zoomDiff = Math.max(0, mainMapZoom - 5)
-
-      // Clamp zoom difference to prevent going below 0
-      zoomDiff = Math.min(zoomDiff, mainMapZoom)
-
-      miniMap.current.jumpTo({
-        center: mainMap.getCenter(),
-        zoom: zoomDiff,
-      })
     })
 
     miniMap.current.on('load', () => {
@@ -101,7 +87,7 @@ const MiniMap = ({ mainMap }) => {
 
       miniMap.current.jumpTo({
         center: mainMap.getCenter(),
-        zoom: mainMap.getZoom() - 5,
+        zoom: mainMap.getZoom() - zoomAdjustment,
       })
 
       trackingRectSource.current = miniMap.current.getSource('trackingRect')
@@ -109,6 +95,10 @@ const MiniMap = ({ mainMap }) => {
     })
 
     mainMap.on('move', () => {
+      miniMap.current.jumpTo({
+        center: mainMap.getCenter(),
+        zoom: mainMap.getZoom() - zoomAdjustment,
+      })
       updateTrackingRectangle(mainMap.getBounds())
     })
 
