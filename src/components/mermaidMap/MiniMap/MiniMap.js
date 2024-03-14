@@ -17,8 +17,9 @@ const MiniMap = ({ mainMap }) => {
   const trackingRectSource = useRef(null)
   const defaultZoom = 2
   const zoomAdjustment = 5
+  const minZoomLevelForTrackingRectToDisplay = 2
 
-  const updateTrackingRectangle = (bounds) => {
+  const updateTrackingRectGeometry = (bounds) => {
     if (trackingRectSource.current) {
       trackingRectSource.current.setData({
         type: 'Feature',
@@ -42,6 +43,14 @@ const MiniMap = ({ mainMap }) => {
   const _initializeMap = useEffect(() => {
     if (!miniMapContainer.current || !mainMap) {
       return
+    }
+
+    const updateTrackingRectVisibility = () => {
+      const isVisible =
+        mainMap.getZoom() > minZoomLevelForTrackingRectToDisplay ? 'visible' : 'none'
+
+      miniMap.current.setLayoutProperty('trackingRectOutline', 'visibility', isVisible)
+      miniMap.current.setLayoutProperty('trackingRectFill', 'visibility', isVisible)
     }
 
     miniMap.current = new maplibregl.Map({
@@ -73,6 +82,9 @@ const MiniMap = ({ mainMap }) => {
           'line-color': '#FF0000',
           'line-width': 2,
         },
+        layout: {
+          visibility: mainMap.getZoom() > minZoomLevelForTrackingRectToDisplay ? 'visible' : 'none',
+        },
       })
 
       miniMap.current.addLayer({
@@ -83,6 +95,9 @@ const MiniMap = ({ mainMap }) => {
           'fill-color': '#FF0000',
           'fill-opacity': 0.3,
         },
+        layout: {
+          visibility: mainMap.getZoom() > minZoomLevelForTrackingRectToDisplay ? 'visible' : 'none',
+        },
       })
 
       miniMap.current.jumpTo({
@@ -91,7 +106,7 @@ const MiniMap = ({ mainMap }) => {
       })
 
       trackingRectSource.current = miniMap.current.getSource('trackingRect')
-      updateTrackingRectangle(mainMap.getBounds())
+      updateTrackingRectGeometry(mainMap.getBounds())
     })
 
     mainMap.on('move', () => {
@@ -99,7 +114,8 @@ const MiniMap = ({ mainMap }) => {
         center: mainMap.getCenter(),
         zoom: mainMap.getZoom() - zoomAdjustment,
       })
-      updateTrackingRectangle(mainMap.getBounds())
+      updateTrackingRectGeometry(mainMap.getBounds())
+      updateTrackingRectVisibility()
     })
 
     // eslint-disable-next-line consistent-return
