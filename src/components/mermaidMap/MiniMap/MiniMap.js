@@ -18,9 +18,8 @@ const MiniMap = ({ mainMap }) => {
   const trackingRectSource = useRef(null)
   const defaultZoom = 2
   const zoomAdjustment = 5
-  const minZoomLevelForTrackingRectToDisplay = 2
 
-  const getIsMiniMapVisible = () => mainMap.getZoom() > minZoomLevelForTrackingRectToDisplay
+  const getIsMiniMapVisible = () => mainMap.getZoom() > defaultZoom
 
   const [isVisible, setIsVisible] = useState(getIsMiniMapVisible())
 
@@ -123,7 +122,6 @@ const MiniMap = ({ mainMap }) => {
     // eslint-disable-next-line consistent-return
     return () => miniMap.current.remove()
 
-    // avoid unncessary re-renders for initializeMap and handleMapMove
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainMap])
 
@@ -131,7 +129,7 @@ const MiniMap = ({ mainMap }) => {
 }
 
 MiniMap.propTypes = {
-  // complex mapbox object - cannot be more specific
+  // complex mapbox object
   // eslint-disable-next-line react/forbid-prop-types
   mainMap: PropTypes.object.isRequired,
 }
