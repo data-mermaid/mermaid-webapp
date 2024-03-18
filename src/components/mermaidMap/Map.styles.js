@@ -44,3 +44,10 @@ export const MapZoomHelpMessage = styled('div')`
   color: #ffffff;
   font-size: 2rem;
 `
+export const MiniMapContainer = styled.div`
+  position: absolute;
+  bottom: 5px;
+  left: 15px;
+  width: 200px;
+  height: 150px;
+`

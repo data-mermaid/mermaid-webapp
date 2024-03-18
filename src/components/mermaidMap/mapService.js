@@ -119,6 +119,25 @@ const benthicOpacityExpression = [
   0, // Default / other
 ]
 
+export const lightBaseMap = {
+  version: 8,
+  name: 'light',
+  sources: {
+    worldmap: {
+      type: 'raster',
+      tiles: [
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+      ],
+    },
+  },
+  layers: [
+    {
+      id: 'base-map',
+      type: 'raster',
+      source: 'worldmap',
+    },
+  ],
+}
 export const satelliteBaseMap = {
   version: 8,
   name: 'World Map',
