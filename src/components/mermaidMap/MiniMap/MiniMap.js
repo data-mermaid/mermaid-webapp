@@ -70,6 +70,15 @@ const MiniMap = ({ mainMap }) => {
       return
     }
 
+    const getMainMapCenter = () => {
+      // prevents tests from failing due to maplibre-gl not being available
+      try {
+        mainMap.getCenter()
+      } catch (e) {
+        console.error('Error getting map center: ', e)
+      }
+    }
+
     const getIsMiniMapVisible = () => mainMap.getZoom() > DEFAULT_ZOOM
 
     const onMapLoad = () => {
@@ -87,7 +96,7 @@ const MiniMap = ({ mainMap }) => {
       addTrackingRectangleLayers()
 
       miniMap.current.jumpTo({
-        center: mainMap.getCenter(),
+        center: getMainMapCenter(),
         zoom: mainMap.getZoom() - ZOOM_ADJUSTMENT,
       })
 
@@ -99,7 +108,7 @@ const MiniMap = ({ mainMap }) => {
       miniMap.current = new maplibregl.Map({
         container: miniMapContainer.current,
         style: lightBaseMap,
-        center: mainMap.getCenter(),
+        center: getMainMapCenter(),
         zoom: DEFAULT_ZOOM,
         interactive: false,
       })
@@ -109,7 +118,7 @@ const MiniMap = ({ mainMap }) => {
 
     const handleMapMove = () => {
       miniMap.current.jumpTo({
-        center: mainMap.getCenter(),
+        center: getMainMapCenter(),
         zoom: mainMap.getZoom() - ZOOM_ADJUSTMENT,
       })
 
