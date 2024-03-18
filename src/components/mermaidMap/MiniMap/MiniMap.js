@@ -9,23 +9,22 @@ const MiniMapWrapper = styled.div`
   width: 200px;
   height: 150px;
   border: 2px solid white;
+  // chose opacity instead of display: none to avoid reflow
   opacity: ${({ visible }) => (visible ? 1 : 0)};
 `
 
 const MiniMap = ({ mainMap }) => {
   const miniMapContainer = useRef(null)
   const miniMap = useRef(null)
-  const trackingRectSource = useRef(null)
-  const defaultZoom = 2
-  const zoomAdjustment = 5
+  const trackingRectangleSource = useRef(null)
+  const DEFAULT_ZOOM = 2
+  const ZOOM_ADJUSTMENT = 5
 
-  const getIsMiniMapVisible = () => mainMap.getZoom() > defaultZoom
+  const [isVisible, setIsVisible] = useState(mainMap.getZoom() > DEFAULT_ZOOM)
 
-  const [isVisible, setIsVisible] = useState(getIsMiniMapVisible())
-
-  const updateTrackingRectGeometry = (bounds) => {
-    if (trackingRectSource.current) {
-      trackingRectSource.current.setData({
+  const updateTrackingRectangleGeometry = (bounds) => {
+    if (trackingRectangleSource.current) {
+      trackingRectangleSource.current.setData({
         type: 'Feature',
         properties: {},
         geometry: {
@@ -44,11 +43,11 @@ const MiniMap = ({ mainMap }) => {
     }
   }
 
-  const addTrackingRectLayers = () => {
+  const addTrackingRectangleLayers = () => {
     miniMap.current.addLayer({
       id: 'trackingRectOutline',
       type: 'line',
-      source: 'trackingRect',
+      source: 'trackingRectangle',
       paint: {
         'line-color': '#FF0000',
         'line-width': 2,
@@ -58,7 +57,7 @@ const MiniMap = ({ mainMap }) => {
     miniMap.current.addLayer({
       id: 'trackingRectFill',
       type: 'fill',
-      source: 'trackingRect',
+      source: 'trackingRectangle',
       paint: {
         'fill-color': '#FF0000',
         'fill-opacity': 0.3,
@@ -66,54 +65,56 @@ const MiniMap = ({ mainMap }) => {
     })
   }
 
-  const onMapLoad = () => {
-    miniMap.current.addSource('trackingRect', {
-      type: 'geojson',
-      data: {
-        type: 'Feature',
-        properties: {},
-        geometry: { type: 'Polygon', coordinates: [[]] },
-      },
-    })
-
-    setIsVisible(getIsMiniMapVisible())
-
-    addTrackingRectLayers()
-
-    miniMap.current.jumpTo({
-      center: mainMap.getCenter(),
-      zoom: mainMap.getZoom() - zoomAdjustment,
-    })
-
-    trackingRectSource.current = miniMap.current.getSource('trackingRect')
-    updateTrackingRectGeometry(mainMap.getBounds())
-  }
-
-  const initializeMap = () => {
-    miniMap.current = new maplibregl.Map({
-      container: miniMapContainer.current,
-      style: lightBaseMap,
-      center: mainMap.getCenter(),
-      zoom: defaultZoom,
-      interactive: false,
-    })
-
-    miniMap.current.on('load', onMapLoad)
-  }
-
-  const handleMapMove = () => {
-    miniMap.current.jumpTo({
-      center: mainMap.getCenter(),
-      zoom: mainMap.getZoom() - zoomAdjustment,
-    })
-
-    setIsVisible(getIsMiniMapVisible())
-    updateTrackingRectGeometry(mainMap.getBounds())
-  }
-
   useEffect(() => {
     if (!miniMapContainer.current || !mainMap) {
       return
+    }
+
+    const getIsMiniMapVisible = () => mainMap.getZoom() > DEFAULT_ZOOM
+
+    const onMapLoad = () => {
+      miniMap.current.addSource('trackingRectangle', {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          properties: {},
+          geometry: { type: 'Polygon', coordinates: [[]] },
+        },
+      })
+
+      setIsVisible(getIsMiniMapVisible())
+
+      addTrackingRectangleLayers()
+
+      miniMap.current.jumpTo({
+        center: mainMap.getCenter(),
+        zoom: mainMap.getZoom() - ZOOM_ADJUSTMENT,
+      })
+
+      trackingRectangleSource.current = miniMap.current.getSource('trackingRectangle')
+      updateTrackingRectangleGeometry(mainMap.getBounds())
+    }
+
+    const initializeMap = () => {
+      miniMap.current = new maplibregl.Map({
+        container: miniMapContainer.current,
+        style: lightBaseMap,
+        center: mainMap.getCenter(),
+        zoom: DEFAULT_ZOOM,
+        interactive: false,
+      })
+
+      miniMap.current.on('load', onMapLoad)
+    }
+
+    const handleMapMove = () => {
+      miniMap.current.jumpTo({
+        center: mainMap.getCenter(),
+        zoom: mainMap.getZoom() - ZOOM_ADJUSTMENT,
+      })
+
+      setIsVisible(getIsMiniMapVisible())
+      updateTrackingRectangleGeometry(mainMap.getBounds())
     }
 
     initializeMap()
@@ -121,8 +122,6 @@ const MiniMap = ({ mainMap }) => {
 
     // eslint-disable-next-line consistent-return
     return () => miniMap.current.remove()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainMap])
 
   return <MiniMapWrapper ref={miniMapContainer} visible={isVisible} />
