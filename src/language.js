@@ -390,9 +390,6 @@ const pages = {
     title: 'Site',
     nonAdminDelete: 'Only admins can delete a site.',
     placeMarker: 'Place Site Marker',
-    replaceMarker: 'Replace Site Marker',
-    cancelPlaceMarker: 'Cancel',
-    done: 'Done',
     swapButton: 'Swap',
   },
   siteTable: {

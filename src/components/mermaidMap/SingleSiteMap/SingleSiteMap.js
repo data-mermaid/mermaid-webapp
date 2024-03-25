@@ -55,9 +55,6 @@ const SingleSiteMap = ({
   const recordMarker = useRef(null)
   const [displayHelpText, setDisplayHelpText] = useState(false)
   const [isMarkerBeingPlaced, setIsMarkerBeingPlaced] = useState(false)
-  const [placeMarkerButtonText, setPlaceMarkerButtonText] = useState(
-    language.pages.siteForm.placeMarker,
-  )
   const [hasLatLngChanged, setHasLatLngChanged] = useState(false)
 
   const outOfRangeLatitude = formLatitudeValue > 90 || formLatitudeValue < -90
@@ -198,28 +195,10 @@ const SingleSiteMap = ({
     }
   }
 
-  useEffect(
-    function updatePlaceMarkerButtonText() {
-      if (!isMarkerBeingPlaced && (!formLatitudeValue || !formLongitudeValue)) {
-        setPlaceMarkerButtonText(language.pages.siteForm.placeMarker)
-      }
-      if (!isMarkerBeingPlaced && formLatitudeValue && formLongitudeValue) {
-        setPlaceMarkerButtonText(language.pages.siteForm.replaceMarker)
-      }
-      if (isMarkerBeingPlaced && !hasLatLngChanged) {
-        setPlaceMarkerButtonText(language.pages.siteForm.cancelPlaceMarker)
-      }
-      if (isMarkerBeingPlaced && hasLatLngChanged) {
-        setPlaceMarkerButtonText(language.pages.siteForm.done)
-      }
-    },
-    [isMarkerBeingPlaced, formLatitudeValue, formLongitudeValue, hasLatLngChanged],
-  )
-
   const placeMarkerButton = (
     <StyledPlaceMarkerButton type="button" onClick={handlePlaceMarkerClick}>
       <IconMapMarker />
-      {placeMarkerButtonText}
+      {language.pages.siteForm.placeMarker}
     </StyledPlaceMarkerButton>
   )
 
@@ -227,7 +206,7 @@ const SingleSiteMap = ({
     <MapInputRow noBorderWidth={isReadOnlyUser}>
       <MapContainer>
         <MapWrapper ref={mapContainer} />
-        {!isReadOnlyUser ? placeMarkerButton : null}
+        {!isReadOnlyUser && nullishLatitudeOrLongitude ? placeMarkerButton : null}
         {displayHelpText && (
           <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
         )}

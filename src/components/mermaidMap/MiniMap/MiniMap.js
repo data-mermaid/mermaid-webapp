@@ -73,9 +73,9 @@ const MiniMap = ({ mainMap }) => {
     const getMainMapCenter = () => {
       // prevents tests from failing due to maplibre-gl not being available
       try {
-        mainMap.getCenter()
+        return mainMap.getCenter()
       } catch (e) {
-        console.error('Error getting map center: ', e)
+        return console.error('Error getting map center: ', e)
       }
     }
 
