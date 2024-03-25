@@ -99,29 +99,29 @@ export const getFishNameTable = ({
     }
   `
   const trophicGroupName = choices.fishgrouptrophics.data?.find(
-    (item) => item.id === fishNameInfo.trophic_group,
+    (item) => item.id === fishNameInfo?.trophic_group,
   )?.name
 
   const functionalGroupName = choices.fishgroupfunctions.data?.find(
-    (item) => item.id === fishNameInfo.functional_group,
+    (item) => item.id === fishNameInfo?.functional_group,
   )?.name
 
   const fishGroupSizeName = choices.fishgroupsizes.data?.find(
-    (item) => item.id === fishNameInfo.group_size,
+    (item) => item.id === fishNameInfo?.group_size,
   )?.name
 
-  const maxLength = fishNameInfo.max_length_type
-    ? `${fishNameInfo.max_length} (${fishNameInfo.max_length_type})`
-    : fishNameInfo.max_length
+  const maxLength = fishNameInfo?.max_length_type
+    ? `${fishNameInfo?.max_length} (${fishNameInfo?.max_length_type})`
+    : fishNameInfo?.max_length
 
   const fishFamilyId =
-    fishNameInfo.family ??
-    fishGenera.find((genusInfo) => genusInfo.id === fishNameInfo.genus)?.family
+    fishNameInfo?.family ??
+    fishGenera.find((genusInfo) => genusInfo.id === fishNameInfo?.genus)?.family
   const fishFamilyName = fishFamilies.find((item) => item.id === fishFamilyId)?.name
 
   return (
     <TableContainer>
-      <label htmlFor="popoverTable">{fishNameInfo.display_name ?? fishNameInfo.name}</label>
+      <label htmlFor="popoverTable">{fishNameInfo?.display_name ?? fishNameInfo?.name}</label>
       <Table id="popoverTable">
         <tbody>
           {fishFamilyName ? (
@@ -134,14 +134,14 @@ export const getFishNameTable = ({
             <Td as="th">{tableLanguage.biomasConstants}</Td>
             <Td>
               <ul>
-                <li>A - {fishNameInfo.biomass_constant_a}</li>
-                <li>B - {fishNameInfo.biomass_constant_b}</li>
-                <li>C - {fishNameInfo.biomass_constant_c}</li>
+                <li>A - {fishNameInfo?.biomass_constant_a}</li>
+                <li>B - {fishNameInfo?.biomass_constant_b}</li>
+                <li>C - {fishNameInfo?.biomass_constant_c}</li>
               </ul>
             </Td>
           </Tr>
 
-          {fishNameInfo.max_length ? (
+          {fishNameInfo?.max_length ? (
             <Tr>
               <Td as="th">Max Length (cm)</Td>
               <Td>{maxLength}</Td>
@@ -153,10 +153,10 @@ export const getFishNameTable = ({
               <Td>{fishGroupSizeName}</Td>
             </Tr>
           ) : null}
-          {fishNameInfo.max_type ? (
+          {fishNameInfo?.max_type ? (
             <Tr>
               <Td as="th">{tableLanguage.maxType}</Td>
-              <Td>{fishNameInfo.max_length_type}</Td>
+              <Td>{fishNameInfo?.max_length_type}</Td>
             </Tr>
           ) : null}
           {functionalGroupName ? (
