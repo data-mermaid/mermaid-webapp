@@ -58,12 +58,13 @@ export const getFishNameOptions = ({ species, genera, families, groupings = [] }
 
 export const getFishNameTable = ({
   fishFamilies,
+  fishGroupings,
   choices,
   fishGenera,
   fishSpecies,
   fishNameId,
 }) => {
-  const fishNameInfo = [...fishSpecies, ...fishGenera, ...fishFamilies].find(
+  const fishNameInfo = [...fishSpecies, ...fishGenera, ...fishFamilies, ...fishGroupings].find(
     (item) => item.id === fishNameId,
   )
 

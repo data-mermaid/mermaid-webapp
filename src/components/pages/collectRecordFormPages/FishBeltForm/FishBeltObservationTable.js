@@ -8,6 +8,7 @@ import {
   fishNameConstantsPropType,
   fishBeltPropType,
   fishFamiliesPropType,
+  fishGroupingsPropType,
   fishGeneraPropType,
   fishSpeciesPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
@@ -97,6 +98,7 @@ const FishBeltObservationTable = ({
   fishNameOptions,
   testId,
   fishFamilies,
+  fishGroupings,
   fishGenera,
   fishSpecies,
 }) => {
@@ -166,6 +168,7 @@ const FishBeltObservationTable = ({
     ({ observationId, fishNameId }) => {
       const popoverTable = getFishNameTable({
         fishFamilies,
+        fishGroupings,
         choices,
         fishGenera,
         fishSpecies,
@@ -175,7 +178,7 @@ const FishBeltObservationTable = ({
       setFishNamePopoverContent(popoverTable)
       setObservationIdWithFishNamePopoverShowing(observationId)
     },
-    [choices, fishFamilies, fishGenera, fishSpecies],
+    [choices, fishFamilies, fishGenera, fishSpecies, fishGroupings],
   )
 
   const resetObservationIdWithFishNamePopoverShowing = () => {
@@ -583,6 +586,7 @@ FishBeltObservationTable.propTypes = {
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
   testId: PropTypes.string.isRequired,
   fishFamilies: fishFamiliesPropType.isRequired,
+  fishGroupings: fishGroupingsPropType.isRequired,
   fishGenera: fishGeneraPropType.isRequired,
   fishSpecies: fishSpeciesPropType.isRequired,
 }
