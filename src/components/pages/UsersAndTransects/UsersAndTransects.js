@@ -434,8 +434,8 @@ const UsersAndTransects = () => {
     handleSetTableUserPrefs({ propertyKey: 'methodsFilter', currentValue: methodsFilter })
   }, [methodsFilter, handleSetTableUserPrefs])
 
-  const calcUserCollectRecordCount = (tableCellData, user) => {
-    const userTableCellData = tableCellData.map((cellData) => cellData[user])
+  const calcUserCollectRecordCount = (tableData, user) => {
+    const userTableCellData = tableData.map((cellData) => cellData[user])
 
     return userTableCellData.reduce((accumulator, userCollectRecord) => {
       if (userCollectRecord !== '-') {
@@ -445,9 +445,9 @@ const UsersAndTransects = () => {
             : 0
 
         return accumulator + collectRecordCount
-      } else {
-        return accumulator
       }
+
+      return accumulator
     }, 0)
   }
 
@@ -461,6 +461,7 @@ const UsersAndTransects = () => {
         (isSearchFilterEnabled && !isMethodFilterEnabled)
       ) {
         const searchFilteredTableCellData = searchFilteredRows.map((row) => row.values)
+
         return calcUserCollectRecordCount(searchFilteredTableCellData, user)
       }
 
