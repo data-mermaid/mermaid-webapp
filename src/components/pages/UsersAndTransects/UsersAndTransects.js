@@ -114,7 +114,7 @@ const UsersAndTransects = () => {
   const [methodsFilteredTableCellData, setMethodsFilteredTableCellData] = useState([])
   const [methodsFilter, setMethodsFilter] = useState([])
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
+  const [searchFilteredRows, setSearchFilteredRows] = useState([])
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -169,14 +169,7 @@ const UsersAndTransects = () => {
 
     return collectRecordsByProfileValues.map((user) => {
       return {
-        Header: (
-          <UserColumnHeader>
-            <span>{user.profileName}</span>
-            <span>
-              <ActiveRecordsCount>{user.collectRecords.length}</ActiveRecordsCount>
-            </span>
-          </UserColumnHeader>
-        ),
+        Header: user.profileName,
         accessor: user.profileId,
         disableSortBy: true,
       }
@@ -369,7 +362,7 @@ const UsersAndTransects = () => {
 
     const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
 
-    setSearchFilteredRowsLength(tableFilteredRows.length)
+    setSearchFilteredRows(tableFilteredRows)
 
     return tableFilteredRows
   }, [])
@@ -441,6 +434,45 @@ const UsersAndTransects = () => {
     handleSetTableUserPrefs({ propertyKey: 'methodsFilter', currentValue: methodsFilter })
   }, [methodsFilter, handleSetTableUserPrefs])
 
+  const calcUserCollectRecordCount = (tableCellData, user) => {
+    const userTableCellData = tableCellData.map((cellData) => cellData[user])
+
+    return userTableCellData.reduce((accumulator, userCollectRecord) => {
+      if (userCollectRecord !== '-') {
+        const collectRecordCount =
+          userCollectRecord !== '-'
+            ? userCollectRecord.props.recordProfileSummary.collect_records.length
+            : 0
+
+        return accumulator + collectRecordCount
+      } else {
+        return accumulator
+      }
+    }, 0)
+  }
+
+  const getUserHeaderCount = useCallback(
+    (user) => {
+      const isSearchFilterEnabled = !!globalFilter?.length
+      const isMethodFilterEnabled = !!methodsFilter.length
+
+      if (
+        (isSearchFilterEnabled && isMethodFilterEnabled) ||
+        (isSearchFilterEnabled && !isMethodFilterEnabled)
+      ) {
+        const searchFilteredTableCellData = searchFilteredRows.map((row) => row.values)
+        return calcUserCollectRecordCount(searchFilteredTableCellData, user)
+      }
+
+      if (!isSearchFilterEnabled && isMethodFilterEnabled) {
+        return calcUserCollectRecordCount(methodsFilteredTableCellData, user)
+      }
+
+      return calcUserCollectRecordCount(tableCellData, user)
+    },
+    [globalFilter, methodsFilter, searchFilteredRows, methodsFilteredTableCellData, tableCellData],
+  )
+
   const pageNoDataAvailable = (
     <>
       <h3>{language.pages.usersAndTransectsTable.noDataMainText}</h3>
@@ -468,6 +500,8 @@ const UsersAndTransects = () => {
 
                   const headerAlignment =
                     column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
+                  const isUserHeader = ThClassName === 'user-headers'
+                  const userProfileId = isUserHeader ? column.id : null
 
                   return (
                     <OverviewTh
@@ -480,7 +514,16 @@ const UsersAndTransects = () => {
                       align={headerAlignment}
                       className={ThClassName}
                     >
-                      <span> {column.render('Header')}</span>
+                      {isUserHeader ? (
+                        <UserColumnHeader>
+                          {column.render('Header')}{' '}
+                          <ActiveRecordsCount>
+                            {getUserHeaderCount(userProfileId)}
+                          </ActiveRecordsCount>
+                        </UserColumnHeader>
+                      ) : (
+                        column.render('Header')
+                      )}
                     </OverviewTh>
                   )
                 })}
@@ -570,7 +613,7 @@ const UsersAndTransects = () => {
           pageType="record"
           unfilteredRowLength={submittedRecords.length}
           methodFilteredRowLength={methodsFilteredTableCellData.length}
-          searchFilteredRowLength={searchFilteredRowsLength}
+          searchFilteredRowLength={searchFilteredRows.length}
           isSearchFilterEnabled={!!globalFilter?.length}
           isMethodFilterEnabled={!!methodsFilter.length}
         />
@@ -615,7 +658,7 @@ const UsersAndTransects = () => {
               <FilterIndicatorPill
                 unfilteredRowLength={submittedRecords.length}
                 methodFilteredRowLength={methodsFilteredTableCellData.length}
-                searchFilteredRowLength={searchFilteredRowsLength}
+                searchFilteredRowLength={searchFilteredRows.length}
                 isSearchFilterEnabled={!!globalFilter?.length}
                 isMethodFilterEnabled={!!methodsFilter?.length}
                 clearFilters={clearFilters}
