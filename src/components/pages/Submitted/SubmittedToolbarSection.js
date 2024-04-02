@@ -27,6 +27,7 @@ const DropdownItemStyle = styled.button`
 
 const SubmittedToolbarSection = ({
   name,
+  globalSearchText,
   handleGlobalFilterChange,
   handleMethodsColumnFilterChange,
   methodFilterValue,
@@ -65,8 +66,9 @@ const SubmittedToolbarSection = ({
         <FilterItems>
           <FilterSearchToolbar
             name={name}
-            handleGlobalFilterChange={handleGlobalFilterChange}
             disabled={disabled}
+            globalSearchText={globalSearchText}
+            handleGlobalFilterChange={handleGlobalFilterChange}
           />
           <MethodsFilterDropDown
             value={methodFilterValue}
