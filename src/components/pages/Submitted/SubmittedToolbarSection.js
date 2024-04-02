@@ -127,6 +127,7 @@ SubmittedToolbarSection.defaultProps = {
 
 SubmittedToolbarSection.propTypes = {
   name: PropTypes.string.isRequired,
+  globalSearchText: PropTypes.string.isRequired,
   handleGlobalFilterChange: PropTypes.func.isRequired,
   handleMethodsColumnFilterChange: PropTypes.func.isRequired,
   methodFilterValue: PropTypes.arrayOf(string),

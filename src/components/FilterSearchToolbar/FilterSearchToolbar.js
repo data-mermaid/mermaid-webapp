@@ -47,15 +47,14 @@ const FilterSearchToolbar = ({
 FilterSearchToolbar.defaultProps = {
   id: 'filter-search',
   disabled: false,
-  globalSearchText: '',
 }
 
 FilterSearchToolbar.propTypes = {
-  handleGlobalFilterChange: PropTypes.func.isRequired,
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
-  globalSearchText: PropTypes.string,
+  globalSearchText: PropTypes.string.isRequired,
+  handleGlobalFilterChange: PropTypes.func.isRequired,
 }
 
 export default FilterSearchToolbar
