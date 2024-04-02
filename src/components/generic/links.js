@@ -25,6 +25,13 @@ export const LinkThatLooksLikeButton = styled.a`
 
 export const NavLinkThatLooksLikeButtonIcon = styled(NavLinkThatLooksLikeButton)``
 
+export const TextLink = styled('a')`
+  padding: 0.4em;
+`
+export const LinkContainer = styled('div')`
+  padding: 0.4em;
+`
+
 export const HelperTextLink = styled('a')`
   font-size: 1.2rem;
   color: ${(props) => props.color || '#000000'};
