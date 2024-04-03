@@ -26,10 +26,10 @@ export const LinkThatLooksLikeButton = styled.a`
 export const NavLinkThatLooksLikeButtonIcon = styled(NavLinkThatLooksLikeButton)``
 
 export const TextLink = styled('a')`
-  padding: 0.4em;
+  padding: ${theme.spacing.small};
 `
 export const LinkContainer = styled('div')`
-  padding: 0.4em;
+  padding: ${theme.spacing.small};
 `
 
 export const HelperTextLink = styled('a')`
