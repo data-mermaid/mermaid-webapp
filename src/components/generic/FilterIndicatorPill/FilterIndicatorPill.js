@@ -35,15 +35,12 @@ const FilterIndicatorPill = ({
   const [filteredAmountToDisplay, setFilteredAmountToDisplay] = useState(null)
 
   const _findFilteredAmountToDisplay = useEffect(() => {
-    // the search results will be method filtered already, which is not the case the opposite way around
-    if (isSearchFilterEnabled && isMethodFilterEnabled) {
+    if (isSearchFilterEnabled) {
       return setFilteredAmountToDisplay(searchFilteredRowLength)
     }
-    if (!isSearchFilterEnabled && isMethodFilterEnabled) {
+
+    if (isMethodFilterEnabled) {
       return setFilteredAmountToDisplay(methodFilteredRowLength)
-    }
-    if (isSearchFilterEnabled && !isMethodFilterEnabled) {
-      return setFilteredAmountToDisplay(searchFilteredRowLength)
     }
 
     return setFilteredAmountToDisplay(unfilteredRowLength)

@@ -438,16 +438,12 @@ const UsersAndTransects = () => {
     const userTableCellData = tableData.map((cellData) => cellData[user])
 
     return userTableCellData.reduce((accumulator, userCollectRecord) => {
-      if (userCollectRecord !== '-') {
-        const collectRecordCount =
-          userCollectRecord !== '-'
-            ? userCollectRecord.props.recordProfileSummary.collect_records.length
-            : 0
+      const collectRecordCount =
+        userCollectRecord !== '-'
+          ? userCollectRecord.props.recordProfileSummary.collect_records.length
+          : 0
 
-        return accumulator + collectRecordCount
-      }
-
-      return accumulator
+      return accumulator + collectRecordCount
     }, 0)
   }
 
@@ -456,16 +452,13 @@ const UsersAndTransects = () => {
       const isSearchFilterEnabled = !!globalFilter?.length
       const isMethodFilterEnabled = !!methodsFilter.length
 
-      if (
-        (isSearchFilterEnabled && isMethodFilterEnabled) ||
-        (isSearchFilterEnabled && !isMethodFilterEnabled)
-      ) {
+      if (isSearchFilterEnabled) {
         const searchFilteredTableCellData = searchFilteredRows.map((row) => row.values)
 
         return calcUserCollectRecordCount(searchFilteredTableCellData, user)
       }
 
-      if (!isSearchFilterEnabled && isMethodFilterEnabled) {
+      if (isMethodFilterEnabled) {
         return calcUserCollectRecordCount(methodsFilteredTableCellData, user)
       }
 
