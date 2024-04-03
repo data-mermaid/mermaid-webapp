@@ -640,8 +640,9 @@ const UsersAndTransects = () => {
           <FilterItems>
             <FilterSearchToolbar
               name={language.pages.usersAndTransectsTable.filterToolbarText}
-              handleGlobalFilterChange={handleGlobalFilterChange}
               disabled={submittedRecords.length === 0}
+              globalSearchText={globalFilter}
+              handleGlobalFilterChange={handleGlobalFilterChange}
             />
             <MethodsFilterDropDown
               value={tableUserPrefs.methodsFilter}

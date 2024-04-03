@@ -413,8 +413,9 @@ const Sites = () => {
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.siteTable.filterToolbarText}
-              handleGlobalFilterChange={handleGlobalFilterChange}
               disabled={siteRecordsForUiDisplay.length === 0}
+              globalSearchText={globalFilter}
+              handleGlobalFilterChange={handleGlobalFilterChange}
             />
 
             <ToolbarButtonWrapper>{toolbarButtonsByRole}</ToolbarButtonWrapper>

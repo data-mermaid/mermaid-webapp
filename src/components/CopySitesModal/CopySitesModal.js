@@ -354,10 +354,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const toolbarContent = (
     <CopyModalToolbarWrapper>
       <FilterSearchToolbar
-        name={language.pages.copySiteTable.filterToolbarText}
-        value={tableUserPrefs.globalFilter}
-        handleGlobalFilterChange={handleGlobalFilterChange}
         id="copy-sites-filter"
+        name={language.pages.copySiteTable.filterToolbarText}
+        globalSearchText={globalFilter}
+        handleGlobalFilterChange={handleGlobalFilterChange}
       />
       <ViewSelectedOnly htmlFor="viewSelectedOnly">
         <input

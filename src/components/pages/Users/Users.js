@@ -918,6 +918,7 @@ const Users = () => {
                   ? language.pages.userTable.filterToolbarTextForAdmin
                   : language.pages.userTable.filterToolbarTextForNonAdmin
               }
+              globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
             {isAdminUser && (

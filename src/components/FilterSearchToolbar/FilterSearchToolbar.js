@@ -14,8 +14,14 @@ const FilterInput = styled(Input)`
   ${inputStyles};
 `
 
-const FilterSearchToolbar = ({ name, handleGlobalFilterChange, id, disabled }) => {
-  const [searchText, setSearchText] = useState([])
+const FilterSearchToolbar = ({
+  id,
+  name,
+  disabled,
+  globalSearchText,
+  handleGlobalFilterChange,
+}) => {
+  const [searchText, setSearchText] = useState(globalSearchText)
 
   const handleFilterChange = (event) => {
     const eventValue = event.target.value
@@ -44,10 +50,11 @@ FilterSearchToolbar.defaultProps = {
 }
 
 FilterSearchToolbar.propTypes = {
-  handleGlobalFilterChange: PropTypes.func.isRequired,
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
+  globalSearchText: PropTypes.string.isRequired,
+  handleGlobalFilterChange: PropTypes.func.isRequired,
 }
 
 export default FilterSearchToolbar
