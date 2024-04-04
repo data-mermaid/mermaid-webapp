@@ -73,14 +73,12 @@ const BenthicPhotoQuadratObservationTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
-  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
-    setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
 
@@ -152,7 +150,6 @@ const BenthicPhotoQuadratObservationTable = ({
 
       if (isTabKey && isLastRow && isNumberOfPoints) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -162,7 +159,6 @@ const BenthicPhotoQuadratObservationTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -272,7 +268,7 @@ const BenthicPhotoQuadratObservationTable = ({
           <Td align="right">
             <InputNumberNumericCharactersOnly
               type="number"
-              autoFocus={autoFocusAllowed}
+              autoFocus={true}
               min="0"
               value={quadratNumberOrEmptyStringToAvoidInputValueErrors}
               step="any"
@@ -287,7 +283,6 @@ const BenthicPhotoQuadratObservationTable = ({
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
                   aria-labelledby="benthic-attribute-label"
-                  autoFocus={autoFocusAllowed}
                   isLastRow={observationsState.length === rowNumber}
                   noResultsText={language.autocomplete.noResultsDefault}
                   onChange={handleBenthicAttributeChange}
@@ -357,7 +352,6 @@ const BenthicPhotoQuadratObservationTable = ({
     })
   }, [
     areValidationsShowing,
-    autoFocusAllowed,
     benthicAttributeSelectOptions,
     choices.growthforms.data,
     collectRecord,
