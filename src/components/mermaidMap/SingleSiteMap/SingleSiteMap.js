@@ -174,6 +174,10 @@ const SingleSiteMap = ({
         recordMarker.current.remove()
       } else {
         recordMarker.current.setLngLat([formLongitudeValue, formLatitudeValue]).addTo(map.current)
+        map.current.jumpTo({
+          center: [formLongitudeValue, formLatitudeValue],
+          zoom: map.current.getZoom(),
+        })
       }
     },
     [formLatitudeValue, formLongitudeValue, nullishLatitudeOrLongitude, outOfRangeLatitude],
