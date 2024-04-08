@@ -77,8 +77,9 @@ const ColoniesBleachedObservationTable = ({
     const handleKeyDown = ({ event, index, observation, isLastCell }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
+      const isLastRow = index === observationsState.length - 1
 
-      if (isTabKey && isLastCell) {
+      if (isTabKey && isLastCell && isLastRow) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
