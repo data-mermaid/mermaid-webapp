@@ -174,14 +174,20 @@ const SingleSiteMap = ({
         recordMarker.current.remove()
       } else {
         recordMarker.current.setLngLat([formLongitudeValue, formLatitudeValue]).addTo(map.current)
-        map.current.flyTo({
-          center: [formLongitudeValue, formLatitudeValue],
-          zoom: map.current.getZoom(),
-          duration: 800,
-          easing(t) {
-            return t
-          },
-        })
+
+        // prevents tests from failing due to maplibre-gl not being available
+        try {
+          map.current.flyTo({
+            center: [formLongitudeValue, formLatitudeValue],
+            zoom: map.current.getZoom(),
+            duration: 800,
+            easing(t) {
+              return t
+            },
+          })
+        } catch (e) {
+          console.error('Error using map flyTo: ', e)
+        }
       }
     },
     [formLatitudeValue, formLongitudeValue, nullishLatitudeOrLongitude, outOfRangeLatitude],
