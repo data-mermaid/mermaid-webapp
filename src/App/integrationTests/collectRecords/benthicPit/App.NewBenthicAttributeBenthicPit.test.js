@@ -99,7 +99,7 @@ test('Benthic PIT observations add new benthic attribute - filling out new attri
 
   expect(within(userNameElement).getByText('FakeFirstNameOnline FakeLastNameOnline'))
   expect(within(projectNameElement).getByText('Project V'))
-  expect(within(benthicAttributeElement).getByText('unicorn'))
+  expect(within(benthicAttributeElement).getByText('Dead Coral with Algae unicorn'))
 
   const submitButton = within(modal).getByRole('button', {
     name: 'Send to MERMAID for review',
