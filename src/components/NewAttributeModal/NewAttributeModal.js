@@ -52,8 +52,10 @@ const MainContentPages = ({
   handleFormikPageOneValueChange,
   handleNewAttributeChange,
   handleSubmit,
+  attributeName,
 }) => {
   const { currentUser } = useCurrentUser()
+
   const mainContentPageOne = (
     <form id="form-page-1" onSubmit={handleSubmit}>
       <StyledRow>
@@ -95,7 +97,7 @@ const MainContentPages = ({
         <tbody>
           <Tr>
             <Td id="new-attribute-label">{pageTwoFirstLabel}</Td>
-            <Td aria-labelledby="new-attribute-label">{pageOneSecondInputValue}</Td>
+            <Td aria-labelledby="new-attribute-label">{`${attributeName} ${pageOneSecondInputValue}`}</Td>
           </Tr>
           <Tr>
             <Td id="user-label">{language.createNewOptionModal.user}</Td>
@@ -327,6 +329,7 @@ const NewAttributeModal = ({
           pageOneSecondInputError={pageOneSecondInputError}
           pageTwoFirstLabel={pageTwoFirstLabel}
           handleSubmit={formikPageOne.handleSubmit}
+          attributeName={attributeName}
           handleNewAttributeChange={handleNewAttributeChange}
           handleFormikPageOneValueChange={handleFormikPageOneValueChange}
         />
@@ -352,6 +355,7 @@ MainContentPages.propTypes = {
   handleFormikPageOneValueChange: PropTypes.func.isRequired,
   handleNewAttributeChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  attributeName: PropTypes.string.isRequired,
 }
 
 MainContentPages.defaultProps = {
