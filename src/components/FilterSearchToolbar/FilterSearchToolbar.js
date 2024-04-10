@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
-import { Input, inputStyles } from '../generic/form'
+import { Input, LabelContainer, inputStyles } from '../generic/form'
+import { IconInfo } from '../icons'
+import { IconButton } from '../generic/buttons'
+import language from '../../language'
+import ColumnHeaderToolTip from '../ColumnHeaderToolTip/ColumnHeaderToolTip'
 
 const FilterLabelWrapper = styled.label`
   display: flex;
@@ -22,6 +26,7 @@ const FilterSearchToolbar = ({
   handleGlobalFilterChange,
 }) => {
   const [searchText, setSearchText] = useState(globalSearchText)
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
 
   const handleFilterChange = (event) => {
     const eventValue = event.target.value
@@ -30,9 +35,33 @@ const FilterSearchToolbar = ({
     handleGlobalFilterChange(eventValue)
   }
 
+  const handleInfoIconClick = (event) => {
+    isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+
+    event.stopPropagation()
+  }
+
   return (
     <FilterLabelWrapper htmlFor={id}>
-      {name}
+      <LabelContainer>
+        {name}
+        <IconButton
+          type="button"
+          onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
+        >
+          <IconInfo aria-label="info" />
+        </IconButton>
+        {isHelperTextShowing ? (
+          <ColumnHeaderToolTip
+            id={`aria-descp${id}`}
+            left="22em"
+            top="7em"
+            bottom="58em"
+            maxWidth="50em"
+            html={language.pages.submittedTable.filterSearchHelperText.__html}
+          />
+        ) : null}
+      </LabelContainer>
       <FilterInput
         type="text"
         id={id}

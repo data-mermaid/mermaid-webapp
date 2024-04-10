@@ -5,7 +5,7 @@ import theme from '../../theme'
 
 export const TooltipPopup = styled('span')`
   display: block;
-  max-width: 25rem;
+  max-width:  ${(props) => props.maxWidth || '25rem'};
   width: max-content;
   background: ${theme.color.primaryColor};
   color: ${theme.color.white};
@@ -37,10 +37,18 @@ export const TooltipPopup = styled('span')`
   text-align: left;
 `
 
-const ColumnHeaderToolTip = ({ helperText, bottom, left }) => {
+const ColumnHeaderToolTip = ({ helperText, bottom, left, top, maxWidth, html }) => {
   return (
-    <TooltipPopup role="tooltip" aria-labelledby="tooltip" bottom={bottom} left={left}>
-      {helperText}
+    <TooltipPopup
+      role="tooltip"
+      aria-labelledby="tooltip"
+      bottom={bottom}
+      left={left}
+      maxWidth={maxWidth}
+      top={top}
+    >
+      {/* eslint-disable-next-line react/no-danger */}
+      {html ? <div dangerouslySetInnerHTML={{ __html: html }} /> : <span>{helperText}</span>}
     </TooltipPopup>
   )
 }
@@ -50,10 +58,17 @@ export default ColumnHeaderToolTip
 ColumnHeaderToolTip.defaultProps = {
   bottom: '4em',
   left: '0em',
+  maxWidth: '25rem',
+  top: '0',
+  html: '',
+  helperText: '',
 }
 
 ColumnHeaderToolTip.propTypes = {
-  helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   bottom: PropTypes.string,
   left: PropTypes.string,
+  top: PropTypes.string,
+  maxWidth: PropTypes.string,
+  html: PropTypes.string,
 }
