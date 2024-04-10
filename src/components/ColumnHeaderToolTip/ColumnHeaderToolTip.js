@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
+import domPurify from 'dompurify'
 import theme from '../../theme'
 
 export const TooltipPopup = styled('span')`
@@ -38,6 +39,10 @@ export const TooltipPopup = styled('span')`
 `
 
 const ColumnHeaderToolTip = ({ helperText, bottom, left, top, maxWidth, html }) => {
+  const sanitizeHtml = domPurify.sanitize
+  const dirtyHTML = html
+  const cleanHTML = sanitizeHtml(dirtyHTML)
+
   return (
     <TooltipPopup
       role="tooltip"
@@ -48,7 +53,7 @@ const ColumnHeaderToolTip = ({ helperText, bottom, left, top, maxWidth, html }) 
       top={top}
     >
       {/* eslint-disable-next-line react/no-danger */}
-      {html ? <div dangerouslySetInnerHTML={{ __html: html }} /> : <span>{helperText}</span>}
+      {html ? <div dangerouslySetInnerHTML={{ __html: cleanHTML }} /> : <span>{helperText}</span>}
     </TooltipPopup>
   )
 }
