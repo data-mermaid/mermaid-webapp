@@ -358,6 +358,12 @@ const pages = {
     title: 'Submitted',
     filterToolbarText: 'Filter this table by site, management, or observer',
     noDataMainText: `This project has no submitted sample units.`,
+    filterSearchHelperText: {
+      __html: `
+        <span style="font-weight: bold;">Use double quotes to search exact phases.</span><br>
+        For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search “North Shore” to find records that have exactly the words North Shore (records with South Shore would not match).
+      `,
+    },
   },
   userTable: {
     title: 'Users',
