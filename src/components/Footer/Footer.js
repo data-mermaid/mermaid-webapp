@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   StyledFooter,
   StyledToggleLabel,
@@ -19,6 +19,21 @@ import OfflineToggle from '../OfflineToggle'
 const Footer = () => {
   const { isAppOnline } = useOnlineStatus()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutsideDropdown = (event) => {
+      if (isDropdownOpen && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('click', handleClickOutsideDropdown)
+
+    return () => {
+      document.removeEventListener('click', handleClickOutsideDropdown)
+    }
+  }, [isDropdownOpen])
 
   const handleLanguageSelect = (event) => {
     const language = event.target.value
@@ -50,7 +65,7 @@ const Footer = () => {
         </span>
       </StyledToggleLabel>
       <FooterNav>
-        <HelpContainer>
+        <HelpContainer ref={dropdownRef}>
           <TextLink type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
             Help (PDF) ▲
           </TextLink>

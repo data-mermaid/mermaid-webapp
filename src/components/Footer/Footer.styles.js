@@ -109,11 +109,11 @@ export const FooterNav = styled('nav')`
 export const StyledSelect = styled('select')`
   position: absolute;
   cursor: pointer;
-  top: calc(100% - 9.5rem);
+  top: calc(100% - 9rem);
   z-index: 2;
   right: 0;
-  min-width: 100px;
-  min-height: 72px;
+  min-width: auto;
+  min-height: auto;
 
   option {
     padding: 0.3em;
