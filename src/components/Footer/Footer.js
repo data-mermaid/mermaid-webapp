@@ -5,7 +5,10 @@ import {
   FooterNav,
   VersionWrapper,
   CssToggle,
+  StyledSelect,
+  HelpContainer,
 } from './Footer.styles'
+import { TextLink } from '../generic/links'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { versionNumber } from '../../version'
 import MermaidDocsEN from '../../docs/MERMAID-user-documentation-EN.pdf'
@@ -15,14 +18,11 @@ import OfflineToggle from '../OfflineToggle'
 
 const Footer = () => {
   const { isAppOnline } = useOnlineStatus()
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [selectedLanguage, setSelectedLanguage] = useState('Select Language')
 
   const handleLanguageSelect = (event) => {
     const language = event.target.value
 
-    setSelectedLanguage(language)
     setIsDropdownOpen(false)
 
     if (language === 'English') {
@@ -50,18 +50,17 @@ const Footer = () => {
         </span>
       </StyledToggleLabel>
       <FooterNav>
-        <div>
-          <button type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+        <HelpContainer>
+          <TextLink type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
             Help (PDF) ▲
-          </button>
+          </TextLink>
           {isDropdownOpen && (
-            <select value={selectedLanguage} size="2" onChange={handleLanguageSelect}>
-              <option value="">Select Language</option>
+            <StyledSelect size="2" onChange={handleLanguageSelect}>
               <option value="English">English</option>
               <option value="Bahasa Indonesia">Bahasa Indonesia</option>
-            </select>
+            </StyledSelect>
           )}
-        </div>
+        </HelpContainer>
         <OfflineHide>
           <a href="https://datamermaid.org/terms-of-service" target="_blank" rel="noreferrer">
             Terms

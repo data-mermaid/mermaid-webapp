@@ -100,4 +100,36 @@ export const FooterNav = styled('nav')`
     display: inline-block;
     padding: 0 ${theme.spacing.small};
   }
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+`
+
+export const StyledSelect = styled('select')`
+  position: absolute;
+  cursor: pointer;
+  top: calc(100% - 9.5rem);
+  z-index: 2;
+  right: 0;
+  min-width: 100px;
+  min-height: 72px;
+
+  option {
+    padding: 0.3em;
+  }
+
+  option:hover {
+    background-color: ${theme.color.secondaryHover};
+    color: black;
+  }
+
+  option:checked {
+    background-color: ${theme.color.secondaryHover};
+  }
+`
+export const HelpContainer = styled('div')`
+  margin-bottom: 3px;
+  position: relative;
+  cursor: pointer;
 `
