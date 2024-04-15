@@ -12,9 +12,7 @@ import Footer from '.'
 test('Footer component shows help, terms, contact, credits links when online', () => {
   renderAuthenticatedOnline(<Footer />)
 
-  const helpLink = screen.getByRole('link', {
-    name: /help/i,
-  })
+  const helpButton = screen.getByText(/Help \(PDF\) ▲/i)
 
   const termsLink = screen.getByRole('link', {
     name: /terms/i,
@@ -26,7 +24,7 @@ test('Footer component shows help, terms, contact, credits links when online', (
     name: /credits/i,
   })
 
-  expect(helpLink).toBeInTheDocument()
+  expect(helpButton).toBeInTheDocument()
   expect(termsLink).toBeInTheDocument()
   expect(contactLink).toBeInTheDocument()
   expect(creditsLink).toBeInTheDocument()
@@ -34,9 +32,7 @@ test('Footer component shows help, terms, contact, credits links when online', (
 test('Footer component shows help, and hide terms, contact, credits links when offline', async () => {
   renderAuthenticatedOffline(<Footer />)
 
-  const helpLink = screen.getByRole('link', {
-    name: /help/i,
-  })
+  const helpButton = screen.getByText(/Help \(PDF\) ▲/i)
 
   const termsLink = screen.queryByRole('link', {
     name: /terms/i,
@@ -48,7 +44,10 @@ test('Footer component shows help, and hide terms, contact, credits links when o
     name: /credits/i,
   })
 
-  expect(helpLink).toBeInTheDocument()
+  await waitFor(() => {
+    expect(helpButton).toBeInTheDocument()
+  })
+
   await waitFor(() => {
     expect(termsLink).not.toBeInTheDocument()
   })
