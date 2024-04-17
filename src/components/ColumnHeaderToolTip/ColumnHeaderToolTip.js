@@ -30,7 +30,6 @@ export const TooltipPopup = styled('span')`
   );
   padding: 1em;
   padding-bottom: calc(1rem + 15px);
-  // bottom: ${(props) => props.bottom || '0em'};
   left: ${(props) => props.left || '0em'};
   top: ${(props) => props.top || '0em'};
   white-space: normal;
@@ -38,7 +37,7 @@ export const TooltipPopup = styled('span')`
   text-align: left;
 `
 
-const ColumnHeaderToolTip = forwardRef(({ helperText, bottom, left, top, maxWidth, html }, ref) => {
+const ColumnHeaderToolTip = forwardRef(({ helperText, left, top, maxWidth, html }, ref) => {
   const sanitizeHtml = domPurify.sanitize
   const dirtyHTML = html
   const cleanHTML = sanitizeHtml(dirtyHTML)
@@ -48,7 +47,6 @@ const ColumnHeaderToolTip = forwardRef(({ helperText, bottom, left, top, maxWidt
       ref={ref}
       role="tooltip"
       aria-labelledby="tooltip"
-      bottom={bottom}
       left={left}
       maxWidth={maxWidth}
       top={top}
@@ -62,7 +60,6 @@ const ColumnHeaderToolTip = forwardRef(({ helperText, bottom, left, top, maxWidt
 export default ColumnHeaderToolTip
 
 ColumnHeaderToolTip.defaultProps = {
-  bottom: '0em',
   left: '0em',
   maxWidth: '25rem',
   top: '0em',
@@ -72,7 +69,6 @@ ColumnHeaderToolTip.defaultProps = {
 
 ColumnHeaderToolTip.propTypes = {
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  bottom: PropTypes.string,
   left: PropTypes.string,
   top: PropTypes.string,
   maxWidth: PropTypes.string,
