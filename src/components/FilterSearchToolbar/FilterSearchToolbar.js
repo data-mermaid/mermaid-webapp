@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import { Input, LabelContainer, inputStyles } from '../generic/form'
@@ -27,6 +27,25 @@ const FilterSearchToolbar = ({
 }) => {
   const [searchText, setSearchText] = useState(globalSearchText)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Calculate the position of the icon relative to the viewport
+      const iconInfoRect = document.getElementById(`icon-info-${id}`).getBoundingClientRect()
+      const tooltipTop = `${iconInfoRect.top - 302}px`
+      const tooltipLeft = `${iconInfoRect.left + iconInfoRect.width / 2 - 488}px`
+
+      setTooltipPosition({ top: tooltipTop, left: tooltipLeft })
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [id])
 
   const handleFilterChange = (event) => {
     const eventValue = event.target.value
@@ -49,14 +68,13 @@ const FilterSearchToolbar = ({
           type="button"
           onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
         >
-          <IconInfo aria-label="info" />
+          <IconInfo id={`icon-info-${id}`} aria-label="info" />
         </IconButton>
         {isHelperTextShowing ? (
           <ColumnHeaderToolTip
             id={`aria-descp${id}`}
-            left="22em"
-            top="7em"
-            bottom="58em"
+            left={tooltipPosition.left}
+            top={tooltipPosition.top}
             maxWidth="50em"
             html={language.pages.submittedTable.filterSearchHelperText.__html}
           />
