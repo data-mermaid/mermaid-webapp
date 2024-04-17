@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import domPurify from 'dompurify'
@@ -38,13 +38,14 @@ export const TooltipPopup = styled('span')`
   text-align: left;
 `
 
-const ColumnHeaderToolTip = ({ helperText, bottom, left, top, maxWidth, html }) => {
+const ColumnHeaderToolTip = forwardRef(({ helperText, bottom, left, top, maxWidth, html }, ref) => {
   const sanitizeHtml = domPurify.sanitize
   const dirtyHTML = html
   const cleanHTML = sanitizeHtml(dirtyHTML)
 
   return (
     <TooltipPopup
+      ref={ref}
       role="tooltip"
       aria-labelledby="tooltip"
       bottom={bottom}
@@ -56,7 +57,7 @@ const ColumnHeaderToolTip = ({ helperText, bottom, left, top, maxWidth, html }) 
       {html ? <div dangerouslySetInnerHTML={{ __html: cleanHTML }} /> : <span>{helperText}</span>}
     </TooltipPopup>
   )
-}
+})
 
 export default ColumnHeaderToolTip
 

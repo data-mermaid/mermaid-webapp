@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import { Input, LabelContainer, inputStyles } from '../generic/form'
@@ -28,6 +28,7 @@ const FilterSearchToolbar = ({
   const [searchText, setSearchText] = useState(globalSearchText)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
+  const tooltipRef = useRef(null)
 
   useEffect(() => {
     const handleResize = () => {
@@ -46,6 +47,20 @@ const FilterSearchToolbar = ({
       window.removeEventListener('resize', handleResize)
     }
   }, [id])
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+        setIsHelperTextShowing(false)
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [])
 
   const handleFilterChange = (event) => {
     const eventValue = event.target.value
@@ -77,6 +92,7 @@ const FilterSearchToolbar = ({
             top={tooltipPosition.top}
             maxWidth="50em"
             html={language.pages.submittedTable.filterSearchHelperText.__html}
+            ref={tooltipRef}
           />
         ) : null}
       </LabelContainer>
