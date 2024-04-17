@@ -358,6 +358,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         name={language.pages.copySiteTable.filterToolbarText}
         globalSearchText={globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
+        type="copy-site-modal"
       />
       <ViewSelectedOnly htmlFor="viewSelectedOnly">
         <input

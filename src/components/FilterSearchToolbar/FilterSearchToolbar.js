@@ -24,6 +24,7 @@ const FilterSearchToolbar = ({
   disabled,
   globalSearchText,
   handleGlobalFilterChange,
+  type,
 }) => {
   const [searchText, setSearchText] = useState(globalSearchText)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
@@ -31,11 +32,22 @@ const FilterSearchToolbar = ({
   const tooltipRef = useRef(null)
 
   useEffect(() => {
+    const pixelAdjustTop = 302
+
+    let pixelAdjustLeft = 488
+
+    if (type === 'copy-site-modal') {
+      pixelAdjustLeft = 597
+    }
+    if (type === 'copy-mr-modal') {
+      pixelAdjustLeft = 328
+    }
+
     const handleResize = () => {
       // Calculate the position of the icon relative to the viewport
-      const iconInfoRect = document.getElementById(`icon-info-${id}`).getBoundingClientRect()
-      const tooltipTop = `${iconInfoRect.top - 302}px`
-      const tooltipLeft = `${iconInfoRect.left + iconInfoRect.width / 2 - 488}px`
+      const iconInfoRect = document.getElementById('info-icon').getBoundingClientRect()
+      const tooltipTop = `${iconInfoRect.top - pixelAdjustTop}px`
+      const tooltipLeft = `${iconInfoRect.left + iconInfoRect.width / 2 - pixelAdjustLeft}px`
 
       setTooltipPosition({ top: tooltipTop, left: tooltipLeft })
     }
@@ -46,7 +58,7 @@ const FilterSearchToolbar = ({
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [id])
+  }, [type])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -83,7 +95,7 @@ const FilterSearchToolbar = ({
           type="button"
           onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
         >
-          <IconInfo id={`icon-info-${id}`} aria-label="info" />
+          <IconInfo id="info-icon" aria-label="info" />
         </IconButton>
         {isHelperTextShowing ? (
           <ColumnHeaderToolTip
@@ -110,6 +122,7 @@ const FilterSearchToolbar = ({
 FilterSearchToolbar.defaultProps = {
   id: 'filter-search',
   disabled: false,
+  type: 'page',
 }
 
 FilterSearchToolbar.propTypes = {
@@ -118,6 +131,7 @@ FilterSearchToolbar.propTypes = {
   disabled: PropTypes.bool,
   globalSearchText: PropTypes.string.isRequired,
   handleGlobalFilterChange: PropTypes.func.isRequired,
+  type: PropTypes.string,
 }
 
 export default FilterSearchToolbar
