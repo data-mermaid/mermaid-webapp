@@ -390,6 +390,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         name={language.pages.copyManagementRegimeTable.filterToolbarText}
         globalSearchText={globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
+        type="copy-mr-modal"
       />
       <ViewSelectedOnly htmlFor="viewSelectedOnly">
         <input
