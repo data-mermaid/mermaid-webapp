@@ -533,5 +533,6 @@ export const fishSpeciesSingluarPropType = PropTypes.shape({
 })
 
 export const fishFamiliesPropType = PropTypes.arrayOf(fishFamiliyPropType)
+export const fishGroupingsPropType = PropTypes.arrayOf(fishFamiliyPropType)
 export const fishSpeciesPropType = PropTypes.arrayOf(fishSpeciesSingluarPropType)
 export const fishGeneraPropType = PropTypes.arrayOf(fishGeneraSingluarPropType)

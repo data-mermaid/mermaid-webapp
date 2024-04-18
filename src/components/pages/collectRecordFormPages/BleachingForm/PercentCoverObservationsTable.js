@@ -167,7 +167,7 @@ const PercentCoverObservationTable = ({
       }
 
       return (
-        <ObservationTr key={observationId}>
+        <ObservationTr key={observationId} messageType={observationValidationType}>
           <Td align="center">{rowNumber}</Td>
           <Td align="center">{quadrat_number}</Td>
 
@@ -273,7 +273,8 @@ const PercentCoverObservationTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.quadrat}
-                          left="-2em"
+                          left="-3em"
+                          top="-6.1em"
                         />
                       ) : null}
                       <IconButton
@@ -292,7 +293,8 @@ const PercentCoverObservationTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'hardCoralPercentage' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.hardCoralPercentage}
-                          left="5em"
+                          left="4.2em"
+                          top="-7.5em"
                         />
                       ) : null}
                       <IconButton
@@ -311,7 +313,8 @@ const PercentCoverObservationTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'softCoralPercentage' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.softCoralPercentage}
-                          left="4.5em"
+                          left="3.6em"
+                          top="-7.5em"
                         />
                       ) : null}
                       <IconButton
@@ -330,7 +333,8 @@ const PercentCoverObservationTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'macroalgaePercentage' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.macroalgaePercentage}
-                          left="5.3em"
+                          left="5em"
+                          top="-7.5em"
                         />
                       ) : null}
                       <IconButton

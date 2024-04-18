@@ -6,7 +6,7 @@ import language from '../../../language'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import {
   satelliteBaseMap,
-  addMapController,
+  addZoomController,
   setCoralMosaicLayerProperty,
   setGeomorphicOrBenthicLayerProperty,
   loadACALayers,
@@ -14,9 +14,16 @@ import {
 } from '../mapService'
 import { ButtonSecondary } from '../../generic/buttons'
 import { IconMapMarker } from '../../icons'
-import { MapInputRow, MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
+import {
+  MapInputRow,
+  MapContainer,
+  MiniMapContainer,
+  MapWrapper,
+  MapZoomHelpMessage,
+} from '../Map.styles'
 import theme from '../../../theme'
 import { roundToSixDecimalPlaces } from '../../../library/numbers/roundToSixDecimalPlaces'
+import MiniMap from '../MiniMap'
 
 const StyledPlaceMarkerButton = styled(ButtonSecondary)`
   padding: 0 5px;
@@ -34,6 +41,7 @@ const StyledPlaceMarkerButton = styled(ButtonSecondary)`
 
 const defaultCenter = [0, 0]
 const defaultZoom = 1
+const initialZoom = 13
 
 const SingleSiteMap = ({
   formLatitudeValue,
@@ -47,6 +55,13 @@ const SingleSiteMap = ({
   const recordMarker = useRef(null)
   const [displayHelpText, setDisplayHelpText] = useState(false)
   const [isMarkerBeingPlaced, setIsMarkerBeingPlaced] = useState(false)
+  const [hasLatLngChanged, setHasLatLngChanged] = useState(false)
+
+  const outOfRangeLatitude = formLatitudeValue > 90 || formLatitudeValue < -90
+
+  const nullishLatitudeOrLongitude =
+    (!formLatitudeValue && formLatitudeValue !== 0) ||
+    (!formLongitudeValue && formLongitudeValue !== 0)
 
   const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
   const handleMarkerLocationChange = useCallback(
@@ -62,6 +77,7 @@ const SingleSiteMap = ({
 
       handleLatitudeChange(roundToSixDecimalPlaces(lngLat.lat))
       handleLongitudeChange(roundToSixDecimalPlaces(adjustedLng))
+      setHasLatLngChanged(true)
     },
     [handleLatitudeChange, handleLongitudeChange],
   )
@@ -77,12 +93,22 @@ const SingleSiteMap = ({
       customAttribution: language.map.attribution,
     })
 
+    if (formLatitudeValue && formLongitudeValue) {
+      // prevents tests from failing due to maplibre-gl not being available
+      try {
+        map.current.setCenter([formLongitudeValue, formLatitudeValue])
+        map.current.setZoom(initialZoom)
+      } catch (error) {
+        console.error('Error setting center and zoom: ', error)
+      }
+    }
+
     recordMarker.current = new maplibregl.Marker({ draggable: !isReadOnlyUser })
     const recordMarkerElement = recordMarker.current.getElement()
 
     recordMarkerElement.id = 'marker'
 
-    addMapController(map.current)
+    addZoomController(map.current)
 
     map.current.on('load', () => {
       loadACALayers(map.current)
@@ -100,7 +126,16 @@ const SingleSiteMap = ({
       map.current.remove()
       recordMarker.current.remove()
     }
-  }, [isReadOnlyUser, handleLatitudeChange, handleLongitudeChange, handleMarkerLocationChange])
+    // formLongitudeValue and formLatitudeValue are not used in the dependency array
+    // we only want to set initial map center and zoom once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    isReadOnlyUser,
+    handleLatitudeChange,
+    handleLongitudeChange,
+    handleMarkerLocationChange,
+    nullishLatitudeOrLongitude,
+  ])
 
   const handleMapClick = useCallback(
     (event) => {
@@ -135,30 +170,27 @@ const SingleSiteMap = ({
         return
       }
 
-      const outOfRangeLatitude = formLatitudeValue > 90 || formLatitudeValue < -90
-
-      const nullishLatitudeOrLongitude =
-        (!formLatitudeValue && formLatitudeValue !== 0) ||
-        (!formLongitudeValue && formLongitudeValue !== 0)
-
       if (outOfRangeLatitude || nullishLatitudeOrLongitude) {
         recordMarker.current.remove()
       } else {
         recordMarker.current.setLngLat([formLongitudeValue, formLatitudeValue]).addTo(map.current)
-      }
 
-      if (
-        formLatitudeValue !== undefined &&
-        formLongitudeValue !== undefined &&
-        !outOfRangeLatitude
-      ) {
-        map.current.jumpTo({
-          center: [formLongitudeValue, formLatitudeValue],
-          zoom: map.current.getZoom(),
-        })
+        // prevents tests from failing due to maplibre-gl not being available
+        try {
+          map.current.flyTo({
+            center: [formLongitudeValue, formLatitudeValue],
+            zoom: map.current.getZoom(),
+            duration: 800,
+            easing(t) {
+              return t
+            },
+          })
+        } catch (e) {
+          console.error('Error using map flyTo: ', e)
+        }
       }
     },
-    [formLatitudeValue, formLongitudeValue],
+    [formLatitudeValue, formLongitudeValue, nullishLatitudeOrLongitude, outOfRangeLatitude],
   )
 
   const updateCoralMosaicLayer = (dataLayerFromLocalStorage) =>
@@ -169,19 +201,18 @@ const SingleSiteMap = ({
 
   const updateBenthicLayers = (dataLayerFromLocalStorage) =>
     setGeomorphicOrBenthicLayerProperty(map.current, 'atlas-benthic', dataLayerFromLocalStorage)
-  const placeMarkerButtonText =
-    formLatitudeValue && formLongitudeValue
-      ? language.pages.siteForm.replaceMarker
-      : language.pages.siteForm.placeMarker
 
   const handlePlaceMarkerClick = () => {
     setIsMarkerBeingPlaced(!isMarkerBeingPlaced)
+    if (hasLatLngChanged) {
+      setHasLatLngChanged(false)
+    }
   }
 
   const placeMarkerButton = (
     <StyledPlaceMarkerButton type="button" onClick={handlePlaceMarkerClick}>
       <IconMapMarker />
-      {isMarkerBeingPlaced ? language.pages.siteForm.done : placeMarkerButtonText}
+      {language.pages.siteForm.placeMarker}
     </StyledPlaceMarkerButton>
   )
 
@@ -189,7 +220,7 @@ const SingleSiteMap = ({
     <MapInputRow noBorderWidth={isReadOnlyUser}>
       <MapContainer>
         <MapWrapper ref={mapContainer} />
-        {!isReadOnlyUser ? placeMarkerButton : null}
+        {!isReadOnlyUser && nullishLatitudeOrLongitude ? placeMarkerButton : null}
         {displayHelpText && (
           <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
         )}
@@ -198,6 +229,11 @@ const SingleSiteMap = ({
           updateGeomorphicLayers={updateGeomorphicLayers}
           updateBenthicLayers={updateBenthicLayers}
         />
+        {map.current ? (
+          <MiniMapContainer>
+            <MiniMap mainMap={map.current} />
+          </MiniMapContainer>
+        ) : null}
       </MapContainer>
     </MapInputRow>
   )

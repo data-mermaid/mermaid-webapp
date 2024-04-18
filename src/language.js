@@ -131,6 +131,7 @@ const error = {
 const success = {
   collectRecordSave: 'Record saved.',
   collectRecordSubmit: 'Record submitted.',
+  collectRecordValidated: 'Record successfully validated.',
   collectRecordDelete: 'Record deleted.',
   newOrganizationAdd: 'Organization added.',
   fishSpeciesSave:
@@ -297,6 +298,7 @@ const pages = {
     totalAbundanceLabel: 'Total Abundance',
     totalBiomassLabel: 'Total Biomass (kg/ha)',
     newBenthicAttributeLink: 'Propose New Benthic Attribute...',
+    viewLink: 'View',
     formSectionTitle: {
       sampleEvent: 'Sample Event',
       quadratCollection: 'Quadrat Collection',
@@ -330,6 +332,7 @@ const pages = {
       functionalGroup: 'Functional Group',
       trophicGroup: 'Trophic Group',
     },
+    benthicPitSyncCheckbox: 'Use Interval Size as Interval Start',
   },
   projectInfo: {
     createOrganizationTitle: 'Suggest a new organization',
@@ -355,6 +358,12 @@ const pages = {
     title: 'Submitted',
     filterToolbarText: 'Filter this table by site, management, or observer',
     noDataMainText: `This project has no submitted sample units.`,
+    filterSearchHelperText: {
+      __html: `
+        <span style="font-weight: bold;">Use double quotes to search exact phases.</span><br>
+        For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search “North Shore” to find records that have exactly the words North Shore (records with South Shore would not match).
+      `,
+    },
   },
   userTable: {
     title: 'Users',
@@ -387,8 +396,7 @@ const pages = {
     title: 'Site',
     nonAdminDelete: 'Only admins can delete a site.',
     placeMarker: 'Place Site Marker',
-    replaceMarker: 'Replace Site Marker',
-    done: 'Done',
+    swapButton: 'Swap',
   },
   siteTable: {
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',
@@ -567,7 +575,7 @@ const helperText = {
   intervalSize:
     'Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).',
   intervalStart:
-    'Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5). Default is interval size (i.e. not counting 0).',
+    'Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5).',
   label:
     'Arbitrary text to distinguish sample units that are distinct but should be combined analytically (i.e. all other properties are identical). For example: Long swim. Rarely used.',
   getLatitude: () => (

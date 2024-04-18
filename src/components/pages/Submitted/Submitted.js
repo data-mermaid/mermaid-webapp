@@ -353,6 +353,7 @@ const Submitted = () => {
   const toolbar = isAppOnline ? (
     <SubmittedToolbarSection
       name={language.pages.submittedTable.filterToolbarText}
+      globalSearchText={globalFilter}
       handleGlobalFilterChange={handleGlobalFilterChange}
       searchFilterValue={tableUserPrefs.globalFilter}
       methodFilterValue={tableUserPrefs.methodsFilter}

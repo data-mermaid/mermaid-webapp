@@ -8,6 +8,7 @@ import {
   fishNameConstantsPropType,
   fishBeltPropType,
   fishFamiliesPropType,
+  fishGroupingsPropType,
   fishGeneraPropType,
   fishSpeciesPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
@@ -97,6 +98,7 @@ const FishBeltObservationTable = ({
   fishNameOptions,
   testId,
   fishFamilies,
+  fishGroupings,
   fishGenera,
   fishSpecies,
 }) => {
@@ -166,6 +168,7 @@ const FishBeltObservationTable = ({
     ({ observationId, fishNameId }) => {
       const popoverTable = getFishNameTable({
         fishFamilies,
+        fishGroupings,
         choices,
         fishGenera,
         fishSpecies,
@@ -175,7 +178,7 @@ const FishBeltObservationTable = ({
       setFishNamePopoverContent(popoverTable)
       setObservationIdWithFishNamePopoverShowing(observationId)
     },
-    [choices, fishFamilies, fishGenera, fishSpecies],
+    [choices, fishFamilies, fishGenera, fishSpecies, fishGroupings],
   )
 
   const resetObservationIdWithFishNamePopoverShowing = () => {
@@ -470,7 +473,8 @@ const FishBeltObservationTable = ({
                   {isHelperTextShowing && currentHelperTextLabel === 'fishName' ? (
                     <ColumnHeaderToolTip
                       helperText={language.tooltipText.getFishName()}
-                      bottom="5.8em"
+                      top="-13.5em"
+                      left="-1.5em"
                       paddingBottom="3.5em"
                     />
                   ) : null}
@@ -488,8 +492,8 @@ const FishBeltObservationTable = ({
                   {isHelperTextShowing && currentHelperTextLabel === 'fishSize' ? (
                     <ColumnHeaderToolTip
                       helperText={language.tooltipText.fishSize}
-                      bottom="5.8em"
-                      left="-1em"
+                      top="-6em"
+                      left="-2.8em"
                     />
                   ) : null}
                   <IconButton
@@ -506,8 +510,8 @@ const FishBeltObservationTable = ({
                   {isHelperTextShowing && currentHelperTextLabel === 'fishCount' ? (
                     <ColumnHeaderToolTip
                       helperText={language.tooltipText.fishCount}
-                      bottom="5.8em"
-                      left="-3em"
+                      top="-6em"
+                      left="-4.7em"
                     />
                   ) : null}
                   <IconButton
@@ -583,6 +587,7 @@ FishBeltObservationTable.propTypes = {
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
   testId: PropTypes.string.isRequired,
   fishFamilies: fishFamiliesPropType.isRequired,
+  fishGroupings: fishGroupingsPropType.isRequired,
   fishGenera: fishGeneraPropType.isRequired,
   fishSpecies: fishSpeciesPropType.isRequired,
 }

@@ -137,9 +137,11 @@ export const ButtonThatLooksLikeLink = styled('button')`
 
 export const ButtonThatLooksLikeLinkUnderlined = styled(ButtonThatLooksLikeLink)`
   text-decoration: underline;
+  padding: 0;
 `
+
 export const ToolbarButtonWrapper = styled('div')`
-  button,
+  // button,
   a {
     margin: 0 -1px;
   }
@@ -152,4 +154,53 @@ export const IconButton = styled.button`
   padding: 0;
   background-color: transparent;
   border-style: none;
+`
+
+export const ViewLink = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: small;
+  padding: ${theme.spacing.small};
+  border: solid ${theme.spacing.borderSmall} ${theme.color.border};
+  background-color: ${theme.color.inputBackground};
+  text-align: inherit;
+  cursor: pointer;
+  &:disabled {
+    color: ${theme.color.secondaryDisabledText};
+    background-color: ${theme.color.secondaryDisabledColor};
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+`
+
+export const CheckBoxContainer = styled.label`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: ${theme.spacing.small};
+
+  input {
+    margin: 0 ${theme.spacing.small} 0 0;
+    cursor: pointer;
+  }
+`
+
+export const InputButton = styled('button')`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  border: solid ${theme.spacing.borderSmall} ${theme.color.border};
+  background-color: ${theme.color.inputBackground};
+
+  span {
+    font-size: ${theme.typography.smallFontSize};
+  }
+
+  &:disabled {
+    color: ${theme.color.secondaryDisabledText};
+    background-color: ${theme.color.secondaryDisabledColor};
+    cursor: not-allowed;
+  }
 `

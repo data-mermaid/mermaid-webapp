@@ -1,7 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
-import { Input, inputStyles } from '../generic/form'
+import { Input, LabelContainer, inputStyles } from '../generic/form'
+import { IconInfo } from '../icons'
+import { IconButton } from '../generic/buttons'
+import language from '../../language'
+import ColumnHeaderToolTip from '../ColumnHeaderToolTip/ColumnHeaderToolTip'
 
 const FilterLabelWrapper = styled.label`
   display: flex;
@@ -14,8 +18,61 @@ const FilterInput = styled(Input)`
   ${inputStyles};
 `
 
-const FilterSearchToolbar = ({ name, handleGlobalFilterChange, id, disabled }) => {
-  const [searchText, setSearchText] = useState([])
+const FilterSearchToolbar = ({
+  id,
+  name,
+  disabled,
+  globalSearchText,
+  handleGlobalFilterChange,
+  type,
+}) => {
+  const [searchText, setSearchText] = useState(globalSearchText)
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
+  const tooltipRef = useRef(null)
+
+  useEffect(() => {
+    const pixelAdjustTop = 302
+
+    let pixelAdjustLeft = 488
+
+    if (type === 'copy-site-modal') {
+      pixelAdjustLeft = 597
+    }
+    if (type === 'copy-mr-modal') {
+      pixelAdjustLeft = 328
+    }
+
+    const handleResize = () => {
+      // Calculate the position of the icon relative to the viewport
+      const iconInfoRect = document.getElementById('info-icon').getBoundingClientRect()
+      const tooltipTop = `${iconInfoRect.top - pixelAdjustTop}px`
+      const tooltipLeft = `${iconInfoRect.left + iconInfoRect.width / 2 - pixelAdjustLeft}px`
+
+      setTooltipPosition({ top: tooltipTop, left: tooltipLeft })
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [type])
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+        setIsHelperTextShowing(false)
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [])
 
   const handleFilterChange = (event) => {
     const eventValue = event.target.value
@@ -24,9 +81,33 @@ const FilterSearchToolbar = ({ name, handleGlobalFilterChange, id, disabled }) =
     handleGlobalFilterChange(eventValue)
   }
 
+  const handleInfoIconClick = (event) => {
+    isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+
+    event.stopPropagation()
+  }
+
   return (
     <FilterLabelWrapper htmlFor={id}>
-      {name}
+      <LabelContainer>
+        {name}
+        <IconButton
+          type="button"
+          onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
+        >
+          <IconInfo id="info-icon" aria-label="info" />
+        </IconButton>
+        {isHelperTextShowing ? (
+          <ColumnHeaderToolTip
+            id={`aria-descp${id}`}
+            left={tooltipPosition.left}
+            top={tooltipPosition.top}
+            maxWidth="50em"
+            html={language.pages.submittedTable.filterSearchHelperText.__html}
+            ref={tooltipRef}
+          />
+        ) : null}
+      </LabelContainer>
       <FilterInput
         type="text"
         id={id}
@@ -41,13 +122,16 @@ const FilterSearchToolbar = ({ name, handleGlobalFilterChange, id, disabled }) =
 FilterSearchToolbar.defaultProps = {
   id: 'filter-search',
   disabled: false,
+  type: 'page',
 }
 
 FilterSearchToolbar.propTypes = {
-  handleGlobalFilterChange: PropTypes.func.isRequired,
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
+  globalSearchText: PropTypes.string.isRequired,
+  handleGlobalFilterChange: PropTypes.func.isRequired,
+  type: PropTypes.string,
 }
 
 export default FilterSearchToolbar

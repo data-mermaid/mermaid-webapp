@@ -73,14 +73,12 @@ const BenthicPhotoQuadratObservationTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
-  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
-    setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
 
@@ -152,7 +150,6 @@ const BenthicPhotoQuadratObservationTable = ({
 
       if (isTabKey && isLastRow && isNumberOfPoints) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -162,7 +159,6 @@ const BenthicPhotoQuadratObservationTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -267,12 +263,12 @@ const BenthicPhotoQuadratObservationTable = ({
       }
 
       return (
-        <ObservationTr key={observationId}>
+        <ObservationTr key={observationId} messageType={observationValidationType}>
           <Td align="center">{rowNumber}</Td>
           <Td align="right">
             <InputNumberNumericCharactersOnly
               type="number"
-              autoFocus={autoFocusAllowed}
+              autoFocus={true}
               min="0"
               value={quadratNumberOrEmptyStringToAvoidInputValueErrors}
               step="any"
@@ -287,7 +283,6 @@ const BenthicPhotoQuadratObservationTable = ({
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
                   aria-labelledby="benthic-attribute-label"
-                  autoFocus={autoFocusAllowed}
                   isLastRow={observationsState.length === rowNumber}
                   noResultsText={language.autocomplete.noResultsDefault}
                   onChange={handleBenthicAttributeChange}
@@ -357,7 +352,6 @@ const BenthicPhotoQuadratObservationTable = ({
     })
   }, [
     areValidationsShowing,
-    autoFocusAllowed,
     benthicAttributeSelectOptions,
     choices.growthforms.data,
     collectRecord,
@@ -391,7 +385,11 @@ const BenthicPhotoQuadratObservationTable = ({
                 <LabelContainer>
                   Quadrat <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
-                    <ColumnHeaderToolTip helperText={language.tooltipText.quadrat} left="-2em" />
+                    <ColumnHeaderToolTip
+                      helperText={language.tooltipText.quadrat}
+                      left="-3em"
+                      top="-6.5em"
+                    />
                   ) : null}
                   <IconButton
                     type="button"
@@ -407,7 +405,8 @@ const BenthicPhotoQuadratObservationTable = ({
                   {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                     <ColumnHeaderToolTip
                       helperText={language.tooltipText.getBenthicAttribute()}
-                      left="4.2em"
+                      left="3em"
+                      top="-13.5em"
                     />
                   ) : null}
                   <IconButton
@@ -424,7 +423,8 @@ const BenthicPhotoQuadratObservationTable = ({
                   {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
                     <ColumnHeaderToolTip
                       helperText={language.tooltipText.growthForm}
-                      left="0.2em"
+                      left="-0.5em"
+                      top="-9em"
                     />
                   ) : null}
                   <IconButton
@@ -439,7 +439,11 @@ const BenthicPhotoQuadratObservationTable = ({
                 <LabelContainer>
                   Number of Points <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'numberOfPoints' ? (
-                    <ColumnHeaderToolTip helperText={language.tooltipText.numberOfPoints} />
+                    <ColumnHeaderToolTip
+                      helperText={language.tooltipText.numberOfPoints}
+                      left="-1em"
+                      top="-11em"
+                    />
                   ) : null}
                   <IconButton
                     type="button"

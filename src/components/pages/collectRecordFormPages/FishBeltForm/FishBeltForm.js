@@ -55,6 +55,7 @@ const FishBeltForm = ({ isNewRecord }) => {
   const [fishSpecies, setFishSpecies] = useState([])
   const [fishGenera, setFishGenera] = useState([])
   const [fishFamilies, setFishFamilies] = useState([])
+  const [fishGroupings, setFishGroupings] = useState([])
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -127,6 +128,7 @@ const FishBeltForm = ({ isNewRecord }) => {
               setFishSpecies(fishSpeciesResponse)
               setFishGenera(fishGeneraResponse)
               setFishFamilies(fishFamiliesResponse)
+              setFishGroupings(fishGroupingsResponse)
               setIsLoading(false)
             }
           },
@@ -255,6 +257,7 @@ const FishBeltForm = ({ isNewRecord }) => {
             fishNameConstants={fishNameConstants}
             fishNameOptions={fishNameOptions}
             fishFamilies={fishFamilies}
+            fishGroupings={fishGroupings}
             fishGenera={fishGenera}
             fishSpecies={fishSpecies}
             {...props}
@@ -265,7 +268,7 @@ const FishBeltForm = ({ isNewRecord }) => {
       return null
     },
 
-    [fishFamilies, fishGenera, fishNameConstants, fishNameOptions, fishSpecies],
+    [fishFamilies, fishGenera, fishNameConstants, fishNameOptions, fishSpecies, fishGroupings],
   )
 
   const PartiallyAppliedFishBeltTransectInputs = useCallback(

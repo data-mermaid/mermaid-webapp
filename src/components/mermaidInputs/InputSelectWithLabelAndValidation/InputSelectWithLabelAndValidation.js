@@ -1,11 +1,22 @@
 import React, { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { InputRow, Select, HelperText, LabelContainer, RequiredIndicator } from '../../generic/form'
+import { getProjectIdFromLocation } from '../../../library/getProjectIdFromLocation'
+import {
+  IconContainer,
+  InputRow,
+  Select,
+  HelperText,
+  InputContainer,
+  LabelContainer,
+  RequiredIndicator,
+} from '../../generic/form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import { IconButton } from '../../generic/buttons'
-import { IconInfo } from '../../icons'
+import { ViewLink } from '../../generic/links'
+import { IconInfo, IconSites, IconMgmt } from '../../icons'
 import language from '../../../language'
 
 const InputSelectWithLabelAndValidation = ({
@@ -21,9 +32,15 @@ const InputSelectWithLabelAndValidation = ({
   testId,
   value,
   updateValueAndResetValidationForDuplicateWarning,
+  displayViewLink,
   ...restOfProps
 }) => {
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+
+  // const navigate = useNavigate()
+  const location = useLocation()
+
+  const projectId = getProjectIdFromLocation(location)
 
   const optionList = options.map((item) => (
     <option key={item.value} value={item.value}>
@@ -36,6 +53,10 @@ const InputSelectWithLabelAndValidation = ({
 
     event.stopPropagation()
   }
+
+  const linkToSiteOrMR = `/projects/${projectId}/${
+    label === 'Site' ? 'sites' : 'management-regimes'
+  }/${value}`
 
   return (
     <InputRow validationType={validationType} data-testid={testId}>
@@ -52,16 +73,25 @@ const InputSelectWithLabelAndValidation = ({
       </LabelContainer>
 
       <div>
-        <Select
-          aria-labelledby={`aria-label${id}`}
-          aria-describedby={`aria-descp${id}`}
-          id={id}
-          value={value}
-          {...restOfProps}
-        >
-          <option value="">{language.placeholders.select}</option>
-          {optionList}
-        </Select>
+        <InputContainer>
+          <Select
+            aria-labelledby={`aria-label${id}`}
+            aria-describedby={`aria-descp${id}`}
+            id={id}
+            value={value}
+            {...restOfProps}
+          >
+            <option value="">{language.placeholders.select}</option>
+            {optionList}
+          </Select>
+
+          {displayViewLink ? (
+            <ViewLink disabled={!value} href={linkToSiteOrMR}>
+              <IconContainer>{label === 'Site' ? <IconSites /> : <IconMgmt />}</IconContainer>
+              {language.pages.collectRecord.viewLink}
+            </ViewLink>
+          ) : null}
+        </InputContainer>
         {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
       <InputValidationInfo
@@ -79,6 +109,7 @@ const InputSelectWithLabelAndValidation = ({
 }
 
 InputSelectWithLabelAndValidation.propTypes = {
+  displayViewLink: PropTypes.bool,
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
   required: PropTypes.bool.isRequired,
@@ -102,5 +133,6 @@ InputSelectWithLabelAndValidation.defaultProps = {
   ignoreNonObservationFieldValidations: () => {},
   resetNonObservationFieldValidations: () => {},
   updateValueAndResetValidationForDuplicateWarning: () => {},
+  displayViewLink: false,
 }
 export default InputSelectWithLabelAndValidation

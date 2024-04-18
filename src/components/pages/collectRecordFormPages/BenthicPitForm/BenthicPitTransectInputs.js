@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -14,6 +14,7 @@ import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAn
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 import language from '../../../../language'
+import { CheckBoxContainer } from '../../../generic/buttons'
 
 const CURRENT_VALIDATION_PATH = 'data.benthic_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.benthic_transect.depth'
@@ -28,6 +29,21 @@ const TRANSECT_NUMBER_VALIDATION_PATH = 'data.benthic_transect.number'
 const VISIBILITY_VALIDATION_PATH = 'data.benthic_transect.visibility'
 const INTERVAL_SIZE_VALIDATION_PATH = 'data.interval_size'
 const INTERVAL_START_VALIDATION_PATH = 'data.interval_start'
+
+const IntervalCheckbox = ({ isChecked, handleChange, checkboxLabel }) => {
+  return (
+    <CheckBoxContainer>
+      <input
+        id="checkbox-sync"
+        type="checkbox"
+        checked={isChecked}
+        onChange={(event) => handleChange(event.target.checked)}
+      />
+
+      {checkboxLabel}
+    </CheckBoxContainer>
+  )
+}
 
 const BenthicPitTransectInputs = ({
   areValidationsShowing,
@@ -46,6 +62,9 @@ const BenthicPitTransectInputs = ({
   const currentOptions = getOptions(currents.data)
   const tideOptions = getOptions(tides.data)
   const benthic_transect = validationsApiData?.benthic_transect
+
+  const [isSyncIntervalStart, setIsSyncIntervalStart] = useState(false)
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     benthic_transect?.number,
@@ -181,6 +200,9 @@ const BenthicPitTransectInputs = ({
   }
 
   const handleIntervalSizeChange = (event) => {
+    if (isSyncIntervalStart) {
+      formik.setFieldValue('interval_start', event.target.value)
+    }
     formik.handleChange(event)
     resetNonObservationFieldValidations({
       validationPath: INTERVAL_SIZE_VALIDATION_PATH,
@@ -192,6 +214,16 @@ const BenthicPitTransectInputs = ({
     resetNonObservationFieldValidations({
       validationPath: INTERVAL_START_VALIDATION_PATH,
     })
+  }
+
+  const handleSyncIntervalChange = (checked) => {
+    setIsCheckboxChecked(checked)
+    if (checked) {
+      setIsSyncIntervalStart(true)
+      formik.setFieldValue('interval_start', formik.values.interval_size)
+    } else {
+      setIsSyncIntervalStart(false)
+    }
   }
 
   return (
@@ -346,6 +378,14 @@ const BenthicPitTransectInputs = ({
           onChange={handleIntervalStartChange}
           unit="m"
           helperText={language.helperText.intervalStart}
+          renderItemAboveInput={
+            <IntervalCheckbox
+              isChecked={isCheckboxChecked}
+              handleChange={handleSyncIntervalChange}
+              checkboxLabel={language.pages.collectRecord.benthicPitSyncCheckbox}
+            />
+          }
+          isInputDisabled={isCheckboxChecked}
         />
         <InputSelectWithLabelAndValidation
           label="Reef Slope"
@@ -483,6 +523,12 @@ BenthicPitTransectInputs.propTypes = {
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
+}
+
+IntervalCheckbox.propTypes = {
+  isChecked: PropTypes.bool.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  checkboxLabel: PropTypes.string.isRequired,
 }
 
 export default BenthicPitTransectInputs

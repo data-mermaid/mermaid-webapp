@@ -7,7 +7,7 @@ import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import { sitePropType, choicesPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import {
   satelliteBaseMap,
-  addMapController,
+  addZoomController,
   setCoralMosaicLayerProperty,
   setGeomorphicOrBenthicLayerProperty,
   loadACALayers,
@@ -15,7 +15,8 @@ import {
   loadMapMarkersLayer,
   handleMapOnWheel,
 } from '../mapService'
-import { MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
+import { MapContainer, MiniMapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
+import MiniMap from '../MiniMap'
 import Popup from '../Popup'
 import usePrevious from '../../../library/usePrevious'
 
@@ -43,7 +44,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       customAttribution: language.map.attribution,
     })
 
-    addMapController(map.current)
+    addZoomController(map.current)
 
     map.current.on('load', () => {
       loadACALayers(map.current)
@@ -65,16 +66,26 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
 
     const { markersData, bounds } = getMapMarkersFeature(sitesForMapMarkers)
 
+    const handleSourceData = () => {
+      if (map.current.getSource('mapMarkers') !== undefined) {
+        map.current.getSource('mapMarkers').setData(markersData)
+      }
+    }
+
     if (
       isMapInitialized ||
       JSON.stringify(sitesForMapMarkers) !== JSON.stringify(previousSitesForMapMarkers)
     ) {
-      if (map.current.getSource('mapMarkers') !== undefined) {
-        map.current.getSource('mapMarkers').setData(markersData)
-      }
+      map.current.on('sourcedata', handleSourceData)
+
       if (sitesForMapMarkers.length > 0) {
         map.current.fitBounds(bounds, { padding: 25, animate: false })
       }
+    }
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      map.current.off('sourcedata', handleSourceData)
     }
   }, [isMapInitialized, sitesForMapMarkers, previousSitesForMapMarkers])
 
@@ -124,6 +135,11 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
         updateGeomorphicLayers={updateGeomorphicLayers}
         updateBenthicLayers={updateBenthicLayers}
       />
+      {map.current ? (
+        <MiniMapContainer>
+          <MiniMap mainMap={map.current} />
+        </MiniMapContainer>
+      ) : null}
     </MapContainer>
   )
 }

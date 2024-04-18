@@ -208,7 +208,7 @@ const BenthicPitObservationsTable = ({
       }
 
       return (
-        <ObservationTr key={observationId}>
+        <ObservationTr key={observationId} messageType={observationValidationType}>
           <Td align="center">{rowNumber}</Td>
           <Td align="right" aria-labelledby="interval-label">
             {interval}m
@@ -323,7 +323,8 @@ const BenthicPitObservationsTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.getBenthicAttribute()}
-                          left="4.2em"
+                          left="3em"
+                          top="-13.5em"
                         />
                       ) : null}
                       <IconButton
@@ -340,7 +341,8 @@ const BenthicPitObservationsTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.growthForm}
-                          left="0.2em"
+                          left="-0.5em"
+                          top="-9em"
                         />
                       ) : null}
                       <IconButton

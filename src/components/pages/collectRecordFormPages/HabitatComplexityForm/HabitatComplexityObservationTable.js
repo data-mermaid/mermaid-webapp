@@ -170,7 +170,7 @@ const HabitatComplexityObservationsTable = ({
       }
 
       return (
-        <ObservationTr key={observationId}>
+        <ObservationTr key={observationId} messageType={observationValidationType}>
           <Td align="center">{rowNumber}</Td>
           <Td align="right" aria-labelledby="interval-label">
             {interval}m
@@ -261,7 +261,8 @@ const HabitatComplexityObservationsTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.habitatComplexityScore}
-                          left="9em"
+                          left="8.3em"
+                          top="-21em"
                         />
                       ) : null}
                       <IconButton

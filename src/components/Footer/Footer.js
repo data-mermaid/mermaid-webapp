@@ -1,115 +1,51 @@
-import React from 'react'
-import styled, { css } from 'styled-components/macro'
-
-import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
+import React, { useState, useRef, useEffect } from 'react'
+import {
+  StyledFooter,
+  StyledToggleLabel,
+  FooterNav,
+  VersionWrapper,
+  CssToggle,
+  StyledSelect,
+  HelpContainer,
+} from './Footer.styles'
+import { TextLink } from '../generic/links'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { versionNumber } from '../../version'
-import MermaidDocs from '../../docs/MERMAID User Documentation.pdf'
+import MermaidDocsEN from '../../docs/MERMAID-user-docs-EN-min.pdf'
+import MermaidDocsBIN from '../../docs/MERMAID-user-docs-ID-min.pdf'
 import OfflineHide from '../generic/OfflineHide'
 import OfflineToggle from '../OfflineToggle'
-import theme from '../../theme'
-
-const smallFooterTextStyle = css`
-  font-size: ${theme.typography.smallFontSize};
-  ${mediaQueryPhoneOnly(css`
-    margin: ${theme.spacing.small} 0;
-  `)}
-`
-
-const VersionWrapper = styled('span')`
-  ${smallFooterTextStyle}
-`
-
-const StyledFooter = styled('footer')`
-  text-align: end;
-  background-color: ${theme.color.footerColor};
-  padding: ${theme.spacing.small};
-  ${mediaQueryPhoneOnly(css`
-    text-align: start;
-    padding-bottom: 5rem;
-  `)}
-  p,
-  label,
-  nav a,
-  button {
-    ${smallFooterTextStyle}
-  }
-`
-const offlineToggleSize = theme.typography.defaultIconSize
-const CssToggle = styled('span')`
-  display: block;
-  width: calc(${offlineToggleSize} * 2);
-  position: relative;
-  &:before,
-  &:after {
-    content: '';
-    transition: 0.3s;
-    position: absolute;
-  }
-  &:before {
-    // container
-    width: calc(${offlineToggleSize} * 2);
-    height: ${offlineToggleSize};
-    left: 0;
-    top: 0;
-    border-radius: 25% / 50%;
-    background: green;
-  }
-  &:after {
-    // toggle
-    width: calc(${offlineToggleSize} - 2px);
-    height: calc(${offlineToggleSize} - 2px);
-    top: 1px;
-    left: 1px;
-    background: oldlace;
-    border-radius: 50%;
-  }
-`
-const StyledToggleLabel = styled('label')`
-  background: rgba(255, 255, 255, 0.5);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  cursor: pointer;
-  display: flex;
-  gap: 1.5rem;
-  padding: ${theme.spacing.small};
-  margin: 0;
-  input {
-    display: none;
-  }
-  input:checked {
-    ~ span:after {
-      background: ${theme.color.cautionColor};
-      left: calc(${offlineToggleSize} - 1px);
-    }
-    ~ span:before {
-      background: ${theme.color.cautionColor};
-      opacity: 0.5;
-    }
-  }
-  input:disabled {
-    ~ span:before {
-      background: ${theme.color.disabledColor};
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    ~ span:after {
-      background: ${theme.color.disabledColor};
-      cursor: not-allowed;
-    }
-  }
-`
-
-const FooterNav = styled('nav')`
-  a {
-    display: inline-block;
-    padding: 0 ${theme.spacing.small};
-  }
-`
 
 const Footer = () => {
   const { isAppOnline } = useOnlineStatus()
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutsideDropdown = (event) => {
+      if (isDropdownOpen && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('click', handleClickOutsideDropdown)
+
+    return () => {
+      document.removeEventListener('click', handleClickOutsideDropdown)
+    }
+  }, [isDropdownOpen])
+
+  const handleLanguageSelect = (event) => {
+    const language = event.target.value
+
+    setIsDropdownOpen(false)
+
+    if (language === 'English') {
+      window.open(MermaidDocsEN, '_blank')
+    } else if (language === 'Bahasa Indonesia') {
+      window.open(MermaidDocsBIN, '_blank')
+    }
+  }
 
   return (
     <StyledFooter>
@@ -129,9 +65,17 @@ const Footer = () => {
         </span>
       </StyledToggleLabel>
       <FooterNav>
-        <a href={MermaidDocs} target="_blank" rel="noreferrer">
-          Help (PDF)
-        </a>
+        <HelpContainer ref={dropdownRef}>
+          <TextLink type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+            Help (PDF) ▲
+          </TextLink>
+          {isDropdownOpen && (
+            <StyledSelect size="2" onChange={handleLanguageSelect}>
+              <option value="English">English</option>
+              <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+            </StyledSelect>
+          )}
+        </HelpContainer>
         <OfflineHide>
           <a href="https://datamermaid.org/terms-of-service" target="_blank" rel="noreferrer">
             Terms

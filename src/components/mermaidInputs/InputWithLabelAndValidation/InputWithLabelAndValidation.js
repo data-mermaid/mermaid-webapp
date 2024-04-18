@@ -1,7 +1,14 @@
 import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { Input, InputRow, HelperText, LabelContainer, RequiredIndicator } from '../../generic/form'
+import {
+  Input,
+  InputContainer,
+  InputRow,
+  HelperText,
+  LabelContainer,
+  RequiredIndicator,
+} from '../../generic/form'
 import { useStopInputScrollingIncrementNumber } from '../../../library/useStopInputScrollingIncrementNumber'
 import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit'
 
@@ -21,6 +28,10 @@ const InputWithLabelAndValidation = ({
   unit,
   validationMessages,
   validationType,
+  renderItemWithinInput,
+  renderItemAboveInput,
+  isInputDisabled,
+
   ...restOfProps
 }) => {
   const textFieldRef = useRef()
@@ -41,6 +52,7 @@ const InputWithLabelAndValidation = ({
       aria-describedby={`aria-descp${id}`}
       id={id}
       unit={unit}
+      disabled={isInputDisabled}
       {...restOfProps}
     />
   ) : (
@@ -68,9 +80,15 @@ const InputWithLabelAndValidation = ({
       </LabelContainer>
 
       <div>
-        {inputType}
+        {renderItemAboveInput || null}
+        <InputContainer>
+          {inputType}
+
+          {renderItemWithinInput || null}
+        </InputContainer>
         {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
       </div>
+
       <InputValidationInfo
         validationType={validationType}
         validationMessages={validationMessages}
@@ -85,8 +103,11 @@ InputWithLabelAndValidation.propTypes = {
   required: PropTypes.bool,
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
+  isInputDisabled: PropTypes.bool,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
+  renderItemAboveInput: PropTypes.node,
+  renderItemWithinInput: PropTypes.node,
   resetNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
   unit: PropTypes.string,
@@ -98,6 +119,9 @@ InputWithLabelAndValidation.defaultProps = {
   required: false,
   helperText: undefined,
   ignoreNonObservationFieldValidations: () => {},
+  isInputDisabled: false,
+  renderItemAboveInput: undefined,
+  renderItemWithinInput: undefined,
   resetNonObservationFieldValidations: () => {},
   testId: undefined,
   unit: undefined,

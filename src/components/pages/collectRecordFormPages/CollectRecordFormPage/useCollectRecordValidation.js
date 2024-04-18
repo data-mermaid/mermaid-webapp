@@ -53,6 +53,10 @@ const useCollectRecordValidation = ({
         validatedRecordResponse.validations.status === 'warning'
           ? setIsSubmitWarningVisible(true)
           : setIsSubmitWarningVisible(false)
+
+        if (validatedRecordResponse.validations.status === 'ok') {
+          toast.success(...getToastArguments(language.success.collectRecordValidated))
+        }
       })
       .catch((error) => {
         setValidateButtonState(buttonGroupStates.validatable)
