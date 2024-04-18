@@ -12,7 +12,7 @@ import { TextLink } from '../generic/links'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { versionNumber } from '../../version'
 import MermaidDocsEN from '../../docs/MERMAID-user-docs-EN-min.pdf'
-import MermaidDocsBIN from '../../docs/MERMAID-user-docs-B-IN-min.pdf'
+import MermaidDocsBIN from '../../docs/MERMAID-user-docs-ID-min.pdf'
 import OfflineHide from '../generic/OfflineHide'
 import OfflineToggle from '../OfflineToggle'
 
