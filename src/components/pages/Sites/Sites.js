@@ -416,6 +416,7 @@ const Sites = () => {
               disabled={siteRecordsForUiDisplay.length === 0}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
+              type="site"
             />
 
             <ToolbarButtonWrapper>{toolbarButtonsByRole}</ToolbarButtonWrapper>
