@@ -114,6 +114,7 @@ export const StyledSelect = styled('select')`
   right: 0;
   min-width: auto;
   min-height: auto;
+  overflow: hidden;
 
   option {
     padding: 0.3em;
