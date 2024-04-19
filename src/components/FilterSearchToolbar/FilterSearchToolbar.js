@@ -30,7 +30,7 @@ const FilterSearchToolbar = ({
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
   const tooltipRef = useRef(null)
-  const [maxWidth, setMaxWdith] = useState('50em')
+  const [maxWidth, setMaxWidth] = useState('50em')
 
   useEffect(() => {
     let pixelAdjustTop = 302
@@ -40,7 +40,7 @@ const FilterSearchToolbar = ({
     if (type === 'copy-site-modal') {
       pixelAdjustLeft = 655
       pixelAdjustTop = 275
-      setMaxWdith('60em')
+      setMaxWidth('60em')
     }
     if (type === 'copy-mr-modal') {
       pixelAdjustLeft = 328
