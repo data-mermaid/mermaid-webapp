@@ -496,7 +496,7 @@ const getValidationMessage = (validation, projectId = '') => {
     duplicate_transect: () => 'Transect already exists',
     duplicate_values: () =>
       fields?.length
-        ? getDuplicateValuesValidationMessage(fields[0], context?.duplicates?.[0])
+        ? getDuplicateValuesValidationMessage(fields[0], context?.duplicates)
         : 'Duplicate',
     exceed_total_colonies: () => 'Maximum number of colonies exceeded',
     future_sample_date: () => 'Sample date is in the future',

@@ -45,7 +45,7 @@ export const goToManagementOverviewPageLink = (projectId) => {
 }
 
 const getDuplicateIndexes = (duplicateIndexes) => {
-  const indexList = duplicateIndexes.map((duplicate) => duplicate.index + 1)
+  const indexList = duplicateIndexes.flatMap((array) => array.map((item) => item.index + 1))
 
   return indexList.join(', ')
 }
