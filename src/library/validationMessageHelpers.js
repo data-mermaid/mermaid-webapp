@@ -43,3 +43,29 @@ export const goToManagementOverviewPageLink = (projectId) => {
     </span>
   )
 }
+
+const getDuplicateIndexes = (duplicateIndexes) => {
+  const indexList = duplicateIndexes.flatMap((array) => array.map((item) => item.index + 1))
+
+  return indexList.join(', ')
+}
+
+const getObservationFieldName = (fieldName) => {
+  // fieldName is a string 'data.obs_colonies_bleached' as an example
+  // since the api does not give us the name, 'Colonies Bleached', we have to map this ourselves and also remove 'data.' from the field name
+
+  const cleanFieldName = fieldName.slice(5)
+
+  const observationFieldNameMapping = {
+    obs_colonies_bleached: 'colonies bleached',
+    benthic_photo_quadrats: 'Benthic Photo Quadrats',
+  }
+
+  return observationFieldNameMapping[cleanFieldName]
+    ? observationFieldNameMapping[cleanFieldName]
+    : ''
+}
+
+export const getDuplicateValuesValidationMessage = (field, context) => {
+  return `Duplicate ${getObservationFieldName(field)} observations: ${getDuplicateIndexes(context)}`
+}
