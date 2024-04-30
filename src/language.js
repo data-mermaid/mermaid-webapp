@@ -111,6 +111,7 @@ const error = {
   pageNotFound: 'This page cannot be found.',
   pageNotFoundRecovery: 'Make sure the URL is correct.',
   pageReadOnly: 'You cannot access this page because you are a read-only member of this project.',
+  pageAdminOnly: 'You cannot access this page because you are not an admin for this project.',
   idNotFound: 'This item cannot be found.',
   idNotFoundRecovery:
     'It might have been deleted, you do not have permission to view it, or the URL might be wrong.',
@@ -444,6 +445,11 @@ const pages = {
     title: 'Copy Management Regimes',
     filterToolbarText: 'Filter management regimes by name, project, or year',
     copyButtonText: 'Copy selected MRs to project',
+  },
+  gfcrTable: {
+    filterToolbarText: 'Filter this table by indicator set, and other things?',
+    noDataMainText: 'This project has no indicator sets.',
+    title: 'GFCR',
   },
   goToDashboard: 'View on Dashboard',
 }

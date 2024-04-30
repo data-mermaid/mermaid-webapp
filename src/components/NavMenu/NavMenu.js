@@ -10,6 +10,7 @@ import {
   IconCollect,
   IconSites,
   IconData,
+  IconGfcr,
   IconMgmt,
   IconInfo,
   IconUsers,
@@ -17,7 +18,7 @@ import {
   IconUsersAndTransects,
   IconManagementRegimesOverview,
 } from '../icons'
-import { getIsUserReadOnlyForProject } from '../../App/currentUserProfileHelpers'
+import { getIsUserAdminForProject, getIsUserReadOnlyForProject } from '../../App/currentUserProfileHelpers'
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
 import SubNavMenuRecordName from '../SubNavMenuRecordName'
@@ -134,14 +135,17 @@ const NavLinkSidebar = styled(NavLink)`
 `
 const NavMenu = ({ subNavNode }) => {
   const projectUrl = useCurrentProjectPath()
-  const { recordId, submittedRecordId, siteId, managementRegimeId, projectId } = useParams()
+  const { recordId, submittedRecordId, siteId, managementRegimeId, projectId, indicatorSetId } = useParams()
   const { pathname } = useLocation()
   const { currentUser } = useCurrentUser()
 
   const isCollectingSubNode = recordId || pathname.includes('collecting')
   const isSiteSubNode = siteId || pathname.includes('sites')
+  const isGfcrSubNode = indicatorSetId || pathname.includes('gfcr')
   const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
+
 
   const handleImageError = (event) => {
     // eslint-disable-next-line no-param-reassign
@@ -234,6 +238,14 @@ const NavMenu = ({ subNavNode }) => {
                   <span>Data Sharing</span>
                 </NavLinkSidebar>
               </li>
+              <li>
+                {isAdminUser && 
+                <NavLinkSidebar to={`${projectUrl}/gfcr`}>
+                  <IconGfcr />
+                  <span>GFCR</span>
+                </NavLinkSidebar>}
+              </li>
+              {isAdminUser && isGfcrSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             </ul>
           </LiNavSecondary>
         </OfflineHide>

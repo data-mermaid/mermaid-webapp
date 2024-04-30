@@ -16,6 +16,7 @@ import checkIcon from '@iconify-icons/mdi/check'
 import checkOutline from '@iconify-icons/mdi/check-outline'
 import circleEditOutline from '@iconify-icons/mdi/circle-edit-outline'
 import clipboardCheck from '@iconify-icons/mdi/clipboard-check-outline'
+import clipboardEdit from '@iconify-icons/mdi/clipboard-edit'
 import closeIcon from '@iconify-icons/mdi/close'
 import contentCopy from '@iconify-icons/mdi/content-copy'
 import contentSave from '@iconify-icons/mdi/content-save'
@@ -83,6 +84,7 @@ export const IconDownload = (props) => <InlineIcon icon={download} {...props} />
 export const IconExternalLink = (props) => <InlineIcon icon={launch} {...props} />
 export const IconFilter = (props) => <InlineIcon icon={filterOutline} {...props} />
 export const IconFish = (props) => <InlineIcon icon={fish} {...props} />
+export const IconGfcr = (props) => <InlineIcon icon={clipboardEdit} {...props} />
 export const IconGlobe = (props) => <InlineIcon icon={globe} {...props} />
 export const IconGraph = (props) => <InlineIcon icon={chartBar} {...props} />
 export const IconHeart = (props) => <InlineIcon icon={heartOutline} {...props} />
