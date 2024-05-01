@@ -119,6 +119,7 @@ export const projectPropType = PropTypes.shape({
   data_policy_beltfish: PropTypes.number,
   data_policy_benthiclit: PropTypes.number,
   data_policy_bleachingqc: PropTypes.number,
+  includes_gfcr: PropTypes.bool,
 })
 
 export const projectsPropType = PropTypes.arrayOf(projectPropType)
