@@ -5,16 +5,13 @@ import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 
 import { ContentPageLayout } from '../../Layout'
-import CopySitesModal from '../../CopySitesModal'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { getIsUserAdminForProject, getIsUserReadOnlyForProject } from '../../../App/currentUserProfileHelpers'
-import { getObjectById } from '../../../library/getObjectById'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
-import { IconPlus, IconCopy, IconDownload } from '../../icons'
-import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import { IconPlus, IconDownload } from '../../icons'
 import language from '../../../language'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -25,12 +22,10 @@ import {
 } from '../../generic/Table/reactTableNaturalSort'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
-  ButtonPrimary,
   ButtonSecondary,
-  LinkLooksLikeButtonSecondary,
   ToolbarButtonWrapper,
 } from '../../generic/buttons'
-import { ToolBarRow } from '../../generic/positioning'
+import { Column, ToolBarRow } from '../../generic/positioning'
 import {
   Tr,
   Th,
@@ -50,7 +45,36 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 import { getFileExportName } from '../../../library/getFileExportName'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
-import { GfcrPageUnavailablePadding } from './Gfcr.styles'
+import { GfcrPageUnavailablePadding, StyledToolbarButtonWrapper } from './Gfcr.styles'
+import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
+import { DropdownItemStyle } from '../../generic/ButtonSecondaryDropdown/ButtonSecondaryDropdown.styles'
+
+const indicatorSetsDummyData = [
+  {
+    id: 1,
+    name: 'Baseline',
+    type: 'report',
+    year: 2021,
+  },
+  {
+    id: 2,
+    name: 'Phase 1 result',
+    type: 'report',
+    year: 2023,
+  },
+  {
+    id: 3,
+    name: 'Midterm Target',
+    type: 'target',
+    year: 2026,
+  },
+  {
+    id: 4,
+    name: 'FinalTarget',
+    type: 'target',
+    year: 2029,
+  }
+]
 
 const Gfcr = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -73,42 +97,36 @@ const Gfcr = () => {
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
-  const openCopySitesModal = () => setIsCopySitesModalOpen(true)
+  const openCopySitesModal = () => setIsCopySitesModalOpen(true) 
   const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
-  const _getSiteRecords = useEffect(() => {
-    const indicatorSetsDummyData = [
-      {
-        id: 1,
-        name: 'Baseline',
-        type: 'report',
-        year: 2021,
-      },
-      {
-        id: 2,
-        name: 'Phase 1 result',
-        type: 'report',
-        year: 2023,
-      },
-      {
-        id: 3,
-        name: 'Midterm Target',
-        type: 'target',
-        year: 2026,
-      },
-      {
-        id: 4,
-        name: 'FinalTarget',
-        type: 'target',
-        year: 2029,
-      },
-    ]
+  const _getIndicatorSets = useEffect(() => {
+    if (databaseSwitchboardInstance && !isSyncInProgress) {
+      Promise.all([
+        databaseSwitchboardInstance.getIndicatorSets(projectId),
+      ])
+        .then(([indicatorSetsResponse]) => {
+          if (isMounted.current) {
+            setIndicatorSets(indicatorSetsResponse.results)
+            setIsLoading(false)
+          }
+        })
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.gfcrIndicatorSetsUnavailable))
+            },
+          })
+        })
+    }
+  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, handleHttpResponseError, projectId])
 
-    setIndicatorSets(indicatorSetsDummyData)
-    setIsLoading(false)
+    // setIndicatorSets(indicatorSetsDummyData)
+    // setIsLoading(false)
     // if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
     //   Promise.all([
     //     databaseSwitchboardInstance.getSiteRecordsForUIDisplay(projectId),
@@ -141,7 +159,7 @@ const Gfcr = () => {
     //     })
     // }
   // }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, handleHttpResponseError])
-  }, [])
+  // }, [])
 
   // const addCopiedSitesToSiteTable = (copiedSites) => {
   //   setSiteRecordsForUiDisplay([...siteRecordsForUiDisplay, ...copiedSites])
@@ -329,28 +347,37 @@ const Gfcr = () => {
     </>
   )
 
+  const createDropdownLabel = (
+    <>
+      <IconPlus /> Create new
+    </>
+  )
+
+  const handleNewAnnualReport = (type) => {
+    console.log('New Annual Report', type)
+  }
+
   const toolbarButtonsByRole = isReadOnlyUser ? (
     <>
       <ToolbarButtonWrapper>{readOnlySitesHeaderContent}</ToolbarButtonWrapper>
     </>
   ) : (
     <>
-      <ToolbarButtonWrapper>
-        <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
-          <IconPlus /> New indicator set
-        </LinkLooksLikeButtonSecondary>
-        {isAppOnline ? (
-          <ButtonSecondary type="button" onClick={openCopySitesModal}>
-            <IconCopy /> {language.pages.siteTable.copySitesButtonText}
-          </ButtonSecondary>
-        ) : null}
-        {readOnlySitesHeaderContent}
-      </ToolbarButtonWrapper>
-      {/* <CopySitesModal
-        isOpen={isCopySitesModalOpen}
-        onDismiss={closeCopySitesModal}
-        addCopiedSitesToSiteTable={addCopiedSitesToSiteTable}
-      /> */}
+      <StyledToolbarButtonWrapper>
+        <ButtonSecondaryDropdown label={createDropdownLabel}>
+          <Column as="nav" data-testid="export-to-csv">
+            <DropdownItemStyle as="button" onClick={() => handleNewAnnualReport('annualReport')}>
+              Annual Report
+            </DropdownItemStyle>
+            <DropdownItemStyle as="button" onClick={() => handleNewAnnualReport('target')}>
+              Target
+            </DropdownItemStyle>
+          </Column>
+        </ButtonSecondaryDropdown>
+        <ButtonSecondary to="" disabled={!indicatorSets.length}>
+          <IconDownload /> Export
+        </ButtonSecondary>
+      </StyledToolbarButtonWrapper>
     </>
   )
 
@@ -392,7 +419,6 @@ const Gfcr = () => {
               return (
                 <Tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
-                    console.log(cell.column)
                     return (
                       <Td {...cell.getCellProps()} align={cell.column.align}>
                         {cell.render('Cell')}
@@ -428,12 +454,8 @@ const Gfcr = () => {
     </>
   ) : (
     <PageUnavailable
-      mainText={language.pages.siteTable.noDataMainText}
-      subText={
-        <ButtonPrimary type="button" onClick={openCopySitesModal}>
-          <IconCopy /> {language.pages.siteTable.copySitesButtonText}
-        </ButtonPrimary>
-      }
+      mainText={language.pages.gfcrTable.noDataMainText}
+      subText={language.pages.gfcrTable.noDataSubText}
     />
   )
 

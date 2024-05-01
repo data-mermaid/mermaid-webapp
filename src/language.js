@@ -68,6 +68,7 @@ const error = {
     `The ${mermaidDataTypeLabel} failed to save both on your computer and online.`,
   getDeleteOfflineErrorTitle: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has failed to delete from your computer or online.`,
+  gfcrIndicatorSetsUnavailable: 'GFCR indicator sets are currently unavailable.',
   idNotFoundUserAction: "Please check the URL in your browser's address bar.",
   invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable: 'Management Regime records data are currently unavailable.',
@@ -448,8 +449,9 @@ const pages = {
   },
   gfcrTable: {
     filterToolbarText: 'Filter this table by indicator set, and other things?',
-    noDataMainText: 'This project has no indicator sets.',
     title: 'GFCR',
+    noDataMainText: 'No indicator sets yet.',
+    noDataSubText: "Select 'Create new' to add an indicator set to this project."
   },
   goToDashboard: 'View on Dashboard',
 }
