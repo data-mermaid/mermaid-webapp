@@ -6,7 +6,6 @@
     "plugin:jest-dom/recommended"
   ],
   "plugins": ["react-hooks", "jsx-a11y"],
- 
   "parserOptions": {
     "parser": "@babel/eslint-parser",
     "sourceType": "module",
@@ -25,7 +24,8 @@
     "curly": ["error", "all"],
     "no-underscore-dangle": "off",
     "react/jsx-props-no-spreading": "off",
-    "react/jsx-boolean-value": "off",
+    "react/jsx-boolean-value": "off", 
+    "react/jsx-key": [1, { "checkFragmentShorthand": true }],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
     "no-console": ["error", {"allow": ["warn", "error"]}],
@@ -57,14 +57,14 @@
     "node": true,
     "es6": true
   },
-"globals": {
-  "window": true,
-  "document": true,
-  "localStorage": true,
-  "FormData": true,
-  "FileReader": true,
-  "Blob": true,
-  "navigator": true,
-  "fetch": true
-}
+  "globals": {
+    "window": true,
+    "document": true,
+    "localStorage": true,
+    "FormData": true,
+    "FileReader": true,
+    "Blob": true,
+    "navigator": true,
+    "fetch": true
+  }
 }

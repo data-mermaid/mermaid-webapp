@@ -40,7 +40,7 @@ import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerC
 
 const DEFAULT_PAGE_SIZE = 7
 
-// eslint-disable-next-line react/prop-types
+// eslint-disable-next-line react/prop-types, react/display-name
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = useRef()
   const resolvedRef = ref || defaultRef

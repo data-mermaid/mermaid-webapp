@@ -36,7 +36,6 @@ const HideShow = ({ contents, button, closeOnClickWithin }) => {
 
       // Proceed if the click is not on the button
       if (!(currentButtonRef && currentButtonRef.contains(event.target))) {
-
         if (closeOnClickWithin) {
           setShowItems(false)
         }
@@ -51,14 +50,14 @@ const HideShow = ({ contents, button, closeOnClickWithin }) => {
       }
     }
 
-    window.addEventListener('click', event => {
+    window.addEventListener('click', (event) => {
       if (isMounted.current) {
         handleClick(event)
       }
     })
 
     return () => {
-      window.removeEventListener('click', event => {
+      window.removeEventListener('click', (event) => {
         handleClick(event)
       })
     }
@@ -79,7 +78,7 @@ const HideShow = ({ contents, button, closeOnClickWithin }) => {
 }
 
 HideShow.defaultProps = {
-  closeOnClickWithin: true
+  closeOnClickWithin: true,
 }
 
 HideShow.propTypes = {
