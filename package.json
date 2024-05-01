@@ -6,6 +6,7 @@
   "dependencies": {
     "@auth0/auth0-react": "^1.2.0",
     "@babel/core": "^7.23.5",
+    "@babel/eslint-parser": "^7.24.5",
     "@babel/plugin-transform-react-jsx": "^7.14.9",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -65,11 +66,10 @@
   "resolutions": {
     "styled-components": "^5",
     "babel-loader": "8.1.0",
-    "//": "See https://github.com/facebook/create-react-app/issues/11773",
     "react-error-overlay": "6.0.9"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
     "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "test": "TZ=UTC react-scripts test",
     "eject": "react-scripts eject",
@@ -97,7 +97,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/plugin-syntax-flow": "^7.23.3",
-    "@sparkgeo/eslint-config-react": "^0.9.0",
+    "@babel/preset-react": "^7.24.1",
     "@testing-library/dom": "^9.3.3",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.1.2",
