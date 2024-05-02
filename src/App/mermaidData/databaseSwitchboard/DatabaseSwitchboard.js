@@ -10,6 +10,7 @@ import SitesMixin from './SitesMixin'
 import FishNameMixin from './FishNamesMixin'
 import SubmittedRecordsMixin from './SubmittedRecordsMixin'
 import ProjectHealthMixin from './ProjectHealthMixin'
+import GfcrMixin from './GfcrMixin'
 
 class DatabaseSwitchboard extends ProjectHealthMixin(
   BenthicAttributesMixin(
@@ -17,7 +18,15 @@ class DatabaseSwitchboard extends ProjectHealthMixin(
       SubmittedRecordsMixin(
         SitesMixin(
           ProjectsMixin(
-            ChoicesMixin(ManagementRegimesMixin(CollectRecordsMixin(DatabaseSwitchboardState))),
+            ChoicesMixin(
+              ManagementRegimesMixin(
+                CollectRecordsMixin(
+                  GfcrMixin(
+                    DatabaseSwitchboardState
+                  )
+                )
+              )
+            ),
           ),
         ),
       ),
