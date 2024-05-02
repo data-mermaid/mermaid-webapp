@@ -13,6 +13,11 @@
     "ecmaFeatures": {
       "jsx": true
     },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
     "babelOptions": {
       "babelrc": false,
       "configFile": false,
@@ -24,11 +29,11 @@
     "curly": ["error", "all"],
     "no-underscore-dangle": "off",
     "react/jsx-props-no-spreading": "off",
-    "react/jsx-boolean-value": "off", 
+    "react/jsx-boolean-value": "off",
     "react/jsx-key": [1, { "checkFragmentShorthand": true }],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
-    "no-console": ["error", {"allow": ["warn", "error"]}],
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "no-undef-init": "error",
     "no-unused-vars": [
       "error",

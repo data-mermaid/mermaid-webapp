@@ -817,7 +817,7 @@ const Users = () => {
         <GenericStickyTable {...getTableProps()} cursor={isTableUpdating ? 'wait' : 'pointer'}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
+              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
@@ -826,6 +826,7 @@ const Users = () => {
                   return (
                     <Th
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
+                      key={column.id}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
@@ -844,10 +845,14 @@ const Users = () => {
               prepareRow(row)
 
               return (
-                <Tr {...row.getRowProps()}>
+                <Tr key={row.id} {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <UserTableTd {...cell.getCellProps()} align={cell.column.align}>
+                      <UserTableTd
+                        key={cell.column.id}
+                        {...cell.getCellProps()}
+                        align={cell.column.align}
+                      >
                         {cell.render('Cell')}
                       </UserTableTd>
                     )
