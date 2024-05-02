@@ -38,7 +38,3 @@ jsconfig.json
 # pycharm/IDEA/pyenv
 .idea/
 .python-version
-
-#yarn
-.yarnrc.yml
-.yarn/*
