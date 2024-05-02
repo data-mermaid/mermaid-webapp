@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { NavLink, useParams, useLocation } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { subNavNodePropTypes } from '../SubNavMenuRecordName/subNavNodePropTypes'
 import theme from '../../theme'
 import { mediaQueryPhoneOnly, hoverState } from '../../library/styling/mediaQueries'
@@ -22,6 +23,13 @@ import { getIsUserAdminForProject, getIsUserReadOnlyForProject } from '../../App
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
 import SubNavMenuRecordName from '../SubNavMenuRecordName'
+import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
+import useIsMounted from '../../library/useIsMounted'
+import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
+import { getToastArguments } from '../../library/getToastArguments'
+import language from '../../language'
+import { useCurrentProject } from '../../App/CurrentProjectContext'
 
 const NavWrapper = styled('nav')`
   background: ${theme.color.grey4};
@@ -138,7 +146,11 @@ const NavMenu = ({ subNavNode }) => {
   const { recordId, submittedRecordId, siteId, managementRegimeId, projectId, indicatorSetId } = useParams()
   const { pathname } = useLocation()
   const { currentUser } = useCurrentUser()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
+  const { isAppOnline } = useOnlineStatus()
+  const isMounted = useIsMounted()
   const isCollectingSubNode = recordId || pathname.includes('collecting')
   const isSiteSubNode = siteId || pathname.includes('sites')
   const isGfcrSubNode = indicatorSetId || pathname.includes('gfcr')
@@ -146,11 +158,44 @@ const NavMenu = ({ subNavNode }) => {
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
+  const { currentProject, setCurrentProject } = useCurrentProject()
 
   const handleImageError = (event) => {
     // eslint-disable-next-line no-param-reassign
     event.target.style.display = 'none'
   }
+
+  const _getProjectData = useEffect(() => {
+    if (!currentProject && isAppOnline && databaseSwitchboardInstance && projectId) {
+      const promises = [
+        databaseSwitchboardInstance.getProject(projectId),
+      ]
+
+      Promise.all(promises)
+        .then(([projectResponse]) => {
+          if (isMounted.current) {
+            // This is set back to undefined in Layout.js if pathname === '/projects'
+            setCurrentProject(projectResponse)
+          }
+        })
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.projectsUnavailable))
+            },
+          })
+        })
+    }
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isMounted,
+    isAppOnline,
+    handleHttpResponseError,
+    setCurrentProject,
+    currentProject
+  ])
 
   return (
     <NavWrapper data-testid="content-page-side-nav">
@@ -239,11 +284,12 @@ const NavMenu = ({ subNavNode }) => {
                 </NavLinkSidebar>
               </li>
               <li>
-                {isAdminUser && 
+              {currentProject?.includes_gfcr &&
                 <NavLinkSidebar to={`${projectUrl}/gfcr`}>
                   <IconGfcr />
                   <span>GFCR</span>
-                </NavLinkSidebar>}
+                </NavLinkSidebar>
+              }
               </li>
               {isAdminUser && isGfcrSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             </ul>
