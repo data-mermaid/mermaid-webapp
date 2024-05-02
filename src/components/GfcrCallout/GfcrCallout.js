@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconCloseCircle, IconGfcr } from '../icons'
 import language from '../../language'
+import theme from '../../theme'
 
 const StyledGfcrCallout = styled('div')`
   padding: 10px;
@@ -40,19 +41,23 @@ const StyledIconIconGfcr = styled(IconGfcr)`
   ${iconStyle}
 `
 
+const StyledParagraph = styled('p')`
+  max-width: ${theme.spacing.maxTextWidth};
+`
+
 const GfcrCallout = ({ isGfcr, handleUpdateIncludesGfcr }) => {
   return (
     <StyledGfcrCallout>
       <h3>{language.pages.projectInfo.gfcrCalloutHeading}</h3>
       {isGfcr
         ? <>
-          <p>{language.pages.projectInfo.gfcrRemoveParagraph}</p>
+          <StyledParagraph>{language.pages.projectInfo.gfcrRemoveParagraph}</StyledParagraph>
           <StyledButtonSecondary type="button" onClick={() => handleUpdateIncludesGfcr(false)}>
             <StyledIconCloseCircle inline={true}/> {language.pages.projectInfo.gfcrRemoveButton}
           </StyledButtonSecondary>
         </>
         : <>
-          <p>{language.pages.projectInfo.gfcrAddParagraph}</p>
+          <StyledParagraph>{language.pages.projectInfo.gfcrAddParagraph}</StyledParagraph>
           <StyledButtonPrimary type="button" onClick={() => handleUpdateIncludesGfcr(true)}>
             <StyledIconIconGfcr /> {language.pages.projectInfo.gfcrAddButton}
           </StyledButtonPrimary>
