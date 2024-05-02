@@ -1,12 +1,9 @@
 import React from 'react'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 
-const OfflineToggle = props => {
-  const {
-    isAppOnline,
-    canUserOverrideOnlineStatus,
-    toggleUserOnlineStatusOverride,
-  } = useOnlineStatus()
+const OfflineToggle = (props) => {
+  const { isAppOnline, canUserOverrideOnlineStatus, toggleUserOnlineStatusOverride } =
+    useOnlineStatus()
 
   return (
     <input

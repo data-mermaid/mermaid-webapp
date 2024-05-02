@@ -2,9 +2,7 @@ const setObjectPropertyOnClone = ({ object, path, value }) => {
   // this returns a new object and leaves the original untouched
 
   if (!object || !path) {
-    throw new Error(
-      'setObjectPropertyOnClone requires parameters for object and path',
-    )
+    throw new Error('setObjectPropertyOnClone requires parameters for object and path')
   }
   const properties = path.split('.')
   const propertiesLength = properties.length

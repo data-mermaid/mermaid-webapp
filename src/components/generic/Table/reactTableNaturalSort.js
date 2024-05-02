@@ -46,5 +46,5 @@ export {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
   reactTableNaturalSortReactNodesSecondChild,
-  reactTableNaturalSortDates
+  reactTableNaturalSortDates,
 }
