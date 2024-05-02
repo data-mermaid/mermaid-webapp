@@ -7,7 +7,7 @@
   ],
   "plugins": ["react-hooks", "jsx-a11y"],
   "parserOptions": {
-    "parser": "@babel/eslint-parser",
+    "parser": "@babel/preset-react",
     "sourceType": "module",
     "ecmaVersion": 2023,
     "ecmaFeatures": {
