@@ -8,10 +8,12 @@ const getObservationValidations = ({ observationId, collectRecord, observationsP
     (record) => record?.code === 'duplicate_values',
   )
 
-  const isObservationIdIncludedInDuplicateRecordValidator =
-    !!duplicateRecordValidator?.[0]?.context?.duplicates[0]?.filter(
-      (obs) => obs.id === observationId,
-    ).length
+  const isObservationIdIncludedInDuplicateRecordValidator = duplicateRecordValidator?.some(
+    (validator) =>
+      validator?.context?.duplicates?.some((duplicateArray) =>
+        duplicateArray?.some((obs) => obs.id === observationId),
+      ),
+  )
 
   const justThisObservationsValidations = allObservationsValidations.flat().filter((validation) => {
     // api is inconsistent between id and observation_id
