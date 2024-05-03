@@ -38,7 +38,7 @@ import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerC
 
 const DEFAULT_PAGE_SIZE = 7
 
-// eslint-disable-next-line react/prop-types
+// eslint-disable-next-line react/prop-types, react/display-name
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = useRef()
   const resolvedRef = ref || defaultRef
@@ -330,7 +330,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
+              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
@@ -338,6 +338,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
 
                   return (
                     <Th
+                      key={column.id}
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
@@ -355,10 +356,10 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
               prepareRow(row)
 
               return (
-                <Tr {...row.getRowProps()}>
+                <Tr key={row.id} {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                      <Td key={cell.column.id} {...cell.getCellProps()} align={cell.column.align}>
                         {cell.render('Cell')}
                       </Td>
                     )

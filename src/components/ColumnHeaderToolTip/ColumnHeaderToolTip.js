@@ -37,6 +37,7 @@ export const TooltipPopup = styled('span')`
   text-align: left;
 `
 
+// eslint-disable-next-line react/display-name
 const ColumnHeaderToolTip = forwardRef(({ helperText, left, top, maxWidth, html }, ref) => {
   const sanitizeHtml = domPurify.sanitize
   const dirtyHTML = html

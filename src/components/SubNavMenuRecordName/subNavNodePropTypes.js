@@ -5,4 +5,3 @@ export const subNavNodePropTypes = PropTypes.shape({
   number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   label: PropTypes.string,
 })
-
