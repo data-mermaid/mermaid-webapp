@@ -139,6 +139,7 @@ export const Textarea = styled.textarea`
 export const LabelContainer = styled.div`
   display: flex;
   flex-direction: row;
+  position: relative;
 `
 export const InputContainer = styled.div`
   display: flex;

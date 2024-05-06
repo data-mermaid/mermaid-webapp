@@ -17,17 +17,19 @@ const LoadingModal = ({ displayModalTimingSeconds }) => {
     }
   })
 
-  return (displayModal) && (
-    <StyledDialogOverlay>
-      <ModalContent>
-        <LoadingIndicator />
-      </ModalContent>
-    </StyledDialogOverlay>
+  return (
+    displayModal && (
+      <StyledDialogOverlay>
+        <ModalContent>
+          <LoadingIndicator />
+        </ModalContent>
+      </StyledDialogOverlay>
+    )
   )
 }
 
 LoadingModal.defaultProps = {
-  displayModalTimingSeconds: 1
+  displayModalTimingSeconds: 1,
 }
 
 LoadingModal.propTypes = {

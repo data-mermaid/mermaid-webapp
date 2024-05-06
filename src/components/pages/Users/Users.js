@@ -451,7 +451,11 @@ const Users = () => {
             <LabelContainer>
               Admin
               {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
-                <ColumnHeaderToolTip helperText={language.tooltipText.admin} left="-4.2em" />
+                <ColumnHeaderToolTip
+                  helperText={language.tooltipText.admin}
+                  left="-5em"
+                  top="-13.7em"
+                />
               ) : null}
               <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'admin')}>
                 <IconInfo aria-label="info" />
@@ -468,7 +472,11 @@ const Users = () => {
             <LabelContainer>
               Collector
               {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
-                <ColumnHeaderToolTip helperText={language.tooltipText.collector} left="-2.5em" />
+                <ColumnHeaderToolTip
+                  helperText={language.tooltipText.collector}
+                  left="-2.5em"
+                  top="-13.7em"
+                />
               ) : null}
               <IconButton
                 type="button"
@@ -489,7 +497,11 @@ const Users = () => {
             <LabelContainer>
               Read-Only
               {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
-                <ColumnHeaderToolTip helperText={language.tooltipText.readOnly} left="-1.8em" />
+                <ColumnHeaderToolTip
+                  helperText={language.tooltipText.readOnly}
+                  left="-2.5em"
+                  top="-7.7em"
+                />
               ) : null}
               <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'readOnly')}>
                 <IconInfo aria-label="info" />
@@ -805,7 +817,7 @@ const Users = () => {
         <GenericStickyTable {...getTableProps()} cursor={isTableUpdating ? 'wait' : 'pointer'}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
+              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
@@ -814,6 +826,7 @@ const Users = () => {
                   return (
                     <Th
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
+                      key={column.id}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
@@ -832,10 +845,14 @@ const Users = () => {
               prepareRow(row)
 
               return (
-                <Tr {...row.getRowProps()}>
+                <Tr key={row.id} {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <UserTableTd {...cell.getCellProps()} align={cell.column.align}>
+                      <UserTableTd
+                        key={cell.column.id}
+                        {...cell.getCellProps()}
+                        align={cell.column.align}
+                      >
                         {cell.render('Cell')}
                       </UserTableTd>
                     )

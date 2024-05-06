@@ -3,8 +3,12 @@ import React from 'react'
 
 import { PROJECT_CODES } from './library/constants/constants'
 import {
-  getSystemValidationErrorMessage,
+  getDuplicateValuesValidationMessage,
   getDuplicateSampleUnitLink,
+  getInvalidBleachingObsMessage,
+  getInvalidBleachingObsTotalMessage,
+  getObservationsCountMessage,
+  getSystemValidationErrorMessage,
   goToManagementOverviewPageLink,
 } from './library/validationMessageHelpers'
 import { HelperTextLink } from './components/generic/links'
@@ -503,7 +507,7 @@ const getResolveModalLanguage = (siteOrManagementRegime) => {
 }
 
 const getValidationMessage = (validation, projectId = '') => {
-  const { code, context, name } = validation
+  const { code, context, fields, name } = validation
 
   const validationMessages = {
     all_attributes_same_category: () => `All benthic attributes are ${context?.category}`,
@@ -518,7 +522,13 @@ const getValidationMessage = (validation, projectId = '') => {
     duplicate_quadrat_transect: () =>
       getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
     duplicate_transect: () => 'Transect already exists',
-    duplicate_values: () => 'Duplicate',
+    duplicate_values: () =>
+      fields?.length
+        ? getDuplicateValuesValidationMessage(fields[0], context?.duplicates)
+        : 'Duplicate',
+    invalid_count: () => getInvalidBleachingObsMessage(context, 'colony count'),
+    invalid_percent_value: () => getInvalidBleachingObsMessage(context, 'percent cover'),
+    invalid_total: () => getInvalidBleachingObsTotalMessage(context),
     exceed_total_colonies: () => 'Maximum number of colonies exceeded',
     future_sample_date: () => 'Sample date is in the future',
     high_density: () => `Fish biomass greater than ${context?.biomass_range[1]} kg/ha`,
@@ -536,7 +546,6 @@ const getValidationMessage = (validation, projectId = '') => {
       'One or more invalid fields: site, management, sample date, transect number, width, depth',
     invalid_number_of_points: () =>
       `Total number of points entered for quadrats: ${context?.invalid_quadrat_numbers} does not match defined number of points per quadrat`,
-    invalid_percent_value: () => 'Percent value must be a non-negative number',
     invalid_quadrat_collection: () =>
       'One or more invalid transect fields: site, management, date, depth',
     invalid_quadrat_size: () => 'Quadrat size must be a positive number',
@@ -545,7 +554,6 @@ const getValidationMessage = (validation, projectId = '') => {
       'One or more invalid fields: site, management, sample date, transect number, depth',
     invalid_sample_date: () => 'Invalid date',
     invalid_score: () => `Invalid score`,
-    invalid_total_percent: () => `Sum of percents must not be less than 0 or greater than 100`,
     large_num_quadrats: () => 'Number of quadrats is too large',
     len_surveyed_not_positive: () => 'Transect length must be a non-negative number',
     len_surveyed_out_of_range: () =>
@@ -572,8 +580,8 @@ const getValidationMessage = (validation, projectId = '') => {
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
     similar_name: () => 'Another Management Regime is similar to this one.',
     site_not_found: () => 'Site record not available for similarity validation',
-    too_many_observations: () => `Greater than ${context?.observation_count_range[1]} observations`,
-    too_few_observations: () => `Fewer than ${context?.observation_count_range[0]} observations`,
+    too_many_observations: () => getObservationsCountMessage(context, fields, 'Greater'),
+    too_few_observations: () => getObservationsCountMessage(context, fields, 'Fewer'),
     unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
     value_not_set: () => 'Value is not set',
     default: () => code || name,

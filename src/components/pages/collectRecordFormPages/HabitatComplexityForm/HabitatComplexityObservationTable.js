@@ -261,7 +261,8 @@ const HabitatComplexityObservationsTable = ({
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                         <ColumnHeaderToolTip
                           helperText={language.tooltipText.habitatComplexityScore}
-                          left="9em"
+                          left="8.3em"
+                          top="-21em"
                         />
                       ) : null}
                       <IconButton
