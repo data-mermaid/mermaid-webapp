@@ -470,8 +470,21 @@ const pages = {
     noDataMainText: 'No indicator sets yet.',
     noDataSubText: "Select 'Create new' to add an indicator set to this project.",
   },
-  gfcrIndicatorSetForm: {
+  gfcrIndicatorSet: {
     title: 'Indicator Set',
+  },
+  gfcrIndicatorSetNav: {
+    indicatorSetHeading: 'Indicator Set',
+    f1: 'Coral reef extent of GFCR project',
+    f2: 'Area of coral reefs under conservation and sustainable management',
+    f3: 'Area of coral reefs under effective coral restoration',
+    f4: 'Change in coral reef health',
+    f5: 'Number of communities engaged in meaningful participation, co-development and capacity strengthening',
+    f6: 'Number of people supported through livelihoods, direct jobs, income, and nutrition',
+    f7: 'Number of people supported to better adapt, respond and recover to the effects of climate change and major external shocks as a result of GFCR',
+    financialData: 'Financial Data (F8, F9, F10)',
+    investmentSources: 'Investment Sources',
+    revenueStreams: 'Revenue Streams',
   },
   goToDashboard: 'View on Dashboard',
 }

@@ -160,7 +160,6 @@ const NavMenu = ({ subNavNode }) => {
   const isGfcrSubNode = indicatorSetId || pathname.includes('gfcr')
   const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
-  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   const { currentProject, setCurrentProject } = useCurrentProject()
 

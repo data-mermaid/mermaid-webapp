@@ -4,52 +4,34 @@ import { useParams, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
-import { buttonGroupStates } from '../../../library/buttonGroupStates'
-import { ContentPageLayout } from '../../Layout'
-import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
-import { formikPropType } from '../../../library/formikPropType'
-import {
-  getIsUserReadOnlyForProject,
-  getIsUserAdminForProject,
-} from '../../../App/currentUserProfileHelpers'
-import { getOptions } from '../../../library/getOptions'
+import { buttonGroupStates } from '../../../../library/buttonGroupStates'
+import { ContentPageLayout } from '../../../Layout'
+import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
+import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
 import { getIndicatorSetFormInitialValues } from './indicatorSetFormInitialValues'
-import { getToastArguments } from '../../../library/getToastArguments'
-import { H2, ItalicizedInfo } from '../../generic/text'
-import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import { InputRow, InputWrapper, RequiredIndicator } from '../../generic/form'
-import { showSyncToastError } from '../../../library/showSyncToastError'
-import { sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
-import { Table } from '../../generic/Table/table'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
-import DeleteRecordButton from '../../DeleteRecordButton'
-import EnhancedPrompt from '../../generic/EnhancedPrompt'
-import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import InputAutocomplete from '../../generic/InputAutocomplete'
-import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
-import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../language'
-import LoadingModal from '../../LoadingModal/LoadingModal'
-import PageUnavailable from '../PageUnavailable'
-import SaveButton from '../../generic/SaveButton'
-import SingleSiteMap from '../../mermaidMap/SingleSiteMap'
-import TableRowItem from '../../generic/Table/TableRowItem'
-import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import useDocumentTitle from '../../../library/useDocumentTitle'
-import useIsMounted from '../../../library/useIsMounted'
-import InputSelectWithLabelAndValidation from '../../mermaidInputs/InputSelectWithLabelAndValidation'
-import { DeleteRecordButtonCautionWrapper } from '../collectRecordFormPages/CollectingFormPage.Styles'
-import { IconSwap } from '../../icons'
-import { InputButton } from '../../generic/buttons'
-import { useCurrentProject } from '../../../App/CurrentProjectContext'
-import styled from 'styled-components'
+import { getToastArguments } from '../../../../library/getToastArguments'
+import { H2, ItalicizedInfo } from '../../../generic/text'
+import { Table } from '../../../generic/Table/table'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import { useOnlineStatus } from '../../../../library/onlineStatusContext'
+import EnhancedPrompt from '../../../generic/EnhancedPrompt'
+import language from '../../../../language'
+import LoadingModal from '../../../LoadingModal/LoadingModal'
+import SaveButton from '../../../generic/SaveButton'
+import SingleSiteMap from '../../../mermaidMap/SingleSiteMap'
+import TableRowItem from '../../../generic/Table/TableRowItem'
+import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
+import useDocumentTitle from '../../../../library/useDocumentTitle'
+import useIsMounted from '../../../../library/useIsMounted'
+import { DeleteRecordButtonCautionWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
+import { IconSwap } from '../../../icons'
+import { InputButton } from '../../../generic/buttons'
+import { useCurrentProject } from '../../../../App/CurrentProjectContext'
+import GfcrIndicatorSetNav from '../GfcrIndicatorSetNav'
+import GfcrIndicatorSetForm from '../GfcrIndicatorSetForm/GfcrIndicatorSetForm'
 
 const ReadOnlySiteContent = ({
   site,
@@ -86,104 +68,6 @@ const ReadOnlySiteContent = ({
   )
 }
 
-const SwapButton = ({ isDisabled, handleSwapClick, swapLabel }) => {
-  return (
-    <InputButton type="button" disabled={isDisabled} onClick={handleSwapClick}>
-      <IconSwap />
-      <span>{swapLabel}</span>
-    </InputButton>
-  )
-}
-
-const enforceNumberInput = (event) => {
-  // Allow only numbers, special key presses, and copy paste shortcuts.
-  const specialActionAndCharacterKeys = [
-    'ArrowUp',
-    'ArrowDown',
-    'ArrowLeft',
-    'ArrowRight',
-    'Backspace',
-    'Delete',
-    '-',
-    '.',
-    'Tab',
-  ]
-
-  const isModifiersKeyPressed = event.metaKey || event.ctrlKey || event.shiftKey
-  const isMovingAndSpecialCharactersKeyPressed = specialActionAndCharacterKeys.includes(event.key)
-  const isNumbersKeyPressed =
-    (event.keyCode >= 48 && event.keyCode <= 58) || (event.keyCode >= 96 && event.keyCode <= 105)
-
-  return !(isModifiersKeyPressed || isMovingAndSpecialCharactersKeyPressed || isNumbersKeyPressed)
-}
-
-const StyledYearInputWithLabelAndValidation = styled(InputWithLabelAndValidation)`
-  width: 10rem;
-`
-
-const handleInputBlur = (formik, event, fieldName) => {
-  const { value } = event.target
-
-  if (value.trim() === '') {
-    setInputToDefaultValue(formik, fieldName)
-  }
-}
-
-const setInputToDefaultValue = (formik, fieldName) => {
-  formik.setFieldValue(fieldName, formik.initialValues[fieldName])
-}
-
-const IndicatorSetForm = ({ formik, isAppOnline }) => {
-  return (
-    <form id="indicator-set-form" onSubmit={formik.handleSubmit}>
-      <InputWrapper>
-        <InputWithLabelAndValidation
-          required
-          label="Title"
-          id="gfcr-title"
-          type="text"
-          {...formik.getFieldProps('title')}
-          validationType={formik.errors.title && formik.touched.title ? 'error' : null}
-          validationMessages={formik.errors.title}
-          /* helperText={language.helperText.siteName} */
-        />
-        <InputWithLabelAndValidation
-          label="Reporting Date"
-          id="gfcr-report_date"
-          type="date"
-          {...formik.getFieldProps('report_date')}
-          validationType={formik.errors.report_date && formik.touched.report_date ? 'error' : null}
-          validationMessages={formik.errors.report_date}
-          onBlur={(event) => handleInputBlur(formik, event, 'report_date')}
-          value={formik.values.report_date}
-          helperText={language.helperText.sampleDate}
-        />
-        <StyledYearInputWithLabelAndValidation
-          required
-          label="Reporting Year"
-          id="gfcr-report-year"
-          type="number"
-          {...formik.getFieldProps('report_year')}
-          validationType={formik.errors.report_year && formik.touched.report_year ? 'error' : null}
-          validationMessages={formik.errors.report_year}
-          onBlur={(event) => {
-            const { value } = event.target
-            const trimmedValue = value.trim()
-
-            if (
-              trimmedValue === '' ||
-              parseInt(trimmedValue) < 1900 ||
-              parseInt(trimmedValue) > 2099
-            ) {
-              setInputToDefaultValue(formik, 'report_year')
-            }
-          }}
-        />
-      </InputWrapper>
-    </form>
-  )
-}
-
 const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
@@ -209,9 +93,11 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   // const [isDeletingSite, setIsDeletingSite] = useState(false)
   // const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
   // const [currentDeleteRecordModalPage, setCurrentDeleteRecordModalPage] = useState(1)
+  const [selectedNavItem, setSelectedNavItem] = useState('indicator-set')
 
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new indicator set is saved (and that triggers a navigation to its new page)
   const indicatorSetType = indicatorSetBeingEdited?.indicator_set_type || newIndicatorSetType
+  const indicatorSetTypeName = indicatorSetType === 'annual_report' ? 'Annual Report' : 'Target'
 
   // const goToPageOneOfDeleteRecordModal = () => {
   //   setCurrentDeleteRecordModalPage(1)
@@ -387,9 +273,11 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     },
   })
 
-  // useDocumentTitle(
-  //   `${language.pages.siteForm.title} - ${formik.values.name} - ${language.title.mermaid}`,
-  // )
+  useDocumentTitle(
+    newIndicatorSetType
+      ? language.pages.gfcrIndicatorSetForm.title
+      : `${formik.values.title} | ${indicatorSetTypeName} | ${formik.values.report_year}`,
+  )
 
   // const { setFieldValue: formikSetFieldValue } = formik
 
@@ -474,8 +362,16 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   // )
 
   const contentViewByRole = (
-    <>
-      <IndicatorSetForm formik={formik} isAppOnline={isAppOnline} />
+    <div
+      style={{
+        display: 'flex',
+      }}
+    >
+      <GfcrIndicatorSetNav
+        selectedNavItem={selectedNavItem}
+        setSelectedNavItem={setSelectedNavItem}
+      />
+      <GfcrIndicatorSetForm formik={formik} selectedNavItem={selectedNavItem} />
       {/* {isAdminUser && isAppOnline && (
         <DeleteRecordButton
           currentPage={currentDeleteRecordModalPage}
@@ -496,7 +392,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       ) : null}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
-    </>
+    </div>
   )
 
   // return displayIdNotFoundErrorPage ? (
@@ -505,7 +401,6 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   //     content={<IdsNotFound ids={idsNotAssociatedWithData} />}
   //   />
   // ) : (
-  const indicatorSetTypeName = indicatorSetType === 'annual_report' ? 'Annual Report' : 'Target'
 
   return (
     <ContentPageLayout
@@ -535,21 +430,6 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     />
   )
   // )
-}
-
-// ReadOnlySiteContent.propTypes = {
-//   site: sitePropType.isRequired,
-//   countryOptions: inputOptionsPropTypes.isRequired,
-//   exposureOptions: inputOptionsPropTypes.isRequired,
-//   reefTypeOptions: inputOptionsPropTypes.isRequired,
-//   reefZoneOptions: inputOptionsPropTypes.isRequired,
-//   isReadOnlyUser: PropTypes.bool.isRequired,
-//   isAppOnline: PropTypes.bool.isRequired,
-// }
-
-IndicatorSetForm.propTypes = {
-  formik: formikPropType.isRequired,
-  isAppOnline: PropTypes.bool.isRequired,
 }
 
 // SwapButton.propTypes = {
