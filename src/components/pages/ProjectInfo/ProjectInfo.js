@@ -498,3 +498,5 @@ OrganizationList.propTypes = {
   organizations: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleOrganizationsChange: PropTypes.func.isRequired,
 }
+
+export default ProjectInfo

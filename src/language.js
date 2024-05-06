@@ -10,7 +10,6 @@ import {
   getObservationsCountMessage,
   getSystemValidationErrorMessage,
   goToManagementOverviewPageLink,
-  getDuplicateValuesValidationMessage,
 } from './library/validationMessageHelpers'
 import { HelperTextLink } from './components/generic/links'
 
