@@ -189,16 +189,7 @@ const NavMenu = ({ subNavNode }) => {
           })
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    projectId,
-    isMounted,
-    isAppOnline,
-    handleHttpResponseError,
-    setCurrentProject,
-    currentProject,
-    gfcr,
-  ])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError, setCurrentProject, currentProject])
 
   return (
     <NavWrapper data-testid="content-page-side-nav">
