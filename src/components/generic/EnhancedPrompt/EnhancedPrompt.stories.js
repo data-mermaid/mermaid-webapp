@@ -16,20 +16,19 @@ export const Basic = () => {
   const [value, setValue] = useState('')
 
   return (
-  <>
-    <input
-      type="text"
-      value={value}
-      placeholder="enter a value"
-      onChange={e => {
-        setValue(e.currentTarget.value)
-        if (e.currentTarget.value !== "") {
-          setFormDirty(true)
-        }
-      }}
-
-    />
-    <EnhancedPrompt shouldPromptTrigger={formDirty}/>
-  </>
+    <>
+      <input
+        type="text"
+        value={value}
+        placeholder="enter a value"
+        onChange={(e) => {
+          setValue(e.currentTarget.value)
+          if (e.currentTarget.value !== '') {
+            setFormDirty(true)
+          }
+        }}
+      />
+      <EnhancedPrompt shouldPromptTrigger={formDirty} />
+    </>
   )
 }

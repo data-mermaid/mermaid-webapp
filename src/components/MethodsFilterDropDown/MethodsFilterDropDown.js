@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react'
 import PropTypes, { string } from 'prop-types'
 import OutlinedInput from '@mui/material/OutlinedInput'

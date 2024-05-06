@@ -485,7 +485,7 @@ const UsersAndTransects = () => {
         <StickyOverviewTable {...getTableProps()}>
           <OverviewThead>
             {headerGroups.map((headerGroup) => (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
+              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
@@ -500,6 +500,7 @@ const UsersAndTransects = () => {
                   return (
                     <OverviewTh
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
+                      key={column.id}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
@@ -529,7 +530,7 @@ const UsersAndTransects = () => {
               prepareRow(row)
 
               return (
-                <OverviewTr {...row.getRowProps()}>
+                <OverviewTr key={row.id} {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
                     const cellColumnGroupId = cell.column.parent.id
@@ -578,6 +579,7 @@ const UsersAndTransects = () => {
                     return (
                       <OverviewTd
                         {...cell.getCellProps()}
+                        key={cell.column.id}
                         align={cellAlignment}
                         className={cellClassName}
                       >

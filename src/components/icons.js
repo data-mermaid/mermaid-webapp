@@ -18,6 +18,7 @@ import circleEditOutline from '@iconify-icons/mdi/circle-edit-outline'
 import clipboardCheck from '@iconify-icons/mdi/clipboard-check-outline'
 import clipboardEdit from '@iconify-icons/mdi/clipboard-edit'
 import closeIcon from '@iconify-icons/mdi/close'
+import closeIconCircle from '@iconify-icons/mdi/close-circle'
 import contentCopy from '@iconify-icons/mdi/content-copy'
 import contentSave from '@iconify-icons/mdi/content-save'
 import download from '@iconify-icons/mdi/download'
@@ -76,6 +77,7 @@ export const IconCheck = (props) => <InlineIcon icon={checkIcon} {...props} />
 export const IconCheckOutline = (props) => <InlineIcon icon={checkOutline} {...props} />
 export const IconCheckAll = (props) => <InlineIcon icon={checkAllIcon} {...props} />
 export const IconClose = (props) => <InlineIcon icon={closeIcon} {...props} />
+export const IconCloseCircle = (props) => <InlineIcon icon={closeIconCircle} {...props} />
 export const IconCollect = (props) => <InlineIcon icon={circleEditOutline} {...props} />
 export const IconCopy = (props) => <InlineIcon icon={contentCopy} {...props} />
 export const IconData = (props) => <InlineIcon icon={checkCircleOutline} {...props} />

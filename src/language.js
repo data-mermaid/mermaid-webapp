@@ -6,6 +6,7 @@ import {
   getSystemValidationErrorMessage,
   getDuplicateSampleUnitLink,
   goToManagementOverviewPageLink,
+  getDuplicateValuesValidationMessage,
 } from './library/validationMessageHelpers'
 import { HelperTextLink } from './components/generic/links'
 
@@ -69,6 +70,7 @@ const error = {
   getDeleteOfflineErrorTitle: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has failed to delete from your computer or online.`,
   gfcrIndicatorSetsUnavailable: 'GFCR indicator sets are currently unavailable.',
+  gfcrIndicatorSetSave: 'Indicator set has not been saved.',
   idNotFoundUserAction: "Please check the URL in your browser's address bar.",
   invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable: 'Management Regime records data are currently unavailable.',
@@ -77,6 +79,8 @@ const error = {
   notificationNotDeleted: 'Notification could not be removed.',
   notificationsNotDeleted: 'Notifications could not be removed',
   projectDelete: 'This project has not been deleted.',
+  projectAddGfcr: 'Could not add GFCR indicators to the project.',
+  projectRemoveGfcr: 'Could not remove GFCR indicators from the project.',
   projectSave: 'The project has not been saved.',
   projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
@@ -143,10 +147,13 @@ const success = {
     `${projectName} has been removed from being offline ready`,
   getUserRoleChangeSuccessMessage: ({ userName, role }) =>
     `${userName}'s role is now set to ${role}.`,
+  gfcrIndicatorSetSave: 'Indicator set saved.',
   newUserAdd: 'New user added.',
   newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
   userRemoved: 'User removed',
   projectSave: 'Project saved',
+  projectAddGfcr: 'Added GFCR indicators to project',
+  projectRemoveGfcr: 'Removed GFCR indicators from project',
   projectCopied: 'Project copied',
   projectCreated: 'Project created',
   projectDeleted: 'Project deleted',
@@ -348,6 +355,13 @@ const pages = {
     organizations: 'Organizations',
     notes: 'Notes',
     noOrganization: 'This Project has no organizations.',
+    gfcrCalloutHeading: 'Global Fund for Coral Reefs (GFCR)',
+    gfcrRemoveParagraph:
+      'Removing GFCR indicators from this project will not delete them, but just hide them.',
+    gfcrAddParagraph:
+      'GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. ',
+    gfcrRemoveButton: 'Remove GFCR indicators from this project',
+    gfcrAddButton: 'Add GFCR indicators to this project',
   },
   dataSharing: {
     introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data are collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
@@ -451,7 +465,10 @@ const pages = {
     filterToolbarText: 'Filter this table by indicator set, and other things?',
     title: 'GFCR',
     noDataMainText: 'No indicator sets yet.',
-    noDataSubText: "Select 'Create new' to add an indicator set to this project."
+    noDataSubText: "Select 'Create new' to add an indicator set to this project.",
+  },
+  gfcrIndicatorSetForm: {
+    title: 'Indicator Set',
   },
   goToDashboard: 'View on Dashboard',
 }
@@ -494,7 +511,7 @@ const getResolveModalLanguage = (siteOrManagementRegime) => {
 }
 
 const getValidationMessage = (validation, projectId = '') => {
-  const { code, context, name } = validation
+  const { code, context, fields, name } = validation
 
   const validationMessages = {
     all_attributes_same_category: () => `All benthic attributes are ${context?.category}`,
@@ -509,7 +526,10 @@ const getValidationMessage = (validation, projectId = '') => {
     duplicate_quadrat_transect: () =>
       getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
     duplicate_transect: () => 'Transect already exists',
-    duplicate_values: () => 'Duplicate',
+    duplicate_values: () =>
+      fields?.length
+        ? getDuplicateValuesValidationMessage(fields[0], context?.duplicates)
+        : 'Duplicate',
     exceed_total_colonies: () => 'Maximum number of colonies exceeded',
     future_sample_date: () => 'Sample date is in the future',
     high_density: () => `Fish biomass greater than ${context?.biomass_range[1]} kg/ha`,

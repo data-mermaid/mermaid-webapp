@@ -379,9 +379,10 @@ const ManagementRegimes = () => {
               const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
 
               return (
-                <Tr {...headerGroup.getHeaderGroupProps()}>
+                <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
                     <Th
+                      key={column.id}
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
@@ -399,10 +400,10 @@ const ManagementRegimes = () => {
               prepareRow(row)
 
               return (
-                <Tr {...row.getRowProps()}>
+                <Tr key={row.id} {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                      <Td key={cell.column.id} {...cell.getCellProps()} align={cell.column.align}>
                         {cell.render('Cell')}
                       </Td>
                     )

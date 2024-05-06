@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import domPurify from 'dompurify'
@@ -6,7 +6,7 @@ import theme from '../../theme'
 
 export const TooltipPopup = styled('span')`
   display: block;
-  max-width:  ${(props) => props.maxWidth || '25rem'};
+  max-width: ${(props) => props.maxWidth || '25rem'};
   width: max-content;
   background: ${theme.color.primaryColor};
   color: ${theme.color.white};
@@ -28,26 +28,26 @@ export const TooltipPopup = styled('span')`
     //bottom left
     0 calc(100% - 15px)
   );
-}
   padding: 1em;
   padding-bottom: calc(1rem + 15px);
-  bottom: ${(props) => props.bottom || '4em'};
-  left: ${(props) => props.left || '0'};
+  left: ${(props) => props.left || '0em'};
+  top: ${(props) => props.top || '0em'};
   white-space: normal;
   z-index: 100;
   text-align: left;
 `
 
-const ColumnHeaderToolTip = ({ helperText, bottom, left, top, maxWidth, html }) => {
+// eslint-disable-next-line react/display-name
+const ColumnHeaderToolTip = forwardRef(({ helperText, left, top, maxWidth, html }, ref) => {
   const sanitizeHtml = domPurify.sanitize
   const dirtyHTML = html
   const cleanHTML = sanitizeHtml(dirtyHTML)
 
   return (
     <TooltipPopup
+      ref={ref}
       role="tooltip"
       aria-labelledby="tooltip"
-      bottom={bottom}
       left={left}
       maxWidth={maxWidth}
       top={top}
@@ -56,22 +56,20 @@ const ColumnHeaderToolTip = ({ helperText, bottom, left, top, maxWidth, html }) 
       {html ? <div dangerouslySetInnerHTML={{ __html: cleanHTML }} /> : <span>{helperText}</span>}
     </TooltipPopup>
   )
-}
+})
 
 export default ColumnHeaderToolTip
 
 ColumnHeaderToolTip.defaultProps = {
-  bottom: '4em',
   left: '0em',
   maxWidth: '25rem',
-  top: '0',
+  top: '0em',
   html: '',
   helperText: '',
 }
 
 ColumnHeaderToolTip.propTypes = {
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  bottom: PropTypes.string,
   left: PropTypes.string,
   top: PropTypes.string,
   maxWidth: PropTypes.string,

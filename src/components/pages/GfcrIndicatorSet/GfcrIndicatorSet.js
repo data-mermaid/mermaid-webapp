@@ -48,6 +48,8 @@ import InputSelectWithLabelAndValidation from '../../mermaidInputs/InputSelectWi
 import { DeleteRecordButtonCautionWrapper } from '../collectRecordFormPages/CollectingFormPage.Styles'
 import { IconSwap } from '../../icons'
 import { InputButton } from '../../generic/buttons'
+import { useCurrentProject } from '../../../App/CurrentProjectContext'
+import styled from 'styled-components'
 
 const ReadOnlySiteContent = ({
   site,
@@ -115,186 +117,101 @@ const enforceNumberInput = (event) => {
   return !(isModifiersKeyPressed || isMovingAndSpecialCharactersKeyPressed || isNumbersKeyPressed)
 }
 
-// const SiteForm = ({
-//   formik,
-//   isAppOnline,
-//   countryOptions,
-//   exposureOptions,
-//   reefTypeOptions,
-//   reefZoneOptions,
-//   handleLatitudeChange,
-//   handleLongitudeChange,
-// }) => {
-//   const handleLngLatSwap = () => {
-//     const currentLatitude = formik.getFieldProps('latitude').value
-//     const currentLongitude = formik.getFieldProps('longitude').value
+const StyledYearInputWithLabelAndValidation = styled(InputWithLabelAndValidation)`
+  width: 10rem;
+`
 
-//     handleLatitudeChange(currentLongitude)
-//     handleLongitudeChange(currentLatitude)
+const handleInputBlur = (formik, event, fieldName) => {
+  const { value } = event.target
 
-//     formik.setFieldTouched('longitude', true)
-//     formik.setFieldTouched('latitude', true)
-//   }
+  if (value.trim() === '') {
+    setInputToDefaultValue(formik, fieldName)
+  }
+}
 
-//   // hack to ensure formik values are updated before manually triggering validation
-//   useEffect(() => {
-//     formik.validateForm()
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [formik.values.latitude, formik.values.longitude])
+const setInputToDefaultValue = (formik, fieldName) => {
+  formik.setFieldValue(fieldName, formik.initialValues[fieldName])
+}
 
-//   return (
-//     <form id="site-form" onSubmit={formik.handleSubmit}>
-//       <InputWrapper>
-//         <InputWithLabelAndValidation
-//           required
-//           label="Name"
-//           id="name"
-//           type="text"
-//           {...formik.getFieldProps('name')}
-//           validationType={formik.errors.name && formik.touched.name ? 'error' : null}
-//           validationMessages={formik.errors.name}
-//           testId="name"
-//           helperText={language.helperText.siteName}
-//         />
-//         <InputRow
-//           validationType={formik.errors.country && formik.touched.country ? 'error' : null}
-//           data-testid="country-select"
-//         >
-//           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-//           <label id="country-label">
-//             Country <RequiredIndicator />{' '}
-//           </label>
-//           <InputAutocomplete
-//             id="country"
-//             aria-labelledby="country-label"
-//             options={countryOptions}
-//             value={formik.values.country}
-//             noResultsText={language.autocomplete.noResultsDefault}
-//             onChange={(selectedItem) => {
-//               formik.setFieldValue('country', selectedItem.value)
-//             }}
-//             isLastRow={false}
-//           />
-//           <InputValidationInfo
-//             validationType={formik.errors.country && formik.touched.country ? 'error' : null}
-//             validationMessages={formik.errors.country}
-//           />
-//         </InputRow>
-//         <InputWithLabelAndValidation
-//           required
-//           label="Latitude"
-//           id="latitude"
-//           type="number"
-//           {...formik.getFieldProps('latitude')}
-//           onKeyDown={(event) => enforceNumberInput(event)}
-//           validationType={formik.errors.latitude && formik.touched.latitude ? 'error' : null}
-//           validationMessages={formik.errors.latitude}
-//           testId="latitude"
-//           helperText={language.helperText.getLatitude()}
-//           shouldShowSteps={true}
-//           step="0.000001"
-//           renderItemWithinInput={
-//             <SwapButton
-//               isDisabled={!formik.values.latitude && !formik.values.longitude}
-//               handleSwapClick={handleLngLatSwap}
-//               swapLabel={language.pages.siteForm.swapButton}
-//             />
-//           }
-//         />
-//         <InputWithLabelAndValidation
-//           required
-//           label="Longitude"
-//           id="longitude"
-//           type="number"
-//           {...formik.getFieldProps('longitude')}
-//           onKeyDown={(event) => enforceNumberInput(event)}
-//           validationType={formik.errors.longitude && formik.touched.longitude ? 'error' : null}
-//           validationMessages={formik.errors.longitude}
-//           testId="longitude"
-//           helperText={language.helperText.getLongitude()}
-//           shouldShowSteps={true}
-//           step="0.000001"
-//           renderItemWithinInput={
-//             <SwapButton
-//               isDisabled={!formik.values.latitude && !formik.values.longitude}
-//               handleSwapClick={handleLngLatSwap}
-//               swapLabel={language.pages.siteForm.swapButton}
-//             />
-//           }
-//         />
-//         {isAppOnline && (
-//           <SingleSiteMap
-//             formLatitudeValue={formik.getFieldProps('latitude').value}
-//             formLongitudeValue={formik.getFieldProps('longitude').value}
-//             handleLatitudeChange={handleLatitudeChange}
-//             handleLongitudeChange={handleLongitudeChange}
-//           />
-//         )}
-//         <InputSelectWithLabelAndValidation
-//           label="Exposure"
-//           id="exposure"
-//           required={true}
-//           options={exposureOptions}
-//           {...formik.getFieldProps('exposure')}
-//           validationType={formik.errors.exposure && formik.touched.exposure ? 'error' : null}
-//           validationMessages={formik.errors.exposure}
-//         />
-//         <InputSelectWithLabelAndValidation
-//           label="Reef Type"
-//           id="reef_type"
-//           required={true}
-//           options={reefTypeOptions}
-//           {...formik.getFieldProps('reef_type')}
-//           validationType={formik.errors.reef_type && formik.touched.reef_type ? 'error' : null}
-//           validationMessages={formik.errors.reef_type}
-//           helperText={language.helperText.getReefType()}
-//         />
-//         <InputSelectWithLabelAndValidation
-//           label="Reef Zone"
-//           id="reef_zone"
-//           required={true}
-//           options={reefZoneOptions}
-//           {...formik.getFieldProps('reef_zone')}
-//           validationType={formik.errors.reef_zone && formik.touched.reef_zone ? 'error' : null}
-//           validationMessages={formik.errors.reef_zone}
-//           helperText={language.helperText.getReefZone()}
-//         />
-//         <TextareaWithLabelAndValidation
-//           label="Notes"
-//           id="notes"
-//           {...formik.getFieldProps('notes')}
-//         />
-//       </InputWrapper>
-//     </form>
-//   )
-// }
+const IndicatorSetForm = ({ formik, isAppOnline }) => {
+  return (
+    <form id="indicator-set-form" onSubmit={formik.handleSubmit}>
+      <InputWrapper>
+        <InputWithLabelAndValidation
+          required
+          label="Title"
+          id="gfcr-title"
+          type="text"
+          {...formik.getFieldProps('title')}
+          validationType={formik.errors.title && formik.touched.title ? 'error' : null}
+          validationMessages={formik.errors.title}
+          /* helperText={language.helperText.siteName} */
+        />
+        <InputWithLabelAndValidation
+          label="Reporting Date"
+          id="gfcr-report_date"
+          type="date"
+          {...formik.getFieldProps('report_date')}
+          validationType={formik.errors.report_date && formik.touched.report_date ? 'error' : null}
+          validationMessages={formik.errors.report_date}
+          onBlur={(event) => handleInputBlur(formik, event, 'report_date')}
+          value={formik.values.report_date}
+          helperText={language.helperText.sampleDate}
+        />
+        <StyledYearInputWithLabelAndValidation
+          required
+          label="Reporting Year"
+          id="gfcr-report-year"
+          type="number"
+          {...formik.getFieldProps('report_year')}
+          validationType={formik.errors.report_year && formik.touched.report_year ? 'error' : null}
+          validationMessages={formik.errors.report_year}
+          onBlur={(event) => {
+            const { value } = event.target
+            const trimmedValue = value.trim()
 
-const GfcrIndicatorSet = ({ isNewIndicatorSet }) => {
-  // const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  // const { isAppOnline } = useOnlineStatus()
+            if (
+              trimmedValue === '' ||
+              parseInt(trimmedValue) < 1900 ||
+              parseInt(trimmedValue) > 2099
+            ) {
+              setInputToDefaultValue(formik, 'report_year')
+            }
+          }}
+        />
+      </InputWrapper>
+    </form>
+  )
+}
+
+const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
   // const { isSyncInProgress } = useSyncStatus()
-  // const { siteId, projectId } = useParams()
-  // const navigate = useNavigate()
-  // const isMounted = useIsMounted()
-  // const currentProjectPath = useCurrentProjectPath()
-  // const { currentUser } = useCurrentUser()
-  // const handleHttpResponseError = useHttpResponseErrorHandler()
+  const { indicatorSetId, projectId } = useParams()
+  const navigate = useNavigate()
+  const isMounted = useIsMounted()
+  const currentProjectPath = useCurrentProjectPath()
+  const { currentUser } = useCurrentUser()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+  const { gfcrIndicatorSets, setGfcrIndicatorSets } = useCurrentProject()
 
   // const [countryOptions, setCountryOptions] = useState([])
   // const [exposureOptions, setExposureOptions] = useState([])
   // const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  // const [isFormDirty, setIsFormDirty] = useState(false)
+  const [isFormDirty, setIsFormDirty] = useState(false)
   // const [reefTypeOptions, setReefTypeOptions] = useState([])
   // const [reefZoneOptions, setReefZoneOptions] = useState([])
-  // const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  // const [siteBeingEdited, setSiteBeingEdited] = useState()
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [indicatorSetBeingEdited, setIndicatorSetBeingEdited] = useState()
   // const [siteDeleteErrorData, setSiteDeleteErrorData] = useState([])
   // const [isDeletingSite, setIsDeletingSite] = useState(false)
   // const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
   // const [currentDeleteRecordModalPage, setCurrentDeleteRecordModalPage] = useState(1)
 
-  // const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new site is saved (and that triggers a navigation to its new page)
+  const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new indicator set is saved (and that triggers a navigation to its new page)
+  const indicatorSetType = indicatorSetBeingEdited?.indicator_set_type || newIndicatorSetType
 
   // const goToPageOneOfDeleteRecordModal = () => {
   //   setCurrentDeleteRecordModalPage(1)
@@ -311,180 +228,164 @@ const GfcrIndicatorSet = ({ isNewIndicatorSet }) => {
   // }
 
   // const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
-  // const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
-
-  const _getSupportingData = useEffect(() => {
-    setIsLoading(false)
-  }, [])
-  //   if (databaseSwitchboardInstance && !isSyncInProgress) {
-  //     const promises = [
-  //       databaseSwitchboardInstance.getChoices(),
-  //       databaseSwitchboardInstance.getProject(projectId),
-  //     ]
-
-  //     if (!isNewIndicatorSet) {
-  //       promises.push(databaseSwitchboardInstance.getSite(siteId))
-  //     }
-
-  //     Promise.all(promises)
-  //       .then(([choicesResponse, projectResponse, siteResponse]) => {
-  //         if (isMounted.current) {
-  //           if (!siteResponse && siteId && !isNewIndicatorSet) {
-  //             setIdsNotAssociatedWithData((previousState) => [...previousState, siteId])
-  //           }
-  //           if (!projectResponse && projectId) {
-  //             setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
-  //           }
-  //           setCountryOptions(getOptions(choicesResponse.countries.data))
-  //           setExposureOptions(getOptions(choicesResponse.reefexposures.data))
-  //           setReefTypeOptions(getOptions(choicesResponse.reeftypes.data))
-  //           setReefZoneOptions(getOptions(choicesResponse.reefzones.data))
-  //           setSiteBeingEdited(siteResponse)
-  //           setIsLoading(false)
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         handleHttpResponseError({
-  //           error,
-  //           callback: () => {
-  //             toast.error(...getToastArguments(language.error.siteRecordUnavailable))
-  //           },
-  //         })
-  //       })
-  //   }
-  // }, [
-  //   databaseSwitchboardInstance,
-  //   isMounted,
-  //   isSyncInProgress,
-  //   projectId,
-  //   siteId,
-  //   isNewIndicatorSet,
-  //   handleHttpResponseError,
-  // ])
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   // const {
   //   persistUnsavedFormData: persistUnsavedFormikData,
   //   clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
   //   getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
-  // } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedSiteInputs`)
+  // } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedIndicatorSetInputs`)
 
-  // const initialFormValues = useMemo(() => {
-  //   return getPersistedUnsavedFormikData() ?? getSiteInitialValues(siteBeingEdited)
-  // }, [getPersistedUnsavedFormikData, siteBeingEdited])
+  const _getIndicatorSets = useEffect(() => {
+    if (!newIndicatorSetType && databaseSwitchboardInstance && isAppOnline) {
+      Promise.all([databaseSwitchboardInstance.getIndicatorSets(projectId)])
+        .then(([indicatorSetsResponse]) => {
+          if (isMounted.current) {
+            setGfcrIndicatorSets(indicatorSetsResponse.results)
+            setIsLoading(false)
+          }
+        })
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.gfcrIndicatorSetsUnavailable))
+            },
+          })
+        })
+    }
 
-  // const formik = useFormik({
-  //   initialValues: initialFormValues,
-  //   enableReinitialize: true,
-  //   onSubmit: (formikValues, formikActions) => {
-  //     const { country, exposure, name, latitude, longitude, notes, reef_type, reef_zone } =
-  //       formikValues
-  //     const formattedSiteForApi = {
-  //       ...siteBeingEdited,
-  //       country,
-  //       exposure,
-  //       name,
-  //       notes,
-  //       reef_type,
-  //       reef_zone,
-  //       location: {
-  //         type: 'point',
-  //         coordinates: [longitude, latitude],
-  //       },
-  //     }
+    if (newIndicatorSetType) {
+      setIsLoading(false)
+    }
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    handleHttpResponseError,
+    projectId,
+    setGfcrIndicatorSets,
+    isAppOnline,
+    newIndicatorSetType,
+  ])
 
-  //     setSaveButtonState(buttonGroupStates.saving)
-  //     databaseSwitchboardInstance
-  //       .saveSite({ site: formattedSiteForApi, projectId })
-  //       .then((response) => {
-  //         toast.success(
-  //           ...getToastArguments(
-  //             language.success.getMermaidDataSaveSuccess({
-  //               mermaidDataTypeLabel: 'site',
-  //               isAppOnline,
-  //             }),
-  //           ),
-  //         )
-  //         clearPersistedUnsavedFormikData()
-  //         setSaveButtonState(buttonGroupStates.saved)
-  //         setIsFormDirty(false)
-  //         formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
+  const _setIndicatorSet = useEffect(() => {
+    if (gfcrIndicatorSets) {
+      const indicatorSet = gfcrIndicatorSets.find(
+        (indicatorSet) => indicatorSet.id === indicatorSetId,
+      )
+      setIndicatorSetBeingEdited(indicatorSet)
+    }
+  }, [gfcrIndicatorSets, indicatorSetId])
 
-  //         if (isNewIndicatorSet) {
-  //           navigate(`${ensureTrailingSlash(currentProjectPath)}sites/${response.id}`)
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         setSaveButtonState(buttonGroupStates.unsaved)
+  const initialFormValues = useMemo(() => {
+    // return getPersistedUnsavedFormikData() ?? getIndicatorSetFormInitialValues(indicatorSetBeingEdited)
+    return getIndicatorSetFormInitialValues(indicatorSetBeingEdited)
+  }, [indicatorSetBeingEdited])
 
-  //         const { isSyncError } = error
+  const handleFormSubmit = useCallback(
+    (formikValues, formikActions) => {
+      const { title, report_date, report_year } = formikValues
 
-  //         if (isSyncError && isAppOnline) {
-  //           const toastTitle = language.error.getSaveOnlineSyncErrorTitle('site')
+      const formattedIndicatorSetForApi = {
+        ...indicatorSetBeingEdited,
+        title,
+        report_date,
+        report_year,
+        indicator_set_type: indicatorSetType,
+      }
 
-  //           showSyncToastError({ toastTitle, error, testId: 'site-toast-error' })
-  //         }
-  //         if (!isSyncError && isAppOnline) {
-  //           handleHttpResponseError({
-  //             error,
-  //           })
-  //         }
-  //         if (!isAppOnline) {
-  //           console.error(error)
-  //           toast.error(
-  //             ...getToastArguments(
-  //               <div data-testid="site-toast-error">
-  //                 {language.error.getSaveOfflineErrorTitle('site')}
-  //               </div>,
-  //             ),
-  //           )
-  //         }
-  //       })
-  //   },
-  //   validate: (values) => {
-  //     persistUnsavedFormikData(values)
-  //     const errors = {}
+      setSaveButtonState(buttonGroupStates.saving)
+      databaseSwitchboardInstance
+        // POST the indicator set if there is no indicator set ID, else PUT it
+        .saveIndicatorSet(projectId, formattedIndicatorSetForApi)
+        .then((response) => {
+          toast.success(...getToastArguments(language.success.gfcrIndicatorSetSave))
+          setSaveButtonState(buttonGroupStates.saved)
+          setIsFormDirty(false)
+          formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
+          // clearPersistedUnsavedFormikData()
 
-  //     if (!values.name) {
-  //       errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
-  //     }
+          if (indicatorSetType) {
+            navigate(`${ensureTrailingSlash(currentProjectPath)}gfcr/${response.id}`)
+          }
+        })
+        .catch((error) => {
+          setSaveButtonState(buttonGroupStates.unsaved)
 
-  //     if (!values.country) {
-  //       errors.country = [{ code: language.error.formValidation.required, id: 'Required' }]
-  //     }
+          if (error && isAppOnline) {
+            toast.error(...getToastArguments(language.error.gfcrIndicatorSetSave))
 
-  //     if (!values.latitude && values.latitude !== 0) {
-  //       errors.latitude = [{ code: language.error.formValidation.required, id: 'Required' }]
-  //     }
+            handleHttpResponseError({
+              error,
+            })
+          }
+        })
+    },
+    [
+      currentProjectPath,
+      databaseSwitchboardInstance,
+      handleHttpResponseError,
+      indicatorSetBeingEdited,
+      isAppOnline,
+      indicatorSetType,
+      navigate,
+      projectId,
+    ],
+  )
 
-  //     if (values.latitude > 90 || values.latitude < -90) {
-  //       errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
-  //     }
+  const formik = useFormik({
+    initialValues: initialFormValues,
+    enableReinitialize: true,
+    onSubmit: handleFormSubmit,
+    validate: (values) => {
+      // persistUnsavedFormikData(values)
+      const errors = {}
 
-  //     if (!values.longitude && values.longitude !== 0) {
-  //       errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
-  //     }
+      if (!values.title) {
+        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
 
-  //     if (values.longitude > 180 || values.longitude < -180) {
-  //       errors.longitude = [
-  //         { code: language.error.formValidation.longitude, id: 'Invalid Longitude' },
-  //       ]
-  //     }
+      if (!values.report_date) {
+        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
 
-  //     if (!values.exposure) {
-  //       errors.exposure = [{ code: language.error.formValidation.required, id: 'Required' }]
-  //     }
+      // if (!values.country) {
+      //   errors.country = [{ code: language.error.formValidation.required, id: 'Required' }]
+      // }
 
-  //     if (!values.reef_type) {
-  //       errors.reef_type = [{ code: language.error.formValidation.required, id: 'Required' }]
-  //     }
+      // if (!values.latitude && values.latitude !== 0) {
+      //   errors.latitude = [{ code: language.error.formValidation.required, id: 'Required' }]
+      // }
 
-  //     if (!values.reef_zone) {
-  //       errors.reef_zone = [{ code: language.error.formValidation.required, id: 'Required' }]
-  //     }
+      // if (values.latitude > 90 || values.latitude < -90) {
+      //   errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
+      // }
 
-  //     return errors
-  //   },
-  // })
+      // if (!values.longitude && values.longitude !== 0) {
+      //   errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
+      // }
+
+      // if (values.longitude > 180 || values.longitude < -180) {
+      //   errors.longitude = [
+      //     { code: language.error.formValidation.longitude, id: 'Invalid Longitude' },
+      //   ]
+      // }
+
+      // if (!values.exposure) {
+      //   errors.exposure = [{ code: language.error.formValidation.required, id: 'Required' }]
+      // }
+
+      // if (!values.reef_type) {
+      //   errors.reef_type = [{ code: language.error.formValidation.required, id: 'Required' }]
+      // }
+
+      // if (!values.reef_zone) {
+      //   errors.reef_zone = [{ code: language.error.formValidation.required, id: 'Required' }]
+      // }
+
+      return errors
+    },
+  })
 
   // useDocumentTitle(
   //   `${language.pages.siteForm.title} - ${formik.values.name} - ${language.title.mermaid}`,
@@ -492,11 +393,11 @@ const GfcrIndicatorSet = ({ isNewIndicatorSet }) => {
 
   // const { setFieldValue: formikSetFieldValue } = formik
 
-  // const _setSaveButtonUnsaved = useEffect(() => {
-  //   if (isFormDirty) {
-  //     setSaveButtonState(buttonGroupStates.unsaved)
-  //   }
-  // }, [isFormDirty])
+  const _setSaveButtonUnsaved = useEffect(() => {
+    if (isFormDirty) {
+      setSaveButtonState(buttonGroupStates.unsaved)
+    }
+  }, [isFormDirty])
 
   // const handleLatitudeChange = useCallback(
   //   (value) => {
@@ -512,10 +413,11 @@ const GfcrIndicatorSet = ({ isNewIndicatorSet }) => {
   //   [formikSetFieldValue],
   // )
 
-  // const _setIsFormDirty = useEffect(
-  //   () => setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData()),
-  //   [formik.dirty, getPersistedUnsavedFormikData],
-  // )
+  const _setIsFormDirty = useEffect(
+    // () => setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData()),
+    () => setIsFormDirty(!!formik.dirty),
+    [formik.dirty],
+  )
 
   // const deleteRecord = () => {
   //   // only available online
@@ -571,44 +473,31 @@ const GfcrIndicatorSet = ({ isNewIndicatorSet }) => {
   //   />
   // )
 
-  const contentViewByRole = <H2>Content view by role</H2>
-
-  // const contentViewByRole = isReadOnlyUser ? (
-  //   contentViewByReadOnlyRole
-  // ) : (
-  //   <>
-  //     <SiteForm
-  //       formik={formik}
-  //       isAppOnline={isAppOnline}
-  //       countryOptions={countryOptions}
-  //       exposureOptions={exposureOptions}
-  //       reefTypeOptions={reefTypeOptions}
-  //       reefZoneOptions={reefZoneOptions}
-  //       handleLatitudeChange={handleLatitudeChange}
-  //       handleLongitudeChange={handleLongitudeChange}
-  //     />
-  //     {isAdminUser && isAppOnline && (
-  //       <DeleteRecordButton
-  //         currentPage={currentDeleteRecordModalPage}
-  //         errorData={siteDeleteErrorData}
-  //         isLoading={isDeletingSite}
-  //         isNewRecord={isNewIndicatorSet}
-  //         isOpen={isDeleteRecordModalOpen}
-  //         modalText={language.deleteRecord('Site')}
-  //         deleteRecord={deleteRecord}
-  //         onDismiss={closeDeleteRecordModal}
-  //         openModal={openDeleteRecordModal}
-  //       />
-  //     )}
-  //     {!isAdminUser && isAppOnline ? (
-  //       <DeleteRecordButtonCautionWrapper>
-  //         <ItalicizedInfo>{language.pages.siteForm.nonAdminDelete}</ItalicizedInfo>
-  //       </DeleteRecordButtonCautionWrapper>
-  //     ) : null}
-  //     {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
-  //     <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
-  //   </>
-  // )
+  const contentViewByRole = (
+    <>
+      <IndicatorSetForm formik={formik} isAppOnline={isAppOnline} />
+      {/* {isAdminUser && isAppOnline && (
+        <DeleteRecordButton
+          currentPage={currentDeleteRecordModalPage}
+          errorData={siteDeleteErrorData}
+          isLoading={isDeletingSite}
+          isNewRecord={isNewIndicatorSet}
+          isOpen={isDeleteRecordModalOpen}
+          modalText={language.deleteRecord('Site')}
+          deleteRecord={deleteRecord}
+          onDismiss={closeDeleteRecordModal}
+          openModal={openDeleteRecordModal}
+        />
+      )} */}
+      {!isAdminUser && isAppOnline ? (
+        <DeleteRecordButtonCautionWrapper>
+          <ItalicizedInfo>{language.pages.siteForm.nonAdminDelete}</ItalicizedInfo>
+        </DeleteRecordButtonCautionWrapper>
+      ) : null}
+      {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
+      <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
+    </>
+  )
 
   // return displayIdNotFoundErrorPage ? (
   //   <ContentPageLayout
@@ -616,28 +505,35 @@ const GfcrIndicatorSet = ({ isNewIndicatorSet }) => {
   //     content={<IdsNotFound ids={idsNotAssociatedWithData} />}
   //   />
   // ) : (
+  const indicatorSetTypeName = indicatorSetType === 'annual_report' ? 'Annual Report' : 'Target'
 
-    return <ContentPageLayout
+  return (
+    <ContentPageLayout
       isPageContentLoading={isLoading}
       isToolbarSticky={true}
-      // subNavNode={{ name: formik.values.name }}
-      subNavNode={{ name: "Indicator Set" }} // TODO: once saved, update the Global Nav Sub Item and the page title.
+      subNavNode={{
+        name: newIndicatorSetType
+          ? language.pages.gfcrIndicatorSetForm.title
+          : `${formik.values.title} ${formik.values.report_year}`,
+      }}
       content={contentViewByRole}
       toolbar={
         <ContentPageToolbarWrapper>
-          {/* {isNewIndicatorSet ? <H2>{language.pages.siteForm.title}</H2> : <H2>{formik.values.name}</H2>} */}
-          {isNewIndicatorSet ? <H2>{language.pages.siteForm.title}</H2> : <H2>{"formik name value"}</H2>}
-          {/* {!isReadOnlyUser && (
-            <SaveButton
-              formId="site-form"
-              saveButtonState={saveButtonState}
-              formHasErrors={!!Object.keys(formik.errors).length}
-              formDirty={isFormDirty}
-            />
-          )} */}
+          {newIndicatorSetType ? (
+            <H2>{language.pages.gfcrIndicatorSetForm.title}</H2>
+          ) : (
+            <H2>{`${formik.values.title} | ${indicatorSetTypeName} | ${formik.values.report_year}`}</H2>
+          )}
+          <SaveButton
+            formId="indicator-set-form"
+            saveButtonState={saveButtonState}
+            formHasErrors={!!Object.keys(formik.errors).length}
+            formDirty={isFormDirty}
+          />
         </ContentPageToolbarWrapper>
       }
     />
+  )
   // )
 }
 
@@ -651,16 +547,10 @@ const GfcrIndicatorSet = ({ isNewIndicatorSet }) => {
 //   isAppOnline: PropTypes.bool.isRequired,
 // }
 
-// SiteForm.propTypes = {
-//   formik: formikPropType.isRequired,
-//   isAppOnline: PropTypes.bool.isRequired,
-//   countryOptions: inputOptionsPropTypes.isRequired,
-//   exposureOptions: inputOptionsPropTypes.isRequired,
-//   reefTypeOptions: inputOptionsPropTypes.isRequired,
-//   reefZoneOptions: inputOptionsPropTypes.isRequired,
-//   handleLatitudeChange: PropTypes.func.isRequired,
-//   handleLongitudeChange: PropTypes.func.isRequired,
-// }
+IndicatorSetForm.propTypes = {
+  formik: formikPropType.isRequired,
+  isAppOnline: PropTypes.bool.isRequired,
+}
 
 // SwapButton.propTypes = {
 //   isDisabled: PropTypes.bool.isRequired,
@@ -668,6 +558,8 @@ const GfcrIndicatorSet = ({ isNewIndicatorSet }) => {
 //   swapLabel: PropTypes.string.isRequired,
 // }
 
-GfcrIndicatorSet.propTypes = { isNewIndicatorSet: PropTypes.bool.isRequired }
+GfcrIndicatorSet.propTypes = {
+  newIndicatorSetType: PropTypes.string,
+}
 
 export default GfcrIndicatorSet

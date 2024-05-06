@@ -1,12 +1,15 @@
 import { CSVLink } from 'react-csv'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 
 import { ContentPageLayout } from '../../Layout'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
-import { getIsUserAdminForProject, getIsUserReadOnlyForProject } from '../../../App/currentUserProfileHelpers'
+import {
+  getIsUserAdminForProject,
+  getIsUserReadOnlyForProject,
+} from '../../../App/currentUserProfileHelpers'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
@@ -21,10 +24,7 @@ import {
   reactTableNaturalSortReactNodes,
 } from '../../generic/Table/reactTableNaturalSort'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import {
-  ButtonSecondary,
-  ToolbarButtonWrapper,
-} from '../../generic/buttons'
+import { ButtonSecondary, ToolbarButtonWrapper } from '../../generic/buttons'
 import { Column, ToolBarRow } from '../../generic/positioning'
 import {
   Tr,
@@ -48,38 +48,40 @@ import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandl
 import { GfcrPageUnavailablePadding, StyledToolbarButtonWrapper } from './Gfcr.styles'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import { DropdownItemStyle } from '../../generic/ButtonSecondaryDropdown/ButtonSecondaryDropdown.styles'
+import { useCurrentProject } from '../../../App/CurrentProjectContext'
 
-const indicatorSetsDummyData = [
-  {
-    id: 1,
-    name: 'Baseline',
-    type: 'report',
-    year: 2021,
-  },
-  {
-    id: 2,
-    name: 'Phase 1 result',
-    type: 'report',
-    year: 2023,
-  },
-  {
-    id: 3,
-    name: 'Midterm Target',
-    type: 'target',
-    year: 2026,
-  },
-  {
-    id: 4,
-    name: 'FinalTarget',
-    type: 'target',
-    year: 2029,
-  }
-]
+// const indicatorSetsDummyData = [
+//   {
+//     id: 1,
+//     name: 'Baseline',
+//     type: 'report',
+//     year: 2021,
+//   },
+//   {
+//     id: 2,
+//     name: 'Phase 1 result',
+//     type: 'report',
+//     year: 2023,
+//   },
+//   {
+//     id: 3,
+//     name: 'Midterm Target',
+//     type: 'target',
+//     year: 2026,
+//   },
+//   {
+//     id: 4,
+//     name: 'FinalTarget',
+//     type: 'target',
+//     year: 2029,
+//   }
+// ]
 
 const Gfcr = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const currentProjectPath = useCurrentProjectPath()
-  const { isSyncInProgress } = useSyncStatus()
+  const { gfcrIndicatorSets, setGfcrIndicatorSets } = useCurrentProject()
+  const navigate = useNavigate()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
@@ -89,7 +91,6 @@ const Gfcr = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   // const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
-  const [indicatorSets, setIndicatorSets] = useState([])
   const [siteExportName, setSiteExportName] = useState('')
   const [choices, setChoices] = useState({})
   const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
@@ -97,20 +98,18 @@ const Gfcr = () => {
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
-  const openCopySitesModal = () => setIsCopySitesModalOpen(true) 
+  const openCopySitesModal = () => setIsCopySitesModalOpen(true)
   const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
   const _getIndicatorSets = useEffect(() => {
-    if (databaseSwitchboardInstance && !isSyncInProgress) {
-      Promise.all([
-        databaseSwitchboardInstance.getIndicatorSets(projectId),
-      ])
+    if (databaseSwitchboardInstance && isAppOnline) {
+      Promise.all([databaseSwitchboardInstance.getIndicatorSets(projectId)])
         .then(([indicatorSetsResponse]) => {
           if (isMounted.current) {
-            setIndicatorSets(indicatorSetsResponse.results)
+            setGfcrIndicatorSets(indicatorSetsResponse.results)
             setIsLoading(false)
           }
         })
@@ -123,41 +122,48 @@ const Gfcr = () => {
           })
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, handleHttpResponseError, projectId])
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    handleHttpResponseError,
+    projectId,
+    setGfcrIndicatorSets,
+    isAppOnline,
+  ])
 
-    // setIndicatorSets(indicatorSetsDummyData)
-    // setIsLoading(false)
-    // if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
-    //   Promise.all([
-    //     databaseSwitchboardInstance.getSiteRecordsForUIDisplay(projectId),
-    //     databaseSwitchboardInstance.getProject(projectId),
-    //     databaseSwitchboardInstance.getChoices(),
-    //   ])
+  // setIndicatorSets(indicatorSetsDummyData)
+  // setIsLoading(false)
+  // if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+  //   Promise.all([
+  //     databaseSwitchboardInstance.getSiteRecordsForUIDisplay(projectId),
+  //     databaseSwitchboardInstance.getProject(projectId),
+  //     databaseSwitchboardInstance.getChoices(),
+  //   ])
 
-    //     .then(([sites, project, choicesResponse]) => {
-    //       if (isMounted.current) {
-    //         if (!project && projectId) {
-    //           setIdsNotAssociatedWithData([projectId])
-    //         }
+  //     .then(([sites, project, choicesResponse]) => {
+  //       if (isMounted.current) {
+  //         if (!project && projectId) {
+  //           setIdsNotAssociatedWithData([projectId])
+  //         }
 
-    //         const exportName = getFileExportName(project, 'sites')
+  //         const exportName = getFileExportName(project, 'sites')
 
-    //         setSiteRecordsForUiDisplay(sites)
-    //         setSitesForMapMarkers(sites)
-    //         setSiteExportName(exportName)
-    //         setChoices(choicesResponse)
-    //         setIsLoading(false)
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       handleHttpResponseError({
-    //         error,
-    //         callback: () => {
-    //           toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
-    //         },
-    //       })
-    //     })
-    // }
+  //         setSiteRecordsForUiDisplay(sites)
+  //         setSitesForMapMarkers(sites)
+  //         setSiteExportName(exportName)
+  //         setChoices(choicesResponse)
+  //         setIsLoading(false)
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       handleHttpResponseError({
+  //         error,
+  //         callback: () => {
+  //           toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
+  //         },
+  //       })
+  //     })
+  // }
   // }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, handleHttpResponseError])
   // }, [])
 
@@ -169,20 +175,20 @@ const Gfcr = () => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Name',
-        accessor: 'name',
+        Header: 'Title',
+        accessor: 'title',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
         Header: 'Type',
-        accessor: 'type',
+        accessor: 'indicator_set_type',
         sortType: reactTableNaturalSort,
       },
       {
         Header: 'Year',
-        accessor: 'year',
+        accessor: 'report_year',
         sortType: reactTableNaturalSort,
-        align: "right",
+        align: 'right',
       },
       // {
       //   Header: 'Reef Type',
@@ -204,22 +210,22 @@ const Gfcr = () => {
   )
 
   const tableCellData = useMemo(() => {
-    return indicatorSets.map((indicatorSet) => {
-      const { id, name, type, year } = indicatorSet
+    return gfcrIndicatorSets.map((indicatorSet) => {
+      const { id, title, indicator_set_type, report_year } = indicatorSet
 
       return {
-        name: <Link to={`${currentProjectPath}/gfcr/${id}`}>{name}</Link>,
-        type,
-        year
+        title: <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link>,
+        indicator_set_type: indicator_set_type === 'annual_report' ? 'Annual Report' : 'Target',
+        report_year,
       }
     })
-  }, [indicatorSets, currentProjectPath])
+  }, [gfcrIndicatorSets, currentProjectPath])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
         {
-          id: 'name',
+          id: 'title',
           desc: false,
         },
       ],
@@ -234,18 +240,14 @@ const Gfcr = () => {
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
-      const keys = [
-        'values.name.props.children',
-        'values.type',
-        'values.year',
-      ]
+      const keys = ['values.title.props.children', 'values.type', 'values.report_year']
 
       const queryTerms = splitSearchQueryStrings(query)
       const filteredRows =
         !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
 
       const filteredRowIds = filteredRows.map((row) => row.original.id)
-      const filteredIndicatorSets = indicatorSets.filter((indicatorSet) =>
+      const filteredIndicatorSets = gfcrIndicatorSets.filter((indicatorSet) =>
         filteredRowIds.includes(indicatorSet.id),
       )
 
@@ -253,7 +255,7 @@ const Gfcr = () => {
 
       return filteredRows
     },
-    [indicatorSets],
+    [gfcrIndicatorSets],
   )
 
   const {
@@ -353,8 +355,8 @@ const Gfcr = () => {
     </>
   )
 
-  const handleNewAnnualReport = (type) => {
-    console.log('New Annual Report', type)
+  const handleNewIndicatorSet = (type) => {
+    navigate(`${currentProjectPath}/gfcr/new/${type}`)
   }
 
   const toolbarButtonsByRole = isReadOnlyUser ? (
@@ -366,22 +368,22 @@ const Gfcr = () => {
       <StyledToolbarButtonWrapper>
         <ButtonSecondaryDropdown label={createDropdownLabel}>
           <Column as="nav" data-testid="export-to-csv">
-            <DropdownItemStyle as="button" onClick={() => handleNewAnnualReport('annualReport')}>
+            <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('annual-report')}>
               Annual Report
             </DropdownItemStyle>
-            <DropdownItemStyle as="button" onClick={() => handleNewAnnualReport('target')}>
+            <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('target')}>
               Target
             </DropdownItemStyle>
           </Column>
         </ButtonSecondaryDropdown>
-        <ButtonSecondary to="" disabled={!indicatorSets.length}>
+        <ButtonSecondary to="" disabled={!gfcrIndicatorSets.length}>
           <IconDownload /> Export
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
     </>
   )
 
-  const table = indicatorSets.length ? (
+  const table = gfcrIndicatorSets.length ? (
     <>
       <StickyTableOverflowWrapper>
         <GenericStickyTable {...getTableProps()}>
@@ -398,7 +400,7 @@ const Gfcr = () => {
                     <Th
                       {...column.getHeaderProps({
                         ...getTableColumnHeaderProps(column),
-                        ...{ style: { 'textAlign': column.align } }
+                        ...{ style: { textAlign: column.align } },
                       })}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
@@ -437,7 +439,7 @@ const Gfcr = () => {
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
           pageType="site"
-          unfilteredRowLength={indicatorSets.length}
+          unfilteredRowLength={gfcrIndicatorSets.length}
           searchFilteredRowLength={searchFilteredRowsLength}
           isSearchFilterEnabled={!!globalFilter?.length}
         />
@@ -460,19 +462,22 @@ const Gfcr = () => {
   )
 
   if (!isAdminUser) {
-    return <GfcrPageUnavailablePadding>
-      <PageUnavailable mainText={language.error.pageAdminOnly} />
-    </GfcrPageUnavailablePadding>
+    return (
+      <GfcrPageUnavailablePadding>
+        <PageUnavailable mainText={language.error.pageAdminOnly} />
+      </GfcrPageUnavailablePadding>
+    )
   }
 
-    return <ContentPageLayout
+  return (
+    <ContentPageLayout
       toolbar={
         <>
           <H2>{language.pages.gfcrTable.title}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.gfcrTable.filterToolbarText}
-              disabled={indicatorSets.length === 0}
+              disabled={gfcrIndicatorSets.length === 0}
               globalSearchText={globalFilter || ''}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
@@ -484,6 +489,7 @@ const Gfcr = () => {
       content={table}
       isPageContentLoading={isLoading}
     />
+  )
   // )
 }
 

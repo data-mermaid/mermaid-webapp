@@ -18,4 +18,3 @@ export const DropdownItemStyle = styled.button`
     background-color: ${theme.color.secondaryHover};
   `)}
 `
-

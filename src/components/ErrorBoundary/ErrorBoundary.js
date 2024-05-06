@@ -68,31 +68,40 @@ class ErrorBoundary extends React.Component {
     if (errorMessage) {
       // Render a fallback UI
       // There is potential to pass this in as a property to make the error boundary customizable
-      return <StyledErrorBoundary>
-        <ErrorBoundaryStatusContainer>
-          <ErrorBoundaryStatus />
-        </ErrorBoundaryStatusContainer>
-        <ErrorBoundaryContentContainer>
-          <ErrorBoundaryPrimaryText>{language.error.errorBoundaryPrimary}</ErrorBoundaryPrimaryText>
-          <p>{language.error.errorBoundarySecondary} <a target="_blank" href="https://datamermaid.org/contact-us" rel="noreferrer">{language.error.errorBoundaryContactUs}</a>.</p>
-        </ErrorBoundaryContentContainer>
-        <ErrorButtonContainer>
-          {!attemptedRerender &&
-            <ErrorButton
-              onClick={() => {
-                this.setState({
-                  errorMessage: '',
-                  attemptedRerender: true,
-                })
-              }}
-            >
-              <IconRefresh />
-              <span> {language.error.errorBoundaryTryAgain}</span>
-            </ErrorButton>
-          }
-        </ErrorButtonContainer>
-
-      </StyledErrorBoundary>
+      return (
+        <StyledErrorBoundary>
+          <ErrorBoundaryStatusContainer>
+            <ErrorBoundaryStatus />
+          </ErrorBoundaryStatusContainer>
+          <ErrorBoundaryContentContainer>
+            <ErrorBoundaryPrimaryText>
+              {language.error.errorBoundaryPrimary}
+            </ErrorBoundaryPrimaryText>
+            <p>
+              {language.error.errorBoundarySecondary}{' '}
+              <a target="_blank" href="https://datamermaid.org/contact-us" rel="noreferrer">
+                {language.error.errorBoundaryContactUs}
+              </a>
+              .
+            </p>
+          </ErrorBoundaryContentContainer>
+          <ErrorButtonContainer>
+            {!attemptedRerender && (
+              <ErrorButton
+                onClick={() => {
+                  this.setState({
+                    errorMessage: '',
+                    attemptedRerender: true,
+                  })
+                }}
+              >
+                <IconRefresh />
+                <span> {language.error.errorBoundaryTryAgain}</span>
+              </ErrorButton>
+            )}
+          </ErrorButtonContainer>
+        </StyledErrorBoundary>
+      )
     }
 
     return children

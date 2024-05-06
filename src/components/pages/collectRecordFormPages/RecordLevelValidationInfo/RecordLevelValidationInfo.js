@@ -39,6 +39,7 @@ const ScrollToButton = styled(ButtonThatLooksLikeLink)`
 const checkScrollToObservation = (validationInfo) => {
   const validationStatusNotOkay = validationInfo.status !== 'ok'
   const observationTableValidationMessages = [
+    'data.obs_colonies_bleached',
     'data.obs_benthic_photo_quadrats',
     'data.obs_belt_fishes',
   ].some((obs) => validationInfo?.fields?.includes(obs))

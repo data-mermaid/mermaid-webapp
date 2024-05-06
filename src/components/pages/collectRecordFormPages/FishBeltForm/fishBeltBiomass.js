@@ -8,27 +8,27 @@ import { getObjectById } from '../../../../library/getObjectById'
 
 /* this whole file is copy pasted (for the most part) from v1. */
 const relationalOperatorFunctions = {
-  '==': function(a, b) {
+  '==': function (a, b) {
     return a === b
   },
-  '!=': function(a, b) {
+  '!=': function (a, b) {
     return a !== b
   },
-  '>': function(a, b) {
+  '>': function (a, b) {
     return a > b
   },
-  '>=': function(a, b) {
+  '>=': function (a, b) {
     return a >= b
   },
-  '<': function(a, b) {
+  '<': function (a, b) {
     return a < b
   },
-  '<=': function(a, b) {
+  '<=': function (a, b) {
     return a <= b
   },
 }
 
-const utilsCombinations = arr => {
+const utilsCombinations = (arr) => {
   let i, j, temp
 
   const result = []
@@ -53,7 +53,7 @@ const utilsCombinations = arr => {
 }
 
 const evaluateConditions = (fishSize, conditionsCombo) => {
-  const results = conditionsCombo.map(cond => {
+  const results = conditionsCombo.map((cond) => {
     const op = relationalOperatorFunctions[cond.operator]
 
     if (op == null) {
@@ -63,7 +63,7 @@ const evaluateConditions = (fishSize, conditionsCombo) => {
     return op(fishSize, cond.size)
   })
 
-  return results.every(val => val === true)
+  return results.every((val) => val === true)
 }
 
 const calcObsBiomass = ({ size, count, constant_a, constant_b, constant_c, length, width }) => {
