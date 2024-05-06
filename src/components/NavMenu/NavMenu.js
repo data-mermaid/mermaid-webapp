@@ -171,9 +171,7 @@ const NavMenu = ({ subNavNode }) => {
 
   const _getProjectData = useEffect(() => {
     if (!currentProject && isAppOnline && databaseSwitchboardInstance && projectId) {
-      const promises = [
-        databaseSwitchboardInstance.getProject(projectId),
-      ]
+      const promises = [databaseSwitchboardInstance.getProject(projectId)]
 
       Promise.all(promises)
         .then(([projectResponse]) => {
@@ -199,7 +197,7 @@ const NavMenu = ({ subNavNode }) => {
     handleHttpResponseError,
     setCurrentProject,
     currentProject,
-    gfcr
+    gfcr,
   ])
 
   return (
@@ -289,12 +287,12 @@ const NavMenu = ({ subNavNode }) => {
                 </NavLinkSidebar>
               </li>
               <li>
-              {currentProject?.includes_gfcr &&
-                <NavLinkSidebar to={`${projectUrl}/gfcr`}>
-                  <IconGfcr />
-                  <span>GFCR</span>
-                </NavLinkSidebar>
-              }
+                {currentProject?.includes_gfcr && (
+                  <NavLinkSidebar to={`${projectUrl}/gfcr`}>
+                    <IconGfcr />
+                    <span>GFCR</span>
+                  </NavLinkSidebar>
+                )}
               </li>
               {isGfcrSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             </ul>

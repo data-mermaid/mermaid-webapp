@@ -37,8 +37,7 @@ const Layout = ({ children, footer, header }) => {
     if (pathname === '/projects') {
       setCurrentProject()
     }
-  },
-  [pathname, setCurrentProject])
+  }, [pathname, setCurrentProject])
 
   return (
     <LayoutContainer>

@@ -10,7 +10,7 @@ import theme from '../../theme'
 const StyledGfcrCallout = styled('div')`
   padding: 10px;
   margin-bottom: 1em;
-  background-color: #F9F9FB;
+  background-color: #f9f9fb;
 `
 
 const buttonStyle = `

@@ -407,12 +407,12 @@ const ProjectInfo = () => {
             formik.setFieldValue('tags', existingOrganizations)
           }}
         />
-        {isGfcrUserTester &&
+        {isGfcrUserTester && (
           <GfcrCallout
             isGfcr={projectBeingEdited?.includes_gfcr}
             handleUpdateIncludesGfcr={updateIncludesGfcr}
           />
-        }
+        )}
         <DeleteProjectButton
           isLoading={isDeletingProject}
           hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
@@ -498,5 +498,3 @@ OrganizationList.propTypes = {
   organizations: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleOrganizationsChange: PropTypes.func.isRequired,
 }
-
-
