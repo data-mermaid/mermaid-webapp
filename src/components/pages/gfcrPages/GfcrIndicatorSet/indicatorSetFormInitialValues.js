@@ -4,7 +4,7 @@ const getIndicatorSetFormInitialValues = (indicatorSet) => {
 
   return {
     title: indicatorSet?.title ?? '',
-    report_date: indicatorSet?.report_date ?? today,
+    report_date: indicatorSet?.report_date ?? today.toISOString().split('T')[0],
     report_year: indicatorSet?.report_year ?? today.getFullYear(),
     // name: siteRecord?.name ?? '',
     // country: siteRecord?.country ?? '',
