@@ -11,9 +11,9 @@ const StyledNav = styled.nav`
 
 const itemStyles = (props) => css`
   border: 1.5px solid white;
-  border-left: ${props.selected && `4px solid ${theme.color.primaryActive}`};
-  margin-left: ${!props.selected && '3px'};
   background-color: ${props.selected ? theme.color.grey5 : theme.color.grey4};
+  background-color: ${props.selected ? theme.color.primaryColor : theme.color.grey4};
+  color: ${props.selected ? theme.color.white : theme.color.textColor};
   ${hoverState(css`
     background-color: ${theme.color.primaryHover};
     color: ${theme.color.white};
