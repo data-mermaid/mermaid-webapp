@@ -11,7 +11,7 @@ import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingS
 import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
 import { getIndicatorSetFormInitialValues } from './indicatorSetFormInitialValues'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import { H2, ItalicizedInfo } from '../../../generic/text'
+import { ItalicizedInfo } from '../../../generic/text'
 import { Table } from '../../../generic/Table/table'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -24,14 +24,12 @@ import SaveButton from '../../../generic/SaveButton'
 import SingleSiteMap from '../../../mermaidMap/SingleSiteMap'
 import TableRowItem from '../../../generic/Table/TableRowItem'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
-import useDocumentTitle from '../../../../library/useDocumentTitle'
 import useIsMounted from '../../../../library/useIsMounted'
 import { DeleteRecordButtonCautionWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
-import { IconSwap } from '../../../icons'
-import { InputButton } from '../../../generic/buttons'
 import { useCurrentProject } from '../../../../App/CurrentProjectContext'
 import GfcrIndicatorSetNav from '../GfcrIndicatorSetNav'
 import GfcrIndicatorSetForm from '../GfcrIndicatorSetForm/GfcrIndicatorSetForm'
+import IndicatorSetTitle from './IndicatorSetTitle'
 
 const ReadOnlySiteContent = ({
   site,
@@ -272,13 +270,6 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       return errors
     },
   })
-
-  useDocumentTitle(
-    newIndicatorSetType
-      ? language.pages.gfcrIndicatorSetForm.title
-      : `${formik.values.title} | ${indicatorSetTypeName} | ${formik.values.report_year}`,
-  )
-
   // const { setFieldValue: formikSetFieldValue } = formik
 
   const _setSaveButtonUnsaved = useEffect(() => {
@@ -408,17 +399,18 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       isToolbarSticky={true}
       subNavNode={{
         name: newIndicatorSetType
-          ? language.pages.gfcrIndicatorSetForm.title
+          ? language.pages.gfcrIndicatorSet.title
           : `${formik.values.title} ${formik.values.report_year}`,
       }}
       content={contentViewByRole}
       toolbar={
         <ContentPageToolbarWrapper>
-          {newIndicatorSetType ? (
-            <H2>{language.pages.gfcrIndicatorSetForm.title}</H2>
-          ) : (
-            <H2>{`${formik.values.title} | ${indicatorSetTypeName} | ${formik.values.report_year}`}</H2>
-          )}
+          <IndicatorSetTitle
+            indicatorSetTitle={formik.values.title}
+            type={indicatorSetTypeName}
+            reportingYear={formik.values.report_year}
+            isNew={!!newIndicatorSetType}
+          />
           <SaveButton
             formId="indicator-set-form"
             saveButtonState={saveButtonState}
