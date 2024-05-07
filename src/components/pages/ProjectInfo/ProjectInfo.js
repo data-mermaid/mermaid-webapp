@@ -33,7 +33,10 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
-import { getIsUserAdminForProject, getIsUserGfcrTester } from '../../../App/currentUserProfileHelpers'
+import {
+  getIsUserAdminForProject,
+  getIsUserGfcrTester,
+} from '../../../App/currentUserProfileHelpers'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import DeleteProjectButton from '../../DeleteProjectButton/DeleteProjectButton'
 import GfcrCallout from '../../GfcrCallout'
@@ -153,7 +156,8 @@ const ProjectInfo = () => {
   const [projectTagOptions, setProjectTagOptions] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { currentProject: projectBeingEdited, setCurrentProject: setProjectBeingEdited } = useCurrentProject()
+  const { currentProject: projectBeingEdited, setCurrentProject: setProjectBeingEdited } =
+    useCurrentProject()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const { currentUser } = useCurrentUser()
@@ -211,7 +215,14 @@ const ProjectInfo = () => {
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError, setProjectBeingEdited])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isMounted,
+    isAppOnline,
+    handleHttpResponseError,
+    setProjectBeingEdited,
+  ])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -396,12 +407,12 @@ const ProjectInfo = () => {
             formik.setFieldValue('tags', existingOrganizations)
           }}
         />
-        {isGfcrUserTester &&
+        {isGfcrUserTester && (
           <GfcrCallout
             isGfcr={projectBeingEdited?.includes_gfcr}
             handleUpdateIncludesGfcr={updateIncludesGfcr}
           />
-        }
+        )}
         <DeleteProjectButton
           isLoading={isDeletingProject}
           hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}

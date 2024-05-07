@@ -10,7 +10,7 @@ import theme from '../../theme'
 const StyledGfcrCallout = styled('div')`
   padding: 10px;
   margin-bottom: 1em;
-  background-color: #F9F9FB;
+  background-color: #f9f9fb;
 `
 
 const buttonStyle = `
@@ -49,31 +49,32 @@ const GfcrCallout = ({ isGfcr, handleUpdateIncludesGfcr }) => {
   return (
     <StyledGfcrCallout>
       <h3>{language.pages.projectInfo.gfcrCalloutHeading}</h3>
-      {isGfcr
-        ? <>
+      {isGfcr ? (
+        <>
           <StyledParagraph>{language.pages.projectInfo.gfcrRemoveParagraph}</StyledParagraph>
           <StyledButtonSecondary type="button" onClick={() => handleUpdateIncludesGfcr(false)}>
-            <StyledIconCloseCircle inline={true}/> {language.pages.projectInfo.gfcrRemoveButton}
+            <StyledIconCloseCircle inline={true} /> {language.pages.projectInfo.gfcrRemoveButton}
           </StyledButtonSecondary>
         </>
-        : <>
+      ) : (
+        <>
           <StyledParagraph>{language.pages.projectInfo.gfcrAddParagraph}</StyledParagraph>
           <StyledButtonPrimary type="button" onClick={() => handleUpdateIncludesGfcr(true)}>
             <StyledIconIconGfcr /> {language.pages.projectInfo.gfcrAddButton}
           </StyledButtonPrimary>
         </>
-      }
+      )}
     </StyledGfcrCallout>
   )
 }
 
 GfcrCallout.propTypes = {
   isGfcr: PropTypes.bool,
-  handleUpdateIncludesGfcr: PropTypes.func.isRequired
+  handleUpdateIncludesGfcr: PropTypes.func.isRequired,
 }
 
 GfcrCallout.defaultProps = {
-  isGfcr: false
+  isGfcr: false,
 }
 
 export default GfcrCallout

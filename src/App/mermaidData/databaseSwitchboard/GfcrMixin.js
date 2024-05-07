@@ -17,6 +17,36 @@ const GfcrMixin = (Base) =>
             .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    saveIndicatorSet = async function saveIndicatorSet(projectId, editedValues) {
+      if (!projectId || !editedValues) {
+        throw new Error(this._operationMissingParameterError)
+      }
+
+      if (editedValues.id) {
+        return this._isOnlineAuthenticatedAndReady
+          ? axios
+              .put(
+                `${this._apiBaseUrl}/projects/${projectId}/indicatorsets/${editedValues.id}/`,
+                editedValues,
+                await getAuthorizationHeaders(this._getAccessToken),
+              )
+              .then((apiResults) => apiResults.data)
+          : Promise.reject(this._notAuthenticatedAndReadyError)
+      }
+
+      if (!editedValues.id) {
+        return this._isOnlineAuthenticatedAndReady
+          ? axios
+              .post(
+                `${this._apiBaseUrl}/projects/${projectId}/indicatorsets/`,
+                editedValues,
+                await getAuthorizationHeaders(this._getAccessToken),
+              )
+              .then((apiResults) => apiResults.data)
+          : Promise.reject(this._notAuthenticatedAndReadyError)
+      }
+    }
   }
 
-  export default GfcrMixin
+export default GfcrMixin

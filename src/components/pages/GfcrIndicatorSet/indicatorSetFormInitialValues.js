@@ -1,5 +1,11 @@
-const getSiteInitialValues = (indicatorSet) => {
+const getIndicatorSetFormInitialValues = (indicatorSet) => {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
   return {
+    title: indicatorSet?.title ?? '',
+    report_date: indicatorSet?.report_date ?? today,
+    report_year: indicatorSet?.report_year ?? today.getFullYear(),
     // name: siteRecord?.name ?? '',
     // country: siteRecord?.country ?? '',
     // exposure: siteRecord?.exposure ?? '',
@@ -11,4 +17,4 @@ const getSiteInitialValues = (indicatorSet) => {
   }
 }
 
-export { getSiteInitialValues }
+export { getIndicatorSetFormInitialValues }

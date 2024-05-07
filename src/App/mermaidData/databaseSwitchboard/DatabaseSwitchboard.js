@@ -19,13 +19,7 @@ class DatabaseSwitchboard extends ProjectHealthMixin(
         SitesMixin(
           ProjectsMixin(
             ChoicesMixin(
-              ManagementRegimesMixin(
-                CollectRecordsMixin(
-                  GfcrMixin(
-                    DatabaseSwitchboardState
-                  )
-                )
-              )
+              ManagementRegimesMixin(CollectRecordsMixin(GfcrMixin(DatabaseSwitchboardState))),
             ),
           ),
         ),

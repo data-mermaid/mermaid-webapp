@@ -5,9 +5,17 @@ const CurrentProjectContext = createContext()
 
 const CurrentProjectProvider = ({ children }) => {
   const [currentProject, setCurrentProject] = useState()
+  const [gfcrIndicatorSets, setGfcrIndicatorSets] = useState([])
 
   return (
-    <CurrentProjectContext.Provider value={{ currentProject, setCurrentProject }}>
+    <CurrentProjectContext.Provider
+      value={{
+        currentProject,
+        setCurrentProject,
+        gfcrIndicatorSets,
+        setGfcrIndicatorSets,
+      }}
+    >
       {children}
     </CurrentProjectContext.Provider>
   )

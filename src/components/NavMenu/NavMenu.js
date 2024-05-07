@@ -19,7 +19,10 @@ import {
   IconUsersAndTransects,
   IconManagementRegimesOverview,
 } from '../icons'
-import { getIsUserAdminForProject, getIsUserReadOnlyForProject } from '../../App/currentUserProfileHelpers'
+import {
+  getIsUserAdminForProject,
+  getIsUserReadOnlyForProject,
+} from '../../App/currentUserProfileHelpers'
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
 import SubNavMenuRecordName from '../SubNavMenuRecordName'
@@ -143,7 +146,8 @@ const NavLinkSidebar = styled(NavLink)`
 `
 const NavMenu = ({ subNavNode }) => {
   const projectUrl = useCurrentProjectPath()
-  const { recordId, submittedRecordId, siteId, managementRegimeId, projectId, indicatorSetId } = useParams()
+  const { recordId, submittedRecordId, siteId, managementRegimeId, projectId, indicatorSetId } =
+    useParams()
   const { pathname } = useLocation()
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -167,9 +171,7 @@ const NavMenu = ({ subNavNode }) => {
 
   const _getProjectData = useEffect(() => {
     if (!currentProject && isAppOnline && databaseSwitchboardInstance && projectId) {
-      const promises = [
-        databaseSwitchboardInstance.getProject(projectId),
-      ]
+      const promises = [databaseSwitchboardInstance.getProject(projectId)]
 
       Promise.all(promises)
         .then(([projectResponse]) => {
@@ -194,7 +196,7 @@ const NavMenu = ({ subNavNode }) => {
     isAppOnline,
     handleHttpResponseError,
     setCurrentProject,
-    currentProject
+    currentProject,
   ])
 
   return (
@@ -284,14 +286,14 @@ const NavMenu = ({ subNavNode }) => {
                 </NavLinkSidebar>
               </li>
               <li>
-              {currentProject?.includes_gfcr &&
-                <NavLinkSidebar to={`${projectUrl}/gfcr`}>
-                  <IconGfcr />
-                  <span>GFCR</span>
-                </NavLinkSidebar>
-              }
+                {currentProject?.includes_gfcr && (
+                  <NavLinkSidebar to={`${projectUrl}/gfcr`}>
+                    <IconGfcr />
+                    <span>GFCR</span>
+                  </NavLinkSidebar>
+                )}
               </li>
-              {isAdminUser && isGfcrSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
+              {isGfcrSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             </ul>
           </LiNavSecondary>
         </OfflineHide>

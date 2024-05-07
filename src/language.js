@@ -73,6 +73,7 @@ const error = {
   getDeleteOfflineErrorTitle: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has failed to delete from your computer or online.`,
   gfcrIndicatorSetsUnavailable: 'GFCR indicator sets are currently unavailable.',
+  gfcrIndicatorSetSave: 'Indicator set has not been saved.',
   idNotFoundUserAction: "Please check the URL in your browser's address bar.",
   invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable: 'Management Regime records data are currently unavailable.',
@@ -149,6 +150,7 @@ const success = {
     `${projectName} has been removed from being offline ready`,
   getUserRoleChangeSuccessMessage: ({ userName, role }) =>
     `${userName}'s role is now set to ${role}.`,
+  gfcrIndicatorSetSave: 'Indicator set saved.',
   newUserAdd: 'New user added.',
   newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
   userRemoved: 'User removed',
@@ -357,8 +359,10 @@ const pages = {
     notes: 'Notes',
     noOrganization: 'This Project has no organizations.',
     gfcrCalloutHeading: 'Global Fund for Coral Reefs (GFCR)',
-    gfcrRemoveParagraph: 'Removing GFCR indicators from this project will not delete them, but just hide them.',
-    gfcrAddParagraph: 'GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. ',
+    gfcrRemoveParagraph:
+      'Removing GFCR indicators from this project will not delete them, but just hide them.',
+    gfcrAddParagraph:
+      'GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. ',
     gfcrRemoveButton: 'Remove GFCR indicators from this project',
     gfcrAddButton: 'Add GFCR indicators to this project',
   },
@@ -464,7 +468,10 @@ const pages = {
     filterToolbarText: 'Filter this table by indicator set, and other things?',
     title: 'GFCR',
     noDataMainText: 'No indicator sets yet.',
-    noDataSubText: "Select 'Create new' to add an indicator set to this project."
+    noDataSubText: "Select 'Create new' to add an indicator set to this project.",
+  },
+  gfcrIndicatorSetForm: {
+    title: 'Indicator Set',
   },
   goToDashboard: 'View on Dashboard',
 }

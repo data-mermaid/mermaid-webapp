@@ -33,14 +33,11 @@ const Layout = ({ children, footer, header }) => {
   const { pathname } = useLocation()
   const { setCurrentProject } = useCurrentProject()
 
-
-
   const _locationChanged = useEffect(() => {
     if (pathname === '/projects') {
       setCurrentProject()
     }
-  },
-  [pathname, setCurrentProject])
+  }, [pathname, setCurrentProject])
 
   return (
     <LayoutContainer>
