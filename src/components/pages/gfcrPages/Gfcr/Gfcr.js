@@ -4,28 +4,28 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 
-import { ContentPageLayout } from '../../Layout'
-import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
+import { ContentPageLayout } from '../../../Layout'
+import FilterSearchToolbar from '../../../FilterSearchToolbar/FilterSearchToolbar'
 import {
   getIsUserAdminForProject,
   getIsUserReadOnlyForProject,
-} from '../../../App/currentUserProfileHelpers'
-import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
-import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
-import { getToastArguments } from '../../../library/getToastArguments'
-import { H2 } from '../../generic/text'
-import { IconPlus, IconDownload } from '../../icons'
-import language from '../../../language'
-import PageSelector from '../../generic/Table/PageSelector'
-import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import PageUnavailable from '../PageUnavailable'
+} from '../../../../App/currentUserProfileHelpers'
+import { getTableColumnHeaderProps } from '../../../../library/getTableColumnHeaderProps'
+import { getTableFilteredRows } from '../../../../library/getTableFilteredRows'
+import { getToastArguments } from '../../../../library/getToastArguments'
+import { H2 } from '../../../generic/text'
+import { IconPlus, IconDownload } from '../../../icons'
+import language from '../../../../language'
+import PageSelector from '../../../generic/Table/PageSelector'
+import PageSizeSelector from '../../../generic/Table/PageSizeSelector'
+import PageUnavailable from '../../PageUnavailable'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
-} from '../../generic/Table/reactTableNaturalSort'
-import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import { ButtonSecondary, ToolbarButtonWrapper } from '../../generic/buttons'
-import { Column, ToolBarRow } from '../../generic/positioning'
+} from '../../../generic/Table/reactTableNaturalSort'
+import { splitSearchQueryStrings } from '../../../../library/splitSearchQueryStrings'
+import { ButtonSecondary, ToolbarButtonWrapper } from '../../../generic/buttons'
+import { Column, ToolBarRow } from '../../../generic/positioning'
 import {
   Tr,
   Th,
@@ -33,22 +33,22 @@ import {
   TableNavigation,
   StickyTableOverflowWrapper,
   GenericStickyTable,
-} from '../../generic/Table/table'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import useDocumentTitle from '../../../library/useDocumentTitle'
-import useIsMounted from '../../../library/useIsMounted'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { getFileExportName } from '../../../library/getFileExportName'
-import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
-import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+} from '../../../generic/Table/table'
+import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import useDocumentTitle from '../../../../library/useDocumentTitle'
+import useIsMounted from '../../../../library/useIsMounted'
+import { useOnlineStatus } from '../../../../library/onlineStatusContext'
+import usePersistUserTablePreferences from '../../../generic/Table/usePersistUserTablePreferences'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { getFileExportName } from '../../../../library/getFileExportName'
+import { PAGE_SIZE_DEFAULT } from '../../../../library/constants/constants'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { GfcrPageUnavailablePadding, StyledToolbarButtonWrapper } from './Gfcr.styles'
-import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
-import { DropdownItemStyle } from '../../generic/ButtonSecondaryDropdown/ButtonSecondaryDropdown.styles'
-import { useCurrentProject } from '../../../App/CurrentProjectContext'
+import ButtonSecondaryDropdown from '../../../generic/ButtonSecondaryDropdown'
+import { DropdownItemStyle } from '../../../generic/ButtonSecondaryDropdown/ButtonSecondaryDropdown.styles'
+import { useCurrentProject } from '../../../../App/CurrentProjectContext'
 
 // const indicatorSetsDummyData = [
 //   {

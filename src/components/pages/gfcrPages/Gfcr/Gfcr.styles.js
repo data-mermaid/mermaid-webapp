@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { ToolbarButtonWrapper } from '../../generic/buttons'
+import { ToolbarButtonWrapper } from '../../../generic/buttons'
 
 export const GfcrPageUnavailablePadding = styled.div`
   padding-top: 50px;
