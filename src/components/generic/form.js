@@ -83,7 +83,9 @@ export const RequiredIndicator = styled.span`
     content: ' *';
   }
 `
-export const InputRow = styled.div`
+export const InputRow = styled.div.attrs({
+  className: 'inputRow', // Used to override styles in GFCR forms
+})`
   display: grid;
   grid-template-columns: 23rem 31rem 1fr;
   max-width: ${theme.spacing.maxWidth};
@@ -136,7 +138,9 @@ export const Textarea = styled.textarea`
   resize: vertical;
   ${inputTextareaSelectStyles}
 `
-export const LabelContainer = styled.div`
+export const LabelContainer = styled.div.attrs({
+  className: 'labelContainer', // Used to override styles in GFCR forms
+})`
   display: flex;
   flex-direction: row;
   position: relative;

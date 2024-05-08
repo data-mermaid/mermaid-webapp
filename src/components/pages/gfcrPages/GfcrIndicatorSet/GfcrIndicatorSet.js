@@ -168,14 +168,23 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
 
   const handleFormSubmit = useCallback(
     (formikValues, formikActions) => {
-      const { title, report_date, report_year } = formikValues
+      /* Ignore to keep sub forms grouped together */
+      /* prettier-ignore */
+      const {
+        title, report_date, report_year,
+        f1_1,
+        f2_1a, f2_1b, f2_2a, f2_2b, f2_3a, f2_3b, f2_4, f2_opt1,
+      } = formikValues
 
+      /* prettier-ignore */
       const formattedIndicatorSetForApi = {
         ...indicatorSetBeingEdited,
+        indicator_set_type: indicatorSetType,
         title,
         report_date,
         report_year,
-        indicator_set_type: indicatorSetType,
+        f1_1,
+        f2_1a, f2_1b, f2_2a, f2_2b, f2_3a, f2_3b, f2_4, f2_opt1,
       }
 
       setSaveButtonState(buttonGroupStates.saving)
@@ -226,10 +235,6 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       const errors = {}
 
       if (!values.title) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
-      }
-
-      if (!values.report_date) {
         errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
