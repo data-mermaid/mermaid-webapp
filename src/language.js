@@ -472,6 +472,16 @@ const pages = {
   },
   gfcrIndicatorSet: {
     title: 'Indicator Set',
+    f1_1: 'Coral reef area of coral reefs in GFCR programming',
+    f2_1a: 'Coral reef area of MPAs and OECMs (as aligned to GBF Target 3)',
+    f2_1b: 'Total area of MPAs and OECMs (as aligned to GBF Target 3)',
+    f2_2a: 'Coral reef area of locally managed areas / co-managed areas',
+    f2_2b: 'Total area of locally managed areas / co-managed areas',
+    f2_3a: 'Coral reef area of fisheries management',
+    f2_3b: 'Total area of fisheries management',
+    f2_4: 'Area with pollution mitigation',
+    f2_opt1:
+      'Area of non-coral reef ecosystems, e.g. mangroves, seagrass or other associated ecosystems',
   },
   gfcrIndicatorSetNav: {
     indicatorSetHeading: 'Indicator Set',
