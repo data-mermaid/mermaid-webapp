@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { formikPropType } from '../../../../library/formikPropType'
-import { F1Form, F2Form, IndicatorSetForm } from './subForms'
+import { F1Form, F2Form, F3Form, IndicatorSetForm } from './subForms'
 
 const handleInputBlur = (formik, event, fieldName) => {
   const { value } = event.target
@@ -27,6 +27,7 @@ const GfcrIndicatorSetForm = ({ formik, selectedNavItem }) => {
       )}
       {selectedNavItem === 'f1' && <F1Form formik={formik} handleInputBlur={handleInputBlur} />}
       {selectedNavItem === 'f2' && <F2Form formik={formik} handleInputBlur={handleInputBlur} />}
+      {selectedNavItem === 'f3' && <F3Form formik={formik} handleInputBlur={handleInputBlur} />}
     </form>
   )
 }

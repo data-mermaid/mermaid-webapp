@@ -12,7 +12,6 @@ import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelp
 import { getIndicatorSetFormInitialValues } from './indicatorSetFormInitialValues'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { ItalicizedInfo } from '../../../generic/text'
-import { Table } from '../../../generic/Table/table'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
@@ -21,8 +20,6 @@ import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import language from '../../../../language'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
 import SaveButton from '../../../generic/SaveButton'
-import SingleSiteMap from '../../../mermaidMap/SingleSiteMap'
-import TableRowItem from '../../../generic/Table/TableRowItem'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
 import { DeleteRecordButtonCautionWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
@@ -31,40 +28,40 @@ import GfcrIndicatorSetNav from '../GfcrIndicatorSetNav'
 import GfcrIndicatorSetForm from '../GfcrIndicatorSetForm/GfcrIndicatorSetForm'
 import IndicatorSetTitle from './IndicatorSetTitle'
 
-const ReadOnlySiteContent = ({
-  site,
-  countryOptions,
-  exposureOptions,
-  reefTypeOptions,
-  reefZoneOptions,
-  isReadOnlyUser,
-  isAppOnline,
-}) => {
-  const { country, latitude, longitude, exposure, reef_type, reef_zone, notes } = site
+// const ReadOnlySiteContent = ({
+//   site,
+//   countryOptions,
+//   exposureOptions,
+//   reefTypeOptions,
+//   reefZoneOptions,
+//   isReadOnlyUser,
+//   isAppOnline,
+// }) => {
+//   const { country, latitude, longitude, exposure, reef_type, reef_zone, notes } = site
 
-  return (
-    <>
-      <Table>
-        <tbody>
-          <TableRowItem title="Country" options={countryOptions} value={country} />
-          <TableRowItem title="Latitude" value={latitude} />
-          <TableRowItem title="Longitude" value={longitude} />
-          <TableRowItem title="Exposure" options={exposureOptions} value={exposure} />
-          <TableRowItem title="Reef Type" options={reefTypeOptions} value={reef_type} />
-          <TableRowItem title="Reef Zone" options={reefZoneOptions} value={reef_zone} />
-          <TableRowItem title="Notes" value={notes} isAllowNewlines={true} />
-        </tbody>
-      </Table>
-      {isAppOnline && (
-        <SingleSiteMap
-          formLatitudeValue={latitude}
-          formLongitudeValue={longitude}
-          isReadOnlyUser={isReadOnlyUser}
-        />
-      )}
-    </>
-  )
-}
+//   return (
+//     <>
+//       <Table>
+//         <tbody>
+//           <TableRowItem title="Country" options={countryOptions} value={country} />
+//           <TableRowItem title="Latitude" value={latitude} />
+//           <TableRowItem title="Longitude" value={longitude} />
+//           <TableRowItem title="Exposure" options={exposureOptions} value={exposure} />
+//           <TableRowItem title="Reef Type" options={reefTypeOptions} value={reef_type} />
+//           <TableRowItem title="Reef Zone" options={reefZoneOptions} value={reef_zone} />
+//           <TableRowItem title="Notes" value={notes} isAllowNewlines={true} />
+//         </tbody>
+//       </Table>
+//       {isAppOnline && (
+//         <SingleSiteMap
+//           formLatitudeValue={latitude}
+//           formLongitudeValue={longitude}
+//           isReadOnlyUser={isReadOnlyUser}
+//         />
+//       )}
+//     </>
+//   )
+// }
 
 const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -174,6 +171,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         title, report_date, report_year,
         f1_1,
         f2_1a, f2_1b, f2_2a, f2_2b, f2_3a, f2_3b, f2_4, f2_opt1,
+        f3_1, f3_2, f3_3, f3_4, f3_5a, f3_5b, f3_5c, f3_5d, f3_6
       } = formikValues
 
       /* prettier-ignore */
@@ -185,6 +183,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         report_year,
         f1_1,
         f2_1a, f2_1b, f2_2a, f2_2b, f2_3a, f2_3b, f2_4, f2_opt1,
+        f3_1, f3_2, f3_3, f3_4, f3_5a, f3_5b, f3_5c, f3_5d, f3_6
       }
 
       setSaveButtonState(buttonGroupStates.saving)

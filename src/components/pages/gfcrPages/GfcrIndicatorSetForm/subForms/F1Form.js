@@ -20,8 +20,6 @@ const F1Form = ({ formik, handleInputBlur }) => {
         type="number"
         unit="km²"
         {...formik.getFieldProps('f1_1')}
-        validationType={formik.errors.title && formik.touched.title ? 'error' : null}
-        validationMessages={formik.errors.title}
         onBlur={(event) => handleInputBlur(formik, event, 'f1_1')}
         helperText="Example helper text"
         onKeyDown={(event) => enforceNumberInput(event)}

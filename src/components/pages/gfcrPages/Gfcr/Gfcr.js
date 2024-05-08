@@ -1,4 +1,4 @@
-import { CSVLink } from 'react-csv'
+// import { CSVLink } from 'react-csv'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
@@ -41,8 +41,7 @@ import useDocumentTitle from '../../../../library/useDocumentTitle'
 import useIsMounted from '../../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../../generic/Table/usePersistUserTablePreferences'
-import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { getFileExportName } from '../../../../library/getFileExportName'
+// import { getFileExportName } from '../../../../library/getFileExportName'
 import { PAGE_SIZE_DEFAULT } from '../../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { GfcrPageUnavailablePadding, StyledToolbarButtonWrapper } from './Gfcr.styles'
@@ -88,18 +87,16 @@ const Gfcr = () => {
   const { currentUser } = useCurrentUser()
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  // const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
-  const [siteExportName, setSiteExportName] = useState('')
-  const [choices, setChoices] = useState({})
-  const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
+  // const [siteExportName, setSiteExportName] = useState('')
+  // const [choices, setChoices] = useState({})
+  // const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
-  const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
-  const openCopySitesModal = () => setIsCopySitesModalOpen(true)
-  const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
+  // const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
+  // const openCopySitesModal = () => setIsCopySitesModalOpen(true)
+  // const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
@@ -389,7 +386,7 @@ const Gfcr = () => {
         <GenericStickyTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
+              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
@@ -402,6 +399,7 @@ const Gfcr = () => {
                         ...getTableColumnHeaderProps(column),
                         ...{ style: { textAlign: column.align } },
                       })}
+                      key={column.id}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
@@ -419,10 +417,10 @@ const Gfcr = () => {
               prepareRow(row)
 
               return (
-                <Tr {...row.getRowProps()}>
+                <Tr key={row.id} {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                      <Td key={cell.id} {...cell.getCellProps()} align={cell.column.align}>
                         {cell.render('Cell')}
                       </Td>
                     )

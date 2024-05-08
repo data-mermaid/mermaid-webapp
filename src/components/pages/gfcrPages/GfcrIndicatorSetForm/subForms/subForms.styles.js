@@ -14,3 +14,18 @@ export const StyledGfcrInputWrapper = styled(InputWrapper)`
     margin-bottom: 1rem;
   }
 `
+
+export const StyledGfcrSubInputWrapper = styled(InputWrapper)`
+  padding 0;
+
+  .inputRow {
+    display: flex;
+    border-width: 0;
+    padding: 1rem 0 1rem 1rem;
+    justify-content: right;
+  }
+
+  .labelContainer {
+    margin-right: 1rem;
+  }
+`

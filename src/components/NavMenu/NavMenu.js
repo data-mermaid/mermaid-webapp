@@ -19,10 +19,7 @@ import {
   IconUsersAndTransects,
   IconManagementRegimesOverview,
 } from '../icons'
-import {
-  getIsUserAdminForProject,
-  getIsUserReadOnlyForProject,
-} from '../../App/currentUserProfileHelpers'
+import { getIsUserReadOnlyForProject } from '../../App/currentUserProfileHelpers'
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
 import SubNavMenuRecordName from '../SubNavMenuRecordName'

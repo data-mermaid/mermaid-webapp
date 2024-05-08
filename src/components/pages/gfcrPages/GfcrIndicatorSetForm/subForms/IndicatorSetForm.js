@@ -29,8 +29,6 @@ const IndicatorSetForm = ({ formik, handleInputBlur, setInputToDefaultValue }) =
         id="gfcr-report_date"
         type="date"
         {...formik.getFieldProps('report_date')}
-        validationType={formik.errors.report_date && formik.touched.report_date ? 'error' : null}
-        validationMessages={formik.errors.report_date}
         onBlur={(event) => handleInputBlur(formik, event, 'report_date')}
         value={formik.values.report_date}
       />
@@ -39,8 +37,6 @@ const IndicatorSetForm = ({ formik, handleInputBlur, setInputToDefaultValue }) =
         id="gfcr-report-year"
         type="number"
         {...formik.getFieldProps('report_year')}
-        validationType={formik.errors.report_year && formik.touched.report_year ? 'error' : null}
-        validationMessages={formik.errors.report_year}
         onKeyDown={(event) => enforceNumberInput(event)}
         onBlur={(event) => {
           const { value } = event.target
