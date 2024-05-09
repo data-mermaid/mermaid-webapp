@@ -482,6 +482,18 @@ const pages = {
     f2_4: 'Area with pollution mitigation',
     f2_opt1:
       'Area of non-coral reef ecosystems, e.g. mangroves, seagrass or other associated ecosystems',
+    f3_1: 'Area of effective coral reef restoration',
+    f3_2: 'Number of in situ coral restoration projects',
+    f3_3: 'Number of coral restoration plans, technologies, strategies or guidelines developed',
+    f3_4: 'Number of coral restoration trainings',
+    f3_5: 'Number of people engaged in coral restoration',
+    f3_5_total: 'Total',
+    f3_5_ofTotalHowMany: 'Of the total, how many of the following',
+    f3_5a: 'Men',
+    f3_5b: 'Women',
+    f3_5c: 'Youth',
+    f3_5d: 'Indigenous',
+    f3_6: 'Number of response plans (incl. financial mechanisms, eg., insurance) in place to support coral restoration after severe shocks (e.g,. storms, bleaching)',
   },
   gfcrIndicatorSetNav: {
     indicatorSetHeading: 'Indicator Set',

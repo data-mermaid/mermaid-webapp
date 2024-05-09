@@ -15,6 +15,15 @@ const getIndicatorSetFormInitialValues = (indicatorSet) => {
     f2_3b = '0',
     f2_4 = '0',
     f2_opt1 = '0',
+    f3_1 = '0',
+    f3_2 = '0',
+    f3_3 = '0',
+    f3_4 = '0',
+    f3_5a = '0',
+    f3_5b = '0',
+    f3_5c = '0',
+    f3_5d = '0',
+    f3_6 = '0',
   } = indicatorSet ?? {}
 
   return {
@@ -30,6 +39,15 @@ const getIndicatorSetFormInitialValues = (indicatorSet) => {
     f2_3b,
     f2_4,
     f2_opt1,
+    f3_1,
+    f3_2,
+    f3_3,
+    f3_4,
+    f3_5a,
+    f3_5b,
+    f3_5c,
+    f3_5d,
+    f3_6,
   }
 }
 
