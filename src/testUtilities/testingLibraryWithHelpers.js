@@ -79,7 +79,7 @@ const UnauthenticatedProviders = ({ children }) => (
             </HttpResponseErrorHandlerProvider>
           </CurrentProjectProvider>
         </CurrentUserProvider>
-     </SyncStatusProvider>
+      </SyncStatusProvider>
     </ThemeProvider>
   </Auth0Context.Provider>
 )
