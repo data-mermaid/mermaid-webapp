@@ -8,8 +8,6 @@ import Collect from '../components/pages/Collect'
 import DataSharing from '../components/pages/DataSharing'
 import FishBeltForm from '../components/pages/collectRecordFormPages/FishBeltForm'
 import FishFamilies from '../components/pages/FishFamilies'
-import Gfcr from '../components/pages/gfcrPages/Gfcr'
-import GfcrIndicatorSet from '../components/pages/gfcrPages/GfcrIndicatorSet'
 import GraphsAndMaps from '../components/pages/GraphsAndMaps'
 import HabitatComplexityForm from '../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
 import ManagementRegime from '../components/pages/ManagementRegime'
@@ -168,22 +166,6 @@ export const routes = [
   {
     path: '/projects/:projectId/data-sharing',
     Component: () => <DataSharing />,
-  },
-  {
-    path: '/projects/:projectId/gfcr',
-    Component: () => <Gfcr />,
-  },
-  {
-    path: '/projects/:projectId/gfcr/new/annual-report',
-    Component: () => <GfcrIndicatorSet newIndicatorSetType={'annual_report'} />,
-  },
-  {
-    path: '/projects/:projectId/gfcr/new/target',
-    Component: () => <GfcrIndicatorSet newIndicatorSetType={'target'} />,
-  },
-  {
-    path: '/projects/:projectId/gfcr/:indicatorSetId',
-    Component: () => <GfcrIndicatorSet />,
   },
   {
     path: '/noProjectAccess',

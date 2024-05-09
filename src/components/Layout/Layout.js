@@ -1,13 +1,11 @@
 import styled, { css } from 'styled-components/macro'
 import PropTypes from 'prop-types'
-import React, { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import React from 'react'
 import theme from '../../theme'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 
 import { Column } from '../generic/positioning'
 import ErrorBoundary from '../ErrorBoundary'
-import { useCurrentProject } from '../../App/CurrentProjectContext'
 
 const LayoutContainer = styled(Column)`
   & main {
@@ -30,14 +28,6 @@ const OfflineIndicatorStyles = styled.div`
 
 const Layout = ({ children, footer, header }) => {
   const { isAppOnline } = useOnlineStatus()
-  const { pathname } = useLocation()
-  const { setCurrentProject } = useCurrentProject()
-
-  const _locationChanged = useEffect(() => {
-    if (pathname === '/projects') {
-      setCurrentProject()
-    }
-  }, [pathname, setCurrentProject])
 
   return (
     <LayoutContainer>

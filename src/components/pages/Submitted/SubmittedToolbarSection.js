@@ -1,16 +1,29 @@
 import { useParams } from 'react-router-dom'
 import PropTypes, { string } from 'prop-types'
 import React from 'react'
+import styled, { css } from 'styled-components'
 
 import { Column, FilterItems, ToolBarItemsRow } from '../../generic/positioning'
 import { H2 } from '../../generic/text'
+import { hoverState } from '../../../library/styling/mediaQueries'
 import { IconDownload } from '../../icons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
-import { DropdownItemStyle } from '../../generic/ButtonSecondaryDropdown/ButtonSecondaryDropdown.styles'
+import theme from '../../../theme'
+
+const DropdownItemStyle = styled.button`
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
+  ${hoverState(css`
+    background-color: ${theme.color.secondaryHover};
+  `)}
+`
 
 const SubmittedToolbarSection = ({
   name,

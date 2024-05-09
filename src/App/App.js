@@ -5,7 +5,6 @@ import React, { useCallback, useMemo } from 'react'
 
 import { BellNotificationProvider } from './BellNotificationContext'
 import { CurrentUserProvider } from './CurrentUserContext'
-import { CurrentProjectProvider } from './CurrentProjectContext'
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { getToastArguments } from '../library/getToastArguments'
@@ -205,59 +204,57 @@ function App({ dexieCurrentUserInstance }) {
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <CurrentUserProvider value={{ currentUser, saveUserProfile, refreshCurrentUser }}>
-          <CurrentProjectProvider>
-            <HttpResponseErrorHandlerProvider
-              value={handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied}
+          <HttpResponseErrorHandlerProvider
+            value={handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied}
+          >
+            <BellNotificationProvider
+              value={{ notifications, deleteNotification, deleteAllNotifications }}
             >
-              <BellNotificationProvider
-                value={{ notifications, deleteNotification, deleteAllNotifications }}
-              >
-                <GlobalStyle />
-                <CustomToastContainer limit={5} />
-                <ErrorBoundary>
-                  <Layout {...layoutProps}>
-                    {
-                      /** The isMermaidAuthenticated is needed here to prevent an
-                       * infinite log in loop with authentication.
-                       *
-                       * The projects list route and project workflow pages will trigger
-                       * a sync when they are routed to, making isOfflineStorageHydrated = true
-                       */
-                      isMermaidAuthenticated ? (
-                        <ErrorBoundary>
-                          <Routes>
-                            {routes.map(({ path, Component }) => (
-                              <Route
-                                exact
-                                path={path}
-                                key={path}
-                                element={
-                                  isMermaidAuthenticatedAndReady ? (
-                                    <Component />
-                                  ) : (
-                                    <LoadingIndicator />
-                                  )
-                                }
-                              />
-                            ))}
-                            <Route exact path="/" element={<Navigate to="/projects" replace />} />
+              <GlobalStyle />
+              <CustomToastContainer limit={5} />
+              <ErrorBoundary>
+                <Layout {...layoutProps}>
+                  {
+                    /** The isMermaidAuthenticated is needed here to prevent an
+                     * infinite log in loop with authentication.
+                     *
+                     * The projects list route and project workflow pages will trigger
+                     * a sync when they are routed to, making isOfflineStorageHydrated = true
+                     */
+                    isMermaidAuthenticated ? (
+                      <ErrorBoundary>
+                        <Routes>
+                          {routes.map(({ path, Component }) => (
+                            <Route
+                              exact
+                              path={path}
+                              key={path}
+                              element={
+                                isMermaidAuthenticatedAndReady ? (
+                                  <Component />
+                                ) : (
+                                  <LoadingIndicator />
+                                )
+                              }
+                            />
+                          ))}
+                          <Route exact path="/" element={<Navigate to="/projects" replace />} />
 
-                            {/* The following route is required b/c of how Cloudfront handles root paths. This is
-                              required for preview urls. When viewing a preview, you will need to append /index.html
-                              like so: https://preview.app2.datamermaid.org/123/index.html */}
-                            <Route exact path="/index.html" element={<Navigate to="/projects" />} />
-                            <Route path="/*" element={<PageNotFound />} />
-                          </Routes>
-                        </ErrorBoundary>
-                      ) : (
-                        <LoadingIndicator />
-                      )
-                    }
-                  </Layout>
-                </ErrorBoundary>
-              </BellNotificationProvider>
-            </HttpResponseErrorHandlerProvider>
-          </CurrentProjectProvider>
+                          {/* The following route is required b/c of how Cloudfront handles root paths. This is
+                            required for preview urls. When viewing a preview, you will need to append /index.html
+                            like so: https://preview.app2.datamermaid.org/123/index.html */}
+                          <Route exact path="/index.html" element={<Navigate to="/projects" />} />
+                          <Route path="/*" element={<PageNotFound />} />
+                        </Routes>
+                      </ErrorBoundary>
+                    ) : (
+                      <LoadingIndicator />
+                    )
+                  }
+                </Layout>
+              </ErrorBoundary>
+            </BellNotificationProvider>
+          </HttpResponseErrorHandlerProvider>
         </CurrentUserProvider>
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>

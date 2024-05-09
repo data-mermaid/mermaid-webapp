@@ -33,14 +33,9 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
-import {
-  getIsUserAdminForProject,
-  getIsUserGfcrTester,
-} from '../../../App/currentUserProfileHelpers'
+import { getIsUserAdminForProject } from '../../../App/currentUserProfileHelpers'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import DeleteProjectButton from '../../DeleteProjectButton/DeleteProjectButton'
-import GfcrCallout from '../../GfcrCallout'
-import { useCurrentProject } from '../../../App/CurrentProjectContext'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -153,11 +148,10 @@ const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
 const ProjectInfo = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [projectBeingEdited, setProjectBeingEdited] = useState()
   const [projectTagOptions, setProjectTagOptions] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { currentProject: projectBeingEdited, setCurrentProject: setProjectBeingEdited } =
-    useCurrentProject()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const { currentUser } = useCurrentUser()
@@ -165,7 +159,6 @@ const ProjectInfo = () => {
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
-  const isGfcrUserTester = getIsUserGfcrTester(currentUser)
   const [projectNameError, setProjectNameError] = useState(false)
   const [isDeletingProject, setIsDeletingProject] = useState(false)
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false)
@@ -215,14 +208,7 @@ const ProjectInfo = () => {
           })
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    projectId,
-    isMounted,
-    isAppOnline,
-    handleHttpResponseError,
-    setProjectBeingEdited,
-  ])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -326,36 +312,6 @@ const ProjectInfo = () => {
       })
   }
 
-  const updateIncludesGfcr = (includesGfcrValue) => {
-    const editedValues = { includes_gfcr: includesGfcrValue }
-
-    databaseSwitchboardInstance
-      .saveProject({ projectId, editedValues })
-      .then((updatedProject) => {
-        setProjectBeingEdited(updatedProject)
-
-        if (includesGfcrValue) {
-          toast.success(...getToastArguments(language.success.projectAddGfcr))
-        }
-        if (!includesGfcrValue) {
-          toast.success(...getToastArguments(language.success.projectRemoveGfcr))
-        }
-      })
-      .catch((error) => {
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            if (includesGfcrValue) {
-              toast.error(...getToastArguments(language.error.projectAddGfcr))
-            }
-            if (!includesGfcrValue) {
-              toast.error(...getToastArguments(language.error.projectRemoveGfcr))
-            }
-          },
-        })
-      })
-  }
-
   const adminContent = (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
@@ -407,12 +363,6 @@ const ProjectInfo = () => {
             formik.setFieldValue('tags', existingOrganizations)
           }}
         />
-        {isGfcrUserTester && (
-          <GfcrCallout
-            isGfcr={projectBeingEdited?.includes_gfcr}
-            handleUpdateIncludesGfcr={updateIncludesGfcr}
-          />
-        )}
         <DeleteProjectButton
           isLoading={isDeletingProject}
           hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
