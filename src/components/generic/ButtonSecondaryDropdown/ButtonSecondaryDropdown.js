@@ -1,15 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled from 'styled-components/macro'
-import theme from '../../../theme'
-import HideShow, { DropdownContainer } from '../HideShow'
+import HideShow from '../HideShow'
 import { ButtonSecondary } from '../buttons'
 import { IconDown } from '../../icons'
-
-const StyledDropdownContainer = styled(DropdownContainer)`
-  background-color: ${theme.color.white};
-  border: solid 1px ${theme.color.border};
-`
+import { StyledDropdownContainer } from './ButtonSecondaryDropdown.styles'
 
 const ButtonSecondaryDropdown = ({ children, label, className }) => {
   return (
