@@ -31,6 +31,7 @@ const InputWithLabelAndValidation = ({
   renderItemWithinInput,
   renderItemAboveInput,
   isInputDisabled,
+  showHelperText = false,
 
   ...restOfProps
 }) => {
@@ -38,7 +39,7 @@ const InputWithLabelAndValidation = ({
 
   useStopInputScrollingIncrementNumber(textFieldRef)
 
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(showHelperText)
 
   const handleInfoIconClick = (event) => {
     isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
@@ -102,6 +103,7 @@ const InputWithLabelAndValidation = ({
 InputWithLabelAndValidation.propTypes = {
   required: PropTypes.bool,
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  showHelperText: PropTypes.bool,
   id: PropTypes.string.isRequired,
   isInputDisabled: PropTypes.bool,
   ignoreNonObservationFieldValidations: PropTypes.func,
@@ -118,6 +120,7 @@ InputWithLabelAndValidation.propTypes = {
 InputWithLabelAndValidation.defaultProps = {
   required: false,
   helperText: undefined,
+  showHelperText: false,
   ignoreNonObservationFieldValidations: () => {},
   isInputDisabled: false,
   renderItemAboveInput: undefined,
