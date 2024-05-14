@@ -103,7 +103,7 @@ const F4Form = ({
     f41HelperText = indicatorSet?.f4_1_calc
       ? gfcrIndicatorSetLanguage.f4_valueFromMermaidData
       : gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
-  } else if (!isF41UsingCalcValue && !indicatorSet?.f4_1_calc) {
+  } else if (!isF41UsingCalcValue && indicatorSet?.f4_1_calc) {
     f41HelperText = gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
   }
 
@@ -111,7 +111,7 @@ const F4Form = ({
     f42HelperText = indicatorSet?.f4_2_calc
       ? gfcrIndicatorSetLanguage.f4_valueFromMermaidData
       : gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
-  } else if (!isF42UsingCalcValue && !indicatorSet?.f4_2_calc) {
+  } else if (!isF42UsingCalcValue && indicatorSet?.f4_2_calc) {
     f42HelperText = gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
   }
 
