@@ -77,9 +77,9 @@ const F5Form = ({ formik, handleInputBlur }) => {
           <InputWithLabelAndValidation
             disabled
             label={<b>{gfcrIndicatorSetLanguage.total}</b>}
-            id="f3_5_total"
+            id="f5_4_total"
             type="number"
-            value={formik.values.f5_4a + formik.values.f5_4b}
+            value={parseInt(formik.values.f5_4a + formik.values.f5_4b)}
           />
         </StyledGfcrSubInputWrapper>
         <div>{gfcrIndicatorSetLanguage.ofTotalHowMany}</div>

@@ -43,7 +43,7 @@ const F6Form = ({ formik, handleInputBlur }) => {
             label={<b>{gfcrIndicatorSetLanguage.total}</b>}
             id="f6_1_total"
             type="number"
-            value={formik.values.f6_1a + formik.values.f6_1b}
+            value={parseInt(formik.values.f6_1a + formik.values.f6_1b)}
           />
         </StyledGfcrSubInputWrapper>
         <div>{gfcrIndicatorSetLanguage.ofTotalHowMany}</div>

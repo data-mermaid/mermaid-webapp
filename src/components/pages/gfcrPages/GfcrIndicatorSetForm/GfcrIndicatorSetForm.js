@@ -48,6 +48,7 @@ const GfcrIndicatorSetForm = ({
           handleInputBlur={handleInputBlur}
           indicatorSetType={indicatorSetType}
           indicatorSet={indicatorSet}
+          setInputToDefaultValue={setInputToDefaultValue}
           handleFormSubmit={handleFormSubmit}
         />
       )}

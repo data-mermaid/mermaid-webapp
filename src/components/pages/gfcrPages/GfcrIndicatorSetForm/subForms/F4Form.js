@@ -40,16 +40,29 @@ const calculatedValueCorrespondingNames = {
   f4_3_calc: 'F 4.3',
 }
 
-const F4Form = ({ formik, handleInputBlur, indicatorSetType, indicatorSet, handleFormSubmit }) => {
+const F4Form = ({
+  formik,
+  handleInputBlur,
+  indicatorSetType,
+  indicatorSet,
+  setInputToDefaultValue,
+  handleFormSubmit,
+}) => {
   const [isUpdateFromCalc, setIsUpdateFromCalc] = useState(false)
   const isAnnualReport = indicatorSetType === 'annual_report'
 
   const _indicatorSetChanged = useEffect(() => {
     if (isUpdateFromCalc) {
-      // Set values to calculated values
-      formik.setFieldValue('f4_1', indicatorSet.f4_1_calc)
-      formik.setFieldValue('f4_2', indicatorSet.f4_2_calc)
-      formik.setFieldValue('f4_3', indicatorSet.f4_3_calc)
+      // Set values to calculated values or defaults
+      indicatorSet?.f4_1_calc
+        ? formik.setFieldValue('f4_1', indicatorSet.f4_1_calc)
+        : setInputToDefaultValue(formik, 'f4_1')
+      indicatorSet?.f4_2_calc
+        ? formik.setFieldValue('f4_2', indicatorSet.f4_2_calc)
+        : setInputToDefaultValue(formik, 'f4_1')
+      indicatorSet?.f4_3_calc
+        ? formik.setFieldValue('f4_3', indicatorSet.f4_3_calc)
+        : setInputToDefaultValue(formik, 'f4_3')
 
       // Display a toast saying which values could not be calculated
       const nullCalcKeys = Object.keys(indicatorSet)
@@ -68,32 +81,45 @@ const F4Form = ({ formik, handleInputBlur, indicatorSetType, indicatorSet, handl
 
       setIsUpdateFromCalc(false)
     }
-  }, [formik, indicatorSet, isUpdateFromCalc])
+  }, [formik, indicatorSet, isUpdateFromCalc, setInputToDefaultValue])
 
   const handleSaveAndUpdateValues = async () => {
     // Save
     await handleFormSubmit(formik.values, { resetForm: formik.resetForm })
 
-    // Set isUpdateFromCalc
+    // Set isUpdateFromCalc. This will trigger _indicatorSetChanged useEffect
     setIsUpdateFromCalc(true)
   }
 
-  const isF41UsingCalcValue = formik.values.f4_1 === indicatorSet.f4_1_calc
-  const isF42UsingCalcValue = formik.values.f4_2 === indicatorSet.f4_2_calc
-  const isF43UsingCalcValue = formik.values.f4_3 === indicatorSet.f4_3_calc
+  const isF41UsingCalcValue = formik.values.f4_1 === indicatorSet?.f4_1_calc
+  const isF42UsingCalcValue = formik.values.f4_2 === indicatorSet?.f4_2_calc
+  const isF43UsingCalcValue = formik.values.f4_3 === indicatorSet?.f4_3_calc
 
-  const f41HelperText =
-    !isF41UsingCalcValue && indicatorSet.f4_1_calc
-      ? gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
-      : gfcrIndicatorSetLanguage.f4_valueFromMermaidData
-  const f42HelperText =
-    !isF42UsingCalcValue && indicatorSet.f4_2_calc
-      ? gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
-      : gfcrIndicatorSetLanguage.f4_valueFromMermaidData
-  const f43HelperText =
-    !isF43UsingCalcValue && indicatorSet.f4_3_calc
-      ? gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
-      : gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+  let f41HelperText,
+    f42HelperText,
+    f43HelperText = null
+
+  if (isF41UsingCalcValue) {
+    f41HelperText = indicatorSet?.f4_1_calc
+      ? gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+      : gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
+  } else if (!isF41UsingCalcValue && !indicatorSet?.f4_1_calc) {
+    f41HelperText = gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
+  }
+
+  if (isF42UsingCalcValue) {
+    f42HelperText = indicatorSet?.f4_2_calc
+      ? gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+      : gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
+  } else if (!isF42UsingCalcValue && !indicatorSet?.f4_2_calc) {
+    f42HelperText = gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
+  }
+
+  if (isF43UsingCalcValue) {
+    f43HelperText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+  } else if (!isF43UsingCalcValue && indicatorSet?.f4_3_calc) {
+    f43HelperText = gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
+  }
 
   return (
     <StyledGfcrInputWrapper>
@@ -139,7 +165,7 @@ const F4Form = ({ formik, handleInputBlur, indicatorSetType, indicatorSet, handl
           showHelperText={true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
-        {isAnnualReport && indicatorSet.f4_1_calc && !isF41UsingCalcValue && (
+        {isAnnualReport && indicatorSet?.f4_1_calc && !isF41UsingCalcValue && (
           <ButtonSecondary
             type="button"
             onClick={() => formik.setFieldValue('f4_1', indicatorSet.f4_1_calc)}
@@ -164,7 +190,7 @@ const F4Form = ({ formik, handleInputBlur, indicatorSetType, indicatorSet, handl
           showHelperText={true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
-        {isAnnualReport && indicatorSet.f4_2_calc && !isF42UsingCalcValue && (
+        {isAnnualReport && indicatorSet?.f4_2_calc && !isF42UsingCalcValue && (
           <ButtonSecondary
             type="button"
             onClick={() => formik.setFieldValue('f4_2', indicatorSet.f4_2_calc)}
@@ -189,7 +215,7 @@ const F4Form = ({ formik, handleInputBlur, indicatorSetType, indicatorSet, handl
           showHelperText={true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
-        {isAnnualReport && indicatorSet.f4_3_calc && isF43UsingCalcValue && (
+        {isAnnualReport && indicatorSet?.f4_3_calc && isF43UsingCalcValue && (
           <ButtonSecondary
             type="button"
             onClick={() => formik.setFieldValue('f4_3', indicatorSet.f4_3_calc)}
@@ -207,6 +233,7 @@ F4Form.propTypes = {
   indicatorSet: PropTypes.object.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
   handleFormSubmit: PropTypes.func.isRequired,
+  setInputToDefaultValue: PropTypes.func.isRequired,
   indicatorSetType: PropTypes.string.isRequired,
 }
 
