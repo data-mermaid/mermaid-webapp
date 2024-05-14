@@ -160,7 +160,7 @@ const F4Form = ({
           type="number"
           unit="%"
           {...formik.getFieldProps('f4_1')}
-          onBlur={(event) => handleInputBlur(formik, event, 'f4_1')}
+          onBlur={(event) => handleInputBlur(formik, event, 'f4_1', true)}
           helperText={isAnnualReport && f41HelperText}
           showHelperText={true}
           onKeyDown={(event) => enforceNumberInput(event)}
@@ -185,7 +185,7 @@ const F4Form = ({
           type="number"
           unit="%"
           {...formik.getFieldProps('f4_2')}
-          onBlur={(event) => handleInputBlur(formik, event, 'f4_2')}
+          onBlur={(event) => handleInputBlur(formik, event, 'f4_2', true)}
           helperText={isAnnualReport && f42HelperText}
           showHelperText={true}
           onKeyDown={(event) => enforceNumberInput(event)}
@@ -210,7 +210,7 @@ const F4Form = ({
           type="number"
           unit="kg/ha"
           {...formik.getFieldProps('f4_3')}
-          onBlur={(event) => handleInputBlur(formik, event, 'f4_3')}
+          onBlur={(event) => handleInputBlur(formik, event, 'f4_3', true)}
           helperText={isAnnualReport && f43HelperText}
           showHelperText={true}
           onKeyDown={(event) => enforceNumberInput(event)}

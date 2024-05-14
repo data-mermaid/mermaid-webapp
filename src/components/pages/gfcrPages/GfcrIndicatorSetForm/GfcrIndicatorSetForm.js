@@ -11,11 +11,16 @@ import {
   F7Form,
   IndicatorSetForm,
 } from './subForms'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 
-const handleInputBlur = (formik, event, fieldName) => {
+const handleInputBlur = (formik, event, fieldName, isRoundTo1DP = false) => {
   const { value } = event.target
   if (value.trim() === '') {
     setInputToDefaultValue(formik, fieldName)
+  }
+
+  if (value && isRoundTo1DP) {
+    formik.setFieldValue(fieldName, roundToOneDecimal(Number(value)))
   }
 }
 
