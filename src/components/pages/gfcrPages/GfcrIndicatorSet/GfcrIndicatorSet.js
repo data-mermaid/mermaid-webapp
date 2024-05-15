@@ -154,7 +154,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       const indicatorSet = gfcrIndicatorSets.find(
         (indicatorSet) => indicatorSet.id === indicatorSetId,
       )
-
+const indicatorSet = gfcrIndicatorSets?.find(
       setIndicatorSetBeingEdited(indicatorSet)
     }
   }, [gfcrIndicatorSets, indicatorSetId])
