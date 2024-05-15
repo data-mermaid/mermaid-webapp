@@ -30,7 +30,6 @@ const IndicatorSetForm = ({ formik, handleInputBlur, setInputToDefaultValue }) =
         type="date"
         {...formik.getFieldProps('report_date')}
         onBlur={(event) => handleInputBlur(formik, event, 'report_date')}
-        value={formik.values.report_date}
       />
       <StyledYearInputWithLabelAndValidation
         label="Reporting Year"
