@@ -6,10 +6,7 @@ import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table
 
 import { ContentPageLayout } from '../../../Layout'
 import FilterSearchToolbar from '../../../FilterSearchToolbar/FilterSearchToolbar'
-import {
-  getIsUserAdminForProject,
-  getIsUserReadOnlyForProject,
-} from '../../../../App/currentUserProfileHelpers'
+import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
 import { getTableColumnHeaderProps } from '../../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../../library/getToastArguments'
@@ -44,37 +41,10 @@ import usePersistUserTablePreferences from '../../../generic/Table/usePersistUse
 // import { getFileExportName } from '../../../../library/getFileExportName'
 import { PAGE_SIZE_DEFAULT } from '../../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import { GfcrPageUnavailablePadding, StyledToolbarButtonWrapper } from './Gfcr.styles'
+import { StyledToolbarButtonWrapper } from './Gfcr.styles'
 import ButtonSecondaryDropdown from '../../../generic/ButtonSecondaryDropdown'
 import { DropdownItemStyle } from '../../../generic/ButtonSecondaryDropdown/ButtonSecondaryDropdown.styles'
 import { useCurrentProject } from '../../../../App/CurrentProjectContext'
-
-// const indicatorSetsDummyData = [
-//   {
-//     id: 1,
-//     name: 'Baseline',
-//     type: 'report',
-//     year: 2021,
-//   },
-//   {
-//     id: 2,
-//     name: 'Phase 1 result',
-//     type: 'report',
-//     year: 2023,
-//   },
-//   {
-//     id: 3,
-//     name: 'Midterm Target',
-//     type: 'target',
-//     year: 2026,
-//   },
-//   {
-//     id: 4,
-//     name: 'FinalTarget',
-//     type: 'target',
-//     year: 2029,
-//   }
-// ]
 
 const Gfcr = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -91,7 +61,6 @@ const Gfcr = () => {
   // const [siteExportName, setSiteExportName] = useState('')
   // const [choices, setChoices] = useState({})
   // const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
-  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   // const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
@@ -107,8 +76,9 @@ const Gfcr = () => {
         .then(([indicatorSetsResponse]) => {
           if (isMounted.current) {
             setGfcrIndicatorSets(indicatorSetsResponse.results)
-            setIsLoading(false)
           }
+
+          setIsLoading(false)
         })
         .catch((error) => {
           handleHttpResponseError({
@@ -117,6 +87,8 @@ const Gfcr = () => {
               toast.error(...getToastArguments(language.error.gfcrIndicatorSetsUnavailable))
             },
           })
+
+          setIsLoading(false)
         })
     }
   }, [
@@ -211,12 +183,12 @@ const Gfcr = () => {
       const { id, title, indicator_set_type, report_year } = indicatorSet
 
       return {
-        title: <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link>,
+        title: isAdminUser ? <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link> : title,
         indicator_set_type: indicator_set_type === 'annual_report' ? 'Annual Report' : 'Target',
         report_year,
       }
     })
-  }, [gfcrIndicatorSets, currentProjectPath])
+  }, [gfcrIndicatorSets, isAdminUser, currentProjectPath])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -332,20 +304,6 @@ const Gfcr = () => {
   //     .toSorted((a, b) => a.Name.localeCompare(b.Name))
   // }, [siteRecordsForUiDisplay, choices])
 
-  const readOnlySitesHeaderContent = (
-    <>
-      <ButtonSecondary>
-        {/* <CSVLink
-          data={getDataForCSV}
-          filename={siteExportName}
-          style={{ margin: 0, textDecoration: 'none' }}
-        >
-          <IconDownload /> Export sites
-        </CSVLink> */}
-      </ButtonSecondary>
-    </>
-  )
-
   const createDropdownLabel = (
     <>
       <IconPlus /> Create new
@@ -356,14 +314,10 @@ const Gfcr = () => {
     navigate(`${currentProjectPath}/gfcr/new/${type}`)
   }
 
-  const toolbarButtonsByRole = isReadOnlyUser ? (
-    <>
-      <ToolbarButtonWrapper>{readOnlySitesHeaderContent}</ToolbarButtonWrapper>
-    </>
-  ) : (
+  const toolbarButtonsByRole = (
     <>
       <StyledToolbarButtonWrapper>
-        <ButtonSecondaryDropdown label={createDropdownLabel}>
+        <ButtonSecondaryDropdown label={createDropdownLabel} disabled={!isAdminUser}>
           <Column as="nav" data-testid="export-to-csv">
             <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('annual-report')}>
               Annual Report
@@ -458,14 +412,6 @@ const Gfcr = () => {
       subText={language.pages.gfcrTable.noDataSubText}
     />
   )
-
-  if (!isAdminUser) {
-    return (
-      <GfcrPageUnavailablePadding>
-        <PageUnavailable mainText={language.error.pageAdminOnly} />
-      </GfcrPageUnavailablePadding>
-    )
-  }
 
   return (
     <ContentPageLayout
