@@ -47,6 +47,21 @@ const GfcrMixin = (Base) =>
           : Promise.reject(this._notAuthenticatedAndReadyError)
       }
     }
+
+    deleteIndicatorSet = async function deleteIndicatorSet(projectId, indicatorSetId) {
+      if (!projectId || !indicatorSetId) {
+        throw new Error(this._operationMissingParameterError)
+      }
+
+      return this._isOnlineAuthenticatedAndReady
+        ? axios
+            .delete(
+              `${this._apiBaseUrl}/projects/${projectId}/indicatorsets/${indicatorSetId}/`,
+              await getAuthorizationHeaders(this._getAccessToken),
+            )
+            .then((apiResults) => apiResults.data)
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default GfcrMixin
