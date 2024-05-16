@@ -11,7 +11,6 @@ import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingS
 import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
 import { getIndicatorSetFormInitialValues } from './indicatorSetFormInitialValues'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import { ItalicizedInfo } from '../../../generic/text'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
@@ -22,11 +21,13 @@ import LoadingModal from '../../../LoadingModal/LoadingModal'
 import SaveButton from '../../../generic/SaveButton'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
-import { DeleteRecordButtonCautionWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import { useCurrentProject } from '../../../../App/CurrentProjectContext'
 import GfcrIndicatorSetNav from '../GfcrIndicatorSetNav'
 import GfcrIndicatorSetForm from '../GfcrIndicatorSetForm/GfcrIndicatorSetForm'
 import IndicatorSetTitle from './IndicatorSetTitle'
+import { GfcrPageUnavailablePadding } from '../Gfcr/Gfcr.styles'
+import PageUnavailable from '../../PageUnavailable'
+import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 
 // const ReadOnlySiteContent = ({
 //   site,
@@ -108,7 +109,6 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   //   setIsDeleteRecordModalOpen(false)
   // }
 
-  // const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   // const {
@@ -123,8 +123,9 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         .then(([indicatorSetsResponse]) => {
           if (isMounted.current) {
             setGfcrIndicatorSets(indicatorSetsResponse.results)
-            setIsLoading(false)
           }
+
+          setIsLoading(false)
         })
         .catch((error) => {
           handleHttpResponseError({
@@ -133,6 +134,8 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
               toast.error(...getToastArguments(language.error.gfcrIndicatorSetsUnavailable))
             },
           })
+
+          setIsLoading(false)
         })
     }
 
@@ -154,7 +157,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       const indicatorSet = gfcrIndicatorSets.find(
         (indicatorSet) => indicatorSet.id === indicatorSetId,
       )
-const indicatorSet = gfcrIndicatorSets?.find(
+
       setIndicatorSetBeingEdited(indicatorSet)
     }
   }, [gfcrIndicatorSets, indicatorSetId])
@@ -355,8 +358,6 @@ const indicatorSet = gfcrIndicatorSets?.find(
   //     })
   // }
 
-  // const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewIndicatorSet
-
   // const contentViewByReadOnlyRole = isNewIndicatorSet ? (
   //   <PageUnavailable mainText={language.error.pageReadOnly} />
   // ) : (
@@ -371,7 +372,7 @@ const indicatorSet = gfcrIndicatorSets?.find(
   //   />
   // )
 
-  const contentViewByRole = (
+  const contentViewByRole = isAdminUser ? (
     <div
       style={{
         display: 'flex',
@@ -401,24 +402,28 @@ const indicatorSet = gfcrIndicatorSets?.find(
           openModal={openDeleteRecordModal}
         />
       )} */}
-      {!isAdminUser && isAppOnline ? (
-        <DeleteRecordButtonCautionWrapper>
-          <ItalicizedInfo>{language.pages.siteForm.nonAdminDelete}</ItalicizedInfo>
-        </DeleteRecordButtonCautionWrapper>
-      ) : null}
+      {/* {!isAdminUser && isAppOnline ? (
+        // <DeleteRecordButtonCautionWrapper>
+        //   <ItalicizedInfo>{language.pages.siteForm.nonAdminDelete}</ItalicizedInfo>
+        // </DeleteRecordButtonCautionWrapper>
+      ) : null} */}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
     </div>
+  ) : (
+    <GfcrPageUnavailablePadding>
+      <PageUnavailable mainText={language.error.pageAdminOnly} />
+    </GfcrPageUnavailablePadding>
   )
 
-  // return displayIdNotFoundErrorPage ? (
-  //   <ContentPageLayout
-  //     isPageContentLoading={isLoading}
-  //     content={<IdsNotFound ids={idsNotAssociatedWithData} />}
-  //   />
-  // ) : (
+  const displayIdNotFoundErrorPage = !indicatorSetBeingEdited && !newIndicatorSetType
 
-  return (
+  return displayIdNotFoundErrorPage ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={indicatorSetId} />}
+    />
+  ) : (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       isToolbarSticky={true}
