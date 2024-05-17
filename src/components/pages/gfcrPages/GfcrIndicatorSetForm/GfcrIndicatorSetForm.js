@@ -34,6 +34,7 @@ const GfcrIndicatorSetForm = ({
   indicatorSetType,
   indicatorSet,
   handleFormSubmit,
+  isNewIndicatorSet,
 }) => {
   return (
     <form id="indicator-set-form" onSubmit={formik.handleSubmit}>
@@ -42,6 +43,7 @@ const GfcrIndicatorSetForm = ({
           formik={formik}
           handleInputBlur={handleInputBlur}
           setInputToDefaultValue={setInputToDefaultValue}
+          isNewIndicatorSet={isNewIndicatorSet}
         />
       )}
       {selectedNavItem === 'f1' && <F1Form formik={formik} handleInputBlur={handleInputBlur} />}
@@ -69,6 +71,7 @@ GfcrIndicatorSetForm.propTypes = {
   selectedNavItem: PropTypes.string.isRequired,
   indicatorSetType: PropTypes.string.isRequired,
   indicatorSet: PropTypes.object.isRequired,
+  isNewIndicatorSet: PropTypes.bool.isRequired,
   handleFormSubmit: PropTypes.func.isRequired,
 }
 

@@ -74,6 +74,7 @@ const error = {
     `The ${mermaidDataTypeLabel} has failed to delete from your computer or online.`,
   gfcrIndicatorSetsUnavailable: 'GFCR indicator sets are currently unavailable.',
   gfcrIndicatorSetSave: 'Indicator set has not been saved.',
+  gfcrIndicatorSetDelete: 'Indicator set has not been deleted.',
   idNotFoundUserAction: "Please check the URL in your browser's address bar.",
   invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable: 'Management Regime records data are currently unavailable.',
@@ -151,6 +152,7 @@ const success = {
   getUserRoleChangeSuccessMessage: ({ userName, role }) =>
     `${userName}'s role is now set to ${role}.`,
   gfcrIndicatorSetSave: 'Indicator set saved.',
+  gfcrIndicatorSetDelete: 'Indicator set deleted.',
   newUserAdd: 'New user added.',
   newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
   userRemoved: 'User removed',
@@ -166,7 +168,6 @@ const success = {
       : `The ${mermaidDataTypeLabel} has been saved on your computer.`,
   getMermaidDataDeleteSuccess: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has been deleted from your computer and online.`,
-
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
   projectStatusSaved: `Test project selection saved.`,
   getDataSharingPolicyChangeSuccess: (method, policy_code) => {

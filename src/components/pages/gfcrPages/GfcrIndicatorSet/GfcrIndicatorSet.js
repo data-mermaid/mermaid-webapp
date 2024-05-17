@@ -95,20 +95,6 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const indicatorSetType = indicatorSetBeingEdited?.indicator_set_type || newIndicatorSetType
   const indicatorSetTypeName = indicatorSetType === 'annual_report' ? 'Annual Report' : 'Target'
 
-  // const goToPageOneOfDeleteRecordModal = () => {
-  //   setCurrentDeleteRecordModalPage(1)
-  // }
-  // const goToPageTwoOfDeleteRecordModal = () => {
-  //   setCurrentDeleteRecordModalPage(2)
-  // }
-  // const openDeleteRecordModal = () => {
-  //   setIsDeleteRecordModalOpen(true)
-  // }
-  // const closeDeleteRecordModal = () => {
-  //   goToPageOneOfDeleteRecordModal()
-  //   setIsDeleteRecordModalOpen(false)
-  // }
-
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   // const {
@@ -320,44 +306,6 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     [formik.dirty],
   )
 
-  // const deleteRecord = () => {
-  //   // only available online
-  //   setIsDeletingSite(true)
-
-  //   databaseSwitchboardInstance
-  //     .deleteSite(siteBeingEdited, projectId)
-  //     .then(() => {
-  //       clearPersistedUnsavedFormikData()
-  //       closeDeleteRecordModal()
-  //       setIsDeletingSite(false)
-  //       toast.success(...getToastArguments(language.success.getMermaidDataDeleteSuccess('site')))
-  //       navigate(`${ensureTrailingSlash(currentProjectPath)}sites/`)
-  //     })
-  //     .catch((error) => {
-  //       const { isSyncError, isDeleteRejectedError } = error
-
-  //       if (isSyncError && !isDeleteRejectedError) {
-  //         const toastTitle = language.error.getDeleteOnlineSyncErrorTitle('site')
-
-  //         showSyncToastError({ toastTitle, error, testId: 'site-toast-error' })
-  //         setIsDeletingSite(false)
-  //         closeDeleteRecordModal()
-  //       }
-
-  //       if (isSyncError && isDeleteRejectedError) {
-  //         // show modal which lists the associated sumbitted sample units that are associated with the site
-  //         setSiteDeleteErrorData(error.associatedSampleUnits)
-  //         setIsDeletingSite(false)
-  //         goToPageTwoOfDeleteRecordModal()
-  //       }
-  //       if (!isSyncError) {
-  //         handleHttpResponseError({
-  //           error,
-  //         })
-  //       }
-  //     })
-  // }
-
   // const contentViewByReadOnlyRole = isNewIndicatorSet ? (
   //   <PageUnavailable mainText={language.error.pageReadOnly} />
   // ) : (
@@ -388,6 +336,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         selectedNavItem={selectedNavItem}
         indicatorSetType={indicatorSetType}
         handleFormSubmit={handleFormSubmit}
+        isNewIndicatorSet={!!newIndicatorSetType}
       />
       {/* {isAdminUser && isAppOnline && (
         <DeleteRecordButton
