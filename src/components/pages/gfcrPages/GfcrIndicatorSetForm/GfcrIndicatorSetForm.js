@@ -19,8 +19,10 @@ const handleInputBlur = (formik, event, fieldName, isRoundTo1DP = false) => {
     setInputToDefaultValue(formik, fieldName)
   }
 
-  if (value && isRoundTo1DP) {
-    formik.setFieldValue(fieldName, roundToOneDecimal(Number(value)))
+  const valueAsNumber = Number(value)
+
+  if (value && isRoundTo1DP && !Number.isInteger(valueAsNumber)) {
+    formik.setFieldValue(fieldName, Number(roundToOneDecimal(valueAsNumber)))
   }
 }
 
