@@ -85,7 +85,7 @@ const F4Form = ({
 
   const handleSaveAndUpdateValues = async () => {
     // Save
-    await handleFormSubmit(formik.values, { resetForm: formik.resetForm })
+    await handleFormSubmit(formik.values, { resetForm: formik.resetForm }, true)
 
     // Set isUpdateFromCalc. This will trigger _indicatorSetChanged useEffect
     setIsUpdateFromCalc(true)
@@ -131,11 +131,18 @@ const F4Form = ({
   const isF42ValueZeroAndCalcValueNull = formik.values.f4_2 === 0 && !indicatorSet?.f4_2_calc
   const isF43ValueZeroAndCalcValueNull = formik.values.f4_3 === 0 && !indicatorSet?.f4_3_calc
 
-  // Disable the “save and update” button if no changes will be made when the user clicks it.
-  const saveAndUpdateValuesButtonDisabled =
+  const dateRangeDirty =
+    formik.values.f4_start_date !== indicatorSet?.f4_start_date ||
+    formik.values.f4_end_date !== indicatorSet?.f4_end_date
+  const fValuesChanged = !(
     (isF41UsingCalcValue || isF41ValueZeroAndCalcValueNull) &&
     (isF42UsingCalcValue || isF42ValueZeroAndCalcValueNull) &&
     (isF43UsingCalcValue || isF43ValueZeroAndCalcValueNull)
+  )
+
+  // Disable the “save and update” button if the indicator set has not title, the date range has not changed or if no changes have been made to the F values.
+  const saveAndUpdateValuesButtonDisabled =
+    !formik.values.title || (!dateRangeDirty && !fValuesChanged)
 
   return (
     <StyledGfcrInputWrapper>
