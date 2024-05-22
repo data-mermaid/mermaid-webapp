@@ -18,12 +18,15 @@ const handleInputBlur = (formik, event, fieldName, isRoundTo1DP = false) => {
   if (value.trim() === '') {
     setInputToDefaultValue(formik, fieldName)
   }
-
   const valueAsNumber = Number(value)
 
   if (value && isRoundTo1DP && !Number.isInteger(valueAsNumber)) {
     formik.setFieldValue(fieldName, Number(roundToOneDecimal(valueAsNumber)))
   }
+}
+
+const getFieldValueTotal = (fieldValue1, fieldValue2) => {
+  return parseInt(fieldValue1) + parseInt(fieldValue2)
 }
 
 const setInputToDefaultValue = (formik, fieldName) => {
@@ -48,7 +51,13 @@ const GfcrIndicatorSetForm = ({
       )}
       {selectedNavItem === 'f1' && <F1Form formik={formik} handleInputBlur={handleInputBlur} />}
       {selectedNavItem === 'f2' && <F2Form formik={formik} handleInputBlur={handleInputBlur} />}
-      {selectedNavItem === 'f3' && <F3Form formik={formik} handleInputBlur={handleInputBlur} />}
+      {selectedNavItem === 'f3' && (
+        <F3Form
+          formik={formik}
+          handleInputBlur={handleInputBlur}
+          getFieldValueTotal={getFieldValueTotal}
+        />
+      )}
       {selectedNavItem === 'f4' && (
         <F4Form
           formik={formik}
@@ -59,9 +68,27 @@ const GfcrIndicatorSetForm = ({
           handleFormSubmit={handleFormSubmit}
         />
       )}
-      {selectedNavItem === 'f5' && <F5Form formik={formik} handleInputBlur={handleInputBlur} />}
-      {selectedNavItem === 'f6' && <F6Form formik={formik} handleInputBlur={handleInputBlur} />}
-      {selectedNavItem === 'f7' && <F7Form formik={formik} handleInputBlur={handleInputBlur} />}
+      {selectedNavItem === 'f5' && (
+        <F5Form
+          formik={formik}
+          handleInputBlur={handleInputBlur}
+          getFieldValueTotal={getFieldValueTotal}
+        />
+      )}
+      {selectedNavItem === 'f6' && (
+        <F6Form
+          formik={formik}
+          handleInputBlur={handleInputBlur}
+          getFieldValueTotal={getFieldValueTotal}
+        />
+      )}
+      {selectedNavItem === 'f7' && (
+        <F7Form
+          formik={formik}
+          handleInputBlur={handleInputBlur}
+          getFieldValueTotal={getFieldValueTotal}
+        />
+      )}
     </form>
   )
 }

@@ -10,7 +10,7 @@ import { InputRow } from '../../../../generic/form'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F5Form = ({ formik, handleInputBlur }) => {
+const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
   return (
     <StyledGfcrInputWrapper>
       <InputWithLabelAndValidation
@@ -24,6 +24,7 @@ const F5Form = ({ formik, handleInputBlur }) => {
         {...formik.getFieldProps('f5_1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_1')}
         onKeyDown={(event) => enforceNumberInput(event)}
+        helperText={gfcrIndicatorSetLanguage.f5_1_helper}
       />
       <InputWithLabelAndValidation
         label={
@@ -36,6 +37,7 @@ const F5Form = ({ formik, handleInputBlur }) => {
         {...formik.getFieldProps('f5_2')}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_2')}
         onKeyDown={(event) => enforceNumberInput(event)}
+        helperText={gfcrIndicatorSetLanguage.f5_2_helper}
       />
       <InputWithLabelAndValidation
         label={
@@ -48,6 +50,7 @@ const F5Form = ({ formik, handleInputBlur }) => {
         {...formik.getFieldProps('f5_3')}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_3')}
         onKeyDown={(event) => enforceNumberInput(event)}
+        helperText={gfcrIndicatorSetLanguage.f5_3_helper}
       />
       <InputRow>
         <label>
@@ -61,6 +64,7 @@ const F5Form = ({ formik, handleInputBlur }) => {
             {...formik.getFieldProps('f5_4a')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4a')}
             onKeyDown={(event) => enforceNumberInput(event)}
+            helperText={gfcrIndicatorSetLanguage.men_helper}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -71,6 +75,7 @@ const F5Form = ({ formik, handleInputBlur }) => {
             {...formik.getFieldProps('f5_4b')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4b')}
             onKeyDown={(event) => enforceNumberInput(event)}
+            helperText={gfcrIndicatorSetLanguage.women_helper}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -79,7 +84,7 @@ const F5Form = ({ formik, handleInputBlur }) => {
             label={<b>{gfcrIndicatorSetLanguage.total}</b>}
             id="f5_4_total"
             type="number"
-            value={parseInt(formik.values.f5_4a + formik.values.f5_4b)}
+            value={getFieldValueTotal(formik.values.f5_4a, formik.values.f5_4b)}
           />
         </StyledGfcrSubInputWrapper>
         <div>{gfcrIndicatorSetLanguage.ofTotalHowMany}</div>
@@ -91,6 +96,7 @@ const F5Form = ({ formik, handleInputBlur }) => {
             {...formik.getFieldProps('f5_4c')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4c')}
             onKeyDown={(event) => enforceNumberInput(event)}
+            helperText={gfcrIndicatorSetLanguage.youth_helper}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -101,6 +107,7 @@ const F5Form = ({ formik, handleInputBlur }) => {
             {...formik.getFieldProps('f5_4d')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4d')}
             onKeyDown={(event) => enforceNumberInput(event)}
+            helperText={gfcrIndicatorSetLanguage.indigenous_helper}
           />
         </StyledGfcrSubInputWrapper>
       </InputRow>
@@ -117,11 +124,12 @@ const F5Form = ({ formik, handleInputBlur }) => {
         validationMessages={formik.errors.title}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_5')}
         onKeyDown={(event) => enforceNumberInput(event)}
+        helperText={gfcrIndicatorSetLanguage.f5_5_helper}
       />
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 5.5</b> {gfcrIndicatorSetLanguage.f5_6}
+            <b>F 5.6</b> {gfcrIndicatorSetLanguage.f5_6}
           </>
         }
         id="f5_6"
@@ -131,6 +139,7 @@ const F5Form = ({ formik, handleInputBlur }) => {
         validationMessages={formik.errors.title}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_6')}
         onKeyDown={(event) => enforceNumberInput(event)}
+        helperText={gfcrIndicatorSetLanguage.f5_6_helper}
       />
     </StyledGfcrInputWrapper>
   )
@@ -139,6 +148,7 @@ const F5Form = ({ formik, handleInputBlur }) => {
 F5Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
+  getFieldValueTotal: PropTypes.func.isRequired,
 }
 
 export default F5Form
