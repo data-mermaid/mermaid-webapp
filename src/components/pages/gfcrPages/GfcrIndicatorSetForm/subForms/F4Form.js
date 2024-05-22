@@ -10,9 +10,6 @@ import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subForms.st
 import { InputRow } from '../../../../generic/form'
 import { ButtonSecondary } from '../../../../generic/buttons'
 import theme from '../../../../../theme'
-import { toast } from 'react-toastify'
-import { getToastArguments } from '../../../../../library/getToastArguments'
-
 const StyledButtonSecondary = styled(ButtonSecondary)`
   width: 100%;
 `
@@ -33,12 +30,6 @@ const StyledInputRowQuestions = styled(InputRow)`
 `
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
-
-const calculatedValueCorrespondingNames = {
-  f4_1_calc: 'F 4.1',
-  f4_2_calc: 'F 4.2',
-  f4_3_calc: 'F 4.3',
-}
 
 const F4Form = ({
   formik,
@@ -63,21 +54,6 @@ const F4Form = ({
       indicatorSet?.f4_3_calc
         ? formik.setFieldValue('f4_3', indicatorSet.f4_3_calc)
         : setInputToDefaultValue(formik, 'f4_3')
-
-      // Display a toast saying which values could not be calculated
-      const nullCalcKeys = Object.keys(indicatorSet)
-        .filter((key) => ['f4_1_calc', 'f4_2_calc', 'f4_3_calc'].includes(key))
-        .filter((key) => indicatorSet[key] === null)
-
-      if (nullCalcKeys.length) {
-        toast.warning(
-          ...getToastArguments(
-            `${gfcrIndicatorSetLanguage.f4_couldNotGetCalcValues} ${nullCalcKeys
-              .map((key) => calculatedValueCorrespondingNames[key])
-              .join(', ')}`,
-          ),
-        )
-      }
 
       setIsUpdateFromCalc(false)
     }
