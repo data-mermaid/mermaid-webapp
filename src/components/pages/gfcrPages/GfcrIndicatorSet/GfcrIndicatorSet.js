@@ -153,46 +153,30 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   }, [indicatorSetBeingEdited])
 
   const handleFormSubmit = useCallback(
-    async (formikValues, formikActions) => {
-      // TODO. Is below necessary or can we just spread the formik values?
-      /* Ignore to keep sub forms grouped together */
-      /* prettier-ignore */
-      const {
-      //   title, report_date, report_year,
-      //   f1_1,
-      //   f2_1a, f2_1b, f2_2a, f2_2b, f2_3a, f2_3b, f2_4, f2_opt1,
-      //   f3_1, f3_2, f3_3, f3_4, f3_5a, f3_5b, f3_5c, f3_5d, f3_6,
-      f4_1, f4_2, f4_3
-      //   f5_1, f5_2, f5_3, f5_4a, f5_4b, f5_4c, f5_4d, f5_5, f5_6,
-      //   f6_1a, f6_1b, f6_1c, f6_1d,
-      //   f7_1a, f7_1b, f7_1c, f7_1d, f7_2a, f7_2b, f7_2c, f7_2d,
-      } = formikValues
-
+    async (formikValues, formikActions, updateFromCalcValues = false) => {
       /* prettier-ignore */
       const formattedIndicatorSetForApi = {
         ...indicatorSetBeingEdited,
         ...formikValues,
         indicator_set_type: indicatorSetType,
-        f4_1, f4_2, f4_3
-        // title,
-        // report_date,
-        // report_year,
-        // f1_1,
-        // f2_1a, f2_1b, f2_2a, f2_2b, f2_3a, f2_3b, f2_4, f2_opt1,
-        // f3_1, f3_2, f3_3, f3_4, f3_5a, f3_5b, f3_5c, f3_5d, f3_6,
-        // f4_1, f4_2, f4_3, f4_start_date, f4_end_date,
-        // f5_1, f5_2, f5_3, f5_4a, f5_4b, f5_4c, f5_4d, f5_5, f5_6,
-        // f6_1a, f6_1b, f6_1c, f6_1d,
-        // f7_1a, f7_1b, f7_1c, f7_1d,
       }
 
       setSaveButtonState(buttonGroupStates.saving)
       try {
-        // POST the indicator set if there is no indicator set ID, else PUT it
-        const response = await databaseSwitchboardInstance.saveIndicatorSet(
+        let response = await databaseSwitchboardInstance.saveIndicatorSet(
           projectId,
           formattedIndicatorSetForApi,
         )
+
+        if (updateFromCalcValues) {
+          // Do another PUT, using the calc values as the F4 values
+          response = await databaseSwitchboardInstance.saveIndicatorSet(projectId, {
+            ...response,
+            f4_1: response.f4_1_calc || 0,
+            f4_2: response.f4_2_calc || 0,
+            f4_3: response.f4_3_calc || 0,
+          })
+        }
 
         setSaveButtonState(buttonGroupStates.saved)
         setIsFormDirty(false)
@@ -400,14 +384,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       }
     />
   )
-  // )
 }
-
-// SwapButton.propTypes = {
-//   isDisabled: PropTypes.bool.isRequired,
-//   handleSwapClick: PropTypes.func.isRequired,
-//   swapLabel: PropTypes.string.isRequired,
-// }
 
 GfcrIndicatorSet.propTypes = {
   newIndicatorSetType: PropTypes.string,

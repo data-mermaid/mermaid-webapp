@@ -23,6 +23,7 @@ const GfcrMixin = (Base) =>
         throw new Error(this._operationMissingParameterError)
       }
 
+      // POST the indicator set if there is no indicator set ID (i.e. it is a new indicator set)
       if (editedValues.id) {
         return this._isOnlineAuthenticatedAndReady
           ? axios
@@ -35,6 +36,7 @@ const GfcrMixin = (Base) =>
           : Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
+      // PUT the indicator set if there is an indicator set ID (i.e. it is an existing indicator set)
       if (!editedValues.id) {
         return this._isOnlineAuthenticatedAndReady
           ? axios

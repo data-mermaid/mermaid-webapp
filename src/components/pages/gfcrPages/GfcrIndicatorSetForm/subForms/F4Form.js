@@ -10,9 +10,6 @@ import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subForms.st
 import { InputRow } from '../../../../generic/form'
 import { ButtonSecondary } from '../../../../generic/buttons'
 import theme from '../../../../../theme'
-import { toast } from 'react-toastify'
-import { getToastArguments } from '../../../../../library/getToastArguments'
-
 const StyledButtonSecondary = styled(ButtonSecondary)`
   width: 100%;
 `
@@ -33,12 +30,6 @@ const StyledInputRowQuestions = styled(InputRow)`
 `
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
-
-const calculatedValueCorrespondingNames = {
-  f4_1_calc: 'F 4.1',
-  f4_2_calc: 'F 4.2',
-  f4_3_calc: 'F 4.3',
-}
 
 const F4Form = ({
   formik,
@@ -64,28 +55,13 @@ const F4Form = ({
         ? formik.setFieldValue('f4_3', indicatorSet.f4_3_calc)
         : setInputToDefaultValue(formik, 'f4_3')
 
-      // Display a toast saying which values could not be calculated
-      const nullCalcKeys = Object.keys(indicatorSet)
-        .filter((key) => ['f4_1_calc', 'f4_2_calc', 'f4_3_calc'].includes(key))
-        .filter((key) => indicatorSet[key] === null)
-
-      if (nullCalcKeys.length) {
-        toast.warning(
-          ...getToastArguments(
-            `${gfcrIndicatorSetLanguage.f4_couldNotGetCalcValues} ${nullCalcKeys
-              .map((key) => calculatedValueCorrespondingNames[key])
-              .join(', ')}`,
-          ),
-        )
-      }
-
       setIsUpdateFromCalc(false)
     }
   }, [formik, indicatorSet, isUpdateFromCalc, setInputToDefaultValue])
 
   const handleSaveAndUpdateValues = async () => {
     // Save
-    await handleFormSubmit(formik.values, { resetForm: formik.resetForm })
+    await handleFormSubmit(formik.values, { resetForm: formik.resetForm }, true)
 
     // Set isUpdateFromCalc. This will trigger _indicatorSetChanged useEffect
     setIsUpdateFromCalc(true)
@@ -100,26 +76,49 @@ const F4Form = ({
     f43HelperText = null
 
   if (isF41UsingCalcValue) {
-    f41HelperText = indicatorSet?.f4_1_calc
-      ? gfcrIndicatorSetLanguage.f4_valueFromMermaidData
-      : gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
+    f41HelperText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
   } else if (!isF41UsingCalcValue && indicatorSet?.f4_1_calc) {
-    f41HelperText = gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
+    f41HelperText = (
+      <>
+        {gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc} <b>({indicatorSet.f4_1_calc})</b>
+      </>
+    )
+  } else if (!isF41UsingCalcValue && !indicatorSet?.f4_1_calc && !formik.values.f4_1) {
+    f41HelperText = gfcrIndicatorSetLanguage.f4_noValue
   }
 
   if (isF42UsingCalcValue) {
-    f42HelperText = indicatorSet?.f4_2_calc
-      ? gfcrIndicatorSetLanguage.f4_valueFromMermaidData
-      : gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
+    f42HelperText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
   } else if (!isF42UsingCalcValue && indicatorSet?.f4_2_calc) {
-    f42HelperText = gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
+    f42HelperText = gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc
+  } else if (!isF42UsingCalcValue && !indicatorSet?.f4_2_calc && !formik.values.f4_2) {
+    f42HelperText = gfcrIndicatorSetLanguage.f4_noValue
   }
 
   if (isF43UsingCalcValue) {
     f43HelperText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
   } else if (!isF43UsingCalcValue && indicatorSet?.f4_3_calc) {
-    f43HelperText = gfcrIndicatorSetLanguage.f4_valueFromSubmittedSampleUnits
+    f43HelperText = gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc
+  } else if (!isF43UsingCalcValue && !indicatorSet?.f4_3_calc && !formik.values.f4_3) {
+    f43HelperText = gfcrIndicatorSetLanguage.f4_noValue
   }
+
+  const isF41ValueZeroAndCalcValueNull = formik.values.f4_1 === 0 && !indicatorSet?.f4_1_calc
+  const isF42ValueZeroAndCalcValueNull = formik.values.f4_2 === 0 && !indicatorSet?.f4_2_calc
+  const isF43ValueZeroAndCalcValueNull = formik.values.f4_3 === 0 && !indicatorSet?.f4_3_calc
+
+  const dateRangeDirty =
+    formik.values.f4_start_date !== indicatorSet?.f4_start_date ||
+    formik.values.f4_end_date !== indicatorSet?.f4_end_date
+  const fValuesChanged = !(
+    (isF41UsingCalcValue || isF41ValueZeroAndCalcValueNull) &&
+    (isF42UsingCalcValue || isF42ValueZeroAndCalcValueNull) &&
+    (isF43UsingCalcValue || isF43ValueZeroAndCalcValueNull)
+  )
+
+  // Disable the “save and update” button if the indicator set has not title, the date range has not changed or if no changes have been made to the F values.
+  const saveAndUpdateValuesButtonDisabled =
+    !formik.values.title || (!dateRangeDirty && !fValuesChanged)
 
   return (
     <StyledGfcrInputWrapper>
@@ -143,7 +142,11 @@ const F4Form = ({
               {...formik.getFieldProps('f4_end_date')}
               onBlur={(event) => handleInputBlur(formik, event, 'f4_end_date')}
             />
-            <StyledButtonSecondary type="button" onClick={handleSaveAndUpdateValues}>
+            <StyledButtonSecondary
+              type="button"
+              onClick={handleSaveAndUpdateValues}
+              disabled={saveAndUpdateValuesButtonDisabled}
+            >
               {gfcrIndicatorSetLanguage.f4_saveAndUpdateValues}
             </StyledButtonSecondary>
           </StyledGfcrSubInputWrapper>
@@ -161,18 +164,10 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_1')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_1', true)}
-          helperText={isAnnualReport && f41HelperText}
-          showHelperText={true}
+          helperText={isAnnualReport ? f41HelperText : gfcrIndicatorSetLanguage.f4_1_helper}
+          showHelperText={isAnnualReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
-        {isAnnualReport && indicatorSet?.f4_1_calc && !isF41UsingCalcValue && (
-          <ButtonSecondary
-            type="button"
-            onClick={() => formik.setFieldValue('f4_1', indicatorSet.f4_1_calc)}
-          >
-            {`${gfcrIndicatorSetLanguage.f4_updateValue} ${indicatorSet.f4_1_calc}%`}
-          </ButtonSecondary>
-        )}
       </StyledInputRowQuestions>
       <StyledInputRowQuestions>
         <InputWithLabelAndValidation
@@ -186,18 +181,10 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_2')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_2', true)}
-          helperText={isAnnualReport && f42HelperText}
-          showHelperText={true}
+          helperText={isAnnualReport ? f42HelperText : gfcrIndicatorSetLanguage.f4_2_helper}
+          showHelperText={isAnnualReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
-        {isAnnualReport && indicatorSet?.f4_2_calc && !isF42UsingCalcValue && (
-          <ButtonSecondary
-            type="button"
-            onClick={() => formik.setFieldValue('f4_2', indicatorSet.f4_2_calc)}
-          >
-            {`${gfcrIndicatorSetLanguage.f4_updateValue} ${indicatorSet.f4_2_calc}%`}
-          </ButtonSecondary>
-        )}
       </StyledInputRowQuestions>
       <StyledInputRowQuestions>
         <InputWithLabelAndValidation
@@ -211,18 +198,10 @@ const F4Form = ({
           unit="kg/ha"
           {...formik.getFieldProps('f4_3')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_3', true)}
-          helperText={isAnnualReport && f43HelperText}
-          showHelperText={true}
+          helperText={isAnnualReport ? f43HelperText : gfcrIndicatorSetLanguage.f4_3_helper}
+          showHelperText={isAnnualReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
-        {isAnnualReport && indicatorSet?.f4_3_calc && isF43UsingCalcValue && (
-          <ButtonSecondary
-            type="button"
-            onClick={() => formik.setFieldValue('f4_3', indicatorSet.f4_3_calc)}
-          >
-            {`${gfcrIndicatorSetLanguage.f4_updateValue} ${indicatorSet.f4_3_calc}%`}
-          </ButtonSecondary>
-        )}
       </StyledInputRowQuestions>
     </StyledGfcrInputWrapper>
   )
