@@ -7,13 +7,15 @@ import language from '../../../../../language'
 import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper } from './subForms.styles'
 
+const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
+
 const F1Form = ({ formik, handleInputBlur }) => {
   return (
     <StyledGfcrInputWrapper>
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 1.1</b> {language.pages.gfcrIndicatorSet.f1_1}
+            <b>F 1.1</b> {gfcrIndicatorSetLanguage.f1_1}
           </>
         }
         id="f1_1"
@@ -21,7 +23,7 @@ const F1Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f1_1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f1_1')}
-        helperText="Example helper text"
+        helperText={gfcrIndicatorSetLanguage.f1_1_helper}
         onKeyDown={(event) => enforceNumberInput(event)}
       />
     </StyledGfcrInputWrapper>

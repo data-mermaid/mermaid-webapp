@@ -188,8 +188,8 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_1')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_1', true)}
-          helperText={isAnnualReport && f41HelperText}
-          showHelperText={true}
+          helperText={isAnnualReport ? f41HelperText : gfcrIndicatorSetLanguage.f4_1_helper}
+          showHelperText={isAnnualReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
@@ -205,8 +205,8 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_2')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_2', true)}
-          helperText={isAnnualReport && f42HelperText}
-          showHelperText={true}
+          helperText={isAnnualReport ? f42HelperText : gfcrIndicatorSetLanguage.f4_2_helper}
+          showHelperText={isAnnualReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
@@ -222,8 +222,8 @@ const F4Form = ({
           unit="kg/ha"
           {...formik.getFieldProps('f4_3')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_3', true)}
-          helperText={isAnnualReport && f43HelperText}
-          showHelperText={true}
+          helperText={isAnnualReport ? f43HelperText : gfcrIndicatorSetLanguage.f4_3_helper}
+          showHelperText={isAnnualReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
