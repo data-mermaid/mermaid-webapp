@@ -75,6 +75,8 @@ const error = {
   gfcrIndicatorSetsUnavailable: 'GFCR indicator sets are currently unavailable.',
   gfcrIndicatorSetSave: 'Indicator set has not been saved.',
   gfcrIndicatorSetDelete: 'Indicator set has not been deleted.',
+  gfcrFinanceSolutionSave: 'Finance solution has not been saved.',
+  gfcrFinanceSolutionDelete: 'Finance solution has not been removed.',
   idNotFoundUserAction: "Please check the URL in your browser's address bar.",
   invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable: 'Management Regime records data are currently unavailable.',
@@ -153,6 +155,8 @@ const success = {
     `${userName}'s role is now set to ${role}.`,
   gfcrIndicatorSetSave: 'Indicator set saved.',
   gfcrIndicatorSetDelete: 'Indicator set deleted.',
+  gfcrFinanceSolutionSave: 'Finance solution row saved.',
+  gfcrFinanceSolutionDelete: 'Finance solution row removed.',
   newUserAdd: 'New user added.',
   newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
   userRemoved: 'User removed',
@@ -242,6 +246,22 @@ const createNewOptionModal = {
   proposedSummaryText: (attribute) =>
     `Your proposed new ${attribute} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.`,
   submit: 'Send to MERMAID for review',
+}
+
+const gfcrFinanceSolutionModal = {
+  titleAdd: 'Add Finance Solution',
+  titleUpdate: 'Update Finance Solution',
+  name: 'Finance solution / business name',
+  sector: 'Sector',
+  usedAnIncubator: 'Used an incubator?',
+  localEnterprise: 'Local enterprise',
+  genderSmart: 'Gender 2X Criteria',
+  sustainableFinanceMechanisms: 'Sustainable finance mechanisms',
+  add: 'Add Finance Solution Row',
+  save: 'Save Finance Solution Row',
+  cancel: 'Cancel',
+  remove: 'Remove Row',
+  none: 'None',
 }
 
 const clearSizeValuesModal = {
@@ -471,6 +491,11 @@ const pages = {
     noDataMainText: 'No indicator sets yet.',
     noDataSubText: "Select 'Create new' to add an indicator set to this project.",
   },
+  gfcrFinanceSolutionsTable: {
+    filterToolbarText: 'Filter this table by finance solution',
+    noDataMainText: 'No Finance Solutions yet.',
+    noDataSubText: "Select 'Add Finance Solution' to add one to this indicator set.",
+  },
   gfcrIndicatorSet: {
     title: 'Indicator Set',
     total: 'Total',
@@ -548,7 +573,8 @@ const pages = {
     f7_4_helper: 'F7.4 Helper Text',
   },
   gfcrIndicatorSetNav: {
-    indicatorSetHeading: 'Indicator Set',
+    fundIndicatorsHeading: 'FUND INDICATORS',
+    reportTitleAndYearHeading: 'Report title and year',
     f1: 'Coral reef extent of GFCR project',
     f2: 'Area of coral reefs under conservation and sustainable management',
     f3: 'Area of coral reefs under effective coral restoration',
@@ -556,9 +582,10 @@ const pages = {
     f5: 'Number of communities engaged in meaningful participation, co-development and capacity strengthening',
     f6: 'Number of people supported through livelihoods, direct jobs, income, and nutrition',
     f7: 'Number of people supported to better adapt, respond and recover to the effects of climate change and major external shocks as a result of GFCR',
-    financialData: 'Financial Data (F8, F9, F10)',
-    investmentSources: 'Investment Sources',
-    revenueStreams: 'Revenue Streams',
+    f8F9F10Heading: 'F8, F9, F10',
+    financeSolutions: 'Business / Finance solutions',
+    investments: 'Investments',
+    revenues: 'Revenues',
   },
   goToDashboard: 'View on Dashboard',
 }
@@ -871,6 +898,7 @@ export default {
   autocomplete,
   clearSizeValuesModal,
   createNewOptionModal,
+  gfcrFinanceSolutionModal,
   deleteProject,
   deleteRecord,
   error,

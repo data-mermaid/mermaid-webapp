@@ -5,7 +5,7 @@ import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabe
 import { formikPropType } from '../../../../../library/formikPropType'
 import language from '../../../../../language'
 import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
-import { StyledGfcrInputWrapper } from './subForms.styles'
+import { StyledGfcrInputWrapper } from './subPages.styles'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
