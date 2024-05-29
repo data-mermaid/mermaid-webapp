@@ -154,10 +154,9 @@ const Gfcr = () => {
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Year',
-        accessor: 'report_year',
+        Header: 'Reporting Date',
+        accessor: 'report_date',
         sortType: reactTableNaturalSort,
-        align: 'right',
       },
     ],
     [],
@@ -165,12 +164,16 @@ const Gfcr = () => {
 
   const tableCellData = useMemo(() => {
     return gfcrIndicatorSets.map((indicatorSet) => {
-      const { id, title, indicator_set_type, report_year } = indicatorSet
+      const { id, title, indicator_set_type, report_date } = indicatorSet
+
+      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+      const currentLocale = navigator.language
+      const localizedDate = new Date(report_date).toLocaleDateString(currentLocale, dateOptions)
 
       return {
         title: isAdminUser ? <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link> : title,
         indicator_set_type: indicator_set_type === 'annual_report' ? 'Annual Report' : 'Target',
-        report_year,
+        report_date: localizedDate,
       }
     })
   }, [gfcrIndicatorSets, isAdminUser, currentProjectPath])
@@ -194,7 +197,7 @@ const Gfcr = () => {
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
-      const keys = ['values.title.props.children', 'values.type', 'values.report_year']
+      const keys = ['values.title.props.children', 'values.type', 'values.report_date']
 
       const queryTerms = splitSearchQueryStrings(query)
       const filteredRows =

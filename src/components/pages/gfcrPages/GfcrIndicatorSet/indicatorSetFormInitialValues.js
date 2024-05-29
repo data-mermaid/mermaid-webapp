@@ -7,7 +7,6 @@ const getIndicatorSetFormInitialValues = (indicatorSet) => {
   const {
     title = '',
     report_date = todayISODate,
-    report_year = today.getFullYear(),
     f1_1 = '0',
     f2_1a = '0',
     f2_1b = '0',
@@ -62,7 +61,6 @@ const getIndicatorSetFormInitialValues = (indicatorSet) => {
   return {
     title,
     report_date,
-    report_year,
     f1_1,
     f2_1a,
     f2_1b,
