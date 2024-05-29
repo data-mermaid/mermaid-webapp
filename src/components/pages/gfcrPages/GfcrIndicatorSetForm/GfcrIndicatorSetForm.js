@@ -10,7 +10,7 @@ import {
   F5Form,
   F6Form,
   F7Form,
-  ReportTitleAndYearForm,
+  ReportTitleAndDateForm,
 } from './subPages'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import FinanceSolutions from './subPages/FinanceSolutions'
@@ -56,10 +56,9 @@ const GfcrIndicatorSetForm = ({
       {!['finance-solutions'].includes(selectedNavItem) && (
         <StyledForm id="gfcr-indicator-set-form" onSubmit={formik.handleSubmit}>
           {selectedNavItem === 'report-title-and-year' && (
-            <ReportTitleAndYearForm
+            <ReportTitleAndDateForm
               formik={formik}
               handleInputBlur={handleInputBlur}
-              setInputToDefaultValue={setInputToDefaultValue}
               isNewIndicatorSet={isNewIndicatorSet}
             />
           )}

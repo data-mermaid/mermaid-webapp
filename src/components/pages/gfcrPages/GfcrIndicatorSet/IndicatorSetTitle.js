@@ -30,7 +30,9 @@ const ProjectTooltip = styled(TooltipWithText)`
   }
 `
 
-const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingYear, isNew = false }) => {
+const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingDate, isNew = false }) => {
+  const reportingYear = reportingDate?.getFullYear()
+
   useDocumentTitle(
     isNew
       ? language.pages.gfcrIndicatorSet.title
@@ -53,7 +55,7 @@ const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingYear, isNew = fal
       <ProjectTooltip
         forwardedAs="h2"
         text={reportingYear}
-        tooltipText="Reporting Year"
+        tooltipText="Reporting Date Year"
         id="gfcr-reporting-year-tooltip"
       />
     </TitleContainer>
@@ -63,7 +65,7 @@ const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingYear, isNew = fal
 IndicatorSetTitle.propTypes = {
   indicatorSetTitle: PropTypes.string,
   type: PropTypes.string,
-  reportingYear: PropTypes.number,
+  reportingDate: PropTypes.date,
   isNew: PropTypes.bool,
 }
 

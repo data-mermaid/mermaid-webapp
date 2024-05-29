@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
 import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
 import { formikPropType } from '../../../../../library/formikPropType'
-import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper } from './subPages.styles'
 import DeleteRecordButton from '../../../../DeleteRecordButton/DeleteRecordButton'
 import language from '../../../../../language'
@@ -16,14 +14,9 @@ import { ensureTrailingSlash } from '../../../../../library/strings/ensureTraili
 import useCurrentProjectPath from '../../../../../library/useCurrentProjectPath'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 
-const StyledYearInputWithLabelAndValidation = styled(InputWithLabelAndValidation)`
-  width: 10rem;
-`
-
-const ReportTitleAndYearForm = ({
+const ReportTitleAndDateForm = ({
   formik,
   handleInputBlur,
-  setInputToDefaultValue,
   isNewIndicatorSet,
 }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -82,25 +75,6 @@ const ReportTitleAndYearForm = ({
         {...formik.getFieldProps('report_date')}
         onBlur={(event) => handleInputBlur(formik, event, 'report_date')}
       />
-      <StyledYearInputWithLabelAndValidation
-        label="Reporting Year"
-        id="gfcr-report-year"
-        type="number"
-        {...formik.getFieldProps('report_year')}
-        onKeyDown={(event) => enforceNumberInput(event)}
-        onBlur={(event) => {
-          const { value } = event.target
-          const trimmedValue = value.trim()
-
-          if (
-            trimmedValue === '' ||
-            parseInt(trimmedValue) < 1900 ||
-            parseInt(trimmedValue) > 2099
-          ) {
-            setInputToDefaultValue(formik, 'report_year')
-          }
-        }}
-      />
       <DeleteRecordButton
         currentPage={1}
         errorData={[]}
@@ -116,11 +90,10 @@ const ReportTitleAndYearForm = ({
   )
 }
 
-ReportTitleAndYearForm.propTypes = {
+ReportTitleAndDateForm.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
-  setInputToDefaultValue: PropTypes.func.isRequired,
   isNewIndicatorSet: PropTypes.bool.isRequired,
 }
 
-export default ReportTitleAndYearForm
+export default ReportTitleAndDateForm

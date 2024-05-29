@@ -335,7 +335,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       subNavNode={{
         name: newIndicatorSetType
           ? language.pages.gfcrIndicatorSet.title
-          : `${formik.values.title} ${formik.values.report_year}`,
+          : `${formik.values.title} ${formik.values.report_date}`,
       }}
       content={contentViewByRole}
       toolbar={
@@ -343,7 +343,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
           <IndicatorSetTitle
             indicatorSetTitle={formik.values.title}
             type={indicatorSetTypeName}
-            reportingYear={formik.values.report_year}
+            reportingDate={new Date(formik.values.report_date)}
             isNew={!!newIndicatorSetType}
           />
           <SaveButton
