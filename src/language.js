@@ -76,6 +76,7 @@ const error = {
   gfcrIndicatorSetSave: 'Indicator set has not been saved.',
   gfcrIndicatorSetDelete: 'Indicator set has not been deleted.',
   gfcrFinanceSolutionSave: 'Finance solution has not been saved.',
+  gfcrFinanceSolutionDelete: 'Finance solution has not been removed.',
   idNotFoundUserAction: "Please check the URL in your browser's address bar.",
   invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable: 'Management Regime records data are currently unavailable.',
@@ -154,7 +155,8 @@ const success = {
     `${userName}'s role is now set to ${role}.`,
   gfcrIndicatorSetSave: 'Indicator set saved.',
   gfcrIndicatorSetDelete: 'Indicator set deleted.',
-  gfcrFinanceSolutionSave: 'Finance solution saved.',
+  gfcrFinanceSolutionSave: 'Finance solution row saved.',
+  gfcrFinanceSolutionDelete: 'Finance solution row removed.',
   newUserAdd: 'New user added.',
   newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
   userRemoved: 'User removed',
@@ -253,11 +255,13 @@ const gfcrFinanceSolutionModal = {
   sector: 'Sector',
   usedAnIncubator: 'Used an incubator?',
   localEnterprise: 'Local enterprise',
-  genderSmart: 'Gender 2X Critria',
+  genderSmart: 'Gender 2X Criteria',
   sustainableFinanceMechanisms: 'Sustainable finance mechanisms',
   add: 'Add Finance Solution Row',
   save: 'Save Finance Solution Row',
   cancel: 'Cancel',
+  remove: 'Remove Row',
+  none: 'None',
 }
 
 const clearSizeValuesModal = {

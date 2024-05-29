@@ -47,6 +47,7 @@ const GfcrIndicatorSetForm = ({
   indicatorSet,
   handleFormSubmit,
   handleFinanceSolutionSubmit,
+  handleFinanceSolutionDelete,
   isNewIndicatorSet,
   choices,
 }) => {
@@ -109,6 +110,7 @@ const GfcrIndicatorSetForm = ({
           indicatorSet={indicatorSet}
           choices={choices}
           onSubmit={handleFinanceSolutionSubmit}
+          onDelete={handleFinanceSolutionDelete}
         />
       )}
     </>
@@ -123,6 +125,7 @@ GfcrIndicatorSetForm.propTypes = {
   isNewIndicatorSet: PropTypes.bool.isRequired,
   handleFormSubmit: PropTypes.func.isRequired,
   handleFinanceSolutionSubmit: PropTypes.func.isRequired,
+  handleFinanceSolutionDelete: PropTypes.func.isRequired,
   choices: choicesPropType.isRequired,
 }
 

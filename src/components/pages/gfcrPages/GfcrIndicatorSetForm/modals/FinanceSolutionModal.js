@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { Box, OutlinedInput } from '@mui/material'
 
 import language from '../../../../../language'
-import Modal, { RightFooter } from '../../../../generic/Modal/Modal'
 import theme from '../../../../../theme'
 import {
   CheckRadioLabel,
@@ -16,13 +16,17 @@ import {
   CustomMuiChip,
   CustomMuiSelect,
 } from '../../../../mermaidInputs/InputMuiChipSelectWithLabelAndValidation/InputMuiChipSelectWithLabelAndValidation.styles'
-import { Box, OutlinedInput } from '@mui/material'
-import { StyledModalInputRow } from '../subPages/subPages.styles'
+import Modal, { RightFooter } from '../../../../generic/Modal/Modal'
+import {
+  StyledModalInputRow,
+  StyledModalFooterWrapper,
+  StyledModalLeftFooter,
+} from '../subPages/subPages.styles'
 import { getFinanceSolutionInitialValues } from './financeSolutionInitialValues'
 import { useFormik } from 'formik'
 import { buttonGroupStates } from '../../../../../library/buttonGroupStates'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonSecondary } from '../../../../generic/buttons'
+import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
 import SaveButton from './SaveButton'
 
 const getOptionList = (selectChoices) => {
@@ -49,11 +53,13 @@ const FinanceSolutionModal = ({
   isOpen,
   onDismiss,
   onSubmit,
+  onDelete,
   financeSolution = undefined,
   choices,
 }) => {
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const initialFormValues = useMemo(() => {
     return getFinanceSolutionInitialValues(financeSolution)
@@ -66,6 +72,8 @@ const FinanceSolutionModal = ({
       const formattedValues = {
         ...formikValues,
         id: financeSolution?.id,
+        used_an_incubator:
+          formikValues.used_an_incubator === 'none' ? null : formikValues.used_an_incubator,
       }
 
       await onSubmit(formattedValues)
@@ -100,6 +108,13 @@ const FinanceSolutionModal = ({
     },
   })
 
+  const handleDelete = useCallback(async () => {
+    setIsDeleting(true)
+    await onDelete(financeSolution.id)
+    setIsDeleting(false)
+    onDismiss(formik.resetForm)
+  }, [financeSolution?.id, formik.resetForm, onDelete, onDismiss])
+
   const _setSaveButtonUnsaved = useEffect(() => {
     if (isFormDirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
@@ -115,16 +130,25 @@ const FinanceSolutionModal = ({
   )
 
   const footer = (
-    <RightFooter>
-      {cancelButton}
-      <SaveButton
-        formId="finance-solution-form"
-        unsavedTitle={financeSolution ? modalLanguage.save : modalLanguage.add}
-        saveButtonState={saveButtonState}
-        formHasErrors={!!Object.keys(formik.errors).length}
-        formDirty={isFormDirty}
-      />
-    </RightFooter>
+    <StyledModalFooterWrapper>
+      <StyledModalLeftFooter>
+        {!!financeSolution && (
+          <ButtonCaution onClick={handleDelete} disabled={isDeleting}>
+            {modalLanguage.remove}
+          </ButtonCaution>
+        )}
+      </StyledModalLeftFooter>
+      <RightFooter>
+        {cancelButton}
+        <SaveButton
+          formId="finance-solution-form"
+          unsavedTitle={financeSolution ? modalLanguage.save : modalLanguage.add}
+          saveButtonState={saveButtonState}
+          formHasErrors={!!Object.keys(formik.errors).length}
+          formDirty={isFormDirty}
+        />
+      </RightFooter>
+    </StyledModalFooterWrapper>
   )
 
   const financeSolutionForm = () => {
@@ -163,6 +187,7 @@ const FinanceSolutionModal = ({
             {...formik.getFieldProps('used_an_incubator')}
           >
             <option value="">{language.placeholders.select}</option>
+            <option value="none">{modalLanguage.none}</option>
             {getOptionList(choices.incubatortypes.data)}
           </Select>
         </StyledModalInputRow>
@@ -252,6 +277,7 @@ FinanceSolutionModal.propTypes = {
   choices: choicesPropType.isRequired,
   financeSolution: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
 }

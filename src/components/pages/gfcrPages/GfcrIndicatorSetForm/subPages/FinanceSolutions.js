@@ -51,8 +51,8 @@ const getTable = (getTableProps, headerGroups, getTableBodyProps, page, prepareR
                   <Th
                     {...column.getHeaderProps({
                       ...getTableColumnHeaderProps(column),
-                      ...{ style: { textAlign: column.align } },
                     })}
+                    align={column.align}
                     key={column.id}
                     isSortedDescending={column.isSortedDesc}
                     sortedIndex={column.sortedIndex}
@@ -90,7 +90,7 @@ const getTable = (getTableProps, headerGroups, getTableBodyProps, page, prepareR
 
 const getIconCheckLabel = (property) => (property ? <IconCheck /> : <IconClose color="red" />)
 
-const FinanceSolutions = ({ indicatorSet, choices, onSubmit }) => {
+const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -167,7 +167,7 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit }) => {
       ).name
       const incubatorNames = choices.incubatortypes.data?.find(
         (incubatorTypeChoice) => incubatorTypeChoice.id === used_an_incubator,
-      ).name
+      )?.name
       const sustainableFinanceMechanismNames = sustainable_finance_mechanisms.map((mechanism) => {
         return choices.sustainablefinancemechanisms.data?.find(
           (sfmChoice) => sfmChoice.id === mechanism,
@@ -358,6 +358,7 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit }) => {
         choices={choices}
         onDismiss={handleFinanceSolutionModalDismiss}
         onSubmit={onSubmit}
+        onDelete={onDelete}
       />
     </>
   )
@@ -367,6 +368,7 @@ FinanceSolutions.propTypes = {
   indicatorSet: PropTypes.object.isRequired,
   choices: choicesPropType.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 }
 
 export default FinanceSolutions

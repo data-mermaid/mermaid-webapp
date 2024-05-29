@@ -337,8 +337,8 @@ const Gfcr = () => {
                     <Th
                       {...column.getHeaderProps({
                         ...getTableColumnHeaderProps(column),
-                        ...{ style: { textAlign: column.align } },
                       })}
+                      align={column.align}
                       key={column.id}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}

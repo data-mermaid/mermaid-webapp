@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { InputWrapper } from '../../../../generic/form'
 import theme from '../../../../../theme'
+import { LeftFooter } from '../../../../generic/Modal/Modal'
 
 export const StyledGfcrInputWrapper = styled(InputWrapper)`
   display: flex;
@@ -51,4 +52,12 @@ export const StyledTableAnchor = styled('a')`
 
 export const StyledModalInputRow = styled('div')`
   margin: 1rem;
+`
+
+export const StyledModalFooterWrapper = styled('div')`
+  display: flex;
+`
+
+export const StyledModalLeftFooter = styled(LeftFooter)`
+  flex: 1;
 `

@@ -179,6 +179,43 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     ],
   )
 
+  const handleFinanceSolutionDelete = useCallback(
+    async (financeSolutionId) => {
+      const updatedIndicatorSet = {
+        ...indicatorSetBeingEdited,
+        finance_solutions: indicatorSetBeingEdited.finance_solutions.filter(
+          (fs) => fs.id !== financeSolutionId,
+        ),
+      }
+
+      try {
+        const response = await databaseSwitchboardInstance.saveIndicatorSet(
+          projectId,
+          updatedIndicatorSet,
+        )
+
+        setIndicatorSetBeingEdited(response)
+
+        toast.success(...getToastArguments(language.success.gfcrFinanceSolutionDelete))
+      } catch (error) {
+        if (error && isAppOnline) {
+          toast.error(...getToastArguments(language.error.gfcrFinanceSolutionDelete))
+
+          handleHttpResponseError({
+            error,
+          })
+        }
+      }
+    },
+    [
+      databaseSwitchboardInstance,
+      handleHttpResponseError,
+      indicatorSetBeingEdited,
+      isAppOnline,
+      projectId,
+    ],
+  )
+
   const handleFinanceSolutionSubmit = useCallback(
     async (financeSolution) => {
       const existingFinanceSolutions = indicatorSetBeingEdited.finance_solutions
@@ -272,6 +309,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
           isNewIndicatorSet={!!newIndicatorSetType}
           choices={choices}
           handleFinanceSolutionSubmit={handleFinanceSolutionSubmit}
+          handleFinanceSolutionDelete={handleFinanceSolutionDelete}
         />
       </div>
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
