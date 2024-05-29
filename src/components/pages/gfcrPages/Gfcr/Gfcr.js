@@ -159,21 +159,6 @@ const Gfcr = () => {
         sortType: reactTableNaturalSort,
         align: 'right',
       },
-      // {
-      //   Header: 'Reef Type',
-      //   accessor: 'reefType',
-      //   sortType: reactTableNaturalSort,
-      // },
-      // {
-      //   Header: 'Reef Zone',
-      //   accessor: 'reefZone',
-      //   sortType: reactTableNaturalSort,
-      // },
-      // {
-      //   Header: 'Exposure',
-      //   accessor: 'exposure',
-      //   sortType: reactTableNaturalSort,
-      // },
     ],
     [],
   )
@@ -259,6 +244,7 @@ const Gfcr = () => {
     useSortBy,
     usePagination,
   )
+
   const handleRowsNumberChange = (e) => {
     setPageSize(Number(e.target.value))
   }
@@ -314,7 +300,7 @@ const Gfcr = () => {
     navigate(`${currentProjectPath}/gfcr/new/${type}`)
   }
 
-  const toolbarButtonsByRole = (
+  const toolbarButtons = (
     <>
       <StyledToolbarButtonWrapper>
         <ButtonSecondaryDropdown label={createDropdownLabel} disabled={!isAdminUser}>
@@ -426,7 +412,7 @@ const Gfcr = () => {
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
 
-            <ToolbarButtonWrapper>{toolbarButtonsByRole}</ToolbarButtonWrapper>
+            <ToolbarButtonWrapper>{toolbarButtons}</ToolbarButtonWrapper>
           </ToolBarRow>
         </>
       }

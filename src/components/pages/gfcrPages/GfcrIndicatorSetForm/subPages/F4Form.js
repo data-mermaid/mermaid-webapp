@@ -6,7 +6,7 @@ import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabe
 import { formikPropType } from '../../../../../library/formikPropType'
 import language from '../../../../../language'
 import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
-import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subForms.styles'
+import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import { InputRow } from '../../../../generic/form'
 import { ButtonSecondary } from '../../../../generic/buttons'
 import theme from '../../../../../theme'

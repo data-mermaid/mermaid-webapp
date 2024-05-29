@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { InputWrapper } from '../../../../generic/form'
+import theme from '../../../../../theme'
 
 export const StyledGfcrInputWrapper = styled(InputWrapper)`
   display: flex;
@@ -29,4 +30,25 @@ export const StyledGfcrSubInputWrapper = styled(InputWrapper)`
     margin-right: 1rem;
     flex: 0.5;
   }
+`
+
+export const TableContentToolbar = styled('div')`
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
+  border-bottom: solid ${theme.spacing.borderMedium} ${theme.color.backgroundColor};
+  margin-bottom: 0;
+  /* z-index: 100; */
+`
+
+const contentPadding = theme.spacing.xsmall
+
+export const StyledTableContentWrapper = styled('div')`
+  padding: ${contentPadding} 0 0 ${contentPadding};
+`
+
+export const StyledTableAnchor = styled('a')`
+  cursor: pointer;
+`
+
+export const StyledModalInputRow = styled('div')`
+  margin: 1rem;
 `

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
 import { formikPropType } from '../../../../../library/formikPropType'
 import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
-import { StyledGfcrInputWrapper } from './subForms.styles'
+import { StyledGfcrInputWrapper } from './subPages.styles'
 import DeleteRecordButton from '../../../../DeleteRecordButton/DeleteRecordButton'
 import language from '../../../../../language'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -20,7 +20,7 @@ const StyledYearInputWithLabelAndValidation = styled(InputWithLabelAndValidation
   width: 10rem;
 `
 
-const IndicatorSetForm = ({
+const ReportTitleAndYearForm = ({
   formik,
   handleInputBlur,
   setInputToDefaultValue,
@@ -116,11 +116,11 @@ const IndicatorSetForm = ({
   )
 }
 
-IndicatorSetForm.propTypes = {
+ReportTitleAndYearForm.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
   setInputToDefaultValue: PropTypes.func.isRequired,
   isNewIndicatorSet: PropTypes.bool.isRequired,
 }
 
-export default IndicatorSetForm
+export default ReportTitleAndYearForm

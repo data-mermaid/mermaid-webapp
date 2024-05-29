@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { formikPropType } from '../../../../library/formikPropType'
 import {
   F1Form,
@@ -9,9 +10,15 @@ import {
   F5Form,
   F6Form,
   F7Form,
-  IndicatorSetForm,
-} from './subForms'
+  ReportTitleAndYearForm,
+} from './subPages'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import FinanceSolutions from './subPages/FinanceSolutions'
+import { choicesPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+
+const StyledForm = styled.form`
+  width: 100%;
+`
 
 const handleInputBlur = (formik, event, fieldName, isRoundTo1DP = false) => {
   const { value } = event.target
@@ -39,59 +46,72 @@ const GfcrIndicatorSetForm = ({
   indicatorSetType,
   indicatorSet,
   handleFormSubmit,
+  handleFinanceSolutionSubmit,
   isNewIndicatorSet,
+  choices,
 }) => {
   return (
-    <form id="indicator-set-form" onSubmit={formik.handleSubmit}>
-      {selectedNavItem === 'indicator-set' && (
-        <IndicatorSetForm
-          formik={formik}
-          handleInputBlur={handleInputBlur}
-          setInputToDefaultValue={setInputToDefaultValue}
-          isNewIndicatorSet={isNewIndicatorSet}
-        />
+    <>
+      {!['finance-solutions'].includes(selectedNavItem) && (
+        <StyledForm id="gfcr-indicator-set-form" onSubmit={formik.handleSubmit}>
+          {selectedNavItem === 'report-title-and-year' && (
+            <ReportTitleAndYearForm
+              formik={formik}
+              handleInputBlur={handleInputBlur}
+              setInputToDefaultValue={setInputToDefaultValue}
+              isNewIndicatorSet={isNewIndicatorSet}
+            />
+          )}
+          {selectedNavItem === 'f1' && <F1Form formik={formik} handleInputBlur={handleInputBlur} />}
+          {selectedNavItem === 'f2' && <F2Form formik={formik} handleInputBlur={handleInputBlur} />}
+          {selectedNavItem === 'f3' && (
+            <F3Form
+              formik={formik}
+              handleInputBlur={handleInputBlur}
+              getFieldValueTotal={getFieldValueTotal}
+            />
+          )}
+          {selectedNavItem === 'f4' && (
+            <F4Form
+              formik={formik}
+              handleInputBlur={handleInputBlur}
+              indicatorSetType={indicatorSetType}
+              indicatorSet={indicatorSet}
+              setInputToDefaultValue={setInputToDefaultValue}
+              handleFormSubmit={handleFormSubmit}
+            />
+          )}
+          {selectedNavItem === 'f5' && (
+            <F5Form
+              formik={formik}
+              handleInputBlur={handleInputBlur}
+              getFieldValueTotal={getFieldValueTotal}
+            />
+          )}
+          {selectedNavItem === 'f6' && (
+            <F6Form
+              formik={formik}
+              handleInputBlur={handleInputBlur}
+              getFieldValueTotal={getFieldValueTotal}
+            />
+          )}
+          {selectedNavItem === 'f7' && (
+            <F7Form
+              formik={formik}
+              handleInputBlur={handleInputBlur}
+              getFieldValueTotal={getFieldValueTotal}
+            />
+          )}
+        </StyledForm>
       )}
-      {selectedNavItem === 'f1' && <F1Form formik={formik} handleInputBlur={handleInputBlur} />}
-      {selectedNavItem === 'f2' && <F2Form formik={formik} handleInputBlur={handleInputBlur} />}
-      {selectedNavItem === 'f3' && (
-        <F3Form
-          formik={formik}
-          handleInputBlur={handleInputBlur}
-          getFieldValueTotal={getFieldValueTotal}
-        />
-      )}
-      {selectedNavItem === 'f4' && (
-        <F4Form
-          formik={formik}
-          handleInputBlur={handleInputBlur}
-          indicatorSetType={indicatorSetType}
+      {selectedNavItem === 'finance-solutions' && (
+        <FinanceSolutions
           indicatorSet={indicatorSet}
-          setInputToDefaultValue={setInputToDefaultValue}
-          handleFormSubmit={handleFormSubmit}
+          choices={choices}
+          onSubmit={handleFinanceSolutionSubmit}
         />
       )}
-      {selectedNavItem === 'f5' && (
-        <F5Form
-          formik={formik}
-          handleInputBlur={handleInputBlur}
-          getFieldValueTotal={getFieldValueTotal}
-        />
-      )}
-      {selectedNavItem === 'f6' && (
-        <F6Form
-          formik={formik}
-          handleInputBlur={handleInputBlur}
-          getFieldValueTotal={getFieldValueTotal}
-        />
-      )}
-      {selectedNavItem === 'f7' && (
-        <F7Form
-          formik={formik}
-          handleInputBlur={handleInputBlur}
-          getFieldValueTotal={getFieldValueTotal}
-        />
-      )}
-    </form>
+    </>
   )
 }
 
@@ -102,6 +122,8 @@ GfcrIndicatorSetForm.propTypes = {
   indicatorSet: PropTypes.object.isRequired,
   isNewIndicatorSet: PropTypes.bool.isRequired,
   handleFormSubmit: PropTypes.func.isRequired,
+  handleFinanceSolutionSubmit: PropTypes.func.isRequired,
+  choices: choicesPropType.isRequired,
 }
 
 export default GfcrIndicatorSetForm
