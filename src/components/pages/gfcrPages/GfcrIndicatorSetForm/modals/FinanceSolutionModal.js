@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { Box, OutlinedInput } from '@mui/material'
+import { OutlinedInput } from '@mui/material'
 
 import language from '../../../../../language'
 import theme from '../../../../../theme'
@@ -13,7 +13,6 @@ import {
 } from '../../../../generic/form'
 import {
   CustomMenuItem,
-  CustomMuiChip,
   CustomMuiSelect,
 } from '../../../../mermaidInputs/InputMuiChipSelectWithLabelAndValidation/InputMuiChipSelectWithLabelAndValidation.styles'
 import Modal, { RightFooter } from '../../../../generic/Modal/Modal'
@@ -28,24 +27,7 @@ import { buttonGroupStates } from '../../../../../library/buttonGroupStates'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
 import SaveButton from './SaveButton'
-
-const getOptionList = (selectChoices) => {
-  return selectChoices.map((item) => (
-    <option key={item.id} value={item.id}>
-      {item.name}
-    </option>
-  ))
-}
-
-const chips = (value, options) => (
-  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-    {options
-      .filter((option) => value.includes(option.id))
-      .map((option) => (
-        <CustomMuiChip key={option.id} label={option.name} />
-      ))}
-  </Box>
-)
+import { getChips, getOptionList } from './modalHelpers'
 
 const modalLanguage = language.gfcrFinanceSolutionModal
 
@@ -239,7 +221,7 @@ const FinanceSolutionModal = ({
             input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
             renderValue={(selected) =>
               selected?.length
-                ? chips(selected, choices.sustainablefinancemechanisms.data)
+                ? getChips(selected, choices.sustainablefinancemechanisms.data)
                 : language.placeholders.select
             }
             displayEmpty={true}

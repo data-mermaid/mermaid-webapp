@@ -7,14 +7,11 @@ import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table
 import { ContentPageLayout } from '../../../Layout'
 import FilterSearchToolbar from '../../../FilterSearchToolbar/FilterSearchToolbar'
 import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
-import { getTableColumnHeaderProps } from '../../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
 import { IconPlus, IconDownload } from '../../../icons'
 import language from '../../../../language'
-import PageSelector from '../../../generic/Table/PageSelector'
-import PageSizeSelector from '../../../generic/Table/PageSizeSelector'
 import PageUnavailable from '../../PageUnavailable'
 import {
   reactTableNaturalSort,
@@ -23,14 +20,6 @@ import {
 import { splitSearchQueryStrings } from '../../../../library/splitSearchQueryStrings'
 import { ButtonSecondary, ToolbarButtonWrapper } from '../../../generic/buttons'
 import { Column, ToolBarRow } from '../../../generic/positioning'
-import {
-  Tr,
-  Th,
-  Td,
-  TableNavigation,
-  StickyTableOverflowWrapper,
-  GenericStickyTable,
-} from '../../../generic/Table/table'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -45,6 +34,7 @@ import { StyledToolbarButtonWrapper } from './Gfcr.styles'
 import ButtonSecondaryDropdown from '../../../generic/ButtonSecondaryDropdown'
 import { DropdownItemStyle } from '../../../generic/ButtonSecondaryDropdown/ButtonSecondaryDropdown.styles'
 import { useCurrentProject } from '../../../../App/CurrentProjectContext'
+import GfcrGenericTable from '../GfcrGenericTable'
 
 const Gfcr = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -99,47 +89,6 @@ const Gfcr = () => {
     setGfcrIndicatorSets,
     isAppOnline,
   ])
-
-  // setIndicatorSets(indicatorSetsDummyData)
-  // setIsLoading(false)
-  // if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
-  //   Promise.all([
-  //     databaseSwitchboardInstance.getSiteRecordsForUIDisplay(projectId),
-  //     databaseSwitchboardInstance.getProject(projectId),
-  //     databaseSwitchboardInstance.getChoices(),
-  //   ])
-
-  //     .then(([sites, project, choicesResponse]) => {
-  //       if (isMounted.current) {
-  //         if (!project && projectId) {
-  //           setIdsNotAssociatedWithData([projectId])
-  //         }
-
-  //         const exportName = getFileExportName(project, 'sites')
-
-  //         setSiteRecordsForUiDisplay(sites)
-  //         setSitesForMapMarkers(sites)
-  //         setSiteExportName(exportName)
-  //         setChoices(choicesResponse)
-  //         setIsLoading(false)
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       handleHttpResponseError({
-  //         error,
-  //         callback: () => {
-  //           toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
-  //         },
-  //       })
-  //     })
-  // }
-  // }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, handleHttpResponseError])
-  // }, [])
-
-  // const addCopiedSitesToSiteTable = (copiedSites) => {
-  //   setSiteRecordsForUiDisplay([...siteRecordsForUiDisplay, ...copiedSites])
-  //   setSitesForMapMarkers([...siteRecordsForUiDisplay, ...copiedSites])
-  // }
 
   const tableColumns = useMemo(
     () => [
@@ -266,33 +215,6 @@ const Gfcr = () => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
 
-  // const getDataForCSV = useMemo(() => {
-  //   const countryChoices = choices?.countries?.data
-  //   const reefTypeChoices = choices?.reeftypes?.data
-  //   const reefZoneChoices = choices?.reefzones?.data
-  //   const exposureChoices = choices?.reefexposures?.data
-
-  //   return siteRecordsForUiDisplay
-  //     .map((site) => {
-  //       const countryName = getObjectById(countryChoices, site.country)?.name
-  //       const reefTypeName = getObjectById(reefTypeChoices, site.reef_type)?.name
-  //       const reefZoneName = getObjectById(reefZoneChoices, site.reef_zone)?.name
-  //       const exposureName = getObjectById(exposureChoices, site.exposure)?.name
-
-  //       return {
-  //         Country: countryName,
-  //         Name: site.name,
-  //         Latitude: site.location.coordinates[1],
-  //         Longitude: site.location.coordinates[0],
-  //         'Reef type': reefTypeName,
-  //         'Reef zone': reefZoneName,
-  //         'Reef exposure': exposureName,
-  //         Notes: site.notes,
-  //       }
-  //     })
-  //     .toSorted((a, b) => a.Name.localeCompare(b.Name))
-  // }, [siteRecordsForUiDisplay, choices])
-
   const createDropdownLabel = (
     <>
       <IconPlus /> Create new
@@ -324,77 +246,25 @@ const Gfcr = () => {
   )
 
   const table = gfcrIndicatorSets.length ? (
-    <>
-      <StickyTableOverflowWrapper>
-        <GenericStickyTable {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => {
-                  const isMultiSortColumn = headerGroup.headers.some(
-                    (header) => header.sortedIndex > 0,
-                  )
-                  const ThClassName = column.parent ? column.parent.id : undefined
-
-                  return (
-                    <Th
-                      {...column.getHeaderProps({
-                        ...getTableColumnHeaderProps(column),
-                      })}
-                      align={column.align}
-                      key={column.id}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
-                      className={ThClassName}
-                    >
-                      <span>{column.render('Header')}</span>
-                    </Th>
-                  )
-                })}
-              </Tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
-              prepareRow(row)
-
-              return (
-                <Tr key={row.id} {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <Td key={cell.id} {...cell.getCellProps()} align={cell.column.align}>
-                        {cell.render('Cell')}
-                      </Td>
-                    )
-                  })}
-                </Tr>
-              )
-            })}
-          </tbody>
-        </GenericStickyTable>
-      </StickyTableOverflowWrapper>
-      <TableNavigation>
-        <PageSizeSelector
-          onChange={handleRowsNumberChange}
-          pageSize={pageSize}
-          pageSizeOptions={[15, 50, 100]}
-          pageType="site"
-          unfilteredRowLength={gfcrIndicatorSets.length}
-          searchFilteredRowLength={searchFilteredRowsLength}
-          isSearchFilterEnabled={!!globalFilter?.length}
-        />
-        <PageSelector
-          onPreviousClick={previousPage}
-          previousDisabled={!canPreviousPage}
-          onNextClick={nextPage}
-          nextDisabled={!canNextPage}
-          onGoToPage={gotoPage}
-          currentPageIndex={pageIndex}
-          pageCount={pageOptions.length}
-        />
-      </TableNavigation>
-    </>
+    <GfcrGenericTable
+      getTableProps={getTableProps}
+      headerGroups={headerGroups}
+      getTableBodyProps={getTableBodyProps}
+      page={page}
+      prepareRow={prepareRow}
+      onPageSizeChange={handleRowsNumberChange}
+      pageSize={pageSize}
+      unfilteredRowLength={gfcrIndicatorSets.length}
+      searchFilteredRowLength={searchFilteredRowsLength}
+      isSearchFilterEnabled={!!globalFilter?.length}
+      onPreviousClick={previousPage}
+      previousDisabled={!canPreviousPage}
+      onNextClick={nextPage}
+      nextDisabled={!canNextPage}
+      onGoToPage={gotoPage}
+      currentPageIndex={pageIndex}
+      pageCount={pageOptions.length}
+    />
   ) : (
     <PageUnavailable
       mainText={language.pages.gfcrTable.noDataMainText}

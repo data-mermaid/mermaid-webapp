@@ -15,6 +15,8 @@ import {
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import FinanceSolutions from './subPages/FinanceSolutions'
 import { choicesPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import Investments from './subPages/Investments'
+import Revenues from './subPages/Revenues'
 
 const StyledForm = styled.form`
   width: 100%;
@@ -48,6 +50,10 @@ const GfcrIndicatorSetForm = ({
   handleFormSubmit,
   handleFinanceSolutionSubmit,
   handleFinanceSolutionDelete,
+  handleInvestmentSubmit,
+  handleInvestmentDelete,
+  handleRevenueSubmit,
+  handleRevenueDelete,
   isNewIndicatorSet,
   choices,
 }) => {
@@ -112,6 +118,22 @@ const GfcrIndicatorSetForm = ({
           onDelete={handleFinanceSolutionDelete}
         />
       )}
+      {selectedNavItem === 'investments' && (
+        <Investments
+          indicatorSet={indicatorSet}
+          choices={choices}
+          onSubmit={handleInvestmentSubmit}
+          onDelete={handleInvestmentDelete}
+        />
+      )}
+      {selectedNavItem === 'revenues' && (
+        <Revenues
+          indicatorSet={indicatorSet}
+          choices={choices}
+          onSubmit={handleRevenueSubmit}
+          onDelete={handleRevenueDelete}
+        />
+      )}
     </>
   )
 }
@@ -119,13 +141,17 @@ const GfcrIndicatorSetForm = ({
 GfcrIndicatorSetForm.propTypes = {
   formik: formikPropType.isRequired,
   selectedNavItem: PropTypes.string.isRequired,
-  indicatorSetType: PropTypes.string.isRequired,
+  indicatorSetType: PropTypes.string,
   indicatorSet: PropTypes.object.isRequired,
   isNewIndicatorSet: PropTypes.bool.isRequired,
   handleFormSubmit: PropTypes.func.isRequired,
   handleFinanceSolutionSubmit: PropTypes.func.isRequired,
   handleFinanceSolutionDelete: PropTypes.func.isRequired,
-  choices: choicesPropType.isRequired,
+  handleInvestmentSubmit: PropTypes.func.isRequired,
+  handleInvestmentDelete: PropTypes.func.isRequired,
+  handleRevenueSubmit: PropTypes.func.isRequired,
+  handleRevenueDelete: PropTypes.func.isRequired,
+  choices: choicesPropType,
 }
 
 export default GfcrIndicatorSetForm
