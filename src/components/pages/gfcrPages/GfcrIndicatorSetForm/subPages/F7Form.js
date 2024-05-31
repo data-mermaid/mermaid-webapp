@@ -19,7 +19,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         </label>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.men}</>}
+            label={gfcrIndicatorSetLanguage.men}
             id="f7_1a"
             type="number"
             {...formik.getFieldProps('f7_1a')}
@@ -30,7 +30,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.women}</>}
+            label={gfcrIndicatorSetLanguage.women}
             id="f7_1b"
             type="number"
             {...formik.getFieldProps('f7_1b')}
@@ -51,7 +51,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         <div>{gfcrIndicatorSetLanguage.ofTotalHowMany}</div>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.youth}</>}
+            label={gfcrIndicatorSetLanguage.youth}
             id="f7_1c"
             type="number"
             {...formik.getFieldProps('f7_1c')}
@@ -62,7 +62,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.indigenous}</>}
+            label={gfcrIndicatorSetLanguage.indigenous}
             id="f7_1d"
             type="number"
             {...formik.getFieldProps('f7_1d')}
@@ -78,7 +78,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         </label>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.men}</>}
+            label={gfcrIndicatorSetLanguage.men}
             id="f7_2a"
             type="number"
             {...formik.getFieldProps('f7_2a')}
@@ -89,7 +89,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.women}</>}
+            label={gfcrIndicatorSetLanguage.women}
             id="f7_2b"
             type="number"
             {...formik.getFieldProps('f7_2b')}
@@ -110,7 +110,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         <div>{gfcrIndicatorSetLanguage.ofTotalHowMany}</div>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.youth}</>}
+            label={gfcrIndicatorSetLanguage.youth}
             id="f7_2c"
             type="number"
             {...formik.getFieldProps('f7_2c')}
@@ -121,7 +121,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.indigenous}</>}
+            label={gfcrIndicatorSetLanguage.indigenous}
             id="f7_2d"
             type="number"
             {...formik.getFieldProps('f7_2d')}

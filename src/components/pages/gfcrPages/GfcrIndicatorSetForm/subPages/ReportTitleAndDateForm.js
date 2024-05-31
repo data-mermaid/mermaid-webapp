@@ -14,11 +14,7 @@ import { ensureTrailingSlash } from '../../../../../library/strings/ensureTraili
 import useCurrentProjectPath from '../../../../../library/useCurrentProjectPath'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 
-const ReportTitleAndDateForm = ({
-  formik,
-  handleInputBlur,
-  isNewIndicatorSet,
-}) => {
+const ReportTitleAndDateForm = ({ formik, handleInputBlur, isNewIndicatorSet }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { indicatorSetId, projectId } = useParams()
   const navigate = useNavigate()

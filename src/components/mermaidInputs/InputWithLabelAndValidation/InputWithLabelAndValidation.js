@@ -18,19 +18,19 @@ import { IconButton } from '../../generic/buttons'
 import { IconInfo } from '../../icons'
 
 const InputWithLabelAndValidation = ({
-  required,
-  helperText,
+  required = false,
+  helperText = undefined,
   id,
-  ignoreNonObservationFieldValidations,
+  ignoreNonObservationFieldValidations = () => {},
   label,
-  resetNonObservationFieldValidations,
-  testId,
-  unit,
-  validationMessages,
-  validationType,
-  renderItemWithinInput,
-  renderItemAboveInput,
-  isInputDisabled,
+  resetNonObservationFieldValidations = () => {},
+  testId = undefined,
+  unit = undefined,
+  validationMessages = [],
+  validationType = undefined,
+  renderItemWithinInput = undefined,
+  renderItemAboveInput = undefined,
+  isInputDisabled = false,
   showHelperText = false,
 
   ...restOfProps
@@ -107,7 +107,7 @@ InputWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
   isInputDisabled: PropTypes.bool,
   ignoreNonObservationFieldValidations: PropTypes.func,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   renderItemAboveInput: PropTypes.node,
   renderItemWithinInput: PropTypes.node,
   resetNonObservationFieldValidations: PropTypes.func,
@@ -115,21 +115,6 @@ InputWithLabelAndValidation.propTypes = {
   unit: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
-}
-
-InputWithLabelAndValidation.defaultProps = {
-  required: false,
-  helperText: undefined,
-  showHelperText: false,
-  ignoreNonObservationFieldValidations: () => {},
-  isInputDisabled: false,
-  renderItemAboveInput: undefined,
-  renderItemWithinInput: undefined,
-  resetNonObservationFieldValidations: () => {},
-  testId: undefined,
-  unit: undefined,
-  validationMessages: [],
-  validationType: undefined,
 }
 
 export default InputWithLabelAndValidation

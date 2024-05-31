@@ -18,119 +18,94 @@ import language from '../../../../../language'
 import { ToolBarRow } from '../../../../generic/positioning'
 import FilterSearchToolbar from '../../../../FilterSearchToolbar/FilterSearchToolbar'
 import { TableContentToolbar, StyledTableContentWrapper } from './subPages.styles'
-import FinanceSolutionModal from '../modals/FinanceSolutionModal'
 import { StyledTableAnchor } from './subPages.styles'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
+import RevenueModal from '../modals/RevenueModal'
 
-const tableLanguage = language.pages.gfcrFinanceSolutionsTable
+const tableLanguage = language.pages.gfcrRevenuesTable
 
-const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
+const Revenues = ({ indicatorSet, choices, onSubmit, onDelete }) => {
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [financeSolutionBeingEdited, setFinanceSolutionBeingEdited] = useState()
+  const [revenueBeingEdited, setRevenueBeingEdited] = useState()
+
+  const revenues = useMemo(() => {
+    return indicatorSet.finance_solutions.flatMap((fs) => fs.revenues)
+  }, [indicatorSet.finance_solutions])
 
   const tableColumns = useMemo(
     () => [
       {
         Header: 'Finance solution business name',
-        accessor: 'name',
+        accessor: 'finance_solution',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Sector',
-        accessor: 'sector',
+        Header: 'Revenue Type',
+        accessor: 'revenue_type',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Used an incubator',
-        accessor: 'used_an_incubator',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: 'Gender 2X Criteria',
-        accessor: 'gender_smart',
+        Header: 'Sustainable Revenue Stream',
+        accessor: 'sustainable_revenue_stream',
         sortType: reactTableNaturalSort,
         align: 'center',
       },
       {
-        Header: 'Local enterprise',
-        accessor: 'local_enterprise',
+        Header: 'Annual Revenue',
+        accessor: 'annual_revenue',
         sortType: reactTableNaturalSort,
-        align: 'center',
-      },
-      {
-        Header: 'Sustainable finance mechanisms',
-        accessor: 'sustainable_finance_mechanisms',
-        sortType: reactTableNaturalSort,
+        align: 'right',
       },
     ],
     [],
   )
 
-  const handleEditFinanceSolution = useCallback(
+  const handleEditRevenue = useCallback(
     (event) => {
       event.preventDefault()
-      const financeSolution = indicatorSet.finance_solutions.find(
-        (financeSolution) => financeSolution.id === event.target.id,
-      )
+      const revenue = revenues.find((rev) => rev.id === event.target.id)
 
-      setFinanceSolutionBeingEdited(financeSolution)
+      setRevenueBeingEdited(revenue)
       setIsModalOpen(true)
     },
-    [indicatorSet.finance_solutions],
+    [revenues],
   )
 
   const tableCellData = useMemo(() => {
-    if (!choices) {
+    if (!choices || !revenues) {
       return
     }
 
-    return indicatorSet.finance_solutions.map((indicatorSet) => {
-      const {
-        id,
-        name,
-        sector,
-        used_an_incubator,
-        gender_smart,
-        local_enterprise,
-        sustainable_finance_mechanisms,
-      } = indicatorSet
+    return revenues.map((revenue) => {
+      const { id, finance_solution, revenue_type, sustainable_revenue_stream, annual_revenue } =
+        revenue
 
-      const sectorName = choices.sectors.data?.find(
-        (sectorChoice) => sectorChoice.id === sector,
+      const revenueTypeName = choices.revenuetypes.data?.find(
+        (revenueTypeChoice) => revenueTypeChoice.id === revenue_type,
       ).name
-      const incubatorName = choices.incubatortypes.data?.find(
-        (incubatorTypeChoice) => incubatorTypeChoice.id === used_an_incubator,
-      )?.name
-      const sustainableFinanceMechanismNames = sustainable_finance_mechanisms.map((mechanism) => {
-        return choices.sustainablefinancemechanisms.data?.find(
-          (sfmChoice) => sfmChoice.id === mechanism,
-        ).name
-      })
 
       return {
-        name: (
-          <StyledTableAnchor id={id} onClick={(event) => handleEditFinanceSolution(event)}>
-            {name}
+        finance_solution: (
+          <StyledTableAnchor id={id} onClick={(event) => handleEditRevenue(event)}>
+            {indicatorSet.finance_solutions.find((fs) => fs.id === finance_solution).name}
           </StyledTableAnchor>
         ),
-        sector: sectorName,
-        used_an_incubator: incubatorName,
-        gender_smart: <IconCheckLabel isCheck={!!gender_smart} />,
-        local_enterprise: <IconCheckLabel isCheck={!!local_enterprise} />,
-        sustainable_finance_mechanisms: sustainableFinanceMechanismNames.join(', '),
+        revenueType: revenueTypeName,
+        sustainable_revenue_stream: <IconCheckLabel isCheck={!!sustainable_revenue_stream} />,
+        annual_revenue: `$${annual_revenue}`,
       }
     })
-  }, [choices, handleEditFinanceSolution, indicatorSet.finance_solutions])
+  }, [choices, handleEditRevenue, indicatorSet.finance_solutions, revenues])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
         {
-          id: 'name',
+          id: 'finance_solution',
           desc: false,
         },
       ],
@@ -139,35 +114,33 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser && currentUser.id}-gfcrFinanceSolutionsTable`,
+    key: `${currentUser && currentUser.id}-gfcrRevenuesTable`,
     defaultValue: tableDefaultPrefs,
   })
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
       const keys = [
-        'values.name.props.children',
-        'values.sector',
-        'values.used_an_incubator',
-        'values.gender_smart',
-        'values.local_enterprise',
-        'values.sustainable_finance_mechanisms',
+        'values.finance_solution.props.children',
+        'values.revenueType',
+        'values.sustainable_revenue_stream',
+        'values.annual_revenue',
       ]
 
       const queryTerms = splitSearchQueryStrings(query)
       const filteredRows =
         !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
 
-      const filteredRowNames = filteredRows.map((row) => row.original.id)
-      const filteredFinanceSolutions = indicatorSet.finance_solutions.filter((financeSolution) =>
-        filteredRowNames.includes(financeSolution.id),
+      const filteredRowNames = filteredRows.map((row) => row.original.name)
+      const filteredRevenues = revenues.filter((investment) =>
+        filteredRowNames.includes(investment.finance_solution),
       )
 
-      setSearchFilteredRowsLength(filteredFinanceSolutions.length)
+      setSearchFilteredRowsLength(filteredRevenues.length)
 
       return filteredRows
     },
-    [indicatorSet.finance_solutions],
+    [revenues],
   )
 
   const {
@@ -221,28 +194,28 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
 
-  const handleAddFinanceSolution = (event) => {
+  const handleAddRevenue = (event) => {
     event.preventDefault()
     setIsModalOpen(true)
   }
 
-  const handleFinanceSolutionModalDismiss = (resetForm) => {
+  const handleRevenueModalDismiss = (resetForm) => {
     resetForm()
-    setFinanceSolutionBeingEdited()
+    setRevenueBeingEdited()
     setIsModalOpen(false)
   }
 
   const toolbarButtons = (
     <>
       <StyledToolbarButtonWrapper>
-        <ButtonSecondary onClick={(event) => handleAddFinanceSolution(event)}>
+        <ButtonSecondary onClick={(event) => handleAddRevenue(event)}>
           <IconPlus /> {tableLanguage.add}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
     </>
   )
 
-  const table = indicatorSet.finance_solutions.length ? (
+  const table = revenues.length ? (
     <GfcrGenericTable
       getTableProps={getTableProps}
       headerGroups={headerGroups}
@@ -251,7 +224,7 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
       prepareRow={prepareRow}
       onPageSizeChange={handleRowsNumberChange}
       pageSize={pageSize}
-      unfilteredRowLength={indicatorSet.finance_solutions.length}
+      unfilteredRowLength={revenues.length}
       searchFilteredRowLength={searchFilteredRowsLength}
       isSearchFilterEnabled={!!globalFilter?.length}
       onPreviousClick={previousPage}
@@ -264,8 +237,12 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
     />
   ) : (
     <PageUnavailable
-      mainText={tableLanguage.noDataMainText}
-      subText={tableLanguage.noDataSubText}
+      mainText={
+        !indicatorSet.finance_solutions.length
+          ? tableLanguage.noFinanceSolutions
+          : tableLanguage.noDataMainText
+      }
+      subText={!!indicatorSet.finance_solutions.length && tableLanguage.noDataSubText}
     />
   )
 
@@ -275,7 +252,7 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
         <ToolBarRow>
           <FilterSearchToolbar
             name={tableLanguage.filterToolbarText}
-            disabled={indicatorSet.finance_solutions.length === 0}
+            disabled={revenues.length === 0}
             globalSearchText={globalFilter || ''}
             handleGlobalFilterChange={handleGlobalFilterChange}
           />
@@ -283,11 +260,12 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
         </ToolBarRow>
       </TableContentToolbar>
       <StyledTableContentWrapper>{table}</StyledTableContentWrapper>
-      <FinanceSolutionModal
+      <RevenueModal
         isOpen={isModalOpen}
-        financeSolution={financeSolutionBeingEdited}
+        revenue={revenueBeingEdited}
+        financeSolutions={indicatorSet.finance_solutions}
         choices={choices}
-        onDismiss={handleFinanceSolutionModalDismiss}
+        onDismiss={handleRevenueModalDismiss}
         onSubmit={onSubmit}
         onDelete={onDelete}
       />
@@ -295,11 +273,11 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
   )
 }
 
-FinanceSolutions.propTypes = {
+Revenues.propTypes = {
   indicatorSet: PropTypes.object.isRequired,
   choices: choicesPropType.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 }
 
-export default FinanceSolutions
+export default Revenues

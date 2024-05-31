@@ -65,7 +65,7 @@ const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingDate, isNew = fal
 IndicatorSetTitle.propTypes = {
   indicatorSetTitle: PropTypes.string,
   type: PropTypes.string,
-  reportingDate: PropTypes.date,
+  reportingDate: PropTypes.instanceOf(Date),
   isNew: PropTypes.bool,
 }
 

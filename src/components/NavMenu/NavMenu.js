@@ -141,7 +141,8 @@ const NavLinkSidebar = styled(NavLink)`
     }
   `)}
 `
-const NavMenu = ({ subNavNode }) => {
+
+const NavMenu = ({ subNavNode = null }) => {
   const projectUrl = useCurrentProjectPath()
   const { recordId, submittedRecordId, siteId, managementRegimeId, projectId, indicatorSetId } =
     useParams()
@@ -301,7 +302,5 @@ const NavMenu = ({ subNavNode }) => {
 NavMenu.propTypes = {
   subNavNode: subNavNodePropTypes,
 }
-
-NavMenu.defaultProps = { subNavNode: null }
 
 export default NavMenu

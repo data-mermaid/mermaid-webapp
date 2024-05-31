@@ -15,10 +15,10 @@ const PageSizeSelector = ({
   pageSizeOptions,
   onChange,
   unfilteredRowLength,
-  methodFilteredRowLength,
-  searchFilteredRowLength,
-  isMethodFilterEnabled,
-  isSearchFilterEnabled,
+  methodFilteredRowLength = null,
+  searchFilteredRowLength = null,
+  isMethodFilterEnabled = false,
+  isSearchFilterEnabled = false,
 }) => {
   const [pageOptionsToDisplay, setPageOptionsToDisplay] = useState([])
   const [filteredAmountToDisplay, setFilteredAmountToDisplay] = useState(null)
@@ -86,13 +86,6 @@ const PageSizeSelector = ({
         : null}
     </label>
   )
-}
-
-PageSizeSelector.defaultProps = {
-  methodFilteredRowLength: null,
-  searchFilteredRowLength: null,
-  isMethodFilterEnabled: false,
-  isSearchFilterEnabled: false,
 }
 
 PageSizeSelector.propTypes = {

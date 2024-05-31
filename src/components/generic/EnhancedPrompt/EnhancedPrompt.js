@@ -4,7 +4,7 @@ import { useBlocker } from 'react-router-dom'
 import useBeforeUnloadPrompt from '../../../library/useBeforeUnloadPrompt'
 import language from '../../../language'
 
-function Prompt({ shouldPromptTrigger, message }) {
+function Prompt({ shouldPromptTrigger = false, message }) {
   useBlocker(() => {
     if (shouldPromptTrigger) {
       // eslint-disable-next-line no-alert
@@ -21,7 +21,7 @@ Prompt.propTypes = {
   shouldPromptTrigger: PropTypes.bool,
 }
 
-const EnhancedPrompt = ({ shouldPromptTrigger }) => {
+const EnhancedPrompt = ({ shouldPromptTrigger = false }) => {
   // Capture browser navigation (will not capture front end/react router routing)
   useBeforeUnloadPrompt({ shouldPromptTrigger })
 
@@ -32,16 +32,10 @@ const EnhancedPrompt = ({ shouldPromptTrigger }) => {
 EnhancedPrompt.propTypes = {
   shouldPromptTrigger: PropTypes.bool,
 }
-EnhancedPrompt.defaultProps = {
-  shouldPromptTrigger: false,
-}
+
 Prompt.propTypes = {
   shouldPromptTrigger: PropTypes.bool,
   message: PropTypes.string.isRequired,
-}
-
-Prompt.defaultProps = {
-  shouldPromptTrigger: false,
 }
 
 export default EnhancedPrompt
