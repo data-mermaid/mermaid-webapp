@@ -28,17 +28,26 @@ import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataPropt
 import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
 import SaveButton from './SaveButton'
 import { getChips, getOptionList } from './modalHelpers'
+import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { getToastArguments } from '../../../../../library/getToastArguments'
+import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 
 const modalLanguage = language.gfcrFinanceSolutionModal
 
 const FinanceSolutionModal = ({
   isOpen,
   onDismiss,
-  onSubmit,
-  onDelete,
   financeSolution = undefined,
+  indicatorSet,
+  setIndicatorSet,
   choices,
 }) => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { projectId } = useParams()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -58,11 +67,58 @@ const FinanceSolutionModal = ({
           formikValues.used_an_incubator === 'none' ? null : formikValues.used_an_incubator,
       }
 
-      await onSubmit(formattedValues)
+      const existingFinanceSolutions = indicatorSet.finance_solutions
+
+      let newFinanceSolutions
+
+      if (formattedValues.id) {
+        // Replace existing element
+        newFinanceSolutions = existingFinanceSolutions.map((fs) =>
+          fs.id === formattedValues.id ? formattedValues : fs,
+        )
+      } else {
+        // Add a new element
+        newFinanceSolutions = [...existingFinanceSolutions, formattedValues]
+      }
+
+      const updatedIndicatorSet = {
+        ...indicatorSet,
+        finance_solutions: newFinanceSolutions,
+      }
+
+      try {
+        const response = await databaseSwitchboardInstance.saveIndicatorSet(
+          projectId,
+          updatedIndicatorSet,
+        )
+
+        setIndicatorSet(response)
+
+        toast.success(...getToastArguments(language.success.gfcrFinanceSolutionSave))
+      } catch (error) {
+        setSaveButtonState(buttonGroupStates.unsaved)
+
+        if (error) {
+          toast.error(...getToastArguments(language.error.gfcrFinanceSolutionSave))
+
+          handleHttpResponseError({
+            error,
+          })
+        }
+      }
+
       setSaveButtonState(buttonGroupStates.saved)
       onDismiss(formikActions.resetForm)
     },
-    [financeSolution, onDismiss, onSubmit],
+    [
+      databaseSwitchboardInstance,
+      financeSolution,
+      handleHttpResponseError,
+      indicatorSet,
+      onDismiss,
+      projectId,
+      setIndicatorSet,
+    ],
   )
 
   const formik = useFormik({
@@ -92,10 +148,44 @@ const FinanceSolutionModal = ({
 
   const handleDelete = useCallback(async () => {
     setIsDeleting(true)
-    await onDelete(financeSolution.id)
+    const updatedIndicatorSet = {
+      ...indicatorSet,
+      finance_solutions: indicatorSet.finance_solutions.filter(
+        (fs) => fs.id !== financeSolution.id,
+      ),
+    }
+
+    try {
+      const response = await databaseSwitchboardInstance.saveIndicatorSet(
+        projectId,
+        updatedIndicatorSet,
+      )
+
+      setIndicatorSet(response)
+
+      toast.success(...getToastArguments(language.success.gfcrFinanceSolutionDelete))
+    } catch (error) {
+      if (error) {
+        toast.error(...getToastArguments(language.error.gfcrFinanceSolutionDelete))
+
+        handleHttpResponseError({
+          error,
+        })
+      }
+    }
+
     setIsDeleting(false)
     onDismiss(formik.resetForm)
-  }, [financeSolution?.id, formik.resetForm, onDelete, onDismiss])
+  }, [
+    databaseSwitchboardInstance,
+    financeSolution,
+    formik.resetForm,
+    handleHttpResponseError,
+    indicatorSet,
+    onDismiss,
+    projectId,
+    setIndicatorSet,
+  ])
 
   const _setSaveButtonUnsaved = useEffect(() => {
     if (isFormDirty) {
@@ -255,11 +345,10 @@ const FinanceSolutionModal = ({
 }
 
 FinanceSolutionModal.propTypes = {
-  indicatorSet: PropTypes.object.isRequired,
+  indicatorSet: PropTypes.object,
+  setIndicatorSet: PropTypes.func.isRequired,
   choices: choicesPropType.isRequired,
   financeSolution: PropTypes.object,
-  onSubmit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
 }

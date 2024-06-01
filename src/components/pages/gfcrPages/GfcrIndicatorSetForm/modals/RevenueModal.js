@@ -23,18 +23,27 @@ import SaveButton from './SaveButton'
 import { getOptionList } from './modalHelpers'
 import { getRevenueInitialValues } from './revenueInitialValues'
 import InputNumberNoScrollWithUnit from '../../../../generic/InputNumberNoScrollWithUnit'
+import { getToastArguments } from '../../../../../library/getToastArguments'
+import { toast } from 'react-toastify'
+import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useParams } from 'react-router-dom'
+import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 
 const modalLanguage = language.gfcrRevenueModal
 
 const RevenueModal = ({
+  indicatorSet,
+  setIndicatorSet,
   isOpen,
   onDismiss,
-  onSubmit,
-  onDelete,
   revenue = undefined,
   choices,
   financeSolutions,
 }) => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { projectId } = useParams()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -52,11 +61,71 @@ const RevenueModal = ({
         id: revenue?.id,
       }
 
-      await onSubmit(formattedValues, revenue && revenue.finance_solution)
+      // Find the finance solution with the id which matches revenue.finance_solution
+      const financeSolution = indicatorSet.finance_solutions.find(
+        (fs) => fs.id === formattedValues.finance_solution,
+      )
+
+      let newRevenues
+      let financeSolutions = indicatorSet.finance_solutions
+
+      // Revenue already exists
+      if (
+        formattedValues.id &&
+        formattedValues.finance_solution !== formattedValues.finance_solution
+      ) {
+        // Revenue finance solution has been updated
+        // Remove any revenue with the same finance solution id within
+        // any element of indicatorSetBeingEdited.finance_solutions
+        financeSolutions = financeSolutions.map((fs) => ({
+          ...fs,
+          revenues: fs.revenues.filter((source) => source.id !== formattedValues.id),
+        }))
+      }
+
+      // Add a new element to revenues
+      newRevenues = [...financeSolution.revenues, formattedValues]
+
+      const updatedIndicatorSet = {
+        ...indicatorSet,
+        finance_solutions: financeSolutions.map((fs) =>
+          fs.id === financeSolution.id ? { ...fs, revenues: newRevenues } : fs,
+        ),
+      }
+
+      try {
+        const response = await databaseSwitchboardInstance.saveIndicatorSet(
+          projectId,
+          updatedIndicatorSet,
+        )
+
+        setIndicatorSet(response)
+
+        toast.success(...getToastArguments(language.success.gfcrRevenueSave))
+      } catch (error) {
+        setSaveButtonState(buttonGroupStates.unsaved)
+
+        if (error) {
+          toast.error(...getToastArguments(language.error.gfcrRevenueSave))
+
+          handleHttpResponseError({
+            error,
+          })
+        }
+      }
+
       setSaveButtonState(buttonGroupStates.saved)
       onDismiss(formikActions.resetForm)
     },
-    [revenue, onDismiss, onSubmit],
+    [
+      databaseSwitchboardInstance,
+      handleHttpResponseError,
+      indicatorSet,
+      onDismiss,
+      projectId,
+      revenue,
+      setIndicatorSet,
+    ],
   )
 
   const formik = useFormik({
@@ -84,10 +153,52 @@ const RevenueModal = ({
 
   const handleDelete = useCallback(async () => {
     setIsDeleting(true)
-    await onDelete(revenue)
+
+    // Update the finance solution by removing the revenue
+    const updatedFinanceSolution = indicatorSet.finance_solutions
+      .find((fs) => fs.id === revenue.finance_solution)
+      .revenues.filter((source) => source.id !== revenue.id)
+
+    const updatedIndicatorSet = {
+      ...indicatorSet,
+      finance_solutions: indicatorSet.finance_solutions.map(
+        // Keep the original finance solution element unless it's the one we're updating, in which case replace it with the updated one
+        (fs) =>
+          fs.id === revenue.finance_solution ? { ...fs, revenues: updatedFinanceSolution } : fs,
+      ),
+    }
+
+    try {
+      const response = await databaseSwitchboardInstance.saveIndicatorSet(
+        projectId,
+        updatedIndicatorSet,
+      )
+
+      setIndicatorSet(response)
+
+      toast.success(...getToastArguments(language.success.gfcrRevenueDelete))
+    } catch (error) {
+      if (error) {
+        toast.error(...getToastArguments(language.error.gfcrRevenueDelete))
+
+        handleHttpResponseError({
+          error,
+        })
+      }
+    }
+
     setIsDeleting(false)
     onDismiss(formik.resetForm)
-  }, [formik.resetForm, revenue, onDelete, onDismiss])
+  }, [
+    databaseSwitchboardInstance,
+    formik.resetForm,
+    handleHttpResponseError,
+    indicatorSet,
+    onDismiss,
+    projectId,
+    revenue,
+    setIndicatorSet,
+  ])
 
   const _setSaveButtonUnsaved = useEffect(() => {
     if (isFormDirty) {
@@ -215,11 +326,10 @@ const RevenueModal = ({
 
 RevenueModal.propTypes = {
   indicatorSet: PropTypes.object,
+  setIndicatorSet: PropTypes.func.isRequired,
   choices: choicesPropType.isRequired,
   revenue: PropTypes.object,
   financeSolutions: PropTypes.array.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
 }

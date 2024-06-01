@@ -26,7 +26,7 @@ import IconCheckLabel from './IconCheckLabel'
 
 const tableLanguage = language.pages.gfcrFinanceSolutionsTable
 
-const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
+const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices }) => {
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -118,7 +118,7 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
           </StyledTableAnchor>
         ),
         sector: sectorName,
-        used_an_incubator: incubatorName,
+        used_an_incubator: incubatorName ? incubatorName : 'None',
         gender_smart: <IconCheckLabel isCheck={!!gender_smart} />,
         local_enterprise: <IconCheckLabel isCheck={!!local_enterprise} />,
         sustainable_finance_mechanisms: sustainableFinanceMechanismNames.join(', '),
@@ -286,10 +286,10 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
       <FinanceSolutionModal
         isOpen={isModalOpen}
         financeSolution={financeSolutionBeingEdited}
+        indicatorSet={indicatorSet}
+        setIndicatorSet={setIndicatorSet}
         choices={choices}
         onDismiss={handleFinanceSolutionModalDismiss}
-        onSubmit={onSubmit}
-        onDelete={onDelete}
       />
     </>
   )
@@ -297,9 +297,8 @@ const FinanceSolutions = ({ indicatorSet, choices, onSubmit, onDelete }) => {
 
 FinanceSolutions.propTypes = {
   indicatorSet: PropTypes.object.isRequired,
+  setIndicatorSet: PropTypes.func.isRequired,
   choices: choicesPropType.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
 }
 
 export default FinanceSolutions

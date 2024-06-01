@@ -12,6 +12,11 @@ import {
   goToManagementOverviewPageLink,
 } from './library/validationMessageHelpers'
 import { HelperTextLink } from './components/generic/links'
+import styled from 'styled-components'
+
+const StyledLink = styled.a`
+  cursor: pointer;
+`
 
 const placeholders = { select: 'Choose...' }
 
@@ -541,14 +546,22 @@ const pages = {
     filterToolbarText: 'Filter this table by investment',
     noDataMainText: 'No Investments yet.',
     noDataSubText: "Select 'Add Investment' to add one to this indicator set.",
-    noFinanceSolutions: 'Add a finance solution before adding investments.',
+    getNoFinanceSolutions: (onClick) => (
+      <>
+        Add a <StyledLink onClick={onClick}>finance solution</StyledLink> before adding investments.
+      </>
+    ),
   },
   gfcrRevenuesTable: {
     add: 'Add Revenue',
     filterToolbarText: 'Filter this table by revenue',
     noDataMainText: 'No Revenues yet.',
     noDataSubText: "Select 'Add Revenue' to add one to this indicator set.",
-    noFinanceSolutions: 'Add a finance solution before adding reveneues.',
+    getNoFinanceSolutions: (onClick) => (
+      <>
+        Add a <StyledLink onClick={onClick}>finance solution</StyledLink> before adding investments.
+      </>
+    ),
   },
   gfcrIndicatorSet: {
     title: 'Indicator Set',

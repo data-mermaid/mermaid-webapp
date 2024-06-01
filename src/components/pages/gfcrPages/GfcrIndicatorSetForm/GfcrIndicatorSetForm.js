@@ -45,15 +45,11 @@ const setInputToDefaultValue = (formik, fieldName) => {
 const GfcrIndicatorSetForm = ({
   formik,
   selectedNavItem,
+  setSelectedNavItem,
   indicatorSetType,
   indicatorSet,
+  setIndicatorSet,
   handleFormSubmit,
-  handleFinanceSolutionSubmit,
-  handleFinanceSolutionDelete,
-  handleInvestmentSubmit,
-  handleInvestmentDelete,
-  handleRevenueSubmit,
-  handleRevenueDelete,
   isNewIndicatorSet,
   choices,
 }) => {
@@ -113,25 +109,24 @@ const GfcrIndicatorSetForm = ({
       {selectedNavItem === 'finance-solutions' && (
         <FinanceSolutions
           indicatorSet={indicatorSet}
+          setIndicatorSet={setIndicatorSet}
           choices={choices}
-          onSubmit={handleFinanceSolutionSubmit}
-          onDelete={handleFinanceSolutionDelete}
         />
       )}
       {selectedNavItem === 'investments' && (
         <Investments
           indicatorSet={indicatorSet}
+          setIndicatorSet={setIndicatorSet}
           choices={choices}
-          onSubmit={handleInvestmentSubmit}
-          onDelete={handleInvestmentDelete}
+          setSelectedNavItem={setSelectedNavItem}
         />
       )}
       {selectedNavItem === 'revenues' && (
         <Revenues
           indicatorSet={indicatorSet}
+          setIndicatorSet={setIndicatorSet}
           choices={choices}
-          onSubmit={handleRevenueSubmit}
-          onDelete={handleRevenueDelete}
+          setSelectedNavItem={setSelectedNavItem}
         />
       )}
     </>
@@ -141,16 +136,12 @@ const GfcrIndicatorSetForm = ({
 GfcrIndicatorSetForm.propTypes = {
   formik: formikPropType.isRequired,
   selectedNavItem: PropTypes.string.isRequired,
+  setSelectedNavItem: PropTypes.func.isRequired,
   indicatorSetType: PropTypes.string,
   indicatorSet: PropTypes.object.isRequired,
+  setIndicatorSet: PropTypes.func.isRequired,
   isNewIndicatorSet: PropTypes.bool.isRequired,
   handleFormSubmit: PropTypes.func.isRequired,
-  handleFinanceSolutionSubmit: PropTypes.func.isRequired,
-  handleFinanceSolutionDelete: PropTypes.func.isRequired,
-  handleInvestmentSubmit: PropTypes.func.isRequired,
-  handleInvestmentDelete: PropTypes.func.isRequired,
-  handleRevenueSubmit: PropTypes.func.isRequired,
-  handleRevenueDelete: PropTypes.func.isRequired,
   choices: choicesPropType,
 }
 
