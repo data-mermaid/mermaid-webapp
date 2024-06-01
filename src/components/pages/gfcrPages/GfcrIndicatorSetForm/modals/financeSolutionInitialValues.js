@@ -5,6 +5,7 @@ const getFinanceSolutionInitialValues = (financeSolution) => {
     gender_smart = false,
     local_enterprise = false,
     sustainable_finance_mechanisms = [],
+    notes = '',
   } = financeSolution || {}
 
   let used_an_incubator
@@ -23,6 +24,7 @@ const getFinanceSolutionInitialValues = (financeSolution) => {
     gender_smart,
     local_enterprise,
     sustainable_finance_mechanisms,
+    notes,
   }
 }
 

@@ -7,6 +7,7 @@ import language from '../../../../../language'
 import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import { InputRow } from '../../../../generic/form'
+import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
@@ -72,6 +73,11 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
           />
         </StyledGfcrSubInputWrapper>
       </InputRow>
+      <TextareaWithLabelAndValidation
+        id="f6_notes"
+        label={gfcrIndicatorSetLanguage.notes}
+        {...formik.getFieldProps('f6_notes')}
+      />
     </StyledGfcrInputWrapper>
   )
 }

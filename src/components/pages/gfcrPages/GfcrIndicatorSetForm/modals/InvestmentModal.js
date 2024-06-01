@@ -292,6 +292,7 @@ const InvestmentModal = ({
             {...formik.getFieldProps('investment_amount')}
           />
         </StyledModalInputRow>
+        <hr />
         <StyledModalInputRow>
           <label id="notes-label" htmlFor="notes-input">
             {modalLanguage.notes}

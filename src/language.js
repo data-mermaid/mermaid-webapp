@@ -575,6 +575,7 @@ const pages = {
     youth_helper: 'Youth Helper Text',
     indigenous: 'Indigenous',
     indigenous_helper: 'Indigenous Helper Text',
+    notes: 'Notes',
     f1_1: 'Coral reef area of coral reefs in GFCR programming',
     f1_1_helper: 'F1.1 Helper Text',
     f2_1a: 'Coral reef area of MPAs and OECMs (as aligned to GBF Target 3)',
