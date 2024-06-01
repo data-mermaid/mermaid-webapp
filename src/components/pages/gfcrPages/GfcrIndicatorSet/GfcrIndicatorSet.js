@@ -41,21 +41,12 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const { gfcrIndicatorSets, setGfcrIndicatorSets } = useCurrentProject()
   const [choices, setChoices] = useState()
 
-  // const [countryOptions, setCountryOptions] = useState([])
-  // const [exposureOptions, setExposureOptions] = useState([])
-  // const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isFormDirty, setIsFormDirty] = useState(false)
-  // const [reefTypeOptions, setReefTypeOptions] = useState([])
-  // const [reefZoneOptions, setReefZoneOptions] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [indicatorSetBeingEdited, setIndicatorSetBeingEdited] = useState()
-  // const [siteDeleteErrorData, setSiteDeleteErrorData] = useState([])
-  // const [isDeletingSite, setIsDeletingSite] = useState(false)
-  // const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
-  // const [currentDeleteRecordModalPage, setCurrentDeleteRecordModalPage] = useState(1)
-  const [selectedNavItem, setSelectedNavItem] = useState('report-title-and-year')
 
+  const [selectedNavItem, setSelectedNavItem] = useState('report-title-and-year')
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new indicator set is saved (and that triggers a navigation to its new page)
   const indicatorSetType = indicatorSetBeingEdited?.indicator_set_type || newIndicatorSetType
   const indicatorSetTypeName = indicatorSetType === 'annual_report' ? 'Annual Report' : 'Target'
@@ -179,306 +170,6 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     ],
   )
 
-  const handleFinanceSolutionDelete = useCallback(
-    async (financeSolutionId) => {
-      const updatedIndicatorSet = {
-        ...indicatorSetBeingEdited,
-        finance_solutions: indicatorSetBeingEdited.finance_solutions.filter(
-          (fs) => fs.id !== financeSolutionId,
-        ),
-      }
-
-      try {
-        const response = await databaseSwitchboardInstance.saveIndicatorSet(
-          projectId,
-          updatedIndicatorSet,
-        )
-
-        setIndicatorSetBeingEdited(response)
-
-        toast.success(...getToastArguments(language.success.gfcrFinanceSolutionDelete))
-      } catch (error) {
-        if (error && isAppOnline) {
-          toast.error(...getToastArguments(language.error.gfcrFinanceSolutionDelete))
-
-          handleHttpResponseError({
-            error,
-          })
-        }
-      }
-    },
-    [
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      indicatorSetBeingEdited,
-      isAppOnline,
-      projectId,
-    ],
-  )
-
-  const handleFinanceSolutionSubmit = useCallback(
-    async (financeSolution) => {
-      const existingFinanceSolutions = indicatorSetBeingEdited.finance_solutions
-
-      let newFinanceSolutions
-
-      if (financeSolution.id) {
-        // Replace existing element
-        newFinanceSolutions = existingFinanceSolutions.map((fs) =>
-          fs.id === financeSolution.id ? financeSolution : fs,
-        )
-      } else {
-        // Add a new element
-        newFinanceSolutions = [...existingFinanceSolutions, financeSolution]
-      }
-
-      const updatedIndicatorSet = {
-        ...indicatorSetBeingEdited,
-        finance_solutions: newFinanceSolutions,
-      }
-
-      try {
-        const response = await databaseSwitchboardInstance.saveIndicatorSet(
-          projectId,
-          updatedIndicatorSet,
-        )
-
-        setIndicatorSetBeingEdited(response)
-
-        toast.success(...getToastArguments(language.success.gfcrFinanceSolutionSave))
-      } catch (error) {
-        setSaveButtonState(buttonGroupStates.unsaved)
-
-        if (error && isAppOnline) {
-          toast.error(...getToastArguments(language.error.gfcrFinanceSolutionSave))
-
-          handleHttpResponseError({
-            error,
-          })
-        }
-      }
-    },
-    [
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      indicatorSetBeingEdited,
-      isAppOnline,
-      projectId,
-    ],
-  )
-
-  const handleInvestmentDelete = useCallback(
-    async (investment) => {
-      // Update the finance solution by removing the investment
-      const updatedFinanceSolution = indicatorSetBeingEdited.finance_solutions
-        .find((fs) => fs.id === investment.finance_solution)
-        .investment_sources.filter((source) => source.id !== investment.id)
-
-      const updatedIndicatorSet = {
-        ...indicatorSetBeingEdited,
-        finance_solutions: indicatorSetBeingEdited.finance_solutions.map(
-          // Keep the original finance solution element unless it's the one we're updating, in which case replace it with the updated one
-          (fs) =>
-            fs.id === investment.finance_solution
-              ? { ...fs, investment_sources: updatedFinanceSolution }
-              : fs,
-        ),
-      }
-
-      try {
-        const response = await databaseSwitchboardInstance.saveIndicatorSet(
-          projectId,
-          updatedIndicatorSet,
-        )
-
-        setIndicatorSetBeingEdited(response)
-
-        toast.success(...getToastArguments(language.success.gfcrInvestmentDelete))
-      } catch (error) {
-        if (error && isAppOnline) {
-          toast.error(...getToastArguments(language.error.gfcrInvestmentDelete))
-
-          handleHttpResponseError({
-            error,
-          })
-        }
-      }
-    },
-    [
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      indicatorSetBeingEdited,
-      isAppOnline,
-      projectId,
-    ],
-  )
-
-  const handleInvestmentSubmit = useCallback(
-    async (investment, previousFinanceSolutionId) => {
-      // Find the finance solution with the id which matches investment.finance_solution
-      const financeSolution = indicatorSetBeingEdited.finance_solutions.find(
-        (fs) => fs.id === investment.finance_solution,
-      )
-
-      let newInvestments
-      let financeSolutions = indicatorSetBeingEdited.finance_solutions
-
-      // Investment already exists
-      if (investment.id && investment.finance_solution !== previousFinanceSolutionId) {
-        // Investment finance solution has been updated
-        // Remove any investment with the same finance solution id within
-        // any element of indicatorSetBeingEdited.finance_solutions
-        financeSolutions = financeSolutions.map((fs) => ({
-          ...fs,
-          investment_sources: fs.investment_sources.filter((source) => source.id !== investment.id),
-        }))
-      }
-
-      // Add a new element to investments
-      newInvestments = [...financeSolution.investment_sources, investment]
-
-      const updatedIndicatorSet = {
-        ...indicatorSetBeingEdited,
-        finance_solutions: financeSolutions.map((fs) =>
-          fs.id === financeSolution.id ? { ...fs, investment_sources: newInvestments } : fs,
-        ),
-      }
-
-      try {
-        const response = await databaseSwitchboardInstance.saveIndicatorSet(
-          projectId,
-          updatedIndicatorSet,
-        )
-
-        setIndicatorSetBeingEdited(response)
-
-        toast.success(...getToastArguments(language.success.gfcrInvestmentSave))
-      } catch (error) {
-        setSaveButtonState(buttonGroupStates.unsaved)
-
-        if (error && isAppOnline) {
-          toast.error(...getToastArguments(language.error.gfcrInvestmentDelete))
-
-          handleHttpResponseError({
-            error,
-          })
-        }
-      }
-    },
-    [
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      indicatorSetBeingEdited,
-      isAppOnline,
-      projectId,
-    ],
-  )
-
-  const handleRevenueDelete = useCallback(
-    async (revenue) => {
-      // Update the finance solution by removing the revenue
-      const updatedFinanceSolution = indicatorSetBeingEdited.finance_solutions
-        .find((fs) => fs.id === revenue.finance_solution)
-        .revenues.filter((source) => source.id !== revenue.id)
-
-      const updatedIndicatorSet = {
-        ...indicatorSetBeingEdited,
-        finance_solutions: indicatorSetBeingEdited.finance_solutions.map(
-          // Keep the original finance solution element unless it's the one we're updating, in which case replace it with the updated one
-          (fs) =>
-            fs.id === revenue.finance_solution ? { ...fs, revenues: updatedFinanceSolution } : fs,
-        ),
-      }
-
-      try {
-        const response = await databaseSwitchboardInstance.saveIndicatorSet(
-          projectId,
-          updatedIndicatorSet,
-        )
-
-        setIndicatorSetBeingEdited(response)
-
-        toast.success(...getToastArguments(language.success.gfcrRevenueDelete))
-      } catch (error) {
-        if (error && isAppOnline) {
-          toast.error(...getToastArguments(language.error.gfcrRevenueDelete))
-
-          handleHttpResponseError({
-            error,
-          })
-        }
-      }
-    },
-    [
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      indicatorSetBeingEdited,
-      isAppOnline,
-      projectId,
-    ],
-  )
-
-  const handleRevenueSubmit = useCallback(
-    async (revenue, previousFinanceSolutionId) => {
-      // Find the finance solution with the id which matches revenue.finance_solution
-      const financeSolution = indicatorSetBeingEdited.finance_solutions.find(
-        (fs) => fs.id === revenue.finance_solution,
-      )
-
-      let newRevenues
-      let financeSolutions = indicatorSetBeingEdited.finance_solutions
-
-      // Revenue already exists
-      if (revenue.id && revenue.finance_solution !== previousFinanceSolutionId) {
-        // Revenue finance solution has been updated
-        // Remove any revenue with the same finance solution id within
-        // any element of indicatorSetBeingEdited.finance_solutions
-        financeSolutions = financeSolutions.map((fs) => ({
-          ...fs,
-          revenues: fs.revenues.filter((source) => source.id !== revenue.id),
-        }))
-      }
-
-      // Add a new element to revenues
-      newRevenues = [...financeSolution.revenues, revenue]
-
-      const updatedIndicatorSet = {
-        ...indicatorSetBeingEdited,
-        finance_solutions: financeSolutions.map((fs) =>
-          fs.id === financeSolution.id ? { ...fs, revenues: newRevenues } : fs,
-        ),
-      }
-
-      try {
-        const response = await databaseSwitchboardInstance.saveIndicatorSet(
-          projectId,
-          updatedIndicatorSet,
-        )
-
-        setIndicatorSetBeingEdited(response)
-
-        toast.success(...getToastArguments(language.success.gfcrRevenueSave))
-      } catch (error) {
-        setSaveButtonState(buttonGroupStates.unsaved)
-
-        if (error && isAppOnline) {
-          toast.error(...getToastArguments(language.error.gfcrRevenueSave))
-
-          handleHttpResponseError({
-            error,
-          })
-        }
-      }
-    },
-    [
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      indicatorSetBeingEdited,
-      isAppOnline,
-      projectId,
-    ],
-  )
-
   const formik = useFormik({
     initialValues: initialFormValues,
     enableReinitialize: true,
@@ -511,21 +202,17 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         selectedNavItem={selectedNavItem}
         setSelectedNavItem={setSelectedNavItem}
       />
-      <div style={{ display: 'block' }}>
+      <div style={{ flex: 1 }}>
         <GfcrIndicatorSetForm
           formik={formik}
           indicatorSet={indicatorSetBeingEdited}
+          setIndicatorSet={setIndicatorSetBeingEdited}
           selectedNavItem={selectedNavItem}
+          setSelectedNavItem={setSelectedNavItem}
           indicatorSetType={indicatorSetType}
           handleFormSubmit={handleFormSubmit}
           isNewIndicatorSet={!!newIndicatorSetType}
           choices={choices}
-          handleFinanceSolutionSubmit={handleFinanceSolutionSubmit}
-          handleFinanceSolutionDelete={handleFinanceSolutionDelete}
-          handleInvestmentSubmit={handleInvestmentSubmit}
-          handleInvestmentDelete={handleInvestmentDelete}
-          handleRevenueSubmit={handleRevenueSubmit}
-          handleRevenueDelete={handleRevenueDelete}
         />
       </div>
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}

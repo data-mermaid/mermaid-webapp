@@ -25,7 +25,14 @@ import InvestmentModal from '../modals/InvestmentModal'
 
 const tableLanguage = language.pages.gfcrInvestmentsTable
 
-const Investments = ({ indicatorSet, choices, onSubmit, onDelete }) => {
+const Investments = ({
+  indicatorSet,
+  setIndicatorSet,
+  choices,
+  onSubmit,
+  onDelete,
+  setSelectedNavItem,
+}) => {
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -209,7 +216,10 @@ const Investments = ({ indicatorSet, choices, onSubmit, onDelete }) => {
   const toolbarButtons = (
     <>
       <StyledToolbarButtonWrapper>
-        <ButtonSecondary onClick={(event) => handleAddInvestment(event)}>
+        <ButtonSecondary
+          onClick={(event) => handleAddInvestment(event)}
+          disabled={!indicatorSet.finance_solutions.length}
+        >
           <IconPlus /> {tableLanguage.add}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
@@ -238,12 +248,14 @@ const Investments = ({ indicatorSet, choices, onSubmit, onDelete }) => {
     />
   ) : (
     <PageUnavailable
-      mainText={
-        !indicatorSet.finance_solutions.length
-          ? tableLanguage.noFinanceSolutions
-          : tableLanguage.noDataMainText
+      mainText={tableLanguage.noDataMainText}
+      subText={
+        indicatorSet.finance_solutions.length
+          ? tableLanguage.noDataSubText
+          : tableLanguage.getNoFinanceSolutions(() => {
+              setSelectedNavItem('finance-solutions')
+            })
       }
-      subText={!!indicatorSet.finance_solutions.length && tableLanguage.noDataSubText}
     />
   )
 
@@ -264,6 +276,8 @@ const Investments = ({ indicatorSet, choices, onSubmit, onDelete }) => {
       <InvestmentModal
         isOpen={isModalOpen}
         investment={investmentBeingEdited}
+        indicatorSet={indicatorSet}
+        setIndicatorSet={setIndicatorSet}
         financeSolutions={indicatorSet.finance_solutions}
         choices={choices}
         onDismiss={handleInvestmentModalDismiss}
@@ -275,10 +289,12 @@ const Investments = ({ indicatorSet, choices, onSubmit, onDelete }) => {
 }
 
 Investments.propTypes = {
-  indicatorSet: PropTypes.object.isRequired,
+  indicatorSet: PropTypes.object,
+  setIndicatorSet: PropTypes.func.isRequired,
   choices: choicesPropType.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  setSelectedNavItem: PropTypes.func.isRequired,
 }
 
 export default Investments

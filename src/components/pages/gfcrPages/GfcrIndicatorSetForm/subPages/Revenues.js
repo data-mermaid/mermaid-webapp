@@ -26,7 +26,7 @@ import RevenueModal from '../modals/RevenueModal'
 
 const tableLanguage = language.pages.gfcrRevenuesTable
 
-const Revenues = ({ indicatorSet, choices, onSubmit, onDelete }) => {
+const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem }) => {
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -94,7 +94,7 @@ const Revenues = ({ indicatorSet, choices, onSubmit, onDelete }) => {
             {indicatorSet.finance_solutions.find((fs) => fs.id === finance_solution).name}
           </StyledTableAnchor>
         ),
-        revenueType: revenueTypeName,
+        revenue_type: revenueTypeName,
         sustainable_revenue_stream: <IconCheckLabel isCheck={!!sustainable_revenue_stream} />,
         annual_revenue: `$${annual_revenue}`,
       }
@@ -122,7 +122,7 @@ const Revenues = ({ indicatorSet, choices, onSubmit, onDelete }) => {
     (rows, id, query) => {
       const keys = [
         'values.finance_solution.props.children',
-        'values.revenueType',
+        'values.revenue_type',
         'values.sustainable_revenue_stream',
         'values.annual_revenue',
       ]
@@ -208,7 +208,10 @@ const Revenues = ({ indicatorSet, choices, onSubmit, onDelete }) => {
   const toolbarButtons = (
     <>
       <StyledToolbarButtonWrapper>
-        <ButtonSecondary onClick={(event) => handleAddRevenue(event)}>
+        <ButtonSecondary
+          onClick={(event) => handleAddRevenue(event)}
+          disabled={!indicatorSet.finance_solutions.length}
+        >
           <IconPlus /> {tableLanguage.add}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
@@ -237,12 +240,14 @@ const Revenues = ({ indicatorSet, choices, onSubmit, onDelete }) => {
     />
   ) : (
     <PageUnavailable
-      mainText={
-        !indicatorSet.finance_solutions.length
-          ? tableLanguage.noFinanceSolutions
-          : tableLanguage.noDataMainText
+      mainText={tableLanguage.noDataMainText}
+      subText={
+        indicatorSet.finance_solutions.length
+          ? tableLanguage.noDataSubText
+          : tableLanguage.getNoFinanceSolutions(() => {
+              setSelectedNavItem('finance-solutions')
+            })
       }
-      subText={!!indicatorSet.finance_solutions.length && tableLanguage.noDataSubText}
     />
   )
 
@@ -266,8 +271,8 @@ const Revenues = ({ indicatorSet, choices, onSubmit, onDelete }) => {
         financeSolutions={indicatorSet.finance_solutions}
         choices={choices}
         onDismiss={handleRevenueModalDismiss}
-        onSubmit={onSubmit}
-        onDelete={onDelete}
+        indicatorSet={indicatorSet}
+        setIndicatorSet={setIndicatorSet}
       />
     </>
   )
@@ -275,9 +280,9 @@ const Revenues = ({ indicatorSet, choices, onSubmit, onDelete }) => {
 
 Revenues.propTypes = {
   indicatorSet: PropTypes.object.isRequired,
+  setIndicatorSet: PropTypes.func.isRequired,
   choices: choicesPropType.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  setSelectedNavItem: PropTypes.func.isRequired,
 }
 
 export default Revenues

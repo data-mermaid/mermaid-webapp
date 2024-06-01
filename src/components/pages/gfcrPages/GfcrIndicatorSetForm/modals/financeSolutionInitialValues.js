@@ -7,10 +7,14 @@ const getFinanceSolutionInitialValues = (financeSolution) => {
     sustainable_finance_mechanisms = [],
   } = financeSolution || {}
 
-  // Used an incubator is a special case because it can be null.
-  // We want to display 'none' in if it is null
-  const used_an_incubator =
-    financeSolution && financeSolution.used_an_incubator === null ? 'none' : ''
+  let used_an_incubator
+
+  if (financeSolution) {
+    // Used an incubator is a special case because it can be null.
+    // We want to display 'none' in if it is null
+    used_an_incubator =
+      financeSolution.used_an_incubator === null ? 'none' : financeSolution.used_an_incubator
+  }
 
   return {
     name,
