@@ -10,6 +10,7 @@ import {
   Input,
   RequiredIndicator,
   Select,
+  Textarea,
 } from '../../../../generic/form'
 import {
   CustomMenuItem,
@@ -326,6 +327,18 @@ const FinanceSolutionModal = ({
               </CustomMenuItem>
             ))}
           </CustomMuiSelect>
+        </StyledModalInputRow>
+        <hr />
+        <StyledModalInputRow>
+          <label id="notes-label" htmlFor="notes-input">
+            {modalLanguage.notes}
+          </label>
+          <Textarea
+            aria-labelledby={'notes-label'}
+            id="notes-input"
+            rows="6"
+            {...formik.getFieldProps('notes')}
+          />
         </StyledModalInputRow>
       </form>
     )

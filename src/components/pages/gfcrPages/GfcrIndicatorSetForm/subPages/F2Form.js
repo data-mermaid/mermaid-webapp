@@ -6,6 +6,7 @@ import { formikPropType } from '../../../../../library/formikPropType'
 import language from '../../../../../language'
 import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper } from './subPages.styles'
+import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
@@ -123,6 +124,11 @@ const F2Form = ({ formik, handleInputBlur }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_opt1')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_opt1_helper}
+      />
+      <TextareaWithLabelAndValidation
+        id="f2_notes"
+        label={gfcrIndicatorSetLanguage.notes}
+        {...formik.getFieldProps('f2_notes')}
       />
     </StyledGfcrInputWrapper>
   )

@@ -296,6 +296,7 @@ const RevenueModal = ({
             {...formik.getFieldProps('annual_revenue')}
           />
         </StyledModalInputRow>
+        <hr />
         <StyledModalInputRow>
           <label id="notes-label" htmlFor="notes-input">
             {modalLanguage.notes}

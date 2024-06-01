@@ -10,6 +10,7 @@ import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.st
 import { InputRow } from '../../../../generic/form'
 import { ButtonSecondary } from '../../../../generic/buttons'
 import theme from '../../../../../theme'
+import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 const StyledButtonSecondary = styled(ButtonSecondary)`
   width: 100%;
 `
@@ -203,6 +204,11 @@ const F4Form = ({
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
+      <TextareaWithLabelAndValidation
+        id="f4_notes"
+        label={gfcrIndicatorSetLanguage.notes}
+        {...formik.getFieldProps('f4_notes')}
+      />
     </StyledGfcrInputWrapper>
   )
 }
