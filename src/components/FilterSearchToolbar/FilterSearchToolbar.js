@@ -19,25 +19,28 @@ const FilterInput = styled(Input)`
 `
 
 const FilterSearchToolbar = ({
-  id,
+  id = 'filter-search',
   name,
-  disabled,
+  disabled = false,
   globalSearchText,
   handleGlobalFilterChange,
-  type,
+  type = 'page',
 }) => {
   const [searchText, setSearchText] = useState(globalSearchText)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
   const tooltipRef = useRef(null)
+  const [maxWidth, setMaxWidth] = useState('50em')
 
   useEffect(() => {
-    const pixelAdjustTop = 302
+    let pixelAdjustTop = 302
 
     let pixelAdjustLeft = 488
 
     if (type === 'copy-site-modal') {
-      pixelAdjustLeft = 597
+      pixelAdjustLeft = 655
+      pixelAdjustTop = 275
+      setMaxWidth('60em')
     }
     if (type === 'copy-mr-modal') {
       pixelAdjustLeft = 328
@@ -102,7 +105,7 @@ const FilterSearchToolbar = ({
             id={`aria-descp${id}`}
             left={tooltipPosition.left}
             top={tooltipPosition.top}
-            maxWidth="50em"
+            maxWidth={maxWidth}
             html={language.pages.submittedTable.filterSearchHelperText.__html}
             ref={tooltipRef}
           />
@@ -117,12 +120,6 @@ const FilterSearchToolbar = ({
       />
     </FilterLabelWrapper>
   )
-}
-
-FilterSearchToolbar.defaultProps = {
-  id: 'filter-search',
-  disabled: false,
-  type: 'page',
 }
 
 FilterSearchToolbar.propTypes = {

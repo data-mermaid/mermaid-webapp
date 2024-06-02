@@ -16,6 +16,7 @@ import {
 import { SyncStatusProvider } from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { getFakeAccessToken } from './getFakeAccessToken'
 import { CurrentUserProvider } from '../App/CurrentUserContext'
+import { CurrentProjectProvider } from '../App/CurrentProjectContext'
 import { HttpResponseErrorHandlerProvider } from '../App/HttpResponseErrorHandlerContext'
 import { getMockDexieInstancesAllSuccess } from './mockDexie'
 import { DexiePerUserDataInstanceProvider } from '../App/dexiePerUserDataInstanceContext'
@@ -43,16 +44,18 @@ const AuthenticatedProviders = ({ children, isSyncInProgressOverride }) => (
     <ThemeProvider theme={theme}>
       <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
         <CurrentUserProvider value={{ currentUser: fakeCurrentUser }}>
-          <HttpResponseErrorHandlerProvider value={() => {}}>
-            <BellNotificationProvider
-              value={{
-                notifications: mockMermaidData.notifications,
-                deleteNotification: () => {},
-              }}
-            >
-              {children}
-            </BellNotificationProvider>
-          </HttpResponseErrorHandlerProvider>
+          <CurrentProjectProvider>
+            <HttpResponseErrorHandlerProvider value={() => {}}>
+              <BellNotificationProvider
+                value={{
+                  notifications: mockMermaidData.notifications,
+                  deleteNotification: () => {},
+                }}
+              >
+                {children}
+              </BellNotificationProvider>
+            </HttpResponseErrorHandlerProvider>
+          </CurrentProjectProvider>
         </CurrentUserProvider>
       </SyncStatusProvider>
     </ThemeProvider>
@@ -70,9 +73,11 @@ const UnauthenticatedProviders = ({ children }) => (
     <ThemeProvider theme={theme}>
       <SyncStatusProvider>
         <CurrentUserProvider value={undefined}>
-          <HttpResponseErrorHandlerProvider value={() => {}}>
-            <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
-          </HttpResponseErrorHandlerProvider>
+          <CurrentProjectProvider>
+            <HttpResponseErrorHandlerProvider value={() => {}}>
+              <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
+            </HttpResponseErrorHandlerProvider>
+          </CurrentProjectProvider>
         </CurrentUserProvider>
       </SyncStatusProvider>
     </ThemeProvider>

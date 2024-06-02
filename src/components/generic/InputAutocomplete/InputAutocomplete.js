@@ -10,6 +10,7 @@ import theme from '../../../theme'
 
 const AutoCompleteInput = styled(Input)`
   width: 100%;
+  min-width: 17.5rem;
 `
 const AutoCompleteResultsWrapper = styled.div`
   position: relative;

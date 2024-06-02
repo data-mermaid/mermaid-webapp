@@ -7,7 +7,9 @@ export const sortArrayByObjectKey = (arrayToSort, key, isAsc = true) => {
   })
 
   // Reverse array for descending sort
-  if (!isAsc) { return sorted.reverse() }
+  if (!isAsc) {
+    return sorted.reverse()
+  }
 
   return sorted
 }
