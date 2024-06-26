@@ -67,9 +67,7 @@ const FishBeltTransectInputs = ({
   const [sizeBinValue, setSizeBinValue] = useState('')
 
   const onSizeBinChange = (event) => {
-    let sizeBinId
-
-    sizeBinValue ? (sizeBinId = sizeBinValue) : (sizeBinId = event?.target?.value)
+    const sizeBinId = sizeBinValue || event?.target?.value
 
     formik.setFieldValue('size_bin', sizeBinId)
 
