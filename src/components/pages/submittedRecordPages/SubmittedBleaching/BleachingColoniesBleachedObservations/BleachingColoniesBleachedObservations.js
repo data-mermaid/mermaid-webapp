@@ -15,7 +15,7 @@ import BleachincColoniesBleachedSummaryStats from '../../../../BleachingColonies
 const BleachingColoniesBleachedObservations = ({
   benthicAttributeOptions,
   choices,
-  observationsColoniesBleached,
+  observationsColoniesBleached = [],
 }) => {
   const growthFormOptions = getOptions(choices.growthforms.data)
 
@@ -69,10 +69,6 @@ BleachingColoniesBleachedObservations.propTypes = {
   choices: choicesPropType.isRequired,
   benthicAttributeOptions: inputOptionsPropTypes.isRequired,
   observationsColoniesBleached: observationsColoniesBleachedPropType,
-}
-
-BleachingColoniesBleachedObservations.defaultProps = {
-  observationsColoniesBleached: [],
 }
 
 export default BleachingColoniesBleachedObservations

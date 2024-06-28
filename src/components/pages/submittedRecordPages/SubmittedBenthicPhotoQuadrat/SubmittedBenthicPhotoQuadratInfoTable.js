@@ -13,7 +13,7 @@ const SubmittedBenthicPhotoQuadratInfoTable = ({
   sites,
   managementRegimes,
   choices,
-  submittedRecord,
+  submittedRecord = undefined,
 }) => {
   const { site, management, sample_date } = submittedRecord.sample_event
 
@@ -70,10 +70,6 @@ SubmittedBenthicPhotoQuadratInfoTable.propTypes = {
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   choices: choicesPropType.isRequired,
   submittedRecord: submittedBenthicPhotoQuadratPropType,
-}
-
-SubmittedBenthicPhotoQuadratInfoTable.defaultProps = {
-  submittedRecord: undefined,
 }
 
 export default SubmittedBenthicPhotoQuadratInfoTable

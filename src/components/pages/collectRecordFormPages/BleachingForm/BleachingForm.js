@@ -28,7 +28,7 @@ import PercentCoverObservationTable from './PercentCoverObservationsTable'
 import useIsMounted from '../../../../library/useIsMounted'
 import ErrorBoundary from '../../../ErrorBoundary'
 
-const BleachingForm = ({ isNewRecord }) => {
+const BleachingForm = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
@@ -248,6 +248,5 @@ const BleachingForm = ({ isNewRecord }) => {
 }
 
 BleachingForm.propTypes = { isNewRecord: PropTypes.bool }
-BleachingForm.defaultProps = { isNewRecord: true }
 
 export default BleachingForm
