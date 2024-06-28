@@ -24,15 +24,15 @@ const InputSelectWithLabelAndValidation = ({
   id,
   required,
   options,
-  helperText,
-  validationMessages,
-  ignoreNonObservationFieldValidations,
-  resetNonObservationFieldValidations,
-  validationType,
-  testId,
-  value,
-  updateValueAndResetValidationForDuplicateWarning,
-  displayViewLink,
+  helperText = undefined,
+  validationMessages = [],
+  ignoreNonObservationFieldValidations = () => {},
+  resetNonObservationFieldValidations = () => {},
+  validationType = undefined,
+  testId = undefined,
+  value = '',
+  updateValueAndResetValidationForDuplicateWarning = () => {},
+  displayViewLink = false,
   ...restOfProps
 }) => {
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
@@ -124,15 +124,4 @@ InputSelectWithLabelAndValidation.propTypes = {
   updateValueAndResetValidationForDuplicateWarning: PropTypes.func,
 }
 
-InputSelectWithLabelAndValidation.defaultProps = {
-  validationType: undefined,
-  validationMessages: [],
-  helperText: undefined,
-  testId: undefined,
-  value: '',
-  ignoreNonObservationFieldValidations: () => {},
-  resetNonObservationFieldValidations: () => {},
-  updateValueAndResetValidationForDuplicateWarning: () => {},
-  displayViewLink: false,
-}
 export default InputSelectWithLabelAndValidation

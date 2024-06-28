@@ -26,7 +26,7 @@ import { BenthicLitTransectInputs } from './BenthicLitTransectInputs'
 import { BenthicLitObservationsTable } from './BenthicLitObservationTable'
 import { benthicLitObservationReducer } from './benthicLitObservationReducer'
 
-const BenthicLitform = ({ isNewRecord }) => {
+const BenthicLitform = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
@@ -247,6 +247,5 @@ const BenthicLitform = ({ isNewRecord }) => {
 }
 
 BenthicLitform.propTypes = { isNewRecord: PropTypes.bool }
-BenthicLitform.defaultProps = { isNewRecord: true }
 
 export default BenthicLitform

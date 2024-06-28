@@ -16,13 +16,13 @@ const getOptionsByItemLabelOrName = (rowValue, options) => {
 
 const TableRowItem = ({
   title,
-  options,
-  value,
-  extraValue,
-  isOriginalSelected,
-  isDuplicateSelected,
-  isAllowNewlines,
-  isLink,
+  options = undefined,
+  value = undefined,
+  extraValue = undefined,
+  isOriginalSelected = false,
+  isDuplicateSelected = false,
+  isAllowNewlines = false,
+  isLink = false,
 }) => {
   const rowItemValue = options ? getOptionsByItemLabelOrName(value, options) : value
   const extraRowItemValue = options ? getOptionsByItemLabelOrName(extraValue, options) : extraValue
@@ -80,16 +80,6 @@ TableRowItem.propTypes = {
   isDuplicateSelected: PropTypes.bool,
   isAllowNewlines: PropTypes.bool,
   isLink: PropTypes.bool,
-}
-
-TableRowItem.defaultProps = {
-  options: undefined,
-  value: undefined,
-  extraValue: undefined,
-  isOriginalSelected: false,
-  isDuplicateSelected: false,
-  isAllowNewlines: false,
-  isLink: false,
 }
 
 export default TableRowItem

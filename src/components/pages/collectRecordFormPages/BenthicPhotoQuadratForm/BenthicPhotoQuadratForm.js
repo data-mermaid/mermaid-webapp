@@ -29,7 +29,7 @@ import BenthicPhotoQuadratTransectInputs from './BenthicPhotoQuadratTransectInpu
 import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
 import benthicpqtObservationReducer from './benthicpqtObservationReducer'
 
-const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
+const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
@@ -262,10 +262,6 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
 
 BenthicPhotoQuadratForm.propTypes = {
   isNewRecord: PropTypes.bool,
-}
-
-BenthicPhotoQuadratForm.defaultProps = {
-  isNewRecord: true,
 }
 
 export default BenthicPhotoQuadratForm
