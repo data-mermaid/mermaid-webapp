@@ -35,16 +35,16 @@ const NoResultSection = styled.div`
 `
 
 const InputAutocomplete = ({
-  className,
-  helperText,
+  className = undefined,
+  helperText = undefined,
   id,
-  isLastRow,
-  noResultsAction,
-  noResultsText,
+  isLastRow = false,
+  noResultsAction = undefined,
+  noResultsText = undefined,
   onChange,
-  onKeyDown,
+  onKeyDown = undefined,
   options,
-  value,
+  value = '',
   ...restOfProps
 }) => {
   const optionMatchingValueProp = useMemo(
@@ -196,16 +196,6 @@ InputAutocomplete.propTypes = {
   onKeyDown: PropTypes.func,
   options: inputOptionsPropTypes.isRequired,
   value: PropTypes.string,
-}
-
-InputAutocomplete.defaultProps = {
-  className: undefined,
-  helperText: undefined,
-  noResultsAction: undefined,
-  noResultsText: undefined,
-  onKeyDown: undefined,
-  value: '',
-  isLastRow: false,
 }
 
 export default InputAutocomplete

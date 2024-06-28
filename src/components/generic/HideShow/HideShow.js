@@ -19,7 +19,7 @@ const PositionedAncestor = styled.div`
   width: max-content;
 `
 
-const HideShow = ({ contents, button, closeOnClickWithin }) => {
+const HideShow = ({ contents, button, closeOnClickWithin = true }) => {
   const [showItems, setShowItems] = useState(false)
   const buttonRef = useRef(null)
   const contentsRef = useRef(null)
@@ -75,10 +75,6 @@ const HideShow = ({ contents, button, closeOnClickWithin }) => {
       {/* {showItems && contents} */}
     </PositionedAncestor>
   )
-}
-
-HideShow.defaultProps = {
-  closeOnClickWithin: true,
 }
 
 HideShow.propTypes = {
