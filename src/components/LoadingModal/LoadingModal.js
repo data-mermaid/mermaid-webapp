@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { StyledDialogOverlay, ModalContent } from '../generic/Modal/Modal'
 import LoadingIndicator from '../LoadingIndicator'
 
-const LoadingModal = ({ displayModalTimingSeconds }) => {
+const LoadingModal = ({ displayModalTimingSeconds = 1 }) => {
   const [displayModal, setDisplayModal] = useState(false)
 
   useEffect(() => {
@@ -26,10 +26,6 @@ const LoadingModal = ({ displayModalTimingSeconds }) => {
       </StyledDialogOverlay>
     )
   )
-}
-
-LoadingModal.defaultProps = {
-  displayModalTimingSeconds: 1,
 }
 
 LoadingModal.propTypes = {

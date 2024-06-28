@@ -21,7 +21,7 @@ const SITE_VALIDATION_PATH = 'data.sample_event.site'
 
 const SampleEventInputs = ({
   areValidationsShowing,
-  collectRecord,
+  collectRecord = undefined,
   formik,
   managementRegimes,
   handleManagementRegimesChange,
@@ -170,10 +170,6 @@ SampleEventInputs.propTypes = {
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
-}
-
-SampleEventInputs.defaultProps = {
-  collectRecord: undefined,
 }
 
 export default SampleEventInputs

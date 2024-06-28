@@ -40,14 +40,14 @@ const InputContainer = styled.div`
 const MainContentPages = ({
   currentPage,
   modalAttributeOptions,
-  projectName,
+  projectName = '',
   proposedSummary,
   pageOneFirstInputLabel,
   pageOneFirstInputValue,
-  pageOneFirstInputError,
+  pageOneFirstInputError = undefined,
   pageOneSecondInputLabel,
   pageOneSecondInputValue,
-  pageOneSecondInputError,
+  pageOneSecondInputError = undefined,
   pageTwoFirstLabel,
   handleFormikPageOneValueChange,
   handleNewAttributeChange,
@@ -356,12 +356,6 @@ MainContentPages.propTypes = {
   handleNewAttributeChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   attributeName: PropTypes.string.isRequired,
-}
-
-MainContentPages.defaultProps = {
-  projectName: '',
-  pageOneFirstInputError: undefined,
-  pageOneSecondInputError: undefined,
 }
 
 NewAttributeModal.propTypes = {

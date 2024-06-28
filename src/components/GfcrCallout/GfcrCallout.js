@@ -45,7 +45,7 @@ const StyledParagraph = styled('p')`
   max-width: ${theme.spacing.maxTextWidth};
 `
 
-const GfcrCallout = ({ isGfcr, handleUpdateIncludesGfcr }) => {
+const GfcrCallout = ({ isGfcr = false, handleUpdateIncludesGfcr }) => {
   return (
     <StyledGfcrCallout>
       <h3>{language.pages.projectInfo.gfcrCalloutHeading}</h3>
@@ -71,10 +71,6 @@ const GfcrCallout = ({ isGfcr, handleUpdateIncludesGfcr }) => {
 GfcrCallout.propTypes = {
   isGfcr: PropTypes.bool,
   handleUpdateIncludesGfcr: PropTypes.func.isRequired,
-}
-
-GfcrCallout.defaultProps = {
-  isGfcr: false,
 }
 
 export default GfcrCallout

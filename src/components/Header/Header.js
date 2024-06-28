@@ -88,7 +88,7 @@ const GlobalLinks = () => {
   )
 }
 
-const Header = ({ logout, currentUser }) => {
+const Header = ({ logout = () => {}, currentUser = undefined }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const openProfileModal = () => setIsProfileModalOpen(true)
   const closeProfileModal = () => setIsProfileModalOpen(false)
@@ -237,11 +237,6 @@ const Header = ({ logout, currentUser }) => {
 Header.propTypes = {
   currentUser: currentUserPropType,
   logout: PropTypes.func,
-}
-
-Header.defaultProps = {
-  currentUser: undefined,
-  logout: () => {},
 }
 
 export default Header

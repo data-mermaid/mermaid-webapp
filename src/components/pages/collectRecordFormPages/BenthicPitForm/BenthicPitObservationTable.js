@@ -58,10 +58,10 @@ const BenthicPitObservationsTable = ({
   areValidationsShowing,
   benthicAttributeSelectOptions,
   choices,
-  collectRecord,
+  collectRecord = undefined,
   formik,
   ignoreObservationValidations,
-  observationsReducer,
+  observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
@@ -393,11 +393,6 @@ BenthicPitObservationsTable.propTypes = {
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
   testId: PropTypes.string.isRequired,
-}
-
-BenthicPitObservationsTable.defaultProps = {
-  collectRecord: undefined,
-  observationsReducer: [],
 }
 
 export default BenthicPitObservationsTable

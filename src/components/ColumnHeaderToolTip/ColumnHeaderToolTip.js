@@ -38,35 +38,29 @@ export const TooltipPopup = styled('span')`
 `
 
 // eslint-disable-next-line react/display-name
-const ColumnHeaderToolTip = forwardRef(({ helperText, left, top, maxWidth, html }, ref) => {
-  const sanitizeHtml = domPurify.sanitize
-  const dirtyHTML = html
-  const cleanHTML = sanitizeHtml(dirtyHTML)
+const ColumnHeaderToolTip = forwardRef(
+  ({ helperText = '', left = '0em', top = '0em', maxWidth = '25rem', html = '' }, ref) => {
+    const sanitizeHtml = domPurify.sanitize
+    const dirtyHTML = html
+    const cleanHTML = sanitizeHtml(dirtyHTML)
 
-  return (
-    <TooltipPopup
-      ref={ref}
-      role="tooltip"
-      aria-labelledby="tooltip"
-      left={left}
-      maxWidth={maxWidth}
-      top={top}
-    >
-      {/* eslint-disable-next-line react/no-danger */}
-      {html ? <div dangerouslySetInnerHTML={{ __html: cleanHTML }} /> : <span>{helperText}</span>}
-    </TooltipPopup>
-  )
-})
+    return (
+      <TooltipPopup
+        ref={ref}
+        role="tooltip"
+        aria-labelledby="tooltip"
+        left={left}
+        maxWidth={maxWidth}
+        top={top}
+      >
+        {/* eslint-disable-next-line react/no-danger */}
+        {html ? <div dangerouslySetInnerHTML={{ __html: cleanHTML }} /> : <span>{helperText}</span>}
+      </TooltipPopup>
+    )
+  },
+)
 
 export default ColumnHeaderToolTip
-
-ColumnHeaderToolTip.defaultProps = {
-  left: '0em',
-  maxWidth: '25rem',
-  top: '0em',
-  html: '',
-  helperText: '',
-}
 
 ColumnHeaderToolTip.propTypes = {
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),

@@ -24,7 +24,7 @@ const SubmittedFishBeltObservationTable = ({
   choices,
   fishNameOptions,
   fishNameConstants,
-  submittedRecord,
+  submittedRecord = undefined,
 }) => {
   const { obs_belt_fishes } = submittedRecord
   const { width, len_surveyed } = submittedRecord.fishbelt_transect
@@ -108,10 +108,6 @@ SubmittedFishBeltObservationTable.propTypes = {
   fishNameOptions: inputOptionsPropTypes.isRequired,
   fishNameConstants: fishNameConstantsPropType.isRequired,
   submittedRecord: submittedFishBeltPropType,
-}
-
-SubmittedFishBeltObservationTable.defaultProps = {
-  submittedRecord: undefined,
 }
 
 export default SubmittedFishBeltObservationTable

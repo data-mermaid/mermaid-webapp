@@ -37,8 +37,8 @@ const FishBeltTransectInputs = ({
   choices,
   formik,
   ignoreNonObservationFieldValidations,
-  observationsDispatch,
-  observationsState,
+  observationsDispatch = () => {},
+  observationsState = [],
   resetNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
   validationsApiData,
@@ -554,11 +554,6 @@ FishBeltTransectInputs.propTypes = {
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: PropTypes.shape({ fishbelt_transect: fishbeltValidationPropType }).isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
-}
-
-FishBeltTransectInputs.defaultProps = {
-  observationsState: [],
-  observationsDispatch: () => {},
 }
 
 export default FishBeltTransectInputs

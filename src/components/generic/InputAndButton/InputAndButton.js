@@ -27,7 +27,7 @@ const InputButton = styled(ButtonSecondary)`
 const InputAndButton = ({
   buttonChildren,
   buttonOnClick,
-  buttonType,
+  buttonType = 'button',
   inputId,
   isLoading,
   labelText,
@@ -56,6 +56,5 @@ InputAndButton.propTypes = {
   labelText: PropTypes.string.isRequired,
   isLoading: PropTypes.bool.isRequired,
 }
-InputAndButton.defaultProps = { buttonType: 'button' }
 
 export default InputAndButton

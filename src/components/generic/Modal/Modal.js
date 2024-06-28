@@ -136,8 +136,8 @@ const Modal = ({
   isOpen,
   onDismiss,
   footerContent,
-  contentOverflowIsVisible,
-  toolbarContent,
+  contentOverflowIsVisible = false,
+  toolbarContent = undefined,
   maxWidth,
 }) => {
   const _closeModalWithEscapeKey = useEffect(() => {
@@ -187,11 +187,6 @@ Modal.propTypes = {
   contentOverflowIsVisible: PropTypes.bool,
   toolbarContent: PropTypes.node,
   maxWidth: PropTypes.string,
-}
-
-Modal.defaultProps = {
-  contentOverflowIsVisible: false,
-  toolbarContent: undefined,
 }
 
 export default Modal

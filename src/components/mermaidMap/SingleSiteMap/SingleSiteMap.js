@@ -44,11 +44,11 @@ const defaultZoom = 1
 const initialZoom = 13
 
 const SingleSiteMap = ({
-  formLatitudeValue,
-  formLongitudeValue,
-  handleLatitudeChange,
-  handleLongitudeChange,
-  isReadOnlyUser,
+  formLatitudeValue = 0,
+  formLongitudeValue = 0,
+  handleLatitudeChange = () => {},
+  handleLongitudeChange = () => {},
+  isReadOnlyUser = false,
 }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
@@ -245,14 +245,6 @@ SingleSiteMap.propTypes = {
   handleLatitudeChange: PropTypes.func,
   handleLongitudeChange: PropTypes.func,
   isReadOnlyUser: PropTypes.bool,
-}
-
-SingleSiteMap.defaultProps = {
-  formLatitudeValue: 0,
-  formLongitudeValue: 0,
-  handleLatitudeChange: () => {},
-  handleLongitudeChange: () => {},
-  isReadOnlyUser: false,
 }
 
 export default SingleSiteMap

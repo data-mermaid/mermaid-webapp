@@ -16,15 +16,15 @@ import language from '../../../language'
 const InputMuiChipSelectWithLabelAndValidation = ({
   id,
   required,
-  ignoreNonObservationFieldValidations,
+  ignoreNonObservationFieldValidations = () => {},
   label,
   onChange,
   options,
-  resetNonObservationFieldValidations,
+  resetNonObservationFieldValidations = () => {},
   validationMessages,
-  validationType,
+  validationType = undefined,
   value,
-  additionalInputContent,
+  additionalInputContent = undefined,
 }) => {
   const handleCheckboxGroupChange = (event) => {
     onChange({ selectedItems: event.target.value, event })
@@ -105,14 +105,6 @@ InputMuiChipSelectWithLabelAndValidation.propTypes = {
       }),
     ]),
   ).isRequired,
-}
-
-InputMuiChipSelectWithLabelAndValidation.defaultProps = {
-  additionalInputContent: undefined,
-  ignoreNonObservationFieldValidations: () => {},
-  resetNonObservationFieldValidations: () => {},
-  validationMessages: [],
-  validationType: undefined,
 }
 
 export default InputMuiChipSelectWithLabelAndValidation

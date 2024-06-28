@@ -25,10 +25,10 @@ const FilterAmount = styled.p`
 `
 
 const FilterIndicatorPill = ({
-  isMethodFilterEnabled,
-  isSearchFilterEnabled,
-  methodFilteredRowLength,
-  searchFilteredRowLength,
+  isMethodFilterEnabled = false,
+  isSearchFilterEnabled = false,
+  methodFilteredRowLength = null,
+  searchFilteredRowLength = null,
   unfilteredRowLength,
   clearFilters,
 }) => {
@@ -63,13 +63,6 @@ const FilterIndicatorPill = ({
       </IconButton>
     </FilterIndictorPillContainer>
   )
-}
-
-FilterIndicatorPill.defaultProps = {
-  methodFilteredRowLength: null,
-  searchFilteredRowLength: null,
-  isMethodFilterEnabled: false,
-  isSearchFilterEnabled: false,
 }
 
 FilterIndicatorPill.propTypes = {

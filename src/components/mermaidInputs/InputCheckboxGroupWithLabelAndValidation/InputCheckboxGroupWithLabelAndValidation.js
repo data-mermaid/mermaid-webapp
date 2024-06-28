@@ -7,13 +7,13 @@ import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 const InputCheckboxGroupWithLabelAndValidation = ({
   id,
   required,
-  ignoreNonObservationFieldValidations,
+  ignoreNonObservationFieldValidations = () => {},
   label,
   onChange,
   options,
-  resetNonObservationFieldValidations,
-  validationMessages,
-  validationType,
+  resetNonObservationFieldValidations = () => {},
+  validationMessages = [],
+  validationType = undefined,
   value,
 }) => {
   const [checkboxItems, setCheckboxItems] = useState([])
@@ -90,13 +90,6 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
       }),
     ]),
   ).isRequired,
-}
-
-InputCheckboxGroupWithLabelAndValidation.defaultProps = {
-  ignoreNonObservationFieldValidations: () => {},
-  resetNonObservationFieldValidations: () => {},
-  validationMessages: [],
-  validationType: undefined,
 }
 
 export default InputCheckboxGroupWithLabelAndValidation

@@ -13,7 +13,7 @@ const SubmittedHabitatComplexityInfoTable = ({
   choices,
   sites,
   managementRegimes,
-  submittedRecord,
+  submittedRecord = undefined,
 }) => {
   const { site, management, sample_date } = submittedRecord.sample_event
 
@@ -67,10 +67,6 @@ SubmittedHabitatComplexityInfoTable.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   submittedRecord: submittedHabitatComplexityPropType,
-}
-
-SubmittedHabitatComplexityInfoTable.defaultProps = {
-  submittedRecord: undefined,
 }
 
 export default SubmittedHabitatComplexityInfoTable

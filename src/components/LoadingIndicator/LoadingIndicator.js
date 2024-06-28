@@ -128,10 +128,10 @@ const LoadingIndicatorContainer = styled.div`
 `
 
 const LoadingIndicator = ({
-  primaryMessage,
-  secondaryMessage,
-  displaySecondary,
-  displaySecondaryTimingSeconds,
+  primaryMessage = language.loadingIndicator.loadingPrimary,
+  secondaryMessage = language.loadingIndicator.loadingSecondary,
+  displaySecondary = true,
+  displaySecondaryTimingSeconds = 10,
   ...props
 }) => {
   const [isDisplaySecondaryTime, setIsDisplaySecondaryTime] = useState(false)
@@ -164,13 +164,6 @@ const LoadingIndicator = ({
       </div>
     </LoadingIndicatorContainer>
   )
-}
-
-LoadingIndicator.defaultProps = {
-  primaryMessage: language.loadingIndicator.loadingPrimary,
-  secondaryMessage: language.loadingIndicator.loadingSecondary,
-  displaySecondary: true,
-  displaySecondaryTimingSeconds: 10,
 }
 
 LoadingIndicator.propTypes = {

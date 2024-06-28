@@ -5,7 +5,7 @@ import { currentUserPropType } from './mermaidData/mermaidDataProptypes'
 
 const CurrentUserContext = createContext()
 
-const CurrentUserProvider = ({ children, value }) => {
+const CurrentUserProvider = ({ children, value = {} }) => {
   return <CurrentUserContext.Provider value={value}>{children}</CurrentUserContext.Provider>
 }
 
@@ -22,10 +22,6 @@ const useCurrentUser = () => {
 CurrentUserProvider.propTypes = {
   children: PropTypes.node.isRequired,
   value: currentUserPropType,
-}
-
-CurrentUserProvider.defaultProps = {
-  value: {},
 }
 
 export { useCurrentUser, CurrentUserProvider }

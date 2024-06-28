@@ -26,7 +26,7 @@ import HabitatComplexityTransectInputs from './HabitatComplexityTransectInputs'
 import language from '../../../../language'
 import useIsMounted from '../../../../library/useIsMounted'
 
-const HabitatComplexityForm = ({ isNewRecord }) => {
+const HabitatComplexityForm = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -151,6 +151,5 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
 }
 
 HabitatComplexityForm.propTypes = { isNewRecord: PropTypes.bool }
-HabitatComplexityForm.defaultProps = { isNewRecord: true }
 
 export default HabitatComplexityForm

@@ -1,7 +1,6 @@
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 
@@ -968,18 +967,6 @@ const Users = () => {
   ) : (
     <ContentPageLayout isPageContentLoading={isPageLoading} content={content} toolbar={toolbar} />
   )
-}
-
-Users.propTypes = {
-  row: PropTypes.shape({
-    original: PropTypes.shape({
-      name: PropTypes.string,
-    }),
-  }),
-}
-
-Users.defaultProps = {
-  row: undefined,
 }
 
 export default Users

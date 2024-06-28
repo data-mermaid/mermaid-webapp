@@ -103,24 +103,24 @@ function loadObservationsFromCollectRecordIntoTableState({
 
 const CollectRecordFormPage = ({
   areObservationsInputsDirty,
-  collectRecordBeingEdited,
+  collectRecordBeingEdited = undefined,
   handleCollectRecordChange,
   idsNotAssociatedWithData,
   initialFormikFormValues,
   isNewRecord,
   isParentDataLoading,
-  observationsTable1Reducer,
-  observationsTable2Reducer,
+  observationsTable1Reducer = [],
+  observationsTable2Reducer = [],
   ObservationTable1,
-  ObservationTable2,
+  ObservationTable2 = undefined,
   sampleUnitFormatSaveFunction,
   sampleUnitName,
   SampleUnitTransectInputs,
   setAreObservationsInputsDirty,
   setIdsNotAssociatedWithData,
-  setIsNewBenthicAttributeModalOpen,
-  setObservationIdToAddNewBenthicAttributeTo,
-  subNavNode,
+  setIsNewBenthicAttributeModalOpen = () => {},
+  setObservationIdToAddNewBenthicAttributeTo = () => {},
+  subNavNode = null,
 }) => {
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [choices, setChoices] = useState({})
@@ -652,16 +652,6 @@ CollectRecordFormPage.propTypes = {
   setIsNewBenthicAttributeModalOpen: PropTypes.func,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func,
   subNavNode: subNavNodePropTypes,
-}
-
-CollectRecordFormPage.defaultProps = {
-  collectRecordBeingEdited: undefined,
-  observationsTable1Reducer: [],
-  observationsTable2Reducer: [],
-  ObservationTable2: undefined,
-  setIsNewBenthicAttributeModalOpen: () => {},
-  setObservationIdToAddNewBenthicAttributeTo: () => {},
-  subNavNode: null,
 }
 
 export default CollectRecordFormPage

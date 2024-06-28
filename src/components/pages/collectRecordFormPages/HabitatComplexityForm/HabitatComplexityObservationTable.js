@@ -43,10 +43,10 @@ const StyledColgroup = styled('colgroup')`
 const HabitatComplexityObservationsTable = ({
   areValidationsShowing,
   choices,
-  collectRecord,
+  collectRecord = undefined,
   formik,
   ignoreObservationValidations,
-  observationsReducer,
+  observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
   testId,
@@ -305,11 +305,6 @@ HabitatComplexityObservationsTable.propTypes = {
     }),
   }).isRequired,
   testId: PropTypes.string.isRequired,
-}
-
-HabitatComplexityObservationsTable.defaultProps = {
-  collectRecord: undefined,
-  observationsReducer: [],
 }
 
 export default HabitatComplexityObservationsTable

@@ -28,7 +28,7 @@ import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
 import ErrorBoundary from '../../../ErrorBoundary'
 
-const BenthicPitForm = ({ isNewRecord }) => {
+const BenthicPitForm = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
@@ -251,6 +251,5 @@ const BenthicPitForm = ({ isNewRecord }) => {
 }
 
 BenthicPitForm.propTypes = { isNewRecord: PropTypes.bool }
-BenthicPitForm.defaultProps = { isNewRecord: true }
 
 export default BenthicPitForm

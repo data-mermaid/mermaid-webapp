@@ -14,7 +14,7 @@ import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.sty
 const SubmittedBenthicPhotoQuadratObservationTable = ({
   choices,
   benthicAttributeOptions,
-  submittedRecord,
+  submittedRecord = undefined,
 }) => {
   const { obs_benthic_photo_quadrats } = submittedRecord
   const growthFormOptions = getOptions(choices.growthforms.data)
@@ -111,10 +111,6 @@ SubmittedBenthicPhotoQuadratObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   benthicAttributeOptions: inputOptionsPropTypes.isRequired,
   submittedRecord: submittedBenthicPhotoQuadratPropType,
-}
-
-SubmittedBenthicPhotoQuadratObservationTable.defaultProps = {
-  submittedRecord: undefined,
 }
 
 export default SubmittedBenthicPhotoQuadratObservationTable

@@ -86,10 +86,10 @@ const getObservationValidations = (observationId, collectRecord) => {
 const FishBeltObservationTable = ({
   areValidationsShowing,
   choices,
-  collectRecord,
+  collectRecord = undefined,
   formik,
   ignoreObservationValidations,
-  observationsReducer,
+  observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
@@ -590,11 +590,6 @@ FishBeltObservationTable.propTypes = {
   fishGroupings: fishGroupingsPropType.isRequired,
   fishGenera: fishGeneraPropType.isRequired,
   fishSpecies: fishSpeciesPropType.isRequired,
-}
-
-FishBeltObservationTable.defaultProps = {
-  collectRecord: undefined,
-  observationsReducer: [],
 }
 
 export default FishBeltObservationTable

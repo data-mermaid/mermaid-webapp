@@ -9,7 +9,7 @@ import { observerPropType } from '../../App/mermaidData/mermaidDataProptypes'
 
 const modalLanguage = language.pages.collectRecord.removeObserverModal
 
-const RemoveObserverModal = ({ isOpen, onDismiss, observer, onSubmit }) => {
+const RemoveObserverModal = ({ isOpen, onDismiss, observer = undefined, onSubmit }) => {
   const observerNameToUse = observer ? getObserverNameToUse(observer) : ''
 
   const footerContent = (
@@ -39,9 +39,6 @@ RemoveObserverModal.propTypes = {
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   observer: observerPropType,
-}
-RemoveObserverModal.defaultProps = {
-  observer: undefined,
 }
 
 export default RemoveObserverModal

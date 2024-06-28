@@ -4,7 +4,7 @@ import { observationsPercentCoverProptype } from '../../App/mermaidData/mermaidD
 import { getAverage } from '../../library/getAverage'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../generic/Table/table'
 
-const BleachingPercentCoverSummaryStats = ({ observations }) => {
+const BleachingPercentCoverSummaryStats = ({ observations = [] }) => {
   const hardPercentages = observations.map((item) => Number(item.percent_hard))
   const softPercentages = observations.map((item) => Number(item.percent_soft))
   const algaePercentages = observations.map((item) => Number(item.percent_algae))
@@ -37,6 +37,5 @@ const BleachingPercentCoverSummaryStats = ({ observations }) => {
 BleachingPercentCoverSummaryStats.propTypes = {
   observations: observationsPercentCoverProptype,
 }
-BleachingPercentCoverSummaryStats.defaultProps = { observations: [] }
 
 export default BleachingPercentCoverSummaryStats

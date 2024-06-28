@@ -5,7 +5,7 @@ import { databaseSwitchboardPropTypes } from './DatabaseSwitchboard'
 
 const DatabaseSwitchboardInstanceContext = createContext()
 
-const DatabaseSwitchboardInstanceProvider = ({ children, value }) => {
+const DatabaseSwitchboardInstanceProvider = ({ children, value = {} }) => {
   return (
     <DatabaseSwitchboardInstanceContext.Provider value={{ databaseSwitchboardInstance: value }}>
       {children}
@@ -17,8 +17,6 @@ DatabaseSwitchboardInstanceProvider.propTypes = {
   children: PropTypes.node.isRequired,
   value: databaseSwitchboardPropTypes,
 }
-
-DatabaseSwitchboardInstanceProvider.defaultProps = { value: {} }
 
 const useDatabaseSwitchboardInstance = () => {
   const context = useContext(DatabaseSwitchboardInstanceContext)

@@ -48,7 +48,11 @@ export const Table = styled('table')`
   */
   height: 1px;
 `
-const getHeaderSortAfter = (isMultiSortColumn, sortedIndex, isSortedDescending) => {
+const getHeaderSortAfter = (
+  isMultiSortColumn = false,
+  sortedIndex = -1,
+  isSortedDescending = false,
+) => {
   if (sortedIndex < 0) {
     return null
   }
@@ -92,12 +96,6 @@ export const Th = styled.th(
     }
   `,
 )
-Th.defaultProps = {
-  isSortedDescending: false,
-  isSortingEnabled: false,
-  isMultiSortColumn: false,
-  sortedIndex: -1,
-}
 
 export const Td = styled.td(
   (props) => css`
