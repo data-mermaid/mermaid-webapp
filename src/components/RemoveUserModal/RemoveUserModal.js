@@ -18,7 +18,7 @@ const RemoveUserModal = ({
   isOpen,
   onDismiss,
   onSubmit,
-  userNameToBeRemoved,
+  userNameToBeRemoved = 'user',
   projectName,
   isLoading,
 }) => {
@@ -119,10 +119,6 @@ RemoveUserModal.propTypes = {
   userNameToBeRemoved: PropTypes.string,
   projectName: PropTypes.string.isRequired,
   isLoading: PropTypes.bool.isRequired,
-}
-
-RemoveUserModal.defaultProps = {
-  userNameToBeRemoved: 'user',
 }
 
 export default RemoveUserModal

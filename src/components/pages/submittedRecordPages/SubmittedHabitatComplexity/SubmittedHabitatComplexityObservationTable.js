@@ -10,7 +10,7 @@ import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFo
 import { getObjectById } from '../../../../library/getObjectById'
 import { getOptions } from '../../../../library/getOptions'
 
-const SubmittedHabitatComplexityObservationTable = ({ choices, submittedRecord }) => {
+const SubmittedHabitatComplexityObservationTable = ({ choices, submittedRecord = undefined }) => {
   const { obs_habitat_complexities } = submittedRecord
   const habitatComplexityFormOptions = getOptions(choices.habitatcomplexityscores.data)
 
@@ -44,10 +44,6 @@ const SubmittedHabitatComplexityObservationTable = ({ choices, submittedRecord }
 SubmittedHabitatComplexityObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   submittedRecord: submittedHabitatComplexityPropType,
-}
-
-SubmittedHabitatComplexityObservationTable.defaultProps = {
-  submittedRecord: undefined,
 }
 
 export default SubmittedHabitatComplexityObservationTable
