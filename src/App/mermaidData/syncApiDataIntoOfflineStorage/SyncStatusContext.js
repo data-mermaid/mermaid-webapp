@@ -6,7 +6,7 @@ const SyncStatusContext = createContext()
 
 // the value prop spread here allows for online status to be mocked for testing
 
-const SyncStatusProvider = ({ children, value }) => {
+const SyncStatusProvider = ({ children, value = {} }) => {
   const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(false)
   const [isSyncInProgress, setIsSyncInProgress] = useState(true)
   const [syncErrors, setSyncErrors] = useState([])
@@ -49,7 +49,5 @@ SyncStatusProvider.propTypes = {
     syncErrors: PropTypes.bool,
   }),
 }
-
-SyncStatusProvider.defaultProps = { value: {} }
 
 export { SyncStatusProvider, useSyncStatus }

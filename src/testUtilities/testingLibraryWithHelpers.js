@@ -32,7 +32,7 @@ const fakeCurrentUser = {
   projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
 }
 
-const AuthenticatedProviders = ({ children, isSyncInProgressOverride }) => (
+const AuthenticatedProviders = ({ children, isSyncInProgressOverride = false }) => (
   <Auth0Context.Provider
     value={{
       isAuthenticated: true,
@@ -88,9 +88,7 @@ AuthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
   isSyncInProgressOverride: PropTypes.bool,
 }
-AuthenticatedProviders.defaultProps = {
-  isSyncInProgressOverride: false,
-}
+
 UnauthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
 }

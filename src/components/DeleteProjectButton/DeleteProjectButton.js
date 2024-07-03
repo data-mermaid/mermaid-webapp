@@ -12,8 +12,8 @@ import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import language from '../../language'
 
 const DeleteProjectButton = ({
-  currentPage,
-  errorData,
+  currentPage = 1,
+  errorData = [],
   isLoading,
   hasSampleUnits,
   hasOtherUsers,
@@ -119,11 +119,6 @@ DeleteProjectButton.propTypes = {
   deleteProject: PropTypes.func.isRequired,
   onDismiss: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-}
-
-DeleteProjectButton.defaultProps = {
-  currentPage: 1,
-  errorData: [],
 }
 
 export default DeleteProjectButton

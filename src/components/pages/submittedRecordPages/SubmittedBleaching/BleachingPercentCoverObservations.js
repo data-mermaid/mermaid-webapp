@@ -19,7 +19,7 @@ const StyledColgroup = styled('colgroup')`
   }
 `
 
-const BleachingPercentCoverObservations = ({ record }) => {
+const BleachingPercentCoverObservations = ({ record = [] }) => {
   const observationRows = record?.obs_quadrat_benthic_percent.map(
     ({ id, percent_hard, percent_soft, percent_algae, quadrat_number }, index) => (
       <Tr key={id}>
@@ -71,10 +71,6 @@ const BleachingPercentCoverObservations = ({ record }) => {
 
 BleachingPercentCoverObservations.propTypes = {
   record: bleachingRecordPropType,
-}
-
-BleachingPercentCoverObservations.defaultProps = {
-  record: [],
 }
 
 export default BleachingPercentCoverObservations

@@ -5,7 +5,7 @@ import { notificationsPropType } from './mermaidData/mermaidDataProptypes'
 
 const BellNotificationContext = createContext()
 
-const BellNotificationProvider = ({ children, value }) => {
+const BellNotificationProvider = ({ children, value = {} }) => {
   return (
     <BellNotificationContext.Provider value={value}>{children}</BellNotificationContext.Provider>
   )
@@ -26,10 +26,6 @@ const useBellNotifications = () => {
 BellNotificationProvider.propTypes = {
   children: PropTypes.node.isRequired,
   value: notificationsPropType,
-}
-
-BellNotificationProvider.defaultProps = {
-  value: {},
 }
 
 export { useBellNotifications, BellNotificationProvider }

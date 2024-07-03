@@ -52,9 +52,9 @@ const ColoniesBleachedObservationTable = ({
   areValidationsShowing,
   benthicAttributeSelectOptions,
   choices,
-  collectRecord,
+  collectRecord = undefined,
   ignoreObservationValidations,
-  observationsReducer,
+  observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
@@ -462,11 +462,6 @@ ColoniesBleachedObservationTable.propTypes = {
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
   testId: PropTypes.string.isRequired,
-}
-
-ColoniesBleachedObservationTable.defaultProps = {
-  collectRecord: undefined,
-  observationsReducer: [],
 }
 
 export default ColoniesBleachedObservationTable
