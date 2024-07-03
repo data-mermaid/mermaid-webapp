@@ -180,6 +180,7 @@ const DataSharing = () => {
       editedValues.data_policy_benthiclit = policyCode
       editedValues.data_policy_benthicpit = policyCode
       editedValues.data_policy_habitatcomplexity = policyCode
+      editedValues.data_policy_benthicpqt = policyCode
     } else {
       editedValues[propertyToUpdate] = policyCode
     }
