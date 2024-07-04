@@ -447,4 +447,12 @@ export const addClusterEventListeners = (map, popUpRef, choices) => {
   map.on('mouseleave', 'clusters', () => {
     map.getCanvas().style.cursor = ''
   })
+
+  map.on('mouseenter', 'unclustered-point', () => {
+    map.getCanvas().style.cursor = 'pointer'
+  })
+
+  map.on('mouseleave', 'unclustered-point', () => {
+    map.getCanvas().style.cursor = ''
+  })
 }
