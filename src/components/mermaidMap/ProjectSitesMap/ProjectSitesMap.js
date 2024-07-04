@@ -10,9 +10,7 @@ import {
   addZoomController,
   setCoralMosaicLayerProperty,
   setGeomorphicOrBenthicLayerProperty,
-  loadACALayers,
   getMapMarkersFeature,
-  loadMapMarkersLayer,
   handleMapOnWheel,
 } from '../mapService'
 import { MapContainer, MiniMapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
@@ -47,9 +45,139 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
     addZoomController(map.current)
 
     map.current.on('load', () => {
-      loadACALayers(map.current)
-      loadMapMarkersLayer(map.current)
+      map.current.addSource('mapMarkers', {
+        type: 'geojson',
+
+        data: {
+          type: 'FeatureCollection',
+
+          features: sitesForMapMarkers.map((site) => ({
+            type: 'Feature',
+
+            geometry: {
+              type: 'Point',
+
+              coordinates: [site.longitude, site.latitude],
+            },
+
+            properties: site,
+          })),
+        },
+
+        cluster: true,
+
+        clusterMaxZoom: 14,
+
+        clusterRadius: 50,
+      })
+
+      map.current.addLayer({
+        id: 'clusters',
+
+        type: 'circle',
+
+        source: 'mapMarkers',
+
+        filter: ['has', 'point_count'],
+
+        paint: {
+          'circle-color': [
+            'step',
+
+            ['get', 'point_count'],
+
+            '#51bbd6',
+
+            100,
+
+            '#f1f075',
+
+            750,
+
+            '#f28cb1',
+          ],
+
+          'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
+        },
+      })
+
+      map.current.addLayer({
+        id: 'cluster-count',
+
+        type: 'symbol',
+
+        source: 'mapMarkers',
+
+        filter: ['has', 'point_count'],
+
+        layout: {
+          'text-field': ['get', 'point_count_abbreviated'],
+
+          'text-font': ['Open Sans Regular,Arial Unicode MS Regular'],
+
+          'text-size': 12,
+        },
+      })
+
+      map.current.addLayer({
+        id: 'unclustered-point',
+
+        type: 'circle',
+
+        source: 'mapMarkers',
+
+        filter: ['!', ['has', 'point_count']],
+
+        paint: {
+          'circle-color': '#11b4da',
+
+          'circle-radius': 4,
+
+          'circle-stroke-width': 1,
+
+          'circle-stroke-color': '#fff',
+        },
+      })
+
+      map.current.on('click', 'clusters', ({ features }) => {
+        const clusterId = features[0].properties.cluster_id
+
+        map.current.getSource('mapMarkers').getClusterExpansionZoom(clusterId, (err, zoom) => {
+          if (err) {
+            return
+          }
+
+          map.current.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: zoom,
+          })
+        })
+      })
+
+      map.current.on('click', 'unclustered-point', (e) => {
+        const coordinates = e.features[0].geometry.coordinates.slice()
+
+        const markerProperty = e.features[0].properties
+
+        const popupNode = document.createElement('div')
+
+        const reactRoot = createRoot(popupNode)
+
+        reactRoot.render(<Popup properties={markerProperty} choices={choices} />)
+
+        popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
+      })
+
+      map.current.on('mouseenter', 'clusters', () => {
+        map.current.getCanvas().style.cursor = 'pointer'
+      })
+
+      map.current.on('mouseleave', 'clusters', () => {
+        map.current.getCanvas().style.cursor = ''
+      })
+
       handleMapOnWheel(map.current, handleZoomDisplayHelpText)
+
       setIsMapInitialized(true)
     })
 
@@ -57,10 +185,10 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
     return () => {
       map.current.remove()
     }
-  }, [])
+  }, [sitesForMapMarkers, choices])
 
   const _updateMapMarkers = useEffect(() => {
-    if (!map.current) {
+    if (!map.current || !isMapInitialized) {
       return
     }
 
@@ -72,57 +200,18 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       }
     }
 
-    if (
-      isMapInitialized ||
-      JSON.stringify(sitesForMapMarkers) !== JSON.stringify(previousSitesForMapMarkers)
-    ) {
-      map.current.on('sourcedata', handleSourceData)
+    map.current.on('sourcedata', handleSourceData)
 
-      if (sitesForMapMarkers.length > 0) {
-        map.current.fitBounds(bounds, { padding: 25, animate: false })
-      }
+    if (sitesForMapMarkers.length > 0) {
+      map.current.fitBounds(bounds, { padding: 25, animate: false })
     }
+    // }
 
     // eslint-disable-next-line consistent-return
     return () => {
       map.current.off('sourcedata', handleSourceData)
     }
   }, [isMapInitialized, sitesForMapMarkers, previousSitesForMapMarkers])
-
-  const _handleMapMarkersEvent = useEffect(() => {
-    if (!map.current) {
-      return
-    }
-
-    map.current.on('click', 'mapMarkers', (e) => {
-      const popupNode = document.createElement('div')
-      const reactRoot = createRoot(popupNode)
-      const coordinates = e.features[0].geometry.coordinates.slice()
-      const markerProperty = e.features[0].properties
-
-      reactRoot.render(<Popup properties={markerProperty} choices={choices} />)
-      popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
-    })
-
-    // Change the cursor to a pointer when the mouse is over the places layer.
-    map.current.on('mouseenter', 'mapMarkers', () => {
-      map.current.getCanvas().style.cursor = 'pointer'
-    })
-
-    // Change it back to a pointer when it leaves.
-    map.current.on('mouseleave', 'mapMarkers', () => {
-      map.current.getCanvas().style.cursor = ''
-    })
-  }, [choices])
-
-  const updateCoralMosaicLayer = (dataLayerFromLocalStorage) =>
-    setCoralMosaicLayerProperty(map.current, dataLayerFromLocalStorage)
-
-  const updateGeomorphicLayers = (dataLayerFromLocalStorage) =>
-    setGeomorphicOrBenthicLayerProperty(map.current, 'atlas-geomorphic', dataLayerFromLocalStorage)
-
-  const updateBenthicLayers = (dataLayerFromLocalStorage) =>
-    setGeomorphicOrBenthicLayerProperty(map.current, 'atlas-benthic', dataLayerFromLocalStorage)
 
   return (
     <MapContainer>
@@ -131,9 +220,9 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
         <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
       )}
       <AtlasLegendDrawer
-        updateCoralMosaicLayer={updateCoralMosaicLayer}
-        updateGeomorphicLayers={updateGeomorphicLayers}
-        updateBenthicLayers={updateBenthicLayers}
+        updateCoralMosaicLayer={setCoralMosaicLayerProperty}
+        updateGeomorphicLayers={setGeomorphicOrBenthicLayerProperty}
+        updateBenthicLayers={setGeomorphicOrBenthicLayerProperty}
       />
       {map.current ? (
         <MiniMapContainer>

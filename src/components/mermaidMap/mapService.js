@@ -156,6 +156,7 @@ export const satelliteBaseMap = {
       source: 'worldmap',
     },
   ],
+  glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
 }
 
 export const addZoomController = (map) => {
