@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { createRoot } from 'react-dom/client'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import language from '../../../language'
@@ -12,10 +11,11 @@ import {
   setGeomorphicOrBenthicLayerProperty,
   getMapMarkersFeature,
   handleMapOnWheel,
+  addClusterSourceAndLayers,
+  addClusterEventListeners,
 } from '../mapService'
 import { MapContainer, MiniMapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 import MiniMap from '../MiniMap'
-import Popup from '../Popup'
 import usePrevious from '../../../library/usePrevious'
 
 const defaultCenter = [20, 20]
@@ -45,139 +45,9 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
     addZoomController(map.current)
 
     map.current.on('load', () => {
-      map.current.addSource('mapMarkers', {
-        type: 'geojson',
-
-        data: {
-          type: 'FeatureCollection',
-
-          features: sitesForMapMarkers.map((site) => ({
-            type: 'Feature',
-
-            geometry: {
-              type: 'Point',
-
-              coordinates: [site.longitude, site.latitude],
-            },
-
-            properties: site,
-          })),
-        },
-
-        cluster: true,
-
-        clusterMaxZoom: 14,
-
-        clusterRadius: 50,
-      })
-
-      map.current.addLayer({
-        id: 'clusters',
-
-        type: 'circle',
-
-        source: 'mapMarkers',
-
-        filter: ['has', 'point_count'],
-
-        paint: {
-          'circle-color': [
-            'step',
-
-            ['get', 'point_count'],
-
-            '#51bbd6',
-
-            100,
-
-            '#f1f075',
-
-            750,
-
-            '#f28cb1',
-          ],
-
-          'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
-        },
-      })
-
-      map.current.addLayer({
-        id: 'cluster-count',
-
-        type: 'symbol',
-
-        source: 'mapMarkers',
-
-        filter: ['has', 'point_count'],
-
-        layout: {
-          'text-field': ['get', 'point_count_abbreviated'],
-
-          'text-font': ['Open Sans Regular,Arial Unicode MS Regular'],
-
-          'text-size': 12,
-        },
-      })
-
-      map.current.addLayer({
-        id: 'unclustered-point',
-
-        type: 'circle',
-
-        source: 'mapMarkers',
-
-        filter: ['!', ['has', 'point_count']],
-
-        paint: {
-          'circle-color': '#11b4da',
-
-          'circle-radius': 4,
-
-          'circle-stroke-width': 1,
-
-          'circle-stroke-color': '#fff',
-        },
-      })
-
-      map.current.on('click', 'clusters', ({ features }) => {
-        const clusterId = features[0].properties.cluster_id
-
-        map.current.getSource('mapMarkers').getClusterExpansionZoom(clusterId, (err, zoom) => {
-          if (err) {
-            return
-          }
-
-          map.current.easeTo({
-            center: features[0].geometry.coordinates,
-            zoom: zoom,
-          })
-        })
-      })
-
-      map.current.on('click', 'unclustered-point', (e) => {
-        const coordinates = e.features[0].geometry.coordinates.slice()
-
-        const markerProperty = e.features[0].properties
-
-        const popupNode = document.createElement('div')
-
-        const reactRoot = createRoot(popupNode)
-
-        reactRoot.render(<Popup properties={markerProperty} choices={choices} />)
-
-        popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
-      })
-
-      map.current.on('mouseenter', 'clusters', () => {
-        map.current.getCanvas().style.cursor = 'pointer'
-      })
-
-      map.current.on('mouseleave', 'clusters', () => {
-        map.current.getCanvas().style.cursor = ''
-      })
-
+      addClusterSourceAndLayers(map.current, sitesForMapMarkers)
+      addClusterEventListeners(map.current, popUpRef, choices)
       handleMapOnWheel(map.current, handleZoomDisplayHelpText)
-
       setIsMapInitialized(true)
     })
 
