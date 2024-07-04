@@ -75,13 +75,21 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
     if (sitesForMapMarkers.length > 0) {
       map.current.fitBounds(bounds, { padding: 25, animate: false })
     }
-    // }
 
     // eslint-disable-next-line consistent-return
     return () => {
       map.current.off('sourcedata', handleSourceData)
     }
   }, [isMapInitialized, sitesForMapMarkers, previousSitesForMapMarkers])
+
+  const updateCoralMosaicLayer = (dataLayerFromLocalStorage) =>
+    setCoralMosaicLayerProperty(map.current, dataLayerFromLocalStorage)
+
+  const updateGeomorphicLayers = (dataLayerFromLocalStorage) =>
+    setGeomorphicOrBenthicLayerProperty(map.current, 'atlas-geomorphic', dataLayerFromLocalStorage)
+
+  const updateBenthicLayers = (dataLayerFromLocalStorage) =>
+    setGeomorphicOrBenthicLayerProperty(map.current, 'atlas-benthic', dataLayerFromLocalStorage)
 
   return (
     <MapContainer>
@@ -90,9 +98,9 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
         <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
       )}
       <AtlasLegendDrawer
-        updateCoralMosaicLayer={setCoralMosaicLayerProperty}
-        updateGeomorphicLayers={setGeomorphicOrBenthicLayerProperty}
-        updateBenthicLayers={setGeomorphicOrBenthicLayerProperty}
+        updateCoralMosaicLayer={updateCoralMosaicLayer}
+        updateGeomorphicLayers={updateGeomorphicLayers}
+        updateBenthicLayers={updateBenthicLayers}
       />
       {map.current ? (
         <MiniMapContainer>
