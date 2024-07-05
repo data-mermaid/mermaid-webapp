@@ -383,8 +383,10 @@ export const addClusterSourceAndLayers = (map, data) => {
     source: 'mapMarkers',
     filter: ['has', 'point_count'],
     paint: {
-      'circle-color': ['step', ['get', 'point_count'], '#51bbd6', 100, '#f1f075', 750, '#f28cb1'],
+      'circle-color': ['step', ['get', 'point_count'], '#A53434', 100, '#f1f075', 750, '#f28cb1'],
       'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
+      'circle-stroke-width': 1,
+      'circle-stroke-color': '#fff',
     },
   })
 
@@ -398,6 +400,9 @@ export const addClusterSourceAndLayers = (map, data) => {
       'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
       'text-size': 12,
     },
+    paint: {
+      'text-color': '#ffffff',
+    },
   })
 
   map.addLayer({
@@ -406,8 +411,8 @@ export const addClusterSourceAndLayers = (map, data) => {
     source: 'mapMarkers',
     filter: ['!', ['has', 'point_count']],
     paint: {
-      'circle-color': '#11b4da',
-      'circle-radius': 4,
+      'circle-color': '#A53434',
+      'circle-radius': 9,
       'circle-stroke-width': 1,
       'circle-stroke-color': '#fff',
     },
