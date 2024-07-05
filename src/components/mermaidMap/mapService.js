@@ -1,3 +1,6 @@
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import Popup from './Popup'
 import maplibregl from 'maplibre-gl'
 import mapPin from '../../assets/map-pin.png'
 
@@ -156,6 +159,7 @@ export const satelliteBaseMap = {
       source: 'worldmap',
     },
   ],
+  glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
 }
 
 export const addZoomController = (map) => {
@@ -351,5 +355,109 @@ export const handleMapOnWheel = (mapCurrent, handleZoomDisplayHelpText) => {
         handleZoomDisplayHelpText(false)
       }, 1500)
     }
+  })
+}
+
+export const addClusterSourceAndLayers = (map, data) => {
+  map.addSource('mapMarkers', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: data.map((site) => ({
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [site.longitude, site.latitude],
+        },
+        properties: site,
+      })),
+    },
+    cluster: true,
+    clusterMaxZoom: 14,
+    clusterRadius: 50,
+  })
+
+  map.addLayer({
+    id: 'clusters',
+    type: 'circle',
+    source: 'mapMarkers',
+    filter: ['has', 'point_count'],
+    paint: {
+      'circle-color': ['step', ['get', 'point_count'], '#A53434', 100, '#f1f075', 750, '#f28cb1'],
+      'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
+      'circle-stroke-width': 1,
+      'circle-stroke-color': '#fff',
+    },
+  })
+
+  map.addLayer({
+    id: 'cluster-count',
+    type: 'symbol',
+    source: 'mapMarkers',
+    filter: ['has', 'point_count'],
+    layout: {
+      'text-field': ['get', 'point_count_abbreviated'],
+      'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
+      'text-size': 12,
+    },
+    paint: {
+      'text-color': '#ffffff',
+    },
+  })
+
+  map.addLayer({
+    id: 'unclustered-point',
+    type: 'circle',
+    source: 'mapMarkers',
+    filter: ['!', ['has', 'point_count']],
+    paint: {
+      'circle-color': '#A53434',
+      'circle-radius': 9,
+      'circle-stroke-width': 1,
+      'circle-stroke-color': '#fff',
+    },
+  })
+}
+
+export const addClusterEventListeners = (map, popUpRef, choices) => {
+  map.on('click', 'clusters', ({ features }) => {
+    const clusterId = features[0].properties.cluster_id
+
+    map.getSource('mapMarkers').getClusterExpansionZoom(clusterId, (err, zoom) => {
+      if (err) {
+        return
+      }
+
+      map.easeTo({
+        center: features[0].geometry.coordinates,
+        zoom: zoom,
+      })
+    })
+  })
+
+  map.on('click', 'unclustered-point', (e) => {
+    const coordinates = e.features[0].geometry.coordinates.slice()
+    const markerProperty = e.features[0].properties
+    const popupNode = document.createElement('div')
+    const reactRoot = createRoot(popupNode)
+
+    reactRoot.render(<Popup properties={markerProperty} choices={choices} />)
+
+    popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map)
+  })
+
+  map.on('mouseenter', 'clusters', () => {
+    map.getCanvas().style.cursor = 'pointer'
+  })
+  map.on('mouseleave', 'clusters', () => {
+    map.getCanvas().style.cursor = ''
+  })
+
+  map.on('mouseenter', 'unclustered-point', () => {
+    map.getCanvas().style.cursor = 'pointer'
+  })
+
+  map.on('mouseleave', 'unclustered-point', () => {
+    map.getCanvas().style.cursor = ''
   })
 }
