@@ -240,7 +240,13 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
           ? language.pages.gfcrIndicatorSet.title
           : `${formik.values.title} ${formik.values.report_date}`,
       }}
-      content={contentViewByRole}
+      content={
+        isAppOnline ? (
+          contentViewByRole
+        ) : (
+          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+        )
+      }
       toolbar={
         <ContentPageToolbarWrapper>
           <IndicatorSetTitle

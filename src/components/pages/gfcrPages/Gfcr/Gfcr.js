@@ -289,7 +289,13 @@ const Gfcr = () => {
           </ToolBarRow>
         </>
       }
-      content={table}
+      content={
+        isAppOnline ? (
+          table
+        ) : (
+          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+        )
+      }
       isPageContentLoading={isLoading}
     />
   )
