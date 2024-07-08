@@ -290,11 +290,7 @@ const Gfcr = () => {
         </>
       }
       content={
-        isAppOnline ? (
-          table
-        ) : (
-          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
-        )
+        isAppOnline ? table : <PageUnavailable mainText={language.error.pageUnavailableOffline} />
       }
       isPageContentLoading={isLoading}
     />
