@@ -121,7 +121,7 @@ const Gfcr = () => {
 
       return {
         title: isAdminUser ? <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link> : title,
-        indicator_set_type: indicator_set_type === 'annual_report' ? 'Annual Report' : 'Target',
+        indicator_set_type: indicator_set_type === 'report' ? 'Report' : 'Target',
         report_date: localizedDate,
       }
     })
@@ -230,8 +230,8 @@ const Gfcr = () => {
       <StyledToolbarButtonWrapper>
         <ButtonSecondaryDropdown label={createDropdownLabel} disabled={!isAdminUser}>
           <Column as="nav" data-testid="export-to-csv">
-            <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('annual-report')}>
-              Annual Report
+            <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('report')}>
+              Report
             </DropdownItemStyle>
             <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('target')}>
               Target

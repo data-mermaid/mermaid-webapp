@@ -49,7 +49,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const [selectedNavItem, setSelectedNavItem] = useState('report-title-and-year')
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new indicator set is saved (and that triggers a navigation to its new page)
   const indicatorSetType = indicatorSetBeingEdited?.indicator_set_type || newIndicatorSetType
-  const indicatorSetTypeName = indicatorSetType === 'annual_report' ? 'Annual Report' : 'Target'
+  const indicatorSetTypeName = indicatorSetType === 'report' ? 'Report' : 'Target'
 
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 

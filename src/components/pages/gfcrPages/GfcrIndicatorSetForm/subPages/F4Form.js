@@ -41,7 +41,7 @@ const F4Form = ({
   handleFormSubmit,
 }) => {
   const [isUpdateFromCalc, setIsUpdateFromCalc] = useState(false)
-  const isAnnualReport = indicatorSetType === 'annual_report'
+  const isReport = indicatorSetType === 'report'
 
   const _indicatorSetChanged = useEffect(() => {
     if (isUpdateFromCalc) {
@@ -123,7 +123,7 @@ const F4Form = ({
 
   return (
     <StyledGfcrInputWrapper>
-      {isAnnualReport && (
+      {isReport && (
         <StyledInputRowDates>
           <label>
             <b>{gfcrIndicatorSetLanguage.f4_reportingDateRange}</b>
@@ -165,8 +165,8 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_1')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_1', true)}
-          helperText={isAnnualReport ? f41HelperText : gfcrIndicatorSetLanguage.f4_1_helper}
-          showHelperText={isAnnualReport && true}
+          helperText={isReport ? f41HelperText : gfcrIndicatorSetLanguage.f4_1_helper}
+          showHelperText={isReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
@@ -182,8 +182,8 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_2')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_2', true)}
-          helperText={isAnnualReport ? f42HelperText : gfcrIndicatorSetLanguage.f4_2_helper}
-          showHelperText={isAnnualReport && true}
+          helperText={isReport ? f42HelperText : gfcrIndicatorSetLanguage.f4_2_helper}
+          showHelperText={isReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
@@ -199,8 +199,8 @@ const F4Form = ({
           unit="kg/ha"
           {...formik.getFieldProps('f4_3')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_3', true)}
-          helperText={isAnnualReport ? f43HelperText : gfcrIndicatorSetLanguage.f4_3_helper}
-          showHelperText={isAnnualReport && true}
+          helperText={isReport ? f43HelperText : gfcrIndicatorSetLanguage.f4_3_helper}
+          showHelperText={isReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
