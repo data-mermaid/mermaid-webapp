@@ -2,9 +2,9 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 
 const ImageClassificationTable = () => {
-  return <p>IMAGE CLASSICIATION TABLE</p>
+  return <p>IMAGE CLASSIFICATION TABLE</p>
 }
 
-// ImageClassiciationTable.propTypes = {}
+// ImageClassificationTable.propTypes = {}
 
 export default ImageClassificationTable

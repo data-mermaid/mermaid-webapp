@@ -20,7 +20,10 @@ const SelectorContainer = styled.div`
   background-color: ${theme.color.grey5};
   margin-left: 1rem;
   margin-top: 3rem;
-  max-width: 76rem;
+`
+
+const TextContainer = styled.div`
+  max-width: 68rem;
 `
 
 const SampleUnitInputSelector = ({ setObservationTableType }) => {
@@ -30,10 +33,12 @@ const SampleUnitInputSelector = ({ setObservationTableType }) => {
 
   return (
     <SelectorContainer>
-      <H3 htmlFor="image-classification-selection">
-        {language.imageClassification.sampleUnitInputSelector.title}
-      </H3>
-      <p>{language.imageClassification.sampleUnitInputSelector.description}</p>
+      <TextContainer>
+        <H3 htmlFor="image-classification-selection">
+          {language.imageClassification.sampleUnitInputSelector.title}
+        </H3>
+        <p>{language.imageClassification.sampleUnitInputSelector.description}</p>
+      </TextContainer>
       <ButtonContainer>
         <ButtonPrimary type="button" onClick={handleSampleUnitChange('image-classification')}>
           <IconSparkles />
