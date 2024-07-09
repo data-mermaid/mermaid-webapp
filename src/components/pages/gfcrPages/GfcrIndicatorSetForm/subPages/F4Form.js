@@ -81,7 +81,8 @@ const F4Form = ({
   } else if (!isF41UsingCalcValue && indicatorSet?.f4_1_calc) {
     f41HelperText = (
       <>
-        {gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc} <strong>({indicatorSet.f4_1_calc})</strong>
+        {gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc}{' '}
+        <strong>({indicatorSet.f4_1_calc})</strong>
       </>
     )
   } else if (!isF41UsingCalcValue && !indicatorSet?.f4_1_calc && !formik.values.f4_1) {

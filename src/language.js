@@ -646,13 +646,15 @@ const pages = {
     f4_couldNotGetCalcValues: 'Could not get values from project for',
     getF5_1: () => (
       <>
-        Number of <strong>local communities</strong> engaged in meaningful participation and co-development
+        Number of <strong>local communities</strong> engaged in meaningful participation and
+        co-development
       </>
     ),
     f5_1_helper: 'F5.1 Helper Text',
     getF5_2: () => (
       <>
-        Number of <strong>local organizations</strong> engaged in meaningful participation and co-development
+        Number of <strong>local organizations</strong> engaged in meaningful participation and
+        co-development
       </>
     ),
     f5_2_helper: 'F5.2 Helper Text',
@@ -667,12 +669,14 @@ const pages = {
     f6_1: 'Number of direct jobs created (disaggregated by gender, age, Indigenous peoples)',
     getF7_1: () => (
       <>
-        Total <strong>direct beneficiaries</strong> (disaggregated by gender, age, Indigenous peoples)
+        Total <strong>direct beneficiaries</strong> (disaggregated by gender, age, Indigenous
+        peoples)
       </>
     ),
     getF7_2: () => (
       <>
-        Total <strong>indirect beneficiaries</strong> (disaggregated by gender, age, Indigenous peoples)
+        Total <strong>indirect beneficiaries</strong> (disaggregated by gender, age, Indigenous
+        peoples)
       </>
     ),
     f7_3: 'Number of financial mechanisms/reforms to help coastal communities respond and recover from external shocks (e.g., insurance, loans, village savings, restoration crisis plans, etc)',
