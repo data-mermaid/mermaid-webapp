@@ -17,7 +17,7 @@ const ButtonContainer = styled.div`
 
 const SelectorContainer = styled.div`
   padding: 1rem;
-  background-color: ${theme.color.grey3};
+  background-color: ${theme.color.grey5};
   margin-left: 1rem;
 `
 

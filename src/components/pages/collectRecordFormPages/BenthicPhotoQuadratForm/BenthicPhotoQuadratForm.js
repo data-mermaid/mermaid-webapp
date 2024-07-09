@@ -29,7 +29,7 @@ import BenthicPhotoQuadratTransectInputs from './BenthicPhotoQuadratTransectInpu
 import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
 import benthicpqtObservationReducer from './benthicpqtObservationReducer'
 import SampleUnitInputSelector from '../../ImageClassification/SampleUnitInputSelector'
-import ImageClassiciationTable from '../../ImageClassification/ImageClassificationTable'
+import ImageClassificationTable from '../../ImageClassification/ImageClassificationTable'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -214,10 +214,12 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
 
   const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
     (props) => {
-      // the conditional here makes tests happy
-      if (!observationTableType) {
+      const manualObservationRecordsLength =
+        collectRecordBeingEdited?.data?.obs_benthic_photo_quadrats.length
+
+      if (!observationTableType && !manualObservationRecordsLength) {
         return <SampleUnitInputSelector setObservationTableType={setObservationTableType} />
-      } else if (benthicAttributeSelectOptions.length && observationTableType === 'manual-input') {
+      } else if (observationTableType === 'manual-input' || manualObservationRecordsLength) {
         return (
           <>
             <BenthicPhotoQuadratObservationTable
@@ -226,13 +228,10 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
             />
           </>
         )
-      } else if (
-        benthicAttributeSelectOptions.length &&
-        observationTableType === 'image-classification'
-      ) {
+      } else if (observationTableType === 'image-classification') {
         return (
           <>
-            <ImageClassiciationTable />
+            <ImageClassificationTable />
           </>
         )
       }
@@ -240,7 +239,11 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       return null
     },
 
-    [benthicAttributeSelectOptions, observationTableType],
+    [
+      benthicAttributeSelectOptions,
+      collectRecordBeingEdited?.data?.obs_benthic_photo_quadrats.length,
+      observationTableType,
+    ],
   )
 
   return (
