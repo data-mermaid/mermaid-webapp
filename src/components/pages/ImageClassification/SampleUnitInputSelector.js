@@ -19,6 +19,8 @@ const SelectorContainer = styled.div`
   padding: 1rem;
   background-color: ${theme.color.grey5};
   margin-left: 1rem;
+  margin-top: 3rem;
+  max-width: 76rem;
 `
 
 const SampleUnitInputSelector = ({ setObservationTableType }) => {
