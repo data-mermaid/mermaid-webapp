@@ -16,7 +16,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.1a</b> {gfcrIndicatorSetLanguage.f2_1a}
+            <b>F 2.1a</b> {gfcrIndicatorSetLanguage.getF2_1a()}
           </>
         }
         id="f2_1a"
@@ -30,7 +30,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.1b</b> {gfcrIndicatorSetLanguage.f2_1b}
+            <b>F 2.1b</b> {gfcrIndicatorSetLanguage.getF2_1b()}
           </>
         }
         id="f2_1b"
@@ -44,7 +44,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.2a</b> {gfcrIndicatorSetLanguage.f2_2a}
+            <b>F 2.2a</b> {gfcrIndicatorSetLanguage.getF2_2a()}
           </>
         }
         id="f2_2a"
@@ -58,7 +58,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.2b</b> {gfcrIndicatorSetLanguage.f2_2b}
+            <b>F 2.2b</b> {gfcrIndicatorSetLanguage.getF2_2b()}
           </>
         }
         id="f2_2b"
@@ -72,7 +72,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.3a</b> {gfcrIndicatorSetLanguage.f2_3a}
+            <b>F 2.3a</b> {gfcrIndicatorSetLanguage.getF2_3a()}
           </>
         }
         id="f2_3a"
@@ -86,7 +86,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.3b</b> {gfcrIndicatorSetLanguage.f2_3b}
+            <b>F 2.3b</b> {gfcrIndicatorSetLanguage.getF2_3b()}
           </>
         }
         id="f2_3b"

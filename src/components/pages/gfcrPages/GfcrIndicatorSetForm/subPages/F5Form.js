@@ -17,7 +17,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 5.1</b> {gfcrIndicatorSetLanguage.f5_1}
+            <b>F 5.1</b> {gfcrIndicatorSetLanguage.getF5_1()}
           </>
         }
         id="f5_1"
@@ -30,7 +30,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 5.2</b> {gfcrIndicatorSetLanguage.f5_2}
+            <b>F 5.2</b> {gfcrIndicatorSetLanguage.getF5_2()}
           </>
         }
         id="f5_2"

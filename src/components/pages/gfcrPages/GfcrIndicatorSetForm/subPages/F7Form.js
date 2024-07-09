@@ -16,7 +16,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
     <StyledGfcrInputWrapper>
       <InputRow>
         <label>
-          <b>F 7.1</b> {gfcrIndicatorSetLanguage.f7_1}
+          <b>F 7.1</b> {gfcrIndicatorSetLanguage.getF7_1()}
         </label>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
@@ -75,7 +75,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
       </InputRow>
       <InputRow>
         <label>
-          <b>F 7.2</b> {gfcrIndicatorSetLanguage.f7_2}
+          <b>F 7.2</b> {gfcrIndicatorSetLanguage.getF7_2()}
         </label>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
