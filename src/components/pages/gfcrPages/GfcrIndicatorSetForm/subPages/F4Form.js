@@ -81,7 +81,7 @@ const F4Form = ({
   } else if (!isF41UsingCalcValue && indicatorSet?.f4_1_calc) {
     f41HelperText = (
       <>
-        {gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc} <b>({indicatorSet.f4_1_calc})</b>
+        {gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc} <strong>({indicatorSet.f4_1_calc})</strong>
       </>
     )
   } else if (!isF41UsingCalcValue && !indicatorSet?.f4_1_calc && !formik.values.f4_1) {
@@ -126,7 +126,7 @@ const F4Form = ({
       {isAnnualReport && (
         <StyledInputRowDates>
           <label>
-            <b>{gfcrIndicatorSetLanguage.f4_reportingDateRange}</b>
+            <strong>{gfcrIndicatorSetLanguage.f4_reportingDateRange}</strong>
           </label>
           <StyledGfcrSubInputWrapper>
             <InputWithLabelAndValidation
@@ -157,7 +157,7 @@ const F4Form = ({
         <InputWithLabelAndValidation
           label={
             <>
-              <b>F 4.1</b> {gfcrIndicatorSetLanguage.f4_1}
+              <strong>F 4.1</strong> {gfcrIndicatorSetLanguage.f4_1}
             </>
           }
           id="f4_1"
@@ -174,7 +174,7 @@ const F4Form = ({
         <InputWithLabelAndValidation
           label={
             <>
-              <b>F 4.2</b> {gfcrIndicatorSetLanguage.f4_2}
+              <strong>F 4.2</strong> {gfcrIndicatorSetLanguage.f4_2}
             </>
           }
           id="f4_2"
@@ -191,7 +191,7 @@ const F4Form = ({
         <InputWithLabelAndValidation
           label={
             <>
-              <b>F 4.3</b> {gfcrIndicatorSetLanguage.f4_3}
+              <strong>F 4.3</strong> {gfcrIndicatorSetLanguage.f4_3}
             </>
           }
           id="f4_3"

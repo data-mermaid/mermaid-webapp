@@ -580,37 +580,37 @@ const pages = {
     f1_1_helper: 'F1.1 Helper Text',
     getF2_1a: () => (
       <>
-        <b>Coral reef area</b> of MPAs and OECMs (as aligned to GBF Target 3)
+        <strong>Coral reef area</strong> of MPAs and OECMs (as aligned to GBF Target 3)
       </>
     ),
     f2_1a_helper: 'F2.1a Helper Text',
     getF2_1b: () => (
       <>
-        <b>Total area</b> of MPAs and OECMs (as aligned to GBF Target 3)
+        <strong>Total area</strong> of MPAs and OECMs (as aligned to GBF Target 3)
       </>
     ),
     f2_1b_helper: 'F2.1b Helper Text',
     getF2_2a: () => (
       <>
-        <b>Coral reef area</b> of locally managed areas / co-managed areas
+        <strong>Coral reef area</strong> of locally managed areas / co-managed areas
       </>
     ),
     f2_2a_helper: 'F2.2a Helper Text',
     getF2_2b: () => (
       <>
-        <b>Total area</b> of locally managed areas / co-managed areas
+        <strong>Total area</strong> of locally managed areas / co-managed areas
       </>
     ),
     f2_2b_helper: 'F2.2b Helper Text',
     getF2_3a: () => (
       <>
-        <b>Coral reef area</b> of fisheries management
+        <strong>Coral reef area</strong> of fisheries management
       </>
     ),
     f2_3a_helper: 'F2.3a Helper Text',
     getF2_3b: () => (
       <>
-        <b>Total area</b> of fisheries management
+        <strong>Total area</strong> of fisheries management
       </>
     ),
     f2_3b_helper: 'F2.3b Helper Text',
@@ -646,13 +646,13 @@ const pages = {
     f4_couldNotGetCalcValues: 'Could not get values from project for',
     getF5_1: () => (
       <>
-        Number of <b>local communities</b> engaged in meaningful participation and co-development
+        Number of <strong>local communities</strong> engaged in meaningful participation and co-development
       </>
     ),
     f5_1_helper: 'F5.1 Helper Text',
     getF5_2: () => (
       <>
-        Number of <b>local organizations</b> engaged in meaningful participation and co-development
+        Number of <strong>local organizations</strong> engaged in meaningful participation and co-development
       </>
     ),
     f5_2_helper: 'F5.2 Helper Text',
@@ -667,12 +667,12 @@ const pages = {
     f6_1: 'Number of direct jobs created (disaggregated by gender, age, Indigenous peoples)',
     getF7_1: () => (
       <>
-        Total <b>direct beneficiaries</b> (disaggregated by gender, age, Indigenous peoples)
+        Total <strong>direct beneficiaries</strong> (disaggregated by gender, age, Indigenous peoples)
       </>
     ),
     getF7_2: () => (
       <>
-        Total <b>indirect beneficiaries</b> (disaggregated by gender, age, Indigenous peoples)
+        Total <strong>indirect beneficiaries</strong> (disaggregated by gender, age, Indigenous peoples)
       </>
     ),
     f7_3: 'Number of financial mechanisms/reforms to help coastal communities respond and recover from external shocks (e.g., insurance, loans, village savings, restoration crisis plans, etc)',
