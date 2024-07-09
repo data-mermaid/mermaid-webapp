@@ -673,6 +673,7 @@ const pages = {
         peoples)
       </>
     ),
+    f6_2: 'Number of people with increased income and/or nutrition from GFCR support',
     getF7_2: () => (
       <>
         Total <strong>indirect beneficiaries</strong> (disaggregated by gender, age, Indigenous

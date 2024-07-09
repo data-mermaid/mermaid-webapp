@@ -73,6 +73,65 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
           />
         </StyledGfcrSubInputWrapper>
       </InputRow>
+      <InputRow>
+        <label>
+          <b>F 6.2</b> {gfcrIndicatorSetLanguage.f6_2}
+        </label>
+        <StyledGfcrSubInputWrapper>
+          <InputWithLabelAndValidation
+            label={<>{gfcrIndicatorSetLanguage.men}</>}
+            id="f6_2a"
+            type="number"
+            {...formik.getFieldProps('f6_2a')}
+            onBlur={(event) => handleInputBlur(formik, event, 'f6_2a')}
+            onKeyDown={(event) => enforceNumberInput(event)}
+            helperText={gfcrIndicatorSetLanguage.men_helper}
+          />
+        </StyledGfcrSubInputWrapper>
+        <StyledGfcrSubInputWrapper>
+          <InputWithLabelAndValidation
+            label={<>{gfcrIndicatorSetLanguage.women}</>}
+            id="f6_2b"
+            type="number"
+            {...formik.getFieldProps('f6_2b')}
+            onBlur={(event) => handleInputBlur(formik, event, 'f6_2b')}
+            onKeyDown={(event) => enforceNumberInput(event)}
+            helperText={gfcrIndicatorSetLanguage.women_helper}
+          />
+        </StyledGfcrSubInputWrapper>
+        <StyledGfcrSubInputWrapper>
+          <InputWithLabelAndValidation
+            disabled
+            label={<b>{gfcrIndicatorSetLanguage.total}</b>}
+            id="f6_2_total"
+            type="number"
+            value={getFieldValueTotal(formik.values.f6_2a, formik.values.f6_2b)}
+          />
+        </StyledGfcrSubInputWrapper>
+        <div>{gfcrIndicatorSetLanguage.ofTotalHowMany}</div>
+        <StyledGfcrSubInputWrapper>
+          <InputWithLabelAndValidation
+            label={<>{gfcrIndicatorSetLanguage.youth}</>}
+            id="f6_2c"
+            type="number"
+            {...formik.getFieldProps('f6_2c')}
+            onBlur={(event) => handleInputBlur(formik, event, 'f6_2c')}
+            onKeyDown={(event) => enforceNumberInput(event)}
+            helperText={gfcrIndicatorSetLanguage.youth_helper}
+          />
+        </StyledGfcrSubInputWrapper>
+        <StyledGfcrSubInputWrapper>
+          <InputWithLabelAndValidation
+            label={<>{gfcrIndicatorSetLanguage.indigenous}</>}
+            id="f6_2d"
+            type="number"
+            {...formik.getFieldProps('f6_2d')}
+            onBlur={(event) => handleInputBlur(formik, event, 'f6_2d')}
+            onKeyDown={(event) => enforceNumberInput(event)}
+            helperText={gfcrIndicatorSetLanguage.indigenous_helper}
+          />
+        </StyledGfcrSubInputWrapper>
+      </InputRow>
       <TextareaWithLabelAndValidation
         id="f6_notes"
         label={gfcrIndicatorSetLanguage.notes}
