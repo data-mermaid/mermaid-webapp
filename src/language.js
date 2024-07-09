@@ -666,14 +666,14 @@ const pages = {
     f5_5_helper: 'F5.5 Helper Text',
     f5_6: 'Number of national policies linked to GFCR engagement, (e.g., NBSAPs, blue economy policies, national MPA declarations)',
     f5_6_helper: 'F5.6 Helper Text',
-    f6_1: 'Number of direct jobs created (disaggregated by gender, age, Indigenous peoples)',
+    f6_1: 'Number of direct jobs created (disaggregated by gender, age, Indigenous peoples)',    f6_2: 'Number of people with increased income and/or nutrition from GFCR support',
+    f6_2: 'Number of people with increased income and/or nutrition from GFCR support',
     getF7_1: () => (
       <>
         Total <strong>direct beneficiaries</strong> (disaggregated by gender, age, Indigenous
         peoples)
       </>
     ),
-    f6_2: 'Number of people with increased income and/or nutrition from GFCR support',
     getF7_2: () => (
       <>
         Total <strong>indirect beneficiaries</strong> (disaggregated by gender, age, Indigenous
