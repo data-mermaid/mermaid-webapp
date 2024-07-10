@@ -29,7 +29,7 @@ import BenthicPhotoQuadratTransectInputs from './BenthicPhotoQuadratTransectInpu
 import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
 import benthicpqtObservationReducer from './benthicpqtObservationReducer'
 import SampleUnitInputSelector from '../../ImageClassification/SampleUnitInputSelector'
-import ImageClassificationTable from '../../ImageClassification/ImageClassificationTable'
+import ImageClassificationObservationTable from '../../ImageClassification/ImageClassificationOberservationTable'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -231,7 +231,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       } else if (observationTableType === 'image-classification') {
         return (
           <>
-            <ImageClassificationTable />
+            <ImageClassificationObservationTable />
           </>
         )
       }
