@@ -16,7 +16,7 @@ const F1Form = ({ formik, handleInputBlur }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 1.1</b> {gfcrIndicatorSetLanguage.f1_1}
+            <strong>F 1.1</strong> {gfcrIndicatorSetLanguage.f1_1}
           </>
         }
         id="f1_1"
