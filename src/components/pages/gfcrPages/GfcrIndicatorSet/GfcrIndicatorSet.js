@@ -54,6 +54,10 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
     if (isMounted.current && databaseSwitchboardInstance && isAppOnline) {
       const promises = [
         databaseSwitchboardInstance.getChoices(),
@@ -224,7 +228,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     </GfcrPageUnavailablePadding>
   )
 
-  const displayIdNotFoundErrorPage = !indicatorSetBeingEdited && !newIndicatorSetType
+  const displayIdNotFoundErrorPage = !indicatorSetBeingEdited && !newIndicatorSetType && isAppOnline
 
   return displayIdNotFoundErrorPage ? (
     <ContentPageLayout
@@ -249,18 +253,24 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       }
       toolbar={
         <ContentPageToolbarWrapper>
-          <IndicatorSetTitle
-            indicatorSetTitle={formik.values.title}
-            type={indicatorSetTypeName}
-            reportingDate={new Date(formik.values.report_date)}
-            isNew={!!newIndicatorSetType}
-          />
-          <SaveButton
-            formId="gfcr-indicator-set-form"
-            saveButtonState={saveButtonState}
-            formHasErrors={!!Object.keys(formik.errors).length}
-            formDirty={isFormDirty}
-          />
+          {isAppOnline ? (
+            <>
+              <IndicatorSetTitle
+                indicatorSetTitle={formik.values.title}
+                type={indicatorSetTypeName}
+                reportingDate={new Date(formik.values.report_date)}
+                isNew={!!newIndicatorSetType}
+              />
+              <SaveButton
+                formId="gfcr-indicator-set-form"
+                saveButtonState={saveButtonState}
+                formHasErrors={!!Object.keys(formik.errors).length}
+                formDirty={isFormDirty}
+              />
+            </>
+          ) : (
+            <h2>{language.pages.gfcrIndicatorSet.title}</h2>
+          )}
         </ContentPageToolbarWrapper>
       }
     />
