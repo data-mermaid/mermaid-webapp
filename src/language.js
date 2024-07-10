@@ -961,6 +961,16 @@ const tooltipText = {
   softCoralPercentage: 'Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
 }
 
+const imageClassification = {
+  sampleUnitInputSelector: {
+    title: 'Image classification is now available in MERMAID.',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel leo pellentesque lorem interdum pretium. Aenean varius luctus ex, vel blandit elit mollis non. Nam risus felis, finibus et nisl vel, convallis viverra odio. Nunc ut turpis tortor. Praesent consectetur nibh quis tortor bibendum fermentum',
+    button1: 'Use image classification for this sample unit',
+    button2: 'Manually input observation for this sample unit',
+  },
+}
+
 export default {
   apiDataTableNames,
   autocomplete,
@@ -976,6 +986,7 @@ export default {
   getValidationMessage,
   header,
   helperText,
+  imageClassification,
   inlineMessage,
   loadingIndicator,
   map,

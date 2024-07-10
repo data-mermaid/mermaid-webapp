@@ -48,6 +48,7 @@ import send from '@iconify-icons/mdi/send'
 import shareVariantOutline from '@iconify-icons/mdi/share-variant-outline'
 import sortAscending from '@iconify-icons/mdi/sort-ascending'
 import sortDescending from '@iconify-icons/mdi/sort-descending'
+import sparkles from '@iconify-icons/mdi/sparkles'
 import styled from 'styled-components/macro'
 import swap from '@iconify-icons/mdi/swap-vertical'
 import sync from '@iconify-icons/mdi/sync'
@@ -104,6 +105,7 @@ export const IconSave = (props) => <InlineIcon icon={contentSave} {...props} />
 export const IconSend = (props) => <InlineIcon icon={send} {...props} />
 export const IconSharing = (props) => <InlineIcon icon={shareVariantOutline} {...props} />
 export const IconSites = (props) => <InlineIcon icon={mapMarkerRadiusOutline} {...props} />
+export const IconSparkles = (props) => <InlineIcon icon={sparkles} {...props} />
 export const IconMapMarker = (props) => <InlineIcon icon={mapMarker} {...props} />
 export const IconSortDown = (props) => <InlineIcon icon={sortDescending} {...props} />
 export const IconSortUp = (props) => <InlineIcon icon={sortAscending} {...props} />
