@@ -33,7 +33,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
         console.error('Silent authentication error:', error)
       }
     }
-    if (!isAuth0Authenticated && isAppOnline && !isAuth0Loading) {
+    if (isAuth0Authenticated && isAppOnline && !isAuth0Loading) {
       silentAuth()
     }
   }, [
@@ -46,13 +46,18 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
 
   const _initializeAuthentication = useEffect(() => {
     let isMounted = true
+    const auth0CookieName =
+      ' ' + `auth0.${process.env.REACT_APP_AUTH0_CLIENT_ID}.is.authenticated=true`
+    const auth0CookieExists = document.cookie.split(';').includes(auth0CookieName)
+
     const isOffline = !isAppOnline
     const hasPreviouslyAuthenticated = localStorage.getItem('hasAuth0Authenticated') === 'true'
     const isUserOnlineAndLoggedOut = !isAuth0Authenticated && !isAuth0Loading && isAppOnline
-    const isUserOnlineAndLoggedIn = isAuth0Authenticated && !isAuth0Loading
+    const isUserOnlineAndLoggedIn = isAuth0Authenticated && !isAuth0Loading && auth0CookieExists
     const isUserOfflineAndLoggedIn = hasPreviouslyAuthenticated && isOffline
+    const didUserLogoutFromDashboard = !isAuth0Loading && isAppOnline && !auth0CookieExists
 
-    if (isUserOnlineAndLoggedOut) {
+    if (isUserOnlineAndLoggedOut || didUserLogoutFromDashboard) {
       pullRequestRedirectAuth0Hack()
       setUnauthenticatedStates()
       auth0LoginWithRedirect()
