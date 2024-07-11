@@ -24,6 +24,26 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
     getAccessTokenSilently: getAuth0AccessTokenSilently,
   } = useAuth0()
 
+  const _silentAuthentication = useEffect(() => {
+    const silentAuth = async () => {
+      try {
+        await getAuth0AccessTokenSilently()
+        setAuthenticatedStates()
+      } catch (error) {
+        console.error('Silent authentication error:', error)
+      }
+    }
+    if (!isAuth0Authenticated && isAppOnline && !isAuth0Loading) {
+      silentAuth()
+    }
+  }, [
+    isAuth0Authenticated,
+    getAuth0AccessTokenSilently,
+    isAppOnline,
+    isAuth0Loading,
+    setAuthenticatedStates,
+  ])
+
   const _initializeAuthentication = useEffect(() => {
     let isMounted = true
     const isOffline = !isAppOnline
