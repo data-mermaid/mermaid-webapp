@@ -814,8 +814,10 @@ const getValidationMessage = (validation, projectId = '') => {
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
     similar_name: () => 'Another Management Regime is similar to this one.',
     site_not_found: () => 'Site record not available for similarity validation',
-    too_many_observations: () => getObservationsCountMessage(fields, 'Greater', context?.observation_count_range[1]),
-    too_few_observations: () => getObservationsCountMessage(fields, 'Fewer', context?.observation_count_range[0]),
+    too_many_observations: () =>
+      getObservationsCountMessage(fields, 'Greater', context?.observation_count_range[1]),
+    too_few_observations: () =>
+      getObservationsCountMessage(fields, 'Fewer', context?.observation_count_range[0]),
     unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
     value_not_set: () => 'Value is not set',
     default: () => code || name,
