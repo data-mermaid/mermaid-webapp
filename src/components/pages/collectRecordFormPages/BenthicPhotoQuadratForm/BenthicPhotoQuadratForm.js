@@ -221,19 +221,13 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
         return <SampleUnitInputSelector setObservationTableType={setObservationTableType} />
       } else if (observationTableType === 'manual-input' || manualObservationRecordsLength) {
         return (
-          <>
-            <BenthicPhotoQuadratObservationTable
-              benthicAttributeSelectOptions={benthicAttributeSelectOptions}
-              {...props}
-            />
-          </>
+          <BenthicPhotoQuadratObservationTable
+            benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+            {...props}
+          />
         )
       } else if (observationTableType === 'image-classification') {
-        return (
-          <>
-            <ImageClassificationObservationTable />
-          </>
-        )
+        return <ImageClassificationObservationTable />
       }
 
       return null
