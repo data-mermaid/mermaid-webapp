@@ -358,12 +358,13 @@ export const handleMapOnWheel = (mapCurrent, handleZoomDisplayHelpText) => {
   })
 }
 
-export const addClusterSourceAndLayers = (map, data) => {
-  const { markersData } = getMapMarkersFeature(data)
-
+export const addClusterSourceAndLayers = (map) => {
   map.addSource('mapMarkers', {
     type: 'geojson',
-    data: markersData,
+    data: {
+      type: 'FeatureCollection',
+      features: [],
+    },
     cluster: true,
     clusterMaxZoom: 14,
     clusterRadius: 50,
