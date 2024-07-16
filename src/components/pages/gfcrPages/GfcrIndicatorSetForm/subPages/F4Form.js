@@ -8,11 +8,12 @@ import language from '../../../../../language'
 import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import { InputRow } from '../../../../generic/form'
-import { ButtonSecondary } from '../../../../generic/buttons'
+import { ButtonPrimary } from '../../../../generic/buttons'
 import theme from '../../../../../theme'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { H2 } from '../../../../generic/text'
-const StyledButtonSecondary = styled(ButtonSecondary)`
+
+const StyledButtonPrimary = styled(ButtonPrimary)`
   width: 100%;
 `
 
@@ -42,7 +43,8 @@ const F4Form = ({
   handleFormSubmit,
 }) => {
   const [isUpdateFromCalc, setIsUpdateFromCalc] = useState(false)
-  const isReport = indicatorSetType === 'report'
+  // Eventually 'annual_report' can be removed if we're sure there are no indicators sets with this value in the DB
+  const isReport = indicatorSetType === 'report' || 'annual_report'
 
   const _indicatorSetChanged = useEffect(() => {
     if (isUpdateFromCalc) {
@@ -146,13 +148,13 @@ const F4Form = ({
               {...formik.getFieldProps('f4_end_date')}
               onBlur={(event) => handleInputBlur(formik, event, 'f4_end_date')}
             />
-            <StyledButtonSecondary
+            <StyledButtonPrimary
               type="button"
               onClick={handleSaveAndUpdateValues}
               disabled={saveAndUpdateValuesButtonDisabled}
             >
               {gfcrIndicatorSetLanguage.f4_saveAndUpdateValues}
-            </StyledButtonSecondary>
+            </StyledButtonPrimary>
           </StyledGfcrSubInputWrapper>
         </StyledInputRowDates>
       )}
