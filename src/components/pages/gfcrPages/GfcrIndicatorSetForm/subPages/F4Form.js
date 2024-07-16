@@ -11,6 +11,7 @@ import { InputRow } from '../../../../generic/form'
 import { ButtonPrimary } from '../../../../generic/buttons'
 import theme from '../../../../../theme'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
+import { H2 } from '../../../../generic/text'
 
 const StyledButtonPrimary = styled(ButtonPrimary)`
   width: 100%;
@@ -126,6 +127,7 @@ const F4Form = ({
 
   return (
     <StyledGfcrInputWrapper>
+      <H2>{gfcrIndicatorSetLanguage.f4Heading}</H2>
       {isReport && (
         <StyledInputRowDates>
           <label>
