@@ -8,12 +8,14 @@ import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import { InputRow } from '../../../../generic/form'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
+import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
 const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
   return (
     <StyledGfcrInputWrapper>
+      <H2>{gfcrIndicatorSetLanguage.f7Heading}</H2>
       <InputRow>
         <label>
           <strong>F 7.1</strong> {gfcrIndicatorSetLanguage.getF7_1()}
