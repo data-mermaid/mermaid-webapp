@@ -16,7 +16,6 @@ import {
 } from '../mapService'
 import { MapContainer, MiniMapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 import MiniMap from '../MiniMap'
-import usePrevious from '../../../library/usePrevious'
 
 const defaultCenter = [20, 20]
 const defaultZoom = 2
@@ -25,7 +24,6 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const popUpRef = useRef(new maplibregl.Popup({ offset: 10 }))
-  const previousSitesForMapMarkers = usePrevious(sitesForMapMarkers)
   const [displayHelpText, setDisplayHelpText] = useState(false)
   const [isMapInitialized, setIsMapInitialized] = useState(false)
 
@@ -45,17 +43,17 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
     addZoomController(map.current)
 
     map.current.on('load', () => {
-      addClusterSourceAndLayers(map.current, sitesForMapMarkers)
+      addClusterSourceAndLayers(map.current)
       addClusterEventListeners(map.current, popUpRef, choices)
       handleMapOnWheel(map.current, handleZoomDisplayHelpText)
       setIsMapInitialized(true)
     })
 
-    // clean up on unmount
     return () => {
+      // clean up on unmount
       map.current.remove()
     }
-  }, [sitesForMapMarkers, choices])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const _updateMapMarkers = useEffect(() => {
     if (!map.current || !isMapInitialized) {
@@ -64,23 +62,12 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
 
     const { markersData, bounds } = getMapMarkersFeature(sitesForMapMarkers)
 
-    const handleSourceData = () => {
-      if (map.current.getSource('mapMarkers') !== undefined) {
-        map.current.getSource('mapMarkers').setData(markersData)
-      }
-    }
-
-    map.current.on('sourcedata', handleSourceData)
+    map.current.getSource('mapMarkers')?.setData(markersData)
 
     if (sitesForMapMarkers.length > 0) {
       map.current.fitBounds(bounds, { padding: 25, animate: false })
     }
-
-    // eslint-disable-next-line consistent-return
-    return () => {
-      map.current.off('sourcedata', handleSourceData)
-    }
-  }, [isMapInitialized, sitesForMapMarkers, previousSitesForMapMarkers])
+  }, [isMapInitialized, sitesForMapMarkers])
 
   const updateCoralMosaicLayer = (dataLayerFromLocalStorage) =>
     setCoralMosaicLayerProperty(map.current, dataLayerFromLocalStorage)
