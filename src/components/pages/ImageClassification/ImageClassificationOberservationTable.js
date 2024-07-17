@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { H2 } from '../../generic/text'
-import { InputWrapper, LabelContainer } from '../../generic/form'
+import { InputWrapper } from '../../generic/form'
 import {
   StyledOverflowWrapper,
   StickyObservationTable,
@@ -42,6 +42,7 @@ const ImageClassificationObservationTable = () => {
       <StyledOverflowWrapper>
         <StickyObservationTable aria-labelledby="table-label">
           <StyledColgroup>
+            <col className="number" />
             <col className="thumbnail" />
             <col className="quadrat" />
             <col className="benthicAttribute" />
@@ -54,19 +55,19 @@ const ImageClassificationObservationTable = () => {
             <Tr>
               <Th> </Th>
               <Th align="right" id="thumbnail-label">
-                <LabelContainer>Thumbnail</LabelContainer>
+                <span>Thumbnail</span>
               </Th>
               <Th align="right" id="quadrat-number-label">
-                <LabelContainer>Quadrat</LabelContainer>
+                <span>Quadrat</span>
               </Th>
               <Th align="left" id="benthic-attribute-label">
-                <LabelContainer>Benthic Attribute</LabelContainer>
+                <span>Benthic Attribute</span>
               </Th>
               <Th align="right" id="growth-form-label">
-                <LabelContainer>Growth Form</LabelContainer>
+                <span>Growth Form</span>
               </Th>
               <Th colSpan="3" align="center" id="number-of-points-label">
-                <LabelContainer>Number of Points</LabelContainer>
+                <span>Number of Points</span>
               </Th>
               <Th> </Th>
             </Tr>
@@ -77,13 +78,13 @@ const ImageClassificationObservationTable = () => {
               <Th> </Th>
               <Th> </Th>
               <Th align="center">
-                <LabelContainer>Confirmed</LabelContainer>
+                <span>Confirmed</span>
               </Th>
               <Th align="center">
-                <LabelContainer>Unconfirmed</LabelContainer>
+                <span>Unconfirmed</span>
               </Th>
               <Th align="center">
-                <LabelContainer>Unknown</LabelContainer>
+                <span>Unknown</span>
               </Th>
               <Th> </Th>
             </Tr>
