@@ -10,7 +10,7 @@ import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWi
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F2Form = ({ formik, handleInputBlur }) => {
+const F2Form = ({ formik, handleInputBlur, displayHelp }) => {
   return (
     <StyledGfcrInputWrapper>
       <InputWithLabelAndValidation
@@ -26,6 +26,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_1a')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_1a_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -40,6 +41,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_1b')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_1b_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -54,6 +56,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_2a')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_2a_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -68,6 +71,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_2b')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_2b_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -82,6 +86,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_3a')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_3a_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -96,6 +101,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_3b')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_3b_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -110,6 +116,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_4')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_4_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -124,6 +131,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_opt1')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_opt1_helper}
+        showHelperText={displayHelp}
       />
       <TextareaWithLabelAndValidation
         id="f2_notes"
@@ -137,6 +145,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
 F2Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default F2Form

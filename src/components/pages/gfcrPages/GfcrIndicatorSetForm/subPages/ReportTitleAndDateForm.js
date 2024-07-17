@@ -14,7 +14,7 @@ import { ensureTrailingSlash } from '../../../../../library/strings/ensureTraili
 import useCurrentProjectPath from '../../../../../library/useCurrentProjectPath'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 
-const ReportTitleAndDateForm = ({ formik, handleInputBlur, isNewIndicatorSet }) => {
+const ReportTitleAndDateForm = ({ formik, handleInputBlur, isNewIndicatorSet, displayHelp }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { indicatorSetId, projectId } = useParams()
   const navigate = useNavigate()
@@ -62,6 +62,7 @@ const ReportTitleAndDateForm = ({ formik, handleInputBlur, isNewIndicatorSet }) 
         {...formik.getFieldProps('title')}
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}
+        showHelperText={displayHelp}
         helperText={'Example helper text'}
       />
       <InputWithLabelAndValidation
@@ -90,6 +91,7 @@ ReportTitleAndDateForm.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
   isNewIndicatorSet: PropTypes.bool.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default ReportTitleAndDateForm

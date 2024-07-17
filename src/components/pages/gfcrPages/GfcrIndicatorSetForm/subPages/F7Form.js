@@ -11,7 +11,7 @@ import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWi
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
+const F6Form = ({ formik, handleInputBlur, getFieldValueTotal, displayHelp }) => {
   return (
     <StyledGfcrInputWrapper>
       <InputRow>
@@ -27,6 +27,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1a')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.men_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -38,6 +39,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1b')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.women_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -59,6 +61,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1c')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.youth_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -70,6 +73,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1d')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.indigenous_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
       </InputRow>
@@ -86,6 +90,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f7_2a')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.men_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -97,6 +102,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f7_2b')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.women_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -118,6 +124,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f7_2c')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.youth_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -144,6 +151,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f7_3')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f7_3_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -157,6 +165,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f7_4')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f7_4_helper}
+        showHelperText={displayHelp}
       />
       <TextareaWithLabelAndValidation
         id="f7_notes"
@@ -171,6 +180,7 @@ F6Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
   getFieldValueTotal: PropTypes.func.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default F6Form

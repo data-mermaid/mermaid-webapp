@@ -11,7 +11,7 @@ import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWi
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
+const F5Form = ({ formik, handleInputBlur, getFieldValueTotal, displayHelp }) => {
   return (
     <StyledGfcrInputWrapper>
       <InputWithLabelAndValidation
@@ -26,6 +26,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f5_1')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f5_1_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -39,6 +40,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f5_2')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f5_2_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -52,6 +54,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f5_3')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f5_3_helper}
+        showHelperText={displayHelp}
       />
       <InputRow>
         <label>
@@ -66,6 +69,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4a')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.men_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -77,6 +81,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4b')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.women_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -98,6 +103,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4c')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.youth_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -109,6 +115,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4d')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.indigenous_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
       </InputRow>
@@ -126,6 +133,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f5_5')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f5_5_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -141,6 +149,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f5_6')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f5_6_helper}
+        showHelperText={displayHelp}
       />
       <TextareaWithLabelAndValidation
         id="f5_notes"
@@ -155,6 +164,7 @@ F5Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
   getFieldValueTotal: PropTypes.func.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default F5Form

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -39,10 +39,14 @@ const InputWithLabelAndValidation = ({
 
   useStopInputScrollingIncrementNumber(textFieldRef)
 
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(showHelperText)
+  const [internalShowHelperText, setInternalShowHelperText] = useState()
+
+  useEffect(() => {
+    setInternalShowHelperText(showHelperText)
+  }, [showHelperText])
 
   const handleInfoIconClick = (event) => {
-    isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+    setInternalShowHelperText(!internalShowHelperText)
 
     event.stopPropagation()
   }
@@ -87,7 +91,9 @@ const InputWithLabelAndValidation = ({
 
           {renderItemWithinInput || null}
         </InputContainer>
-        {isHelperTextShowing ? <HelperText id={`aria-descp${id}`}>{helperText}</HelperText> : null}
+        {showHelperText || internalShowHelperText ? (
+          <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>
+        ) : null}
       </div>
 
       <InputValidationInfo

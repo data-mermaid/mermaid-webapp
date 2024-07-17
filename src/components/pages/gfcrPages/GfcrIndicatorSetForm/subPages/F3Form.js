@@ -11,7 +11,7 @@ import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWi
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
+const F3Form = ({ formik, handleInputBlur, getFieldValueTotal, displayHelp }) => {
   return (
     <StyledGfcrInputWrapper>
       <InputWithLabelAndValidation
@@ -27,6 +27,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f3_1')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f3_1_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -40,6 +41,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f3_2')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f3_2_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -53,6 +55,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f3_3')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f3_3_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -66,6 +69,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f3_4')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f3_4_helper}
+        showHelperText={displayHelp}
       />
       <InputRow>
         <label>
@@ -80,6 +84,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f3_5a')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.men_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -91,6 +96,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f3_5b')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.women_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -112,6 +118,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f3_5c')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.youth_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -123,6 +130,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             onBlur={(event) => handleInputBlur(formik, event, 'f3_5d')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.indigenous_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
       </InputRow>
@@ -140,6 +148,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f3_6')}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f3_6_helper}
+        showHelperText={displayHelp}
       />
       <TextareaWithLabelAndValidation
         id="f3_notes"
@@ -154,6 +163,7 @@ F3Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
   getFieldValueTotal: PropTypes.func.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default F3Form

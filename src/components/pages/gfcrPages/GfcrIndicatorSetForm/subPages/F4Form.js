@@ -39,6 +39,7 @@ const F4Form = ({
   indicatorSet,
   setInputToDefaultValue,
   handleFormSubmit,
+  displayHelp,
 }) => {
   const [isUpdateFromCalc, setIsUpdateFromCalc] = useState(false)
   const isReport = indicatorSetType === 'report'
@@ -167,7 +168,7 @@ const F4Form = ({
           {...formik.getFieldProps('f4_1')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_1', true)}
           helperText={isReport ? f41HelperText : gfcrIndicatorSetLanguage.f4_1_helper}
-          showHelperText={isReport && true}
+          showHelperText={isReport || displayHelp}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
@@ -184,7 +185,7 @@ const F4Form = ({
           {...formik.getFieldProps('f4_2')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_2', true)}
           helperText={isReport ? f42HelperText : gfcrIndicatorSetLanguage.f4_2_helper}
-          showHelperText={isReport && true}
+          showHelperText={isReport}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
@@ -201,7 +202,7 @@ const F4Form = ({
           {...formik.getFieldProps('f4_3')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_3', true)}
           helperText={isReport ? f43HelperText : gfcrIndicatorSetLanguage.f4_3_helper}
-          showHelperText={isReport && true}
+          showHelperText={isReport && displayHelp}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
@@ -221,6 +222,7 @@ F4Form.propTypes = {
   handleFormSubmit: PropTypes.func.isRequired,
   setInputToDefaultValue: PropTypes.func.isRequired,
   indicatorSetType: PropTypes.string.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default F4Form

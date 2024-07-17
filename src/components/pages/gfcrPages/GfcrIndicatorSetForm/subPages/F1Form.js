@@ -10,7 +10,7 @@ import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWi
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F1Form = ({ formik, handleInputBlur }) => {
+const F1Form = ({ formik, handleInputBlur, displayHelp }) => {
   return (
     <StyledGfcrInputWrapper>
       <InputWithLabelAndValidation
@@ -25,6 +25,7 @@ const F1Form = ({ formik, handleInputBlur }) => {
         {...formik.getFieldProps('f1_1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f1_1')}
         helperText={gfcrIndicatorSetLanguage.f1_1_helper}
+        showHelperText={displayHelp}
         onKeyDown={(event) => enforceNumberInput(event)}
       />
       <TextareaWithLabelAndValidation
@@ -39,6 +40,7 @@ const F1Form = ({ formik, handleInputBlur }) => {
 F1Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default F1Form
