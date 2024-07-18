@@ -563,6 +563,7 @@ const pages = {
       </>
     ),
   },
+
   gfcrIndicatorSet: {
     title: 'Indicator Set',
     total: 'Total',
@@ -576,8 +577,10 @@ const pages = {
     indigenous: 'Indigenous',
     indigenous_helper: 'Indigenous Helper Text',
     notes: 'Notes',
+    f1Heading: 'Coral reef extent of GFCR project',
     f1_1: 'Coral reef area of coral reefs in GFCR programming',
     f1_1_helper: 'F1.1 Helper Text',
+    f2Heading: 'Area of coral reefs under conservation and sustainable management',
     getF2_1a: () => (
       <>
         <strong>Coral reef area</strong> of MPAs and OECMs (as aligned to GBF Target 3)
@@ -619,6 +622,7 @@ const pages = {
     f2_opt1:
       'Area of non-coral reef ecosystems, e.g. mangroves, seagrass or other associated ecosystems',
     f2_opt1_helper: 'F2 opt1 Helper Text',
+    f3Heading: 'Area of coral reefs under effective coral restoration',
     f3_1: 'Area of effective coral reef restoration',
     f3_1_helper: 'F3.1 Helper Text',
     f3_2: 'Number of in situ coral restoration projects',
@@ -630,6 +634,7 @@ const pages = {
     f3_5: 'Number of people engaged in coral restoration',
     f3_6: 'Number of response plans (incl. financial mechanisms, eg., insurance) in place to support coral restoration after severe shocks (e.g,. storms, bleaching)',
     f3_6_helper: 'F3.6 Helper Text',
+    f4Heading: 'Change in coral reef health',
     f4_1: 'Average live hard coral cover',
     f4_1_helper: 'F4.1 Helper Text (target only)',
     f4_2: 'Average macroalgae',
@@ -644,6 +649,8 @@ const pages = {
     f4_end_date: 'End Date',
     f4_saveAndUpdateValues: 'Save and update values with data from this project',
     f4_couldNotGetCalcValues: 'Could not get values from project for',
+    f5Heading:
+      'Number of communities engaged in meaningful participation, co-development and capacity strengthening',
     getF5_1: () => (
       <>
         Number of <strong>local communities</strong> engaged in meaningful participation and
@@ -666,8 +673,11 @@ const pages = {
     f5_5_helper: 'F5.5 Helper Text',
     f5_6: 'Number of national policies linked to GFCR engagement, (e.g., NBSAPs, blue economy policies, national MPA declarations)',
     f5_6_helper: 'F5.6 Helper Text',
+    f6Heading: 'Number of people supported through livelihoods, direct jobs, income, and nutrition',
     f6_1: 'Number of direct jobs created (disaggregated by gender, age, Indigenous peoples)',
     f6_2: 'Number of people with increased income and/or nutrition from GFCR support',
+    f7Heading:
+      'Number of people supported to better adapt, respond and recover to the effects of climate change and major external shocks as a result of GFCR',
     getF7_1: () => (
       <>
         Total <strong>direct beneficiaries</strong> (disaggregated by gender, age, Indigenous
@@ -687,14 +697,14 @@ const pages = {
   },
   gfcrIndicatorSetNav: {
     fundIndicatorsHeading: 'FUND INDICATORS',
-    reportTitleAndYearHeading: 'Report title and year',
-    f1: 'Coral reef extent of GFCR project',
-    f2: 'Area of coral reefs under conservation and sustainable management',
-    f3: 'Area of coral reefs under effective coral restoration',
-    f4: 'Change in coral reef health',
-    f5: 'Number of communities engaged in meaningful participation, co-development and capacity strengthening',
-    f6: 'Number of people supported through livelihoods, direct jobs, income, and nutrition',
-    f7: 'Number of people supported to better adapt, respond and recover to the effects of climate change and major external shocks as a result of GFCR',
+    reportTitleAndDateHeading: 'Report title and date',
+    f1: 'Project area',
+    f2: 'Conservation and management',
+    f3: 'Restoration',
+    f4: 'Coral reef health',
+    f5: 'Communities',
+    f6: 'People',
+    f7: 'Climate response',
     f8F9F10Heading: 'F8, F9, F10',
     financeSolutions: 'Business / Finance solutions',
     investments: 'Investments',
@@ -814,8 +824,10 @@ const getValidationMessage = (validation, projectId = '') => {
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
     similar_name: () => 'Another Management Regime is similar to this one.',
     site_not_found: () => 'Site record not available for similarity validation',
-    too_many_observations: () => getObservationsCountMessage(context, fields, 'Greater'),
-    too_few_observations: () => getObservationsCountMessage(context, fields, 'Fewer'),
+    too_many_observations: () =>
+      getObservationsCountMessage(fields, 'Greater', context?.observation_count_range[1]),
+    too_few_observations: () =>
+      getObservationsCountMessage(fields, 'Fewer', context?.observation_count_range[0]),
     unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
     value_not_set: () => 'Value is not set',
     default: () => code || name,
