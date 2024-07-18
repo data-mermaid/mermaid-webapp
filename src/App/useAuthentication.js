@@ -49,8 +49,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
     const auth0CookieName =
       ' ' + `auth0.${process.env.REACT_APP_AUTH0_CLIENT_ID}.is.authenticated=true`
 
-    const auth0CookieExists =
-      typeof document !== 'undefined' && document.cookie.split(';').includes(auth0CookieName)
+    const auth0CookieExists = document?.cookie?.split(';').includes(auth0CookieName)
 
     const isOffline = !isAppOnline
     const hasPreviouslyAuthenticated = localStorage.getItem('hasAuth0Authenticated') === 'true'
