@@ -276,6 +276,8 @@ const gfcrFinanceSolutionModal = {
   cancel: 'Cancel',
   remove: 'Remove Row',
   none: 'None',
+  yes: 'Yes',
+  no: 'No',
 }
 
 const gfcrInvestmentModal = {
@@ -306,6 +308,8 @@ const gfcrRevenueModal = {
   cancel: 'Cancel',
   remove: 'Remove Row',
   none: 'None',
+  yes: 'Yes',
+  no: 'No',
 }
 
 const clearSizeValuesModal = {

@@ -2,13 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 
 import language from '../../../../../language'
-import {
-  CheckRadioLabel,
-  CheckRadioWrapper,
-  RequiredIndicator,
-  Select,
-  Textarea,
-} from '../../../../generic/form'
+import { RequiredIndicator, Select, Textarea } from '../../../../generic/form'
 import Modal, { RightFooter } from '../../../../generic/Modal/Modal'
 import {
   StyledModalInputRow,
@@ -59,6 +53,7 @@ const RevenueModal = ({
       const formattedValues = {
         ...formikValues,
         id: revenue?.id,
+        sustainable_revenue_stream: formikValues.sustainable_revenue_stream === 'true',
       }
 
       // Find the finance solution with the id which matches revenue.finance_solution
@@ -141,6 +136,12 @@ const RevenueModal = ({
 
       if (!values.revenue_type) {
         errors.revenue_type = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
+      if (values.sustainable_revenue_stream === '') {
+        errors.sustainable_revenue_stream = [
+          { code: language.error.formValidation.required, id: 'Required' },
+        ]
       }
 
       if (values.annual_revenue === '') {
@@ -266,23 +267,18 @@ const RevenueModal = ({
           </Select>
         </StyledModalInputRow>
         <StyledModalInputRow>
-          <CheckRadioWrapper>
-            <input
-              id="sustainable-revenue-stream-input"
-              aria-labelledby="sustainable-revenue-stream-label"
-              type="checkbox"
-              checked={formik.getFieldProps('sustainable_revenue_stream').value}
-              onChange={({ target }) => {
-                formik.setFieldValue('sustainable_revenue_stream', target.checked)
-              }}
-            />
-            <CheckRadioLabel
-              id="sustainable-revenue-stream-label"
-              htmlFor="sustainable-revenue-stream-input"
-            >
-              {modalLanguage.sustainableRevenueStream}
-            </CheckRadioLabel>
-          </CheckRadioWrapper>
+          <label id="sustainable-revenue-stream-label" htmlFor="sustainable-revenue-stream-select">
+            {modalLanguage.sustainableRevenueStream} <RequiredIndicator />
+          </label>
+          <Select
+            id="sustainable-revenue-stream-select"
+            aria-labelledby="sustainable-revenue-stream-label"
+            {...formik.getFieldProps('sustainable_revenue_stream')}
+          >
+            <option value="">{language.placeholders.select}</option>
+            <option value="true">{modalLanguage.yes}</option>
+            <option value="false">{modalLanguage.no}</option>
+          </Select>
         </StyledModalInputRow>
         <StyledModalInputRow>
           <label id="annual-revenue-label" htmlFor="annual-revenue-input">
