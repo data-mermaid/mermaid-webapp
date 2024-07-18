@@ -423,13 +423,16 @@ const pages = {
     organizations: 'Organizations',
     notes: 'Notes',
     noOrganization: 'This Project has no organizations.',
-    gfcrCalloutHeading: 'Global Fund for Coral Reefs (GFCR)',
-    gfcrRemoveParagraph:
-      'Removing GFCR indicators from this project will not delete them, but just hide them.',
-    gfcrAddParagraph:
-      'GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. ',
-    gfcrRemoveButton: 'Remove GFCR indicators from this project',
-    gfcrAddButton: 'Add GFCR indicators to this project',
+    gfcrCallout: {
+      calloutHeading: 'Global Fund for Coral Reefs (GFCR)',
+      removeParagraph:
+        'Removing GFCR indicators from this project will not delete them, but just hide them.',
+      addParagraph:
+        'GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. ',
+      disableButton: 'Disable GFCR Indicators',
+      enableButton: 'Enable GFCR Indicators for this project',
+      goToButton: 'Go to GFCR Indicators',
+    },
   },
   dataSharing: {
     introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data are collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
