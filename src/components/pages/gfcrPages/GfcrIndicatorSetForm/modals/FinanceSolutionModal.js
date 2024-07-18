@@ -142,7 +142,7 @@ const FinanceSolutionModal = ({
         errors.local_enterprise = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
-      if (!values.gender_smart === '') {
+      if (values.gender_smart === '') {
         errors.gender_smart = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
