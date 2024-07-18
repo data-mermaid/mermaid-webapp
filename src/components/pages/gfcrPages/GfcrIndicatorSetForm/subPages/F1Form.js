@@ -11,7 +11,7 @@ import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F1Form = ({ formik, handleInputBlur }) => {
+const F1Form = ({ formik, handleInputBlur, handleInputFocus }) => {
   return (
     <StyledGfcrInputWrapper>
       <H2>{gfcrIndicatorSetLanguage.f1Heading}</H2>
@@ -26,6 +26,7 @@ const F1Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f1_1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f1_1')}
+        onFocus={(event) => handleInputFocus(event)}
         helperText={gfcrIndicatorSetLanguage.f1_1_helper}
         onKeyDown={(event) => enforceNumberInput(event)}
       />
@@ -41,6 +42,7 @@ const F1Form = ({ formik, handleInputBlur }) => {
 F1Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
+  handleInputFocus: PropTypes.func.isRequired,
 }
 
 export default F1Form

@@ -11,7 +11,7 @@ import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F2Form = ({ formik, handleInputBlur }) => {
+const F2Form = ({ formik, handleInputBlur, handleInputFocus }) => {
   return (
     <StyledGfcrInputWrapper>
       <H2>{gfcrIndicatorSetLanguage.f2Heading}</H2>
@@ -26,6 +26,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_1a')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_1a')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_1a_helper}
       />
@@ -40,6 +41,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_1b')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_1b')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_1b_helper}
       />
@@ -54,6 +56,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_2a')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_2a')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_2a_helper}
       />
@@ -68,6 +71,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_2b')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_2b')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_2b_helper}
       />
@@ -82,6 +86,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_3a')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_3a')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_3a_helper}
       />
@@ -96,6 +101,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_3b')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_3b')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_3b_helper}
       />
@@ -110,6 +116,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_4')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_4')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_4_helper}
       />
@@ -124,6 +131,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_opt1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_opt1')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f2_opt1_helper}
       />
@@ -139,6 +147,7 @@ const F2Form = ({ formik, handleInputBlur }) => {
 F2Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
+  handleInputFocus: PropTypes.func.isRequired,
 }
 
 export default F2Form

@@ -12,7 +12,7 @@ import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
+const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal }) => {
   return (
     <StyledGfcrInputWrapper>
       <H2>{gfcrIndicatorSetLanguage.f6Heading}</H2>
@@ -27,6 +27,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             type="number"
             {...formik.getFieldProps('f6_1a')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1a')}
+            onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.men_helper}
           />
@@ -38,6 +39,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             type="number"
             {...formik.getFieldProps('f6_1b')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1b')}
+            onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.women_helper}
           />
@@ -86,6 +88,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             type="number"
             {...formik.getFieldProps('f6_2a')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_2a')}
+            onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.men_helper}
           />
@@ -97,6 +100,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             type="number"
             {...formik.getFieldProps('f6_2b')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_2b')}
+            onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.women_helper}
           />
@@ -146,6 +150,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
 F6Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
+  handleInputFocus: PropTypes.func.isRequired,
   getFieldValueTotal: PropTypes.func.isRequired,
 }
 
