@@ -7,7 +7,7 @@
 import '@testing-library/jest-dom'
 import { configure } from '@testing-library/react'
 import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSuccessful'
-import { mockDocumentCookie } from './mockDocumentCookie'
+import { mockDocumentCookie } from './testUtilities/mockDocumentCookie'
 
 jest.setTimeout(300000)
 window.URL.createObjectURL = () => {}
