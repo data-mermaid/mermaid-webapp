@@ -34,6 +34,14 @@ const handleInputBlur = (formik, event, fieldName, isRoundTo1DP = false) => {
   }
 }
 
+const handleInputFocus = (event) => {
+  const { value } = event.target
+
+  if (value === '0') {
+    event.target.select()
+  }
+}
+
 const getFieldValueTotal = (fieldValue1, fieldValue2) => {
   return parseInt(fieldValue1) + parseInt(fieldValue2)
 }
@@ -64,12 +72,25 @@ const GfcrIndicatorSetForm = ({
               isNewIndicatorSet={isNewIndicatorSet}
             />
           )}
-          {selectedNavItem === 'f1' && <F1Form formik={formik} handleInputBlur={handleInputBlur} />}
-          {selectedNavItem === 'f2' && <F2Form formik={formik} handleInputBlur={handleInputBlur} />}
+          {selectedNavItem === 'f1' && (
+            <F1Form
+              formik={formik}
+              handleInputBlur={handleInputBlur}
+              handleInputFocus={handleInputFocus}
+            />
+          )}
+          {selectedNavItem === 'f2' && (
+            <F2Form
+              formik={formik}
+              handleInputBlur={handleInputBlur}
+              handleInputFocus={handleInputFocus}
+            />
+          )}
           {selectedNavItem === 'f3' && (
             <F3Form
               formik={formik}
               handleInputBlur={handleInputBlur}
+              handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
             />
           )}
@@ -77,6 +98,7 @@ const GfcrIndicatorSetForm = ({
             <F4Form
               formik={formik}
               handleInputBlur={handleInputBlur}
+              handleInputFocus={handleInputFocus}
               indicatorSetType={indicatorSetType}
               indicatorSet={indicatorSet}
               setInputToDefaultValue={setInputToDefaultValue}
@@ -87,6 +109,7 @@ const GfcrIndicatorSetForm = ({
             <F5Form
               formik={formik}
               handleInputBlur={handleInputBlur}
+              handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
             />
           )}
@@ -94,6 +117,7 @@ const GfcrIndicatorSetForm = ({
             <F6Form
               formik={formik}
               handleInputBlur={handleInputBlur}
+              handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
             />
           )}
@@ -101,6 +125,7 @@ const GfcrIndicatorSetForm = ({
             <F7Form
               formik={formik}
               handleInputBlur={handleInputBlur}
+              handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
             />
           )}

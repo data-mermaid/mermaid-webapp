@@ -37,6 +37,7 @@ const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 const F4Form = ({
   formik,
   handleInputBlur,
+  handleInputFocus,
   indicatorSetType,
   indicatorSet,
   setInputToDefaultValue,
@@ -170,6 +171,7 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_1')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_1', true)}
+          onFocus={(event) => handleInputFocus(event)}
           helperText={isReport ? f41HelperText : gfcrIndicatorSetLanguage.f4_1_helper}
           showHelperText={isReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
@@ -187,6 +189,7 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_2')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_2', true)}
+          onFocus={(event) => handleInputFocus(event)}
           helperText={isReport ? f42HelperText : gfcrIndicatorSetLanguage.f4_2_helper}
           showHelperText={isReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
@@ -204,6 +207,7 @@ const F4Form = ({
           unit="kg/ha"
           {...formik.getFieldProps('f4_3')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_3', true)}
+          onFocus={(event) => handleInputFocus(event)}
           helperText={isReport ? f43HelperText : gfcrIndicatorSetLanguage.f4_3_helper}
           showHelperText={isReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
@@ -222,6 +226,7 @@ F4Form.propTypes = {
   formik: formikPropType.isRequired,
   indicatorSet: PropTypes.object.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
+  handleInputFocus: PropTypes.func.isRequired,
   handleFormSubmit: PropTypes.func.isRequired,
   setInputToDefaultValue: PropTypes.func.isRequired,
   indicatorSetType: PropTypes.string.isRequired,

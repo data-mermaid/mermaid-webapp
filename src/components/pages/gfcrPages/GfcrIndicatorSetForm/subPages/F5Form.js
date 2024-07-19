@@ -12,7 +12,7 @@ import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
+const F5Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal }) => {
   return (
     <StyledGfcrInputWrapper>
       <H2>{gfcrIndicatorSetLanguage.f5Heading}</H2>
@@ -26,6 +26,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         type="number"
         {...formik.getFieldProps('f5_1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_1')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f5_1_helper}
       />
@@ -39,6 +40,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         type="number"
         {...formik.getFieldProps('f5_2')}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_2')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f5_2_helper}
       />
@@ -52,6 +54,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         type="number"
         {...formik.getFieldProps('f5_3')}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_3')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f5_3_helper}
       />
@@ -66,6 +69,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             type="number"
             {...formik.getFieldProps('f5_4a')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4a')}
+            onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.men_helper}
           />
@@ -77,6 +81,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
             type="number"
             {...formik.getFieldProps('f5_4b')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4b')}
+            onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.women_helper}
           />
@@ -126,6 +131,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_5')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f5_5_helper}
       />
@@ -141,6 +147,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_6')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f5_6_helper}
       />
@@ -156,6 +163,7 @@ const F5Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
 F5Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
+  handleInputFocus: PropTypes.func.isRequired,
   getFieldValueTotal: PropTypes.func.isRequired,
 }
 
