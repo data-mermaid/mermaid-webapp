@@ -30,6 +30,10 @@ const StyledInputRowQuestions = styled(InputRow)`
   }
 `
 
+const StyledValueUpdateText = styled.strong`
+  font-size: ${theme.typography.smallFontSize};
+`
+
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
 const F4Form = ({
@@ -73,37 +77,37 @@ const F4Form = ({
   const isF42UsingCalcValue = formik.values.f4_2 === indicatorSet?.f4_2_calc
   const isF43UsingCalcValue = formik.values.f4_3 === indicatorSet?.f4_3_calc
 
-  let f41HelperText,
-    f42HelperText,
-    f43HelperText = null
+  let f41ValueUpdateText,
+    f42ValueUpdateText,
+    f43ValueUpdateText = null
 
   if (isF41UsingCalcValue) {
-    f41HelperText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+    f41ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
   } else if (!isF41UsingCalcValue && indicatorSet?.f4_1_calc) {
-    f41HelperText = (
+    f41ValueUpdateText = (
       <>
         {gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc}{' '}
         <strong>({indicatorSet.f4_1_calc})</strong>
       </>
     )
   } else if (!isF41UsingCalcValue && !indicatorSet?.f4_1_calc && !formik.values.f4_1) {
-    f41HelperText = gfcrIndicatorSetLanguage.f4_noValue
+    f41ValueUpdateText = gfcrIndicatorSetLanguage.f4_noValue
   }
 
   if (isF42UsingCalcValue) {
-    f42HelperText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+    f42ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
   } else if (!isF42UsingCalcValue && indicatorSet?.f4_2_calc) {
-    f42HelperText = gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc
+    f42ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc
   } else if (!isF42UsingCalcValue && !indicatorSet?.f4_2_calc && !formik.values.f4_2) {
-    f42HelperText = gfcrIndicatorSetLanguage.f4_noValue
+    f42ValueUpdateText = gfcrIndicatorSetLanguage.f4_noValue
   }
 
   if (isF43UsingCalcValue) {
-    f43HelperText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+    f43ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
   } else if (!isF43UsingCalcValue && indicatorSet?.f4_3_calc) {
-    f43HelperText = gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc
+    f43ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc
   } else if (!isF43UsingCalcValue && !indicatorSet?.f4_3_calc && !formik.values.f4_3) {
-    f43HelperText = gfcrIndicatorSetLanguage.f4_noValue
+    f43ValueUpdateText = gfcrIndicatorSetLanguage.f4_noValue
   }
 
   const isF41ValueZeroAndCalcValueNull = formik.values.f4_1 === 0 && !indicatorSet?.f4_1_calc
@@ -167,10 +171,11 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_1')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_1', true)}
-          helperText={isReport ? f41HelperText : gfcrIndicatorSetLanguage.f4_1_helper}
-          showHelperText={isReport || displayHelp}
+          helperText={gfcrIndicatorSetLanguage.f4_1_helper}
+          showHelperText={displayHelp}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
+        {isReport && <StyledValueUpdateText>{f41ValueUpdateText}</StyledValueUpdateText>}
       </StyledInputRowQuestions>
       <StyledInputRowQuestions>
         <InputWithLabelAndValidation
@@ -184,10 +189,11 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_2')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_2', true)}
-          helperText={isReport ? f42HelperText : gfcrIndicatorSetLanguage.f4_2_helper}
-          showHelperText={isReport}
+          helperText={gfcrIndicatorSetLanguage.f4_2_helper}
+          showHelperText={displayHelp}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
+        {isReport && <StyledValueUpdateText>{f42ValueUpdateText}</StyledValueUpdateText>}
       </StyledInputRowQuestions>
       <StyledInputRowQuestions>
         <InputWithLabelAndValidation
@@ -201,10 +207,11 @@ const F4Form = ({
           unit="kg/ha"
           {...formik.getFieldProps('f4_3')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_3', true)}
-          helperText={isReport ? f43HelperText : gfcrIndicatorSetLanguage.f4_3_helper}
-          showHelperText={isReport && displayHelp}
+          helperText={gfcrIndicatorSetLanguage.f4_3_helper}
+          showHelperText={displayHelp}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
+        {isReport && <StyledValueUpdateText>{f43ValueUpdateText}</StyledValueUpdateText>}
       </StyledInputRowQuestions>
       <TextareaWithLabelAndValidation
         id="f4_notes"
