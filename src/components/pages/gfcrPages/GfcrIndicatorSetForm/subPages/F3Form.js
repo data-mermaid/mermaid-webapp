@@ -8,16 +8,18 @@ import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import { InputRow } from '../../../../generic/form'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
+import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
 const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
   return (
     <StyledGfcrInputWrapper>
+      <H2>{gfcrIndicatorSetLanguage.f3Heading}</H2>
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 3.1</b> {gfcrIndicatorSetLanguage.f3_1}
+            <strong>F 3.1</strong> {gfcrIndicatorSetLanguage.f3_1}
           </>
         }
         id="f3_1"
@@ -31,7 +33,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 3.2</b> {gfcrIndicatorSetLanguage.f3_2}
+            <strong>F 3.2</strong> {gfcrIndicatorSetLanguage.f3_2}
           </>
         }
         id="f3_2"
@@ -44,7 +46,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 3.3</b> {gfcrIndicatorSetLanguage.f3_3}
+            <strong>F 3.3</strong> {gfcrIndicatorSetLanguage.f3_3}
           </>
         }
         id="f3_3"
@@ -57,7 +59,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 3.4</b> {gfcrIndicatorSetLanguage.f3_4}
+            <strong>F 3.4</strong> {gfcrIndicatorSetLanguage.f3_4}
           </>
         }
         id="f3_4"
@@ -69,7 +71,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
       />
       <InputRow>
         <label>
-          <b>F 3.5</b> {gfcrIndicatorSetLanguage.f3_5}
+          <strong>F 3.5</strong> {gfcrIndicatorSetLanguage.f3_5}
         </label>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
@@ -96,7 +98,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
             disabled
-            label={<b>{gfcrIndicatorSetLanguage.total}</b>}
+            label={<strong>{gfcrIndicatorSetLanguage.total}</strong>}
             id="f3_5total"
             type="number"
             value={getFieldValueTotal(formik.values.f3_5a, formik.values.f3_5b)}
@@ -129,7 +131,7 @@ const F3Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 3.6</b> {gfcrIndicatorSetLanguage.f3_6}
+            <strong>F 3.6</strong> {gfcrIndicatorSetLanguage.f3_6}
           </>
         }
         id="f3_6"

@@ -166,6 +166,7 @@ const ProjectInfo = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const isGfcrUserTester = getIsUserGfcrTester(currentUser)
+  const [isUpdatingGfcr, setIsUpdatingGfcr] = useState(false)
   const [projectNameError, setProjectNameError] = useState(false)
   const [isDeletingProject, setIsDeletingProject] = useState(false)
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false)
@@ -329,9 +330,13 @@ const ProjectInfo = () => {
   const updateIncludesGfcr = (includesGfcrValue) => {
     const editedValues = { includes_gfcr: includesGfcrValue }
 
+    setIsUpdatingGfcr(true)
+
     databaseSwitchboardInstance
       .saveProject({ projectId, editedValues })
       .then((updatedProject) => {
+        setIsUpdatingGfcr(false)
+
         setProjectBeingEdited(updatedProject)
 
         if (includesGfcrValue) {
@@ -342,6 +347,8 @@ const ProjectInfo = () => {
         }
       })
       .catch((error) => {
+        setIsUpdatingGfcr(false)
+
         handleHttpResponseError({
           error,
           callback: () => {
@@ -411,6 +418,7 @@ const ProjectInfo = () => {
           <GfcrCallout
             isGfcr={projectBeingEdited?.includes_gfcr}
             handleUpdateIncludesGfcr={updateIncludesGfcr}
+            isLoading={isUpdatingGfcr}
           />
         )}
         <DeleteProjectButton

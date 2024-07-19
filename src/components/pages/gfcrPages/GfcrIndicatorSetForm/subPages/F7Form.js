@@ -8,15 +8,17 @@ import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import { InputRow } from '../../../../generic/form'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
+import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
 const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
   return (
     <StyledGfcrInputWrapper>
+      <H2>{gfcrIndicatorSetLanguage.f7Heading}</H2>
       <InputRow>
         <label>
-          <b>F 7.1</b> {gfcrIndicatorSetLanguage.f7_1}
+          <strong>F 7.1</strong> {gfcrIndicatorSetLanguage.getF7_1()}
         </label>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
@@ -43,7 +45,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
             disabled
-            label={<b>{gfcrIndicatorSetLanguage.total}</b>}
+            label={<strong>{gfcrIndicatorSetLanguage.total}</strong>}
             id="f7_1_total"
             type="number"
             value={getFieldValueTotal(formik.values.f7_1a, formik.values.f7_1b)}
@@ -75,7 +77,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
       </InputRow>
       <InputRow>
         <label>
-          <b>F 7.2</b> {gfcrIndicatorSetLanguage.f7_2}
+          <strong>F 7.2</strong> {gfcrIndicatorSetLanguage.getF7_2()}
         </label>
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
@@ -102,7 +104,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
             disabled
-            label={<b>{gfcrIndicatorSetLanguage.total}</b>}
+            label={<strong>{gfcrIndicatorSetLanguage.total}</strong>}
             id="f7_2_total"
             type="number"
             value={getFieldValueTotal(formik.values.f7_2a, formik.values.f7_2b)}
@@ -135,7 +137,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 7.3</b> {gfcrIndicatorSetLanguage.f7_3}
+            <strong>F 7.3</strong> {gfcrIndicatorSetLanguage.f7_3}
           </>
         }
         id="f7_3"
@@ -148,7 +150,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal }) => {
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 7.4</b> {gfcrIndicatorSetLanguage.f7_4}
+            <strong>F 7.4</strong> {gfcrIndicatorSetLanguage.f7_4}
           </>
         }
         id="f7_4"

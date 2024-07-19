@@ -49,11 +49,15 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const [selectedNavItem, setSelectedNavItem] = useState('report-title-and-year')
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new indicator set is saved (and that triggers a navigation to its new page)
   const indicatorSetType = indicatorSetBeingEdited?.indicator_set_type || newIndicatorSetType
-  const indicatorSetTypeName = indicatorSetType === 'annual_report' ? 'Annual Report' : 'Target'
+  const indicatorSetTypeName = indicatorSetType === 'report' ? 'Report' : 'Target'
 
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
     if (isMounted.current && databaseSwitchboardInstance && isAppOnline) {
       const promises = [
         databaseSwitchboardInstance.getChoices(),
@@ -224,7 +228,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     </GfcrPageUnavailablePadding>
   )
 
-  const displayIdNotFoundErrorPage = !indicatorSetBeingEdited && !newIndicatorSetType
+  const displayIdNotFoundErrorPage = !indicatorSetBeingEdited && !newIndicatorSetType && isAppOnline
 
   return displayIdNotFoundErrorPage ? (
     <ContentPageLayout
@@ -240,21 +244,33 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
           ? language.pages.gfcrIndicatorSet.title
           : `${formik.values.title} ${formik.values.report_date}`,
       }}
-      content={contentViewByRole}
+      content={
+        isAppOnline ? (
+          contentViewByRole
+        ) : (
+          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+        )
+      }
       toolbar={
         <ContentPageToolbarWrapper>
-          <IndicatorSetTitle
-            indicatorSetTitle={formik.values.title}
-            type={indicatorSetTypeName}
-            reportingDate={new Date(formik.values.report_date)}
-            isNew={!!newIndicatorSetType}
-          />
-          <SaveButton
-            formId="gfcr-indicator-set-form"
-            saveButtonState={saveButtonState}
-            formHasErrors={!!Object.keys(formik.errors).length}
-            formDirty={isFormDirty}
-          />
+          {isAppOnline ? (
+            <>
+              <IndicatorSetTitle
+                indicatorSetTitle={formik.values.title}
+                type={indicatorSetTypeName}
+                reportingDate={new Date(formik.values.report_date)}
+                isNew={!!newIndicatorSetType}
+              />
+              <SaveButton
+                formId="gfcr-indicator-set-form"
+                saveButtonState={saveButtonState}
+                formHasErrors={!!Object.keys(formik.errors).length}
+                formDirty={isFormDirty}
+              />
+            </>
+          ) : (
+            <h2>{language.pages.gfcrIndicatorSet.title}</h2>
+          )}
         </ContentPageToolbarWrapper>
       }
     />

@@ -282,14 +282,16 @@ const NavMenu = ({ subNavNode = null }) => {
                   <span>Data Sharing</span>
                 </NavLinkSidebar>
               </li>
-              <li>
-                {currentProject?.includes_gfcr && (
-                  <NavLinkSidebar to={`${projectUrl}/gfcr`}>
-                    <IconGfcr />
-                    <span>GFCR</span>
-                  </NavLinkSidebar>
-                )}
-              </li>
+              <OfflineHide>
+                <li>
+                  {currentProject?.includes_gfcr && (
+                    <NavLinkSidebar to={`${projectUrl}/gfcr`}>
+                      <IconGfcr />
+                      <span>GFCR</span>
+                    </NavLinkSidebar>
+                  )}
+                </li>
+              </OfflineHide>
               {isGfcrSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             </ul>
           </LiNavSecondary>

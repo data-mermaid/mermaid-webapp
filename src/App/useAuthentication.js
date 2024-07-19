@@ -24,15 +24,42 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
     getAccessTokenSilently: getAuth0AccessTokenSilently,
   } = useAuth0()
 
+  const _silentAuthentication = useEffect(() => {
+    const silentAuth = async () => {
+      try {
+        await getAuth0AccessTokenSilently()
+        setAuthenticatedStates()
+      } catch (error) {
+        console.error('Silent authentication error:', error)
+      }
+    }
+    if (isAuth0Authenticated && isAppOnline && !isAuth0Loading) {
+      silentAuth()
+    }
+  }, [
+    isAuth0Authenticated,
+    getAuth0AccessTokenSilently,
+    isAppOnline,
+    isAuth0Loading,
+    setAuthenticatedStates,
+  ])
+
   const _initializeAuthentication = useEffect(() => {
     let isMounted = true
+    const auth0CookieName =
+      ' ' + `auth0.${process.env.REACT_APP_AUTH0_CLIENT_ID}.is.authenticated=true`
+
+    const auth0CookieExists = document?.cookie?.split(';').includes(auth0CookieName)
+
     const isOffline = !isAppOnline
     const hasPreviouslyAuthenticated = localStorage.getItem('hasAuth0Authenticated') === 'true'
     const isUserOnlineAndLoggedOut = !isAuth0Authenticated && !isAuth0Loading && isAppOnline
-    const isUserOnlineAndLoggedIn = isAuth0Authenticated && !isAuth0Loading
-    const isUserOfflineAndLoggedIn = hasPreviouslyAuthenticated && isOffline
+    const isUserOnlineAndLoggedIn = isAuth0Authenticated && !isAuth0Loading && auth0CookieExists
 
-    if (isUserOnlineAndLoggedOut) {
+    const isUserOfflineAndLoggedIn = hasPreviouslyAuthenticated && isOffline
+    const didUserLogoutFromDashboard = !isAuth0Loading && isAppOnline && !auth0CookieExists
+
+    if (isUserOnlineAndLoggedOut || didUserLogoutFromDashboard) {
       pullRequestRedirectAuth0Hack()
       setUnauthenticatedStates()
       auth0LoginWithRedirect()
@@ -42,7 +69,6 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
       getAuth0AccessTokenSilently()
         .then(() => {
           if (isMounted) {
-            // setAuth0Token(token)
             setAuthenticatedStates()
           }
         })

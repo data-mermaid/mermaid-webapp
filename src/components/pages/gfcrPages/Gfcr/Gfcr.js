@@ -61,6 +61,10 @@ const Gfcr = () => {
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
   const _getIndicatorSets = useEffect(() => {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
     if (databaseSwitchboardInstance && isAppOnline) {
       Promise.all([databaseSwitchboardInstance.getIndicatorSets(projectId)])
         .then(([indicatorSetsResponse]) => {
@@ -121,7 +125,7 @@ const Gfcr = () => {
 
       return {
         title: isAdminUser ? <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link> : title,
-        indicator_set_type: indicator_set_type === 'annual_report' ? 'Annual Report' : 'Target',
+        indicator_set_type: indicator_set_type === 'report' ? 'Report' : 'Target',
         report_date: localizedDate,
       }
     })
@@ -230,8 +234,8 @@ const Gfcr = () => {
       <StyledToolbarButtonWrapper>
         <ButtonSecondaryDropdown label={createDropdownLabel} disabled={!isAdminUser}>
           <Column as="nav" data-testid="export-to-csv">
-            <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('annual-report')}>
-              Annual Report
+            <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('report')}>
+              Report
             </DropdownItemStyle>
             <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('target')}>
               Target
@@ -277,19 +281,23 @@ const Gfcr = () => {
       toolbar={
         <>
           <H2>{language.pages.gfcrTable.title}</H2>
-          <ToolBarRow>
-            <FilterSearchToolbar
-              name={language.pages.gfcrTable.filterToolbarText}
-              disabled={gfcrIndicatorSets.length === 0}
-              globalSearchText={globalFilter || ''}
-              handleGlobalFilterChange={handleGlobalFilterChange}
-            />
+          {isAppOnline && (
+            <ToolBarRow>
+              <FilterSearchToolbar
+                name={language.pages.gfcrTable.filterToolbarText}
+                disabled={gfcrIndicatorSets.length === 0}
+                globalSearchText={globalFilter || ''}
+                handleGlobalFilterChange={handleGlobalFilterChange}
+              />
 
-            <ToolbarButtonWrapper>{toolbarButtons}</ToolbarButtonWrapper>
-          </ToolBarRow>
+              <ToolbarButtonWrapper>{toolbarButtons}</ToolbarButtonWrapper>
+            </ToolBarRow>
+          )}
         </>
       }
-      content={table}
+      content={
+        isAppOnline ? table : <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+      }
       isPageContentLoading={isLoading}
     />
   )

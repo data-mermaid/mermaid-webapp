@@ -8,10 +8,12 @@ import language from '../../../../../language'
 import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import { InputRow } from '../../../../generic/form'
-import { ButtonSecondary } from '../../../../generic/buttons'
+import { ButtonPrimary } from '../../../../generic/buttons'
 import theme from '../../../../../theme'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
-const StyledButtonSecondary = styled(ButtonSecondary)`
+import { H2 } from '../../../../generic/text'
+
+const StyledButtonPrimary = styled(ButtonPrimary)`
   width: 100%;
 `
 
@@ -41,7 +43,8 @@ const F4Form = ({
   handleFormSubmit,
 }) => {
   const [isUpdateFromCalc, setIsUpdateFromCalc] = useState(false)
-  const isAnnualReport = indicatorSetType === 'annual_report'
+  // Eventually 'annual_report' can be removed if we're sure there are no indicators sets with this value in the DB
+  const isReport = indicatorSetType === 'report' || 'annual_report'
 
   const _indicatorSetChanged = useEffect(() => {
     if (isUpdateFromCalc) {
@@ -81,7 +84,8 @@ const F4Form = ({
   } else if (!isF41UsingCalcValue && indicatorSet?.f4_1_calc) {
     f41HelperText = (
       <>
-        {gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc} <b>({indicatorSet.f4_1_calc})</b>
+        {gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc}{' '}
+        <strong>({indicatorSet.f4_1_calc})</strong>
       </>
     )
   } else if (!isF41UsingCalcValue && !indicatorSet?.f4_1_calc && !formik.values.f4_1) {
@@ -123,10 +127,11 @@ const F4Form = ({
 
   return (
     <StyledGfcrInputWrapper>
-      {isAnnualReport && (
+      <H2>{gfcrIndicatorSetLanguage.f4Heading}</H2>
+      {isReport && (
         <StyledInputRowDates>
           <label>
-            <b>{gfcrIndicatorSetLanguage.f4_reportingDateRange}</b>
+            <strong>{gfcrIndicatorSetLanguage.f4_reportingDateRange}</strong>
           </label>
           <StyledGfcrSubInputWrapper>
             <InputWithLabelAndValidation
@@ -143,13 +148,13 @@ const F4Form = ({
               {...formik.getFieldProps('f4_end_date')}
               onBlur={(event) => handleInputBlur(formik, event, 'f4_end_date')}
             />
-            <StyledButtonSecondary
+            <StyledButtonPrimary
               type="button"
               onClick={handleSaveAndUpdateValues}
               disabled={saveAndUpdateValuesButtonDisabled}
             >
               {gfcrIndicatorSetLanguage.f4_saveAndUpdateValues}
-            </StyledButtonSecondary>
+            </StyledButtonPrimary>
           </StyledGfcrSubInputWrapper>
         </StyledInputRowDates>
       )}
@@ -157,7 +162,7 @@ const F4Form = ({
         <InputWithLabelAndValidation
           label={
             <>
-              <b>F 4.1</b> {gfcrIndicatorSetLanguage.f4_1}
+              <strong>F 4.1</strong> {gfcrIndicatorSetLanguage.f4_1}
             </>
           }
           id="f4_1"
@@ -165,8 +170,8 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_1')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_1', true)}
-          helperText={isAnnualReport ? f41HelperText : gfcrIndicatorSetLanguage.f4_1_helper}
-          showHelperText={isAnnualReport && true}
+          helperText={isReport ? f41HelperText : gfcrIndicatorSetLanguage.f4_1_helper}
+          showHelperText={isReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
@@ -174,7 +179,7 @@ const F4Form = ({
         <InputWithLabelAndValidation
           label={
             <>
-              <b>F 4.2</b> {gfcrIndicatorSetLanguage.f4_2}
+              <strong>F 4.2</strong> {gfcrIndicatorSetLanguage.f4_2}
             </>
           }
           id="f4_2"
@@ -182,8 +187,8 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_2')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_2', true)}
-          helperText={isAnnualReport ? f42HelperText : gfcrIndicatorSetLanguage.f4_2_helper}
-          showHelperText={isAnnualReport && true}
+          helperText={isReport ? f42HelperText : gfcrIndicatorSetLanguage.f4_2_helper}
+          showHelperText={isReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
@@ -191,7 +196,7 @@ const F4Form = ({
         <InputWithLabelAndValidation
           label={
             <>
-              <b>F 4.3</b> {gfcrIndicatorSetLanguage.f4_3}
+              <strong>F 4.3</strong> {gfcrIndicatorSetLanguage.f4_3}
             </>
           }
           id="f4_3"
@@ -199,8 +204,8 @@ const F4Form = ({
           unit="kg/ha"
           {...formik.getFieldProps('f4_3')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_3', true)}
-          helperText={isAnnualReport ? f43HelperText : gfcrIndicatorSetLanguage.f4_3_helper}
-          showHelperText={isAnnualReport && true}
+          helperText={isReport ? f43HelperText : gfcrIndicatorSetLanguage.f4_3_helper}
+          showHelperText={isReport && true}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
       </StyledInputRowQuestions>
