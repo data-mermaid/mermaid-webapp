@@ -39,6 +39,7 @@ import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 
 const groupManagementRegimes = (records) => {
   return records.reduce((accumulator, record) => {
@@ -72,6 +73,8 @@ const ManagementRegimesOverview = () => {
   const [methodsFilter, setMethodsFilter] = useState([])
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
+
+  useDocumentTitle(`${language.pages.managementRegimesOverview.title} - ${language.title.mermaid}`)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {

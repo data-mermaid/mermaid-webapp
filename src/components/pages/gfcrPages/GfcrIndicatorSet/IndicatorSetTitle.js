@@ -36,7 +36,7 @@ const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingDate, isNew = fal
   useDocumentTitle(
     isNew
       ? language.pages.gfcrIndicatorSet.title
-      : `${indicatorSetTitle} - ${type} - ${reportingYear}`,
+      : `${indicatorSetTitle} ${type} ${reportingYear} - ${language.title.mermaid}`,
   )
 
   if (isNew) {
