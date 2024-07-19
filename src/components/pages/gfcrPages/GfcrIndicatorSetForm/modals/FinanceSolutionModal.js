@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { OutlinedInput } from '@mui/material'
+import { Checkbox, ListItemText, OutlinedInput } from '@mui/material'
 
 import language from '../../../../../language'
 import theme from '../../../../../theme'
@@ -321,7 +321,12 @@ const FinanceSolutionModal = ({
                 value={option.id}
                 sx={{ fontSize: theme.typography.defaultFontSize }}
               >
-                {option.name}
+                <Checkbox
+                  checked={formik
+                    .getFieldProps('sustainable_finance_mechanisms')
+                    .value.includes(option.id)}
+                />
+                <ListItemText primary={option.name} />
               </CustomMenuItem>
             ))}
           </CustomMuiSelect>
