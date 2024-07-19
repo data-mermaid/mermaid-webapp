@@ -35,6 +35,44 @@ const StyledColgroup = styled('colgroup')`
   }
 `
 
+const tableHeaders = [
+  { align: 'right', id: 'thumbnail-label', text: 'Thumbnail' },
+  { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
+  { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
+  { align: 'right', id: 'growth-form-label', text: 'Growth Form' },
+  { colSpan: 3, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
+]
+
+const TableHeaderRow = () => (
+  <Tr>
+    <Th />
+    {tableHeaders.map((header) => (
+      <Th key={header.id} align={header.align} id={header.id} colSpan={header.colSpan || 1}>
+        <span>{header.text}</span>
+      </Th>
+    ))}
+    <Th />
+  </Tr>
+)
+
+const subHeaderColumns = [
+  { align: 'center', text: 'Confirmed' },
+  { align: 'center', text: 'Unconfirmed' },
+  { align: 'center', text: 'Unknown' },
+]
+
+const SubHeaderRow = () => (
+  <Tr>
+    <Th colSpan={5} />
+    {subHeaderColumns.map((col, index) => (
+      <Th key={index} align={col.align}>
+        <span>{col.text}</span>
+      </Th>
+    ))}
+    <Th />
+  </Tr>
+)
+
 const ImageClassificationObservationTable = () => {
   return (
     <InputWrapper>
@@ -48,46 +86,12 @@ const ImageClassificationObservationTable = () => {
             <col className="benthicAttribute" />
             <col className="growthForm" />
             <col className="numberOfPoints" />
-            {/* {areValidationsShowing ? <col className="validations" /> : null} */}
+            {/* {areValidationsShowing && <col className="validations" />} */}
             <col className="remove" />
           </StyledColgroup>
           <thead>
-            <Tr>
-              <Th> </Th>
-              <Th align="right" id="thumbnail-label">
-                <span>Thumbnail</span>
-              </Th>
-              <Th align="right" id="quadrat-number-label">
-                <span>Quadrat</span>
-              </Th>
-              <Th align="left" id="benthic-attribute-label">
-                <span>Benthic Attribute</span>
-              </Th>
-              <Th align="right" id="growth-form-label">
-                <span>Growth Form</span>
-              </Th>
-              <Th colSpan="3" align="center" id="number-of-points-label">
-                <span>Number of Points</span>
-              </Th>
-              <Th> </Th>
-            </Tr>
-            <Tr>
-              <Th> </Th>
-              <Th> </Th>
-              <Th> </Th>
-              <Th> </Th>
-              <Th> </Th>
-              <Th align="center">
-                <span>Confirmed</span>
-              </Th>
-              <Th align="center">
-                <span>Unconfirmed</span>
-              </Th>
-              <Th align="center">
-                <span>Unknown</span>
-              </Th>
-              <Th> </Th>
-            </Tr>
+            <TableHeaderRow />
+            <SubHeaderRow />
           </thead>
           {/* <tbody>{observationsRows}</tbody> */}
         </StickyObservationTable>
@@ -96,6 +100,9 @@ const ImageClassificationObservationTable = () => {
   )
 }
 
-// ImageClassificationObservationTable.propTypes = {}
+// ImageClassificationObservationTable.propTypes = {
+//   areValidationsShowing: PropTypes.bool,
+//   observationsRows: PropTypes.node,
+// }
 
 export default ImageClassificationObservationTable
