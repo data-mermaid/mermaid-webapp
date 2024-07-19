@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { Checkbox, ListItemText, OutlinedInput } from '@mui/material'
+import { Checkbox, OutlinedInput } from '@mui/material'
 
 import language from '../../../../../language'
 import theme from '../../../../../theme'
@@ -326,7 +326,7 @@ const FinanceSolutionModal = ({
                     .getFieldProps('sustainable_finance_mechanisms')
                     .value.includes(option.id)}
                 />
-                <ListItemText primary={option.name} />
+                {option.name}
               </CustomMenuItem>
             ))}
           </CustomMuiSelect>
