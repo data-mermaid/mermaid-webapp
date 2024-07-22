@@ -1,17 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { OutlinedInput } from '@mui/material'
+import { Checkbox, OutlinedInput } from '@mui/material'
 
 import language from '../../../../../language'
 import theme from '../../../../../theme'
-import {
-  CheckRadioLabel,
-  CheckRadioWrapper,
-  Input,
-  RequiredIndicator,
-  Select,
-  Textarea,
-} from '../../../../generic/form'
+import { Input, RequiredIndicator, Select, Textarea } from '../../../../generic/form'
 import {
   CustomMenuItem,
   CustomMuiSelect,
@@ -66,6 +59,8 @@ const FinanceSolutionModal = ({
         id: financeSolution?.id,
         used_an_incubator:
           formikValues.used_an_incubator === 'none' ? null : formikValues.used_an_incubator,
+        local_enterprise: formikValues.local_enterprise === 'true',
+        gender_smart: formikValues.gender_smart === 'true',
       }
 
       const existingFinanceSolutions = indicatorSet.finance_solutions
@@ -137,10 +132,18 @@ const FinanceSolutionModal = ({
         errors.sector = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
-      if (!values.used_an_incubator) {
+      if (values.used_an_incubator === '') {
         errors.used_an_incubator = [
           { code: language.error.formValidation.required, id: 'Required' },
         ]
+      }
+
+      if (values.local_enterprise === '') {
+        errors.local_enterprise = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
+      if (values.gender_smart === '') {
+        errors.gender_smart = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       return errors
@@ -265,37 +268,32 @@ const FinanceSolutionModal = ({
           </Select>
         </StyledModalInputRow>
         <StyledModalInputRow>
-          <CheckRadioWrapper>
-            <input
-              id="local-enterprise-input"
-              aria-labelledby="local-enterprise-label"
-              type="checkbox"
-              checked={formik.getFieldProps('local_enterprise').value}
-              onChange={({ target }) => {
-                formik.setFieldValue('local_enterprise', target.checked)
-              }}
-            />
-            <CheckRadioLabel id="local-enterprise-label" htmlFor="local-enterprise-input">
-              {modalLanguage.localEnterprise}
-            </CheckRadioLabel>
-          </CheckRadioWrapper>
+          <label id="local-enterprise-label" htmlFor="local-enterprise-select">
+            {modalLanguage.localEnterprise} <RequiredIndicator />
+          </label>
+          <Select
+            id="local-enterprise-select"
+            aria-labelledby="local-enterprise-label"
+            {...formik.getFieldProps('local_enterprise')}
+          >
+            <option value="">{language.placeholders.select}</option>
+            <option value="true">{modalLanguage.yes}</option>
+            <option value="false">{modalLanguage.no}</option>
+          </Select>
         </StyledModalInputRow>
         <StyledModalInputRow>
-          <CheckRadioWrapper>
-            <input
-              id="gender-smart-input"
-              aria-labelledby="gender-smart-label"
-              type="checkbox"
-              checked={formik.getFieldProps('gender_smart').value}
-              onChange={({ target }) => {
-                formik.setFieldValue('gender_smart', target.checked)
-              }}
-            />
-
-            <CheckRadioLabel id="gender-smart-label" htmlFor="gender-smart-input">
-              {modalLanguage.genderSmart}
-            </CheckRadioLabel>
-          </CheckRadioWrapper>
+          <label id="gender-smart-label" htmlFor="gender-smart-select">
+            {modalLanguage.genderSmart} <RequiredIndicator />
+          </label>
+          <Select
+            id="gender-smart-select"
+            aria-labelledby="gender-smart-label"
+            {...formik.getFieldProps('gender_smart')}
+          >
+            <option value="">{language.placeholders.select}</option>
+            <option value="true">{modalLanguage.yes}</option>
+            <option value="false">{modalLanguage.no}</option>
+          </Select>
         </StyledModalInputRow>
         <StyledModalInputRow>
           <label
@@ -323,6 +321,11 @@ const FinanceSolutionModal = ({
                 value={option.id}
                 sx={{ fontSize: theme.typography.defaultFontSize }}
               >
+                <Checkbox
+                  checked={formik
+                    .getFieldProps('sustainable_finance_mechanisms')
+                    .value.includes(option.id)}
+                />
                 {option.name}
               </CustomMenuItem>
             ))}

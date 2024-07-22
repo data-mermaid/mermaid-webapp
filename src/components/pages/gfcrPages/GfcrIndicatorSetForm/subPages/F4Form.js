@@ -8,10 +8,12 @@ import language from '../../../../../language'
 import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import { InputRow } from '../../../../generic/form'
-import { ButtonSecondary } from '../../../../generic/buttons'
+import { ButtonPrimary } from '../../../../generic/buttons'
 import theme from '../../../../../theme'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
-const StyledButtonSecondary = styled(ButtonSecondary)`
+import { H2 } from '../../../../generic/text'
+
+const StyledButtonPrimary = styled(ButtonPrimary)`
   width: 100%;
 `
 
@@ -39,6 +41,7 @@ const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 const F4Form = ({
   formik,
   handleInputBlur,
+  handleInputFocus,
   indicatorSetType,
   indicatorSet,
   setInputToDefaultValue,
@@ -46,7 +49,8 @@ const F4Form = ({
   displayHelp,
 }) => {
   const [isUpdateFromCalc, setIsUpdateFromCalc] = useState(false)
-  const isReport = indicatorSetType === 'report'
+  // Eventually 'annual_report' can be removed if we're sure there are no indicators sets with this value in the DB
+  const isReport = indicatorSetType === 'report' || 'annual_report'
 
   const _indicatorSetChanged = useEffect(() => {
     if (isUpdateFromCalc) {
@@ -129,6 +133,7 @@ const F4Form = ({
 
   return (
     <StyledGfcrInputWrapper>
+      <H2>{gfcrIndicatorSetLanguage.f4Heading}</H2>
       {isReport && (
         <StyledInputRowDates>
           <label>
@@ -149,13 +154,13 @@ const F4Form = ({
               {...formik.getFieldProps('f4_end_date')}
               onBlur={(event) => handleInputBlur(formik, event, 'f4_end_date')}
             />
-            <StyledButtonSecondary
+            <StyledButtonPrimary
               type="button"
               onClick={handleSaveAndUpdateValues}
               disabled={saveAndUpdateValuesButtonDisabled}
             >
               {gfcrIndicatorSetLanguage.f4_saveAndUpdateValues}
-            </StyledButtonSecondary>
+            </StyledButtonPrimary>
           </StyledGfcrSubInputWrapper>
         </StyledInputRowDates>
       )}
@@ -171,6 +176,7 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_1')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_1', true)}
+          onFocus={(event) => handleInputFocus(event)}
           helperText={gfcrIndicatorSetLanguage.f4_1_helper}
           showHelperText={displayHelp}
           onKeyDown={(event) => enforceNumberInput(event)}
@@ -189,6 +195,7 @@ const F4Form = ({
           unit="%"
           {...formik.getFieldProps('f4_2')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_2', true)}
+          onFocus={(event) => handleInputFocus(event)}
           helperText={gfcrIndicatorSetLanguage.f4_2_helper}
           showHelperText={displayHelp}
           onKeyDown={(event) => enforceNumberInput(event)}
@@ -207,6 +214,7 @@ const F4Form = ({
           unit="kg/ha"
           {...formik.getFieldProps('f4_3')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_3', true)}
+          onFocus={(event) => handleInputFocus(event)}
           helperText={gfcrIndicatorSetLanguage.f4_3_helper}
           showHelperText={displayHelp}
           onKeyDown={(event) => enforceNumberInput(event)}
@@ -226,6 +234,7 @@ F4Form.propTypes = {
   formik: formikPropType.isRequired,
   indicatorSet: PropTypes.object.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
+  handleInputFocus: PropTypes.func.isRequired,
   handleFormSubmit: PropTypes.func.isRequired,
   setInputToDefaultValue: PropTypes.func.isRequired,
   indicatorSetType: PropTypes.string.isRequired,

@@ -2,8 +2,8 @@ const getFinanceSolutionInitialValues = (financeSolution) => {
   const {
     name = '',
     sector = '',
-    gender_smart = false,
-    local_enterprise = false,
+    gender_smart = '',
+    local_enterprise = '',
     sustainable_finance_mechanisms = [],
     notes = '',
   } = financeSolution || {}

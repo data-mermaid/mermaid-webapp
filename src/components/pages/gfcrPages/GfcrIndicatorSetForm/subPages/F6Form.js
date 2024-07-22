@@ -8,12 +8,14 @@ import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import { InputRow } from '../../../../generic/form'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
+import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F6Form = ({ formik, handleInputBlur, getFieldValueTotal, displayHelp }) => {
+const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFieldValueTotal }) => {
   return (
     <StyledGfcrInputWrapper>
+      <H2>{gfcrIndicatorSetLanguage.f6Heading}</H2>
       <InputRow>
         <label>
           <strong>F 6.1</strong> {gfcrIndicatorSetLanguage.f6_1}
@@ -25,6 +27,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal, displayHelp }) =>
             type="number"
             {...formik.getFieldProps('f6_1a')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1a')}
+            onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.men_helper}
             showHelperText={displayHelp}
@@ -37,6 +40,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal, displayHelp }) =>
             type="number"
             {...formik.getFieldProps('f6_1b')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1b')}
+            onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.women_helper}
             showHelperText={displayHelp}
@@ -88,6 +92,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal, displayHelp }) =>
             type="number"
             {...formik.getFieldProps('f6_2a')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_2a')}
+            onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.men_helper}
             showHelperText={displayHelp}
@@ -100,6 +105,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal, displayHelp }) =>
             type="number"
             {...formik.getFieldProps('f6_2b')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_2b')}
+            onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.women_helper}
             showHelperText={displayHelp}
@@ -152,6 +158,7 @@ const F6Form = ({ formik, handleInputBlur, getFieldValueTotal, displayHelp }) =>
 F6Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
+  handleInputFocus: PropTypes.func.isRequired,
   getFieldValueTotal: PropTypes.func.isRequired,
   displayHelp: PropTypes.string,
 }
