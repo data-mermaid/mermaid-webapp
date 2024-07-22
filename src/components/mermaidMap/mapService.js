@@ -246,37 +246,46 @@ export const loadACALayers = (map) => {
     maxZoom: 22,
   })
 
-  map.addLayer({
-    id: 'atlas-planet',
-    type: 'raster',
-    source: 'atlas-planet',
-    'source-layer': 'planet',
-    paint: {
-      'raster-opacity': rasterOpacityExpression,
+  map.addLayer(
+    {
+      id: 'atlas-planet',
+      type: 'raster',
+      source: 'atlas-planet',
+      'source-layer': 'planet',
+      paint: {
+        'raster-opacity': rasterOpacityExpression,
+      },
     },
-  })
+    'clusters',
+  ) // Add this layer before the clusters layer to prevent overlapping
 
-  map.addLayer({
-    id: 'atlas-geomorphic',
-    type: 'fill',
-    source: 'atlas-geomorphic',
-    'source-layer': 'geomorphic',
-    paint: {
-      'fill-color': geomorphicColorExpression,
-      'fill-opacity': fillGeomorphicOpacityExpression,
+  map.addLayer(
+    {
+      id: 'atlas-geomorphic',
+      type: 'fill',
+      source: 'atlas-geomorphic',
+      'source-layer': 'geomorphic',
+      paint: {
+        'fill-color': geomorphicColorExpression,
+        'fill-opacity': fillGeomorphicOpacityExpression,
+      },
     },
-  })
+    'clusters',
+  )
 
-  map.addLayer({
-    id: 'atlas-benthic',
-    type: 'fill',
-    source: 'atlas-benthic',
-    'source-layer': 'benthic',
-    paint: {
-      'fill-color': benthicColorExpression,
-      'fill-opacity': fillBenthicOpacityExpression,
+  map.addLayer(
+    {
+      id: 'atlas-benthic',
+      type: 'fill',
+      source: 'atlas-benthic',
+      'source-layer': 'benthic',
+      paint: {
+        'fill-color': benthicColorExpression,
+        'fill-opacity': fillBenthicOpacityExpression,
+      },
     },
-  })
+    'clusters',
+  )
 }
 
 export const getMapMarkersFeature = (records) => {

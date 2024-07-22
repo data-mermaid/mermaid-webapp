@@ -45,6 +45,7 @@ import CollectSampleUnitPopup from '../../SampleUnitPopups/CollectSampleUnitPopu
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 
 const EMPTY_VALUE = '-'
 
@@ -115,6 +116,8 @@ const UsersAndTransects = () => {
   const [methodsFilter, setMethodsFilter] = useState([])
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
   const [searchFilteredRows, setSearchFilteredRows] = useState([])
+
+  useDocumentTitle(`${language.pages.usersAndTransectsTable.title} - ${language.title.mermaid}`)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
