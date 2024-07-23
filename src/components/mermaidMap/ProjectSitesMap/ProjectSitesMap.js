@@ -13,6 +13,7 @@ import {
   handleMapOnWheel,
   addClusterSourceAndLayers,
   addClusterEventListeners,
+  loadACALayers,
 } from '../mapService'
 import { MapContainer, MiniMapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 import MiniMap from '../MiniMap'
@@ -46,6 +47,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       addClusterSourceAndLayers(map.current)
       addClusterEventListeners(map.current, popUpRef, choices)
       handleMapOnWheel(map.current, handleZoomDisplayHelpText)
+      loadACALayers(map.current)
       setIsMapInitialized(true)
     })
 
