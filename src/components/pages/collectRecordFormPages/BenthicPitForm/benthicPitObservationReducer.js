@@ -10,13 +10,16 @@ const benthicPitObservationReducer = (state, action) => {
     const isIntervalStart = intervalStart !== ''
     const intervalStartToUse = isIntervalStart ? Number(intervalStart) : 0
     const intervalSizeToUse = Number(intervalSize)
+    const formatInterval = (interval) => {
+      return interval % 1 === 0 ? interval.toFixed(1) : interval.toFixed(2)
+    }
 
     if (!intervalSizeToUse) {
       return observations.map((observation) => ({ ...observation, interval: '-' }))
     }
 
     observations.forEach((observation, index) => {
-      const interval = (intervalStartToUse + intervalSizeToUse * index).toFixed(2)
+      const interval = formatInterval(intervalStartToUse + intervalSizeToUse * index)
       recalculatedObservations.push({ ...observation, interval })
     })
     return recalculatedObservations
