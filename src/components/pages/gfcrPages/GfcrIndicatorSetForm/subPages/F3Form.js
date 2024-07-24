@@ -12,7 +12,7 @@ import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F3Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal }) => {
+const F3Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFieldValueTotal }) => {
   return (
     <StyledGfcrInputWrapper>
       <H2>{gfcrIndicatorSetLanguage.f3Heading}</H2>
@@ -30,6 +30,7 @@ const F3Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f3_1_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -44,6 +45,7 @@ const F3Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f3_2_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -58,6 +60,7 @@ const F3Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f3_3_helper}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -72,6 +75,7 @@ const F3Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f3_4_helper}
+        showHelperText={displayHelp}
       />
       <InputRow>
         <label>
@@ -87,6 +91,7 @@ const F3Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.men_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -99,6 +104,7 @@ const F3Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.women_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -120,6 +126,7 @@ const F3Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             onBlur={(event) => handleInputBlur(formik, event, 'f3_5c')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.youth_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -131,6 +138,7 @@ const F3Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             onBlur={(event) => handleInputBlur(formik, event, 'f3_5d')}
             onKeyDown={(event) => enforceNumberInput(event)}
             helperText={gfcrIndicatorSetLanguage.indigenous_helper}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
       </InputRow>
@@ -149,6 +157,7 @@ const F3Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.f3_6_helper}
+        showHelperText={displayHelp}
       />
       <TextareaWithLabelAndValidation
         id="f3_notes"
@@ -164,6 +173,7 @@ F3Form.propTypes = {
   handleInputBlur: PropTypes.func.isRequired,
   handleInputFocus: PropTypes.func.isRequired,
   getFieldValueTotal: PropTypes.func.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default F3Form
