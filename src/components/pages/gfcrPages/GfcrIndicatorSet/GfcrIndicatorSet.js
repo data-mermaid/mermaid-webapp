@@ -220,18 +220,20 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         setSelectedNavItem={setSelectedNavItem}
       />
       <div style={{ flex: 1 }}>
-        <GfcrIndicatorSetForm
-          formik={formik}
-          indicatorSet={indicatorSetBeingEdited}
-          setIndicatorSet={setIndicatorSetBeingEdited}
-          selectedNavItem={selectedNavItem}
-          setSelectedNavItem={setSelectedNavItem}
-          indicatorSetType={indicatorSetType}
-          handleFormSubmit={handleFormSubmit}
-          isNewIndicatorSet={!!newIndicatorSetType}
-          choices={choices}
-          displayHelp={displayHelp}
-        />
+        {!!indicatorSetBeingEdited && (
+          <GfcrIndicatorSetForm
+            formik={formik}
+            indicatorSet={indicatorSetBeingEdited}
+            setIndicatorSet={setIndicatorSetBeingEdited}
+            selectedNavItem={selectedNavItem}
+            setSelectedNavItem={setSelectedNavItem}
+            indicatorSetType={indicatorSetType}
+            handleFormSubmit={handleFormSubmit}
+            isNewIndicatorSet={!!newIndicatorSetType}
+            choices={choices}
+            displayHelp={displayHelp}
+          />
+        )}
       </div>
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />

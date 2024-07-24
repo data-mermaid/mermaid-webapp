@@ -312,6 +312,14 @@ const gfcrRevenueModal = {
   no: 'No',
 }
 
+const gfcrNewIndicatorSetModal = {
+  title: 'Create Indicator Set',
+  create: 'Create Indicator Set',
+  cancel: 'Cancel',
+  titleInput: 'Title',
+  dateInput: 'Date',
+}
+
 const clearSizeValuesModal = {
   title: `Clear Size Values`,
   prompt: `This will clear all the size values for all observations.`,
@@ -538,6 +546,7 @@ const pages = {
   },
   gfcrTable: {
     filterToolbarText: 'Filter this table by indicator set, and other things?',
+    createIndicatorSetTitle: 'Create Indicator Set',
     title: 'GFCR',
     noDataMainText: 'No indicator sets yet.',
     noDataSubText: "Select 'Create new' to add an indicator set to this project.",
@@ -1033,6 +1042,7 @@ export default {
   gfcrFinanceSolutionModal,
   gfcrInvestmentModal,
   gfcrRevenueModal,
+  gfcrNewIndicatorSetModal,
   deleteProject,
   deleteRecord,
   error,
