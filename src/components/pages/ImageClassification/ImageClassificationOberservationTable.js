@@ -1,5 +1,4 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useState } from 'react'
 import { H2 } from '../../generic/text'
 import { InputWrapper } from '../../generic/form'
 import {
@@ -7,33 +6,11 @@ import {
   StickyObservationTable,
 } from '../collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Th } from '../../generic/Table/table'
-// import PropTypes from 'prop-types';
-
-const StyledColgroup = styled('colgroup')`
-  col {
-    &.thumbnail {
-      width: 5rem;
-    }
-    &.quadrat {
-      width: 15rem;
-    }
-    &.benthicAttribute {
-      width: auto;
-    }
-    &.growthForm {
-      width: 20%;
-    }
-    &.numberOfPoints {
-      width: 20rem;
-    }
-    &.validation {
-      width: auto;
-    }
-    &.remove {
-      width: 5rem;
-    }
-  }
-`
+// import PropTypes from 'prop-types'
+import { ButtonPrimary } from '../../generic/buttons'
+import { IconUpload } from '../../icons'
+import ImageUploadModal from './ImageUploadModal'
+import { StyledColgroup, IconContainer } from './ImageClassificationObservationTable.styles'
 
 const tableHeaders = [
   { align: 'right', id: 'thumbnail-label', text: 'Thumbnail' },
@@ -74,6 +51,7 @@ const SubHeaderRow = () => (
 )
 
 const ImageClassificationObservationTable = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   return (
     <InputWrapper>
       <H2 id="table-label">Observations</H2>
@@ -96,13 +74,17 @@ const ImageClassificationObservationTable = () => {
           {/* <tbody>{observationsRows}</tbody> */}
         </StickyObservationTable>
       </StyledOverflowWrapper>
+      <ButtonPrimary type="button" onClick={() => setIsModalOpen(true)}>
+        <IconContainer>
+          <IconUpload />
+        </IconContainer>
+        Upload Photos
+      </ButtonPrimary>
+      {isModalOpen && <ImageUploadModal onClose={() => setIsModalOpen(false)} />}
     </InputWrapper>
   )
 }
 
-// ImageClassificationObservationTable.propTypes = {
-//   areValidationsShowing: PropTypes.bool,
-//   observationsRows: PropTypes.node,
-// }
+// ImageClassificationObservationTable.propTypes = {}
 
 export default ImageClassificationObservationTable
