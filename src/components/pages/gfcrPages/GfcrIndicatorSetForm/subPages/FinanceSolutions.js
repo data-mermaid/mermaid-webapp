@@ -26,7 +26,7 @@ import IconCheckLabel from './IconCheckLabel'
 
 const tableLanguage = language.pages.gfcrFinanceSolutionsTable
 
-const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices }) => {
+const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp }) => {
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -290,6 +290,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices }) => {
         setIndicatorSet={setIndicatorSet}
         choices={choices}
         onDismiss={handleFinanceSolutionModalDismiss}
+        displayHelp={displayHelp}
       />
     </>
   )
@@ -299,6 +300,7 @@ FinanceSolutions.propTypes = {
   indicatorSet: PropTypes.object.isRequired,
   setIndicatorSet: PropTypes.func.isRequired,
   choices: choicesPropType.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default FinanceSolutions

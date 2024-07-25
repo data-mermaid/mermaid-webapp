@@ -13,9 +13,14 @@ import {
 } from './library/validationMessageHelpers'
 import { HelperTextLink } from './components/generic/links'
 import styled from 'styled-components'
+import theme from './theme'
 
 const StyledLink = styled.a`
   cursor: pointer;
+`
+
+const StyledHelperLink = styled.a`
+  font-size: ${theme.typography.smallFontSize};
 `
 
 const placeholders = { select: 'Choose...' }
@@ -265,11 +270,59 @@ const gfcrFinanceSolutionModal = {
   titleAdd: 'Add Finance Solution',
   titleUpdate: 'Update Finance Solution',
   name: 'Finance solution / business name',
+  getNameHelper: () => (
+    <>
+      Name helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   sector: 'Sector',
+  getSectorHelper: () => (
+    <>
+      Sector helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   usedAnIncubator: 'Used an incubator?',
+  getUsedAnIncubatorHelper: () => (
+    <>
+      Used an incubator helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   localEnterprise: 'Local enterprise',
+  getLocalEnterpriseHelper: () => (
+    <>
+      Local enterprise helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   genderSmart: 'Gender 2X Criteria',
+  getGenderSmartHelper: () => (
+    <>
+      Gender smart helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   sustainableFinanceMechanisms: 'Sustainable finance mechanisms',
+  getSustainableFinanceMechanismsHelper: () => (
+    <>
+      Sustainable finance mechanisms helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   notes: 'Notes',
   add: 'Add Finance Solution Row',
   save: 'Save Finance Solution Row',
@@ -284,9 +337,41 @@ const gfcrInvestmentModal = {
   titleAdd: 'Add Investment',
   titleUpdate: 'Update Investment',
   financeSolution: 'Finance solution (select from previous input)',
+  getFinanceSolutionHelper: () => (
+    <>
+      Finance solution helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   investmentSource: 'Investment source',
+  getInvestmentSourceHelper: () => (
+    <>
+      Investment source helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   investmentType: 'Investment type',
+  getInvestmentTypeHelper: () => (
+    <>
+      Investment type helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   investmentAmount: 'Investment amount',
+  getInvestmentAmountHelper: () => (
+    <>
+      Investment amount helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   notes: 'Notes',
   add: 'Add Investment Row',
   save: 'Save Investment Row',
@@ -299,9 +384,41 @@ const gfcrRevenueModal = {
   titleAdd: 'Add Revenue Stream',
   titleUpdate: 'Update Revenue Stream',
   financeSolution: 'Finance solution (select from previous input)',
+  getFinanceSolutionHelper: () => (
+    <>
+      Finance solution helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   revenueType: 'Revenue type',
+  getRevenueTypeHelper: () => (
+    <>
+      Revenue type helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   sustainableRevenueStream: 'Sustainable revenue stream',
+  getSustainableRevenueStreamHelper: () => (
+    <>
+      Sustainable revenue stream helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   annualRevenue: 'Annual revenue',
+  getAnnualRevenueHelper: () => (
+    <>
+      Annual revenue helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   notes: 'Notes',
   add: 'Add Revenue Row',
   save: 'Save Revenue Row',
