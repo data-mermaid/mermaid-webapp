@@ -545,7 +545,7 @@ const pages = {
     copyButtonText: 'Copy selected MRs to project',
   },
   gfcrTable: {
-    filterToolbarText: 'Filter this table by indicator set, and other things?',
+    filterToolbarText: 'Filter this table by title or date',
     createIndicatorSetTitle: 'Create Indicator Set',
     title: 'GFCR',
     noDataMainText: 'No indicator sets yet.',

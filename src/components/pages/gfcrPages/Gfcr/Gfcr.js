@@ -152,7 +152,7 @@ const Gfcr = () => {
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
-      const keys = ['values.title.props.children', 'values.type', 'values.report_date']
+      const keys = ['values.title.props.children', 'values.report_date']
 
       const queryTerms = splitSearchQueryStrings(query)
       const filteredRows =
