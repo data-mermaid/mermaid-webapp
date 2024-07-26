@@ -27,7 +27,7 @@ const F1Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         {...formik.getFieldProps('f1_1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f1_1')}
         onFocus={(event) => handleInputFocus(event)}
-        helperText={gfcrIndicatorSetLanguage.f1_1_helper}
+        helperText={gfcrIndicatorSetLanguage.getF1_1_helper()}
         showHelperText={displayHelp}
         onKeyDown={(event) => enforceNumberInput(event)}
       />

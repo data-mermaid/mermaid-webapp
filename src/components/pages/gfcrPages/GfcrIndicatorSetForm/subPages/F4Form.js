@@ -177,7 +177,7 @@ const F4Form = ({
           {...formik.getFieldProps('f4_1')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_1', true)}
           onFocus={(event) => handleInputFocus(event)}
-          helperText={gfcrIndicatorSetLanguage.f4_1_helper}
+          helperText={gfcrIndicatorSetLanguage.getF4_1_helper()}
           showHelperText={displayHelp}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
@@ -196,7 +196,7 @@ const F4Form = ({
           {...formik.getFieldProps('f4_2')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_2', true)}
           onFocus={(event) => handleInputFocus(event)}
-          helperText={gfcrIndicatorSetLanguage.f4_2_helper}
+          helperText={gfcrIndicatorSetLanguage.getF4_2_helper()}
           showHelperText={displayHelp}
           onKeyDown={(event) => enforceNumberInput(event)}
         />
@@ -215,7 +215,7 @@ const F4Form = ({
           {...formik.getFieldProps('f4_3')}
           onBlur={(event) => handleInputBlur(formik, event, 'f4_3', true)}
           onFocus={(event) => handleInputFocus(event)}
-          helperText={gfcrIndicatorSetLanguage.f4_3_helper}
+          helperText={gfcrIndicatorSetLanguage.getF4_3_helper()}
           showHelperText={displayHelp}
           onKeyDown={(event) => enforceNumberInput(event)}
         />

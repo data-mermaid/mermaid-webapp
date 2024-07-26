@@ -28,7 +28,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         onBlur={(event) => handleInputBlur(formik, event, 'f5_1')}
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
-        helperText={gfcrIndicatorSetLanguage.f5_1_helper}
+        helperText={gfcrIndicatorSetLanguage.getF5_1_helper()}
         showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
@@ -43,7 +43,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         onBlur={(event) => handleInputBlur(formik, event, 'f5_2')}
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
-        helperText={gfcrIndicatorSetLanguage.f5_2_helper}
+        helperText={gfcrIndicatorSetLanguage.getF5_2_helper()}
         showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
@@ -58,7 +58,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         onBlur={(event) => handleInputBlur(formik, event, 'f5_3')}
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
-        helperText={gfcrIndicatorSetLanguage.f5_3_helper}
+        helperText={gfcrIndicatorSetLanguage.getF5_3_helper()}
         showHelperText={displayHelp}
       />
       <InputRow>
@@ -74,7 +74,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4a')}
             onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.men_helper}
+            helperText={gfcrIndicatorSetLanguage.getF5_4_men_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
@@ -87,7 +87,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4b')}
             onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.women_helper}
+            helperText={gfcrIndicatorSetLanguage.getF5_4_women_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
@@ -109,7 +109,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f5_4c')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4c')}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.youth_helper}
+            helperText={gfcrIndicatorSetLanguage.getF5_4_youth_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
@@ -121,7 +121,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f5_4d')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4d')}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.indigenous_helper}
+            helperText={gfcrIndicatorSetLanguage.getF5_4_indigenous_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
@@ -140,7 +140,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         onBlur={(event) => handleInputBlur(formik, event, 'f5_5')}
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
-        helperText={gfcrIndicatorSetLanguage.f5_5_helper}
+        helperText={gfcrIndicatorSetLanguage.getF5_5_helper()}
         showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
@@ -157,7 +157,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         onBlur={(event) => handleInputBlur(formik, event, 'f5_6')}
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
-        helperText={gfcrIndicatorSetLanguage.f5_6_helper}
+        helperText={gfcrIndicatorSetLanguage.getF5_6_helper()}
         showHelperText={displayHelp}
       />
       <TextareaWithLabelAndValidation

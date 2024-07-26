@@ -22,7 +22,7 @@ import {
 import Modal, { RightFooter } from '../../../generic/Modal/Modal'
 import SaveButton from '../GfcrIndicatorSetForm/modals/SaveButton'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
-import { Input, RequiredIndicator } from '../../../generic/form'
+import InputNoRowWithLabelAndValidation from '../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 
 const modalLanguage = language.gfcrNewIndicatorSetModal
 
@@ -91,6 +91,11 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
       if (!values.title) {
         errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
+
+      if (!values.report_date) {
+        errors.report_date = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
       return errors
     },
   })
@@ -128,24 +133,23 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
       mainContent={
         <form id="new-indicator-set-modal-form" onSubmit={formik.handleSubmit}>
           <StyledModalInputRow>
-            <label id="indicator-set-title-label" htmlFor="indicator-set-title-input">
-              {modalLanguage.titleInput} <RequiredIndicator />
-            </label>
-            <Input
+            <InputNoRowWithLabelAndValidation
+              required
+              label={language.pages.gfcrIndicatorSet.indicatorSetTitle}
               id="indicator-set-title-input"
-              aria-labelledby="indicator-set-title-label"
+              type="text"
               {...formik.getFieldProps('title')}
+              helperText={language.pages.gfcrIndicatorSet.getIndicatorSetTitleHelperText()}
             />
           </StyledModalInputRow>
           <StyledModalInputRow>
-            <label id="indicator-set-date-label" htmlFor="indicator-set-date-input">
-              {modalLanguage.dateInput} <RequiredIndicator />
-            </label>
-            <Input
+            <InputNoRowWithLabelAndValidation
+              required
+              label={language.pages.gfcrIndicatorSet.indicatorSetReportingDate}
               id="indicator-set-date-input"
-              aria-labelledby="indicator-set-date-label"
               type="date"
               {...formik.getFieldProps('report_date')}
+              helperText={language.pages.gfcrIndicatorSet.getIndicatorSetReportingDateHelperText()}
             />
           </StyledModalInputRow>
         </form>
