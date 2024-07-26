@@ -197,6 +197,11 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       if (!values.title) {
         errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
+
+      if (!values.report_date) {
+        errors.report_date = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
       return errors
     },
   })

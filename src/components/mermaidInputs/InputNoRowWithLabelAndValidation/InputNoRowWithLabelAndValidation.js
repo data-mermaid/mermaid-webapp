@@ -89,7 +89,7 @@ const InputNoRowWithLabelAndValidation = ({
 
           {renderItemWithinInput || null}
         </InputContainer>
-        {showHelperText || internalShowHelperText ? (
+        {internalShowHelperText ? (
           <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>
         ) : null}
       </div>

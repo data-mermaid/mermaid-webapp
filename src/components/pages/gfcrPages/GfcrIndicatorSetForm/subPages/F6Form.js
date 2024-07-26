@@ -29,7 +29,7 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1a')}
             onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.men_helper}
+            helperText={gfcrIndicatorSetLanguage.getF6_1_men_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
@@ -42,7 +42,7 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1b')}
             onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.women_helper}
+            helperText={gfcrIndicatorSetLanguage.getF6_1_women_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
@@ -64,7 +64,7 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f6_1c')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1c')}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.youth_helper}
+            helperText={gfcrIndicatorSetLanguage.getF6_1_youth_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
@@ -76,7 +76,7 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f6_1d')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1d')}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.indigenous_helper}
+            helperText={gfcrIndicatorSetLanguage.getF6_1_indigenous_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
@@ -94,7 +94,7 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             onBlur={(event) => handleInputBlur(formik, event, 'f6_2a')}
             onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.men_helper}
+            helperText={gfcrIndicatorSetLanguage.getF6_2_men_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
@@ -107,7 +107,7 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             onBlur={(event) => handleInputBlur(formik, event, 'f6_2b')}
             onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.women_helper}
+            helperText={gfcrIndicatorSetLanguage.getF6_2_women_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
@@ -129,7 +129,7 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f6_2c')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_2c')}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.youth_helper}
+            helperText={gfcrIndicatorSetLanguage.getF6_2_youth_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
@@ -141,7 +141,7 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f6_2d')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_2d')}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.indigenous_helper}
+            helperText={gfcrIndicatorSetLanguage.getF6_2_indigenous_helper()}
             showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
