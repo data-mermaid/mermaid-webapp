@@ -24,7 +24,7 @@ const StyledHelperLink = styled.a`
 `
 
 const acaUrl = 'https://allencoralatlas.org/atlas'
-const gfcrPdfUrl = 'https://public.datamermaid.org/GFCR-Monitoring-and-Evaluation-Toolkit.pdf'
+const gfcrPdfUrl = `https://public.datamermaid.org/GFCR-Monitoring-and-Evaluation-Toolkit.pdf?nocache=${Date.now()}`
 
 const AcaLink = () => (
   <StyledHelperLink href={acaUrl} target="_blank">
