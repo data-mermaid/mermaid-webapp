@@ -145,6 +145,7 @@ const GfcrIndicatorSetForm = ({
           indicatorSet={indicatorSet}
           setIndicatorSet={setIndicatorSet}
           choices={choices}
+          displayHelp={displayHelp}
         />
       )}
       {selectedNavItem === 'investments' && (
@@ -153,6 +154,7 @@ const GfcrIndicatorSetForm = ({
           setIndicatorSet={setIndicatorSet}
           choices={choices}
           setSelectedNavItem={setSelectedNavItem}
+          displayHelp={displayHelp}
         />
       )}
       {selectedNavItem === 'revenues' && (
@@ -161,6 +163,7 @@ const GfcrIndicatorSetForm = ({
           setIndicatorSet={setIndicatorSet}
           choices={choices}
           setSelectedNavItem={setSelectedNavItem}
+          displayHelp={displayHelp}
         />
       )}
     </>

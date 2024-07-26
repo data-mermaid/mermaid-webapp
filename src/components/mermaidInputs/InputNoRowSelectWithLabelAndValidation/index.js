@@ -1,0 +1,3 @@
+import InputNoRowSelectWithLabelAndValidation from './InputNoRowSelectWithLabelAndValidation'
+
+export default InputNoRowSelectWithLabelAndValidation
