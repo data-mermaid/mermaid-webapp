@@ -7,6 +7,7 @@
 import '@testing-library/jest-dom'
 import { configure } from '@testing-library/react'
 import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSuccessful'
+import { mockDocumentCookie } from './testUtilities/mockDocumentCookie'
 
 jest.setTimeout(300000)
 window.URL.createObjectURL = () => {}
@@ -59,10 +60,18 @@ beforeAll(() => {
   mockMermaidApiAllSuccessful.listen()
   global.IS_REACT_ACT_ENVIRONMENT = !!process.env.REACT_APP_IGNORE_TESTING_ACT_WARNINGS // suppress missing act warnings or not, defaults to false
 })
+beforeEach(() => {
+  const auth0ClientId = process.env.REACT_APP_AUTH0_CLIENT_ID || 'default-client-id'
+  const auth0CookieName = `auth0.${auth0ClientId}.is.authenticated=true`
+  const mockCookie = `_legacy_${auth0CookieName}; ${auth0CookieName};`
+
+  mockDocumentCookie(mockCookie)
+})
 afterEach(() => {
   mockMermaidApiAllSuccessful.resetHandlers()
   window.sessionStorage.clear()
   window.localStorage.clear()
+  mockDocumentCookie('')
 })
 afterAll(() => {
   mockMermaidApiAllSuccessful.close()

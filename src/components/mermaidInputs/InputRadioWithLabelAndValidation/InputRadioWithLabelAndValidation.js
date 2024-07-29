@@ -7,16 +7,16 @@ import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const InputRadioWithLabelAndValidation = ({
-  required,
+  required = false,
   id,
   label,
   options,
-  validationMessages,
-  ignoreNonObservationFieldValidations,
-  resetNonObservationFieldValidations,
-  validationType,
-  testId,
-  additionalText,
+  validationMessages = [],
+  ignoreNonObservationFieldValidations = () => {},
+  resetNonObservationFieldValidations = () => {},
+  validationType = undefined,
+  testId = undefined,
+  additionalText = null,
   ...restOfProps
 }) => {
   const optionsList = options.map(({ label: optionLabel, value: optionValue }) => {
@@ -63,16 +63,6 @@ InputRadioWithLabelAndValidation.propTypes = {
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
   additionalText: PropTypes.node,
-}
-
-InputRadioWithLabelAndValidation.defaultProps = {
-  required: false,
-  ignoreNonObservationFieldValidations: () => {},
-  resetNonObservationFieldValidations: () => {},
-  testId: undefined,
-  validationMessages: [],
-  validationType: undefined,
-  additionalText: null,
 }
 
 export default InputRadioWithLabelAndValidation

@@ -5,6 +5,8 @@ import theme from '../../../theme'
 export const SliderContainer = styled.div`
   position: absolute;
   width: 270px;
+  overflow-y: auto;
+  height: 66vh;
   right: ${(props) => (props.isOpen ? '0px' : '-270px')};
   background: ${(props) => props.isOpen && 'rgba(255, 255, 255, 1)'};
   top: 1px;

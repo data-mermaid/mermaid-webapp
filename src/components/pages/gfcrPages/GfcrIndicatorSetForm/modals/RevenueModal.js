@@ -2,13 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 
 import language from '../../../../../language'
-import {
-  CheckRadioLabel,
-  CheckRadioWrapper,
-  RequiredIndicator,
-  Select,
-  Textarea,
-} from '../../../../generic/form'
+import { Textarea } from '../../../../generic/form'
 import Modal, { RightFooter } from '../../../../generic/Modal/Modal'
 import {
   StyledModalInputRow,
@@ -20,14 +14,15 @@ import { buttonGroupStates } from '../../../../../library/buttonGroupStates'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
 import SaveButton from './SaveButton'
-import { getOptionList } from './modalHelpers'
 import { getRevenueInitialValues } from './revenueInitialValues'
-import InputNumberNoScrollWithUnit from '../../../../generic/InputNumberNoScrollWithUnit'
 import { getToastArguments } from '../../../../../library/getToastArguments'
 import { toast } from 'react-toastify'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useParams } from 'react-router-dom'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
+import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
+import { getOptions } from '../../../../../library/getOptions'
+import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 
 const modalLanguage = language.gfcrRevenueModal
 
@@ -39,6 +34,7 @@ const RevenueModal = ({
   revenue = undefined,
   choices,
   financeSolutions,
+  displayHelp,
 }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
@@ -59,6 +55,7 @@ const RevenueModal = ({
       const formattedValues = {
         ...formikValues,
         id: revenue?.id,
+        sustainable_revenue_stream: formikValues.sustainable_revenue_stream === 'true',
       }
 
       // Find the finance solution with the id which matches revenue.finance_solution
@@ -141,6 +138,12 @@ const RevenueModal = ({
 
       if (!values.revenue_type) {
         errors.revenue_type = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
+      if (values.sustainable_revenue_stream === '') {
+        errors.sustainable_revenue_stream = [
+          { code: language.error.formValidation.required, id: 'Required' },
+        ]
       }
 
       if (values.annual_revenue === '') {
@@ -240,60 +243,52 @@ const RevenueModal = ({
     return (
       <form id="revenue-form" onSubmit={formik.handleSubmit}>
         <StyledModalInputRow>
-          <label id="finance-solution-label" htmlFor="finance-solution-select">
-            {modalLanguage.financeSolution} <RequiredIndicator />
-          </label>
-          <Select
+          <InputNoRowSelectWithLabelAndValidation
+            label={modalLanguage.financeSolution}
             id="finance-solution-select"
-            aria-labelledby="finance-solution-label"
             {...formik.getFieldProps('finance_solution')}
-          >
-            <option value="">{language.placeholders.select}</option>
-            {getOptionList(financeSolutions.map((fs) => ({ id: fs.id, name: fs.name })))}
-          </Select>
+            options={financeSolutions.map((fs) => ({ value: fs.id, label: fs.name }))}
+            helperText={modalLanguage.getFinanceSolutionHelper()}
+            showHelperText={displayHelp}
+            required={true}
+          />
         </StyledModalInputRow>
         <StyledModalInputRow>
-          <label id="revenue-type-label" htmlFor="revenue-type-select">
-            {modalLanguage.revenueType} <RequiredIndicator />
-          </label>
-          <Select
+          <InputNoRowSelectWithLabelAndValidation
+            label={modalLanguage.revenueType}
             id="revenue-type-select"
-            aria-labelledby="revenue-type-label"
             {...formik.getFieldProps('revenue_type')}
-          >
-            <option value="">{language.placeholders.select}</option>
-            {getOptionList(choices.revenuetypes.data)}
-          </Select>
+            options={getOptions(choices.revenuetypes.data)}
+            helperText={modalLanguage.getRevenueTypeHelper()}
+            showHelperText={displayHelp}
+            required={true}
+          />
         </StyledModalInputRow>
         <StyledModalInputRow>
-          <CheckRadioWrapper>
-            <input
-              id="sustainable-revenue-stream-input"
-              aria-labelledby="sustainable-revenue-stream-label"
-              type="checkbox"
-              checked={formik.getFieldProps('sustainable_revenue_stream').value}
-              onChange={({ target }) => {
-                formik.setFieldValue('sustainable_revenue_stream', target.checked)
-              }}
-            />
-            <CheckRadioLabel
-              id="sustainable-revenue-stream-label"
-              htmlFor="sustainable-revenue-stream-input"
-            >
-              {modalLanguage.sustainableRevenueStream}
-            </CheckRadioLabel>
-          </CheckRadioWrapper>
+          <InputNoRowSelectWithLabelAndValidation
+            label={modalLanguage.sustainableRevenueStream}
+            id="sustainable-revenue-stream-select"
+            {...formik.getFieldProps('sustainable_revenue_stream')}
+            options={[
+              { value: 'true', label: modalLanguage.yes },
+              { value: 'false', label: modalLanguage.no },
+            ]}
+            helperText={modalLanguage.getSustainableRevenueStreamHelper()}
+            showHelperText={displayHelp}
+            required={true}
+          />
         </StyledModalInputRow>
         <StyledModalInputRow>
-          <label id="annual-revenue-label" htmlFor="annual-revenue-input">
-            {modalLanguage.annualRevenue} <RequiredIndicator />
-          </label>
-          <InputNumberNoScrollWithUnit
-            aria-labelledby={'annual-revenue-label'}
+          <InputNoRowWithLabelAndValidation
+            label={modalLanguage.annualRevenue}
             id="annual-revenue-input"
+            type="number"
             unit="USD $"
             alignUnitsLeft={true}
             {...formik.getFieldProps('annual_revenue')}
+            helperText={modalLanguage.getAnnualRevenueHelper()}
+            showHelperText={displayHelp}
+            required={true}
           />
         </StyledModalInputRow>
         <hr />
@@ -333,6 +328,7 @@ RevenueModal.propTypes = {
   financeSolutions: PropTypes.array.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default RevenueModal

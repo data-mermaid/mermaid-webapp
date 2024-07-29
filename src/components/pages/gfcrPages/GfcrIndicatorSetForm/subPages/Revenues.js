@@ -26,7 +26,7 @@ import RevenueModal from '../modals/RevenueModal'
 
 const tableLanguage = language.pages.gfcrRevenuesTable
 
-const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem }) => {
+const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, displayHelp }) => {
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -273,6 +273,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem }
         onDismiss={handleRevenueModalDismiss}
         indicatorSet={indicatorSet}
         setIndicatorSet={setIndicatorSet}
+        displayHelp={displayHelp}
       />
     </>
   )
@@ -283,6 +284,7 @@ Revenues.propTypes = {
   setIndicatorSet: PropTypes.func.isRequired,
   choices: choicesPropType.isRequired,
   setSelectedNavItem: PropTypes.func.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default Revenues

@@ -79,7 +79,12 @@ const methods = [
   'Habitat Complexity',
 ]
 
-const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, disabled }) => {
+const MethodsFilterDropDown = ({
+  handleMethodsColumnFilterChange,
+  value = [],
+  id = 'methods-filter-search',
+  disabled = false,
+}) => {
   const handleChange = (event) => {
     const eventValue = event.target.value
 
@@ -112,12 +117,6 @@ const MethodsFilterDropDown = ({ handleMethodsColumnFilterChange, value, id, dis
       </FormControl>
     </div>
   )
-}
-
-MethodsFilterDropDown.defaultProps = {
-  id: 'methods-filter-search',
-  disabled: false,
-  value: [],
 }
 
 MethodsFilterDropDown.propTypes = {

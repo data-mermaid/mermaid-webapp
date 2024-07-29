@@ -45,9 +45,9 @@ const StyledColgroup = styled('colgroup')`
 
 const PercentCoverObservationTable = ({
   areValidationsShowing,
-  collectRecord,
+  collectRecord = undefined,
   ignoreObservationValidations,
-  observationsReducer,
+  observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
   testId,
@@ -378,11 +378,6 @@ PercentCoverObservationTable.propTypes = {
   resetObservationValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   testId: PropTypes.string.isRequired,
-}
-
-PercentCoverObservationTable.defaultProps = {
-  collectRecord: undefined,
-  observationsReducer: [],
 }
 
 export default PercentCoverObservationTable

@@ -9,7 +9,12 @@ import {
 import { Table } from '../../../generic/Table/table'
 import TableRowItem from '../../../generic/Table/TableRowItem/TableRowItem'
 
-const SubmittedBenthicPitInfoTable = ({ choices, sites, managementRegimes, submittedRecord }) => {
+const SubmittedBenthicPitInfoTable = ({
+  choices,
+  sites,
+  managementRegimes,
+  submittedRecord = undefined,
+}) => {
   const { site, management, sample_date } = submittedRecord.sample_event
 
   const {
@@ -63,10 +68,6 @@ SubmittedBenthicPitInfoTable.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   submittedRecord: benthicPitRecordPropType,
-}
-
-SubmittedBenthicPitInfoTable.defaultProps = {
-  submittedRecord: undefined,
 }
 
 export default SubmittedBenthicPitInfoTable

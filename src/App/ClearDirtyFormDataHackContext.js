@@ -9,7 +9,7 @@ import React, { createContext, useContext } from 'react'
 // CreateBrowserHistory was also considered, however it didnt trigger in all cases
 const ClearPersistedFormDataHackContext = createContext()
 
-const ClearPersistedFormDataHackProvider = ({ children, value }) => {
+const ClearPersistedFormDataHackProvider = ({ children, value = {} }) => {
   return (
     <ClearPersistedFormDataHackContext.Provider value={value}>
       {children}
@@ -34,7 +34,5 @@ ClearPersistedFormDataHackProvider.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   value: PropTypes.any,
 }
-
-ClearPersistedFormDataHackProvider.defaultProps = { value: {} }
 
 export { ClearPersistedFormDataHackProvider, useRouterFromClearPersistedFormDataHack }

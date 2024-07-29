@@ -30,7 +30,7 @@ import language from '../../../../language'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
 
-const FishBeltForm = ({ isNewRecord }) => {
+const FishBeltForm = ({ isNewRecord = true }) => {
   const { recordId, projectId } = useParams()
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
@@ -320,10 +320,6 @@ const FishBeltForm = ({ isNewRecord }) => {
 
 FishBeltForm.propTypes = {
   isNewRecord: PropTypes.bool,
-}
-
-FishBeltForm.defaultProps = {
-  isNewRecord: true,
 }
 
 export default FishBeltForm

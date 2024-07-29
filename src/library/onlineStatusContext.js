@@ -5,7 +5,7 @@ import axios from 'axios'
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const OnlineStatusContext = createContext()
 
-const OnlineStatusProvider = ({ children, value }) => {
+const OnlineStatusProvider = ({ children, value = {} }) => {
   const [isNavigatorOnline, setIsNavigatorOnline] = useState(navigator.onLine)
   const [isServerReachable, setIsServerReachable] = useState(true)
   const [hasUserTurnedAppOffline, setHasUserTurnedAppOffline] = useState(
@@ -117,7 +117,5 @@ OnlineStatusProvider.propTypes = {
   children: PropTypes.node.isRequired,
   value: PropTypes.shape({ isAppOnline: PropTypes.bool }),
 }
-
-OnlineStatusProvider.defaultProps = { value: {} }
 
 export { OnlineStatusProvider, useOnlineStatus }

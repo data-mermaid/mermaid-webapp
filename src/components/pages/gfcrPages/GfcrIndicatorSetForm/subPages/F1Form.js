@@ -7,16 +7,18 @@ import language from '../../../../../language'
 import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
 import { StyledGfcrInputWrapper } from './subPages.styles'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
+import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F1Form = ({ formik, handleInputBlur }) => {
+const F1Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
   return (
     <StyledGfcrInputWrapper>
+      <H2>{gfcrIndicatorSetLanguage.f1Heading}</H2>
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 1.1</b> {gfcrIndicatorSetLanguage.f1_1}
+            <strong>F 1.1</strong> {gfcrIndicatorSetLanguage.f1_1}
           </>
         }
         id="f1_1"
@@ -24,7 +26,9 @@ const F1Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f1_1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f1_1')}
-        helperText={gfcrIndicatorSetLanguage.f1_1_helper}
+        onFocus={(event) => handleInputFocus(event)}
+        helperText={gfcrIndicatorSetLanguage.getF1_1_helper()}
+        showHelperText={displayHelp}
         onKeyDown={(event) => enforceNumberInput(event)}
       />
       <TextareaWithLabelAndValidation
@@ -38,7 +42,9 @@ const F1Form = ({ formik, handleInputBlur }) => {
 
 F1Form.propTypes = {
   formik: formikPropType.isRequired,
+  displayHelp: PropTypes.bool,
   handleInputBlur: PropTypes.func.isRequired,
+  handleInputFocus: PropTypes.func.isRequired,
 }
 
 export default F1Form

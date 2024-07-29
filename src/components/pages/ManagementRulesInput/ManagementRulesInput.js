@@ -40,13 +40,13 @@ const partialRestrictionOptions = [
 ]
 
 const ManagementRulesInput = ({
-  id,
-  label,
-  managementFormValues,
+  id = 'rules',
+  label = 'Rules',
+  managementFormValues = {},
   onChange,
   required,
-  validationMessages,
-  validationType,
+  validationMessages = undefined,
+  validationType = undefined,
   ...restOfProps
 }) => {
   const getManagementRulesRadioInputValue = (rules) => {
@@ -244,14 +244,6 @@ ManagementRulesInput.propTypes = {
   required: PropTypes.bool.isRequired,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
-}
-
-ManagementRulesInput.defaultProps = {
-  id: 'rules',
-  label: 'Rules',
-  managementFormValues: {},
-  validationMessages: undefined,
-  validationType: undefined,
 }
 
 export default ManagementRulesInput

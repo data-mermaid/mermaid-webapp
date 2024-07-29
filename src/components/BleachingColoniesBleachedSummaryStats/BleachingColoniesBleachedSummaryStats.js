@@ -2,7 +2,7 @@ import React from 'react'
 import { observationsColoniesBleachedPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { ObservationsSummaryStats, Td, Th, Tr } from '../generic/Table/table'
 
-const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached }) => {
+const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached = [] }) => {
   const getTotalOfColonies = () => {
     const totals = observationsColoniesBleached.map((item) => {
       return (
@@ -83,10 +83,6 @@ const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached })
 
 BleachincColoniesBleachedSummaryStats.propTypes = {
   observationsColoniesBleached: observationsColoniesBleachedPropType,
-}
-
-BleachincColoniesBleachedSummaryStats.defaultProps = {
-  observationsColoniesBleached: [],
 }
 
 export default BleachincColoniesBleachedSummaryStats

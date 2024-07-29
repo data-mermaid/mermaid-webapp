@@ -3,7 +3,7 @@ import React, { createContext, useContext } from 'react'
 
 const HttpResponseErrorHandlerContext = createContext()
 
-const HttpResponseErrorHandlerProvider = ({ children, value }) => {
+const HttpResponseErrorHandlerProvider = ({ children, value = {} }) => {
   return (
     <HttpResponseErrorHandlerContext.Provider value={value}>
       {children}
@@ -26,10 +26,6 @@ const useHttpResponseErrorHandler = () => {
 HttpResponseErrorHandlerProvider.propTypes = {
   children: PropTypes.node.isRequired,
   value: PropTypes.func,
-}
-
-HttpResponseErrorHandlerProvider.defaultProps = {
-  value: {},
 }
 
 export { HttpResponseErrorHandlerProvider, useHttpResponseErrorHandler }

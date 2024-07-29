@@ -1,16 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
+import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconCloseCircle, IconGfcr } from '../icons'
 import language from '../../language'
 import theme from '../../theme'
+import { useNavigate } from 'react-router-dom'
+import useCurrentProjectPath from '../../library/useCurrentProjectPath'
+import Modal, { RightFooter } from '../generic/Modal/Modal'
+
+const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DASHBOARD_LINK
+const { gfcrCallout: gfcrCalloutLanguage } = language.pages.projectInfo
 
 const StyledGfcrCallout = styled('div')`
   padding: 10px;
   margin-bottom: 1em;
   background-color: ${theme.color.grey5};
+`
+
+const StyledGfcrEnableButtonsContainer = styled('div')`
+  display: flex;
+  gap: 2rem;
 `
 
 const buttonStyle = `
@@ -37,7 +48,7 @@ const StyledIconCloseCircle = styled(IconCloseCircle)`
   ${iconStyle}
 `
 
-const StyledIconIconGfcr = styled(IconGfcr)`
+const StyledIconGfcr = styled(IconGfcr)`
   ${iconStyle}
 `
 
@@ -45,36 +56,104 @@ const StyledParagraph = styled('p')`
   max-width: ${theme.spacing.maxTextWidth};
 `
 
-const GfcrCallout = ({ isGfcr, handleUpdateIncludesGfcr }) => {
-  return (
-    <StyledGfcrCallout>
-      <h3>{language.pages.projectInfo.gfcrCalloutHeading}</h3>
-      {isGfcr ? (
-        <>
-          <StyledParagraph>{language.pages.projectInfo.gfcrRemoveParagraph}</StyledParagraph>
-          <StyledButtonSecondary type="button" onClick={() => handleUpdateIncludesGfcr(false)}>
-            <StyledIconCloseCircle inline={true} /> {language.pages.projectInfo.gfcrRemoveButton}
-          </StyledButtonSecondary>
-        </>
-      ) : (
-        <>
-          <StyledParagraph>{language.pages.projectInfo.gfcrAddParagraph}</StyledParagraph>
-          <StyledButtonPrimary type="button" onClick={() => handleUpdateIncludesGfcr(true)}>
-            <StyledIconIconGfcr /> {language.pages.projectInfo.gfcrAddButton}
-          </StyledButtonPrimary>
-        </>
-      )}
-    </StyledGfcrCallout>
+const DisableIndicatorsModal = ({ isOpen = false, disableGfcr, onDismiss }) => {
+  const footerContent = (
+    <RightFooter>
+      <ButtonSecondary onClick={onDismiss}>{'Cancel'}</ButtonSecondary>
+      <ButtonCaution
+        onClick={() => {
+          disableGfcr()
+          onDismiss()
+        }}
+      >
+        {gfcrCalloutLanguage.disableButton}
+      </ButtonCaution>
+    </RightFooter>
   )
+
+  const content = (
+    <>
+      Disabling GFCR Indicators for this project will not delete them, but just hide them from the{' '}
+      <a href={mermaidDashboardLink} target="_blank" rel="noreferrer">
+        Global Dashboard
+      </a>
+      . No data will be lost. You can re-enable them at any time.
+    </>
+  )
+
+  return (
+    <Modal
+      title={gfcrCalloutLanguage.disableButton}
+      isOpen={isOpen}
+      onDismiss={onDismiss}
+      mainContent={content}
+      footerContent={footerContent}
+    />
+  )
+}
+
+const GfcrCallout = ({ isGfcr = false, isLoading = false, handleUpdateIncludesGfcr }) => {
+  const navigate = useNavigate()
+  const currentProjectPath = useCurrentProjectPath()
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  return (
+    <>
+      <StyledGfcrCallout>
+        <h3>{gfcrCalloutLanguage.calloutHeading}</h3>
+        {isGfcr ? (
+          <>
+            <StyledParagraph>{gfcrCalloutLanguage.removeParagraph}</StyledParagraph>
+            <StyledGfcrEnableButtonsContainer>
+              <StyledButtonPrimary
+                type="button"
+                disabled={isLoading}
+                onClick={() => navigate(`${currentProjectPath}/gfcr/`)}
+              >
+                <StyledIconGfcr inline={true} /> {gfcrCalloutLanguage.goToButton}
+              </StyledButtonPrimary>
+              <StyledButtonSecondary
+                type="button"
+                disabled={isLoading}
+                onClick={() => setIsModalOpen(true)}
+              >
+                <StyledIconCloseCircle inline={true} /> {gfcrCalloutLanguage.disableButton}
+              </StyledButtonSecondary>
+            </StyledGfcrEnableButtonsContainer>
+          </>
+        ) : (
+          <>
+            <StyledParagraph>{gfcrCalloutLanguage.addParagraph}</StyledParagraph>
+            <StyledButtonPrimary
+              type="button"
+              disabled={isLoading}
+              onClick={() => handleUpdateIncludesGfcr(true)}
+            >
+              <StyledIconGfcr /> {gfcrCalloutLanguage.enableButton}
+            </StyledButtonPrimary>
+          </>
+        )}
+      </StyledGfcrCallout>
+      <DisableIndicatorsModal
+        isOpen={isModalOpen}
+        disableGfcr={() => handleUpdateIncludesGfcr(false)}
+        onDismiss={() => setIsModalOpen(false)}
+      />
+    </>
+  )
+}
+
+DisableIndicatorsModal.propTypes = {
+  isOpen: PropTypes.bool,
+  disableGfcr: PropTypes.func.isRequired,
+  onDismiss: PropTypes.func.isRequired,
 }
 
 GfcrCallout.propTypes = {
   isGfcr: PropTypes.bool,
+  isLoading: PropTypes.bool,
   handleUpdateIncludesGfcr: PropTypes.func.isRequired,
-}
-
-GfcrCallout.defaultProps = {
-  isGfcr: false,
 }
 
 export default GfcrCallout

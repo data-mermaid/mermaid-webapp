@@ -1,17 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { OutlinedInput } from '@mui/material'
+import { Checkbox, OutlinedInput } from '@mui/material'
 
 import language from '../../../../../language'
 import theme from '../../../../../theme'
-import {
-  CheckRadioLabel,
-  CheckRadioWrapper,
-  Input,
-  RequiredIndicator,
-  Select,
-  Textarea,
-} from '../../../../generic/form'
+import { HelperText, Textarea } from '../../../../generic/form'
 import {
   CustomMenuItem,
   CustomMuiSelect,
@@ -26,14 +19,18 @@ import { getFinanceSolutionInitialValues } from './financeSolutionInitialValues'
 import { useFormik } from 'formik'
 import { buttonGroupStates } from '../../../../../library/buttonGroupStates'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
+import { ButtonCaution, ButtonSecondary, IconButton } from '../../../../generic/buttons'
 import SaveButton from './SaveButton'
-import { getChips, getOptionList } from './modalHelpers'
+import { getChips } from './modalHelpers'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { getToastArguments } from '../../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
+import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
+import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
+import { getOptions } from '../../../../../library/getOptions'
+import { IconInfo } from '../../../../icons'
 
 const modalLanguage = language.gfcrFinanceSolutionModal
 
@@ -44,6 +41,7 @@ const FinanceSolutionModal = ({
   indicatorSet,
   setIndicatorSet,
   choices,
+  displayHelp,
 }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
@@ -66,6 +64,8 @@ const FinanceSolutionModal = ({
         id: financeSolution?.id,
         used_an_incubator:
           formikValues.used_an_incubator === 'none' ? null : formikValues.used_an_incubator,
+        local_enterprise: formikValues.local_enterprise === 'true',
+        gender_smart: formikValues.gender_smart === 'true',
       }
 
       const existingFinanceSolutions = indicatorSet.finance_solutions
@@ -137,10 +137,18 @@ const FinanceSolutionModal = ({
         errors.sector = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
-      if (!values.used_an_incubator) {
+      if (values.used_an_incubator === '') {
         errors.used_an_incubator = [
           { code: language.error.formValidation.required, id: 'Required' },
         ]
+      }
+
+      if (values.local_enterprise === '') {
+        errors.local_enterprise = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
+      if (values.gender_smart === '') {
+        errors.gender_smart = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       return errors
@@ -196,6 +204,18 @@ const FinanceSolutionModal = ({
 
   const _setIsFormDirty = useEffect(() => setIsFormDirty(!!formik.dirty), [formik.dirty])
 
+  const [SFMShowHelperText, setSFMShowHelperText] = useState()
+
+  useEffect(() => {
+    setSFMShowHelperText(displayHelp)
+  }, [displayHelp])
+
+  const handleSFMInfoIconClick = (event) => {
+    setSFMShowHelperText(!SFMShowHelperText)
+
+    event.stopPropagation()
+  }
+
   const cancelButton = (
     <ButtonSecondary type="button" onClick={() => onDismiss(formik.resetForm)}>
       {modalLanguage.cancel}
@@ -228,74 +248,70 @@ const FinanceSolutionModal = ({
     return (
       <form id="finance-solution-form" onSubmit={formik.handleSubmit}>
         <StyledModalInputRow>
-          <label id="finance-solution-label" htmlFor="finance-solution-input">
-            {modalLanguage.name} <RequiredIndicator />
-          </label>
-          <Input
+          <InputNoRowWithLabelAndValidation
+            label={modalLanguage.name}
             id="finance-solution-input"
-            aria-labelledby="finance-solution-label"
+            type="text"
             {...formik.getFieldProps('name')}
+            helperText={modalLanguage.getNameHelper()}
+            showHelperText={displayHelp}
+            required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
-          <label id="sector-label" htmlFor="sector-select">
-            {modalLanguage.sector} <RequiredIndicator />
-          </label>
-          <Select
+          <InputNoRowSelectWithLabelAndValidation
+            label={modalLanguage.sector}
             id="sector-select"
-            aria-labelledby="sector-label"
             {...formik.getFieldProps('sector')}
-          >
-            <option value="">{language.placeholders.select}</option>
-            {getOptionList(choices.sectors.data)}
-          </Select>
+            options={getOptions(choices.sectors.data)}
+            helperText={modalLanguage.getSectorHelper()}
+            showHelperText={displayHelp}
+            required={true}
+          />
         </StyledModalInputRow>
         <StyledModalInputRow>
-          <label id="used-an-incubator-label" htmlFor="used-an-incubator-select">
-            {modalLanguage.usedAnIncubator} <RequiredIndicator />
-          </label>
-          <Select
+          <InputNoRowSelectWithLabelAndValidation
+            label={modalLanguage.usedAnIncubator}
             id="used-an-incubator-select"
-            aria-labelledby="used-an-incubator-label"
             {...formik.getFieldProps('used_an_incubator')}
-          >
-            <option value="">{language.placeholders.select}</option>
-            <option value="none">{modalLanguage.none}</option>
-            {getOptionList(choices.incubatortypes.data)}
-          </Select>
+            options={[
+              { value: 'none', label: modalLanguage.none },
+              ...getOptions(choices.incubatortypes.data),
+            ]}
+            helperText={modalLanguage.getUsedAnIncubatorHelper()}
+            showHelperText={displayHelp}
+            required={true}
+          />
         </StyledModalInputRow>
         <StyledModalInputRow>
-          <CheckRadioWrapper>
-            <input
-              id="local-enterprise-input"
-              aria-labelledby="local-enterprise-label"
-              type="checkbox"
-              checked={formik.getFieldProps('local_enterprise').value}
-              onChange={({ target }) => {
-                formik.setFieldValue('local_enterprise', target.checked)
-              }}
-            />
-            <CheckRadioLabel id="local-enterprise-label" htmlFor="local-enterprise-input">
-              {modalLanguage.localEnterprise}
-            </CheckRadioLabel>
-          </CheckRadioWrapper>
+          <InputNoRowSelectWithLabelAndValidation
+            label={modalLanguage.localEnterprise}
+            id="local-enterprise-select"
+            {...formik.getFieldProps('local_enterprise')}
+            options={[
+              { value: 'none', label: modalLanguage.none },
+              { value: 'true', label: modalLanguage.yes },
+              { value: 'false', label: modalLanguage.no },
+            ]}
+            helperText={modalLanguage.getLocalEnterpriseHelper()}
+            showHelperText={displayHelp}
+            required={true}
+          />
         </StyledModalInputRow>
         <StyledModalInputRow>
-          <CheckRadioWrapper>
-            <input
-              id="gender-smart-input"
-              aria-labelledby="gender-smart-label"
-              type="checkbox"
-              checked={formik.getFieldProps('gender_smart').value}
-              onChange={({ target }) => {
-                formik.setFieldValue('gender_smart', target.checked)
-              }}
-            />
-
-            <CheckRadioLabel id="gender-smart-label" htmlFor="gender-smart-input">
-              {modalLanguage.genderSmart}
-            </CheckRadioLabel>
-          </CheckRadioWrapper>
+          <InputNoRowSelectWithLabelAndValidation
+            label={modalLanguage.genderSmart}
+            id="gender-smart-select"
+            {...formik.getFieldProps('gender_smart')}
+            options={[
+              { value: 'none', label: modalLanguage.none },
+              { value: 'true', label: modalLanguage.yes },
+              { value: 'false', label: modalLanguage.no },
+            ]}
+            helperText={modalLanguage.getGenderSmartHelper()}
+            showHelperText={displayHelp}
+            required={true}
+          />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <label
@@ -303,6 +319,9 @@ const FinanceSolutionModal = ({
             htmlFor="sustainable-finance-mechanisms-select"
           >
             {modalLanguage.sustainableFinanceMechanisms}
+            <IconButton type="button" onClick={(event) => handleSFMInfoIconClick(event)}>
+              <IconInfo aria-label="info" />
+            </IconButton>
           </label>
           <CustomMuiSelect
             id="sustainable-finance-mechanisms-select"
@@ -323,10 +342,20 @@ const FinanceSolutionModal = ({
                 value={option.id}
                 sx={{ fontSize: theme.typography.defaultFontSize }}
               >
+                <Checkbox
+                  checked={formik
+                    .getFieldProps('sustainable_finance_mechanisms')
+                    .value.includes(option.id)}
+                />
                 {option.name}
               </CustomMenuItem>
             ))}
           </CustomMuiSelect>
+          {displayHelp || SFMShowHelperText ? (
+            <HelperText id="sfm-helper">
+              {modalLanguage.getSustainableFinanceMechanismsHelper()}
+            </HelperText>
+          ) : null}
         </StyledModalInputRow>
         <hr />
         <StyledModalInputRow>
@@ -364,6 +393,7 @@ FinanceSolutionModal.propTypes = {
   financeSolution: PropTypes.object,
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default FinanceSolutionModal

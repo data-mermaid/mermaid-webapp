@@ -37,8 +37,8 @@ const FishBeltTransectInputs = ({
   choices,
   formik,
   ignoreNonObservationFieldValidations,
-  observationsDispatch,
-  observationsState,
+  observationsDispatch = () => {},
+  observationsState = [],
   resetNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
   validationsApiData,
@@ -64,10 +64,10 @@ const FishBeltTransectInputs = ({
   const hasFishBeltObservations =
     !!observationsState?.length > 0 && observationsState[0]?.fish_attribute
   const [isClearSizeValueModalOpen, setIsClearSizeValueModalOpen] = useState(false)
-  const [sizeBinEvent, setSizeBinEvent] = useState({})
+  const [sizeBinValue, setSizeBinValue] = useState('')
 
   const onSizeBinChange = (event) => {
-    const sizeBinId = event.target.value
+    const sizeBinId = sizeBinValue || event?.target?.value
 
     formik.setFieldValue('size_bin', sizeBinId)
 
@@ -179,8 +179,8 @@ const FishBeltTransectInputs = ({
 
   const handleSizeBinChange = (event) => {
     if (hasFishBeltObservations) {
+      setSizeBinValue(event.target.value)
       openClearSizeValuesModal()
-      setSizeBinEvent(event)
     } else {
       onSizeBinChange(event)
       resetNonObservationFieldValidations({
@@ -249,7 +249,7 @@ const FishBeltTransectInputs = ({
   }
 
   const handleResetSizeValues = () => {
-    onSizeBinChange(sizeBinEvent)
+    onSizeBinChange()
     resetNonObservationFieldValidations({
       inputName: 'size_bin',
       validationPath: SIZE_BIN_VALIDATION_PATH,
@@ -554,11 +554,6 @@ FishBeltTransectInputs.propTypes = {
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: PropTypes.shape({ fishbelt_transect: fishbeltValidationPropType }).isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
-}
-
-FishBeltTransectInputs.defaultProps = {
-  observationsState: [],
-  observationsDispatch: () => {},
 }
 
 export default FishBeltTransectInputs

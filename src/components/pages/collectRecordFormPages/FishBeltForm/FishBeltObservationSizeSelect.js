@@ -7,9 +7,9 @@ import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWit
 
 export const FishBeltObservationSizeSelect = ({
   onValueEntered,
-  fishBinSelectedLabel,
-  value,
-  labelledBy,
+  fishBinSelectedLabel = undefined,
+  value = '',
+  labelledBy = undefined,
   ...restOfProps
 }) => {
   const binsToUse = fishBeltBins[fishBinSelectedLabel] ?? []
@@ -84,10 +84,4 @@ FishBeltObservationSizeSelect.propTypes = {
   fishBinSelectedLabel: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   labelledBy: PropTypes.string,
-}
-
-FishBeltObservationSizeSelect.defaultProps = {
-  fishBinSelectedLabel: undefined,
-  labelledBy: undefined,
-  value: '',
 }

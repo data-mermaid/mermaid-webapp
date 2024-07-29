@@ -6,7 +6,7 @@ import { hoverState } from '../../../../library/styling/mediaQueries'
 import language from '../../../../language'
 
 const StyledNav = styled.nav`
-  width: 30rem;
+  width: 26rem;
 `
 
 const itemStyles = (props) => css`
@@ -76,7 +76,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           setSelectedNavItem(e.currentTarget.id)
         }}
       >
-        {language.pages.gfcrIndicatorSetNav.reportTitleAndYearHeading}
+        {language.pages.gfcrIndicatorSetNav.reportTitleAndDateHeading}
       </NavSubHeader>
       <NavList>
         <NavListItem

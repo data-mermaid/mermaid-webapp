@@ -13,10 +13,29 @@ import {
 } from './library/validationMessageHelpers'
 import { HelperTextLink } from './components/generic/links'
 import styled from 'styled-components'
+import theme from './theme'
 
 const StyledLink = styled.a`
   cursor: pointer;
 `
+
+const StyledHelperLink = styled.a`
+  font-size: ${theme.typography.smallFontSize};
+`
+
+const acaUrl = 'https://allencoralatlas.org/atlas'
+const gfcrPdfUrl = `https://public.datamermaid.org/GFCR-Monitoring-and-Evaluation-Toolkit.pdf?nocache=${Date.now()}`
+
+const AcaLink = () => (
+  <StyledHelperLink href={acaUrl} target="_blank">
+    Allen Coral Atlas
+  </StyledHelperLink>
+)
+const GfcrPdfLink = () => (
+  <StyledHelperLink href={gfcrPdfUrl} target="_blank">
+    View M&E Toolkit PDF
+  </StyledHelperLink>
+)
 
 const placeholders = { select: 'Choose...' }
 
@@ -265,26 +284,81 @@ const gfcrFinanceSolutionModal = {
   titleAdd: 'Add Finance Solution',
   titleUpdate: 'Update Finance Solution',
   name: 'Finance solution / business name',
+  getNameHelper: () => (
+    <>
+      Name helper <GfcrPdfLink />
+    </>
+  ),
   sector: 'Sector',
+  getSectorHelper: () => (
+    <>
+      Sector helper <GfcrPdfLink />
+    </>
+  ),
   usedAnIncubator: 'Used an incubator?',
+  getUsedAnIncubatorHelper: () => (
+    <>
+      Used an incubator helper <GfcrPdfLink />
+    </>
+  ),
   localEnterprise: 'Local enterprise',
+  getLocalEnterpriseHelper: () => (
+    <>
+      Local enterprise helper <GfcrPdfLink />
+    </>
+  ),
   genderSmart: 'Gender 2X Criteria',
+  getGenderSmartHelper: () => (
+    <>
+      Gender smart helper <GfcrPdfLink />
+    </>
+  ),
   sustainableFinanceMechanisms: 'Sustainable finance mechanisms',
+  getSustainableFinanceMechanismsHelper: () => (
+    <>
+      Sustainable finance mechanisms helper <GfcrPdfLink />
+    </>
+  ),
   notes: 'Notes',
   add: 'Add Finance Solution Row',
   save: 'Save Finance Solution Row',
   cancel: 'Cancel',
   remove: 'Remove Row',
   none: 'None',
+  yes: 'Yes',
+  no: 'No',
 }
 
 const gfcrInvestmentModal = {
   titleAdd: 'Add Investment',
   titleUpdate: 'Update Investment',
   financeSolution: 'Finance solution (select from previous input)',
+  getFinanceSolutionHelper: () => (
+    <>
+      Finance solution helper{' '}
+      <StyledHelperLink href="" target="_blank">
+        and link
+      </StyledHelperLink>
+    </>
+  ),
   investmentSource: 'Investment source',
+  getInvestmentSourceHelper: () => (
+    <>
+      Investment source helper <GfcrPdfLink />
+    </>
+  ),
   investmentType: 'Investment type',
+  getInvestmentTypeHelper: () => (
+    <>
+      Investment type helper <GfcrPdfLink />
+    </>
+  ),
   investmentAmount: 'Investment amount',
+  getInvestmentAmountHelper: () => (
+    <>
+      Investment amount helper <GfcrPdfLink />
+    </>
+  ),
   notes: 'Notes',
   add: 'Add Investment Row',
   save: 'Save Investment Row',
@@ -297,15 +371,45 @@ const gfcrRevenueModal = {
   titleAdd: 'Add Revenue Stream',
   titleUpdate: 'Update Revenue Stream',
   financeSolution: 'Finance solution (select from previous input)',
+  getFinanceSolutionHelper: () => (
+    <>
+      Finance solution helper <GfcrPdfLink />
+    </>
+  ),
   revenueType: 'Revenue type',
+  getRevenueTypeHelper: () => (
+    <>
+      Revenue type helper <GfcrPdfLink />
+    </>
+  ),
   sustainableRevenueStream: 'Sustainable revenue stream',
+  getSustainableRevenueStreamHelper: () => (
+    <>
+      Sustainable revenue stream helper <GfcrPdfLink />
+    </>
+  ),
   annualRevenue: 'Annual revenue',
+  getAnnualRevenueHelper: () => (
+    <>
+      Annual revenue helper <GfcrPdfLink />
+    </>
+  ),
   notes: 'Notes',
   add: 'Add Revenue Row',
   save: 'Save Revenue Row',
   cancel: 'Cancel',
   remove: 'Remove Row',
   none: 'None',
+  yes: 'Yes',
+  no: 'No',
+}
+
+const gfcrNewIndicatorSetModal = {
+  title: 'Create Indicator Set',
+  create: 'Create Indicator Set',
+  cancel: 'Cancel',
+  titleInput: 'Title',
+  dateInput: 'Date',
 }
 
 const clearSizeValuesModal = {
@@ -423,13 +527,16 @@ const pages = {
     organizations: 'Organizations',
     notes: 'Notes',
     noOrganization: 'This Project has no organizations.',
-    gfcrCalloutHeading: 'Global Fund for Coral Reefs (GFCR)',
-    gfcrRemoveParagraph:
-      'Removing GFCR indicators from this project will not delete them, but just hide them.',
-    gfcrAddParagraph:
-      'GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. ',
-    gfcrRemoveButton: 'Remove GFCR indicators from this project',
-    gfcrAddButton: 'Add GFCR indicators to this project',
+    gfcrCallout: {
+      calloutHeading: 'Global Fund for Coral Reefs (GFCR)',
+      removeParagraph:
+        'Removing GFCR indicators from this project will not delete them, but just hide them.',
+      addParagraph:
+        'GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. ',
+      disableButton: 'Disable GFCR Indicators',
+      enableButton: 'Enable GFCR Indicators for this project',
+      goToButton: 'Go to GFCR Indicators',
+    },
   },
   dataSharing: {
     introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data are collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
@@ -530,7 +637,8 @@ const pages = {
     copyButtonText: 'Copy selected MRs to project',
   },
   gfcrTable: {
-    filterToolbarText: 'Filter this table by indicator set, and other things?',
+    filterToolbarText: 'Filter this table by title or date',
+    createIndicatorSetTitle: 'Create Indicator Set',
     title: 'GFCR',
     noDataMainText: 'No indicator sets yet.',
     noDataSubText: "Select 'Create new' to add an indicator set to this project.",
@@ -559,97 +667,484 @@ const pages = {
     noDataSubText: "Select 'Add Revenue' to add one to this indicator set.",
     getNoFinanceSolutions: (onClick) => (
       <>
-        Add a <StyledLink onClick={onClick}>finance solution</StyledLink> before adding investments.
+        Add a <StyledLink onClick={onClick}>finance solution</StyledLink> before adding revenues.
       </>
     ),
   },
+
   gfcrIndicatorSet: {
     title: 'Indicator Set',
     total: 'Total',
     ofTotalHowMany: 'Of the total, how many of the following',
     men: 'Men',
-    men_helper: 'Men Helper Text',
     women: 'Women',
-    women_helper: 'Women Helper Text',
     youth: 'Youth',
-    youth_helper: 'Youth Helper Text',
     indigenous: 'Indigenous',
-    indigenous_helper: 'Indigenous Helper Text',
     notes: 'Notes',
-    f1_1: 'Coral reef area of coral reefs in GFCR programming',
-    f1_1_helper: 'F1.1 Helper Text',
-    f2_1a: 'Coral reef area of MPAs and OECMs (as aligned to GBF Target 3)',
-    f2_1a_helper: 'F2.1a Helper Text',
-    f2_1b: 'Total area of MPAs and OECMs (as aligned to GBF Target 3)',
-    f2_1b_helper: 'F2.1b Helper Text',
-    f2_2a: 'Coral reef area of locally managed areas / co-managed areas',
-    f2_2a_helper: 'F2.2a Helper Text',
-    f2_2b: 'Total area of locally managed areas / co-managed areas',
-    f2_2b_helper: 'F2.2b Helper Text',
-    f2_3a: 'Coral reef area of fisheries management',
-    f2_3a_helper: 'F2.3a Helper Text',
-    f2_3b: 'Total area of fisheries management',
-    f2_3b_helper: 'F2.3b Helper Text',
+    indicatorSetTitle: 'Title',
+    getIndicatorSetTitleHelperText: () => (
+      <>
+        e.g., Miamba Yetu August 2024 report. <GfcrPdfLink />
+      </>
+    ),
+    indicatorSetReportingDate: 'Reporting Date',
+    getIndicatorSetReportingDateHelperText: () => (
+      <>
+        End date for the reporting period of the GFCR project, e.g., final year report may have
+        December as reporting date. <GfcrPdfLink />
+      </>
+    ),
+    f1Heading: 'Coral reef extent of GFCR project',
+    f1_1: 'Coral reef area in GFCR',
+    getF1_1_helper: () => (
+      <>
+        Total area (km2) of coral reefs within the GFCR project area, e.g., calculated from the{' '}
+        <AcaLink />. <GfcrPdfLink />
+      </>
+    ),
+    f2Heading: 'Area of coral reefs under conservation and sustainable management',
+    getF2_1a: () => (
+      <>
+        <strong>Coral reef area</strong> of MPAs and OECMs (as aligned to GBF Target 3)
+      </>
+    ),
+    getF2_1a_helper: () => (
+      <>
+        Total area (km2) of coral reefs exclusively within Marine Protected Areas (MPAs) and Other
+        Effective Conservation Measures (OECMs) as per the Global Biodiversity Framework (GBF)
+        Target 3, within GFCR project area. e.g., calculated from the <AcaLink />. This is different
+        to the total area in F 2.1b. <GfcrPdfLink />
+      </>
+    ),
+    getF2_1b: () => (
+      <>
+        <strong>Total area</strong> of MPAs and OECMs (as aligned to GBF Target 3)
+      </>
+    ),
+    getF2_1b_helper: () => (
+      <>
+        Total area (km2) of MPAs and OECMs, including but not limited to coral reefs, aligned with
+        GBF Target 3, within GFCR project area.
+        <GfcrPdfLink />
+      </>
+    ),
+    getF2_2a: () => (
+      <>
+        <strong>Coral reef area</strong> of locally managed areas / co-managed areas
+      </>
+    ),
+    getF2_2a_helper: () => (
+      <>
+        Total area (km2) of coral reefs exclusively under other local management or co-management
+        arrangements (not MPAs or OECMs), where local communities have significant involvement in
+        management decisions, within GFCR project area. This is different to the total area in F
+        2.2b. <GfcrPdfLink />
+      </>
+    ),
+    getF2_2b: () => (
+      <>
+        <strong>Total area</strong> of locally managed areas / co-managed areas
+      </>
+    ),
+    getF2_2b_helper: () => (
+      <>
+        Total area (km2) of other locally managed areas (not MPAs or OECMs), including but not
+        restricted to coral reefs, within GFCR project area. <GfcrPdfLink />
+      </>
+    ),
+    getF2_3a: () => (
+      <>
+        <strong>Coral reef area</strong> of fisheries management
+      </>
+    ),
+    getF2_3a_helper: () => (
+      <>
+        Total area (km2) of coral reefs in fisheries management areas (not MPAs or OECMs), which
+        have specific fisheries management plans, e.g., gear restrictions, catch quotas, within GFCR
+        project area. This is different to the total area in F 2.3b. <GfcrPdfLink />
+      </>
+    ),
+    getF2_3b: () => (
+      <>
+        <strong>Total area</strong> of fisheries management
+      </>
+    ),
+    getF2_3b_helper: () => (
+      <>
+        Total area (km2) of fisheries management areas (not MPAs or OECMs), including but not
+        restricted to coral reefs, within GFCR project area. <GfcrPdfLink />
+      </>
+    ),
     f2_4: 'Area with pollution mitigation',
     f2_4_helper: 'F2.4 Helper Text',
-    f2_opt1:
-      'Area of non-coral reef ecosystems, e.g. mangroves, seagrass or other associated ecosystems',
-    f2_opt1_helper: 'F2 opt1 Helper Text',
+    getF2_4_helper: () => (
+      <>
+        Total area (km2) with active pollution mitigation measures in place to reduce pollution
+        impacts within GFCR project area. <GfcrPdfLink />
+      </>
+    ),
+    f2_5: 'Area of non-coral reef ecosystems, e.g. mangroves, seagrass or other associated ecosystems',
+    getF2_5_helper: () => (
+      <>
+        Total area (km2) of non-coral reef ecosystems within GFCR project area, e.g. mangroves,
+        seagrass or other coral reef-associated ecosystems. <GfcrPdfLink />
+      </>
+    ),
+    f3Heading: 'Area of coral reefs under effective coral restoration',
     f3_1: 'Area of effective coral reef restoration',
-    f3_1_helper: 'F3.1 Helper Text',
+    getF3_1_helper: () => (
+      <>
+        Total area (km2) of active coral reef restoration within GFCR project area. <GfcrPdfLink />
+      </>
+    ),
     f3_2: 'Number of in situ coral restoration projects',
-    f3_2_helper: 'F3.2 Helper Text',
+    getF3_2_helper: () => (
+      <>
+        Total number of coral restoration projects that are carried out directly in a coral reef
+        environment (in situ). If restoration is not supported by GFCR program, enter 0.{' '}
+        <GfcrPdfLink />
+      </>
+    ),
     f3_3: 'Number of coral restoration plans, technologies, strategies or guidelines developed',
-    f3_3_helper: 'F3.3 Helper Text',
+    getF3_3_helper: () => (
+      <>
+        Total number of frameworks, protocols or technologies associated to coral restoration
+        created in the GFCR project that can be applied locally or used by third-parties. If
+        restoration is not supported by GFCR program, enter 0. <GfcrPdfLink />
+      </>
+    ),
     f3_4: 'Number of coral restoration trainings',
-    f3_4_helper: 'F3.4 Helper Text',
+    getF3_4_helper: () => (
+      <>
+        Total number of training sessions conducted to educate and empower individuals and
+        communities in coral restoration techniques. If restoration is not supported by GFCR
+        program, enter 0. <GfcrPdfLink />
+      </>
+    ),
     f3_5: 'Number of people engaged in coral restoration',
-    f3_6: 'Number of response plans (incl. financial mechanisms, eg., insurance) in place to support coral restoration after severe shocks (e.g,. storms, bleaching)',
-    f3_6_helper: 'F3.6 Helper Text',
+    getF3_5_men_helper: () => (
+      <>
+        Total number of men actively involved on a hiring, volunteering or educational basis in
+        coral restoration activities. If restoration is not supported by GFCR program, enter 0.{' '}
+        <GfcrPdfLink />
+      </>
+    ),
+    getF3_5_women_helper: () => (
+      <>
+        Total number of women actively involved on a hiring, volunteering or educational basis in
+        coral restoration activities. If restoration is not supported by GFCR program, enter 0.{' '}
+        <GfcrPdfLink />
+      </>
+    ),
+    getF3_5_youth_helper: () => (
+      <>
+        Total number of young people (typically aged 15-24, as defined by the United Nations)
+        actively involved either on a hiring, volunteering or educational basis in coral restoration
+        activities. If restoration is not supported by GFCR program, enter 0. <GfcrPdfLink />
+      </>
+    ),
+    getF3_5_indigenous_helper: () => (
+      <>
+        Total number of Indigenous people actively involved on a hiring, volunteering or educational
+        basis in coral restoration activities. If restoration is not supported by GFCR program,
+        enter 0. <GfcrPdfLink />
+      </>
+    ),
+    f3_6: 'Number of response plans to support coral restoration after severe shocks',
+    getF3_6_helper: () => (
+      <>
+        Total number of plans, including financial mechanisms (e.g., insurance) in place to aid in
+        coral restoration efforts following severe environmental shocks, e.g., storms, bleaching. If
+        there are no response plans, enter 0. <GfcrPdfLink />
+      </>
+    ),
+    f4Heading: 'Change in coral reef health',
     f4_1: 'Average live hard coral cover',
-    f4_1_helper: 'F4.1 Helper Text (target only)',
+    getF4_1_helper: () => (
+      <>
+        Average percentage live hard coral cover of all surveys during the reporting date range.
+        This is calculated directly on MERMAID Collect app and can be found in the MERMAID dashboard
+        when searching your project. <GfcrPdfLink />
+      </>
+    ),
     f4_2: 'Average macroalgae',
-    f4_2_helper: 'F4.2 Helper Text (target only)',
+    getF4_2_helper: () => (
+      <>
+        Average percentage macroalgae cover of all surveys during the reporting date range. This is
+        calculated directly on MERMAID Collect app and can be found in the MERMAID dashboard when
+        searching your project. <GfcrPdfLink />
+      </>
+    ),
     f4_3: 'Average reef fish biomass',
-    f4_3_helper: 'F4.3 Helper Text (target only)',
+    getF4_3_helper: () => (
+      <>
+        Average reef fish biomass (kg/ha) of all surveys during the reporting date range. This is
+        calculated directly on MERMAID Collect app and can be found in the MERMAID dashboard when
+        searching your project. <GfcrPdfLink />
+      </>
+    ),
     f4_valueFromMermaidData: 'This value is from MERMAID data in this project',
     f4_valueDifferentFromCalc: 'This value is different from what was calculated in this project',
     f4_noValue: 'No value for this date range. Updating the value to 0',
-    f4_reportingDateRange: 'Reporting Date Range',
+    f4_reportingDateRange: 'Reporting date range',
     f4_start_date: 'Start Date',
     f4_end_date: 'End Date',
     f4_saveAndUpdateValues: 'Save and update values with data from this project',
     f4_couldNotGetCalcValues: 'Could not get values from project for',
-    f5_1: 'Number of local communities engaged in meaningful participation and co-development',
-    f5_1_helper: 'F5.1 Helper Text',
-    f5_2: 'Number of local organizations engaged in meaningful participation and co-development',
-    f5_2_helper: 'F5.2 Helper Text',
-    f5_3: 'Number of local scientific/research partners involved in strengthening capacity for participation and co-development (e.g., national universities, regional science organizations',
-    f5_3_helper: 'F5.3 Helper Text',
-    f5_4: 'Number of local practitioners trained / supported in coral reef conservation (e.g. community rangers)',
-    f5_4_helper: 'F5.4 Helper Text',
-    f5_5: 'Number of agreements with local authorities or fishing cooperatives to manage marine resources (e.g., LMMAs, MPAs, OECMs)',
-    f5_5_helper: 'F5.5 Helper Text',
-    f5_6: 'Number of national policies linked to GFCR engagement, (e.g., NBSAPs, blue economy policies, national MPA declarations)',
-    f5_6_helper: 'F5.6 Helper Text',
-    f6_1: 'Number of direct jobs created (disaggregated by gender, age, Indigenous peoples)',
-    f7_1: 'Total direct beneficiaries (disaggregated by gender, age, Indigenous peoples)',
-    f7_2: 'Total indirect beneficiaries (disaggregated by gender, age, Indigenous peoples)',
-    f7_3: 'Number of financial mechanisms/reforms to help coastal communities respond and recover from external shocks (e.g., insurance, loans, village savings, restoration crisis plans, etc)',
-    f7_3_helper: 'F7.3 Helper Text',
+    f5Heading:
+      'Number of communities engaged in meaningful participation, co-development and capacity strengthening',
+    getF5_1: () => (
+      <>
+        Number of <strong>local communities</strong> engaged in meaningful participation and
+        co-development
+      </>
+    ),
+    getF5_1_helper: () => (
+      <>
+        Total number of communities supported with opportunities to participate and co-develop GFCR
+        program/blended finance investments. A community can be defined as groups of people who
+        share common characteristics, interests, or geographical locations and may be the target
+        beneficiaries/stakeholder of project. <GfcrPdfLink />
+      </>
+    ),
+    getF5_2: () => (
+      <>
+        Number of <strong>local organizations</strong> engaged in meaningful participation and
+        co-development
+      </>
+    ),
+    getF5_2_helper: () => (
+      <>
+        Total number of local organizations supported with opportunities to participate in and
+        co-develop GFCR program, where a local organization is defined as a community-based entity
+        operating within a specific geographical area, often with a focus on addressing local needs
+        and advancing the well-being of the immediate community. <GfcrPdfLink />
+      </>
+    ),
+    f5_3: 'Number of local scientific/research partners involved in strengthening capacity for participation and co-development',
+    getF5_3_helper: () => (
+      <>
+        Total number of local scientific/research partnerships (including national universities,
+        regional science organizations or other research hubs) supported with opportunities to
+        participate in and co-develop GFCR program and support capacity building with local GFCR
+        partners. <GfcrPdfLink />
+      </>
+    ),
+    f5_4: 'Number of local practitioners',
+    getF5_4_men_helper: () => (
+      <>
+        Total number of local male practitioners (e.g., community rangers, coastal guardians, MPA
+        managers, etc) trained or supported in coral reef conservation and management by GFCR
+        program. <GfcrPdfLink />
+      </>
+    ),
+    getF5_4_women_helper: () => (
+      <>
+        Total number of local female practitioners (e.g., community rangers, coastal guardians, MPA
+        managers, etc) trained or supported in coral reef conservation and management by GFCR
+        program. <GfcrPdfLink />
+      </>
+    ),
+    getF5_4_youth_helper: () => (
+      <>
+        Total number of local young (typically aged 15-24, as defined by the United Nations)
+        practitioners (e.g., community rangers, coastal guardians, MPA managers, etc) trained or
+        supported in coral reef conservation and management by GFCR program. <GfcrPdfLink />
+      </>
+    ),
+    getF5_4_indigenous_helper: () => (
+      <>
+        Total number of local indigenous practitioners (e.g., community rangers, coastal guardians,
+        MPA managers, etc) trained or supported in coral reef conservation and management by GFCR
+        program. <GfcrPdfLink />
+      </>
+    ),
+    f5_5: 'Number of agreements with local authorities or fishing cooperatives to manage marine resources',
+    getF5_5_helper: () => (
+      <>
+        Total number of formal agreements with local organizations to support marine management
+        through GFCR program, that may include agreements to support or develop LMMAs, MPAs or
+        OECMs. Agreements are defined as formal documents, serving as a framework for collaboration
+        (e.g., a memorandum of understanding, MOU, or a management plan). Agreements should be
+        supported by GFCR program. <GfcrPdfLink />
+      </>
+    ),
+    f5_6: 'Number of national policies linked to GFCR engagement',
+    getF5_6_helper: () => (
+      <>
+        Total number of national policies directly associated with GFCR engagement, e.g., has the
+        GFCR program organized a policy workshop directly related to national policy or provided
+        other investments associated with a policy outcome. Programs not planning national policy
+        targets, or where a policy is underway but not yet finalized should enter 0. <GfcrPdfLink />
+      </>
+    ),
+    f6Heading: 'Number of people supported through livelihoods, direct jobs, income, and nutrition',
+    f6_1: 'Number of direct jobs created',
+    getF6_1_men_helper: () => (
+      <>
+        Total number of local jobs created for men by GFCR businesses. Jobs should be considered for
+        each business activity supported by GFCR program. <GfcrPdfLink />
+      </>
+    ),
+    getF6_1_women_helper: () => (
+      <>
+        Total number of local jobs created for women by GFCR businesses. Jobs should be considered
+        for each business activity supported by GFCR program. <GfcrPdfLink />
+      </>
+    ),
+    getF6_1_youth_helper: () => (
+      <>
+        Total number of local jobs created for young individuals (typically aged 15-24, as defined
+        by the United Nations) by GFCR businesses. Jobs should be considered for each business
+        activity supported by GFCR program. <GfcrPdfLink />
+      </>
+    ),
+    getF6_1_indigenous_helper: () => (
+      <>
+        Total number of local jobs created for indigenous people by GFCR businesses. Jobs should be
+        considered for each business activity supported by GFCR program. <GfcrPdfLink />
+      </>
+    ),
+    f6_2: 'Number of people with increased income and/or nutrition',
+    getF6_2_men_helper: () => (
+      <>
+        Total number of men with increased income and/or nutrition due to GFCR program, e.g., in
+        fisheries related business opportunities that seek to improve nutrition access by local
+        opportunities. In this case, programs can also report the number of people with increased
+        income and/or nutrition. <GfcrPdfLink />
+      </>
+    ),
+    getF6_2_women_helper: () => (
+      <>
+        Total number of women with increased income and/or nutrition due to GFCR program, e.g., in
+        fisheries related business opportunities that seek to improve nutrition access by local
+        opportunities. In this case, programs can also report the number of people with increased
+        income and/or nutrition. <GfcrPdfLink />
+      </>
+    ),
+    getF6_2_youth_helper: () => (
+      <>
+        Total number of young individuals (typically aged 15-24, as defined by the United Nations)
+        with increased income and/or nutrition due to GFCR program, e.g., in fisheries related
+        business opportunities that seek to improve nutrition access by local opportunities. In this
+        case, programs can also report the number of people with increased income and/or nutrition.{' '}
+        <GfcrPdfLink />
+      </>
+    ),
+    getF6_2_indigenous_helper: () => (
+      <>
+        Total number of indigenous people with increased income and/or nutrition due to GFCR
+        program, e.g., in fisheries related business opportunities that seek to improve nutrition
+        access by local opportunities. In this case, programs can also report the number of people
+        with increased income and/or nutrition. <GfcrPdfLink />
+      </>
+    ),
+    f7Heading:
+      'Number of people supported to better adapt, respond and recover to the effects of climate change and major external shocks as a result of GFCR',
+    getF7_1: () => (
+      <>
+        Total <strong>direct beneficiaries</strong>
+      </>
+    ),
+    getF7_1_men_helper: () => (
+      <>
+        Direct male beneficiaries that can be identified as the number of men receiving direct
+        support from GFCR program (e.g., employment, loans, improved incomes or livelihoods, or
+        other targeted benefits that improves their livelihoods and thus their ability to adapt to
+        climate change). <GfcrPdfLink />
+      </>
+    ),
+    getF7_1_women_helper: () => (
+      <>
+        Direct female beneficiaries that can be identified as the number of women receiving direct
+        support from GFCR program (e.g., employment, loans, improved incomes or livelihoods, or
+        other targeted benefits that improves their livelihoods and thus their ability to adapt to
+        climate change). <GfcrPdfLink />
+      </>
+    ),
+    getF7_1_youth_helper: () => (
+      <>
+        Direct youth beneficiaries that can be identified as the number of young individuals
+        (typically aged 15-24, as defined by the United Nations) receiving direct support from GFCR
+        program (e.g., employment, loans, improved incomes or livelihoods, or other targeted
+        benefits that improves their livelihoods and thus their ability to adapt to climate change).{' '}
+        <GfcrPdfLink />
+      </>
+    ),
+    getF7_1_indigenous_helper: () => (
+      <>
+        Direct indigenous beneficiaries that can be identified as the number of indigenous people
+        receiving direct support from GFCR program (e.g., employment, loans, improved incomes or
+        livelihoods, or other targeted benefits that improves their livelihoods and thus their
+        ability to adapt to climate change). <GfcrPdfLink />
+      </>
+    ),
+    getF7_2: () => (
+      <>
+        Total <strong>indirect beneficiaries</strong>
+      </>
+    ),
+    getF7_2_men_helper: () => (
+      <>
+        Indirect male beneficiaries refer to men that may live within the area of GFCR program (e.g.
+        within 100 km) and may experience positive effects or benefits as a result of a project or
+        program, though they may not be the primary target audience. <GfcrPdfLink />
+      </>
+    ),
+    getF7_2_women_helper: () => (
+      <>
+        Indirect female beneficiaries refer to women that may live within the area of GFCR program
+        (e.g. within 100 km) and may experience positive effects or benefits as a result of a
+        project or program, though they may not be the primary target audience. <GfcrPdfLink />
+      </>
+    ),
+    getF7_2_youth_helper: () => (
+      <>
+        Indirect youth beneficiaries refer to youth (typically aged 15-24, as defined by the United
+        Nations) that may live within the area of GFCR program (e.g. within 100 km) and may
+        experience positive effects or benefits as a result of a project or program, though they may
+        not be the primary target audience. <GfcrPdfLink />
+      </>
+    ),
+    getF7_2_indigenous_helper: () => (
+      <>
+        Indirect indigenous beneficiaries refer to indigenous people that may live within the area
+        of GFCR program (e.g. within 100 km) and may experience positive effects or benefits as a
+        result of a project or program, though they may not be the primary target audience.{' '}
+        <GfcrPdfLink />
+      </>
+    ),
+    f7_3: 'Number of financial mechanisms/reforms to help coastal communities respond and recover from external shocks',
+    getF7_3_helper: () => (
+      <>
+        Total number of financial mechanisms associated with GFCR program that can help coastal
+        communities recover from external shocks associated with climate change and other disasters,
+        e.g., coral reef insurance programs, coordinated loan programmes, village savings clubs
+        started by GFCR program, ecological restoration crisis plans. If no mechanisms are intended
+        to be supported by the GFCR program or are not yet in place, enter 0. <GfcrPdfLink />
+      </>
+    ),
     f7_4: 'Number of governance reforms/policies to support response and recovery to external shocks (e.g., crisis management plans, reforms for temporary alternative employment)',
-    f7_4_helper: 'F7.4 Helper Text',
+    getF7_4_helper: () => (
+      <>
+        Total number of governance reforms/policies connected to national or subnational government
+        initiatives and supported by GFCR program, e.g., organizing a policy workshop, providing
+        technical input into policy development, crisis management plans, reforms for temporary
+        alternative employment. If no policies are intended to be supported by the GFCR program or
+        are not yet in place, enter 0. <GfcrPdfLink />
+      </>
+    ),
   },
   gfcrIndicatorSetNav: {
     fundIndicatorsHeading: 'FUND INDICATORS',
-    reportTitleAndYearHeading: 'Report title and year',
-    f1: 'Coral reef extent of GFCR project',
-    f2: 'Area of coral reefs under conservation and sustainable management',
-    f3: 'Area of coral reefs under effective coral restoration',
-    f4: 'Change in coral reef health',
-    f5: 'Number of communities engaged in meaningful participation, co-development and capacity strengthening',
-    f6: 'Number of people supported through livelihoods, direct jobs, income, and nutrition',
-    f7: 'Number of people supported to better adapt, respond and recover to the effects of climate change and major external shocks as a result of GFCR',
+    reportTitleAndDateHeading: 'Report title and date',
+    f1: 'Project area',
+    f2: 'Conservation and management',
+    f3: 'Restoration',
+    f4: 'Coral reef health',
+    f5: 'Communities',
+    f6: 'People',
+    f7: 'Climate response',
     f8F9F10Heading: 'F8, F9, F10',
     financeSolutions: 'Business / Finance solutions',
     investments: 'Investments',
@@ -769,8 +1264,10 @@ const getValidationMessage = (validation, projectId = '') => {
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
     similar_name: () => 'Another Management Regime is similar to this one.',
     site_not_found: () => 'Site record not available for similarity validation',
-    too_many_observations: () => getObservationsCountMessage(context, fields, 'Greater'),
-    too_few_observations: () => getObservationsCountMessage(context, fields, 'Fewer'),
+    too_many_observations: () =>
+      getObservationsCountMessage(fields, 'Greater', context?.observation_count_range[1]),
+    too_few_observations: () =>
+      getObservationsCountMessage(fields, 'Fewer', context?.observation_count_range[0]),
     unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
     value_not_set: () => 'Value is not set',
     default: () => code || name,
@@ -969,6 +1466,7 @@ export default {
   gfcrFinanceSolutionModal,
   gfcrInvestmentModal,
   gfcrRevenueModal,
+  gfcrNewIndicatorSetModal,
   deleteProject,
   deleteRecord,
   error,

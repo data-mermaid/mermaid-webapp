@@ -31,15 +31,16 @@ const GfcrGenericTable = ({
   onNextClick,
   onGoToPage,
 }) => {
-  const tableProps = getTableProps()
+  const { tableKey, ...tableProps } = getTableProps()
+  const { id: headerGroupId, ...headerGroupProps } = headerGroups[0]
 
   return (
     <>
       <StickyTableOverflowWrapper>
-        <GenericStickyTableTextWrapTh key={tableProps.key} {...tableProps}>
+        <GenericStickyTableTextWrapTh key={tableKey} {...tableProps}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+              <Tr key={headerGroupId} {...headerGroupProps}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
@@ -68,9 +69,10 @@ const GfcrGenericTable = ({
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
+              const { id: rowId, ...rowProps } = row.getRowProps()
 
               return (
-                <Tr key={row.id} {...row.getRowProps()}>
+                <Tr key={rowId} {...rowProps}>
                   {row.cells.map((cell) => {
                     return (
                       <Td key={cell.id} {...cell.getCellProps()} align={cell.column.align}>

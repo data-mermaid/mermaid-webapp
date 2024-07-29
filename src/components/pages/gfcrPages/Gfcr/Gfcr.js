@@ -1,5 +1,5 @@
 // import { CSVLink } from 'react-csv'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
@@ -35,12 +35,12 @@ import ButtonSecondaryDropdown from '../../../generic/ButtonSecondaryDropdown'
 import { DropdownItemStyle } from '../../../generic/ButtonSecondaryDropdown/ButtonSecondaryDropdown.styles'
 import { useCurrentProject } from '../../../../App/CurrentProjectContext'
 import GfcrGenericTable from '../GfcrGenericTable'
+import NewIndicatorSetModal from './NewIndicatorSetModal'
 
 const Gfcr = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const currentProjectPath = useCurrentProjectPath()
   const { gfcrIndicatorSets, setGfcrIndicatorSets } = useCurrentProject()
-  const navigate = useNavigate()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
@@ -48,6 +48,8 @@ const Gfcr = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const [isLoading, setIsLoading] = useState(true)
+  const [isNewIndicatorSetModalOpen, setIsNewIndicatorSetModalOpen] = useState(false)
+  const [newIndicatorSetType, setNewIndicatorSetType] = useState()
   // const [siteExportName, setSiteExportName] = useState('')
   // const [choices, setChoices] = useState({})
   // const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
@@ -58,9 +60,13 @@ const Gfcr = () => {
   // const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${language.pages.gfcrTable.title} - ${language.title.mermaid}`)
 
   const _getIndicatorSets = useEffect(() => {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
     if (databaseSwitchboardInstance && isAppOnline) {
       Promise.all([databaseSwitchboardInstance.getIndicatorSets(projectId)])
         .then(([indicatorSetsResponse]) => {
@@ -121,7 +127,7 @@ const Gfcr = () => {
 
       return {
         title: isAdminUser ? <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link> : title,
-        indicator_set_type: indicator_set_type === 'annual_report' ? 'Annual Report' : 'Target',
+        indicator_set_type: indicator_set_type === 'report' ? 'Report' : 'Target',
         report_date: localizedDate,
       }
     })
@@ -146,7 +152,7 @@ const Gfcr = () => {
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
-      const keys = ['values.title.props.children', 'values.type', 'values.report_date']
+      const keys = ['values.title.props.children', 'values.report_date']
 
       const queryTerms = splitSearchQueryStrings(query)
       const filteredRows =
@@ -222,7 +228,8 @@ const Gfcr = () => {
   )
 
   const handleNewIndicatorSet = (type) => {
-    navigate(`${currentProjectPath}/gfcr/new/${type}`)
+    setNewIndicatorSetType(type)
+    setIsNewIndicatorSetModalOpen(true)
   }
 
   const toolbarButtons = (
@@ -230,8 +237,8 @@ const Gfcr = () => {
       <StyledToolbarButtonWrapper>
         <ButtonSecondaryDropdown label={createDropdownLabel} disabled={!isAdminUser}>
           <Column as="nav" data-testid="export-to-csv">
-            <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('annual-report')}>
-              Annual Report
+            <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('report')}>
+              Report
             </DropdownItemStyle>
             <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('target')}>
               Target
@@ -242,6 +249,15 @@ const Gfcr = () => {
           <IconDownload /> Export
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
+      <NewIndicatorSetModal
+        indicatorSetType={newIndicatorSetType}
+        isOpen={isNewIndicatorSetModalOpen}
+        onDismiss={(resetForm) => {
+          resetForm()
+          setIsNewIndicatorSetModalOpen(false)
+          setNewIndicatorSetType()
+        }}
+      />
     </>
   )
 
@@ -277,19 +293,23 @@ const Gfcr = () => {
       toolbar={
         <>
           <H2>{language.pages.gfcrTable.title}</H2>
-          <ToolBarRow>
-            <FilterSearchToolbar
-              name={language.pages.gfcrTable.filterToolbarText}
-              disabled={gfcrIndicatorSets.length === 0}
-              globalSearchText={globalFilter || ''}
-              handleGlobalFilterChange={handleGlobalFilterChange}
-            />
+          {isAppOnline && (
+            <ToolBarRow>
+              <FilterSearchToolbar
+                name={language.pages.gfcrTable.filterToolbarText}
+                disabled={gfcrIndicatorSets.length === 0}
+                globalSearchText={globalFilter || ''}
+                handleGlobalFilterChange={handleGlobalFilterChange}
+              />
 
-            <ToolbarButtonWrapper>{toolbarButtons}</ToolbarButtonWrapper>
-          </ToolBarRow>
+              <ToolbarButtonWrapper>{toolbarButtons}</ToolbarButtonWrapper>
+            </ToolBarRow>
+          )}
         </>
       }
-      content={table}
+      content={
+        isAppOnline ? table : <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+      }
       isPageContentLoading={isLoading}
     />
   )
