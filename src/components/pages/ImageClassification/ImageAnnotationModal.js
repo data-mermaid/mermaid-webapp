@@ -14,7 +14,7 @@ const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
 
-  const _renderMap = useEffect(() => {
+  const _renderImageViaMap = useEffect(() => {
     if (!isModalDisplayed) {
       return
     }
@@ -27,11 +27,12 @@ const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
     })
 
     const bounds = map.current.getBounds()
+
     map.current.setStyle({
       version: 8,
       name: 'image',
       sources: {
-        image: {
+        benthicQuadratImage: {
           type: 'image',
           url: SampleImage, // TODO: Will be fetched from API
           coordinates: [
@@ -45,14 +46,14 @@ const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
       },
       layers: [
         {
-          id: 'image-layer',
+          id: 'benthicQuadratImageLayer',
           type: 'raster',
-          source: 'image',
+          source: 'benthicQuadratImage',
         },
       ],
     })
 
-    // This keeps the max extent of the map to the size of the image
+    // Keep the max extent of the map to the size of the image
     map.current.setMaxBounds([
       [bounds._sw.lng, bounds._sw.lat],
       [bounds._ne.lng, bounds._ne.lat],
