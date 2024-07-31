@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { H2 } from '../../generic/text'
 import { InputWrapper } from '../../generic/form'
@@ -7,6 +7,7 @@ import {
   StickyObservationTable,
 } from '../collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Th } from '../../generic/Table/table'
+import ImageAnnotationModal from './ImageAnnotationModal'
 // import PropTypes from 'prop-types';
 
 const StyledColgroup = styled('colgroup')`
@@ -74,29 +75,38 @@ const SubHeaderRow = () => (
 )
 
 const ImageClassificationObservationTable = () => {
+  const [isModalDisplayed, setIsModalDisplayed] = useState(false)
+
   return (
-    <InputWrapper>
-      <H2 id="table-label">Observations</H2>
-      <StyledOverflowWrapper>
-        <StickyObservationTable aria-labelledby="table-label">
-          <StyledColgroup>
-            <col className="number" />
-            <col className="thumbnail" />
-            <col className="quadrat" />
-            <col className="benthicAttribute" />
-            <col className="growthForm" />
-            <col className="numberOfPoints" />
-            {/* {areValidationsShowing && <col className="validations" />} */}
-            <col className="remove" />
-          </StyledColgroup>
-          <thead>
-            <TableHeaderRow />
-            <SubHeaderRow />
-          </thead>
-          {/* <tbody>{observationsRows}</tbody> */}
-        </StickyObservationTable>
-      </StyledOverflowWrapper>
-    </InputWrapper>
+    <>
+      <InputWrapper>
+        <H2 id="table-label">Observations</H2>
+        <StyledOverflowWrapper>
+          <StickyObservationTable aria-labelledby="table-label">
+            <StyledColgroup>
+              <col className="number" />
+              <col className="thumbnail" />
+              <col className="quadrat" />
+              <col className="benthicAttribute" />
+              <col className="growthForm" />
+              <col className="numberOfPoints" />
+              {/* {areValidationsShowing && <col className="validations" />} */}
+              <col className="remove" />
+            </StyledColgroup>
+            <thead>
+              <TableHeaderRow />
+              <SubHeaderRow />
+            </thead>
+            {/* <tbody>{observationsRows}</tbody> */}
+          </StickyObservationTable>
+        </StyledOverflowWrapper>
+      </InputWrapper>
+      <button onClick={() => setIsModalDisplayed(true)}>Temp button to open Modal</button>
+      <ImageAnnotationModal
+        isModalDisplayed={isModalDisplayed}
+        setIsModalDisplayed={setIsModalDisplayed}
+      />
+    </>
   )
 }
 
