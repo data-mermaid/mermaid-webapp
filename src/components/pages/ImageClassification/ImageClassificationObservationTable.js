@@ -1,16 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { H2 } from '../../generic/text'
 import { InputWrapper } from '../../generic/form'
 import {
   StyledOverflowWrapper,
   StickyObservationTable,
 } from '../collectRecordFormPages/CollectingFormPage.Styles'
-import { Tr, Th } from '../../generic/Table/table'
-// import PropTypes from 'prop-types'
-import { ButtonPrimary } from '../../generic/buttons'
-import { IconUpload } from '../../icons'
-import ImageUploadModal from './ImageUploadModal'
-import { StyledColgroup, IconContainer } from './ImageClassificationObservationTable.styles'
+import { Tr, Th, Td } from '../../generic/Table/table'
+import PropTypes from 'prop-types'
+import { StyledColgroup } from './ImageClassificationObservationTable.styles'
 
 const tableHeaders = [
   { align: 'right', id: 'thumbnail-label', text: 'Thumbnail' },
@@ -50,8 +47,7 @@ const SubHeaderRow = () => (
   </Tr>
 )
 
-const ImageClassificationObservationTable = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+const ImageClassificationObservationTable = ({ uploadedFiles }) => {
   return (
     <InputWrapper>
       <H2 id="table-label">Observations</H2>
@@ -71,20 +67,23 @@ const ImageClassificationObservationTable = () => {
             <TableHeaderRow />
             <SubHeaderRow />
           </thead>
-          {/* <tbody>{observationsRows}</tbody> */}
+          <tbody>
+            {uploadedFiles.map((file, index) => (
+              <Tr key={index}>
+                <Td>{index + 1}</Td>
+                <Td>{file.name}</Td>
+                {/* Other cells can be added here as needed */}
+              </Tr>
+            ))}
+          </tbody>
         </StickyObservationTable>
       </StyledOverflowWrapper>
-      <ButtonPrimary type="button" onClick={() => setIsModalOpen(true)}>
-        <IconContainer>
-          <IconUpload />
-        </IconContainer>
-        Upload Photos
-      </ButtonPrimary>
-      {isModalOpen && <ImageUploadModal onClose={() => setIsModalOpen(false)} />}
     </InputWrapper>
   )
 }
 
-// ImageClassificationObservationTable.propTypes = {}
+ImageClassificationObservationTable.propTypes = {
+  uploadedFiles: PropTypes.arrayOf(PropTypes.object),
+}
 
 export default ImageClassificationObservationTable

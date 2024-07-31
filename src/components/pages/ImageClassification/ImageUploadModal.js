@@ -9,19 +9,21 @@ import {
   HiddenInput,
 } from './ImageUploadModal.styles'
 
-const ImageUploadModal = ({ onClose }) => {
+const ImageUploadModal = ({ onClose, onFilesUpload }) => {
   const [selectedFiles, setSelectedFiles] = useState([])
   const fileInputRef = useRef(null)
 
   const handleFileChange = (event) => {
-    const files = event.target.files
+    const files = Array.from(event.target.files)
     setSelectedFiles([...selectedFiles, ...files])
+    onFilesUpload([...selectedFiles, ...files])
   }
 
   const handleDrop = (event) => {
     event.preventDefault()
-    const files = event.dataTransfer.files
+    const files = Array.from(event.dataTransfer.files)
     setSelectedFiles([...selectedFiles, ...files])
+    onFilesUpload([...selectedFiles, ...files])
   }
 
   const handleDragOver = (event) => {
@@ -31,6 +33,7 @@ const ImageUploadModal = ({ onClose }) => {
   const handleRemoveFile = (file) => {
     const updatedFiles = selectedFiles.filter((f) => f !== file)
     setSelectedFiles(updatedFiles)
+    onFilesUpload(updatedFiles)
   }
 
   const handleButtonClick = () => {
@@ -66,6 +69,7 @@ const ImageUploadModal = ({ onClose }) => {
 
 ImageUploadModal.propTypes = {
   onClose: PropTypes.func.isRequired,
+  onFilesUpload: PropTypes.func.isRequired,
 }
 
 export default ImageUploadModal
