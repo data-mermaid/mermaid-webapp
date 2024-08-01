@@ -44,5 +44,4 @@ const DropZone = styled.div`
 const HiddenInput = styled.input`
   display: none;
 `
-
 export { ModalOverlay, ModalContent, CloseButton, DropZone, HiddenInput }

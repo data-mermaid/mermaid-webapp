@@ -10,22 +10,24 @@ import PropTypes from 'prop-types'
 import { StyledColgroup } from './ImageClassificationObservationTable.styles'
 
 const tableHeaders = [
+  { align: 'right', id: 'number-label', text: '#' },
   { align: 'right', id: 'thumbnail-label', text: 'Thumbnail' },
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
   { align: 'right', id: 'growth-form-label', text: 'Growth Form' },
   { colSpan: 3, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
+  { align: 'right', id: 'validations', text: 'Validations' },
+  { align: 'right', id: 'review', text: 'Review' },
+  { align: 'right', id: 'remove', text: 'Remove' },
 ]
 
 const TableHeaderRow = () => (
   <Tr>
-    <Th />
     {tableHeaders.map((header) => (
       <Th key={header.id} align={header.align} id={header.id} colSpan={header.colSpan || 1}>
         <span>{header.text}</span>
       </Th>
     ))}
-    <Th />
   </Tr>
 )
 
@@ -43,7 +45,7 @@ const SubHeaderRow = () => (
         <span>{col.text}</span>
       </Th>
     ))}
-    <Th />
+    <Th colSpan={4} />
   </Tr>
 )
 
@@ -59,8 +61,11 @@ const ImageClassificationObservationTable = ({ uploadedFiles }) => {
             <col className="quadrat" />
             <col className="benthicAttribute" />
             <col className="growthForm" />
-            <col className="numberOfPoints" />
-            {/* {areValidationsShowing && <col className="validations" />} */}
+            <col className="confirmed" />
+            <col className="unconfirmed" />
+            <col className="unknown" />
+            <col className="validations" />
+            <col className="review" />
             <col className="remove" />
           </StyledColgroup>
           <thead>
@@ -70,9 +75,17 @@ const ImageClassificationObservationTable = ({ uploadedFiles }) => {
           <tbody>
             {uploadedFiles.map((file, index) => (
               <Tr key={index}>
-                <Td>{index + 1}</Td>
-                <Td>{file.name}</Td>
-                {/* Other cells can be added here as needed */}
+                <Td style={{ textAlign: 'center' }}>{index + 1}</Td>
+                <Td style={{ textAlign: 'center' }}>{file.name}</Td>
+                <Td></Td>
+                <Td></Td>
+                <Td></Td>
+                <Td></Td>
+                <Td></Td>
+                <Td></Td>
+                <Td></Td>
+                <Td></Td>
+                <Td></Td>
               </Tr>
             ))}
           </tbody>

@@ -30,4 +30,8 @@ const IconContainer = styled('span')`
   margin-right: 0.8rem;
 `
 
-export { StyledColgroup, IconContainer }
+const ButtonContainer = styled.div`
+  margin-left: 1rem;
+`
+
+export { StyledColgroup, IconContainer, ButtonContainer }
