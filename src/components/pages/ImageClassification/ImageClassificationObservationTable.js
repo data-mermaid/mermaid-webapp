@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { H2 } from '../../generic/text'
 import { InputWrapper } from '../../generic/form'
 import {
@@ -51,8 +51,6 @@ const SubHeaderRow = () => (
 )
 
 const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }) => {
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
-
   return (
     <InputWrapper>
       <H2 id="table-label">Observations</H2>
@@ -88,9 +86,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                 <StyledTd></StyledTd>
                 <StyledTd></StyledTd>
                 <StyledTd>
-                  <ButtonPrimary type="button" onClick={() => setIsReviewModalOpen(true)}>
-                    Review
-                  </ButtonPrimary>
+                  <ButtonPrimary type="button">Review</ButtonPrimary>
                 </StyledTd>
                 <StyledTd>
                   <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
