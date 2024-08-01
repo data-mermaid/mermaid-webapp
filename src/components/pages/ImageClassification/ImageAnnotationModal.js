@@ -10,6 +10,23 @@ const Footer = styled.div`
   justify-content: space-between;
 `
 
+const Legend = styled.div`
+  display: flex;
+  gap: 8px;
+`
+
+const LegendItem = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const LegendSquare = styled.div`
+  width: 12px;
+  height: 12px;
+  margin-right: 2px;
+  border: ${({ color }) => `2px solid ${color}`};
+`
+
 const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
@@ -87,7 +104,24 @@ const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
       }
       footerContent={
         <Footer>
-          <div>legend goes here</div>
+          <Legend>
+            <LegendItem>
+              <LegendSquare color="#D4BC48" />
+              Current
+            </LegendItem>
+            <LegendItem>
+              <LegendSquare color="#B4BBE2" />
+              Unconfirmed
+            </LegendItem>
+            <LegendItem>
+              <LegendSquare color="#80CA72" />
+              Confirmed
+            </LegendItem>
+            <LegendItem>
+              <LegendSquare color="#BF6B69" />
+              Unclassified
+            </LegendItem>
+          </Legend>
           <button onClick={handleCloseModal}>Close</button>
         </Footer>
       }
