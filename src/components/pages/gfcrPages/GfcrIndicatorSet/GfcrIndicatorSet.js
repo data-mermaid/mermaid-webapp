@@ -197,6 +197,11 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       if (!values.title) {
         errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
+
+      if (!values.report_date) {
+        errors.report_date = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
       return errors
     },
   })
@@ -220,18 +225,20 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         setSelectedNavItem={setSelectedNavItem}
       />
       <div style={{ flex: 1 }}>
-        <GfcrIndicatorSetForm
-          formik={formik}
-          indicatorSet={indicatorSetBeingEdited}
-          setIndicatorSet={setIndicatorSetBeingEdited}
-          selectedNavItem={selectedNavItem}
-          setSelectedNavItem={setSelectedNavItem}
-          indicatorSetType={indicatorSetType}
-          handleFormSubmit={handleFormSubmit}
-          isNewIndicatorSet={!!newIndicatorSetType}
-          choices={choices}
-          displayHelp={displayHelp}
-        />
+        {!!indicatorSetBeingEdited && (
+          <GfcrIndicatorSetForm
+            formik={formik}
+            indicatorSet={indicatorSetBeingEdited}
+            setIndicatorSet={setIndicatorSetBeingEdited}
+            selectedNavItem={selectedNavItem}
+            setSelectedNavItem={setSelectedNavItem}
+            indicatorSetType={indicatorSetType}
+            handleFormSubmit={handleFormSubmit}
+            isNewIndicatorSet={!!newIndicatorSetType}
+            choices={choices}
+            displayHelp={displayHelp}
+          />
+        )}
       </div>
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />

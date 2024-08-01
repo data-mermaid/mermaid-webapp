@@ -56,21 +56,23 @@ const ReportTitleAndDateForm = ({ formik, handleInputBlur, isNewIndicatorSet, di
     <StyledGfcrInputWrapper>
       <InputWithLabelAndValidation
         required
-        label="Title"
+        label={language.pages.gfcrIndicatorSet.indicatorSetTitle}
         id="gfcr-title"
         type="text"
         {...formik.getFieldProps('title')}
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}
         showHelperText={displayHelp}
-        helperText={'Example helper text'}
+        helperText={language.pages.gfcrIndicatorSet.getIndicatorSetTitleHelperText()}
       />
       <InputWithLabelAndValidation
-        label="Reporting Date"
+        label={language.pages.gfcrIndicatorSet.indicatorSetReportingDate}
         id="gfcr-report_date"
         type="date"
         {...formik.getFieldProps('report_date')}
         onBlur={(event) => handleInputBlur(formik, event, 'report_date')}
+        showHelperText={displayHelp}
+        helperText={language.pages.gfcrIndicatorSet.getIndicatorSetReportingDateHelperText()}
       />
       <DeleteRecordButton
         currentPage={1}

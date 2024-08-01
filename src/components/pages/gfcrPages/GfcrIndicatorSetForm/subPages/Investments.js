@@ -30,8 +30,8 @@ const Investments = ({
   setIndicatorSet,
   choices,
   onSubmit,
-  onDelete,
   setSelectedNavItem,
+  displayHelp,
 }) => {
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
@@ -282,7 +282,7 @@ const Investments = ({
         choices={choices}
         onDismiss={handleInvestmentModalDismiss}
         onSubmit={onSubmit}
-        onDelete={onDelete}
+        displayHelp={displayHelp}
       />
     </>
   )
@@ -293,8 +293,8 @@ Investments.propTypes = {
   setIndicatorSet: PropTypes.func.isRequired,
   choices: choicesPropType.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
   setSelectedNavItem: PropTypes.func.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
 export default Investments
