@@ -16,9 +16,18 @@ const ImageClassificationContainer = () => {
     setIsModalOpen(false)
   }
 
+  const handleRemoveFile = (file) => {
+    const updatedFiles = uploadedFiles.filter((f) => f !== file)
+    setUploadedFiles(updatedFiles)
+    toast.warn('File removed')
+  }
+
   return (
     <>
-      <ImageClassificationObservationTable uploadedFiles={uploadedFiles} />
+      <ImageClassificationObservationTable
+        uploadedFiles={uploadedFiles}
+        handleRemoveFile={handleRemoveFile}
+      />
       <ButtonContainer>
         <ButtonPrimary type="button" onClick={() => setIsModalOpen(true)}>
           <IconContainer>

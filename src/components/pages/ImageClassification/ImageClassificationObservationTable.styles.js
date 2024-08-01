@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Td } from '../../generic/Table/table'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -26,6 +27,10 @@ const StyledColgroup = styled('colgroup')`
   }
 `
 
+const StyledTd = styled(Td)`
+  padding: 0.5em !important;
+`
+
 const IconContainer = styled('span')`
   margin-right: 0.8rem;
 `
@@ -34,4 +39,4 @@ const ButtonContainer = styled.div`
   margin-left: 1rem;
 `
 
-export { StyledColgroup, IconContainer, ButtonContainer }
+export { StyledColgroup, IconContainer, ButtonContainer, StyledTd }

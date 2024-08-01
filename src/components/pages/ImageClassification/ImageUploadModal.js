@@ -30,12 +30,6 @@ const ImageUploadModal = ({ onClose, onFilesUpload }) => {
     event.preventDefault()
   }
 
-  // const handleRemoveFile = (file) => {
-  //   const updatedFiles = selectedFiles.filter((f) => f !== file)
-  //   setSelectedFiles(updatedFiles)
-  //   onFilesUpload(updatedFiles)
-  // }
-
   const handleButtonClick = () => {
     fileInputRef.current.click()
   }
@@ -55,13 +49,6 @@ const ImageUploadModal = ({ onClose, onFilesUpload }) => {
           </ButtonPrimary>
           <HiddenInput type="file" multiple onChange={handleFileChange} ref={fileInputRef} />
         </DropZone>
-        {/* <ul>
-          {selectedFiles.map((file, index) => (
-            <li key={index}>
-              {file.name} <button onClick={() => handleRemoveFile(file)}>Remove</button>
-            </li>
-          ))}
-        </ul> */}
       </ModalContent>
     </ModalOverlay>
   )

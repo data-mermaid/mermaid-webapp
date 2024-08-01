@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { H2 } from '../../generic/text'
 import { InputWrapper } from '../../generic/form'
 import {
   StyledOverflowWrapper,
   StickyObservationTable,
 } from '../collectRecordFormPages/CollectingFormPage.Styles'
-import { Tr, Th, Td } from '../../generic/Table/table'
+import { Tr, Th } from '../../generic/Table/table'
 import PropTypes from 'prop-types'
-import { StyledColgroup } from './ImageClassificationObservationTable.styles'
+import { StyledColgroup, StyledTd } from './ImageClassificationObservationTable.styles'
+import { ButtonPrimary, ButtonCaution } from '../../generic/buttons'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -17,8 +18,8 @@ const tableHeaders = [
   { align: 'right', id: 'growth-form-label', text: 'Growth Form' },
   { colSpan: 3, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
   { align: 'right', id: 'validations', text: 'Validations' },
-  { align: 'right', id: 'review', text: 'Review' },
-  { align: 'right', id: 'remove', text: 'Remove' },
+  { align: 'right', id: 'review', text: '' },
+  { align: 'right', id: 'remove', text: '' },
 ]
 
 const TableHeaderRow = () => (
@@ -49,7 +50,9 @@ const SubHeaderRow = () => (
   </Tr>
 )
 
-const ImageClassificationObservationTable = ({ uploadedFiles }) => {
+const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }) => {
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
+
   return (
     <InputWrapper>
       <H2 id="table-label">Observations</H2>
@@ -75,17 +78,25 @@ const ImageClassificationObservationTable = ({ uploadedFiles }) => {
           <tbody>
             {uploadedFiles.map((file, index) => (
               <Tr key={index}>
-                <Td style={{ textAlign: 'center' }}>{index + 1}</Td>
-                <Td style={{ textAlign: 'center' }}>{file.name}</Td>
-                <Td></Td>
-                <Td></Td>
-                <Td></Td>
-                <Td></Td>
-                <Td></Td>
-                <Td></Td>
-                <Td></Td>
-                <Td></Td>
-                <Td></Td>
+                <StyledTd>{index + 1}</StyledTd>
+                <StyledTd>{file.name}</StyledTd>
+                <StyledTd></StyledTd>
+                <StyledTd></StyledTd>
+                <StyledTd></StyledTd>
+                <StyledTd></StyledTd>
+                <StyledTd></StyledTd>
+                <StyledTd></StyledTd>
+                <StyledTd></StyledTd>
+                <StyledTd>
+                  <ButtonPrimary type="button" onClick={() => setIsReviewModalOpen(true)}>
+                    Review
+                  </ButtonPrimary>
+                </StyledTd>
+                <StyledTd>
+                  <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
+                    x
+                  </ButtonCaution>
+                </StyledTd>
               </Tr>
             ))}
           </tbody>
@@ -97,6 +108,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles }) => {
 
 ImageClassificationObservationTable.propTypes = {
   uploadedFiles: PropTypes.arrayOf(PropTypes.object),
+  handleRemoveFile: PropTypes.func,
 }
 
 export default ImageClassificationObservationTable
