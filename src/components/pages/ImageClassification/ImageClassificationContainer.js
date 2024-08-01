@@ -4,6 +4,7 @@ import ImageUploadModal from './ImageUploadModal'
 import { ButtonPrimary } from '../../generic/buttons'
 import { IconUpload } from '../../icons'
 import { IconContainer } from './ImageClassificationObservationTable.styles'
+import { toast } from 'react-toastify'
 
 const ImageClassificationContainer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -11,9 +12,9 @@ const ImageClassificationContainer = () => {
 
   const handleFilesUpload = (files) => {
     setUploadedFiles([...uploadedFiles, ...files])
+    toast.success('Files uploaded successfully')
+    setIsModalOpen(false)
   }
-
-  console.log({ uploadedFiles })
 
   return (
     <div>
