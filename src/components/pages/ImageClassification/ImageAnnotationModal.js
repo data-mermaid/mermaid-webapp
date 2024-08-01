@@ -5,6 +5,61 @@ import maplibregl from 'maplibre-gl'
 import Modal from '../../generic/Modal/Modal'
 import SampleImage from './sample-image.jpg'
 
+// TODO: This is sample data, will be replaced with actual data from API
+// Two rows, 5 columns of points
+const points = [
+  {
+    row: 122,
+    column: 122,
+    annotations: [{}],
+  },
+  {
+    row: 122,
+    column: 356,
+    annotations: [{}],
+  },
+  {
+    row: 122,
+    column: 590,
+    annotations: [{}],
+  },
+  {
+    row: 122,
+    column: 824,
+    annotations: [{}],
+  },
+  {
+    row: 122,
+    column: 1058,
+    annotations: [{}],
+  },
+  {
+    row: 356,
+    column: 122,
+    annotations: [{}],
+  },
+  {
+    row: 356,
+    column: 356,
+    annotations: [{}],
+  },
+  {
+    row: 356,
+    column: 590,
+    annotations: [{}],
+  },
+  {
+    row: 356,
+    column: 824,
+    annotations: [{}],
+  },
+  {
+    row: 356,
+    column: 1058,
+    annotations: [{}],
+  },
+]
+
 const Footer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -43,12 +98,66 @@ const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
             [bounds._sw.lng, bounds._sw.lat],
           ],
         },
+        patches: {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: points.map((point) => {
+              // TOOD: crop size might come from API?
+              // Row and Column represent the center of the patch in pixels,
+              // Crop size is the size of the patch in pixels
+              // We calculate the corners of the patch in pixels, then convert to lng, lat
+              const cropSize = 224
+              const topLeft = map.current.unproject([
+                point.column - cropSize / 2,
+                point.row - cropSize / 2,
+              ])
+              const bottomLeft = map.current.unproject([
+                point.column - cropSize / 2,
+                point.row + cropSize / 2,
+              ])
+              const bottomRight = map.current.unproject([
+                point.column + cropSize / 2,
+                point.row + cropSize / 2,
+              ])
+              const topRight = map.current.unproject([
+                point.column + cropSize / 2,
+                point.row - cropSize / 2,
+              ])
+              return {
+                type: 'Feature',
+                properties: {}, // TODO: Will use this to display confirmed, unconfirmed, unknown, etc.
+                geometry: {
+                  type: 'Polygon',
+                  coordinates: [
+                    [
+                      [topLeft.lng, topLeft.lat],
+                      [bottomLeft.lng, bottomLeft.lat],
+                      [bottomRight.lng, bottomRight.lat],
+                      [topRight.lng, topRight.lat],
+                      [topLeft.lng, topLeft.lat],
+                    ],
+                  ],
+                },
+              }
+            }),
+          },
+        },
       },
       layers: [
         {
           id: 'benthicQuadratImageLayer',
           type: 'raster',
           source: 'benthicQuadratImage',
+        },
+        {
+          id: 'patches-layer',
+          type: 'line',
+          source: 'patches',
+          paint: {
+            'line-width': 5, // TODO: This will be based on a property in geojson
+            'line-color': 'yellow', // TODO: This will be based on a property in geojson
+          },
         },
       ],
     })
