@@ -60,6 +60,7 @@ const GfcrIndicatorSetForm = ({
   handleFormSubmit,
   isNewIndicatorSet,
   choices,
+  displayHelp,
 }) => {
   return (
     <>
@@ -70,6 +71,7 @@ const GfcrIndicatorSetForm = ({
               formik={formik}
               handleInputBlur={handleInputBlur}
               isNewIndicatorSet={isNewIndicatorSet}
+              displayHelp={displayHelp}
             />
           )}
           {selectedNavItem === 'f1' && (
@@ -77,6 +79,7 @@ const GfcrIndicatorSetForm = ({
               formik={formik}
               handleInputBlur={handleInputBlur}
               handleInputFocus={handleInputFocus}
+              displayHelp={displayHelp}
             />
           )}
           {selectedNavItem === 'f2' && (
@@ -84,6 +87,7 @@ const GfcrIndicatorSetForm = ({
               formik={formik}
               handleInputBlur={handleInputBlur}
               handleInputFocus={handleInputFocus}
+              displayHelp={displayHelp}
             />
           )}
           {selectedNavItem === 'f3' && (
@@ -92,6 +96,7 @@ const GfcrIndicatorSetForm = ({
               handleInputBlur={handleInputBlur}
               handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
+              displayHelp={displayHelp}
             />
           )}
           {selectedNavItem === 'f4' && (
@@ -103,6 +108,7 @@ const GfcrIndicatorSetForm = ({
               indicatorSet={indicatorSet}
               setInputToDefaultValue={setInputToDefaultValue}
               handleFormSubmit={handleFormSubmit}
+              displayHelp={displayHelp}
             />
           )}
           {selectedNavItem === 'f5' && (
@@ -111,6 +117,7 @@ const GfcrIndicatorSetForm = ({
               handleInputBlur={handleInputBlur}
               handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
+              displayHelp={displayHelp}
             />
           )}
           {selectedNavItem === 'f6' && (
@@ -119,6 +126,7 @@ const GfcrIndicatorSetForm = ({
               handleInputBlur={handleInputBlur}
               handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
+              displayHelp={displayHelp}
             />
           )}
           {selectedNavItem === 'f7' && (
@@ -127,6 +135,7 @@ const GfcrIndicatorSetForm = ({
               handleInputBlur={handleInputBlur}
               handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
+              displayHelp={displayHelp}
             />
           )}
         </StyledForm>
@@ -136,6 +145,7 @@ const GfcrIndicatorSetForm = ({
           indicatorSet={indicatorSet}
           setIndicatorSet={setIndicatorSet}
           choices={choices}
+          displayHelp={displayHelp}
         />
       )}
       {selectedNavItem === 'investments' && (
@@ -144,6 +154,7 @@ const GfcrIndicatorSetForm = ({
           setIndicatorSet={setIndicatorSet}
           choices={choices}
           setSelectedNavItem={setSelectedNavItem}
+          displayHelp={displayHelp}
         />
       )}
       {selectedNavItem === 'revenues' && (
@@ -152,6 +163,7 @@ const GfcrIndicatorSetForm = ({
           setIndicatorSet={setIndicatorSet}
           choices={choices}
           setSelectedNavItem={setSelectedNavItem}
+          displayHelp={displayHelp}
         />
       )}
     </>
@@ -168,6 +180,7 @@ GfcrIndicatorSetForm.propTypes = {
   isNewIndicatorSet: PropTypes.bool.isRequired,
   handleFormSubmit: PropTypes.func.isRequired,
   choices: choicesPropType,
+  displayHelp: PropTypes.bool,
 }
 
 export default GfcrIndicatorSetForm

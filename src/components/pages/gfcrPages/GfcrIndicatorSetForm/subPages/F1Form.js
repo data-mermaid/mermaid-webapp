@@ -11,7 +11,7 @@ import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F1Form = ({ formik, handleInputBlur, handleInputFocus }) => {
+const F1Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
   return (
     <StyledGfcrInputWrapper>
       <H2>{gfcrIndicatorSetLanguage.f1Heading}</H2>
@@ -27,7 +27,8 @@ const F1Form = ({ formik, handleInputBlur, handleInputFocus }) => {
         {...formik.getFieldProps('f1_1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f1_1')}
         onFocus={(event) => handleInputFocus(event)}
-        helperText={gfcrIndicatorSetLanguage.f1_1_helper}
+        helperText={gfcrIndicatorSetLanguage.getF1_1_helper()}
+        showHelperText={displayHelp}
         onKeyDown={(event) => enforceNumberInput(event)}
       />
       <TextareaWithLabelAndValidation
@@ -41,6 +42,7 @@ const F1Form = ({ formik, handleInputBlur, handleInputFocus }) => {
 
 F1Form.propTypes = {
   formik: formikPropType.isRequired,
+  displayHelp: PropTypes.bool,
   handleInputBlur: PropTypes.func.isRequired,
   handleInputFocus: PropTypes.func.isRequired,
 }

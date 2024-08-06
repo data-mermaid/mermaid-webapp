@@ -1,5 +1,5 @@
 // import { CSVLink } from 'react-csv'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
@@ -35,12 +35,12 @@ import ButtonSecondaryDropdown from '../../../generic/ButtonSecondaryDropdown'
 import { DropdownItemStyle } from '../../../generic/ButtonSecondaryDropdown/ButtonSecondaryDropdown.styles'
 import { useCurrentProject } from '../../../../App/CurrentProjectContext'
 import GfcrGenericTable from '../GfcrGenericTable'
+import NewIndicatorSetModal from './NewIndicatorSetModal'
 
 const Gfcr = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const currentProjectPath = useCurrentProjectPath()
   const { gfcrIndicatorSets, setGfcrIndicatorSets } = useCurrentProject()
-  const navigate = useNavigate()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
@@ -48,6 +48,8 @@ const Gfcr = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const [isLoading, setIsLoading] = useState(true)
+  const [isNewIndicatorSetModalOpen, setIsNewIndicatorSetModalOpen] = useState(false)
+  const [newIndicatorSetType, setNewIndicatorSetType] = useState()
   // const [siteExportName, setSiteExportName] = useState('')
   // const [choices, setChoices] = useState({})
   // const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
@@ -150,7 +152,7 @@ const Gfcr = () => {
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
-      const keys = ['values.title.props.children', 'values.type', 'values.report_date']
+      const keys = ['values.title.props.children', 'values.report_date']
 
       const queryTerms = splitSearchQueryStrings(query)
       const filteredRows =
@@ -226,7 +228,8 @@ const Gfcr = () => {
   )
 
   const handleNewIndicatorSet = (type) => {
-    navigate(`${currentProjectPath}/gfcr/new/${type}`)
+    setNewIndicatorSetType(type)
+    setIsNewIndicatorSetModalOpen(true)
   }
 
   const toolbarButtons = (
@@ -246,6 +249,15 @@ const Gfcr = () => {
           <IconDownload /> Export
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
+      <NewIndicatorSetModal
+        indicatorSetType={newIndicatorSetType}
+        isOpen={isNewIndicatorSetModalOpen}
+        onDismiss={(resetForm) => {
+          resetForm()
+          setIsNewIndicatorSetModalOpen(false)
+          setNewIndicatorSetType()
+        }}
+      />
     </>
   )
 

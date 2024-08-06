@@ -12,7 +12,7 @@ import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal }) => {
+const F7Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFieldValueTotal }) => {
   return (
     <StyledGfcrInputWrapper>
       <H2>{gfcrIndicatorSetLanguage.f7Heading}</H2>
@@ -29,7 +29,8 @@ const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1a')}
             onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.men_helper}
+            helperText={gfcrIndicatorSetLanguage.getF7_1_men_helper()}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -41,7 +42,8 @@ const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1b')}
             onKeyDown={(event) => enforceNumberInput(event)}
             onFocus={(event) => handleInputFocus(event)}
-            helperText={gfcrIndicatorSetLanguage.women_helper}
+            helperText={gfcrIndicatorSetLanguage.getF7_1_women_helper()}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -62,7 +64,8 @@ const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             {...formik.getFieldProps('f7_1c')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1c')}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.youth_helper}
+            helperText={gfcrIndicatorSetLanguage.getF7_1_youth_helper()}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -73,7 +76,8 @@ const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             {...formik.getFieldProps('f7_1d')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1d')}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.indigenous_helper}
+            helperText={gfcrIndicatorSetLanguage.getF7_1_indigenous_helper()}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
       </InputRow>
@@ -90,7 +94,8 @@ const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             onBlur={(event) => handleInputBlur(formik, event, 'f7_2a')}
             onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.men_helper}
+            helperText={gfcrIndicatorSetLanguage.getF7_2_men_helper()}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -102,7 +107,8 @@ const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             onBlur={(event) => handleInputBlur(formik, event, 'f7_2b')}
             onFocus={(event) => handleInputFocus(event)}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.women_helper}
+            helperText={gfcrIndicatorSetLanguage.getF7_2_women_helper()}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -123,7 +129,8 @@ const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             {...formik.getFieldProps('f7_2c')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_2c')}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.youth_helper}
+            helperText={gfcrIndicatorSetLanguage.getF7_2_youth_helper()}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -134,7 +141,8 @@ const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
             {...formik.getFieldProps('f7_2d')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_2d')}
             onKeyDown={(event) => enforceNumberInput(event)}
-            helperText={gfcrIndicatorSetLanguage.indigenous_helper}
+            helperText={gfcrIndicatorSetLanguage.getF7_2_indigenous_helper()}
+            showHelperText={displayHelp}
           />
         </StyledGfcrSubInputWrapper>
       </InputRow>
@@ -150,7 +158,8 @@ const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
         onBlur={(event) => handleInputBlur(formik, event, 'f7_3')}
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
-        helperText={gfcrIndicatorSetLanguage.f7_3_helper}
+        helperText={gfcrIndicatorSetLanguage.getF7_3_helper()}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
@@ -164,7 +173,8 @@ const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
         onBlur={(event) => handleInputBlur(formik, event, 'f7_4')}
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
-        helperText={gfcrIndicatorSetLanguage.f7_4_helper}
+        helperText={gfcrIndicatorSetLanguage.getF7_4_helper()}
+        showHelperText={displayHelp}
       />
       <TextareaWithLabelAndValidation
         id="f7_notes"
@@ -175,11 +185,12 @@ const F6Form = ({ formik, handleInputBlur, handleInputFocus, getFieldValueTotal 
   )
 }
 
-F6Form.propTypes = {
+F7Form.propTypes = {
   formik: formikPropType.isRequired,
   handleInputBlur: PropTypes.func.isRequired,
   handleInputFocus: PropTypes.func.isRequired,
   getFieldValueTotal: PropTypes.func.isRequired,
+  displayHelp: PropTypes.bool,
 }
 
-export default F6Form
+export default F7Form

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useParams, useNavigate } from 'react-router-dom'
@@ -28,6 +29,17 @@ import IndicatorSetTitle from './IndicatorSetTitle'
 import { GfcrPageUnavailablePadding } from '../Gfcr/Gfcr.styles'
 import PageUnavailable from '../../PageUnavailable'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
+import { ButtonSecondary } from '../../../generic/buttons'
+import { IconInfo } from '../../../icons'
+
+const ButtonContainer = styled.div`
+  display: 'flex';
+  justify-content: 'right';
+`
+
+const HelpButton = styled(ButtonSecondary)`
+  margin-right: 1rem;
+`
 
 const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -45,6 +57,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [indicatorSetBeingEdited, setIndicatorSetBeingEdited] = useState()
+  const [displayHelp, setDisplayHelp] = useState(false)
 
   const [selectedNavItem, setSelectedNavItem] = useState('report-title-and-year')
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new indicator set is saved (and that triggers a navigation to its new page)
@@ -184,6 +197,11 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       if (!values.title) {
         errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
+
+      if (!values.report_date) {
+        errors.report_date = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
       return errors
     },
   })
@@ -207,17 +225,20 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         setSelectedNavItem={setSelectedNavItem}
       />
       <div style={{ flex: 1 }}>
-        <GfcrIndicatorSetForm
-          formik={formik}
-          indicatorSet={indicatorSetBeingEdited}
-          setIndicatorSet={setIndicatorSetBeingEdited}
-          selectedNavItem={selectedNavItem}
-          setSelectedNavItem={setSelectedNavItem}
-          indicatorSetType={indicatorSetType}
-          handleFormSubmit={handleFormSubmit}
-          isNewIndicatorSet={!!newIndicatorSetType}
-          choices={choices}
-        />
+        {!!indicatorSetBeingEdited && (
+          <GfcrIndicatorSetForm
+            formik={formik}
+            indicatorSet={indicatorSetBeingEdited}
+            setIndicatorSet={setIndicatorSetBeingEdited}
+            selectedNavItem={selectedNavItem}
+            setSelectedNavItem={setSelectedNavItem}
+            indicatorSetType={indicatorSetType}
+            handleFormSubmit={handleFormSubmit}
+            isNewIndicatorSet={!!newIndicatorSetType}
+            choices={choices}
+            displayHelp={displayHelp}
+          />
+        )}
       </div>
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
@@ -261,12 +282,17 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
                 reportingDate={new Date(formik.values.report_date)}
                 isNew={!!newIndicatorSetType}
               />
-              <SaveButton
-                formId="gfcr-indicator-set-form"
-                saveButtonState={saveButtonState}
-                formHasErrors={!!Object.keys(formik.errors).length}
-                formDirty={isFormDirty}
-              />
+              <ButtonContainer>
+                <HelpButton to="" onClick={() => setDisplayHelp(!displayHelp)}>
+                  <IconInfo /> {displayHelp ? 'Hide Help' : 'Show Help'}
+                </HelpButton>
+                <SaveButton
+                  formId="gfcr-indicator-set-form"
+                  saveButtonState={saveButtonState}
+                  formHasErrors={!!Object.keys(formik.errors).length}
+                  formDirty={isFormDirty}
+                />
+              </ButtonContainer>
             </>
           ) : (
             <h2>{language.pages.gfcrIndicatorSet.title}</h2>

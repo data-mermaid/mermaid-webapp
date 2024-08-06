@@ -9,6 +9,7 @@ import { Tr, Th } from '../../generic/Table/table'
 import PropTypes from 'prop-types'
 import { StyledTd } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../generic/buttons'
+import { IconClose } from '../../icons'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -77,7 +78,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                 </StyledTd>
                 <StyledTd>
                   <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
-                    x
+                    <IconClose aria-label="close" />
                   </ButtonCaution>
                 </StyledTd>
               </Tr>
