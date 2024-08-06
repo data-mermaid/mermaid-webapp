@@ -28,14 +28,14 @@ const LegendSquare = styled.div`
   border: ${({ color }) => `2px solid ${color}`};
 `
 
-const ImageAnnotationModal = ({ setIsModalDisplayed, data }) => {
+const ImageAnnotationModal = ({ setDataToReview, dataToReview }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [dimensions, setDimensions] = useState()
 
   const _getImageDimensions = useEffect(() => {
     const imageForMap = new Image()
-    imageForMap.src = data.image
+    imageForMap.src = dataToReview.image
     imageForMap.onload = () => {
       // Assumes that the image will always be wider than it is tall
       // If assumption is incorrect, we will need to check for height as well
@@ -70,7 +70,7 @@ const ImageAnnotationModal = ({ setIsModalDisplayed, data }) => {
       sources: {
         benthicQuadratImage: {
           type: 'image',
-          url: data.image,
+          url: dataToReview.image,
           coordinates: [
             // spans the image across the entire map
             [bounds._sw.lng, bounds._ne.lat],
@@ -83,7 +83,7 @@ const ImageAnnotationModal = ({ setIsModalDisplayed, data }) => {
           type: 'geojson',
           data: {
             type: 'FeatureCollection',
-            features: data.points.map((point) => {
+            features: dataToReview.points.map((point) => {
               // TOOD: crop size might come from API?
               // Row and Column represent the center of the patch in pixels,
               // Crop size is the size of the patch in pixels
@@ -148,16 +148,16 @@ const ImageAnnotationModal = ({ setIsModalDisplayed, data }) => {
       [bounds._sw.lng, bounds._sw.lat],
       [bounds._ne.lng, bounds._ne.lat],
     ])
-  }, [dimensions, data])
+  }, [dimensions, dataToReview])
 
   const handleCloseModal = () => {
     // TODO: Save content before closing
-    setIsModalDisplayed(false)
+    setDataToReview()
   }
 
   return (
     <Modal
-      title={data.original_image_name}
+      title={dataToReview.original_image_name}
       isOpen
       onDismiss={handleCloseModal}
       maxWidth="100%"
@@ -204,8 +204,8 @@ const ImageAnnotationModal = ({ setIsModalDisplayed, data }) => {
 }
 
 ImageAnnotationModal.propTypes = {
-  setIsModalDisplayed: PropTypes.func.isRequired,
-  data: PropTypes.shape({
+  setDataToReview: PropTypes.func.isRequired,
+  dataToReview: PropTypes.shape({
     original_image_name: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     points: PropTypes.arrayOf(

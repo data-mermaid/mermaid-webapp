@@ -54,7 +54,7 @@ const SubHeaderRow = () => (
 )
 
 const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }) => {
-  const [isModalDisplayed, setIsModalDisplayed] = useState(false)
+  const [dataToReview, setDataToReview] = useState()
 
   return (
     <>
@@ -79,7 +79,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd>
-                    <ButtonPrimary type="button" onClick={() => setIsModalDisplayed(true)}>
+                    <ButtonPrimary type="button" onClick={() => setDataToReview(sampleData)}>
                       Review
                     </ButtonPrimary>
                   </StyledTd>
@@ -94,8 +94,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
           </StickyObservationTable>
         </StyledOverflowWrapper>
       </InputWrapper>
-      {isModalDisplayed ? (
-        <ImageAnnotationModal setIsModalDisplayed={setIsModalDisplayed} data={sampleData} />
+      {dataToReview ? (
+        <ImageAnnotationModal dataToReview={sampleData} setDataToReview={setDataToReview} />
       ) : undefined}
     </>
   )
