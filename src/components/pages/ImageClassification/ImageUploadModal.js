@@ -1,15 +1,10 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
+import Modal from '../../generic/Modal'
 import { ButtonPrimary } from '../../generic/buttons'
-import {
-  ModalOverlay,
-  ModalContent,
-  CloseButton,
-  DropZone,
-  HiddenInput,
-} from './ImageUploadModal.styles'
+import { DropZone, HiddenInput } from './ImageUploadModal.styles'
 
-const ImageUploadModal = ({ onClose, onFilesUpload }) => {
+const ImageUploadModal = ({ isOpen, onClose, onFilesUpload }) => {
   const [selectedFiles, setSelectedFiles] = useState([])
   const fileInputRef = useRef(null)
 
@@ -35,10 +30,13 @@ const ImageUploadModal = ({ onClose, onFilesUpload }) => {
   }
 
   return (
-    <ModalOverlay>
-      <ModalContent>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
-        <h2>Upload Photos</h2>
+    <Modal
+      isOpen={isOpen}
+      onDismiss={onClose}
+      title="Upload Photos"
+      maxWidth="80rem"
+      padding="0.5rem"
+      mainContent={
         <DropZone onDrop={handleDrop} onDragOver={handleDragOver}>
           Drop files here
           <br />
@@ -49,12 +47,20 @@ const ImageUploadModal = ({ onClose, onFilesUpload }) => {
           </ButtonPrimary>
           <HiddenInput type="file" multiple onChange={handleFileChange} ref={fileInputRef} />
         </DropZone>
-      </ModalContent>
-    </ModalOverlay>
+      }
+      footerContent={
+        <div>
+          <ButtonPrimary type="button" onClick={onClose}>
+            Close
+          </ButtonPrimary>
+        </div>
+      }
+    />
   )
 }
 
 ImageUploadModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onFilesUpload: PropTypes.func.isRequired,
 }

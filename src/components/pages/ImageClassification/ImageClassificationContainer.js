@@ -37,7 +37,11 @@ const ImageClassificationContainer = () => {
         </ButtonPrimary>
       </ButtonContainer>
       {isModalOpen && (
-        <ImageUploadModal onClose={() => setIsModalOpen(false)} onFilesUpload={handleFilesUpload} />
+        <ImageUploadModal
+          onClose={() => setIsModalOpen(false)}
+          onFilesUpload={handleFilesUpload}
+          isOpen={isModalOpen}
+        />
       )}
     </>
   )
