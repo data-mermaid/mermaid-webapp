@@ -7,7 +7,7 @@ import {
 } from '../collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Th } from '../../generic/Table/table'
 import PropTypes from 'prop-types'
-import { StyledColgroup, StyledTd } from './ImageClassificationObservationTable.styles'
+import { StyledTd } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../generic/buttons'
 
 const tableHeaders = [
@@ -56,19 +56,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
       <H2 id="table-label">Observations</H2>
       <StyledOverflowWrapper>
         <StickyObservationTable aria-labelledby="table-label">
-          <StyledColgroup>
-            <col className="number" />
-            <col className="thumbnail" />
-            <col className="quadrat" />
-            <col className="benthicAttribute" />
-            <col className="growthForm" />
-            <col className="confirmed" />
-            <col className="unconfirmed" />
-            <col className="unknown" />
-            <col className="validations" />
-            <col className="review" />
-            <col className="remove" />
-          </StyledColgroup>
           <thead>
             <TableHeaderRow />
             <SubHeaderRow />
