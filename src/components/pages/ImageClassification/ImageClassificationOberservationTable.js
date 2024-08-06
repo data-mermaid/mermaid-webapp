@@ -8,6 +8,7 @@ import {
 } from '../collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Th } from '../../generic/Table/table'
 import ImageAnnotationModal from './ImageAnnotationModal'
+import sampleData from './sample-data'
 // import PropTypes from 'prop-types';
 
 const StyledColgroup = styled('colgroup')`
@@ -102,10 +103,9 @@ const ImageClassificationObservationTable = () => {
         </StyledOverflowWrapper>
       </InputWrapper>
       <button onClick={() => setIsModalDisplayed(true)}>Temp button to open Modal</button>
-      <ImageAnnotationModal
-        isModalDisplayed={isModalDisplayed}
-        setIsModalDisplayed={setIsModalDisplayed}
-      />
+      {isModalDisplayed ? (
+        <ImageAnnotationModal setIsModalDisplayed={setIsModalDisplayed} data={sampleData} />
+      ) : undefined}
     </>
   )
 }
