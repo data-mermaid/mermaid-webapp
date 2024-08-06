@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import { H2 } from '../../generic/text'
 import { InputWrapper } from '../../generic/form'
 import {
@@ -7,53 +6,32 @@ import {
   StickyObservationTable,
 } from '../collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Th } from '../../generic/Table/table'
+import PropTypes from 'prop-types'
+import { StyledTd } from './ImageClassificationObservationTable.styles'
+import { ButtonPrimary, ButtonCaution } from '../../generic/buttons'
+import { IconClose } from '../../icons'
 import ImageAnnotationModal from './ImageAnnotationModal'
 import sampleData from './sample-data'
-// import PropTypes from 'prop-types';
-
-const StyledColgroup = styled('colgroup')`
-  col {
-    &.thumbnail {
-      width: 5rem;
-    }
-    &.quadrat {
-      width: 15rem;
-    }
-    &.benthicAttribute {
-      width: auto;
-    }
-    &.growthForm {
-      width: 20%;
-    }
-    &.numberOfPoints {
-      width: 20rem;
-    }
-    &.validation {
-      width: auto;
-    }
-    &.remove {
-      width: 5rem;
-    }
-  }
-`
 
 const tableHeaders = [
+  { align: 'right', id: 'number-label', text: '#' },
   { align: 'right', id: 'thumbnail-label', text: 'Thumbnail' },
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
   { align: 'right', id: 'growth-form-label', text: 'Growth Form' },
   { colSpan: 3, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
+  { align: 'right', id: 'validations', text: 'Validations' },
+  { align: 'right', id: 'review', text: '' },
+  { align: 'right', id: 'remove', text: '' },
 ]
 
 const TableHeaderRow = () => (
   <Tr>
-    <Th />
     {tableHeaders.map((header) => (
       <Th key={header.id} align={header.align} id={header.id} colSpan={header.colSpan || 1}>
         <span>{header.text}</span>
       </Th>
     ))}
-    <Th />
   </Tr>
 )
 
@@ -71,11 +49,11 @@ const SubHeaderRow = () => (
         <span>{col.text}</span>
       </Th>
     ))}
-    <Th />
+    <Th colSpan={4} />
   </Tr>
 )
 
-const ImageClassificationObservationTable = () => {
+const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }) => {
   const [isModalDisplayed, setIsModalDisplayed] = useState(false)
 
   return (
@@ -84,25 +62,38 @@ const ImageClassificationObservationTable = () => {
         <H2 id="table-label">Observations</H2>
         <StyledOverflowWrapper>
           <StickyObservationTable aria-labelledby="table-label">
-            <StyledColgroup>
-              <col className="number" />
-              <col className="thumbnail" />
-              <col className="quadrat" />
-              <col className="benthicAttribute" />
-              <col className="growthForm" />
-              <col className="numberOfPoints" />
-              {/* {areValidationsShowing && <col className="validations" />} */}
-              <col className="remove" />
-            </StyledColgroup>
             <thead>
               <TableHeaderRow />
               <SubHeaderRow />
             </thead>
-            {/* <tbody>{observationsRows}</tbody> */}
+            <tbody>
+              {uploadedFiles.map((file, index) => (
+                <Tr key={index}>
+                  <StyledTd>{index + 1}</StyledTd>
+                  <StyledTd>{file.name}</StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd>
+                    <ButtonPrimary type="button" onClick={() => setIsModalDisplayed(true)}>
+                      Review
+                    </ButtonPrimary>
+                  </StyledTd>
+                  <StyledTd>
+                    <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
+                      <IconClose aria-label="close" />
+                    </ButtonCaution>
+                  </StyledTd>
+                </Tr>
+              ))}
+            </tbody>
           </StickyObservationTable>
         </StyledOverflowWrapper>
       </InputWrapper>
-      <button onClick={() => setIsModalDisplayed(true)}>Temp button to open Modal</button>
       {isModalDisplayed ? (
         <ImageAnnotationModal setIsModalDisplayed={setIsModalDisplayed} data={sampleData} />
       ) : undefined}
@@ -110,9 +101,9 @@ const ImageClassificationObservationTable = () => {
   )
 }
 
-// ImageClassificationObservationTable.propTypes = {
-//   areValidationsShowing: PropTypes.bool,
-//   observationsRows: PropTypes.node,
-// }
+ImageClassificationObservationTable.propTypes = {
+  uploadedFiles: PropTypes.arrayOf(PropTypes.object),
+  handleRemoveFile: PropTypes.func,
+}
 
 export default ImageClassificationObservationTable
