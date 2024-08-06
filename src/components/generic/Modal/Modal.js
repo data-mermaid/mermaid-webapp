@@ -22,7 +22,7 @@ const StyledDialogOverlay = styled('div')`
 `
 
 const StyledDialog = styled('div')`
-  padding: 0;
+  padding: ${(props) => props.padding || '0'};
   margin: 0;
   min-width: 30rem;
   width: calc(100vw - 4rem);
@@ -139,6 +139,7 @@ const Modal = ({
   contentOverflowIsVisible = false,
   toolbarContent = undefined,
   maxWidth,
+  padding,
 }) => {
   const _closeModalWithEscapeKey = useEffect(() => {
     const close = (event) => {
@@ -160,6 +161,7 @@ const Modal = ({
           aria-labelledby="modal-title"
           aria-describedby="modal-content"
           maxWidth={maxWidth}
+          padding={padding}
         >
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>
@@ -187,6 +189,7 @@ Modal.propTypes = {
   contentOverflowIsVisible: PropTypes.bool,
   toolbarContent: PropTypes.node,
   maxWidth: PropTypes.string,
+  padding: PropTypes.string,
 }
 
 export default Modal
