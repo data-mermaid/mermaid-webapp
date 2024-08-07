@@ -10,17 +10,21 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
   const fileInputRef = useRef(null)
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
+  const maxFileSize = 30 * 1024 * 1024 // 30 MB in bytes
 
   const validateAndUploadFiles = (files) => {
     const validFiles = []
     const invalidFiles = []
     const duplicateFiles = []
+    const oversizedFiles = []
 
     const allFiles = [...existingFiles, ...selectedFiles]
 
     files.forEach((file) => {
       if (!validFileTypes.includes(file.type)) {
         invalidFiles.push(file)
+      } else if (file.size > maxFileSize) {
+        oversizedFiles.push(file)
       } else if (allFiles.some((existingFile) => existingFile.name === file.name)) {
         duplicateFiles.push(file)
       } else {
@@ -36,6 +40,10 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       toast.error(
         'Some files were not added due to invalid file types. Only JPEG, PJPEG, PNG, and MPO files are allowed.',
       )
+    }
+
+    if (oversizedFiles.length > 0) {
+      toast.error('Some files were not added because they exceed the 30 MB size limit.')
     }
 
     if (invalidFiles.length === 0 && duplicateFiles.length === 0 && validFiles.length > 0) {
