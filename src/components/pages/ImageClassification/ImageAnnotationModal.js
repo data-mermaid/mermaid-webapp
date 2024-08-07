@@ -4,7 +4,9 @@ import styled from 'styled-components'
 import maplibregl from 'maplibre-gl'
 import Modal from '../../generic/Modal/Modal'
 
-const MAX_WIDTH = 1450
+// TODO: In future, PATCH_SIZE will come from API
+const PATCH_SIZE = 224
+const MAX_WIDTH = 1000
 
 const Footer = styled.div`
   display: flex;
@@ -84,26 +86,24 @@ const ImageAnnotationModal = ({ setDataToReview, dataToReview }) => {
           data: {
             type: 'FeatureCollection',
             features: dataToReview.points.map((point) => {
-              // TOOD: crop size might come from API?
               // Row and Column represent the center of the patch in pixels,
               // Crop size is the size of the patch in pixels
               // We calculate the corners of the patch in pixels, then convert to lng, lat
-              const cropSize = 224 * dimensions.scale
               const topLeft = map.current.unproject([
-                point.column - cropSize / 2,
-                point.row - cropSize / 2,
+                (point.column - PATCH_SIZE / 2) * dimensions.scale,
+                (point.row - PATCH_SIZE / 2) * dimensions.scale,
               ])
               const bottomLeft = map.current.unproject([
-                point.column - cropSize / 2,
-                point.row + cropSize / 2,
+                (point.column - PATCH_SIZE / 2) * dimensions.scale,
+                (point.row + PATCH_SIZE / 2) * dimensions.scale,
               ])
               const bottomRight = map.current.unproject([
-                point.column + cropSize / 2,
-                point.row + cropSize / 2,
+                (point.column + PATCH_SIZE / 2) * dimensions.scale,
+                (point.row + PATCH_SIZE / 2) * dimensions.scale,
               ])
               const topRight = map.current.unproject([
-                point.column + cropSize / 2,
-                point.row - cropSize / 2,
+                (point.column + PATCH_SIZE / 2) * dimensions.scale,
+                (point.row - PATCH_SIZE / 2) * dimensions.scale,
               ])
               return {
                 type: 'Feature',
@@ -169,8 +169,6 @@ const ImageAnnotationModal = ({ setDataToReview, dataToReview }) => {
             style={{
               width: dimensions?.width,
               height: dimensions?.height,
-              // width: '1450px',
-              // height: '1088px',
             }}
             ref={mapContainer}
           />
