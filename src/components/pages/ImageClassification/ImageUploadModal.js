@@ -32,17 +32,13 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       toast.error('Some files are duplicates and were not added.')
     }
 
-    if (invalidFiles.length > 0 && validFiles.length === 0) {
-      toast.error(
-        'Invalid file. Only JPEG, PJPEG, PNG, and MPO files are allowed. Please try again.',
-      )
-    } else if (invalidFiles.length > 0 && validFiles.length > 0) {
-      setSelectedFiles((prevFiles) => [...prevFiles, ...validFiles])
-      onFilesUpload([...selectedFiles, ...validFiles])
+    if (invalidFiles.length > 0) {
       toast.error(
         'Some files were not added due to invalid file types. Only JPEG, PJPEG, PNG, and MPO files are allowed.',
       )
-    } else if (validFiles.length > 0) {
+    }
+
+    if (invalidFiles.length === 0 && duplicateFiles.length === 0 && validFiles.length > 0) {
       setSelectedFiles((prevFiles) => [...prevFiles, ...validFiles])
       onFilesUpload([...selectedFiles, ...validFiles])
       toast.success('Files uploaded successfully')
