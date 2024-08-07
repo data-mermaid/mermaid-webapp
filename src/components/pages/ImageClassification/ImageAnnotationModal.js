@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import maplibregl from 'maplibre-gl'
+import { toast } from 'react-toastify'
 import Modal from '../../generic/Modal/Modal'
 
 // TODO: In future, PATCH_SIZE will come from API
@@ -50,6 +51,11 @@ const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
         width: imageForMap.naturalWidth * imageScale,
         scale: imageScale,
       })
+    }
+
+    imageForMap.onerror = () => {
+      setDataToReview()
+      toast.error('There was a problem displaying this image, please contact if issue persists.')
     }
     // eslint-disable-next-line
   }, [])
