@@ -98,7 +98,7 @@ ImageUploadModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onFilesUpload: PropTypes.func.isRequired,
-  existingFiles: PropTypes.array.isRequired, // New prop type for existing files
+  existingFiles: PropTypes.array.isRequired,
 }
 
 export default ImageUploadModal
