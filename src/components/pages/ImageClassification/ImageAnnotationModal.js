@@ -6,7 +6,10 @@ import Modal from '../../generic/Modal/Modal'
 
 // TODO: In future, PATCH_SIZE will come from API
 const PATCH_SIZE = 224
-const MAX_WIDTH = 1000
+
+// TODO: Assumes that the max dimension for height and width are the same.
+// This can change depending on final implementation, hardcoded for now.
+const MAX_DIMENSION = 1000
 
 const Footer = styled.div`
   display: flex;
@@ -30,7 +33,7 @@ const LegendSquare = styled.div`
   border: ${({ color }) => `2px solid ${color}`};
 `
 
-const ImageAnnotationModal = ({ setDataToReview, dataToReview }) => {
+const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [dimensions, setDimensions] = useState()
@@ -39,10 +42,9 @@ const ImageAnnotationModal = ({ setDataToReview, dataToReview }) => {
     const imageForMap = new Image()
     imageForMap.src = dataToReview.image
     imageForMap.onload = () => {
-      // Assumes that the image will always be wider than it is tall
-      // If assumption is incorrect, we will need to check for height as well
-      const imageScale =
-        imageForMap.naturalWidth > MAX_WIDTH ? MAX_WIDTH / imageForMap.naturalWidth : 1
+      const longerSide = Math.max(imageForMap.naturalWidth, imageForMap.naturalHeight)
+      const imageScale = longerSide > MAX_DIMENSION ? MAX_DIMENSION / longerSide : 1
+
       setDimensions({
         height: imageForMap.naturalHeight * imageScale,
         width: imageForMap.naturalWidth * imageScale,
