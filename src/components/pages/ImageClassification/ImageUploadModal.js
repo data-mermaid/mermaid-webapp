@@ -3,22 +3,61 @@ import PropTypes from 'prop-types'
 import Modal from '../../generic/Modal'
 import { ButtonPrimary } from '../../generic/buttons'
 import { DropZone, HiddenInput } from './ImageUploadModal.styles'
+import { toast } from 'react-toastify'
 
-const ImageUploadModal = ({ isOpen, onClose, onFilesUpload }) => {
+const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
   const [selectedFiles, setSelectedFiles] = useState([])
   const fileInputRef = useRef(null)
 
+  const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
+
+  const validateAndUploadFiles = (files) => {
+    const validFiles = []
+    const invalidFiles = []
+    const duplicateFiles = []
+
+    const allFiles = [...existingFiles, ...selectedFiles]
+
+    files.forEach((file) => {
+      if (!validFileTypes.includes(file.type)) {
+        invalidFiles.push(file)
+      } else if (allFiles.some((existingFile) => existingFile.name === file.name)) {
+        duplicateFiles.push(file)
+      } else {
+        validFiles.push(file)
+      }
+    })
+
+    if (duplicateFiles.length > 0) {
+      toast.error('Some files are duplicates and were not added.')
+    }
+
+    if (invalidFiles.length > 0 && validFiles.length === 0) {
+      toast.error(
+        'Invalid file. Only JPEG, PJPEG, PNG, and MPO files are allowed. Please try again.',
+      )
+    } else if (invalidFiles.length > 0 && validFiles.length > 0) {
+      setSelectedFiles((prevFiles) => [...prevFiles, ...validFiles])
+      onFilesUpload([...selectedFiles, ...validFiles])
+      toast.error(
+        'Some files were not added due to invalid file types. Only JPEG, PJPEG, PNG, and MPO files are allowed.',
+      )
+    } else if (validFiles.length > 0) {
+      setSelectedFiles((prevFiles) => [...prevFiles, ...validFiles])
+      onFilesUpload([...selectedFiles, ...validFiles])
+      toast.success('Files uploaded successfully')
+    }
+  }
+
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files)
-    setSelectedFiles([...selectedFiles, ...files])
-    onFilesUpload([...selectedFiles, ...files])
+    validateAndUploadFiles(files)
   }
 
   const handleDrop = (event) => {
     event.preventDefault()
     const files = Array.from(event.dataTransfer.files)
-    setSelectedFiles([...selectedFiles, ...files])
-    onFilesUpload([...selectedFiles, ...files])
+    validateAndUploadFiles(files)
   }
 
   const handleDragOver = (event) => {
@@ -63,6 +102,7 @@ ImageUploadModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onFilesUpload: PropTypes.func.isRequired,
+  existingFiles: PropTypes.array.isRequired, // New prop type for existing files
 }
 
 export default ImageUploadModal
