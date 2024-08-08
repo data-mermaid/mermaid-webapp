@@ -47,8 +47,9 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     }
 
     if (validFiles.length > 0) {
-      setSelectedFiles((prevFiles) => [...prevFiles, ...validFiles])
-      onFilesUpload([...selectedFiles, ...validFiles])
+      const newSelectedFiles = [...selectedFiles, ...validFiles]
+      setSelectedFiles(newSelectedFiles)
+      onFilesUpload(newSelectedFiles)
       if (invalidFiles.length === 0 && duplicateFiles.length === 0 && oversizedFiles.length === 0) {
         toast.success('Files uploaded successfully')
       }
