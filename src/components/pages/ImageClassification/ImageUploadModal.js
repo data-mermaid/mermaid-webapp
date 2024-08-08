@@ -131,7 +131,13 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
           <ButtonPrimary type="button" onClick={handleButtonClick}>
             Select files from your computer...
           </ButtonPrimary>
-          <HiddenInput type="file" multiple onChange={handleFileChange} ref={fileInputRef} />
+          <HiddenInput
+            type="file"
+            multiple
+            onChange={handleFileChange}
+            ref={fileInputRef}
+            accept={validFileTypes.join(',')}
+          />
         </DropZone>
       }
       footerContent={
