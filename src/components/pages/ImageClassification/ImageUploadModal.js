@@ -46,10 +46,12 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       toast.error('Some files were not added because they exceed the 30 MB size limit.')
     }
 
-    if (invalidFiles.length === 0 && duplicateFiles.length === 0 && validFiles.length > 0) {
+    if (validFiles.length > 0) {
       setSelectedFiles((prevFiles) => [...prevFiles, ...validFiles])
       onFilesUpload([...selectedFiles, ...validFiles])
-      toast.success('Files uploaded successfully')
+      if (invalidFiles.length === 0 && duplicateFiles.length === 0 && oversizedFiles.length === 0) {
+        toast.success('Files uploaded successfully')
+      }
     }
   }
 
@@ -106,7 +108,7 @@ ImageUploadModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onFilesUpload: PropTypes.func.isRequired,
-  existingFiles: PropTypes.array.isRequired,
+  existingFiles: PropTypes.array.isRequired, // New prop type for existing files
 }
 
 export default ImageUploadModal
