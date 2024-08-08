@@ -10,24 +10,58 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
+  const maxWidth = 8000
+  const maxHeight = 8000
 
-  const validateAndUploadFiles = (files) => {
+  const validateDimensions = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const img = new Image()
+        img.onload = () => {
+          if (img.width <= maxWidth && img.height <= maxHeight) {
+            resolve({ file, valid: true })
+          } else {
+            resolve({ file, valid: false })
+          }
+        }
+        img.src = event.target.result
+      }
+      reader.readAsDataURL(file)
+    })
+  }
+
+  const validateAndUploadFiles = async (files) => {
     const validFiles = []
     const invalidFiles = []
     const duplicateFiles = []
     const oversizedFiles = []
+    const dimensionExceededFiles = []
 
     const allFiles = [...existingFiles]
 
-    files.forEach((file) => {
+    const dimensionPromises = files.map((file) => {
       if (!validFileTypes.includes(file.type)) {
         invalidFiles.push(file)
+        return Promise.resolve(null)
       } else if (file.size > maxFileSize) {
         oversizedFiles.push(file)
+        return Promise.resolve(null)
       } else if (allFiles.some((existingFile) => existingFile.name === file.name)) {
         duplicateFiles.push(file)
+        return Promise.resolve(null)
       } else {
-        validFiles.push(file)
+        return validateDimensions(file)
+      }
+    })
+
+    const dimensionResults = await Promise.all(dimensionPromises)
+
+    dimensionResults.forEach((result) => {
+      if (result && result.valid) {
+        validFiles.push(result.file)
+      } else if (result && !result.valid) {
+        dimensionExceededFiles.push(result.file)
       }
     })
 
@@ -45,9 +79,18 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       toast.error('Some files were not added because they exceed the 30 MB size limit.')
     }
 
+    if (dimensionExceededFiles.length > 0) {
+      toast.error('Some files were not added because they exceed the 8000x8000 dimensions limit.')
+    }
+
     if (validFiles.length > 0) {
       onFilesUpload(validFiles)
-      if (invalidFiles.length === 0 && duplicateFiles.length === 0 && oversizedFiles.length === 0) {
+      if (
+        invalidFiles.length === 0 &&
+        duplicateFiles.length === 0 &&
+        oversizedFiles.length === 0 &&
+        dimensionExceededFiles.length === 0
+      ) {
         toast.success('Files uploaded successfully')
       }
     }
@@ -55,7 +98,6 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files)
-
     validateAndUploadFiles(files)
   }
 
@@ -107,7 +149,7 @@ ImageUploadModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onFilesUpload: PropTypes.func.isRequired,
-  existingFiles: PropTypes.array.isRequired, // New prop type for existing files
+  existingFiles: PropTypes.array.isRequired,
 }
 
 export default ImageUploadModal
