@@ -1,64 +1,16 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import maplibregl from 'maplibre-gl'
+import { toast } from 'react-toastify'
 import Modal from '../../generic/Modal/Modal'
-import SampleImage from './sample-image.jpg'
 
-// TODO: This is sample data, will be replaced with actual data from API
-// Two rows, 5 columns of points
-const points = [
-  {
-    row: 122,
-    column: 122,
-    annotations: [{}],
-  },
-  {
-    row: 122,
-    column: 356,
-    annotations: [{}],
-  },
-  {
-    row: 122,
-    column: 590,
-    annotations: [{}],
-  },
-  {
-    row: 122,
-    column: 824,
-    annotations: [{}],
-  },
-  {
-    row: 122,
-    column: 1058,
-    annotations: [{}],
-  },
-  {
-    row: 356,
-    column: 122,
-    annotations: [{}],
-  },
-  {
-    row: 356,
-    column: 356,
-    annotations: [{}],
-  },
-  {
-    row: 356,
-    column: 590,
-    annotations: [{}],
-  },
-  {
-    row: 356,
-    column: 824,
-    annotations: [{}],
-  },
-  {
-    row: 356,
-    column: 1058,
-    annotations: [{}],
-  },
-]
+// TODO: In future, PATCH_SIZE will come from API
+const PATCH_SIZE = 224
+
+// TODO: Assumes that the max dimension for height and width are the same.
+// This can change depending on final implementation, hardcoded for now.
+const MAX_DIMENSION = 1000
 
 const Footer = styled.div`
   display: flex;
@@ -82,12 +34,34 @@ const LegendSquare = styled.div`
   border: ${({ color }) => `2px solid ${color}`};
 `
 
-const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
+const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
+  const [dimensions, setDimensions] = useState()
+
+  const _getImageDimensions = useEffect(() => {
+    const imageForMap = new Image()
+    imageForMap.src = dataToReview.image
+    imageForMap.onload = () => {
+      const longerSide = Math.max(imageForMap.naturalWidth, imageForMap.naturalHeight)
+      const imageScale = longerSide > MAX_DIMENSION ? MAX_DIMENSION / longerSide : 1
+
+      setDimensions({
+        height: imageForMap.naturalHeight * imageScale,
+        width: imageForMap.naturalWidth * imageScale,
+        scale: imageScale,
+      })
+    }
+
+    imageForMap.onerror = () => {
+      setDataToReview()
+      toast.error('There was a problem displaying this image, please contact if issue persists.')
+    }
+    // eslint-disable-next-line
+  }, [])
 
   const _renderImageViaMap = useEffect(() => {
-    if (!isModalDisplayed) {
+    if (!dimensions) {
       return
     }
 
@@ -106,7 +80,7 @@ const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
       sources: {
         benthicQuadratImage: {
           type: 'image',
-          url: SampleImage, // TODO: Will be fetched from API
+          url: dataToReview.image,
           coordinates: [
             // spans the image across the entire map
             [bounds._sw.lng, bounds._ne.lat],
@@ -119,27 +93,25 @@ const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
           type: 'geojson',
           data: {
             type: 'FeatureCollection',
-            features: points.map((point) => {
-              // TOOD: crop size might come from API?
+            features: dataToReview.points.map((point) => {
               // Row and Column represent the center of the patch in pixels,
               // Crop size is the size of the patch in pixels
               // We calculate the corners of the patch in pixels, then convert to lng, lat
-              const cropSize = 224
               const topLeft = map.current.unproject([
-                point.column - cropSize / 2,
-                point.row - cropSize / 2,
+                (point.column - PATCH_SIZE / 2) * dimensions.scale,
+                (point.row - PATCH_SIZE / 2) * dimensions.scale,
               ])
               const bottomLeft = map.current.unproject([
-                point.column - cropSize / 2,
-                point.row + cropSize / 2,
+                (point.column - PATCH_SIZE / 2) * dimensions.scale,
+                (point.row + PATCH_SIZE / 2) * dimensions.scale,
               ])
               const bottomRight = map.current.unproject([
-                point.column + cropSize / 2,
-                point.row + cropSize / 2,
+                (point.column + PATCH_SIZE / 2) * dimensions.scale,
+                (point.row + PATCH_SIZE / 2) * dimensions.scale,
               ])
               const topRight = map.current.unproject([
-                point.column + cropSize / 2,
-                point.row - cropSize / 2,
+                (point.column + PATCH_SIZE / 2) * dimensions.scale,
+                (point.row - PATCH_SIZE / 2) * dimensions.scale,
               ])
               return {
                 type: 'Feature',
@@ -184,17 +156,17 @@ const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
       [bounds._sw.lng, bounds._sw.lat],
       [bounds._ne.lng, bounds._ne.lat],
     ])
-  }, [isModalDisplayed])
+  }, [dimensions, dataToReview])
 
   const handleCloseModal = () => {
     // TODO: Save content before closing
-    setIsModalDisplayed(false)
+    setDataToReview()
   }
 
   return (
     <Modal
-      title="Placeholder value for image name"
-      isOpen={isModalDisplayed}
+      title={dataToReview.original_image_name}
+      isOpen
       onDismiss={handleCloseModal}
       maxWidth="100%"
       mainContent={
@@ -203,9 +175,8 @@ const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
           <p>table goes here</p>
           <div
             style={{
-              // TODO: Set these programatically based on image size (when fetched from API)
-              width: '1200px',
-              height: '797px',
+              width: dimensions?.width,
+              height: dimensions?.height,
             }}
             ref={mapContainer}
           />
@@ -239,8 +210,18 @@ const ImageAnnotationModal = ({ isModalDisplayed, setIsModalDisplayed }) => {
 }
 
 ImageAnnotationModal.propTypes = {
-  isModalDisplayed: PropTypes.bool.isRequired,
-  setIsModalDisplayed: PropTypes.func.isRequired,
+  setDataToReview: PropTypes.func.isRequired,
+  dataToReview: PropTypes.shape({
+    original_image_name: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    points: PropTypes.arrayOf(
+      PropTypes.shape({
+        row: PropTypes.number.isRequired,
+        column: PropTypes.number.isRequired,
+        annotations: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }),
+    ),
+  }),
 }
 
 export default ImageAnnotationModal

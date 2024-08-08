@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { H2 } from '../../generic/text'
 import { InputWrapper } from '../../generic/form'
 import {
@@ -10,6 +10,8 @@ import PropTypes from 'prop-types'
 import { StyledTd } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../generic/buttons'
 import { IconClose } from '../../icons'
+import ImageAnnotationModal from './ImageAnnotationModal'
+import sampleData from './sample-data'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -52,41 +54,50 @@ const SubHeaderRow = () => (
 )
 
 const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }) => {
+  const [dataToReview, setDataToReview] = useState()
+
   return (
-    <InputWrapper>
-      <H2 id="table-label">Observations</H2>
-      <StyledOverflowWrapper>
-        <StickyObservationTable aria-labelledby="table-label">
-          <thead>
-            <TableHeaderRow />
-            <SubHeaderRow />
-          </thead>
-          <tbody>
-            {uploadedFiles.map((file, index) => (
-              <Tr key={index}>
-                <StyledTd>{index + 1}</StyledTd>
-                <StyledTd>{file.name}</StyledTd>
-                <StyledTd></StyledTd>
-                <StyledTd></StyledTd>
-                <StyledTd></StyledTd>
-                <StyledTd></StyledTd>
-                <StyledTd></StyledTd>
-                <StyledTd></StyledTd>
-                <StyledTd></StyledTd>
-                <StyledTd>
-                  <ButtonPrimary type="button">Review</ButtonPrimary>
-                </StyledTd>
-                <StyledTd>
-                  <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
-                    <IconClose aria-label="close" />
-                  </ButtonCaution>
-                </StyledTd>
-              </Tr>
-            ))}
-          </tbody>
-        </StickyObservationTable>
-      </StyledOverflowWrapper>
-    </InputWrapper>
+    <>
+      <InputWrapper>
+        <H2 id="table-label">Observations</H2>
+        <StyledOverflowWrapper>
+          <StickyObservationTable aria-labelledby="table-label">
+            <thead>
+              <TableHeaderRow />
+              <SubHeaderRow />
+            </thead>
+            <tbody>
+              {uploadedFiles.map((file, index) => (
+                <Tr key={index}>
+                  <StyledTd>{index + 1}</StyledTd>
+                  <StyledTd>{file.name}</StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd></StyledTd>
+                  <StyledTd>
+                    <ButtonPrimary type="button" onClick={() => setDataToReview(sampleData)}>
+                      Review
+                    </ButtonPrimary>
+                  </StyledTd>
+                  <StyledTd>
+                    <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
+                      <IconClose aria-label="close" />
+                    </ButtonCaution>
+                  </StyledTd>
+                </Tr>
+              ))}
+            </tbody>
+          </StickyObservationTable>
+        </StyledOverflowWrapper>
+      </InputWrapper>
+      {dataToReview ? (
+        <ImageAnnotationModal dataToReview={sampleData} setDataToReview={setDataToReview} />
+      ) : undefined}
+    </>
   )
 }
 
