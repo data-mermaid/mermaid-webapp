@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import Modal from '../../generic/Modal'
 import { ButtonPrimary } from '../../generic/buttons'
@@ -6,11 +6,10 @@ import { DropZone, HiddenInput } from './ImageUploadModal.styles'
 import { toast } from 'react-toastify'
 
 const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
-  const [selectedFiles, setSelectedFiles] = useState([])
   const fileInputRef = useRef(null)
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
-  const maxFileSize = 30 * 1024 * 1024 // 30 MB in bytes
+  const maxFileSize = 30 * 1024 * 1024 // 30 MB
 
   const validateAndUploadFiles = (files) => {
     const validFiles = []
@@ -18,7 +17,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     const duplicateFiles = []
     const oversizedFiles = []
 
-    const allFiles = [...existingFiles, ...selectedFiles]
+    const allFiles = [...existingFiles]
 
     files.forEach((file) => {
       if (!validFileTypes.includes(file.type)) {
@@ -47,9 +46,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     }
 
     if (validFiles.length > 0) {
-      const newSelectedFiles = [...selectedFiles, ...validFiles]
-      setSelectedFiles(newSelectedFiles)
-      onFilesUpload(newSelectedFiles)
+      onFilesUpload(validFiles)
       if (invalidFiles.length === 0 && duplicateFiles.length === 0 && oversizedFiles.length === 0) {
         toast.success('Files uploaded successfully')
       }
@@ -58,6 +55,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files)
+
     validateAndUploadFiles(files)
   }
 
