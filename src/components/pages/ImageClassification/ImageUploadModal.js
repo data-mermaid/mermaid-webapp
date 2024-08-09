@@ -25,7 +25,13 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
             resolve({ file, valid: false })
           }
         }
+        img.onerror = () => {
+          resolve({ file, valid: false, corrupt: true })
+        }
         img.src = event.target.result
+      }
+      reader.onerror = () => {
+        resolve({ file, valid: false, corrupt: true })
       }
       reader.readAsDataURL(file)
     })
@@ -37,6 +43,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     const duplicateFiles = []
     const oversizedFiles = []
     const dimensionExceededFiles = []
+    const corruptFiles = []
 
     const allFiles = [...existingFiles]
 
@@ -58,8 +65,10 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     const dimensionResults = await Promise.all(dimensionPromises)
 
     dimensionResults.forEach((result) => {
-      if (result && result.valid) {
+      if (result && result.valid && !result.corrupt) {
         validFiles.push(result.file)
+      } else if (result && result.corrupt) {
+        corruptFiles.push(result.file)
       } else if (result && !result.valid) {
         dimensionExceededFiles.push(result.file)
       }
@@ -83,13 +92,18 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       toast.error('Some files were not added because they exceed the 8000x8000 dimensions limit.')
     }
 
+    if (corruptFiles.length > 0) {
+      toast.error('Some files were not added because they appear to be corrupt.')
+    }
+
     if (validFiles.length > 0) {
       onFilesUpload(validFiles)
       if (
         invalidFiles.length === 0 &&
         duplicateFiles.length === 0 &&
         oversizedFiles.length === 0 &&
-        dimensionExceededFiles.length === 0
+        dimensionExceededFiles.length === 0 &&
+        corruptFiles.length === 0
       ) {
         toast.success('Files uploaded successfully')
       }
