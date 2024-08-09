@@ -12,7 +12,6 @@ const ImageClassificationContainer = () => {
 
   const handleFilesUpload = (files) => {
     setUploadedFiles([...uploadedFiles, ...files])
-    toast.success('Files uploaded successfully')
     setIsModalOpen(false)
   }
 
@@ -41,6 +40,7 @@ const ImageClassificationContainer = () => {
           onClose={() => setIsModalOpen(false)}
           onFilesUpload={handleFilesUpload}
           isOpen={isModalOpen}
+          existingFiles={uploadedFiles}
         />
       )}
     </>
