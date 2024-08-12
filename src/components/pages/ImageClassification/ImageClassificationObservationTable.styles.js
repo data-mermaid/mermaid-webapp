@@ -39,4 +39,24 @@ const ButtonContainer = styled.div`
   margin-left: 1rem;
 `
 
-export { StyledColgroup, IconContainer, ButtonContainer, StyledTd }
+const CenteredTd = styled(StyledTd)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 110%; /* Position above the cell */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    color: white;
+    padding: 5px;
+    white-space: nowrap;
+    font-size: 12px;
+    z-index: 10;
+  }
+`
+
+export { StyledColgroup, IconContainer, ButtonContainer, StyledTd, CenteredTd }
