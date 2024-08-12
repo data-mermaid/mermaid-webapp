@@ -65,9 +65,9 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     const dimensionResults = await Promise.all(dimensionPromises)
 
     dimensionResults.forEach((result) => {
-      if (result && result.valid && !result.corrupt) {
+      if (result?.valid && !result?.corrupt) {
         validFiles.push(result.file)
-      } else if (result && result.corrupt) {
+      } else if (result?.corrupt) {
         corruptFiles.push(result.file)
       } else if (result && !result.valid) {
         dimensionExceededFiles.push(result.file)
