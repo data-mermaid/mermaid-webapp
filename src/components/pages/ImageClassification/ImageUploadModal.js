@@ -144,7 +144,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
           {loading ? (
             <div>
               Uploading {processedFiles}/{totalFiles} images...
-            </div> // Show progress
+            </div>
           ) : (
             <DropZone onDrop={handleDrop} onDragOver={handleDragOver}>
               Drop files here
