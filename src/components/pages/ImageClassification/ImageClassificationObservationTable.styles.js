@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { Td } from '../../generic/Table/table'
+import theme from '../../../theme'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -39,24 +40,33 @@ const ButtonContainer = styled.div`
   margin-left: 1rem;
 `
 
-const CenteredTd = styled(StyledTd)`
+const TdWithHoverText = styled(StyledTd)`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  &:hover::after {
+  &::after {
     content: attr(data-tooltip);
     position: absolute;
     bottom: 100%; /* Position above the cell */
     left: 50%;
     transform: translateX(-50%);
-    background-color: black;
+    background-color: ${theme.color.primaryColor};
     color: white;
     padding: 5px;
     white-space: nowrap;
     font-size: 12px;
     z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+
+  &:hover::after {
+    opacity: 1;
+    visibility: visible;
   }
 `
 
-export { StyledColgroup, IconContainer, ButtonContainer, StyledTd, CenteredTd }
+export { StyledColgroup, IconContainer, ButtonContainer, StyledTd, TdWithHoverText }

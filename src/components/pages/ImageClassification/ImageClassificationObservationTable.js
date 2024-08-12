@@ -7,7 +7,7 @@ import {
 } from '../collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Th } from '../../generic/Table/table'
 import PropTypes from 'prop-types'
-import { StyledTd, CenteredTd } from './ImageClassificationObservationTable.styles'
+import { StyledTd, TdWithHoverText } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../generic/buttons'
 import { IconClose } from '../../icons'
 import ImageAnnotationModal from './ImageAnnotationModal'
@@ -71,9 +71,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
               {uploadedFiles.map((file, index) => (
                 <Tr key={index}>
                   <StyledTd>{index + 1}</StyledTd>
-                  <CenteredTd data-tooltip={file.name}>
+                  <TdWithHoverText data-tooltip={file.name}>
                     <Thumbnail imageUrl={URL.createObjectURL(file)} />
-                  </CenteredTd>
+                  </TdWithHoverText>
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
