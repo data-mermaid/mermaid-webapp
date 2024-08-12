@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import Modal from '../../generic/Modal'
 import { ButtonPrimary } from '../../generic/buttons'
@@ -6,6 +6,9 @@ import { DropZone, HiddenInput } from './ImageUploadModal.styles'
 import { toast } from 'react-toastify'
 
 const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
+  const [loading, setLoading] = useState(false)
+  const [totalFiles, setTotalFiles] = useState(0)
+  const [processedFiles, setProcessedFiles] = useState(0)
   const fileInputRef = useRef(null)
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
@@ -38,6 +41,10 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
   }
 
   const validateAndUploadFiles = async (files) => {
+    setLoading(true)
+    setTotalFiles(files.length)
+    setProcessedFiles(0) // Reset the processed files count
+
     const validFiles = []
     const invalidFiles = []
     const duplicateFiles = []
@@ -47,32 +54,26 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
     const allFiles = [...existingFiles]
 
-    const dimensionPromises = files.map((file) => {
+    for (const [index, file] of files.entries()) {
       if (!validFileTypes.includes(file.type)) {
         invalidFiles.push(file)
-        return Promise.resolve(null)
       } else if (file.size > maxFileSize) {
         oversizedFiles.push(file)
-        return Promise.resolve(null)
       } else if (allFiles.some((existingFile) => existingFile.name === file.name)) {
         duplicateFiles.push(file)
-        return Promise.resolve(null)
       } else {
-        return validateDimensions(file)
+        const result = await validateDimensions(file)
+        if (result.valid && !result.corrupt) {
+          validFiles.push(result.file)
+        } else if (result.corrupt) {
+          corruptFiles.push(result.file)
+        } else {
+          dimensionExceededFiles.push(result.file)
+        }
       }
-    })
 
-    const dimensionResults = await Promise.all(dimensionPromises)
-
-    dimensionResults.forEach((result) => {
-      if (result?.valid && !result?.corrupt) {
-        validFiles.push(result.file)
-      } else if (result?.corrupt) {
-        corruptFiles.push(result.file)
-      } else if (result && !result.valid) {
-        dimensionExceededFiles.push(result.file)
-      }
-    })
+      setProcessedFiles(index + 1)
+    }
 
     if (duplicateFiles.length > 0) {
       toast.error('Some files are duplicates and were not added.')
@@ -108,6 +109,8 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
         toast.success('Files uploaded successfully')
       }
     }
+
+    setLoading(false)
   }
 
   const handleFileChange = (event) => {
@@ -137,26 +140,34 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       maxWidth="80rem"
       padding="0.5rem"
       mainContent={
-        <DropZone onDrop={handleDrop} onDragOver={handleDragOver}>
-          Drop files here
-          <br />
-          or
-          <br />
-          <ButtonPrimary type="button" onClick={handleButtonClick}>
-            Select files from your computer...
-          </ButtonPrimary>
-          <HiddenInput
-            type="file"
-            multiple
-            onChange={handleFileChange}
-            ref={fileInputRef}
-            accept={validFileTypes.join(',')}
-          />
-        </DropZone>
+        <>
+          {loading ? (
+            <div>
+              Uploading {processedFiles}/{totalFiles} images...
+            </div> // Show progress
+          ) : (
+            <DropZone onDrop={handleDrop} onDragOver={handleDragOver}>
+              Drop files here
+              <br />
+              or
+              <br />
+              <ButtonPrimary type="button" onClick={handleButtonClick}>
+                Select files from your computer...
+              </ButtonPrimary>
+              <HiddenInput
+                type="file"
+                multiple
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                accept={validFileTypes.join(',')}
+              />
+            </DropZone>
+          )}
+        </>
       }
       footerContent={
         <div>
-          <ButtonPrimary type="button" onClick={onClose}>
+          <ButtonPrimary type="button" onClick={onClose} disabled={loading}>
             Close
           </ButtonPrimary>
         </div>
