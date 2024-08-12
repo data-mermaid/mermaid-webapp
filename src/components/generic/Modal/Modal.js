@@ -140,10 +140,11 @@ const Modal = ({
   toolbarContent = undefined,
   maxWidth,
   padding,
+  allowCloseWithEscapeKey = true,
 }) => {
   const _closeModalWithEscapeKey = useEffect(() => {
     const close = (event) => {
-      if (event.code === 'Escape') {
+      if (allowCloseWithEscapeKey && event.code === 'Escape') {
         onDismiss()
       }
     }
@@ -151,7 +152,7 @@ const Modal = ({
     window.addEventListener('keydown', close)
 
     return () => window.removeEventListener('keydown', close)
-  }, [onDismiss])
+  }, [onDismiss, allowCloseWithEscapeKey])
 
   return (
     isOpen && (
@@ -181,6 +182,7 @@ const Modal = ({
 }
 
 Modal.propTypes = {
+  allowCloseWithEscapeKey: PropTypes.bool,
   footerContent: PropTypes.node.isRequired,
   isOpen: PropTypes.bool.isRequired,
   mainContent: PropTypes.node.isRequired,
