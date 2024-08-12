@@ -47,7 +47,7 @@ const CenteredTd = styled(StyledTd)`
   &:hover::after {
     content: attr(data-tooltip);
     position: absolute;
-    bottom: 110%; /* Position above the cell */
+    bottom: 100%; /* Position above the cell */
     left: 50%;
     transform: translateX(-50%);
     background-color: black;
