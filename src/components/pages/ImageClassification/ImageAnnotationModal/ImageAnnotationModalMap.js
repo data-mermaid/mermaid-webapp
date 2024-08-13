@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { toast } from 'react-toastify'
+import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 
 // TODO: In future, PATCH_SIZE will come from API
 const PATCH_SIZE = 224
@@ -91,7 +92,9 @@ const ImageAnnotationModalMap = ({ dataToReview, setDataToReview }) => {
               ])
               return {
                 type: 'Feature',
-                properties: {}, // TODO: Will use this to display confirmed, unconfirmed, unknown, etc.
+                properties: {
+                  isConfirmed: `${point.annotations[0].is_confirmed}`,
+                },
                 geometry: {
                   type: 'Polygon',
                   coordinates: [
@@ -121,7 +124,15 @@ const ImageAnnotationModalMap = ({ dataToReview, setDataToReview }) => {
           source: 'patches',
           paint: {
             'line-width': 5, // TODO: This will be based on a property in geojson
-            'line-color': 'yellow', // TODO: This will be based on a property in geojson
+            'line-color': [
+              'match',
+              ['get', 'isConfirmed'],
+              'true',
+              COLORS.confirmed,
+              'false',
+              COLORS.unconfirmed,
+              COLORS.unclassified,
+            ],
           },
         },
       ],
