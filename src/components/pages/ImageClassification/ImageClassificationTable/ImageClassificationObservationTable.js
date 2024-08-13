@@ -12,7 +12,7 @@ import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
 import ImageAnnotationModal from '../ImageAnnotationModal'
 import sampleData from '../sample-data'
-import Thumbnail from '../ImageUploadModal/Thumbnail'
+import Thumbnail from './Thumbnail'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -71,7 +71,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
               {uploadedFiles.map((file, index) => (
                 <Tr key={index}>
                   <StyledTd>{index + 1}</StyledTd>
-                  <TdWithHoverText data-tooltip={file.name}>
+                  <TdWithHoverText
+                    data-tooltip={file.name}
+                    onClick={() => setDataToReview(sampleData)}
+                  >
                     <Thumbnail imageUrl={URL.createObjectURL(file)} />
                   </TdWithHoverText>
                   <StyledTd></StyledTd>

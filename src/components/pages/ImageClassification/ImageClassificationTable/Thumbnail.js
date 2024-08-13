@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const ThumbnailWrapper = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 150px;
+  height: 150px;
   overflow: hidden;
 `
 
