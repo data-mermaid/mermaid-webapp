@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
-import { H2 } from '../../generic/text'
-import { InputWrapper } from '../../generic/form'
+import { H2 } from '../../../generic/text'
+import { InputWrapper } from '../../../generic/form'
 import {
   StyledOverflowWrapper,
   StickyObservationTable,
-} from '../collectRecordFormPages/CollectingFormPage.Styles'
-import { Tr, Th } from '../../generic/Table/table'
+} from '../../collectRecordFormPages/CollectingFormPage.Styles'
+import { Tr, Th } from '../../../generic/Table/table'
 import PropTypes from 'prop-types'
-import { StyledTd, TdWithHoverText } from './ImageClassificationObservationTable.styles'
-import { ButtonPrimary, ButtonCaution } from '../../generic/buttons'
-import { IconClose } from '../../icons'
-import ImageAnnotationModal from './ImageAnnotationModal'
-import sampleData from './sample-data'
-import Thumbnail from './Thumbnail'
+import { StyledTd, TdWithHoverText } from '../ImageClassificationObservationTable.styles'
+import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
+import { IconClose } from '../../../icons'
+import ImageAnnotationModal from '../ImageAnnotationModal'
+import sampleData from '../sample-data'
+import Thumbnail from '../Thumbnail'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },

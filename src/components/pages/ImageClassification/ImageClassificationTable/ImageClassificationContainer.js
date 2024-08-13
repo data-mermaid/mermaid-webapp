@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import ImageClassificationObservationTable from './ImageClassificationObservationTable'
-import ImageUploadModal from './ImageUploadModal'
-import { ButtonPrimary } from '../../generic/buttons'
-import { IconUpload } from '../../icons'
-import { ButtonContainer, IconContainer } from './ImageClassificationObservationTable.styles'
+import ImageUploadModal from '../ImageUploadModal/ImageUploadModal'
+import { ButtonPrimary } from '../../../generic/buttons'
+import { IconUpload } from '../../../icons'
+import { ButtonContainer, IconContainer } from '../ImageClassificationObservationTable.styles'
 import { toast } from 'react-toastify'
 
 const ImageClassificationContainer = () => {

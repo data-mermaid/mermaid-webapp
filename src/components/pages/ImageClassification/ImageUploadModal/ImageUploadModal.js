@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import Modal from '../../generic/Modal'
-import { ButtonPrimary } from '../../generic/buttons'
-import { DropZone, HiddenInput } from './ImageUploadModal.styles'
+import Modal from '../../../generic/Modal'
+import { ButtonPrimary } from '../../../generic/buttons'
+import { DropZone, HiddenInput } from '../ImageUploadModal.styles'
 import { toast } from 'react-toastify'
 
 const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
