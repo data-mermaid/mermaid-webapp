@@ -105,7 +105,7 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
   const footer = (
     <StyledModalFooterWrapper>
       <StyledModalLeftFooter>
-        <ButtonSecondary onClick={onDismiss} disabled={isLoading}>
+        <ButtonSecondary onClick={() => onDismiss(formik.resetForm)} disabled={isLoading}>
           {modalLanguage.cancel}
         </ButtonSecondary>
       </StyledModalLeftFooter>
