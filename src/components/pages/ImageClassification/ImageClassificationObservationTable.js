@@ -10,8 +10,8 @@ import PropTypes from 'prop-types'
 import { StyledTd } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../generic/buttons'
 import { IconClose } from '../../icons'
-import ImageAnnotationModal from './ImageAnnotationModal'
-import sampleData from './sample-data'
+import ImageAnnotationModal from './ImageAnnotationModal/ImageAnnotationModal'
+import sampleData from './sampleData/sample-data'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },

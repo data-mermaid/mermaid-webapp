@@ -1,9 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import maplibregl from 'maplibre-gl'
 import { toast } from 'react-toastify'
-import Modal from '../../generic/Modal/Modal'
 
 // TODO: In future, PATCH_SIZE will come from API
 const PATCH_SIZE = 224
@@ -12,29 +10,7 @@ const PATCH_SIZE = 224
 // This can change depending on final implementation, hardcoded for now.
 const MAX_DIMENSION = 1000
 
-const Footer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-
-const Legend = styled.div`
-  display: flex;
-  gap: 8px;
-`
-
-const LegendItem = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-const LegendSquare = styled.div`
-  width: 12px;
-  height: 12px;
-  margin-right: 2px;
-  border: ${({ color }) => `2px solid ${color}`};
-`
-
-const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
+const ImageAnnotationModalMap = ({ dataToReview, setDataToReview }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [dimensions, setDimensions] = useState()
@@ -158,70 +134,29 @@ const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
     ])
   }, [dimensions, dataToReview])
 
-  const handleCloseModal = () => {
-    // TODO: Save content before closing
-    setDataToReview()
-  }
-
   return (
-    <Modal
-      title={dataToReview.original_image_name}
-      isOpen
-      onDismiss={handleCloseModal}
-      maxWidth="100%"
-      mainContent={
-        <div>
-          Quadrat: <b>4</b>
-          <p>table goes here</p>
-          <div
-            style={{
-              width: dimensions?.width,
-              height: dimensions?.height,
-            }}
-            ref={mapContainer}
-          />
-        </div>
-      }
-      footerContent={
-        <Footer>
-          <Legend>
-            <LegendItem>
-              <LegendSquare color="#D4BC48" />
-              Current
-            </LegendItem>
-            <LegendItem>
-              <LegendSquare color="#B4BBE2" />
-              Unconfirmed
-            </LegendItem>
-            <LegendItem>
-              <LegendSquare color="#80CA72" />
-              Confirmed
-            </LegendItem>
-            <LegendItem>
-              <LegendSquare color="#BF6B69" />
-              Unclassified
-            </LegendItem>
-          </Legend>
-          <button onClick={handleCloseModal}>Close</button>
-        </Footer>
-      }
+    <div
+      style={{
+        width: dimensions?.width,
+        height: dimensions?.height,
+        marginTop: '2rem',
+      }}
+      ref={mapContainer}
     />
   )
 }
 
-ImageAnnotationModal.propTypes = {
+ImageAnnotationModalMap.propTypes = {
   setDataToReview: PropTypes.func.isRequired,
   dataToReview: PropTypes.shape({
-    original_image_name: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     points: PropTypes.arrayOf(
       PropTypes.shape({
         row: PropTypes.number.isRequired,
         column: PropTypes.number.isRequired,
-        annotations: PropTypes.arrayOf(PropTypes.object).isRequired,
       }),
-    ),
-  }),
+    ).isRequired,
+  }).isRequired,
 }
 
-export default ImageAnnotationModal
+export default ImageAnnotationModalMap
