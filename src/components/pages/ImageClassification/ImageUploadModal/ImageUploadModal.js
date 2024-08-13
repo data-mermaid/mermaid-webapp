@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import Modal from '../../../generic/Modal'
-import { ButtonPrimary } from '../../../generic/buttons'
-import { DropZone, HiddenInput } from './ImageUploadModal.styles'
+import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
+import { DropZone, HiddenInput, ButtonContainer } from './ImageUploadModal.styles'
 import { toast } from 'react-toastify'
 import language from '../../../../language'
 
@@ -139,6 +139,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       title="Upload Photos"
       maxWidth="80rem"
       padding="0.5rem"
+      displayCloseIcon={false}
       mainContent={
         <>
           {loading ? (
@@ -166,11 +167,12 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
         </>
       }
       footerContent={
-        <div>
+        <ButtonContainer>
           <ButtonPrimary type="button" onClick={onClose} disabled={loading}>
             Close
           </ButtonPrimary>
-        </div>
+          {loading ? <ButtonCaution>Cancel Upload</ButtonCaution> : null}
+        </ButtonContainer>
       }
     />
   )

@@ -140,6 +140,7 @@ const Modal = ({
   toolbarContent = undefined,
   maxWidth,
   padding,
+  displayCloseIcon = true,
 }) => {
   const _closeModalWithEscapeKey = useEffect(() => {
     const close = (event) => {
@@ -165,9 +166,11 @@ const Modal = ({
         >
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>
-            <CloseButton type="button" className="close-button" onClick={onDismiss}>
-              <IconClose aria-label="close" />
-            </CloseButton>
+            {displayCloseIcon ? (
+              <CloseButton type="button" className="close-button" onClick={onDismiss}>
+                <IconClose aria-label="close" />
+              </CloseButton>
+            ) : null}
           </ModalTitle>
           <ModalToolbar>{toolbarContent}</ModalToolbar>
           <ModalContent contentOverflowIsVisible={contentOverflowIsVisible} id="modal-content">
@@ -190,6 +193,7 @@ Modal.propTypes = {
   toolbarContent: PropTypes.node,
   maxWidth: PropTypes.string,
   padding: PropTypes.string,
+  displayCloseIcon: PropTypes.bool,
 }
 
 export default Modal

@@ -11,4 +11,9 @@ const DropZone = styled.div`
 const HiddenInput = styled.input`
   display: none;
 `
-export { DropZone, HiddenInput }
+
+const ButtonContainer = styled.div`
+  display: flex;
+`
+
+export { DropZone, HiddenInput, ButtonContainer }
