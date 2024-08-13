@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { Td } from '../../generic/Table/table'
-import theme from '../../../theme'
+import { Td } from '../../../generic/Table/table'
+import theme from '../../../../theme'
 
 const StyledColgroup = styled('colgroup')`
   col {

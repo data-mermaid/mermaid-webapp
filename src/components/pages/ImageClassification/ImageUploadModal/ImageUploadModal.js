@@ -2,8 +2,9 @@ import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import Modal from '../../../generic/Modal'
 import { ButtonPrimary } from '../../../generic/buttons'
-import { DropZone, HiddenInput } from '../ImageUploadModal.styles'
+import { DropZone, HiddenInput } from './ImageUploadModal.styles'
 import { toast } from 'react-toastify'
+import language from '../../../../language'
 
 const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
   const [loading, setLoading] = useState(false)
@@ -15,6 +16,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
   const maxWidth = 8000
   const maxHeight = 8000
+  const errorText = language.imageClassification.imageClassficationModal.errors
 
   const validateDimensions = (file) => {
     return new Promise((resolve) => {
@@ -76,25 +78,23 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     }
 
     if (duplicateFiles.length > 0) {
-      toast.error('Some files are duplicates and were not added.')
+      toast.error(errorText.duplicateFiles)
     }
 
     if (invalidFiles.length > 0) {
-      toast.error(
-        'Some files were not added due to invalid file types. Only JPEG, PJPEG, PNG, and MPO files are allowed.',
-      )
+      toast.error(errorText.invalidFiles)
     }
 
     if (oversizedFiles.length > 0) {
-      toast.error('Some files were not added because they exceed the 30 MB size limit.')
+      toast.error(errorText.oversizedFiles)
     }
 
     if (dimensionExceededFiles.length > 0) {
-      toast.error('Some files were not added because they exceed the 8000x8000 dimensions limit.')
+      toast.error(errorText.dimensionExceededFiles)
     }
 
     if (corruptFiles.length > 0) {
-      toast.error('Some files were not added because they appear to be corrupt.')
+      toast.error(errorText.corruptFiles)
     }
 
     if (validFiles.length > 0) {

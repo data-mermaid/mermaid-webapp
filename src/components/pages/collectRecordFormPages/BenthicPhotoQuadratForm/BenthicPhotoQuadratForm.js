@@ -29,7 +29,7 @@ import BenthicPhotoQuadratTransectInputs from './BenthicPhotoQuadratTransectInpu
 import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
 import benthicpqtObservationReducer from './benthicpqtObservationReducer'
 import SampleUnitInputSelector from '../../ImageClassification/SampleUnitInputSelector'
-import ImageClassificationContainer from '../../ImageClassification/ImageClassificationContainer'
+import ImageClassificationContainer from '../../ImageClassification/ImageClassificationTable/ImageClassificationContainer'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)

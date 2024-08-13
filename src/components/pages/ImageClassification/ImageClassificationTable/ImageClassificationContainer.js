@@ -3,7 +3,7 @@ import ImageClassificationObservationTable from './ImageClassificationObservatio
 import ImageUploadModal from '../ImageUploadModal/ImageUploadModal'
 import { ButtonPrimary } from '../../../generic/buttons'
 import { IconUpload } from '../../../icons'
-import { ButtonContainer, IconContainer } from '../ImageClassificationObservationTable.styles'
+import { ButtonContainer, IconContainer } from './ImageClassificationObservationTable.styles'
 import { toast } from 'react-toastify'
 
 const ImageClassificationContainer = () => {
