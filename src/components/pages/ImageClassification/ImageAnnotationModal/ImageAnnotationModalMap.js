@@ -11,6 +11,9 @@ const PATCH_SIZE = 224
 // This can change depending on final implementation, hardcoded for now.
 const MAX_DIMENSION = 1000
 
+const POLYGON_LINE_WIDTH = 5
+const SELECTED_POLYGON_LINE_WIDTH = 10
+
 const IMAGE_CLASSIFICATION_COLOR_EXP = [
   'case',
   ['get', 'isConfirmed'],
@@ -18,7 +21,12 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
   COLORS.unconfirmed,
 ]
 
-const ImageAnnotationModalMap = ({ dataToReview, setDataToReview, highlightedPoints }) => {
+const ImageAnnotationModalMap = ({
+  dataToReview,
+  setDataToReview,
+  highlightedPoints,
+  selectedPoints,
+}) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [dimensions, setDimensions] = useState()
@@ -131,7 +139,7 @@ const ImageAnnotationModalMap = ({ dataToReview, setDataToReview, highlightedPoi
           type: 'line',
           source: 'patches',
           paint: {
-            'line-width': 5, // TODO: This will be based on a property in geojson
+            'line-width': POLYGON_LINE_WIDTH,
             'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
           },
         },
@@ -153,14 +161,33 @@ const ImageAnnotationModalMap = ({ dataToReview, setDataToReview, highlightedPoi
     // prettier-ignore
     map.current.setPaintProperty('patches-layer', 'line-color', [
       'case',
-      ['in', // checks if the id is in the list of highlighted points
-        ['get', 'id'],
-        ['literal', highlightedPoints.map((point) => point.id)] 
-      ],
-      COLORS.highlighted, // if true, set to highlighted color
-      IMAGE_CLASSIFICATION_COLOR_EXP, // fallback to default expression
+        ['in', // checks if point on map is in selected row in table
+          ['get', 'id'],
+          ['literal', selectedPoints.map((point) => point.id)] 
+        ],
+        COLORS.current,
+
+        ['in', // checks if point on map is in highlighted row in table
+          ['get', 'id'],
+          ['literal', highlightedPoints.map((point) => point.id)] 
+        ],
+        COLORS.highlighted,
+      
+        IMAGE_CLASSIFICATION_COLOR_EXP, // fallback to default expression
     ])
-  }, [highlightedPoints])
+
+    map.current.setPaintProperty('patches-layer', 'line-width', [
+      'case',
+      [
+        'in', // checks if point on map is in selected row in table
+        ['get', 'id'],
+        ['literal', selectedPoints.map((point) => point.id)],
+      ],
+      SELECTED_POLYGON_LINE_WIDTH,
+
+      POLYGON_LINE_WIDTH, // fallback to default width
+    ])
+  }, [highlightedPoints, selectedPoints])
 
   return (
     <div
@@ -174,6 +201,7 @@ const ImageAnnotationModalMap = ({ dataToReview, setDataToReview, highlightedPoi
   )
 }
 
+// TODO: how to DRY this
 ImageAnnotationModalMap.propTypes = {
   setDataToReview: PropTypes.func.isRequired,
   dataToReview: PropTypes.shape({
@@ -186,6 +214,12 @@ ImageAnnotationModalMap.propTypes = {
     ).isRequired,
   }).isRequired,
   highlightedPoints: PropTypes.arrayOf(
+    PropTypes.shape({
+      row: PropTypes.number.isRequired,
+      column: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
+  selectedPoints: PropTypes.arrayOf(
     PropTypes.shape({
       row: PropTypes.number.isRequired,
       column: PropTypes.number.isRequired,

@@ -7,6 +7,7 @@ import ImageAnnotationModalMap from './ImageAnnotationModalMap'
 import { Footer, Legend, LegendItem, LegendSquare } from './ImageAnnotationModal.styles'
 
 const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
+  const [selectedPoints, setSelectedPoints] = useState([])
   const [highlightedPoints, setHighlightedPoints] = useState([])
 
   const handleCloseModal = () => {
@@ -26,11 +27,13 @@ const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
           <ImageAnnotationModalTable
             points={dataToReview.points}
             setHighlightedPoints={setHighlightedPoints}
+            setSelectedPoints={setSelectedPoints}
           />
           <ImageAnnotationModalMap
             dataToReview={dataToReview}
             setDataToReview={setDataToReview}
             highlightedPoints={highlightedPoints}
+            selectedPoints={selectedPoints}
           />
         </div>
       }

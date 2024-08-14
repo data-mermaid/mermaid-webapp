@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Table, Tr, Th, Td } from '../../../generic/Table/table'
 
-const ImageAnnotationModalTable = ({ points, setHighlightedPoints }) => {
+const ImageAnnotationModalTable = ({ points, setHighlightedPoints, setSelectedPoints }) => {
+  const [selectedRowIndex, setSelectedRowIndex] = useState()
   const tableData = Object.groupBy(points, ({ annotations }) => annotations[0].label_display)
 
-  const handleHover = (row) => {
-    setHighlightedPoints(tableData[row])
+  const handleRowSelect = (rowData, index) => {
+    if (index === selectedRowIndex) {
+      setSelectedRowIndex()
+      setSelectedPoints([])
+    } else {
+      setSelectedRowIndex(index)
+      setSelectedPoints(rowData)
+    }
   }
 
   return (
@@ -21,16 +28,17 @@ const ImageAnnotationModalTable = ({ points, setHighlightedPoints }) => {
         </Tr>
       </thead>
       <tbody>
-        {Object.keys(tableData).map((key) => (
+        {Object.keys(tableData).map((row, i) => (
           <Tr
-            key={key}
-            onMouseEnter={() => handleHover(key)}
+            key={row}
+            onClick={() => handleRowSelect(tableData[row], i)}
+            onMouseEnter={() => setHighlightedPoints(tableData[row])}
             onMouseLeave={() => setHighlightedPoints([])}
           >
             {/* TODO: These next two values are either going to be provided in dataToReview or we will need to lookup via API call (benthic attr - growth form) */}
-            <Td>{key}</Td>
-            <Td>{key}</Td>
-            <Td>{tableData[key].length}</Td>
+            <Td>{row}</Td>
+            <Td>{row}</Td>
+            <Td>{tableData[row].length}</Td>
             <Td>
               <button>Confirm</button>
             </Td>
@@ -46,6 +54,7 @@ const ImageAnnotationModalTable = ({ points, setHighlightedPoints }) => {
 
 ImageAnnotationModalTable.propTypes = {
   setHighlightedPoints: PropTypes.func.isRequired,
+  setSelectedPoints: PropTypes.func.isRequired,
   points: PropTypes.arrayOf(
     PropTypes.shape({
       row: PropTypes.number.isRequired,
