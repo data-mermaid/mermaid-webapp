@@ -11,7 +11,14 @@ const PATCH_SIZE = 224
 // This can change depending on final implementation, hardcoded for now.
 const MAX_DIMENSION = 1000
 
-const ImageAnnotationModalMap = ({ dataToReview, setDataToReview }) => {
+const IMAGE_CLASSIFICATION_COLOR_EXP = [
+  'case',
+  ['get', 'isConfirmed'],
+  COLORS.confirmed,
+  COLORS.unconfirmed,
+]
+
+const ImageAnnotationModalMap = ({ dataToReview, setDataToReview, highlightedPoints }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [dimensions, setDimensions] = useState()
@@ -93,7 +100,8 @@ const ImageAnnotationModalMap = ({ dataToReview, setDataToReview }) => {
               return {
                 type: 'Feature',
                 properties: {
-                  isConfirmed: `${point.annotations[0].is_confirmed}`,
+                  id: point.id,
+                  isConfirmed: point.annotations[0].is_confirmed,
                 },
                 geometry: {
                   type: 'Polygon',
@@ -124,15 +132,7 @@ const ImageAnnotationModalMap = ({ dataToReview, setDataToReview }) => {
           source: 'patches',
           paint: {
             'line-width': 5, // TODO: This will be based on a property in geojson
-            'line-color': [
-              'match',
-              ['get', 'isConfirmed'],
-              'true',
-              COLORS.confirmed,
-              'false',
-              COLORS.unconfirmed,
-              COLORS.unclassified,
-            ],
+            'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
           },
         },
       ],
@@ -144,6 +144,23 @@ const ImageAnnotationModalMap = ({ dataToReview, setDataToReview }) => {
       [bounds._ne.lng, bounds._ne.lat],
     ])
   }, [dimensions, dataToReview])
+
+  const _highlightPoints = useEffect(() => {
+    if (!map.current) {
+      return
+    }
+
+    // prettier-ignore
+    map.current.setPaintProperty('patches-layer', 'line-color', [
+      'case',
+      ['in', // checks if the id is in the list of highlighted points
+        ['get', 'id'],
+        ['literal', highlightedPoints.map((point) => point.id)] 
+      ],
+      COLORS.highlighted, // if true, set to highlighted color
+      IMAGE_CLASSIFICATION_COLOR_EXP, // fallback to default expression
+    ])
+  }, [highlightedPoints])
 
   return (
     <div
@@ -168,6 +185,12 @@ ImageAnnotationModalMap.propTypes = {
       }),
     ).isRequired,
   }).isRequired,
+  highlightedPoints: PropTypes.arrayOf(
+    PropTypes.shape({
+      row: PropTypes.number.isRequired,
+      column: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
 }
 
 export default ImageAnnotationModalMap

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Modal from '../../../generic/Modal/Modal'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
@@ -7,6 +7,8 @@ import ImageAnnotationModalMap from './ImageAnnotationModalMap'
 import { Footer, Legend, LegendItem, LegendSquare } from './ImageAnnotationModal.styles'
 
 const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
+  const [highlightedPoints, setHighlightedPoints] = useState([])
+
   const handleCloseModal = () => {
     // TODO: Save content before closing
     setDataToReview()
@@ -21,8 +23,15 @@ const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
       maxWidth="100%"
       mainContent={
         <div>
-          <ImageAnnotationModalTable dataToReview={dataToReview} />
-          <ImageAnnotationModalMap dataToReview={dataToReview} setDataToReview={setDataToReview} />
+          <ImageAnnotationModalTable
+            points={dataToReview.points}
+            setHighlightedPoints={setHighlightedPoints}
+          />
+          <ImageAnnotationModalMap
+            dataToReview={dataToReview}
+            setDataToReview={setDataToReview}
+            highlightedPoints={highlightedPoints}
+          />
         </div>
       }
       footerContent={

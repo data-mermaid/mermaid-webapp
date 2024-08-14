@@ -2,11 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Table, Tr, Th, Td } from '../../../generic/Table/table'
 
-const ImageAnnotationModalTable = ({ dataToReview }) => {
-  const tableData = Object.groupBy(
-    dataToReview.points,
-    ({ annotations }) => annotations[0].label_display,
-  )
+const ImageAnnotationModalTable = ({ points, setHighlightedPoints }) => {
+  const tableData = Object.groupBy(points, ({ annotations }) => annotations[0].label_display)
+
+  const handleHover = (row) => {
+    setHighlightedPoints(tableData[row])
+  }
 
   return (
     <Table aria-labelledby="table-label">
@@ -21,7 +22,11 @@ const ImageAnnotationModalTable = ({ dataToReview }) => {
       </thead>
       <tbody>
         {Object.keys(tableData).map((key) => (
-          <Tr key={key}>
+          <Tr
+            key={key}
+            onMouseEnter={() => handleHover(key)}
+            onMouseLeave={() => setHighlightedPoints([])}
+          >
             {/* TODO: These next two values are either going to be provided in dataToReview or we will need to lookup via API call (benthic attr - growth form) */}
             <Td>{key}</Td>
             <Td>{key}</Td>
@@ -40,15 +45,20 @@ const ImageAnnotationModalTable = ({ dataToReview }) => {
 }
 
 ImageAnnotationModalTable.propTypes = {
-  dataToReview: PropTypes.shape({
-    image: PropTypes.string.isRequired,
-    points: PropTypes.arrayOf(
-      PropTypes.shape({
-        row: PropTypes.number.isRequired,
-        column: PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
+  setHighlightedPoints: PropTypes.func.isRequired,
+  points: PropTypes.arrayOf(
+    PropTypes.shape({
+      row: PropTypes.number.isRequired,
+      column: PropTypes.number.isRequired,
+      annotations: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string.isRequired,
+          label_display: PropTypes.string.isRequired,
+          is_confirmed: PropTypes.bool.isRequired,
+        }),
+      ),
+    }),
+  ).isRequired,
 }
 
 export default ImageAnnotationModalTable
