@@ -49,11 +49,11 @@ const ImageAnnotationModalTable = ({ points, setHighlightedPoints, setSelectedPo
             {/* TODO: These next two values are either going to be provided in dataToReview or we will need to lookup via API call (benthic attr - growth form) */}
             <Td>{row}</Td>
             <Td>{row}</Td>
-            <Td>{tableData[row].length}</Td>
-            <Td>
+            <Td align="right">{tableData[row].length}</Td>
+            <Td align="center">
               <button>Confirm</button>
             </Td>
-            <Td>
+            <Td align="center">
               <button>x</button>
             </Td>
           </TrWithBorderStyling>
