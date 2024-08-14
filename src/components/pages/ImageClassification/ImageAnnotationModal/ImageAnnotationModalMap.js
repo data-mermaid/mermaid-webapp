@@ -158,22 +158,23 @@ const ImageAnnotationModalMap = ({
       return
     }
 
-    // prettier-ignore
     map.current.setPaintProperty('patches-layer', 'line-color', [
       'case',
-        ['in', // checks if point on map is in selected row in table
-          ['get', 'id'],
-          ['literal', selectedPoints.map((point) => point.id)] 
-        ],
-        COLORS.current,
+      [
+        'in', // checks if point on map is in selected row in table
+        ['get', 'id'],
+        ['literal', selectedPoints.map((point) => point.id)],
+      ],
+      COLORS.current,
 
-        ['in', // checks if point on map is in highlighted row in table
-          ['get', 'id'],
-          ['literal', highlightedPoints.map((point) => point.id)] 
-        ],
-        COLORS.highlighted,
-      
-        IMAGE_CLASSIFICATION_COLOR_EXP, // fallback to default expression
+      [
+        'in', // checks if point on map is in highlighted row in table
+        ['get', 'id'],
+        ['literal', highlightedPoints.map((point) => point.id)],
+      ],
+      COLORS.highlighted,
+
+      IMAGE_CLASSIFICATION_COLOR_EXP, // fallback to default expression
     ])
 
     map.current.setPaintProperty('patches-layer', 'line-width', [

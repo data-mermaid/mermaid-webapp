@@ -1,6 +1,16 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { Table, Tr, Th, Td } from '../../../generic/Table/table'
+import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+
+const TrWithBorderStyling = styled(Tr)`
+  border: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.current}`};
+
+  &:hover {
+    border: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.highlighted}`};
+  }
+`
 
 const ImageAnnotationModalTable = ({ points, setHighlightedPoints, setSelectedPoints }) => {
   const [selectedRowIndex, setSelectedRowIndex] = useState()
@@ -29,11 +39,12 @@ const ImageAnnotationModalTable = ({ points, setHighlightedPoints, setSelectedPo
       </thead>
       <tbody>
         {Object.keys(tableData).map((row, i) => (
-          <Tr
+          <TrWithBorderStyling
             key={row}
             onClick={() => handleRowSelect(tableData[row], i)}
             onMouseEnter={() => setHighlightedPoints(tableData[row])}
             onMouseLeave={() => setHighlightedPoints([])}
+            $isSelected={i === selectedRowIndex}
           >
             {/* TODO: These next two values are either going to be provided in dataToReview or we will need to lookup via API call (benthic attr - growth form) */}
             <Td>{row}</Td>
@@ -45,7 +56,7 @@ const ImageAnnotationModalTable = ({ points, setHighlightedPoints, setSelectedPo
             <Td>
               <button>x</button>
             </Td>
-          </Tr>
+          </TrWithBorderStyling>
         ))}
       </tbody>
     </Table>
