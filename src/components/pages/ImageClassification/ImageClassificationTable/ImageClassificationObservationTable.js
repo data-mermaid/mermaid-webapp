@@ -10,8 +10,8 @@ import PropTypes from 'prop-types'
 import { StyledTd, TdWithHoverText } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
-import ImageAnnotationModal from '../ImageAnnotationModal'
-import sampleData from '../sample-data'
+import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
+import sampleData from '../sampleData/sample-data'
 import Thumbnail from './Thumbnail'
 
 const tableHeaders = [
