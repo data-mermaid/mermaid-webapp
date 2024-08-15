@@ -171,7 +171,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
           <ButtonPrimary type="button" onClick={onClose} disabled={loading}>
             Close
           </ButtonPrimary>
-          {/* TDB on cancel uploda functionality - will need to sync with the backend*/}
+          {/* TDB on cancel upload functionality - will need to sync with the backend*/}
           {loading ? <ButtonCaution>Cancel Upload</ButtonCaution> : null}
         </ButtonContainer>
       }
