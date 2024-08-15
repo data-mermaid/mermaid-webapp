@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Modal from '../../../generic/Modal/Modal'
+import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import ImageAnnotationModalTable from './ImageAnnotationModalTable'
 import ImageAnnotationModalMap from './ImageAnnotationModalMap'
 import { Footer, Legend, LegendItem, LegendSquare } from './ImageAnnotationModal.styles'
 
 const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
+  const [selectedPoints, setSelectedPoints] = useState([])
+  const [highlightedPoints, setHighlightedPoints] = useState([])
+
   const handleCloseModal = () => {
     // TODO: Save content before closing
     setDataToReview()
@@ -20,27 +24,36 @@ const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
       maxWidth="100%"
       mainContent={
         <div>
-          <ImageAnnotationModalTable />
-          <ImageAnnotationModalMap dataToReview={dataToReview} setDataToReview={setDataToReview} />
+          <ImageAnnotationModalTable
+            points={dataToReview.points}
+            setHighlightedPoints={setHighlightedPoints}
+            setSelectedPoints={setSelectedPoints}
+          />
+          <ImageAnnotationModalMap
+            dataToReview={dataToReview}
+            setDataToReview={setDataToReview}
+            highlightedPoints={highlightedPoints}
+            selectedPoints={selectedPoints}
+          />
         </div>
       }
       footerContent={
         <Footer>
           <Legend>
             <LegendItem>
-              <LegendSquare color="#D4BC48" />
+              <LegendSquare color={COLORS.current} />
               Current
             </LegendItem>
             <LegendItem>
-              <LegendSquare color="#B4BBE2" />
+              <LegendSquare color={COLORS.unconfirmed} />
               Unconfirmed
             </LegendItem>
             <LegendItem>
-              <LegendSquare color="#80CA72" />
+              <LegendSquare color={COLORS.confirmed} />
               Confirmed
             </LegendItem>
             <LegendItem>
-              <LegendSquare color="#BF6B69" />
+              <LegendSquare color={COLORS.unclassified} />
               Unclassified
             </LegendItem>
           </Legend>
