@@ -16,7 +16,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
   const maxWidth = 8000
   const maxHeight = 8000
-  const errorText = language.imageClassification.imageClassficationModal.errors
+  const uploadText = language.imageClassification.imageClassficationModal
 
   const validateDimensions = (file) => {
     return new Promise((resolve) => {
@@ -78,23 +78,23 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     }
 
     if (duplicateFiles.length > 0) {
-      toast.error(errorText.duplicateFiles)
+      toast.error(uploadText.errors.duplicateFiles)
     }
 
     if (invalidFiles.length > 0) {
-      toast.error(errorText.invalidFiles)
+      toast.error(uploadText.errors.invalidFiles)
     }
 
     if (oversizedFiles.length > 0) {
-      toast.error(errorText.oversizedFiles)
+      toast.error(uploadText.errors.oversizedFiles)
     }
 
     if (dimensionExceededFiles.length > 0) {
-      toast.error(errorText.dimensionExceededFiles)
+      toast.error(uploadText.errors.dimensionExceededFiles)
     }
 
     if (corruptFiles.length > 0) {
-      toast.error(errorText.corruptFiles)
+      toast.error(uploadText.errors.corruptFiles)
     }
 
     if (validFiles.length > 0) {
@@ -106,7 +106,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
         dimensionExceededFiles.length === 0 &&
         corruptFiles.length === 0
       ) {
-        toast.success('Files uploaded successfully')
+        toast.success(uploadText.success)
       }
     }
 

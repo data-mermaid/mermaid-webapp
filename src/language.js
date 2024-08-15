@@ -1476,6 +1476,7 @@ const imageClassification = {
         'Some files were not added because they exceed the 8000x8000 dimensions limit.',
       corruptFiles: 'Some files were not added because they appear to be corrupt.',
     },
+    success: 'Files uploaded successfully.',
   },
 }
 
