@@ -155,7 +155,7 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
         </form>
       }
       footerContent={footer}
-      contentOverflowIsVisible={true}
+      contentOverflowIsVisible={false}
       maxWidth="65rem"
     />
   )

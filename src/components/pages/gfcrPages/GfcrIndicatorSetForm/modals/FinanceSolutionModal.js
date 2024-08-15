@@ -380,7 +380,7 @@ const FinanceSolutionModal = ({
       title={financeSolution ? modalLanguage.titleUpdate : modalLanguage.titleAdd}
       mainContent={financeSolutionForm()}
       footerContent={footer}
-      contentOverflowIsVisible={true}
+      contentOverflowIsVisible={false}
       maxWidth="65rem"
     />
   )
