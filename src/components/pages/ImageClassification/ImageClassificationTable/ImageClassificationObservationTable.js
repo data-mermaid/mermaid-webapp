@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
-import { H2 } from '../../generic/text'
-import { InputWrapper } from '../../generic/form'
+import { H2 } from '../../../generic/text'
+import { InputWrapper } from '../../../generic/form'
 import {
   StyledOverflowWrapper,
   StickyObservationTable,
-} from '../collectRecordFormPages/CollectingFormPage.Styles'
-import { Tr, Th } from '../../generic/Table/table'
+} from '../../collectRecordFormPages/CollectingFormPage.Styles'
+import { Tr, Th } from '../../../generic/Table/table'
 import PropTypes from 'prop-types'
-import { StyledTd } from './ImageClassificationObservationTable.styles'
-import { ButtonPrimary, ButtonCaution } from '../../generic/buttons'
-import { IconClose } from '../../icons'
-import ImageAnnotationModal from './ImageAnnotationModal/ImageAnnotationModal'
-import sampleData from './sampleData/sample-data'
+import { StyledTd, TdWithHoverText } from './ImageClassificationObservationTable.styles'
+import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
+import { IconClose } from '../../../icons'
+import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
+import sampleData from '../sampleData/sample-data'
+import Thumbnail from './Thumbnail'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -70,7 +71,12 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
               {uploadedFiles.map((file, index) => (
                 <Tr key={index}>
                   <StyledTd>{index + 1}</StyledTd>
-                  <StyledTd>{file.name}</StyledTd>
+                  <TdWithHoverText
+                    data-tooltip={file.name}
+                    onClick={() => setDataToReview(sampleData)}
+                  >
+                    <Thumbnail imageUrl={URL.createObjectURL(file)} />
+                  </TdWithHoverText>
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>

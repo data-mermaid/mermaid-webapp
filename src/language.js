@@ -1466,6 +1466,18 @@ const imageClassification = {
     button1: 'Use image classification for this sample unit',
     button2: 'Manually input observation for this sample unit',
   },
+  imageClassficationModal: {
+    errors: {
+      duplicateFiles: 'Some files are duplicates and were not added.',
+      invalidFiles:
+        'Some files were not added due to invalid file types. Only JPEG, PJPEG, PNG, and MPO files are allowed.',
+      oversizedFiles: 'Some files were not added because they exceed the 30 MB size limit.',
+      dimensionsExceededFiles:
+        'Some files were not added because they exceed the 8000x8000 dimensions limit.',
+      corruptFiles: 'Some files were not added because they appear to be corrupt.',
+    },
+    success: 'Files uploaded successfully.',
+  },
 }
 
 export default {
