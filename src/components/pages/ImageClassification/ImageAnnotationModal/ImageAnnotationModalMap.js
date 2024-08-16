@@ -16,8 +16,13 @@ const SELECTED_POLYGON_LINE_WIDTH = 10
 
 const IMAGE_CLASSIFICATION_COLOR_EXP = [
   'case',
+
+  ['get', 'isUnclassified'],
+  COLORS.unclassified,
+
   ['get', 'isConfirmed'],
   COLORS.confirmed,
+
   COLORS.unconfirmed,
 ]
 
@@ -109,7 +114,8 @@ const ImageAnnotationModalMap = ({
                 type: 'Feature',
                 properties: {
                   id: point.id,
-                  isConfirmed: point.annotations[0].is_confirmed,
+                  isUnclassified: point.annotations.length === 0,
+                  isConfirmed: point.annotations[0]?.is_confirmed,
                 },
                 geometry: {
                   type: 'Polygon',
