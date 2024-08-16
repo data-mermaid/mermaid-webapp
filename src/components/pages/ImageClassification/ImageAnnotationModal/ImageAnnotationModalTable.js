@@ -48,6 +48,7 @@ const ImageAnnotationModalTable = ({
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
     setSelectedRowIndex()
     setSelectedPoints([])
+    setHighlightedPoints([])
   }
 
   return (
