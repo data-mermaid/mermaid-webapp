@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
-import { toast } from 'react-toastify'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 
 // TODO: In future, PATCH_SIZE will come from API
@@ -26,39 +25,19 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
   COLORS.unconfirmed,
 ]
 
-const ImageAnnotationModalMap = ({
-  dataToReview,
-  setDataToReview,
-  highlightedPoints,
-  selectedPoints,
-}) => {
+const getImageScale = (dataToReview) => {
+  const longerSide = Math.max(dataToReview.original_image_width, dataToReview.original_image_height)
+  return longerSide > MAX_DIMENSION ? MAX_DIMENSION / longerSide : 1
+}
+
+const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoints }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
-  const [dimensions, setDimensions] = useState()
-
-  const _getImageDimensions = useEffect(() => {
-    const imageForMap = new Image()
-    imageForMap.src = dataToReview.image
-    imageForMap.onload = () => {
-      const longerSide = Math.max(imageForMap.naturalWidth, imageForMap.naturalHeight)
-      const imageScale = longerSide > MAX_DIMENSION ? MAX_DIMENSION / longerSide : 1
-
-      setDimensions({
-        height: imageForMap.naturalHeight * imageScale,
-        width: imageForMap.naturalWidth * imageScale,
-        scale: imageScale,
-      })
-    }
-
-    imageForMap.onerror = () => {
-      setDataToReview()
-      toast.error('There was a problem displaying this image, please contact if issue persists.')
-    }
-    // eslint-disable-next-line
-  }, [])
+  const [hasMapLoaded, setHasMapLoaded] = useState(false)
+  const imageScale = getImageScale(dataToReview)
 
   const _renderImageViaMap = useEffect(() => {
-    if (!dimensions) {
+    if (hasMapLoaded) {
       return
     }
 
@@ -95,20 +74,20 @@ const ImageAnnotationModalMap = ({
               // Crop size is the size of the patch in pixels
               // We calculate the corners of the patch in pixels, then convert to lng, lat
               const topLeft = map.current.unproject([
-                (point.column - PATCH_SIZE / 2) * dimensions.scale,
-                (point.row - PATCH_SIZE / 2) * dimensions.scale,
+                (point.column - PATCH_SIZE / 2) * imageScale,
+                (point.row - PATCH_SIZE / 2) * imageScale,
               ])
               const bottomLeft = map.current.unproject([
-                (point.column - PATCH_SIZE / 2) * dimensions.scale,
-                (point.row + PATCH_SIZE / 2) * dimensions.scale,
+                (point.column - PATCH_SIZE / 2) * imageScale,
+                (point.row + PATCH_SIZE / 2) * imageScale,
               ])
               const bottomRight = map.current.unproject([
-                (point.column + PATCH_SIZE / 2) * dimensions.scale,
-                (point.row + PATCH_SIZE / 2) * dimensions.scale,
+                (point.column + PATCH_SIZE / 2) * imageScale,
+                (point.row + PATCH_SIZE / 2) * imageScale,
               ])
               const topRight = map.current.unproject([
-                (point.column + PATCH_SIZE / 2) * dimensions.scale,
-                (point.row - PATCH_SIZE / 2) * dimensions.scale,
+                (point.column + PATCH_SIZE / 2) * imageScale,
+                (point.row - PATCH_SIZE / 2) * imageScale,
               ])
               return {
                 type: 'Feature',
@@ -157,10 +136,13 @@ const ImageAnnotationModalMap = ({
       [bounds._sw.lng, bounds._sw.lat],
       [bounds._ne.lng, bounds._ne.lat],
     ])
-  }, [dimensions, dataToReview])
+
+    map.current.on('load', () => setHasMapLoaded(true))
+    // eslint-disable-next-line
+  }, [])
 
   const _highlightPoints = useEffect(() => {
-    if (!map.current) {
+    if (!hasMapLoaded) {
       return
     }
 
@@ -194,13 +176,13 @@ const ImageAnnotationModalMap = ({
 
       POLYGON_LINE_WIDTH, // fallback to default width
     ])
-  }, [highlightedPoints, selectedPoints])
+  }, [highlightedPoints, selectedPoints, hasMapLoaded])
 
   return (
     <div
       style={{
-        width: dimensions?.width,
-        height: dimensions?.height,
+        width: dataToReview.original_image_width * imageScale,
+        height: dataToReview.original_image_height * imageScale,
         marginTop: '2rem',
       }}
       ref={mapContainer}
@@ -213,6 +195,8 @@ ImageAnnotationModalMap.propTypes = {
   setDataToReview: PropTypes.func.isRequired,
   dataToReview: PropTypes.shape({
     image: PropTypes.string.isRequired,
+    original_image_width: PropTypes.number.isRequired,
+    original_image_height: PropTypes.number.isRequired,
     points: PropTypes.arrayOf(
       PropTypes.shape({
         row: PropTypes.number.isRequired,
