@@ -182,9 +182,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
               <br />
               or
               <br />
-              <ButtonPrimary type="button" onClick={handleButtonClick}>
-                Select files from your computer...
-              </ButtonPrimary>
+              <ButtonPrimary type="button">Select files from your computer...</ButtonPrimary>
               <HiddenInput
                 type="file"
                 multiple
