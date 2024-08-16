@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import Modal from '../../../generic/Modal'
-import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
+import { ButtonPrimary, ButtonCaution, ButtonSecondary } from '../../../generic/buttons'
 import { DropZone, HiddenInput, ButtonContainer } from './ImageUploadModal.styles'
 import { toast } from 'react-toastify'
 import language from '../../../../language'
@@ -10,6 +10,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
   const [loading, setLoading] = useState(false)
   const [totalFiles, setTotalFiles] = useState(0)
   const [processedFiles, setProcessedFiles] = useState(0)
+  const isCancelledRef = useRef(false) // Use ref for cancellation flag - more reliable because refs update synchronously
   const fileInputRef = useRef(null)
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
@@ -20,10 +21,22 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
   const validateDimensions = (file) => {
     return new Promise((resolve) => {
+      if (isCancelledRef.current) {
+        return resolve({ file, valid: false, cancelled: true })
+      }
+
       const reader = new FileReader()
       reader.onload = (event) => {
+        if (isCancelledRef.current) {
+          return resolve({ file, valid: false, cancelled: true })
+        }
+
         const img = new Image()
         img.onload = () => {
+          if (isCancelledRef.current) {
+            return resolve({ file, valid: false, cancelled: true })
+          }
+
           if (img.width <= maxWidth && img.height <= maxHeight) {
             resolve({ file, valid: true })
           } else {
@@ -45,7 +58,8 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
   const validateAndUploadFiles = async (files) => {
     setLoading(true)
     setTotalFiles(files.length)
-    setProcessedFiles(0) // Reset the processed files count
+    setProcessedFiles(0)
+    isCancelledRef.current = false
 
     const validFiles = []
     const invalidFiles = []
@@ -57,6 +71,11 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     const allFiles = [...existingFiles]
 
     for (const [index, file] of files.entries()) {
+      if (isCancelledRef.current) {
+        setLoading(false)
+        return
+      }
+
       if (!validFileTypes.includes(file.type)) {
         invalidFiles.push(file)
       } else if (file.size > maxFileSize) {
@@ -65,6 +84,11 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
         duplicateFiles.push(file)
       } else {
         const result = await validateDimensions(file)
+        if (isCancelledRef.current || result.cancelled) {
+          setLoading(false)
+          return
+        }
+
         if (result.valid && !result.corrupt) {
           validFiles.push(result.file)
         } else if (result.corrupt) {
@@ -75,6 +99,15 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       }
 
       setProcessedFiles(index + 1)
+    }
+
+    if (isCancelledRef.current) {
+      setLoading(false)
+      return
+    }
+
+    if (validFiles.length > 0) {
+      onFilesUpload(validFiles)
     }
 
     if (duplicateFiles.length > 0) {
@@ -98,16 +131,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     }
 
     if (validFiles.length > 0) {
-      onFilesUpload(validFiles)
-      if (
-        invalidFiles.length === 0 &&
-        duplicateFiles.length === 0 &&
-        oversizedFiles.length === 0 &&
-        dimensionExceededFiles.length === 0 &&
-        corruptFiles.length === 0
-      ) {
-        toast.success(uploadText.success)
-      }
+      toast.success(uploadText.success)
     }
 
     setLoading(false)
@@ -132,6 +156,12 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     fileInputRef.current.click()
   }
 
+  const handleCancelUpload = () => {
+    isCancelledRef.current = true
+    setLoading(false)
+    toast.info('Upload cancelled.')
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -147,7 +177,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
               Uploading {processedFiles}/{totalFiles} images...
             </div>
           ) : (
-            <DropZone onDrop={handleDrop} onDragOver={handleDragOver}>
+            <DropZone onDrop={handleDrop} onDragOver={handleDragOver} onClick={handleButtonClick}>
               Drop files here
               <br />
               or
@@ -168,11 +198,15 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       }
       footerContent={
         <ButtonContainer>
-          <ButtonPrimary type="button" onClick={onClose} disabled={loading}>
-            Close
-          </ButtonPrimary>
-          {/* TDB on cancel upload functionality - will need to sync with the backend*/}
-          {loading ? <ButtonCaution>Cancel Upload</ButtonCaution> : null}
+          {loading ? (
+            <ButtonCaution type="button" onClick={handleCancelUpload}>
+              Cancel Upload
+            </ButtonCaution>
+          ) : (
+            <ButtonSecondary type="button" onClick={onClose} disabled={loading}>
+              Close
+            </ButtonSecondary>
+          )}
         </ButtonContainer>
       }
     />

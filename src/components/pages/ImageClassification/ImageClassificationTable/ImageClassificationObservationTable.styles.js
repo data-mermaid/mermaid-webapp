@@ -64,6 +64,10 @@ const TdWithHoverText = styled(StyledTd)`
     transition: opacity 0.5s ease, visibility 0.5s ease;
   }
 
+  &:hover {
+    border: 2px solid ${theme.color.primaryColor};
+  }
+
   &:hover::after {
     opacity: 1;
     visibility: visible;

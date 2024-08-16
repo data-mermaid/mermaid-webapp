@@ -6,6 +6,7 @@ const DropZone = styled.div`
   margin-top: 20px;
   text-align: center;
   border-radius: 4px;
+  cursor: pointer;
 `
 
 const HiddenInput = styled.input`
@@ -14,6 +15,7 @@ const HiddenInput = styled.input`
 
 const ButtonContainer = styled.div`
   display: flex;
+  flex-direction: row-reverse;
 `
 
 export { DropZone, HiddenInput, ButtonContainer }

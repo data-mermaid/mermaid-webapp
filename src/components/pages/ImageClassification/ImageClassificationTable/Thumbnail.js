@@ -17,7 +17,7 @@ const ThumbnailImage = styled.img`
 const Thumbnail = ({ imageUrl }) => {
   return (
     <ThumbnailWrapper>
-      <ThumbnailImage src={imageUrl} alt="Thumbnail" />
+      <ThumbnailImage src={imageUrl} alt="image-upload-thumbnail" />
     </ThumbnailWrapper>
   )
 }
