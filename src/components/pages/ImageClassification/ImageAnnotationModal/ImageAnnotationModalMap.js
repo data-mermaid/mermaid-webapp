@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
@@ -36,6 +36,54 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const imageScale = getImageScale(dataToReview)
 
+  const getPointsGeojson = useCallback(
+    () => ({
+      type: 'FeatureCollection',
+      features: dataToReview.points.map((point) => {
+        // Row and Column represent the center of the patch in pixels,
+        // Crop size is the size of the patch in pixels
+        // We calculate the corners of the patch in pixels, then convert to lng, lat
+        const topLeft = map.current.unproject([
+          (point.column - PATCH_SIZE / 2) * imageScale,
+          (point.row - PATCH_SIZE / 2) * imageScale,
+        ])
+        const bottomLeft = map.current.unproject([
+          (point.column - PATCH_SIZE / 2) * imageScale,
+          (point.row + PATCH_SIZE / 2) * imageScale,
+        ])
+        const bottomRight = map.current.unproject([
+          (point.column + PATCH_SIZE / 2) * imageScale,
+          (point.row + PATCH_SIZE / 2) * imageScale,
+        ])
+        const topRight = map.current.unproject([
+          (point.column + PATCH_SIZE / 2) * imageScale,
+          (point.row - PATCH_SIZE / 2) * imageScale,
+        ])
+        return {
+          type: 'Feature',
+          properties: {
+            id: point.id,
+            isUnclassified: point.annotations.length === 0,
+            isConfirmed: point.annotations[0]?.is_confirmed,
+          },
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
+              [
+                [topLeft.lng, topLeft.lat],
+                [bottomLeft.lng, bottomLeft.lat],
+                [bottomRight.lng, bottomRight.lat],
+                [topRight.lng, topRight.lat],
+                [topLeft.lng, topLeft.lat],
+              ],
+            ],
+          },
+        }
+      }),
+    }),
+    [dataToReview, imageScale],
+  )
+
   const _renderImageViaMap = useEffect(() => {
     if (hasMapLoaded) {
       return
@@ -67,50 +115,7 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
         },
         patches: {
           type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: dataToReview.points.map((point) => {
-              // Row and Column represent the center of the patch in pixels,
-              // Crop size is the size of the patch in pixels
-              // We calculate the corners of the patch in pixels, then convert to lng, lat
-              const topLeft = map.current.unproject([
-                (point.column - PATCH_SIZE / 2) * imageScale,
-                (point.row - PATCH_SIZE / 2) * imageScale,
-              ])
-              const bottomLeft = map.current.unproject([
-                (point.column - PATCH_SIZE / 2) * imageScale,
-                (point.row + PATCH_SIZE / 2) * imageScale,
-              ])
-              const bottomRight = map.current.unproject([
-                (point.column + PATCH_SIZE / 2) * imageScale,
-                (point.row + PATCH_SIZE / 2) * imageScale,
-              ])
-              const topRight = map.current.unproject([
-                (point.column + PATCH_SIZE / 2) * imageScale,
-                (point.row - PATCH_SIZE / 2) * imageScale,
-              ])
-              return {
-                type: 'Feature',
-                properties: {
-                  id: point.id,
-                  isUnclassified: point.annotations.length === 0,
-                  isConfirmed: point.annotations[0]?.is_confirmed,
-                },
-                geometry: {
-                  type: 'Polygon',
-                  coordinates: [
-                    [
-                      [topLeft.lng, topLeft.lat],
-                      [bottomLeft.lng, bottomLeft.lat],
-                      [bottomRight.lng, bottomRight.lat],
-                      [topRight.lng, topRight.lat],
-                      [topLeft.lng, topLeft.lat],
-                    ],
-                  ],
-                },
-              }
-            }),
-          },
+          data: getPointsGeojson(),
         },
       },
       layers: [
@@ -140,6 +145,14 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
     map.current.on('load', () => setHasMapLoaded(true))
     // eslint-disable-next-line
   }, [])
+
+  const _updatePointsOnDataChange = useEffect(() => {
+    if (!hasMapLoaded) {
+      return
+    }
+
+    map.current.getSource('patches').setData(getPointsGeojson())
+  }, [dataToReview, hasMapLoaded, getPointsGeojson])
 
   const _highlightPoints = useEffect(() => {
     if (!hasMapLoaded) {

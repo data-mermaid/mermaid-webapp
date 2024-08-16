@@ -37,13 +37,16 @@ const ImageAnnotationModalTable = ({
     }
   }
 
-  const handleRowDelete = (rowData) => {
+  const handleRowDelete = (e, rowData) => {
+    e.stopPropagation()
+
     const updatedPoints = points.map((point) => {
       const isPointInRow = rowData.some((pointInRow) => pointInRow.id === point.id)
       return isPointInRow ? { ...point, annotations: [] } : point
     })
 
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
+    setSelectedRowIndex()
     setSelectedPoints([])
   }
 
@@ -75,7 +78,7 @@ const ImageAnnotationModalTable = ({
               <button type="button">Confirm</button>
             </Td>
             <Td align="center">
-              <ButtonCaution type="button" onClick={() => handleRowDelete(tableData[row])}>
+              <ButtonCaution type="button" onClick={(e) => handleRowDelete(e, tableData[row])}>
                 <IconClose />
               </ButtonCaution>
             </Td>
