@@ -101,7 +101,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         </StyledOverflowWrapper>
       </InputWrapper>
       {dataToReview ? (
-        <ImageAnnotationModal dataToReview={sampleData} setDataToReview={setDataToReview} />
+        <ImageAnnotationModal dataToReview={dataToReview} setDataToReview={setDataToReview} />
       ) : undefined}
     </>
   )

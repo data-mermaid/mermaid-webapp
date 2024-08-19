@@ -26,6 +26,7 @@ const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
         <div>
           <ImageAnnotationModalTable
             points={dataToReview.points}
+            setDataToReview={setDataToReview}
             setHighlightedPoints={setHighlightedPoints}
             setSelectedPoints={setSelectedPoints}
           />
