@@ -28,9 +28,9 @@ const ImageAnnotationModalTable = ({
     ({ annotations }) => annotations[0].label_display,
   )
 
-  // Check the first first annotation of the first point in the row.
-  //  All points in row should have same value for is_confirmed
-  const checkIfRowIsConfirmed = (row) => tableData[row][0].annotations[0].is_confirmed
+  // Returns true if every point in row has an annotation that has `is_confirmed` set to true
+  const checkIfRowIsConfirmed = (row) =>
+    tableData[row].every(({ annotations }) => annotations[0].is_confirmed)
 
   const handleRowSelect = (rowData, index) => {
     if (index === selectedRowIndex) {
