@@ -2,6 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+import {
+  imageClassificationPointsPropType,
+  imageClassificationResponsePropType,
+} from '../../../../App/mermaidData/mermaidDataProptypes'
 
 // TODO: Assumes that the max dimension for height and width are the same.
 // This can change depending on final implementation, hardcoded for now.
@@ -201,33 +205,11 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
   )
 }
 
-// TODO: how to DRY this
 ImageAnnotationModalMap.propTypes = {
   setDataToReview: PropTypes.func.isRequired,
-  dataToReview: PropTypes.shape({
-    image: PropTypes.string.isRequired,
-    original_image_width: PropTypes.number.isRequired,
-    original_image_height: PropTypes.number.isRequired,
-    patch_size: PropTypes.number.isRequired,
-    points: PropTypes.arrayOf(
-      PropTypes.shape({
-        row: PropTypes.number.isRequired,
-        column: PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-  highlightedPoints: PropTypes.arrayOf(
-    PropTypes.shape({
-      row: PropTypes.number.isRequired,
-      column: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
-  selectedPoints: PropTypes.arrayOf(
-    PropTypes.shape({
-      row: PropTypes.number.isRequired,
-      column: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
+  dataToReview: imageClassificationResponsePropType.isRequired,
+  highlightedPoints: imageClassificationPointsPropType.isRequired,
+  selectedPoints: imageClassificationPointsPropType.isRequired,
 }
 
 export default ImageAnnotationModalMap

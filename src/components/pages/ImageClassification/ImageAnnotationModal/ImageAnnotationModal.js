@@ -56,7 +56,7 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
 
   return (
     <Modal
-      title={dataToReview?.original_image_name}
+      title={dataToReview?.original_image_name ?? ''}
       isOpen
       onDismiss={handleCloseModal}
       allowCloseWithEscapeKey={false}
