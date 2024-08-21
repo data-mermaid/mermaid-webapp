@@ -25,7 +25,6 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
   useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance.getAnnotationsForImage(projectId, imageId).then((data) => {
-        console.log('DATA', data)
         setDataToReview(data)
       })
     }
@@ -96,18 +95,6 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
 ImageAnnotationModal.propTypes = {
   imageId: PropTypes.string.isRequired,
   setImageId: PropTypes.func.isRequired,
-  // dataToReview: PropTypes.shape({
-  //   id: PropTypes.string.isRequired,
-  //   original_image_name: PropTypes.string.isRequired,
-  //   image: PropTypes.string.isRequired,
-  //   points: PropTypes.arrayOf(
-  //     PropTypes.shape({
-  //       row: PropTypes.number.isRequired,
-  //       column: PropTypes.number.isRequired,
-  //       annotations: PropTypes.arrayOf(PropTypes.object).isRequired,
-  //     }),
-  //   ),
-  // }),
 }
 
 export default ImageAnnotationModal
