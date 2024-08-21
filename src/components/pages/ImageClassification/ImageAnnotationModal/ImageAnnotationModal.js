@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import Modal from '../../../generic/Modal/Modal'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import ImageAnnotationModalTable from './ImageAnnotationModalTable'
@@ -24,9 +25,14 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
 
   useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
-      databaseSwitchboardInstance.getAnnotationsForImage(projectId, imageId).then((data) => {
-        setDataToReview(data)
-      })
+      databaseSwitchboardInstance
+        .getAnnotationsForImage(projectId, imageId)
+        .then((data) => {
+          setDataToReview(data)
+        })
+        .catch(() => {
+          toast.error('Failed to fetch image annotations')
+        })
     }
     // eslint-disable-next-line
   }, [])
