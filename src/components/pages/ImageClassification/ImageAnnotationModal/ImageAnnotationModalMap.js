@@ -3,9 +3,6 @@ import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 
-// TODO: In future, PATCH_SIZE will come from API
-const PATCH_SIZE = 224
-
 // TODO: Assumes that the max dimension for height and width are the same.
 // This can change depending on final implementation, hardcoded for now.
 const MAX_DIMENSION = 1000
@@ -35,6 +32,7 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
   const map = useRef(null)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const imageScale = getImageScale(dataToReview)
+  const halfPatchSize = dataToReview.patch_size / 2
 
   const getPointsGeojson = useCallback(
     () => ({
@@ -44,20 +42,20 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
         // Crop size is the size of the patch in pixels
         // We calculate the corners of the patch in pixels, then convert to lng, lat
         const topLeft = map.current.unproject([
-          (point.column - PATCH_SIZE / 2) * imageScale,
-          (point.row - PATCH_SIZE / 2) * imageScale,
+          (point.column - halfPatchSize) * imageScale,
+          (point.row - halfPatchSize) * imageScale,
         ])
         const bottomLeft = map.current.unproject([
-          (point.column - PATCH_SIZE / 2) * imageScale,
-          (point.row + PATCH_SIZE / 2) * imageScale,
+          (point.column - halfPatchSize) * imageScale,
+          (point.row + halfPatchSize) * imageScale,
         ])
         const bottomRight = map.current.unproject([
-          (point.column + PATCH_SIZE / 2) * imageScale,
-          (point.row + PATCH_SIZE / 2) * imageScale,
+          (point.column + halfPatchSize) * imageScale,
+          (point.row + halfPatchSize) * imageScale,
         ])
         const topRight = map.current.unproject([
-          (point.column + PATCH_SIZE / 2) * imageScale,
-          (point.row - PATCH_SIZE / 2) * imageScale,
+          (point.column + halfPatchSize) * imageScale,
+          (point.row - halfPatchSize) * imageScale,
         ])
         return {
           type: 'Feature',
@@ -81,7 +79,7 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
         }
       }),
     }),
-    [dataToReview, imageScale],
+    [dataToReview, imageScale, halfPatchSize],
   )
 
   const _renderImageViaMap = useEffect(() => {
@@ -210,6 +208,7 @@ ImageAnnotationModalMap.propTypes = {
     image: PropTypes.string.isRequired,
     original_image_width: PropTypes.number.isRequired,
     original_image_height: PropTypes.number.isRequired,
+    patch_size: PropTypes.number.isRequired,
     points: PropTypes.arrayOf(
       PropTypes.shape({
         row: PropTypes.number.isRequired,
