@@ -20,6 +20,8 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const [dataToReview, setDataToReview] = useState()
+  const [growthForms, setGrowthForms] = useState()
+  const [benthicAttributes, setBenthicAttributes] = useState()
   const [selectedPoints, setSelectedPoints] = useState([])
   const [highlightedPoints, setHighlightedPoints] = useState([])
 
@@ -33,6 +35,16 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
         .catch(() => {
           toast.error('Failed to fetch image annotations')
         })
+
+      // TODO: These two will likely be fetched in ObservationTable and passed to this component as props
+      // Because of that, not going to add error handling / loading indicators / Promise.all
+      databaseSwitchboardInstance.getChoices().then(({ growthforms }) => {
+        setGrowthForms(growthforms.data)
+      })
+
+      databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
+        setBenthicAttributes(benthicAttributes)
+      })
     }
     // eslint-disable-next-line
   }, [])
@@ -54,6 +66,8 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
           <div>
             <ImageAnnotationModalTable
               points={dataToReview.points}
+              growthForms={growthForms}
+              benthicAttributes={benthicAttributes}
               setDataToReview={setDataToReview}
               setHighlightedPoints={setHighlightedPoints}
               setSelectedPoints={setSelectedPoints}
