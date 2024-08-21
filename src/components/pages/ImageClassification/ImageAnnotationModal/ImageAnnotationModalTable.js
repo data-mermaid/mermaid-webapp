@@ -25,12 +25,13 @@ const ImageAnnotationModalTable = ({
   const pointsWithAnnotations = points.filter(({ annotations }) => annotations.length)
   const tableData = Object.groupBy(
     pointsWithAnnotations,
-    ({ annotations }) => annotations[0].label_display,
+    ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
   )
 
   // Check the first first annotation of the first point in the row.
   //  All points in row should have same value for is_confirmed
-  const checkIfRowIsConfirmed = (row) => tableData[row][0].annotations[0].is_confirmed
+  const checkIfRowIsConfirmed = (row) =>
+    tableData[row].every(({ annotations }) => annotations[0].is_confirmed)
 
   const handleRowSelect = (rowData, index) => {
     if (index === selectedRowIndex) {
@@ -98,8 +99,8 @@ const ImageAnnotationModalTable = ({
             $isConfirmed={checkIfRowIsConfirmed(row)}
           >
             {/* TODO: These next two values are either going to be provided in dataToReview or we will need to lookup via API call (benthic attr - growth form) */}
-            <Td>{row}</Td>
-            <Td>{row}</Td>
+            <Td>{tableData[row][0].annotations[0]?.benthic_attribute}</Td>
+            <Td>{tableData[row][0].annotations[0]?.growth_form}</Td>
             <Td align="right">{tableData[row].length}</Td>
             <Td align="center">
               {checkIfRowIsConfirmed(row) ? (
