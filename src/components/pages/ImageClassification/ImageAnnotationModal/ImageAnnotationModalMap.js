@@ -31,7 +31,20 @@ const getImageScale = (dataToReview) => {
   return longerSide > MAX_DIMENSION ? MAX_DIMENSION / longerSide : 1
 }
 
-const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoints }) => {
+const getLabel = (properties, benthicAttributes, growthForms) => {
+  const { benthicAttributeId, growthFormId } = properties
+  const benthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
+  const growthForm = growthForms.find(({ id }) => id === growthFormId)
+  return `${benthicAttribute?.name ?? ''} ${growthForm?.name ?? ''}`
+}
+
+const ImageAnnotationModalMap = ({
+  dataToReview,
+  highlightedPoints,
+  selectedPoints,
+  growthForms,
+  benthicAttributes,
+}) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
@@ -65,7 +78,8 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
           type: 'Feature',
           properties: {
             id: point.id,
-            labelDisplay: point.annotations[0]?.label_display,
+            benthicAttributeId: point.annotations[0]?.benthic_attribute,
+            growthFormId: point.annotations[0]?.growth_form,
             isUnclassified: point.annotations.length === 0,
             isConfirmed: point.annotations[0]?.is_confirmed,
           },
@@ -164,7 +178,9 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
     map.current.on('mouseenter', 'patches-fill-layer', ({ features }) => {
       const [{ geometry, properties }] = features
       map.current.getCanvas().style.cursor = 'pointer'
-      const label = properties.isUnclassified ? 'Unclassified' : properties.labelDisplay
+      const label = properties.isUnclassified
+        ? 'Unclassified'
+        : getLabel(properties, benthicAttributes, growthForms)
       popup.setLngLat(geometry.coordinates[0][0]).setHTML(label).addTo(map.current)
     })
 
@@ -238,6 +254,8 @@ ImageAnnotationModalMap.propTypes = {
   dataToReview: imageClassificationResponsePropType.isRequired,
   highlightedPoints: imageClassificationPointsPropType.isRequired,
   selectedPoints: imageClassificationPointsPropType.isRequired,
+  benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default ImageAnnotationModalMap

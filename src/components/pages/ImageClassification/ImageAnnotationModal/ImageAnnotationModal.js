@@ -74,9 +74,11 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
             />
             <ImageAnnotationModalMap
               dataToReview={dataToReview}
-              setDataToReview={setDataToReview}
               highlightedPoints={highlightedPoints}
               selectedPoints={selectedPoints}
+              growthForms={growthForms}
+              benthicAttributes={benthicAttributes}
+              setDataToReview={setDataToReview}
             />
           </div>
         ) : (
