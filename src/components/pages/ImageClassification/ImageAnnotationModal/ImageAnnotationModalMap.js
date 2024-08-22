@@ -63,6 +63,7 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
           type: 'Feature',
           properties: {
             id: point.id,
+            labelDisplay: point.annotations[0]?.label_display,
             isUnclassified: point.annotations.length === 0,
             isConfirmed: point.annotations[0]?.is_confirmed,
           },
@@ -125,12 +126,20 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
           source: 'benthicQuadratImage',
         },
         {
-          id: 'patches-layer',
+          id: 'patches-line-layer',
           type: 'line',
           source: 'patches',
           paint: {
             'line-width': POLYGON_LINE_WIDTH,
             'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
+          },
+        },
+        {
+          id: 'patches-fill-layer',
+          type: 'fill',
+          source: 'patches',
+          paint: {
+            'fill-color': 'transparent',
           },
         },
       ],
@@ -143,6 +152,25 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
     ])
 
     map.current.on('load', () => setHasMapLoaded(true))
+
+    const popup = new maplibregl.Popup({
+      anchor: 'center',
+      closeButton: false,
+      closeOnClick: false,
+    })
+
+    map.current.on('mouseenter', 'patches-fill-layer', ({ features }) => {
+      const [{ geometry, properties }] = features
+      map.current.getCanvas().style.cursor = 'pointer'
+      const label = properties.isUnclassified ? 'Unclassified' : properties.labelDisplay
+      popup.setLngLat(geometry.coordinates[0][0]).setHTML(label).addTo(map.current)
+    })
+
+    map.current.on('mouseleave', 'patches-fill-layer', () => {
+      map.current.getCanvas().style.cursor = ''
+      popup.remove()
+    })
+
     // eslint-disable-next-line
   }, [])
 
@@ -159,7 +187,7 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
       return
     }
 
-    map.current.setPaintProperty('patches-layer', 'line-color', [
+    map.current.setPaintProperty('patches-line-layer', 'line-color', [
       'case',
       [
         'in', // checks if point on map is in selected row in table
@@ -178,7 +206,7 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
       IMAGE_CLASSIFICATION_COLOR_EXP, // fallback to default expression
     ])
 
-    map.current.setPaintProperty('patches-layer', 'line-width', [
+    map.current.setPaintProperty('patches-line-layer', 'line-width', [
       'case',
       [
         'in', // checks if point on map is in selected row in table
