@@ -5,6 +5,7 @@ import { Table, Tr, Th, Td } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
+import { imageClassificationPointsPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 
 const TrWithBorderStyling = styled(Tr)`
   border: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.current}`};
@@ -17,6 +18,8 @@ const TrWithBorderStyling = styled(Tr)`
 
 const ImageAnnotationModalTable = ({
   points,
+  growthForms,
+  benthicAttributes,
   setDataToReview,
   setHighlightedPoints,
   setSelectedPoints,
@@ -25,12 +28,26 @@ const ImageAnnotationModalTable = ({
   const pointsWithAnnotations = points.filter(({ annotations }) => annotations.length)
   const tableData = Object.groupBy(
     pointsWithAnnotations,
-    ({ annotations }) => annotations[0].label_display,
+    ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
   )
 
   // Returns true if every point in row has an annotation that has `is_confirmed` set to true
   const checkIfRowIsConfirmed = (row) =>
     tableData[row].every(({ annotations }) => annotations[0].is_confirmed)
+
+  const getBenthicAttributeLabel = (row) => {
+    // All points in a row will have the same benthic attribute
+    const benthicAttributeId = tableData[row][0].annotations[0].benthic_attribute
+    const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
+    return matchingBenthicAttribute?.name
+  }
+
+  const getGrowthFormLabel = (row) => {
+    // All points in a row will have the same growth form
+    const growthFormId = tableData[row][0].annotations[0].growth_form
+    const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
+    return matchingGrowthForm?.name
+  }
 
   const handleRowSelect = (rowData, index) => {
     if (index === selectedRowIndex) {
@@ -97,9 +114,8 @@ const ImageAnnotationModalTable = ({
             $isSelected={i === selectedRowIndex}
             $isConfirmed={checkIfRowIsConfirmed(row)}
           >
-            {/* TODO: These next two values are either going to be provided in dataToReview or we will need to lookup via API call (benthic attr - growth form) */}
-            <Td>{row}</Td>
-            <Td>{row}</Td>
+            <Td>{getBenthicAttributeLabel(row)}</Td>
+            <Td>{getGrowthFormLabel(row)}</Td>
             <Td align="right">{tableData[row].length}</Td>
             <Td align="center">
               {checkIfRowIsConfirmed(row) ? (
@@ -126,13 +142,9 @@ ImageAnnotationModalTable.propTypes = {
   setHighlightedPoints: PropTypes.func.isRequired,
   setSelectedPoints: PropTypes.func.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  points: PropTypes.arrayOf(
-    PropTypes.shape({
-      row: PropTypes.number.isRequired,
-      column: PropTypes.number.isRequired,
-      annotations: PropTypes.arrayOf(PropTypes.object).isRequired,
-    }),
-  ),
+  points: imageClassificationPointsPropType.isRequired,
+  benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default ImageAnnotationModalTable

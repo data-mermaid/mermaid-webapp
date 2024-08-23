@@ -11,7 +11,6 @@ import { StyledTd, TdWithHoverText } from './ImageClassificationObservationTable
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
-import sampleData from '../sampleData/sample-data'
 import Thumbnail from './Thumbnail'
 
 const tableHeaders = [
@@ -25,6 +24,10 @@ const tableHeaders = [
   { align: 'right', id: 'review', text: '' },
   { align: 'right', id: 'remove', text: '' },
 ]
+
+// This will be set by the actual image ID when image is done processing
+// Update this to the ID of the image you uploaded locally
+const HARDCODED_IMAGE_ID = 'f3dc709a-1fdb-4cdc-b370-883b695bb6b9'
 
 const TableHeaderRow = () => (
   <Tr>
@@ -55,7 +58,7 @@ const SubHeaderRow = () => (
 )
 
 const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }) => {
-  const [dataToReview, setDataToReview] = useState()
+  const [imageId, setImageId] = useState()
 
   return (
     <>
@@ -73,7 +76,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                   <StyledTd>{index + 1}</StyledTd>
                   <TdWithHoverText
                     data-tooltip={file.name}
-                    onClick={() => setDataToReview(sampleData)}
+                    onClick={() => setImageId(HARDCODED_IMAGE_ID)}
                   >
                     <Thumbnail imageUrl={URL.createObjectURL(file)} />
                   </TdWithHoverText>
@@ -85,7 +88,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd>
-                    <ButtonPrimary type="button" onClick={() => setDataToReview(sampleData)}>
+                    <ButtonPrimary type="button" onClick={() => setImageId(HARDCODED_IMAGE_ID)}>
                       Review
                     </ButtonPrimary>
                   </StyledTd>
@@ -100,9 +103,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
           </StickyObservationTable>
         </StyledOverflowWrapper>
       </InputWrapper>
-      {dataToReview ? (
-        <ImageAnnotationModal dataToReview={dataToReview} setDataToReview={setDataToReview} />
-      ) : undefined}
+      {imageId ? <ImageAnnotationModal imageId={imageId} setImageId={setImageId} /> : undefined}
     </>
   )
 }

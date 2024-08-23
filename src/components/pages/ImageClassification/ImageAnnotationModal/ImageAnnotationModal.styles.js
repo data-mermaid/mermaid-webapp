@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import theme from '../../../../theme'
 
 export const Footer = styled.div`
   display: flex;
@@ -20,4 +21,10 @@ export const LegendSquare = styled.div`
   height: 12px;
   margin-right: 2px;
   border: ${({ color }) => `2px solid ${color}`};
+`
+
+export const LoadingContainer = styled.div`
+  background-color: ${theme.color.background};
+  height: 500px;
+  width: 100%;
 `

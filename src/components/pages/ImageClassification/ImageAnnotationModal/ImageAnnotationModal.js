@@ -1,42 +1,91 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import Modal from '../../../generic/Modal/Modal'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import ImageAnnotationModalTable from './ImageAnnotationModalTable'
 import ImageAnnotationModalMap from './ImageAnnotationModalMap'
-import { Footer, Legend, LegendItem, LegendSquare } from './ImageAnnotationModal.styles'
+import {
+  Footer,
+  Legend,
+  LegendItem,
+  LegendSquare,
+  LoadingContainer,
+} from './ImageAnnotationModal.styles'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 
-const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
+const ImageAnnotationModal = ({ imageId, setImageId }) => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { projectId } = useParams()
+  const [dataToReview, setDataToReview] = useState()
+  const [growthForms, setGrowthForms] = useState()
+  const [benthicAttributes, setBenthicAttributes] = useState()
   const [selectedPoints, setSelectedPoints] = useState([])
   const [highlightedPoints, setHighlightedPoints] = useState([])
 
+  const _fetchImageAnnotations = useEffect(() => {
+    if (databaseSwitchboardInstance && projectId) {
+      databaseSwitchboardInstance
+        .getAnnotationsForImage(projectId, imageId)
+        .then((data) => {
+          setDataToReview(data)
+        })
+        .catch(() => {
+          toast.error('Failed to fetch image annotations')
+        })
+
+      // TODO: These two will likely be fetched in ObservationTable and passed to this component as props
+      // Because of that, not going to add error handling / loading indicators / Promise.all
+      databaseSwitchboardInstance.getChoices().then(({ growthforms }) => {
+        setGrowthForms(growthforms.data)
+      })
+
+      databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
+        setBenthicAttributes(benthicAttributes)
+      })
+    }
+    // eslint-disable-next-line
+  }, [])
+
   const handleCloseModal = () => {
     // TODO: Save content before closing
-    setDataToReview()
+    setImageId()
   }
 
   return (
     <Modal
-      title={dataToReview.original_image_name}
+      title={dataToReview?.original_image_name ?? ''}
       isOpen
       onDismiss={handleCloseModal}
       allowCloseWithEscapeKey={false}
       maxWidth="100%"
       mainContent={
-        <div>
-          <ImageAnnotationModalTable
-            points={dataToReview.points}
-            setDataToReview={setDataToReview}
-            setHighlightedPoints={setHighlightedPoints}
-            setSelectedPoints={setSelectedPoints}
-          />
-          <ImageAnnotationModalMap
-            dataToReview={dataToReview}
-            setDataToReview={setDataToReview}
-            highlightedPoints={highlightedPoints}
-            selectedPoints={selectedPoints}
-          />
-        </div>
+        dataToReview ? (
+          <div>
+            <ImageAnnotationModalTable
+              points={dataToReview.points}
+              growthForms={growthForms}
+              benthicAttributes={benthicAttributes}
+              setDataToReview={setDataToReview}
+              setHighlightedPoints={setHighlightedPoints}
+              setSelectedPoints={setSelectedPoints}
+            />
+            <ImageAnnotationModalMap
+              dataToReview={dataToReview}
+              highlightedPoints={highlightedPoints}
+              selectedPoints={selectedPoints}
+              growthForms={growthForms}
+              benthicAttributes={benthicAttributes}
+              setDataToReview={setDataToReview}
+            />
+          </div>
+        ) : (
+          <LoadingContainer>
+            <LoadingIndicator />
+          </LoadingContainer>
+        )
       }
       footerContent={
         <Footer>
@@ -66,18 +115,8 @@ const ImageAnnotationModal = ({ dataToReview, setDataToReview }) => {
 }
 
 ImageAnnotationModal.propTypes = {
-  setDataToReview: PropTypes.func.isRequired,
-  dataToReview: PropTypes.shape({
-    original_image_name: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    points: PropTypes.arrayOf(
-      PropTypes.shape({
-        row: PropTypes.number.isRequired,
-        column: PropTypes.number.isRequired,
-        annotations: PropTypes.arrayOf(PropTypes.object).isRequired,
-      }),
-    ),
-  }),
+  imageId: PropTypes.string.isRequired,
+  setImageId: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModal

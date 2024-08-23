@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
-
-// TODO: In future, PATCH_SIZE will come from API
-const PATCH_SIZE = 224
+import {
+  imageClassificationPointsPropType,
+  imageClassificationResponsePropType,
+} from '../../../../App/mermaidData/mermaidDataProptypes'
 
 // TODO: Assumes that the max dimension for height and width are the same.
 // This can change depending on final implementation, hardcoded for now.
@@ -30,11 +31,25 @@ const getImageScale = (dataToReview) => {
   return longerSide > MAX_DIMENSION ? MAX_DIMENSION / longerSide : 1
 }
 
-const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoints }) => {
+const getLabel = (properties, benthicAttributes, growthForms) => {
+  const { benthicAttributeId, growthFormId } = properties
+  const benthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
+  const growthForm = growthForms.find(({ id }) => id === growthFormId)
+  return `${benthicAttribute?.name ?? ''} ${growthForm?.name ?? ''}`
+}
+
+const ImageAnnotationModalMap = ({
+  dataToReview,
+  highlightedPoints,
+  selectedPoints,
+  growthForms,
+  benthicAttributes,
+}) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const imageScale = getImageScale(dataToReview)
+  const halfPatchSize = dataToReview.patch_size / 2
 
   const getPointsGeojson = useCallback(
     () => ({
@@ -44,26 +59,27 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
         // Crop size is the size of the patch in pixels
         // We calculate the corners of the patch in pixels, then convert to lng, lat
         const topLeft = map.current.unproject([
-          (point.column - PATCH_SIZE / 2) * imageScale,
-          (point.row - PATCH_SIZE / 2) * imageScale,
+          (point.column - halfPatchSize) * imageScale,
+          (point.row - halfPatchSize) * imageScale,
         ])
         const bottomLeft = map.current.unproject([
-          (point.column - PATCH_SIZE / 2) * imageScale,
-          (point.row + PATCH_SIZE / 2) * imageScale,
+          (point.column - halfPatchSize) * imageScale,
+          (point.row + halfPatchSize) * imageScale,
         ])
         const bottomRight = map.current.unproject([
-          (point.column + PATCH_SIZE / 2) * imageScale,
-          (point.row + PATCH_SIZE / 2) * imageScale,
+          (point.column + halfPatchSize) * imageScale,
+          (point.row + halfPatchSize) * imageScale,
         ])
         const topRight = map.current.unproject([
-          (point.column + PATCH_SIZE / 2) * imageScale,
-          (point.row - PATCH_SIZE / 2) * imageScale,
+          (point.column + halfPatchSize) * imageScale,
+          (point.row - halfPatchSize) * imageScale,
         ])
         return {
           type: 'Feature',
           properties: {
             id: point.id,
-            labelDisplay: point.annotations[0]?.label_display,
+            benthicAttributeId: point.annotations[0]?.benthic_attribute,
+            growthFormId: point.annotations[0]?.growth_form,
             isUnclassified: point.annotations.length === 0,
             isConfirmed: point.annotations[0]?.is_confirmed,
           },
@@ -82,7 +98,7 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
         }
       }),
     }),
-    [dataToReview, imageScale],
+    [dataToReview, imageScale, halfPatchSize],
   )
 
   const _renderImageViaMap = useEffect(() => {
@@ -162,7 +178,9 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
     map.current.on('mouseenter', 'patches-fill-layer', ({ features }) => {
       const [{ geometry, properties }] = features
       map.current.getCanvas().style.cursor = 'pointer'
-      const label = properties.isUnclassified ? 'Unclassified' : properties.labelDisplay
+      const label = properties.isUnclassified
+        ? 'Unclassified'
+        : getLabel(properties, benthicAttributes, growthForms)
       popup.setLngLat(geometry.coordinates[0][0]).setHTML(label).addTo(map.current)
     })
 
@@ -231,32 +249,13 @@ const ImageAnnotationModalMap = ({ dataToReview, highlightedPoints, selectedPoin
   )
 }
 
-// TODO: how to DRY this
 ImageAnnotationModalMap.propTypes = {
   setDataToReview: PropTypes.func.isRequired,
-  dataToReview: PropTypes.shape({
-    image: PropTypes.string.isRequired,
-    original_image_width: PropTypes.number.isRequired,
-    original_image_height: PropTypes.number.isRequired,
-    points: PropTypes.arrayOf(
-      PropTypes.shape({
-        row: PropTypes.number.isRequired,
-        column: PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-  highlightedPoints: PropTypes.arrayOf(
-    PropTypes.shape({
-      row: PropTypes.number.isRequired,
-      column: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
-  selectedPoints: PropTypes.arrayOf(
-    PropTypes.shape({
-      row: PropTypes.number.isRequired,
-      column: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
+  dataToReview: imageClassificationResponsePropType.isRequired,
+  highlightedPoints: imageClassificationPointsPropType.isRequired,
+  selectedPoints: imageClassificationPointsPropType.isRequired,
+  benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default ImageAnnotationModalMap
