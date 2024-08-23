@@ -25,7 +25,7 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
   const [selectedPoints, setSelectedPoints] = useState([])
   const [highlightedPoints, setHighlightedPoints] = useState([])
 
-  useEffect(() => {
+  const _fetchImageAnnotations = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
         .getAnnotationsForImage(projectId, imageId)
