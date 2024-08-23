@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Modal from '../../../generic/Modal'
 import { ButtonPrimary, ButtonCaution, ButtonSecondary } from '../../../generic/buttons'
@@ -12,6 +13,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
   const [processedFiles, setProcessedFiles] = useState(0)
   const isCancelledRef = useRef(false) // Use ref for cancellation flag - more reliable because refs update synchronously
   const fileInputRef = useRef(null)
+  const { projectId } = useParams()
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
@@ -89,8 +91,36 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
           return
         }
 
+        if (validFiles.length > 0) {
+          onFilesUpload(validFiles)
+        }
+
         if (result.valid && !result.corrupt) {
-          validFiles.push(result.file)
+          // Upload the image to the server
+          try {
+            const formData = new FormData()
+            formData.append('collect_record_id', 'bacd3529-e0f4-40f4-a089-992c5bd5cc02') // Example ID
+            formData.append('image', result.file)
+
+            const response = await fetch(
+              `https://dev-api.datamermaid.org/v1/projects/${projectId}/classification/images/`,
+              {
+                method: 'POST',
+                body: formData,
+              },
+            )
+
+            if (response.ok) {
+              const responseData = await response.json()
+              validFiles.push(responseData) // Collect the response for further processing if needed
+              console.log({ responseData })
+              toast.success(`Successfully uploaded: ${file.name}`)
+            } else {
+              toast.error(`Failed to upload: ${file.name}`)
+            }
+          } catch (error) {
+            toast.error(`Error uploading ${file.name}: ${error.message}`)
+          }
         } else if (result.corrupt) {
           corruptFiles.push(result.file)
         } else {
@@ -106,10 +136,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       return
     }
 
-    if (validFiles.length > 0) {
-      onFilesUpload(validFiles)
-    }
-
+    // Display error messages for invalid files
     if (duplicateFiles.length > 0) {
       toast.error(uploadText.errors.duplicateFiles)
     }
@@ -128,10 +155,6 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
     if (corruptFiles.length > 0) {
       toast.error(uploadText.errors.corruptFiles)
-    }
-
-    if (validFiles.length > 0) {
-      toast.success(uploadText.success)
     }
 
     setLoading(false)
