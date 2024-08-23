@@ -5,7 +5,7 @@ const ImageClassificationMixin = (Base) =>
   class extends Base {
     getAnnotationsForImage = async function getAnnotationsForImage(projectId, imageId) {
       if (!imageId || !projectId) {
-        Promise.reject(this._operationMissingParameterError)
+        return Promise.reject(this._operationMissingParameterError)
       }
 
       return this._isOnlineAuthenticatedAndReady
