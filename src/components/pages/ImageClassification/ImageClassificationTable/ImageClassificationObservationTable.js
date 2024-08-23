@@ -27,7 +27,7 @@ const tableHeaders = [
 
 // This will be set by the actual image ID when image is done processing
 // Update this to the ID of the image you uploaded locally
-const HARDCODED_IMAGE_ID = 'f3dc709a-1fdb-4cdc-b370-883b695bb6b9'
+const HARDCODED_IMAGE_ID = '6652b493-e0f9-4c1a-98e8-21691776e3d2'
 
 const TableHeaderRow = () => (
   <Tr>
