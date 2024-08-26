@@ -28,3 +28,9 @@ export const LoadingContainer = styled.div`
   height: 500px;
   width: 100%;
 `
+
+export const ImageAnnotationMapContainer = styled.div`
+  width: ${({ $width }) => `${$width}px`};
+  height: ${({ $height }) => `${$height}px`};
+  margin-top: '2rem';
+`

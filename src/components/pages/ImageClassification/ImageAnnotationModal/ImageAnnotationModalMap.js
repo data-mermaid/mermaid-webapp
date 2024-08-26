@@ -7,6 +7,7 @@ import {
   imageClassificationResponsePropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import Modal from '../../../generic/Modal/Modal'
+import { ImageAnnotationMapContainer } from './ImageAnnotationModal.styles'
 
 // TODO: Assumes that the max dimension for height and width are the same.
 // This can change depending on final implementation, hardcoded for now.
@@ -246,13 +247,10 @@ const ImageAnnotationModalMap = ({
 
   return (
     <>
-      <div
-        style={{
-          width: dataToReview.original_image_width * imageScale,
-          height: dataToReview.original_image_height * imageScale,
-          marginTop: '2rem',
-        }}
+      <ImageAnnotationMapContainer
         ref={mapContainer}
+        $width={dataToReview.original_image_width * imageScale}
+        $height={dataToReview.original_image_height * imageScale}
       />
       {displayEditPointModal && (
         <Modal
