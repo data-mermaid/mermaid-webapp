@@ -50,8 +50,15 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
   }, [])
 
   const handleCloseModal = () => {
-    // TODO: Save content before closing
-    setImageId()
+    databaseSwitchboardInstance
+      .saveAnnotationsForImage(projectId, imageId, dataToReview.points)
+      .then(() => {
+        setImageId()
+        toast.success('Successfully saved image annotations')
+      })
+      .catch(() => {
+        toast.error('Failed to save image annotations')
+      })
   }
 
   return (
