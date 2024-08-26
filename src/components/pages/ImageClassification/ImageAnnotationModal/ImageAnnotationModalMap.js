@@ -6,6 +6,7 @@ import {
   imageClassificationPointsPropType,
   imageClassificationResponsePropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
+import Modal from '../../../generic/Modal/Modal'
 
 // TODO: Assumes that the max dimension for height and width are the same.
 // This can change depending on final implementation, hardcoded for now.
@@ -48,6 +49,7 @@ const ImageAnnotationModalMap = ({
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
+  const [displayEditPointModal, setDisplayEditPointModal] = useState()
   const imageScale = getImageScale(dataToReview)
   const halfPatchSize = dataToReview.patch_size / 2
 
@@ -189,6 +191,11 @@ const ImageAnnotationModalMap = ({
       popup.remove()
     })
 
+    map.current.on('click', 'patches-fill-layer', ({ features }) => {
+      const [{ properties }] = features
+      setDisplayEditPointModal(properties.id)
+    })
+
     // eslint-disable-next-line
   }, [])
 
@@ -238,14 +245,26 @@ const ImageAnnotationModalMap = ({
   }, [highlightedPoints, selectedPoints, hasMapLoaded])
 
   return (
-    <div
-      style={{
-        width: dataToReview.original_image_width * imageScale,
-        height: dataToReview.original_image_height * imageScale,
-        marginTop: '2rem',
-      }}
-      ref={mapContainer}
-    />
+    <>
+      <div
+        style={{
+          width: dataToReview.original_image_width * imageScale,
+          height: dataToReview.original_image_height * imageScale,
+          marginTop: '2rem',
+        }}
+        ref={mapContainer}
+      />
+      {displayEditPointModal && (
+        <Modal
+          title="Edit Point"
+          isOpen
+          onDismiss={() => setDisplayEditPointModal()}
+          allowCloseWithEscapeKey={false}
+          maxWidth="100%"
+          mainContent={<div>TODO: Implement Edit Point Modal</div>}
+        />
+      )}
+    </>
   )
 }
 
