@@ -113,7 +113,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
             if (response.ok) {
               const responseData = await response.json()
               validFiles.push(responseData) // Collect the response for further processing if needed
-              console.log({ responseData })
+
               toast.success(`Successfully uploaded: ${file.name}`)
             } else {
               toast.error(`Failed to upload: ${file.name}`)

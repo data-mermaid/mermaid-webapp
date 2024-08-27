@@ -50,9 +50,10 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const isMounted = useIsMounted()
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
   const [sites, setSites] = useState([])
-  const [observationTableType, setObservationTableType] = useState('')
+  const [isImageClassification, setIsImageClassification] = useState(null)
 
   const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
+  const enableImageClassification = collectRecordBeingEdited?.data?.imageClassification
 
   useEffect(
     function loadSupportingData() {
@@ -117,6 +118,10 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       isSyncInProgress,
     ],
   )
+
+  const handleIsImageClassificationChange = (type) => {
+    setIsImageClassification(type)
+  }
 
   const { getPersistedUnsavedFormData: getPersistedUnsavedFormikData } =
     useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedSampleInfoInputs`)
@@ -214,19 +219,18 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
 
   const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
     (props) => {
-      const manualObservationRecordsLength =
-        collectRecordBeingEdited?.data?.obs_benthic_photo_quadrats.length
-
-      if (!observationTableType && !manualObservationRecordsLength) {
-        return <SampleUnitInputSelector setObservationTableType={setObservationTableType} />
-      } else if (observationTableType === 'manual-input' || manualObservationRecordsLength) {
+      if (isNewRecord || enableImageClassification === null) {
+        return (
+          <SampleUnitInputSelector setIsImageClassification={handleIsImageClassificationChange} />
+        )
+      } else if (enableImageClassification === false) {
         return (
           <BenthicPhotoQuadratObservationTable
             benthicAttributeSelectOptions={benthicAttributeSelectOptions}
             {...props}
           />
         )
-      } else if (observationTableType === 'image-classification') {
+      } else if (enableImageClassification) {
         return <ImageClassificationContainer />
       }
 
@@ -236,7 +240,8 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
     [
       benthicAttributeSelectOptions,
       collectRecordBeingEdited?.data?.obs_benthic_photo_quadrats.length,
-      observationTableType,
+      isImageClassification,
+      enableImageClassification,
     ],
   )
 
@@ -260,6 +265,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
         setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
         setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
         subNavNode={subNavNode}
+        isImageClassification={isImageClassification}
       />
       {!!projectId && !!currentUser && (
         <NewAttributeModal
