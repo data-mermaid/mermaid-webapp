@@ -1,20 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { Table, Tr, Th, Td } from '../../../generic/Table/table'
-import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
 import { imageClassificationPointsPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-
-const TrWithBorderStyling = styled(Tr)`
-  border: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.current}`};
-  background-color: ${({ $isConfirmed }) => $isConfirmed && `${COLORS.confirmed} !important`};
-
-  &:hover {
-    border: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.highlighted}`};
-  }
-`
+import { TrWithBorderStyling } from './ImageAnnotationModal.styles'
 
 const ImageAnnotationModalTable = ({
   points,
@@ -25,9 +15,11 @@ const ImageAnnotationModalTable = ({
   setSelectedPoints,
 }) => {
   const [selectedRowIndex, setSelectedRowIndex] = useState()
-  const pointsWithAnnotations = points.filter(({ annotations }) => annotations.length)
+  const classifiedPoints = points.filter(
+    ({ is_unclassified, annotations }) => !is_unclassified && annotations.length > 0,
+  )
   const tableData = Object.groupBy(
-    pointsWithAnnotations,
+    classifiedPoints,
     ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
   )
 
@@ -64,7 +56,11 @@ const ImageAnnotationModalTable = ({
 
     const updatedPoints = points.map((point) => {
       const isPointInRow = rowData.some((pointInRow) => pointInRow.id === point.id)
-      return isPointInRow ? { ...point, annotations: [] } : point
+      if (isPointInRow) {
+        point.is_unclassified = true
+      }
+
+      return point
     })
 
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
