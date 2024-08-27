@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { createRoot } from 'react-dom/client'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
@@ -6,8 +7,8 @@ import {
   imageClassificationPointsPropType,
   imageClassificationResponsePropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import Modal from '../../../generic/Modal/Modal'
 import { ImageAnnotationMapContainer } from './ImageAnnotationModal.styles'
+import ImageAnnotationPopup from './ImageAnnotationPopup'
 
 // TODO: Assumes that the max dimension for height and width are the same.
 // This can change depending on final implementation, hardcoded for now.
@@ -50,9 +51,14 @@ const ImageAnnotationModalMap = ({
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
-  const [displayEditPointModal, setDisplayEditPointModal] = useState()
   const imageScale = getImageScale(dataToReview)
   const halfPatchSize = dataToReview.patch_size / 2
+  const editPointPopup = new maplibregl.Popup()
+  const pointLabelPopup = new maplibregl.Popup({
+    anchor: 'center',
+    closeButton: false,
+    closeOnClick: false,
+  })
 
   const getPointsGeojson = useCallback(
     () => ({
@@ -170,31 +176,42 @@ const ImageAnnotationModalMap = ({
       [bounds._ne.lng, bounds._ne.lat],
     ])
 
+    // Map Listeners here on out
     map.current.on('load', () => setHasMapLoaded(true))
 
-    const popup = new maplibregl.Popup({
-      anchor: 'center',
-      closeButton: false,
-      closeOnClick: false,
-    })
-
+    // Display Label on point hover
     map.current.on('mouseenter', 'patches-fill-layer', ({ features }) => {
+      if (editPointPopup.isOpen()) {
+        return
+      }
+
       const [{ geometry, properties }] = features
       map.current.getCanvas().style.cursor = 'pointer'
       const label = properties.isUnclassified
         ? 'Unclassified'
         : getLabel(properties, benthicAttributes, growthForms)
-      popup.setLngLat(geometry.coordinates[0][0]).setHTML(label).addTo(map.current)
+      pointLabelPopup.setLngLat(geometry.coordinates[0][0]).setHTML(label).addTo(map.current)
     })
 
+    // Remove Label on point exit
     map.current.on('mouseleave', 'patches-fill-layer', () => {
       map.current.getCanvas().style.cursor = ''
-      popup.remove()
+      pointLabelPopup.remove()
     })
 
+    // Display Edit Point Popup on point click
     map.current.on('click', 'patches-fill-layer', ({ features }) => {
-      const [{ properties }] = features
-      setDisplayEditPointModal(properties.id)
+      const [{ geometry, properties }] = features
+      map.current.getCanvas().style.cursor = 'pointer'
+      pointLabelPopup.remove()
+
+      const popupNode = document.createElement('div')
+      const root = createRoot(popupNode)
+      root.render(<ImageAnnotationPopup properties={properties} />)
+      editPointPopup
+        .setLngLat(geometry.coordinates[0][0])
+        .setDOMContent(popupNode)
+        .addTo(map.current)
     })
 
     // eslint-disable-next-line
@@ -252,16 +269,6 @@ const ImageAnnotationModalMap = ({
         $width={dataToReview.original_image_width * imageScale}
         $height={dataToReview.original_image_height * imageScale}
       />
-      {displayEditPointModal && (
-        <Modal
-          title="Edit Point"
-          isOpen
-          onDismiss={() => setDisplayEditPointModal()}
-          allowCloseWithEscapeKey={false}
-          maxWidth="100%"
-          mainContent={<div>TODO: Implement Edit Point Modal</div>}
-        />
-      )}
     </>
   )
 }
