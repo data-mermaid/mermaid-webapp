@@ -26,9 +26,9 @@ const TextContainer = styled.div`
   max-width: 68rem;
 `
 
-const SampleUnitInputSelector = ({ setObservationTableType }) => {
+const SampleUnitInputSelector = ({ setIsImageClassification }) => {
   const handleSampleUnitChange = (type) => () => {
-    setObservationTableType(type)
+    setIsImageClassification(type)
   }
 
   return (
@@ -40,13 +40,13 @@ const SampleUnitInputSelector = ({ setObservationTableType }) => {
         <p>{language.imageClassification.sampleUnitInputSelector.description}</p>
       </TextContainer>
       <ButtonContainer>
-        <ButtonPrimary type="button" onClick={handleSampleUnitChange('image-classification')}>
+        <ButtonPrimary type="button" onClick={handleSampleUnitChange(true)}>
           <IconSparkles />
           <ButtonText>{language.imageClassification.sampleUnitInputSelector.button1}</ButtonText>
         </ButtonPrimary>
       </ButtonContainer>
       <ButtonContainer>
-        <ButtonSecondary type="button" onClick={handleSampleUnitChange('manual-input')}>
+        <ButtonSecondary type="button" onClick={handleSampleUnitChange(false)}>
           <IconPen />
           <ButtonText>{language.imageClassification.sampleUnitInputSelector.button2}</ButtonText>
         </ButtonSecondary>
@@ -56,7 +56,7 @@ const SampleUnitInputSelector = ({ setObservationTableType }) => {
 }
 
 SampleUnitInputSelector.propTypes = {
-  setObservationTableType: PropTypes.func.isRequired,
+  setIsImageClassification: PropTypes.func.isRequired,
 }
 
 export default SampleUnitInputSelector

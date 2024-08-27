@@ -113,6 +113,7 @@ const CollectRecordFormPage = ({
   observationsTable2Reducer = [],
   ObservationTable1,
   ObservationTable2 = undefined,
+  isImageClassification,
   sampleUnitFormatSaveFunction,
   sampleUnitName,
   SampleUnitTransectInputs,
@@ -375,6 +376,7 @@ const CollectRecordFormPage = ({
       formikValues: formik.values,
       observationsTable1State,
       observationsTable2State,
+      imageClassification: isImageClassification,
     })
 
     setSaveButtonState(buttonGroupStates.saving)
@@ -387,6 +389,7 @@ const CollectRecordFormPage = ({
         profileId: currentUser.id,
         projectId,
         protocol: sampleUnitName,
+        imageClassification: isImageClassification,
       })
       .then((collectRecordResponse) => {
         setIsFormDirty(false)
@@ -434,6 +437,14 @@ const CollectRecordFormPage = ({
         })
       })
   }
+
+  const _handleSaveObservationTableType = useEffect(() => {
+    if (isImageClassification !== null) {
+      handleSave()
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isImageClassification])
 
   const openDeleteRecordModal = () => {
     setIsDeleteRecordModalOpen(true)
@@ -652,6 +663,7 @@ CollectRecordFormPage.propTypes = {
   setIsNewBenthicAttributeModalOpen: PropTypes.func,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func,
   subNavNode: subNavNodePropTypes,
+  isImageClassification: PropTypes.bool,
 }
 
 export default CollectRecordFormPage
