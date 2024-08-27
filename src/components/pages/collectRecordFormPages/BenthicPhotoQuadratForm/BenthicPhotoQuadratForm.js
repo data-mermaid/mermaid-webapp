@@ -237,12 +237,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       return null
     },
 
-    [
-      benthicAttributeSelectOptions,
-      collectRecordBeingEdited?.data?.obs_benthic_photo_quadrats.length,
-      isImageClassification,
-      enableImageClassification,
-    ],
+    [isNewRecord, enableImageClassification, benthicAttributeSelectOptions],
   )
 
   return (
