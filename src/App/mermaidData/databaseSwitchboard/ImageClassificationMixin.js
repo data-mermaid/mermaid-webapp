@@ -53,10 +53,7 @@ const ImageClassificationMixin = (Base) =>
                 'Content-Type': 'multipart/form-data',
               },
             })
-            .then((apiResults) => {
-              console.log('data', apiResults.data)
-              return apiResults.data
-            })
+            .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
   }

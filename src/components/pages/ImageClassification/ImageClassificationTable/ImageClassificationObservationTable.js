@@ -25,10 +25,6 @@ const tableHeaders = [
   { align: 'right', id: 'remove', text: '' },
 ]
 
-// This will be set by the actual image ID when image is done processing
-// Update this to the ID of the image you uploaded locally
-const HARDCODED_IMAGE_ID = '6652b493-e0f9-4c1a-98e8-21691776e3d2'
-
 const TableHeaderRow = () => (
   <Tr>
     {tableHeaders.map((header) => (
@@ -75,10 +71,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                 <Tr key={index}>
                   <StyledTd>{index + 1}</StyledTd>
                   <TdWithHoverText
-                    data-tooltip={file.name}
-                    onClick={() => setImageId(HARDCODED_IMAGE_ID)}
+                    data-tooltip={file.original_image_name}
+                    onClick={() => setImageId(file.id)}
                   >
-                    <Thumbnail imageUrl={URL.createObjectURL(file)} />
+                    <Thumbnail imageUrl={file.thumbnail || file.image} />
                   </TdWithHoverText>
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
@@ -88,7 +84,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd>
-                    <ButtonPrimary type="button" onClick={() => setImageId(HARDCODED_IMAGE_ID)}>
+                    <ButtonPrimary type="button" onClick={() => setImageId(file.id)}>
                       Review
                     </ButtonPrimary>
                   </StyledTd>
