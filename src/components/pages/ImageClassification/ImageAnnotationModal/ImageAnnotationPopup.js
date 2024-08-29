@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Tr, Th, Td } from '../../../generic/Table/table'
+import { Tr, Th } from '../../../generic/Table/table'
 import { ButtonSecondary } from '../../../generic/buttons'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { PopupSubTh, PopupTable, PopupTd } from './ImageAnnotationModal.styles'
