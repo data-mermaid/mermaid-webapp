@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Tr, Th, Td } from '../../../generic/Table/table'
 import { ButtonSecondary } from '../../../generic/buttons'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { PopupSubTh, PopupTable } from './ImageAnnotationModal.styles'
+import { PopupSubTh, PopupTable, PopupTd } from './ImageAnnotationModal.styles'
 import { Select } from '../../../generic/form'
 
 const ImageAnnotationPopup = ({
@@ -53,16 +53,16 @@ const ImageAnnotationPopup = ({
         </Tr>
         {point.annotations.map((annotation) => (
           <Tr key={annotation.id}>
-            <Td>{getBenthicAttributeLabel(annotation.benthic_attribute)}</Td>
-            <Td>{getGrowthFormLabel(annotation.growth_form)}</Td>
-            <Td>{annotation.score}</Td>
+            <PopupTd>{getBenthicAttributeLabel(annotation.benthic_attribute)}</PopupTd>
+            <PopupTd>{getGrowthFormLabel(annotation.growth_form)}</PopupTd>
+            <PopupTd>{annotation.score}</PopupTd>
           </Tr>
         ))}
         <Tr>
           <PopupSubTh colSpan={3}>Add to existing row</PopupSubTh>
         </Tr>
         <Tr>
-          <Td colSpan={3}>
+          <PopupTd colSpan={3}>
             <Select
               label="Add to existing row"
               value={selectedRow}
@@ -74,15 +74,15 @@ const ImageAnnotationPopup = ({
                 </option>
               ))}
             </Select>
-          </Td>
+          </PopupTd>
         </Tr>
         <Tr>
           <PopupSubTh colSpan={3}>New row</PopupSubTh>
         </Tr>
         <Tr>
-          <Td colSpan={3}>
+          <PopupTd colSpan={3}>
             <ButtonSecondary>Choose Attribute</ButtonSecondary>
-          </Td>
+          </PopupTd>
         </Tr>
       </tbody>
     </PopupTable>
