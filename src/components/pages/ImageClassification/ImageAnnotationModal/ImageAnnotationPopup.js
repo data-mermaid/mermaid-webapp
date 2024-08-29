@@ -13,18 +13,28 @@ const ImageAnnotationPopup = ({
   getGrowthFormLabel,
 }) => {
   const point = dataToReview.points.find((point) => point.id === pointId)
+
   const classifiedPoints = dataToReview.points.filter(
     ({ is_unclassified, annotations }) => !is_unclassified && annotations.length > 0,
   )
-  const tableData = Object.groupBy(
-    classifiedPoints,
-    ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
-  )
+
+  const existingRowDropdownOptions = classifiedPoints.reduce((acc, currentPoint) => {
+    const { benthic_attribute, growth_form } = currentPoint.annotations[0]
+    const value = benthic_attribute + '_' + growth_form
+    const label = `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(
+      growth_form,
+    )}`
+    if (!acc.some((option) => option.value === value)) {
+      acc.push({ label: label, value: value })
+    }
+
+    return acc
+  }, [])
 
   const [selectedRow, setSelectedRow] = useState(() => {
     const rowKeyForPoint =
       point.annotations[0].benthic_attribute + '_' + point.annotations[0].growth_form
-    const isPointInARow = Object.keys(tableData).some((row) => rowKeyForPoint === row)
+    const isPointInARow = existingRowDropdownOptions.some((row) => rowKeyForPoint === row.value)
     return isPointInARow ? rowKeyForPoint : ''
   })
 
@@ -58,16 +68,11 @@ const ImageAnnotationPopup = ({
               value={selectedRow}
               onChange={(e) => setSelectedRow(e.target.value)}
             >
-              {Object.keys(tableData).map((row) => {
-                // All points in a row will have the same benthic attribute / growth form
-                const { benthic_attribute, growth_form } = tableData[row][0].annotations[0]
-                return (
-                  <option key={row} value={row}>
-                    {getBenthicAttributeLabel(benthic_attribute)}
-                    {getGrowthFormLabel(growth_form)}
-                  </option>
-                )
-              })}
+              {existingRowDropdownOptions.map((row) => (
+                <option key={row.value} value={row.value}>
+                  {row.label}
+                </option>
+              ))}
             </Select>
           </Td>
         </Tr>
