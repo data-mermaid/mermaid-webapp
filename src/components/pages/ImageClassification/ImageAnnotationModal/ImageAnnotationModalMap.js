@@ -36,7 +36,6 @@ const getImageScale = (dataToReview) => {
 
 const ImageAnnotationModalMap = ({
   dataToReview,
-  setDataToReview,
   highlightedPoints,
   selectedPoints,
   getBenthicAttributeLabel,
@@ -274,7 +273,6 @@ const ImageAnnotationModalMap = ({
 }
 
 ImageAnnotationModalMap.propTypes = {
-  setDataToReview: PropTypes.func.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   highlightedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
   selectedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
