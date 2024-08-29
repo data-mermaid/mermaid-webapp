@@ -8,8 +8,8 @@ import { TrWithBorderStyling } from './ImageAnnotationModal.styles'
 
 const ImageAnnotationModalTable = ({
   points,
-  growthForms,
-  benthicAttributes,
+  getBenthicAttributeLabel,
+  getGrowthFormLabel,
   setDataToReview,
   setHighlightedPoints,
   setSelectedPoints,
@@ -26,20 +26,6 @@ const ImageAnnotationModalTable = ({
   // Returns true if every point in row has an annotation that has `is_confirmed` set to true
   const checkIfRowIsConfirmed = (row) =>
     tableData[row].every(({ annotations }) => annotations[0].is_confirmed)
-
-  const getBenthicAttributeLabel = (row) => {
-    // All points in a row will have the same benthic attribute
-    const benthicAttributeId = tableData[row][0].annotations[0].benthic_attribute
-    const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-    return matchingBenthicAttribute?.name
-  }
-
-  const getGrowthFormLabel = (row) => {
-    // All points in a row will have the same growth form
-    const growthFormId = tableData[row][0].annotations[0].growth_form
-    const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
-    return matchingGrowthForm?.name
-  }
 
   const handleRowSelect = (rowData, index) => {
     if (index === selectedRowIndex) {
@@ -110,8 +96,9 @@ const ImageAnnotationModalTable = ({
             $isSelected={i === selectedRowIndex}
             $isConfirmed={checkIfRowIsConfirmed(row)}
           >
-            <Td>{getBenthicAttributeLabel(row)}</Td>
-            <Td>{getGrowthFormLabel(row)}</Td>
+            {/* // All points in a row will have the same benthic attribute / growth form */}
+            <Td>{getBenthicAttributeLabel(tableData[row][0].annotations[0].benthic_attribute)}</Td>
+            <Td>{getGrowthFormLabel(tableData[row][0].annotations[0].growth_form)}</Td>
             <Td align="right">{tableData[row].length}</Td>
             <Td align="center">
               {checkIfRowIsConfirmed(row) ? (
@@ -139,8 +126,8 @@ ImageAnnotationModalTable.propTypes = {
   setSelectedPoints: PropTypes.func.isRequired,
   setDataToReview: PropTypes.func.isRequired,
   points: imageClassificationPointsPropType.isRequired,
-  benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
-  growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
+  getBenthicAttributeLabel: PropTypes.func.isRequired,
+  getGrowthFormLabel: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModalTable
