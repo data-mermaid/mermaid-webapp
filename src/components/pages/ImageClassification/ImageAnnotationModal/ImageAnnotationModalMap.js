@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import {
-  imageClassificationPointsPropType,
+  imageClassificationPointPropType,
   imageClassificationResponsePropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ImageAnnotationMapContainer } from './ImageAnnotationModal.styles'
@@ -36,6 +36,7 @@ const getImageScale = (dataToReview) => {
 
 const ImageAnnotationModalMap = ({
   dataToReview,
+  setDataToReview,
   highlightedPoints,
   selectedPoints,
   getBenthicAttributeLabel,
@@ -200,7 +201,8 @@ const ImageAnnotationModalMap = ({
       const root = createRoot(popupNode)
       root.render(
         <ImageAnnotationPopup
-          properties={properties}
+          dataToReview={dataToReview}
+          pointId={properties.id}
           getBenthicAttributeLabel={getBenthicAttributeLabel}
           getGrowthFormLabel={getGrowthFormLabel}
         />,
@@ -274,8 +276,8 @@ const ImageAnnotationModalMap = ({
 ImageAnnotationModalMap.propTypes = {
   setDataToReview: PropTypes.func.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
-  highlightedPoints: imageClassificationPointsPropType.isRequired,
-  selectedPoints: imageClassificationPointsPropType.isRequired,
+  highlightedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
+  selectedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
   getGrowthFormLabel: PropTypes.func.isRequired,
 }

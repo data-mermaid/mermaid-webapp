@@ -538,17 +538,15 @@ export const fishGroupingsPropType = PropTypes.arrayOf(fishFamiliyPropType)
 export const fishSpeciesPropType = PropTypes.arrayOf(fishSpeciesSingluarPropType)
 export const fishGeneraPropType = PropTypes.arrayOf(fishGeneraSingluarPropType)
 
-export const imageClassificationPointsPropType = PropTypes.arrayOf(
-  PropTypes.shape({
-    row: PropTypes.number.isRequired,
-    column: PropTypes.number.isRequired,
-  }),
-)
+export const imageClassificationPointPropType = PropTypes.shape({
+  row: PropTypes.number.isRequired,
+  column: PropTypes.number.isRequired,
+})
 
 export const imageClassificationResponsePropType = PropTypes.shape({
   image: PropTypes.string.isRequired,
   original_image_width: PropTypes.number.isRequired,
   original_image_height: PropTypes.number.isRequired,
   patch_size: PropTypes.number.isRequired,
-  points: imageClassificationPointsPropType,
+  points: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
 })
