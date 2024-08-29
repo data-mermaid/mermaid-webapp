@@ -46,11 +46,10 @@ const ImageAnnotationModalMap = ({
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const imageScale = getImageScale(dataToReview)
   const halfPatchSize = dataToReview.patch_size / 2
-  const editPointPopup = new maplibregl.Popup()
+  const editPointPopup = new maplibregl.Popup({ closeButton: false })
   const pointLabelPopup = new maplibregl.Popup({
     anchor: 'center',
     closeButton: false,
-    closeOnClick: false,
   })
 
   const getPointsGeojson = useCallback(
@@ -174,10 +173,6 @@ const ImageAnnotationModalMap = ({
 
     // Display Label on point hover
     map.current.on('mouseenter', 'patches-fill-layer', ({ features }) => {
-      if (editPointPopup.isOpen()) {
-        return
-      }
-
       const [{ geometry, properties }] = features
       map.current.getCanvas().style.cursor = 'pointer'
       const label = properties.isUnclassified
@@ -205,6 +200,7 @@ const ImageAnnotationModalMap = ({
       root.render(<ImageAnnotationPopup properties={properties} />)
       editPointPopup
         .setLngLat(geometry.coordinates[0][0])
+        .setMaxWidth('none')
         .setDOMContent(popupNode)
         .addTo(map.current)
     })

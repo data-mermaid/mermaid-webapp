@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import theme from '../../../../theme'
-import { Tr } from '../../../generic/Table/table'
+import { Table, Tr, Th } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 
 export const Footer = styled.div`
@@ -44,4 +44,14 @@ export const TrWithBorderStyling = styled(Tr)`
   &:hover {
     border: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.highlighted}`};
   }
+`
+
+export const PopupTable = styled(Table)`
+  width: 500px;
+`
+
+export const PopupSubTh = styled(Th)`
+  border: solid 1px ${theme.color.tableBorderColor};
+  font-weight: bold;
+  background-color: ${theme.color.tableRowEven};
 `
