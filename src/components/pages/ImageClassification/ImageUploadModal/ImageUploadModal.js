@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react'
+import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Modal from '../../../generic/Modal'
 import { ButtonPrimary, ButtonCaution, ButtonSecondary } from '../../../generic/buttons'
 import { DropZone, HiddenInput, ButtonContainer } from './ImageUploadModal.styles'
 import { toast } from 'react-toastify'
 import language from '../../../../language'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
   const [loading, setLoading] = useState(false)
@@ -12,6 +14,8 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
   const [processedFiles, setProcessedFiles] = useState(0)
   const isCancelledRef = useRef(false) // Use ref for cancellation flag - more reliable because refs update synchronously
   const fileInputRef = useRef(null)
+  const { recordId, projectId } = useParams()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
@@ -53,6 +57,20 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       }
       reader.readAsDataURL(file)
     })
+  }
+
+  const processImagesSequentially = async (files) => {
+    for (let i = 0; i < files.length; i++) {
+      if (isCancelledRef.current) {
+        break
+      }
+      try {
+        await databaseSwitchboardInstance.uploadImage(projectId, recordId, files[i])
+        setProcessedFiles((prev) => prev + 1)
+      } catch (error) {
+        toast.error(`Failed to upload ${files[i].name}: ${error.message}`)
+      }
+    }
   }
 
   const validateAndUploadFiles = async (files) => {
@@ -107,7 +125,8 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     }
 
     if (validFiles.length > 0) {
-      onFilesUpload(validFiles)
+      await processImagesSequentially(validFiles)
+      toast.success(uploadText.success)
     }
 
     if (duplicateFiles.length > 0) {
@@ -128,10 +147,6 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
     if (corruptFiles.length > 0) {
       toast.error(uploadText.errors.corruptFiles)
-    }
-
-    if (validFiles.length > 0) {
-      toast.success(uploadText.success)
     }
 
     setLoading(false)

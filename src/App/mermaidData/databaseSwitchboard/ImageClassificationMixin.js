@@ -35,6 +35,30 @@ const ImageClassificationMixin = (Base) =>
             .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    uploadImage = async function uploadImage(projectId, recordId, file) {
+      if (!projectId || !recordId || !file) {
+        return Promise.reject(this._operationMissingParameterError)
+      }
+
+      const formData = new FormData()
+      formData.append('collect_record_id', recordId)
+      formData.append('image', file)
+
+      return this._isOnlineAuthenticatedAndReady
+        ? axios
+            .post(`${this._apiBaseUrl}/projects/${projectId}/classification/images/`, formData, {
+              headers: {
+                ...(await getAuthorizationHeaders(this._getAccessToken)).headers,
+                'Content-Type': 'multipart/form-data',
+              },
+            })
+            .then((apiResults) => {
+              console.log('data', apiResults.data)
+              return apiResults.data
+            })
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default ImageClassificationMixin
