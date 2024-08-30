@@ -113,6 +113,7 @@ const ImageAnnotationModalMap = ({
       center: [0, 0], // this value doesn't matter, default to null island
       zoom: 2, // needs to be > 1 otherwise bounds become > 180 and > 85
       renderWorldCopies: false, // prevents the image from repeating
+      dragRotate: false,
     })
 
     const bounds = map.current.getBounds()

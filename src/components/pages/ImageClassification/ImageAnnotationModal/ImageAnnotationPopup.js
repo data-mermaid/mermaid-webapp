@@ -22,6 +22,9 @@ const ClassifierGuesses = ({ annotations, getBenthicAttributeLabel, getGrowthFor
   ))
 }
 
+const isClassified = ({ is_unclassified, annotations }) =>
+  !is_unclassified && annotations.length > 0
+
 const ImageAnnotationPopup = ({
   dataToReview,
   pointId,
@@ -30,17 +33,14 @@ const ImageAnnotationPopup = ({
 }) => {
   const point = dataToReview.points.find((point) => point.id === pointId)
 
-  const classifiedPoints = dataToReview.points.filter(
-    ({ is_unclassified, annotations }) => !is_unclassified && annotations.length > 0,
-  )
-
-  const existingRowDropdownOptions = classifiedPoints.reduce((acc, currentPoint) => {
+  const existingRowDropdownOptions = dataToReview.points.reduce((acc, currentPoint) => {
     const { benthic_attribute, growth_form } = currentPoint.annotations[0]
     const value = benthic_attribute + '_' + growth_form
     const label = `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(
       growth_form,
     )}`
-    if (!acc.some((option) => option.value === value)) {
+
+    if (isClassified(currentPoint) && !acc.some((option) => option.value === value)) {
       acc.push({ label: label, value: value })
     }
 
