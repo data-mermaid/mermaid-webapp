@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import {
-  imageClassificationPointsPropType,
+  imageClassificationPointPropType,
   imageClassificationResponsePropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ImageAnnotationMapContainer } from './ImageAnnotationModal.styles'
@@ -83,7 +83,6 @@ const ImageAnnotationModalMap = ({
             growthFormId: point.annotations[0]?.growth_form,
             isUnclassified: !!point.is_unclassified || !point.annotations.length,
             isConfirmed: point.annotations[0]?.is_confirmed,
-            annotations: point.annotations,
           },
           geometry: {
             type: 'Polygon',
@@ -113,6 +112,7 @@ const ImageAnnotationModalMap = ({
       center: [0, 0], // this value doesn't matter, default to null island
       zoom: 2, // needs to be > 1 otherwise bounds become > 180 and > 85
       renderWorldCopies: false, // prevents the image from repeating
+      dragRotate: false,
     })
 
     const bounds = map.current.getBounds()
@@ -200,7 +200,8 @@ const ImageAnnotationModalMap = ({
       const root = createRoot(popupNode)
       root.render(
         <ImageAnnotationPopup
-          properties={properties}
+          dataToReview={dataToReview}
+          pointId={properties.id}
           getBenthicAttributeLabel={getBenthicAttributeLabel}
           getGrowthFormLabel={getGrowthFormLabel}
         />,
@@ -272,10 +273,9 @@ const ImageAnnotationModalMap = ({
 }
 
 ImageAnnotationModalMap.propTypes = {
-  setDataToReview: PropTypes.func.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
-  highlightedPoints: imageClassificationPointsPropType.isRequired,
-  selectedPoints: imageClassificationPointsPropType.isRequired,
+  highlightedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
+  selectedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
   getGrowthFormLabel: PropTypes.func.isRequired,
 }

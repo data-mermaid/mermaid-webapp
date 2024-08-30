@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Tr, Th, Td } from '../../../generic/Table/table'
+import { Tr, Th } from '../../../generic/Table/table'
 import { ButtonSecondary } from '../../../generic/buttons'
-import { PopupSubTh, PopupTable } from './ImageAnnotationModal.styles'
+import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { PopupSubTh, PopupTable, PopupTd } from './ImageAnnotationModal.styles'
+import { Select } from '../../../generic/form'
 
 const SectionHeader = ({ title }) => (
   <Tr>
@@ -13,14 +15,45 @@ const SectionHeader = ({ title }) => (
 const ClassifierGuesses = ({ annotations, getBenthicAttributeLabel, getGrowthFormLabel }) => {
   return annotations.map((annotation) => (
     <Tr key={annotation.id}>
-      <Td>{getBenthicAttributeLabel(annotation.benthic_attribute)}</Td>
-      <Td>{getGrowthFormLabel(annotation.growth_form)}</Td>
-      <Td>{annotation.score}</Td>
+      <PopupTd>{getBenthicAttributeLabel(annotation.benthic_attribute)}</PopupTd>
+      <PopupTd>{getGrowthFormLabel(annotation.growth_form)}</PopupTd>
+      <PopupTd>{annotation.score}</PopupTd>
     </Tr>
   ))
 }
 
-const ImageAnnotationPopup = ({ properties, getBenthicAttributeLabel, getGrowthFormLabel }) => {
+const isClassified = ({ is_unclassified, annotations }) =>
+  !is_unclassified && annotations.length > 0
+
+const ImageAnnotationPopup = ({
+  dataToReview,
+  pointId,
+  getBenthicAttributeLabel,
+  getGrowthFormLabel,
+}) => {
+  const point = dataToReview.points.find((point) => point.id === pointId)
+
+  const existingRowDropdownOptions = dataToReview.points.reduce((acc, currentPoint) => {
+    const { benthic_attribute, growth_form } = currentPoint.annotations[0]
+    const value = benthic_attribute + '_' + growth_form
+    const label = `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(
+      growth_form,
+    )}`
+
+    if (isClassified(currentPoint) && !acc.some((option) => option.value === value)) {
+      acc.push({ label: label, value: value })
+    }
+
+    return acc
+  }, [])
+
+  const [selectedRow, setSelectedRow] = useState(() => {
+    const rowKeyForPoint =
+      point.annotations[0].benthic_attribute + '_' + point.annotations[0].growth_form
+    const isPointInARow = existingRowDropdownOptions.some((row) => rowKeyForPoint === row.value)
+    return isPointInARow ? rowKeyForPoint : ''
+  })
+
   return (
     <PopupTable aria-labelledby="table-label">
       <thead>
@@ -33,19 +66,31 @@ const ImageAnnotationPopup = ({ properties, getBenthicAttributeLabel, getGrowthF
       <tbody>
         <SectionHeader title="Classifier Guesses" />
         <ClassifierGuesses
-          annotations={JSON.parse(properties.annotations)}
+          annotations={point.annotations}
           getBenthicAttributeLabel={getBenthicAttributeLabel}
           getGrowthFormLabel={getGrowthFormLabel}
         />
         <SectionHeader title="Add to existing row" />
         <Tr>
-          <Td colSpan={3}>Dropdown Row Selector goes here</Td>
+          <PopupTd colSpan={3}>
+            <Select
+              label="Add to existing row"
+              value={selectedRow}
+              onChange={(e) => setSelectedRow(e.target.value)}
+            >
+              {existingRowDropdownOptions.map((row) => (
+                <option key={row.value} value={row.value}>
+                  {row.label}
+                </option>
+              ))}
+            </Select>
+          </PopupTd>
         </Tr>
         <SectionHeader title="New row" />
         <Tr>
-          <Td colSpan={3}>
+          <PopupTd colSpan={3}>
             <ButtonSecondary>Choose Attribute</ButtonSecondary>
-          </Td>
+          </PopupTd>
         </Tr>
       </tbody>
     </PopupTable>
@@ -70,23 +115,8 @@ ClassifierGuesses.propTypes = {
 }
 
 ImageAnnotationPopup.propTypes = {
-  properties: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    benthicAttributeId: PropTypes.string.isRequired,
-    growthFormId: PropTypes.string.isRequired,
-    isUnclassified: PropTypes.bool.isRequired,
-    isConfirmed: PropTypes.bool.isRequired,
-    annotations: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        benthic_attribute: PropTypes.string.isRequired,
-        growth_form: PropTypes.string.isRequired,
-        score: PropTypes.number.isRequired,
-        is_confirmed: PropTypes.bool.isRequired,
-        is_machine_created: PropTypes.bool.isRequired,
-      }),
-    ),
-  }),
+  dataToReview: imageClassificationResponsePropType.isRequired,
+  pointId: PropTypes.string.isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
   getGrowthFormLabel: PropTypes.func.isRequired,
 }

@@ -95,7 +95,6 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
               selectedPoints={selectedPoints}
               getBenthicAttributeLabel={getBenthicAttributeLabel}
               getGrowthFormLabel={getGrowthFormLabel}
-              setDataToReview={setDataToReview}
             />
           </div>
         ) : (

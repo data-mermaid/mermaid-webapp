@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Table, Tr, Th, Td } from '../../../generic/Table/table'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
-import { imageClassificationPointsPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { TrWithBorderStyling } from './ImageAnnotationModal.styles'
 
 const ImageAnnotationModalTable = ({
@@ -96,7 +96,7 @@ const ImageAnnotationModalTable = ({
             $isSelected={i === selectedRowIndex}
             $isConfirmed={checkIfRowIsConfirmed(row)}
           >
-            {/* // All points in a row will have the same benthic attribute / growth form */}
+            {/* All points in a row will have the same benthic attribute / growth form */}
             <Td>{getBenthicAttributeLabel(tableData[row][0].annotations[0].benthic_attribute)}</Td>
             <Td>{getGrowthFormLabel(tableData[row][0].annotations[0].growth_form)}</Td>
             <Td align="right">{tableData[row].length}</Td>
@@ -125,7 +125,7 @@ ImageAnnotationModalTable.propTypes = {
   setHighlightedPoints: PropTypes.func.isRequired,
   setSelectedPoints: PropTypes.func.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  points: imageClassificationPointsPropType.isRequired,
+  points: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
   getGrowthFormLabel: PropTypes.func.isRequired,
 }

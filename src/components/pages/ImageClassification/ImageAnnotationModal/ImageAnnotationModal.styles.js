@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import theme from '../../../../theme'
-import { Table, Tr, Th } from '../../../generic/Table/table'
+import { Table, Tr, Th, Td } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 
 export const Footer = styled.div`
@@ -54,4 +54,7 @@ export const PopupSubTh = styled(Th)`
   border: solid 1px ${theme.color.tableBorderColor};
   font-weight: bold;
   background-color: ${theme.color.tableRowEven};
+`
+export const PopupTd = styled(Td)`
+  background-color: ${theme.color.tableRowOdd};
 `
