@@ -15,7 +15,8 @@ import Thumbnail from './Thumbnail'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
-  { align: 'right', id: 'thumbnail-label', text: 'Thumbnail' },
+  { align: 'center', id: 'thumbnail-label', text: 'Thumbnail' },
+  { align: 'right', id: 'status-label', text: 'Status' },
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
   { align: 'right', id: 'growth-form-label', text: 'Growth Form' },
@@ -43,7 +44,7 @@ const subHeaderColumns = [
 
 const SubHeaderRow = () => (
   <Tr>
-    <Th colSpan={5} />
+    <Th colSpan={6} />
     {subHeaderColumns.map((col, index) => (
       <Th key={index} align={col.align}>
         <span>{col.text}</span>
@@ -52,6 +53,23 @@ const SubHeaderRow = () => (
     <Th colSpan={4} />
   </Tr>
 )
+
+const getStatusLabel = (status) => {
+  switch (status) {
+    case 0:
+      return 'Unknown'
+    case 1:
+      return 'Pending'
+    case 2:
+      return 'Running'
+    case 3:
+      return 'Completed'
+    case 4:
+      return 'Failed'
+    default:
+      return 'Unknown Status'
+  }
+}
 
 const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }) => {
   const [imageId, setImageId] = useState()
@@ -76,6 +94,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                   >
                     <Thumbnail imageUrl={file.thumbnail || file.image} />
                   </TdWithHoverText>
+                  <StyledTd>{getStatusLabel(file.classification_status.status)}</StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>

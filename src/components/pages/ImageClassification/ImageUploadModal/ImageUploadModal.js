@@ -60,17 +60,25 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
   }
 
   const processImagesSequentially = async (files) => {
+    const uploadedFiles = []
+
     for (const file of files) {
       if (isCancelledRef.current) {
         break
       }
       try {
         const imageData = await databaseSwitchboardInstance.uploadImage(projectId, recordId, file)
-        onFilesUpload([imageData])
+
+        uploadedFiles.push(imageData) // Add each uploaded file's data to the array
         setProcessedFiles((prev) => prev + 1)
       } catch (error) {
         toast.error(`Failed to upload ${file.name}: ${error.message}`)
       }
+    }
+
+    // After all files are processed, pass the entire array of uploaded files to onFilesUpload
+    if (uploadedFiles.length > 0) {
+      onFilesUpload(uploadedFiles)
     }
   }
 
