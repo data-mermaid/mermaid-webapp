@@ -83,7 +83,6 @@ const ImageAnnotationModalMap = ({
             growthFormId: point.annotations[0]?.growth_form,
             isUnclassified: !!point.is_unclassified || !point.annotations.length,
             isConfirmed: point.annotations[0]?.is_confirmed,
-            annotations: point.annotations,
           },
           geometry: {
             type: 'Polygon',
