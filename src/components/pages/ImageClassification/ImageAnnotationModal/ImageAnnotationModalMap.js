@@ -34,30 +34,22 @@ const getImageScale = (dataToReview) => {
   return longerSide > MAX_DIMENSION ? MAX_DIMENSION / longerSide : 1
 }
 
-const getLabel = (properties, benthicAttributes, growthForms) => {
-  const { benthicAttributeId, growthFormId } = properties
-  const benthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-  const growthForm = growthForms.find(({ id }) => id === growthFormId)
-  return `${benthicAttribute?.name ?? ''} ${growthForm?.name ?? ''}`
-}
-
 const ImageAnnotationModalMap = ({
   dataToReview,
   highlightedPoints,
   selectedPoints,
-  growthForms,
-  benthicAttributes,
+  getBenthicAttributeLabel,
+  getGrowthFormLabel,
 }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const imageScale = getImageScale(dataToReview)
   const halfPatchSize = dataToReview.patch_size / 2
-  const editPointPopup = new maplibregl.Popup()
+  const editPointPopup = new maplibregl.Popup({ closeButton: false })
   const pointLabelPopup = new maplibregl.Popup({
     anchor: 'center',
     closeButton: false,
-    closeOnClick: false,
   })
 
   const getPointsGeojson = useCallback(
@@ -91,6 +83,7 @@ const ImageAnnotationModalMap = ({
             growthFormId: point.annotations[0]?.growth_form,
             isUnclassified: !!point.is_unclassified || !point.annotations.length,
             isConfirmed: point.annotations[0]?.is_confirmed,
+            annotations: point.annotations,
           },
           geometry: {
             type: 'Polygon',
@@ -181,15 +174,13 @@ const ImageAnnotationModalMap = ({
 
     // Display Label on point hover
     map.current.on('mouseenter', 'patches-fill-layer', ({ features }) => {
-      if (editPointPopup.isOpen()) {
-        return
-      }
-
       const [{ geometry, properties }] = features
       map.current.getCanvas().style.cursor = 'pointer'
       const label = properties.isUnclassified
         ? 'Unclassified'
-        : getLabel(properties, benthicAttributes, growthForms)
+        : `${getBenthicAttributeLabel(properties.benthicAttributeId)} ${getGrowthFormLabel(
+            properties.growthFormId,
+          )}`
       pointLabelPopup.setLngLat(geometry.coordinates[0][0]).setHTML(label).addTo(map.current)
     })
 
@@ -207,9 +198,16 @@ const ImageAnnotationModalMap = ({
 
       const popupNode = document.createElement('div')
       const root = createRoot(popupNode)
-      root.render(<ImageAnnotationPopup properties={properties} />)
+      root.render(
+        <ImageAnnotationPopup
+          properties={properties}
+          getBenthicAttributeLabel={getBenthicAttributeLabel}
+          getGrowthFormLabel={getGrowthFormLabel}
+        />,
+      )
       editPointPopup
         .setLngLat(geometry.coordinates[0][0])
+        .setMaxWidth('none')
         .setDOMContent(popupNode)
         .addTo(map.current)
     })
@@ -278,8 +276,8 @@ ImageAnnotationModalMap.propTypes = {
   dataToReview: imageClassificationResponsePropType.isRequired,
   highlightedPoints: imageClassificationPointsPropType.isRequired,
   selectedPoints: imageClassificationPointsPropType.isRequired,
-  benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
-  growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
+  getBenthicAttributeLabel: PropTypes.func.isRequired,
+  getGrowthFormLabel: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModalMap

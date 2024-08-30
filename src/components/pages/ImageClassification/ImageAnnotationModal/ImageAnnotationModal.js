@@ -61,6 +61,16 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
       })
   }
 
+  const getBenthicAttributeLabel = (benthicAttributeId) => {
+    const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
+    return matchingBenthicAttribute?.name ?? ''
+  }
+
+  const getGrowthFormLabel = (growthFormId) => {
+    const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
+    return matchingGrowthForm?.name ?? ''
+  }
+
   return (
     <Modal
       title={dataToReview?.original_image_name ?? ''}
@@ -73,9 +83,9 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
           <div>
             <ImageAnnotationModalTable
               points={dataToReview.points}
-              growthForms={growthForms}
-              benthicAttributes={benthicAttributes}
               setDataToReview={setDataToReview}
+              getBenthicAttributeLabel={getBenthicAttributeLabel}
+              getGrowthFormLabel={getGrowthFormLabel}
               setHighlightedPoints={setHighlightedPoints}
               setSelectedPoints={setSelectedPoints}
             />
@@ -83,8 +93,8 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
               dataToReview={dataToReview}
               highlightedPoints={highlightedPoints}
               selectedPoints={selectedPoints}
-              growthForms={growthForms}
-              benthicAttributes={benthicAttributes}
+              getBenthicAttributeLabel={getBenthicAttributeLabel}
+              getGrowthFormLabel={getGrowthFormLabel}
               setDataToReview={setDataToReview}
             />
           </div>
