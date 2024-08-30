@@ -4,6 +4,22 @@ import { Tr, Th, Td } from '../../../generic/Table/table'
 import { ButtonSecondary } from '../../../generic/buttons'
 import { PopupSubTh, PopupTable } from './ImageAnnotationModal.styles'
 
+const SectionHeader = ({ title }) => (
+  <Tr>
+    <PopupSubTh colSpan={3}>{title}</PopupSubTh>
+  </Tr>
+)
+
+const ClassifierGuesses = ({ annotations, getBenthicAttributeLabel, getGrowthFormLabel }) => {
+  return annotations.map((annotation) => (
+    <Tr key={annotation.id}>
+      <Td>{getBenthicAttributeLabel(annotation.benthic_attribute)}</Td>
+      <Td>{getGrowthFormLabel(annotation.growth_form)}</Td>
+      <Td>{annotation.score}</Td>
+    </Tr>
+  ))
+}
+
 const ImageAnnotationPopup = ({ properties, getBenthicAttributeLabel, getGrowthFormLabel }) => {
   return (
     <PopupTable aria-labelledby="table-label">
@@ -15,25 +31,17 @@ const ImageAnnotationPopup = ({ properties, getBenthicAttributeLabel, getGrowthF
         </Tr>
       </thead>
       <tbody>
-        <Tr>
-          <PopupSubTh colSpan={3}>Classifier Guesses</PopupSubTh>
-        </Tr>
-        {JSON.parse(properties.annotations).map((annotation) => (
-          <Tr key={annotation.id}>
-            <Td>{getBenthicAttributeLabel(annotation.benthic_attribute)}</Td>
-            <Td>{getGrowthFormLabel(annotation.growth_form)}</Td>
-            <Td>{annotation.score}</Td>
-          </Tr>
-        ))}
-        <Tr>
-          <PopupSubTh colSpan={3}>Add to existing row</PopupSubTh>
-        </Tr>
+        <SectionHeader title="Classifier Guesses" />
+        <ClassifierGuesses
+          annotations={JSON.parse(properties.annotations)}
+          getBenthicAttributeLabel={getBenthicAttributeLabel}
+          getGrowthFormLabel={getGrowthFormLabel}
+        />
+        <SectionHeader title="Add to existing row" />
         <Tr>
           <Td colSpan={3}>Dropdown Row Selector goes here</Td>
         </Tr>
-        <Tr>
-          <PopupSubTh colSpan={3}>New row</PopupSubTh>
-        </Tr>
+        <SectionHeader title="New row" />
         <Tr>
           <Td colSpan={3}>
             <ButtonSecondary>Choose Attribute</ButtonSecondary>
@@ -42,6 +50,23 @@ const ImageAnnotationPopup = ({ properties, getBenthicAttributeLabel, getGrowthF
       </tbody>
     </PopupTable>
   )
+}
+
+SectionHeader.propTypes = {
+  title: PropTypes.string.isRequired,
+}
+
+ClassifierGuesses.propTypes = {
+  annotations: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      benthic_attribute: PropTypes.string.isRequired,
+      growth_form: PropTypes.string.isRequired,
+      score: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
+  getBenthicAttributeLabel: PropTypes.func.isRequired,
+  getGrowthFormLabel: PropTypes.func.isRequired,
 }
 
 ImageAnnotationPopup.propTypes = {
