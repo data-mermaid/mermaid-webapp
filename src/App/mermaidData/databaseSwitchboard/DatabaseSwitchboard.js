@@ -60,6 +60,8 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   deleteSampleUnit: PropTypes.func,
   validateSampleUnit: PropTypes.func,
   saveSampleUnit: PropTypes.func,
+  getAnnotationsForImage: PropTypes.func,
+  saveAnnotationsForImage: PropTypes.func,
 })
 
 export default DatabaseSwitchboard

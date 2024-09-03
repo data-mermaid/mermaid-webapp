@@ -3,8 +3,17 @@ import PropTypes from 'prop-types'
 import { Tr, Th } from '../../../generic/Table/table'
 import { ButtonSecondary } from '../../../generic/buttons'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { PopupSubTh, PopupTable, PopupTd } from './ImageAnnotationModal.styles'
+import {
+  PopupSubTh,
+  PopupTable,
+  PopupTd,
+  PopupInputAutocompleteContainer,
+} from './ImageAnnotationModal.styles'
 import { Select } from '../../../generic/form'
+import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
+import { getBenthicOptions } from '../../../../library/getOptions'
+import language from '../../../../language'
+import { databaseSwitchboardPropTypes } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 
 const SectionHeader = ({ title }) => (
   <Tr>
@@ -28,9 +37,17 @@ const isClassified = ({ is_unclassified, annotations }) =>
 const ImageAnnotationPopup = ({
   dataToReview,
   pointId,
+  databaseSwitchboardInstance,
   getBenthicAttributeLabel,
   getGrowthFormLabel,
 }) => {
+  const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
+  const [growthFormSelectOptions, setGrowthFormSelectOptions] = useState([])
+  const [selectedNewRowValues, setSelectedNewRowValues] = useState({
+    benthicAttr: '',
+    growthForm: '',
+  })
+
   const point = dataToReview.points.find((point) => point.id === pointId)
 
   const existingRowDropdownOptions = dataToReview.points.reduce((acc, currentPoint) => {
@@ -47,12 +64,32 @@ const ImageAnnotationPopup = ({
     return acc
   }, [])
 
-  const [selectedRow, setSelectedRow] = useState(() => {
+  const [selectedExistingRow, setSelectedExistingRow] = useState(() => {
     const rowKeyForPoint =
       point.annotations[0].benthic_attribute + '_' + point.annotations[0].growth_form
     const isPointInARow = existingRowDropdownOptions.some((row) => rowKeyForPoint === row.value)
     return isPointInARow ? rowKeyForPoint : ''
   })
+
+  const handleDisplayNewRowSelection = () => {
+    const promises = [
+      databaseSwitchboardInstance.getBenthicAttributes(),
+      databaseSwitchboardInstance.getChoices(),
+    ]
+
+    Promise.all(promises).then(([benthicAttributes, choices]) => {
+      setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributes))
+      setGrowthFormSelectOptions(choices.growthforms.data)
+    })
+  }
+
+  const handleBenthicAttributeSelection = ({ value }) => {
+    setSelectedNewRowValues({ ...selectedNewRowValues, benthicAttr: value })
+  }
+
+  const handleGrowthFormSelection = (growthFormId) => {
+    setSelectedNewRowValues({ ...selectedNewRowValues, growthForm: growthFormId })
+  }
 
   return (
     <PopupTable aria-labelledby="table-label">
@@ -75,8 +112,8 @@ const ImageAnnotationPopup = ({
           <PopupTd colSpan={3}>
             <Select
               label="Add to existing row"
-              value={selectedRow}
-              onChange={(e) => setSelectedRow(e.target.value)}
+              value={selectedExistingRow}
+              onChange={(e) => setSelectedExistingRow(e.target.value)}
             >
               {existingRowDropdownOptions.map((row) => (
                 <option key={row.value} value={row.value}>
@@ -88,9 +125,41 @@ const ImageAnnotationPopup = ({
         </Tr>
         <SectionHeader title="New row" />
         <Tr>
-          <PopupTd colSpan={3}>
-            <ButtonSecondary>Choose Attribute</ButtonSecondary>
-          </PopupTd>
+          {benthicAttributeSelectOptions.length ? (
+            <>
+              <PopupTd>
+                <PopupInputAutocompleteContainer>
+                  <ObservationAutocomplete
+                    id="benthic-attribute-autocomplete"
+                    autoFocus
+                    aria-labelledby="benthic-attribute-label"
+                    options={benthicAttributeSelectOptions}
+                    onChange={handleBenthicAttributeSelection}
+                    noResultsText={language.autocomplete.noResultsDefault}
+                  />
+                </PopupInputAutocompleteContainer>
+              </PopupTd>
+              <PopupTd>
+                <Select
+                  label="Growth forms"
+                  onChange={(e) => handleGrowthFormSelection(e.target.value)}
+                >
+                  {growthFormSelectOptions.map((growthForm) => (
+                    <option key={growthForm.id} value={growthForm.id}>
+                      {growthForm.name}
+                    </option>
+                  ))}
+                </Select>
+              </PopupTd>
+              <PopupTd />
+            </>
+          ) : (
+            <PopupTd colSpan={3}>
+              <ButtonSecondary onClick={handleDisplayNewRowSelection}>
+                Choose Attribute
+              </ButtonSecondary>
+            </PopupTd>
+          )}
         </Tr>
       </tbody>
     </PopupTable>
@@ -117,6 +186,7 @@ ClassifierGuesses.propTypes = {
 ImageAnnotationPopup.propTypes = {
   dataToReview: imageClassificationResponsePropType.isRequired,
   pointId: PropTypes.string.isRequired,
+  databaseSwitchboardInstance: databaseSwitchboardPropTypes,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
   getGrowthFormLabel: PropTypes.func.isRequired,
 }
