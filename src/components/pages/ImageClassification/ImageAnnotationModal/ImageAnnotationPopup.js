@@ -9,6 +9,7 @@ import {
   PopupTable,
   PopupTd,
   PopupInputAutocompleteContainer,
+  PopupTdForRadio,
 } from './ImageAnnotationModal.styles'
 import { Select } from '../../../generic/form'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
@@ -18,13 +19,24 @@ import { databaseSwitchboardPropTypes } from '../../../../App/mermaidData/databa
 
 const SectionHeader = ({ title }) => (
   <Tr>
-    <PopupSubTh colSpan={3}>{title}</PopupSubTh>
+    <PopupSubTh colSpan={4}>{title}</PopupSubTh>
   </Tr>
 )
 
 const ClassifierGuesses = ({ annotations, getBenthicAttributeLabel, getGrowthFormLabel }) => {
   return annotations.map((annotation) => (
     <Tr key={annotation.id}>
+      <PopupTdForRadio>
+        <input
+          type="radio"
+          id={`${annotation.benthic_attribute}_${annotation.growth_form}`}
+          value={`${annotation.benthic_attribute}_${annotation.growth_form}`}
+          name="classifier-guesses"
+          // checked={projectBeingEdited?.data_policy_benthiclit === item.value}
+          // onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
+          // disabled={isDataUpdating}
+        />
+      </PopupTdForRadio>
       <PopupTd>{getBenthicAttributeLabel(annotation.benthic_attribute)}</PopupTd>
       <PopupTd>{getGrowthFormLabel(annotation.growth_form)}</PopupTd>
       <PopupTd>{annotation.score}</PopupTd>
@@ -100,7 +112,7 @@ const ImageAnnotationPopup = ({
     <PopupTable aria-labelledby="table-label">
       <thead>
         <Tr>
-          <Th>Benthic Attribute</Th>
+          <Th colSpan={2}>Benthic Attribute</Th>
           <Th>Growth Form</Th>
           <Th>Confidence</Th>
         </Tr>
@@ -114,6 +126,17 @@ const ImageAnnotationPopup = ({
         />
         <SectionHeader title="Add to existing row" />
         <Tr>
+          <PopupTdForRadio>
+            <input
+              type="radio"
+              id="existing-row-point-selection"
+              value={selectedExistingRow}
+              name="existing-row-point-selection"
+              // checked={projectBeingEdited?.data_policy_benthiclit === item.value}
+              // onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
+              // disabled={isDataUpdating}
+            />
+          </PopupTdForRadio>
           <PopupTd colSpan={3}>
             <Select
               label="Add to existing row"
@@ -132,6 +155,17 @@ const ImageAnnotationPopup = ({
         <Tr>
           {benthicAttributeSelectOptions.length && growthFormSelectOptions.length ? (
             <>
+              <PopupTdForRadio>
+                <input
+                  type="radio"
+                  id="new-row-point-selection"
+                  value={`${selectedNewRowValues.benthicAttr}_${selectedNewRowValues.growthForm}`}
+                  name="new-row-point-selection"
+                  // checked={projectBeingEdited?.data_policy_benthiclit === item.value}
+                  // onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
+                  // disabled={isDataUpdating}
+                />
+              </PopupTdForRadio>
               <PopupTd>
                 <PopupInputAutocompleteContainer>
                   <ObservationAutocomplete
@@ -159,7 +193,7 @@ const ImageAnnotationPopup = ({
               <PopupTd />
             </>
           ) : (
-            <PopupTd colSpan={3}>
+            <PopupTd colSpan={4}>
               <ButtonSecondary onClick={handleDisplayNewRowSelection}>
                 Choose Attribute
               </ButtonSecondary>
