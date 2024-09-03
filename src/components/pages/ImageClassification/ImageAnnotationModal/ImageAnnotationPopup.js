@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { toast } from 'react-toastify'
 import { Tr, Th } from '../../../generic/Table/table'
 import { ButtonSecondary } from '../../../generic/buttons'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
@@ -77,10 +78,14 @@ const ImageAnnotationPopup = ({
       databaseSwitchboardInstance.getChoices(),
     ]
 
-    Promise.all(promises).then(([benthicAttributes, choices]) => {
-      setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributes))
-      setGrowthFormSelectOptions(choices.growthforms.data)
-    })
+    Promise.all(promises)
+      .then(([benthicAttributes, choices]) => {
+        setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributes))
+        setGrowthFormSelectOptions(choices.growthforms.data)
+      })
+      .catch(() => {
+        toast.error('Failed to retrieve benthic attributes and growth forms')
+      })
   }
 
   const handleBenthicAttributeSelection = ({ value }) => {
@@ -125,7 +130,7 @@ const ImageAnnotationPopup = ({
         </Tr>
         <SectionHeader title="New row" />
         <Tr>
-          {benthicAttributeSelectOptions.length ? (
+          {benthicAttributeSelectOptions.length && growthFormSelectOptions.length ? (
             <>
               <PopupTd>
                 <PopupInputAutocompleteContainer>
