@@ -1,17 +1,21 @@
 import React, { useState, useRef } from 'react'
+import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Modal from '../../../generic/Modal'
 import { ButtonPrimary, ButtonCaution, ButtonSecondary } from '../../../generic/buttons'
 import { DropZone, HiddenInput, ButtonContainer } from './ImageUploadModal.styles'
 import { toast } from 'react-toastify'
 import language from '../../../../language'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
   const [loading, setLoading] = useState(false)
   const [totalFiles, setTotalFiles] = useState(0)
   const [processedFiles, setProcessedFiles] = useState(0)
-  const isCancelledRef = useRef(false) // Use ref for cancellation flag - more reliable because refs update synchronously
+  const isCancelledRef = useRef(false)
   const fileInputRef = useRef(null)
+  const { recordId, projectId } = useParams()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
@@ -55,82 +59,72 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     })
   }
 
+  const processSingleImage = async (file) => {
+    try {
+      const imageData = await databaseSwitchboardInstance.uploadImage(projectId, recordId, file)
+
+      // Placeholder: Polling logic will go here.
+      // TODO: Implement polling to check the status of image processing before proceeding to the next image.
+      // something like: `await pollForCompletion(imageData.id);`
+
+      setProcessedFiles((prev) => prev + 1)
+      return imageData
+    } catch (error) {
+      toast.error(`Failed to upload ${file.name}: ${error.message}`)
+      return null
+    }
+  }
+
   const validateAndUploadFiles = async (files) => {
     setLoading(true)
     setTotalFiles(files.length)
     setProcessedFiles(0)
     isCancelledRef.current = false
 
-    const validFiles = []
-    const invalidFiles = []
-    const duplicateFiles = []
-    const oversizedFiles = []
-    const dimensionExceededFiles = []
-    const corruptFiles = []
+    const uploadedFiles = []
 
-    const allFiles = [...existingFiles]
-
-    for (const [index, file] of files.entries()) {
+    for (const file of files) {
       if (isCancelledRef.current) {
         setLoading(false)
         return
       }
 
+      // Validate file type, size, dimensions, and uniqueness.
       if (!validFileTypes.includes(file.type)) {
-        invalidFiles.push(file)
-      } else if (file.size > maxFileSize) {
-        oversizedFiles.push(file)
-      } else if (allFiles.some((existingFile) => existingFile.name === file.name)) {
-        duplicateFiles.push(file)
-      } else {
-        const result = await validateDimensions(file)
-        if (isCancelledRef.current || result.cancelled) {
-          setLoading(false)
-          return
-        }
-
-        if (result.valid && !result.corrupt) {
-          validFiles.push(result.file)
-        } else if (result.corrupt) {
-          corruptFiles.push(result.file)
-        } else {
-          dimensionExceededFiles.push(result.file)
-        }
+        toast.error(`Invalid file type: ${file.name}`)
+        continue
+      }
+      if (file.size > maxFileSize) {
+        toast.error(`File size exceeds the limit: ${file.name}`)
+        continue
+      }
+      if (existingFiles.some((existingFile) => existingFile.name === file.name)) {
+        toast.error(`Duplicate file: ${file.name}`)
+        continue
       }
 
-      setProcessedFiles(index + 1)
+      const result = await validateDimensions(file)
+      if (!result.valid || result.corrupt) {
+        toast.error(`File is invalid or corrupt: ${file.name}`)
+        continue
+      }
+
+      // Start uploading the file as soon as it's validated.
+      const uploadedFile = await processSingleImage(file)
+      if (uploadedFile) {
+        uploadedFiles.push(uploadedFile)
+      }
+
+      // Exit early if upload is canceled.
+      if (isCancelledRef.current) {
+        setLoading(false)
+        return
+      }
     }
 
-    if (isCancelledRef.current) {
-      setLoading(false)
-      return
-    }
-
-    if (validFiles.length > 0) {
-      onFilesUpload(validFiles)
-    }
-
-    if (duplicateFiles.length > 0) {
-      toast.error(uploadText.errors.duplicateFiles)
-    }
-
-    if (invalidFiles.length > 0) {
-      toast.error(uploadText.errors.invalidFiles)
-    }
-
-    if (oversizedFiles.length > 0) {
-      toast.error(uploadText.errors.oversizedFiles)
-    }
-
-    if (dimensionExceededFiles.length > 0) {
-      toast.error(uploadText.errors.dimensionExceededFiles)
-    }
-
-    if (corruptFiles.length > 0) {
-      toast.error(uploadText.errors.corruptFiles)
-    }
-
-    if (validFiles.length > 0) {
+    // After all valid files are processed, call the onFilesUpload callback.
+    if (uploadedFiles.length > 0) {
+      onFilesUpload(uploadedFiles)
       toast.success(uploadText.success)
     }
 
