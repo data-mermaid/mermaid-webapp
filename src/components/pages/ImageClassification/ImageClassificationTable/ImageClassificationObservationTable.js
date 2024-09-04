@@ -68,9 +68,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
   const handleImageClick = (file) => {
     if (isImageProcessed(file.classification_status.status)) {
-      return setImageId(file.id)
-    } else {
-      return
+      setImageId(file.id)
     }
   }
 
