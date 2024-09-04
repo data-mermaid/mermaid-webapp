@@ -60,6 +60,10 @@ export const PopupTd = styled(Td)`
   background-color: ${theme.color.tableRowOdd};
 `
 
+export const PopupTdForRadio = styled(PopupTd)`
+  width: 15px;
+`
+
 export const PopupInputAutocompleteContainer = styled.div`
   ${inputTextareaSelectStyles}
   padding: 0;
