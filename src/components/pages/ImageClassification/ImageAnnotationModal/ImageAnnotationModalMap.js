@@ -40,6 +40,7 @@ const ImageAnnotationModalMap = ({
   selectedPoints,
   getBenthicAttributeLabel,
   getGrowthFormLabel,
+  databaseSwitchboardInstance,
 }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
@@ -202,6 +203,7 @@ const ImageAnnotationModalMap = ({
         <ImageAnnotationPopup
           dataToReview={dataToReview}
           pointId={properties.id}
+          databaseSwitchboardInstance={databaseSwitchboardInstance}
           getBenthicAttributeLabel={getBenthicAttributeLabel}
           getGrowthFormLabel={getGrowthFormLabel}
         />,
@@ -276,6 +278,7 @@ ImageAnnotationModalMap.propTypes = {
   dataToReview: imageClassificationResponsePropType.isRequired,
   highlightedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
   selectedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
+  databaseSwitchboardInstance: PropTypes.object.isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
   getGrowthFormLabel: PropTypes.func.isRequired,
 }

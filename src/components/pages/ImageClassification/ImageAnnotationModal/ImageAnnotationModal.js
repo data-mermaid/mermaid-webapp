@@ -93,6 +93,7 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
               dataToReview={dataToReview}
               highlightedPoints={highlightedPoints}
               selectedPoints={selectedPoints}
+              databaseSwitchboardInstance={databaseSwitchboardInstance}
               getBenthicAttributeLabel={getBenthicAttributeLabel}
               getGrowthFormLabel={getGrowthFormLabel}
             />

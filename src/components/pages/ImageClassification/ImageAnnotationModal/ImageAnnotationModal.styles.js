@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import theme from '../../../../theme'
 import { Table, Tr, Th, Td } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+import { inputTextareaSelectStyles } from '../../../generic/form'
 
 export const Footer = styled.div`
   display: flex;
@@ -57,4 +58,9 @@ export const PopupSubTh = styled(Th)`
 `
 export const PopupTd = styled(Td)`
   background-color: ${theme.color.tableRowOdd};
+`
+
+export const PopupInputAutocompleteContainer = styled.div`
+  ${inputTextareaSelectStyles}
+  padding: 0;
 `
