@@ -45,7 +45,7 @@ const TdWithHoverText = styled(StyledTd)`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: ${(props) => props.cursor};
 
   &::after {
     content: attr(data-tooltip);
