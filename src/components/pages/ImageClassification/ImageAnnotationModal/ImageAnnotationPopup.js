@@ -23,18 +23,23 @@ const SectionHeader = ({ title }) => (
   </Tr>
 )
 
-const ClassifierGuesses = ({ annotations, getBenthicAttributeLabel, getGrowthFormLabel }) => {
-  return annotations.map((annotation) => (
+const ClassifierGuesses = ({
+  annotations,
+  getBenthicAttributeLabel,
+  getGrowthFormLabel,
+  selectedRadioOption,
+  setSelectedRadioOption,
+}) => {
+  return annotations.map((annotation, i) => (
     <Tr key={annotation.id}>
       <PopupTdForRadio>
         <input
           type="radio"
           id={`${annotation.benthic_attribute}_${annotation.growth_form}`}
-          value={`${annotation.benthic_attribute}_${annotation.growth_form}`}
-          name="classifier-guesses"
-          // checked={projectBeingEdited?.data_policy_benthiclit === item.value}
-          // onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
-          // disabled={isDataUpdating}
+          name={`${annotation.benthic_attribute}_${annotation.growth_form}`}
+          value={`classifier-guess-${i}`}
+          checked={selectedRadioOption === `classifier-guess-${i}`}
+          onChange={() => setSelectedRadioOption(`classifier-guess-${i}`)}
         />
       </PopupTdForRadio>
       <PopupTd>{getBenthicAttributeLabel(annotation.benthic_attribute)}</PopupTd>
@@ -60,6 +65,7 @@ const ImageAnnotationPopup = ({
     benthicAttr: '',
     growthForm: '',
   })
+  const [selectedRadioOption, setSelectedRadioOption] = useState('')
 
   const point = dataToReview.points.find((point) => point.id === pointId)
 
@@ -123,6 +129,8 @@ const ImageAnnotationPopup = ({
           annotations={point.annotations}
           getBenthicAttributeLabel={getBenthicAttributeLabel}
           getGrowthFormLabel={getGrowthFormLabel}
+          selectedRadioOption={selectedRadioOption}
+          setSelectedRadioOption={setSelectedRadioOption}
         />
         <SectionHeader title="Add to existing row" />
         <Tr>
@@ -130,11 +138,10 @@ const ImageAnnotationPopup = ({
             <input
               type="radio"
               id="existing-row-point-selection"
-              value={selectedExistingRow}
               name="existing-row-point-selection"
-              // checked={projectBeingEdited?.data_policy_benthiclit === item.value}
-              // onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
-              // disabled={isDataUpdating}
+              value="existing-row"
+              checked={selectedRadioOption === 'existing-row'}
+              onChange={() => setSelectedRadioOption('existing-row')}
             />
           </PopupTdForRadio>
           <PopupTd colSpan={3}>
@@ -159,11 +166,10 @@ const ImageAnnotationPopup = ({
                 <input
                   type="radio"
                   id="new-row-point-selection"
-                  value={`${selectedNewRowValues.benthicAttr}_${selectedNewRowValues.growthForm}`}
                   name="new-row-point-selection"
-                  // checked={projectBeingEdited?.data_policy_benthiclit === item.value}
-                  // onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
-                  // disabled={isDataUpdating}
+                  value="new-row"
+                  checked={selectedRadioOption === 'new-row'}
+                  onChange={() => setSelectedRadioOption('new-row')}
                 />
               </PopupTdForRadio>
               <PopupTd>
@@ -220,6 +226,8 @@ ClassifierGuesses.propTypes = {
   ).isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
   getGrowthFormLabel: PropTypes.func.isRequired,
+  selectedRadioOption: PropTypes.string.isRequired,
+  setSelectedRadioOption: PropTypes.func.isRequired,
 }
 
 ImageAnnotationPopup.propTypes = {
