@@ -54,25 +54,25 @@ const SubHeaderRow = () => (
   </Tr>
 )
 
-const getStatusLabel = (status) => {
-  switch (status) {
-    case 0:
-      return 'Unknown'
-    case 1:
-      return 'Pending'
-    case 2:
-      return 'Running'
-    case 3:
-      return 'Completed'
-    case 4:
-      return 'Failed'
-    default:
-      return 'Unknown Status'
-  }
+const statusLabels = {
+  0: 'Unknown',
+  1: 'Pending',
+  2: 'Running',
+  3: 'Completed',
+  4: 'Failed',
 }
 
 const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }) => {
   const [imageId, setImageId] = useState()
+  const isImageProcessed = (status) => status === 3
+
+  const handleImageClick = (file) => {
+    if (isImageProcessed(file.classification_status.status)) {
+      return setImageId(file.id)
+    } else {
+      return
+    }
+  }
 
   return (
     <>
@@ -90,11 +90,14 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                   <StyledTd>{index + 1}</StyledTd>
                   <TdWithHoverText
                     data-tooltip={file.original_image_name}
-                    onClick={() => setImageId(file.id)}
+                    onClick={() => handleImageClick(file)}
+                    cursor={
+                      isImageProcessed(file.classification_status.status) ? 'pointer' : 'default'
+                    }
                   >
                     <Thumbnail imageUrl={file.thumbnail || file.image} />
                   </TdWithHoverText>
-                  <StyledTd>{getStatusLabel(file.classification_status.status)}</StyledTd>
+                  <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
@@ -103,7 +106,11 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd>
-                    <ButtonPrimary type="button" onClick={() => setImageId(file.id)}>
+                    <ButtonPrimary
+                      type="button"
+                      onClick={() => setImageId(file.id)}
+                      disabled={!isImageProcessed(file.classification_status.status)}
+                    >
                       Review
                     </ButtonPrimary>
                   </StyledTd>
