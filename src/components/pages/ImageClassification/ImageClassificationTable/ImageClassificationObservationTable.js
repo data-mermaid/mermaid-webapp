@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
 import {
@@ -12,6 +13,7 @@ import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
 import Thumbnail from './Thumbnail'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -64,6 +66,13 @@ const statusLabels = {
 
 const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }) => {
   const [imageId, setImageId] = useState()
+  const [images, setImages] = useState(uploadedFiles)
+  const [polling, setPolling] = useState(false)
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { projectId, recordId } = useParams()
+  const excludeParams =
+    'data,points,created_by,updated_by,created_on,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
+
   const isImageProcessed = (status) => status === 3
 
   const handleImageClick = (file) => {
@@ -71,6 +80,51 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
       setImageId(file.id)
     }
   }
+
+  // Poll every 5 seconds after the first image is uploaded
+  const _pollImageStatuses = useEffect(() => {
+    let intervalId
+    const startPolling = async () => {
+      try {
+        const response = await databaseSwitchboardInstance.getAllImagesInProject(
+          projectId,
+          recordId,
+          excludeParams,
+        )
+        setImages(response.results)
+
+        // Check if all images are processed
+        const allProcessed = response.results.every((file) =>
+          isImageProcessed(file.classification_status.status),
+        )
+
+        if (allProcessed) {
+          clearInterval(intervalId) // Stop polling when all images are processed
+          setPolling(false)
+        }
+      } catch (error) {
+        console.error('Error polling images:', error)
+      }
+    }
+
+    if (polling) {
+      intervalId = setInterval(startPolling, 5000)
+    }
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [polling, projectId])
+
+  // Start polling after the first image is uploaded
+  useEffect(() => {
+    if (uploadedFiles.length > 0 && !polling) {
+      setPolling(true)
+    }
+  }, [uploadedFiles, polling])
 
   return (
     <>
@@ -83,7 +137,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
               <SubHeaderRow />
             </thead>
             <tbody>
-              {uploadedFiles.map((file, index) => (
+              {images.map((file, index) => (
                 <Tr key={index}>
                   <StyledTd>{index + 1}</StyledTd>
                   <TdWithHoverText
@@ -131,6 +185,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 ImageClassificationObservationTable.propTypes = {
   uploadedFiles: PropTypes.arrayOf(PropTypes.object),
   handleRemoveFile: PropTypes.func,
+  projectId: PropTypes.string.isRequired,
 }
 
 export default ImageClassificationObservationTable
