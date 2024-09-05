@@ -119,8 +119,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [polling, projectId])
 
-  // Start polling after the first image is uploaded
-  useEffect(() => {
+  const _beginPollingAfterFirstImageIsUploaded = useEffect(() => {
     if (uploadedFiles.length > 0 && !polling) {
       setPolling(true)
     }
