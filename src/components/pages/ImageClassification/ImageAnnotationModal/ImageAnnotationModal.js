@@ -91,6 +91,7 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
             />
             <ImageAnnotationModalMap
               dataToReview={dataToReview}
+              setDataToReview={setDataToReview}
               highlightedPoints={highlightedPoints}
               selectedPoints={selectedPoints}
               databaseSwitchboardInstance={databaseSwitchboardInstance}

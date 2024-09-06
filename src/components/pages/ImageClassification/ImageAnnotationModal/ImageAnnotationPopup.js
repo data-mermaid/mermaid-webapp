@@ -28,9 +28,11 @@ const ClassifierGuesses = ({
   getBenthicAttributeLabel,
   getGrowthFormLabel,
   selectedRadioOption,
-  setSelectedRadioOption,
+  handleRadioSelection,
 }) => {
-  return annotations.map((annotation, i) => (
+  const annotationsSortedByScore = annotations.toSorted((a, b) => b.score - a.score)
+
+  return annotationsSortedByScore.map((annotation, i) => (
     <Tr key={annotation.id}>
       <PopupTdForRadio>
         <input
@@ -39,7 +41,7 @@ const ClassifierGuesses = ({
           name={`${annotation.benthic_attribute}_${annotation.growth_form}`}
           value={`classifier-guess-${i}`}
           checked={selectedRadioOption === `classifier-guess-${i}`}
-          onChange={() => setSelectedRadioOption(`classifier-guess-${i}`)}
+          onChange={() => handleRadioSelection('classifier-guess', i)}
         />
       </PopupTdForRadio>
       <PopupTd>{getBenthicAttributeLabel(annotation.benthic_attribute)}</PopupTd>
@@ -52,8 +54,15 @@ const ClassifierGuesses = ({
 const isClassified = ({ is_unclassified, annotations }) =>
   !is_unclassified && annotations.length > 0
 
+const moveItemToFront = (array, index) => {
+  const newArray = [...array]
+  newArray.unshift(newArray.splice(index, 1)[0])
+  return newArray
+}
+
 const ImageAnnotationPopup = ({
   dataToReview,
+  setDataToReview,
   pointId,
   databaseSwitchboardInstance,
   getBenthicAttributeLabel,
@@ -67,7 +76,7 @@ const ImageAnnotationPopup = ({
   })
   const [selectedRadioOption, setSelectedRadioOption] = useState('')
 
-  const point = dataToReview.points.find((point) => point.id === pointId)
+  const selectedPoint = dataToReview.points.find((point) => point.id === pointId)
 
   const existingRowDropdownOptions = dataToReview.points.reduce((acc, currentPoint) => {
     const { benthic_attribute, growth_form } = currentPoint.annotations[0]
@@ -85,7 +94,9 @@ const ImageAnnotationPopup = ({
 
   const [selectedExistingRow, setSelectedExistingRow] = useState(() => {
     const rowKeyForPoint =
-      point.annotations[0].benthic_attribute + '_' + point.annotations[0].growth_form
+      selectedPoint.annotations[0].benthic_attribute +
+      '_' +
+      selectedPoint.annotations[0].growth_form
     const isPointInARow = existingRowDropdownOptions.some((row) => rowKeyForPoint === row.value)
     return isPointInARow ? rowKeyForPoint : ''
   })
@@ -114,6 +125,18 @@ const ImageAnnotationPopup = ({
     setSelectedNewRowValues({ ...selectedNewRowValues, growthForm: growthFormId })
   }
 
+  const handleRadioSelection = (value, classifierGuessIndex) => {
+    setSelectedRadioOption(`${value}-${classifierGuessIndex}`)
+
+    if (value === 'classifier-guess') {
+      const updatedAnnotations = moveItemToFront(selectedPoint.annotations, classifierGuessIndex)
+      const updatedPoints = dataToReview.points.map((point) =>
+        point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
+      )
+      setDataToReview({ ...dataToReview, points: updatedPoints })
+    }
+  }
+
   return (
     <PopupTable aria-labelledby="table-label">
       <thead>
@@ -126,11 +149,11 @@ const ImageAnnotationPopup = ({
       <tbody>
         <SectionHeader title="Classifier Guesses" />
         <ClassifierGuesses
-          annotations={point.annotations}
+          annotations={selectedPoint.annotations}
           getBenthicAttributeLabel={getBenthicAttributeLabel}
           getGrowthFormLabel={getGrowthFormLabel}
           selectedRadioOption={selectedRadioOption}
-          setSelectedRadioOption={setSelectedRadioOption}
+          handleRadioSelection={handleRadioSelection}
         />
         <SectionHeader title="Add to existing row" />
         <Tr>
@@ -189,6 +212,8 @@ const ImageAnnotationPopup = ({
                   label="Growth forms"
                   onChange={(e) => handleGrowthFormSelection(e.target.value)}
                 >
+                  {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                  <option value=""> </option>
                   {growthFormSelectOptions.map((growthForm) => (
                     <option key={growthForm.id} value={growthForm.id}>
                       {growthForm.name}
@@ -227,11 +252,12 @@ ClassifierGuesses.propTypes = {
   getBenthicAttributeLabel: PropTypes.func.isRequired,
   getGrowthFormLabel: PropTypes.func.isRequired,
   selectedRadioOption: PropTypes.string.isRequired,
-  setSelectedRadioOption: PropTypes.func.isRequired,
+  handleRadioSelection: PropTypes.func.isRequired,
 }
 
 ImageAnnotationPopup.propTypes = {
   dataToReview: imageClassificationResponsePropType.isRequired,
+  setDataToReview: PropTypes.func.isRequired,
   pointId: PropTypes.string.isRequired,
   databaseSwitchboardInstance: databaseSwitchboardPropTypes,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
