@@ -148,6 +148,23 @@ const ImageAnnotationPopup = ({
       )
       setDataToReview({ ...dataToReview, points: updatedPoints })
       setSelectedRadioOption(value)
+    } else if (value === 'new-row' && selectedNewRowValues.benthicAttr) {
+      const updatedAnnotations = [
+        {
+          benthic_attribute: selectedNewRowValues.benthicAttr,
+          growth_form: selectedNewRowValues.growthForm || null,
+          is_confirmed: true,
+        },
+        ...selectedPoint.annotations,
+      ]
+      const updatedPoints = dataToReview.points.map((point) =>
+        point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
+      )
+
+      setDataToReview({ ...dataToReview, points: updatedPoints })
+      setSelectedRadioOption(value)
+    } else if (value === 'new-row') {
+      setSelectedRadioOption(value)
     }
   }
 
@@ -206,7 +223,7 @@ const ImageAnnotationPopup = ({
                   name="new-row-point-selection"
                   value="new-row"
                   checked={selectedRadioOption === 'new-row'}
-                  onChange={() => setSelectedRadioOption('new-row')}
+                  onChange={() => handleRadioSelection('new-row')}
                 />
               </PopupTdForRadio>
               <PopupTd>
