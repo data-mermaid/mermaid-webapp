@@ -59,25 +59,31 @@ const ImageClassificationMixin = (Base) =>
 
     getAllImagesInProject = async (projectId, collectRecordId, excludeParams = '') => {
       if (!projectId || !collectRecordId) {
-        return Promise.reject(new Error('projectId and collectRecordId are required parameters.'))
+        throw new Error('projectId and collectRecordId are required parameters.')
       }
 
-      // Add `exclude` query param
-      const queryParams = [`collect_record_id=${collectRecordId}`]
+      const queryParams = new URLSearchParams({ collect_record_id: collectRecordId })
+
       if (excludeParams) {
-        queryParams.push(`exclude=${encodeURIComponent(excludeParams)}`)
+        queryParams.append('exclude', excludeParams)
       }
 
-      const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : ''
+      const queryString = queryParams.toString()
 
-      return this._isOnlineAuthenticatedAndReady
-        ? axios
-            .get(
-              `${this._apiBaseUrl}/projects/${projectId}/classification/images/${queryString}`,
-              await getAuthorizationHeaders(this._getAccessToken),
-            )
-            .then((apiResults) => apiResults.data)
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+      if (!this._isOnlineAuthenticatedAndReady) {
+        throw this._notAuthenticatedAndReadyError
+      }
+
+      try {
+        const headers = await getAuthorizationHeaders(this._getAccessToken)
+        const response = await axios.get(
+          `${this._apiBaseUrl}/projects/${projectId}/classification/images/${queryString}`,
+          headers,
+        )
+        return response.data
+      } catch (error) {
+        throw new Error(`Error fetching images: ${error.message}`)
+      }
     }
   }
 
