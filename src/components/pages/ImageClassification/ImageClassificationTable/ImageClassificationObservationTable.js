@@ -14,6 +14,7 @@ import { IconClose } from '../../../icons'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
 import Thumbnail from './Thumbnail'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { EXCLUDE_PARAMS } from '../../../../library/constants/constants'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -70,8 +71,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [polling, setPolling] = useState(false)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId, recordId } = useParams()
-  const excludeParams =
-    'data,points,created_by,updated_by,created_on,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
 
   const isImageProcessed = (status) => status === 3
 
@@ -89,7 +88,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         const response = await databaseSwitchboardInstance.getAllImagesInProject(
           projectId,
           recordId,
-          excludeParams,
+          EXCLUDE_PARAMS,
         )
         setImages(response.results)
 
