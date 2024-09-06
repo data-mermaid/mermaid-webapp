@@ -41,7 +41,7 @@ const ClassifierGuesses = ({
           name={`${annotation.benthic_attribute}_${annotation.growth_form}`}
           value={`classifier-guess-${i}`}
           checked={selectedRadioOption === `classifier-guess-${i}`}
-          onChange={() => handleRadioSelection('classifier-guess', i)}
+          onChange={() => handleRadioSelection(`classifier-guess-${i}`)}
         />
       </PopupTdForRadio>
       <PopupTd>{getBenthicAttributeLabel(annotation.benthic_attribute)}</PopupTd>
@@ -125,17 +125,15 @@ const ImageAnnotationPopup = ({
     setSelectedNewRowValues({ ...selectedNewRowValues, growthForm: growthFormId })
   }
 
-  const handleRadioSelection = (value, classifierGuessIndex) => {
+  const updateAnnotationsForPoint = (value) => {
+    let updatedAnnotations
+
     if (value === 'classifier-guess') {
-      const updatedAnnotations = moveItemToFront(selectedPoint.annotations, classifierGuessIndex)
-      const updatedPoints = dataToReview.points.map((point) =>
-        point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
-      )
-      setDataToReview({ ...dataToReview, points: updatedPoints })
-      setSelectedRadioOption(`${value}-${classifierGuessIndex}`)
+      const classifierGuessIndex = value.charAt(value.length - 1)
+      updatedAnnotations = moveItemToFront(selectedPoint.annotations, classifierGuessIndex)
     } else if (value === 'existing-row') {
       const [benthic_attribute, growth_form] = selectedExistingRow.split('_')
-      const updatedAnnotations = [
+      updatedAnnotations = [
         {
           benthic_attribute,
           growth_form: growth_form === 'null' ? null : growth_form,
@@ -143,13 +141,8 @@ const ImageAnnotationPopup = ({
         },
         ...selectedPoint.annotations,
       ]
-      const updatedPoints = dataToReview.points.map((point) =>
-        point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
-      )
-      setDataToReview({ ...dataToReview, points: updatedPoints })
-      setSelectedRadioOption(value)
-    } else if (value === 'new-row' && selectedNewRowValues.benthicAttr) {
-      const updatedAnnotations = [
+    } else if (value === 'new-row') {
+      updatedAnnotations = [
         {
           benthic_attribute: selectedNewRowValues.benthicAttr,
           growth_form: selectedNewRowValues.growthForm || null,
@@ -157,15 +150,24 @@ const ImageAnnotationPopup = ({
         },
         ...selectedPoint.annotations,
       ]
-      const updatedPoints = dataToReview.points.map((point) =>
-        point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
-      )
-
-      setDataToReview({ ...dataToReview, points: updatedPoints })
-      setSelectedRadioOption(value)
-    } else if (value === 'new-row') {
-      setSelectedRadioOption(value)
     }
+
+    const updatedPoints = dataToReview.points.map((point) =>
+      point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
+    )
+    setDataToReview({ ...dataToReview, points: updatedPoints })
+  }
+
+  const handleRadioSelection = (value) => {
+    if (
+      value.includes('classifier-guess') ||
+      value === 'existing-row' ||
+      (value === 'new-row' && selectedNewRowValues.benthicAttr)
+    ) {
+      updateAnnotationsForPoint(value)
+    }
+
+    setSelectedRadioOption(value)
   }
 
   return (
