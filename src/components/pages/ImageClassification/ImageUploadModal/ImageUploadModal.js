@@ -63,11 +63,8 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     try {
       const imageData = await databaseSwitchboardInstance.uploadImage(projectId, recordId, file)
 
-      // Placeholder: Polling logic will go here.
-      // TODO: Implement polling to check the status of image processing before proceeding to the next image.
-      // something like: `await pollForCompletion(imageData.id);`
-
       setProcessedFiles((prev) => prev + 1)
+
       return imageData
     } catch (error) {
       toast.error(`Failed to upload ${file.name}: ${error.message}`)

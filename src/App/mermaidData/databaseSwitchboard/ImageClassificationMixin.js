@@ -56,6 +56,35 @@ const ImageClassificationMixin = (Base) =>
             .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    getAllImagesInProject = async (projectId, collectRecordId, excludeParams = '') => {
+      if (!projectId || !collectRecordId) {
+        throw new Error('projectId and collectRecordId are required parameters.')
+      }
+
+      const queryParams = new URLSearchParams({ collect_record_id: collectRecordId })
+
+      if (excludeParams) {
+        queryParams.append('exclude', excludeParams)
+      }
+
+      const queryString = queryParams.toString()
+
+      if (!this._isOnlineAuthenticatedAndReady) {
+        throw this._notAuthenticatedAndReadyError
+      }
+
+      try {
+        const headers = await getAuthorizationHeaders(this._getAccessToken)
+        const response = await axios.get(
+          `${this._apiBaseUrl}/projects/${projectId}/classification/images/${queryString}`,
+          headers,
+        )
+        return response.data
+      } catch (error) {
+        throw new Error(`Error fetching images: ${error.message}`)
+      }
+    }
   }
 
 export default ImageClassificationMixin
