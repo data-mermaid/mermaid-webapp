@@ -68,7 +68,7 @@ const ImageClassificationMixin = (Base) =>
         queryParams.append('exclude', excludeParams)
       }
 
-      const queryString = queryParams.toString()
+      const queryString = `?${queryParams.toString()}`
 
       if (!this._isOnlineAuthenticatedAndReady) {
         throw this._notAuthenticatedAndReadyError
@@ -76,10 +76,12 @@ const ImageClassificationMixin = (Base) =>
 
       try {
         const headers = await getAuthorizationHeaders(this._getAccessToken)
+
         const response = await axios.get(
-          `${this._apiBaseUrl}/projects/${projectId}/classification/images${queryString}`,
+          `${this._apiBaseUrl}/projects/${projectId}/classification/images/${queryString}`,
           headers,
         )
+
         return response.data
       } catch (error) {
         throw new Error(`Error fetching images: ${error.message}`)
