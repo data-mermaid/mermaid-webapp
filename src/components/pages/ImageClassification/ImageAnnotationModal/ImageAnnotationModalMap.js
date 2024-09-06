@@ -84,7 +84,7 @@ const ImageAnnotationModalMap = ({
             benthicAttributeId: point.annotations[0]?.benthic_attribute,
             growthFormId: point.annotations[0]?.growth_form,
             isUnclassified: !!point.is_unclassified || !point.annotations.length,
-            isConfirmed: point.annotations[0]?.is_confirmed,
+            isConfirmed: !!point.annotations[0]?.is_confirmed,
           },
           geometry: {
             type: 'Polygon',

@@ -126,14 +126,28 @@ const ImageAnnotationPopup = ({
   }
 
   const handleRadioSelection = (value, classifierGuessIndex) => {
-    setSelectedRadioOption(`${value}-${classifierGuessIndex}`)
-
     if (value === 'classifier-guess') {
       const updatedAnnotations = moveItemToFront(selectedPoint.annotations, classifierGuessIndex)
       const updatedPoints = dataToReview.points.map((point) =>
         point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
       )
       setDataToReview({ ...dataToReview, points: updatedPoints })
+      setSelectedRadioOption(`${value}-${classifierGuessIndex}`)
+    } else if (value === 'existing-row') {
+      const [benthic_attribute, growth_form] = selectedExistingRow.split('_')
+      const updatedAnnotations = [
+        {
+          benthic_attribute,
+          growth_form: growth_form === 'null' ? null : growth_form,
+          is_confirmed: true,
+        },
+        ...selectedPoint.annotations,
+      ]
+      const updatedPoints = dataToReview.points.map((point) =>
+        point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
+      )
+      setDataToReview({ ...dataToReview, points: updatedPoints })
+      setSelectedRadioOption(value)
     }
   }
 
@@ -164,7 +178,7 @@ const ImageAnnotationPopup = ({
               name="existing-row-point-selection"
               value="existing-row"
               checked={selectedRadioOption === 'existing-row'}
-              onChange={() => setSelectedRadioOption('existing-row')}
+              onChange={() => handleRadioSelection('existing-row')}
             />
           </PopupTdForRadio>
           <PopupTd colSpan={3}>
