@@ -93,6 +93,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         )
         setImages(response.results)
 
+        console.log({ response })
+
         // Check if all images are processed
         const allProcessed = response.results.every((file) =>
           isImageProcessed(file.classification_status.status),
