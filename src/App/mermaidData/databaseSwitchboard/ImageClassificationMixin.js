@@ -77,7 +77,7 @@ const ImageClassificationMixin = (Base) =>
       try {
         const headers = await getAuthorizationHeaders(this._getAccessToken)
         const response = await axios.get(
-          `${this._apiBaseUrl}/projects/${projectId}/classification/images/${queryString}`,
+          `${this._apiBaseUrl}/projects/${projectId}/classification/images${queryString}`,
           headers,
         )
         return response.data
