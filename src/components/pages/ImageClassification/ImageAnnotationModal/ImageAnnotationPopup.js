@@ -117,18 +117,24 @@ const ImageAnnotationPopup = ({
       })
   }
 
-  const handleBenthicAttributeSelection = ({ value }) => {
-    setSelectedNewRowValues({ ...selectedNewRowValues, benthicAttr: value })
+  const handleBenthicAttributeSelection = ({ benthicAttrId }) => {
+    setSelectedNewRowValues({ ...selectedNewRowValues, benthicAttr: benthicAttrId })
+    setSelectedRadioOption('new-row')
+    updateAnnotationsForPoint('new-row')
   }
 
   const handleGrowthFormSelection = (growthFormId) => {
     setSelectedNewRowValues({ ...selectedNewRowValues, growthForm: growthFormId })
+    if (selectedNewRowValues.benthicAttr) {
+      setSelectedRadioOption('new-row')
+      updateAnnotationsForPoint('new-row')
+    }
   }
 
   const updateAnnotationsForPoint = (value) => {
     let updatedAnnotations
 
-    if (value === 'classifier-guess') {
+    if (value.includes('classifier-guess')) {
       const classifierGuessIndex = value.charAt(value.length - 1)
       updatedAnnotations = moveItemToFront(selectedPoint.annotations, classifierGuessIndex)
     } else if (value === 'existing-row') {
@@ -204,7 +210,11 @@ const ImageAnnotationPopup = ({
             <Select
               label="Add to existing row"
               value={selectedExistingRow}
-              onChange={(e) => setSelectedExistingRow(e.target.value)}
+              onChange={(e) => {
+                setSelectedExistingRow(e.target.value)
+                setSelectedRadioOption('existing-row')
+                updateAnnotationsForPoint('existing-row')
+              }}
             >
               {existingRowDropdownOptions.map((row) => (
                 <option key={row.value} value={row.value}>
