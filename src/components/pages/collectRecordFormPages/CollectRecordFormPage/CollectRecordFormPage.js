@@ -376,7 +376,7 @@ const CollectRecordFormPage = ({
       formikValues: formik.values,
       observationsTable1State,
       observationsTable2State,
-      imageClassification: isImageClassification,
+      image_classification: isImageClassification,
     })
 
     setSaveButtonState(buttonGroupStates.saving)
@@ -389,7 +389,7 @@ const CollectRecordFormPage = ({
         profileId: currentUser.id,
         projectId,
         protocol: sampleUnitName,
-        imageClassification: isImageClassification,
+        image_classification: isImageClassification,
       })
       .then((collectRecordResponse) => {
         setIsFormDirty(false)
