@@ -14,6 +14,9 @@ import ImageAnnotationPopup from './ImageAnnotationPopup'
 // This can change depending on final implementation, hardcoded for now.
 const MAX_DIMENSION = 1000
 
+const DEFAULT_CENTER = [0, 0] // this value doesn't matter, default to null island
+const DEFAULT_ZOOM = 2 // needs to be > 1 otherwise bounds become > 180 and > 85
+
 const POLYGON_LINE_WIDTH = 5
 const SELECTED_POLYGON_LINE_WIDTH = 10
 
@@ -28,6 +31,18 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
 
   COLORS.unconfirmed,
 ]
+
+// HACK: MapLibre's unproject() doesn't let you pass zoom as parameter.
+// So to ensure that our points remain in the same position,
+// we store current lnglat/zoom, reset map position to default, and then set back to current lnglat/zoom
+const hackTemporarilySetMapToDefaultPosition = (map) => {
+  map.current.setZoom(DEFAULT_ZOOM)
+  map.current.setCenter(DEFAULT_CENTER)
+}
+const hackResetMapToCurrentPosition = (map, currentZoom, currentCenter) => {
+  map.current.setZoom(currentZoom)
+  map.current.setCenter(currentCenter)
+}
 
 const getImageScale = (dataToReview) => {
   const longerSide = Math.max(dataToReview.original_image_width, dataToReview.original_image_height)
@@ -111,8 +126,8 @@ const ImageAnnotationModalMap = ({
 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
-      center: [0, 0], // this value doesn't matter, default to null island
-      zoom: 2, // needs to be > 1 otherwise bounds become > 180 and > 85
+      center: DEFAULT_CENTER,
+      zoom: DEFAULT_ZOOM,
       renderWorldCopies: false, // prevents the image from repeating
       dragRotate: false,
     })
@@ -225,7 +240,14 @@ const ImageAnnotationModalMap = ({
       return
     }
 
+    const currentZoom = map.current.getZoom()
+    const currentCenter = map.current.getCenter()
+
+    hackTemporarilySetMapToDefaultPosition(map)
+
     map.current.getSource('patches').setData(getPointsGeojson())
+
+    hackResetMapToCurrentPosition(map, currentZoom, currentCenter)
   }, [dataToReview, hasMapLoaded, getPointsGeojson])
 
   const _highlightPoints = useEffect(() => {
