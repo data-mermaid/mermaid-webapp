@@ -32,9 +32,10 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
   COLORS.unconfirmed,
 ]
 
-// HACK: MapLibre's unproject() doesn't let you pass zoom as parameter.
-// So to ensure that our points remain in the same position,
-// we store current lnglat/zoom, reset map position to default, and then set back to current lnglat/zoom
+// HACK: MapLibre's unproject() (used to get pixel coords) doesn't let you pass zoom as parameter.
+// So to ensure that our points remain in the same position we:
+// 1. store current lnglat/zoom, 2. reset map lnglat/zoom to default,
+// 3. call unproject (to get pixel coords) 4. set back to current lnglat/zoom
 const hackTemporarilySetMapToDefaultPosition = (map) => {
   map.current.setZoom(DEFAULT_ZOOM)
   map.current.setCenter(DEFAULT_CENTER)
