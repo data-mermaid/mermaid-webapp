@@ -7,10 +7,18 @@ import {
   imageClassificationResponsePropType,
 } from '../../../../../App/mermaidData/mermaidDataProptypes'
 
-const moveItemToFront = (array, index) => {
+const moveAnnotationToFront = (array, index) => {
   const newArray = [...array]
   newArray.unshift(newArray.splice(index, 1)[0])
   return newArray
+}
+
+const confirmFirstAnnotationAndUnconfirmRest = (annotation, i) => {
+  if (i === 0) {
+    annotation.is_confirmed = true
+  } else {
+    annotation.is_confirmed = false
+  }
 }
 
 const ClassifierGuesses = ({
@@ -22,19 +30,27 @@ const ClassifierGuesses = ({
   getBenthicAttributeLabel,
   getGrowthFormLabel,
 }) => {
-  const annotationsSortedByScore = selectedPoint.annotations.toSorted((a, b) => b.score - a.score)
+  const classifierGuesses = selectedPoint.annotations.filter(
+    (annotation) => annotation.is_machine_created,
+  )
+  const classifierGuessesSortedByScore = classifierGuesses.toSorted((a, b) => b.score - a.score)
 
-  const selectClassifierGuess = (classifierGuessIndex) => {
-    // TODO: Un-confirm any previously confirmed annotations
-    const updatedAnnotations = moveItemToFront(selectedPoint.annotations, classifierGuessIndex)
-    updatedAnnotations[0].is_confirmed = true // auto-confirm
+  const selectClassifierGuess = (annotationId) => {
+    const classifierGuessIndex = classifierGuessesSortedByScore.findIndex(
+      (annotation) => annotation.id === annotationId,
+    )
+    const updatedAnnotations = moveAnnotationToFront(
+      classifierGuessesSortedByScore,
+      classifierGuessIndex,
+    )
+    updatedAnnotations.forEach(confirmFirstAnnotationAndUnconfirmRest)
     const updatedPoints = dataToReview.points.map((point) =>
       point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
     )
     setDataToReview({ ...dataToReview, points: updatedPoints })
   }
 
-  return annotationsSortedByScore.map((annotation, i) => (
+  return classifierGuessesSortedByScore.map((annotation, i) => (
     <Tr key={annotation.id}>
       <PopupTdForRadio>
         <input
@@ -45,7 +61,7 @@ const ClassifierGuesses = ({
           checked={selectedRadioOption === `classifier-guess-${i}`}
           onChange={() => {
             setSelectedRadioOption(`classifier-guess-${i}`)
-            selectClassifierGuess(i)
+            selectClassifierGuess(annotation.id)
           }}
         />
       </PopupTdForRadio>
