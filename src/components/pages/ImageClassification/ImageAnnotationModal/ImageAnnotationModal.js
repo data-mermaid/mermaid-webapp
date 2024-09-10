@@ -16,6 +16,22 @@ import {
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 
+// Context: Strategy for the Image Annotation Modal is to use the 1st annotation in the array for each point
+// as the "current" annotation. The 1st annotation is used to group points into rows for the table,
+// and also used as the properties for the points on the map.
+// Annotations that are "confirmed" get top priority, with the other annotations being sorted by score from the API.
+// When a user selects a new annotation for that point, it is pushed to the first position in the annotations array.
+
+const prioritizeConfirmedAnnotations = (a, b) => {
+  if (a.is_confirmed && !b.is_confirmed) {
+    return -1
+  }
+  if (!a.is_confirmed && b.is_confirmed) {
+    return 1
+  }
+  return 0
+}
+
 const ImageAnnotationModal = ({ imageId, setImageId }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
@@ -30,6 +46,7 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
       databaseSwitchboardInstance
         .getAnnotationsForImage(projectId, imageId)
         .then((data) => {
+          data.points.map((point) => point.annotations.sort(prioritizeConfirmedAnnotations))
           setDataToReview(data)
         })
         .catch(() => {
