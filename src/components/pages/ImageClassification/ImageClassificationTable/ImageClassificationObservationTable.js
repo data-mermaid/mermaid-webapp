@@ -71,6 +71,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [polling, setPolling] = useState(false)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId, recordId } = useParams()
+  const [imagesDoneProcessing, setImagesDoneProcessing] = useState(false)
 
   const isImageProcessed = (status) => status === 3
 
@@ -85,7 +86,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     let intervalId
     const startPolling = async () => {
       try {
-        const response = await databaseSwitchboardInstance.getAllImagesInProject(
+        const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
           projectId,
           recordId,
           EXCLUDE_PARAMS,
@@ -100,6 +101,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         if (allProcessed) {
           clearInterval(intervalId) // Stop polling when all images are processed
           setPolling(false)
+          setImagesDoneProcessing(true)
         }
       } catch (error) {
         console.error('Error polling images:', error)
@@ -119,10 +121,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   }, [polling, projectId])
 
   const _beginPollingAfterFirstImageIsUploaded = useEffect(() => {
-    if (uploadedFiles.length > 0 && !polling) {
+    if (uploadedFiles.length > 0 && !polling && !imagesDoneProcessing) {
       setPolling(true)
     }
-  }, [uploadedFiles, polling])
+  }, [uploadedFiles, polling, images, imagesDoneProcessing])
 
   return (
     <>
@@ -151,9 +153,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd></StyledTd>
-                  <StyledTd></StyledTd>
-                  <StyledTd></StyledTd>
-                  <StyledTd></StyledTd>
+                  <StyledTd>{file.num_confirmed}</StyledTd>
+                  <StyledTd>{file.num_unconfirmed}</StyledTd>
+                  <StyledTd>{file.num_unclassified}</StyledTd>
                   <StyledTd></StyledTd>
                   <StyledTd>
                     <ButtonPrimary
