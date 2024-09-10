@@ -11,6 +11,15 @@ import {
 const isClassified = ({ is_unclassified, annotations }) =>
   !is_unclassified && annotations.length > 0
 
+const isAClassifierGuess = (classifierGuesses, benthic_attribute, growth_form) =>
+  classifierGuesses.some(
+    (classifierGuess) =>
+      classifierGuess.benthic_attribute === benthic_attribute &&
+      classifierGuess.growth_form === growth_form,
+  )
+
+const isAlreadyPushed = (acc, value) => acc.some((option) => option.value === value)
+
 const ExistingRows = ({
   selectedPoint,
   dataToReview,
@@ -27,7 +36,11 @@ const ExistingRows = ({
       growth_form,
     )}`
 
-    if (isClassified(currentPoint) && !acc.some((option) => option.value === value)) {
+    if (
+      isClassified(currentPoint) &&
+      !isAClassifierGuess(selectedPoint.annotations, benthic_attribute, growth_form) &&
+      !isAlreadyPushed(acc, value)
+    ) {
       acc.push({ label: label, value: value })
     }
 
