@@ -95,7 +95,8 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
         toast.error(`File size exceeds the limit: ${file.name}`)
         continue
       }
-      if (existingFiles.some((existingFile) => existingFile.name === file.name)) {
+
+      if (existingFiles.some((existingFile) => existingFile.original_image_name === file.name)) {
         toast.error(`Duplicate file: ${file.name}`)
         continue
       }

@@ -26,7 +26,7 @@ export const IMAGE_CLASSIFICATION_COLORS = {
 }
 
 export const EXCLUDE_PARAMS =
-  'data,points,created_by,updated_by,created_on,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
+  'data,created_by,updated_by,created_on,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
 
 Object.freeze(PROJECT_CODES)
 Object.freeze(apiDataTypes)
