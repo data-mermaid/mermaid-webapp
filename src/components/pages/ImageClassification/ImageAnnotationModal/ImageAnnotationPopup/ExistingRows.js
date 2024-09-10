@@ -14,6 +14,7 @@ const isClassified = ({ is_unclassified, annotations }) =>
 const isAClassifierGuess = (classifierGuesses, benthic_attribute, growth_form) =>
   classifierGuesses.some(
     (classifierGuess) =>
+      !!classifierGuess.is_machine_created &&
       classifierGuess.benthic_attribute === benthic_attribute &&
       classifierGuess.growth_form === growth_form,
   )
