@@ -8,7 +8,7 @@ import {
   imageClassificationResponsePropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ImageAnnotationMapContainer } from './ImageAnnotationModal.styles'
-import ImageAnnotationPopup from './ImageAnnotationPopup'
+import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 
 // TODO: Assumes that the max dimension for height and width are the same.
 // This can change depending on final implementation, hardcoded for now.

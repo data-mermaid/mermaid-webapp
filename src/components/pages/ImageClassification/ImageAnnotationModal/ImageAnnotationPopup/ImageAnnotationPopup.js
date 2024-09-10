@@ -1,21 +1,22 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
-import { Tr, Th } from '../../../generic/Table/table'
-import { ButtonSecondary } from '../../../generic/buttons'
-import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { Tr, Th } from '../../../../generic/Table/table'
+import { ButtonSecondary } from '../../../../generic/buttons'
+import { imageClassificationResponsePropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import {
   PopupSubTh,
   PopupTable,
   PopupTd,
   PopupInputAutocompleteContainer,
   PopupTdForRadio,
-} from './ImageAnnotationModal.styles'
-import { Select } from '../../../generic/form'
-import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
-import { getBenthicOptions } from '../../../../library/getOptions'
-import language from '../../../../language'
-import { databaseSwitchboardPropTypes } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
+} from '../ImageAnnotationModal.styles'
+import { Select } from '../../../../generic/form'
+import ObservationAutocomplete from '../../../../ObservationAutocomplete/ObservationAutocomplete'
+import { getBenthicOptions } from '../../../../../library/getOptions'
+import language from '../../../../../language'
+import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
+import ExistingRows from './ExistingRows'
 
 const SectionHeader = ({ title }) => (
   <Tr>
@@ -51,8 +52,8 @@ const ClassifierGuesses = ({
   ))
 }
 
-const isClassified = ({ is_unclassified, annotations }) =>
-  !is_unclassified && annotations.length > 0
+// const isClassified = ({ is_unclassified, annotations }) =>
+//   !is_unclassified && annotations.length > 0
 
 const moveItemToFront = (array, index) => {
   const newArray = [...array]
@@ -78,28 +79,28 @@ const ImageAnnotationPopup = ({
 
   const selectedPoint = dataToReview.points.find((point) => point.id === pointId)
 
-  const existingRowDropdownOptions = dataToReview.points.reduce((acc, currentPoint) => {
-    const { benthic_attribute, growth_form } = currentPoint.annotations[0]
-    const value = benthic_attribute + '_' + growth_form
-    const label = `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(
-      growth_form,
-    )}`
+  // const existingRowDropdownOptions = dataToReview.points.reduce((acc, currentPoint) => {
+  //   const { benthic_attribute, growth_form } = currentPoint.annotations[0]
+  //   const value = benthic_attribute + '_' + growth_form
+  //   const label = `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(
+  //     growth_form,
+  //   )}`
 
-    if (isClassified(currentPoint) && !acc.some((option) => option.value === value)) {
-      acc.push({ label: label, value: value })
-    }
+  //   if (isClassified(currentPoint) && !acc.some((option) => option.value === value)) {
+  //     acc.push({ label: label, value: value })
+  //   }
 
-    return acc
-  }, [])
+  //   return acc
+  // }, [])
 
-  const [selectedExistingRow, setSelectedExistingRow] = useState(() => {
-    const rowKeyForPoint =
-      selectedPoint.annotations[0].benthic_attribute +
-      '_' +
-      selectedPoint.annotations[0].growth_form
-    const isPointInARow = existingRowDropdownOptions.some((row) => rowKeyForPoint === row.value)
-    return isPointInARow ? rowKeyForPoint : ''
-  })
+  // const [selectedExistingRow, setSelectedExistingRow] = useState(() => {
+  //   const rowKeyForPoint =
+  //     selectedPoint.annotations[0].benthic_attribute +
+  //     '_' +
+  //     selectedPoint.annotations[0].growth_form
+  //   const isPointInARow = existingRowDropdownOptions.some((row) => rowKeyForPoint === row.value)
+  //   return isPointInARow ? rowKeyForPoint : ''
+  // })
 
   const handleDisplayNewRowSelection = () => {
     const promises = [
@@ -138,15 +139,15 @@ const ImageAnnotationPopup = ({
       const classifierGuessIndex = value.charAt(value.length - 1)
       updatedAnnotations = moveItemToFront(selectedPoint.annotations, classifierGuessIndex)
     } else if (value === 'existing-row') {
-      const [benthic_attribute, growth_form] = selectedExistingRow.split('_')
-      updatedAnnotations = [
-        {
-          benthic_attribute,
-          growth_form: growth_form === 'null' ? null : growth_form,
-          is_confirmed: true,
-        },
-        ...selectedPoint.annotations,
-      ]
+      // const [benthic_attribute, growth_form] = selectedExistingRow.split('_')
+      // updatedAnnotations = [
+      //   {
+      //     benthic_attribute,
+      //     growth_form: growth_form === 'null' ? null : growth_form,
+      //     is_confirmed: true,
+      //   },
+      //   ...selectedPoint.annotations,
+      // ]
     } else if (value === 'new-row') {
       updatedAnnotations = [
         {
@@ -195,35 +196,15 @@ const ImageAnnotationPopup = ({
           handleRadioSelection={handleRadioSelection}
         />
         <SectionHeader title="Add to existing row" />
-        <Tr>
-          <PopupTdForRadio>
-            <input
-              type="radio"
-              id="existing-row-point-selection"
-              name="existing-row-point-selection"
-              value="existing-row"
-              checked={selectedRadioOption === 'existing-row'}
-              onChange={() => handleRadioSelection('existing-row')}
-            />
-          </PopupTdForRadio>
-          <PopupTd colSpan={3}>
-            <Select
-              label="Add to existing row"
-              value={selectedExistingRow}
-              onChange={(e) => {
-                setSelectedExistingRow(e.target.value)
-                setSelectedRadioOption('existing-row')
-                updateAnnotationsForPoint('existing-row')
-              }}
-            >
-              {existingRowDropdownOptions.map((row) => (
-                <option key={row.value} value={row.value}>
-                  {row.label}
-                </option>
-              ))}
-            </Select>
-          </PopupTd>
-        </Tr>
+        <ExistingRows
+          selectedPoint={selectedPoint}
+          dataToReview={dataToReview}
+          setDataToReview={setDataToReview}
+          selectedRadioOption={selectedRadioOption}
+          setSelectedRadioOption={setSelectedRadioOption}
+          getBenthicAttributeLabel={getBenthicAttributeLabel}
+          getGrowthFormLabel={getGrowthFormLabel}
+        />
         <SectionHeader title="New row" />
         <Tr>
           {benthicAttributeSelectOptions.length && growthFormSelectOptions.length ? (
