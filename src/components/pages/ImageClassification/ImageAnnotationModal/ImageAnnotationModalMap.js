@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { createRoot } from 'react-dom/client'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
@@ -7,7 +6,11 @@ import {
   imageClassificationPointPropType,
   imageClassificationResponsePropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { ImageAnnotationMapContainer } from './ImageAnnotationModal.styles'
+import {
+  ImageAnnotationMapContainer,
+  ImageAnnotationMapWrapper,
+  ImageAnnotationPopupContainer,
+} from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 
 // TODO: Assumes that the max dimension for height and width are the same.
@@ -62,9 +65,9 @@ const ImageAnnotationModalMap = ({
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
+  const [editPointId, setEditPointId] = useState()
   const imageScale = getImageScale(dataToReview)
   const halfPatchSize = dataToReview.patch_size / 2
-  const editPointPopup = new maplibregl.Popup({ closeButton: false })
   const pointLabelPopup = new maplibregl.Popup({
     anchor: 'center',
     closeButton: false,
@@ -211,26 +214,12 @@ const ImageAnnotationModalMap = ({
     // Display Edit Point Popup on point click
     map.current.on('click', 'patches-fill-layer', ({ features }) => {
       const [{ geometry, properties }] = features
-      map.current.getCanvas().style.cursor = 'pointer'
-      pointLabelPopup.remove()
-
-      const popupNode = document.createElement('div')
-      const root = createRoot(popupNode)
-      root.render(
-        <ImageAnnotationPopup
-          dataToReview={dataToReview}
-          setDataToReview={setDataToReview}
-          pointId={properties.id}
-          databaseSwitchboardInstance={databaseSwitchboardInstance}
-          getBenthicAttributeLabel={getBenthicAttributeLabel}
-          getGrowthFormLabel={getGrowthFormLabel}
-        />,
+      const bounds = new maplibregl.LngLatBounds(
+        geometry.coordinates[0][0],
+        geometry.coordinates[0][2],
       )
-      editPointPopup
-        .setLngLat(geometry.coordinates[0][0])
-        .setMaxWidth('none')
-        .setDOMContent(popupNode)
-        .addTo(map.current)
+      map.current.fitBounds(bounds, { padding: 300 })
+      setEditPointId(properties.id)
     })
 
     // eslint-disable-next-line
@@ -289,13 +278,25 @@ const ImageAnnotationModalMap = ({
   }, [highlightedPoints, selectedPoints, hasMapLoaded])
 
   return (
-    <>
+    <ImageAnnotationMapWrapper>
       <ImageAnnotationMapContainer
         ref={mapContainer}
         $width={dataToReview.original_image_width * imageScale}
         $height={dataToReview.original_image_height * imageScale}
       />
-    </>
+      {editPointId ? (
+        <ImageAnnotationPopupContainer>
+          <ImageAnnotationPopup
+            dataToReview={dataToReview}
+            setDataToReview={setDataToReview}
+            pointId={editPointId}
+            databaseSwitchboardInstance={databaseSwitchboardInstance}
+            getBenthicAttributeLabel={getBenthicAttributeLabel}
+            getGrowthFormLabel={getGrowthFormLabel}
+          />
+        </ImageAnnotationPopupContainer>
+      ) : null}
+    </ImageAnnotationMapWrapper>
   )
 }
 
