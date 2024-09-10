@@ -42,6 +42,10 @@ export const ImageAnnotationMapContainer = styled.div`
   margin-top: '2rem';
 `
 
+export const TableWithNoMinWidth = styled(Table)`
+  min-width: unset;
+`
+
 export const ImageAnnotationPopupContainer = styled.div`
   position: absolute;
   top: 0;

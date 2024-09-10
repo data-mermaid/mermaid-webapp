@@ -15,7 +15,7 @@ import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 
 // TODO: Assumes that the max dimension for height and width are the same.
 // This can change depending on final implementation, hardcoded for now.
-const MAX_DIMENSION = 1000
+const MAX_DIMENSION = 900
 
 const DEFAULT_CENTER = [0, 0] // this value doesn't matter, default to null island
 const DEFAULT_ZOOM = 2 // needs to be > 1 otherwise bounds become > 180 and > 85

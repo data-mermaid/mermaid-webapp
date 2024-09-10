@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Table, Tr, Th, Td } from '../../../generic/Table/table'
+import { Tr, Th, Td } from '../../../generic/Table/table'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { TrWithBorderStyling } from './ImageAnnotationModal.styles'
+import { TableWithNoMinWidth, TrWithBorderStyling } from './ImageAnnotationModal.styles'
 
 const ImageAnnotationModalTable = ({
   points,
@@ -76,7 +76,7 @@ const ImageAnnotationModalTable = ({
   }
 
   return (
-    <Table aria-labelledby="table-label">
+    <TableWithNoMinWidth aria-labelledby="table-label" style={{ minWidth: 'unset' }}>
       <thead>
         <Tr>
           <Th>Benthic Attribute</Th>
@@ -117,7 +117,7 @@ const ImageAnnotationModalTable = ({
           </TrWithBorderStyling>
         ))}
       </tbody>
-    </Table>
+    </TableWithNoMinWidth>
   )
 }
 
