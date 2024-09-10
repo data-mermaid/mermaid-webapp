@@ -57,7 +57,7 @@ const ImageClassificationMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getAllImagesInProject = async (projectId, collectRecordId, excludeParams = '') => {
+    getAllImagesInCollectRecord = async (projectId, collectRecordId, excludeParams = '') => {
       if (!projectId || !collectRecordId) {
         throw new Error('projectId and collectRecordId are required parameters.')
       }
