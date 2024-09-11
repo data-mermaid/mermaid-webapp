@@ -249,7 +249,6 @@ export const loadACALayers = (map) => {
     maxZoom: 22,
   })
 
-  // Add layers with a conditional check for 'beforeLayerId'
   map.addLayer(
     {
       id: 'atlas-planet',
