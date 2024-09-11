@@ -225,6 +225,9 @@ export const loadACALayers = (map) => {
     ? benthicOpacityExpression
     : fillBenthicOpacityValue
 
+  // Check if 'clusters' layer exists before adding layers before it
+  const beforeLayerId = map.getLayer('clusters') ? 'clusters' : undefined
+
   map.addSource('atlas-planet', {
     type: 'raster',
     tiles: [
@@ -246,6 +249,7 @@ export const loadACALayers = (map) => {
     maxZoom: 22,
   })
 
+  // Add layers with a conditional check for 'beforeLayerId'
   map.addLayer(
     {
       id: 'atlas-planet',
@@ -256,8 +260,8 @@ export const loadACALayers = (map) => {
         'raster-opacity': rasterOpacityExpression,
       },
     },
-    'clusters',
-  ) // Add this layer before the clusters layer to prevent overlapping
+    beforeLayerId,
+  )
 
   map.addLayer(
     {
@@ -270,7 +274,7 @@ export const loadACALayers = (map) => {
         'fill-opacity': fillGeomorphicOpacityExpression,
       },
     },
-    'clusters',
+    beforeLayerId,
   )
 
   map.addLayer(
@@ -284,7 +288,7 @@ export const loadACALayers = (map) => {
         'fill-opacity': fillBenthicOpacityExpression,
       },
     },
-    'clusters',
+    beforeLayerId,
   )
 }
 
@@ -322,7 +326,8 @@ export const getMapMarkersFeature = (records) => {
 export const loadMapMarkersLayer = (map) => {
   map.loadImage(mapPin, (error, image) => {
     if (error) {
-      throw error
+      console.error('Error loading image: ', error)
+      return
     }
 
     map.addImage('custom-marker', image)
