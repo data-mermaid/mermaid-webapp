@@ -81,6 +81,19 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     }
   }
 
+  const imagePointsData = images.map((file) => {
+    const classifiedPoints = file.points.filter(
+      ({ is_unclassified, annotations }) => !is_unclassified && annotations.length > 0,
+    )
+
+    const imageAnnotationData = Object.groupBy(
+      classifiedPoints,
+      ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
+    )
+
+    console.log(file.original_image_name, { imageAnnotationData })
+  })
+
   // Poll every 5 seconds after the first image is uploaded
   const _pollImageStatuses = useEffect(() => {
     let intervalId
