@@ -214,10 +214,9 @@ const ImageAnnotationModalMap = ({
     // Display Edit Point Popup on point click
     map.current.on('click', 'patches-fill-layer', ({ features }) => {
       const [{ geometry, properties }] = features
-      const bounds = new maplibregl.LngLatBounds(
-        geometry.coordinates[0][0],
-        geometry.coordinates[0][2],
-      )
+      const topLeft = geometry.coordinates[0][0]
+      const bottomRight = geometry.coordinates[0][2]
+      const bounds = new maplibregl.LngLatBounds(topLeft, bottomRight)
       map.current.fitBounds(bounds, { padding: 300 })
       setEditPointId(properties.id)
     })
