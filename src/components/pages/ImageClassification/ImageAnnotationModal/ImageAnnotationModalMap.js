@@ -222,6 +222,14 @@ const ImageAnnotationModalMap = ({
       setEditPointId(properties.id)
     })
 
+    // Remove Edit Point Popup when user clicks away
+    map.current.on('click', ({ point }) => {
+      const [patches] = map.current.queryRenderedFeatures(point, { layers: ['patches-fill-layer'] })
+      if (!patches) {
+        setEditPointId()
+      }
+    })
+
     // eslint-disable-next-line
   }, [])
 
