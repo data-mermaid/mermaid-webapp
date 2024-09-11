@@ -93,6 +93,19 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
     console.log(file.original_image_name, { imageAnnotationData })
   })
+  const _fetchImagesOnLoad = useEffect(() => {
+    if (recordId && projectId) {
+      databaseSwitchboardInstance
+        .getAllImagesInCollectRecord(projectId, recordId, EXCLUDE_PARAMS)
+        .then((response) => {
+          setImages(response.results)
+        })
+        .catch((error) => {
+          console.error('Error fetching images:', error)
+        })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId, recordId])
 
   // Poll every 5 seconds after the first image is uploaded
   const _pollImageStatuses = useEffect(() => {
@@ -199,7 +212,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 ImageClassificationObservationTable.propTypes = {
   uploadedFiles: PropTypes.arrayOf(PropTypes.object),
   handleRemoveFile: PropTypes.func,
-  projectId: PropTypes.string.isRequired,
 }
 
 export default ImageClassificationObservationTable
