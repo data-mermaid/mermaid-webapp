@@ -80,7 +80,9 @@ const ExistingRows = ({
     updatedAnnotations.forEach(confirmFirstAnnotationAndUnconfirmRest)
 
     const updatedPoints = dataToReview.points.map((point) =>
-      point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
+      point.id === selectedPoint.id
+        ? { ...point, is_unclassified: false, annotations: updatedAnnotations }
+        : point,
     )
     setDataToReview({ ...dataToReview, points: updatedPoints })
   }
