@@ -8,6 +8,14 @@ import {
   imageClassificationResponsePropType,
 } from '../../../../../App/mermaidData/mermaidDataProptypes'
 
+const confirmFirstAnnotationAndUnconfirmRest = (annotation, i) => {
+  if (i === 0) {
+    annotation.is_confirmed = true
+  } else {
+    annotation.is_confirmed = false
+  }
+}
+
 const isClassified = ({ is_unclassified, annotations }) =>
   !is_unclassified && annotations.length > 0
 
@@ -59,14 +67,17 @@ const ExistingRows = ({
 
   const addExistingAnnotation = (existingAnnotation) => {
     const [benthic_attribute, growth_form] = existingAnnotation.split('_')
+    const classifierGuesses = selectedPoint.annotations.filter(
+      (annotation) => annotation.is_machine_created,
+    )
     const updatedAnnotations = [
       {
         benthic_attribute,
         growth_form: growth_form === 'null' ? null : growth_form,
-        is_confirmed: true,
       },
-      ...selectedPoint.annotations,
+      ...classifierGuesses,
     ]
+    updatedAnnotations.forEach(confirmFirstAnnotationAndUnconfirmRest)
 
     const updatedPoints = dataToReview.points.map((point) =>
       point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
