@@ -8,6 +8,7 @@ import ImageAnnotationModalTable from './ImageAnnotationModalTable'
 import ImageAnnotationModalMap from './ImageAnnotationModalMap'
 import {
   Footer,
+  ImageAnnotationModalContainer,
   Legend,
   LegendItem,
   LegendSquare,
@@ -97,7 +98,7 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
       maxWidth="100%"
       mainContent={
         dataToReview ? (
-          <div>
+          <ImageAnnotationModalContainer>
             <ImageAnnotationModalTable
               points={dataToReview.points}
               setDataToReview={setDataToReview}
@@ -115,7 +116,7 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
               getBenthicAttributeLabel={getBenthicAttributeLabel}
               getGrowthFormLabel={getGrowthFormLabel}
             />
-          </div>
+          </ImageAnnotationModalContainer>
         ) : (
           <LoadingContainer>
             <LoadingIndicator />

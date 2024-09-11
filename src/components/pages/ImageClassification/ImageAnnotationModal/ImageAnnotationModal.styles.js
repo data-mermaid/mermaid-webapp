@@ -32,6 +32,10 @@ export const LoadingContainer = styled.div`
   width: 100%;
 `
 
+export const ImageAnnotationModalContainer = styled.div`
+  display: flex;
+`
+
 export const ImageAnnotationMapWrapper = styled.div`
   position: relative;
 `
