@@ -106,15 +106,16 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         )
         setImages(response.results)
 
-        // Check if all images are processed
         const allProcessed = response.results.every((file) =>
           isImageProcessed(file.classification_status.status),
         )
 
         if (allProcessed) {
-          clearInterval(intervalId) // Stop polling when all images are processed
+          clearInterval(intervalId)
           setPolling(false)
           setImagesDoneProcessing(true)
+        } else {
+          setImagesDoneProcessing(false)
         }
       } catch (error) {
         console.error('Error polling images:', error)
