@@ -1,36 +1,35 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
-import ObservationAutocomplete from '../../../../ObservationAutocomplete/ObservationAutocomplete'
 import { Select } from '../../../../generic/form'
-import { ButtonSecondary } from '../../../../generic/buttons'
+import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
 import language from '../../../../../language'
-import { Tr } from '../../../../generic/Table/table'
+import { Tr, Td } from '../../../../generic/Table/table'
 import { getBenthicOptions } from '../../../../../library/getOptions'
-import {
-  PopupTd,
-  PopupTdForRadio,
-  PopupInputAutocompleteContainer,
-} from '../ImageAnnotationModal.styles'
 import {
   imageClassificationPointPropType,
   imageClassificationResponsePropType,
 } from '../../../../../App/mermaidData/mermaidDataProptypes'
+import { IconPlus } from '../../../../icons'
+import Modal from '../../../../generic/Modal/Modal'
+import InputAutocomplete from '../../../../generic/InputAutocomplete'
+import { NewRowContainer, NewRowFooterContainer, NewRowLabel } from '../ImageAnnotationModal.styles'
 
-const NewRow = ({
-  selectedPoint,
-  dataToReview,
-  setDataToReview,
-  selectedRadioOption,
-  setSelectedRadioOption,
-  databaseSwitchboardInstance,
-}) => {
+// TODO: Place this in a shared folder since used twice?
+const isAClassifierGuessOfSelectedPoint = (annotations, benthic_attribute, growth_form) =>
+  annotations.some(
+    (annotation) =>
+      annotation.is_machine_created &&
+      annotation.benthic_attribute === benthic_attribute &&
+      annotation.growth_form === growth_form,
+  )
+
+const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchboardInstance }) => {
+  const [shouldDisplayModal, setShouldDisplayModal] = useState(false)
   const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
   const [growthFormSelectOptions, setGrowthFormSelectOptions] = useState([])
-  const [selectedNewRowValues, setSelectedNewRowValues] = useState({
-    benthicAttr: '',
-    growthForm: '',
-  })
+  const [selectedBenthicAttr, setSelectedBenthicAttr] = useState('')
+  const [selectedGrowthForm, setSelectedGrowthForm] = useState('')
 
   const handleDisplayNewRowSelection = () => {
     const promises = [
@@ -42,98 +41,162 @@ const NewRow = ({
       .then(([benthicAttributes, choices]) => {
         setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributes))
         setGrowthFormSelectOptions(choices.growthforms.data)
+        setShouldDisplayModal(true)
       })
       .catch(() => {
         toast.error('Failed to retrieve benthic attributes and growth forms')
       })
   }
 
-  const handleRadioSelection = () => {
-    setSelectedRadioOption('new-row')
-    if (selectedNewRowValues.benthicAttr) {
-      addNewAnnotation(selectedNewRowValues.benthicAttr, selectedNewRowValues.growthForm)
-    }
+  const handleCloseModal = () => {
+    setSelectedBenthicAttr('')
+    setSelectedGrowthForm('')
+    setShouldDisplayModal(false)
   }
 
-  const handleBenthicAttributeSelection = ({ benthicAttrId }) => {
-    setSelectedNewRowValues({ ...selectedNewRowValues, benthicAttr: benthicAttrId })
-    setSelectedRadioOption('new-row')
-    addNewAnnotation(benthicAttrId, selectedNewRowValues.growthForm)
-  }
+  const selectClassifierGuessAsConfirmedAnnotation = () => {
+    const updatedAnnotations = selectedPoint.annotations.reduce((acc, currentAnnotation) => {
+      const { benthic_attribute, growth_form, is_machine_created } = currentAnnotation
 
-  const handleGrowthFormSelection = (growthFormId) => {
-    setSelectedNewRowValues({ ...selectedNewRowValues, growthForm: growthFormId })
-    if (selectedNewRowValues.benthicAttr) {
-      setSelectedRadioOption('new-row')
-      addNewAnnotation(selectedNewRowValues.benthicAttr, growthFormId)
-    }
-  }
+      // only want classifier guesses
+      if (!is_machine_created) {
+        return acc
+      }
 
-  const addNewAnnotation = (benthicAttr, growthForm) => {
-    // TODO: if classifier guess, use that instead
-    const updatedAnnotations = [
-      {
-        benthic_attribute: benthicAttr,
-        growth_form: growthForm || null,
-        is_confirmed: true,
-      },
-      ...selectedPoint.annotations,
-    ]
+      // Move the matching classifier guess to front of array and confirm. Unconfirm the rest.
+      if (
+        benthic_attribute === selectedBenthicAttr &&
+        growth_form === (selectedGrowthForm || null)
+      ) {
+        acc.unshift({ ...currentAnnotation, is_confirmed: true })
+      } else {
+        acc.push({ ...currentAnnotation, is_confirmed: false })
+      }
+
+      return acc
+    }, [])
 
     const updatedPoints = dataToReview.points.map((point) =>
-      point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
+      point.id === selectedPoint.id
+        ? { ...point, is_unclassified: false, annotations: updatedAnnotations }
+        : point,
     )
+
     setDataToReview({ ...dataToReview, points: updatedPoints })
+    handleCloseModal()
+  }
+
+  const addNewAnnotation = () => {
+    // Only want classifier guesses, and want them unconfirmed.
+    const resetAnnotationsForPoint = selectedPoint.annotations.reduce((acc, currentAnnotation) => {
+      if (currentAnnotation.is_machine_created) {
+        acc.push({ ...currentAnnotation, is_confirmed: false })
+      }
+
+      return acc
+    }, [])
+
+    const annotationToAdd = {
+      benthic_attribute: selectedBenthicAttr,
+      growth_form: selectedGrowthForm || null,
+      is_confirmed: true,
+      is_machine_created: false,
+    }
+
+    const updatedAnnotations = [annotationToAdd, ...resetAnnotationsForPoint]
+
+    const updatedPoints = dataToReview.points.map((point) =>
+      point.id === selectedPoint.id
+        ? { ...point, is_unclassified: false, annotations: updatedAnnotations }
+        : point,
+    )
+
+    setDataToReview({ ...dataToReview, points: updatedPoints })
+    handleCloseModal()
+  }
+
+  const handleAddNewRowClick = () => {
+    if (
+      isAClassifierGuessOfSelectedPoint(
+        selectedPoint.annotations,
+        selectedBenthicAttr,
+        selectedGrowthForm || null,
+      )
+    ) {
+      selectClassifierGuessAsConfirmedAnnotation()
+    } else {
+      addNewAnnotation()
+    }
   }
 
   return (
-    <Tr>
-      {benthicAttributeSelectOptions.length && growthFormSelectOptions.length ? (
-        <>
-          <PopupTdForRadio>
-            <input
-              type="radio"
-              id="new-row-point-selection"
-              name="new-row-point-selection"
-              value="new-row"
-              checked={selectedRadioOption === 'new-row'}
-              onChange={handleRadioSelection}
-            />
-          </PopupTdForRadio>
-          <PopupTd>
-            <PopupInputAutocompleteContainer>
-              <ObservationAutocomplete
+    <>
+      <Tr>
+        <Td colSpan={4} align="center">
+          <ButtonSecondary type="button" onClick={handleDisplayNewRowSelection}>
+            <IconPlus /> Select New Attribute
+          </ButtonSecondary>
+        </Td>
+      </Tr>
+      <Modal
+        title="Select New Attribute"
+        isOpen={
+          benthicAttributeSelectOptions.length &&
+          growthFormSelectOptions.length &&
+          shouldDisplayModal
+        }
+        onDismiss={handleCloseModal}
+        allowCloseWithEscapeKey={false}
+        maxWidth="fit-content"
+        contentOverflowIsVisible
+        mainContent={
+          <NewRowContainer>
+            <NewRowLabel htmlFor="benthic-attribute-autocomplete">
+              Benthic Attribute
+              <InputAutocomplete
                 id="benthic-attribute-autocomplete"
                 autoFocus
                 aria-labelledby="benthic-attribute-label"
                 options={benthicAttributeSelectOptions}
-                onChange={handleBenthicAttributeSelection}
+                onChange={({ value }) => setSelectedBenthicAttr(value)}
+                value={selectedBenthicAttr}
                 noResultsText={language.autocomplete.noResultsDefault}
               />
-            </PopupInputAutocompleteContainer>
-          </PopupTd>
-          <PopupTd>
-            <Select
-              label="Growth forms"
-              onChange={(e) => handleGrowthFormSelection(e.target.value)}
+            </NewRowLabel>
+
+            <NewRowLabel htmlFor="growth-forms">
+              <span>Growth forms</span>
+              <Select
+                id="growth-forms"
+                label="Growth forms"
+                onChange={(e) => setSelectedGrowthForm(e.target.value)}
+              >
+                <option value=""></option>
+                {growthFormSelectOptions.map((growthForm) => (
+                  <option key={growthForm.id} value={growthForm.id}>
+                    {growthForm.name}
+                  </option>
+                ))}
+              </Select>
+            </NewRowLabel>
+          </NewRowContainer>
+        }
+        footerContent={
+          <NewRowFooterContainer>
+            <ButtonSecondary type="button" onClick={handleCloseModal}>
+              Cancel
+            </ButtonSecondary>
+            <ButtonPrimary
+              type="button"
+              disabled={!selectedBenthicAttr}
+              onClick={handleAddNewRowClick}
             >
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <option value=""> </option>
-              {growthFormSelectOptions.map((growthForm) => (
-                <option key={growthForm.id} value={growthForm.id}>
-                  {growthForm.name}
-                </option>
-              ))}
-            </Select>
-          </PopupTd>
-          <PopupTd />
-        </>
-      ) : (
-        <PopupTd colSpan={4}>
-          <ButtonSecondary onClick={handleDisplayNewRowSelection}>Choose Attribute</ButtonSecondary>
-        </PopupTd>
-      )}
-    </Tr>
+              Add New Row
+            </ButtonPrimary>
+          </NewRowFooterContainer>
+        }
+      />
+    </>
   )
 }
 

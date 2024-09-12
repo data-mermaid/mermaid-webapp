@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import theme from '../../../../theme'
 import { Table, Tr, Th, Td } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
-import { inputTextareaSelectStyles } from '../../../generic/form'
 
 export const Footer = styled.div`
   display: flex;
@@ -82,9 +81,17 @@ export const PopupTdForRadio = styled(PopupTd)`
   width: 15px;
 `
 
-export const PopupInputAutocompleteContainer = styled.div`
-  ${inputTextareaSelectStyles}
-  padding: 0;
+export const NewRowContainer = styled.div`
+  display: flex;
+  gap: ${theme.spacing.large};
+`
+
+export const NewRowFooterContainer = styled.div`
+  justify-self: right;
+`
+
+export const NewRowLabel = styled.label`
+  font-weight: bold;
 `
 
 export const MapResetButton = styled.button`

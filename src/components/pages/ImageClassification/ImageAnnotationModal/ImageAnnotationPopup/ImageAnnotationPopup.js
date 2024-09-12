@@ -6,7 +6,7 @@ import { PopupSubTh, PopupTable } from '../ImageAnnotationModal.styles'
 import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import ExistingRows from './ExistingRows'
 import ClassifierGuesses from './ClassifierGuesses'
-// import NewRow from './NewRow'
+import NewRow from './NewRow'
 
 const SectionHeader = ({ title }) => (
   <Tr>
@@ -18,7 +18,7 @@ const ImageAnnotationPopup = ({
   dataToReview,
   setDataToReview,
   pointId,
-  // databaseSwitchboardInstance,
+  databaseSwitchboardInstance,
   getBenthicAttributeLabel,
   getGrowthFormLabel,
 }) => {
@@ -56,8 +56,6 @@ const ImageAnnotationPopup = ({
           getBenthicAttributeLabel={getBenthicAttributeLabel}
           getGrowthFormLabel={getGrowthFormLabel}
         />
-        {/* TODO: Functionality for this is likely to change. */}
-        {/* <SectionHeader title="New row" />
         <NewRow
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
@@ -65,7 +63,7 @@ const ImageAnnotationPopup = ({
           selectedRadioOption={selectedRadioOption}
           setSelectedRadioOption={setSelectedRadioOption}
           databaseSwitchboardInstance={databaseSwitchboardInstance}
-        /> */}
+        />
       </tbody>
     </PopupTable>
   )
