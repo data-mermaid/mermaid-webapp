@@ -86,3 +86,16 @@ export const PopupInputAutocompleteContainer = styled.div`
   ${inputTextareaSelectStyles}
   padding: 0;
 `
+
+export const MapResetButton = styled.button`
+  position: absolute;
+  top: 75px;
+  left: 10px;
+  z-index: 1;
+  padding: 2px 7px; // don't like specific values but need to match maplibre zoom buttons
+  cursor: pointer;
+  border: none;
+  border-radius: ${theme.spacing.borderMedium};
+  background-color: ${theme.color.white};
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1); // copy maplibre button shadow
+`

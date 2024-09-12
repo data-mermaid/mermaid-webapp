@@ -6,10 +6,12 @@ import {
   imageClassificationPointPropType,
   imageClassificationResponsePropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { IconReset } from '../../../icons'
 import {
   ImageAnnotationMapContainer,
   ImageAnnotationMapWrapper,
   ImageAnnotationPopupContainer,
+  MapResetButton,
 } from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 
@@ -35,6 +37,16 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
   COLORS.unconfirmed,
 ]
 
+const zoomControl = new maplibregl.NavigationControl({ showCompass: false })
+
+const flyToDefaultView = (map) =>
+  map.current.flyTo({ center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM, duration: 500 })
+
+const getImageScale = (dataToReview) => {
+  const longerSide = Math.max(dataToReview.original_image_width, dataToReview.original_image_height)
+  return longerSide > MAX_DIMENSION ? MAX_DIMENSION / longerSide : 1
+}
+
 // HACK: MapLibre's unproject() (used to get pixel coords) doesn't let you pass zoom as parameter.
 // So to ensure that our points remain in the same position we:
 // 1. store current lnglat/zoom, 2. reset map lnglat/zoom to default,
@@ -46,11 +58,6 @@ const hackTemporarilySetMapToDefaultPosition = (map) => {
 const hackResetMapToCurrentPosition = (map, currentZoom, currentCenter) => {
   map.current.setZoom(currentZoom)
   map.current.setCenter(currentCenter)
-}
-
-const getImageScale = (dataToReview) => {
-  const longerSide = Math.max(dataToReview.original_image_width, dataToReview.original_image_height)
-  return longerSide > MAX_DIMENSION ? MAX_DIMENSION / longerSide : 1
 }
 
 const ImageAnnotationModalMap = ({
@@ -132,9 +139,12 @@ const ImageAnnotationModalMap = ({
       container: mapContainer.current,
       center: DEFAULT_CENTER,
       zoom: DEFAULT_ZOOM,
+      minZoom: DEFAULT_ZOOM,
       renderWorldCopies: false, // prevents the image from repeating
       dragRotate: false,
     })
+
+    map.current.addControl(zoomControl, 'top-left')
 
     const bounds = map.current.getBounds()
 
@@ -303,6 +313,9 @@ const ImageAnnotationModalMap = ({
           />
         </ImageAnnotationPopupContainer>
       ) : null}
+      <MapResetButton type="button" onClick={() => flyToDefaultView(map)}>
+        <IconReset />
+      </MapResetButton>
     </ImageAnnotationMapWrapper>
   )
 }
