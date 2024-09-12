@@ -32,10 +32,28 @@ export const LoadingContainer = styled.div`
   width: 100%;
 `
 
+export const ImageAnnotationModalContainer = styled.div`
+  display: flex;
+`
+
+export const ImageAnnotationMapWrapper = styled.div`
+  position: relative;
+`
+
 export const ImageAnnotationMapContainer = styled.div`
   width: ${({ $width }) => `${$width}px`};
   height: ${({ $height }) => `${$height}px`};
   margin-top: '2rem';
+`
+
+export const TableWithNoMinWidth = styled(Table)`
+  min-width: unset;
+`
+
+export const ImageAnnotationPopupContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
 `
 
 export const TrWithBorderStyling = styled(Tr)`
