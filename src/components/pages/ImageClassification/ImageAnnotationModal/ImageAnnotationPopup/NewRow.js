@@ -77,9 +77,7 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
     }, [])
 
     const updatedPoints = dataToReview.points.map((point) =>
-      point.id === selectedPoint.id
-        ? { ...point, is_unclassified: false, annotations: updatedAnnotations }
-        : point,
+      point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
     )
 
     setDataToReview({ ...dataToReview, points: updatedPoints })
@@ -106,9 +104,7 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
     const updatedAnnotations = [annotationToAdd, ...resetAnnotationsForPoint]
 
     const updatedPoints = dataToReview.points.map((point) =>
-      point.id === selectedPoint.id
-        ? { ...point, is_unclassified: false, annotations: updatedAnnotations }
-        : point,
+      point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
     )
 
     setDataToReview({ ...dataToReview, points: updatedPoints })

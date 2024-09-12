@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tr, Th, Td } from '../../../generic/Table/table'
-import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
-import { IconClose } from '../../../icons'
+import { ButtonPrimary } from '../../../generic/buttons'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { TableWithNoMinWidth, TrWithBorderStyling } from './ImageAnnotationModal.styles'
 
@@ -15,9 +14,7 @@ const ImageAnnotationModalTable = ({
   setSelectedPoints,
 }) => {
   const [selectedRowIndex, setSelectedRowIndex] = useState()
-  const classifiedPoints = points.filter(
-    ({ is_unclassified, annotations }) => !is_unclassified && annotations.length > 0,
-  )
+  const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
   const tableData = Object.groupBy(
     classifiedPoints,
     ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
@@ -35,24 +32,6 @@ const ImageAnnotationModalTable = ({
       setSelectedRowIndex(index)
       setSelectedPoints(rowData)
     }
-  }
-
-  const handleRowDelete = (e, rowData) => {
-    e.stopPropagation()
-
-    const updatedPoints = points.map((point) => {
-      const isPointInRow = rowData.some((pointInRow) => pointInRow.id === point.id)
-      if (isPointInRow) {
-        point.is_unclassified = true
-      }
-
-      return point
-    })
-
-    setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
-    setSelectedRowIndex()
-    setSelectedPoints([])
-    setHighlightedPoints([])
   }
 
   const handleRowConfirm = (e, rowData) => {
@@ -83,7 +62,6 @@ const ImageAnnotationModalTable = ({
           <Th>Growth Form</Th>
           <Th align="right">Number of Points</Th>
           <Th />
-          <Th />
         </Tr>
       </thead>
       <tbody>
@@ -108,11 +86,6 @@ const ImageAnnotationModalTable = ({
                   Confirm
                 </ButtonPrimary>
               )}
-            </Td>
-            <Td align="center">
-              <ButtonCaution type="button" onClick={(e) => handleRowDelete(e, tableData[row])}>
-                <IconClose />
-              </ButtonCaution>
             </Td>
           </TrWithBorderStyling>
         ))}

@@ -8,8 +8,7 @@ import {
   imageClassificationResponsePropType,
 } from '../../../../../App/mermaidData/mermaidDataProptypes'
 
-const isClassified = ({ is_unclassified, annotations }) =>
-  !is_unclassified && annotations.length > 0
+const isClassified = ({ annotations }) => annotations.length > 0
 
 const isAClassifierGuessOfSelectedPoint = (annotations, benthic_attribute, growth_form) =>
   annotations.some(
@@ -80,9 +79,7 @@ const ExistingRows = ({
     const updatedAnnotations = [annotationToAdd, ...resetAnnotationsForPoint]
 
     const updatedPoints = dataToReview.points.map((point) =>
-      point.id === selectedPoint.id
-        ? { ...point, is_unclassified: false, annotations: updatedAnnotations }
-        : point,
+      point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
     )
     setDataToReview({ ...dataToReview, points: updatedPoints })
   }
