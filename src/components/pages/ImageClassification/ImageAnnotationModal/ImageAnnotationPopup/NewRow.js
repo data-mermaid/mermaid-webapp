@@ -15,6 +15,15 @@ import Modal from '../../../../generic/Modal/Modal'
 import InputAutocomplete from '../../../../generic/InputAutocomplete'
 import { NewRowContainer, NewRowFooterContainer, NewRowLabel } from '../ImageAnnotationModal.styles'
 
+// TODO: Place this in a shared folder since used twice?
+const isAClassifierGuessOfSelectedPoint = (annotations, benthic_attribute, growth_form) =>
+  annotations.some(
+    (annotation) =>
+      annotation.is_machine_created &&
+      annotation.benthic_attribute === benthic_attribute &&
+      annotation.growth_form === growth_form,
+  )
+
 const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchboardInstance }) => {
   const [shouldDisplayModal, setShouldDisplayModal] = useState(false)
   const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
@@ -45,10 +54,40 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
     setShouldDisplayModal(false)
   }
 
-  const addNewAnnotation = () => {
-    // TODO: If the selected BA_GR is a classifier guess, use that instead
+  const selectClassifierGuessAsConfirmedAnnotation = () => {
+    const updatedAnnotations = selectedPoint.annotations.reduce((acc, currentAnnotation) => {
+      const { benthic_attribute, growth_form, is_machine_created } = currentAnnotation
 
-    // Only want classifier guesses, and want to them unconfirmed.
+      // only want classifier guesses
+      if (!is_machine_created) {
+        return acc
+      }
+
+      // Move the matching classifier guess to front of array and confirm. Unconfirm the rest.
+      if (
+        benthic_attribute === selectedBenthicAttr &&
+        growth_form === (selectedGrowthForm || null)
+      ) {
+        acc.unshift({ ...currentAnnotation, is_confirmed: true })
+      } else {
+        acc.push({ ...currentAnnotation, is_confirmed: false })
+      }
+
+      return acc
+    }, [])
+
+    const updatedPoints = dataToReview.points.map((point) =>
+      point.id === selectedPoint.id
+        ? { ...point, is_unclassified: false, annotations: updatedAnnotations }
+        : point,
+    )
+
+    setDataToReview({ ...dataToReview, points: updatedPoints })
+    handleCloseModal()
+  }
+
+  const addNewAnnotation = () => {
+    // Only want classifier guesses, and want them unconfirmed.
     const resetAnnotationsForPoint = selectedPoint.annotations.reduce((acc, currentAnnotation) => {
       if (currentAnnotation.is_machine_created) {
         acc.push({ ...currentAnnotation, is_confirmed: false })
@@ -71,8 +110,23 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
         ? { ...point, is_unclassified: false, annotations: updatedAnnotations }
         : point,
     )
+
     setDataToReview({ ...dataToReview, points: updatedPoints })
     handleCloseModal()
+  }
+
+  const handleAddNewRowClick = () => {
+    if (
+      isAClassifierGuessOfSelectedPoint(
+        selectedPoint.annotations,
+        selectedBenthicAttr,
+        selectedGrowthForm || null,
+      )
+    ) {
+      selectClassifierGuessAsConfirmedAnnotation()
+    } else {
+      addNewAnnotation()
+    }
   }
 
   return (
@@ -132,7 +186,11 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
             <ButtonSecondary type="button" onClick={handleCloseModal}>
               Cancel
             </ButtonSecondary>
-            <ButtonPrimary type="button" disabled={!selectedBenthicAttr} onClick={addNewAnnotation}>
+            <ButtonPrimary
+              type="button"
+              disabled={!selectedBenthicAttr}
+              onClick={handleAddNewRowClick}
+            >
               Add New Row
             </ButtonPrimary>
           </NewRowFooterContainer>
