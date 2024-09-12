@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Tr } from '../../../../generic/Table/table'
 import { PopupTd, PopupTdForRadio } from '../ImageAnnotationModal.styles'
@@ -30,6 +30,8 @@ const ExistingRows = ({
   getBenthicAttributeLabel,
   getGrowthFormLabel,
 }) => {
+  const [selectedExistingRow, setSelectedExistingRow] = useState('')
+
   const existingRowDropdownOptions = dataToReview.points.reduce((acc, currentPoint) => {
     const { benthic_attribute, growth_form } = currentPoint.annotations[0]
     const value = benthic_attribute + '_' + growth_form
@@ -48,14 +50,13 @@ const ExistingRows = ({
     return acc
   }, [])
 
-  const [selectedExistingRow, setSelectedExistingRow] = useState(() => {
-    const rowKeyForPoint =
-      selectedPoint.annotations[0].benthic_attribute +
-      '_' +
-      selectedPoint.annotations[0].growth_form
+  const _updateSelectedRow = useEffect(() => {
+    const { benthic_attribute, growth_form } = selectedPoint.annotations[0]
+    const rowKeyForPoint = benthic_attribute + '_' + growth_form
     const isPointInARow = existingRowDropdownOptions.some((row) => rowKeyForPoint === row.value)
-    return isPointInARow ? rowKeyForPoint : ''
-  })
+
+    setSelectedExistingRow(isPointInARow ? rowKeyForPoint : '')
+  }, [selectedPoint.annotations, existingRowDropdownOptions])
 
   const addExistingAnnotation = (existingAnnotation) => {
     const [benthic_attribute, growth_form] = existingAnnotation.split('_')
