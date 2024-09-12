@@ -200,8 +200,6 @@ NewRow.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  selectedRadioOption: PropTypes.string.isRequired,
-  setSelectedRadioOption: PropTypes.func.isRequired,
   databaseSwitchboardInstance: PropTypes.object.isRequired,
 }
 

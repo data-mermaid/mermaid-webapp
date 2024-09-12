@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Tr, Th } from '../../../../generic/Table/table'
 import { imageClassificationResponsePropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
@@ -22,8 +22,6 @@ const ImageAnnotationPopup = ({
   getBenthicAttributeLabel,
   getGrowthFormLabel,
 }) => {
-  const [selectedRadioOption, setSelectedRadioOption] = useState('')
-
   const selectedPoint = dataToReview.points.find((point) => point.id === pointId)
 
   return (
@@ -41,8 +39,6 @@ const ImageAnnotationPopup = ({
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
           setDataToReview={setDataToReview}
-          selectedRadioOption={selectedRadioOption}
-          setSelectedRadioOption={setSelectedRadioOption}
           getBenthicAttributeLabel={getBenthicAttributeLabel}
           getGrowthFormLabel={getGrowthFormLabel}
         />
@@ -51,8 +47,6 @@ const ImageAnnotationPopup = ({
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
           setDataToReview={setDataToReview}
-          selectedRadioOption={selectedRadioOption}
-          setSelectedRadioOption={setSelectedRadioOption}
           getBenthicAttributeLabel={getBenthicAttributeLabel}
           getGrowthFormLabel={getGrowthFormLabel}
         />
@@ -60,8 +54,6 @@ const ImageAnnotationPopup = ({
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
           setDataToReview={setDataToReview}
-          selectedRadioOption={selectedRadioOption}
-          setSelectedRadioOption={setSelectedRadioOption}
           databaseSwitchboardInstance={databaseSwitchboardInstance}
         />
       </tbody>

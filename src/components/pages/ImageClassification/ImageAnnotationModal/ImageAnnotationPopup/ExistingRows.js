@@ -24,8 +24,6 @@ const ExistingRows = ({
   selectedPoint,
   dataToReview,
   setDataToReview,
-  selectedRadioOption,
-  setSelectedRadioOption,
   getBenthicAttributeLabel,
   getGrowthFormLabel,
 }) => {
@@ -92,9 +90,11 @@ const ExistingRows = ({
           id="existing-row-point-selection"
           name="existing-row-point-selection"
           value="existing-row"
-          checked={selectedRadioOption === 'existing-row'}
+          checked={
+            `${selectedPoint.annotations[0].benthic_attribute}_${selectedPoint.annotations[0].growth_form}` ===
+            selectedExistingRow
+          }
           onChange={() => {
-            setSelectedRadioOption('existing-row')
             addExistingAnnotation(selectedExistingRow)
           }}
         />
@@ -105,7 +105,6 @@ const ExistingRows = ({
           value={selectedExistingRow}
           onChange={(e) => {
             setSelectedExistingRow(e.target.value)
-            setSelectedRadioOption('existing-row')
             addExistingAnnotation(e.target.value)
           }}
         >
@@ -124,8 +123,6 @@ ExistingRows.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  selectedRadioOption: PropTypes.string.isRequired,
-  setSelectedRadioOption: PropTypes.func.isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
   getGrowthFormLabel: PropTypes.func.isRequired,
 }

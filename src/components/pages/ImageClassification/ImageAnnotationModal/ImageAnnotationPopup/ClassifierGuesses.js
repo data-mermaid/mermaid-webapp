@@ -17,12 +17,19 @@ const confirmFirstAnnotationAndUnconfirmRest = (annotation, i) => {
   annotation.is_confirmed = i === 0
 }
 
+const isAnnotationSelected = (annotation, selectedPoint) => {
+  const { benthic_attribute, growth_form } = annotation
+  const selectedAnnotation = selectedPoint.annotations[0]
+  return (
+    benthic_attribute === selectedAnnotation.benthic_attribute &&
+    growth_form === selectedAnnotation.growth_form
+  )
+}
+
 const ClassifierGuesses = ({
   selectedPoint,
   dataToReview,
   setDataToReview,
-  selectedRadioOption,
-  setSelectedRadioOption,
   getBenthicAttributeLabel,
   getGrowthFormLabel,
 }) => {
@@ -54,9 +61,8 @@ const ClassifierGuesses = ({
           id={`${annotation.benthic_attribute}_${annotation.growth_form}`}
           name={`${annotation.benthic_attribute}_${annotation.growth_form}`}
           value={`classifier-guess-${i}`}
-          checked={selectedRadioOption === `classifier-guess-${i}`}
+          checked={isAnnotationSelected(annotation, selectedPoint)}
           onChange={() => {
-            setSelectedRadioOption(`classifier-guess-${i}`)
             selectClassifierGuess(annotation.id)
           }}
         />
@@ -70,8 +76,6 @@ const ClassifierGuesses = ({
 
 ClassifierGuesses.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
-  selectedRadioOption: PropTypes.string.isRequired,
-  setSelectedRadioOption: PropTypes.func.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
