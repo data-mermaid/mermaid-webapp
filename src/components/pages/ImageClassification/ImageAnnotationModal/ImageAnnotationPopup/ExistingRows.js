@@ -14,12 +14,12 @@ const isClassified = ({ is_unclassified, annotations }) =>
 const isAClassifierGuessOfSelectedPoint = (annotations, benthic_attribute, growth_form) =>
   annotations.some(
     (annotation) =>
-      !!annotation.is_machine_created &&
+      annotation.is_machine_created &&
       annotation.benthic_attribute === benthic_attribute &&
       annotation.growth_form === growth_form,
   )
 
-const isAlreadyPushed = (acc, value) => acc.some((option) => option.value === value)
+const isOptionAlreadyAdded = (acc, value) => acc.some((option) => option.value === value)
 
 const ExistingRows = ({
   selectedPoint,
@@ -39,7 +39,7 @@ const ExistingRows = ({
 
     if (
       isClassified(currentPoint) &&
-      !isAlreadyPushed(acc, value) &&
+      !isOptionAlreadyAdded(acc, value) &&
       !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, benthic_attribute, growth_form)
     ) {
       acc.push({ label, value })
@@ -63,8 +63,7 @@ const ExistingRows = ({
     // Only want classifier guesses, and want to them unconfirmed.
     const resetAnnotationsForPoint = selectedPoint.annotations.reduce((acc, currentAnnotation) => {
       if (currentAnnotation.is_machine_created) {
-        currentAnnotation.is_confirmed = false
-        acc.push(currentAnnotation)
+        acc.push({ ...currentAnnotation, is_confirmed: false })
       }
 
       return acc
@@ -74,6 +73,7 @@ const ExistingRows = ({
       benthic_attribute,
       growth_form: growth_form === 'null' ? null : growth_form,
       is_confirmed: true,
+      is_machine_created: false,
     }
 
     const updatedAnnotations = [annotationToAdd, ...resetAnnotationsForPoint]

@@ -23,15 +23,7 @@ import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 // Annotations that are "confirmed" get top priority, with the other annotations being sorted by score from the API.
 // When a user selects a new annotation for that point, it is pushed to the first position in the annotations array.
 
-const prioritizeConfirmedAnnotations = (a, b) => {
-  if (a.is_confirmed && !b.is_confirmed) {
-    return -1
-  }
-  if (!a.is_confirmed && b.is_confirmed) {
-    return 1
-  }
-  return 0
-}
+const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
 const ImageAnnotationModal = ({ imageId, setImageId }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()

@@ -9,16 +9,12 @@ import {
 
 const moveAnnotationToFront = (array, index) => {
   const newArray = [...array]
-  newArray.unshift(newArray.splice(index, 1)[0])
-  return newArray
+  const [movedAnnotation] = newArray.splice(index, 1)
+  return [movedAnnotation, ...newArray]
 }
 
 const confirmFirstAnnotationAndUnconfirmRest = (annotation, i) => {
-  if (i === 0) {
-    annotation.is_confirmed = true
-  } else {
-    annotation.is_confirmed = false
-  }
+  annotation.is_confirmed = i === 0
 }
 
 const ClassifierGuesses = ({
