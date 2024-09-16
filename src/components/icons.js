@@ -44,6 +44,7 @@ import pencilIcon from '@iconify-icons/mdi/pencil'
 import playButton from '@iconify-icons/mdi/play-circle-outline'
 import plus from '@iconify-icons/mdi/plus'
 import React from 'react'
+import Refresh from '@iconify-icons/mdi/refresh'
 import send from '@iconify-icons/mdi/send'
 import shareVariantOutline from '@iconify-icons/mdi/share-variant-outline'
 import sortAscending from '@iconify-icons/mdi/sort-ascending'
@@ -101,6 +102,7 @@ export const IconPen = (props) => <InlineIcon icon={pencilIcon} {...props} />
 export const IconPlus = (props) => <InlineIcon icon={plus} {...props} />
 export const IconRefresh = (props) => <InlineIcon icon={sync} {...props} />
 export const IconRequired = (props) => <InlineIcon icon={asterisk} {...props} />
+export const IconReset = (props) => <InlineIcon icon={Refresh} {...props} />
 export const IconSave = (props) => <InlineIcon icon={contentSave} {...props} />
 export const IconSend = (props) => <InlineIcon icon={send} {...props} />
 export const IconSharing = (props) => <InlineIcon icon={shareVariantOutline} {...props} />

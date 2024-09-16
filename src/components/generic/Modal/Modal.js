@@ -155,33 +155,31 @@ const Modal = ({
     return () => window.removeEventListener('keydown', close)
   }, [onDismiss, allowCloseWithEscapeKey])
 
-  return (
-    isOpen && (
-      <StyledDialogOverlay aria-label={`${title} Modal`}>
-        <StyledDialog
-          role="dialog"
-          aria-labelledby="modal-title"
-          aria-describedby="modal-content"
-          maxWidth={maxWidth}
-          padding={padding}
-        >
-          <ModalTitle>
-            <h2 id="modal-title">{title}</h2>
-            {displayCloseIcon ? (
-              <CloseButton type="button" className="close-button" onClick={onDismiss}>
-                <IconClose aria-label="close" />
-              </CloseButton>
-            ) : null}
-          </ModalTitle>
-          <ModalToolbar>{toolbarContent}</ModalToolbar>
-          <ModalContent contentOverflowIsVisible={contentOverflowIsVisible} id="modal-content">
-            {mainContent}
-          </ModalContent>
-          <ModalFooter>{footerContent}</ModalFooter>
-        </StyledDialog>
-      </StyledDialogOverlay>
-    )
-  )
+  return isOpen ? (
+    <StyledDialogOverlay aria-label={`${title} Modal`}>
+      <StyledDialog
+        role="dialog"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-content"
+        maxWidth={maxWidth}
+        padding={padding}
+      >
+        <ModalTitle>
+          <h2 id="modal-title">{title}</h2>
+          {displayCloseIcon ? (
+            <CloseButton type="button" className="close-button" onClick={onDismiss}>
+              <IconClose aria-label="close" />
+            </CloseButton>
+          ) : null}
+        </ModalTitle>
+        <ModalToolbar>{toolbarContent}</ModalToolbar>
+        <ModalContent contentOverflowIsVisible={contentOverflowIsVisible} id="modal-content">
+          {mainContent}
+        </ModalContent>
+        <ModalFooter>{footerContent}</ModalFooter>
+      </StyledDialog>
+    </StyledDialogOverlay>
+  ) : undefined
 }
 
 Modal.propTypes = {

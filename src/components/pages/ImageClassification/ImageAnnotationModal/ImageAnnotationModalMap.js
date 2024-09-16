@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { createRoot } from 'react-dom/client'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
@@ -7,12 +6,21 @@ import {
   imageClassificationPointPropType,
   imageClassificationResponsePropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { ImageAnnotationMapContainer } from './ImageAnnotationModal.styles'
-import ImageAnnotationPopup from './ImageAnnotationPopup'
+import { IconReset } from '../../../icons'
+import {
+  ImageAnnotationMapContainer,
+  ImageAnnotationMapWrapper,
+  ImageAnnotationPopupContainer,
+  MapResetButton,
+} from './ImageAnnotationModal.styles'
+import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 
 // TODO: Assumes that the max dimension for height and width are the same.
 // This can change depending on final implementation, hardcoded for now.
-const MAX_DIMENSION = 1000
+const MAX_DIMENSION = 900
+
+const DEFAULT_CENTER = [0, 0] // this value doesn't matter, default to null island
+const DEFAULT_ZOOM = 2 // needs to be > 1 otherwise bounds become > 180 and > 85
 
 const POLYGON_LINE_WIDTH = 5
 const SELECTED_POLYGON_LINE_WIDTH = 10
@@ -29,13 +37,32 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
   COLORS.unconfirmed,
 ]
 
+const zoomControl = new maplibregl.NavigationControl({ showCompass: false })
+
+const flyToDefaultView = (map) =>
+  map.current.flyTo({ center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM, duration: 500 })
+
 const getImageScale = (dataToReview) => {
   const longerSide = Math.max(dataToReview.original_image_width, dataToReview.original_image_height)
   return longerSide > MAX_DIMENSION ? MAX_DIMENSION / longerSide : 1
 }
 
+// HACK: MapLibre's unproject() (used to get pixel coords) doesn't let you pass zoom as parameter.
+// So to ensure that our points remain in the same position we:
+// 1. store current lnglat/zoom, 2. reset map lnglat/zoom to default,
+// 3. call unproject (to get pixel coords) 4. set back to current lnglat/zoom
+const hackTemporarilySetMapToDefaultPosition = (map) => {
+  map.current.setZoom(DEFAULT_ZOOM)
+  map.current.setCenter(DEFAULT_CENTER)
+}
+const hackResetMapToCurrentPosition = (map, currentZoom, currentCenter) => {
+  map.current.setZoom(currentZoom)
+  map.current.setCenter(currentCenter)
+}
+
 const ImageAnnotationModalMap = ({
   dataToReview,
+  setDataToReview,
   highlightedPoints,
   selectedPoints,
   getBenthicAttributeLabel,
@@ -45,9 +72,9 @@ const ImageAnnotationModalMap = ({
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
+  const [editPointId, setEditPointId] = useState()
   const imageScale = getImageScale(dataToReview)
   const halfPatchSize = dataToReview.patch_size / 2
-  const editPointPopup = new maplibregl.Popup({ closeButton: false })
   const pointLabelPopup = new maplibregl.Popup({
     anchor: 'center',
     closeButton: false,
@@ -82,8 +109,8 @@ const ImageAnnotationModalMap = ({
             id: point.id,
             benthicAttributeId: point.annotations[0]?.benthic_attribute,
             growthFormId: point.annotations[0]?.growth_form,
-            isUnclassified: !!point.is_unclassified || !point.annotations.length,
-            isConfirmed: point.annotations[0]?.is_confirmed,
+            isUnclassified: !point.annotations.length,
+            isConfirmed: !!point.annotations[0]?.is_confirmed,
           },
           geometry: {
             type: 'Polygon',
@@ -110,11 +137,14 @@ const ImageAnnotationModalMap = ({
 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
-      center: [0, 0], // this value doesn't matter, default to null island
-      zoom: 2, // needs to be > 1 otherwise bounds become > 180 and > 85
+      center: DEFAULT_CENTER,
+      zoom: DEFAULT_ZOOM,
+      minZoom: DEFAULT_ZOOM,
       renderWorldCopies: false, // prevents the image from repeating
       dragRotate: false,
     })
+
+    map.current.addControl(zoomControl, 'top-left')
 
     const bounds = map.current.getBounds()
 
@@ -194,25 +224,19 @@ const ImageAnnotationModalMap = ({
     // Display Edit Point Popup on point click
     map.current.on('click', 'patches-fill-layer', ({ features }) => {
       const [{ geometry, properties }] = features
-      map.current.getCanvas().style.cursor = 'pointer'
-      pointLabelPopup.remove()
+      const topLeft = geometry.coordinates[0][0]
+      const bottomRight = geometry.coordinates[0][2]
+      const bounds = new maplibregl.LngLatBounds(topLeft, bottomRight)
+      map.current.fitBounds(bounds, { padding: 300 })
+      setEditPointId(properties.id)
+    })
 
-      const popupNode = document.createElement('div')
-      const root = createRoot(popupNode)
-      root.render(
-        <ImageAnnotationPopup
-          dataToReview={dataToReview}
-          pointId={properties.id}
-          databaseSwitchboardInstance={databaseSwitchboardInstance}
-          getBenthicAttributeLabel={getBenthicAttributeLabel}
-          getGrowthFormLabel={getGrowthFormLabel}
-        />,
-      )
-      editPointPopup
-        .setLngLat(geometry.coordinates[0][0])
-        .setMaxWidth('none')
-        .setDOMContent(popupNode)
-        .addTo(map.current)
+    // Remove Edit Point Popup when user clicks away
+    map.current.on('click', ({ point }) => {
+      const [patches] = map.current.queryRenderedFeatures(point, { layers: ['patches-fill-layer'] })
+      if (!patches) {
+        setEditPointId()
+      }
     })
 
     // eslint-disable-next-line
@@ -223,7 +247,14 @@ const ImageAnnotationModalMap = ({
       return
     }
 
+    const currentZoom = map.current.getZoom()
+    const currentCenter = map.current.getCenter()
+
+    hackTemporarilySetMapToDefaultPosition(map)
+
     map.current.getSource('patches').setData(getPointsGeojson())
+
+    hackResetMapToCurrentPosition(map, currentZoom, currentCenter)
   }, [dataToReview, hasMapLoaded, getPointsGeojson])
 
   const _highlightPoints = useEffect(() => {
@@ -264,18 +295,34 @@ const ImageAnnotationModalMap = ({
   }, [highlightedPoints, selectedPoints, hasMapLoaded])
 
   return (
-    <>
+    <ImageAnnotationMapWrapper>
       <ImageAnnotationMapContainer
         ref={mapContainer}
         $width={dataToReview.original_image_width * imageScale}
         $height={dataToReview.original_image_height * imageScale}
       />
-    </>
+      {editPointId ? (
+        <ImageAnnotationPopupContainer>
+          <ImageAnnotationPopup
+            dataToReview={dataToReview}
+            setDataToReview={setDataToReview}
+            pointId={editPointId}
+            databaseSwitchboardInstance={databaseSwitchboardInstance}
+            getBenthicAttributeLabel={getBenthicAttributeLabel}
+            getGrowthFormLabel={getGrowthFormLabel}
+          />
+        </ImageAnnotationPopupContainer>
+      ) : null}
+      <MapResetButton type="button" onClick={() => flyToDefaultView(map)}>
+        <IconReset />
+      </MapResetButton>
+    </ImageAnnotationMapWrapper>
   )
 }
 
 ImageAnnotationModalMap.propTypes = {
   dataToReview: imageClassificationResponsePropType.isRequired,
+  setDataToReview: PropTypes.func.isRequired,
   highlightedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
   selectedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
   databaseSwitchboardInstance: PropTypes.object.isRequired,
