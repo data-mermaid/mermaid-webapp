@@ -234,16 +234,16 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
                     {/* Subrows based on imageAnnotationData */}
                     {Object.keys(imageAnnotationData).map((key, idx) => {
-                      const imageAnnotations = imageAnnotationData[key]
+                      const imageAnnotation = imageAnnotationData[key]
 
-                      const confirmedCount = imageAnnotations.reduce((count, item) => {
+                      const confirmedCount = imageAnnotation.reduce((count, item) => {
                         if (item.annotations[0].is_confirmed) {
                           return count + 1
                         }
                         return count
                       }, 0)
 
-                      const unconfirmedCount = imageAnnotations.reduce((count, item) => {
+                      const unconfirmedCount = imageAnnotation.reduce((count, item) => {
                         if (!item.annotations[0].is_confirmed) {
                           return count + 1
                         }
