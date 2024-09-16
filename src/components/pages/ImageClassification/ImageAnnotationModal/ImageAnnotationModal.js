@@ -16,6 +16,7 @@ import {
 } from './ImageAnnotationModal.styles'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
+import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 
 // Context: Strategy for the Image Annotation Modal is to use the 1st annotation in the array for each point
 // as the "current" annotation. The 1st annotation is used to group points into rows for the table,
@@ -59,7 +60,9 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
     // eslint-disable-next-line
   }, [])
 
-  const handleCloseModal = () => {
+  const handleCloseModal = () => setImageId()
+
+  const handleSaveChanges = () => {
     databaseSwitchboardInstance
       .saveAnnotationsForImage(projectId, imageId, dataToReview.points)
       .then(() => {
@@ -135,7 +138,10 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
               Unclassified
             </LegendItem>
           </Legend>
-          <button onClick={handleCloseModal}>Close</button>
+          <div>
+            <ButtonSecondary onClick={handleCloseModal}>Cancel</ButtonSecondary>
+            <ButtonPrimary onClick={handleSaveChanges}>Save Changes</ButtonPrimary>
+          </div>
         </Footer>
       }
     />
