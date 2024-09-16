@@ -24,8 +24,6 @@ const ExistingRows = ({
   selectedPoint,
   dataToReview,
   setDataToReview,
-  selectedRadioOption,
-  setSelectedRadioOption,
   getBenthicAttributeLabel,
   getGrowthFormLabel,
 }) => {
@@ -49,18 +47,18 @@ const ExistingRows = ({
     return acc
   }, [])
 
-  const _updateSelectedRow = useEffect(() => {
+  const _updateSelectedRowOnPointAnnotationChange = useEffect(() => {
     const { benthic_attribute, growth_form } = selectedPoint.annotations[0]
     const rowKeyForPoint = benthic_attribute + '_' + growth_form
     const isPointInARow = existingRowDropdownOptions.some((row) => rowKeyForPoint === row.value)
 
-    setSelectedExistingRow(isPointInARow ? rowKeyForPoint : '')
+    setSelectedExistingRow((prevState) => (isPointInARow ? rowKeyForPoint : prevState))
   }, [selectedPoint.annotations, existingRowDropdownOptions])
 
   const addExistingAnnotation = (existingAnnotation) => {
     const [benthic_attribute, growth_form] = existingAnnotation.split('_')
 
-    // Only want classifier guesses, and want to them unconfirmed.
+    // Only want classifier guesses, and want them unconfirmed.
     const resetAnnotationsForPoint = selectedPoint.annotations.reduce((acc, currentAnnotation) => {
       if (currentAnnotation.is_machine_created) {
         acc.push({ ...currentAnnotation, is_confirmed: false })
@@ -92,23 +90,23 @@ const ExistingRows = ({
           id="existing-row-point-selection"
           name="existing-row-point-selection"
           value="existing-row"
-          checked={selectedRadioOption === 'existing-row'}
-          onChange={() => {
-            setSelectedRadioOption('existing-row')
-            addExistingAnnotation(selectedExistingRow)
-          }}
+          disabled={!selectedExistingRow}
+          checked={
+            `${selectedPoint.annotations[0].benthic_attribute}_${selectedPoint.annotations[0].growth_form}` ===
+            selectedExistingRow
+          }
+          onChange={() => addExistingAnnotation(selectedExistingRow)}
         />
       </PopupTdForRadio>
       <PopupTd colSpan={3}>
         <Select
           label="Add to existing row"
           value={selectedExistingRow}
-          onChange={(e) => {
-            setSelectedExistingRow(e.target.value)
-            setSelectedRadioOption('existing-row')
-            addExistingAnnotation(e.target.value)
-          }}
+          onChange={(e) => addExistingAnnotation(e.target.value)}
         >
+          <option value="" disabled>
+            Choose...
+          </option>
           {existingRowDropdownOptions.map((row) => (
             <option key={row.value} value={row.value}>
               {row.label}
@@ -124,8 +122,6 @@ ExistingRows.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  selectedRadioOption: PropTypes.string.isRequired,
-  setSelectedRadioOption: PropTypes.func.isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
   getGrowthFormLabel: PropTypes.func.isRequired,
 }
