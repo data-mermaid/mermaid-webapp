@@ -233,24 +233,35 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                     </Tr>
 
                     {/* Subrows based on imageAnnotationData */}
-                    {Object.keys(imageAnnotationData).map((key, idx) => (
-                      <Tr key={`${file.id}-sub-${idx}`}>
-                        <StyledTd colSpan={3} /> {/* Empty cells to indent subrow */}
-                        <StyledTd>{imageAnnotationData[key][0].annotations[0].quadrat}</StyledTd>
-                        <StyledTd>
-                          {getBenthicAttributeLabel(
-                            imageAnnotationData[key][0].annotations[0].benthic_attribute,
-                          )}
-                        </StyledTd>
-                        <StyledTd>
-                          {getGrowthFormLabel(
-                            imageAnnotationData[key][0].annotations[0].growth_form,
-                          )}
-                        </StyledTd>
-                        <StyledTd>{imageAnnotationData[key].length}</StyledTd>
-                        {/* Additional columns for subrow */}
-                      </Tr>
-                    ))}
+                    {Object.keys(imageAnnotationData).map((key, idx) => {
+                      const imageAnnotations = imageAnnotationData[key]
+
+                      const confirmedCount = imageAnnotations.reduce((count, item) => {
+                        if (item.annotations[0].is_confirmed) {
+                          return count + 1
+                        }
+                        return count
+                      }, 0)
+                      return (
+                        <Tr key={`${file.id}-sub-${idx}`}>
+                          <StyledTd colSpan={3} />
+                          <StyledTd>{imageAnnotationData[key][0].annotations[0].quadrat}</StyledTd>
+                          <StyledTd>
+                            {getBenthicAttributeLabel(
+                              imageAnnotationData[key][0].annotations[0].benthic_attribute,
+                            )}
+                          </StyledTd>
+                          <StyledTd>
+                            {getGrowthFormLabel(
+                              imageAnnotationData[key][0].annotations[0].growth_form,
+                            )}
+                          </StyledTd>
+                          <StyledTd>{confirmedCount}</StyledTd>
+                          <StyledTd></StyledTd>
+                          {/* Additional columns for subrow */}
+                        </Tr>
+                      )
+                    })}
                   </React.Fragment>
                 )
               })}
