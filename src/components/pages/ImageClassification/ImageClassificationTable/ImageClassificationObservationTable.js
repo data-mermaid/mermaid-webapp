@@ -242,6 +242,14 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                         }
                         return count
                       }, 0)
+
+                      const unconfirmedCount = imageAnnotations.reduce((count, item) => {
+                        if (!item.annotations[0].is_confirmed) {
+                          return count + 1
+                        }
+                        return count
+                      }, 0)
+
                       return (
                         <Tr key={`${file.id}-sub-${idx}`}>
                           <StyledTd colSpan={3} />
@@ -257,7 +265,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                             )}
                           </StyledTd>
                           <StyledTd>{confirmedCount}</StyledTd>
-                          <StyledTd></StyledTd>
+                          <StyledTd>{unconfirmedCount}</StyledTd>
                           {/* Additional columns for subrow */}
                         </Tr>
                       )
