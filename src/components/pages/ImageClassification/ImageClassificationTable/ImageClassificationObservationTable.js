@@ -250,8 +250,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
                       return (
                         <Tr key={`${file.id}-sub-${idx}`}>
-                          <StyledTd colSpan={3} />
-                          <StyledTd></StyledTd>
+                          <StyledTd colSpan={4} />
                           <StyledTd>
                             {getBenthicAttributeLabel(
                               imageAnnotationData[key][0].annotations[0].benthic_attribute,
