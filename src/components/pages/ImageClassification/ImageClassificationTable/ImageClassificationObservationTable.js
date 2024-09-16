@@ -93,12 +93,23 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     return matchingGrowthForm?.name ?? ''
   }
 
+  const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
+
   const _fetchImagesOnLoad = useEffect(() => {
     if (recordId && projectId) {
       databaseSwitchboardInstance
         .getAllImagesInCollectRecord(projectId, recordId, EXCLUDE_PARAMS)
         .then((response) => {
-          setImages(response.results)
+          const sortedImages = response.results.map((image) => {
+            const sortedPoints = image.points.map((point) => {
+              const sortedAnnotations = point.annotations.sort(prioritizeConfirmedAnnotations)
+
+              return { ...point, annotations: sortedAnnotations }
+            })
+            return { ...image, points: sortedPoints }
+          })
+
+          setImages(sortedImages)
         })
         .catch((error) => {
           console.error('Error fetching images:', error)
@@ -184,7 +195,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
             <tbody>
               {images.map((file, index) => {
                 const classifiedPoints = file.points.filter(
-                  ({ is_unclassified, annotations }) => !is_unclassified && annotations.length > 0,
+                  ({ annotations }) => annotations.length > 0,
                 )
 
                 const imageAnnotationData = Object.groupBy(
