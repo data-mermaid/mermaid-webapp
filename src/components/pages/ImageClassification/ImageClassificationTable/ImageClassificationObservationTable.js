@@ -72,6 +72,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId, recordId } = useParams()
   const [imagesDoneProcessing, setImagesDoneProcessing] = useState(false)
+  const [growthForms, setGrowthForms] = useState()
+  const [benthicAttributes, setBenthicAttributes] = useState()
 
   const isImageProcessed = (status) => status === 3
 
@@ -81,15 +83,54 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     }
   }
 
+  const getBenthicAttributeLabel = (benthicAttributeId) => {
+    const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
+    return matchingBenthicAttribute?.name ?? ''
+  }
+
+  const getGrowthFormLabel = (growthFormId) => {
+    const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
+    return matchingGrowthForm?.name ?? ''
+  }
+
+  const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
+
   const _fetchImagesOnLoad = useEffect(() => {
     if (recordId && projectId) {
       databaseSwitchboardInstance
         .getAllImagesInCollectRecord(projectId, recordId, EXCLUDE_PARAMS)
         .then((response) => {
-          setImages(response.results)
+          const sortedImages = response.results.map((image) => {
+            const sortedPoints = image.points.map((point) => {
+              const sortedAnnotations = point.annotations.sort(prioritizeConfirmedAnnotations)
+
+              return { ...point, annotations: sortedAnnotations }
+            })
+            return { ...image, points: sortedPoints }
+          })
+
+          setImages(sortedImages)
         })
         .catch((error) => {
           console.error('Error fetching images:', error)
+        })
+
+      databaseSwitchboardInstance
+        .getChoices()
+        .then(({ growthforms }) => {
+          setGrowthForms(growthforms.data)
+        })
+        .catch((error) => {
+          console.error('Error fetching growth forms:', error)
+        })
+
+      databaseSwitchboardInstance
+        .getBenthicAttributes()
+        .then((benthicAttributes) => {
+          setBenthicAttributes(benthicAttributes)
+        })
+        .catch((error) => {
+          console.error('Error fetching benthic attributes:', error)
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,15 +148,16 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         )
         setImages(response.results)
 
-        // Check if all images are processed
         const allProcessed = response.results.every((file) =>
           isImageProcessed(file.classification_status.status),
         )
 
         if (allProcessed) {
-          clearInterval(intervalId) // Stop polling when all images are processed
+          clearInterval(intervalId)
           setPolling(false)
           setImagesDoneProcessing(true)
+        } else {
+          setImagesDoneProcessing(false)
         }
       } catch (error) {
         console.error('Error polling images:', error)
@@ -151,42 +193,92 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
               <SubHeaderRow />
             </thead>
             <tbody>
-              {images.map((file, index) => (
-                <Tr key={index}>
-                  <StyledTd>{index + 1}</StyledTd>
-                  <TdWithHoverText
-                    data-tooltip={file.original_image_name}
-                    onClick={() => handleImageClick(file)}
-                    cursor={
-                      isImageProcessed(file.classification_status.status) ? 'pointer' : 'default'
-                    }
-                  >
-                    <Thumbnail imageUrl={file.thumbnail || file.image} />
-                  </TdWithHoverText>
-                  <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
-                  <StyledTd></StyledTd>
-                  <StyledTd></StyledTd>
-                  <StyledTd></StyledTd>
-                  <StyledTd>{file.num_confirmed}</StyledTd>
-                  <StyledTd>{file.num_unconfirmed}</StyledTd>
-                  <StyledTd>{file.num_unclassified}</StyledTd>
-                  <StyledTd></StyledTd>
-                  <StyledTd>
-                    <ButtonPrimary
-                      type="button"
-                      onClick={() => setImageId(file.id)}
-                      disabled={!isImageProcessed(file.classification_status.status)}
-                    >
-                      Review
-                    </ButtonPrimary>
-                  </StyledTd>
-                  <StyledTd>
-                    <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
-                      <IconClose aria-label="close" />
-                    </ButtonCaution>
-                  </StyledTd>
-                </Tr>
-              ))}
+              {images.map((file, index) => {
+                const classifiedPoints = file.points.filter(
+                  ({ annotations }) => annotations.length > 0,
+                )
+
+                const imageAnnotationData = Object.groupBy(
+                  classifiedPoints,
+                  ({ annotations }) =>
+                    annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
+                )
+
+                return (
+                  <React.Fragment key={index}>
+                    <Tr>
+                      <StyledTd>{index + 1}</StyledTd>
+                      <TdWithHoverText
+                        data-tooltip={file.original_image_name}
+                        onClick={() => handleImageClick(file)}
+                        cursor={
+                          isImageProcessed(file.classification_status.status)
+                            ? 'pointer'
+                            : 'default'
+                        }
+                      >
+                        <Thumbnail imageUrl={file.thumbnail || file.image} />
+                      </TdWithHoverText>
+                      <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
+                      <StyledTd>{index + 1}</StyledTd>
+                      <StyledTd></StyledTd>
+                      <StyledTd></StyledTd>
+                      <StyledTd>{file.num_confirmed}</StyledTd>
+                      <StyledTd>{file.num_unconfirmed}</StyledTd>
+                      <StyledTd>{file.num_unclassified}</StyledTd>
+                      <StyledTd></StyledTd>
+                      <StyledTd>
+                        <ButtonPrimary
+                          type="button"
+                          onClick={() => setImageId(file.id)}
+                          disabled={!isImageProcessed(file.classification_status.status)}
+                        >
+                          Review
+                        </ButtonPrimary>
+                      </StyledTd>
+                      <StyledTd>
+                        <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
+                          <IconClose aria-label="close" />
+                        </ButtonCaution>
+                      </StyledTd>
+                    </Tr>
+
+                    {/* Subrows based on imageAnnotationData */}
+                    {Object.keys(imageAnnotationData).map((key, idx) => {
+                      const { confirmedCount, unconfirmedCount } = imageAnnotationData[key].reduce(
+                        (counts, item) => {
+                          if (item.annotations[0].is_confirmed) {
+                            counts.confirmedCount += 1
+                          } else {
+                            counts.unconfirmedCount += 1
+                          }
+                          return counts
+                        },
+                        { confirmedCount: 0, unconfirmedCount: 0 },
+                      )
+
+                      return (
+                        <Tr key={`${file.id}-sub-${idx}`}>
+                          <StyledTd colSpan={4} />
+                          <StyledTd>
+                            {getBenthicAttributeLabel(
+                              imageAnnotationData[key][0].annotations[0].benthic_attribute,
+                            )}
+                          </StyledTd>
+                          <StyledTd>
+                            {getGrowthFormLabel(
+                              imageAnnotationData[key][0].annotations[0].growth_form,
+                            )}
+                          </StyledTd>
+                          <StyledTd>{confirmedCount}</StyledTd>
+                          <StyledTd>{unconfirmedCount}</StyledTd>
+                          {/* Additional columns for subrow */}
+                        </Tr>
+                      )
+                    })}
+                  </React.Fragment>
+                )
+              })}
             </tbody>
           </StickyObservationTable>
         </StyledOverflowWrapper>
