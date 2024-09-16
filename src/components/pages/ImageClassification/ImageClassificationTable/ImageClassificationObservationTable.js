@@ -209,7 +209,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                         <Thumbnail imageUrl={file.thumbnail || file.image} />
                       </TdWithHoverText>
                       <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
-                      <StyledTd></StyledTd>
+                      <StyledTd>{index + 1}</StyledTd>
                       <StyledTd></StyledTd>
                       <StyledTd></StyledTd>
                       <StyledTd>{file.num_confirmed}</StyledTd>
@@ -251,7 +251,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                       return (
                         <Tr key={`${file.id}-sub-${idx}`}>
                           <StyledTd colSpan={3} />
-                          <StyledTd>{imageAnnotationData[key][0].annotations[0].quadrat}</StyledTd>
+                          <StyledTd></StyledTd>
                           <StyledTd>
                             {getBenthicAttributeLabel(
                               imageAnnotationData[key][0].annotations[0].benthic_attribute,
