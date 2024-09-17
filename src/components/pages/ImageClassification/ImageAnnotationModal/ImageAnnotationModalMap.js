@@ -232,7 +232,7 @@ const ImageAnnotationModalMap = ({
       const topRight = geometry.coordinates[0][1]
       const bottomRight = geometry.coordinates[0][2]
       const bounds = new maplibregl.LngLatBounds(topLeft, bottomRight)
-      map.current.fitBounds(bounds, { padding: 300 })
+      map.current.fitBounds(bounds, { padding: 250 })
 
       setEditPointPopup({
         id: properties.id,
@@ -313,7 +313,6 @@ const ImageAnnotationModalMap = ({
             getBenthicAttributeLabel={getBenthicAttributeLabel}
             getGrowthFormLabel={getGrowthFormLabel}
           />
-          ,
         </EditPointPopupWrapper>
       ) : null}
     </ImageAnnotationMapWrapper>
