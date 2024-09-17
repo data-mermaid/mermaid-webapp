@@ -48,7 +48,6 @@ export const ImageAnnotationMapWrapper = styled.div`
 export const ImageAnnotationMapContainer = styled.div`
   width: ${({ $width }) => `${$width}px`};
   height: ${({ $height }) => `${$height}px`};
-  margin-top: '2rem';
 `
 
 export const TableWithNoMinWidth = styled(Table)`
