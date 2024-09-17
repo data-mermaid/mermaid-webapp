@@ -13,32 +13,7 @@ import {
   MapResetButton,
 } from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
-import './ImageAnnotationModalMap.css'
-
-// eslint-disable-next-line react/prop-types
-const EditPointPopupWrapper = ({ children, map, lngLat }) => {
-  const popupRef = useRef()
-
-  useEffect(() => {
-    const popup = new maplibregl.Popup({
-      anchor: 'top-left',
-      closeButton: false,
-      maxWidth: 'none',
-      className: 'edit-point-popup',
-    })
-      .setLngLat(lngLat)
-      .setDOMContent(popupRef.current)
-      .addTo(map)
-
-    return popup.remove
-  }, [children, lngLat, map])
-
-  return (
-    <div style={{ display: 'none' }}>
-      <div ref={popupRef}>{children}</div>
-    </div>
-  )
-}
+import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
 
 // Image/Map should be full height while maintaining aspect ratio. Set Max height to 80vh
 const MAX_HEIGHT = (80 * (document?.documentElement?.clientHeight || window.innerHeight)) / 100
@@ -320,6 +295,14 @@ const ImageAnnotationModalMap = ({
 
   return (
     <ImageAnnotationMapWrapper>
+      <ImageAnnotationMapContainer
+        ref={mapContainer}
+        $width={dataToReview.original_image_width * imageScale}
+        $height={dataToReview.original_image_height * imageScale}
+      />
+      <MapResetButton type="button" onClick={() => flyToDefaultView(map)}>
+        <IconReset />
+      </MapResetButton>
       {editPointPopup.id ? (
         <EditPointPopupWrapper map={map.current} lngLat={editPointPopup.lngLat}>
           <ImageAnnotationPopup
@@ -333,14 +316,6 @@ const ImageAnnotationModalMap = ({
           ,
         </EditPointPopupWrapper>
       ) : null}
-      <ImageAnnotationMapContainer
-        ref={mapContainer}
-        $width={dataToReview.original_image_width * imageScale}
-        $height={dataToReview.original_image_height * imageScale}
-      />
-      <MapResetButton type="button" onClick={() => flyToDefaultView(map)}>
-        <IconReset />
-      </MapResetButton>
     </ImageAnnotationMapWrapper>
   )
 }

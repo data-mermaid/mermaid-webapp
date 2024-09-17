@@ -7,6 +7,7 @@ import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/dat
 import ExistingRows from './ExistingRows'
 import ClassifierGuesses from './ClassifierGuesses'
 import NewRow from './NewRow'
+import './ImageAnnotationPopup.css'
 
 const SectionHeader = ({ title }) => (
   <Tr>
