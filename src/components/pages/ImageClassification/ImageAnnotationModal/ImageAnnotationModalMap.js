@@ -16,7 +16,7 @@ import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import './ImageAnnotationModalMap.css'
 
 // eslint-disable-next-line react/prop-types
-const PopupBase = ({ children, map, lngLat }) => {
+const EditPointPopupWrapper = ({ children, map, lngLat }) => {
   const popupRef = useRef()
 
   useEffect(() => {
@@ -96,8 +96,7 @@ const ImageAnnotationModalMap = ({
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const imageScale = getImageScale(dataToReview)
   const halfPatchSize = dataToReview.patch_size / 2
-  const [popupContent, setPopupContent] = useState(null)
-  const [popupLngLat, setPopupLngLat] = useState(null)
+  const [editPointPopup, setEditPointPopup] = useState({ id: null, lngLat: null })
   const pointLabelPopup = new maplibregl.Popup({
     anchor: 'center',
     closeButton: false,
@@ -260,8 +259,10 @@ const ImageAnnotationModalMap = ({
       const bounds = new maplibregl.LngLatBounds(topLeft, bottomRight)
       map.current.fitBounds(bounds, { padding: 300 })
 
-      setPopupContent(properties.id)
-      setPopupLngLat(topRight)
+      setEditPointPopup({
+        id: properties.id,
+        lngLat: topRight,
+      })
     })
   }, [dataToReview, hasMapLoaded])
 
@@ -319,19 +320,19 @@ const ImageAnnotationModalMap = ({
 
   return (
     <ImageAnnotationMapWrapper>
-      {popupLngLat && (
-        <PopupBase map={map.current} lngLat={popupLngLat}>
+      {editPointPopup.id ? (
+        <EditPointPopupWrapper map={map.current} lngLat={editPointPopup.lngLat}>
           <ImageAnnotationPopup
             dataToReview={dataToReview}
             setDataToReview={setDataToReview}
-            pointId={popupContent}
+            pointId={editPointPopup.id}
             databaseSwitchboardInstance={databaseSwitchboardInstance}
             getBenthicAttributeLabel={getBenthicAttributeLabel}
             getGrowthFormLabel={getGrowthFormLabel}
           />
           ,
-        </PopupBase>
-      )}
+        </EditPointPopupWrapper>
+      ) : null}
       <ImageAnnotationMapContainer
         ref={mapContainer}
         $width={dataToReview.original_image_width * imageScale}
