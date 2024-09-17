@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { createRoot } from 'react-dom/client'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
@@ -10,10 +11,10 @@ import { IconReset } from '../../../icons'
 import {
   ImageAnnotationMapContainer,
   ImageAnnotationMapWrapper,
-  ImageAnnotationPopupContainer,
   MapResetButton,
 } from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
+import './ImageAnnotationModalMap.css'
 
 // Image/Map should be full height while maintaining aspect ratio. Set Max height to 80vh
 const MAX_HEIGHT = (80 * (document?.documentElement?.clientHeight || window.innerHeight)) / 100
@@ -69,9 +70,14 @@ const ImageAnnotationModalMap = ({
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
-  const [editPointId, setEditPointId] = useState()
   const imageScale = getImageScale(dataToReview)
   const halfPatchSize = dataToReview.patch_size / 2
+  const editPointPopup = new maplibregl.Popup({
+    anchor: 'top-left',
+    closeButton: false,
+    maxWidth: 'none',
+    className: 'edit-point-popup',
+  })
   const pointLabelPopup = new maplibregl.Popup({
     anchor: 'center',
     closeButton: false,
@@ -219,23 +225,30 @@ const ImageAnnotationModalMap = ({
     })
 
     // Display Edit Point Popup on point click
-    map.current.on('click', 'patches-fill-layer', ({ features }) => {
-      const [{ geometry, properties }] = features
+    map.current.on('click', 'patches-fill-layer', (test) => {
+      const [{ geometry, properties }] = test.features
       const topLeft = geometry.coordinates[0][0]
       const bottomRight = geometry.coordinates[0][2]
       const bounds = new maplibregl.LngLatBounds(topLeft, bottomRight)
       map.current.fitBounds(bounds, { padding: 300 })
-      setEditPointId(properties.id)
-    })
 
-    // Remove Edit Point Popup when user clicks away
-    map.current.on('click', ({ point }) => {
-      const [patches] = map.current.queryRenderedFeatures(point, { layers: ['patches-fill-layer'] })
-      if (!patches) {
-        setEditPointId()
-      }
+      const popupNode = document.createElement('div')
+      const root = createRoot(popupNode)
+      root.render(
+        <ImageAnnotationPopup
+          dataToReview={dataToReview}
+          setDataToReview={setDataToReview}
+          pointId={properties.id}
+          databaseSwitchboardInstance={databaseSwitchboardInstance}
+          getBenthicAttributeLabel={getBenthicAttributeLabel}
+          getGrowthFormLabel={getGrowthFormLabel}
+        />,
+      )
+      editPointPopup
+        .setLngLat(geometry.coordinates[0][1])
+        .setDOMContent(popupNode)
+        .addTo(map.current)
     })
-
     // eslint-disable-next-line
   }, [])
 
@@ -298,18 +311,6 @@ const ImageAnnotationModalMap = ({
         $width={dataToReview.original_image_width * imageScale}
         $height={dataToReview.original_image_height * imageScale}
       />
-      {editPointId ? (
-        <ImageAnnotationPopupContainer>
-          <ImageAnnotationPopup
-            dataToReview={dataToReview}
-            setDataToReview={setDataToReview}
-            pointId={editPointId}
-            databaseSwitchboardInstance={databaseSwitchboardInstance}
-            getBenthicAttributeLabel={getBenthicAttributeLabel}
-            getGrowthFormLabel={getGrowthFormLabel}
-          />
-        </ImageAnnotationPopupContainer>
-      ) : null}
       <MapResetButton type="button" onClick={() => flyToDefaultView(map)}>
         <IconReset />
       </MapResetButton>
