@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { createRoot } from 'react-dom/client'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
@@ -15,6 +14,31 @@ import {
 } from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import './ImageAnnotationModalMap.css'
+
+// eslint-disable-next-line react/prop-types
+const PopupBase = ({ children, map, lngLat }) => {
+  const popupRef = useRef()
+
+  useEffect(() => {
+    const popup = new maplibregl.Popup({
+      anchor: 'top-left',
+      closeButton: false,
+      maxWidth: 'none',
+      className: 'edit-point-popup',
+    })
+      .setLngLat(lngLat)
+      .setDOMContent(popupRef.current)
+      .addTo(map)
+
+    return popup.remove
+  }, [children, lngLat, map])
+
+  return (
+    <div style={{ display: 'none' }}>
+      <div ref={popupRef}>{children}</div>
+    </div>
+  )
+}
 
 // Image/Map should be full height while maintaining aspect ratio. Set Max height to 80vh
 const MAX_HEIGHT = (80 * (document?.documentElement?.clientHeight || window.innerHeight)) / 100
@@ -72,12 +96,8 @@ const ImageAnnotationModalMap = ({
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const imageScale = getImageScale(dataToReview)
   const halfPatchSize = dataToReview.patch_size / 2
-  const editPointPopup = new maplibregl.Popup({
-    anchor: 'top-left',
-    closeButton: false,
-    maxWidth: 'none',
-    className: 'edit-point-popup',
-  })
+  const [popupContent, setPopupContent] = useState(null)
+  const [popupLngLat, setPopupLngLat] = useState(null)
   const pointLabelPopup = new maplibregl.Popup({
     anchor: 'center',
     closeButton: false,
@@ -224,33 +244,26 @@ const ImageAnnotationModalMap = ({
       pointLabelPopup.remove()
     })
 
-    // Display Edit Point Popup on point click
-    map.current.on('click', 'patches-fill-layer', (test) => {
-      const [{ geometry, properties }] = test.features
+    // eslint-disable-next-line
+  }, [])
+
+  const _displayEditPointPopupOnPointClick = useEffect(() => {
+    if (!hasMapLoaded) {
+      return
+    }
+
+    map.current.on('click', 'patches-fill-layer', ({ features }) => {
+      const [{ geometry, properties }] = features
       const topLeft = geometry.coordinates[0][0]
+      const topRight = geometry.coordinates[0][1]
       const bottomRight = geometry.coordinates[0][2]
       const bounds = new maplibregl.LngLatBounds(topLeft, bottomRight)
       map.current.fitBounds(bounds, { padding: 300 })
 
-      const popupNode = document.createElement('div')
-      const root = createRoot(popupNode)
-      root.render(
-        <ImageAnnotationPopup
-          dataToReview={dataToReview}
-          setDataToReview={setDataToReview}
-          pointId={properties.id}
-          databaseSwitchboardInstance={databaseSwitchboardInstance}
-          getBenthicAttributeLabel={getBenthicAttributeLabel}
-          getGrowthFormLabel={getGrowthFormLabel}
-        />,
-      )
-      editPointPopup
-        .setLngLat(geometry.coordinates[0][1])
-        .setDOMContent(popupNode)
-        .addTo(map.current)
+      setPopupContent(properties.id)
+      setPopupLngLat(topRight)
     })
-    // eslint-disable-next-line
-  }, [])
+  }, [dataToReview, hasMapLoaded])
 
   const _updatePointsOnDataChange = useEffect(() => {
     if (!hasMapLoaded) {
@@ -306,6 +319,19 @@ const ImageAnnotationModalMap = ({
 
   return (
     <ImageAnnotationMapWrapper>
+      {popupLngLat && (
+        <PopupBase map={map.current} lngLat={popupLngLat}>
+          <ImageAnnotationPopup
+            dataToReview={dataToReview}
+            setDataToReview={setDataToReview}
+            pointId={popupContent}
+            databaseSwitchboardInstance={databaseSwitchboardInstance}
+            getBenthicAttributeLabel={getBenthicAttributeLabel}
+            getGrowthFormLabel={getGrowthFormLabel}
+          />
+          ,
+        </PopupBase>
+      )}
       <ImageAnnotationMapContainer
         ref={mapContainer}
         $width={dataToReview.original_image_width * imageScale}
