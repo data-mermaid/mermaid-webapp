@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Tr, Th, Table } from '../../../../generic/Table/table'
+import { Tr, Th } from '../../../../generic/Table/table'
 import { imageClassificationResponsePropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import ExistingRows from './ExistingRows'
 import ClassifierGuesses from './ClassifierGuesses'
 import NewRow from './NewRow'
+import { EditPointPopupTable } from '../ImageAnnotationModal.styles'
 import './ImageAnnotationPopup.css'
 
 const ImageAnnotationPopup = ({
@@ -19,7 +20,7 @@ const ImageAnnotationPopup = ({
   const selectedPoint = dataToReview.points.find((point) => point.id === pointId)
 
   return (
-    <Table aria-labelledby="table-label">
+    <EditPointPopupTable aria-labelledby="table-label">
       <thead>
         <Tr>
           <Th colSpan={2}>Classifier Guesses</Th>
@@ -48,7 +49,7 @@ const ImageAnnotationPopup = ({
           databaseSwitchboardInstance={databaseSwitchboardInstance}
         />
       </tbody>
-    </Table>
+    </EditPointPopupTable>
   )
 }
 

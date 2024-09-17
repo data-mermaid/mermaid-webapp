@@ -79,6 +79,10 @@ export const ConfirmedIcon = styled(IconCheck)`
   width: 2.5rem;
 `
 
+export const EditPointPopupTable = styled(Table)`
+  border: ${`2px solid ${COLORS.current}`};
+`
+
 export const PopupTd = styled(Td)`
   background-color: ${theme.color.tableRowEven};
   border: none;

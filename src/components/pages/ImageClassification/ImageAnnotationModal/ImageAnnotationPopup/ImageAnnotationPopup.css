@@ -1,7 +1,6 @@
 .edit-point-popup > .maplibregl-popup-content {
   padding: 0;
   margin-top: -5px;
-  border: 2px solid #D4BC48;
 }
 
 /* Remove Tip */
