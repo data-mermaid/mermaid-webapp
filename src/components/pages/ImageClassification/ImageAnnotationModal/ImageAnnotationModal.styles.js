@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import theme from '../../../../theme'
 import { Table, Tr, Th, Td } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+import { IconCheck } from '../../../icons'
 
 export const Footer = styled.div`
   display: flex;
@@ -33,6 +34,8 @@ export const LoadingContainer = styled.div`
 
 export const ImageAnnotationModalContainer = styled.div`
   display: flex;
+  margin: -${theme.spacing.medium};
+  background-color: ${theme.color.background};
 `
 
 export const ImageAnnotationMapWrapper = styled.div`
@@ -42,11 +45,11 @@ export const ImageAnnotationMapWrapper = styled.div`
 export const ImageAnnotationMapContainer = styled.div`
   width: ${({ $width }) => `${$width}px`};
   height: ${({ $height }) => `${$height}px`};
-  margin-top: '2rem';
 `
 
 export const TableWithNoMinWidth = styled(Table)`
   min-width: unset;
+  border-top: none;
 `
 
 export const ImageAnnotationPopupContainer = styled.div`
@@ -56,12 +59,24 @@ export const ImageAnnotationPopupContainer = styled.div`
 `
 
 export const TrWithBorderStyling = styled(Tr)`
-  border: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.current}`};
-  background-color: ${({ $isConfirmed }) => $isConfirmed && `${COLORS.confirmed} !important`};
+  border: 1px solid transparent;
+  border-top: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.current}`};
+  border-bottom: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.current}`};
 
   &:hover {
-    border: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.highlighted}`};
+    border-top: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.highlighted}`};
+    border-bottom: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.highlighted}`};
   }
+
+  td {
+    border: none;
+  }
+`
+
+export const ConfirmedIcon = styled(IconCheck)`
+  color: ${COLORS.confirmed};
+  height: 2rem;
+  width: 2rem;
 `
 
 export const PopupTable = styled(Table)`

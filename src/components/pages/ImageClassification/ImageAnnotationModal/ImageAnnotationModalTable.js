@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Tr, Th, Td } from '../../../generic/Table/table'
-import { ButtonPrimary } from '../../../generic/buttons'
+import { ButtonSecondary } from '../../../generic/buttons'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { TableWithNoMinWidth, TrWithBorderStyling } from './ImageAnnotationModal.styles'
+import {
+  ConfirmedIcon,
+  TableWithNoMinWidth,
+  TrWithBorderStyling,
+} from './ImageAnnotationModal.styles'
 
 const ImageAnnotationModalTable = ({
   points,
@@ -19,6 +23,11 @@ const ImageAnnotationModalTable = ({
     classifiedPoints,
     ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
   )
+
+  const getAttributeGrowthFormLabel = ({ benthic_attribute, growth_form }) =>
+    growth_form
+      ? `${getBenthicAttributeLabel(benthic_attribute)} / ${getGrowthFormLabel(growth_form)}`
+      : getBenthicAttributeLabel(benthic_attribute)
 
   // Returns true if every point in row has an annotation that has `is_confirmed` set to true
   const checkIfRowIsConfirmed = (row) =>
@@ -55,40 +64,48 @@ const ImageAnnotationModalTable = ({
   }
 
   return (
-    <TableWithNoMinWidth aria-labelledby="table-label" style={{ minWidth: 'unset' }}>
+    <TableWithNoMinWidth aria-labelledby="table-label">
       <thead>
         <Tr>
-          <Th>Benthic Attribute</Th>
-          <Th>Growth Form</Th>
-          <Th align="right">Number of Points</Th>
-          <Th />
+          <Th colSpan={2} align="right">
+            Count
+          </Th>
+          <Th>Attribute / Growth Form</Th>
+          <Th>Status</Th>
         </Tr>
       </thead>
       <tbody>
-        {Object.keys(tableData).map((row, i) => (
-          <TrWithBorderStyling
-            key={row}
-            onClick={() => handleRowSelect(tableData[row], i)}
-            onMouseEnter={() => setHighlightedPoints(tableData[row])}
-            onMouseLeave={() => setHighlightedPoints([])}
-            $isSelected={i === selectedRowIndex}
-            $isConfirmed={checkIfRowIsConfirmed(row)}
-          >
-            {/* All points in a row will have the same benthic attribute / growth form */}
-            <Td>{getBenthicAttributeLabel(tableData[row][0].annotations[0].benthic_attribute)}</Td>
-            <Td>{getGrowthFormLabel(tableData[row][0].annotations[0].growth_form)}</Td>
-            <Td align="right">{tableData[row].length}</Td>
-            <Td align="center">
-              {checkIfRowIsConfirmed(row) ? (
-                'Confirmed'
-              ) : (
-                <ButtonPrimary type="button" onClick={(e) => handleRowConfirm(e, tableData[row])}>
-                  Confirm
-                </ButtonPrimary>
-              )}
-            </Td>
-          </TrWithBorderStyling>
-        ))}
+        {Object.keys(tableData).map((row, i) => {
+          const isRowConfirmed = checkIfRowIsConfirmed(row)
+
+          return (
+            <TrWithBorderStyling
+              key={row}
+              onClick={() => handleRowSelect(tableData[row], i)}
+              onMouseEnter={() => setHighlightedPoints(tableData[row])}
+              onMouseLeave={() => setHighlightedPoints([])}
+              $isSelected={i === selectedRowIndex}
+              $isConfirmed={isRowConfirmed}
+            >
+              <Td align="right">{isRowConfirmed ? <ConfirmedIcon /> : undefined}</Td>
+              <Td align="right">{tableData[row].length}</Td>
+              {/* All points in a row will have the same benthic attribute / growth form */}
+              <Td>{getAttributeGrowthFormLabel(tableData[row][0].annotations[0])}</Td>
+              <Td align="center">
+                {isRowConfirmed ? (
+                  'Confirmed'
+                ) : (
+                  <ButtonSecondary
+                    type="button"
+                    onClick={(e) => handleRowConfirm(e, tableData[row])}
+                  >
+                    Confirm
+                  </ButtonSecondary>
+                )}
+              </Td>
+            </TrWithBorderStyling>
+          )
+        })}
       </tbody>
     </TableWithNoMinWidth>
   )
