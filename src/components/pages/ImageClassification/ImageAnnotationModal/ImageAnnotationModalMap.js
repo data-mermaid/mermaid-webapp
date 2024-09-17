@@ -16,7 +16,7 @@ import {
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 
 // Image/Map should be full height while maintaining aspect ratio. Set Max height to 80vh
-const MAX_DIMENSION = (80 * (document?.documentElement?.clientHeight || window.innerHeight)) / 100
+const MAX_HEIGHT = (80 * (document?.documentElement?.clientHeight || window.innerHeight)) / 100
 
 const DEFAULT_CENTER = [0, 0] // this value doesn't matter, default to null island
 const DEFAULT_ZOOM = 2 // needs to be > 1 otherwise bounds become > 180 and > 85
@@ -42,7 +42,7 @@ const flyToDefaultView = (map) =>
   map.current.flyTo({ center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM, duration: 500 })
 
 const getImageScale = ({ original_image_height }) =>
-  original_image_height > MAX_DIMENSION ? MAX_DIMENSION / original_image_height : 1
+  original_image_height > MAX_HEIGHT ? MAX_HEIGHT / original_image_height : 1
 
 // HACK: MapLibre's unproject() (used to get pixel coords) doesn't let you pass zoom as parameter.
 // So to ensure that our points remain in the same position we:
