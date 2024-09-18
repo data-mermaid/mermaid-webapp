@@ -29,15 +29,26 @@ const tableHeaders = [
   { align: 'right', id: 'remove', text: '' },
 ]
 
-const TableHeaderRow = () => (
+const TableHeaderRow = ({ hideStatus }) => (
   <Tr>
-    {tableHeaders.map((header) => (
-      <Th key={header.id} align={header.align} id={header.id} colSpan={header.colSpan || 1}>
-        <span>{header.text}</span>
-      </Th>
-    ))}
+    {tableHeaders.map((header) => {
+      // Skip rendering the "Status" header if hideStatus is true
+      if (hideStatus && header.id === 'status-label') {
+        return null
+      }
+
+      return (
+        <Th key={header.id} align={header.align} id={header.id} colSpan={header.colSpan || 1}>
+          <span>{header.text}</span>
+        </Th>
+      )
+    })}
   </Tr>
 )
+
+TableHeaderRow.propTypes = {
+  hideStatus: PropTypes.bool.isRequired,
+}
 
 const subHeaderColumns = [
   { align: 'center', text: 'Confirmed' },
@@ -193,7 +204,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         <StyledOverflowWrapper>
           <StickyObservationTable aria-labelledby="table-label">
             <thead>
-              <TableHeaderRow />
+              {/* Pass imagesDoneProcessing to TableHeaderRow to hide/show the status column */}
+              <TableHeaderRow hideStatus={imagesDoneProcessing} />
               <SubHeaderRow />
             </thead>
             <tbody>
@@ -223,7 +235,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                       >
                         <Thumbnail imageUrl={file.thumbnail || file.image} />
                       </TdWithHoverText>
-                      <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
+                      {/* Conditionally render the "Status" column */}
+                      {!imagesDoneProcessing && (
+                        <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
+                      )}
                       <StyledTd>{index + 1}</StyledTd>
                       <StyledTd></StyledTd>
                       <StyledTd></StyledTd>
@@ -276,7 +291,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                           </StyledTd>
                           <StyledTd>{confirmedCount}</StyledTd>
                           <StyledTd>{unconfirmedCount}</StyledTd>
-                          {/* Additional columns for subrow */}
                         </Tr>
                       )
                     })}
