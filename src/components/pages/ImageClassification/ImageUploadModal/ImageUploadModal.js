@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Modal from '../../../generic/Modal'
@@ -9,7 +9,6 @@ import language from '../../../../language'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
-  const [uploadingImages, setUploadingImages] = useState(false)
   const isCancelledRef = useRef(false)
   const fileInputRef = useRef(null)
   const { recordId, projectId } = useParams()
@@ -85,8 +84,6 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       )
     }
 
-    setUploadingImages(true)
-
     isCancelledRef.current = false
 
     const uploadedFiles = []
@@ -94,7 +91,6 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
     for (const file of files) {
       if (isCancelledRef.current) {
-        setUploadingImages(false)
         return
       }
 
@@ -144,7 +140,6 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       }
 
       if (isCancelledRef.current) {
-        setUploadingImages(false)
         return
       }
     }
@@ -157,8 +152,6 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       toast.dismiss(toastId.current)
       toastId.current = null
     }
-
-    setUploadingImages(false)
   }
 
   const handleFileChange = (event) => {
@@ -182,7 +175,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
   const handleCancelUpload = () => {
     isCancelledRef.current = true
-    setUploadingImages(false)
+
     toast.info('Upload cancelled.')
   }
 
@@ -214,7 +207,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       }
       footerContent={
         <ButtonContainer>
-          <ButtonSecondary type="button" onClick={onClose} disabled={uploadingImages}>
+          <ButtonSecondary type="button" onClick={onClose}>
             Close
           </ButtonSecondary>
         </ButtonContainer>
