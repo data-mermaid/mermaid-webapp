@@ -158,12 +158,19 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   // Poll every 5 seconds after the first image is uploaded
   const _pollImageStatuses = useEffect(() => {
     let intervalId
+    let abortController = new AbortController()
+
     const startPolling = async () => {
       try {
+        // Cancel the previous request if any
+        abortController.abort()
+        abortController = new AbortController()
+
         const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
           projectId,
           recordId,
           EXCLUDE_PARAMS,
+          { signal: abortController.signal },
         )
         setImages(response.results)
 
@@ -191,6 +198,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
       if (intervalId) {
         clearInterval(intervalId)
       }
+      abortController.abort()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [polling, projectId])

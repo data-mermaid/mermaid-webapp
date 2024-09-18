@@ -80,7 +80,6 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
             Cancel Upload
           </ButtonCaution>
         </div>,
-        { autoClose: true },
       )
     }
 
