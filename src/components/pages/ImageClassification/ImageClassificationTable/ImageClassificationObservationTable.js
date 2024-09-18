@@ -136,6 +136,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, recordId])
 
+  const _updateFilesOnUpload = useEffect(() => {
+    setImages(uploadedFiles)
+  }, [uploadedFiles])
+
   // Poll every 5 seconds after the first image is uploaded
   const _pollImageStatuses = useEffect(() => {
     let intervalId
@@ -181,6 +185,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
       setPolling(true)
     }
   }, [uploadedFiles, polling, images, imagesDoneProcessing])
+
+  console.log({ polling, imagesDoneProcessing, images })
 
   return (
     <>

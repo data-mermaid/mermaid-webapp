@@ -1477,6 +1477,7 @@ const imageClassification = {
       corruptFiles: 'Some files were not added because they appear to be corrupt.',
     },
     success: 'Files uploaded successfully.',
+    uploading: 'Uploading files...',
   },
 }
 

@@ -9,13 +9,14 @@ import language from '../../../../language'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
-  const [loading, setLoading] = useState(false)
+  const [uploadingImages, setUploadingImages] = useState(false)
   const [totalFiles, setTotalFiles] = useState(0)
   const [processedFiles, setProcessedFiles] = useState(0)
   const isCancelledRef = useRef(false)
   const fileInputRef = useRef(null)
   const { recordId, projectId } = useParams()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const toastId = useRef(null)
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
@@ -73,7 +74,13 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
   }
 
   const validateAndUploadFiles = async (files) => {
-    setLoading(true)
+    onClose()
+    // Show the persistent uploading toast and store the toastId
+    if (!toastId.current) {
+      toastId.current = toast.success(uploadText.uploading, { autoClose: true })
+    }
+
+    setUploadingImages(true)
     setTotalFiles(files.length)
     setProcessedFiles(0)
     isCancelledRef.current = false
@@ -82,7 +89,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
     for (const file of files) {
       if (isCancelledRef.current) {
-        setLoading(false)
+        setUploadingImages(false)
         return
       }
 
@@ -107,26 +114,26 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
         continue
       }
 
-      // Start uploading the file as soon as it's validated.
+      // Start processing the file as soon as it's validated.
       const uploadedFile = await processSingleImage(file)
       if (uploadedFile) {
         uploadedFiles.push(uploadedFile)
+        onFilesUpload(uploadedFiles)
       }
 
       // Exit early if upload is canceled.
       if (isCancelledRef.current) {
-        setLoading(false)
+        setUploadingImages(false)
         return
       }
     }
 
-    // After all valid files are processed, call the onFilesUpload callback.
+    // After all valid files are processed, show success message
     if (uploadedFiles.length > 0) {
-      onFilesUpload(uploadedFiles)
       toast.success(uploadText.success)
     }
 
-    setLoading(false)
+    setUploadingImages(false)
   }
 
   const handleFileChange = (event) => {
@@ -150,7 +157,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
   const handleCancelUpload = () => {
     isCancelledRef.current = true
-    setLoading(false)
+    setUploadingImages(false)
     toast.info('Upload cancelled.')
   }
 
@@ -164,7 +171,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       displayCloseIcon={false}
       mainContent={
         <>
-          {loading ? (
+          {uploadingImages ? (
             <div>
               Uploading {processedFiles}/{totalFiles} images...
             </div>
@@ -188,12 +195,12 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       }
       footerContent={
         <ButtonContainer>
-          {loading ? (
+          {uploadingImages ? (
             <ButtonCaution type="button" onClick={handleCancelUpload}>
               Cancel Upload
             </ButtonCaution>
           ) : (
-            <ButtonSecondary type="button" onClick={onClose} disabled={loading}>
+            <ButtonSecondary type="button" onClick={onClose} disabled={uploadingImages}>
               Close
             </ButtonSecondary>
           )}
