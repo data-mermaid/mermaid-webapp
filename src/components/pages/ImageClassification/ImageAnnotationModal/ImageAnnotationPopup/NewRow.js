@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import { Select } from '../../../../generic/form'
 import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
 import language from '../../../../../language'
-import { Tr, Td } from '../../../../generic/Table/table'
+import { Tr } from '../../../../generic/Table/table'
 import { getBenthicOptions } from '../../../../../library/getOptions'
 import {
   imageClassificationPointPropType,
@@ -13,7 +13,13 @@ import {
 import { IconPlus } from '../../../../icons'
 import Modal from '../../../../generic/Modal/Modal'
 import InputAutocomplete from '../../../../generic/InputAutocomplete'
-import { NewRowContainer, NewRowFooterContainer, NewRowLabel } from '../ImageAnnotationModal.styles'
+import {
+  NewRowContainer,
+  NewRowFooterContainer,
+  NewRowLabel,
+  PopupTd,
+} from '../ImageAnnotationModal.styles'
+import { createPortal } from 'react-dom'
 
 // TODO: Place this in a shared folder since used twice?
 const isAClassifierGuessOfSelectedPoint = (annotations, benthic_attribute, growth_form) =>
@@ -128,70 +134,73 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
   return (
     <>
       <Tr>
-        <Td colSpan={4} align="center">
+        <PopupTd colSpan={4} align="center">
           <ButtonSecondary type="button" onClick={handleDisplayNewRowSelection}>
             <IconPlus /> Select New Attribute
           </ButtonSecondary>
-        </Td>
+        </PopupTd>
       </Tr>
-      <Modal
-        title="Select New Attribute"
-        isOpen={
-          benthicAttributeSelectOptions.length &&
-          growthFormSelectOptions.length &&
-          shouldDisplayModal
-        }
-        onDismiss={handleCloseModal}
-        allowCloseWithEscapeKey={false}
-        maxWidth="fit-content"
-        contentOverflowIsVisible
-        mainContent={
-          <NewRowContainer>
-            <NewRowLabel htmlFor="benthic-attribute-autocomplete">
-              Benthic Attribute
-              <InputAutocomplete
-                id="benthic-attribute-autocomplete"
-                autoFocus
-                aria-labelledby="benthic-attribute-label"
-                options={benthicAttributeSelectOptions}
-                onChange={({ value }) => setSelectedBenthicAttr(value)}
-                value={selectedBenthicAttr}
-                noResultsText={language.autocomplete.noResultsDefault}
-              />
-            </NewRowLabel>
+      {createPortal(
+        <Modal
+          title="Select New Attribute"
+          isOpen={
+            !!benthicAttributeSelectOptions.length &&
+            !!growthFormSelectOptions.length &&
+            shouldDisplayModal
+          }
+          onDismiss={handleCloseModal}
+          allowCloseWithEscapeKey={false}
+          maxWidth="fit-content"
+          contentOverflowIsVisible
+          mainContent={
+            <NewRowContainer>
+              <NewRowLabel htmlFor="benthic-attribute-autocomplete">
+                Benthic Attribute
+                <InputAutocomplete
+                  id="benthic-attribute-autocomplete"
+                  autoFocus
+                  aria-labelledby="benthic-attribute-label"
+                  options={benthicAttributeSelectOptions}
+                  onChange={({ value }) => setSelectedBenthicAttr(value)}
+                  value={selectedBenthicAttr}
+                  noResultsText={language.autocomplete.noResultsDefault}
+                />
+              </NewRowLabel>
 
-            <NewRowLabel htmlFor="growth-forms">
-              <span>Growth forms</span>
-              <Select
-                id="growth-forms"
-                label="Growth forms"
-                onChange={(e) => setSelectedGrowthForm(e.target.value)}
+              <NewRowLabel htmlFor="growth-forms">
+                <span>Growth forms</span>
+                <Select
+                  id="growth-forms"
+                  label="Growth forms"
+                  onChange={(e) => setSelectedGrowthForm(e.target.value)}
+                >
+                  <option value=""></option>
+                  {growthFormSelectOptions.map((growthForm) => (
+                    <option key={growthForm.id} value={growthForm.id}>
+                      {growthForm.name}
+                    </option>
+                  ))}
+                </Select>
+              </NewRowLabel>
+            </NewRowContainer>
+          }
+          footerContent={
+            <NewRowFooterContainer>
+              <ButtonSecondary type="button" onClick={handleCloseModal}>
+                Cancel
+              </ButtonSecondary>
+              <ButtonPrimary
+                type="button"
+                disabled={!selectedBenthicAttr}
+                onClick={handleAddNewRowClick}
               >
-                <option value=""></option>
-                {growthFormSelectOptions.map((growthForm) => (
-                  <option key={growthForm.id} value={growthForm.id}>
-                    {growthForm.name}
-                  </option>
-                ))}
-              </Select>
-            </NewRowLabel>
-          </NewRowContainer>
-        }
-        footerContent={
-          <NewRowFooterContainer>
-            <ButtonSecondary type="button" onClick={handleCloseModal}>
-              Cancel
-            </ButtonSecondary>
-            <ButtonPrimary
-              type="button"
-              disabled={!selectedBenthicAttr}
-              onClick={handleAddNewRowClick}
-            >
-              Add New Row
-            </ButtonPrimary>
-          </NewRowFooterContainer>
-        }
-      />
+                Add New Row
+              </ButtonPrimary>
+            </NewRowFooterContainer>
+          }
+        />,
+        document.body,
+      )}
     </>
   )
 }

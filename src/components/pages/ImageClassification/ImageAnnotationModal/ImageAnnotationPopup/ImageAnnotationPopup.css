@@ -1,0 +1,9 @@
+.edit-point-popup > .maplibregl-popup-content {
+  padding: 0;
+  margin-top: -5px;
+}
+
+/* Remove Tip */
+.edit-point-popup > .maplibregl-popup-tip {
+  display: none;
+}

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import theme from '../../../../theme'
-import { Table, Tr, Th, Td } from '../../../generic/Table/table'
+import { Table, Tr, Td } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import { IconCheck } from '../../../icons'
 
@@ -75,21 +75,17 @@ export const TrWithBorderStyling = styled(Tr)`
 
 export const ConfirmedIcon = styled(IconCheck)`
   color: ${COLORS.confirmed};
-  height: 2rem;
-  width: 2rem;
+  height: 3rem;
+  width: 3rem;
 `
 
-export const PopupTable = styled(Table)`
-  width: 500px;
+export const EditPointPopupTable = styled(Table)`
+  border: ${`2px solid ${COLORS.current}`};
 `
 
-export const PopupSubTh = styled(Th)`
-  border: solid 1px ${theme.color.tableBorderColor};
-  font-weight: bold;
-  background-color: ${theme.color.tableRowEven};
-`
 export const PopupTd = styled(Td)`
-  background-color: ${theme.color.tableRowOdd};
+  background-color: ${theme.color.tableRowEven};
+  border: none;
 `
 
 export const PopupTdForRadio = styled(PopupTd)`

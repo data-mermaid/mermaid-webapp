@@ -2,17 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Tr, Th } from '../../../../generic/Table/table'
 import { imageClassificationResponsePropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
-import { PopupSubTh, PopupTable } from '../ImageAnnotationModal.styles'
 import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import ExistingRows from './ExistingRows'
 import ClassifierGuesses from './ClassifierGuesses'
 import NewRow from './NewRow'
-
-const SectionHeader = ({ title }) => (
-  <Tr>
-    <PopupSubTh colSpan={4}>{title}</PopupSubTh>
-  </Tr>
-)
+import { EditPointPopupTable } from '../ImageAnnotationModal.styles'
+import './ImageAnnotationPopup.css'
 
 const ImageAnnotationPopup = ({
   dataToReview,
@@ -25,16 +20,14 @@ const ImageAnnotationPopup = ({
   const selectedPoint = dataToReview.points.find((point) => point.id === pointId)
 
   return (
-    <PopupTable aria-labelledby="table-label">
+    <EditPointPopupTable aria-labelledby="table-label">
       <thead>
         <Tr>
-          <Th colSpan={2}>Benthic Attribute</Th>
-          <Th>Growth Form</Th>
-          <Th>Confidence</Th>
+          <Th colSpan={2}>Classifier Guesses</Th>
+          <Th align="right">Confidence</Th>
         </Tr>
       </thead>
       <tbody>
-        <SectionHeader title="Classifier Guesses" />
         <ClassifierGuesses
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
@@ -42,7 +35,6 @@ const ImageAnnotationPopup = ({
           getBenthicAttributeLabel={getBenthicAttributeLabel}
           getGrowthFormLabel={getGrowthFormLabel}
         />
-        <SectionHeader title="Add to existing row" />
         <ExistingRows
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
@@ -57,12 +49,8 @@ const ImageAnnotationPopup = ({
           databaseSwitchboardInstance={databaseSwitchboardInstance}
         />
       </tbody>
-    </PopupTable>
+    </EditPointPopupTable>
   )
-}
-
-SectionHeader.propTypes = {
-  title: PropTypes.string.isRequired,
 }
 
 ImageAnnotationPopup.propTypes = {
