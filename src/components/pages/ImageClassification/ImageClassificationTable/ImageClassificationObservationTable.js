@@ -137,7 +137,22 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   }, [projectId, recordId])
 
   const _updateFilesOnUpload = useEffect(() => {
-    setImages(uploadedFiles)
+    setPolling(true)
+    setImages((prevImages) => {
+      const existingImagesMap = new Map(prevImages.map((img) => [img.id, img]))
+
+      // Merge existing images with newly uploaded ones
+      const mergedImages = [...prevImages]
+
+      uploadedFiles.forEach((file) => {
+        // Only add new uploaded files if they don't already exist
+        if (!existingImagesMap.has(file.id)) {
+          mergedImages.push(file)
+        }
+      })
+
+      return mergedImages
+    })
   }, [uploadedFiles])
 
   // Poll every 5 seconds after the first image is uploaded
