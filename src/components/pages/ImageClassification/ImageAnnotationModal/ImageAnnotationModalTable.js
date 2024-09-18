@@ -16,7 +16,7 @@ const ImageAnnotationModalTable = ({
   setDataToReview,
   setHighlightedAttributeId,
 }) => {
-  const [selectedRowIndex, setSelectedRowIndex] = useState()
+  const [selectedRowKey, setSelectedRowKey] = useState()
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
   const tableData = Object.groupBy(
     classifiedPoints,
@@ -28,27 +28,27 @@ const ImageAnnotationModalTable = ({
       ? `${getBenthicAttributeLabel(benthic_attribute)} / ${getGrowthFormLabel(growth_form)}`
       : getBenthicAttributeLabel(benthic_attribute)
 
-  const checkIfRowIsConfirmed = (row) =>
-    tableData[row].every(({ annotations }) => annotations[0].is_confirmed)
+  const checkIfRowIsConfirmed = (rowKey) =>
+    tableData[rowKey].every(({ annotations }) => annotations[0].is_confirmed)
 
-  const handleRowSelect = (index) => {
-    if (index === selectedRowIndex) {
-      setSelectedRowIndex()
+  const handleRowSelect = (rowKey) => {
+    if (rowKey === selectedRowKey) {
+      setSelectedRowKey()
     } else {
-      setSelectedRowIndex(index)
+      setSelectedRowKey(rowKey)
     }
   }
 
-  const handleRowHover = (row) => {
-    if (selectedRowIndex !== undefined) {
+  const handleRowHover = (rowKey) => {
+    if (selectedRowKey !== undefined) {
       return
     }
 
-    setHighlightedAttributeId(row)
+    setHighlightedAttributeId(rowKey)
   }
 
   const handleRowLeave = () => {
-    if (selectedRowIndex !== undefined) {
+    if (selectedRowKey !== undefined) {
       return
     }
 
@@ -68,7 +68,7 @@ const ImageAnnotationModalTable = ({
     })
 
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
-    setSelectedRowIndex()
+    setSelectedRowKey()
     setHighlightedAttributeId('')
   }
 
@@ -84,17 +84,17 @@ const ImageAnnotationModalTable = ({
         </Tr>
       </thead>
       <tbody>
-        {Object.keys(tableData).map((row, i) => {
+        {Object.keys(tableData).map((row) => {
           const isRowConfirmed = checkIfRowIsConfirmed(row)
 
           return (
             <TrWithBorderStyling
               key={row}
-              onClick={() => handleRowSelect(i)}
+              onClick={() => handleRowSelect(row)}
               onMouseEnter={() => handleRowHover(row)}
               onMouseLeave={handleRowLeave}
-              $isSelected={i === selectedRowIndex}
-              $isAnyRowSelected={selectedRowIndex !== undefined}
+              $isSelected={row === selectedRowKey}
+              $isAnyRowSelected={selectedRowKey !== undefined}
             >
               <Td align="right">{isRowConfirmed ? <ConfirmedIcon /> : undefined}</Td>
               <Td align="right">{tableData[row].length}</Td>
