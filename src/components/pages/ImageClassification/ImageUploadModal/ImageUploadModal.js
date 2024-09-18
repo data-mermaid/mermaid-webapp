@@ -84,7 +84,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
     // Show the persistent uploading toast and store the toastId
     if (!toastId.current) {
-      toastId.current = toast.success(renderUploadProgress(0, files.length, handleCancelUpload))
+      toastId.current = toast.info(renderUploadProgress(0, files.length, handleCancelUpload))
     }
 
     isCancelledRef.current = false
@@ -139,7 +139,13 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     }
 
     if (uploadedFiles.length > 0) {
-      toast.success(uploadText.success)
+      if (toastId.current) {
+        toast.update(toastId.current, {
+          render: uploadText.success,
+          type: toast.TYPE.SUCCESS,
+          autoClose: 5000,
+        })
+      }
     }
 
     if (toastId.current) {
