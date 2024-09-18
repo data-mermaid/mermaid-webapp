@@ -23,8 +23,7 @@ const tableHeaders = [
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
   { align: 'right', id: 'growth-form-label', text: 'Growth Form' },
-  { colSpan: 4, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
-  { align: 'right', id: 'validations', text: 'Validations' },
+  { colSpan: 3, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
   { align: 'right', id: 'review', text: '' },
   { align: 'right', id: 'remove', text: '' },
 ]
@@ -32,13 +31,11 @@ const tableHeaders = [
 const TableHeaderRow = ({ hideStatus }) => (
   <Tr>
     {tableHeaders.map((header) => {
-      // Skip rendering the "Status" header if hideStatus is true
       if (hideStatus && header.id === 'status-label') {
         return null
       }
 
-      const colSpan =
-        header.id === 'number-of-points-label' ? (hideStatus ? 4 : 3) : header.colSpan || 1
+      const colSpan = header.id === 'number-of-points-label' ? 3 : header.colSpan || 1
 
       return (
         <Th key={header.id} align={header.align} id={header.id} colSpan={colSpan}>
@@ -156,6 +153,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
   const _updateFilesOnUpload = useEffect(() => {
     setImages(uploadedFiles)
+    setImagesDoneProcessing(false)
   }, [uploadedFiles])
 
   // Poll every 5 seconds after the first image is uploaded
@@ -250,7 +248,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                       <StyledTd>{file.num_confirmed}</StyledTd>
                       <StyledTd>{file.num_unconfirmed}</StyledTd>
                       <StyledTd>{file.num_unclassified}</StyledTd>
-                      <StyledTd></StyledTd>
                       <StyledTd>
                         <ButtonPrimary
                           type="button"
