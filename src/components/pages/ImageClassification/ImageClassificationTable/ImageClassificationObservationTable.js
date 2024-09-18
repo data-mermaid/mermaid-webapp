@@ -186,8 +186,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     }
   }, [uploadedFiles, polling, images, imagesDoneProcessing])
 
-  console.log({ polling, imagesDoneProcessing, images })
-
   return (
     <>
       <InputWrapper>

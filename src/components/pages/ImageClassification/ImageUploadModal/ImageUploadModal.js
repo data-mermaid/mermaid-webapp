@@ -74,7 +74,15 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
     // Show the persistent uploading toast and store the toastId
     if (!toastId.current) {
-      toastId.current = toast.success(`Uploading 0/${files.length} images...`, { autoClose: true })
+      toastId.current = toast.success(
+        <div>
+          <p>Uploading 0/{files.length} images...</p>
+          <ButtonCaution type="button" onClick={handleCancelUpload}>
+            Cancel Upload
+          </ButtonCaution>
+        </div>,
+        { autoClose: true },
+      )
     }
 
     setUploadingImages(true)
@@ -121,7 +129,16 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
         if (toastId.current) {
           toast.update(toastId.current, {
-            render: `Uploading ${processedCount}/${files.length} images...`,
+            render: (
+              <div>
+                <p>
+                  Uploading {processedCount}/{files.length} images...
+                </p>
+                <ButtonCaution type="button" onClick={handleCancelUpload}>
+                  Cancel Upload
+                </ButtonCaution>
+              </div>
+            ),
           })
         }
       }
@@ -197,15 +214,9 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       }
       footerContent={
         <ButtonContainer>
-          {uploadingImages ? (
-            <ButtonCaution type="button" onClick={handleCancelUpload}>
-              Cancel Upload
-            </ButtonCaution>
-          ) : (
-            <ButtonSecondary type="button" onClick={onClose} disabled={uploadingImages}>
-              Close
-            </ButtonSecondary>
-          )}
+          <ButtonSecondary type="button" onClick={onClose} disabled={uploadingImages}>
+            Close
+          </ButtonSecondary>
         </ButtonContainer>
       }
     />
