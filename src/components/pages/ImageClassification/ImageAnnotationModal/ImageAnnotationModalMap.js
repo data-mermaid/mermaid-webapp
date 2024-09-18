@@ -100,7 +100,7 @@ const ImageAnnotationModalMap = ({
           type: 'Feature',
           properties: {
             id: point.id,
-            ba_gr: `${point.annotations[0]?.benthic_attribute}_${point.annotations[0]?.growth_form}`,
+            ba_gr: point.annotations[0]?.ba_gr,
             benthicAttributeId: point.annotations[0]?.benthic_attribute,
             growthFormId: point.annotations[0]?.growth_form,
             isUnclassified: !point.annotations.length,

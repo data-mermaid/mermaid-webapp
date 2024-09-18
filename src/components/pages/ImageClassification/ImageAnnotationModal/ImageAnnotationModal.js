@@ -39,7 +39,14 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
       databaseSwitchboardInstance
         .getAnnotationsForImage(projectId, imageId)
         .then((data) => {
-          data.points.map((point) => point.annotations.sort(prioritizeConfirmedAnnotations))
+          data.points.map((point) => {
+            point.annotations.sort(prioritizeConfirmedAnnotations)
+            point.annotations.map(
+              (annotation) =>
+                (annotation.ba_gr = annotation.benthic_attribute + '_' + annotation.growth_form),
+            )
+            return point
+          })
           setDataToReview(data)
         })
         .catch(() => {

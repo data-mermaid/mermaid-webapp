@@ -18,10 +18,7 @@ const ImageAnnotationModalTable = ({
 }) => {
   const [selectedRowKey, setSelectedRowKey] = useState()
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
-  const tableData = Object.groupBy(
-    classifiedPoints,
-    ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
-  )
+  const tableData = Object.groupBy(classifiedPoints, ({ annotations }) => annotations[0].ba_gr)
 
   const getAttributeGrowthFormLabel = ({ benthic_attribute, growth_form }) =>
     growth_form

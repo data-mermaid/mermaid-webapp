@@ -10,13 +10,8 @@ import {
 
 const isClassified = ({ annotations }) => annotations.length > 0
 
-const isAClassifierGuessOfSelectedPoint = (annotations, benthic_attribute, growth_form) =>
-  annotations.some(
-    (annotation) =>
-      annotation.is_machine_created &&
-      annotation.benthic_attribute === benthic_attribute &&
-      annotation.growth_form === growth_form,
-  )
+const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
+  annotations.some((annotation) => annotation.is_machine_created && annotation.ba_gr === ba_gr)
 
 const isOptionAlreadyAdded = (acc, value) => acc.some((option) => option.value === value)
 
@@ -30,26 +25,24 @@ const ExistingRows = ({
   const [selectedExistingRow, setSelectedExistingRow] = useState('')
 
   const existingRowDropdownOptions = dataToReview.points.reduce((acc, currentPoint) => {
-    const { benthic_attribute, growth_form } = currentPoint.annotations[0]
-    const value = benthic_attribute + '_' + growth_form
+    const { benthic_attribute, growth_form, ba_gr } = currentPoint.annotations[0]
     const label = `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(
       growth_form,
     )}`
 
     if (
       isClassified(currentPoint) &&
-      !isOptionAlreadyAdded(acc, value) &&
-      !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, benthic_attribute, growth_form)
+      !isOptionAlreadyAdded(acc, ba_gr) &&
+      !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr)
     ) {
-      acc.push({ label, value })
+      acc.push({ label, value: ba_gr })
     }
 
     return acc
   }, [])
 
   const _updateSelectedRowOnPointAnnotationChange = useEffect(() => {
-    const { benthic_attribute, growth_form } = selectedPoint.annotations[0]
-    const rowKeyForPoint = benthic_attribute + '_' + growth_form
+    const rowKeyForPoint = selectedPoint.annotations[0].ba_gr
     const isPointInARow = existingRowDropdownOptions.some((row) => rowKeyForPoint === row.value)
 
     setSelectedExistingRow((prevState) => (isPointInARow ? rowKeyForPoint : prevState))
@@ -68,6 +61,7 @@ const ExistingRows = ({
     }, [])
 
     const annotationToAdd = {
+      ba_gr: existingAnnotation,
       benthic_attribute,
       growth_form: growth_form === 'null' ? null : growth_form,
       is_confirmed: true,
@@ -95,10 +89,7 @@ const ExistingRows = ({
             name="existing-row-point-selection"
             value="existing-row"
             disabled={!selectedExistingRow}
-            checked={
-              `${selectedPoint.annotations[0].benthic_attribute}_${selectedPoint.annotations[0].growth_form}` ===
-              selectedExistingRow
-            }
+            checked={selectedPoint.annotations[0].ba_gr === selectedExistingRow}
             onChange={() => addExistingAnnotation(selectedExistingRow)}
           />
         </PopupTdForRadio>

@@ -17,15 +17,6 @@ const confirmFirstAnnotationAndUnconfirmRest = (annotation, i) => {
   annotation.is_confirmed = i === 0
 }
 
-const isAnnotationSelected = (annotation, selectedPoint) => {
-  const { benthic_attribute, growth_form } = annotation
-  const selectedAnnotation = selectedPoint.annotations[0]
-  return (
-    benthic_attribute === selectedAnnotation.benthic_attribute &&
-    growth_form === selectedAnnotation.growth_form
-  )
-}
-
 const ClassifierGuesses = ({
   selectedPoint,
   dataToReview,
@@ -53,18 +44,15 @@ const ClassifierGuesses = ({
     setDataToReview({ ...dataToReview, points: updatedPoints })
   }
 
-  return classifierGuessesSortedByScore.map((annotation, i) => (
+  return classifierGuessesSortedByScore.map((annotation) => (
     <Tr key={annotation.id}>
       <PopupTdForRadio>
         <input
           type="radio"
-          id={`${annotation.benthic_attribute}_${annotation.growth_form}`}
-          name={`${annotation.benthic_attribute}_${annotation.growth_form}`}
-          value={`classifier-guess-${i}`}
-          checked={isAnnotationSelected(annotation, selectedPoint)}
-          onChange={() => {
-            selectClassifierGuess(annotation.id)
-          }}
+          id={annotation.ba_gr}
+          name={annotation.ba_gr}
+          checked={annotation.ba_gr === selectedPoint.annotations[0].ba_gr}
+          onChange={() => selectClassifierGuess(annotation.id)}
         />
       </PopupTdForRadio>
       <PopupTd>
