@@ -36,6 +36,7 @@ const ImageAnnotationModalTable = ({
       setSelectedRowKey()
     } else {
       setSelectedRowKey(rowKey)
+      setHighlightedAttributeId(rowKey)
     }
   }
 
