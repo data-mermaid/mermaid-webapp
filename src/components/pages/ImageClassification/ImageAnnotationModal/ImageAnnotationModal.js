@@ -26,12 +26,10 @@ import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 
 const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
-const ImageAnnotationModal = ({ imageId, setImageId }) => {
+const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthForms }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const [dataToReview, setDataToReview] = useState()
-  const [growthForms, setGrowthForms] = useState()
-  const [benthicAttributes, setBenthicAttributes] = useState()
   const [highlightedAttributeId, setHighlightedAttributeId] = useState('')
 
   const _fetchImageAnnotations = useEffect(() => {
@@ -52,16 +50,6 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
         .catch(() => {
           toast.error('Failed to fetch image annotations')
         })
-
-      // TODO: These two will likely be fetched in ObservationTable and passed to this component as props
-      // Because of that, not going to add error handling / loading indicators / Promise.all
-      databaseSwitchboardInstance.getChoices().then(({ growthforms }) => {
-        setGrowthForms(growthforms.data)
-      })
-
-      databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
-        setBenthicAttributes(benthicAttributes)
-      })
     }
     // eslint-disable-next-line
   }, [])
@@ -155,6 +143,8 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
 ImageAnnotationModal.propTypes = {
   imageId: PropTypes.string.isRequired,
   setImageId: PropTypes.func.isRequired,
+  benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default ImageAnnotationModal
