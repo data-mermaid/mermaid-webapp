@@ -144,8 +144,8 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
         <Modal
           title="Select New Attribute"
           isOpen={
-            benthicAttributeSelectOptions.length &&
-            growthFormSelectOptions.length &&
+            !!benthicAttributeSelectOptions.length &&
+            !!growthFormSelectOptions.length &&
             shouldDisplayModal
           }
           onDismiss={handleCloseModal}

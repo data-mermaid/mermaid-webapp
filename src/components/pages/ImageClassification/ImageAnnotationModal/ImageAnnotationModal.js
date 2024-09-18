@@ -90,7 +90,6 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
       onDismiss={handleCloseModal}
       allowCloseWithEscapeKey={false}
       maxWidth="fit-content"
-      contentOverflowIsVisible
       mainContent={
         dataToReview ? (
           <ImageAnnotationModalContainer>
