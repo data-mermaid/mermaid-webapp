@@ -157,8 +157,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     }
   }, [uploadedFiles, polling, imagesDoneProcessing])
 
-  console.log({ polling, imagesDoneProcessing })
-
   // Poll every 5 seconds after the first image is uploaded
   const _pollImageStatuses = useEffect(() => {
     let intervalId
