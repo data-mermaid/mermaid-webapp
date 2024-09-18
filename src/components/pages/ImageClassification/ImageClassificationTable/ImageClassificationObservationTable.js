@@ -71,9 +71,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [polling, setPolling] = useState(false)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId, recordId } = useParams()
-  // const [imagesDoneProcessing, setImagesDoneProcessing] = useState(false)
   const [growthForms, setGrowthForms] = useState()
   const [benthicAttributes, setBenthicAttributes] = useState()
+  const [imagesDoneProcessing, setImagesDoneProcessing] = useState(false)
 
   const isImageProcessed = (status) => status === 3
 
@@ -137,35 +137,38 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   }, [projectId, recordId])
 
   const _startPollingOnUpload = useEffect(() => {
-    if (!uploadedFiles.length && polling) {
-      return
-    }
+    if (uploadedFiles.length > 0 && !polling && !imagesDoneProcessing) {
+      setPolling(true)
+      setImages((prevImages) => {
+        const existingImagesMap = new Map(prevImages.map((img) => [img.id, img]))
 
-    setPolling(true)
-    setImages((prevImages) => {
-      const existingImagesMap = new Map(prevImages.map((img) => [img.id, img]))
-      // Merge only new images
-      const newImages = uploadedFiles.filter((file) => !existingImagesMap.has(file.id))
-      return [...prevImages, ...newImages]
-    })
-  }, [uploadedFiles, polling])
+        // Merge existing images with newly uploaded ones
+        const mergedImages = [...prevImages]
+
+        uploadedFiles.forEach((file) => {
+          // Only add new uploaded files if they don't already exist
+          if (!existingImagesMap.has(file.id)) {
+            mergedImages.push(file)
+          }
+        })
+
+        return mergedImages
+      })
+    }
+  }, [uploadedFiles, polling, imagesDoneProcessing])
+
+  console.log({ polling, imagesDoneProcessing })
 
   // Poll every 5 seconds after the first image is uploaded
   const _pollImageStatuses = useEffect(() => {
     let intervalId
-    let abortController = new AbortController()
 
     const startPolling = async () => {
       try {
-        // Cancel the previous request if any
-        abortController.abort()
-        abortController = new AbortController()
-
         const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
           projectId,
           recordId,
           EXCLUDE_PARAMS,
-          { signal: abortController.signal },
         )
         setImages(response.results)
 
@@ -176,9 +179,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         if (allProcessed) {
           clearInterval(intervalId)
           setPolling(false)
-          // setImagesDoneProcessing(true)
+          setImagesDoneProcessing(true)
         } else {
-          // setImagesDoneProcessing(false)
+          setImagesDoneProcessing(false)
         }
       } catch (error) {
         console.error('Error polling images:', error)
@@ -193,7 +196,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
       if (intervalId) {
         clearInterval(intervalId)
       }
-      abortController.abort()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [polling, projectId])
