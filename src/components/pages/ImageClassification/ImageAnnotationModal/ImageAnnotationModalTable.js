@@ -14,7 +14,7 @@ const ImageAnnotationModalTable = ({
   getBenthicAttributeLabel,
   getGrowthFormLabel,
   setDataToReview,
-  setHighlightedPoints,
+  setHighlightedAttributeId,
 }) => {
   const [selectedRowIndex, setSelectedRowIndex] = useState()
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
@@ -31,7 +31,7 @@ const ImageAnnotationModalTable = ({
   const checkIfRowIsConfirmed = (row) =>
     tableData[row].every(({ annotations }) => annotations[0].is_confirmed)
 
-  const handleRowSelect = (rowData, index) => {
+  const handleRowSelect = (index) => {
     if (index === selectedRowIndex) {
       setSelectedRowIndex()
     } else {
@@ -44,7 +44,7 @@ const ImageAnnotationModalTable = ({
       return
     }
 
-    setHighlightedPoints(tableData[row])
+    setHighlightedAttributeId(row)
   }
 
   const handleRowLeave = () => {
@@ -52,7 +52,7 @@ const ImageAnnotationModalTable = ({
       return
     }
 
-    setHighlightedPoints([])
+    setHighlightedAttributeId('')
   }
 
   const handleRowConfirm = (e, rowData) => {
@@ -69,7 +69,7 @@ const ImageAnnotationModalTable = ({
 
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
     setSelectedRowIndex()
-    setHighlightedPoints([])
+    setHighlightedAttributeId('')
   }
 
   return (
@@ -90,7 +90,7 @@ const ImageAnnotationModalTable = ({
           return (
             <TrWithBorderStyling
               key={row}
-              onClick={() => handleRowSelect(tableData[row], i)}
+              onClick={() => handleRowSelect(i)}
               onMouseEnter={() => handleRowHover(row)}
               onMouseLeave={handleRowLeave}
               $isSelected={i === selectedRowIndex}
@@ -121,7 +121,7 @@ const ImageAnnotationModalTable = ({
 }
 
 ImageAnnotationModalTable.propTypes = {
-  setHighlightedPoints: PropTypes.func.isRequired,
+  setHighlightedAttributeId: PropTypes.func.isRequired,
   setDataToReview: PropTypes.func.isRequired,
   points: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
