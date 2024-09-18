@@ -75,8 +75,8 @@ export const TrWithBorderStyling = styled(Tr)`
 
 export const ConfirmedIcon = styled(IconCheck)`
   color: ${COLORS.confirmed};
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 3rem;
+  width: 3rem;
 `
 
 export const EditPointPopupTable = styled(Table)`
