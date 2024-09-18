@@ -8,7 +8,7 @@ const EditPointPopupWrapper = ({ children, map, lngLat }) => {
   const popupRef = useRef()
 
   useEffect(() => {
-    const popup = new maplibregl.Popup({
+    new maplibregl.Popup({
       anchor: 'top-left',
       closeButton: false,
       maxWidth: 'none',
@@ -17,8 +17,6 @@ const EditPointPopupWrapper = ({ children, map, lngLat }) => {
       .setLngLat(lngLat)
       .setDOMContent(popupRef.current)
       .addTo(map)
-
-    return popup.remove
   }, [children, lngLat, map])
 
   return (
@@ -31,7 +29,7 @@ const EditPointPopupWrapper = ({ children, map, lngLat }) => {
 EditPointPopupWrapper.propTypes = {
   children: PropTypes.node.isRequired,
   map: PropTypes.object.isRequired,
-  lngLat: PropTypes.array.isRequired,
+  lngLat: PropTypes.arrayOf(PropTypes.number).isRequired,
 }
 
 export default EditPointPopupWrapper
