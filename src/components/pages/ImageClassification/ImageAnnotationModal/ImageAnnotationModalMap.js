@@ -266,14 +266,14 @@ const ImageAnnotationModalMap = ({
     map.current.setPaintProperty('patches-line-layer', 'line-color', [
       'case',
       [
-        'in', // checks if point on map is clicked
+        '==', // checks if point on map is clicked
         ['get', 'id'],
         selectedPoint.id,
       ],
       COLORS.current,
 
       [
-        'in', // checks if point on map is in highlighted row in table
+        '==', // checks if point on map is in highlighted row in table
         ['get', 'ba_gr'],
         highlightedAttributeId,
       ],
@@ -285,7 +285,7 @@ const ImageAnnotationModalMap = ({
     map.current.setPaintProperty('patches-line-layer', 'line-width', [
       'case',
       [
-        'in', // checks if point on map is clicked
+        '==', // checks if point on map is clicked
         ['get', 'id'],
         selectedPoint.id,
       ],
