@@ -9,21 +9,10 @@ import {
   TrWithBorderStyling,
 } from './ImageAnnotationModal.styles'
 
-const ImageAnnotationModalTable = ({
-  points,
-  getBenthicAttributeLabel,
-  getGrowthFormLabel,
-  setDataToReview,
-  setHighlightedAttributeId,
-}) => {
+const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttributeId }) => {
   const [selectedRowKey, setSelectedRowKey] = useState()
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
   const tableData = Object.groupBy(classifiedPoints, ({ annotations }) => annotations[0].ba_gr)
-
-  const getAttributeGrowthFormLabel = ({ benthic_attribute, growth_form }) =>
-    growth_form
-      ? `${getBenthicAttributeLabel(benthic_attribute)} / ${getGrowthFormLabel(growth_form)}`
-      : getBenthicAttributeLabel(benthic_attribute)
 
   const checkIfRowIsConfirmed = (rowKey) =>
     tableData[rowKey].every(({ annotations }) => annotations[0].is_confirmed)
@@ -96,8 +85,8 @@ const ImageAnnotationModalTable = ({
             >
               <Td align="right">{isRowConfirmed ? <ConfirmedIcon /> : undefined}</Td>
               <Td align="right">{tableData[row].length}</Td>
-              {/* All points in a row will have the same benthic attribute / growth form */}
-              <Td>{getAttributeGrowthFormLabel(tableData[row][0].annotations[0])}</Td>
+              {/* All points in a row will have the same ba_gr label */}
+              <Td>{tableData[row][0].annotations[0].ba_gr_label}</Td>
               <Td align="center">
                 {isRowConfirmed ? (
                   'Confirmed'
@@ -122,8 +111,6 @@ ImageAnnotationModalTable.propTypes = {
   setHighlightedAttributeId: PropTypes.func.isRequired,
   setDataToReview: PropTypes.func.isRequired,
   points: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
-  getBenthicAttributeLabel: PropTypes.func.isRequired,
-  getGrowthFormLabel: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModalTable

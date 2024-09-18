@@ -17,13 +17,7 @@ const confirmFirstAnnotationAndUnconfirmRest = (annotation, i) => {
   annotation.is_confirmed = i === 0
 }
 
-const ClassifierGuesses = ({
-  selectedPoint,
-  dataToReview,
-  setDataToReview,
-  getBenthicAttributeLabel,
-  getGrowthFormLabel,
-}) => {
+const ClassifierGuesses = ({ selectedPoint, dataToReview, setDataToReview }) => {
   const classifierGuesses = selectedPoint.annotations.filter(
     (annotation) => annotation.is_machine_created,
   )
@@ -55,10 +49,7 @@ const ClassifierGuesses = ({
           onChange={() => selectClassifierGuess(annotation.id)}
         />
       </PopupTdForRadio>
-      <PopupTd>
-        {getBenthicAttributeLabel(annotation.benthic_attribute)}{' '}
-        {getGrowthFormLabel(annotation.growth_form)}
-      </PopupTd>
+      <PopupTd>{annotation.ba_gr_label}</PopupTd>
       <PopupTd align="right">{annotation.score}%</PopupTd>
     </Tr>
   ))
@@ -68,8 +59,6 @@ ClassifierGuesses.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  getBenthicAttributeLabel: PropTypes.func.isRequired,
-  getGrowthFormLabel: PropTypes.func.isRequired,
 }
 
 export default ClassifierGuesses

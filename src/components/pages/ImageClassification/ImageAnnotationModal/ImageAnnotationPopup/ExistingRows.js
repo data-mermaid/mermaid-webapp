@@ -15,27 +15,18 @@ const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
 
 const isOptionAlreadyAdded = (acc, value) => acc.some((option) => option.value === value)
 
-const ExistingRows = ({
-  selectedPoint,
-  dataToReview,
-  setDataToReview,
-  getBenthicAttributeLabel,
-  getGrowthFormLabel,
-}) => {
+const ExistingRows = ({ selectedPoint, dataToReview, setDataToReview }) => {
   const [selectedExistingRow, setSelectedExistingRow] = useState('')
 
   const existingRowDropdownOptions = dataToReview.points.reduce((acc, currentPoint) => {
-    const { benthic_attribute, growth_form, ba_gr } = currentPoint.annotations[0]
-    const label = `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(
-      growth_form,
-    )}`
+    const { ba_gr, ba_gr_label } = currentPoint.annotations[0]
 
     if (
       isClassified(currentPoint) &&
       !isOptionAlreadyAdded(acc, ba_gr) &&
       !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr)
     ) {
-      acc.push({ label, value: ba_gr })
+      acc.push({ label: ba_gr_label, value: ba_gr })
     }
 
     return acc
@@ -60,8 +51,13 @@ const ExistingRows = ({
       return acc
     }, [])
 
+    const labelForExistingAnnotation = existingRowDropdownOptions.find(
+      ({ value }) => value === existingAnnotation,
+    ).label
+
     const annotationToAdd = {
       ba_gr: existingAnnotation,
+      ba_gr_label: labelForExistingAnnotation,
       benthic_attribute,
       growth_form: growth_form === 'null' ? null : growth_form,
       is_confirmed: true,
@@ -118,8 +114,6 @@ ExistingRows.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  getBenthicAttributeLabel: PropTypes.func.isRequired,
-  getGrowthFormLabel: PropTypes.func.isRequired,
 }
 
 export default ExistingRows

@@ -32,20 +32,38 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
   const [dataToReview, setDataToReview] = useState()
   const [highlightedAttributeId, setHighlightedAttributeId] = useState('')
 
+  const getBenthicAttributeLabel = (benthicAttributeId) => {
+    const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
+    return matchingBenthicAttribute?.name ?? ''
+  }
+
+  const getGrowthFormLabel = (growthFormId) => {
+    const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
+    return matchingGrowthForm?.name ?? ''
+  }
+
+  const getAttributeGrowthFormLabel = ({ benthic_attribute, growth_form }) =>
+    growth_form
+      ? `${getBenthicAttributeLabel(benthic_attribute)} / ${getGrowthFormLabel(growth_form)}`
+      : getBenthicAttributeLabel(benthic_attribute)
+
   const _fetchImageAnnotations = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
         .getAnnotationsForImage(projectId, imageId)
         .then((data) => {
-          data.points.map((point) => {
-            point.annotations.sort(prioritizeConfirmedAnnotations)
-            point.annotations.map(
-              (annotation) =>
-                (annotation.ba_gr = annotation.benthic_attribute + '_' + annotation.growth_form),
-            )
-            return point
+          const formattedPoints = data.points.map((point) => {
+            const sortedAnnotations = point.annotations.toSorted(prioritizeConfirmedAnnotations)
+            const formattedAnnotations = sortedAnnotations.map((annotation) => ({
+              ...annotation,
+              ba_gr: annotation.benthic_attribute + '_' + annotation.growth_form,
+              ba_gr_label: getAttributeGrowthFormLabel(annotation),
+            }))
+
+            return { ...point, annotations: formattedAnnotations }
           })
-          setDataToReview(data)
+
+          setDataToReview({ ...data, points: formattedPoints })
         })
         .catch(() => {
           toast.error('Failed to fetch image annotations')
@@ -68,16 +86,6 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
       })
   }
 
-  const getBenthicAttributeLabel = (benthicAttributeId) => {
-    const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-    return matchingBenthicAttribute?.name ?? ''
-  }
-
-  const getGrowthFormLabel = (growthFormId) => {
-    const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
-    return matchingGrowthForm?.name ?? ''
-  }
-
   return (
     <Modal
       title={dataToReview?.original_image_name ?? ''}
@@ -91,8 +99,6 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
             <ImageAnnotationModalTable
               points={dataToReview.points}
               setDataToReview={setDataToReview}
-              getBenthicAttributeLabel={getBenthicAttributeLabel}
-              getGrowthFormLabel={getGrowthFormLabel}
               setHighlightedAttributeId={setHighlightedAttributeId}
             />
             <ImageAnnotationModalMap
@@ -100,8 +106,6 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
               setDataToReview={setDataToReview}
               highlightedAttributeId={highlightedAttributeId}
               databaseSwitchboardInstance={databaseSwitchboardInstance}
-              getBenthicAttributeLabel={getBenthicAttributeLabel}
-              getGrowthFormLabel={getGrowthFormLabel}
             />
           </ImageAnnotationModalContainer>
         ) : (
