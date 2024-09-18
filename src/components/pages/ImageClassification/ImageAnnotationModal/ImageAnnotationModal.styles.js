@@ -60,12 +60,14 @@ export const ImageAnnotationPopupContainer = styled.div`
 
 export const TrWithBorderStyling = styled(Tr)`
   border: 1px solid transparent;
-  border-top: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.current}`};
-  border-bottom: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.current}`};
+  border-top: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.highlighted}`};
+  border-bottom: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.highlighted}`};
 
   &:hover {
-    border-top: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.highlighted}`};
-    border-bottom: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.highlighted}`};
+    border-top: ${({ $isAnyRowSelected }) =>
+      !$isAnyRowSelected && `2px solid ${COLORS.highlighted}`};
+    border-bottom: ${({ $isAnyRowSelected }) =>
+      !$isAnyRowSelected && `2px solid ${COLORS.highlighted}`};
   }
 
   td {
