@@ -23,7 +23,7 @@ const tableHeaders = [
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
   { align: 'right', id: 'growth-form-label', text: 'Growth Form' },
-  { colSpan: 3, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
+  { colSpan: 4, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
   { align: 'right', id: 'validations', text: 'Validations' },
   { align: 'right', id: 'review', text: '' },
   { align: 'right', id: 'remove', text: '' },
@@ -37,8 +37,11 @@ const TableHeaderRow = ({ hideStatus }) => (
         return null
       }
 
+      const colSpan =
+        header.id === 'number-of-points-label' ? (hideStatus ? 4 : 3) : header.colSpan || 1
+
       return (
-        <Th key={header.id} align={header.align} id={header.id} colSpan={header.colSpan || 1}>
+        <Th key={header.id} align={header.align} id={header.id} colSpan={colSpan}>
           <span>{header.text}</span>
         </Th>
       )
@@ -56,9 +59,9 @@ const subHeaderColumns = [
   { align: 'center', text: 'Unknown' },
 ]
 
-const SubHeaderRow = () => (
+const SubHeaderRow = ({ hideStatus }) => (
   <Tr>
-    <Th colSpan={6} />
+    <Th colSpan={hideStatus ? 5 : 6} />
     {subHeaderColumns.map((col, index) => (
       <Th key={index} align={col.align}>
         <span>{col.text}</span>
@@ -67,6 +70,10 @@ const SubHeaderRow = () => (
     <Th colSpan={4} />
   </Tr>
 )
+
+SubHeaderRow.propTypes = {
+  hideStatus: PropTypes.bool.isRequired,
+}
 
 const statusLabels = {
   0: 'Unknown',
@@ -204,9 +211,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         <StyledOverflowWrapper>
           <StickyObservationTable aria-labelledby="table-label">
             <thead>
-              {/* Pass imagesDoneProcessing to TableHeaderRow to hide/show the status column */}
               <TableHeaderRow hideStatus={imagesDoneProcessing} />
-              <SubHeaderRow />
+              <SubHeaderRow hideStatus={imagesDoneProcessing} />
             </thead>
             <tbody>
               {images.map((file, index) => {
@@ -235,7 +241,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                       >
                         <Thumbnail imageUrl={file.thumbnail || file.image} />
                       </TdWithHoverText>
-                      {/* Conditionally render the "Status" column */}
                       {!imagesDoneProcessing && (
                         <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
                       )}
@@ -278,7 +283,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
                       return (
                         <Tr key={`${file.id}-sub-${idx}`}>
-                          <StyledTd colSpan={4} />
+                          <StyledTd colSpan={imagesDoneProcessing ? 3 : 4} />
                           <StyledTd>
                             {getBenthicAttributeLabel(
                               imageAnnotationData[key][0].annotations[0].benthic_attribute,
