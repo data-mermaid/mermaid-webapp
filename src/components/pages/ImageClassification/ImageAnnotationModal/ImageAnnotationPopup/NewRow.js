@@ -92,8 +92,18 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
       return acc
     }, [])
 
+    const benthicAttributeLabel = benthicAttributeSelectOptions.find(
+      ({ value }) => value === selectedBenthicAttr,
+    )?.label
+    const growthFormLabel = growthFormSelectOptions
+      .find(({ id }) => id === selectedGrowthForm)
+      ?.name.toLowerCase()
+
     const annotationToAdd = {
       ba_gr: `${selectedBenthicAttr}_${selectedGrowthForm || null}`,
+      ba_gr_label: growthFormLabel
+        ? `${benthicAttributeLabel} ${growthFormLabel}`
+        : benthicAttributeLabel,
       benthic_attribute: selectedBenthicAttr,
       growth_form: selectedGrowthForm || null,
       is_confirmed: true,

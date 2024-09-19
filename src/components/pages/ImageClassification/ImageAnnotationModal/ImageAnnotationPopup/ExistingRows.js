@@ -53,7 +53,7 @@ const ExistingRows = ({ selectedPoint, dataToReview, setDataToReview }) => {
 
     const labelForExistingAnnotation = existingRowDropdownOptions.find(
       ({ value }) => value === existingAnnotation,
-    ).label
+    )?.label
 
     const annotationToAdd = {
       ba_gr: existingAnnotation,

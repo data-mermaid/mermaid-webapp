@@ -39,12 +39,12 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
 
   const getGrowthFormLabel = (growthFormId) => {
     const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
-    return matchingGrowthForm?.name ?? ''
+    return matchingGrowthForm?.name.toLowerCase() ?? ''
   }
 
   const getAttributeGrowthFormLabel = ({ benthic_attribute, growth_form }) =>
     growth_form
-      ? `${getBenthicAttributeLabel(benthic_attribute)} / ${getGrowthFormLabel(growth_form)}`
+      ? `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(growth_form)}`
       : getBenthicAttributeLabel(benthic_attribute)
 
   const _fetchImageAnnotations = useEffect(() => {
