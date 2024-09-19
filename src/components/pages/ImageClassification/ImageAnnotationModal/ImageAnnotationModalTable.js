@@ -12,7 +12,10 @@ import {
 const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttributeId }) => {
   const [selectedRowKey, setSelectedRowKey] = useState()
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
-  const tableData = Object.groupBy(classifiedPoints, ({ annotations }) => annotations[0].ba_gr)
+  const tableData = Object.groupBy(
+    classifiedPoints,
+    ({ annotations }) => annotations[0].ba_gr_label,
+  )
 
   const checkIfRowIsConfirmed = (rowKey) =>
     tableData[rowKey].every(({ annotations }) => annotations[0].is_confirmed)
@@ -22,7 +25,9 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
       setSelectedRowKey()
     } else {
       setSelectedRowKey(rowKey)
-      setHighlightedAttributeId(rowKey)
+
+      const attributeId = tableData[rowKey][0].annotations[0].ba_gr
+      setHighlightedAttributeId(attributeId)
     }
   }
 
@@ -31,7 +36,8 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
       return
     }
 
-    setHighlightedAttributeId(rowKey)
+    const attributeId = tableData[rowKey][0].annotations[0].ba_gr
+    setHighlightedAttributeId(attributeId)
   }
 
   const handleRowLeave = () => {
@@ -71,37 +77,39 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
         </Tr>
       </thead>
       <tbody>
-        {Object.keys(tableData).map((row) => {
-          const isRowConfirmed = checkIfRowIsConfirmed(row)
+        {Object.keys(tableData)
+          .sort()
+          .map((row) => {
+            const isRowConfirmed = checkIfRowIsConfirmed(row)
 
-          return (
-            <TrWithBorderStyling
-              key={row}
-              onClick={() => handleRowSelect(row)}
-              onMouseEnter={() => handleRowHover(row)}
-              onMouseLeave={handleRowLeave}
-              $isSelected={row === selectedRowKey}
-              $isAnyRowSelected={selectedRowKey !== undefined}
-            >
-              <Td align="right">{isRowConfirmed ? <ConfirmedIcon /> : undefined}</Td>
-              <Td align="right">{tableData[row].length}</Td>
-              {/* All points in a row will have the same ba_gr label */}
-              <Td>{tableData[row][0].annotations[0].ba_gr_label}</Td>
-              <Td align="center">
-                {isRowConfirmed ? (
-                  'Confirmed'
-                ) : (
-                  <ButtonSecondary
-                    type="button"
-                    onClick={(e) => handleRowConfirm(e, tableData[row])}
-                  >
-                    Confirm
-                  </ButtonSecondary>
-                )}
-              </Td>
-            </TrWithBorderStyling>
-          )
-        })}
+            return (
+              <TrWithBorderStyling
+                key={row}
+                onClick={() => handleRowSelect(row)}
+                onMouseEnter={() => handleRowHover(row)}
+                onMouseLeave={handleRowLeave}
+                $isSelected={row === selectedRowKey}
+                $isAnyRowSelected={selectedRowKey !== undefined}
+              >
+                <Td align="right">{isRowConfirmed ? <ConfirmedIcon /> : undefined}</Td>
+                <Td align="right">{tableData[row].length}</Td>
+                {/* All points in a row will have the same ba_gr label */}
+                <Td>{tableData[row][0].annotations[0].ba_gr_label}</Td>
+                <Td align="center">
+                  {isRowConfirmed ? (
+                    'Confirmed'
+                  ) : (
+                    <ButtonSecondary
+                      type="button"
+                      onClick={(e) => handleRowConfirm(e, tableData[row])}
+                    >
+                      Confirm
+                    </ButtonSecondary>
+                  )}
+                </Td>
+              </TrWithBorderStyling>
+            )
+          })}
       </tbody>
     </TableWithNoMinWidth>
   )
