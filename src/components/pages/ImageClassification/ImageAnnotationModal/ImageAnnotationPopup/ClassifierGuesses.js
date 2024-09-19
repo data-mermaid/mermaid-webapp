@@ -67,9 +67,11 @@ const ClassifierGuesses = ({
           }}
         />
       </PopupTdForRadio>
-      <PopupTd>{getBenthicAttributeLabel(annotation.benthic_attribute)}</PopupTd>
-      <PopupTd>{getGrowthFormLabel(annotation.growth_form)}</PopupTd>
-      <PopupTd>{annotation.score}</PopupTd>
+      <PopupTd>
+        {getBenthicAttributeLabel(annotation.benthic_attribute)}{' '}
+        {getGrowthFormLabel(annotation.growth_form)}
+      </PopupTd>
+      <PopupTd align="right">{annotation.score}%</PopupTd>
     </Tr>
   ))
 }

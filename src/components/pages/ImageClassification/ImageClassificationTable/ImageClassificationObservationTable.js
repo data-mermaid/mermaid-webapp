@@ -86,11 +86,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [polling, setPolling] = useState(false)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId, recordId } = useParams()
-  const [imagesDoneProcessing, setImagesDoneProcessing] = useState(false)
   const [growthForms, setGrowthForms] = useState()
   const [benthicAttributes, setBenthicAttributes] = useState()
 
-  const isImageProcessed = (status) => status === 3
+  const isImageProcessed = (status) => status === 3 || status === 4
 
   const handleImageClick = (file) => {
     if (isImageProcessed(file.classification_status.status)) {
@@ -151,14 +150,35 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, recordId])
 
-  const _updateFilesOnUpload = useEffect(() => {
-    setImages(uploadedFiles)
-    setImagesDoneProcessing(false)
-  }, [uploadedFiles])
+  const _startPollingOnUpload = useEffect(() => {
+    const hasNewImages = uploadedFiles.some((file) => !images.some((img) => img.id === file.id))
+
+    if (hasNewImages) {
+      setImages((prevImages) => {
+        const existingImagesMap = new Map(prevImages.map((img) => [img.id, img]))
+
+        // Merge existing images with newly uploaded ones
+        const mergedImages = [...prevImages]
+
+        uploadedFiles.forEach((file) => {
+          if (!existingImagesMap.has(file.id)) {
+            mergedImages.push(file)
+          }
+        })
+
+        return mergedImages
+      })
+
+      if (!polling) {
+        setPolling(true)
+      }
+    }
+  }, [uploadedFiles, images, polling])
 
   // Poll every 5 seconds after the first image is uploaded
   const _pollImageStatuses = useEffect(() => {
     let intervalId
+
     const startPolling = async () => {
       try {
         const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
@@ -166,6 +186,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
           recordId,
           EXCLUDE_PARAMS,
         )
+
         setImages(response.results)
 
         const allProcessed = response.results.every((file) =>
@@ -173,34 +194,28 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         )
 
         if (allProcessed) {
-          clearInterval(intervalId)
           setPolling(false)
-          setImagesDoneProcessing(true)
         } else {
-          setImagesDoneProcessing(false)
+          // Schedule the next polling only after the current one completes
+          intervalId = setTimeout(startPolling, 5000)
         }
       } catch (error) {
         console.error('Error polling images:', error)
+        intervalId = setTimeout(startPolling, 5000)
       }
     }
 
     if (polling) {
-      intervalId = setInterval(startPolling, 5000)
+      startPolling()
     }
 
     return () => {
       if (intervalId) {
-        clearInterval(intervalId)
+        clearTimeout(intervalId)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [polling, projectId])
-
-  const _beginPollingAfterFirstImageIsUploaded = useEffect(() => {
-    if (uploadedFiles.length > 0 && !polling && !imagesDoneProcessing) {
-      setPolling(true)
-    }
-  }, [uploadedFiles, polling, images, imagesDoneProcessing])
+  }, [polling, projectId, recordId])
 
   return (
     <>
@@ -209,8 +224,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         <StyledOverflowWrapper>
           <StickyObservationTable aria-labelledby="table-label">
             <thead>
-              <TableHeaderRow hideStatus={imagesDoneProcessing} />
-              <SubHeaderRow hideStatus={imagesDoneProcessing} />
+              <TableHeaderRow hideStatus={!polling} />
+              <SubHeaderRow hideStatus={!polling} />
             </thead>
             <tbody>
               {images.map((file, index) => {
@@ -242,7 +257,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                       >
                         <Thumbnail imageUrl={file.thumbnail || file.image} />
                       </TdWithHoverText>
-                      {!imagesDoneProcessing && (
+                      {!!polling && (
                         <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
                       )}
                       <StyledTd></StyledTd>
@@ -281,7 +296,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
                       return (
                         <Tr key={`${file.id}-sub-${idx}`}>
-                          <StyledTd colSpan={imagesDoneProcessing ? 2 : 3} />
+                          <StyledTd colSpan={!polling ? 2 : 3} />
                           <StyledTd>{index + 1}</StyledTd>
                           <StyledTd>
                             {getBenthicAttributeLabel(

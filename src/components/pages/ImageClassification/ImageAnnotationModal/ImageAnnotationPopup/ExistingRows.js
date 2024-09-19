@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Tr } from '../../../../generic/Table/table'
+import { Th, Tr } from '../../../../generic/Table/table'
 import { PopupTd, PopupTdForRadio } from '../ImageAnnotationModal.styles'
 import { Select } from '../../../../generic/form'
 import {
@@ -83,38 +83,43 @@ const ExistingRows = ({
   }
 
   return (
-    <Tr>
-      <PopupTdForRadio>
-        <input
-          type="radio"
-          id="existing-row-point-selection"
-          name="existing-row-point-selection"
-          value="existing-row"
-          disabled={!selectedExistingRow}
-          checked={
-            `${selectedPoint.annotations[0].benthic_attribute}_${selectedPoint.annotations[0].growth_form}` ===
-            selectedExistingRow
-          }
-          onChange={() => addExistingAnnotation(selectedExistingRow)}
-        />
-      </PopupTdForRadio>
-      <PopupTd colSpan={3}>
-        <Select
-          label="Add to existing row"
-          value={selectedExistingRow}
-          onChange={(e) => addExistingAnnotation(e.target.value)}
-        >
-          <option value="" disabled>
-            Choose...
-          </option>
-          {existingRowDropdownOptions.map((row) => (
-            <option key={row.value} value={row.value}>
-              {row.label}
+    <>
+      <Tr>
+        <Th colSpan={4}>Attribute / Growth Form</Th>
+      </Tr>
+      <Tr>
+        <PopupTdForRadio>
+          <input
+            type="radio"
+            id="existing-row-point-selection"
+            name="existing-row-point-selection"
+            value="existing-row"
+            disabled={!selectedExistingRow}
+            checked={
+              `${selectedPoint.annotations[0].benthic_attribute}_${selectedPoint.annotations[0].growth_form}` ===
+              selectedExistingRow
+            }
+            onChange={() => addExistingAnnotation(selectedExistingRow)}
+          />
+        </PopupTdForRadio>
+        <PopupTd colSpan={3}>
+          <Select
+            label="Add to existing row"
+            value={selectedExistingRow}
+            onChange={(e) => addExistingAnnotation(e.target.value)}
+          >
+            <option value="" disabled>
+              Choose...
             </option>
-          ))}
-        </Select>
-      </PopupTd>
-    </Tr>
+            {existingRowDropdownOptions.map((row) => (
+              <option key={row.value} value={row.value}>
+                {row.label}
+              </option>
+            ))}
+          </Select>
+        </PopupTd>
+      </Tr>
+    </>
   )
 }
 

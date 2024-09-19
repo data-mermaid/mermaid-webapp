@@ -8,6 +8,17 @@ import { toast } from 'react-toastify'
 import language from '../../../../language'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
+const renderUploadProgress = (processedCount, totalFiles, handleCancelUpload) => (
+  <div>
+    <p>
+      Uploading {processedCount}/{totalFiles} images...
+    </p>
+    <ButtonCaution type="button" onClick={handleCancelUpload}>
+      Cancel Upload
+    </ButtonCaution>
+  </div>
+)
+
 const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
   const isCancelledRef = useRef(false)
   const fileInputRef = useRef(null)
@@ -73,15 +84,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
     // Show the persistent uploading toast and store the toastId
     if (!toastId.current) {
-      toastId.current = toast.success(
-        <div>
-          <p>Uploading 0/{files.length} images...</p>
-          <ButtonCaution type="button" onClick={handleCancelUpload}>
-            Cancel Upload
-          </ButtonCaution>
-        </div>,
-        { autoClose: true },
-      )
+      toastId.current = toast.info(renderUploadProgress(0, files.length, handleCancelUpload))
     }
 
     isCancelledRef.current = false
@@ -125,16 +128,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
         if (toastId.current) {
           toast.update(toastId.current, {
-            render: (
-              <div>
-                <p>
-                  Uploading {processedCount}/{files.length} images...
-                </p>
-                <ButtonCaution type="button" onClick={handleCancelUpload}>
-                  Cancel Upload
-                </ButtonCaution>
-              </div>
-            ),
+            render: renderUploadProgress(processedCount, files.length, handleCancelUpload),
           })
         }
       }
@@ -145,7 +139,13 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     }
 
     if (uploadedFiles.length > 0) {
-      toast.success(uploadText.success)
+      if (toastId.current) {
+        toast.update(toastId.current, {
+          render: uploadText.success,
+          type: toast.TYPE.SUCCESS,
+          autoClose: 5000,
+        })
+      }
     }
 
     if (toastId.current) {
