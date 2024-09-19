@@ -74,7 +74,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [growthForms, setGrowthForms] = useState()
   const [benthicAttributes, setBenthicAttributes] = useState()
 
-  const isImageProcessed = (status) => status === 3
+  const isImageProcessed = (status) => status === 3 || status === 4
 
   const handleImageClick = (file) => {
     if (isImageProcessed(file.classification_status.status)) {
