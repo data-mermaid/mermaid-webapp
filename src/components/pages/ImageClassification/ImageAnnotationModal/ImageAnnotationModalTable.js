@@ -40,20 +40,10 @@ const ImageAnnotationModalTable = ({
     }
   }
 
-  const handleRowHover = (rowKey) => {
-    if (selectedRowKey !== undefined) {
-      return
+  const handleRowHoverOrLeave = (rowKey) => {
+    if (selectedRowKey === undefined) {
+      setHighlightedAttributeId(rowKey)
     }
-
-    setHighlightedAttributeId(rowKey)
-  }
-
-  const handleRowLeave = () => {
-    if (selectedRowKey !== undefined) {
-      return
-    }
-
-    setHighlightedAttributeId('')
   }
 
   const handleRowConfirm = (e, rowData) => {
@@ -92,8 +82,8 @@ const ImageAnnotationModalTable = ({
             <TrWithBorderStyling
               key={row}
               onClick={() => handleRowSelect(row)}
-              onMouseEnter={() => handleRowHover(row)}
-              onMouseLeave={handleRowLeave}
+              onMouseEnter={() => handleRowHoverOrLeave(row)}
+              onMouseLeave={() => handleRowHoverOrLeave('')}
               $isSelected={row === selectedRowKey}
               $isAnyRowSelected={selectedRowKey !== undefined}
             >
