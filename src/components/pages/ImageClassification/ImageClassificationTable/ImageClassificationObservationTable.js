@@ -242,10 +242,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                       {!imagesDoneProcessing && (
                         <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
                       )}
-                      <StyledTd>{index + 1}</StyledTd>
-                      <StyledTd></StyledTd>
-                      <StyledTd></StyledTd>
-                      <StyledTd>{file.num_confirmed}</StyledTd>
+                      <StyledTd colSpan={4}></StyledTd>
                       <StyledTd>{file.num_unconfirmed}</StyledTd>
                       <StyledTd>{file.num_unclassified}</StyledTd>
                       <StyledTd>
@@ -266,21 +263,20 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
                     {/* Subrows based on imageAnnotationData */}
                     {Object.keys(imageAnnotationData).map((key, idx) => {
-                      const { confirmedCount, unconfirmedCount } = imageAnnotationData[key].reduce(
+                      const { confirmedCount } = imageAnnotationData[key].reduce(
                         (counts, item) => {
                           if (item.annotations[0].is_confirmed) {
                             counts.confirmedCount += 1
-                          } else {
-                            counts.unconfirmedCount += 1
                           }
                           return counts
                         },
-                        { confirmedCount: 0, unconfirmedCount: 0 },
+                        { confirmedCount: 0 },
                       )
 
                       return (
                         <Tr key={`${file.id}-sub-${idx}`}>
-                          <StyledTd colSpan={imagesDoneProcessing ? 3 : 4} />
+                          <StyledTd colSpan={imagesDoneProcessing ? 2 : 3} />
+                          <StyledTd>{index + 1}</StyledTd>
                           <StyledTd>
                             {getBenthicAttributeLabel(
                               imageAnnotationData[key][0].annotations[0].benthic_attribute,
@@ -292,7 +288,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                             )}
                           </StyledTd>
                           <StyledTd>{confirmedCount}</StyledTd>
-                          <StyledTd>{unconfirmedCount}</StyledTd>
                         </Tr>
                       )
                     })}
