@@ -18,19 +18,21 @@ const isOptionAlreadyAdded = (acc, value) => acc.some((option) => option.value =
 const ExistingRows = ({ selectedPoint, dataToReview, setDataToReview }) => {
   const [selectedExistingRow, setSelectedExistingRow] = useState('')
 
-  const existingRowDropdownOptions = dataToReview.points.reduce((acc, currentPoint) => {
-    const { ba_gr, ba_gr_label } = currentPoint.annotations[0]
+  const existingRowDropdownOptions = dataToReview.points
+    .reduce((acc, currentPoint) => {
+      const { ba_gr, ba_gr_label } = currentPoint.annotations[0]
 
-    if (
-      isClassified(currentPoint) &&
-      !isOptionAlreadyAdded(acc, ba_gr) &&
-      !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr)
-    ) {
-      acc.push({ label: ba_gr_label, value: ba_gr })
-    }
+      if (
+        isClassified(currentPoint) &&
+        !isOptionAlreadyAdded(acc, ba_gr) &&
+        !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr)
+      ) {
+        acc.push({ label: ba_gr_label, value: ba_gr })
+      }
 
-    return acc
-  }, [])
+      return acc
+    }, [])
+    .sort((a, b) => a.label.localeCompare(b.label))
 
   const _updateSelectedRowOnPointAnnotationChange = useEffect(() => {
     const rowKeyForPoint = selectedPoint.annotations[0].ba_gr
