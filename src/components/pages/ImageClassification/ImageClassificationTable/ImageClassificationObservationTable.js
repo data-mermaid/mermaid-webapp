@@ -224,6 +224,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                     annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
                 )
 
+                const numSubRows = Object.keys(imageAnnotationData).length
+
                 return (
                   <React.Fragment key={index}>
                     <Tr>
@@ -236,13 +238,17 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                             ? 'pointer'
                             : 'default'
                         }
+                        rowspan={numSubRows}
                       >
                         <Thumbnail imageUrl={file.thumbnail || file.image} />
                       </TdWithHoverText>
                       {!imagesDoneProcessing && (
                         <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
                       )}
-                      <StyledTd colSpan={4}></StyledTd>
+                      <StyledTd></StyledTd>
+                      <StyledTd></StyledTd>
+                      <StyledTd></StyledTd>
+                      <StyledTd></StyledTd>
                       <StyledTd>{file.num_unconfirmed}</StyledTd>
                       <StyledTd>{file.num_unclassified}</StyledTd>
                       <StyledTd>
