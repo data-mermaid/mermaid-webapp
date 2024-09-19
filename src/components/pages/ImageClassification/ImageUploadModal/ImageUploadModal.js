@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Modal from '../../../generic/Modal'
@@ -8,14 +8,23 @@ import { toast } from 'react-toastify'
 import language from '../../../../language'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
+const renderUploadProgress = (processedCount, totalFiles, handleCancelUpload) => (
+  <div>
+    <p>
+      Uploading {processedCount}/{totalFiles} images...
+    </p>
+    <ButtonCaution type="button" onClick={handleCancelUpload}>
+      Cancel Upload
+    </ButtonCaution>
+  </div>
+)
+
 const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
-  const [loading, setLoading] = useState(false)
-  const [totalFiles, setTotalFiles] = useState(0)
-  const [processedFiles, setProcessedFiles] = useState(0)
   const isCancelledRef = useRef(false)
   const fileInputRef = useRef(null)
   const { recordId, projectId } = useParams()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const toastId = useRef(null)
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
@@ -63,8 +72,6 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
     try {
       const imageData = await databaseSwitchboardInstance.uploadImage(projectId, recordId, file)
 
-      setProcessedFiles((prev) => prev + 1)
-
       return imageData
     } catch (error) {
       toast.error(`Failed to upload ${file.name}: ${error.message}`)
@@ -73,16 +80,20 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
   }
 
   const validateAndUploadFiles = async (files) => {
-    setLoading(true)
-    setTotalFiles(files.length)
-    setProcessedFiles(0)
+    onClose()
+
+    // Show the persistent uploading toast and store the toastId
+    if (!toastId.current) {
+      toastId.current = toast.info(renderUploadProgress(0, files.length, handleCancelUpload))
+    }
+
     isCancelledRef.current = false
 
     const uploadedFiles = []
+    let processedCount = 0
 
     for (const file of files) {
       if (isCancelledRef.current) {
-        setLoading(false)
         return
       }
 
@@ -107,26 +118,40 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
         continue
       }
 
-      // Start uploading the file as soon as it's validated.
+      // Start processing the file as soon as it's validated.
       const uploadedFile = await processSingleImage(file)
       if (uploadedFile) {
         uploadedFiles.push(uploadedFile)
+        onFilesUpload(uploadedFiles)
+
+        processedCount += 1
+
+        if (toastId.current) {
+          toast.update(toastId.current, {
+            render: renderUploadProgress(processedCount, files.length, handleCancelUpload),
+          })
+        }
       }
 
-      // Exit early if upload is canceled.
       if (isCancelledRef.current) {
-        setLoading(false)
         return
       }
     }
 
-    // After all valid files are processed, call the onFilesUpload callback.
     if (uploadedFiles.length > 0) {
-      onFilesUpload(uploadedFiles)
-      toast.success(uploadText.success)
+      if (toastId.current) {
+        toast.update(toastId.current, {
+          render: uploadText.success,
+          type: toast.TYPE.SUCCESS,
+          autoClose: 5000,
+        })
+      }
     }
 
-    setLoading(false)
+    if (toastId.current) {
+      toast.dismiss(toastId.current)
+      toastId.current = null
+    }
   }
 
   const handleFileChange = (event) => {
@@ -150,7 +175,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
   const handleCancelUpload = () => {
     isCancelledRef.current = true
-    setLoading(false)
+
     toast.info('Upload cancelled.')
   }
 
@@ -164,39 +189,27 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       displayCloseIcon={false}
       mainContent={
         <>
-          {loading ? (
-            <div>
-              Uploading {processedFiles}/{totalFiles} images...
-            </div>
-          ) : (
-            <DropZone onDrop={handleDrop} onDragOver={handleDragOver} onClick={handleButtonClick}>
-              Drop files here
-              <br />
-              or
-              <br />
-              <ButtonPrimary type="button">Select files from your computer...</ButtonPrimary>
-              <HiddenInput
-                type="file"
-                multiple
-                onChange={handleFileChange}
-                ref={fileInputRef}
-                accept={validFileTypes.join(',')}
-              />
-            </DropZone>
-          )}
+          <DropZone onDrop={handleDrop} onDragOver={handleDragOver} onClick={handleButtonClick}>
+            Drop files here
+            <br />
+            or
+            <br />
+            <ButtonPrimary type="button">Select files from your computer...</ButtonPrimary>
+            <HiddenInput
+              type="file"
+              multiple
+              onChange={handleFileChange}
+              ref={fileInputRef}
+              accept={validFileTypes.join(',')}
+            />
+          </DropZone>
         </>
       }
       footerContent={
         <ButtonContainer>
-          {loading ? (
-            <ButtonCaution type="button" onClick={handleCancelUpload}>
-              Cancel Upload
-            </ButtonCaution>
-          ) : (
-            <ButtonSecondary type="button" onClick={onClose} disabled={loading}>
-              Close
-            </ButtonSecondary>
-          )}
+          <ButtonSecondary type="button" onClick={onClose}>
+            Close
+          </ButtonSecondary>
         </ButtonContainer>
       }
     />
