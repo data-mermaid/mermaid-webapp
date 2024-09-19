@@ -73,7 +73,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const { projectId, recordId } = useParams()
   const [growthForms, setGrowthForms] = useState()
   const [benthicAttributes, setBenthicAttributes] = useState()
-  const [imagesDoneProcessing, setImagesDoneProcessing] = useState(false)
 
   const isImageProcessed = (status) => status === 3
 
@@ -137,8 +136,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   }, [projectId, recordId])
 
   const _startPollingOnUpload = useEffect(() => {
-    if (uploadedFiles.length > 0 && !polling && !imagesDoneProcessing) {
-      setPolling(true)
+    const hasNewImages = uploadedFiles.some((file) => !images.some((img) => img.id === file.id))
+
+    if (hasNewImages) {
       setImages((prevImages) => {
         const existingImagesMap = new Map(prevImages.map((img) => [img.id, img]))
 
@@ -146,7 +146,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         const mergedImages = [...prevImages]
 
         uploadedFiles.forEach((file) => {
-          // Only add new uploaded files if they don't already exist
           if (!existingImagesMap.has(file.id)) {
             mergedImages.push(file)
           }
@@ -154,8 +153,12 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
         return mergedImages
       })
+
+      if (!polling) {
+        setPolling(true)
+      }
     }
-  }, [uploadedFiles, polling, imagesDoneProcessing])
+  }, [uploadedFiles, images, polling])
 
   // Poll every 5 seconds after the first image is uploaded
   const _pollImageStatuses = useEffect(() => {
@@ -177,9 +180,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         if (allProcessed) {
           clearInterval(intervalId)
           setPolling(false)
-          setImagesDoneProcessing(true)
-        } else {
-          setImagesDoneProcessing(false)
         }
       } catch (error) {
         console.error('Error polling images:', error)
