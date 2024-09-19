@@ -14,10 +14,9 @@ const ImageAnnotationModalTable = ({
   getBenthicAttributeLabel,
   getGrowthFormLabel,
   setDataToReview,
-  setHighlightedPoints,
-  setSelectedPoints,
+  setHighlightedAttributeId,
 }) => {
-  const [selectedRowIndex, setSelectedRowIndex] = useState()
+  const [selectedRowKey, setSelectedRowKey] = useState()
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
   const tableData = Object.groupBy(
     classifiedPoints,
@@ -29,17 +28,21 @@ const ImageAnnotationModalTable = ({
       ? `${getBenthicAttributeLabel(benthic_attribute)} / ${getGrowthFormLabel(growth_form)}`
       : getBenthicAttributeLabel(benthic_attribute)
 
-  // Returns true if every point in row has an annotation that has `is_confirmed` set to true
-  const checkIfRowIsConfirmed = (row) =>
-    tableData[row].every(({ annotations }) => annotations[0].is_confirmed)
+  const checkIfRowIsConfirmed = (rowKey) =>
+    tableData[rowKey].every(({ annotations }) => annotations[0].is_confirmed)
 
-  const handleRowSelect = (rowData, index) => {
-    if (index === selectedRowIndex) {
-      setSelectedRowIndex()
-      setSelectedPoints([])
+  const handleRowSelect = (rowKey) => {
+    if (rowKey === selectedRowKey) {
+      setSelectedRowKey()
     } else {
-      setSelectedRowIndex(index)
-      setSelectedPoints(rowData)
+      setSelectedRowKey(rowKey)
+      setHighlightedAttributeId(rowKey)
+    }
+  }
+
+  const handleRowHoverOrLeave = (rowKey) => {
+    if (selectedRowKey === undefined) {
+      setHighlightedAttributeId(rowKey)
     }
   }
 
@@ -49,8 +52,6 @@ const ImageAnnotationModalTable = ({
     const updatedPoints = points.map((point) => {
       const isPointInRow = rowData.some((pointInRow) => pointInRow.id === point.id)
       if (isPointInRow) {
-        // TODO: Check if user-created annotation or machine-generated annotation
-        // For now, assume machine-generated, update first annotation to confirmed
         point.annotations[0].is_confirmed = true
       }
 
@@ -58,9 +59,8 @@ const ImageAnnotationModalTable = ({
     })
 
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
-    setSelectedRowIndex()
-    setSelectedPoints([])
-    setHighlightedPoints([])
+    setSelectedRowKey()
+    setHighlightedAttributeId('')
   }
 
   return (
@@ -75,17 +75,17 @@ const ImageAnnotationModalTable = ({
         </Tr>
       </thead>
       <tbody>
-        {Object.keys(tableData).map((row, i) => {
+        {Object.keys(tableData).map((row) => {
           const isRowConfirmed = checkIfRowIsConfirmed(row)
 
           return (
             <TrWithBorderStyling
               key={row}
-              onClick={() => handleRowSelect(tableData[row], i)}
-              onMouseEnter={() => setHighlightedPoints(tableData[row])}
-              onMouseLeave={() => setHighlightedPoints([])}
-              $isSelected={i === selectedRowIndex}
-              $isConfirmed={isRowConfirmed}
+              onClick={() => handleRowSelect(row)}
+              onMouseEnter={() => handleRowHoverOrLeave(row)}
+              onMouseLeave={() => handleRowHoverOrLeave('')}
+              $isSelected={row === selectedRowKey}
+              $isAnyRowSelected={selectedRowKey !== undefined}
             >
               <Td align="right">{isRowConfirmed ? <ConfirmedIcon /> : undefined}</Td>
               <Td align="right">{tableData[row].length}</Td>
@@ -112,8 +112,7 @@ const ImageAnnotationModalTable = ({
 }
 
 ImageAnnotationModalTable.propTypes = {
-  setHighlightedPoints: PropTypes.func.isRequired,
-  setSelectedPoints: PropTypes.func.isRequired,
+  setHighlightedAttributeId: PropTypes.func.isRequired,
   setDataToReview: PropTypes.func.isRequired,
   points: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,

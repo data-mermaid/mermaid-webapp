@@ -32,8 +32,7 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
   const [dataToReview, setDataToReview] = useState()
   const [growthForms, setGrowthForms] = useState()
   const [benthicAttributes, setBenthicAttributes] = useState()
-  const [selectedPoints, setSelectedPoints] = useState([])
-  const [highlightedPoints, setHighlightedPoints] = useState([])
+  const [highlightedAttributeId, setHighlightedAttributeId] = useState('')
 
   const _fetchImageAnnotations = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
@@ -99,14 +98,12 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
               setDataToReview={setDataToReview}
               getBenthicAttributeLabel={getBenthicAttributeLabel}
               getGrowthFormLabel={getGrowthFormLabel}
-              setHighlightedPoints={setHighlightedPoints}
-              setSelectedPoints={setSelectedPoints}
+              setHighlightedAttributeId={setHighlightedAttributeId}
             />
             <ImageAnnotationModalMap
               dataToReview={dataToReview}
               setDataToReview={setDataToReview}
-              highlightedPoints={highlightedPoints}
-              selectedPoints={selectedPoints}
+              highlightedAttributeId={highlightedAttributeId}
               databaseSwitchboardInstance={databaseSwitchboardInstance}
               getBenthicAttributeLabel={getBenthicAttributeLabel}
               getGrowthFormLabel={getGrowthFormLabel}

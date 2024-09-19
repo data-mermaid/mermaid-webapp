@@ -2,10 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
-import {
-  imageClassificationPointPropType,
-  imageClassificationResponsePropType,
-} from '../../../../App/mermaidData/mermaidDataProptypes'
+import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { IconReset } from '../../../icons'
 import {
   ImageAnnotationMapContainer,
@@ -60,8 +57,7 @@ const hackResetMapToCurrentPosition = (map, currentZoom, currentCenter) => {
 const ImageAnnotationModalMap = ({
   dataToReview,
   setDataToReview,
-  highlightedPoints,
-  selectedPoints,
+  highlightedAttributeId,
   getBenthicAttributeLabel,
   getGrowthFormLabel,
   databaseSwitchboardInstance,
@@ -71,7 +67,7 @@ const ImageAnnotationModalMap = ({
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const imageScale = getImageScale(dataToReview)
   const halfPatchSize = dataToReview.patch_size / 2
-  const [editPointPopup, setEditPointPopup] = useState({ id: null, lngLat: null })
+  const [selectedPoint, setSelectedPoint] = useState({ id: null, lngLat: null })
   const pointLabelPopup = new maplibregl.Popup({
     anchor: 'center',
     closeButton: false,
@@ -104,6 +100,7 @@ const ImageAnnotationModalMap = ({
           type: 'Feature',
           properties: {
             id: point.id,
+            ba_gr: `${point.annotations[0]?.benthic_attribute}_${point.annotations[0]?.growth_form}`,
             benthicAttributeId: point.annotations[0]?.benthic_attribute,
             growthFormId: point.annotations[0]?.growth_form,
             isUnclassified: !point.annotations.length,
@@ -234,10 +231,15 @@ const ImageAnnotationModalMap = ({
       const bounds = new maplibregl.LngLatBounds(topLeft, bottomRight)
       map.current.fitBounds(bounds, { padding: 250 })
 
-      setEditPointPopup({
-        id: properties.id,
-        lngLat: topRight,
-      })
+      setSelectedPoint({ id: properties.id, lngLat: topRight })
+    })
+
+    // Remove Edit Point Popup when user clicks away
+    map.current.on('click', ({ point }) => {
+      const [patches] = map.current.queryRenderedFeatures(point, { layers: ['patches-fill-layer'] })
+      if (!patches) {
+        setSelectedPoint({ id: '', lngLat: '' })
+      }
     })
   }, [dataToReview, hasMapLoaded])
 
@@ -256,7 +258,7 @@ const ImageAnnotationModalMap = ({
     hackResetMapToCurrentPosition(map, currentZoom, currentCenter)
   }, [dataToReview, hasMapLoaded, getPointsGeojson])
 
-  const _highlightPoints = useEffect(() => {
+  const _updateStylingForPoints = useEffect(() => {
     if (!hasMapLoaded) {
       return
     }
@@ -264,16 +266,16 @@ const ImageAnnotationModalMap = ({
     map.current.setPaintProperty('patches-line-layer', 'line-color', [
       'case',
       [
-        'in', // checks if point on map is in selected row in table
+        '==', // checks if point on map is clicked
         ['get', 'id'],
-        ['literal', selectedPoints.map((point) => point.id)],
+        selectedPoint.id,
       ],
       COLORS.current,
 
       [
-        'in', // checks if point on map is in highlighted row in table
-        ['get', 'id'],
-        ['literal', highlightedPoints.map((point) => point.id)],
+        '==', // checks if point on map is in highlighted row in table
+        ['get', 'ba_gr'],
+        highlightedAttributeId,
       ],
       COLORS.highlighted,
 
@@ -283,15 +285,15 @@ const ImageAnnotationModalMap = ({
     map.current.setPaintProperty('patches-line-layer', 'line-width', [
       'case',
       [
-        'in', // checks if point on map is in selected row in table
+        '==', // checks if point on map is clicked
         ['get', 'id'],
-        ['literal', selectedPoints.map((point) => point.id)],
+        selectedPoint.id,
       ],
       SELECTED_POLYGON_LINE_WIDTH,
 
       POLYGON_LINE_WIDTH, // fallback to default width
     ])
-  }, [highlightedPoints, selectedPoints, hasMapLoaded])
+  }, [highlightedAttributeId, hasMapLoaded, selectedPoint])
 
   return (
     <ImageAnnotationMapWrapper>
@@ -303,12 +305,12 @@ const ImageAnnotationModalMap = ({
       <MapResetButton type="button" onClick={() => flyToDefaultView(map)}>
         <IconReset />
       </MapResetButton>
-      {editPointPopup.id ? (
-        <EditPointPopupWrapper map={map.current} lngLat={editPointPopup.lngLat}>
+      {selectedPoint.id ? (
+        <EditPointPopupWrapper map={map.current} lngLat={selectedPoint.lngLat}>
           <ImageAnnotationPopup
             dataToReview={dataToReview}
             setDataToReview={setDataToReview}
-            pointId={editPointPopup.id}
+            pointId={selectedPoint.id}
             databaseSwitchboardInstance={databaseSwitchboardInstance}
             getBenthicAttributeLabel={getBenthicAttributeLabel}
             getGrowthFormLabel={getGrowthFormLabel}
@@ -322,8 +324,7 @@ const ImageAnnotationModalMap = ({
 ImageAnnotationModalMap.propTypes = {
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  highlightedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
-  selectedPoints: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
+  highlightedAttributeId: PropTypes.string.isRequired,
   databaseSwitchboardInstance: PropTypes.object.isRequired,
   getBenthicAttributeLabel: PropTypes.func.isRequired,
   getGrowthFormLabel: PropTypes.func.isRequired,
