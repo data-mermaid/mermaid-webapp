@@ -10,46 +10,32 @@ import {
 
 const isClassified = ({ annotations }) => annotations.length > 0
 
-const isAClassifierGuessOfSelectedPoint = (annotations, benthic_attribute, growth_form) =>
-  annotations.some(
-    (annotation) =>
-      annotation.is_machine_created &&
-      annotation.benthic_attribute === benthic_attribute &&
-      annotation.growth_form === growth_form,
-  )
+const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
+  annotations.some((annotation) => annotation.is_machine_created && annotation.ba_gr === ba_gr)
 
 const isOptionAlreadyAdded = (acc, value) => acc.some((option) => option.value === value)
 
-const ExistingRows = ({
-  selectedPoint,
-  dataToReview,
-  setDataToReview,
-  getBenthicAttributeLabel,
-  getGrowthFormLabel,
-}) => {
+const ExistingRows = ({ selectedPoint, dataToReview, setDataToReview }) => {
   const [selectedExistingRow, setSelectedExistingRow] = useState('')
 
-  const existingRowDropdownOptions = dataToReview.points.reduce((acc, currentPoint) => {
-    const { benthic_attribute, growth_form } = currentPoint.annotations[0]
-    const value = benthic_attribute + '_' + growth_form
-    const label = `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(
-      growth_form,
-    )}`
+  const existingRowDropdownOptions = dataToReview.points
+    .reduce((acc, currentPoint) => {
+      const { ba_gr, ba_gr_label } = currentPoint.annotations[0]
 
-    if (
-      isClassified(currentPoint) &&
-      !isOptionAlreadyAdded(acc, value) &&
-      !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, benthic_attribute, growth_form)
-    ) {
-      acc.push({ label, value })
-    }
+      if (
+        isClassified(currentPoint) &&
+        !isOptionAlreadyAdded(acc, ba_gr) &&
+        !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr)
+      ) {
+        acc.push({ label: ba_gr_label, value: ba_gr })
+      }
 
-    return acc
-  }, [])
+      return acc
+    }, [])
+    .sort((a, b) => a.label.localeCompare(b.label))
 
   const _updateSelectedRowOnPointAnnotationChange = useEffect(() => {
-    const { benthic_attribute, growth_form } = selectedPoint.annotations[0]
-    const rowKeyForPoint = benthic_attribute + '_' + growth_form
+    const rowKeyForPoint = selectedPoint.annotations[0].ba_gr
     const isPointInARow = existingRowDropdownOptions.some((row) => rowKeyForPoint === row.value)
 
     setSelectedExistingRow((prevState) => (isPointInARow ? rowKeyForPoint : prevState))
@@ -67,7 +53,13 @@ const ExistingRows = ({
       return acc
     }, [])
 
+    const labelForExistingAnnotation = existingRowDropdownOptions.find(
+      ({ value }) => value === existingAnnotation,
+    )?.label
+
     const annotationToAdd = {
+      ba_gr: existingAnnotation,
+      ba_gr_label: labelForExistingAnnotation,
       benthic_attribute,
       growth_form: growth_form === 'null' ? null : growth_form,
       is_confirmed: true,
@@ -85,7 +77,7 @@ const ExistingRows = ({
   return (
     <>
       <Tr>
-        <Th colSpan={4}>Attribute / Growth Form</Th>
+        <Th colSpan={4}>Attribute growth form</Th>
       </Tr>
       <Tr>
         <PopupTdForRadio>
@@ -95,10 +87,7 @@ const ExistingRows = ({
             name="existing-row-point-selection"
             value="existing-row"
             disabled={!selectedExistingRow}
-            checked={
-              `${selectedPoint.annotations[0].benthic_attribute}_${selectedPoint.annotations[0].growth_form}` ===
-              selectedExistingRow
-            }
+            checked={selectedPoint.annotations[0].ba_gr === selectedExistingRow}
             onChange={() => addExistingAnnotation(selectedExistingRow)}
           />
         </PopupTdForRadio>
@@ -127,8 +116,6 @@ ExistingRows.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  getBenthicAttributeLabel: PropTypes.func.isRequired,
-  getGrowthFormLabel: PropTypes.func.isRequired,
 }
 
 export default ExistingRows

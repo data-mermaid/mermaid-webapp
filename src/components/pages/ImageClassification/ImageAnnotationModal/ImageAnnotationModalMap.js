@@ -58,8 +58,6 @@ const ImageAnnotationModalMap = ({
   dataToReview,
   setDataToReview,
   highlightedAttributeId,
-  getBenthicAttributeLabel,
-  getGrowthFormLabel,
   databaseSwitchboardInstance,
 }) => {
   const mapContainer = useRef(null)
@@ -100,9 +98,8 @@ const ImageAnnotationModalMap = ({
           type: 'Feature',
           properties: {
             id: point.id,
-            ba_gr: `${point.annotations[0]?.benthic_attribute}_${point.annotations[0]?.growth_form}`,
-            benthicAttributeId: point.annotations[0]?.benthic_attribute,
-            growthFormId: point.annotations[0]?.growth_form,
+            ba_gr: point.annotations[0]?.ba_gr,
+            ba_gr_label: point.annotations[0]?.ba_gr_label,
             isUnclassified: !point.annotations.length,
             isConfirmed: !!point.annotations[0]?.is_confirmed,
           },
@@ -201,11 +198,7 @@ const ImageAnnotationModalMap = ({
     map.current.on('mouseenter', 'patches-fill-layer', ({ features }) => {
       const [{ geometry, properties }] = features
       map.current.getCanvas().style.cursor = 'pointer'
-      const label = properties.isUnclassified
-        ? 'Unclassified'
-        : `${getBenthicAttributeLabel(properties.benthicAttributeId)} ${getGrowthFormLabel(
-            properties.growthFormId,
-          )}`
+      const label = properties.isUnclassified ? 'Unclassified' : properties.ba_gr_label
       pointLabelPopup.setLngLat(geometry.coordinates[0][0]).setHTML(label).addTo(map.current)
     })
 
@@ -312,8 +305,6 @@ const ImageAnnotationModalMap = ({
             setDataToReview={setDataToReview}
             pointId={selectedPoint.id}
             databaseSwitchboardInstance={databaseSwitchboardInstance}
-            getBenthicAttributeLabel={getBenthicAttributeLabel}
-            getGrowthFormLabel={getGrowthFormLabel}
           />
         </EditPointPopupWrapper>
       ) : null}
@@ -326,8 +317,6 @@ ImageAnnotationModalMap.propTypes = {
   setDataToReview: PropTypes.func.isRequired,
   highlightedAttributeId: PropTypes.string.isRequired,
   databaseSwitchboardInstance: PropTypes.object.isRequired,
-  getBenthicAttributeLabel: PropTypes.func.isRequired,
-  getGrowthFormLabel: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModalMap

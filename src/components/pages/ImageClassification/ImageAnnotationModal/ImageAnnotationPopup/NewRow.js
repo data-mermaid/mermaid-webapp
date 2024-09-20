@@ -22,13 +22,8 @@ import {
 import { createPortal } from 'react-dom'
 
 // TODO: Place this in a shared folder since used twice?
-const isAClassifierGuessOfSelectedPoint = (annotations, benthic_attribute, growth_form) =>
-  annotations.some(
-    (annotation) =>
-      annotation.is_machine_created &&
-      annotation.benthic_attribute === benthic_attribute &&
-      annotation.growth_form === growth_form,
-  )
+const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
+  annotations.some((annotation) => annotation.is_machine_created && annotation.ba_gr === ba_gr)
 
 const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchboardInstance }) => {
   const [shouldDisplayModal, setShouldDisplayModal] = useState(false)
@@ -62,7 +57,7 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
 
   const selectClassifierGuessAsConfirmedAnnotation = () => {
     const updatedAnnotations = selectedPoint.annotations.reduce((acc, currentAnnotation) => {
-      const { benthic_attribute, growth_form, is_machine_created } = currentAnnotation
+      const { ba_gr, is_machine_created } = currentAnnotation
 
       // only want classifier guesses
       if (!is_machine_created) {
@@ -70,10 +65,7 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
       }
 
       // Move the matching classifier guess to front of array and confirm. Unconfirm the rest.
-      if (
-        benthic_attribute === selectedBenthicAttr &&
-        growth_form === (selectedGrowthForm || null)
-      ) {
+      if (`${selectedBenthicAttr}_${selectedGrowthForm || null}` === ba_gr) {
         acc.unshift({ ...currentAnnotation, is_confirmed: true })
       } else {
         acc.push({ ...currentAnnotation, is_confirmed: false })
@@ -100,7 +92,18 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
       return acc
     }, [])
 
+    const benthicAttributeLabel = benthicAttributeSelectOptions.find(
+      ({ value }) => value === selectedBenthicAttr,
+    )?.label
+    const growthFormLabel = growthFormSelectOptions
+      .find(({ id }) => id === selectedGrowthForm)
+      ?.name.toLowerCase()
+
     const annotationToAdd = {
+      ba_gr: `${selectedBenthicAttr}_${selectedGrowthForm || null}`,
+      ba_gr_label: growthFormLabel
+        ? `${benthicAttributeLabel} ${growthFormLabel}`
+        : benthicAttributeLabel,
       benthic_attribute: selectedBenthicAttr,
       growth_form: selectedGrowthForm || null,
       is_confirmed: true,
@@ -121,8 +124,7 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
     if (
       isAClassifierGuessOfSelectedPoint(
         selectedPoint.annotations,
-        selectedBenthicAttr,
-        selectedGrowthForm || null,
+        `${selectedBenthicAttr}_${selectedGrowthForm || null}`,
       )
     ) {
       selectClassifierGuessAsConfirmedAnnotation()

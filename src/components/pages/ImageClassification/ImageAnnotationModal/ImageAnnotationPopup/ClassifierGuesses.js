@@ -17,22 +17,7 @@ const confirmFirstAnnotationAndUnconfirmRest = (annotation, i) => {
   annotation.is_confirmed = i === 0
 }
 
-const isAnnotationSelected = (annotation, selectedPoint) => {
-  const { benthic_attribute, growth_form } = annotation
-  const selectedAnnotation = selectedPoint.annotations[0]
-  return (
-    benthic_attribute === selectedAnnotation.benthic_attribute &&
-    growth_form === selectedAnnotation.growth_form
-  )
-}
-
-const ClassifierGuesses = ({
-  selectedPoint,
-  dataToReview,
-  setDataToReview,
-  getBenthicAttributeLabel,
-  getGrowthFormLabel,
-}) => {
+const ClassifierGuesses = ({ selectedPoint, dataToReview, setDataToReview }) => {
   const classifierGuesses = selectedPoint.annotations.filter(
     (annotation) => annotation.is_machine_created,
   )
@@ -53,24 +38,18 @@ const ClassifierGuesses = ({
     setDataToReview({ ...dataToReview, points: updatedPoints })
   }
 
-  return classifierGuessesSortedByScore.map((annotation, i) => (
+  return classifierGuessesSortedByScore.map((annotation) => (
     <Tr key={annotation.id}>
       <PopupTdForRadio>
         <input
           type="radio"
-          id={`${annotation.benthic_attribute}_${annotation.growth_form}`}
-          name={`${annotation.benthic_attribute}_${annotation.growth_form}`}
-          value={`classifier-guess-${i}`}
-          checked={isAnnotationSelected(annotation, selectedPoint)}
-          onChange={() => {
-            selectClassifierGuess(annotation.id)
-          }}
+          id={annotation.ba_gr}
+          name={annotation.ba_gr}
+          checked={annotation.ba_gr === selectedPoint.annotations[0].ba_gr}
+          onChange={() => selectClassifierGuess(annotation.id)}
         />
       </PopupTdForRadio>
-      <PopupTd>
-        {getBenthicAttributeLabel(annotation.benthic_attribute)}{' '}
-        {getGrowthFormLabel(annotation.growth_form)}
-      </PopupTd>
+      <PopupTd>{annotation.ba_gr_label}</PopupTd>
       <PopupTd align="right">{annotation.score}%</PopupTd>
     </Tr>
   ))
@@ -80,8 +59,6 @@ ClassifierGuesses.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  getBenthicAttributeLabel: PropTypes.func.isRequired,
-  getGrowthFormLabel: PropTypes.func.isRequired,
 }
 
 export default ClassifierGuesses

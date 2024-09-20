@@ -303,7 +303,14 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
           </StickyObservationTable>
         </StyledOverflowWrapper>
       </InputWrapper>
-      {imageId ? <ImageAnnotationModal imageId={imageId} setImageId={setImageId} /> : undefined}
+      {!!imageId && !!benthicAttributes && !!growthForms ? (
+        <ImageAnnotationModal
+          imageId={imageId}
+          setImageId={setImageId}
+          benthicAttributes={benthicAttributes}
+          growthForms={growthForms}
+        />
+      ) : undefined}
     </>
   )
 }

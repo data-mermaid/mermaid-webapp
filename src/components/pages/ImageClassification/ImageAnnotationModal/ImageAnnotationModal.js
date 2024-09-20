@@ -26,35 +26,48 @@ import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 
 const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
-const ImageAnnotationModal = ({ imageId, setImageId }) => {
+const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthForms }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const [dataToReview, setDataToReview] = useState()
-  const [growthForms, setGrowthForms] = useState()
-  const [benthicAttributes, setBenthicAttributes] = useState()
   const [highlightedAttributeId, setHighlightedAttributeId] = useState('')
+
+  const getBenthicAttributeLabel = (benthicAttributeId) => {
+    const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
+    return matchingBenthicAttribute?.name ?? ''
+  }
+
+  const getGrowthFormLabel = (growthFormId) => {
+    const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
+    return matchingGrowthForm?.name.toLowerCase() ?? ''
+  }
+
+  const getAttributeGrowthFormLabel = ({ benthic_attribute, growth_form }) =>
+    growth_form
+      ? `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(growth_form)}`
+      : getBenthicAttributeLabel(benthic_attribute)
 
   const _fetchImageAnnotations = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
         .getAnnotationsForImage(projectId, imageId)
         .then((data) => {
-          data.points.map((point) => point.annotations.sort(prioritizeConfirmedAnnotations))
-          setDataToReview(data)
+          const formattedPoints = data.points.map((point) => {
+            const sortedAnnotations = point.annotations.toSorted(prioritizeConfirmedAnnotations)
+            const formattedAnnotations = sortedAnnotations.map((annotation) => ({
+              ...annotation,
+              ba_gr: annotation.benthic_attribute + '_' + annotation.growth_form,
+              ba_gr_label: getAttributeGrowthFormLabel(annotation),
+            }))
+
+            return { ...point, annotations: formattedAnnotations }
+          })
+
+          setDataToReview({ ...data, points: formattedPoints })
         })
         .catch(() => {
           toast.error('Failed to fetch image annotations')
         })
-
-      // TODO: These two will likely be fetched in ObservationTable and passed to this component as props
-      // Because of that, not going to add error handling / loading indicators / Promise.all
-      databaseSwitchboardInstance.getChoices().then(({ growthforms }) => {
-        setGrowthForms(growthforms.data)
-      })
-
-      databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
-        setBenthicAttributes(benthicAttributes)
-      })
     }
     // eslint-disable-next-line
   }, [])
@@ -73,16 +86,6 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
       })
   }
 
-  const getBenthicAttributeLabel = (benthicAttributeId) => {
-    const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-    return matchingBenthicAttribute?.name ?? ''
-  }
-
-  const getGrowthFormLabel = (growthFormId) => {
-    const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
-    return matchingGrowthForm?.name ?? ''
-  }
-
   return (
     <Modal
       title={dataToReview?.original_image_name ?? ''}
@@ -96,8 +99,6 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
             <ImageAnnotationModalTable
               points={dataToReview.points}
               setDataToReview={setDataToReview}
-              getBenthicAttributeLabel={getBenthicAttributeLabel}
-              getGrowthFormLabel={getGrowthFormLabel}
               setHighlightedAttributeId={setHighlightedAttributeId}
             />
             <ImageAnnotationModalMap
@@ -105,8 +106,6 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
               setDataToReview={setDataToReview}
               highlightedAttributeId={highlightedAttributeId}
               databaseSwitchboardInstance={databaseSwitchboardInstance}
-              getBenthicAttributeLabel={getBenthicAttributeLabel}
-              getGrowthFormLabel={getGrowthFormLabel}
             />
           </ImageAnnotationModalContainer>
         ) : (
@@ -148,6 +147,8 @@ const ImageAnnotationModal = ({ imageId, setImageId }) => {
 ImageAnnotationModal.propTypes = {
   imageId: PropTypes.string.isRequired,
   setImageId: PropTypes.func.isRequired,
+  benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default ImageAnnotationModal

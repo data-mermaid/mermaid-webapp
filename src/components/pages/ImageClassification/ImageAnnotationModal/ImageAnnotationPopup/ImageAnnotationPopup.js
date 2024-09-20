@@ -14,8 +14,6 @@ const ImageAnnotationPopup = ({
   setDataToReview,
   pointId,
   databaseSwitchboardInstance,
-  getBenthicAttributeLabel,
-  getGrowthFormLabel,
 }) => {
   const selectedPoint = dataToReview.points.find((point) => point.id === pointId)
 
@@ -32,15 +30,11 @@ const ImageAnnotationPopup = ({
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
           setDataToReview={setDataToReview}
-          getBenthicAttributeLabel={getBenthicAttributeLabel}
-          getGrowthFormLabel={getGrowthFormLabel}
         />
         <ExistingRows
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
           setDataToReview={setDataToReview}
-          getBenthicAttributeLabel={getBenthicAttributeLabel}
-          getGrowthFormLabel={getGrowthFormLabel}
         />
         <NewRow
           selectedPoint={selectedPoint}
@@ -58,8 +52,6 @@ ImageAnnotationPopup.propTypes = {
   setDataToReview: PropTypes.func.isRequired,
   pointId: PropTypes.string.isRequired,
   databaseSwitchboardInstance: databaseSwitchboardPropTypes,
-  getBenthicAttributeLabel: PropTypes.func.isRequired,
-  getGrowthFormLabel: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationPopup
