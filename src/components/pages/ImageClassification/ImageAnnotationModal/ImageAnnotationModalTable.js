@@ -8,10 +8,11 @@ import {
   TableWithNoMinWidth,
   TrWithBorderStyling,
 } from './ImageAnnotationModal.styles'
+import { filterForClassifiedPoints } from '../imageClassificationUtilities'
 
 const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttributeId }) => {
   const [selectedRowKey, setSelectedRowKey] = useState()
-  const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
+  const classifiedPoints = filterForClassifiedPoints(points)
   const tableData = Object.groupBy(
     classifiedPoints,
     ({ annotations }) => annotations[0].ba_gr_label,

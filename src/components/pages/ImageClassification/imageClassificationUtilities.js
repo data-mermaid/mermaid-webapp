@@ -9,3 +9,6 @@ export const getGrowthFormLabel = (growthForms, growthFormId) => {
 }
 
 export const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
+
+export const filterForClassifiedPoints = (points) =>
+  points.filter(({ annotations }) => annotations.length > 0)

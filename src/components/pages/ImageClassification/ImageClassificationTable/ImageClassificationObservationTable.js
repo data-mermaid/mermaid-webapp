@@ -16,6 +16,7 @@ import Thumbnail from './Thumbnail'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { EXCLUDE_PARAMS } from '../../../../library/constants/constants'
 import {
+  filterForClassifiedPoints,
   getBenthicAttributeLabel,
   getGrowthFormLabel,
   prioritizeConfirmedAnnotations,
@@ -207,10 +208,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
             </thead>
             <tbody>
               {images.map((file, index) => {
-                const classifiedPoints = file.points.filter(
-                  ({ annotations }) => annotations.length > 0,
-                )
-
+                const classifiedPoints = filterForClassifiedPoints(file.points)
                 const imageAnnotationData = Object.groupBy(
                   classifiedPoints,
                   ({ annotations }) =>
@@ -258,16 +256,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
                     {/* Subrows based on imageAnnotationData */}
                     {Object.keys(imageAnnotationData).map((key, idx) => {
-                      const { confirmedCount, unconfirmedCount } = imageAnnotationData[key].reduce(
-                        (counts, item) => {
-                          if (item.annotations[0].is_confirmed) {
-                            counts.confirmedCount += 1
-                          } else {
-                            counts.unconfirmedCount += 1
-                          }
-                          return counts
-                        },
-                        { confirmedCount: 0, unconfirmedCount: 0 },
+                      const { confirmed, unconfirmed } = Object.groupBy(
+                        imageAnnotationData[key],
+                        ({ annotations }) =>
+                          annotations[0].is_confirmed ? 'confirmed' : 'unconfirmed',
                       )
 
                       return (
@@ -285,8 +277,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                               imageAnnotationData[key][0].annotations[0].growth_form,
                             )}
                           </StyledTd>
-                          <StyledTd>{confirmedCount}</StyledTd>
-                          <StyledTd>{unconfirmedCount}</StyledTd>
+                          <StyledTd>{confirmed?.length ?? 0}</StyledTd>
+                          <StyledTd>{unconfirmed?.length ?? 0}</StyledTd>
                           {/* Additional columns for subrow */}
                         </Tr>
                       )
