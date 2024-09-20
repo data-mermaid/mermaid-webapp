@@ -127,8 +127,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
       return {
         confirmedCount,
-        benthic_attribute: benthic_attribute_label,
-        growth_form: growth_form_label,
+        benthicAttributeLabel: benthic_attribute_label,
+        growthFormLabel: growth_form_label,
         quadrat: index + 1,
       }
     },
@@ -137,7 +137,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
   const distillImagesObject = useCallback(
     (images) => {
-      const distilledImages = images.map((file, index) => {
+      return images.map((file, index) => {
         const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
 
         const imageAnnotationData = Object.groupBy(
@@ -157,8 +157,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
           distilledAnnotationData,
         }
       })
-
-      return distilledImages
     },
     [distillAnnotationData],
   )
@@ -340,16 +338,20 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                       </>
                     )}
 
-                    <StyledTd>{annotation?.quadrat}</StyledTd>
-                    <StyledTd>{annotation?.benthic_attribute}</StyledTd>
-                    <StyledTd>{annotation?.growth_form || 'N/A'}</StyledTd>
-                    <StyledTd>{annotation?.confirmedCount}</StyledTd>
+                    <StyledTd textAlign="right">{annotation?.quadrat}</StyledTd>
+                    <StyledTd>{annotation?.benthicAttributeLabel}</StyledTd>
+                    <StyledTd>{annotation?.growthFormLabel || ''}</StyledTd>
+                    <StyledTd textAlign="right">{annotation?.confirmedCount}</StyledTd>
 
                     {/* First row only: Unconfirmed, Unclassified, Review, Delete */}
                     {subIndex === 0 && (
                       <>
-                        <StyledTd rowSpan={numSubRows}>{file.num_unconfirmed}</StyledTd>
-                        <StyledTd rowSpan={numSubRows}>{file.num_unclassified}</StyledTd>
+                        <StyledTd textAlign="right" rowSpan={numSubRows}>
+                          {file.num_unconfirmed}
+                        </StyledTd>
+                        <StyledTd textAlign="right" rowSpan={numSubRows}>
+                          {file.num_unclassified}
+                        </StyledTd>
                         <StyledTd rowSpan={numSubRows}>
                           <ButtonPrimary
                             type="button"
