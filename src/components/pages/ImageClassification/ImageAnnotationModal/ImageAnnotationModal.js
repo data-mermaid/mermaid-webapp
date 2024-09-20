@@ -18,6 +18,9 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 
+const EXCLUDE_PARAMS =
+  'classification_status,collect_record_id,comments,created_by,created_on,data,id,location,name,num_confirmed,num_unclassified,num_unconfirmed,photo_timestamp,thumbnail,updated_by,updated_on'
+
 // Context: Strategy for the Image Annotation Modal is to use the 1st annotation in the array for each point
 // as the "current" annotation. The 1st annotation is used to group points into rows for the table,
 // and also used as the properties for the points on the map.
@@ -50,7 +53,7 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
   const _fetchImageAnnotations = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
-        .getAnnotationsForImage(projectId, imageId)
+        .getAnnotationsForImage(projectId, imageId, EXCLUDE_PARAMS)
         .then((data) => {
           const formattedPoints = data.points.map((point) => {
             const sortedAnnotations = point.annotations.toSorted(prioritizeConfirmedAnnotations)

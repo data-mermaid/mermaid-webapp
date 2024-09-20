@@ -25,9 +25,6 @@ export const IMAGE_CLASSIFICATION_COLORS = {
   highlighted: 'blue', // TODO: This colour is not yet defined
 }
 
-export const EXCLUDE_PARAMS =
-  'data,created_by,updated_by,created_on,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
-
 Object.freeze(PROJECT_CODES)
 Object.freeze(apiDataTypes)
 Object.freeze(IMAGE_CLASSIFICATION_COLORS)
