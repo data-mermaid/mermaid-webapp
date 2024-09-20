@@ -217,6 +217,66 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [polling, projectId, recordId])
 
+  const processAnnotationData = (items, index) => {
+    let confirmedCount = 0
+    let benthic_attribute_label = null
+    let growth_form_label = null
+
+    items.forEach((item) => {
+      const firstAnnotation = item.annotations[0]
+      if (firstAnnotation.is_confirmed) {
+        confirmedCount += 1
+      }
+
+      if (firstAnnotation.benthic_attribute) {
+        benthic_attribute_label = getBenthicAttributeLabel(firstAnnotation.benthic_attribute)
+      }
+
+      if (firstAnnotation.growth_form) {
+        growth_form_label = getGrowthFormLabel(firstAnnotation.growth_form)
+      }
+    })
+
+    return {
+      confirmedCount,
+      benthic_attribute: benthic_attribute_label,
+      growth_form: growth_form_label,
+      quadrat: index + 1,
+    }
+  }
+
+  const newImagesObject = (images) => {
+    return images.map((file, index) => {
+      const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
+
+      const imageAnnotationData = Object.groupBy(
+        classifiedPoints,
+        ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
+      )
+
+      const numSubRows = Object.keys(imageAnnotationData).length
+
+      const distilledAnnotationData = Object.keys(imageAnnotationData).map((key) =>
+        processAnnotationData(imageAnnotationData[key], index),
+      )
+
+      return {
+        file: {
+          id: file.id,
+          original_image_name: file.original_image_name,
+          thumbnail: file.thumbnail,
+          num_unconfirmed: file.num_unconfirmed,
+          num_unclassified: file.num_unclassified,
+          status: file.classification_status?.status,
+        },
+        numSubRows,
+        distilledAnnotationData,
+      }
+    })
+  }
+
+  console.log({ newImagesObject: newImagesObject(images) })
+
   return (
     <>
       <InputWrapper>
@@ -255,7 +315,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                         }
                         rowspan={numSubRows}
                       >
-                        <Thumbnail imageUrl={file.thumbnail || file.image} />
+                        <Thumbnail imageUrl={file.thumbnail} />
                       </TdWithHoverText>
                       {!!polling && (
                         <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
@@ -282,7 +342,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                       </StyledTd>
                     </Tr>
 
-                    {/* Subrows based on imageAnnotationData */}
                     {Object.keys(imageAnnotationData).map((key, idx) => {
                       const { confirmedCount } = imageAnnotationData[key].reduce(
                         (counts, item) => {
