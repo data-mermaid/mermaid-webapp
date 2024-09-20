@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
@@ -76,6 +76,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [growthForms, setGrowthForms] = useState()
   const [benthicAttributes, setBenthicAttributes] = useState()
   const [distilledImages, setDistilledImages] = useState([])
+  const [isFetching, setIsFetching] = useState(false)
+  const isFirstLoad = useRef(true)
 
   const isImageProcessed = (status) => status === 3 || status === 4
 
@@ -104,6 +106,11 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
   const distillAnnotationData = useCallback(
     (items, index) => {
+      if (!benthicAttributes || !growthForms) {
+        console.warn('Benthic Attributes or Growth Forms not available yet')
+        return null
+      }
+
       let confirmedCount = 0
       let benthic_attribute_label = null
       let growth_form_label = null
@@ -130,12 +137,12 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         quadrat: index + 1,
       }
     },
-    [getBenthicAttributeLabel, getGrowthFormLabel],
+    [getBenthicAttributeLabel, getGrowthFormLabel, benthicAttributes, growthForms],
   )
 
   const distillImagesObject = useCallback(
     (images) => {
-      return images.map((file, index) => {
+      const distilledImages = images.map((file, index) => {
         const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
 
         const imageAnnotationData = Object.groupBy(
@@ -155,51 +162,62 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
           distilledAnnotationData,
         }
       })
+
+      return distilledImages
     },
     [distillAnnotationData],
   )
 
   const _fetchImagesOnLoad = useEffect(() => {
-    if (recordId && projectId) {
-      databaseSwitchboardInstance
-        .getAllImagesInCollectRecord(projectId, recordId, EXCLUDE_PARAMS)
-        .then((response) => {
-          const sortedImages = response.results.map((image) => {
-            const sortedPoints = image.points.map((point) => {
-              const sortedAnnotations = point.annotations.sort(prioritizeConfirmedAnnotations)
+    const fetchImages = async () => {
+      if (!recordId || !projectId || isFetching || !isFirstLoad.current) {
+        return
+      }
+      setIsFetching(true)
+      isFirstLoad.current = false
 
-              return { ...point, annotations: sortedAnnotations }
-            })
-            return { ...image, points: sortedPoints }
+      try {
+        const [choicesResponse, benthicAttributesResponse] = await Promise.all([
+          databaseSwitchboardInstance.getChoices(),
+          databaseSwitchboardInstance.getBenthicAttributes(),
+        ])
+
+        setGrowthForms(choicesResponse.growthforms.data)
+        setBenthicAttributes(benthicAttributesResponse)
+
+        const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
+          projectId,
+          recordId,
+          EXCLUDE_PARAMS,
+        )
+
+        const sortedImages = response.results.map((image) => {
+          const sortedPoints = image.points.map((point) => {
+            const sortedAnnotations = point.annotations.sort(prioritizeConfirmedAnnotations)
+            return { ...point, annotations: sortedAnnotations }
           })
-
-          setImages(sortedImages)
-          setDistilledImages(distillImagesObject(sortedImages))
-        })
-        .catch((error) => {
-          console.error('Error fetching images:', error)
+          return { ...image, points: sortedPoints }
         })
 
-      databaseSwitchboardInstance
-        .getChoices()
-        .then(({ growthforms }) => {
-          setGrowthForms(growthforms.data)
-        })
-        .catch((error) => {
-          console.error('Error fetching growth forms:', error)
-        })
-
-      databaseSwitchboardInstance
-        .getBenthicAttributes()
-        .then((benthicAttributes) => {
-          setBenthicAttributes(benthicAttributes)
-        })
-        .catch((error) => {
-          console.error('Error fetching benthic attributes:', error)
-        })
+        setImages(sortedImages)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      } finally {
+        setIsFetching(false)
+      }
     }
+
+    fetchImages()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectId, recordId])
+  }, [projectId, recordId, benthicAttributes, growthForms])
+
+  const _distillImageData = useEffect(() => {
+    if (benthicAttributes && growthForms && images.length > 0) {
+      const distilled = distillImagesObject(images)
+      setDistilledImages(distilled)
+    }
+  }, [benthicAttributes, growthForms, images, distillImagesObject])
 
   const _startPollingOnUpload = useEffect(() => {
     const hasNewImages = uploadedFiles.some((file) => !images.some((img) => img.id === file.id))
@@ -327,10 +345,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                       </>
                     )}
 
-                    <StyledTd>{annotation.quadrat}</StyledTd>
-                    <StyledTd>{annotation.benthic_attribute}</StyledTd>
-                    <StyledTd>{annotation.growth_form || 'N/A'}</StyledTd>
-                    <StyledTd>{annotation.confirmedCount}</StyledTd>
+                    <StyledTd>{annotation?.quadrat}</StyledTd>
+                    <StyledTd>{annotation?.benthic_attribute}</StyledTd>
+                    <StyledTd>{annotation?.growth_form || 'N/A'}</StyledTd>
+                    <StyledTd>{annotation?.confirmedCount}</StyledTd>
 
                     {/* First row only: Unconfirmed, Unclassified, Review, Delete */}
                     {subIndex === 0 && (
