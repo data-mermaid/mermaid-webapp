@@ -20,10 +20,7 @@ import {
   PopupTd,
 } from '../ImageAnnotationModal.styles'
 import { createPortal } from 'react-dom'
-
-// TODO: Place this in a shared folder since used twice?
-const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
-  annotations.some((annotation) => annotation.is_machine_created && annotation.ba_gr === ba_gr)
+import { isAClassifierGuessOfSelectedPoint } from '../../imageClassificationUtilities'
 
 const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchboardInstance }) => {
   const [shouldDisplayModal, setShouldDisplayModal] = useState(false)
@@ -31,6 +28,7 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
   const [growthFormSelectOptions, setGrowthFormSelectOptions] = useState([])
   const [selectedBenthicAttr, setSelectedBenthicAttr] = useState('')
   const [selectedGrowthForm, setSelectedGrowthForm] = useState('')
+  const selectedAttributeGrowthFormId = `${selectedBenthicAttr}_${selectedGrowthForm || null}`
 
   const handleDisplayNewRowSelection = () => {
     const promises = [
@@ -65,7 +63,7 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
       }
 
       // Move the matching classifier guess to front of array and confirm. Unconfirm the rest.
-      if (`${selectedBenthicAttr}_${selectedGrowthForm || null}` === ba_gr) {
+      if (selectedAttributeGrowthFormId === ba_gr) {
         acc.unshift({ ...currentAnnotation, is_confirmed: true })
       } else {
         acc.push({ ...currentAnnotation, is_confirmed: false })
@@ -100,7 +98,7 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
       ?.name.toLowerCase()
 
     const annotationToAdd = {
-      ba_gr: `${selectedBenthicAttr}_${selectedGrowthForm || null}`,
+      ba_gr: selectedAttributeGrowthFormId,
       ba_gr_label: growthFormLabel
         ? `${benthicAttributeLabel} ${growthFormLabel}`
         : benthicAttributeLabel,
@@ -122,10 +120,7 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
 
   const handleAddNewRowClick = () => {
     if (
-      isAClassifierGuessOfSelectedPoint(
-        selectedPoint.annotations,
-        `${selectedBenthicAttr}_${selectedGrowthForm || null}`,
-      )
+      isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, selectedAttributeGrowthFormId)
     ) {
       selectClassifierGuessAsConfirmedAnnotation()
     } else {

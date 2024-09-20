@@ -12,3 +12,6 @@ export const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_co
 
 export const filterForClassifiedPoints = (points) =>
   points.filter(({ annotations }) => annotations.length > 0)
+
+export const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
+  annotations.some((annotation) => annotation.is_machine_created && annotation.ba_gr === ba_gr)
