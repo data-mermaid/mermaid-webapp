@@ -17,6 +17,11 @@ import {
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
+import {
+  getBenthicAttributeLabel,
+  getGrowthFormLabel,
+  prioritizeConfirmedAnnotations,
+} from '../imageClassificationUtilities'
 
 // Context: Strategy for the Image Annotation Modal is to use the 1st annotation in the array for each point
 // as the "current" annotation. The 1st annotation is used to group points into rows for the table,
@@ -24,28 +29,19 @@ import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 // Annotations that are "confirmed" get top priority, with the other annotations being sorted by score from the API.
 // When a user selects a new annotation for that point, it is pushed to the first position in the annotations array.
 
-const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
-
 const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthForms }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const [dataToReview, setDataToReview] = useState()
   const [highlightedAttributeId, setHighlightedAttributeId] = useState('')
 
-  const getBenthicAttributeLabel = (benthicAttributeId) => {
-    const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-    return matchingBenthicAttribute?.name ?? ''
-  }
-
-  const getGrowthFormLabel = (growthFormId) => {
-    const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
-    return matchingGrowthForm?.name.toLowerCase() ?? ''
-  }
-
   const getAttributeGrowthFormLabel = ({ benthic_attribute, growth_form }) =>
     growth_form
-      ? `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(growth_form)}`
-      : getBenthicAttributeLabel(benthic_attribute)
+      ? `${getBenthicAttributeLabel(benthicAttributes, benthic_attribute)} ${getGrowthFormLabel(
+          growthForms,
+          growth_form,
+        )}`
+      : getBenthicAttributeLabel(benthicAttributes, benthic_attribute)
 
   const _fetchImageAnnotations = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {

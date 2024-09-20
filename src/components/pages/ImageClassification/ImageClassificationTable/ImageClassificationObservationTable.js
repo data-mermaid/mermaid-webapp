@@ -15,6 +15,11 @@ import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
 import Thumbnail from './Thumbnail'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { EXCLUDE_PARAMS } from '../../../../library/constants/constants'
+import {
+  getBenthicAttributeLabel,
+  getGrowthFormLabel,
+  prioritizeConfirmedAnnotations,
+} from '../imageClassificationUtilities'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -81,18 +86,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
       setImageId(file.id)
     }
   }
-
-  const getBenthicAttributeLabel = (benthicAttributeId) => {
-    const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-    return matchingBenthicAttribute?.name ?? ''
-  }
-
-  const getGrowthFormLabel = (growthFormId) => {
-    const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
-    return matchingGrowthForm?.name ?? ''
-  }
-
-  const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
   const _fetchImagesOnLoad = useEffect(() => {
     if (recordId && projectId) {
@@ -282,11 +275,13 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                           <StyledTd colSpan={4} />
                           <StyledTd>
                             {getBenthicAttributeLabel(
+                              benthicAttributes,
                               imageAnnotationData[key][0].annotations[0].benthic_attribute,
                             )}
                           </StyledTd>
                           <StyledTd>
                             {getGrowthFormLabel(
+                              growthForms,
                               imageAnnotationData[key][0].annotations[0].growth_form,
                             )}
                           </StyledTd>
