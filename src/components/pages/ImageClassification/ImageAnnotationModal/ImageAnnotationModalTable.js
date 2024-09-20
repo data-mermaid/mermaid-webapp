@@ -62,7 +62,7 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
           <Th colSpan={2} align="right">
             Count
           </Th>
-          <Th>Attribute / Growth Form</Th>
+          <Th>Attribute growth form</Th>
           <Th>Status</Th>
         </Tr>
       </thead>

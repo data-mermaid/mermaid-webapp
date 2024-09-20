@@ -77,7 +77,7 @@ const ExistingRows = ({ selectedPoint, dataToReview, setDataToReview }) => {
   return (
     <>
       <Tr>
-        <Th colSpan={4}>Attribute / Growth Form</Th>
+        <Th colSpan={4}>Attribute growth form</Th>
       </Tr>
       <Tr>
         <PopupTdForRadio>
