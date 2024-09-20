@@ -29,15 +29,11 @@ const tableHeaders = [
 
 const TableHeaderRow = () => (
   <Tr>
-    {tableHeaders.map((header) => {
-      const colSpan = header.id === 'number-of-points-label' ? 3 : header.colSpan || 1
-
-      return (
-        <Th key={header.id} align={header.align} id={header.id} colSpan={colSpan}>
-          <span>{header.text}</span>
-        </Th>
-      )
-    })}
+    {tableHeaders.map((header) => (
+      <Th key={header.id} align={header.align} id={header.id} colSpan={header.colSpan || 1}>
+        <span>{header.text}</span>
+      </Th>
+    ))}
   </Tr>
 )
 
@@ -107,7 +103,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const distillAnnotationData = useCallback(
     (items, index) => {
       if (!benthicAttributes || !growthForms) {
-        console.warn('Benthic Attributes or Growth Forms not available yet')
         return null
       }
 
