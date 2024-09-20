@@ -3,15 +3,27 @@ import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeader
 
 const ImageClassificationMixin = (Base) =>
   class extends Base {
-    getAnnotationsForImage = async function getAnnotationsForImage(projectId, imageId) {
+    getAnnotationsForImage = async function getAnnotationsForImage(
+      projectId,
+      imageId,
+      excludeParams = '',
+    ) {
       if (!imageId || !projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
 
+      const queryParams = new URLSearchParams()
+
+      if (excludeParams) {
+        queryParams.append('exclude', excludeParams)
+      }
+
+      const queryString = `?${queryParams.toString()}`
+
       return this._isOnlineAuthenticatedAndReady
         ? axios
             .get(
-              `${this._apiBaseUrl}/projects/${projectId}/classification/images/${imageId}`,
+              `${this._apiBaseUrl}/projects/${projectId}/classification/images/${imageId}/${queryString}`,
               await getAuthorizationHeaders(this._getAccessToken),
             )
             .then((apiResults) => apiResults.data)

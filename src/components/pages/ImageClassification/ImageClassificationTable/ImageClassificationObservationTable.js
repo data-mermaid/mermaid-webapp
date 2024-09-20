@@ -14,7 +14,9 @@ import { IconClose } from '../../../icons'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
 import Thumbnail from './Thumbnail'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { EXCLUDE_PARAMS } from '../../../../library/constants/constants'
+
+const EXCLUDE_PARAMS =
+  'data,created_by,updated_by,created_on,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
