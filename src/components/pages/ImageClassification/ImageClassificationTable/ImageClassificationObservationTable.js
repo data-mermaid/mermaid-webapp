@@ -135,7 +135,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     [getBenthicAttributeLabel, getGrowthFormLabel, benthicAttributes, growthForms],
   )
 
-  const distillImagesObject = useCallback(
+  const distillImagesData = useCallback(
     (images) => {
       return images.map((file, index) => {
         const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
@@ -205,12 +205,12 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, recordId, benthicAttributes, growthForms])
 
-  const _distillImageData = useEffect(() => {
+  const _distillImagseData = useEffect(() => {
     if (benthicAttributes && growthForms && images.length > 0) {
-      const distilled = distillImagesObject(images)
+      const distilled = distillImagesData(images)
       setDistilledImages(distilled)
     }
-  }, [benthicAttributes, growthForms, images, distillImagesObject])
+  }, [benthicAttributes, growthForms, images, distillImagesData])
 
   const _startPollingOnUpload = useEffect(() => {
     const hasNewImages = uploadedFiles.some((file) => !images.some((img) => img.id === file.id))
@@ -228,7 +228,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
           }
         })
 
-        setDistilledImages(distillImagesObject(mergedImages))
+        setDistilledImages(distillImagesData(mergedImages))
 
         return mergedImages
       })
@@ -237,7 +237,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         setPolling(true)
       }
     }
-  }, [uploadedFiles, images, polling, distillImagesObject])
+  }, [uploadedFiles, images, polling, distillImagesData])
 
   // Poll every 5 seconds after the first image is uploaded
   const _pollImageStatuses = useEffect(() => {
@@ -252,7 +252,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         )
 
         setImages(response.results)
-        setDistilledImages(distillImagesObject(response.results))
+        setDistilledImages(distillImagesData(response.results))
 
         const allProcessed = response.results.every((file) =>
           isImageProcessed(file.classification_status.status),
