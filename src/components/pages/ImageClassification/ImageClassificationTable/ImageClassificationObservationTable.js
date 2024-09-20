@@ -307,19 +307,12 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                       </TdWithHoverText>
 
                       <StyledTd
-                        colSpan={6}
+                        colSpan={8}
                         textAlign={
                           isImageProcessed(file.classification_status.status) ? 'left' : 'center'
                         }
                       >
                         {statusLabels[file.classification_status.status]}
-                      </StyledTd>
-
-                      <StyledTd>
-                        <button>Review</button>
-                      </StyledTd>
-                      <StyledTd>
-                        <button>Delete</button>
                       </StyledTd>
                     </Tr>
                   )
@@ -348,10 +341,18 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                         <StyledTd rowSpan={numSubRows}>{file.num_unconfirmed}</StyledTd>
                         <StyledTd rowSpan={numSubRows}>{file.num_unclassified}</StyledTd>
                         <StyledTd rowSpan={numSubRows}>
-                          <button>Review</button>
+                          <ButtonPrimary
+                            type="button"
+                            onClick={() => setImageId(file.id)}
+                            disabled={!isImageProcessed(file.classification_status.status)}
+                          >
+                            Review
+                          </ButtonPrimary>
                         </StyledTd>
                         <StyledTd rowSpan={numSubRows}>
-                          <button>Delete</button>
+                          <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
+                            <IconClose aria-label="close" />
+                          </ButtonCaution>
                         </StyledTd>
                       </>
                     )}
