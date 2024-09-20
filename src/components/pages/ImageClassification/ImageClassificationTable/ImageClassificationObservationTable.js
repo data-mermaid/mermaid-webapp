@@ -287,10 +287,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                 const { file, distilledAnnotationData, numSubRows } = image
 
                 if (numSubRows === 0) {
-                  // If no subrows exist (image not processed), display a single row with thumbnail, status, review, and delete
-                  {
-                    console.log(isImageProcessed(file.classification_status.status))
-                  }
+                  // If no subrows exist (image not processed), display a single row with thumbnail, status
                   return (
                     <Tr key={file.id}>
                       <StyledTd>{imageIndex + 1}</StyledTd>
@@ -318,7 +315,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                   )
                 }
 
-                // If there are subrows (processed image), render the rows with distilledAnnotationData
+                // If there are subrows (processed image), render annotation data
                 return distilledAnnotationData.map((annotation, subIndex) => (
                   <Tr key={`${file.id}-${subIndex}`}>
                     {subIndex === 0 && (
@@ -360,95 +357,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                 ))
               })}
             </tbody>
-
-            {/* <tbody>
-              {images.map((file, index) => {
-                const classifiedPoints = file.points.filter(
-                  ({ annotations }) => annotations.length > 0,
-                )
-
-                const imageAnnotationData = Object.groupBy(
-                  classifiedPoints,
-                  ({ annotations }) =>
-                    annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
-                )
-
-                const numSubRows = Object.keys(imageAnnotationData).length
-
-                return (
-                  <React.Fragment key={index}>
-                    <Tr>
-                      <StyledTd>{index + 1}</StyledTd>
-                      <TdWithHoverText
-                        data-tooltip={file.original_image_name}
-                        onClick={() => handleImageClick(file)}
-                        cursor={
-                          isImageProcessed(file.classification_status.status)
-                            ? 'pointer'
-                            : 'default'
-                        }
-                        rowspan={numSubRows}
-                      >
-                        <Thumbnail imageUrl={file.thumbnail} />
-                      </TdWithHoverText>
-                      {!!polling && (
-                        <StyledTd>{statusLabels[file.classification_status.status]}</StyledTd>
-                      )}
-                      <StyledTd></StyledTd>
-                      <StyledTd></StyledTd>
-                      <StyledTd></StyledTd>
-                      <StyledTd></StyledTd>
-                      <StyledTd>{file.num_unconfirmed}</StyledTd>
-                      <StyledTd>{file.num_unclassified}</StyledTd>
-                      <StyledTd>
-                        <ButtonPrimary
-                          type="button"
-                          onClick={() => setImageId(file.id)}
-                          disabled={!isImageProcessed(file.classification_status.status)}
-                        >
-                          Review
-                        </ButtonPrimary>
-                      </StyledTd>
-                      <StyledTd>
-                        <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
-                          <IconClose aria-label="close" />
-                        </ButtonCaution>
-                      </StyledTd>
-                    </Tr>
-
-                    {Object.keys(imageAnnotationData).map((key, idx) => {
-                      const { confirmedCount } = imageAnnotationData[key].reduce(
-                        (counts, item) => {
-                          if (item.annotations[0].is_confirmed) {
-                            counts.confirmedCount += 1
-                          }
-                          return counts
-                        },
-                        { confirmedCount: 0 },
-                      )
-
-                      return (
-                        <Tr key={`${file.id}-sub-${idx}`}>
-                          <StyledTd colSpan={!polling ? 2 : 3} />
-                          <StyledTd>{index + 1}</StyledTd>
-                          <StyledTd>
-                            {getBenthicAttributeLabel(
-                              imageAnnotationData[key][0].annotations[0].benthic_attribute,
-                            )}
-                          </StyledTd>
-                          <StyledTd>
-                            {getGrowthFormLabel(
-                              imageAnnotationData[key][0].annotations[0].growth_form,
-                            )}
-                          </StyledTd>
-                          <StyledTd>{confirmedCount}</StyledTd>
-                        </Tr>
-                      )
-                    })}
-                  </React.Fragment>
-                )
-              })}
-            </tbody> */}
           </StickyObservationTable>
         </StyledOverflowWrapper>
       </InputWrapper>
