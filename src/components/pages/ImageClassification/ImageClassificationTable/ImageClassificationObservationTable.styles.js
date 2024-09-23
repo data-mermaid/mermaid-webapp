@@ -30,6 +30,7 @@ const StyledColgroup = styled('colgroup')`
 
 const StyledTd = styled(Td)`
   padding: 0.5em !important;
+  text-align: ${(props) => props.textAlign};
 `
 
 const IconContainer = styled('span')`
