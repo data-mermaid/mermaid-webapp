@@ -135,31 +135,28 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     [getBenthicAttributeLabel, getGrowthFormLabel, benthicAttributes, growthForms],
   )
 
-  const distillImagesData = useCallback(
-    (images) => {
-      return images.map((file, index) => {
-        const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
+  const distillImagesData = useCallback(() => {
+    return images.map((file, index) => {
+      const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
 
-        const imageAnnotationData = Object.groupBy(
-          classifiedPoints,
-          ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
-        )
+      const imageAnnotationData = Object.groupBy(
+        classifiedPoints,
+        ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
+      )
 
-        const numSubRows = Object.keys(imageAnnotationData).length
+      const numSubRows = Object.keys(imageAnnotationData).length
 
-        const distilledAnnotationData = Object.keys(imageAnnotationData).map((key) =>
-          distillAnnotationData(imageAnnotationData[key], index),
-        )
+      const distilledAnnotationData = Object.keys(imageAnnotationData).map((key) =>
+        distillAnnotationData(imageAnnotationData[key], index),
+      )
 
-        return {
-          file,
-          numSubRows,
-          distilledAnnotationData,
-        }
-      })
-    },
-    [distillAnnotationData],
-  )
+      return {
+        file,
+        numSubRows,
+        distilledAnnotationData,
+      }
+    })
+  }, [distillAnnotationData, images])
 
   const _fetchImagesOnLoad = useEffect(() => {
     const fetchImages = async () => {
@@ -205,7 +202,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, recordId, benthicAttributes, growthForms])
 
-  const _distillImagseData = useEffect(() => {
+  const _distillImagesData = useEffect(() => {
     if (benthicAttributes && growthForms && images.length > 0) {
       const distilled = distillImagesData(images)
       setDistilledImages(distilled)
@@ -227,8 +224,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
             mergedImages.push(file)
           }
         })
-
-        setDistilledImages(distillImagesData(mergedImages))
 
         return mergedImages
       })
@@ -252,7 +247,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         )
 
         setImages(response.results)
-        setDistilledImages(distillImagesData(response.results))
 
         const allProcessed = response.results.every((file) =>
           isImageProcessed(file.classification_status.status),
