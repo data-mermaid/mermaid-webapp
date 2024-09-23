@@ -260,6 +260,12 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
         pollImageStatuses()
       }
     }
+
+    return () => {
+      if (pollTimeoutRef.current) {
+        clearTimeout(pollTimeoutRef.current)
+      }
+    }
   }, [uploadedFiles, images, polling, distillImagesData, pollImageStatuses])
 
   return (
