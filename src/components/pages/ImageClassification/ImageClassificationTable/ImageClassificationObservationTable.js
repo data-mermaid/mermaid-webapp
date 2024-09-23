@@ -73,7 +73,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [benthicAttributes, setBenthicAttributes] = useState()
   const [distilledImages, setDistilledImages] = useState([])
   const [isFetching, setIsFetching] = useState(false)
-  const isFirstLoad = useRef(true)
   const pollTimeoutRef = useRef(null)
 
   const isImageProcessed = (status) => status === 3 || status === 4
@@ -187,11 +186,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
   const _fetchImagesOnLoad = useEffect(() => {
     const fetchImages = async () => {
-      if (!recordId || !projectId || isFetching || !isFirstLoad.current) {
+      if (!recordId || !projectId || isFetching) {
         return
       }
       setIsFetching(true)
-      isFirstLoad.current = false
 
       try {
         const [choicesResponse, benthicAttributesResponse] = await Promise.all([
@@ -227,7 +225,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     fetchImages()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectId, recordId, benthicAttributes, growthForms])
+  }, [])
 
   const _distillImagesData = useEffect(() => {
     if (benthicAttributes && growthForms && images.length > 0) {
