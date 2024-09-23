@@ -74,7 +74,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [distilledImages, setDistilledImages] = useState([])
   const [isFetching, setIsFetching] = useState(false)
   const isFirstLoad = useRef(true)
-  const pollTimeoutRef = useRef(null)
+  // const pollTimeoutRef = useRef(null)
 
   const isImageProcessed = (status) => status === 3 || status === 4
 
@@ -159,31 +159,46 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     })
   }, [distillAnnotationData, images])
 
-  const pollImageStatuses = useCallback(async () => {
-    try {
-      const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
-        projectId,
-        recordId,
-        EXCLUDE_PARAMS,
-      )
+  // Poll every 5 seconds after the first image is uploaded
+  const _pollImageStatuses = useEffect(() => {
+    let intervalId
 
-      setImages(response.results)
+    const startPolling = async () => {
+      try {
+        const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
+          projectId,
+          recordId,
+          EXCLUDE_PARAMS,
+        )
 
-      const allProcessed = response.results.every((file) =>
-        isImageProcessed(file.classification_status.status),
-      )
+        setImages(response.results)
 
-      if (!allProcessed) {
-        pollTimeoutRef.current = setTimeout(pollImageStatuses, 5000)
-      } else {
-        setPolling(false)
+        const allProcessed = response.results.every((file) =>
+          isImageProcessed(file.classification_status.status),
+        )
+
+        if (allProcessed) {
+          setPolling(false)
+        } else {
+          intervalId = setTimeout(startPolling, 5000)
+        }
+      } catch (error) {
+        console.error('Error polling images:', error)
+        intervalId = setTimeout(startPolling, 5000)
       }
-    } catch (error) {
-      console.error('Error polling images:', error)
-      pollTimeoutRef.current = setTimeout(pollImageStatuses, 5000)
+    }
+
+    if (polling) {
+      startPolling()
+    }
+
+    return () => {
+      if (intervalId) {
+        clearTimeout(intervalId)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectId, recordId])
+  }, [polling, projectId, recordId])
 
   const _fetchImagesOnLoad = useEffect(() => {
     const fetchImages = async () => {
@@ -227,7 +242,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     fetchImages()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [images])
 
   const _distillImagesData = useEffect(() => {
     if (benthicAttributes && growthForms && images.length > 0) {
@@ -257,16 +272,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
       if (!polling) {
         setPolling(true)
-        pollImageStatuses()
       }
     }
-
-    return () => {
-      if (pollTimeoutRef.current) {
-        clearTimeout(pollTimeoutRef.current)
-      }
-    }
-  }, [uploadedFiles, images, polling, distillImagesData, pollImageStatuses])
+  }, [uploadedFiles, polling, images])
 
   return (
     <>
@@ -332,15 +340,21 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                         <StyledTd textAlign="right" rowSpan={numSubRows}>
                           {file.num_unclassified}
                         </StyledTd>
-                        {file.classification_status.status === 3 && (
-                          <StyledTd colSpan={8} textAlign="right">
-                            <ButtonPrimary type="button" onClick={() => setImageId(file.id)}>
-                              Review
-                            </ButtonPrimary>
-                          </StyledTd>
-                        )}
                         <StyledTd rowSpan={numSubRows}>
-                          <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
+                          <ButtonPrimary
+                            type="button"
+                            onClick={() => setImageId(file.id)}
+                            disabled={!isImageProcessed(file.classification_status.status)}
+                          >
+                            Review
+                          </ButtonPrimary>
+                        </StyledTd>
+                        <StyledTd rowSpan={numSubRows}>
+                          <ButtonCaution
+                            type="button"
+                            onClick={() => handleRemoveFile(file)}
+                            disabled={file.classification_status.status !== 3}
+                          >
                             <IconClose aria-label="close" />
                           </ButtonCaution>
                         </StyledTd>
