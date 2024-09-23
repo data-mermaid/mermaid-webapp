@@ -74,6 +74,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [distilledImages, setDistilledImages] = useState([])
   const [isFetching, setIsFetching] = useState(false)
   const isFirstLoad = useRef(true)
+  const pollTimeoutRef = useRef(null)
 
   const isImageProcessed = (status) => status === 3 || status === 4
 
@@ -158,6 +159,32 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     })
   }, [distillAnnotationData, images])
 
+  const pollImageStatuses = useCallback(async () => {
+    try {
+      const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
+        projectId,
+        recordId,
+        EXCLUDE_PARAMS,
+      )
+
+      setImages(response.results)
+
+      const allProcessed = response.results.every((file) =>
+        isImageProcessed(file.classification_status.status),
+      )
+
+      if (!allProcessed) {
+        pollTimeoutRef.current = setTimeout(pollImageStatuses, 5000)
+      } else {
+        setPolling(false)
+      }
+    } catch (error) {
+      console.error('Error polling images:', error)
+      pollTimeoutRef.current = setTimeout(pollImageStatuses, 5000)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId, recordId])
+
   const _fetchImagesOnLoad = useEffect(() => {
     const fetchImages = async () => {
       if (!recordId || !projectId || isFetching || !isFirstLoad.current) {
@@ -230,51 +257,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
       if (!polling) {
         setPolling(true)
+        pollImageStatuses()
       }
     }
-  }, [uploadedFiles, images, polling, distillImagesData])
-
-  // Poll every 5 seconds after the first image is uploaded
-  const _pollImageStatuses = useEffect(() => {
-    let intervalId
-
-    const startPolling = async () => {
-      try {
-        const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
-          projectId,
-          recordId,
-          EXCLUDE_PARAMS,
-        )
-
-        setImages(response.results)
-
-        const allProcessed = response.results.every((file) =>
-          isImageProcessed(file.classification_status.status),
-        )
-
-        if (allProcessed) {
-          setPolling(false)
-        } else {
-          // Schedule the next polling only after the current one completes
-          intervalId = setTimeout(startPolling, 5000)
-        }
-      } catch (error) {
-        console.error('Error polling images:', error)
-        intervalId = setTimeout(startPolling, 5000)
-      }
-    }
-
-    if (polling) {
-      startPolling()
-    }
-
-    return () => {
-      if (intervalId) {
-        clearTimeout(intervalId)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [polling, projectId, recordId])
+  }, [uploadedFiles, images, polling, distillImagesData, pollImageStatuses])
 
   return (
     <>
