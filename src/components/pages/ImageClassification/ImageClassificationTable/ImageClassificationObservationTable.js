@@ -291,20 +291,14 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                       <TdWithHoverText
                         data-tooltip={file.original_image_name}
                         onClick={() => handleImageClick(file)}
-                        cursor={
-                          isImageProcessed(file.classification_status.status)
-                            ? 'pointer'
-                            : 'default'
-                        }
+                        cursor={file.classification_status.status === 3 ? 'pointer' : 'default'}
                       >
                         <Thumbnail imageUrl={file.thumbnail} />
                       </TdWithHoverText>
 
                       <StyledTd
                         colSpan={8}
-                        textAlign={
-                          isImageProcessed(file.classification_status.status) ? 'left' : 'center'
-                        }
+                        textAlign={file.classification_status.status === 3 ? 'left' : 'center'}
                       >
                         {statusLabels[file.classification_status.status]}
                       </StyledTd>
@@ -338,15 +332,13 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                         <StyledTd textAlign="right" rowSpan={numSubRows}>
                           {file.num_unclassified}
                         </StyledTd>
-                        <StyledTd rowSpan={numSubRows}>
-                          <ButtonPrimary
-                            type="button"
-                            onClick={() => setImageId(file.id)}
-                            disabled={!isImageProcessed(file.classification_status.status)}
-                          >
-                            Review
-                          </ButtonPrimary>
-                        </StyledTd>
+                        {file.classification_status.status === 3 && (
+                          <StyledTd colSpan={8} textAlign="right">
+                            <ButtonPrimary type="button" onClick={() => setImageId(file.id)}>
+                              Review
+                            </ButtonPrimary>
+                          </StyledTd>
+                        )}
                         <StyledTd rowSpan={numSubRows}>
                           <ButtonCaution type="button" onClick={() => handleRemoveFile(file)}>
                             <IconClose aria-label="close" />
