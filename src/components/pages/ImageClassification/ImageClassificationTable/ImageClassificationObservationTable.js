@@ -74,7 +74,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [distilledImages, setDistilledImages] = useState([])
   const [isFetching, setIsFetching] = useState(false)
   const isFirstLoad = useRef(true)
-  // const pollTimeoutRef = useRef(null)
 
   const isImageProcessed = (status) => status === 3 || status === 4
 
