@@ -73,6 +73,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [benthicAttributes, setBenthicAttributes] = useState()
   const [distilledImages, setDistilledImages] = useState([])
   const [isFetching, setIsFetching] = useState(false)
+  const isFirstLoad = useRef(true)
   const pollTimeoutRef = useRef(null)
 
   const isImageProcessed = (status) => status === 3 || status === 4
@@ -186,10 +187,11 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 
   const _fetchImagesOnLoad = useEffect(() => {
     const fetchImages = async () => {
-      if (!recordId || !projectId || isFetching) {
+      if (!recordId || !projectId || isFetching || !isFirstLoad.current) {
         return
       }
       setIsFetching(true)
+      isFirstLoad.current = false
 
       try {
         const [choicesResponse, benthicAttributesResponse] = await Promise.all([
