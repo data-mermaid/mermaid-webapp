@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
 import {
@@ -65,7 +66,7 @@ const statusLabels = {
   4: 'Failed',
 }
 
-const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }) => {
+const ImageClassificationObservationTable = ({ uploadedFiles }) => {
   const [imageId, setImageId] = useState()
   const [images, setImages] = useState(uploadedFiles)
   const [polling, setPolling] = useState(false)
@@ -83,6 +84,19 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     if (isImageProcessed(file.classification_status.status)) {
       setImageId(file.id)
     }
+  }
+
+  const handleRemoveImage = (file) => {
+    databaseSwitchboardInstance
+      .deleteImage(projectId, file.id)
+      .then(() => {
+        const updatedImages = images.filter((f) => f.id !== file.id)
+        setImages(updatedImages)
+        toast.warn('File removed')
+      })
+      .catch(() => {
+        toast.error('Failed to delete image')
+      })
   }
 
   const getBenthicAttributeLabel = useCallback(
@@ -353,7 +367,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                         <StyledTd rowSpan={numSubRows}>
                           <ButtonCaution
                             type="button"
-                            onClick={() => handleRemoveFile(file)}
+                            onClick={() => handleRemoveImage(file)}
                             disabled={file.classification_status.status !== 3}
                           >
                             <IconClose aria-label="close" />
@@ -381,8 +395,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 }
 
 ImageClassificationObservationTable.propTypes = {
-  uploadedFiles: PropTypes.arrayOf(PropTypes.object),
-  handleRemoveFile: PropTypes.func,
+  uploadedFiles: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default ImageClassificationObservationTable
