@@ -73,7 +73,7 @@ const ProjectsMixin = (Base) =>
       return this._isOnlineAuthenticatedAndReady
         ? axios
             .get(
-              `${this._apiBaseUrl}/projecttags/`,
+              `${this._apiBaseUrl}/projecttags/?limit=5000`,
               await getAuthorizationHeaders(this._getAccessToken),
             )
             .then((apiResults) => apiResults.data.results)
