@@ -99,6 +99,21 @@ const ImageClassificationMixin = (Base) =>
         throw new Error(`Error fetching images: ${error.message}`)
       }
     }
+
+    deleteImage = async (projectId, imageId) => {
+      if (!imageId || !projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      return this._isOnlineAuthenticatedAndReady
+        ? axios
+            .delete(
+              `${this._apiBaseUrl}/projects/${projectId}/classification/images/${imageId}/`,
+              await getAuthorizationHeaders(this._getAccessToken),
+            )
+            .then((response) => response)
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default ImageClassificationMixin

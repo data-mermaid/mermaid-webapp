@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
 import {
@@ -65,9 +66,9 @@ const statusLabels = {
   4: 'Failed',
 }
 
-const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }) => {
+const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }) => {
   const [imageId, setImageId] = useState()
-  const [images, setImages] = useState(uploadedFiles)
+  const [images, setImages] = useState([])
   const [polling, setPolling] = useState(false)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId, recordId } = useParams()
@@ -76,6 +77,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   const [distilledImages, setDistilledImages] = useState([])
   const [isFetching, setIsFetching] = useState(false)
   const isFirstLoad = useRef(true)
+  const [deletingImage, setDeletingImage] = useState()
 
   const isImageProcessed = (status) => status === 3 || status === 4
 
@@ -83,6 +85,28 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
     if (isImageProcessed(file.classification_status.status)) {
       setImageId(file.id)
     }
+  }
+
+  const handleRemoveImage = (file) => {
+    setDeletingImage(file.id)
+
+    databaseSwitchboardInstance
+      .deleteImage(projectId, file.id)
+      .then(() => {
+        const updatedImages = images.filter((f) => f.id !== file.id)
+        setImages(updatedImages)
+
+        const updatedUploadedFiles = uploadedFiles.filter((f) => f.id !== file.id)
+        setUploadedFiles(updatedUploadedFiles)
+
+        toast.warn('File removed')
+      })
+      .catch(() => {
+        toast.error('Failed to delete image')
+      })
+      .finally(() => {
+        setDeletingImage()
+      })
   }
 
   const getBenthicAttributeLabel = useCallback(
@@ -246,7 +270,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
   }, [images])
 
   const _distillImagesData = useEffect(() => {
-    if (benthicAttributes && growthForms && images.length > 0) {
+    if (benthicAttributes && growthForms) {
       const distilled = distillImagesData(images)
       setDistilledImages(distilled)
     }
@@ -353,8 +377,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
                         <StyledTd rowSpan={numSubRows}>
                           <ButtonCaution
                             type="button"
-                            onClick={() => handleRemoveFile(file)}
-                            disabled={file.classification_status.status !== 3}
+                            onClick={() => handleRemoveImage(file)}
+                            disabled={
+                              file.classification_status.status !== 3 || deletingImage === file.id
+                            }
                           >
                             <IconClose aria-label="close" />
                           </ButtonCaution>
@@ -381,8 +407,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, handleRemoveFile }
 }
 
 ImageClassificationObservationTable.propTypes = {
-  uploadedFiles: PropTypes.arrayOf(PropTypes.object),
-  handleRemoveFile: PropTypes.func,
+  uploadedFiles: PropTypes.arrayOf(PropTypes.object).isRequired,
+  setUploadedFiles: PropTypes.func.isRequired,
 }
 
 export default ImageClassificationObservationTable
