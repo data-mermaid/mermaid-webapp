@@ -29,7 +29,13 @@ const EXCLUDE_PARAMS =
 
 const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
-const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthForms }) => {
+const ImageAnnotationModal = ({
+  imageId,
+  setImageId,
+  benthicAttributes,
+  growthForms,
+  onAnnotationSaveSuccess,
+}) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const [dataToReview, setDataToReview] = useState()
@@ -85,6 +91,7 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
       .saveAnnotationsForImage(projectId, imageId, dataToReview.points)
       .then(() => {
         setImageId()
+        onAnnotationSaveSuccess()
         toast.success('Successfully saved image annotations')
       })
       .catch(() => {
@@ -162,6 +169,7 @@ ImageAnnotationModal.propTypes = {
   setImageId: PropTypes.func.isRequired,
   benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
   growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onAnnotationSaveSuccess: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModal
