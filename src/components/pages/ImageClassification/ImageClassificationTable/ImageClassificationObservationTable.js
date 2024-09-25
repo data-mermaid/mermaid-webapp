@@ -31,6 +31,8 @@ const tableHeaders = [
 ]
 
 const sortByLatest = (a, b) => new Date(a.file.created_on) - new Date(b.file.created_on)
+const sortAlphabetically = (a, b) => a.benthicAttributeLabel.localeCompare(b.benthicAttributeLabel)
+const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
 const TableHeaderRow = () => (
   <Tr>
@@ -126,7 +128,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
     },
     [growthForms],
   )
-  const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
   const fetchImages = async () => {
     try {
@@ -207,9 +208,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
 
         const numSubRows = Object.keys(imageAnnotationData).length
 
-        const distilledAnnotationData = Object.keys(imageAnnotationData).map((key) =>
-          distillAnnotationData(imageAnnotationData[key], index),
-        )
+        const distilledAnnotationData = Object.keys(imageAnnotationData)
+          .map((key) => distillAnnotationData(imageAnnotationData[key], index))
+          .sort(sortAlphabetically)
 
         return {
           file,
