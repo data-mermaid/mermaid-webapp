@@ -301,6 +301,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
     }
   }, [uploadedFiles, polling, images])
 
+  let rowIndex = 1
+
   return (
     <>
       <InputWrapper>
@@ -313,14 +315,14 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
             </thead>
 
             <tbody>
-              {distilledImages.map((image, imageIndex) => {
+              {distilledImages.map((image) => {
                 const { file, distilledAnnotationData, numSubRows } = image
 
                 if (numSubRows === 0) {
                   // If no subrows exist (image not processed), display a single row with thumbnail, status
                   return (
                     <Tr key={file.id}>
-                      <StyledTd>{imageIndex + 1}</StyledTd>
+                      <StyledTd>{rowIndex++}</StyledTd>
                       <TdWithHoverText
                         data-tooltip={file.original_image_name}
                         onClick={() => handleImageClick(file)}
@@ -328,7 +330,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                       >
                         <Thumbnail imageUrl={file.thumbnail} />
                       </TdWithHoverText>
-
                       <StyledTd
                         colSpan={8}
                         textAlign={file.classification_status.status === 3 ? 'left' : 'center'}
@@ -342,9 +343,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                 // If there are subrows (processed image), render annotation data
                 return distilledAnnotationData.map((annotation, subIndex) => (
                   <Tr key={`${file.id}-${subIndex}`}>
+                    <StyledTd>{rowIndex++}</StyledTd>
                     {subIndex === 0 && (
                       <>
-                        <StyledTd rowSpan={numSubRows}>{imageIndex + 1}</StyledTd>
                         <TdWithHoverText
                           rowSpan={numSubRows}
                           data-tooltip={file.original_image_name}
@@ -355,13 +356,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                         </TdWithHoverText>
                       </>
                     )}
-
                     <StyledTd textAlign="right">{annotation?.quadrat}</StyledTd>
                     <StyledTd>{annotation?.benthicAttributeLabel}</StyledTd>
                     <StyledTd>{annotation?.growthFormLabel || ''}</StyledTd>
                     <StyledTd textAlign="right">{annotation?.confirmedCount}</StyledTd>
-
-                    {/* First row only: Unconfirmed, Unclassified, Review, Delete */}
                     {subIndex === 0 && (
                       <>
                         <StyledTd textAlign="right" rowSpan={numSubRows}>
