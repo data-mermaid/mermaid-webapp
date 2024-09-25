@@ -162,7 +162,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
   }
 
   const distillAnnotationData = useCallback(
-    (items, index) => {
+    (items) => {
       if (!benthicAttributes || !growthForms) {
         return null
       }
@@ -190,7 +190,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
         confirmedCount,
         benthicAttributeLabel: benthic_attribute_label,
         growthFormLabel: growth_form_label,
-        quadrat: index + 1,
       }
     },
     [getBenthicAttributeLabel, getGrowthFormLabel, benthicAttributes, growthForms],
@@ -320,7 +319,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
             </thead>
 
             <tbody>
-              {distilledImages.map((image) => {
+              {distilledImages.map((image, imageIndex) => {
                 const { file, distilledAnnotationData, numSubRows } = image
 
                 if (numSubRows === 0) {
@@ -361,7 +360,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                         </TdWithHoverText>
                       </>
                     )}
-                    <StyledTd textAlign="right">{annotation?.quadrat}</StyledTd>
+                    <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
                     <StyledTd>{annotation?.benthicAttributeLabel}</StyledTd>
                     <StyledTd>{annotation?.growthFormLabel || ''}</StyledTd>
                     <StyledTd textAlign="right">{annotation?.confirmedCount}</StyledTd>
