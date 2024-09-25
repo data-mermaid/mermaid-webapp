@@ -366,7 +366,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                           {file.num_unconfirmed}
                         </StyledTd>
                         <StyledTd textAlign="right" rowSpan={numSubRows}>
-                          {file.num_unknown}
+                          {file.num_unclassified}
                         </StyledTd>
                         <StyledTd rowSpan={numSubRows}>
                           <ButtonPrimary
