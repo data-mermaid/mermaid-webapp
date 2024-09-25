@@ -68,7 +68,7 @@ const statusLabels = {
 
 const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }) => {
   const [imageId, setImageId] = useState()
-  const [images, setImages] = useState(uploadedFiles)
+  const [images, setImages] = useState([])
   const [polling, setPolling] = useState(false)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId, recordId } = useParams()
@@ -270,7 +270,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
   }, [images])
 
   const _distillImagesData = useEffect(() => {
-    if (benthicAttributes && growthForms && images.length > 0) {
+    if (benthicAttributes && growthForms) {
       const distilled = distillImagesData(images)
       setDistilledImages(distilled)
     }
