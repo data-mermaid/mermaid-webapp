@@ -126,6 +126,38 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
   )
   const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
+  const fetchImages = async () => {
+    try {
+      const [choicesResponse, benthicAttributesResponse] = await Promise.all([
+        databaseSwitchboardInstance.getChoices(),
+        databaseSwitchboardInstance.getBenthicAttributes(),
+      ])
+
+      setGrowthForms(choicesResponse.growthforms.data)
+      setBenthicAttributes(benthicAttributesResponse)
+
+      const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
+        projectId,
+        recordId,
+        EXCLUDE_PARAMS,
+      )
+
+      const sortedImages = response.results.map((image) => {
+        const sortedPoints = image.points.map((point) => {
+          const sortedAnnotations = point.annotations.sort(prioritizeConfirmedAnnotations)
+          return { ...point, annotations: sortedAnnotations }
+        })
+        return { ...image, points: sortedPoints }
+      })
+
+      setImages(sortedImages)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setIsFetching(false)
+    }
+  }
+
   const distillAnnotationData = useCallback(
     (items, index) => {
       if (!benthicAttributes || !growthForms) {
@@ -226,48 +258,16 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
   }, [polling, projectId, recordId])
 
   const _fetchImagesOnLoad = useEffect(() => {
-    const fetchImages = async () => {
-      if (!recordId || !projectId || isFetching || !isFirstLoad.current) {
-        return
-      }
-      setIsFetching(true)
-      isFirstLoad.current = false
-
-      try {
-        const [choicesResponse, benthicAttributesResponse] = await Promise.all([
-          databaseSwitchboardInstance.getChoices(),
-          databaseSwitchboardInstance.getBenthicAttributes(),
-        ])
-
-        setGrowthForms(choicesResponse.growthforms.data)
-        setBenthicAttributes(benthicAttributesResponse)
-
-        const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
-          projectId,
-          recordId,
-          EXCLUDE_PARAMS,
-        )
-
-        const sortedImages = response.results.map((image) => {
-          const sortedPoints = image.points.map((point) => {
-            const sortedAnnotations = point.annotations.sort(prioritizeConfirmedAnnotations)
-            return { ...point, annotations: sortedAnnotations }
-          })
-          return { ...image, points: sortedPoints }
-        })
-
-        setImages(sortedImages)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        setIsFetching(false)
-      }
+    if (!recordId || !projectId || isFetching || !isFirstLoad.current) {
+      return
     }
+    setIsFetching(true)
+    isFirstLoad.current = false
 
     fetchImages()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images])
+  }, [])
 
   const _distillImagesData = useEffect(() => {
     if (benthicAttributes && growthForms) {
@@ -345,9 +345,14 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                     {subIndex === 0 && (
                       <>
                         <StyledTd rowSpan={numSubRows}>{imageIndex + 1}</StyledTd>
-                        <StyledTd rowSpan={numSubRows}>
+                        <TdWithHoverText
+                          rowSpan={numSubRows}
+                          data-tooltip={file.original_image_name}
+                          onClick={() => handleImageClick(file)}
+                          cursor={file.classification_status.status === 3 ? 'pointer' : 'default'}
+                        >
                           <Thumbnail imageUrl={file.thumbnail} />
-                        </StyledTd>
+                        </TdWithHoverText>
                       </>
                     )}
 
@@ -400,6 +405,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
           setImageId={setImageId}
           benthicAttributes={benthicAttributes}
           growthForms={growthForms}
+          onAnnotationSaveSuccess={fetchImages}
         />
       ) : undefined}
     </>
