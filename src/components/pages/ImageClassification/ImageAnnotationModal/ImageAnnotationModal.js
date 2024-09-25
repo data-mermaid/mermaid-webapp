@@ -34,6 +34,7 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
   const { projectId } = useParams()
   const [dataToReview, setDataToReview] = useState()
   const [highlightedAttributeId, setHighlightedAttributeId] = useState('')
+  const [isSaving, setIsSaving] = useState(false)
 
   const getBenthicAttributeLabel = (benthicAttributeId) => {
     const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
@@ -78,6 +79,8 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
   const handleCloseModal = () => setImageId()
 
   const handleSaveChanges = () => {
+    setIsSaving(true)
+
     databaseSwitchboardInstance
       .saveAnnotationsForImage(projectId, imageId, dataToReview.points)
       .then(() => {
@@ -86,6 +89,9 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
       })
       .catch(() => {
         toast.error('Failed to save image annotations')
+      })
+      .finally(() => {
+        setIsSaving(false)
       })
   }
 
@@ -97,7 +103,7 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
       allowCloseWithEscapeKey={false}
       maxWidth="fit-content"
       mainContent={
-        dataToReview ? (
+        dataToReview && !isSaving ? (
           <ImageAnnotationModalContainer>
             <ImageAnnotationModalTable
               points={dataToReview.points}
@@ -138,8 +144,12 @@ const ImageAnnotationModal = ({ imageId, setImageId, benthicAttributes, growthFo
             </LegendItem>
           </Legend>
           <div>
-            <ButtonSecondary onClick={handleCloseModal}>Cancel</ButtonSecondary>
-            <ButtonPrimary onClick={handleSaveChanges}>Save Changes</ButtonPrimary>
+            <ButtonSecondary type="button" onClick={handleCloseModal} disabled={isSaving}>
+              Cancel
+            </ButtonSecondary>
+            <ButtonPrimary type="button" onClick={handleSaveChanges} disabled={isSaving}>
+              Save Changes
+            </ButtonPrimary>
           </div>
         </Footer>
       }
