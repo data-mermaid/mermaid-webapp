@@ -16,7 +16,10 @@ const ImageClassificationContainer = () => {
 
   return (
     <>
-      <ImageClassificationObservationTable uploadedFiles={uploadedFiles} />
+      <ImageClassificationObservationTable
+        uploadedFiles={uploadedFiles}
+        setUploadedFiles={setUploadedFiles}
+      />
       <ButtonContainer>
         <ButtonPrimary type="button" onClick={() => setIsModalOpen(true)}>
           <IconContainer>

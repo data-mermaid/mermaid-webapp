@@ -66,7 +66,7 @@ const statusLabels = {
   4: 'Failed',
 }
 
-const ImageClassificationObservationTable = ({ uploadedFiles }) => {
+const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }) => {
   const [imageId, setImageId] = useState()
   const [images, setImages] = useState(uploadedFiles)
   const [polling, setPolling] = useState(false)
@@ -77,6 +77,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles }) => {
   const [distilledImages, setDistilledImages] = useState([])
   const [isFetching, setIsFetching] = useState(false)
   const isFirstLoad = useRef(true)
+  const [deletingImage, setDeletingImage] = useState()
 
   const isImageProcessed = (status) => status === 3 || status === 4
 
@@ -87,15 +88,24 @@ const ImageClassificationObservationTable = ({ uploadedFiles }) => {
   }
 
   const handleRemoveImage = (file) => {
+    setDeletingImage(file.id)
+
     databaseSwitchboardInstance
       .deleteImage(projectId, file.id)
       .then(() => {
         const updatedImages = images.filter((f) => f.id !== file.id)
         setImages(updatedImages)
+
+        const updatedUploadedFiles = uploadedFiles.filter((f) => f.id !== file.id)
+        setUploadedFiles(updatedUploadedFiles)
+
         toast.warn('File removed')
       })
       .catch(() => {
         toast.error('Failed to delete image')
+      })
+      .finally(() => {
+        setDeletingImage()
       })
   }
 
@@ -368,7 +378,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles }) => {
                           <ButtonCaution
                             type="button"
                             onClick={() => handleRemoveImage(file)}
-                            disabled={file.classification_status.status !== 3}
+                            disabled={
+                              file.classification_status.status !== 3 || deletingImage === file.id
+                            }
                           >
                             <IconClose aria-label="close" />
                           </ButtonCaution>
@@ -396,6 +408,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles }) => {
 
 ImageClassificationObservationTable.propTypes = {
   uploadedFiles: PropTypes.arrayOf(PropTypes.object).isRequired,
+  setUploadedFiles: PropTypes.func.isRequired,
 }
 
 export default ImageClassificationObservationTable
