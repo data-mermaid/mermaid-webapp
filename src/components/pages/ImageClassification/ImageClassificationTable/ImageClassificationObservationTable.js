@@ -17,7 +17,7 @@ import Thumbnail from './Thumbnail'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const EXCLUDE_PARAMS =
-  'data,created_by,updated_by,created_on,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
+  'data,created_by,updated_by,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -29,6 +29,10 @@ const tableHeaders = [
   { align: 'right', id: 'review', text: '' },
   { align: 'right', id: 'remove', text: '' },
 ]
+
+const sortByLatest = (a, b) => new Date(a.file.created_on) - new Date(b.file.created_on)
+const sortAlphabetically = (a, b) => a.benthicAttributeLabel.localeCompare(b.benthicAttributeLabel)
+const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
 const TableHeaderRow = () => (
   <Tr>
@@ -124,7 +128,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
     },
     [growthForms],
   )
-  const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
   const fetchImages = async () => {
     try {
@@ -194,26 +197,28 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
   )
 
   const distillImagesData = useCallback(() => {
-    return images.map((file, index) => {
-      const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
+    return images
+      .map((file, index) => {
+        const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
 
-      const imageAnnotationData = Object.groupBy(
-        classifiedPoints,
-        ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
-      )
+        const imageAnnotationData = Object.groupBy(
+          classifiedPoints,
+          ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
+        )
 
-      const numSubRows = Object.keys(imageAnnotationData).length
+        const numSubRows = Object.keys(imageAnnotationData).length
 
-      const distilledAnnotationData = Object.keys(imageAnnotationData).map((key) =>
-        distillAnnotationData(imageAnnotationData[key], index),
-      )
+        const distilledAnnotationData = Object.keys(imageAnnotationData)
+          .map((key) => distillAnnotationData(imageAnnotationData[key], index))
+          .sort(sortAlphabetically)
 
-      return {
-        file,
-        numSubRows,
-        distilledAnnotationData,
-      }
-    })
+        return {
+          file,
+          numSubRows,
+          distilledAnnotationData,
+        }
+      })
+      .sort(sortByLatest)
   }, [distillAnnotationData, images])
 
   // Poll every 5 seconds after the first image is uploaded
