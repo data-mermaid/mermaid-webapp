@@ -28,7 +28,7 @@ const Projects = () => {
   const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
   const [projectFilter, setProjectFilter] = useState('')
   const [projects, setProjects] = useState([])
-  const [projectSortKey, setProjectSortKey] = useState('name')
+  const [projectSortKey, setProjectSortKey] = useState('updated_on')
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
