@@ -50,12 +50,9 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const isMounted = useIsMounted()
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
   const [sites, setSites] = useState([])
-  const [isImageClassification, setIsImageClassification] = useState(
-    isNewRecord ? null : collectRecordBeingEdited?.data?.image_classification,
-  )
+  const [isImageClassification, setIsImageClassification] = useState(null)
 
   const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
-  const enableImageClassification = collectRecordBeingEdited?.data?.image_classification
 
   useEffect(
     function loadSupportingData() {
@@ -93,7 +90,16 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
               setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributesResponse))
               setSites(sitesResponse)
 
-              setIsLoading(false)
+              if (
+                !isNewRecord &&
+                collectRecordResponse?.data &&
+                Object.prototype.hasOwnProperty.call(
+                  collectRecordResponse.data,
+                  'image_classification',
+                )
+              ) {
+                setIsImageClassification(collectRecordResponse?.data?.image_classification)
+              }
             }
           })
           .catch((error) => {
@@ -221,13 +227,13 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
 
   const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
     (props) => {
-      if (isNewRecord || enableImageClassification === null) {
+      if (isNewRecord || isImageClassification === null) {
         return (
           <SampleUnitInputSelector setIsImageClassification={handleIsImageClassificationChange} />
         )
       } else if (
         collectRecordBeingEdited &&
-        (enableImageClassification === false || enableImageClassification === undefined)
+        (isImageClassification === false || isImageClassification === undefined)
       ) {
         return (
           <BenthicPhotoQuadratObservationTable
@@ -235,19 +241,14 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
             {...props}
           />
         )
-      } else if (collectRecordBeingEdited && enableImageClassification) {
+      } else if (collectRecordBeingEdited && isImageClassification) {
         return <ImageClassificationContainer />
       }
 
       return null
     },
 
-    [
-      isNewRecord,
-      enableImageClassification,
-      benthicAttributeSelectOptions,
-      collectRecordBeingEdited,
-    ],
+    [isNewRecord, isImageClassification, benthicAttributeSelectOptions, collectRecordBeingEdited],
   )
 
   return (
