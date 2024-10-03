@@ -50,7 +50,9 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const isMounted = useIsMounted()
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
   const [sites, setSites] = useState([])
-  const [isImageClassification, setIsImageClassification] = useState(null)
+  const [isImageClassification, setIsImageClassification] = useState(
+    isNewRecord ? null : collectRecordBeingEdited?.data?.image_classification,
+  )
 
   const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
   const enableImageClassification = collectRecordBeingEdited?.data?.image_classification
