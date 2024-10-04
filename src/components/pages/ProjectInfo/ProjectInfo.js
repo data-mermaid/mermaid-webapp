@@ -33,10 +33,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
-import {
-  getIsUserAdminForProject,
-  getIsUserGfcrTester,
-} from '../../../App/currentUserProfileHelpers'
+import { getIsUserAdminForProject } from '../../../App/currentUserProfileHelpers'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import DeleteProjectButton from '../../DeleteProjectButton/DeleteProjectButton'
 import GfcrCallout from '../../GfcrCallout'
@@ -165,7 +162,7 @@ const ProjectInfo = () => {
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
-  const isGfcrUserTester = getIsUserGfcrTester(currentUser)
+  const isGfcrUserTester = true
   const [isUpdatingGfcr, setIsUpdatingGfcr] = useState(false)
   const [projectNameError, setProjectNameError] = useState(false)
   const [isDeletingProject, setIsDeletingProject] = useState(false)
