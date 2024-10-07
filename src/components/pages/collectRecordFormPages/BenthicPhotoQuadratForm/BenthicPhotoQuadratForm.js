@@ -223,10 +223,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
         return (
           <SampleUnitInputSelector setIsImageClassification={handleIsImageClassificationChange} />
         )
-      } else if (
-        collectRecordBeingEdited &&
-        (enableImageClassification === false || enableImageClassification === undefined)
-      ) {
+      } else if (collectRecordBeingEdited && enableImageClassification === false) {
         return (
           <BenthicPhotoQuadratObservationTable
             benthicAttributeSelectOptions={benthicAttributeSelectOptions}
