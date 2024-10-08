@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Tr, Th, Td } from '../../../generic/Table/table'
+import { Tr, Th, Td, TableOverflowWrapper } from '../../../generic/Table/table'
 import { ButtonSecondary } from '../../../generic/buttons'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import {
@@ -56,52 +56,54 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
   }
 
   return (
-    <TableWithNoMinWidth aria-labelledby="table-label">
-      <thead>
-        <Tr>
-          <Th colSpan={2} align="right">
-            Count
-          </Th>
-          <Th>Attribute growth form</Th>
-          <Th>Status</Th>
-        </Tr>
-      </thead>
-      <tbody>
-        {Object.keys(tableData)
-          .sort()
-          .map((row) => {
-            const isRowConfirmed = checkIfRowIsConfirmed(row)
+    <TableOverflowWrapper>
+      <TableWithNoMinWidth aria-labelledby="table-label">
+        <thead>
+          <Tr>
+            <Th colSpan={2} align="right">
+              Count
+            </Th>
+            <Th>Attribute growth form</Th>
+            <Th>Status</Th>
+          </Tr>
+        </thead>
+        <tbody>
+          {Object.keys(tableData)
+            .sort()
+            .map((row) => {
+              const isRowConfirmed = checkIfRowIsConfirmed(row)
 
-            return (
-              <TrWithBorderStyling
-                key={row}
-                onClick={() => handleRowSelect(row)}
-                onMouseEnter={() => handleRowHoverOrLeave(row)}
-                onMouseLeave={() => handleRowHoverOrLeave('')}
-                $isSelected={row === selectedRowKey}
-                $isAnyRowSelected={selectedRowKey !== undefined}
-              >
-                <Td align="right">{isRowConfirmed ? <ConfirmedIcon /> : undefined}</Td>
-                <Td align="right">{tableData[row].length}</Td>
-                {/* All points in a row will have the same ba_gr label */}
-                <Td>{tableData[row][0].annotations[0].ba_gr_label}</Td>
-                <Td align="center">
-                  {isRowConfirmed ? (
-                    'Confirmed'
-                  ) : (
-                    <ButtonSecondary
-                      type="button"
-                      onClick={(e) => handleRowConfirm(e, tableData[row])}
-                    >
-                      Confirm
-                    </ButtonSecondary>
-                  )}
-                </Td>
-              </TrWithBorderStyling>
-            )
-          })}
-      </tbody>
-    </TableWithNoMinWidth>
+              return (
+                <TrWithBorderStyling
+                  key={row}
+                  onClick={() => handleRowSelect(row)}
+                  onMouseEnter={() => handleRowHoverOrLeave(row)}
+                  onMouseLeave={() => handleRowHoverOrLeave('')}
+                  $isSelected={row === selectedRowKey}
+                  $isAnyRowSelected={selectedRowKey !== undefined}
+                >
+                  <Td align="right">{isRowConfirmed ? <ConfirmedIcon /> : undefined}</Td>
+                  <Td align="right">{tableData[row].length}</Td>
+                  {/* All points in a row will have the same ba_gr label */}
+                  <Td>{tableData[row][0].annotations[0].ba_gr_label}</Td>
+                  <Td align="center">
+                    {isRowConfirmed ? (
+                      'Confirmed'
+                    ) : (
+                      <ButtonSecondary
+                        type="button"
+                        onClick={(e) => handleRowConfirm(e, tableData[row])}
+                      >
+                        Confirm
+                      </ButtonSecondary>
+                    )}
+                  </Td>
+                </TrWithBorderStyling>
+              )
+            })}
+        </tbody>
+      </TableWithNoMinWidth>
+    </TableOverflowWrapper>
   )
 }
 
