@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
@@ -11,9 +11,6 @@ import {
 } from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
-
-// Image/Map should be full height while maintaining aspect ratio. Set Max height to 80vh
-const MAX_HEIGHT = (80 * (document?.documentElement?.clientHeight || window.innerHeight)) / 100
 
 const DEFAULT_CENTER = [0, 0] // this value doesn't matter, default to null island
 const DEFAULT_ZOOM = 2 // needs to be > 1 otherwise bounds become > 180 and > 85
@@ -34,12 +31,21 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
 ]
 
 const zoomControl = new maplibregl.NavigationControl({ showCompass: false })
+const pointLabelPopup = new maplibregl.Popup({
+  anchor: 'center',
+  closeButton: false,
+})
+
+const calculate80ViewHeight = () =>
+  (80 * (document?.documentElement?.clientHeight || window.innerHeight)) / 100
+
+const calcImageScale = ({ original_image_height }) => {
+  const maxHeight = calculate80ViewHeight()
+  return original_image_height > maxHeight ? maxHeight / original_image_height : 1
+}
 
 const flyToDefaultView = (map) =>
   map.current.flyTo({ center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM, duration: 500 })
-
-const getImageScale = ({ original_image_height }) =>
-  original_image_height > MAX_HEIGHT ? MAX_HEIGHT / original_image_height : 1
 
 // HACK: MapLibre's unproject() (used to get pixel coords) doesn't let you pass zoom as parameter.
 // So to ensure that our points remain in the same position we:
@@ -63,65 +69,87 @@ const ImageAnnotationModalMap = ({
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
-  const imageScale = getImageScale(dataToReview)
-  const halfPatchSize = dataToReview.patch_size / 2
   const [selectedPoint, setSelectedPoint] = useState({ id: null, lngLat: null })
-  const pointLabelPopup = new maplibregl.Popup({
-    anchor: 'center',
-    closeButton: false,
+  const [imageScale, setImageScale] = useState(() => calcImageScale(dataToReview))
+  const halfPatchSize = dataToReview.patch_size / 2
+
+  const getPointsGeojson = () => ({
+    type: 'FeatureCollection',
+    features: dataToReview.points.map((point) => {
+      // Row and Column represent the center of the patch in pixels,
+      // Crop size is the size of the patch in pixels
+      // We calculate the corners of the patch in pixels, then convert to lng, lat
+      const topLeft = map.current.unproject([
+        (point.column - halfPatchSize) * imageScale,
+        (point.row - halfPatchSize) * imageScale,
+      ])
+      const bottomLeft = map.current.unproject([
+        (point.column - halfPatchSize) * imageScale,
+        (point.row + halfPatchSize) * imageScale,
+      ])
+      const bottomRight = map.current.unproject([
+        (point.column + halfPatchSize) * imageScale,
+        (point.row + halfPatchSize) * imageScale,
+      ])
+      const topRight = map.current.unproject([
+        (point.column + halfPatchSize) * imageScale,
+        (point.row - halfPatchSize) * imageScale,
+      ])
+      return {
+        type: 'Feature',
+        properties: {
+          id: point.id,
+          ba_gr: point.annotations[0]?.ba_gr,
+          ba_gr_label: point.annotations[0]?.ba_gr_label,
+          isUnclassified: !point.annotations.length,
+          isConfirmed: !!point.annotations[0]?.is_confirmed,
+        },
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [topLeft.lng, topLeft.lat],
+              [bottomLeft.lng, bottomLeft.lat],
+              [bottomRight.lng, bottomRight.lat],
+              [topRight.lng, topRight.lat],
+              [topLeft.lng, topLeft.lat],
+            ],
+          ],
+        },
+      }
+    }),
   })
 
-  const getPointsGeojson = useCallback(
-    () => ({
-      type: 'FeatureCollection',
-      features: dataToReview.points.map((point) => {
-        // Row and Column represent the center of the patch in pixels,
-        // Crop size is the size of the patch in pixels
-        // We calculate the corners of the patch in pixels, then convert to lng, lat
-        const topLeft = map.current.unproject([
-          (point.column - halfPatchSize) * imageScale,
-          (point.row - halfPatchSize) * imageScale,
-        ])
-        const bottomLeft = map.current.unproject([
-          (point.column - halfPatchSize) * imageScale,
-          (point.row + halfPatchSize) * imageScale,
-        ])
-        const bottomRight = map.current.unproject([
-          (point.column + halfPatchSize) * imageScale,
-          (point.row + halfPatchSize) * imageScale,
-        ])
-        const topRight = map.current.unproject([
-          (point.column + halfPatchSize) * imageScale,
-          (point.row - halfPatchSize) * imageScale,
-        ])
-        return {
-          type: 'Feature',
-          properties: {
-            id: point.id,
-            ba_gr: point.annotations[0]?.ba_gr,
-            ba_gr_label: point.annotations[0]?.ba_gr_label,
-            isUnclassified: !point.annotations.length,
-            isConfirmed: !!point.annotations[0]?.is_confirmed,
-          },
-          geometry: {
-            type: 'Polygon',
-            coordinates: [
-              [
-                [topLeft.lng, topLeft.lat],
-                [bottomLeft.lng, bottomLeft.lat],
-                [bottomRight.lng, bottomRight.lat],
-                [topRight.lng, topRight.lat],
-                [topLeft.lng, topLeft.lat],
-              ],
-            ],
-          },
-        }
-      }),
-    }),
-    [dataToReview, imageScale, halfPatchSize],
-  )
+  const updatePointsOnMap = () => {
+    const currentZoom = map.current.getZoom()
+    const currentCenter = map.current.getCenter()
 
-  const _renderImageViaMap = useEffect(() => {
+    hackTemporarilySetMapToDefaultPosition(map)
+
+    map.current.getSource('patches').setData(getPointsGeojson())
+
+    hackResetMapToCurrentPosition(map, currentZoom, currentCenter)
+  }
+
+  const updateImageSizeOnMap = () => {
+    const bounds = map.current.getBounds()
+
+    map.current.getSource('benthicQuadratImage').setCoordinates([
+      // spans the image across the entire map
+      [bounds._sw.lng, bounds._ne.lat],
+      [bounds._ne.lng, bounds._ne.lat],
+      [bounds._ne.lng, bounds._sw.lat],
+      [bounds._sw.lng, bounds._sw.lat],
+    ])
+
+    // Keep the max extent of the map to the size of the image
+    map.current.setMaxBounds([
+      [bounds._sw.lng, bounds._sw.lat],
+      [bounds._ne.lng, bounds._ne.lat],
+    ])
+  }
+
+  const _renderImageMapOnLoad = useEffect(() => {
     if (hasMapLoaded) {
       return
     }
@@ -241,15 +269,36 @@ const ImageAnnotationModalMap = ({
       return
     }
 
-    const currentZoom = map.current.getZoom()
-    const currentCenter = map.current.getCenter()
+    updatePointsOnMap()
 
-    hackTemporarilySetMapToDefaultPosition(map)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataToReview, hasMapLoaded])
 
-    map.current.getSource('patches').setData(getPointsGeojson())
+  const _windowResizeListener = useEffect(() => {
+    if (!hasMapLoaded) {
+      return
+    }
 
-    hackResetMapToCurrentPosition(map, currentZoom, currentCenter)
-  }, [dataToReview, hasMapLoaded, getPointsGeojson])
+    window.addEventListener('resize', () => {
+      setImageScale(calcImageScale(dataToReview))
+    })
+
+    return () => {
+      window.removeEventListener('resize', map.current.resize())
+    }
+  }, [hasMapLoaded, dataToReview])
+
+  const _updateLayersOnWindowResize = useEffect(() => {
+    if (!hasMapLoaded) {
+      return
+    }
+
+    map.current.resize()
+    updatePointsOnMap()
+    updateImageSizeOnMap()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imageScale, hasMapLoaded])
 
   const _updateStylingForPoints = useEffect(() => {
     if (!hasMapLoaded) {
@@ -292,8 +341,10 @@ const ImageAnnotationModalMap = ({
     <ImageAnnotationMapWrapper>
       <ImageAnnotationMapContainer
         ref={mapContainer}
-        $width={dataToReview.original_image_width * imageScale}
-        $height={dataToReview.original_image_height * imageScale}
+        style={{
+          width: dataToReview.original_image_width * imageScale,
+          height: dataToReview.original_image_height * imageScale,
+        }}
       />
       <MapResetButton type="button" onClick={() => flyToDefaultView(map)}>
         <IconReset />
