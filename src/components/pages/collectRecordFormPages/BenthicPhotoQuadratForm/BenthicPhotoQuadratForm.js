@@ -50,7 +50,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const isMounted = useIsMounted()
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
   const [sites, setSites] = useState([])
-  const [isImageClassification, setIsImageClassification] = useState(null)
+  const [isImageClassificationSelected, setIsImageClassification] = useState(null)
 
   const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
   const enableImageClassification = collectRecordBeingEdited?.data?.image_classification
@@ -265,7 +265,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
         setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
         setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
         subNavNode={subNavNode}
-        isImageClassification={isImageClassification}
+        isImageClassification={isImageClassificationSelected}
       />
       {!!projectId && !!currentUser && (
         <NewAttributeModal
