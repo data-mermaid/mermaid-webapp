@@ -36,6 +36,9 @@ const pointLabelPopup = new maplibregl.Popup({
   closeButton: false,
 })
 
+const calculate100ViewWidth = () =>
+  (100 * (document?.documentElement?.clientWidth || window.innerWidth)) / 100
+
 const calculate80ViewHeight = () =>
   (80 * (document?.documentElement?.clientHeight || window.innerHeight)) / 100
 
@@ -274,21 +277,33 @@ const ImageAnnotationModalMap = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataToReview, hasMapLoaded])
 
-  const _windowResizeListener = useEffect(() => {
+  const _setImageScaleOnWindowResize = useEffect(() => {
     if (!hasMapLoaded) {
       return
     }
 
-    window.addEventListener('resize', () => {
-      setImageScale(calcImageScale(dataToReview))
-    })
+    const updateMapScale = () => {
+      const modalTableWidth = document?.getElementById('modal-table')?.clientWidth
+      const maxWidth = calculate100ViewWidth() - 64 - modalTableWidth
+      const maxHeight = calculate80ViewHeight()
+      const widthScale = maxWidth / dataToReview.original_image_width
+      const heightScale = maxHeight / dataToReview.original_image_height
+
+      if (widthScale < 1 || heightScale < 1) {
+        setImageScale(Math.min(widthScale, heightScale))
+      } else {
+        setImageScale(calcImageScale(dataToReview))
+      }
+    }
+
+    window.addEventListener('resize', updateMapScale)
 
     return () => {
-      window.removeEventListener('resize', map.current.resize())
+      window.removeEventListener('resize', updateMapScale)
     }
   }, [hasMapLoaded, dataToReview])
 
-  const _updateLayersOnWindowResize = useEffect(() => {
+  const _updateLayersOnImageScaleChange = useEffect(() => {
     if (!hasMapLoaded) {
       return
     }
