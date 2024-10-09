@@ -44,11 +44,6 @@ export const ImageAnnotationMapWrapper = styled.div`
   position: relative;
 `
 
-export const ImageAnnotationMapContainer = styled.div`
-  width: ${({ $width }) => `${$width}px`};
-  height: ${({ $height }) => `${$height}px`};
-`
-
 export const TableWithNoMinWidth = styled(Table)`
   min-width: unset;
   border-top: none;

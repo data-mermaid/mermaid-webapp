@@ -4,11 +4,7 @@ import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { IconReset } from '../../../icons'
-import {
-  ImageAnnotationMapContainer,
-  ImageAnnotationMapWrapper,
-  MapResetButton,
-} from './ImageAnnotationModal.styles'
+import { ImageAnnotationMapWrapper, MapResetButton } from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
 
