@@ -42,9 +42,19 @@ const calculate100ViewWidth = () =>
 const calculate80ViewHeight = () =>
   (80 * (document?.documentElement?.clientHeight || window.innerHeight)) / 100
 
-const calcImageScale = ({ original_image_height }) => {
+const calcImageScale = ({ original_image_width, original_image_height }) => {
+  const modalTableWidth = document?.getElementById('modal-table')?.clientWidth || 400
+  const maxWidth = calculate100ViewWidth() - 64 - modalTableWidth
   const maxHeight = calculate80ViewHeight()
-  return original_image_height > maxHeight ? maxHeight / original_image_height : 1
+  const widthScale = maxWidth / original_image_width
+  const heightScale = maxHeight / original_image_height
+
+  if (widthScale < 1 || heightScale < 1) {
+    return Math.min(widthScale, heightScale)
+  } else {
+    // TODO: Is this the right way to handle this case?
+    return original_image_height > maxHeight ? maxHeight / original_image_height : 1
+  }
 }
 
 const flyToDefaultView = (map) =>
@@ -282,24 +292,11 @@ const ImageAnnotationModalMap = ({
       return
     }
 
-    const updateMapScale = () => {
-      const modalTableWidth = document?.getElementById('modal-table')?.clientWidth
-      const maxWidth = calculate100ViewWidth() - 64 - modalTableWidth
-      const maxHeight = calculate80ViewHeight()
-      const widthScale = maxWidth / dataToReview.original_image_width
-      const heightScale = maxHeight / dataToReview.original_image_height
-
-      if (widthScale < 1 || heightScale < 1) {
-        setImageScale(Math.min(widthScale, heightScale))
-      } else {
-        setImageScale(calcImageScale(dataToReview))
-      }
-    }
-
-    window.addEventListener('resize', updateMapScale)
+    // TODO: Put this is in a function
+    window.addEventListener('resize', () => setImageScale(calcImageScale(dataToReview)))
 
     return () => {
-      window.removeEventListener('resize', updateMapScale)
+      window.removeEventListener('resize', () => setImageScale(calcImageScale(dataToReview)))
     }
   }, [hasMapLoaded, dataToReview])
 
