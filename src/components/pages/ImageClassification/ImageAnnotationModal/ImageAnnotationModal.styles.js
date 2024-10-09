@@ -34,17 +34,14 @@ export const LoadingContainer = styled.div`
 
 export const ImageAnnotationModalContainer = styled.div`
   display: flex;
+  max-height: inherit;
+  overflow: hidden;
   margin: -${theme.spacing.medium};
   background-color: ${theme.color.background};
 `
 
 export const ImageAnnotationMapWrapper = styled.div`
   position: relative;
-`
-
-export const ImageAnnotationMapContainer = styled.div`
-  width: ${({ $width }) => `${$width}px`};
-  height: ${({ $height }) => `${$height}px`};
 `
 
 export const TableWithNoMinWidth = styled(Table)`
