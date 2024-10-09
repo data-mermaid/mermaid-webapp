@@ -371,12 +371,20 @@ const CollectRecordFormPage = ({
   })
 
   const handleSave = () => {
+    const originalImageClassification = collectRecordBeingEdited?.data?.image_classification
+
+    // ensure image_classification is not overwritten after it has been saved the first time.
+    const imageClassificationToSave =
+      originalImageClassification === undefined || originalImageClassification === null
+        ? isImageClassification
+        : originalImageClassification
+
     const recordToSubmit = sampleUnitFormatSaveFunction({
       collectRecordBeingEdited,
       formikValues: formik.values,
       observationsTable1State,
       observationsTable2State,
-      image_classification: isImageClassification,
+      image_classification: imageClassificationToSave,
     })
 
     setSaveButtonState(buttonGroupStates.saving)
