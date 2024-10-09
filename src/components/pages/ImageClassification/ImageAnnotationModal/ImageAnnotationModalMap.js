@@ -12,6 +12,9 @@ import {
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
 
+const MODAL_PADDING = 64
+const EST_TABLE_SIZE = 400 // estimated value if can't get by id
+
 const DEFAULT_CENTER = [0, 0] // this value doesn't matter, default to null island
 const DEFAULT_ZOOM = 2 // needs to be > 1 otherwise bounds become > 180 and > 85
 
@@ -43,18 +46,14 @@ const calculate80ViewHeight = () =>
   (80 * (document?.documentElement?.clientHeight || window.innerHeight)) / 100
 
 const calcImageScale = ({ original_image_width, original_image_height }) => {
-  const modalTableWidth = document?.getElementById('modal-table')?.clientWidth || 400
-  const maxWidth = calculate100ViewWidth() - 64 - modalTableWidth
-  const maxHeight = calculate80ViewHeight()
-  const widthScale = maxWidth / original_image_width
-  const heightScale = maxHeight / original_image_height
+  const modalTableWidth = document?.getElementById('modal-table')?.clientWidth || EST_TABLE_SIZE
+  const maxWidthForImg = calculate100ViewWidth() - MODAL_PADDING - modalTableWidth
+  const maxHeightForImg = calculate80ViewHeight() // Based on max-height of ModalContent el in <Modal/>
+  const widthScale = maxWidthForImg / original_image_width
+  const heightScale = maxHeightForImg / original_image_height
 
-  if (widthScale < 1 || heightScale < 1) {
-    return Math.min(widthScale, heightScale)
-  } else {
-    // TODO: Is this the right way to handle this case?
-    return original_image_height > maxHeight ? maxHeight / original_image_height : 1
-  }
+  // We want to scale by the smaller value to ensure the image always fits
+  return widthScale < 1 || heightScale < 1 ? Math.min(widthScale, heightScale) : 1
 }
 
 const flyToDefaultView = (map) =>
@@ -292,14 +291,17 @@ const ImageAnnotationModalMap = ({
       return
     }
 
-    // TODO: Put this is in a function
-    window.addEventListener('resize', () => setImageScale(calcImageScale(dataToReview)))
+    const updateImgScaleOnWindowResize = () => setImageScale(calcImageScale(dataToReview))
+
+    window.addEventListener('resize', updateImgScaleOnWindowResize)
 
     return () => {
-      window.removeEventListener('resize', () => setImageScale(calcImageScale(dataToReview)))
+      window.removeEventListener('resize', updateImgScaleOnWindowResize)
     }
   }, [hasMapLoaded, dataToReview])
 
+  // This effect is essentially triggered by the _setImageScaleOnWindowResize above.
+  // It can be combined, but readability becomes comprimised.
   const _updateLayersOnImageScaleChange = useEffect(() => {
     if (!hasMapLoaded) {
       return
