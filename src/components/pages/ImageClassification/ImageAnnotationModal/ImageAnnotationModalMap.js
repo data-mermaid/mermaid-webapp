@@ -46,7 +46,8 @@ const calculate80ViewHeight = () =>
   (80 * (document?.documentElement?.clientHeight || window.innerHeight)) / 100
 
 const calcImageScale = ({ original_image_width, original_image_height }) => {
-  const modalTableWidth = document?.getElementById('modal-table')?.clientWidth || EST_TABLE_SIZE
+  const modalTableWidth =
+    document?.getElementById('annotation-modal-table')?.clientWidth || EST_TABLE_SIZE
   const maxWidthForImg = calculate100ViewWidth() - MODAL_PADDING - modalTableWidth
   const maxHeightForImg = calculate80ViewHeight() // Based on max-height of ModalContent el in <Modal/>
   const widthScale = maxWidthForImg / original_image_width
@@ -353,7 +354,7 @@ const ImageAnnotationModalMap = ({
 
   return (
     <ImageAnnotationMapWrapper>
-      <ImageAnnotationMapContainer
+      <div
         ref={mapContainer}
         style={{
           width: dataToReview.original_image_width * imageScale,

@@ -56,7 +56,7 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
   }
 
   return (
-    <TableOverflowWrapper id="modal-table">
+    <TableOverflowWrapper id="annotation-modal-table">
       <TableWithNoMinWidth aria-labelledby="table-label">
         <thead>
           <Tr>
