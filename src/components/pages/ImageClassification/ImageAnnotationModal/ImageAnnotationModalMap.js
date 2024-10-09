@@ -56,8 +56,8 @@ const calcImageScale = ({ original_image_width, original_image_height }) => {
   return widthScale < 1 || heightScale < 1 ? Math.min(widthScale, heightScale) : 1
 }
 
-const flyToDefaultView = (map) =>
-  map.current.flyTo({ center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM, duration: 500 })
+const easeToDefaultView = (map) =>
+  map.current.easeTo({ center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM, duration: 500 })
 
 // HACK: MapLibre's unproject() (used to get pixel coords) doesn't let you pass zoom as parameter.
 // So to ensure that our points remain in the same position we:
@@ -360,7 +360,7 @@ const ImageAnnotationModalMap = ({
           height: dataToReview.original_image_height * imageScale,
         }}
       />
-      <MapResetButton type="button" onClick={() => flyToDefaultView(map)}>
+      <MapResetButton type="button" onClick={() => easeToDefaultView(map)}>
         <IconReset />
       </MapResetButton>
       {selectedPoint.id ? (
