@@ -1,32 +1,18 @@
 import React from 'react'
-import { ButtonPrimary, ButtonSecondary } from '../../generic/buttons'
-import { H3 } from '../../generic/text'
-import { IconSparkles, IconPen } from '../../icons'
-import styled from 'styled-components/macro'
-import language from '../../../language'
-import theme from '../../../theme'
+import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
+import { H3 } from '../../../generic/text'
+import { IconSparkles, IconPen } from '../../../icons'
+import language from '../../../../language'
 import PropTypes from 'prop-types'
+import {
+  ButtonContainer,
+  ButtonText,
+  OfflineText,
+  SelectorContainer,
+  TextContainer,
+} from './SampleUnitInputSelector.styles'
 
-const ButtonText = styled.span`
-  margin-left: 0.8rem;
-`
-
-const ButtonContainer = styled.div`
-  margin-bottom: 1rem;
-`
-
-const SelectorContainer = styled.div`
-  padding: 1rem;
-  background-color: ${theme.color.grey5};
-  margin-left: 1rem;
-  margin-top: 3rem;
-`
-
-const TextContainer = styled.div`
-  max-width: 68rem;
-`
-
-const SampleUnitInputSelector = ({ setIsImageClassification }) => {
+const SampleUnitInputSelector = ({ setIsImageClassification, isAppOnline }) => {
   const handleSampleUnitChange = (type) => () => {
     setIsImageClassification(type)
   }
@@ -40,10 +26,11 @@ const SampleUnitInputSelector = ({ setIsImageClassification }) => {
         <p>{language.imageClassification.sampleUnitInputSelector.description}</p>
       </TextContainer>
       <ButtonContainer>
-        <ButtonPrimary type="button" onClick={handleSampleUnitChange(true)}>
+        <ButtonPrimary type="button" onClick={handleSampleUnitChange(true)} disabled={!isAppOnline}>
           <IconSparkles />
           <ButtonText>{language.imageClassification.sampleUnitInputSelector.button1}</ButtonText>
         </ButtonPrimary>
+        {!isAppOnline ? <OfflineText>Unavailable offline.</OfflineText> : null}
       </ButtonContainer>
       <ButtonContainer>
         <ButtonSecondary type="button" onClick={handleSampleUnitChange(false)}>
@@ -57,6 +44,7 @@ const SampleUnitInputSelector = ({ setIsImageClassification }) => {
 
 SampleUnitInputSelector.propTypes = {
   setIsImageClassification: PropTypes.func.isRequired,
+  isAppOnline: PropTypes.bool.isRequired,
 }
 
 export default SampleUnitInputSelector
