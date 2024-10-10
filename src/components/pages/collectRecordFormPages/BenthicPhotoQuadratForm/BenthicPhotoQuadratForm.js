@@ -222,7 +222,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
 
   const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
     (props) => {
-      if (!isAppOnline) {
+      if (!isAppOnline && enableImageClassification) {
         return <SampleUnitInputSelectorOffline />
       } else if (isNewRecord || enableImageClassification === null) {
         return (
