@@ -14,8 +14,8 @@ const EST_TABLE_SIZE = 400 // estimated value if can't get by id
 const DEFAULT_CENTER = [0, 0] // this value doesn't matter, default to null island
 const DEFAULT_ZOOM = 2 // needs to be > 1 otherwise bounds become > 180 and > 85
 
-const POLYGON_LINE_WIDTH = 5
-const SELECTED_POLYGON_LINE_WIDTH = 10
+const POLYGON_LINE_WIDTH = 3 
+const SELECTED_POLYGON_LINE_WIDTH = 5 
 
 const IMAGE_CLASSIFICATION_COLOR_EXP = [
   'case',
@@ -212,6 +212,16 @@ const ImageAnnotationModalMap = ({
           },
         },
         {
+          id: 'patches-outline-layer',
+          type: 'line',
+          source: 'patches',
+          paint: {
+            'line-width': POLYGON_LINE_WIDTH,
+            'line-color': 'white',
+            'line-offset' : -POLYGON_LINE_WIDTH,
+          },
+        },
+        {
           id: 'patches-fill-layer',
           type: 'fill',
           source: 'patches',
@@ -316,14 +326,14 @@ const ImageAnnotationModalMap = ({
       return
     }
 
-    map.current.setPaintProperty('patches-line-layer', 'line-color', [
+    map.current.setPaintProperty('patches-outline-layer', 'line-color', [
       'case',
       [
         '==', // checks if point on map is clicked
         ['get', 'id'],
         selectedPoint.id,
       ],
-      COLORS.current,
+      COLORS.highlighted,
 
       [
         '==', // checks if point on map is in highlighted row in table
@@ -332,7 +342,25 @@ const ImageAnnotationModalMap = ({
       ],
       COLORS.highlighted,
 
+      COLORS.white
+    ])
+    map.current.setPaintProperty('patches-line-layer', 'line-color', [
+      'case',
+      [
+        '==', // checks if point on map is clicked
+        ['get', 'id'],
+        selectedPoint.id,
+      ],
       IMAGE_CLASSIFICATION_COLOR_EXP, // fallback to default expression
+
+      [
+        '==', // checks if point on map is in highlighted row in table
+        ['get', 'ba_gr'],
+        highlightedAttributeId,
+      ],
+      IMAGE_CLASSIFICATION_COLOR_EXP, 
+
+      IMAGE_CLASSIFICATION_COLOR_EXP,
     ])
 
     map.current.setPaintProperty('patches-line-layer', 'line-width', [
