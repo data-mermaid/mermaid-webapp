@@ -134,10 +134,6 @@ const ImageAnnotationModal = ({
         <Footer>
           <Legend>
             <LegendItem>
-              <LegendSquare color={COLORS.current} />
-              Current
-            </LegendItem>
-            <LegendItem>
               <LegendSquare color={COLORS.unconfirmed} />
               Unconfirmed
             </LegendItem>

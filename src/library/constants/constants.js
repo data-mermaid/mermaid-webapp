@@ -18,11 +18,12 @@ export const apiDataTypes = {
   projectSites: 'project_sites',
 }
 export const IMAGE_CLASSIFICATION_COLORS = {
-  current: '#D4BC48',
-  confirmed: '#80CA72',
-  unconfirmed: '#B4BBE2',
+  current: '#D4BC48', // no longer used, see highlighted
+  confirmed: '#5EFF13',
+  unconfirmed: '#0080FF',
+  white: '#efefef',
   unclassified: '#BF6B69',
-  highlighted: 'blue', // TODO: This colour is not yet defined
+  highlighted: '#FF00FB',
 }
 
 Object.freeze(PROJECT_CODES)
