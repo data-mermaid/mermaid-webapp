@@ -126,13 +126,9 @@ const SubmittedHabitatComplexity = () => {
         submittedRecordId,
         sampleUnitMethod: 'habitatcomplexitytransectmethods',
       })
-      .then(() => {
+      .then(({ id }) => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
-        navigate(
-          `${ensureTrailingSlash(
-            currentProjectPath,
-          )}collecting/habitatcomplexity/${submittedRecordId}`,
-        )
+        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/habitatcomplexity/${id}`)
       })
       .catch((error) => {
         handleHttpResponseError({

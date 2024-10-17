@@ -127,11 +127,9 @@ const SubmittedBleaching = () => {
         submittedRecordId,
         sampleUnitMethod: 'bleachingquadratcollectionmethods',
       })
-      .then(() => {
+      .then(({ id }) => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
-        navigate(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/bleachingqc/${submittedRecordId}`,
-        )
+        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/bleachingqc/${id}`)
       })
       .catch((error) => {
         handleHttpResponseError({
