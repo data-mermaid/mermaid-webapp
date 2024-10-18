@@ -113,6 +113,7 @@ const CollectRecordFormPage = ({
   observationsTable2Reducer = [],
   ObservationTable1,
   ObservationTable2 = undefined,
+  isImageClassification,
   sampleUnitFormatSaveFunction,
   sampleUnitName,
   SampleUnitTransectInputs,
@@ -370,11 +371,20 @@ const CollectRecordFormPage = ({
   })
 
   const handleSave = () => {
+    const originalImageClassification = collectRecordBeingEdited?.data?.image_classification
+
+    // ensure image_classification is not overwritten after it has been saved the first time.
+    const imageClassificationToSave =
+      originalImageClassification === undefined || originalImageClassification === null
+        ? isImageClassification
+        : originalImageClassification
+
     const recordToSubmit = sampleUnitFormatSaveFunction({
       collectRecordBeingEdited,
       formikValues: formik.values,
       observationsTable1State,
       observationsTable2State,
+      image_classification: imageClassificationToSave,
     })
 
     setSaveButtonState(buttonGroupStates.saving)
@@ -387,6 +397,7 @@ const CollectRecordFormPage = ({
         profileId: currentUser.id,
         projectId,
         protocol: sampleUnitName,
+        image_classification: isImageClassification,
       })
       .then((collectRecordResponse) => {
         setIsFormDirty(false)
@@ -434,6 +445,14 @@ const CollectRecordFormPage = ({
         })
       })
   }
+
+  const _handleSaveObservationTableType = useEffect(() => {
+    if (isImageClassification !== null) {
+      handleSave()
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isImageClassification])
 
   const openDeleteRecordModal = () => {
     setIsDeleteRecordModalOpen(true)
@@ -652,6 +671,7 @@ CollectRecordFormPage.propTypes = {
   setIsNewBenthicAttributeModalOpen: PropTypes.func,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func,
   subNavNode: subNavNodePropTypes,
+  isImageClassification: PropTypes.bool,
 }
 
 export default CollectRecordFormPage

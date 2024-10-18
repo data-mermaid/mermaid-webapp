@@ -28,6 +28,10 @@ import ErrorBoundary from '../../../ErrorBoundary'
 import BenthicPhotoQuadratTransectInputs from './BenthicPhotoQuadratTransectInputs'
 import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
 import benthicpqtObservationReducer from './benthicpqtObservationReducer'
+import SampleUnitInputSelector from '../../ImageClassification/SampleUnitInputSelector/SampleUnitInputSelector'
+import SampleUnitInputSelectorOffline from '../../ImageClassification/SampleUnitInputSelector/SampleUnitInputSelectorOffline'
+import ImageClassificationContainer from '../../ImageClassification/ImageClassificationTable/ImageClassificationContainer'
+import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -39,6 +43,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const [observationIdToAddNewBenthicAttributeTo, setObservationIdToAddNewBenthicAttributeTo] =
     useState()
   const [subNavNode, setSubNavNode] = useState(null)
+  const { isAppOnline } = useOnlineStatus()
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -48,8 +53,10 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const isMounted = useIsMounted()
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
   const [sites, setSites] = useState([])
+  const [isImageClassificationSelected, setIsImageClassification] = useState(null)
 
   const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
+  const enableImageClassification = collectRecordBeingEdited?.data?.image_classification
 
   useEffect(
     function loadSupportingData() {
@@ -114,6 +121,10 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       isSyncInProgress,
     ],
   )
+
+  const handleIsImageClassificationChange = (type) => {
+    setIsImageClassification(type)
+  }
 
   const { getPersistedUnsavedFormData: getPersistedUnsavedFormikData } =
     useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedSampleInfoInputs`)
@@ -208,22 +219,38 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       updateBenthicAttributeOptionsStateWithOfflineStorageData,
     ],
   )
+
   const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
     (props) => {
-      // the conditional here makes tests happy
-      if (benthicAttributeSelectOptions.length) {
+      if (!isAppOnline && enableImageClassification) {
+        return <SampleUnitInputSelectorOffline />
+      } else if (isNewRecord || enableImageClassification === null) {
+        return (
+          <SampleUnitInputSelector
+            setIsImageClassification={handleIsImageClassificationChange}
+            isAppOnline={isAppOnline}
+          />
+        )
+      } else if (collectRecordBeingEdited && enableImageClassification === false) {
         return (
           <BenthicPhotoQuadratObservationTable
             benthicAttributeSelectOptions={benthicAttributeSelectOptions}
             {...props}
           />
         )
+      } else if (collectRecordBeingEdited && enableImageClassification) {
+        return <ImageClassificationContainer />
       }
-
       return null
     },
 
-    [benthicAttributeSelectOptions],
+    [
+      isNewRecord,
+      enableImageClassification,
+      benthicAttributeSelectOptions,
+      collectRecordBeingEdited,
+      isAppOnline,
+    ],
   )
 
   return (
@@ -246,6 +273,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
         setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
         setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
         subNavNode={subNavNode}
+        isImageClassification={isImageClassificationSelected}
       />
       {!!projectId && !!currentUser && (
         <NewAttributeModal
