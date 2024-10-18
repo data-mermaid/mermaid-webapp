@@ -842,16 +842,14 @@ const Users = () => {
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
-
+              const { key: _, ...restRowProps } = row.getRowProps()
               return (
-                <Tr key={row.id} {...row.getRowProps()}>
+                <Tr key={row.id} {...restRowProps}>
                   {row.cells.map((cell) => {
+                    const { key: _, ...restCellProps } = cell.getCellProps()
+                    const uniqueKey = `${row.id}-${cell.column.id}`
                     return (
-                      <UserTableTd
-                        key={cell.column.id}
-                        {...cell.getCellProps()}
-                        align={cell.column.align}
-                      >
+                      <UserTableTd key={uniqueKey} {...restCellProps} align={cell.column.align}>
                         {cell.render('Cell')}
                       </UserTableTd>
                     )

@@ -126,11 +126,9 @@ const SubmittedBenthicPhotoQuadrat = () => {
         submittedRecordId,
         sampleUnitMethod: 'benthicphotoquadrattransectmethods',
       })
-      .then(() => {
+      .then(({ id }) => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
-        navigate(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/benthicpqt/${submittedRecordId}`,
-        )
+        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/benthicpqt/${id}`)
       })
       .catch((error) => {
         handleHttpResponseError({

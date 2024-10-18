@@ -145,11 +145,9 @@ const SubmittedFishBelt = () => {
     setIsMoveToButtonDisabled(true)
     databaseSwitchboardInstance
       .moveToCollect({ projectId, submittedRecordId, sampleUnitMethod: 'beltfishtransectmethods' })
-      .then(() => {
+      .then(({ id }) => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
-        navigate(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${submittedRecordId}`,
-        )
+        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${id}`)
       })
       .catch((error) => {
         handleHttpResponseError({
