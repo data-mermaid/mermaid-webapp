@@ -126,11 +126,9 @@ const SubmittedBenthicLit = () => {
         submittedRecordId,
         sampleUnitMethod: 'benthiclittransectmethods',
       })
-      .then(() => {
+      .then(({ id }) => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
-        navigate(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/benthiclit/${submittedRecordId}`,
-        )
+        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/benthiclit/${id}`)
       })
       .catch((error) => {
         handleHttpResponseError({
