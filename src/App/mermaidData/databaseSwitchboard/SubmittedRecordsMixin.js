@@ -107,7 +107,13 @@ const SubmittedRecordsMixin = (Base) =>
               {},
               await getAuthorizationHeaders(this._getAccessToken),
             )
-            .then(() => this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId))
+            .then((res) => {
+              return this._apiSyncInstance
+                .pushThenPullAllProjectDataExceptChoices(projectId)
+                .then(() => {
+                  return res.data
+                })
+            })
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
