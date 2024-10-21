@@ -81,7 +81,6 @@ const ProjectToolBarSection = ({
   setProjectFilter,
   projectSortKey,
   setProjectSortKey,
-  isProjectSortAsc,
   setIsProjectSortAsc,
   addProjectToProjectsPage,
 }) => {
@@ -151,7 +150,6 @@ ProjectToolBarSection.propTypes = {
   setProjectFilter: PropTypes.func.isRequired,
   projectSortKey: PropTypes.string.isRequired,
   setProjectSortKey: PropTypes.func.isRequired,
-  isProjectSortAsc: PropTypes.bool.isRequired,
   setIsProjectSortAsc: PropTypes.func.isRequired,
   addProjectToProjectsPage: PropTypes.func.isRequired,
 }
