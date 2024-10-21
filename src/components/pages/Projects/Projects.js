@@ -156,7 +156,6 @@ const Projects = () => {
           setProjectFilter={setProjectFilter}
           projectSortKey={projectSortKey}
           setProjectSortKey={setProjectSortKey}
-          isProjectSortAsc={isProjectSortAsc}
           setIsProjectSortAsc={setIsProjectSortAsc}
           addProjectToProjectsPage={addProjectToProjectsPage}
         />

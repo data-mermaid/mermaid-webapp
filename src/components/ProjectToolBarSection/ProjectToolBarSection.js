@@ -7,8 +7,7 @@ import {
   mediaQueryPhoneOnly,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
-import { ButtonCallout, ButtonSecondary } from '../generic/buttons'
-import { IconSortDown, IconSortUp } from '../icons'
+import { ButtonCallout } from '../generic/buttons'
 import { Input, inputStyles } from '../generic/form'
 import OfflineHide from '../generic/OfflineHide'
 import ProjectModal from '../ProjectCard/ProjectModal'
@@ -82,7 +81,6 @@ const ProjectToolBarSection = ({
   setProjectFilter,
   projectSortKey,
   setProjectSortKey,
-  isProjectSortAsc,
   setIsProjectSortAsc,
   addProjectToProjectsPage,
 }) => {
@@ -94,6 +92,15 @@ const ProjectToolBarSection = ({
 
   const setSortBy = (event) => {
     setProjectSortKey(event.target.value)
+    if (event.target.value === 'updated_on') {
+      setIsProjectSortAsc(false)
+    }
+    if (event.target.value === 'name') {
+      setIsProjectSortAsc(true)
+    }
+    if (event.target.value === 'countries') {
+      setIsProjectSortAsc(true)
+    }
   }
 
   const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false)
@@ -129,15 +136,8 @@ const ProjectToolBarSection = ({
             <option value="updated_on">Last Updated Date</option>
             <option value="name">Project Name</option>
             <option value="countries">Country</option>
-            <option value="num_sites">Number of Sites</option>
           </select>
         </SortByLabelWrapper>
-        <ButtonSecondary
-          aria-label="sort-projects"
-          onClick={() => setIsProjectSortAsc(!isProjectSortAsc)}
-        >
-          {isProjectSortAsc ? <IconSortDown /> : <IconSortUp />}
-        </ButtonSecondary>
       </FilterRowWrapper>
     </GlobalWrapper>
   )
@@ -150,7 +150,6 @@ ProjectToolBarSection.propTypes = {
   setProjectFilter: PropTypes.func.isRequired,
   projectSortKey: PropTypes.string.isRequired,
   setProjectSortKey: PropTypes.func.isRequired,
-  isProjectSortAsc: PropTypes.bool.isRequired,
   setIsProjectSortAsc: PropTypes.func.isRequired,
   addProjectToProjectsPage: PropTypes.func.isRequired,
 }
