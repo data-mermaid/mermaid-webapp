@@ -62,7 +62,7 @@ const TdWithHoverText = styled(StyledTd)`
   }
 
   &:hover {
-    border: 2px solid ${theme.color.primaryColor};
+    outline: 2px solid ${theme.color.primaryColor};
   }
 
   &:hover::after {

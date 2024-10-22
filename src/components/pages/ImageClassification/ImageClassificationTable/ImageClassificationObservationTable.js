@@ -24,7 +24,7 @@ const tableHeaders = [
   { align: 'center', id: 'thumbnail-label', text: 'Thumbnail' },
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
-  { align: 'right', id: 'growth-form-label', text: 'Growth Form' },
+  { align: 'left', id: 'growth-form-label', text: 'Growth Form' },
   { colSpan: 3, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
   { align: 'right', id: 'review', text: '' },
   { align: 'right', id: 'remove', text: '' },
@@ -45,9 +45,9 @@ const TableHeaderRow = () => (
 )
 
 const subHeaderColumns = [
-  { align: 'center', text: 'Confirmed' },
-  { align: 'center', text: 'Unconfirmed' },
-  { align: 'center', text: 'Unknown' },
+  { align: 'right', text: 'Confirmed' },
+  { align: 'right', text: 'Unconfirmed' },
+  { align: 'right', text: 'Unknown' },
 ]
 
 const SubHeaderRow = () => (
@@ -64,8 +64,8 @@ const SubHeaderRow = () => (
 
 const statusLabels = {
   0: 'Unknown',
-  1: 'Pending',
-  2: 'Running',
+  1: 'Queued',
+  2: 'Processing',
   3: 'Completed',
   4: 'Failed',
 }
