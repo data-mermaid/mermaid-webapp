@@ -223,8 +223,8 @@ and project profiles to ensure the user can pull fresh data if they are given pe
   expect(lastRevisionProject1FishSpeciesAfterSyncError[0].lastRevisionNumber).toEqual('server')
 
   // The 'tables' with project info that has been deleted for a project, need to have nulled out last revision numbers for that table+project combo
-  expect(lastRevisionProject1CollectRecordsAfterSyncError[0].lastRevisionNumber).toBeNull()
-  expect(lastRevisionProject1ManagementsAfterSyncError[0].lastRevisionNumber).toBeNull()
-  expect(lastRevisionProject1ProfilesAfterSyncError[0].lastRevisionNumber).toBeNull()
-  expect(lastRevisionProject1SitesAfterSyncError[0].lastRevisionNumber).toBeNull()
+  expect(lastRevisionProject1CollectRecordsAfterSyncError[0].lastRevisionNumber).toEqual('initial')
+  expect(lastRevisionProject1ManagementsAfterSyncError[0].lastRevisionNumber).toEqual('initial')
+  expect(lastRevisionProject1ProfilesAfterSyncError[0].lastRevisionNumber).toEqual('initial')
+  expect(lastRevisionProject1SitesAfterSyncError[0].lastRevisionNumber).toEqual('initial')
 })

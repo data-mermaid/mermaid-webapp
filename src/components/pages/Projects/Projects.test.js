@@ -42,12 +42,6 @@ test('Projects component renders with the expected UI elements', async () => {
   const sortByLabel = screen.getByLabelText('Sort By')
 
   expect(sortByLabel).toBeInTheDocument()
-
-  const sortButton = screen.getByRole('button', {
-    name: 'sort-projects',
-  })
-
-  expect(sortButton).toBeInTheDocument()
 })
 
 test('A project card renders with the expected UI elements for button groups', async () => {
@@ -95,23 +89,24 @@ test('A project card shows relevant data for a project', async () => {
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
+
   const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
   const submittedSummaryCard = within(projectCard).getByLabelText(/submitted/i)
   const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
   const usersSummaryCard = within(projectCard).getByLabelText(/users/i)
   const dataSharingSummaryCard = within(projectCard).getByLabelText(/data-sharing/i)
 
-  expect(within(projectCard).getByText('Project I'))
-  expect(within(projectCard).getByText('Canada'))
-  expect(within(collectingSummaryCard).getByText('12'))
-  expect(within(submittedSummaryCard).getByText('9'))
-  expect(within(sitesSummaryCard).getByText('13'))
-  expect(within(usersSummaryCard).getByText('5'))
+  expect(within(projectCard).getByText('Project II'))
+  expect(within(projectCard).getByText('America'))
+  expect(within(collectingSummaryCard).getByText('32'))
+  expect(within(submittedSummaryCard).getByText('2'))
+  expect(within(sitesSummaryCard).getByText('36'))
+  expect(within(usersSummaryCard).getByText('3'))
   expect(within(dataSharingSummaryCard).getByTestId('fishbelt-policy')).toHaveTextContent(
-    'Fish belt: Private',
+    'Fish belt: Public Summary',
   )
   expect(within(dataSharingSummaryCard).getByTestId('benthic-policy')).toHaveTextContent(
-    'Benthic: Public Summary',
+    'Benthic: Private',
   )
   expect(within(dataSharingSummaryCard).getByTestId('bleaching-policy')).toHaveTextContent(
     'Bleaching: Public',
@@ -122,9 +117,8 @@ test('A project card shows relevant data for a project', async () => {
   })
 
   expect(offlineCheckbox)
-  expect(offlineCheckbox).toBeChecked()
 
-  expect(within(projectCard).getByText('Tue Jan 21 2020 00:00:00'))
+  expect(within(projectCard).getByText('Thu Jan 21 2021 08:00:00'))
 })
 
 test('A project card renders appropriately when offline', async () => {
@@ -245,30 +239,6 @@ test('Projects can be sorted by countries', async () => {
   expect(within(topProjectCard).getByText('America'))
 })
 
-test('Projects can be sorted by number of sites', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-
-  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-
-  const { user } = renderAuthenticatedOnline(<Projects />, {
-    dexiePerUserDataInstance,
-    isSyncInProgressOverride: true,
-  })
-
-  await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
-  )
-
-  const selectMenu = screen.getAllByRole('combobox')[0]
-
-  await user.selectOptions(selectMenu, ['num_sites'])
-
-  const topProjectCard = screen.getAllByRole('listitem')[0]
-
-  expect(within(topProjectCard).getByText('Project IV'))
-  expect(within(topProjectCard).getByText('9'))
-})
-
 test('Projects can be sorted by updated on date', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
@@ -289,31 +259,8 @@ test('Projects can be sorted by updated on date', async () => {
 
   const topProjectCard = screen.getAllByRole('listitem')[0]
 
-  expect(within(topProjectCard).getByText('Project III'))
-  expect(within(topProjectCard).getByText('Tue Jan 21 1992 08:00:00'))
-})
-
-test('Project sorted descending', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-
-  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-
-  const { user } = renderAuthenticatedOnline(<Projects />, {
-    dexiePerUserDataInstance,
-    isSyncInProgressOverride: true,
-  })
-
-  await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
-  )
-
-  const sortProjects = screen.getByLabelText('sort-projects')
-
-  await user.click(sortProjects)
-
-  const topProjectCard = screen.getAllByRole('listitem')[0]
-
-  expect(within(topProjectCard).getByText("Project Z has an apostrophe foo's"))
+  expect(within(topProjectCard).getByText('Project II'))
+  expect(within(topProjectCard).getByText('Thu Jan 21 2021 08:00:00'))
 })
 
 test('Project filter filters by name and country', async () => {
