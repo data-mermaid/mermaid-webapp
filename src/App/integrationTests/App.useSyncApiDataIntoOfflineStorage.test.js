@@ -179,6 +179,7 @@ test('Sync: initial page load already done, navigate to non project page', async
    */
 
   // this makes the act errors disappear.
+
   expect(within(await screen.findByTestId('collect-record-count')).getByText('21'))
 
   expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(22)
