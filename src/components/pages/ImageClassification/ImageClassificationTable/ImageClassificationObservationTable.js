@@ -9,7 +9,12 @@ import {
 } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Th } from '../../../generic/Table/table'
 import PropTypes from 'prop-types'
-import { StyledTd, StyledTr, TdWithHoverText } from './ImageClassificationObservationTable.styles'
+import {
+  StyledTd,
+  TdWithHoverText,
+  ImageWrapper,
+  StyledTr,
+} from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
@@ -24,7 +29,7 @@ const tableHeaders = [
   { align: 'center', id: 'thumbnail-label', text: 'Thumbnail' },
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
-  { align: 'right', id: 'growth-form-label', text: 'Growth Form' },
+  { align: 'left', id: 'growth-form-label', text: 'Growth Form' },
   { colSpan: 3, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
   { align: 'right', id: 'review', text: '' },
   { align: 'right', id: 'remove', text: '' },
@@ -45,9 +50,9 @@ const TableHeaderRow = () => (
 )
 
 const subHeaderColumns = [
-  { align: 'center', text: 'Confirmed' },
-  { align: 'center', text: 'Unconfirmed' },
-  { align: 'center', text: 'Unknown' },
+  { align: 'right', text: 'Confirmed' },
+  { align: 'right', text: 'Unconfirmed' },
+  { align: 'right', text: 'Unknown' },
 ]
 
 const SubHeaderRow = () => (
@@ -64,8 +69,8 @@ const SubHeaderRow = () => (
 
 const statusLabels = {
   0: 'Unknown',
-  1: 'Pending',
-  2: 'Running',
+  1: 'Queued',
+  2: 'Processing',
   3: 'Completed',
   4: 'Failed',
 }
@@ -336,7 +341,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                         onClick={() => handleImageClick(file)}
                         cursor={file.classification_status.status === 3 ? 'pointer' : 'default'}
                       >
-                        <Thumbnail imageUrl={file.thumbnail} />
+                        <ImageWrapper>
+                          <Thumbnail imageUrl={file.thumbnail} />
+                        </ImageWrapper>
                       </TdWithHoverText>
                       <StyledTd
                         colSpan={8}
@@ -363,7 +370,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                           onClick={() => handleImageClick(file)}
                           cursor={file.classification_status.status === 3 ? 'pointer' : 'default'}
                         >
-                          <Thumbnail imageUrl={file.thumbnail} />
+                          <ImageWrapper>
+                            <Thumbnail imageUrl={file.thumbnail} />
+                          </ImageWrapper>
                         </TdWithHoverText>
                       </>
                     )}

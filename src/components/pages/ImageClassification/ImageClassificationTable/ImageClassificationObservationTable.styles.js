@@ -53,6 +53,12 @@ const ButtonContainer = styled.div`
   margin-left: 1rem;
 `
 
+const ImageWrapper = styled('div')`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const TdWithHoverText = styled(StyledTd)`
   cursor: ${(props) => props.cursor};
 
@@ -74,7 +80,7 @@ const TdWithHoverText = styled(StyledTd)`
   }
 
   &:hover {
-    border: 2px solid ${theme.color.primaryColor};
+    outline: 2px solid ${theme.color.primaryColor};
   }
 
   &:hover::after {
@@ -83,4 +89,12 @@ const TdWithHoverText = styled(StyledTd)`
   }
 `
 
-export { StyledColgroup, IconContainer, ButtonContainer, StyledTd, StyledTr, TdWithHoverText }
+export {
+  StyledColgroup,
+  IconContainer,
+  ButtonContainer,
+  StyledTd,
+  TdWithHoverText,
+  ImageWrapper,
+  StyledTr,
+}
