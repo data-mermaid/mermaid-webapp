@@ -1,6 +1,7 @@
 import styled from 'styled-components'
-import { Td } from '../../../generic/Table/table'
+import { Td, Tr } from '../../../generic/Table/table'
 import theme from '../../../../theme'
+import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -31,6 +32,17 @@ const StyledColgroup = styled('colgroup')`
 const StyledTd = styled(Td)`
   padding: 0.5em !important;
   text-align: ${(props) => props.textAlign};
+`
+
+const StyledTr = styled(Tr)`
+  border-width: 0 0 0 ${theme.spacing.xsmall};
+  border-style: solid;
+  border-color: ${({ $messageType, $hasUnconfirmedPoint }) =>
+    $messageType
+      ? theme.color.getBorderColor($messageType)
+      : $hasUnconfirmedPoint
+      ? COLORS.unconfirmed
+      : COLORS.confirmed};
 `
 
 const IconContainer = styled('span')`
@@ -78,3 +90,4 @@ const TdWithHoverText = styled(StyledTd)`
 `
 
 export { StyledColgroup, IconContainer, ButtonContainer, StyledTd, TdWithHoverText, ImageWrapper }
+
