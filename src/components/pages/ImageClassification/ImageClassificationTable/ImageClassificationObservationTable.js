@@ -9,7 +9,11 @@ import {
 } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Th } from '../../../generic/Table/table'
 import PropTypes from 'prop-types'
-import { StyledTd, TdWithHoverText } from './ImageClassificationObservationTable.styles'
+import {
+  StyledTd,
+  TdWithHoverText,
+  ImageWrapper,
+} from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
@@ -332,7 +336,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                         onClick={() => handleImageClick(file)}
                         cursor={file.classification_status.status === 3 ? 'pointer' : 'default'}
                       >
-                        <Thumbnail imageUrl={file.thumbnail} />
+                        <ImageWrapper>
+                          <Thumbnail imageUrl={file.thumbnail} />
+                        </ImageWrapper>
                       </TdWithHoverText>
                       <StyledTd
                         colSpan={8}
@@ -356,7 +362,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                           onClick={() => handleImageClick(file)}
                           cursor={file.classification_status.status === 3 ? 'pointer' : 'default'}
                         >
-                          <Thumbnail imageUrl={file.thumbnail} />
+                          <ImageWrapper>
+                            <Thumbnail imageUrl={file.thumbnail} />
+                          </ImageWrapper>
                         </TdWithHoverText>
                       </>
                     )}

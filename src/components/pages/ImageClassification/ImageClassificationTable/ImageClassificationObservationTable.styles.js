@@ -41,11 +41,14 @@ const ButtonContainer = styled.div`
   margin-left: 1rem;
 `
 
+const ImageWrapper = styled('div')`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const TdWithHoverText = styled(StyledTd)`
   cursor: ${(props) => props.cursor};
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   &::after {
     content: attr(data-tooltip);
@@ -74,4 +77,4 @@ const TdWithHoverText = styled(StyledTd)`
   }
 `
 
-export { StyledColgroup, IconContainer, ButtonContainer, StyledTd, TdWithHoverText }
+export { StyledColgroup, IconContainer, ButtonContainer, StyledTd, TdWithHoverText, ImageWrapper }
