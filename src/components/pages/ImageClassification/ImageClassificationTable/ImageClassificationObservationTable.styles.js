@@ -43,6 +43,9 @@ const ButtonContainer = styled.div`
 
 const TdWithHoverText = styled(StyledTd)`
   cursor: ${(props) => props.cursor};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &::after {
     content: attr(data-tooltip);
