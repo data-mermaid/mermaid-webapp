@@ -9,7 +9,7 @@ import {
 } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Th } from '../../../generic/Table/table'
 import PropTypes from 'prop-types'
-import { StyledTd, TdWithHoverText } from './ImageClassificationObservationTable.styles'
+import { StyledTd, StyledTr, TdWithHoverText } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
@@ -168,6 +168,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
       }
 
       let confirmedCount = 0
+      let hasUnconfirmedPoint = false
       let benthic_attribute_label = null
       let growth_form_label = null
 
@@ -175,6 +176,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
         const firstAnnotation = item.annotations[0]
         if (firstAnnotation.is_confirmed) {
           confirmedCount += 1
+        } else {
+          hasUnconfirmedPoint = true
         }
 
         if (firstAnnotation.benthic_attribute) {
@@ -188,6 +191,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
 
       return {
         confirmedCount,
+        hasUnconfirmedPoint,
         benthicAttributeLabel: benthic_attribute_label,
         growthFormLabel: growth_form_label,
       }
@@ -346,7 +350,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
 
                 // If there are subrows (processed image), render annotation data
                 return distilledAnnotationData.map((annotation, subIndex) => (
-                  <Tr key={`${file.id}-${subIndex}`}>
+                  <StyledTr
+                    key={`${file.id}-${subIndex}`}
+                    $hasUnconfirmedPoint={annotation.hasUnconfirmedPoint}
+                  >
                     <StyledTd>{rowIndex++}</StyledTd>
                     {subIndex === 0 && (
                       <>
@@ -394,7 +401,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                         </StyledTd>
                       </>
                     )}
-                  </Tr>
+                  </StyledTr>
                 ))
               })}
             </tbody>
