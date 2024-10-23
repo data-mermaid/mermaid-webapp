@@ -89,5 +89,12 @@ const TdWithHoverText = styled(StyledTd)`
   }
 `
 
-export { StyledColgroup, IconContainer, ButtonContainer, StyledTd, TdWithHoverText, ImageWrapper }
-
+export {
+  StyledColgroup,
+  IconContainer,
+  ButtonContainer,
+  StyledTd,
+  TdWithHoverText,
+  ImageWrapper,
+  StyledTr,
+}

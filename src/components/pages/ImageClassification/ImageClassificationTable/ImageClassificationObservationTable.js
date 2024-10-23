@@ -13,6 +13,7 @@ import {
   StyledTd,
   TdWithHoverText,
   ImageWrapper,
+  StyledTr,
 } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
