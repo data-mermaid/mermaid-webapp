@@ -17,5 +17,15 @@ export const apiDataTypes = {
   projectProfiles: 'project_profiles',
   projectSites: 'project_sites',
 }
+export const IMAGE_CLASSIFICATION_COLORS = {
+  current: '#D4BC48', // no longer used, see highlighted
+  confirmed: '#5EFF13',
+  unconfirmed: '#0080FF',
+  white: '#efefef',
+  unclassified: '#BF6B69',
+  highlighted: '#FF00FB',
+}
+
 Object.freeze(PROJECT_CODES)
 Object.freeze(apiDataTypes)
+Object.freeze(IMAGE_CLASSIFICATION_COLORS)
