@@ -63,7 +63,20 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
       pullRequestRedirectAuth0Hack()
       setUnauthenticatedStates()
       auth0LoginWithRedirect()
+
+      var urlParams = new URLSearchParams(window.location.search)
+      var error = urlParams.get('error')
+      if (error && error === 'access_denied') {
+        let errorDescription = urlParams.get('error_description')
+        if (errorDescription && errorDescription === 'email_not_verified') {
+          let returnMsg = 'You must verify your email before you can login.'
+          window.location.href = `https://${
+            process.env.REACT_APP_AUTH0_DOMAIN
+          }/login?error=${error}&error_description=${encodeURIComponent(returnMsg)}`
+        }
+      }
     }
+
     if (isUserOnlineAndLoggedIn) {
       // this is where logged in state gets set after successful login. (because of redirect)
       getAuth0AccessTokenSilently()
