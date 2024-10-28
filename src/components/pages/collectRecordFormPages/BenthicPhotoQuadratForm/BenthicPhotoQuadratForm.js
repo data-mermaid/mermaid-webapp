@@ -239,7 +239,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
           />
         )
       } else if (collectRecordBeingEdited && enableImageClassification) {
-        return <ImageClassificationContainer />
+        return <ImageClassificationContainer {...props} />
       }
       return null
     },

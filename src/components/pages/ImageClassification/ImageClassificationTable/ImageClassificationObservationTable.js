@@ -20,6 +20,8 @@ import { IconClose } from '../../../icons'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
 import Thumbnail from './Thumbnail'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import getObservationValidationInfo from '../../collectRecordFormPages/CollectRecordFormPage/getObservationValidationInfo'
+import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 
 const EXCLUDE_PARAMS =
   'data,created_by,updated_by,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
@@ -33,6 +35,7 @@ const tableHeaders = [
   { colSpan: 3, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
   { align: 'right', id: 'review', text: '' },
   { align: 'right', id: 'remove', text: '' },
+  { align: 'right', id: 'validations', text: 'Validations' },
 ]
 
 const sortByLatest = (a, b) => new Date(a.file.created_on) - new Date(b.file.created_on)
@@ -75,7 +78,12 @@ const statusLabels = {
   4: 'Failed',
 }
 
-const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }) => {
+const ImageClassificationObservationTable = ({
+  uploadedFiles,
+  setUploadedFiles,
+  collectRecord = undefined,
+  areValidationsShowing,
+}) => {
   const [imageId, setImageId] = useState()
   const [images, setImages] = useState([])
   const [polling, setPolling] = useState(false)
@@ -330,6 +338,21 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
             <tbody>
               {distilledImages.map((image, imageIndex) => {
                 const { file, distilledAnnotationData, numSubRows } = image
+                const id = file.id
+
+                const {
+                  isObservationValid,
+                  hasObservationWarningValidation,
+                  hasObservationErrorValidation,
+                  hasObservationIgnoredValidation,
+                  observationValidationMessages,
+                  observationValidationType,
+                } = getObservationValidationInfo({
+                  id,
+                  collectRecord,
+                  areValidationsShowing,
+                  observationsPropertyName: 'images',
+                })
 
                 if (numSubRows === 0) {
                   // If no subrows exist (image not processed), display a single row with thumbnail, status
@@ -433,6 +456,8 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
 ImageClassificationObservationTable.propTypes = {
   uploadedFiles: PropTypes.arrayOf(PropTypes.object).isRequired,
   setUploadedFiles: PropTypes.func.isRequired,
+  areValidationsShowing: PropTypes.bool.isRequired,
+  collectRecord: benthicPhotoQuadratPropType,
 }
 
 export default ImageClassificationObservationTable
