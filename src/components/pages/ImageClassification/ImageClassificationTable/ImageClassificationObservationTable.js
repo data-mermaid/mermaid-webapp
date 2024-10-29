@@ -360,7 +360,7 @@ const ImageClassificationObservationTable = ({
                   observationValidationMessages,
                   observationValidationType,
                 } = getObservationValidationInfo({
-                  id,
+                  observationId: id,
                   collectRecord,
                   areValidationsShowing,
                   observationsPropertyName: 'images',
