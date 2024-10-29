@@ -63,8 +63,6 @@ const getObservationValidationInfo = ({
   const { validationType: observationValidationType } = observationValidationsToDisplay
   const observationValidationMessages = observationValidationsToDisplay?.validationMessages ?? []
 
-  // console.log('in func 2: ', { observationValidationMessages })
-
   const isObservationValid = observationValidationType === 'ok'
   const hasObservationWarningValidation = observationValidationType === 'warning'
   const hasObservationErrorValidation = observationValidationType === 'error'
