@@ -22,6 +22,7 @@ import Thumbnail from './Thumbnail'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import getObservationValidationInfo from '../../collectRecordFormPages/CollectRecordFormPage/getObservationValidationInfo'
 import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
 
 const EXCLUDE_PARAMS =
   'data,created_by,updated_by,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
@@ -83,6 +84,8 @@ const ImageClassificationObservationTable = ({
   setUploadedFiles,
   collectRecord = undefined,
   areValidationsShowing,
+  ignoreObservationValidations,
+  resetObservationValidations,
 }) => {
   const [imageId, setImageId] = useState()
   const [images, setImages] = useState([])
@@ -431,6 +434,19 @@ const ImageClassificationObservationTable = ({
                             <IconClose aria-label="close" />
                           </ButtonCaution>
                         </StyledTd>
+                        {areValidationsShowing ? (
+                          <ObservationValidationInfo
+                            hasObservationErrorValidation={hasObservationErrorValidation}
+                            hasObservationIgnoredValidation={hasObservationIgnoredValidation}
+                            hasObservationWarningValidation={hasObservationWarningValidation}
+                            ignoreObservationValidations={ignoreObservationValidations}
+                            isObservationValid={isObservationValid}
+                            observationId={id}
+                            observationValidationMessages={observationValidationMessages}
+                            observationValidationType={observationValidationType}
+                            resetObservationValidations={resetObservationValidations}
+                          />
+                        ) : null}
                       </>
                     )}
                   </StyledTr>
@@ -458,6 +474,8 @@ ImageClassificationObservationTable.propTypes = {
   setUploadedFiles: PropTypes.func.isRequired,
   areValidationsShowing: PropTypes.bool.isRequired,
   collectRecord: benthicPhotoQuadratPropType,
+  ignoreObservationValidations: PropTypes.func.isRequired,
+  resetObservationValidations: PropTypes.func.isRequired,
 }
 
 export default ImageClassificationObservationTable
