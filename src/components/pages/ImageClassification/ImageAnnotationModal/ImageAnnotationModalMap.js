@@ -376,7 +376,7 @@ const ImageAnnotationModalMap = ({
         ['get', 'id'],
         selectedPoint.id,
       ],
-      POLYGON_LINE_WIDTH, 
+      POLYGON_LINE_WIDTH,
 
       POLYGON_LINE_WIDTH, // fallback to default width
     ])

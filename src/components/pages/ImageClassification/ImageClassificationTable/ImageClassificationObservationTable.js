@@ -36,22 +36,31 @@ const tableHeaders = [
   { colSpan: 3, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
   { align: 'right', id: 'review', text: '' },
   { align: 'right', id: 'remove', text: '' },
-  { align: 'right', id: 'validations', text: 'Validations' },
+  { align: 'left', id: 'validations', text: 'Validations' },
 ]
 
 const sortByLatest = (a, b) => new Date(a.file.created_on) - new Date(b.file.created_on)
 const sortAlphabetically = (a, b) => a.benthicAttributeLabel.localeCompare(b.benthicAttributeLabel)
 const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
-const TableHeaderRow = () => (
-  <Tr>
-    {tableHeaders.map((header) => (
-      <Th key={header.id} align={header.align} id={header.id} colSpan={header.colSpan || 1}>
-        <span>{header.text}</span>
-      </Th>
-    ))}
-  </Tr>
-)
+const TableHeaderRow = ({ areValidationsShowing }) => {
+  const filteredHeaders = tableHeaders.filter(
+    (header) => header.id !== 'validations' || areValidationsShowing,
+  )
+
+  return (
+    <Tr>
+      {filteredHeaders.map((header) => (
+        <Th key={header.id} align={header.align} id={header.id} colSpan={header.colSpan || 1}>
+          <span>{header.text}</span>
+        </Th>
+      ))}
+    </Tr>
+  )
+}
+TableHeaderRow.propTypes = {
+  areValidationsShowing: PropTypes.bool.isRequired,
+}
 
 const subHeaderColumns = [
   { align: 'right', text: 'Confirmed' },
@@ -102,7 +111,7 @@ const ImageClassificationObservationTable = ({
   const isImageProcessed = (status) => status === 3 || status === 4
 
   const handleImageClick = (file) => {
-    if (isImageProcessed(file.classification_status.status)) {
+    if (isImageProcessed(file.classification_status?.status)) {
       setImageId(file.id)
     }
   }
@@ -334,7 +343,7 @@ const ImageClassificationObservationTable = ({
         <StyledOverflowWrapper>
           <StickyObservationTable aria-labelledby="table-label">
             <thead>
-              <TableHeaderRow />
+              <TableHeaderRow areValidationsShowing={areValidationsShowing} />
               <SubHeaderRow />
             </thead>
 
@@ -435,17 +444,19 @@ const ImageClassificationObservationTable = ({
                           </ButtonCaution>
                         </StyledTd>
                         {areValidationsShowing ? (
-                          <ObservationValidationInfo
-                            hasObservationErrorValidation={hasObservationErrorValidation}
-                            hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-                            hasObservationWarningValidation={hasObservationWarningValidation}
-                            ignoreObservationValidations={ignoreObservationValidations}
-                            isObservationValid={isObservationValid}
-                            observationId={id}
-                            observationValidationMessages={observationValidationMessages}
-                            observationValidationType={observationValidationType}
-                            resetObservationValidations={resetObservationValidations}
-                          />
+                          <StyledTd rowSpan={numSubRows}>
+                            <ObservationValidationInfo
+                              hasObservationErrorValidation={hasObservationErrorValidation}
+                              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
+                              hasObservationWarningValidation={hasObservationWarningValidation}
+                              ignoreObservationValidations={ignoreObservationValidations}
+                              isObservationValid={isObservationValid}
+                              observationId={id}
+                              observationValidationMessages={observationValidationMessages}
+                              observationValidationType={observationValidationType}
+                              resetObservationValidations={resetObservationValidations}
+                            />
+                          </StyledTd>
                         ) : null}
                       </>
                     )}
