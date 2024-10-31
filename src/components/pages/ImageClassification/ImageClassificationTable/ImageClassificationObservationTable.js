@@ -193,16 +193,19 @@ const ImageClassificationObservationTable = ({
       }
 
       let confirmedCount = 0
+      let unconfirmedCount = 0
       let hasUnconfirmedPoint = false
       let benthic_attribute_label = null
       let growth_form_label = null
 
       items.forEach((item) => {
         const firstAnnotation = item.annotations[0]
+
         if (firstAnnotation.is_confirmed) {
           confirmedCount += 1
         } else {
           hasUnconfirmedPoint = true
+          unconfirmedCount += 1
         }
 
         if (firstAnnotation.benthic_attribute) {
@@ -216,6 +219,7 @@ const ImageClassificationObservationTable = ({
 
       return {
         confirmedCount,
+        unconfirmedCount,
         hasUnconfirmedPoint,
         benthicAttributeLabel: benthic_attribute_label,
         growthFormLabel: growth_form_label,
@@ -415,11 +419,9 @@ const ImageClassificationObservationTable = ({
                     <StyledTd>{annotation?.benthicAttributeLabel}</StyledTd>
                     <StyledTd>{annotation?.growthFormLabel || ''}</StyledTd>
                     <StyledTd textAlign="right">{annotation?.confirmedCount}</StyledTd>
+                    <StyledTd textAlign="right">{annotation?.unconfirmedCount}</StyledTd>
                     {subIndex === 0 && (
                       <>
-                        <StyledTd textAlign="right" rowSpan={numSubRows}>
-                          {file.num_unconfirmed}
-                        </StyledTd>
                         <StyledTd textAlign="right" rowSpan={numSubRows}>
                           {file.num_unclassified}
                         </StyledTd>
