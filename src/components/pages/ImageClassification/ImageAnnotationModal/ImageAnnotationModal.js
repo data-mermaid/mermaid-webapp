@@ -116,6 +116,7 @@ const ImageAnnotationModal = ({
             <ImageAnnotationModalTable
               points={dataToReview.points}
               setDataToReview={setDataToReview}
+              selectedAttributeId={selectedAttributeId}
               setSelectedAttributeId={setSelectedAttributeId}
               setHoveredAttributeId={setHoveredAttributeId}
             />

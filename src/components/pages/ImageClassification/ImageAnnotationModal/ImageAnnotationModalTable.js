@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Tr, Th, Td, TableOverflowWrapper } from '../../../generic/Table/table'
 import { ButtonSecondary } from '../../../generic/buttons'
@@ -13,10 +13,10 @@ import {
 const ImageAnnotationModalTable = ({
   points,
   setDataToReview,
+  selectedAttributeId,
   setSelectedAttributeId,
   setHoveredAttributeId,
 }) => {
-  const [selectedRowKey, setSelectedRowKey] = useState()
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
   const tableData = Object.groupBy(
     classifiedPoints,
@@ -29,14 +29,11 @@ const ImageAnnotationModalTable = ({
       0,
     )
 
-  const handleRowSelect = (rowKey) => {
-    if (rowKey === selectedRowKey) {
-      setSelectedRowKey()
+  const handleRowSelect = (rowId) => {
+    if (rowId === selectedAttributeId) {
       setSelectedAttributeId('')
     } else {
-      setSelectedRowKey(rowKey)
-      const attributeId = tableData[rowKey][0].annotations[0].ba_gr
-      setSelectedAttributeId(attributeId)
+      setSelectedAttributeId(rowId)
     }
   }
 
@@ -58,7 +55,6 @@ const ImageAnnotationModalTable = ({
     })
 
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
-    setSelectedRowKey()
     setSelectedAttributeId('')
   }
 
@@ -77,20 +73,21 @@ const ImageAnnotationModalTable = ({
           {Object.keys(tableData)
             .sort()
             .map((row) => {
+              const { ba_gr, ba_gr_label } = tableData[row][0].annotations[0]
               const confirmedCount = getConfirmedCount(row)
               const unconfirmedCount = tableData[row].length - confirmedCount
 
               return (
                 <TrWithBorderStyling
                   key={row}
-                  onClick={() => handleRowSelect(row)}
+                  onClick={() => handleRowSelect(tableData[row][0].annotations[0].ba_gr)}
                   onMouseEnter={() => handleRowHoverOrLeave(row)}
                   onMouseLeave={() => handleRowHoverOrLeave('')}
-                  $isSelected={row === selectedRowKey}
-                  $isAnyRowSelected={selectedRowKey !== undefined}
+                  $isSelected={ba_gr === selectedAttributeId}
+                  $isAnyRowSelected={selectedAttributeId !== undefined}
                 >
                   {/* All points in a row will have the same ba_gr label */}
-                  <Td>{tableData[row][0].annotations[0].ba_gr_label}</Td>
+                  <Td>{ba_gr_label}</Td>
                   <TdConfirmed $hasConfirmedPoint={!!confirmedCount}>{confirmedCount}</TdConfirmed>
                   <TdUnconfirmed $hasUnconfirmedPoint={!!unconfirmedCount}>
                     {unconfirmedCount}
@@ -117,6 +114,7 @@ const ImageAnnotationModalTable = ({
 }
 
 ImageAnnotationModalTable.propTypes = {
+  selectedAttributeId: PropTypes.string.isRequired,
   setSelectedAttributeId: PropTypes.func.isRequired,
   setHoveredAttributeId: PropTypes.func.isRequired,
   setDataToReview: PropTypes.func.isRequired,
