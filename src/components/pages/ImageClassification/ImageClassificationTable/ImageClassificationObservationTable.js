@@ -33,7 +33,7 @@ const tableHeaders = [
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
   { align: 'left', id: 'growth-form-label', text: 'Growth Form' },
-  { colSpan: 3, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
+  { colSpan: 2, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
   { align: 'right', id: 'review', text: '' },
   { align: 'right', id: 'remove', text: '' },
   { align: 'left', id: 'validations', text: 'Validations' },
@@ -65,7 +65,6 @@ TableHeaderRow.propTypes = {
 const subHeaderColumns = [
   { align: 'right', text: 'Confirmed' },
   { align: 'right', text: 'Unconfirmed' },
-  { align: 'right', text: 'Unknown' },
 ]
 
 const SubHeaderRow = () => (
@@ -107,6 +106,7 @@ const ImageClassificationObservationTable = ({
   const [isFetching, setIsFetching] = useState(false)
   const isFirstLoad = useRef(true)
   const [deletingImage, setDeletingImage] = useState()
+  const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
 
   const isImageProcessed = (status) => status === 3 || status === 4
 
@@ -422,9 +422,6 @@ const ImageClassificationObservationTable = ({
                     <StyledTd textAlign="right">{annotation?.unconfirmedCount}</StyledTd>
                     {subIndex === 0 && (
                       <>
-                        <StyledTd textAlign="right" rowSpan={numSubRows}>
-                          {file.num_unclassified}
-                        </StyledTd>
                         <StyledTd rowSpan={numSubRows}>
                           <ButtonPrimary
                             type="button"
