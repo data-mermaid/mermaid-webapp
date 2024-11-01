@@ -18,10 +18,12 @@ const ImageAnnotationModalTable = ({
   setHoveredAttributeId,
 }) => {
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
-  const tableData = Object.groupBy(
-    classifiedPoints,
-    ({ annotations }) => annotations[0].ba_gr_label,
-  )
+  const tableData = Object.groupBy(classifiedPoints, ({ annotations }) => annotations[0].ba_gr)
+
+  const sortAlphabeticallyByAttributeLabel = (a, b) =>
+    tableData[a][0].annotations[0].ba_gr_label.localeCompare(
+      tableData[b][0].annotations[0].ba_gr_label,
+    )
 
   const getConfirmedCount = (rowKey) =>
     tableData[rowKey].reduce(
@@ -29,18 +31,8 @@ const ImageAnnotationModalTable = ({
       0,
     )
 
-  const handleRowSelect = (rowId) => {
-    if (rowId === selectedAttributeId) {
-      setSelectedAttributeId('')
-    } else {
-      setSelectedAttributeId(rowId)
-    }
-  }
-
-  const handleRowHoverOrLeave = (rowKey) => {
-    const attributeId = rowKey ? tableData[rowKey][0].annotations[0].ba_gr : ''
-    setHoveredAttributeId(attributeId)
-  }
+  const handleRowSelect = (rowKey) =>
+    rowKey === selectedAttributeId ? setSelectedAttributeId('') : setSelectedAttributeId(rowKey)
 
   const handleRowConfirm = (e, rowData) => {
     e.stopPropagation()
@@ -71,23 +63,22 @@ const ImageAnnotationModalTable = ({
         </thead>
         <tbody>
           {Object.keys(tableData)
-            .sort()
-            .map((row) => {
-              const { ba_gr, ba_gr_label } = tableData[row][0].annotations[0]
-              const confirmedCount = getConfirmedCount(row)
-              const unconfirmedCount = tableData[row].length - confirmedCount
+            .sort(sortAlphabeticallyByAttributeLabel)
+            .map((rowKey) => {
+              const confirmedCount = getConfirmedCount(rowKey)
+              const unconfirmedCount = tableData[rowKey].length - confirmedCount
 
               return (
                 <TrWithBorderStyling
-                  key={row}
-                  onClick={() => handleRowSelect(tableData[row][0].annotations[0].ba_gr)}
-                  onMouseEnter={() => handleRowHoverOrLeave(row)}
-                  onMouseLeave={() => handleRowHoverOrLeave('')}
-                  $isSelected={ba_gr === selectedAttributeId}
+                  key={rowKey}
+                  onClick={() => handleRowSelect(rowKey)}
+                  onMouseEnter={() => setHoveredAttributeId(rowKey)}
+                  onMouseLeave={() => setHoveredAttributeId('')}
+                  $isSelected={rowKey === selectedAttributeId}
                   $isAnyRowSelected={selectedAttributeId !== undefined}
                 >
                   {/* All points in a row will have the same ba_gr label */}
-                  <Td>{ba_gr_label}</Td>
+                  <Td>{tableData[rowKey][0].annotations[0].ba_gr_label}</Td>
                   <TdConfirmed $hasConfirmedPoint={!!confirmedCount}>{confirmedCount}</TdConfirmed>
                   <TdUnconfirmed $hasUnconfirmedPoint={!!unconfirmedCount}>
                     {unconfirmedCount}
@@ -98,7 +89,7 @@ const ImageAnnotationModalTable = ({
                     ) : (
                       <ButtonSecondary
                         type="button"
-                        onClick={(e) => handleRowConfirm(e, tableData[row])}
+                        onClick={(e) => handleRowConfirm(e, tableData[rowKey])}
                       >
                         Confirm
                       </ButtonSecondary>
