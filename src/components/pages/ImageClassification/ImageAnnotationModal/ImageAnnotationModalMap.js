@@ -77,6 +77,7 @@ const ImageAnnotationModalMap = ({
   const map = useRef(null)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const [selectedPoint, setSelectedPoint] = useState({ id: null, lngLat: null })
+  const [hoveredPointId, setHoveredPointId] = useState(null)
   const [imageScale, setImageScale] = useState(() => calcImageScale(dataToReview))
   const halfPatchSize = dataToReview.patch_size / 2
 
@@ -281,6 +282,25 @@ const ImageAnnotationModalMap = ({
     })
   }, [dataToReview, hasMapLoaded])
 
+  const _updateStyleOnPointHover = useEffect(() => {
+    if (!hasMapLoaded) {
+      return
+    }
+
+    map.current.on('mousemove', 'patches-fill-layer', ({ features }) => {
+      if (features.length > 0) {
+        const [{ properties }] = features
+        setHoveredPointId(properties.id)
+      }
+    })
+
+    map.current.on('mouseleave', 'patches-fill-layer', () => {
+      setHoveredPointId(null)
+    })
+
+    // eslint-disable-next-line
+  }, [dataToReview, hasMapLoaded])
+
   const _updatePointsOnDataChange = useEffect(() => {
     if (!hasMapLoaded) {
       return
@@ -341,6 +361,13 @@ const ImageAnnotationModalMap = ({
       COLORS.selected,
 
       [
+        '==', // checks if point on map is clicked
+        ['get', 'id'],
+        hoveredPointId,
+      ],
+      COLORS.hover,
+
+      [
         '==', // checks if point on map is in highlighted row in table
         ['get', 'ba_gr'],
         hoveredAttributeId,
@@ -349,7 +376,7 @@ const ImageAnnotationModalMap = ({
 
       COLORS.white, // resting outline color
     ])
-  }, [selectedAttributeId, hoveredAttributeId, hasMapLoaded, selectedPoint])
+  }, [selectedAttributeId, hoveredAttributeId, hoveredPointId, hasMapLoaded, selectedPoint])
 
   return (
     <ImageAnnotationMapWrapper>
