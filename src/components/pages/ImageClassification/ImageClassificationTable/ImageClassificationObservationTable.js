@@ -232,6 +232,9 @@ const ImageClassificationObservationTable = ({
     return images
       .map((file, index) => {
         const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
+        let totalConfirmed = 0
+        let totalUnconfirmed = 0
+        let totalUnknown = 0
 
         const imageAnnotationData = Object.groupBy(
           classifiedPoints,
@@ -244,14 +247,24 @@ const ImageClassificationObservationTable = ({
           .map((key) => distillAnnotationData(imageAnnotationData[key], index))
           .sort(sortAlphabetically)
 
+        distilledAnnotationData.forEach((item) => {
+          totalConfirmed += item.confirmedCount
+          totalUnconfirmed += item.unconfirmedCount
+        })
+
+        totalUnknown = numPointsPerQuadrat - totalConfirmed - totalUnconfirmed
+
         return {
           file,
           numSubRows,
           distilledAnnotationData,
+          totalConfirmed,
+          totalUnconfirmed,
+          totalUnknown,
         }
       })
       .sort(sortByLatest)
-  }, [distillAnnotationData, images])
+  }, [distillAnnotationData, images, numPointsPerQuadrat])
 
   // Poll every 5 seconds after the first image is uploaded
   const _pollImageStatuses = useEffect(() => {
