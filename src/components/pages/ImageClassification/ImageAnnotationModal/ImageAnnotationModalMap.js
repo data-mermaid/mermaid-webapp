@@ -333,7 +333,7 @@ const ImageAnnotationModalMap = ({
         selectedPoint.id,
       ],
       // clicked outline colour
-      COLORS.highlighted,
+      COLORS.selected,
 
       [
         '==', // checks if point on map is in highlighted row in table
@@ -341,7 +341,7 @@ const ImageAnnotationModalMap = ({
         highlightedAttributeId,
       ],
       // hover outline color
-      COLORS.highlighted,
+      COLORS.selected,
 
       // resting outline color
       COLORS.white,
@@ -376,7 +376,7 @@ const ImageAnnotationModalMap = ({
         ['get', 'id'],
         selectedPoint.id,
       ],
-      POLYGON_LINE_WIDTH, 
+      POLYGON_LINE_WIDTH,
 
       POLYGON_LINE_WIDTH, // fallback to default width
     ])

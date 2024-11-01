@@ -22,7 +22,8 @@ export const IMAGE_CLASSIFICATION_COLORS = {
   unconfirmed: '#0080FF',
   white: '#efefef',
   unclassified: '#BF6B69',
-  highlighted: '#FF00FB',
+  hover: '#ffb3fe',
+  selected: '#FF00FB',
 }
 
 Object.freeze(PROJECT_CODES)
