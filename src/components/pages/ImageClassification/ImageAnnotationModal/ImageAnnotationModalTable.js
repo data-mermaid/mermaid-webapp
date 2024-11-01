@@ -10,7 +10,12 @@ import {
   TrWithBorderStyling,
 } from './ImageAnnotationModal.styles'
 
-const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttributeId }) => {
+const ImageAnnotationModalTable = ({
+  points,
+  setDataToReview,
+  setSelectedAttributeId,
+  setHoveredAttributeId,
+}) => {
   const [selectedRowKey, setSelectedRowKey] = useState()
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
   const tableData = Object.groupBy(
@@ -27,19 +32,17 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
   const handleRowSelect = (rowKey) => {
     if (rowKey === selectedRowKey) {
       setSelectedRowKey()
+      setSelectedAttributeId('')
     } else {
       setSelectedRowKey(rowKey)
-
       const attributeId = tableData[rowKey][0].annotations[0].ba_gr
-      setHighlightedAttributeId(attributeId)
+      setSelectedAttributeId(attributeId)
     }
   }
 
   const handleRowHoverOrLeave = (rowKey) => {
-    if (selectedRowKey === undefined) {
-      const attributeId = rowKey ? tableData[rowKey][0].annotations[0].ba_gr : ''
-      setHighlightedAttributeId(attributeId)
-    }
+    const attributeId = rowKey ? tableData[rowKey][0].annotations[0].ba_gr : ''
+    setHoveredAttributeId(attributeId)
   }
 
   const handleRowConfirm = (e, rowData) => {
@@ -56,7 +59,7 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
 
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
     setSelectedRowKey()
-    setHighlightedAttributeId('')
+    setSelectedAttributeId('')
   }
 
   return (
@@ -114,7 +117,8 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
 }
 
 ImageAnnotationModalTable.propTypes = {
-  setHighlightedAttributeId: PropTypes.func.isRequired,
+  setSelectedAttributeId: PropTypes.func.isRequired,
+  setHoveredAttributeId: PropTypes.func.isRequired,
   setDataToReview: PropTypes.func.isRequired,
   points: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
 }

@@ -14,8 +14,6 @@ const EST_TABLE_SIZE = 400 // estimated value if can't get by id
 const DEFAULT_CENTER = [0, 0] // this value doesn't matter, default to null island
 const DEFAULT_ZOOM = 2 // needs to be > 1 otherwise bounds become > 180 and > 85
 
-const POLYGON_LINE_WIDTH = 3
-
 const IMAGE_CLASSIFICATION_COLOR_EXP = [
   'case',
 
@@ -71,7 +69,8 @@ const hackResetMapToCurrentPosition = (map, currentZoom, currentCenter) => {
 const ImageAnnotationModalMap = ({
   dataToReview,
   setDataToReview,
-  highlightedAttributeId,
+  selectedAttributeId,
+  hoveredAttributeId,
   databaseSwitchboardInstance,
 }) => {
   const mapContainer = useRef(null)
@@ -206,7 +205,7 @@ const ImageAnnotationModalMap = ({
           type: 'line',
           source: 'patches',
           paint: {
-            'line-width': POLYGON_LINE_WIDTH,
+            'line-width': 3,
             'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
           },
         },
@@ -215,9 +214,9 @@ const ImageAnnotationModalMap = ({
           type: 'line',
           source: 'patches',
           paint: {
-            'line-width': POLYGON_LINE_WIDTH,
+            'line-width': 3,
             'line-color': 'white',
-            'line-offset': -POLYGON_LINE_WIDTH,
+            'line-offset': -3,
           },
         },
         {
@@ -332,55 +331,25 @@ const ImageAnnotationModalMap = ({
         ['get', 'id'],
         selectedPoint.id,
       ],
-      // clicked outline colour
+      COLORS.selected,
+
+      [
+        '==', // checks if point on map is in selected row in table
+        ['get', 'ba_gr'],
+        selectedAttributeId,
+      ],
       COLORS.selected,
 
       [
         '==', // checks if point on map is in highlighted row in table
         ['get', 'ba_gr'],
-        highlightedAttributeId,
+        hoveredAttributeId,
       ],
-      // hover outline color
-      COLORS.selected,
+      COLORS.hover,
 
-      // resting outline color
-      COLORS.white,
+      COLORS.white, // resting outline color
     ])
-    map.current.setPaintProperty('patches-line-layer', 'line-color', [
-      'case',
-      [
-        '==', // checks if point on map is clicked
-        ['get', 'id'],
-        selectedPoint.id,
-      ],
-      //clicked line colour
-      IMAGE_CLASSIFICATION_COLOR_EXP, // fallback to default expression
-      // COLORS.hidden,
-
-      [
-        '==', // checks if point on map is in highlighted row in table
-        ['get', 'ba_gr'],
-        highlightedAttributeId,
-      ],
-      // hover line colour
-      IMAGE_CLASSIFICATION_COLOR_EXP,
-
-      // resting line colour
-      IMAGE_CLASSIFICATION_COLOR_EXP,
-    ])
-
-    map.current.setPaintProperty('patches-line-layer', 'line-width', [
-      'case',
-      [
-        '==', // checks if point on map is clicked
-        ['get', 'id'],
-        selectedPoint.id,
-      ],
-      POLYGON_LINE_WIDTH,
-
-      POLYGON_LINE_WIDTH, // fallback to default width
-    ])
-  }, [highlightedAttributeId, hasMapLoaded, selectedPoint])
+  }, [selectedAttributeId, hoveredAttributeId, hasMapLoaded, selectedPoint])
 
   return (
     <ImageAnnotationMapWrapper>
@@ -411,7 +380,8 @@ const ImageAnnotationModalMap = ({
 ImageAnnotationModalMap.propTypes = {
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  highlightedAttributeId: PropTypes.string.isRequired,
+  selectedAttributeId: PropTypes.string.isRequired,
+  hoveredAttributeId: PropTypes.string.isRequired,
   databaseSwitchboardInstance: PropTypes.object.isRequired,
 }
 

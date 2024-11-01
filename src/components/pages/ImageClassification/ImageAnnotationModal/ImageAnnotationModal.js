@@ -39,7 +39,8 @@ const ImageAnnotationModal = ({
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const [dataToReview, setDataToReview] = useState()
-  const [highlightedAttributeId, setHighlightedAttributeId] = useState('')
+  const [selectedAttributeId, setSelectedAttributeId] = useState('')
+  const [hoveredAttributeId, setHoveredAttributeId] = useState('')
   const [isSaving, setIsSaving] = useState(false)
 
   const getBenthicAttributeLabel = (benthicAttributeId) => {
@@ -115,12 +116,14 @@ const ImageAnnotationModal = ({
             <ImageAnnotationModalTable
               points={dataToReview.points}
               setDataToReview={setDataToReview}
-              setHighlightedAttributeId={setHighlightedAttributeId}
+              setSelectedAttributeId={setSelectedAttributeId}
+              setHoveredAttributeId={setHoveredAttributeId}
             />
             <ImageAnnotationModalMap
               dataToReview={dataToReview}
               setDataToReview={setDataToReview}
-              highlightedAttributeId={highlightedAttributeId}
+              selectedAttributeId={selectedAttributeId}
+              hoveredAttributeId={hoveredAttributeId}
               databaseSwitchboardInstance={databaseSwitchboardInstance}
             />
           </ImageAnnotationModalContainer>
