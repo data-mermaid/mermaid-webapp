@@ -4,8 +4,9 @@ import { Tr, Th, Td, TableOverflowWrapper } from '../../../generic/Table/table'
 import { ButtonSecondary } from '../../../generic/buttons'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import {
-  ConfirmedIcon,
   TableWithNoMinWidth,
+  TdConfirmed,
+  TdUnconfirmed,
   TrWithBorderStyling,
 } from './ImageAnnotationModal.styles'
 
@@ -17,8 +18,11 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
     ({ annotations }) => annotations[0].ba_gr_label,
   )
 
-  const checkIfRowIsConfirmed = (rowKey) =>
-    tableData[rowKey].every(({ annotations }) => annotations[0].is_confirmed)
+  const getConfirmedCount = (rowKey) =>
+    tableData[rowKey].reduce(
+      (count, point) => (point.annotations[0].is_confirmed ? count + 1 : count),
+      0,
+    )
 
   const handleRowSelect = (rowKey) => {
     if (rowKey === selectedRowKey) {
@@ -60,10 +64,9 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
       <TableWithNoMinWidth aria-labelledby="table-label">
         <thead>
           <Tr>
-            <Th colSpan={2} align="right">
-              Count
-            </Th>
             <Th>Attribute growth form</Th>
+            <Th title="Confirmed count">✓</Th>
+            <Th title="Unconfirmed count">?</Th>
             <Th>Status</Th>
           </Tr>
         </thead>
@@ -71,7 +74,8 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
           {Object.keys(tableData)
             .sort()
             .map((row) => {
-              const isRowConfirmed = checkIfRowIsConfirmed(row)
+              const confirmedCount = getConfirmedCount(row)
+              const unconfirmedCount = tableData[row].length - confirmedCount
 
               return (
                 <TrWithBorderStyling
@@ -82,12 +86,14 @@ const ImageAnnotationModalTable = ({ points, setDataToReview, setHighlightedAttr
                   $isSelected={row === selectedRowKey}
                   $isAnyRowSelected={selectedRowKey !== undefined}
                 >
-                  <Td align="right">{isRowConfirmed ? <ConfirmedIcon /> : undefined}</Td>
-                  <Td align="right">{tableData[row].length}</Td>
                   {/* All points in a row will have the same ba_gr label */}
                   <Td>{tableData[row][0].annotations[0].ba_gr_label}</Td>
+                  <TdConfirmed $hasConfirmedPoint={!!confirmedCount}>{confirmedCount}</TdConfirmed>
+                  <TdUnconfirmed $hasUnconfirmedPoint={!!unconfirmedCount}>
+                    {unconfirmedCount}
+                  </TdUnconfirmed>
                   <Td align="center">
-                    {isRowConfirmed ? (
+                    {!unconfirmedCount ? (
                       'Confirmed'
                     ) : (
                       <ButtonSecondary
