@@ -47,7 +47,6 @@ const ImageAnnotationModalTable = ({
     })
 
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
-    setSelectedAttributeId('')
   }
 
   return (
