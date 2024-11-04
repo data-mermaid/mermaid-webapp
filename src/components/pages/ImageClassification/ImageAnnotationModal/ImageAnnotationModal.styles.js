@@ -65,23 +65,18 @@ export const TrWithBorderStyling = styled(Tr)`
   border-bottom: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
 
   &:hover {
-    border-top: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.hover}`};
-    border-bottom: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.hover}`};
-  }
-
-  td {
-    border: none;
+    outline: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.hover}`};
   }
 `
 
 export const TdConfirmed = styled(Td)`
   background-color: ${({ $hasConfirmedPoint }) =>
-    $hasConfirmedPoint ? confirmed.mix(white, 0.3) : undefined};
+    $hasConfirmedPoint ? confirmed.mix(white, 0.7) : undefined};
 `
 
 export const TdUnconfirmed = styled(Td)`
   background-color: ${({ $hasUnconfirmedPoint }) =>
-    $hasUnconfirmedPoint ? unconfirmed.mix(white, 0.3) : undefined};
+    $hasUnconfirmedPoint ? unconfirmed.mix(white, 0.7) : undefined};
 `
 
 export const EditPointPopupTable = styled(Table)`
