@@ -202,12 +202,21 @@ const ImageAnnotationModalMap = ({
           source: 'benthicQuadratImage',
         },
         {
-          id: 'patches-line-layer',
+          id: 'patches-status-layer',
           type: 'line',
           source: 'patches',
           paint: {
             'line-width': 3,
+            'line-offset': -3,
             'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
+          },
+        },
+        {
+          id: 'patches-inline-layer',
+          type: 'line',
+          source: 'patches',
+          paint: {
+            'line-width': 3,
           },
         },
         {
@@ -216,8 +225,7 @@ const ImageAnnotationModalMap = ({
           source: 'patches',
           paint: {
             'line-width': 3,
-            'line-color': 'white',
-            'line-offset': -3,
+            'line-offset': -6,
           },
         },
         {
@@ -344,7 +352,7 @@ const ImageAnnotationModalMap = ({
       return
     }
 
-    map.current.setPaintProperty('patches-outline-layer', 'line-color', [
+    const lineColor = [
       'case',
       [
         '==', // checks if point on map is clicked
@@ -374,8 +382,11 @@ const ImageAnnotationModalMap = ({
       ],
       COLORS.hover,
 
-      COLORS.white, // resting outline color
-    ])
+      COLORS.outline, // resting outline color
+    ]
+
+    map.current.setPaintProperty('patches-inline-layer', 'line-color', lineColor)
+    map.current.setPaintProperty('patches-outline-layer', 'line-color', lineColor)
   }, [selectedAttributeId, hoveredAttributeId, hoveredPointId, hasMapLoaded, selectedPoint])
 
   return (

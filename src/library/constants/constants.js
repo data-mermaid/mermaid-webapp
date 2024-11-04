@@ -20,10 +20,10 @@ export const apiDataTypes = {
 export const IMAGE_CLASSIFICATION_COLORS = {
   confirmed: '#5EFF13',
   unconfirmed: '#0080FF',
-  white: '#efefef',
   unclassified: '#BF6B69',
   hover: '#ffb3fe',
   selected: '#FF00FB',
+  outline: '#000',
 }
 
 Object.freeze(PROJECT_CODES)
