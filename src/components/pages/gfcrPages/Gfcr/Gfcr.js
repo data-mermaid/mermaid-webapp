@@ -100,6 +100,7 @@ const Gfcr = () => {
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
+  const [exportButtonLabel, setExportButtonLabel] = useState('Export to XLSX')
 
   const _getIndicatorSets = useEffect(() => {
     if (databaseSwitchboardInstance && isAppOnline) {
@@ -356,6 +357,19 @@ const Gfcr = () => {
     navigate(`${currentProjectPath}/gfcr/new/${type}`)
   }
 
+  const handleExportClick = () => {
+    setExportButtonLabel('Exporting...')
+
+    databaseSwitchboardInstance
+      .exportData(projectId)
+      .catch(() => {
+        toast.error('There was an error exporting the report.')
+      })
+      .finally(() => {
+        setExportButtonLabel('Export to XLSX')
+      })
+  }
+
   const toolbarButtonsByRole = isReadOnlyUser ? (
     <>
       <ToolbarButtonWrapper>{readOnlySitesHeaderContent}</ToolbarButtonWrapper>
@@ -373,8 +387,8 @@ const Gfcr = () => {
             </DropdownItemStyle>
           </Column>
         </ButtonSecondaryDropdown>
-        <ButtonSecondary to="" disabled={!gfcrIndicatorSets.length}>
-          <IconDownload /> Export
+        <ButtonSecondary to="" disabled={!gfcrIndicatorSets.length} onClick={handleExportClick}>
+          <IconDownload /> {exportButtonLabel}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
     </>
