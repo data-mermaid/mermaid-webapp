@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { H2 } from '../../../generic/text'
@@ -7,7 +7,7 @@ import {
   StyledOverflowWrapper,
   StickyObservationTable,
 } from '../../collectRecordFormPages/CollectingFormPage.Styles'
-import { Tr, Th } from '../../../generic/Table/table'
+import { Tr, Th, ObservationsSummaryStats } from '../../../generic/Table/table'
 import PropTypes from 'prop-types'
 import {
   StyledTd,
@@ -20,6 +20,7 @@ import { IconClose } from '../../../icons'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
 import Thumbnail from './Thumbnail'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 
 const EXCLUDE_PARAMS =
   'data,created_by,updated_by,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
@@ -89,6 +90,38 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
   const [deletingImage, setDeletingImage] = useState()
 
   const isImageProcessed = (status) => status === 3 || status === 4
+
+  const observationsSummaryStats = useMemo(() => {
+    if (!distilledImages.length || !benthicAttributes) {
+      return {}
+    }
+
+    const allPoints = distilledImages.flatMap((image) => image.distilledAnnotationData)
+    const allPointsWithTopLevelCategory = allPoints.map((point) => {
+      const topLevelCategory = benthicAttributes.find(
+        ({ id }) => id === point.benthicAttribute,
+      )?.top_level_category
+      return { ...point, topLevelCategory }
+    })
+
+    const categoryGroups = allPointsWithTopLevelCategory.reduce(
+      (accumulator, point) => {
+        const topLevelName = benthicAttributes.find(({ id }) => id === point.topLevelCategory).name
+
+        if (accumulator[topLevelName]) {
+          accumulator[topLevelName] += point.confirmedCount + point.unconfirmedCount
+        } else {
+          accumulator[topLevelName] = point.confirmedCount + point.unconfirmedCount
+        }
+
+        accumulator.total += point.confirmedCount + point.unconfirmedCount
+
+        return accumulator
+      },
+      { total: 0 },
+    )
+    return categoryGroups
+  }, [distilledImages, benthicAttributes])
 
   const handleImageClick = (file) => {
     if (isImageProcessed(file.classification_status.status)) {
@@ -173,8 +206,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
       }
 
       let confirmedCount = 0
+      let unconfirmedCount = 0
       let hasUnconfirmedPoint = false
       let benthic_attribute_label = null
+      let benthic_attribute = null
       let growth_form_label = null
 
       items.forEach((item) => {
@@ -182,11 +217,13 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
         if (firstAnnotation.is_confirmed) {
           confirmedCount += 1
         } else {
+          unconfirmedCount += 1
           hasUnconfirmedPoint = true
         }
 
         if (firstAnnotation.benthic_attribute) {
           benthic_attribute_label = getBenthicAttributeLabel(firstAnnotation.benthic_attribute)
+          benthic_attribute = firstAnnotation.benthic_attribute
         }
 
         if (firstAnnotation.growth_form) {
@@ -196,8 +233,10 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
 
       return {
         confirmedCount,
+        unconfirmedCount,
         hasUnconfirmedPoint,
         benthicAttributeLabel: benthic_attribute_label,
+        benthicAttribute: benthic_attribute,
         growthFormLabel: growth_form_label,
       }
     },
@@ -417,6 +456,24 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
           </StickyObservationTable>
         </StyledOverflowWrapper>
       </InputWrapper>
+      <ObservationsSummaryStats>
+        <tbody>
+          {Object.keys(observationsSummaryStats)
+            ?.sort()
+            .map((obs) => {
+              const percentage = roundToOneDecimal(
+                (observationsSummaryStats[obs] / observationsSummaryStats.total) * 100,
+              )
+
+              return obs !== 'total' ? (
+                <Tr key={obs}>
+                  <Th>% {obs}</Th>
+                  <Th>{percentage}</Th>
+                </Tr>
+              ) : null
+            })}
+        </tbody>
+      </ObservationsSummaryStats>
       {!!imageId && !!benthicAttributes && !!growthForms ? (
         <ImageAnnotationModal
           imageId={imageId}
