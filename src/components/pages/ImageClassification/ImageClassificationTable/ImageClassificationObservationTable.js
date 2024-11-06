@@ -386,7 +386,7 @@ const ImageClassificationObservationTable = ({
 
             <tbody>
               {distilledImages.map((image, imageIndex) => {
-                const { file, distilledAnnotationData, numSubRows } = image
+                const { file, distilledAnnotationData, numSubRows, totalUnknown } = image
                 const imgId = file.id
 
                 if (numSubRows === 0) {
@@ -414,60 +414,106 @@ const ImageClassificationObservationTable = ({
                 }
 
                 // If there are subrows (processed image), render annotation data
-                return distilledAnnotationData.map((annotation, subIndex) => {
-                  const benthicAttributeId = annotation.benthicAttributeId
-                  const growthFormId = annotation.growthFormId
-                  const obsId = buildObservationId(imgId, benthicAttributeId, growthFormId)
+                return (
+                  <React.Fragment key={imgId}>
+                    {distilledAnnotationData.map((annotation, subIndex) => {
+                      const benthicAttributeId = annotation.benthicAttributeId
+                      const growthFormId = annotation.growthFormId
+                      const obsId = buildObservationId(imgId, benthicAttributeId, growthFormId)
 
-                  const {
-                    isObservationValid,
-                    hasObservationWarningValidation,
-                    hasObservationErrorValidation,
-                    hasObservationIgnoredValidation,
-                    observationValidationMessages,
-                    observationValidationType,
-                  } = getObservationValidationInfo({
-                    observationId: obsId,
-                    collectRecord,
-                    areValidationsShowing,
-                    observationsPropertyName: 'obs_benthic_photo_quadrats',
-                  })
+                      const {
+                        isObservationValid,
+                        hasObservationWarningValidation,
+                        hasObservationErrorValidation,
+                        hasObservationIgnoredValidation,
+                        observationValidationMessages,
+                        observationValidationType,
+                      } = getObservationValidationInfo({
+                        observationId: obsId,
+                        collectRecord,
+                        areValidationsShowing,
+                        observationsPropertyName: 'obs_benthic_photo_quadrats',
+                      })
 
-                  return (
-                    <StyledTr
-                      key={`${file.id}-${subIndex}`}
-                      $hasUnconfirmedPoint={annotation.hasUnconfirmedPoint}
-                      $messageType={
-                        hasObservationErrorValidation
-                          ? 'error'
-                          : hasObservationWarningValidation
-                          ? 'warning'
-                          : null
-                      }
-                    >
-                      <StyledTd>{rowIndex++}</StyledTd>
-                      {subIndex === 0 && (
-                        <>
-                          <TdWithHoverText
-                            rowSpan={numSubRows}
-                            data-tooltip={file.original_image_name}
-                            onClick={() => handleImageClick(file)}
-                            cursor={file.classification_status.status === 3 ? 'pointer' : 'default'}
-                          >
-                            <ImageWrapper>
-                              <Thumbnail imageUrl={file.thumbnail} />
-                            </ImageWrapper>
-                          </TdWithHoverText>
-                        </>
-                      )}
-                      <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
-                      <StyledTd>{annotation?.benthicAttributeLabel}</StyledTd>
-                      <StyledTd>{annotation?.growthFormLabel || ''}</StyledTd>
-                      <StyledTd textAlign="right">{annotation?.confirmedCount}</StyledTd>
-                      <StyledTd textAlign="right">{annotation?.unconfirmedCount}</StyledTd>
-                      {subIndex === 0 && (
-                        <>
-                          {areValidationsShowing ? (
+                      return (
+                        <StyledTr
+                          key={`${file.id}-${subIndex}`}
+                          $hasUnconfirmedPoint={annotation.hasUnconfirmedPoint}
+                          $messageType={
+                            hasObservationErrorValidation
+                              ? 'error'
+                              : hasObservationWarningValidation
+                              ? 'warning'
+                              : null
+                          }
+                        >
+                          <StyledTd>{rowIndex++}</StyledTd>
+                          {subIndex === 0 && (
+                            <>
+                              <TdWithHoverText
+                                rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
+                                data-tooltip={file.original_image_name}
+                                onClick={() => handleImageClick(file)}
+                                cursor={
+                                  file.classification_status.status === 3 ? 'pointer' : 'default'
+                                }
+                              >
+                                <ImageWrapper>
+                                  <Thumbnail imageUrl={file.thumbnail} />
+                                </ImageWrapper>
+                              </TdWithHoverText>
+                            </>
+                          )}
+                          <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
+                          <StyledTd>{annotation?.benthicAttributeLabel}</StyledTd>
+                          <StyledTd>{annotation?.growthFormLabel || ''}</StyledTd>
+                          <StyledTd textAlign="right">{annotation?.confirmedCount}</StyledTd>
+                          <StyledTd textAlign="right">{annotation?.unconfirmedCount}</StyledTd>
+                          {subIndex === 0 && (
+                            <>
+                              {areValidationsShowing ? (
+                                <StyledTd>
+                                  <ObservationValidationInfo
+                                    hasObservationErrorValidation={hasObservationErrorValidation}
+                                    hasObservationIgnoredValidation={
+                                      hasObservationIgnoredValidation
+                                    }
+                                    hasObservationWarningValidation={
+                                      hasObservationWarningValidation
+                                    }
+                                    ignoreObservationValidations={ignoreObservationValidations}
+                                    isObservationValid={isObservationValid}
+                                    observationId={obsId}
+                                    observationValidationMessages={observationValidationMessages}
+                                    observationValidationType={observationValidationType}
+                                    resetObservationValidations={resetObservationValidations}
+                                  />
+                                </StyledTd>
+                              ) : null}
+                              <StyledTd rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}>
+                                <ButtonPrimary
+                                  type="button"
+                                  onClick={() => setImageId(file.id)}
+                                  disabled={!isImageProcessed(file.classification_status.status)}
+                                >
+                                  Review
+                                </ButtonPrimary>
+                              </StyledTd>
+                              <StyledTd rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}>
+                                <ButtonCaution
+                                  type="button"
+                                  onClick={() => handleRemoveImage(file)}
+                                  disabled={
+                                    file.classification_status.status !== 3 ||
+                                    deletingImage === file.id
+                                  }
+                                >
+                                  <IconClose aria-label="close" />
+                                </ButtonCaution>
+                              </StyledTd>
+                            </>
+                          )}
+                          {areValidationsShowing && subIndex >= 1 ? (
                             <StyledTd>
                               <ObservationValidationInfo
                                 hasObservationErrorValidation={hasObservationErrorValidation}
@@ -482,46 +528,21 @@ const ImageClassificationObservationTable = ({
                               />
                             </StyledTd>
                           ) : null}
-                          <StyledTd rowSpan={numSubRows}>
-                            <ButtonPrimary
-                              type="button"
-                              onClick={() => setImageId(file.id)}
-                              disabled={!isImageProcessed(file.classification_status.status)}
-                            >
-                              Review
-                            </ButtonPrimary>
-                          </StyledTd>
-                          <StyledTd rowSpan={numSubRows}>
-                            <ButtonCaution
-                              type="button"
-                              onClick={() => handleRemoveImage(file)}
-                              disabled={
-                                file.classification_status.status !== 3 || deletingImage === file.id
-                              }
-                            >
-                              <IconClose aria-label="close" />
-                            </ButtonCaution>
-                          </StyledTd>
-                        </>
-                      )}
-                      {areValidationsShowing && subIndex >= 1 ? (
-                        <StyledTd>
-                          <ObservationValidationInfo
-                            hasObservationErrorValidation={hasObservationErrorValidation}
-                            hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-                            hasObservationWarningValidation={hasObservationWarningValidation}
-                            ignoreObservationValidations={ignoreObservationValidations}
-                            isObservationValid={isObservationValid}
-                            observationId={obsId}
-                            observationValidationMessages={observationValidationMessages}
-                            observationValidationType={observationValidationType}
-                            resetObservationValidations={resetObservationValidations}
-                          />
+                        </StyledTr>
+                      )
+                    })}
+                    {totalUnknown > 0 && (
+                      <StyledTr key={`${file.id}-unknown`} $messageType={'error'}>
+                        <StyledTd>{rowIndex++}</StyledTd>
+                        <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
+                        <StyledTd colSpan={3} textAlign="center">
+                          {`${totalUnknown} Unclassified point${totalUnknown > 1 ? 's' : ''}`}
                         </StyledTd>
-                      ) : null}
-                    </StyledTr>
-                  )
-                })
+                        <StyledTd colSpan={2} />
+                      </StyledTr>
+                    )}
+                  </React.Fragment>
+                )
               })}
             </tbody>
           </StickyObservationTable>
