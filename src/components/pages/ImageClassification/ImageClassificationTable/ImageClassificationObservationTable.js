@@ -97,16 +97,14 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
     }
 
     const allPoints = distilledImages.flatMap((image) => image.distilledAnnotationData)
-    const allPointsWithTopLevelCategory = allPoints.map((point) => {
-      const topLevelCategory = benthicAttributes.find(
-        ({ id }) => id === point.benthicAttribute,
-      )?.top_level_category
-      return { ...point, topLevelCategory }
-    })
 
-    const categoryGroups = allPointsWithTopLevelCategory.reduce(
+    const categoryGroups = allPoints.reduce(
       (accumulator, point) => {
-        const topLevelName = benthicAttributes.find(({ id }) => id === point.topLevelCategory).name
+        const topLevelId = benthicAttributes.find(
+          ({ id }) => id === point.benthicAttribute,
+        )?.top_level_category
+
+        const topLevelName = benthicAttributes.find(({ id }) => id === topLevelId)?.name
 
         if (accumulator[topLevelName]) {
           accumulator[topLevelName] += point.confirmedCount + point.unconfirmedCount
@@ -120,6 +118,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
       },
       { total: 0 },
     )
+
     return categoryGroups
   }, [distilledImages, benthicAttributes])
 
@@ -456,7 +455,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
       <ObservationsSummaryStats>
         <tbody>
           {Object.keys(observationsSummaryStats)
-            ?.sort()
+            .sort()
             .map((obs) => {
               const percentage = roundToOneDecimal(
                 (observationsSummaryStats[obs] / observationsSummaryStats.total) * 100,
