@@ -8,7 +8,7 @@ import { MapInputRow, MapContainer, MapWrapper } from '../Map.styles'
 const defaultCenter = [0, 0]
 const defaultZoom = 13
 
-const ResolveDuplicateSiteMap = ({ formLatitudeValue, formLongitudeValue }) => {
+const ResolveDuplicateSiteMap = ({ formLatitudeValue = 0, formLongitudeValue = 0 }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const recordMarker = useRef(null)
@@ -66,11 +66,6 @@ const ResolveDuplicateSiteMap = ({ formLatitudeValue, formLongitudeValue }) => {
 ResolveDuplicateSiteMap.propTypes = {
   formLatitudeValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   formLongitudeValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-}
-
-ResolveDuplicateSiteMap.defaultProps = {
-  formLatitudeValue: 0,
-  formLongitudeValue: 0,
 }
 
 export default ResolveDuplicateSiteMap

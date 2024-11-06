@@ -6,7 +6,7 @@ import { hoverState } from '../../../../library/styling/mediaQueries'
 import language from '../../../../language'
 
 const StyledNav = styled.nav`
-  width: 30rem;
+  width: 26rem;
 `
 
 const itemStyles = (props) => css`
@@ -26,6 +26,16 @@ const NavHeader = styled.h3(
     background: ${theme.color.grey4};
     margin: 0;
     padding: 10px;
+    /* ${itemStyles(props)} */
+  `,
+)
+
+const NavSubHeader = styled.div(
+  (props) => css`
+    background: ${theme.color.grey4};
+    margin: 0;
+    padding: 10px;
+    /* padding-left: 6px; */
     ${itemStyles(props)}
   `,
 )
@@ -58,15 +68,16 @@ const LiText = styled.span`
 const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
   return (
     <StyledNav>
-      <NavHeader
-        id="indicator-set"
-        selected={selectedNavItem === 'indicator-set'}
+      <NavHeader>{language.pages.gfcrIndicatorSetNav.fundIndicatorsHeading}</NavHeader>
+      <NavSubHeader
+        id="report-title-and-year"
+        selected={selectedNavItem === 'report-title-and-year'}
         onClick={(e) => {
           setSelectedNavItem(e.currentTarget.id)
         }}
       >
-        {language.pages.gfcrIndicatorSetNav.indicatorSetHeading}
-      </NavHeader>
+        {language.pages.gfcrIndicatorSetNav.reportTitleAndDateHeading}
+      </NavSubHeader>
       <NavList>
         <NavListItem
           id="f1"
@@ -124,30 +135,35 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           <FText>F7</FText>
           <LiText>{language.pages.gfcrIndicatorSetNav.f7}</LiText>
         </NavListItem>
-        <NavListItem
-          id="financial-data"
-          selected={selectedNavItem === 'financial-data'}
-          onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
-        >
-          <FText>{language.pages.gfcrIndicatorSetNav.financialData}</FText>
-        </NavListItem>
-        <NavList>
-          <NavListItem
-            id="investment-sources"
-            selected={selectedNavItem === 'investment-sources'}
-            onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
-          >
-            <LiText>{language.pages.gfcrIndicatorSetNav.investmentSources}</LiText>
-          </NavListItem>
-          <NavListItem
-            id="revenue-streams"
-            selected={selectedNavItem === 'revenue-streams'}
-            onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
-          >
-            <LiText>{language.pages.gfcrIndicatorSetNav.revenueStreams}</LiText>
-          </NavListItem>
-        </NavList>
       </NavList>
+      <NavHeader>{language.pages.gfcrIndicatorSetNav.f8F9F10Heading}</NavHeader>
+      <NavSubHeader
+        id="finance-solutions"
+        selected={selectedNavItem === 'finance-solutions'}
+        onClick={(e) => {
+          setSelectedNavItem(e.currentTarget.id)
+        }}
+      >
+        {language.pages.gfcrIndicatorSetNav.financeSolutions}
+      </NavSubHeader>
+      <NavSubHeader
+        id="investments"
+        selected={selectedNavItem === 'investments'}
+        onClick={(e) => {
+          setSelectedNavItem(e.currentTarget.id)
+        }}
+      >
+        {language.pages.gfcrIndicatorSetNav.investments}
+      </NavSubHeader>
+      <NavSubHeader
+        id="revenues"
+        selected={selectedNavItem === 'revenues'}
+        onClick={(e) => {
+          setSelectedNavItem(e.currentTarget.id)
+        }}
+      >
+        {language.pages.gfcrIndicatorSetNav.revenues}
+      </NavSubHeader>
     </StyledNav>
   )
 }

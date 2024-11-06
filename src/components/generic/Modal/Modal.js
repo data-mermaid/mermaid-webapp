@@ -20,12 +20,14 @@ const StyledDialogOverlay = styled('div')`
   z-index: 103;
   cursor: default;
 `
+
 const StyledDialog = styled('div')`
   padding: 0;
   margin: 0;
   min-width: 30rem;
   width: calc(100vw - 4rem);
-  max-width: 96rem;
+  max-width: ${(props) =>
+    props.maxWidth || '96rem'}; // Default to 96rem if maxWidth prop is not provided
   background: ${theme.color.white};
   max-height: 98vh;
   display: grid;
@@ -134,8 +136,9 @@ const Modal = ({
   isOpen,
   onDismiss,
   footerContent,
-  contentOverflowIsVisible,
-  toolbarContent,
+  contentOverflowIsVisible = false,
+  toolbarContent = undefined,
+  maxWidth,
 }) => {
   const _closeModalWithEscapeKey = useEffect(() => {
     const close = (event) => {
@@ -152,7 +155,12 @@ const Modal = ({
   return (
     isOpen && (
       <StyledDialogOverlay aria-label={`${title} Modal`}>
-        <StyledDialog role="dialog" aria-labelledby="modal-title" aria-describedby="modal-content">
+        <StyledDialog
+          role="dialog"
+          aria-labelledby="modal-title"
+          aria-describedby="modal-content"
+          maxWidth={maxWidth}
+        >
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>
             <CloseButton type="button" className="close-button" onClick={onDismiss}>
@@ -178,11 +186,7 @@ Modal.propTypes = {
   title: PropTypes.string.isRequired,
   contentOverflowIsVisible: PropTypes.bool,
   toolbarContent: PropTypes.node,
-}
-
-Modal.defaultProps = {
-  contentOverflowIsVisible: false,
-  toolbarContent: undefined,
+  maxWidth: PropTypes.string,
 }
 
 export default Modal

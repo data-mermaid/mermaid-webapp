@@ -5,11 +5,11 @@ import { ButtonSecondary } from '../buttons'
 import { IconDown } from '../../icons'
 import { StyledDropdownContainer } from './ButtonSecondaryDropdown.styles'
 
-const ButtonSecondaryDropdown = ({ children, label, className }) => {
+const ButtonSecondaryDropdown = ({ children, label, className = undefined, disabled = false }) => {
   return (
     <HideShow
       button={
-        <ButtonSecondary className={className}>
+        <ButtonSecondary className={className} disabled={disabled}>
           {label} <IconDown />
         </ButtonSecondary>
       }
@@ -22,9 +22,7 @@ ButtonSecondaryDropdown.propTypes = {
   children: PropTypes.node.isRequired,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   className: PropTypes.string,
-}
-ButtonSecondaryDropdown.defaultProps = {
-  className: undefined,
+  disabled: PropTypes.bool,
 }
 
 export default ButtonSecondaryDropdown

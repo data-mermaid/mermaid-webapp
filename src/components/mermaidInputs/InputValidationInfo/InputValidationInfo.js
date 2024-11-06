@@ -17,13 +17,13 @@ const ValidationWrapper = styled('div')`
 `
 
 const InputValidationInfo = ({
-  ignoreNonObservationFieldValidations,
-  resetNonObservationFieldValidations,
-  validationMessages,
-  validationType,
-  currentSelectValue,
-  updateValueAndResetValidationForDuplicateWarning,
-  additionalText,
+  ignoreNonObservationFieldValidations = () => {},
+  resetNonObservationFieldValidations = () => {},
+  validationMessages = [],
+  validationType = undefined,
+  currentSelectValue = undefined,
+  updateValueAndResetValidationForDuplicateWarning = () => {},
+  additionalText = null,
 }) => {
   const { projectId } = useParams()
   const areThereValidationMessages = validationMessages.length
@@ -109,16 +109,6 @@ InputValidationInfo.propTypes = {
   currentSelectValue: PropTypes.string,
   updateValueAndResetValidationForDuplicateWarning: PropTypes.func,
   additionalText: PropTypes.node,
-}
-
-InputValidationInfo.defaultProps = {
-  ignoreNonObservationFieldValidations: () => {},
-  resetNonObservationFieldValidations: () => {},
-  validationMessages: [],
-  validationType: undefined,
-  currentSelectValue: undefined,
-  updateValueAndResetValidationForDuplicateWarning: () => {},
-  additionalText: null,
 }
 
 export default InputValidationInfo

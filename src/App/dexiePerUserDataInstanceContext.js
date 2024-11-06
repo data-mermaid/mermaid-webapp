@@ -7,7 +7,7 @@ import dexieInstancePropTypes from './dexieInstancePropTypes'
 const DexiePerUserDataInstanceContext = createContext()
 
 // the value prop spread here allows for online status to be mocked for testing
-const DexiePerUserDataInstanceProvider = ({ children, value }) => {
+const DexiePerUserDataInstanceProvider = ({ children, value = {} }) => {
   const [dexiePerUserDataInstance, setDexiePerUserDataInstance] = useState()
 
   return (
@@ -63,7 +63,5 @@ DexiePerUserDataInstanceProvider.propTypes = {
     setDexiePerUserDataInstance: PropTypes.func,
   }),
 }
-
-DexiePerUserDataInstanceProvider.defaultProps = { value: {} }
 
 export { DexiePerUserDataInstanceProvider, useDexiePerUserDataInstance }

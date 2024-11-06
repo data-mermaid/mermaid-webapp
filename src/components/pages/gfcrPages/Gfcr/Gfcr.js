@@ -1,23 +1,17 @@
 // import { CSVLink } from 'react-csv'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 
 import { ContentPageLayout } from '../../../Layout'
 import FilterSearchToolbar from '../../../FilterSearchToolbar/FilterSearchToolbar'
-import {
-  getIsUserAdminForProject,
-  getIsUserReadOnlyForProject,
-} from '../../../../App/currentUserProfileHelpers'
-import { getTableColumnHeaderProps } from '../../../../library/getTableColumnHeaderProps'
+import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
 import { getTableFilteredRows } from '../../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
 import { IconPlus, IconDownload } from '../../../icons'
 import language from '../../../../language'
-import PageSelector from '../../../generic/Table/PageSelector'
-import PageSizeSelector from '../../../generic/Table/PageSizeSelector'
 import PageUnavailable from '../../PageUnavailable'
 import {
   reactTableNaturalSort,
@@ -26,14 +20,6 @@ import {
 import { splitSearchQueryStrings } from '../../../../library/splitSearchQueryStrings'
 import { ButtonSecondary, ToolbarButtonWrapper } from '../../../generic/buttons'
 import { Column, ToolBarRow } from '../../../generic/positioning'
-import {
-  Tr,
-  Th,
-  Td,
-  TableNavigation,
-  StickyTableOverflowWrapper,
-  GenericStickyTable,
-} from '../../../generic/Table/table'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -44,43 +30,17 @@ import usePersistUserTablePreferences from '../../../generic/Table/usePersistUse
 // import { getFileExportName } from '../../../../library/getFileExportName'
 import { PAGE_SIZE_DEFAULT } from '../../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import { GfcrPageUnavailablePadding, StyledToolbarButtonWrapper } from './Gfcr.styles'
+import { StyledToolbarButtonWrapper } from './Gfcr.styles'
 import ButtonSecondaryDropdown from '../../../generic/ButtonSecondaryDropdown'
 import { DropdownItemStyle } from '../../../generic/ButtonSecondaryDropdown/ButtonSecondaryDropdown.styles'
 import { useCurrentProject } from '../../../../App/CurrentProjectContext'
-
-// const indicatorSetsDummyData = [
-//   {
-//     id: 1,
-//     name: 'Baseline',
-//     type: 'report',
-//     year: 2021,
-//   },
-//   {
-//     id: 2,
-//     name: 'Phase 1 result',
-//     type: 'report',
-//     year: 2023,
-//   },
-//   {
-//     id: 3,
-//     name: 'Midterm Target',
-//     type: 'target',
-//     year: 2026,
-//   },
-//   {
-//     id: 4,
-//     name: 'FinalTarget',
-//     type: 'target',
-//     year: 2029,
-//   }
-// ]
+import GfcrGenericTable from '../GfcrGenericTable'
+import NewIndicatorSetModal from './NewIndicatorSetModal'
 
 const Gfcr = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const currentProjectPath = useCurrentProjectPath()
   const { gfcrIndicatorSets, setGfcrIndicatorSets } = useCurrentProject()
-  const navigate = useNavigate()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
@@ -88,10 +48,11 @@ const Gfcr = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const [isLoading, setIsLoading] = useState(true)
+  const [isNewIndicatorSetModalOpen, setIsNewIndicatorSetModalOpen] = useState(false)
+  const [newIndicatorSetType, setNewIndicatorSetType] = useState()
   // const [siteExportName, setSiteExportName] = useState('')
   // const [choices, setChoices] = useState({})
   // const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
-  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   // const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
@@ -103,13 +64,18 @@ const Gfcr = () => {
   const [isExporting, setIsExporting] = useState(false)
 
   const _getIndicatorSets = useEffect(() => {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
     if (databaseSwitchboardInstance && isAppOnline) {
       Promise.all([databaseSwitchboardInstance.getIndicatorSets(projectId)])
         .then(([indicatorSetsResponse]) => {
           if (isMounted.current) {
             setGfcrIndicatorSets(indicatorSetsResponse.results)
-            setIsLoading(false)
           }
+
+          setIsLoading(false)
         })
         .catch((error) => {
           handleHttpResponseError({
@@ -118,6 +84,8 @@ const Gfcr = () => {
               toast.error(...getToastArguments(language.error.gfcrIndicatorSetsUnavailable))
             },
           })
+
+          setIsLoading(false)
         })
     }
   }, [
@@ -128,47 +96,6 @@ const Gfcr = () => {
     setGfcrIndicatorSets,
     isAppOnline,
   ])
-
-  // setIndicatorSets(indicatorSetsDummyData)
-  // setIsLoading(false)
-  // if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
-  //   Promise.all([
-  //     databaseSwitchboardInstance.getSiteRecordsForUIDisplay(projectId),
-  //     databaseSwitchboardInstance.getProject(projectId),
-  //     databaseSwitchboardInstance.getChoices(),
-  //   ])
-
-  //     .then(([sites, project, choicesResponse]) => {
-  //       if (isMounted.current) {
-  //         if (!project && projectId) {
-  //           setIdsNotAssociatedWithData([projectId])
-  //         }
-
-  //         const exportName = getFileExportName(project, 'sites')
-
-  //         setSiteRecordsForUiDisplay(sites)
-  //         setSitesForMapMarkers(sites)
-  //         setSiteExportName(exportName)
-  //         setChoices(choicesResponse)
-  //         setIsLoading(false)
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       handleHttpResponseError({
-  //         error,
-  //         callback: () => {
-  //           toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
-  //         },
-  //       })
-  //     })
-  // }
-  // }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, handleHttpResponseError])
-  // }, [])
-
-  // const addCopiedSitesToSiteTable = (copiedSites) => {
-  //   setSiteRecordsForUiDisplay([...siteRecordsForUiDisplay, ...copiedSites])
-  //   setSitesForMapMarkers([...siteRecordsForUiDisplay, ...copiedSites])
-  // }
 
   const tableColumns = useMemo(
     () => [
@@ -183,41 +110,29 @@ const Gfcr = () => {
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Year',
-        accessor: 'report_year',
+        Header: 'Reporting Date',
+        accessor: 'report_date',
         sortType: reactTableNaturalSort,
-        align: 'right',
       },
-      // {
-      //   Header: 'Reef Type',
-      //   accessor: 'reefType',
-      //   sortType: reactTableNaturalSort,
-      // },
-      // {
-      //   Header: 'Reef Zone',
-      //   accessor: 'reefZone',
-      //   sortType: reactTableNaturalSort,
-      // },
-      // {
-      //   Header: 'Exposure',
-      //   accessor: 'exposure',
-      //   sortType: reactTableNaturalSort,
-      // },
     ],
     [],
   )
 
   const tableCellData = useMemo(() => {
     return gfcrIndicatorSets.map((indicatorSet) => {
-      const { id, title, indicator_set_type, report_year } = indicatorSet
+      const { id, title, indicator_set_type, report_date } = indicatorSet
+
+      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+      const currentLocale = navigator.language
+      const localizedDate = new Date(report_date).toLocaleDateString(currentLocale, dateOptions)
 
       return {
-        title: <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link>,
-        indicator_set_type: indicator_set_type === 'annual_report' ? 'Annual Report' : 'Target',
-        report_year,
+        title: isAdminUser ? <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link> : title,
+        indicator_set_type: indicator_set_type === 'report' ? 'Report' : 'Target',
+        report_date: localizedDate,
       }
     })
-  }, [gfcrIndicatorSets, currentProjectPath])
+  }, [gfcrIndicatorSets, isAdminUser, currentProjectPath])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -238,7 +153,7 @@ const Gfcr = () => {
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
-      const keys = ['values.title.props.children', 'values.type', 'values.report_year']
+      const keys = ['values.title.props.children', 'values.report_date']
 
       const queryTerms = splitSearchQueryStrings(query)
       const filteredRows =
@@ -288,6 +203,7 @@ const Gfcr = () => {
     useSortBy,
     usePagination,
   )
+
   const handleRowsNumberChange = (e) => {
     setPageSize(Number(e.target.value))
   }
@@ -306,47 +222,6 @@ const Gfcr = () => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
 
-  // const getDataForCSV = useMemo(() => {
-  //   const countryChoices = choices?.countries?.data
-  //   const reefTypeChoices = choices?.reeftypes?.data
-  //   const reefZoneChoices = choices?.reefzones?.data
-  //   const exposureChoices = choices?.reefexposures?.data
-
-  //   return siteRecordsForUiDisplay
-  //     .map((site) => {
-  //       const countryName = getObjectById(countryChoices, site.country)?.name
-  //       const reefTypeName = getObjectById(reefTypeChoices, site.reef_type)?.name
-  //       const reefZoneName = getObjectById(reefZoneChoices, site.reef_zone)?.name
-  //       const exposureName = getObjectById(exposureChoices, site.exposure)?.name
-
-  //       return {
-  //         Country: countryName,
-  //         Name: site.name,
-  //         Latitude: site.location.coordinates[1],
-  //         Longitude: site.location.coordinates[0],
-  //         'Reef type': reefTypeName,
-  //         'Reef zone': reefZoneName,
-  //         'Reef exposure': exposureName,
-  //         Notes: site.notes,
-  //       }
-  //     })
-  //     .toSorted((a, b) => a.Name.localeCompare(b.Name))
-  // }, [siteRecordsForUiDisplay, choices])
-
-  const readOnlySitesHeaderContent = (
-    <>
-      <ButtonSecondary>
-        {/* <CSVLink
-          data={getDataForCSV}
-          filename={siteExportName}
-          style={{ margin: 0, textDecoration: 'none' }}
-        >
-          <IconDownload /> Export sites
-        </CSVLink> */}
-      </ButtonSecondary>
-    </>
-  )
-
   const createDropdownLabel = (
     <>
       <IconPlus /> Create new
@@ -354,7 +229,8 @@ const Gfcr = () => {
   )
 
   const handleNewIndicatorSet = (type) => {
-    navigate(`${currentProjectPath}/gfcr/new/${type}`)
+    setNewIndicatorSetType(type)
+    setIsNewIndicatorSetModalOpen(true)
   }
 
   const handleExportClick = () => {
@@ -370,17 +246,13 @@ const Gfcr = () => {
       })
   }
 
-  const toolbarButtonsByRole = isReadOnlyUser ? (
-    <>
-      <ToolbarButtonWrapper>{readOnlySitesHeaderContent}</ToolbarButtonWrapper>
-    </>
-  ) : (
+  const toolbarButtons = (
     <>
       <StyledToolbarButtonWrapper>
-        <ButtonSecondaryDropdown label={createDropdownLabel}>
+        <ButtonSecondaryDropdown label={createDropdownLabel} disabled={!isAdminUser}>
           <Column as="nav" data-testid="export-to-csv">
-            <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('annual-report')}>
-              Annual Report
+            <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('report')}>
+              Report
             </DropdownItemStyle>
             <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('target')}>
               Target
@@ -395,81 +267,38 @@ const Gfcr = () => {
           <IconDownload /> {isExporting ? 'Exporting...' : 'Export to XLSX'}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
+      <NewIndicatorSetModal
+        indicatorSetType={newIndicatorSetType}
+        isOpen={isNewIndicatorSetModalOpen}
+        onDismiss={(resetForm) => {
+          resetForm()
+          setIsNewIndicatorSetModalOpen(false)
+          setNewIndicatorSetType()
+        }}
+      />
     </>
   )
 
   const table = gfcrIndicatorSets.length ? (
-    <>
-      <StickyTableOverflowWrapper>
-        <GenericStickyTable {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => {
-                  const isMultiSortColumn = headerGroup.headers.some(
-                    (header) => header.sortedIndex > 0,
-                  )
-                  const ThClassName = column.parent ? column.parent.id : undefined
-
-                  return (
-                    <Th
-                      {...column.getHeaderProps({
-                        ...getTableColumnHeaderProps(column),
-                        ...{ style: { textAlign: column.align } },
-                      })}
-                      key={column.id}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
-                      className={ThClassName}
-                    >
-                      <span>{column.render('Header')}</span>
-                    </Th>
-                  )
-                })}
-              </Tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
-              prepareRow(row)
-
-              return (
-                <Tr key={row.id} {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <Td key={cell.id} {...cell.getCellProps()} align={cell.column.align}>
-                        {cell.render('Cell')}
-                      </Td>
-                    )
-                  })}
-                </Tr>
-              )
-            })}
-          </tbody>
-        </GenericStickyTable>
-      </StickyTableOverflowWrapper>
-      <TableNavigation>
-        <PageSizeSelector
-          onChange={handleRowsNumberChange}
-          pageSize={pageSize}
-          pageSizeOptions={[15, 50, 100]}
-          pageType="site"
-          unfilteredRowLength={gfcrIndicatorSets.length}
-          searchFilteredRowLength={searchFilteredRowsLength}
-          isSearchFilterEnabled={!!globalFilter?.length}
-        />
-        <PageSelector
-          onPreviousClick={previousPage}
-          previousDisabled={!canPreviousPage}
-          onNextClick={nextPage}
-          nextDisabled={!canNextPage}
-          onGoToPage={gotoPage}
-          currentPageIndex={pageIndex}
-          pageCount={pageOptions.length}
-        />
-      </TableNavigation>
-    </>
+    <GfcrGenericTable
+      getTableProps={getTableProps}
+      headerGroups={headerGroups}
+      getTableBodyProps={getTableBodyProps}
+      page={page}
+      prepareRow={prepareRow}
+      onPageSizeChange={handleRowsNumberChange}
+      pageSize={pageSize}
+      unfilteredRowLength={gfcrIndicatorSets.length}
+      searchFilteredRowLength={searchFilteredRowsLength}
+      isSearchFilterEnabled={!!globalFilter?.length}
+      onPreviousClick={previousPage}
+      previousDisabled={!canPreviousPage}
+      onNextClick={nextPage}
+      nextDisabled={!canNextPage}
+      onGoToPage={gotoPage}
+      currentPageIndex={pageIndex}
+      pageCount={pageOptions.length}
+    />
   ) : (
     <PageUnavailable
       mainText={language.pages.gfcrTable.noDataMainText}
@@ -477,32 +306,28 @@ const Gfcr = () => {
     />
   )
 
-  if (!isAdminUser) {
-    return (
-      <GfcrPageUnavailablePadding>
-        <PageUnavailable mainText={language.error.pageAdminOnly} />
-      </GfcrPageUnavailablePadding>
-    )
-  }
-
   return (
     <ContentPageLayout
       toolbar={
         <>
           <H2>{language.pages.gfcrTable.title}</H2>
-          <ToolBarRow>
-            <FilterSearchToolbar
-              name={language.pages.gfcrTable.filterToolbarText}
-              disabled={gfcrIndicatorSets.length === 0}
-              globalSearchText={globalFilter || ''}
-              handleGlobalFilterChange={handleGlobalFilterChange}
-            />
+          {isAppOnline && (
+            <ToolBarRow>
+              <FilterSearchToolbar
+                name={language.pages.gfcrTable.filterToolbarText}
+                disabled={gfcrIndicatorSets.length === 0}
+                globalSearchText={globalFilter || ''}
+                handleGlobalFilterChange={handleGlobalFilterChange}
+              />
 
-            <ToolbarButtonWrapper>{toolbarButtonsByRole}</ToolbarButtonWrapper>
-          </ToolBarRow>
+              <ToolbarButtonWrapper>{toolbarButtons}</ToolbarButtonWrapper>
+            </ToolBarRow>
+          )}
         </>
       }
-      content={table}
+      content={
+        isAppOnline ? table : <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+      }
       isPageContentLoading={isLoading}
     />
   )

@@ -19,12 +19,12 @@ const FilterInput = styled(Input)`
 `
 
 const FilterSearchToolbar = ({
-  id,
+  id = 'filter-search',
   name,
-  disabled,
+  disabled = false,
   globalSearchText,
   handleGlobalFilterChange,
-  type,
+  type = 'page',
 }) => {
   const [searchText, setSearchText] = useState(globalSearchText)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
@@ -120,12 +120,6 @@ const FilterSearchToolbar = ({
       />
     </FilterLabelWrapper>
   )
-}
-
-FilterSearchToolbar.defaultProps = {
-  id: 'filter-search',
-  disabled: false,
-  type: 'page',
 }
 
 FilterSearchToolbar.propTypes = {

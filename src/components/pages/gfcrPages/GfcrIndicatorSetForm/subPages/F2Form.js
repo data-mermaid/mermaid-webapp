@@ -5,17 +5,20 @@ import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabe
 import { formikPropType } from '../../../../../library/formikPropType'
 import language from '../../../../../language'
 import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
-import { StyledGfcrInputWrapper } from './subForms.styles'
+import { StyledGfcrInputWrapper } from './subPages.styles'
+import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
+import { H2 } from '../../../../generic/text'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F2Form = ({ formik, handleInputBlur }) => {
+const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
   return (
     <StyledGfcrInputWrapper>
+      <H2>{gfcrIndicatorSetLanguage.f2Heading}</H2>
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.1a</b> {gfcrIndicatorSetLanguage.f2_1a}
+            <strong>F 2.1a</strong> {gfcrIndicatorSetLanguage.getF2_1a()}
           </>
         }
         id="f2_1a"
@@ -23,12 +26,15 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_1a')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_1a')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
+        helperText={gfcrIndicatorSetLanguage.getF2_1a_helper()}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.1b</b> {gfcrIndicatorSetLanguage.f2_1b}
+            <strong>F 2.1b</strong> {gfcrIndicatorSetLanguage.getF2_1b()}
           </>
         }
         id="f2_1b"
@@ -36,12 +42,15 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_1b')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_1b')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
+        helperText={gfcrIndicatorSetLanguage.getF2_1b_helper()}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.2a</b> {gfcrIndicatorSetLanguage.f2_2a}
+            <strong>F 2.2a</strong> {gfcrIndicatorSetLanguage.getF2_2a()}
           </>
         }
         id="f2_2a"
@@ -49,12 +58,15 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_2a')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_2a')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
+        helperText={gfcrIndicatorSetLanguage.getF2_2a_helper()}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.2b</b> {gfcrIndicatorSetLanguage.f2_2b}
+            <strong>F 2.2b</strong> {gfcrIndicatorSetLanguage.getF2_2b()}
           </>
         }
         id="f2_2b"
@@ -62,12 +74,15 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_2b')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_2b')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
+        helperText={gfcrIndicatorSetLanguage.getF2_2b_helper()}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.3a</b> {gfcrIndicatorSetLanguage.f2_3a}
+            <strong>F 2.3a</strong> {gfcrIndicatorSetLanguage.getF2_3a()}
           </>
         }
         id="f2_3a"
@@ -75,13 +90,15 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_3a')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_3a')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
-        helperText="Example helper text"
+        helperText={gfcrIndicatorSetLanguage.getF2_3a_helper()}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.3b</b> {gfcrIndicatorSetLanguage.f2_3b}
+            <strong>F 2.3b</strong> {gfcrIndicatorSetLanguage.getF2_3b()}
           </>
         }
         id="f2_3b"
@@ -89,13 +106,15 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_3b')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_3b')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
-        helperText="Example helper text"
+        helperText={gfcrIndicatorSetLanguage.getF2_3b_helper()}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.4</b> {gfcrIndicatorSetLanguage.f2_4}
+            <strong>F 2.4</strong> {gfcrIndicatorSetLanguage.f2_4}
           </>
         }
         id="f2_4"
@@ -103,13 +122,15 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_4')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_4')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
-        helperText="Example helper text"
+        helperText={gfcrIndicatorSetLanguage.getF2_4_helper()}
+        showHelperText={displayHelp}
       />
       <InputWithLabelAndValidation
         label={
           <>
-            <b>F 2.Opt1</b> {gfcrIndicatorSetLanguage.f2_opt1}
+            <strong>F 2.5</strong> {gfcrIndicatorSetLanguage.f2_5}
           </>
         }
         id="f2_opt1"
@@ -117,8 +138,15 @@ const F2Form = ({ formik, handleInputBlur }) => {
         unit="km²"
         {...formik.getFieldProps('f2_opt1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_opt1')}
+        onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
-        helperText="Example helper text"
+        helperText={gfcrIndicatorSetLanguage.getF2_5_helper()}
+        showHelperText={displayHelp}
+      />
+      <TextareaWithLabelAndValidation
+        id="f2_notes"
+        label={gfcrIndicatorSetLanguage.notes}
+        {...formik.getFieldProps('f2_notes')}
       />
     </StyledGfcrInputWrapper>
   )
@@ -126,7 +154,9 @@ const F2Form = ({ formik, handleInputBlur }) => {
 
 F2Form.propTypes = {
   formik: formikPropType.isRequired,
+  displayHelp: PropTypes.bool,
   handleInputBlur: PropTypes.func.isRequired,
+  handleInputFocus: PropTypes.func.isRequired,
 }
 
 export default F2Form

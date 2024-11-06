@@ -1,7 +1,6 @@
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 
@@ -843,16 +842,14 @@ const Users = () => {
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
-
+              const { key: _, ...restRowProps } = row.getRowProps()
               return (
-                <Tr key={row.id} {...row.getRowProps()}>
+                <Tr key={row.id} {...restRowProps}>
                   {row.cells.map((cell) => {
+                    const { key: _, ...restCellProps } = cell.getCellProps()
+                    const uniqueKey = `${row.id}-${cell.column.id}`
                     return (
-                      <UserTableTd
-                        key={cell.column.id}
-                        {...cell.getCellProps()}
-                        align={cell.column.align}
-                      >
+                      <UserTableTd key={uniqueKey} {...restCellProps} align={cell.column.align}>
                         {cell.render('Cell')}
                       </UserTableTd>
                     )
@@ -968,18 +965,6 @@ const Users = () => {
   ) : (
     <ContentPageLayout isPageContentLoading={isPageLoading} content={content} toolbar={toolbar} />
   )
-}
-
-Users.propTypes = {
-  row: PropTypes.shape({
-    original: PropTypes.shape({
-      name: PropTypes.string,
-    }),
-  }),
-}
-
-Users.defaultProps = {
-  row: undefined,
 }
 
 export default Users

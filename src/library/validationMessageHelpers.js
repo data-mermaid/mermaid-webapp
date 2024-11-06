@@ -96,7 +96,7 @@ export const getInvalidBleachingObsTotalMessage = (context) => {
   return `Sum of values must not be less than ${context?.value_range[0]} or greater than ${context?.value_range[1]}`
 }
 
-export const getObservationsCountMessage = (context, fields, compWord) => {
+export const getObservationsCountMessage = (fields, compWord, compVal) => {
   const obsField = fields[0]
   const tableStringMap = {
     'data.obs_quadrat_benthic_percent': ' in Percent Cover',
@@ -104,5 +104,5 @@ export const getObservationsCountMessage = (context, fields, compWord) => {
   }
   const inObsTableString = tableStringMap[obsField] || ''
 
-  return `${compWord} than ${context?.observation_count_range[0]} observations${inObsTableString}`
+  return `${compWord} than ${compVal} observations${inObsTableString}`
 }

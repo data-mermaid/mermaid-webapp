@@ -9,7 +9,12 @@ import {
 import { Table } from '../../../generic/Table/table'
 import TableRowItem from '../../../generic/Table/TableRowItem/TableRowItem'
 
-const SubmittedBleachingInfoTable = ({ choices, sites, managementRegimes, submittedRecord }) => {
+const SubmittedBleachingInfoTable = ({
+  choices,
+  sites,
+  managementRegimes,
+  submittedRecord = undefined,
+}) => {
   const { site, management, sample_date } = submittedRecord.sample_event
 
   const {
@@ -55,10 +60,6 @@ SubmittedBleachingInfoTable.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   submittedRecord: bleachingRecordPropType,
-}
-
-SubmittedBleachingInfoTable.defaultProps = {
-  submittedRecord: undefined,
 }
 
 export default SubmittedBleachingInfoTable

@@ -16,7 +16,13 @@ import { geomorphicColors, benthicColors } from '../mapService'
 const geomorphicKeyNames = Object.keys(geomorphicColors)
 const benthicKeyNames = Object.keys(benthicColors)
 
-const LegendCheckbox = ({ labelName, checked, bgColor, fullWidth, handleCheckboxChange }) => {
+const LegendCheckbox = ({
+  labelName,
+  checked = false,
+  bgColor = '',
+  fullWidth = false,
+  handleCheckboxChange = () => {},
+}) => {
   return (
     <CheckBoxLabel htmlFor={labelName} fullWidth={fullWidth}>
       <input
@@ -235,12 +241,6 @@ LegendCheckbox.propTypes = {
   handleCheckboxChange: PropTypes.func,
 }
 
-LegendCheckbox.defaultProps = {
-  checked: false,
-  bgColor: '',
-  fullWidth: false,
-  handleCheckboxChange: () => {},
-}
 AtlasLegendDrawer.propTypes = {}
 
 export default AtlasLegendDrawer

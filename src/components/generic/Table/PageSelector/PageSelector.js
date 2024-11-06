@@ -71,10 +71,9 @@ const PageSelector = ({
         const buttonProps = {
           ...pageButtonPropsThatChangeLess,
           pageIndex: page - 1,
-          key: `pagination-button-${page}`,
         }
 
-        buttons.push(<PageButton {...buttonProps} />)
+        buttons.push(<PageButton key={`pagination-button-${page}`} {...buttonProps} />)
       }
 
       return buttons

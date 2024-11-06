@@ -17,13 +17,13 @@ const SubmittedToolbarSection = ({
   globalSearchText,
   handleGlobalFilterChange,
   handleMethodsColumnFilterChange,
-  methodFilterValue,
-  disabled,
+  methodFilterValue = [],
+  disabled = false,
   unfilteredRowLength,
-  methodFilteredRowLength,
-  searchFilteredRowLength,
-  isSearchFilterEnabled,
-  isMethodFilterEnabled,
+  methodFilteredRowLength = null,
+  searchFilteredRowLength = null,
+  isSearchFilterEnabled = false,
+  isMethodFilterEnabled = false,
   setMethodsFilter,
   handleSetTableUserPrefs,
 }) => {
@@ -101,15 +101,6 @@ const SubmittedToolbarSection = ({
       </ToolBarItemsRow>
     </>
   )
-}
-
-SubmittedToolbarSection.defaultProps = {
-  methodFilterValue: [],
-  disabled: false,
-  methodFilteredRowLength: null,
-  searchFilteredRowLength: null,
-  isMethodFilterEnabled: false,
-  isSearchFilterEnabled: false,
 }
 
 SubmittedToolbarSection.propTypes = {

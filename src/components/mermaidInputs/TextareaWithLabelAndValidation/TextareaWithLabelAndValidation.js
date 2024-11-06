@@ -6,15 +6,15 @@ import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 
 const TextareaWithLabelAndValidation = ({
-  helperText,
-  required,
+  helperText = undefined,
+  required = false,
   id,
-  ignoreNonObservationFieldValidations,
+  ignoreNonObservationFieldValidations = () => {},
   label,
-  resetNonObservationFieldValidations,
-  testId,
-  validationMessages,
-  validationType,
+  resetNonObservationFieldValidations = () => {},
+  testId = undefined,
+  validationMessages = undefined,
+  validationType = undefined,
   ...restOfProps
 }) => {
   return (
@@ -53,16 +53,6 @@ TextareaWithLabelAndValidation.propTypes = {
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
-}
-
-TextareaWithLabelAndValidation.defaultProps = {
-  helperText: undefined,
-  required: false,
-  ignoreNonObservationFieldValidations: () => {},
-  resetNonObservationFieldValidations: () => {},
-  testId: undefined,
-  validationMessages: undefined,
-  validationType: undefined,
 }
 
 export default TextareaWithLabelAndValidation

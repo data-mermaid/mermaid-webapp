@@ -8,8 +8,8 @@ import LoadingModal from '../LoadingModal/LoadingModal'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 
 const DeleteRecordButton = ({
-  currentPage,
-  errorData,
+  currentPage = 1,
+  errorData = [],
   isLoading,
   isNewRecord,
   isOpen,
@@ -107,11 +107,6 @@ DeleteRecordButton.propTypes = {
   deleteRecord: PropTypes.func.isRequired,
   onDismiss: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-}
-
-DeleteRecordButton.defaultProps = {
-  currentPage: 1,
-  errorData: [],
 }
 
 export default DeleteRecordButton

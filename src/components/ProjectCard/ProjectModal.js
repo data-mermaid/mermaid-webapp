@@ -25,7 +25,12 @@ const CheckBoxLabel = styled.label`
   }
 `
 
-const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) => {
+const ProjectModal = ({
+  isOpen,
+  onDismiss,
+  project = projectPropType.isRequired,
+  addProjectToProjectsPage,
+}) => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [nameAlreadyExists, setNameAlreadyExists] = useState(false)
@@ -222,10 +227,6 @@ ProjectModal.propTypes = {
   onDismiss: PropTypes.func.isRequired,
   project: projectPropType,
   addProjectToProjectsPage: PropTypes.func.isRequired,
-}
-
-ProjectModal.defaultProps = {
-  project: projectPropType.isRequired,
 }
 
 export default ProjectModal

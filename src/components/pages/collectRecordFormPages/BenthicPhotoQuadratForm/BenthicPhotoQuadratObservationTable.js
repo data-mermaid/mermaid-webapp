@@ -64,9 +64,9 @@ const BenthicPhotoQuadratObservationTable = ({
   areValidationsShowing,
   benthicAttributeSelectOptions,
   choices,
-  collectRecord,
+  collectRecord = undefined,
   ignoreObservationValidations,
-  observationsReducer,
+  observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
@@ -505,11 +505,6 @@ BenthicPhotoQuadratObservationTable.propTypes = {
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
   testId: PropTypes.string.isRequired,
-}
-
-BenthicPhotoQuadratObservationTable.defaultProps = {
-  collectRecord: undefined,
-  observationsReducer: [],
 }
 
 export default BenthicPhotoQuadratObservationTable

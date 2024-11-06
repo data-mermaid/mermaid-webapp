@@ -1,8 +1,9 @@
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useParams, useNavigate } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
@@ -11,7 +12,6 @@ import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingS
 import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
 import { getIndicatorSetFormInitialValues } from './indicatorSetFormInitialValues'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import { ItalicizedInfo } from '../../../generic/text'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
@@ -22,51 +22,28 @@ import LoadingModal from '../../../LoadingModal/LoadingModal'
 import SaveButton from '../../../generic/SaveButton'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
-import { DeleteRecordButtonCautionWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import { useCurrentProject } from '../../../../App/CurrentProjectContext'
 import GfcrIndicatorSetNav from '../GfcrIndicatorSetNav'
 import GfcrIndicatorSetForm from '../GfcrIndicatorSetForm/GfcrIndicatorSetForm'
 import IndicatorSetTitle from './IndicatorSetTitle'
+import { GfcrPageUnavailablePadding } from '../Gfcr/Gfcr.styles'
+import PageUnavailable from '../../PageUnavailable'
+import IdsNotFound from '../../IdsNotFound/IdsNotFound'
+import { ButtonSecondary } from '../../../generic/buttons'
+import { IconInfo } from '../../../icons'
 
-// const ReadOnlySiteContent = ({
-//   site,
-//   countryOptions,
-//   exposureOptions,
-//   reefTypeOptions,
-//   reefZoneOptions,
-//   isReadOnlyUser,
-//   isAppOnline,
-// }) => {
-//   const { country, latitude, longitude, exposure, reef_type, reef_zone, notes } = site
+const ButtonContainer = styled.div`
+  display: 'flex';
+  justify-content: 'right';
+`
 
-//   return (
-//     <>
-//       <Table>
-//         <tbody>
-//           <TableRowItem title="Country" options={countryOptions} value={country} />
-//           <TableRowItem title="Latitude" value={latitude} />
-//           <TableRowItem title="Longitude" value={longitude} />
-//           <TableRowItem title="Exposure" options={exposureOptions} value={exposure} />
-//           <TableRowItem title="Reef Type" options={reefTypeOptions} value={reef_type} />
-//           <TableRowItem title="Reef Zone" options={reefZoneOptions} value={reef_zone} />
-//           <TableRowItem title="Notes" value={notes} isAllowNewlines={true} />
-//         </tbody>
-//       </Table>
-//       {isAppOnline && (
-//         <SingleSiteMap
-//           formLatitudeValue={latitude}
-//           formLongitudeValue={longitude}
-//           isReadOnlyUser={isReadOnlyUser}
-//         />
-//       )}
-//     </>
-//   )
-// }
+const HelpButton = styled(ButtonSecondary)`
+  margin-right: 1rem;
+`
 
 const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
-  // const { isSyncInProgress } = useSyncStatus()
   const { indicatorSetId, projectId } = useParams()
   const navigate = useNavigate()
   const isMounted = useIsMounted()
@@ -74,57 +51,40 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const { currentUser } = useCurrentUser()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { gfcrIndicatorSets, setGfcrIndicatorSets } = useCurrentProject()
+  const [choices, setChoices] = useState()
 
-  // const [countryOptions, setCountryOptions] = useState([])
-  // const [exposureOptions, setExposureOptions] = useState([])
-  // const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isFormDirty, setIsFormDirty] = useState(false)
-  // const [reefTypeOptions, setReefTypeOptions] = useState([])
-  // const [reefZoneOptions, setReefZoneOptions] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [indicatorSetBeingEdited, setIndicatorSetBeingEdited] = useState()
-  // const [siteDeleteErrorData, setSiteDeleteErrorData] = useState([])
-  // const [isDeletingSite, setIsDeletingSite] = useState(false)
-  // const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
-  // const [currentDeleteRecordModalPage, setCurrentDeleteRecordModalPage] = useState(1)
-  const [selectedNavItem, setSelectedNavItem] = useState('indicator-set')
+  const [displayHelp, setDisplayHelp] = useState(false)
 
+  const [selectedNavItem, setSelectedNavItem] = useState('report-title-and-year')
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new indicator set is saved (and that triggers a navigation to its new page)
   const indicatorSetType = indicatorSetBeingEdited?.indicator_set_type || newIndicatorSetType
-  const indicatorSetTypeName = indicatorSetType === 'annual_report' ? 'Annual Report' : 'Target'
+  const indicatorSetTypeName = indicatorSetType === 'report' ? 'Report' : 'Target'
 
-  // const goToPageOneOfDeleteRecordModal = () => {
-  //   setCurrentDeleteRecordModalPage(1)
-  // }
-  // const goToPageTwoOfDeleteRecordModal = () => {
-  //   setCurrentDeleteRecordModalPage(2)
-  // }
-  // const openDeleteRecordModal = () => {
-  //   setIsDeleteRecordModalOpen(true)
-  // }
-  // const closeDeleteRecordModal = () => {
-  //   goToPageOneOfDeleteRecordModal()
-  //   setIsDeleteRecordModalOpen(false)
-  // }
-
-  // const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
-  // const {
-  //   persistUnsavedFormData: persistUnsavedFormikData,
-  //   clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
-  //   getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
-  // } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedIndicatorSetInputs`)
+  const _getSupportingData = useEffect(() => {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
 
-  const _getIndicatorSets = useEffect(() => {
-    if (!newIndicatorSetType && databaseSwitchboardInstance && isAppOnline) {
-      Promise.all([databaseSwitchboardInstance.getIndicatorSets(projectId)])
-        .then(([indicatorSetsResponse]) => {
+    if (isMounted.current && databaseSwitchboardInstance && isAppOnline) {
+      const promises = [
+        databaseSwitchboardInstance.getChoices(),
+        databaseSwitchboardInstance.getIndicatorSets(projectId),
+      ]
+
+      Promise.all(promises)
+        .then(([choicesResponse, indicatorSetsResponse]) => {
           if (isMounted.current) {
+            setChoices(choicesResponse)
             setGfcrIndicatorSets(indicatorSetsResponse.results)
-            setIsLoading(false)
           }
+
+          setIsLoading(false)
         })
         .catch((error) => {
           handleHttpResponseError({
@@ -133,6 +93,8 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
               toast.error(...getToastArguments(language.error.gfcrIndicatorSetsUnavailable))
             },
           })
+
+          setIsLoading(false)
         })
     }
 
@@ -147,6 +109,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     setGfcrIndicatorSets,
     isAppOnline,
     newIndicatorSetType,
+    setChoices,
   ])
 
   const _setIndicatorSet = useEffect(() => {
@@ -154,74 +117,73 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       const indicatorSet = gfcrIndicatorSets.find(
         (indicatorSet) => indicatorSet.id === indicatorSetId,
       )
+
       setIndicatorSetBeingEdited(indicatorSet)
     }
   }, [gfcrIndicatorSets, indicatorSetId])
 
   const initialFormValues = useMemo(() => {
-    // return getPersistedUnsavedFormikData() ?? getIndicatorSetFormInitialValues(indicatorSetBeingEdited)
     return getIndicatorSetFormInitialValues(indicatorSetBeingEdited)
   }, [indicatorSetBeingEdited])
 
   const handleFormSubmit = useCallback(
-    (formikValues, formikActions) => {
-      /* Ignore to keep sub forms grouped together */
-      /* prettier-ignore */
-      const {
-        title, report_date, report_year,
-        f1_1,
-        f2_1a, f2_1b, f2_2a, f2_2b, f2_3a, f2_3b, f2_4, f2_opt1,
-        f3_1, f3_2, f3_3, f3_4, f3_5a, f3_5b, f3_5c, f3_5d, f3_6
-      } = formikValues
-
+    async (formikValues, formikActions, updateFromCalcValues = false) => {
       /* prettier-ignore */
       const formattedIndicatorSetForApi = {
         ...indicatorSetBeingEdited,
+        ...formikValues,
         indicator_set_type: indicatorSetType,
-        title,
-        report_date,
-        report_year,
-        f1_1,
-        f2_1a, f2_1b, f2_2a, f2_2b, f2_3a, f2_3b, f2_4, f2_opt1,
-        f3_1, f3_2, f3_3, f3_4, f3_5a, f3_5b, f3_5c, f3_5d, f3_6
       }
 
       setSaveButtonState(buttonGroupStates.saving)
-      databaseSwitchboardInstance
-        // POST the indicator set if there is no indicator set ID, else PUT it
-        .saveIndicatorSet(projectId, formattedIndicatorSetForApi)
-        .then((response) => {
-          toast.success(...getToastArguments(language.success.gfcrIndicatorSetSave))
-          setSaveButtonState(buttonGroupStates.saved)
-          setIsFormDirty(false)
-          formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
-          // clearPersistedUnsavedFormikData()
+      try {
+        let response = await databaseSwitchboardInstance.saveIndicatorSet(
+          projectId,
+          formattedIndicatorSetForApi,
+        )
 
-          if (indicatorSetType) {
-            navigate(`${ensureTrailingSlash(currentProjectPath)}gfcr/${response.id}`)
-          }
-        })
-        .catch((error) => {
-          setSaveButtonState(buttonGroupStates.unsaved)
+        if (updateFromCalcValues) {
+          // Do another PUT, using the calc values as the F4 values
+          response = await databaseSwitchboardInstance.saveIndicatorSet(projectId, {
+            ...response,
+            f4_1: response.f4_1_calc || 0,
+            f4_2: response.f4_2_calc || 0,
+            f4_3: response.f4_3_calc || 0,
+          })
+        }
 
-          if (error && isAppOnline) {
-            toast.error(...getToastArguments(language.error.gfcrIndicatorSetSave))
+        setSaveButtonState(buttonGroupStates.saved)
+        setIsFormDirty(false)
+        formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
 
-            handleHttpResponseError({
-              error,
-            })
-          }
-        })
+        setIndicatorSetBeingEdited(response)
+
+        if (newIndicatorSetType) {
+          navigate(`${ensureTrailingSlash(currentProjectPath)}gfcr/${response.id}`)
+        }
+        toast.success(...getToastArguments(language.success.gfcrIndicatorSetSave))
+      } catch (error) {
+        setSaveButtonState(buttonGroupStates.unsaved)
+
+        if (error && isAppOnline) {
+          toast.error(...getToastArguments(language.error.gfcrIndicatorSetSave))
+
+          handleHttpResponseError({
+            error,
+          })
+        }
+      }
     },
     [
-      currentProjectPath,
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
       indicatorSetBeingEdited,
-      isAppOnline,
       indicatorSetType,
-      navigate,
+      databaseSwitchboardInstance,
       projectId,
+      newIndicatorSetType,
+      navigate,
+      currentProjectPath,
+      isAppOnline,
+      handleHttpResponseError,
     ],
   )
 
@@ -230,51 +192,19 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     enableReinitialize: true,
     onSubmit: handleFormSubmit,
     validate: (values) => {
-      // persistUnsavedFormikData(values)
       const errors = {}
 
       if (!values.title) {
         errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
-      // if (!values.country) {
-      //   errors.country = [{ code: language.error.formValidation.required, id: 'Required' }]
-      // }
-
-      // if (!values.latitude && values.latitude !== 0) {
-      //   errors.latitude = [{ code: language.error.formValidation.required, id: 'Required' }]
-      // }
-
-      // if (values.latitude > 90 || values.latitude < -90) {
-      //   errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
-      // }
-
-      // if (!values.longitude && values.longitude !== 0) {
-      //   errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
-      // }
-
-      // if (values.longitude > 180 || values.longitude < -180) {
-      //   errors.longitude = [
-      //     { code: language.error.formValidation.longitude, id: 'Invalid Longitude' },
-      //   ]
-      // }
-
-      // if (!values.exposure) {
-      //   errors.exposure = [{ code: language.error.formValidation.required, id: 'Required' }]
-      // }
-
-      // if (!values.reef_type) {
-      //   errors.reef_type = [{ code: language.error.formValidation.required, id: 'Required' }]
-      // }
-
-      // if (!values.reef_zone) {
-      //   errors.reef_zone = [{ code: language.error.formValidation.required, id: 'Required' }]
-      // }
+      if (!values.report_date) {
+        errors.report_date = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
 
       return errors
     },
   })
-  // const { setFieldValue: formikSetFieldValue } = formik
 
   const _setSaveButtonUnsaved = useEffect(() => {
     if (isFormDirty) {
@@ -282,81 +212,9 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     }
   }, [isFormDirty])
 
-  // const handleLatitudeChange = useCallback(
-  //   (value) => {
-  //     formikSetFieldValue('latitude', value)
-  //   },
-  //   [formikSetFieldValue],
-  // )
+  const _setIsFormDirty = useEffect(() => setIsFormDirty(!!formik.dirty), [formik.dirty])
 
-  // const handleLongitudeChange = useCallback(
-  //   (value) => {
-  //     formikSetFieldValue('longitude', value)
-  //   },
-  //   [formikSetFieldValue],
-  // )
-
-  const _setIsFormDirty = useEffect(
-    // () => setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData()),
-    () => setIsFormDirty(!!formik.dirty),
-    [formik.dirty],
-  )
-
-  // const deleteRecord = () => {
-  //   // only available online
-  //   setIsDeletingSite(true)
-
-  //   databaseSwitchboardInstance
-  //     .deleteSite(siteBeingEdited, projectId)
-  //     .then(() => {
-  //       clearPersistedUnsavedFormikData()
-  //       closeDeleteRecordModal()
-  //       setIsDeletingSite(false)
-  //       toast.success(...getToastArguments(language.success.getMermaidDataDeleteSuccess('site')))
-  //       navigate(`${ensureTrailingSlash(currentProjectPath)}sites/`)
-  //     })
-  //     .catch((error) => {
-  //       const { isSyncError, isDeleteRejectedError } = error
-
-  //       if (isSyncError && !isDeleteRejectedError) {
-  //         const toastTitle = language.error.getDeleteOnlineSyncErrorTitle('site')
-
-  //         showSyncToastError({ toastTitle, error, testId: 'site-toast-error' })
-  //         setIsDeletingSite(false)
-  //         closeDeleteRecordModal()
-  //       }
-
-  //       if (isSyncError && isDeleteRejectedError) {
-  //         // show modal which lists the associated sumbitted sample units that are associated with the site
-  //         setSiteDeleteErrorData(error.associatedSampleUnits)
-  //         setIsDeletingSite(false)
-  //         goToPageTwoOfDeleteRecordModal()
-  //       }
-  //       if (!isSyncError) {
-  //         handleHttpResponseError({
-  //           error,
-  //         })
-  //       }
-  //     })
-  // }
-
-  // const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewIndicatorSet
-
-  // const contentViewByReadOnlyRole = isNewIndicatorSet ? (
-  //   <PageUnavailable mainText={language.error.pageReadOnly} />
-  // ) : (
-  //   <ReadOnlySiteContent
-  //     site={formik.values}
-  //     countryOptions={countryOptions}
-  //     exposureOptions={exposureOptions}
-  //     reefTypeOptions={reefTypeOptions}
-  //     reefZoneOptions={reefZoneOptions}
-  //     isReadOnlyUser={isReadOnlyUser}
-  //     isAppOnline={isAppOnline}
-  //   />
-  // )
-
-  const contentViewByRole = (
+  const contentViewByRole = isAdminUser ? (
     <div
       style={{
         display: 'flex',
@@ -366,73 +224,84 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         selectedNavItem={selectedNavItem}
         setSelectedNavItem={setSelectedNavItem}
       />
-      <GfcrIndicatorSetForm formik={formik} selectedNavItem={selectedNavItem} />
-      {/* {isAdminUser && isAppOnline && (
-        <DeleteRecordButton
-          currentPage={currentDeleteRecordModalPage}
-          errorData={siteDeleteErrorData}
-          isLoading={isDeletingSite}
-          isNewRecord={isNewIndicatorSet}
-          isOpen={isDeleteRecordModalOpen}
-          modalText={language.deleteRecord('Site')}
-          deleteRecord={deleteRecord}
-          onDismiss={closeDeleteRecordModal}
-          openModal={openDeleteRecordModal}
-        />
-      )} */}
-      {!isAdminUser && isAppOnline ? (
-        <DeleteRecordButtonCautionWrapper>
-          <ItalicizedInfo>{language.pages.siteForm.nonAdminDelete}</ItalicizedInfo>
-        </DeleteRecordButtonCautionWrapper>
-      ) : null}
+      <div style={{ flex: 1 }}>
+        {!!indicatorSetBeingEdited && (
+          <GfcrIndicatorSetForm
+            formik={formik}
+            indicatorSet={indicatorSetBeingEdited}
+            setIndicatorSet={setIndicatorSetBeingEdited}
+            selectedNavItem={selectedNavItem}
+            setSelectedNavItem={setSelectedNavItem}
+            indicatorSetType={indicatorSetType}
+            handleFormSubmit={handleFormSubmit}
+            isNewIndicatorSet={!!newIndicatorSetType}
+            choices={choices}
+            displayHelp={displayHelp}
+          />
+        )}
+      </div>
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
     </div>
+  ) : (
+    <GfcrPageUnavailablePadding>
+      <PageUnavailable mainText={language.error.pageAdminOnly} />
+    </GfcrPageUnavailablePadding>
   )
 
-  // return displayIdNotFoundErrorPage ? (
-  //   <ContentPageLayout
-  //     isPageContentLoading={isLoading}
-  //     content={<IdsNotFound ids={idsNotAssociatedWithData} />}
-  //   />
-  // ) : (
+  const displayIdNotFoundErrorPage = !indicatorSetBeingEdited && !newIndicatorSetType && isAppOnline
 
-  return (
+  return displayIdNotFoundErrorPage ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={[indicatorSetId]} />}
+    />
+  ) : (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       isToolbarSticky={true}
       subNavNode={{
         name: newIndicatorSetType
           ? language.pages.gfcrIndicatorSet.title
-          : `${formik.values.title} ${formik.values.report_year}`,
+          : `${formik.values.title} ${formik.values.report_date}`,
       }}
-      content={contentViewByRole}
+      content={
+        isAppOnline ? (
+          contentViewByRole
+        ) : (
+          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+        )
+      }
       toolbar={
         <ContentPageToolbarWrapper>
-          <IndicatorSetTitle
-            indicatorSetTitle={formik.values.title}
-            type={indicatorSetTypeName}
-            reportingYear={formik.values.report_year}
-            isNew={!!newIndicatorSetType}
-          />
-          <SaveButton
-            formId="indicator-set-form"
-            saveButtonState={saveButtonState}
-            formHasErrors={!!Object.keys(formik.errors).length}
-            formDirty={isFormDirty}
-          />
+          {isAppOnline ? (
+            <>
+              <IndicatorSetTitle
+                indicatorSetTitle={formik.values.title}
+                type={indicatorSetTypeName}
+                reportingDate={new Date(formik.values.report_date)}
+                isNew={!!newIndicatorSetType}
+              />
+              <ButtonContainer>
+                <HelpButton to="" onClick={() => setDisplayHelp(!displayHelp)}>
+                  <IconInfo /> {displayHelp ? 'Hide Help' : 'Show Help'}
+                </HelpButton>
+                <SaveButton
+                  formId="gfcr-indicator-set-form"
+                  saveButtonState={saveButtonState}
+                  formHasErrors={!!Object.keys(formik.errors).length}
+                  formDirty={isFormDirty}
+                />
+              </ButtonContainer>
+            </>
+          ) : (
+            <h2>{language.pages.gfcrIndicatorSet.title}</h2>
+          )}
         </ContentPageToolbarWrapper>
       }
     />
   )
-  // )
 }
-
-// SwapButton.propTypes = {
-//   isDisabled: PropTypes.bool.isRequired,
-//   handleSwapClick: PropTypes.func.isRequired,
-//   swapLabel: PropTypes.string.isRequired,
-// }
 
 GfcrIndicatorSet.propTypes = {
   newIndicatorSetType: PropTypes.string,

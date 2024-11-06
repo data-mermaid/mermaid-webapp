@@ -63,7 +63,7 @@ const Label = styled.label`
   cursor: ${(props) => props.cursor};
 `
 
-const ReadOnlyDataSharingContent = ({ project }) => (
+const ReadOnlyDataSharingContent = ({ project = {} }) => (
   <>
     <H3>Fish Belt</H3>
     <P>{getDataSharingPolicyLabel(project?.data_policy_beltfish)}</P>
@@ -180,6 +180,7 @@ const DataSharing = () => {
       editedValues.data_policy_benthiclit = policyCode
       editedValues.data_policy_benthicpit = policyCode
       editedValues.data_policy_habitatcomplexity = policyCode
+      editedValues.data_policy_benthicpqt = policyCode
     } else {
       editedValues[propertyToUpdate] = policyCode
     }
@@ -363,10 +364,6 @@ ReadOnlyDataSharingContent.propTypes = {
     data_policy_benthiclit: PropTypes.number,
     data_policy_bleachingqc: PropTypes.number,
   }),
-}
-
-ReadOnlyDataSharingContent.defaultProps = {
-  project: {},
 }
 
 export default DataSharing

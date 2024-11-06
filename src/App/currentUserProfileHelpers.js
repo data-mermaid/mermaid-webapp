@@ -132,27 +132,3 @@ export const getIsProjectProfileReadOnly = (profile) => profile.role === userRol
 export const getIsUserAdminForProject = (userProfile, projectId) => {
   return getProjectRole(userProfile, projectId) === userRole.admin
 }
-
-export const getIsUserGfcrTester = (userProfile) => {
-  const userEnvVar = process.env.REACT_APP_GFCR_TEST_USERS
-
-  if (!userEnvVar) {
-    return false
-  }
-
-  const gfcrTestUsers = process.env.REACT_APP_GFCR_TEST_USERS.split(',')
-  const userEmail = userProfile.email
-
-  const isUserEmailMatch = gfcrTestUsers.some((email) => {
-    if (email.includes('*')) {
-      const domain = email.split('@')[1]
-      const userEmailDomain = userEmail.split('@')[1]
-
-      return domain === userEmailDomain
-    }
-
-    return email === userEmail
-  })
-
-  return isUserEmailMatch
-}

@@ -31,7 +31,11 @@ const ProjectTooltip = styled(TooltipWithText)`
   }
 `
 
-const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, protocol }) => {
+const RecordFormTitle = ({
+  submittedRecordOrCollectRecordDataProperty = undefined,
+  sites,
+  protocol,
+}) => {
   const transectType = getProtocolTransectType(protocol)
   const protocolTitle = language.protocolTitles[protocol] ?? ''
   const primaryTitle = `${protocolTitle}`
@@ -75,10 +79,6 @@ RecordFormTitle.propTypes = {
   submittedRecordOrCollectRecordDataProperty: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   protocol: PropTypes.string.isRequired,
-}
-
-RecordFormTitle.defaultProps = {
-  submittedRecordOrCollectRecordDataProperty: undefined,
 }
 
 export default RecordFormTitle

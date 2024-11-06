@@ -39,7 +39,7 @@ const NavListSubItemWrapper = styled('div')`
     flex-direction: column;
   `)}
 `
-const RecordName = ({ subNavNode }) => {
+const RecordName = ({ subNavNode = null }) => {
   const { name, number, label } = subNavNode
 
   if (!number && !label) {
@@ -63,7 +63,7 @@ const RecordName = ({ subNavNode }) => {
   )
 }
 
-const SubNavMenuRecordName = ({ subNavNode }) => {
+const SubNavMenuRecordName = ({ subNavNode = null }) => {
   return subNavNode ? (
     <SubNavListLi>
       <RecordName subNavNode={subNavNode} />
@@ -78,8 +78,5 @@ RecordName.propTypes = {
 SubNavMenuRecordName.propTypes = {
   subNavNode: subNavNodePropTypes,
 }
-
-RecordName.defaultProps = { subNavNode: null }
-SubNavMenuRecordName.defaultProps = { subNavNode: null }
 
 export default SubNavMenuRecordName

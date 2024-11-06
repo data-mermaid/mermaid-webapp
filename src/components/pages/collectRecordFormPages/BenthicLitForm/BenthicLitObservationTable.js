@@ -47,9 +47,9 @@ const BenthicLitObservationsTable = ({
   areValidationsShowing,
   benthicAttributeSelectOptions,
   choices,
-  collectRecord,
+  collectRecord = undefined,
   ignoreObservationValidations,
-  observationsReducer,
+  observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
@@ -395,11 +395,6 @@ BenthicLitObservationsTable.propTypes = {
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
   testId: PropTypes.string.isRequired,
-}
-
-BenthicLitObservationsTable.defaultProps = {
-  collectRecord: undefined,
-  observationsReducer: [],
 }
 
 export { BenthicLitObservationsTable }

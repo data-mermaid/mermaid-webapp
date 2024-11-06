@@ -32,7 +32,7 @@ const InlineMessageWrapper = styled.div`
   }
 `
 
-const InlineMessage = ({ type, children, className }) => {
+const InlineMessage = ({ type = 'warning', children, className = undefined }) => {
   return (
     <>
       {type && (
@@ -50,6 +50,5 @@ InlineMessage.propTypes = {
   type: PropTypes.string,
   className: PropTypes.string,
 }
-InlineMessage.defaultProps = { type: 'warning', className: undefined }
 
 export default InlineMessage

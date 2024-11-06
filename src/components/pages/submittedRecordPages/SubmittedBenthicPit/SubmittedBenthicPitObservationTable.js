@@ -15,7 +15,7 @@ import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservat
 const SubmittedBenthicPitObservationTable = ({
   benthicAttributeOptions,
   choices,
-  submittedRecord,
+  submittedRecord = undefined,
 }) => {
   const { obs_benthic_pits } = submittedRecord
   const growthFormOptions = getOptions(choices.growthforms.data)
@@ -59,10 +59,6 @@ SubmittedBenthicPitObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   benthicAttributeOptions: inputOptionsPropTypes.isRequired,
   submittedRecord: benthicPitRecordPropType,
-}
-
-SubmittedBenthicPitObservationTable.defaultProps = {
-  submittedRecord: undefined,
 }
 
 export default SubmittedBenthicPitObservationTable

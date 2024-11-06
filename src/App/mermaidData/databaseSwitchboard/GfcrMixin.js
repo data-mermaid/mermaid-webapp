@@ -23,6 +23,7 @@ const GfcrMixin = (Base) =>
         throw new Error(this._operationMissingParameterError)
       }
 
+      // PUT the indicator set if there is an indicator set ID (i.e. it is an existing indicator set)
       if (editedValues.id) {
         return this._isOnlineAuthenticatedAndReady
           ? axios
@@ -35,6 +36,7 @@ const GfcrMixin = (Base) =>
           : Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
+      // POST the indicator set if there is no indicator set ID (i.e. it is a new indicator set)
       if (!editedValues.id) {
         return this._isOnlineAuthenticatedAndReady
           ? axios
@@ -78,6 +80,21 @@ const GfcrMixin = (Base) =>
               link.click()
               link.parentNode.removeChild(link)
             })
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    deleteIndicatorSet = async function deleteIndicatorSet(projectId, indicatorSetId) {
+      if (!projectId || !indicatorSetId) {
+        throw new Error(this._operationMissingParameterError)
+      }
+
+      return this._isOnlineAuthenticatedAndReady
+        ? axios
+            .delete(
+              `${this._apiBaseUrl}/projects/${projectId}/indicatorsets/${indicatorSetId}/`,
+              await getAuthorizationHeaders(this._getAccessToken),
+            )
+            .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
   }

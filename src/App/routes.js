@@ -174,8 +174,8 @@ export const routes = [
     Component: () => <Gfcr />,
   },
   {
-    path: '/projects/:projectId/gfcr/new/annual-report',
-    Component: () => <GfcrIndicatorSet newIndicatorSetType={'annual_report'} />,
+    path: '/projects/:projectId/gfcr/new/report',
+    Component: () => <GfcrIndicatorSet newIndicatorSetType={'report'} />,
   },
   {
     path: '/projects/:projectId/gfcr/new/target',

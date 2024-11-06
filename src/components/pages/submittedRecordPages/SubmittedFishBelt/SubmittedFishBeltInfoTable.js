@@ -9,7 +9,12 @@ import {
 import { Table } from '../../../generic/Table/table'
 import TableRowItem from '../../../generic/Table/TableRowItem/TableRowItem'
 
-const SubmittedFishBeltInfoTable = ({ sites, managementRegimes, choices, submittedRecord }) => {
+const SubmittedFishBeltInfoTable = ({
+  sites,
+  managementRegimes,
+  choices,
+  submittedRecord = undefined,
+}) => {
   const { site, management, sample_date } = submittedRecord.sample_event
 
   const {
@@ -71,10 +76,6 @@ SubmittedFishBeltInfoTable.propTypes = {
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   choices: choicesPropType.isRequired,
   submittedRecord: submittedFishBeltPropType,
-}
-
-SubmittedFishBeltInfoTable.defaultProps = {
-  submittedRecord: undefined,
 }
 
 export default SubmittedFishBeltInfoTable
