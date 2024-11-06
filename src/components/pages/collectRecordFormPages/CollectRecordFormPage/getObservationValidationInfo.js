@@ -18,14 +18,10 @@ const getObservationValidations = ({ observationId, collectRecord, observationsP
   const justThisObservationsValidations = allObservationsValidations.flat().filter((validation) => {
     // api is inconsistent between id and observation_id
 
-    if (observationsPropertyName === 'images') {
-      return validation.context?.image_id === observationId
-    } else {
-      return (
-        validation.context?.observation_id === observationId ||
-        validation.context?.id === observationId
-      )
-    }
+    return (
+      validation.context?.observation_id === observationId ||
+      validation.context?.id === observationId
+    )
   })
 
   // if there are duplicate values, in context, there is an array of objects with the duplicate observations ids
