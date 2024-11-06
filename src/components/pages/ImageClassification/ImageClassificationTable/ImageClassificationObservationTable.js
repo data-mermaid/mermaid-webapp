@@ -34,9 +34,9 @@ const tableHeaders = [
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
   { align: 'left', id: 'growth-form-label', text: 'Growth Form' },
   { colSpan: 2, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
+  { align: 'left', id: 'validations', text: 'Validations' },
   { align: 'right', id: 'review', text: '' },
   { align: 'right', id: 'remove', text: '' },
-  { align: 'left', id: 'validations', text: 'Validations' },
 ]
 
 const sortByLatest = (a, b) => new Date(a.file.created_on) - new Date(b.file.created_on)
@@ -460,6 +460,21 @@ const ImageClassificationObservationTable = ({
                       <StyledTd textAlign="right">{annotation?.unconfirmedCount}</StyledTd>
                       {subIndex === 0 && (
                         <>
+                          {areValidationsShowing ? (
+                            <StyledTd>
+                              <ObservationValidationInfo
+                                hasObservationErrorValidation={hasObservationErrorValidation}
+                                hasObservationIgnoredValidation={hasObservationIgnoredValidation}
+                                hasObservationWarningValidation={hasObservationWarningValidation}
+                                ignoreObservationValidations={ignoreObservationValidations}
+                                isObservationValid={isObservationValid}
+                                observationId={obsId}
+                                observationValidationMessages={observationValidationMessages}
+                                observationValidationType={observationValidationType}
+                                resetObservationValidations={resetObservationValidations}
+                              />
+                            </StyledTd>
+                          ) : null}
                           <StyledTd rowSpan={numSubRows}>
                             <ButtonPrimary
                               type="button"
@@ -480,21 +495,6 @@ const ImageClassificationObservationTable = ({
                               <IconClose aria-label="close" />
                             </ButtonCaution>
                           </StyledTd>
-                          {areValidationsShowing ? (
-                            <StyledTd>
-                              <ObservationValidationInfo
-                                hasObservationErrorValidation={hasObservationErrorValidation}
-                                hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-                                hasObservationWarningValidation={hasObservationWarningValidation}
-                                ignoreObservationValidations={ignoreObservationValidations}
-                                isObservationValid={isObservationValid}
-                                observationId={obsId}
-                                observationValidationMessages={observationValidationMessages}
-                                observationValidationType={observationValidationType}
-                                resetObservationValidations={resetObservationValidations}
-                              />
-                            </StyledTd>
-                          ) : null}
                         </>
                       )}
                       {areValidationsShowing && subIndex >= 1 ? (
