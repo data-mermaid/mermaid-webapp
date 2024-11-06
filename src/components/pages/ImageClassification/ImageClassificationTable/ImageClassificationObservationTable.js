@@ -207,7 +207,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
 
       let confirmedCount = 0
       let unconfirmedCount = 0
-      let hasUnconfirmedPoint = false
       let benthic_attribute_label = null
       let benthic_attribute = null
       let growth_form_label = null
@@ -218,7 +217,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
           confirmedCount += 1
         } else {
           unconfirmedCount += 1
-          hasUnconfirmedPoint = true
         }
 
         if (firstAnnotation.benthic_attribute) {
@@ -234,7 +232,6 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
       return {
         confirmedCount,
         unconfirmedCount,
-        hasUnconfirmedPoint,
         benthicAttributeLabel: benthic_attribute_label,
         benthicAttribute: benthic_attribute,
         growthFormLabel: growth_form_label,
@@ -398,7 +395,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                 return distilledAnnotationData.map((annotation, subIndex) => (
                   <StyledTr
                     key={`${file.id}-${subIndex}`}
-                    $hasUnconfirmedPoint={annotation.hasUnconfirmedPoint}
+                    $hasUnconfirmedPoint={annotation.unconfirmedCount > 0}
                   >
                     <StyledTd>{rowIndex++}</StyledTd>
                     {subIndex === 0 && (
