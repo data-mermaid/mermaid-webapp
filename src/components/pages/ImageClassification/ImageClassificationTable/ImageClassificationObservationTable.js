@@ -21,6 +21,7 @@ import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
 import Thumbnail from './Thumbnail'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { RowRight } from '../../../generic/positioning'
 
 const EXCLUDE_PARAMS =
   'data,created_by,updated_by,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
@@ -452,24 +453,26 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
           </StickyObservationTable>
         </StyledOverflowWrapper>
       </InputWrapper>
-      <ObservationsSummaryStats>
-        <tbody>
-          {Object.keys(observationsSummaryStats)
-            .sort()
-            .map((obs) => {
-              const percentage = roundToOneDecimal(
-                (observationsSummaryStats[obs] / observationsSummaryStats.total) * 100,
-              )
+      <RowRight>
+        <ObservationsSummaryStats>
+          <tbody>
+            {Object.keys(observationsSummaryStats)
+              .sort()
+              .map((obs) => {
+                const percentage = roundToOneDecimal(
+                  (observationsSummaryStats[obs] / observationsSummaryStats.total) * 100,
+                )
 
-              return obs !== 'total' ? (
-                <Tr key={obs}>
-                  <Th>% {obs}</Th>
-                  <Th>{percentage}</Th>
-                </Tr>
-              ) : null
-            })}
-        </tbody>
-      </ObservationsSummaryStats>
+                return obs !== 'total' ? (
+                  <Tr key={obs}>
+                    <Th>% {obs}</Th>
+                    <Th>{percentage}</Th>
+                  </Tr>
+                ) : null
+              })}
+          </tbody>
+        </ObservationsSummaryStats>
+      </RowRight>
       {!!imageId && !!benthicAttributes && !!growthForms ? (
         <ImageAnnotationModal
           imageId={imageId}
