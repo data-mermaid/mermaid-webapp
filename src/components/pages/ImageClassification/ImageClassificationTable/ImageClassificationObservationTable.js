@@ -437,6 +437,13 @@ const ImageClassificationObservationTable = ({
                     <StyledTr
                       key={`${file.id}-${subIndex}`}
                       $hasUnconfirmedPoint={annotation.hasUnconfirmedPoint}
+                      $messageType={
+                        hasObservationErrorValidation
+                          ? 'error'
+                          : hasObservationWarningValidation
+                          ? 'warning'
+                          : null
+                      }
                     >
                       <StyledTd>{rowIndex++}</StyledTd>
                       {subIndex === 0 && (
