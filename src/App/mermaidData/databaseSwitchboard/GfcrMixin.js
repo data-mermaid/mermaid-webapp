@@ -50,6 +50,39 @@ const GfcrMixin = (Base) =>
       }
     }
 
+    exportData = async function exportData(projectId) {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      const payload = {
+        report_type: 'gfcr',
+        project_ids: [projectId],
+        background: false,
+      }
+
+      const config = await getAuthorizationHeaders(this._getAccessToken)
+
+      return this._isOnlineAuthenticatedAndReady
+        ? axios
+            .post(`${this._apiBaseUrl}/reports/`, payload, {
+              ...config,
+              responseType: 'arraybuffer',
+            })
+            .then((res) => {
+              const url = window.URL.createObjectURL(new Blob([res.data]))
+
+              // create link and click to download file
+              const link = document.createElement('a')
+              link.href = url
+              link.setAttribute('download', 'gfcr-report.zip')
+              document.body.appendChild(link)
+              link.click()
+              link.parentNode.removeChild(link)
+            })
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     deleteIndicatorSet = async function deleteIndicatorSet(projectId, indicatorSetId) {
       if (!projectId || !indicatorSetId) {
         throw new Error(this._operationMissingParameterError)
