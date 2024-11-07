@@ -14,6 +14,7 @@ import {
   TdWithHoverText,
   ImageWrapper,
   StyledTr,
+  LoadingTableBody,
 } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
@@ -327,45 +328,21 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
               <SubHeaderRow />
             </thead>
 
-            <tbody>
-              {distilledImages.map((image, imageIndex) => {
-                const { file, distilledAnnotationData, numSubRows } = image
+            {isFetching ? (
+              <LoadingTableBody>
+                <td colSpan={8}>Loading...</td>
+              </LoadingTableBody>
+            ) : (
+              <tbody>
+                {distilledImages.map((image, imageIndex) => {
+                  const { file, distilledAnnotationData, numSubRows } = image
 
-                if (numSubRows === 0) {
-                  // If no subrows exist (image not processed), display a single row with thumbnail, status
-                  return (
-                    <Tr key={file.id}>
-                      <StyledTd>{rowIndex++}</StyledTd>
-                      <TdWithHoverText
-                        data-tooltip={file.original_image_name}
-                        onClick={() => handleImageClick(file)}
-                        cursor={file.classification_status.status === 3 ? 'pointer' : 'default'}
-                      >
-                        <ImageWrapper>
-                          <Thumbnail imageUrl={file.thumbnail} />
-                        </ImageWrapper>
-                      </TdWithHoverText>
-                      <StyledTd
-                        colSpan={8}
-                        textAlign={file.classification_status.status === 3 ? 'left' : 'center'}
-                      >
-                        {statusLabels[file.classification_status.status]}
-                      </StyledTd>
-                    </Tr>
-                  )
-                }
-
-                // If there are subrows (processed image), render annotation data
-                return distilledAnnotationData.map((annotation, subIndex) => (
-                  <StyledTr
-                    key={`${file.id}-${subIndex}`}
-                    $hasUnconfirmedPoint={annotation.hasUnconfirmedPoint}
-                  >
-                    <StyledTd>{rowIndex++}</StyledTd>
-                    {subIndex === 0 && (
-                      <>
+                  if (numSubRows === 0) {
+                    // If no subrows exist (image not processed), display a single row with thumbnail, status
+                    return (
+                      <Tr key={file.id}>
+                        <StyledTd>{rowIndex++}</StyledTd>
                         <TdWithHoverText
-                          rowSpan={numSubRows}
                           data-tooltip={file.original_image_name}
                           onClick={() => handleImageClick(file)}
                           cursor={file.classification_status.status === 3 ? 'pointer' : 'default'}
@@ -374,46 +351,76 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                             <Thumbnail imageUrl={file.thumbnail} />
                           </ImageWrapper>
                         </TdWithHoverText>
-                      </>
-                    )}
-                    <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
-                    <StyledTd>{annotation?.benthicAttributeLabel}</StyledTd>
-                    <StyledTd>{annotation?.growthFormLabel || ''}</StyledTd>
-                    <StyledTd textAlign="right">{annotation?.confirmedCount}</StyledTd>
-                    {subIndex === 0 && (
-                      <>
-                        <StyledTd textAlign="right" rowSpan={numSubRows}>
-                          {file.num_unconfirmed}
+                        <StyledTd
+                          colSpan={8}
+                          textAlign={file.classification_status.status === 3 ? 'left' : 'center'}
+                        >
+                          {statusLabels[file.classification_status.status]}
                         </StyledTd>
-                        <StyledTd textAlign="right" rowSpan={numSubRows}>
-                          {file.num_unclassified}
-                        </StyledTd>
-                        <StyledTd rowSpan={numSubRows}>
-                          <ButtonPrimary
-                            type="button"
-                            onClick={() => setImageId(file.id)}
-                            disabled={!isImageProcessed(file.classification_status.status)}
+                      </Tr>
+                    )
+                  }
+
+                  // If there are subrows (processed image), render annotation data
+                  return distilledAnnotationData.map((annotation, subIndex) => (
+                    <StyledTr
+                      key={`${file.id}-${subIndex}`}
+                      $hasUnconfirmedPoint={annotation.hasUnconfirmedPoint}
+                    >
+                      <StyledTd>{rowIndex++}</StyledTd>
+                      {subIndex === 0 && (
+                        <>
+                          <TdWithHoverText
+                            rowSpan={numSubRows}
+                            data-tooltip={file.original_image_name}
+                            onClick={() => handleImageClick(file)}
+                            cursor={file.classification_status.status === 3 ? 'pointer' : 'default'}
                           >
-                            Review
-                          </ButtonPrimary>
-                        </StyledTd>
-                        <StyledTd rowSpan={numSubRows}>
-                          <ButtonCaution
-                            type="button"
-                            onClick={() => handleRemoveImage(file)}
-                            disabled={
-                              file.classification_status.status !== 3 || deletingImage === file.id
-                            }
-                          >
-                            <IconClose aria-label="close" />
-                          </ButtonCaution>
-                        </StyledTd>
-                      </>
-                    )}
-                  </StyledTr>
-                ))
-              })}
-            </tbody>
+                            <ImageWrapper>
+                              <Thumbnail imageUrl={file.thumbnail} />
+                            </ImageWrapper>
+                          </TdWithHoverText>
+                        </>
+                      )}
+                      <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
+                      <StyledTd>{annotation?.benthicAttributeLabel}</StyledTd>
+                      <StyledTd>{annotation?.growthFormLabel || ''}</StyledTd>
+                      <StyledTd textAlign="right">{annotation?.confirmedCount}</StyledTd>
+                      {subIndex === 0 && (
+                        <>
+                          <StyledTd textAlign="right" rowSpan={numSubRows}>
+                            {file.num_unconfirmed}
+                          </StyledTd>
+                          <StyledTd textAlign="right" rowSpan={numSubRows}>
+                            {file.num_unclassified}
+                          </StyledTd>
+                          <StyledTd rowSpan={numSubRows}>
+                            <ButtonPrimary
+                              type="button"
+                              onClick={() => setImageId(file.id)}
+                              disabled={!isImageProcessed(file.classification_status.status)}
+                            >
+                              Review
+                            </ButtonPrimary>
+                          </StyledTd>
+                          <StyledTd rowSpan={numSubRows}>
+                            <ButtonCaution
+                              type="button"
+                              onClick={() => handleRemoveImage(file)}
+                              disabled={
+                                file.classification_status.status !== 3 || deletingImage === file.id
+                              }
+                            >
+                              <IconClose aria-label="close" />
+                            </ButtonCaution>
+                          </StyledTd>
+                        </>
+                      )}
+                    </StyledTr>
+                  ))
+                })}
+              </tbody>
+            )}
           </StickyObservationTable>
         </StyledOverflowWrapper>
       </InputWrapper>

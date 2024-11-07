@@ -89,6 +89,14 @@ const TdWithHoverText = styled(StyledTd)`
   }
 `
 
+const LoadingTableBody = styled.tbody`
+  height: 100px;
+
+  td {
+    text-align: center;
+  }
+`
+
 export {
   StyledColgroup,
   IconContainer,
@@ -97,4 +105,5 @@ export {
   TdWithHoverText,
   ImageWrapper,
   StyledTr,
+  LoadingTableBody,
 }
