@@ -7,7 +7,7 @@ import {
   StyledOverflowWrapper,
   StickyObservationTable,
 } from '../../collectRecordFormPages/CollectingFormPage.Styles'
-import { Tr, Th, ObservationsSummaryStats } from '../../../generic/Table/table'
+import { Tr, Th, ObservationsSummaryStats, Td } from '../../../generic/Table/table'
 import PropTypes from 'prop-types'
 import {
   StyledTd,
@@ -466,7 +466,7 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                 return obs !== 'total' ? (
                   <Tr key={obs}>
                     <Th>% {obs}</Th>
-                    <Th>{percentage}</Th>
+                    <Td>{percentage}</Td>
                   </Tr>
                 ) : null
               })}
