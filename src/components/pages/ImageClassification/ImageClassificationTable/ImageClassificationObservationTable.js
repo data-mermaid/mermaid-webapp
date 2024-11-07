@@ -15,6 +15,7 @@ import {
   ImageWrapper,
   StyledTr,
   LoadingTableBody,
+  Spinner,
 } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
@@ -355,6 +356,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                           colSpan={8}
                           textAlign={file.classification_status.status === 3 ? 'left' : 'center'}
                         >
+                          {!isImageProcessed(file.classification_status.status) ? (
+                            <Spinner />
+                          ) : null}
                           {statusLabels[file.classification_status.status]}
                         </StyledTd>
                       </Tr>
