@@ -275,7 +275,7 @@ const FinanceSolutionModal = ({
             id="used-an-incubator-select"
             {...formik.getFieldProps('used_an_incubator')}
             options={[
-              { value: 'none', label: modalLanguage.none },
+              { value: 'none', label: modalLanguage.no },
               ...getOptions(choices.incubatortypes.data),
             ]}
             helperText={modalLanguage.getUsedAnIncubatorHelper()}
@@ -289,7 +289,6 @@ const FinanceSolutionModal = ({
             id="local-enterprise-select"
             {...formik.getFieldProps('local_enterprise')}
             options={[
-              { value: 'none', label: modalLanguage.none },
               { value: 'true', label: modalLanguage.yes },
               { value: 'false', label: modalLanguage.no },
             ]}
@@ -304,7 +303,6 @@ const FinanceSolutionModal = ({
             id="gender-smart-select"
             {...formik.getFieldProps('gender_smart')}
             options={[
-              { value: 'none', label: modalLanguage.none },
               { value: 'true', label: modalLanguage.yes },
               { value: 'false', label: modalLanguage.no },
             ]}
