@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { H2 } from '../../../generic/text'
@@ -7,7 +7,7 @@ import {
   StyledOverflowWrapper,
   StickyObservationTable,
 } from '../../collectRecordFormPages/CollectingFormPage.Styles'
-import { Tr, Th } from '../../../generic/Table/table'
+import { Tr, Th, ObservationsSummaryStats, Td } from '../../../generic/Table/table'
 import PropTypes from 'prop-types'
 import {
   StyledTd,
@@ -23,6 +23,8 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import getObservationValidationInfo from '../../collectRecordFormPages/CollectRecordFormPage/getObservationValidationInfo'
 import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { RowRight } from '../../../generic/positioning'
 
 const EXCLUDE_PARAMS =
   'data,created_by,updated_by,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
@@ -110,6 +112,36 @@ const ImageClassificationObservationTable = ({
 
   const isImageProcessed = (status) => status === 3 || status === 4
 
+  const observationsSummaryStats = useMemo(() => {
+    if (!distilledImages.length || !benthicAttributes) {
+      return {}
+    }
+
+    const allPoints = distilledImages.flatMap((image) => image.distilledAnnotationData)
+    const categoryGroups = allPoints.reduce(
+      (accumulator, point) => {
+        const topLevelId = benthicAttributes.find(
+          ({ id }) => id === point.benthicAttributeId,
+        )?.top_level_category
+
+        const topLevelName = benthicAttributes.find(({ id }) => id === topLevelId)?.name
+
+        if (accumulator[topLevelName]) {
+          accumulator[topLevelName] += point.confirmedCount + point.unconfirmedCount
+        } else {
+          accumulator[topLevelName] = point.confirmedCount + point.unconfirmedCount
+        }
+
+        accumulator.total += point.confirmedCount + point.unconfirmedCount
+
+        return accumulator
+      },
+      { total: 0 },
+    )
+
+    return categoryGroups
+  }, [distilledImages, benthicAttributes])
+
   const handleImageClick = (file) => {
     if (isImageProcessed(file.classification_status?.status)) {
       setImageId(file.id)
@@ -194,7 +226,6 @@ const ImageClassificationObservationTable = ({
 
       let confirmedCount = 0
       let unconfirmedCount = 0
-      let hasUnconfirmedPoint = false
       let benthic_attribute_label = null
       let growth_form_label = null
       let benthic_attribute_id = null
@@ -206,7 +237,6 @@ const ImageClassificationObservationTable = ({
         if (firstAnnotation.is_confirmed) {
           confirmedCount += 1
         } else {
-          hasUnconfirmedPoint = true
           unconfirmedCount += 1
         }
 
@@ -224,7 +254,6 @@ const ImageClassificationObservationTable = ({
       return {
         confirmedCount,
         unconfirmedCount,
-        hasUnconfirmedPoint,
         benthicAttributeLabel: benthic_attribute_label,
         benthicAttributeId: benthic_attribute_id,
         growthFormLabel: growth_form_label,
@@ -438,7 +467,7 @@ const ImageClassificationObservationTable = ({
                       return (
                         <StyledTr
                           key={`${file.id}-${subIndex}`}
-                          $hasUnconfirmedPoint={annotation.hasUnconfirmedPoint}
+                          $hasUnconfirmedPoint={annotation.unconfirmedCount > 0}
                           $messageType={
                             hasObservationErrorValidation
                               ? 'error'
@@ -552,6 +581,26 @@ const ImageClassificationObservationTable = ({
           </StickyObservationTable>
         </StyledOverflowWrapper>
       </InputWrapper>
+      <RowRight>
+        <ObservationsSummaryStats>
+          <tbody>
+            {Object.keys(observationsSummaryStats)
+              .sort()
+              .map((obs) => {
+                const percentage = roundToOneDecimal(
+                  (observationsSummaryStats[obs] / observationsSummaryStats.total) * 100,
+                )
+
+                return obs !== 'total' ? (
+                  <Tr key={obs}>
+                    <Th>% {obs}</Th>
+                    <Td>{percentage}</Td>
+                  </Tr>
+                ) : null
+              })}
+          </tbody>
+        </ObservationsSummaryStats>
+      </RowRight>
       {!!imageId && !!benthicAttributes && !!growthForms ? (
         <ImageAnnotationModal
           imageId={imageId}
