@@ -1271,6 +1271,7 @@ const getValidationMessage = (validation, projectId = '') => {
     unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
     value_not_set: () => 'Value is not set',
     default: () => code || name,
+    unconfirmed_annotation: () => 'Wrong number of confirmed annotations',
   }
 
   return (validationMessages[code] || validationMessages.default)()

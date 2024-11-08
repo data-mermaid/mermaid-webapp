@@ -134,7 +134,9 @@ export const UnderTableRowButtonArea = styled('div')`
   }
 `
 
-export const CellValidation = styled(Td)``
+export const CellValidation = styled(Td)`
+  border: none;
+`
 
 export const CellValidationButton = styled(ButtonSecondary)`
   font-size: smaller;
