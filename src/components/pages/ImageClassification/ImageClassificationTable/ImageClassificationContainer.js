@@ -5,7 +5,7 @@ import { ButtonPrimary } from '../../../generic/buttons'
 import { IconUpload } from '../../../icons'
 import { ButtonContainer, IconContainer } from './ImageClassificationObservationTable.styles'
 
-const ImageClassificationContainer = () => {
+const ImageClassificationContainer = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState([])
 
@@ -19,6 +19,7 @@ const ImageClassificationContainer = () => {
       <ImageClassificationObservationTable
         uploadedFiles={uploadedFiles}
         setUploadedFiles={setUploadedFiles}
+        {...props}
       />
       <ButtonContainer>
         <ButtonPrimary type="button" onClick={() => setIsModalOpen(true)}>

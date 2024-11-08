@@ -17,6 +17,7 @@ const getObservationValidations = ({ observationId, collectRecord, observationsP
 
   const justThisObservationsValidations = allObservationsValidations.flat().filter((validation) => {
     // api is inconsistent between id and observation_id
+
     return (
       validation.context?.observation_id === observationId ||
       validation.context?.id === observationId
