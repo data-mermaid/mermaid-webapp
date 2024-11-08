@@ -331,7 +331,9 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
 
             {isFetching ? (
               <LoadingTableBody>
-                <td colSpan={8}>Loading...</td>
+                <td colSpan={8}>
+                  <Spinner /> Loading...
+                </td>
               </LoadingTableBody>
             ) : (
               <tbody>
@@ -357,9 +359,13 @@ const ImageClassificationObservationTable = ({ uploadedFiles, setUploadedFiles }
                           textAlign={file.classification_status.status === 3 ? 'left' : 'center'}
                         >
                           {!isImageProcessed(file.classification_status.status) ? (
-                            <Spinner />
-                          ) : null}
-                          {statusLabels[file.classification_status.status]}
+                            <>
+                              <Spinner />
+                              {statusLabels[file.classification_status.status]}...
+                            </>
+                          ) : (
+                            statusLabels[file.classification_status.status]
+                          )}
                         </StyledTd>
                       </Tr>
                     )
