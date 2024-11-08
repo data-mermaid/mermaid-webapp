@@ -1,8 +1,12 @@
 import styled from 'styled-components'
+import colorHelper from 'color'
 import theme from '../../../../theme'
 import { Table, Tr, Td } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
-import { IconCheck } from '../../../icons'
+
+const confirmed = colorHelper(COLORS.confirmed)
+const unconfirmed = colorHelper(COLORS.unconfirmed)
+const white = colorHelper(theme.color.white)
 
 export const Footer = styled.div`
   display: flex;
@@ -57,25 +61,22 @@ export const ImageAnnotationPopupContainer = styled.div`
 
 export const TrWithBorderStyling = styled(Tr)`
   border: 1px solid transparent;
-  border-top: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.highlighted}`};
-  border-bottom: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.highlighted}`};
+  border-top: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
+  border-bottom: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
 
   &:hover {
-    border-top: ${({ $isAnyRowSelected }) =>
-      !$isAnyRowSelected && `2px solid ${COLORS.highlighted}`};
-    border-bottom: ${({ $isAnyRowSelected }) =>
-      !$isAnyRowSelected && `2px solid ${COLORS.highlighted}`};
-  }
-
-  td {
-    border: none;
+    outline: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.hover}`};
   }
 `
 
-export const ConfirmedIcon = styled(IconCheck)`
-  color: ${COLORS.confirmed};
-  height: 3rem;
-  width: 3rem;
+export const TdConfirmed = styled(Td)`
+  background-color: ${({ $hasConfirmedPoint }) =>
+    $hasConfirmedPoint ? confirmed.mix(white, 0.7) : undefined};
+`
+
+export const TdUnconfirmed = styled(Td)`
+  background-color: ${({ $hasUnconfirmedPoint }) =>
+    $hasUnconfirmedPoint ? unconfirmed.mix(white, 0.7) : undefined};
 `
 
 export const EditPointPopupTable = styled(Table)`

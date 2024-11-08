@@ -113,7 +113,7 @@ const CollectRecordFormPage = ({
   observationsTable2Reducer = [],
   ObservationTable1,
   ObservationTable2 = undefined,
-  isImageClassification,
+  isImageClassification = null,
   sampleUnitFormatSaveFunction,
   sampleUnitName,
   SampleUnitTransectInputs,
