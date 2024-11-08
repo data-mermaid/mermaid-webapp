@@ -103,7 +103,6 @@ const Spinner = styled.span`
   aspect-ratio: 1 / 1;
   border: 2px dashed;
   border-radius: 50%;
-  display: inline-block;
   position: relative;
   bottom: -2px;
   margin-right: 0.5rem;
