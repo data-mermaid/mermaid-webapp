@@ -39,7 +39,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Finance solution business name',
+        Header: 'Business / Finance Solution',
         accessor: 'finance_solution',
         sortType: reactTableNaturalSortReactNodes,
       },
@@ -55,8 +55,8 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
         align: 'center',
       },
       {
-        Header: 'Annual Revenue',
-        accessor: 'annual_revenue',
+        Header: 'Revenue Amount',
+        accessor: 'revenue_amount',
         sortType: reactTableNaturalSort,
         align: 'right',
       },
@@ -81,7 +81,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
     }
 
     return revenues.map((revenue) => {
-      const { id, finance_solution, revenue_type, sustainable_revenue_stream, annual_revenue } =
+      const { id, finance_solution, revenue_type, sustainable_revenue_stream, revenue_amount } =
         revenue
 
       const revenueTypeName = choices.revenuetypes.data?.find(
@@ -96,7 +96,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
         ),
         revenue_type: revenueTypeName,
         sustainable_revenue_stream: <IconCheckLabel isCheck={!!sustainable_revenue_stream} />,
-        annual_revenue: `$${annual_revenue}`,
+        revenue_amount: `$${revenue_amount}`,
       }
     })
   }, [choices, handleEditRevenue, indicatorSet.finance_solutions, revenues])
@@ -124,7 +124,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
         'values.finance_solution.props.children',
         'values.revenue_type',
         'values.sustainable_revenue_stream',
-        'values.annual_revenue',
+        'values.revenue_amount',
       ]
 
       const queryTerms = splitSearchQueryStrings(query)
