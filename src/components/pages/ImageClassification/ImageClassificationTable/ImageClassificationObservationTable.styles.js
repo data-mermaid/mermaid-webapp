@@ -89,6 +89,35 @@ const TdWithHoverText = styled(StyledTd)`
   }
 `
 
+const LoadingTableBody = styled.tbody`
+  height: 100px;
+
+  td {
+    text-align: center;
+  }
+`
+
+const Spinner = styled.span`
+  height: 16px;
+  display: inline-block;
+  aspect-ratio: 1 / 1;
+  border: 2px dashed;
+  border-radius: 50%;
+  position: relative;
+  bottom: -2px;
+  margin-right: 0.5rem;
+  animation: rotation 2s linear infinite;
+
+  @keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`
+
 export {
   StyledColgroup,
   IconContainer,
@@ -97,4 +126,6 @@ export {
   TdWithHoverText,
   ImageWrapper,
   StyledTr,
+  LoadingTableBody,
+  Spinner,
 }
