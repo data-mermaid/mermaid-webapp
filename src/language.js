@@ -720,8 +720,9 @@ const pages = {
       <>
         Recommended naming conventions:
         <br />
-        For target reports, use "Phase 1 Target", "Mid-term Target", or "Final Target". For
-        bi-annual progress reports, use "Mid-year Report" or "End-year Report". <GfcrPdfLink />
+        For target reports, use &quot;Phase 1 Target&quot;, &quot;Mid-term Target&quot;, or
+        &quot;Final Target&quot;. For bi-annual progress reports, use &quot;Mid-year Report&quot; or
+        &quot;End-year Report&quot;. <GfcrPdfLink />
       </>
     ),
     indicatorSetReportingDate: 'Reporting date',
@@ -754,7 +755,7 @@ const pages = {
         (GBF) Target 3, within GFCR Programme area, e.g., calculated from the <AcaLink /> or from
         another database. This is different from the total area in F 2.1b. Report as cumulative
         total since the start of the Programme. If GFCR Programme activities are not working on MPAs
-        or OECMs, enter '0'. <GfcrPdfLink />
+        or OECMs, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF2_1b: () => (
@@ -768,7 +769,7 @@ const pages = {
         seagrass or other associated ecosystems, aligned with GBF Target 3, within GFCR Programme
         area, e.g., calculated from the <AcaLink /> or from another database. Report as cumulative
         total since the start of the Programme. If GFCR Programme activities are not working on MPAs
-        or OECMs, enter '0'. <GfcrPdfLink />
+        or OECMs, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF2_2a: () => (
@@ -782,7 +783,7 @@ const pages = {
         arrangements (not MPAs or OECMs), where local communities have significant involvement in
         management decisions, within GFCR Programme area. This is different to the total area in F
         2.2b. Report as cumulative total since the start of the Programme. If GFCR Programme
-        activities are not working on locally managed areas, enter '0'. <GfcrPdfLink />
+        activities are not working on locally managed areas, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF2_2b: () => (
@@ -795,7 +796,7 @@ const pages = {
         Total area (km2) of other locally managed areas (not MPAs or OECMs), including non-coral
         reef areas, e.g., mangroves, seagrass or other associated ecosystems, within GFCR Programme
         area. Report as cumulative total since the start of the Programme. If GFCR Programme
-        activities are not working on locally managed areas, enter '0'. <GfcrPdfLink />
+        activities are not working on locally managed areas, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF2_3a: () => (
@@ -809,7 +810,8 @@ const pages = {
         which have specific fisheries management plans, e.g., gear restrictions, catch quotas,
         within GFCR Programme area. This is different to the total area in F 2.3b. Report as
         cumulative total since the start of the Programme. If Programme activities are not working
-        on fisheries management within a fisheries managed area, enter '0'. <GfcrPdfLink />
+        on fisheries management within a fisheries managed area, enter &apos;0&apos;.{' '}
+        <GfcrPdfLink />
       </>
     ),
     getF2_3b: () => (
@@ -823,7 +825,7 @@ const pages = {
         non-coral reef areas, e.g., mangroves, seagrass or other associated ecosystems, within GFCR
         Programme area. Report as cumulative total since the start of the Programme. If Programme
         activities are not working on fisheries management within a fisheries managed area, enter
-        '0'.
+        &apos;0&apos;.
         <GfcrPdfLink />
       </>
     ),
@@ -833,8 +835,8 @@ const pages = {
       <>
         Total area (km2) with active pollution mitigation measures in place to reduce pollution
         impacts within GFCR Programme area. Report as cumulative total since the start of the
-        Programme. If Programme activities are not working on pollution mitigation, enter '0'.{' '}
-        <GfcrPdfLink />
+        Programme. If Programme activities are not working on pollution mitigation, enter
+        &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f2_5: 'Area of non-coral reef ecosystems, e.g. mangroves, seagrass or other associated ecosystems',
@@ -852,7 +854,7 @@ const pages = {
         Total area (km2) of effective coral reef restoration within GFCR Programme area. This is a
         subset of F1.1 and used to measure only the area of coral restoration activities in the
         Programme. Report as cumulative total since the start of the Programme. If there is no
-        restoration planned within Programme, enter '0'. <GfcrPdfLink />
+        restoration planned within Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f3_2: 'Number of in situ coral reef restoration projects',
@@ -860,7 +862,7 @@ const pages = {
       <>
         Total number of coral reef restoration projects that are carried out directly in a coral
         reef environment (in situ). Report as cumulative total since the start of the Programme. If
-        restoration is not supported by GFCR Programme, enter '0'. <GfcrPdfLink />
+        restoration is not supported by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f3_3: 'Number of coral reef restoration plans, technologies, strategies or guidelines developed',
@@ -869,7 +871,7 @@ const pages = {
         Total number of frameworks, protocols or technologies associated to coral restoration
         created in the GFCR Programme that can be applied locally or used by third-parties. Report
         as cumulative total since the start of the Programme. If restoration is not supported by
-        GFCR Programme, enter '0'. <GfcrPdfLink />
+        GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f3_4: 'Number of coral reef restoration trainings',
@@ -877,7 +879,8 @@ const pages = {
       <>
         Total number of training sessions conducted to educate and empower individuals and
         communities in coral restoration techniques. Report as cumulative total since the start of
-        the Programme. If restoration is not supported by GFCR Programme, enter '0'. <GfcrPdfLink />
+        the Programme. If restoration is not supported by GFCR Programme, enter &apos;0&apos;.{' '}
+        <GfcrPdfLink />
       </>
     ),
     f3_5: 'Number of people engaged in coral reef restoration',
@@ -885,14 +888,16 @@ const pages = {
       <>
         Total number of men actively involved on a hiring, volunteering or educational basis in
         coral reef restoration activities. Report as cumulative total since the start of the
-        Programme. If restoration is not supported by GFCR Programme, enter '0'. <GfcrPdfLink />
+        Programme. If restoration is not supported by GFCR Programme, enter &apos;0&apos;.{' '}
+        <GfcrPdfLink />
       </>
     ),
     getF3_5_women_helper: () => (
       <>
         Total number of women actively involved on a hiring, volunteering or educational basis in
         coral reef restoration activities. Report as cumulative total since the start of the
-        Programme. If restoration is not supported by GFCR Programme, enter '0'. <GfcrPdfLink />
+        Programme. If restoration is not supported by GFCR Programme, enter &apos;0&apos;.{' '}
+        <GfcrPdfLink />
       </>
     ),
     getF3_5_youth_helper: () => (
@@ -900,14 +905,15 @@ const pages = {
         Total number of young people (aged between 15-24, as defined by the United Nations) actively
         involved on a hiring, volunteering or educational basis in coral reef restoration
         activities. Report as cumulative total since the start of the Programme. If restoration is
-        not supported by GFCR Programme, enter '0'. <GfcrPdfLink />
+        not supported by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF3_5_indigenous_helper: () => (
       <>
         Total number of Indigenous people actively involved on a hiring, volunteering or educational
         basis in coral reef restoration activities. Report as cumulative total since the start of
-        the Programme. If restoration is not supported by GFCR Programme, enter '0'. <GfcrPdfLink />
+        the Programme. If restoration is not supported by GFCR Programme, enter &apos;0&apos;.{' '}
+        <GfcrPdfLink />
       </>
     ),
     f3_6: 'Number of response plans to support coral reef restoration after severe shocks',
@@ -916,7 +922,7 @@ const pages = {
         Total number of plans, including financial mechanisms, e.g., insurance, to aid in coral reef
         restoration efforts following severe environmental shocks, e.g., storms, bleaching. Report
         as cumulative total since the start of the Programme. If there are no response plans or
-        restoration not supported by Programme, enter '0'. <GfcrPdfLink />
+        restoration not supported by Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f4Heading: 'Change in coral reef health',
@@ -969,7 +975,7 @@ const pages = {
         Programme/blended finance investments. A community can be defined as groups of people who
         share common characteristics, interests, or geographical locations and may be the target
         beneficiaries/stakeholder of Programme. Report as cumulative total since the start of the
-        Programme. If communities are not directly supported by GFCR Programme, enter '0'.{' '}
+        Programme. If communities are not directly supported by GFCR Programme, enter &apos;0&apos;.{' '}
         <GfcrPdfLink />
       </>
     ),
@@ -986,7 +992,7 @@ const pages = {
         operating within a specific geographical area, often with a focus on addressing local needs
         and advancing the well-being of the immediate community. Report as cumulative total since
         the start of the Programme. If local organizations are not directly supported by GFCR
-        Programme, enter '0'. <GfcrPdfLink />
+        Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f5_3: 'Number of local scientific/research partners involved in strengthening capacity for participation and co-development',
@@ -996,8 +1002,8 @@ const pages = {
         regional science organizations or other research hubs) supported with opportunities to
         participate in and co-develop GFCR Programme and support capacity building with local GFCR
         partners. Report cumulative total since the start of the Programme. If local
-        scientific/research partnerships are not directly supported by GFCR Programme, enter '0'.{' '}
-        <GfcrPdfLink />
+        scientific/research partnerships are not directly supported by GFCR Programme, enter
+        &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f5_4: 'Number of local practitioners trained / supported in coral reef conservation and management',
@@ -1006,7 +1012,7 @@ const pages = {
         Total number of local male practitioners (e.g., community rangers, coastal guardians, MPA
         managers, etc) trained or supported in coral reef conservation and management by GFCR
         Programme. Report cumulative total since the start of the Programme. If men are not trained
-        or directly supported by GFCR Programme, enter '0'. <GfcrPdfLink />
+        or directly supported by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF5_4_women_helper: () => (
@@ -1014,7 +1020,7 @@ const pages = {
         Total number of local female practitioners (e.g., community rangers, coastal guardians, MPA
         managers, etc) trained or supported in coral reef conservation and management by GFCR
         Programme. Report cumulative total since the start of the Programme. If women are not
-        trained or directly supported by GFCR Programme, enter '0'. <GfcrPdfLink />
+        trained or directly supported by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF5_4_youth_helper: () => (
@@ -1023,7 +1029,7 @@ const pages = {
         practitioners (e.g., community rangers, coastal guardians, MPA managers, etc) trained or
         supported in coral reef conservation and management by GFCR Programme. Report cumulative
         total since the start of the Programme. If young people are not trained or directly
-        supported by GFCR Programme, enter '0'. <GfcrPdfLink />
+        supported by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF5_4_indigenous_helper: () => (
@@ -1031,7 +1037,8 @@ const pages = {
         Total number of local Indigenous practitioners (e.g., community rangers, coastal guardians,
         MPA managers, etc) trained or supported in coral reef conservation and management by GFCR
         Programme. Report cumulative total since the start of the Programme. If Indigenous people
-        are not trained or directly supported by GFCR Programme, enter '0'. <GfcrPdfLink />
+        are not trained or directly supported by GFCR Programme, enter &apos;0&apos;.{' '}
+        <GfcrPdfLink />
       </>
     ),
     f5_5: 'Number of agreements with local authorities or fishing cooperatives to manage marine resources',
@@ -1042,7 +1049,7 @@ const pages = {
         OECMs. Agreements are defined as formal documents, serving as a framework for collaboration
         (e.g., a memorandum of understanding, MOU, or a management plan). Report cumulative total
         since the start of the Programme. If agreements are not supported by GFCR Programme, enter
-        '0'. <GfcrPdfLink />
+        &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f5_6: 'Number of national policies linked to GFCR engagement',
@@ -1051,7 +1058,8 @@ const pages = {
         Total number of national policies directly associated with GFCR engagement, e.g., has the
         GFCR Programme organized a policy workshop directly related to national policy or provided
         other investments associated with a policy outcome. If Programmes are not planning national
-        policy targets, or policy is underway but not yet finalized, enter '0'. <GfcrPdfLink />
+        policy targets, or policy is underway but not yet finalized, enter &apos;0&apos;.{' '}
+        <GfcrPdfLink />
       </>
     ),
     f6Heading: 'Number of people supported through livelihoods, direct jobs, income, and nutrition',
@@ -1061,7 +1069,7 @@ const pages = {
         Total number of local jobs created for men by GFCR businesses or finance solutions. Jobs
         should be considered for each business activity supported by GFCR Programme. Report as
         cumulative total since the start of the Programme. If local jobs are not directly created by
-        GFCR Programme, enter '0'. <GfcrPdfLink />
+        GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF6_1_women_helper: () => (
@@ -1069,7 +1077,7 @@ const pages = {
         Total number of local jobs created for women by GFCR businesses or finance solutions. Jobs
         should be considered for each business activity supported by GFCR Programme. Report as
         cumulative total since the start of the Programme. If local jobs are not directly created by
-        GFCR Programme, enter '0'. <GfcrPdfLink />
+        GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF6_1_youth_helper: () => (
@@ -1077,8 +1085,8 @@ const pages = {
         Total number of local jobs created for young people (aged between 15-24, as defined by
         United Nations) by GFCR businesses or finance solutions. Jobs should be considered for each
         business activity supported by GFCR Programme. Report as cumulative total since the start of
-        the Programme. If local jobs are not directly created by GFCR Programme, enter '0'.{' '}
-        <GfcrPdfLink />
+        the Programme. If local jobs are not directly created by GFCR Programme, enter
+        &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF6_1_indigenous_helper: () => (
@@ -1086,7 +1094,7 @@ const pages = {
         Total number of local jobs created for Indigenous people by GFCR businesses or finance
         solutions. Jobs should be considered for each business activity supported by GFCR Programme.
         Report as cumulative total since the start of the Programme. If local jobs are not directly
-        created by GFCR Programme, enter '0'. <GfcrPdfLink />
+        created by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f6_2: 'Number of people with increased income and/or nutrition',
@@ -1095,7 +1103,8 @@ const pages = {
         Total number of men with increased income and/or nutrition due to GFCR Programme, e.g., in
         fisheries related business opportunities that seek to improve nutrition access by local
         opportunities. Report as cumulative total since the start of the Programme. If there is no
-        direct increased income and/or nutrition by GFCR Programme, enter '0'. <GfcrPdfLink />
+        direct increased income and/or nutrition by GFCR Programme, enter &apos;0&apos;.{' '}
+        <GfcrPdfLink />
       </>
     ),
     getF6_2_women_helper: () => (
@@ -1103,7 +1112,8 @@ const pages = {
         Total number of women with increased income and/or nutrition due to GFCR Programme, e.g., in
         fisheries related business opportunities that seek to improve nutrition access by local
         opportunities. Report as cumulative total since the start of the Programme. If there is no
-        direct increased income and/or nutrition by GFCR Programme, enter '0'. <GfcrPdfLink />
+        direct increased income and/or nutrition by GFCR Programme, enter &apos;0&apos;.{' '}
+        <GfcrPdfLink />
       </>
     ),
     getF6_2_youth_helper: () => (
@@ -1112,7 +1122,7 @@ const pages = {
         increased income and/or nutrition due to GFCR Programme, e.g., in fisheries related business
         opportunities that seek to improve nutrition access by local opportunities. Report as
         cumulative total since the start of the Programme. If there is no direct increased income
-        and/or nutrition by GFCR Programme, enter '0'. <GfcrPdfLink />
+        and/or nutrition by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF6_2_indigenous_helper: () => (
@@ -1120,8 +1130,8 @@ const pages = {
         Total number of Indigenous people with increased income and/or nutrition due to GFCR
         Programme, e.g., in fisheries related business opportunities that seek to improve nutrition
         access by local opportunities. Report as cumulative total since the start of the Programme.
-        If there is no direct increased income and/or nutrition by GFCR Programme, enter '0'.{' '}
-        <GfcrPdfLink />
+        If there is no direct increased income and/or nutrition by GFCR Programme, enter
+        &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f7Heading:
@@ -1137,7 +1147,7 @@ const pages = {
         support from GFCR Programme, e.g., employment, loans, improved incomes or livelihoods, or
         other targeted benefits that improves their livelihoods and thus their ability to adapt to
         climate change. Report as cumulative total since the start of the Programme. If there are no
-        direct beneficiaries from GFCR Programme, enter '0'. <GfcrPdfLink />
+        direct beneficiaries from GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF7_1_women_helper: () => (
@@ -1146,7 +1156,7 @@ const pages = {
         support from GFCR Programme, e.g., employment, loans, improved incomes or livelihoods, or
         other targeted benefits that improves their livelihoods and thus their ability to adapt to
         climate change. Report as cumulative total since the start of the Programme. If there are no
-        direct beneficiaries from GFCR Programme, enter '0'. <GfcrPdfLink />
+        direct beneficiaries from GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF7_1_youth_helper: () => (
@@ -1156,7 +1166,7 @@ const pages = {
         e.g., employment, loans, improved incomes or livelihoods, or other targeted benefits that
         improves their livelihoods and thus their ability to adapt to climate change. Report as
         cumulative total since the start of the Programme. If there are no direct beneficiaries from
-        GFCR Programme, enter '0'. <GfcrPdfLink />
+        GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF7_1_indigenous_helper: () => (
@@ -1165,7 +1175,7 @@ const pages = {
         receiving direct support from GFCR Programme, e.g., employment, loans, improved incomes or
         livelihoods, or other targeted benefits that improves their livelihoods and thus their
         ability to adapt to climate change. Report as cumulative total since the start of the
-        Programme. If there are no direct beneficiaries from GFCR Programme, enter '0'.{' '}
+        Programme. If there are no direct beneficiaries from GFCR Programme, enter &apos;0&apos;.{' '}
         <GfcrPdfLink />
       </>
     ),
@@ -1180,7 +1190,7 @@ const pages = {
         (e.g. within 100 km) and may experience positive effects or benefits as a result of a
         project or program, though they may not be the primary target audience. Report as cumulative
         total since the start of the Programme. If there are no indirect beneficiaries from GFCR
-        Programme, enter '0'. <GfcrPdfLink />
+        Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF7_2_women_helper: () => (
@@ -1189,7 +1199,7 @@ const pages = {
         (e.g. within 100 km) and may experience positive effects or benefits as a result of a
         project or program, though they may not be the primary target audience. Report as cumulative
         total since the start of the Programme. If there are no indirect beneficiaries from GFCR
-        Programme, enter '0'. <GfcrPdfLink />
+        Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF7_2_youth_helper: () => (
@@ -1198,7 +1208,7 @@ const pages = {
         Nations) that may live within the area of GFCR Programme (e.g. within 100 km) and may
         experience positive effects or benefits as a result of a project or program, though they may
         not be the primary target audience. Report as cumulative total since the start of the
-        Programme. If there are no indirect beneficiaries from GFCR Programme, enter '0'.{' '}
+        Programme. If there are no indirect beneficiaries from GFCR Programme, enter &apos;0&apos;.{' '}
         <GfcrPdfLink />
       </>
     ),
@@ -1208,7 +1218,7 @@ const pages = {
         of GFCR Programme (e.g. within 100 km) and may experience positive effects or benefits as a
         result of a project or program, though they may not be the primary target audience. Report
         as cumulative total since the start of the Programme. If there are no indirect beneficiaries
-        from GFCR Programme, enter '0'. <GfcrPdfLink />
+        from GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f7_3: 'Number of financial mechanisms/reforms to help coastal communities respond and recover from external shocks',
@@ -1219,7 +1229,7 @@ const pages = {
         e.g., coral reef insurance programs, coordinated loan programmes, village savings clubs
         started by the Programme, ecological restoration crisis plans. Report as cumulative total
         since the start of the Programme. If no mechanisms are intended to be supported by the GFCR
-        Programme or are not yet in place, enter '0'. <GfcrPdfLink />
+        Programme or are not yet in place, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     f7_4: 'Number of governance reforms/policies to support response and recovery to external shocks',
@@ -1230,7 +1240,7 @@ const pages = {
         technical input into policy development, crisis management plans, reforms for temporary
         alternative employment. Report as cumulative total since the start of the Programme. If no
         policies are intended to be supported by the GFCR Programme or are not yet in place, enter
-        '0'. <GfcrPdfLink />
+        &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
   },
