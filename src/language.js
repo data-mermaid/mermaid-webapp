@@ -728,8 +728,8 @@ const pages = {
     indicatorSetReportingDate: 'Reporting date',
     getIndicatorSetReportingDateHelperText: () => (
       <>
-        End date for the reporting period of the GFCR Programme, e.g., a final year report may have
-        December as the reporting date. <GfcrPdfLink />
+        End date for the reporting period of the GFCR Programme, e.g., a end-year report may have
+        December 31 as the reporting date. <GfcrPdfLink />
       </>
     ),
     f1Heading: 'Coral reef extent of GFCR project',
