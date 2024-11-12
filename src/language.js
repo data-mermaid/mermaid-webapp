@@ -878,8 +878,8 @@ const pages = {
     getF3_4_helper: () => (
       <>
         Total number of training sessions conducted to educate and empower individuals and
-        communities in coral reef restoration techniques. Report as cumulative total since the start of
-        the Programme. If restoration is not supported by GFCR Programme, enter &apos;0&apos;.{' '}
+        communities in coral reef restoration techniques. Report as cumulative total since the start
+        of the Programme. If restoration is not supported by GFCR Programme, enter &apos;0&apos;.{' '}
         <GfcrPdfLink />
       </>
     ),
@@ -1188,26 +1188,26 @@ const pages = {
       <>
         Indirect male beneficiaries refer to men that may live within the area of GFCR Programme
         (e.g. within 100 km) and may experience positive effects or benefits as a result of a
-        project or programme, though they may not be the primary target audience. Report as cumulative
-        total since the start of the Programme. If there are no indirect beneficiaries from GFCR
-        Programme, enter &apos;0&apos;. <GfcrPdfLink />
+        project or programme, though they may not be the primary target audience. Report as
+        cumulative total since the start of the Programme. If there are no indirect beneficiaries
+        from GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF7_2_women_helper: () => (
       <>
         Indirect female beneficiaries refer to women that may live within the area of GFCR Programme
         (e.g. within 100 km) and may experience positive effects or benefits as a result of a
-        project or programme, though they may not be the primary target audience. Report as cumulative
-        total since the start of the Programme. If there are no indirect beneficiaries from GFCR
-        Programme, enter &apos;0&apos;. <GfcrPdfLink />
+        project or programme, though they may not be the primary target audience. Report as
+        cumulative total since the start of the Programme. If there are no indirect beneficiaries
+        from GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
     getF7_2_youth_helper: () => (
       <>
         Indirect young beneficiaries refer to young people (aged between 15-24, as defined by United
         Nations) that may live within the area of GFCR Programme (e.g. within 100 km) and may
-        experience positive effects or benefits as a result of a project or programme, though they may
-        not be the primary target audience. Report as cumulative total since the start of the
+        experience positive effects or benefits as a result of a project or programme, though they
+        may not be the primary target audience. Report as cumulative total since the start of the
         Programme. If there are no indirect beneficiaries from GFCR Programme, enter &apos;0&apos;.{' '}
         <GfcrPdfLink />
       </>
