@@ -281,7 +281,7 @@ const RevenueModal = ({
         <StyledModalInputRow>
           <InputNoRowWithLabelAndValidation
             label={modalLanguage.annualRevenue}
-            id="revenue-ammount-input"
+            id="revenue-amount-input"
             type="number"
             unit="USD $"
             alignUnitsLeft={true}
