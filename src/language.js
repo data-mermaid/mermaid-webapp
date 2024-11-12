@@ -732,7 +732,7 @@ const pages = {
         December 31 as the reporting date. <GfcrPdfLink />
       </>
     ),
-    f1Heading: 'Coral reef extent of GFCR project',
+    f1Heading: 'Coral reef extent of GFCR Programme',
     f1_1: 'Total area of coral reefs in GFCR Programme',
     getF1_1_helper: () => (
       <>
@@ -852,7 +852,7 @@ const pages = {
     getF3_1_helper: () => (
       <>
         Total area (km2) of effective coral reef restoration within GFCR Programme area. This is a
-        subset of F1.1 and used to measure only the area of coral restoration activities in the
+        subset of F1.1 and used to measure only the area of coral reef restoration activities in the
         Programme. Report as cumulative total since the start of the Programme. If there is no
         restoration planned within Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
@@ -868,7 +868,7 @@ const pages = {
     f3_3: 'Number of coral reef restoration plans, technologies, strategies or guidelines developed',
     getF3_3_helper: () => (
       <>
-        Total number of frameworks, protocols or technologies associated to coral restoration
+        Total number of frameworks, protocols or technologies associated to coral reef restoration
         created in the GFCR Programme that can be applied locally or used by third-parties. Report
         as cumulative total since the start of the Programme. If restoration is not supported by
         GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
@@ -878,7 +878,7 @@ const pages = {
     getF3_4_helper: () => (
       <>
         Total number of training sessions conducted to educate and empower individuals and
-        communities in coral restoration techniques. Report as cumulative total since the start of
+        communities in coral reef restoration techniques. Report as cumulative total since the start of
         the Programme. If restoration is not supported by GFCR Programme, enter &apos;0&apos;.{' '}
         <GfcrPdfLink />
       </>
@@ -1188,7 +1188,7 @@ const pages = {
       <>
         Indirect male beneficiaries refer to men that may live within the area of GFCR Programme
         (e.g. within 100 km) and may experience positive effects or benefits as a result of a
-        project or program, though they may not be the primary target audience. Report as cumulative
+        project or programme, though they may not be the primary target audience. Report as cumulative
         total since the start of the Programme. If there are no indirect beneficiaries from GFCR
         Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
@@ -1197,7 +1197,7 @@ const pages = {
       <>
         Indirect female beneficiaries refer to women that may live within the area of GFCR Programme
         (e.g. within 100 km) and may experience positive effects or benefits as a result of a
-        project or program, though they may not be the primary target audience. Report as cumulative
+        project or programme, though they may not be the primary target audience. Report as cumulative
         total since the start of the Programme. If there are no indirect beneficiaries from GFCR
         Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
@@ -1206,7 +1206,7 @@ const pages = {
       <>
         Indirect young beneficiaries refer to young people (aged between 15-24, as defined by United
         Nations) that may live within the area of GFCR Programme (e.g. within 100 km) and may
-        experience positive effects or benefits as a result of a project or program, though they may
+        experience positive effects or benefits as a result of a project or programme, though they may
         not be the primary target audience. Report as cumulative total since the start of the
         Programme. If there are no indirect beneficiaries from GFCR Programme, enter &apos;0&apos;.{' '}
         <GfcrPdfLink />
@@ -1216,7 +1216,7 @@ const pages = {
       <>
         Indirect indigenous beneficiaries refer to Indigenous people that may live within the area
         of GFCR Programme (e.g. within 100 km) and may experience positive effects or benefits as a
-        result of a project or program, though they may not be the primary target audience. Report
+        result of a project or programme, though they may not be the primary target audience. Report
         as cumulative total since the start of the Programme. If there are no indirect beneficiaries
         from GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
@@ -1226,7 +1226,7 @@ const pages = {
       <>
         Total number of financial mechanisms associated with GFCR Programme that can help coastal
         communities recover from external shocks associated with climate change and other disasters,
-        e.g., coral reef insurance programs, coordinated loan programmes, village savings clubs
+        e.g., coral reef insurance programmes, coordinated loan programmes, village savings clubs
         started by the Programme, ecological restoration crisis plans. Report as cumulative total
         since the start of the Programme. If no mechanisms are intended to be supported by the GFCR
         Programme or are not yet in place, enter &apos;0&apos;. <GfcrPdfLink />
