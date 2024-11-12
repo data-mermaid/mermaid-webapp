@@ -45,7 +45,7 @@ const Investments = ({
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Finance solution business name',
+        Header: 'Business / Finance Solution',
         accessor: 'finance_solution',
         sortType: reactTableNaturalSortReactNodes,
       },

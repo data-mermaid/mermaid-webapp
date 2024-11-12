@@ -60,7 +60,8 @@ const Gfcr = () => {
   // const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.gfcrTable.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
+  const [isExporting, setIsExporting] = useState(false)
 
   const _getIndicatorSets = useEffect(() => {
     if (!isAppOnline) {
@@ -232,6 +233,19 @@ const Gfcr = () => {
     setIsNewIndicatorSetModalOpen(true)
   }
 
+  const handleExportClick = () => {
+    setIsExporting(true)
+
+    databaseSwitchboardInstance
+      .exportData(projectId)
+      .catch(() => {
+        toast.error('There was an error exporting the report.')
+      })
+      .finally(() => {
+        setIsExporting(false)
+      })
+  }
+
   const toolbarButtons = (
     <>
       <StyledToolbarButtonWrapper>
@@ -245,8 +259,12 @@ const Gfcr = () => {
             </DropdownItemStyle>
           </Column>
         </ButtonSecondaryDropdown>
-        <ButtonSecondary to="" disabled={!gfcrIndicatorSets.length}>
-          <IconDownload /> Export
+        <ButtonSecondary
+          to=""
+          disabled={!gfcrIndicatorSets.length || isExporting}
+          onClick={handleExportClick}
+        >
+          <IconDownload /> {isExporting ? 'Exporting...' : 'Export to XLSX'}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
       <NewIndicatorSetModal
