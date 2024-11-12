@@ -539,6 +539,7 @@ const CollectRecordFormPage = ({
           validationPropertiesWithDirtyResetOnInputChange={
             validationPropertiesWithDirtyResetOnInputChange
           }
+          isImageClassification={collectRecordBeingEdited?.data?.image_classification}
         />
 
         <ObserversInput
