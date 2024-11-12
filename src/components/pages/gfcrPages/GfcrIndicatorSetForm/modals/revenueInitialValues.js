@@ -3,7 +3,7 @@ const getRevenueInitialValues = (revenue) => {
     finance_solution,
     revenue_type = '',
     sustainable_revenue_stream = '',
-    annual_revenue = '',
+    revenue_amount = '',
     notes = '',
   } = revenue || {}
 
@@ -11,7 +11,7 @@ const getRevenueInitialValues = (revenue) => {
     finance_solution,
     revenue_type,
     sustainable_revenue_stream,
-    annual_revenue,
+    revenue_amount,
     notes,
   }
 }

@@ -146,8 +146,8 @@ const RevenueModal = ({
         ]
       }
 
-      if (values.annual_revenue === '') {
-        errors.annual_revenue = [{ code: language.error.formValidation.required, id: 'Required' }]
+      if (values.revenue_amount === '') {
+        errors.revenue_amount = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       return errors
@@ -281,11 +281,11 @@ const RevenueModal = ({
         <StyledModalInputRow>
           <InputNoRowWithLabelAndValidation
             label={modalLanguage.annualRevenue}
-            id="annual-revenue-input"
+            id="revenue-amount-input"
             type="number"
             unit="USD $"
             alignUnitsLeft={true}
-            {...formik.getFieldProps('annual_revenue')}
+            {...formik.getFieldProps('revenue_amount')}
             helperText={modalLanguage.getAnnualRevenueHelper()}
             showHelperText={displayHelp}
             required={true}
