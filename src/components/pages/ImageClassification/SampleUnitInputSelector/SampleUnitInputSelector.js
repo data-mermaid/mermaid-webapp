@@ -31,8 +31,6 @@ const SampleUnitInputSelector = ({ setIsImageClassification, isAppOnline }) => {
           <ButtonText>{language.imageClassification.sampleUnitInputSelector.button1}</ButtonText>
         </ButtonPrimary>
         {!isAppOnline ? <OfflineText>Unavailable offline.</OfflineText> : null}
-      </ButtonContainer>
-      <ButtonContainer>
         <ButtonSecondary type="button" onClick={handleSampleUnitChange(false)}>
           <IconPen />
           <ButtonText>{language.imageClassification.sampleUnitInputSelector.button2}</ButtonText>

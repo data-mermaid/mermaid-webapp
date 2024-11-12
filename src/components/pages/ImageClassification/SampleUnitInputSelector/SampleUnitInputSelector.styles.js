@@ -8,7 +8,7 @@ const ButtonText = styled.span`
 const ButtonContainer = styled.div`
   margin-bottom: 1rem;
   display: flex;
-  align-items: center;
+  gap: 2rem;
 `
 
 const SelectorContainer = styled.div`
