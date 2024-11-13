@@ -122,7 +122,7 @@ const Gfcr = () => {
     return gfcrIndicatorSets.map((indicatorSet) => {
       const { id, title, indicator_set_type, report_date } = indicatorSet
 
-      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }
       const currentLocale = navigator.language
       const localizedDate = new Date(report_date).toLocaleDateString(currentLocale, dateOptions)
 
