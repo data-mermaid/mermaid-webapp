@@ -12,6 +12,7 @@ export const getSampleDateLabel = (sampleDate) => {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
+      // timeZone: 'UTC',  // This is needed for correct GFCR IS dates. Is it needed here?
     })
   } catch {
     return undefined
