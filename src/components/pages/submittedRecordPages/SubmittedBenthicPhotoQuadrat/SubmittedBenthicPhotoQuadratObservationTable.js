@@ -83,20 +83,16 @@ const SubmittedBenthicPhotoQuadratObservationTable = ({
 
     const image = images.find((img) => img.id === observation.image)
 
-    return (
-      <>
-        {isFirstRowOfQuadrat && (
-          <TdWithHoverText
-            data-tooltip={image?.original_image_name}
-            rowSpan={quadratLengths[observation.quadrat_number]}
-          >
-            <ImageWrapper>
-              <Thumbnail imageUrl={image?.thumbnail} />
-            </ImageWrapper>
-          </TdWithHoverText>
-        )}
-      </>
-    )
+    return isFirstRowOfQuadrat ? (
+      <TdWithHoverText
+        data-tooltip={image?.original_image_name}
+        rowSpan={quadratLengths[observation.quadrat_number]}
+      >
+        <ImageWrapper>
+          <Thumbnail imageUrl={image?.thumbnail} />
+        </ImageWrapper>
+      </TdWithHoverText>
+    ) : null
   }
 
   const observationBeltFish = obs_benthic_photo_quadrats.map((observation, index) => {
