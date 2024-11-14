@@ -10,14 +10,33 @@ import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Table, Tr, Td, Th } from '../../../generic/Table/table'
 import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.styles'
+import Thumbnail from '../../ImageClassification/ImageClassificationTable/Thumbnail'
+import {
+  ImageWrapper,
+  TdWithHoverText,
+} from '../../ImageClassification/ImageClassificationTable/ImageClassificationObservationTable.styles'
 
 const SubmittedBenthicPhotoQuadratObservationTable = ({
   choices,
   benthicAttributeOptions,
   submittedRecord = undefined,
 }) => {
-  const { obs_benthic_photo_quadrats } = submittedRecord
+  const { obs_benthic_photo_quadrats, images, image_classification } = submittedRecord
   const growthFormOptions = getOptions(choices.growthforms.data)
+
+  const quadratLengths = image_classification
+    ? obs_benthic_photo_quadrats.reduce((acc, quadrat) => {
+        const { quadrat_number } = quadrat
+
+        if (acc[quadrat_number]) {
+          acc[quadrat_number] += 1
+        } else {
+          acc[quadrat_number] = 1
+        }
+
+        return acc
+      }, {})
+    : null
 
   const observationCategoryPercentages = useMemo(() => {
     const addTopCategoryInfoToObservation = obs_benthic_photo_quadrats.map((obs) => {
@@ -58,15 +77,41 @@ const SubmittedBenthicPhotoQuadratObservationTable = ({
     return categoryPercentages
   }, [obs_benthic_photo_quadrats, benthicAttributeOptions])
 
-  const observationBeltFish = obs_benthic_photo_quadrats.map((item, index) => (
-    <Tr key={item.id}>
-      <Td align="center">{index + 1}</Td>
-      <Td align="right">{item.quadrat_number}</Td>
-      <Td align="right">{getObjectById(benthicAttributeOptions, item.attribute)?.label}</Td>
-      <Td align="right">{getObjectById(growthFormOptions, item.growth_form)?.label}</Td>
-      <Td align="right">{item.num_points}</Td>
-    </Tr>
-  ))
+  const getThumbnail = (observation, index) => {
+    const isFirstRowOfQuadrat =
+      observation.quadrat_number !== obs_benthic_photo_quadrats[index - 1]?.quadrat_number
+
+    const image = images.find((img) => img.id === observation.image)
+
+    return (
+      <>
+        {isFirstRowOfQuadrat && (
+          <TdWithHoverText
+            data-tooltip={image?.original_image_name}
+            rowSpan={quadratLengths[observation.quadrat_number]}
+          >
+            <ImageWrapper>
+              <Thumbnail imageUrl={image?.thumbnail} />
+            </ImageWrapper>
+          </TdWithHoverText>
+        )}
+      </>
+    )
+  }
+
+  const observationBeltFish = obs_benthic_photo_quadrats.map((observation, index) => {
+    const { id, quadrat_number, attribute, growth_form, num_points } = observation
+    return (
+      <Tr key={id}>
+        {image_classification && getThumbnail(observation, index)}
+        <Td align="center">{index + 1}</Td>
+        <Td align="right">{quadrat_number}</Td>
+        <Td align="right">{getObjectById(benthicAttributeOptions, attribute)?.label}</Td>
+        <Td align="right">{getObjectById(growthFormOptions, growth_form)?.label}</Td>
+        <Td align="right">{num_points}</Td>
+      </Tr>
+    )
+  })
 
   return (
     <>
@@ -74,6 +119,7 @@ const SubmittedBenthicPhotoQuadratObservationTable = ({
       <Table>
         <thead>
           <Tr>
+            {image_classification && <TheadItem>Thumbnail</TheadItem>}
             <TheadItem> </TheadItem>
             <TheadItem align="right">Quadrat</TheadItem>
             <TheadItem align="right">Benthic Attribute</TheadItem>
