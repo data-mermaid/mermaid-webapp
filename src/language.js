@@ -1333,6 +1333,8 @@ const getValidationMessage = (validation, projectId = '') => {
     invalid_benthic_transect: () =>
       'One or more invalid fields: site, management, sample date, transect number, width, depth',
     invalid_depth: () => `Depth invalid or not greater than ${context?.depth_range[0]} m`,
+    excessive_precision: () =>
+      `Depth precision to right of decimal point greater than ${context?.decimal_places} digit(s)`,
     invalid_fish_count: () => 'Fish count must be a non-negative integer',
     invalid_fish_size: () => `Invalid fish size`,
     invalid_fishbelt_transect: () =>
