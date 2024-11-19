@@ -8,10 +8,15 @@ import { ButtonContainer, IconContainer } from './ImageClassificationObservation
 const ImageClassificationContainer = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState([])
+  const [isUploading, setIsUploading] = useState(false)
 
   const handleFilesUpload = (files) => {
     setUploadedFiles([...uploadedFiles, ...files])
     setIsModalOpen(false)
+  }
+
+  const handleUploadingChange = (isUploading) => {
+    setIsUploading(isUploading)
   }
 
   return (
@@ -19,6 +24,7 @@ const ImageClassificationContainer = (props) => {
       <ImageClassificationObservationTable
         uploadedFiles={uploadedFiles}
         setUploadedFiles={setUploadedFiles}
+        isUploading={isUploading}
         {...props}
       />
       <ButtonContainer>
@@ -33,6 +39,7 @@ const ImageClassificationContainer = (props) => {
         <ImageUploadModal
           onClose={() => setIsModalOpen(false)}
           onFilesUpload={handleFilesUpload}
+          isUploading={handleUploadingChange}
           isOpen={isModalOpen}
           existingFiles={uploadedFiles}
         />
