@@ -60,7 +60,7 @@ const Gfcr = () => {
   // const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${language.pages.gfcrTable.title} - ${language.title.mermaid}`)
   const [isExporting, setIsExporting] = useState(false)
 
   const _getIndicatorSets = useEffect(() => {
