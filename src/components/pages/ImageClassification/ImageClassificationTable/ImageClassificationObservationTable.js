@@ -92,12 +92,11 @@ const statusLabels = {
 }
 
 const ImageClassificationObservationTable = ({
-  uploadedFiles,
-  setUploadedFiles,
   collectRecord = undefined,
   areValidationsShowing,
   ignoreObservationValidations,
   resetObservationValidations,
+  isUploading,
 }) => {
   const [imageId, setImageId] = useState()
   const [images, setImages] = useState([])
@@ -158,9 +157,6 @@ const ImageClassificationObservationTable = ({
       .then(() => {
         const updatedImages = images.filter((f) => f.id !== file.id)
         setImages(updatedImages)
-
-        const updatedUploadedFiles = uploadedFiles.filter((f) => f.id !== file.id)
-        setUploadedFiles(updatedUploadedFiles)
 
         toast.warn('File removed')
       })
@@ -317,11 +313,11 @@ const ImageClassificationObservationTable = ({
 
         setImages(response.results)
 
-        const allProcessed = response.results.every((file) =>
-          isImageProcessed(file.classification_status.status),
+        const areAllImagesProcessed = response.results.every((file) =>
+          isImageProcessed(file.classification_status?.status),
         )
 
-        if (allProcessed) {
+        if (areAllImagesProcessed) {
           setPolling(false)
         } else {
           intervalId = setTimeout(startPolling, 5000)
@@ -364,29 +360,10 @@ const ImageClassificationObservationTable = ({
   }, [benthicAttributes, growthForms, images, distillImagesData])
 
   const _startPollingOnUpload = useEffect(() => {
-    const hasNewImages = uploadedFiles.some((file) => !images.some((img) => img.id === file.id))
-
-    if (hasNewImages) {
-      setImages((prevImages) => {
-        const existingImagesMap = new Map(prevImages.map((img) => [img.id, img]))
-
-        // Merge existing images with newly uploaded ones
-        const mergedImages = [...prevImages]
-
-        uploadedFiles.forEach((file) => {
-          if (!existingImagesMap.has(file.id)) {
-            mergedImages.push(file)
-          }
-        })
-
-        return mergedImages
-      })
-
-      if (!polling) {
-        setPolling(true)
-      }
+    if (isUploading) {
+      setPolling(true)
     }
-  }, [uploadedFiles, polling, images])
+  }, [images, isUploading])
 
   let rowIndex = 1
 
@@ -435,7 +412,11 @@ const ImageClassificationObservationTable = ({
                         <TdWithHoverText
                           data-tooltip={file.original_image_name}
                           onClick={() => handleImageClick(file)}
-                          cursor={file.classification_status.status === 3 ? 'pointer' : 'default'}
+                          cursor={
+                            statusLabels(file.classification_status?.status) === 'Completed'
+                              ? 'pointer'
+                              : 'default'
+                          }
                         >
                           <ImageWrapper>
                             <Thumbnail imageUrl={file.thumbnail} />
@@ -443,15 +424,19 @@ const ImageClassificationObservationTable = ({
                         </TdWithHoverText>
                         <StyledTd
                           colSpan={8}
-                          textAlign={file.classification_status.status === 3 ? 'left' : 'center'}
+                          textAlign={
+                            statusLabels(file.classification_status?.status) === 'Completed'
+                              ? 'left'
+                              : 'center'
+                          }
                         >
-                          {!isImageProcessed(file.classification_status.status) ? (
+                          {!isImageProcessed(file.classification_status?.status) ? (
                             <>
                               <Spinner />
-                              {statusLabels[file.classification_status.status]}...
+                              {statusLabels[file.classification_status?.status]}...
                             </>
                           ) : (
-                            statusLabels[file.classification_status.status]
+                            statusLabels[file.classification_status?.status]
                           )}
                         </StyledTd>
                       </Tr>
@@ -546,7 +531,7 @@ const ImageClassificationObservationTable = ({
                                   <ButtonPrimary
                                     type="button"
                                     onClick={() => setImageId(file.id)}
-                                    disabled={!isImageProcessed(file.classification_status.status)}
+                                    disabled={!isImageProcessed(file.classification_status?.status)}
                                   >
                                     Review
                                   </ButtonPrimary>
@@ -556,7 +541,7 @@ const ImageClassificationObservationTable = ({
                                     type="button"
                                     onClick={() => handleRemoveImage(file)}
                                     disabled={
-                                      file.classification_status.status !== 3 ||
+                                      file.classification_status?.status !== 3 ||
                                       deletingImage === file.id
                                     }
                                   >
@@ -641,12 +626,12 @@ const ImageClassificationObservationTable = ({
 }
 
 ImageClassificationObservationTable.propTypes = {
-  uploadedFiles: PropTypes.arrayOf(PropTypes.object).isRequired,
   setUploadedFiles: PropTypes.func.isRequired,
   areValidationsShowing: PropTypes.bool.isRequired,
   collectRecord: benthicPhotoQuadratPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
   resetObservationValidations: PropTypes.func.isRequired,
+  isUploading: PropTypes.bool.isRequired,
 }
 
 export default ImageClassificationObservationTable

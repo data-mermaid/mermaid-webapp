@@ -19,7 +19,7 @@ const renderUploadProgress = (processedCount, totalFiles, handleCancelUpload) =>
   </div>
 )
 
-const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => {
+const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles, setIsUploading }) => {
   const isCancelledRef = useRef(false)
   const fileInputRef = useRef(null)
   const { recordId, projectId } = useParams()
@@ -81,6 +81,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
   const validateAndUploadFiles = async (files) => {
     onClose()
+    setIsUploading(true)
 
     // Show the persistent uploading toast and store the toastId
     if (!toastId.current) {
@@ -94,6 +95,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
 
     for (const file of files) {
       if (isCancelledRef.current) {
+        setIsUploading(false)
         return
       }
 
@@ -134,6 +136,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       }
 
       if (isCancelledRef.current) {
+        setIsUploading(false)
         return
       }
     }
@@ -152,6 +155,8 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles }) => 
       toast.dismiss(toastId.current)
       toastId.current = null
     }
+
+    setIsUploading(false)
   }
 
   const handleFileChange = (event) => {
@@ -221,6 +226,7 @@ ImageUploadModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   onFilesUpload: PropTypes.func.isRequired,
   existingFiles: PropTypes.array.isRequired,
+  setIsUploading: PropTypes.func.isRequired,
 }
 
 export default ImageUploadModal
