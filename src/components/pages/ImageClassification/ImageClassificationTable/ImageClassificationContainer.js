@@ -15,10 +15,6 @@ const ImageClassificationContainer = (props) => {
     setIsModalOpen(false)
   }
 
-  const handleUploadingChange = (isUploading) => {
-    setIsUploading(isUploading)
-  }
-
   return (
     <>
       <ImageClassificationObservationTable
@@ -39,7 +35,7 @@ const ImageClassificationContainer = (props) => {
         <ImageUploadModal
           onClose={() => setIsModalOpen(false)}
           onFilesUpload={handleFilesUpload}
-          isUploading={handleUploadingChange}
+          setIsUploading={setIsUploading}
           isOpen={isModalOpen}
           existingFiles={uploadedFiles}
         />

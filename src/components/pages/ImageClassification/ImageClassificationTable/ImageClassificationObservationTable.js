@@ -313,11 +313,11 @@ const ImageClassificationObservationTable = ({
 
         setImages(response.results)
 
-        const allProcessed = response.results.every((file) =>
+        const areAllImagesProcessed = response.results.every((file) =>
           isImageProcessed(file.classification_status?.status),
         )
 
-        if (allProcessed) {
+        if (areAllImagesProcessed) {
           setPolling(false)
         } else {
           intervalId = setTimeout(startPolling, 5000)
@@ -412,7 +412,11 @@ const ImageClassificationObservationTable = ({
                         <TdWithHoverText
                           data-tooltip={file.original_image_name}
                           onClick={() => handleImageClick(file)}
-                          cursor={file.classification_status?.status === 3 ? 'pointer' : 'default'}
+                          cursor={
+                            statusLabels(file.classification_status?.status) === 'Completed'
+                              ? 'pointer'
+                              : 'default'
+                          }
                         >
                           <ImageWrapper>
                             <Thumbnail imageUrl={file.thumbnail} />
@@ -420,7 +424,11 @@ const ImageClassificationObservationTable = ({
                         </TdWithHoverText>
                         <StyledTd
                           colSpan={8}
-                          textAlign={file.classification_status?.status === 3 ? 'left' : 'center'}
+                          textAlign={
+                            statusLabels(file.classification_status?.status) === 'Completed'
+                              ? 'left'
+                              : 'center'
+                          }
                         >
                           {!isImageProcessed(file.classification_status?.status) ? (
                             <>
