@@ -26,11 +26,13 @@ const SampleUnitInputSelector = ({ setIsImageClassification, isAppOnline }) => {
         <p>{language.imageClassification.sampleUnitInputSelector.description}</p>
       </TextContainer>
       <ButtonContainer>
+        <div>
+        {!isAppOnline ? <OfflineText>Unavailable offline.</OfflineText> : null}
         <ButtonPrimary type="button" onClick={handleSampleUnitChange(true)} disabled={!isAppOnline}>
           <IconSparkles />
           <ButtonText>{language.imageClassification.sampleUnitInputSelector.button1}</ButtonText>
         </ButtonPrimary>
-        {!isAppOnline ? <OfflineText>Unavailable offline.</OfflineText> : null}
+        </div>
         <ButtonSecondary type="button" onClick={handleSampleUnitChange(false)}>
           <IconPen />
           <ButtonText>{language.imageClassification.sampleUnitInputSelector.button2}</ButtonText>
