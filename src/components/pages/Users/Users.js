@@ -850,9 +850,9 @@ const Users = () => {
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
-              const { key, ...restRowProps } = row.getRowProps()
+              const { key: rowKey, ...restRowProps } = row.getRowProps()
               return (
-                <Tr key={key} {...restRowProps}>
+                <Tr key={rowKey} {...restRowProps}>
                   {row.cells.map((cell) => {
                     const { key: cellKey, ...restCellProps } = cell.getCellProps()
                     return (
