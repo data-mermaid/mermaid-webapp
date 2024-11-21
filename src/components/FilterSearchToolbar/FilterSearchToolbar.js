@@ -22,7 +22,7 @@ const FilterSearchToolbar = ({
   id = 'filter-search',
   name,
   disabled = false,
-  globalSearchText,
+  globalSearchText = '',
   handleGlobalFilterChange,
   type = 'page',
 }) => {
