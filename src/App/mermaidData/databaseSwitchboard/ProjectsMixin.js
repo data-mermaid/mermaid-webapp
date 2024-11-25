@@ -83,20 +83,35 @@ const ProjectsMixin = (Base) =>
 
     getProjectProfiles = function getProjectProfiles(projectId) {
       if (!projectId) {
-        Promise.reject(this._operationMissingParameterError)
+        return Promise.reject(this._operationMissingParameterError)
       }
 
       if (!this._isAuthenticatedAndReady) {
         return Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
-      return this._apiSyncInstance
-        .pullAllProjectDataExceptChoices(projectId)
-        .then(async (pullData) => {
+      return this._dexiePerUserDataInstance.project_profiles.toArray().then((projectProfiles) => {
+        if (projectProfiles.length > 0) {
+          const usersInCurrentProject = projectProfiles.filter(
+            ({ project }) => project === projectId,
+          )
+
+          if (usersInCurrentProject.length > 0) {
+            return usersInCurrentProject
+          }
+        }
+
+        // If IndexedDB returns no profiles or none match the projectId, fallback to API pull
+        return this._apiSyncInstance.pullAllProjectDataExceptChoices(projectId).then((pullData) => {
           const projectProfiles = pullData.data.project_profiles.updates
 
-          return projectProfiles.filter((projectProfile) => projectProfile.project === projectId)
+          const usersInCurrentProject = projectProfiles.filter(
+            ({ project }) => project === projectId,
+          )
+
+          return usersInCurrentProject
         })
+      })
     }
 
     editProjectProfileRole = async function editProjectProfileRole({
