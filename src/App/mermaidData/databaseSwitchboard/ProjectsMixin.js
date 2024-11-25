@@ -86,13 +86,17 @@ const ProjectsMixin = (Base) =>
         Promise.reject(this._operationMissingParameterError)
       }
 
-      return this._isAuthenticatedAndReady
-        ? this._dexiePerUserDataInstance.project_profiles
-            .toArray()
-            .then((projectProfiles) =>
-              projectProfiles.filter((projectProfile) => projectProfile.project === projectId),
-            )
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+      if (!this._isAuthenticatedAndReady) {
+        return Promise.reject(this._notAuthenticatedAndReadyError)
+      }
+
+      return this._apiSyncInstance
+        .pullAllProjectDataExceptChoices(projectId)
+        .then(async (pullData) => {
+          const projectProfiles = pullData.data.project_profiles.updates
+
+          return projectProfiles.filter((projectProfile) => projectProfile.project === projectId)
+        })
     }
 
     editProjectProfileRole = async function editProjectProfileRole({
