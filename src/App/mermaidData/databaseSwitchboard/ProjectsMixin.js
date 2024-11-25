@@ -90,28 +90,35 @@ const ProjectsMixin = (Base) =>
         return Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
-      return this._dexiePerUserDataInstance.project_profiles.toArray().then((projectProfiles) => {
-        if (projectProfiles.length > 0) {
-          const usersInCurrentProject = projectProfiles.filter(
-            ({ project }) => project === projectId,
-          )
+      return this._dexiePerUserDataInstance.project_profiles
+        .toArray()
+        .then((projectProfiles) => {
+          if (projectProfiles.length > 0) {
+            const usersInCurrentProject = projectProfiles.filter(
+              ({ project }) => project === projectId,
+            )
 
-          if (usersInCurrentProject.length > 0) {
-            return usersInCurrentProject
+            if (usersInCurrentProject.length > 0) {
+              return usersInCurrentProject
+            }
           }
-        }
 
-        // If IndexedDB returns no profiles or none match the projectId, fallback to API pull
-        return this._apiSyncInstance.pullAllProjectDataExceptChoices(projectId).then((pullData) => {
-          const projectProfiles = pullData.data.project_profiles.updates
+          // If IndexedDB returns no profiles or none match the projectId, fallback to API pull
+          return this._apiSyncInstance
+            .pullAllProjectDataExceptChoices(projectId)
+            .then((pullData) => {
+              const projectProfiles = pullData.data.project_profiles.updates
 
-          const usersInCurrentProject = projectProfiles.filter(
-            ({ project }) => project === projectId,
-          )
+              const usersInCurrentProject = projectProfiles.filter(
+                ({ project }) => project === projectId,
+              )
 
-          return usersInCurrentProject
+              return usersInCurrentProject
+            })
         })
-      })
+        .catch((error) => {
+          return Promise.reject(error)
+        })
     }
 
     editProjectProfileRole = async function editProjectProfileRole({
