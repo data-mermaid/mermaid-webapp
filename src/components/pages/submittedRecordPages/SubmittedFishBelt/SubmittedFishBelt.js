@@ -160,8 +160,6 @@ const SubmittedFishBelt = () => {
       })
   }
 
-  console.log({ isMoveToButtonDisabled })
-
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
