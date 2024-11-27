@@ -80,7 +80,6 @@ const SubmittedFishBelt = () => {
             genera,
             families,
             submittedRecordResponse,
-            projectProfilesResponse,
           ]) => {
             if (isMounted.current) {
               const updateFishNameOptions = getFishNameOptions({
