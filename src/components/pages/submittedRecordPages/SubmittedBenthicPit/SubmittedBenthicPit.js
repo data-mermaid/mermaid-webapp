@@ -194,7 +194,7 @@ const SubmittedBenthicPit = () => {
                 </p>
                 <ButtonSecondary
                   onClick={handleMoveToCollect}
-                  disabled={isAdminUser ? isMoveToButtonDisabled : 'false'}
+                  disabled={!isAdminUser || isMoveToButtonDisabled}
                 >
                   <IconPen />
                   {language.pages.submittedForm.moveSampleUnitButton}
