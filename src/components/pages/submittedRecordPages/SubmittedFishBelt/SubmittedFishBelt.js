@@ -27,6 +27,7 @@ import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNode
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { FormSubTitle } from '../SubmittedFormPage.styles'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
@@ -48,8 +49,9 @@ const SubmittedFishBelt = () => {
   const isMounted = useIsMounted()
   const observers = submittedRecord?.observers ?? []
   const { currentUser } = useCurrentUser()
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
+  // const [currentUserProfile, setCurrentUserProfile] = useState({})
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -99,17 +101,12 @@ const SubmittedFishBelt = () => {
                 'fishbelt',
               )
 
-              const filteredUserProfile = projectProfilesResponse.filter(
-                ({ profile }) => currentUser.id === profile,
-              )[0]
-
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
               setSubmittedRecord(submittedRecordResponse)
               setFishNameOptions(updateFishNameOptions)
               setFishNameConstants(updateFishNameConstants)
-              setCurrentUserProfile(filteredUserProfile)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
@@ -208,13 +205,13 @@ const SubmittedFishBelt = () => {
             <RowSpaceBetween>
               <>
                 <p>
-                  {currentUserProfile.is_admin
+                  {isAdminUser
                     ? language.pages.submittedForm.sampleUnitsAreReadOnly
                     : language.pages.submittedForm.adminEditOnly}
                 </p>
                 <ButtonSecondary
                   onClick={handleMoveToCollect}
-                  disabled={currentUserProfile.is_admin ? false : isMoveToButtonDisabled}
+                  disabled={isAdminUser ? isMoveToButtonDisabled : 'false'}
                 >
                   <IconPen />
                   {language.pages.submittedForm.moveSampleUnitButton}
