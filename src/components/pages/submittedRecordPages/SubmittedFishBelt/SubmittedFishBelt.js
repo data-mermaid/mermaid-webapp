@@ -49,7 +49,6 @@ const SubmittedFishBelt = () => {
   const isMounted = useIsMounted()
   const observers = submittedRecord?.observers ?? []
   const { currentUser } = useCurrentUser()
-  // const [currentUserProfile, setCurrentUserProfile] = useState({})
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
@@ -67,7 +66,6 @@ const SubmittedFishBelt = () => {
           submittedRecordId,
           'beltfishtransectmethods',
         ),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
@@ -210,7 +208,7 @@ const SubmittedFishBelt = () => {
                 </p>
                 <ButtonSecondary
                   onClick={handleMoveToCollect}
-                  disabled={isAdminUser ? isMoveToButtonDisabled : 'false'}
+                  disabled={isAdminUser ? isMoveToButtonDisabled : `false`}
                 >
                   <IconPen />
                   {language.pages.submittedForm.moveSampleUnitButton}
