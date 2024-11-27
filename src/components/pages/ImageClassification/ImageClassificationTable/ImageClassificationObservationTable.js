@@ -33,7 +33,7 @@ const EXCLUDE_PARAMS =
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
-  { align: 'center', id: 'thumbnail-label', text: 'Thumbnail' },
+  { align: 'center', id: 'photo-label', text: 'Photo' },
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
   { align: 'left', id: 'growth-form-label', text: 'Growth Form' },
@@ -413,7 +413,7 @@ const ImageClassificationObservationTable = ({
                           data-tooltip={file.original_image_name}
                           onClick={() => handleImageClick(file)}
                           cursor={
-                            statusLabels(file.classification_status?.status) === 'Completed'
+                            statusLabels[file.classification_status?.status] === 'Completed'
                               ? 'pointer'
                               : 'default'
                           }
@@ -425,7 +425,7 @@ const ImageClassificationObservationTable = ({
                         <StyledTd
                           colSpan={8}
                           textAlign={
-                            statusLabels(file.classification_status?.status) === 'Completed'
+                            statusLabels[file.classification_status?.status] === 'Completed'
                               ? 'left'
                               : 'center'
                           }
