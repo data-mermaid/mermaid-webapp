@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
+import { LngLat } from 'mapbox-gl'
 
 const useAuthentication = ({ dexieCurrentUserInstance }) => {
   const { isAppOnline } = useOnlineStatus()
@@ -62,18 +63,19 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
     if (isUserOnlineAndLoggedOut || didUserLogoutFromDashboard) {
       pullRequestRedirectAuth0Hack()
       setUnauthenticatedStates()
-      auth0LoginWithRedirect()
 
-      var urlParams = new URLSearchParams(window.location.search)
-      var error = urlParams.get('error')
+      const urlParams = new URLSearchParams(window.location.search)
+      const error = urlParams.get('error')
       if (error && error === 'access_denied') {
         let errorDescription = urlParams.get('error_description')
         if (errorDescription && errorDescription === 'email_not_verified') {
           let returnMsg = 'You must verify your email before you can login.'
-          window.location.href = `https://${
-            process.env.REACT_APP_AUTH0_DOMAIN
-          }/login?error=${error}&error_description=${encodeURIComponent(returnMsg)}`
+          const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID
+          window.location.href = `https://${process.env.REACT_APP_AUTH0_DOMAIN}/login?client=${clientId}&error=${error}&error_description=${encodeURIComponent(returnMsg)}`
         }
+      }
+      else {
+        auth0LoginWithRedirect()
       }
     }
 
