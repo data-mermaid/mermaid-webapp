@@ -2,7 +2,6 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
-import { LngLat } from 'mapbox-gl'
 
 const useAuthentication = ({ dexieCurrentUserInstance }) => {
   const { isAppOnline } = useOnlineStatus()
@@ -71,10 +70,13 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
         if (errorDescription && errorDescription === 'email_not_verified') {
           let returnMsg = 'You must verify your email before you can login.'
           const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID
-          window.location.href = `https://${process.env.REACT_APP_AUTH0_DOMAIN}/login?client=${clientId}&error=${error}&error_description=${encodeURIComponent(returnMsg)}`
+          window.location.href = `https://${
+            process.env.REACT_APP_AUTH0_DOMAIN
+          }/login?client=${clientId}&error=${error}&error_description=${encodeURIComponent(
+            returnMsg,
+          )}`
         }
-      }
-      else {
+      } else {
         auth0LoginWithRedirect()
       }
     }
