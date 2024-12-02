@@ -127,9 +127,13 @@ const Gfcr = () => {
       const localizedDate = new Date(report_date).toLocaleDateString(currentLocale, dateOptions)
 
       return {
-        title: isAdminUser ? <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link> : title,
-        indicator_set_type: indicator_set_type === 'report' ? 'Report' : 'Target',
-        report_date: localizedDate,
+        title: isAdminUser ? (
+          <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link>
+        ) : (
+          <span>{title || 'Untitled'}</span>
+        ),
+        indicator_set_type: <span>{indicator_set_type === 'report' ? 'Report' : 'Target'}</span>,
+        report_date: <span>{localizedDate}</span>,
       }
     })
   }, [gfcrIndicatorSets, isAdminUser, currentProjectPath])
