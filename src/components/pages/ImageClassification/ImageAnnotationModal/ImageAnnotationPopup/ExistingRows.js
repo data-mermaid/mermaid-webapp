@@ -15,7 +15,12 @@ const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
 
 const isOptionAlreadyAdded = (acc, value) => acc.some((option) => option.value === value)
 
-const ExistingRows = ({ selectedPoint, dataToReview, setDataToReview }) => {
+const ExistingRows = ({
+  selectedPoint,
+  dataToReview,
+  setDataToReview,
+  setIsDataUpdatedSinceLastSave,
+}) => {
   const [selectedExistingRow, setSelectedExistingRow] = useState('')
 
   const existingRowDropdownOptions = dataToReview.points
@@ -72,6 +77,7 @@ const ExistingRows = ({ selectedPoint, dataToReview, setDataToReview }) => {
       point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
     )
     setDataToReview({ ...dataToReview, points: updatedPoints })
+    setIsDataUpdatedSinceLastSave(true)
   }
 
   return (
@@ -116,6 +122,7 @@ ExistingRows.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
+  setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
 }
 
 export default ExistingRows

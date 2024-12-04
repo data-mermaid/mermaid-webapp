@@ -42,6 +42,7 @@ const ImageAnnotationModal = ({
   const [selectedAttributeId, setSelectedAttributeId] = useState('')
   const [hoveredAttributeId, setHoveredAttributeId] = useState('')
   const [isSaving, setIsSaving] = useState(false)
+  const [isDataUpdatedSinceLastSave, setIsDataUpdatedSinceLastSave] = useState(false)
 
   const getBenthicAttributeLabel = (benthicAttributeId) => {
     const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
@@ -83,7 +84,18 @@ const ImageAnnotationModal = ({
     // eslint-disable-next-line
   }, [])
 
-  const handleCloseModal = () => setImageId()
+  const handleCloseModal = () => {
+    if (isDataUpdatedSinceLastSave) {
+      const userConfirmed = window.confirm(
+        'Are you sure you want to discard the change to this image?',
+      )
+      if (userConfirmed) {
+        setImageId()
+      }
+    } else {
+      setImageId()
+    }
+  }
 
   const handleSaveChanges = () => {
     setIsSaving(true)
@@ -119,6 +131,7 @@ const ImageAnnotationModal = ({
               selectedAttributeId={selectedAttributeId}
               setSelectedAttributeId={setSelectedAttributeId}
               setHoveredAttributeId={setHoveredAttributeId}
+              setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
             />
             <ImageAnnotationModalMap
               dataToReview={dataToReview}
@@ -126,6 +139,7 @@ const ImageAnnotationModal = ({
               selectedAttributeId={selectedAttributeId}
               hoveredAttributeId={hoveredAttributeId}
               databaseSwitchboardInstance={databaseSwitchboardInstance}
+              setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
             />
           </ImageAnnotationModalContainer>
         ) : (

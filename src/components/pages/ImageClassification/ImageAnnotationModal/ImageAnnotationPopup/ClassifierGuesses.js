@@ -17,7 +17,12 @@ const confirmFirstAnnotationAndUnconfirmRest = (annotation, i) => {
   annotation.is_confirmed = i === 0
 }
 
-const ClassifierGuesses = ({ selectedPoint, dataToReview, setDataToReview }) => {
+const ClassifierGuesses = ({
+  selectedPoint,
+  dataToReview,
+  setDataToReview,
+  setIsDataUpdatedSinceLastSave,
+}) => {
   const classifierGuesses = selectedPoint.annotations.filter(
     (annotation) => annotation.is_machine_created,
   )
@@ -36,6 +41,7 @@ const ClassifierGuesses = ({ selectedPoint, dataToReview, setDataToReview }) => 
       point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
     )
     setDataToReview({ ...dataToReview, points: updatedPoints })
+    setIsDataUpdatedSinceLastSave(true)
   }
 
   return classifierGuessesSortedByScore.map((annotation) => (
@@ -59,6 +65,7 @@ ClassifierGuesses.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
+  setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
 }
 
 export default ClassifierGuesses

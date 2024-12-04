@@ -25,7 +25,13 @@ import { createPortal } from 'react-dom'
 const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
   annotations.some((annotation) => annotation.is_machine_created && annotation.ba_gr === ba_gr)
 
-const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchboardInstance }) => {
+const NewRow = ({
+  selectedPoint,
+  dataToReview,
+  setDataToReview,
+  databaseSwitchboardInstance,
+  setIsDataUpdatedSinceLastSave,
+}) => {
   const [shouldDisplayModal, setShouldDisplayModal] = useState(false)
   const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
   const [growthFormSelectOptions, setGrowthFormSelectOptions] = useState([])
@@ -79,6 +85,7 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
     )
 
     setDataToReview({ ...dataToReview, points: updatedPoints })
+    setIsDataUpdatedSinceLastSave(true)
     handleCloseModal()
   }
 
@@ -117,6 +124,7 @@ const NewRow = ({ selectedPoint, dataToReview, setDataToReview, databaseSwitchbo
     )
 
     setDataToReview({ ...dataToReview, points: updatedPoints })
+    setIsDataUpdatedSinceLastSave(true)
     handleCloseModal()
   }
 
@@ -212,6 +220,7 @@ NewRow.propTypes = {
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
   databaseSwitchboardInstance: PropTypes.object.isRequired,
+  setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
 }
 
 export default NewRow
