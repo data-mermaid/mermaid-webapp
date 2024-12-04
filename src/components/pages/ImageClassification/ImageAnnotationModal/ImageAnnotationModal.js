@@ -85,14 +85,10 @@ const ImageAnnotationModal = ({
   }, [])
 
   const handleCloseModal = () => {
-    if (isDataUpdatedSinceLastSave) {
-      const userConfirmed = window.confirm(
-        'Are you sure you want to discard the change to this image?',
-      )
-      if (userConfirmed) {
-        setImageId()
-      }
-    } else {
+    if (
+      !isDataUpdatedSinceLastSave ||
+      window.confirm('Are you sure you want to discard the change to this image?')
+    ) {
       setImageId()
     }
   }
