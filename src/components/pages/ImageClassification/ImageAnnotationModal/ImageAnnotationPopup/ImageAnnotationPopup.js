@@ -14,6 +14,7 @@ const ImageAnnotationPopup = ({
   setDataToReview,
   pointId,
   databaseSwitchboardInstance,
+  setIsDataUpdatedSinceLastSave,
 }) => {
   const selectedPoint = dataToReview.points.find((point) => point.id === pointId)
 
@@ -30,17 +31,20 @@ const ImageAnnotationPopup = ({
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
           setDataToReview={setDataToReview}
+          setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
         />
         <ExistingRows
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
           setDataToReview={setDataToReview}
+          setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
         />
         <NewRow
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
           setDataToReview={setDataToReview}
           databaseSwitchboardInstance={databaseSwitchboardInstance}
+          setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
         />
       </tbody>
     </EditPointPopupTable>
@@ -52,6 +56,7 @@ ImageAnnotationPopup.propTypes = {
   setDataToReview: PropTypes.func.isRequired,
   pointId: PropTypes.string.isRequired,
   databaseSwitchboardInstance: databaseSwitchboardPropTypes,
+  setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationPopup

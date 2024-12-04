@@ -72,6 +72,7 @@ const ImageAnnotationModalMap = ({
   selectedAttributeId,
   hoveredAttributeId,
   databaseSwitchboardInstance,
+  setIsDataUpdatedSinceLastSave,
 }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
@@ -408,6 +409,7 @@ const ImageAnnotationModalMap = ({
             setDataToReview={setDataToReview}
             pointId={selectedPoint.id}
             databaseSwitchboardInstance={databaseSwitchboardInstance}
+            setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
           />
         </EditPointPopupWrapper>
       ) : null}
@@ -421,6 +423,7 @@ ImageAnnotationModalMap.propTypes = {
   selectedAttributeId: PropTypes.string.isRequired,
   hoveredAttributeId: PropTypes.string.isRequired,
   databaseSwitchboardInstance: PropTypes.object.isRequired,
+  setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModalMap

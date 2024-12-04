@@ -16,6 +16,7 @@ const ImageAnnotationModalTable = ({
   selectedAttributeId,
   setSelectedAttributeId,
   setHoveredAttributeId,
+  setIsDataUpdatedSinceLastSave,
 }) => {
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
   const tableData = Object.groupBy(classifiedPoints, ({ annotations }) => annotations[0].ba_gr)
@@ -47,6 +48,7 @@ const ImageAnnotationModalTable = ({
     })
 
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
+    setIsDataUpdatedSinceLastSave(true)
   }
 
   return (
@@ -109,6 +111,7 @@ ImageAnnotationModalTable.propTypes = {
   setHoveredAttributeId: PropTypes.func.isRequired,
   setDataToReview: PropTypes.func.isRequired,
   points: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
+  setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModalTable
