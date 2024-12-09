@@ -16,7 +16,6 @@ import {
   StyledTr,
   LoadingTableBody,
   Spinner,
-  StyledTdWithStickyHover,
 } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
@@ -541,7 +540,7 @@ const ImageClassificationObservationTable = ({
                                     ) : null}
                                   </StyledTd>
                                 ) : null}
-                                <StyledTdWithStickyHover
+                                <StyledTd
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
@@ -552,8 +551,8 @@ const ImageClassificationObservationTable = ({
                                   >
                                     Review
                                   </ButtonPrimary>
-                                </StyledTdWithStickyHover>
-                                <StyledTdWithStickyHover
+                                </StyledTd>
+                                <StyledTd
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
@@ -567,7 +566,7 @@ const ImageClassificationObservationTable = ({
                                   >
                                     <IconClose aria-label="close" />
                                   </ButtonCaution>
-                                </StyledTdWithStickyHover>
+                                </StyledTd>
                               </>
                             )}
                             {areValidationsShowing && subIndex >= 1 ? (
