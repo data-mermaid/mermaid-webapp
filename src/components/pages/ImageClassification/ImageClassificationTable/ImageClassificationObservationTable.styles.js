@@ -62,6 +62,10 @@ const ImageWrapper = styled('div')`
 const TdWithHoverText = styled(StyledTd)`
   cursor: ${(props) => props.cursor};
 
+  &.hover-highlight {
+    background-color: ${theme.color.tableRowHover};
+  }
+
   &::after {
     content: attr(data-tooltip);
     position: absolute;
@@ -86,6 +90,12 @@ const TdWithHoverText = styled(StyledTd)`
   &:hover::after {
     opacity: 1;
     visibility: visible;
+  }
+`
+
+const StyledTdWithStickyHover = styled(StyledTd)`
+  &.hover-highlight {
+    background-color: ${theme.color.tableRowHover};
   }
 `
 
@@ -128,4 +138,5 @@ export {
   StyledTr,
   LoadingTableBody,
   Spinner,
+  StyledTdWithStickyHover,
 }

@@ -16,6 +16,7 @@ import {
   StyledTr,
   LoadingTableBody,
   Spinner,
+  StyledTdWithStickyHover,
 } from './ImageClassificationObservationTable.styles'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
 import { IconClose } from '../../../icons'
@@ -110,6 +111,7 @@ const ImageClassificationObservationTable = ({
   const isFirstLoad = useRef(true)
   const [deletingImage, setDeletingImage] = useState()
   const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
+  const [hoveredImageIndex, setHoveredImageIndex] = useState(null)
 
   const isImageProcessed = (status) => status === 3 || status === 4
 
@@ -381,6 +383,14 @@ const ImageClassificationObservationTable = ({
     return observationId
   }
 
+  const handleRowMouseEnter = (imageIndex) => {
+    setHoveredImageIndex(imageIndex)
+  }
+
+  const handleRowMouseLeave = () => {
+    setHoveredImageIndex(null)
+  }
+
   return (
     <>
       <InputWrapper>
@@ -450,6 +460,7 @@ const ImageClassificationObservationTable = ({
                         const benthicAttributeId = annotation.benthicAttributeId
                         const growthFormId = annotation.growthFormId
                         const obsId = buildObservationId(imgId, benthicAttributeId, growthFormId)
+                        const isGroupHovered = hoveredImageIndex === imageIndex
 
                         const {
                           isObservationValid,
@@ -476,6 +487,8 @@ const ImageClassificationObservationTable = ({
                                 ? 'warning'
                                 : null
                             }
+                            onMouseEnter={() => handleRowMouseEnter(imageIndex)}
+                            onMouseLeave={handleRowMouseLeave}
                           >
                             <StyledTd>{rowIndex++}</StyledTd>
                             {subIndex === 0 && (
@@ -487,6 +500,7 @@ const ImageClassificationObservationTable = ({
                                   cursor={
                                     file.classification_status.status === 3 ? 'pointer' : 'default'
                                   }
+                                  className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
                                   <ImageWrapper>
                                     <Thumbnail imageUrl={file.thumbnail} />
@@ -497,7 +511,7 @@ const ImageClassificationObservationTable = ({
                             <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
                             <StyledTd>{annotation?.benthicAttributeLabel}</StyledTd>
                             <StyledTd>{annotation?.growthFormLabel || ''}</StyledTd>
-                            <StyledTd textAlign="right">{annotation?.confirmedCount}</StyledTd>
+                            <StyledTd textAlign="right">{annotation?.confirmedCount} </StyledTd>
                             <StyledTd textAlign="right">{annotation?.unconfirmedCount}</StyledTd>
                             {subIndex === 0 && (
                               <>
@@ -527,7 +541,10 @@ const ImageClassificationObservationTable = ({
                                     ) : null}
                                   </StyledTd>
                                 ) : null}
-                                <StyledTd rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}>
+                                <StyledTdWithStickyHover
+                                  rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
+                                  className={isGroupHovered ? 'hover-highlight' : ''}
+                                >
                                   <ButtonPrimary
                                     type="button"
                                     onClick={() => setImageId(file.id)}
@@ -535,8 +552,11 @@ const ImageClassificationObservationTable = ({
                                   >
                                     Review
                                   </ButtonPrimary>
-                                </StyledTd>
-                                <StyledTd rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}>
+                                </StyledTdWithStickyHover>
+                                <StyledTdWithStickyHover
+                                  rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
+                                  className={isGroupHovered ? 'hover-highlight' : ''}
+                                >
                                   <ButtonCaution
                                     type="button"
                                     onClick={() => handleRemoveImage(file)}
@@ -547,7 +567,7 @@ const ImageClassificationObservationTable = ({
                                   >
                                     <IconClose aria-label="close" />
                                   </ButtonCaution>
-                                </StyledTd>
+                                </StyledTdWithStickyHover>
                               </>
                             )}
                             {areValidationsShowing && subIndex >= 1 ? (
