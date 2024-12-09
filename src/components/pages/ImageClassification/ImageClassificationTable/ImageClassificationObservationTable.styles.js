@@ -63,8 +63,7 @@ const TdWithHoverText = styled(StyledTd)`
   cursor: ${(props) => props.cursor};
 
   &.hover-highlight {
-    // background-color: ${theme.color.tableRowOdd};
-    background-color: blue;
+    background-color: ${theme.color.tableRowHover};
   }
 
   &::after {
@@ -96,8 +95,7 @@ const TdWithHoverText = styled(StyledTd)`
 
 const StyledTdWithStickyHover = styled(StyledTd)`
   &.hover-highlight {
-    // background-color: ${theme.color.tableRowOdd};
-    background-color: blue;
+    background-color: ${theme.color.tableRowHover};
   }
 `
 
