@@ -32,6 +32,10 @@ const StyledColgroup = styled('colgroup')`
 const StyledTd = styled(Td)`
   padding: 0.5em !important;
   text-align: ${(props) => props.textAlign};
+
+  &.hover-highlight {
+    background-color: ${theme.color.tableRowHover};
+  }
 `
 
 const StyledTr = styled(Tr)`
@@ -93,12 +97,6 @@ const TdWithHoverText = styled(StyledTd)`
   }
 `
 
-const StyledTdWithStickyHover = styled(StyledTd)`
-  &.hover-highlight {
-    background-color: ${theme.color.tableRowHover};
-  }
-`
-
 const LoadingTableBody = styled.tbody`
   height: 100px;
 
@@ -138,5 +136,4 @@ export {
   StyledTr,
   LoadingTableBody,
   Spinner,
-  StyledTdWithStickyHover,
 }
