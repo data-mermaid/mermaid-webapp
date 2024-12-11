@@ -60,7 +60,7 @@ const Gfcr = () => {
   // const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${language.pages.gfcrTable.title} - ${language.title.mermaid}`)
   const [isExporting, setIsExporting] = useState(false)
 
   const _getIndicatorSets = useEffect(() => {
@@ -127,9 +127,13 @@ const Gfcr = () => {
       const localizedDate = new Date(report_date).toLocaleDateString(currentLocale, dateOptions)
 
       return {
-        title: isAdminUser ? <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link> : title,
-        indicator_set_type: indicator_set_type === 'report' ? 'Report' : 'Target',
-        report_date: localizedDate,
+        title: isAdminUser ? (
+          <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link>
+        ) : (
+          <span>{title || 'Untitled'}</span>
+        ),
+        indicator_set_type: <span>{indicator_set_type === 'report' ? 'Report' : 'Target'}</span>,
+        report_date: <span>{localizedDate}</span>,
       }
     })
   }, [gfcrIndicatorSets, isAdminUser, currentProjectPath])
