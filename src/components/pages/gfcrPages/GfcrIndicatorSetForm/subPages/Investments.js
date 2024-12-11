@@ -22,6 +22,7 @@ import { StyledTableAnchor } from './subPages.styles'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import InvestmentModal from '../modals/InvestmentModal'
+import formattedCurrencyAmount from '../../../../../library/formatCurrencyAmount'
 
 const tableLanguage = language.pages.gfcrInvestmentsTable
 
@@ -96,10 +97,7 @@ const Investments = ({
         (investmentTypeChoice) => investmentTypeChoice.id === investment_type,
       )?.name
 
-      const formattedInvestmentAmount = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(investment_amount)
+      const formattedInvestmentAmount = formattedCurrencyAmount(investment_amount)
 
       return {
         finance_solution: (

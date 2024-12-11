@@ -23,6 +23,7 @@ import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataPropt
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
 import RevenueModal from '../modals/RevenueModal'
+import formattedCurrencyAmount from '../../../../../library/formatCurrencyAmount'
 
 const tableLanguage = language.pages.gfcrRevenuesTable
 
@@ -88,10 +89,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
         (revenueTypeChoice) => revenueTypeChoice.id === revenue_type,
       ).name
 
-      const formattedRevenueAmount = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(revenue_amount)
+      const formattedRevenueAmount = formattedCurrencyAmount(revenue_amount)
 
       return {
         finance_solution: (
