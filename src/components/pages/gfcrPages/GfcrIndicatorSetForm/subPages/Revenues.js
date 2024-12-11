@@ -88,6 +88,11 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
         (revenueTypeChoice) => revenueTypeChoice.id === revenue_type,
       ).name
 
+      const formattedRevenueAmount = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      }).format(revenue_amount)
+
       return {
         finance_solution: (
           <StyledTableAnchor id={id} onClick={(event) => handleEditRevenue(event)}>
@@ -96,7 +101,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
         ),
         revenue_type: revenueTypeName,
         sustainable_revenue_stream: <IconCheckLabel isCheck={!!sustainable_revenue_stream} />,
-        revenue_amount: `$${revenue_amount}`,
+        revenue_amount: `${formattedRevenueAmount}`,
       }
     })
   }, [choices, handleEditRevenue, indicatorSet.finance_solutions, revenues])
