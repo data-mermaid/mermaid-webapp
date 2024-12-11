@@ -23,6 +23,7 @@ import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataPropt
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
 import RevenueModal from '../modals/RevenueModal'
+import formattedCurrencyAmount from '../../../../../library/formatCurrencyAmount'
 
 const tableLanguage = language.pages.gfcrRevenuesTable
 
@@ -88,6 +89,8 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
         (revenueTypeChoice) => revenueTypeChoice.id === revenue_type,
       ).name
 
+      const formattedRevenueAmount = formattedCurrencyAmount(revenue_amount)
+
       return {
         finance_solution: (
           <StyledTableAnchor id={id} onClick={(event) => handleEditRevenue(event)}>
@@ -96,7 +99,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
         ),
         revenue_type: revenueTypeName,
         sustainable_revenue_stream: <IconCheckLabel isCheck={!!sustainable_revenue_stream} />,
-        revenue_amount: `$${revenue_amount}`,
+        revenue_amount: `${formattedRevenueAmount}`,
       }
     })
   }, [choices, handleEditRevenue, indicatorSet.finance_solutions, revenues])
