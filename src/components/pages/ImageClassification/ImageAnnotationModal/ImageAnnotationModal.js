@@ -17,7 +17,6 @@ import {
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
-import useBeforeUnloadPrompt from '../../../../library/useBeforeUnloadPrompt'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 
 const EXCLUDE_PARAMS =
@@ -45,8 +44,6 @@ const ImageAnnotationModal = ({
   const [hoveredAttributeId, setHoveredAttributeId] = useState('')
   const [isSaving, setIsSaving] = useState(false)
   const [isDataUpdatedSinceLastSave, setIsDataUpdatedSinceLastSave] = useState(false)
-
-  useBeforeUnloadPrompt({ shouldPromptTrigger: isDataUpdatedSinceLastSave })
 
   const getBenthicAttributeLabel = (benthicAttributeId) => {
     const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
