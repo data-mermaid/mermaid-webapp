@@ -45,7 +45,6 @@ const ImageAnnotationModal = ({
   const [isSaving, setIsSaving] = useState(false)
   const [isDataUpdatedSinceLastSave, setIsDataUpdatedSinceLastSave] = useState(false)
 
-  // Use the custom hook to show the browser prompt when there are unsaved changes
   useBeforeUnloadPrompt({ shouldPromptTrigger: isDataUpdatedSinceLastSave })
 
   const getBenthicAttributeLabel = (benthicAttributeId) => {
