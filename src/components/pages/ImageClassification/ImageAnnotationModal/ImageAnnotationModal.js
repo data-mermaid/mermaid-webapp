@@ -17,6 +17,7 @@ import {
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
+import useBeforeUnloadPrompt from '../../../../library/useBeforeUnloadPrompt'
 
 const EXCLUDE_PARAMS =
   'classification_status,collect_record_id,comments,created_by,created_on,data,id,location,name,num_confirmed,num_unclassified,num_unconfirmed,photo_timestamp,thumbnail,updated_by,updated_on'
@@ -43,6 +44,9 @@ const ImageAnnotationModal = ({
   const [hoveredAttributeId, setHoveredAttributeId] = useState('')
   const [isSaving, setIsSaving] = useState(false)
   const [isDataUpdatedSinceLastSave, setIsDataUpdatedSinceLastSave] = useState(false)
+
+  // Use the custom hook to show the browser prompt when there are unsaved changes
+  useBeforeUnloadPrompt({ shouldPromptTrigger: isDataUpdatedSinceLastSave })
 
   const getBenthicAttributeLabel = (benthicAttributeId) => {
     const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
