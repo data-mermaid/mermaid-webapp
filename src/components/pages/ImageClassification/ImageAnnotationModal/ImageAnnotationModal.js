@@ -18,6 +18,7 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 import useBeforeUnloadPrompt from '../../../../library/useBeforeUnloadPrompt'
+import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 
 const EXCLUDE_PARAMS =
   'classification_status,collect_record_id,comments,created_by,created_on,data,id,location,name,num_confirmed,num_unclassified,num_unconfirmed,photo_timestamp,thumbnail,updated_by,updated_on'
@@ -115,65 +116,68 @@ const ImageAnnotationModal = ({
   }
 
   return (
-    <Modal
-      title={dataToReview?.original_image_name ?? ''}
-      isOpen
-      onDismiss={handleCloseModal}
-      contentOverflowIsVisible={true}
-      maxWidth="fit-content"
-      mainContent={
-        dataToReview && !isSaving ? (
-          <ImageAnnotationModalContainer>
-            <ImageAnnotationModalTable
-              points={dataToReview.points}
-              setDataToReview={setDataToReview}
-              selectedAttributeId={selectedAttributeId}
-              setSelectedAttributeId={setSelectedAttributeId}
-              setHoveredAttributeId={setHoveredAttributeId}
-              setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-            />
-            <ImageAnnotationModalMap
-              dataToReview={dataToReview}
-              setDataToReview={setDataToReview}
-              selectedAttributeId={selectedAttributeId}
-              hoveredAttributeId={hoveredAttributeId}
-              databaseSwitchboardInstance={databaseSwitchboardInstance}
-              setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-            />
-          </ImageAnnotationModalContainer>
-        ) : (
-          <LoadingContainer>
-            <LoadingIndicator />
-          </LoadingContainer>
-        )
-      }
-      footerContent={
-        <Footer>
-          <Legend>
-            <LegendItem>
-              <LegendSquare color={COLORS.unconfirmed} />
-              Unconfirmed
-            </LegendItem>
-            <LegendItem>
-              <LegendSquare color={COLORS.confirmed} />
-              Confirmed
-            </LegendItem>
-            <LegendItem>
-              <LegendSquare color={COLORS.unclassified} />
-              Unclassified
-            </LegendItem>
-          </Legend>
-          <div>
-            <ButtonSecondary type="button" onClick={handleCloseModal} disabled={isSaving}>
-              Cancel
-            </ButtonSecondary>
-            <ButtonPrimary type="button" onClick={handleSaveChanges} disabled={isSaving}>
-              Save Changes
-            </ButtonPrimary>
-          </div>
-        </Footer>
-      }
-    />
+    <>
+      <EnhancedPrompt shouldPromptTrigger={isDataUpdatedSinceLastSave} />
+      <Modal
+        title={dataToReview?.original_image_name ?? ''}
+        isOpen
+        onDismiss={handleCloseModal}
+        contentOverflowIsVisible={true}
+        maxWidth="fit-content"
+        mainContent={
+          dataToReview && !isSaving ? (
+            <ImageAnnotationModalContainer>
+              <ImageAnnotationModalTable
+                points={dataToReview.points}
+                setDataToReview={setDataToReview}
+                selectedAttributeId={selectedAttributeId}
+                setSelectedAttributeId={setSelectedAttributeId}
+                setHoveredAttributeId={setHoveredAttributeId}
+                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+              />
+              <ImageAnnotationModalMap
+                dataToReview={dataToReview}
+                setDataToReview={setDataToReview}
+                selectedAttributeId={selectedAttributeId}
+                hoveredAttributeId={hoveredAttributeId}
+                databaseSwitchboardInstance={databaseSwitchboardInstance}
+                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+              />
+            </ImageAnnotationModalContainer>
+          ) : (
+            <LoadingContainer>
+              <LoadingIndicator />
+            </LoadingContainer>
+          )
+        }
+        footerContent={
+          <Footer>
+            <Legend>
+              <LegendItem>
+                <LegendSquare color={COLORS.unconfirmed} />
+                Unconfirmed
+              </LegendItem>
+              <LegendItem>
+                <LegendSquare color={COLORS.confirmed} />
+                Confirmed
+              </LegendItem>
+              <LegendItem>
+                <LegendSquare color={COLORS.unclassified} />
+                Unclassified
+              </LegendItem>
+            </Legend>
+            <div>
+              <ButtonSecondary type="button" onClick={handleCloseModal} disabled={isSaving}>
+                Cancel
+              </ButtonSecondary>
+              <ButtonPrimary type="button" onClick={handleSaveChanges} disabled={isSaving}>
+                Save Changes
+              </ButtonPrimary>
+            </div>
+          </Footer>
+        }
+      />
+    </>
   )
 }
 
