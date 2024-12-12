@@ -35,7 +35,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Finance solution business name',
+        Header: 'Business / Finance Solution Name',
         accessor: 'name',
         sortType: reactTableNaturalSortReactNodes,
       },
@@ -45,7 +45,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Used an incubator',
+        Header: 'Used An Incubator',
         accessor: 'used_an_incubator',
         sortType: reactTableNaturalSort,
       },
@@ -56,13 +56,13 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         align: 'center',
       },
       {
-        Header: 'Local enterprise',
+        Header: 'Local Enterprise',
         accessor: 'local_enterprise',
         sortType: reactTableNaturalSort,
         align: 'center',
       },
       {
-        Header: 'Sustainable finance mechanisms',
+        Header: 'Sustainable Finance Mechanisms',
         accessor: 'sustainable_finance_mechanisms',
         sortType: reactTableNaturalSort,
       },

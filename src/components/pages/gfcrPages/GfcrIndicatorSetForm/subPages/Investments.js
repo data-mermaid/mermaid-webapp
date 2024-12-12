@@ -22,6 +22,7 @@ import { StyledTableAnchor } from './subPages.styles'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import InvestmentModal from '../modals/InvestmentModal'
+import formattedCurrencyAmount from '../../../../../library/formatCurrencyAmount'
 
 const tableLanguage = language.pages.gfcrInvestmentsTable
 
@@ -45,7 +46,7 @@ const Investments = ({
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Finance solution business name',
+        Header: 'Business / Finance Solution',
         accessor: 'finance_solution',
         sortType: reactTableNaturalSortReactNodes,
       },
@@ -96,6 +97,8 @@ const Investments = ({
         (investmentTypeChoice) => investmentTypeChoice.id === investment_type,
       )?.name
 
+      const formattedInvestmentAmount = formattedCurrencyAmount(investment_amount)
+
       return {
         finance_solution: (
           <StyledTableAnchor id={id} onClick={(event) => handleEditInvestment(event)}>
@@ -104,7 +107,7 @@ const Investments = ({
         ),
         investment_source: investmentSourceName,
         investment_type: investmentTypeName,
-        investment_amount: `$${investment_amount}`,
+        investment_amount: `${formattedInvestmentAmount}`,
       }
     })
   }, [choices, handleEditInvestment, indicatorSet, investments])

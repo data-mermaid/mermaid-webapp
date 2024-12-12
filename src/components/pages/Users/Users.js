@@ -164,7 +164,7 @@ const Users = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
-  const { setIsSyncInProgress } = useSyncStatus()
+  const { setIsSyncInProgress, isSyncInProgress } = useSyncStatus()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const isMounted = useIsMounted()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
@@ -179,8 +179,7 @@ const Users = () => {
     if (!isAppOnline) {
       setIsPageLoading(false)
     }
-
-    if (isAppOnline && databaseSwitchboardInstance && projectId) {
+    if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       Promise.all([
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getProject(projectId),
@@ -205,7 +204,14 @@ const Users = () => {
           })
         })
     }
-  }, [isAppOnline, databaseSwitchboardInstance, isMounted, projectId, handleHttpResponseError])
+  }, [
+    databaseSwitchboardInstance,
+    handleHttpResponseError,
+    isAppOnline,
+    isMounted,
+    isSyncInProgress,
+    projectId,
+  ])
 
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
     setIsReadonlyUserWithActiveSampleUnits(false)

@@ -61,6 +61,7 @@ const Gfcr = () => {
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${language.pages.gfcrTable.title} - ${language.title.mermaid}`)
+  const [isExporting, setIsExporting] = useState(false)
 
   const _getIndicatorSets = useEffect(() => {
     if (!isAppOnline) {
@@ -121,14 +122,18 @@ const Gfcr = () => {
     return gfcrIndicatorSets.map((indicatorSet) => {
       const { id, title, indicator_set_type, report_date } = indicatorSet
 
-      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }
       const currentLocale = navigator.language
       const localizedDate = new Date(report_date).toLocaleDateString(currentLocale, dateOptions)
 
       return {
-        title: isAdminUser ? <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link> : title,
-        indicator_set_type: indicator_set_type === 'report' ? 'Report' : 'Target',
-        report_date: localizedDate,
+        title: isAdminUser ? (
+          <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link>
+        ) : (
+          <span>{title || 'Untitled'}</span>
+        ),
+        indicator_set_type: <span>{indicator_set_type === 'report' ? 'Report' : 'Target'}</span>,
+        report_date: <span>{localizedDate}</span>,
       }
     })
   }, [gfcrIndicatorSets, isAdminUser, currentProjectPath])
@@ -232,6 +237,19 @@ const Gfcr = () => {
     setIsNewIndicatorSetModalOpen(true)
   }
 
+  const handleExportClick = () => {
+    setIsExporting(true)
+
+    databaseSwitchboardInstance
+      .exportData(projectId)
+      .catch(() => {
+        toast.error('There was an error exporting the report.')
+      })
+      .finally(() => {
+        setIsExporting(false)
+      })
+  }
+
   const toolbarButtons = (
     <>
       <StyledToolbarButtonWrapper>
@@ -245,8 +263,12 @@ const Gfcr = () => {
             </DropdownItemStyle>
           </Column>
         </ButtonSecondaryDropdown>
-        <ButtonSecondary to="" disabled={!gfcrIndicatorSets.length}>
-          <IconDownload /> Export
+        <ButtonSecondary
+          to=""
+          disabled={!gfcrIndicatorSets.length || isExporting}
+          onClick={handleExportClick}
+        >
+          <IconDownload /> {isExporting ? 'Exporting...' : 'Export to XLSX'}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
       <NewIndicatorSetModal

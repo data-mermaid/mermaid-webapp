@@ -80,7 +80,7 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
 
   await user.click(project5OfflineCheckboxBeforeFirstClick)
 
-  expect(await screen.findByText('Project V is now offline ready'))
+  expect(await screen.findByText("Project Z has an apostrophe foo's is now offline ready"))
 
   const project5OfflineCheckboxAfterProjectSetOffline = within(
     (await screen.findAllByTestId('project-card'))[4],
@@ -116,7 +116,7 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
 
   await user.click(project5OfflineCheckboxBeforeFirstClick)
 
-  expect(await screen.findByText('Project V is now offline ready'))
+  expect(await screen.findByText("Project Z has an apostrophe foo's is now offline ready"))
 
   const project5OfflineCheckboxAfterFirstClick = within(
     (await screen.findAllByTestId('project-card'))[4],
@@ -127,7 +127,7 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
   await user.click(project5OfflineCheckboxAfterFirstClick)
 
   await waitFor(() =>
-    expect(screen.getByText('Project V has been removed from being offline ready')),
+    expect(screen.getByText("Project Z has an apostrophe foo's is now offline ready")),
   )
 
   const project5OfflineCheckboxAfterProjectSetOffline = within(
@@ -137,17 +137,17 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
   expect(project5OfflineCheckboxAfterProjectSetOffline).not.toBeChecked()
 
   expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(
-    mockMermaidData.collect_records.filter((record) => record.project !== '5').length,
+    mockMermaidData.collect_records.filter((record) => record.project !== '6').length,
   )
   expect((await dexiePerUserDataInstance.project_managements.toArray()).length).toEqual(
     mockMermaidData.project_managements.filter(
-      (managementRegime) => managementRegime.project !== '5',
+      (managementRegime) => managementRegime.project !== '6',
     ).length,
   )
   expect((await dexiePerUserDataInstance.project_profiles.toArray()).length).toEqual(
-    mockMermaidData.project_profiles.filter((profile) => profile.project !== '5').length,
+    mockMermaidData.project_profiles.filter((profile) => profile.project !== '6').length,
   )
   expect((await dexiePerUserDataInstance.project_sites.toArray()).length).toEqual(
-    mockMermaidData.project_sites.filter((site) => site.project !== '5').length,
+    mockMermaidData.project_sites.filter((site) => site.project !== '6').length,
   )
 })
