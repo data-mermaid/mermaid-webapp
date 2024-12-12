@@ -162,7 +162,6 @@ const ProjectInfo = () => {
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
-  const isGfcrUserTester = true
   const [isUpdatingGfcr, setIsUpdatingGfcr] = useState(false)
   const [projectNameError, setProjectNameError] = useState(false)
   const [isDeletingProject, setIsDeletingProject] = useState(false)
@@ -411,13 +410,11 @@ const ProjectInfo = () => {
             formik.setFieldValue('tags', existingOrganizations)
           }}
         />
-        {isGfcrUserTester && (
-          <GfcrCallout
-            isGfcr={projectBeingEdited?.includes_gfcr}
-            handleUpdateIncludesGfcr={updateIncludesGfcr}
-            isLoading={isUpdatingGfcr}
-          />
-        )}
+        <GfcrCallout
+          isGfcr={projectBeingEdited?.includes_gfcr}
+          handleUpdateIncludesGfcr={updateIncludesGfcr}
+          isLoading={isUpdatingGfcr}
+        />
         <DeleteProjectButton
           isLoading={isDeletingProject}
           hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
