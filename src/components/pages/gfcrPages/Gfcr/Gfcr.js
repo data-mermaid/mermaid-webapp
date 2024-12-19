@@ -1,4 +1,3 @@
-// import { CSVLink } from 'react-csv'
 import { Link, useParams } from 'react-router-dom'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
@@ -27,7 +26,6 @@ import useDocumentTitle from '../../../../library/useDocumentTitle'
 import useIsMounted from '../../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../../generic/Table/usePersistUserTablePreferences'
-// import { getFileExportName } from '../../../../library/getFileExportName'
 import { PAGE_SIZE_DEFAULT } from '../../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { StyledToolbarButtonWrapper } from './Gfcr.styles'
@@ -50,14 +48,8 @@ const Gfcr = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isNewIndicatorSetModalOpen, setIsNewIndicatorSetModalOpen] = useState(false)
   const [newIndicatorSetType, setNewIndicatorSetType] = useState()
-  // const [siteExportName, setSiteExportName] = useState('')
-  // const [choices, setChoices] = useState({})
-  // const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
-  // const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
-  // const openCopySitesModal = () => setIsCopySitesModalOpen(true)
-  // const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${language.pages.gfcrTable.title} - ${language.title.mermaid}`)
@@ -335,7 +327,6 @@ const Gfcr = () => {
       isPageContentLoading={isLoading}
     />
   )
-  // )
 }
 
 export default Gfcr

@@ -23,6 +23,7 @@ import { getToastArguments } from '../../../../../library/getToastArguments'
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
 import { getOptions } from '../../../../../library/getOptions'
 import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
+import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
 
 const modalLanguage = language.gfcrInvestmentModal
 
@@ -100,7 +101,7 @@ const InvestmentModal = ({
         setSaveButtonState(buttonGroupStates.unsaved)
 
         if (error) {
-          toast.error(...getToastArguments(language.error.gfcrInvestmentDelete))
+          displayErrorMessagesGFCR(error)
 
           handleHttpResponseError({
             error,

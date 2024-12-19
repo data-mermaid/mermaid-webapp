@@ -31,6 +31,7 @@ import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoR
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
 import { getOptions } from '../../../../../library/getOptions'
 import { IconInfo } from '../../../../icons'
+import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
 
 const modalLanguage = language.gfcrFinanceSolutionModal
 
@@ -100,7 +101,7 @@ const FinanceSolutionModal = ({
         setSaveButtonState(buttonGroupStates.unsaved)
 
         if (error) {
-          toast.error(...getToastArguments(language.error.gfcrFinanceSolutionSave))
+          displayErrorMessagesGFCR(error)
 
           handleHttpResponseError({
             error,
