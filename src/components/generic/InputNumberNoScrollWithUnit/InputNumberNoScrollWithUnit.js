@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 
 import { inputTextareaSelectStyles } from '../form'
@@ -28,11 +28,40 @@ const InnerInput = styled(InputNumberNoScroll)`
   padding: ${theme.spacing.xsmall};
 `
 
-const InputNumberNoScrollWithUnit = ({ unit, alignUnitsLeft = false, ...restOfProps }) => {
+const InputNumberNoScrollWithUnit = ({
+  unit = '',
+  alignUnitsLeft = false,
+  value = '',
+  onChange = () => {},
+  name = '',
+  ...restOfProps
+}) => {
+  const [inputValue, setInputValue] = useState(value || '')
+
+  const handleInputChange = (e) => {
+    let rawValue = e.target.value
+
+    rawValue = rawValue.replace(/[^0-9.]/g, '')
+
+    // Restrict to a valid decimal format: up to two decimal places
+    if (rawValue.includes('.')) {
+      const [integerPart, decimalPart] = rawValue.split('.')
+      if (decimalPart.length > 2) {
+        rawValue = `${integerPart}.${decimalPart.slice(0, 2)}`
+      }
+    }
+
+    setInputValue(rawValue)
+
+    if (onChange) {
+      onChange({ ...e, target: { ...e.target, value: rawValue, name } })
+    }
+  }
+
   return (
     <InputContainer>
       {alignUnitsLeft && <UnitContainer>{unit}</UnitContainer>}
-      <InnerInput {...restOfProps} />
+      <InnerInput {...restOfProps} value={inputValue} onChange={handleInputChange} />
       {!alignUnitsLeft && <UnitContainer>{unit}</UnitContainer>}
     </InputContainer>
   )
@@ -41,6 +70,9 @@ const InputNumberNoScrollWithUnit = ({ unit, alignUnitsLeft = false, ...restOfPr
 InputNumberNoScrollWithUnit.propTypes = {
   unit: PropTypes.string.isRequired,
   alignUnitsLeft: PropTypes.bool,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onChange: PropTypes.func,
+  name: PropTypes.string,
 }
 
 export default InputNumberNoScrollWithUnit

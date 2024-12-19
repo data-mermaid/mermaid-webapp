@@ -103,7 +103,17 @@ const RevenueModal = ({
         setSaveButtonState(buttonGroupStates.unsaved)
 
         if (error) {
-          toast.error(...getToastArguments(language.error.gfcrRevenueSave))
+          const errorData = error.response.data
+
+          if (errorData) {
+            Object.entries(errorData).forEach(([field, messages]) => {
+              if (Array.isArray(messages)) {
+                messages.forEach((message) => {
+                  toast.error(`Item not saved. ${field}: ${message}`)
+                })
+              }
+            })
+          }
 
           handleHttpResponseError({
             error,

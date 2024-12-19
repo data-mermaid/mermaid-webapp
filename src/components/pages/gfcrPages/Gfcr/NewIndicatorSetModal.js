@@ -60,7 +60,17 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
         setSaveButtonState(buttonGroupStates.unsaved)
 
         if (error && isAppOnline) {
-          toast.error(...getToastArguments(language.error.gfcrIndicatorSetSave))
+          const errorData = error.response.data
+
+          if (errorData) {
+            Object.entries(errorData).forEach(([field, messages]) => {
+              if (Array.isArray(messages)) {
+                messages.forEach((message) => {
+                  toast.error(`Item not saved. ${field}: ${message}`)
+                })
+              }
+            })
+          }
 
           handleHttpResponseError({
             error,
