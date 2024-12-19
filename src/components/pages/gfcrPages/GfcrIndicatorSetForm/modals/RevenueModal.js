@@ -23,6 +23,7 @@ import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErro
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
 import { getOptions } from '../../../../../library/getOptions'
 import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
+import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
 
 const modalLanguage = language.gfcrRevenueModal
 
@@ -103,17 +104,7 @@ const RevenueModal = ({
         setSaveButtonState(buttonGroupStates.unsaved)
 
         if (error) {
-          const errorData = error.response.data
-
-          if (errorData) {
-            Object.entries(errorData).forEach(([field, messages]) => {
-              if (Array.isArray(messages)) {
-                messages.forEach((message) => {
-                  toast.error(`Item not saved. ${field}: ${message}`)
-                })
-              }
-            })
-          }
+          displayErrorMessagesGFCR(error)
 
           handleHttpResponseError({
             error,
