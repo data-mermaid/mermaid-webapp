@@ -41,13 +41,15 @@ const InputNumberNoScrollWithUnit = ({
   const handleInputChange = (e) => {
     let rawValue = e.target.value
 
-    rawValue = rawValue.replace(/[^0-9.]/g, '')
+    if (unit === 'USD $') {
+      rawValue = rawValue.replace(/[^0-9.]/g, '')
 
-    // Restrict to a valid decimal format: up to two decimal places
-    if (rawValue.includes('.')) {
-      const [integerPart, decimalPart] = rawValue.split('.')
-      if (decimalPart.length > 2) {
-        rawValue = `${integerPart}.${decimalPart.slice(0, 2)}`
+      // Restrict to a valid decimal format: up to two decimal places
+      if (rawValue.includes('.')) {
+        const [integerPart, decimalPart] = rawValue.split('.')
+        if (decimalPart.length > 2) {
+          rawValue = `${integerPart}.${decimalPart.slice(0, 2)}`
+        }
       }
     }
 
