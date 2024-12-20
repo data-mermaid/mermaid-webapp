@@ -23,6 +23,7 @@ import Modal, { RightFooter } from '../../../generic/Modal/Modal'
 import SaveButton from '../GfcrIndicatorSetForm/modals/SaveButton'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import InputNoRowWithLabelAndValidation from '../../../mermaidInputs/InputNoRowWithLabelAndValidation'
+import { displayErrorMessagesGFCR } from '../../../../library/displayErrorMessagesGFCR'
 
 const modalLanguage = language.gfcrNewIndicatorSetModal
 
@@ -60,7 +61,7 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
         setSaveButtonState(buttonGroupStates.unsaved)
 
         if (error && isAppOnline) {
-          toast.error(...getToastArguments(language.error.gfcrIndicatorSetSave))
+          displayErrorMessagesGFCR(error)
 
           handleHttpResponseError({
             error,
