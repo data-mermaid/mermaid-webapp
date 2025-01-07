@@ -92,7 +92,7 @@ const DataSharing = () => {
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
-  const [issDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(false)
+  const [isDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(false)
   const openDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(true)
   const closeDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(false)
 
@@ -328,7 +328,7 @@ const DataSharing = () => {
       ) : null}
       {!isAdminUser && isTestProject ? <p>{language.pages.dataSharing.isTestProject}</p> : null}
       <DataSharingInfoModal
-        isOpen={issDataSharingInfoModalOpen}
+        isOpen={isDataSharingInfoModalOpen}
         onDismiss={closeDataSharingInfoModal}
       />
     </MaxWidthInputWrapper>
