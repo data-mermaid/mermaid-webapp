@@ -204,7 +204,7 @@ const NewRow = ({
                 disabled={!selectedBenthicAttr}
                 onClick={handleAddNewRowClick}
               >
-                Add New Row
+                <IconPlus /> Add Row
               </ButtonPrimary>
             </NewRowFooterContainer>
           }
