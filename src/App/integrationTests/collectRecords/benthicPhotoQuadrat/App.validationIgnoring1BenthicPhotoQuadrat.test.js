@@ -703,10 +703,15 @@ test('Benthic Photo Quadrat validation: user can dismiss observation warnings ',
   await waitFor(() =>
     expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
-  expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
 
-  expect(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' })).toBeChecked()
-  expect(within(observationsTable).getByText('Ignored'))
+  const observationsTableAfterIgnore = screen.getByLabelText('Observations')
+
+  expect(within(observationsTableAfterIgnore).queryByText('secondWarning')).not.toBeInTheDocument()
+
+  expect(
+    within(observationsTableAfterIgnore).getByRole('checkbox', { name: 'Ignore warning' }),
+  ).toBeChecked()
+  expect(within(observationsTableAfterIgnore).getByText('Ignored'))
 
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
 
