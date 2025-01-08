@@ -66,11 +66,18 @@ const RecordLevelValidationInfo = ({
     }
   }
 
-  // suppress redundent validation error, unless it's the only validation error
-  const filteredValidations =
-    validations.length > 1
-      ? validations.filter((validation) => validation.code !== 'unsuccessful_dry_submit')
-      : validations
+  const hasUnresolvedErrors = validations.some(
+    (validation) => validation.code !== 'unsuccessful_dry_submit' && validation.status === 'error',
+  )
+
+  const filteredValidations = validations.filter((validation) => {
+    if (validation.code === 'unsuccessful_dry_submit') {
+      // Show dry submit errors only if there are no unresolved errors
+      return !hasUnresolvedErrors
+    }
+
+    return true
+  })
 
   return (
     <ValidationList data-testid="record-level-validations">

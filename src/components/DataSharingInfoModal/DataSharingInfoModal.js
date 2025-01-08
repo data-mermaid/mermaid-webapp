@@ -132,6 +132,18 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
+            <Tcell cellWithText>Average colonies bleached (%)</Tcell>
+            <TcellWithIconClose>
+              <IconClose />
+            </TcellWithIconClose>
+            <Tcell>
+              <IconCheck />
+            </Tcell>
+            <Tcell>
+              <IconCheck />
+            </Tcell>
+          </Tr>
+          <Tr>
             <Td colSpan="4" cellWithText>
               <strong>Transect-level observations</strong>
             </Td>
