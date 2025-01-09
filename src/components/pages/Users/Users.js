@@ -4,13 +4,12 @@ import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 
-import { ButtonSecondary, ButtonCaution, IconButton } from '../../generic/buttons'
+import { ButtonSecondary, ButtonCaution, IconButton, ButtonPrimary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
-import { H2 } from '../../generic/text'
 import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import {
   IconAccount,
@@ -34,6 +33,7 @@ import {
   StickyTableOverflowWrapper,
   GenericStickyTable,
 } from '../../generic/Table/table'
+import { P, H3 } from '../../generic/text'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
@@ -63,6 +63,7 @@ import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { LabelContainer } from '../../generic/form'
 import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import UserRolesInfoModal from '../../UserRolesInfoModal/UserRolesInfoModal'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -72,6 +73,10 @@ const ToolbarRowWrapper = styled('div')`
     grid-template-rows: 1fr 1fr;
     grid-template-columns: auto;
   `)}
+`
+
+const InfoParagraph = styled('div')`
+  margin-bottom: 1.5em;
 `
 
 const InlineStyle = styled('div')`
@@ -174,6 +179,10 @@ const Users = () => {
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
 
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
+
+  const [isUserRolesModalOpen, setIsUserRolesModalOpen] = useState(false)
+  const openUserRolesModal = () => setIsUserRolesModalOpen(true)
+  const closeUserRolesModal = () => setIsUserRolesModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -865,6 +874,7 @@ const Users = () => {
             })}
           </tbody>
         </GenericStickyTable>
+        <UserRolesInfoModal isOpen={isUserRolesModalOpen} onDismiss={closeUserRolesModal} />
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
@@ -921,7 +931,13 @@ const Users = () => {
   )
   const toolbar = (
     <>
-      <H2>{language.pages.userTable.title}</H2>
+      <H3>{language.pages.userTable.title}</H3>
+      <InfoParagraph>
+        <P>{language.pages.userTable.introductionParagraph}</P>
+        <ButtonPrimary type="button" onClick={openUserRolesModal}>
+          <IconInfo /> View User Roles...
+        </ButtonPrimary>
+      </InfoParagraph>
       {isAppOnline && (
         <>
           {isReadonlyUserWithActiveSampleUnits && isAdminUser && (
