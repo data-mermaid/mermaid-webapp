@@ -1,14 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Tr, Th, Td, TableOverflowWrapper } from '../../../generic/Table/table'
-import { ButtonSecondary } from '../../../generic/buttons'
-import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+
 import {
+  ButtonZoom,
   TableWithNoMinWidth,
   TdConfirmed,
   TdUnconfirmed,
+  TdZoom,
   TrWithBorderStyling,
 } from './ImageAnnotationModal.styles'
+import { ButtonSecondary } from '../../../generic/buttons'
+import { Tr, Th, Td, TableOverflowWrapper } from '../../../generic/Table/table'
+import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { IconZoomIn } from '../../../icons'
 
 const ImageAnnotationModalTable = ({
   points,
@@ -17,6 +21,7 @@ const ImageAnnotationModalTable = ({
   setSelectedAttributeId,
   setHoveredAttributeId,
   setIsDataUpdatedSinceLastSave,
+  zoomToPointsByAttributeId,
 }) => {
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
   const tableData = Object.groupBy(classifiedPoints, ({ annotations }) => annotations[0].ba_gr)
@@ -51,11 +56,18 @@ const ImageAnnotationModalTable = ({
     setIsDataUpdatedSinceLastSave(true)
   }
 
+  const handleZoomClick = ({ event, attributeId }) => {
+    event.stopPropagation()
+    zoomToPointsByAttributeId(attributeId)
+    setSelectedAttributeId(attributeId)
+  }
+
   return (
     <TableOverflowWrapper id="annotation-modal-table">
       <TableWithNoMinWidth aria-labelledby="table-label">
         <thead>
           <Tr>
+            <Th />
             <Th>Attribute growth form</Th>
             <Th title="Confirmed count">✓</Th>
             <Th title="Unconfirmed count">?</Th>
@@ -78,10 +90,21 @@ const ImageAnnotationModalTable = ({
                   $isSelected={rowKey === selectedAttributeId}
                   $isAnyRowSelected={selectedAttributeId !== undefined}
                 >
+                  <TdZoom>
+                    <ButtonZoom
+                      onClick={(event) => handleZoomClick({ event, attributeId: rowKey })}
+                      $isSelected={rowKey === selectedAttributeId}
+                      type="button"
+                    >
+                      <IconZoomIn />
+                    </ButtonZoom>
+                  </TdZoom>
                   {/* All points in a row will have the same ba_gr label */}
                   <Td>{tableData[rowKey][0].annotations[0].ba_gr_label}</Td>
-                  <TdConfirmed $hasConfirmedPoint={!!confirmedCount}>{confirmedCount}</TdConfirmed>
-                  <TdUnconfirmed $hasUnconfirmedPoint={!!unconfirmedCount}>
+                  <TdConfirmed align="right" $hasConfirmedPoint={!!confirmedCount}>
+                    {confirmedCount}
+                  </TdConfirmed>
+                  <TdUnconfirmed align="right" $hasUnconfirmedPoint={!!unconfirmedCount}>
                     {unconfirmedCount}
                   </TdUnconfirmed>
                   <Td align="center">
@@ -112,6 +135,7 @@ ImageAnnotationModalTable.propTypes = {
   setDataToReview: PropTypes.func.isRequired,
   points: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
   setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
+  zoomToPointsByAttributeId: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModalTable

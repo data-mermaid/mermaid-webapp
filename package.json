@@ -20,6 +20,8 @@
     "@iconify-icons/ri": "^1.1.0",
     "@iconify/react": "^1.1.4",
     "@mui/material": "^5.13.6",
+    "@turf/bbox": "^7.2.0",
+    "@turf/buffer": "^7.2.0",
     "axios": "^0.21.1",
     "axios-retry": "^3.3.1",
     "color": "^3.1.3",

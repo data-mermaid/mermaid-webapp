@@ -33,8 +33,8 @@ import homeOutline from '@iconify-icons/mdi/home-outline'
 import informationIcon from '@iconify-icons/mdi/information-outline'
 import launch from '@iconify-icons/mdi/launch'
 import libraryBooks from '@iconify-icons/mdi/library-books'
-import mapMarkerRadiusOutline from '@iconify-icons/mdi/map-marker-radius-outline'
 import mapMarker from '@iconify-icons/mdi/map-marker'
+import mapMarkerRadiusOutline from '@iconify-icons/mdi/map-marker-radius-outline'
 import menu from '@iconify-icons/mdi/menu'
 import menuDown from '@iconify-icons/mdi/menu-down'
 import menuUp from '@iconify-icons/mdi/menu-up'
@@ -53,10 +53,11 @@ import sparkles from '@iconify-icons/mdi/sparkles'
 import styled from 'styled-components/macro'
 import swap from '@iconify-icons/mdi/swap-vertical'
 import sync from '@iconify-icons/mdi/sync'
+import theme from '../theme'
 import upload from '@iconify-icons/mdi/upload'
 import user from '@iconify-icons/mdi/user'
 import usersAndTransects from '@iconify-icons/mdi/account-box-multiple-outline'
-import theme from '../theme'
+import zoomIn from '@iconify-icons/mdi/zoom-in'
 
 const WarningIcon = styled(InlineIcon)`
   color: ${theme.color.warningColor};
@@ -76,8 +77,8 @@ export const IconArrowRight = (props) => <InlineIcon icon={arrowRight} {...props
 export const IconBell = (props) => <InlineIcon icon={bellIcon} {...props} />
 export const IconBook = (props) => <InlineIcon icon={book} {...props} />
 export const IconCheck = (props) => <InlineIcon icon={checkIcon} {...props} />
-export const IconCheckOutline = (props) => <InlineIcon icon={checkOutline} {...props} />
 export const IconCheckAll = (props) => <InlineIcon icon={checkAllIcon} {...props} />
+export const IconCheckOutline = (props) => <InlineIcon icon={checkOutline} {...props} />
 export const IconClose = (props) => <InlineIcon icon={closeIcon} {...props} />
 export const IconCloseCircle = (props) => <InlineIcon icon={closeIconCircle} {...props} />
 export const IconCollect = (props) => <InlineIcon icon={circleEditOutline} {...props} />
@@ -85,6 +86,7 @@ export const IconCopy = (props) => <InlineIcon icon={contentCopy} {...props} />
 export const IconData = (props) => <InlineIcon icon={checkCircleOutline} {...props} />
 export const IconDown = (props) => <InlineIcon icon={menuDown} {...props} />
 export const IconDownload = (props) => <InlineIcon icon={download} {...props} />
+export const IconExcel = (props) => <InlineIcon icon={excel} {...props} />
 export const IconExternalLink = (props) => <InlineIcon icon={launch} {...props} />
 export const IconFilter = (props) => <InlineIcon icon={filterOutline} {...props} />
 export const IconFish = (props) => <InlineIcon icon={fish} {...props} />
@@ -95,11 +97,18 @@ export const IconHeart = (props) => <InlineIcon icon={heartOutline} {...props} /
 export const IconHome = (props) => <InlineIcon icon={homeOutline} {...props} />
 export const IconInfo = (props) => <InlineIcon icon={informationIcon} {...props} />
 export const IconLibraryBooks = (props) => <InlineIcon icon={libraryBooks} {...props} />
+export const IconManagementRegimes = (props) => <InlineIcon icon={fileTable} {...props} />
+export const IconManagementRegimesOverview = (props) => (
+  <InlineIcon icon={multiFileTable} {...props} />
+)
+export const IconMapMarker = (props) => <InlineIcon icon={mapMarker} {...props} />
 export const IconMenu = (props) => <InlineIcon icon={menu} {...props} />
 export const IconMgmt = (props) => <InlineIcon icon={fileTable} {...props} />
 export const IconOpenInNew = (props) => <InlineIcon icon={openInNew} {...props} />
 export const IconPen = (props) => <InlineIcon icon={pencilIcon} {...props} />
 export const IconPlus = (props) => <InlineIcon icon={plus} {...props} />
+export const IconProjectOverview = (props) => <InlineIcon icon={clipboardCheck} {...props} />
+export const IconProjectProgress = (props) => <InlineIcon icon={playButton} {...props} />
 export const IconRefresh = (props) => <InlineIcon icon={sync} {...props} />
 export const IconRequired = (props) => <InlineIcon icon={asterisk} {...props} />
 export const IconReset = (props) => <InlineIcon icon={Refresh} {...props} />
@@ -107,20 +116,13 @@ export const IconSave = (props) => <InlineIcon icon={contentSave} {...props} />
 export const IconSend = (props) => <InlineIcon icon={send} {...props} />
 export const IconSharing = (props) => <InlineIcon icon={shareVariantOutline} {...props} />
 export const IconSites = (props) => <InlineIcon icon={mapMarkerRadiusOutline} {...props} />
-export const IconSparkles = (props) => <InlineIcon icon={sparkles} {...props} />
-export const IconMapMarker = (props) => <InlineIcon icon={mapMarker} {...props} />
 export const IconSortDown = (props) => <InlineIcon icon={sortDescending} {...props} />
 export const IconSortUp = (props) => <InlineIcon icon={sortAscending} {...props} />
+export const IconSparkles = (props) => <InlineIcon icon={sparkles} {...props} />
 export const IconSwap = (props) => <InlineIcon icon={swap} {...props} />
 export const IconUp = (props) => <InlineIcon icon={menuUp} {...props} />
 export const IconUpload = (props) => <InlineIcon icon={upload} {...props} />
 export const IconUser = (props) => <InlineIcon icon={user} {...props} />
 export const IconUsers = (props) => <InlineIcon icon={accountGroup} {...props} />
 export const IconUsersAndTransects = (props) => <InlineIcon icon={usersAndTransects} {...props} />
-export const IconProjectProgress = (props) => <InlineIcon icon={playButton} {...props} />
-export const IconManagementRegimes = (props) => <InlineIcon icon={fileTable} {...props} />
-export const IconProjectOverview = (props) => <InlineIcon icon={clipboardCheck} {...props} />
-export const IconExcel = (props) => <InlineIcon icon={excel} {...props} />
-export const IconManagementRegimesOverview = (props) => (
-  <InlineIcon icon={multiFileTable} {...props} />
-)
+export const IconZoomIn = (props) => <InlineIcon icon={zoomIn} {...props} />

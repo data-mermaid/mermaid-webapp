@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -18,6 +18,9 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
+import { useImageScale } from '../useImageScale'
+import { usePointsGeoJson } from './usePointsGeoJson'
+import { useZoomToPointsByAttributeId } from './useZoomToPointsByAttributeId'
 
 const EXCLUDE_PARAMS =
   'classification_status,collect_record_id,comments,created_by,created_on,data,id,location,name,num_confirmed,num_unclassified,num_unconfirmed,photo_timestamp,thumbnail,updated_by,updated_on'
@@ -44,6 +47,17 @@ const ImageAnnotationModal = ({
   const [hoveredAttributeId, setHoveredAttributeId] = useState('')
   const [isSaving, setIsSaving] = useState(false)
   const [isDataUpdatedSinceLastSave, setIsDataUpdatedSinceLastSave] = useState(false)
+  const [hasMapLoaded, setHasMapLoaded] = useState(false)
+  const map = useRef(null)
+
+  const { imageScale } = useImageScale({ hasMapLoaded, dataToReview })
+
+  const { getPointsGeojson } = usePointsGeoJson({ dataToReview, imageScale, map })
+
+  const { zoomToPointsByAttributeId } = useZoomToPointsByAttributeId({
+    getPointsGeojson,
+    mapRef: map,
+  })
 
   const getBenthicAttributeLabel = (benthicAttributeId) => {
     const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
@@ -122,7 +136,7 @@ const ImageAnnotationModal = ({
         contentOverflowIsVisible={true}
         maxWidth="fit-content"
         mainContent={
-          dataToReview && !isSaving ? (
+          dataToReview && !isSaving && imageScale ? (
             <ImageAnnotationModalContainer>
               <ImageAnnotationModalTable
                 points={dataToReview.points}
@@ -131,6 +145,7 @@ const ImageAnnotationModal = ({
                 setSelectedAttributeId={setSelectedAttributeId}
                 setHoveredAttributeId={setHoveredAttributeId}
                 setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+                zoomToPointsByAttributeId={zoomToPointsByAttributeId}
               />
               <ImageAnnotationModalMap
                 dataToReview={dataToReview}
@@ -139,6 +154,11 @@ const ImageAnnotationModal = ({
                 hoveredAttributeId={hoveredAttributeId}
                 databaseSwitchboardInstance={databaseSwitchboardInstance}
                 setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+                getPointsGeojson={getPointsGeojson}
+                hasMapLoaded={hasMapLoaded}
+                imageScale={imageScale}
+                map={map}
+                setHasMapLoaded={setHasMapLoaded}
               />
             </ImageAnnotationModalContainer>
           ) : (
