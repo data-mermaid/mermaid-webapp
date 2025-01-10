@@ -7,7 +7,7 @@ import {
   TdConfirmed,
   TdUnconfirmed,
   TdZoom,
-  TrWithBorderStyling,
+  TrImageClassification,
 } from './ImageAnnotationModal.styles'
 import { ButtonSecondary } from '../../../generic/buttons'
 import { Tr, Th, Td, TableOverflowWrapper } from '../../../generic/Table/table'
@@ -82,7 +82,7 @@ const ImageAnnotationModalTable = ({
               const unconfirmedCount = tableData[rowKey].length - confirmedCount
 
               return (
-                <TrWithBorderStyling
+                <TrImageClassification
                   key={rowKey}
                   onClick={() => handleRowSelect(rowKey)}
                   onMouseEnter={() => setHoveredAttributeId(rowKey)}
@@ -119,7 +119,7 @@ const ImageAnnotationModalTable = ({
                       </ButtonSecondary>
                     )}
                   </Td>
-                </TrWithBorderStyling>
+                </TrImageClassification>
               )
             })}
         </tbody>
