@@ -204,24 +204,46 @@ const ImageAnnotationModalMap = ({
       return
     }
 
-    map.current.on('click', 'patches-fill-layer', ({ features }) => {
+    const showFeaturePopup = ({ features }) => {
       const [{ geometry, properties }] = features
+
+      const xAnchor = properties.isPointInLeftHalfOfImage ? 'left' : 'right'
+      const yAnchor = properties.isPointInTopHalfOfImage ? 'top' : 'bottom'
       const topLeft = geometry.coordinates[0][0]
       const topRight = geometry.coordinates[0][1]
       const bottomRight = geometry.coordinates[0][2]
+      const bottomLeft = geometry.coordinates[0][3]
       const bounds = new maplibregl.LngLatBounds(topLeft, bottomRight)
+      const popupAnchorPosition = `${yAnchor}-${xAnchor}`
+      const latLngLookupByAnchorPosition = {
+        'top-left': bottomRight,
+        'top-right': bottomLeft,
+        'bottom-left': topRight,
+        'bottom-right': topLeft,
+      }
       map.current.fitBounds(bounds, { padding: 250 })
 
-      setSelectedPoint({ id: properties.id, lngLat: topRight })
-    })
+      setSelectedPoint({
+        id: properties.id,
+        lngLat: latLngLookupByAnchorPosition[popupAnchorPosition],
+        popupAnchorPosition,
+      })
+    }
 
-    // Remove Edit Point Popup when user clicks away
-    map.current.on('click', ({ point }) => {
+    const hideFeaturePopup = ({ point }) => {
       const [patches] = map.current.queryRenderedFeatures(point, { layers: ['patches-fill-layer'] })
       if (!patches) {
         setSelectedPoint({ id: '', lngLat: '' })
       }
-    })
+    }
+
+    map.current.on('click', 'patches-fill-layer', showFeaturePopup)
+    map.current.on('click', hideFeaturePopup)
+
+    return () => {
+      map.current.off('click', 'patches-fill-layer', showFeaturePopup)
+      map.current.off('click', hideFeaturePopup)
+    }
   }, [dataToReview, hasMapLoaded, map])
 
   const _updateStyleOnPointHover = useEffect(() => {
@@ -322,7 +344,11 @@ const ImageAnnotationModalMap = ({
         <IconReset />
       </MapResetButton>
       {selectedPoint.id ? (
-        <EditPointPopupWrapper map={map.current} lngLat={selectedPoint.lngLat}>
+        <EditPointPopupWrapper
+          map={map.current}
+          lngLat={selectedPoint.lngLat}
+          anchor={selectedPoint.popupAnchorPosition}
+        >
           <ImageAnnotationPopup
             dataToReview={dataToReview}
             setDataToReview={setDataToReview}
