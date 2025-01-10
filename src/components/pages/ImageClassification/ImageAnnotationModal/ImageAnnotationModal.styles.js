@@ -3,6 +3,7 @@ import colorHelper from 'color'
 import theme from '../../../../theme'
 import { Table, Tr, Td } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 
 const confirmed = colorHelper(COLORS.confirmed)
 const unconfirmed = colorHelper(COLORS.unconfirmed)
@@ -134,4 +135,9 @@ export const ButtonZoom = styled.button`
   & svg {
     opacity: ${({ $isSelected }) => ($isSelected ? 1 : 0)};
   }
+`
+
+export const LoadingIndicatorImageClassificationImage = styled(LoadingIndicator)`
+  width: 100%;
+  height: 100%;
 `

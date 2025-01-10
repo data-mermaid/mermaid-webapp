@@ -4,7 +4,11 @@ import maplibregl from 'maplibre-gl'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { IconReset } from '../../../icons'
-import { ImageAnnotationMapWrapper, MapResetButton } from './ImageAnnotationModal.styles'
+import {
+  ImageAnnotationMapWrapper,
+  LoadingIndicatorImageClassificationImage,
+  MapResetButton,
+} from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
 
@@ -311,6 +315,7 @@ const ImageAnnotationModalMap = ({
 
   return (
     <ImageAnnotationMapWrapper>
+      {!hasMapLoaded ? <LoadingIndicatorImageClassificationImage /> : null}
       <div
         ref={mapContainer}
         style={{
@@ -318,9 +323,12 @@ const ImageAnnotationModalMap = ({
           height: dataToReview.original_image_height * imageScale,
         }}
       />
-      <MapResetButton type="button" onClick={() => easeToDefaultView(map)}>
-        <IconReset />
-      </MapResetButton>
+      {hasMapLoaded ? (
+        <MapResetButton type="button" onClick={() => easeToDefaultView(map)}>
+          <IconReset />
+        </MapResetButton>
+      ) : null}
+
       {selectedPoint.id ? (
         <EditPointPopupWrapper map={map.current} lngLat={selectedPoint.lngLat}>
           <ImageAnnotationPopup
