@@ -20,6 +20,7 @@ import {
   PopupTd,
 } from '../ImageAnnotationModal.styles'
 import { createPortal } from 'react-dom'
+import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 
 // TODO: Place this in a shared folder since used twice?
 const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
@@ -219,7 +220,7 @@ NewRow.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  databaseSwitchboardInstance: PropTypes.object.isRequired,
+  databaseSwitchboardInstance: databaseSwitchboardPropTypes,
   setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
 }
 

@@ -403,9 +403,11 @@ const ImageClassificationObservationTable = ({
 
             {isFetching ? (
               <LoadingTableBody>
-                <td colSpan={8}>
-                  <Spinner /> Loading...
-                </td>
+                <tr>
+                  <td colSpan={8}>
+                    <Spinner /> Loading...
+                  </td>
+                </tr>
               </LoadingTableBody>
             ) : (
               <tbody>

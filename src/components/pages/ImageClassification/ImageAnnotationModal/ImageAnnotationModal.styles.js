@@ -63,9 +63,12 @@ export const TrWithBorderStyling = styled(Tr)`
   border: 1px solid transparent;
   border-top: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
   border-bottom: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
-
+  cursor: pointer;
   &:hover {
     outline: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.hover}`};
+    svg {
+      opacity: 1; // this make the zoom icon visible on hover
+    }
   }
 `
 
@@ -116,4 +119,19 @@ export const MapResetButton = styled.button`
   border-radius: ${theme.spacing.borderMedium};
   background-color: ${theme.color.white};
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1); // copy maplibre button shadow
+`
+
+export const TdZoom = styled(Td)`
+  padding: 0;
+  height: 31px;
+  width: 48px;
+`
+export const ButtonZoom = styled.button`
+  all: unset;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  & svg {
+    opacity: ${({ $isSelected }) => ($isSelected ? 1 : 0)};
+  }
 `
