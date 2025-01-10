@@ -59,7 +59,7 @@ export const ImageAnnotationPopupContainer = styled.div`
   right: 0;
 `
 
-export const TrWithBorderStyling = styled(Tr)`
+export const TrImageClassification = styled(Tr)`
   border: 1px solid transparent;
   border-top: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
   border-bottom: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
@@ -69,6 +69,10 @@ export const TrWithBorderStyling = styled(Tr)`
     svg {
       opacity: 1; // this make the zoom icon visible on hover
     }
+  }
+  &:nth-child(odd),
+  &:nth-child(even) {
+    background-color: ${theme.color.white}; // undo default table row striping
   }
 `
 
@@ -125,6 +129,9 @@ export const TdZoom = styled(Td)`
   padding: 0;
   height: 31px;
   width: 48px;
+  &:hover {
+    background-color: ${theme.color.secondaryHover};
+  }
 `
 export const ButtonZoom = styled.button`
   all: unset;
