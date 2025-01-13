@@ -60,13 +60,24 @@ export const ImageAnnotationPopupContainer = styled.div`
   right: 0;
 `
 
+export const TdZoom = styled(Td)`
+  padding: 0;
+  height: 31px;
+  width: 48px;
+  background-color: ${theme.color.white}; // stop the row hover colour from showing
+  &:hover {
+    background-color: ${theme.color.tableRowHover};
+  }
+`
+
 export const TrImageClassification = styled(Tr)`
   border: 1px solid transparent;
   border-top: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
   border-bottom: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
   cursor: pointer;
   &:hover {
-    outline: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.hover}`};
+    border-top: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.hover}`};
+    border-bottom: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.hover}`};
     svg {
       opacity: 1; // this make the zoom icon visible on hover
     }
@@ -74,6 +85,9 @@ export const TrImageClassification = styled(Tr)`
   &:nth-child(odd),
   &:nth-child(even) {
     background-color: ${theme.color.white}; // undo default table row striping
+  }
+  &:has(${TdZoom}:hover) {
+    background-color: ${theme.color.white};
   }
 `
 
@@ -126,14 +140,6 @@ export const MapResetButton = styled.button`
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1); // copy maplibre button shadow
 `
 
-export const TdZoom = styled(Td)`
-  padding: 0;
-  height: 31px;
-  width: 48px;
-  &:hover {
-    background-color: ${theme.color.secondaryHover};
-  }
-`
 export const ButtonZoom = styled.button`
   all: unset;
   height: 100%;
