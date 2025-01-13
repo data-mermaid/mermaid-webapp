@@ -1,32 +1,11 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { getBenthicOptions } from '../../../library/getOptions'
 import { toast } from 'react-toastify'
-import { Select } from '../../../../generic/form'
-import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
-import language from '../../../../../language'
-import { Tr } from '../../../../generic/Table/table'
-import { getBenthicOptions } from '../../../../../library/getOptions'
-import {
-  imageClassificationPointPropType,
-  imageClassificationResponsePropType,
-} from '../../../../../App/mermaidData/mermaidDataProptypes'
-import { IconPlus } from '../../../../icons'
-import Modal from '../../../../generic/Modal/Modal'
-import InputAutocomplete from '../../../../generic/InputAutocomplete'
-import {
-  NewRowContainer,
-  NewRowFooterContainer,
-  NewRowLabel,
-  PopupTd,
-} from '../ImageAnnotationModal.styles'
-import { createPortal } from 'react-dom'
-import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 
-// TODO: Place this in a shared folder since used twice?
 const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
   annotations.some((annotation) => annotation.is_machine_created && annotation.ba_gr === ba_gr)
 
-const NewRow = ({
+export const useSelectNewAttribute = ({
   selectedPoint,
   dataToReview,
   setDataToReview,
@@ -142,86 +121,15 @@ const NewRow = ({
     }
   }
 
-  return (
-    <>
-      <Tr>
-        <PopupTd colSpan={4} align="center">
-          <ButtonSecondary type="button" onClick={handleDisplayNewRowSelection}>
-            <IconPlus /> Select New Attribute
-          </ButtonSecondary>
-        </PopupTd>
-      </Tr>
-      {createPortal(
-        <Modal
-          title="Select New Attribute"
-          isOpen={
-            !!benthicAttributeSelectOptions.length &&
-            !!growthFormSelectOptions.length &&
-            shouldDisplayModal
-          }
-          onDismiss={handleCloseModal}
-          allowCloseWithEscapeKey={false}
-          maxWidth="fit-content"
-          contentOverflowIsVisible
-          mainContent={
-            <NewRowContainer>
-              <NewRowLabel htmlFor="benthic-attribute-autocomplete">
-                Benthic Attribute
-                <InputAutocomplete
-                  id="benthic-attribute-autocomplete"
-                  autoFocus
-                  aria-labelledby="benthic-attribute-label"
-                  options={benthicAttributeSelectOptions}
-                  onChange={({ value }) => setSelectedBenthicAttr(value)}
-                  value={selectedBenthicAttr}
-                  noResultsText={language.autocomplete.noResultsDefault}
-                />
-              </NewRowLabel>
-
-              <NewRowLabel htmlFor="growth-forms">
-                <span>Growth forms</span>
-                <Select
-                  id="growth-forms"
-                  label="Growth forms"
-                  onChange={(e) => setSelectedGrowthForm(e.target.value)}
-                >
-                  <option value=""></option>
-                  {growthFormSelectOptions.map((growthForm) => (
-                    <option key={growthForm.id} value={growthForm.id}>
-                      {growthForm.name}
-                    </option>
-                  ))}
-                </Select>
-              </NewRowLabel>
-            </NewRowContainer>
-          }
-          footerContent={
-            <NewRowFooterContainer>
-              <ButtonSecondary type="button" onClick={handleCloseModal}>
-                Cancel
-              </ButtonSecondary>
-              <ButtonPrimary
-                type="button"
-                disabled={!selectedBenthicAttr}
-                onClick={handleAddNewRowClick}
-              >
-                <IconPlus /> Add Row
-              </ButtonPrimary>
-            </NewRowFooterContainer>
-          }
-        />,
-        document.body,
-      )}
-    </>
-  )
+  return {
+    handleDisplayNewRowSelection,
+    benthicAttributeSelectOptions,
+    growthFormSelectOptions,
+    shouldDisplayModal,
+    handleCloseModal,
+    selectedBenthicAttr,
+    setSelectedBenthicAttr,
+    handleAddNewRowClick,
+    setSelectedGrowthForm,
+  }
 }
-
-NewRow.propTypes = {
-  selectedPoint: imageClassificationPointPropType.isRequired,
-  dataToReview: imageClassificationResponsePropType.isRequired,
-  setDataToReview: PropTypes.func.isRequired,
-  databaseSwitchboardInstance: databaseSwitchboardPropTypes,
-  setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
-}
-
-export default NewRow
