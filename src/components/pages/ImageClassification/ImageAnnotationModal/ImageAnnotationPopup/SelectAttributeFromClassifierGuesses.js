@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -36,7 +36,26 @@ const SelectAttributeFromClassifierGuesses = ({
   setIsDataUpdatedSinceLastSave,
   databaseSwitchboardInstance,
 }) => {
-  const [selectedExistingRow, setSelectedExistingRow] = useState('')
+  const rowKeyForPoint = selectedPoint.annotations[0].ba_gr
+
+  const existingRowDropdownOptions = dataToReview.points
+    .reduce((acc, currentPoint) => {
+      const { ba_gr, ba_gr_label } = currentPoint.annotations[0]
+
+      if (
+        isClassified(currentPoint) &&
+        !isOptionAlreadyAdded(acc, ba_gr) &&
+        !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr)
+      ) {
+        acc.push({ label: ba_gr_label, value: ba_gr })
+      }
+
+      return acc
+    }, [])
+    .sort((a, b) => a.label.localeCompare(b.label))
+
+  const isPointInARow = existingRowDropdownOptions?.some((row) => rowKeyForPoint === row.value)
+  const selectedExistingRow = isPointInARow ? rowKeyForPoint : ''
 
   const {
     handleDisplayNewRowSelection,
@@ -55,29 +74,6 @@ const SelectAttributeFromClassifierGuesses = ({
     databaseSwitchboardInstance,
     setIsDataUpdatedSinceLastSave,
   })
-
-  const existingRowDropdownOptions = dataToReview.points
-    .reduce((acc, currentPoint) => {
-      const { ba_gr, ba_gr_label } = currentPoint.annotations[0]
-
-      if (
-        isClassified(currentPoint) &&
-        !isOptionAlreadyAdded(acc, ba_gr) &&
-        !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr)
-      ) {
-        acc.push({ label: ba_gr_label, value: ba_gr })
-      }
-
-      return acc
-    }, [])
-    .sort((a, b) => a.label.localeCompare(b.label))
-
-  const _updateSelectedRowOnPointAnnotationChange = useEffect(() => {
-    const rowKeyForPoint = selectedPoint.annotations[0].ba_gr
-    const isPointInARow = existingRowDropdownOptions.some((row) => rowKeyForPoint === row.value)
-
-    setSelectedExistingRow((prevState) => (isPointInARow ? rowKeyForPoint : prevState))
-  }, [selectedPoint.annotations, existingRowDropdownOptions])
 
   const handleSelectOnChange = (event) => {
     const existingAnnotation = event.target.value
@@ -151,7 +147,7 @@ const SelectAttributeFromClassifierGuesses = ({
             <option value="" disabled>
               Choose...
             </option>
-            {existingRowDropdownOptions.map((row) => (
+            {existingRowDropdownOptions?.map((row) => (
               <option key={row.value} value={row.value}>
                 {row.label}
               </option>
