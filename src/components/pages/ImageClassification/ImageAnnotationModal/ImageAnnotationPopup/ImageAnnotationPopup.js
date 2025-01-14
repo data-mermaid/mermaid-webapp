@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import { Tr, Th } from '../../../../generic/Table/table'
 import { imageClassificationResponsePropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
-import ExistingRows from './ExistingRows'
+import SelectAttributeFromClassifierGuesses from './SelectAttributeFromClassifierGuesses'
 import ClassifierGuesses from './ClassifierGuesses'
-import NewRow from './NewRow'
 import { EditPointPopupTable } from '../ImageAnnotationModal.styles'
 import './ImageAnnotationPopup.css'
 
@@ -33,18 +32,12 @@ const ImageAnnotationPopup = ({
           setDataToReview={setDataToReview}
           setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
         />
-        <ExistingRows
+        <SelectAttributeFromClassifierGuesses
           selectedPoint={selectedPoint}
           dataToReview={dataToReview}
           setDataToReview={setDataToReview}
           setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-        />
-        <NewRow
-          selectedPoint={selectedPoint}
-          dataToReview={dataToReview}
-          setDataToReview={setDataToReview}
           databaseSwitchboardInstance={databaseSwitchboardInstance}
-          setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
         />
       </tbody>
     </EditPointPopupTable>

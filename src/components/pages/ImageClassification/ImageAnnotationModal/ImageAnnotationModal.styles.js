@@ -114,16 +114,16 @@ export const PopupTdForRadio = styled(PopupTd)`
   width: 15px;
 `
 
-export const NewRowContainer = styled.div`
+export const NewAttributeModalContentContainer = styled.div`
   display: flex;
   gap: ${theme.spacing.large};
 `
 
-export const NewRowFooterContainer = styled.div`
+export const NewAttributeModalFooterContainer = styled.div`
   justify-self: right;
 `
 
-export const NewRowLabel = styled.label`
+export const NewAttributeModalLabel = styled.label`
   font-weight: bold;
 `
 
