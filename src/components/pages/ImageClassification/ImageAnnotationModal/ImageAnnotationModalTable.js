@@ -27,7 +27,7 @@ const ImageAnnotationModalTable = ({
   const tableData = Object.groupBy(classifiedPoints, ({ annotations }) => annotations[0].ba_gr)
 
   const sortAlphabeticallyByAttributeLabel = (a, b) =>
-    tableData[a][0].annotations[0].ba_gr_label.localeCompare(
+    tableData[a][0].annotations[0].ba_gr_label?.localeCompare(
       tableData[b][0].annotations[0].ba_gr_label,
     )
 

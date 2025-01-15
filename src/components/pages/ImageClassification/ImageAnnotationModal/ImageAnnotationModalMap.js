@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
+
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { IconReset } from '../../../icons'
@@ -62,11 +63,17 @@ const ImageAnnotationModalMap = ({
   map,
   setHasMapLoaded,
 }) => {
-  const mapContainer = useRef(null)
-  const [selectedPoint, setSelectedPoint] = useState({ id: null, lngLat: null })
   const [hoveredPointId, setHoveredPointId] = useState(null)
+  const [selectedPoint, setSelectedPoint] = useState({ id: null, lngLat: null })
+  const mapContainer = useRef(null)
+  const popupRef = useRef()
 
-  const updatePointsOnMap = () => {
+  const closePopup = () => {
+    setSelectedPoint({ id: null, lngLat: null })
+    popupRef.current?.remove()
+  }
+
+  const updatePointsOnMap = useCallback(() => {
     const currentZoom = map.current.getZoom()
     const currentCenter = map.current.getCenter()
 
@@ -75,7 +82,7 @@ const ImageAnnotationModalMap = ({
     map.current.getSource('patches').setData(getPointsGeojson())
 
     hackResetMapToCurrentPosition(map, currentZoom, currentCenter)
-  }
+  }, [getPointsGeojson, map])
 
   const updateImageSizeOnMap = () => {
     const bounds = map.current.getBounds()
@@ -183,23 +190,30 @@ const ImageAnnotationModalMap = ({
       [bounds._ne.lng, bounds._ne.lat],
     ])
 
-    // Map Listeners here on out
-    map.current.on('load', () => setHasMapLoaded(true))
-
-    // Display Label on point hover
-    map.current.on('mouseenter', 'patches-fill-layer', ({ features }) => {
+    const handleMapLoad = () => {
+      setHasMapLoaded(true)
+    }
+    const displayPointFeatureLabel = ({ features }) => {
       const [{ geometry, properties }] = features
       map.current.getCanvas().style.cursor = 'pointer'
       const label = properties.isUnclassified ? 'Unclassified' : properties.ba_gr_label
       pointLabelPopup.setLngLat(geometry.coordinates[0][0]).setHTML(label).addTo(map.current)
-    })
-
-    // Remove Label on point exit
-    map.current.on('mouseleave', 'patches-fill-layer', () => {
+    }
+    const hidePointFeatureLabel = () => {
       map.current.getCanvas().style.cursor = ''
       pointLabelPopup.remove()
-    })
+    }
+    map.current.on('load', handleMapLoad)
+    map.current.on('mouseenter', 'patches-fill-layer', displayPointFeatureLabel)
+    map.current.on('mouseleave', 'patches-fill-layer', hidePointFeatureLabel)
 
+    const currentMap = map.current
+    return () => {
+      currentMap.off('load', handleMapLoad)
+      currentMap.off('mouseenter', 'patches-fill-layer', displayPointFeatureLabel)
+      currentMap.off('mouseleave', 'patches-fill-layer', hidePointFeatureLabel)
+      currentMap.remove()
+    }
     // eslint-disable-next-line
   }, [])
 
@@ -236,8 +250,9 @@ const ImageAnnotationModalMap = ({
 
     const hideFeaturePopup = ({ point }) => {
       const [patches] = map.current.queryRenderedFeatures(point, { layers: ['patches-fill-layer'] })
-      if (!patches) {
-        setSelectedPoint({ id: '', lngLat: '' })
+      const isClickFromFeatureLayer = !!patches
+      if (!isClickFromFeatureLayer) {
+        closePopup()
       }
     }
 
@@ -254,20 +269,25 @@ const ImageAnnotationModalMap = ({
     if (!hasMapLoaded) {
       return
     }
-
-    map.current.on('mousemove', 'patches-fill-layer', ({ features }) => {
+    const applyPointHoverStyle = ({ features }) => {
       if (features.length > 0) {
         const [{ properties }] = features
         setHoveredPointId(properties.id)
       }
-    })
-
-    map.current.on('mouseleave', 'patches-fill-layer', () => {
+    }
+    const removePointHoverStyle = () => {
       setHoveredPointId(null)
-    })
+    }
+    map.current.on('mousemove', 'patches-fill-layer', applyPointHoverStyle)
 
-    // eslint-disable-next-line
-  }, [dataToReview, hasMapLoaded])
+    map.current.on('mouseleave', 'patches-fill-layer', removePointHoverStyle)
+
+    const currentMap = map.current
+    return () => {
+      currentMap.off('mousemove', 'patches-fill-layer', applyPointHoverStyle)
+      currentMap.off('mouseleave', 'patches-fill-layer', removePointHoverStyle)
+    }
+  }, [hasMapLoaded, map])
 
   const _updatePointsOnDataChange = useEffect(() => {
     if (!hasMapLoaded) {
@@ -275,9 +295,7 @@ const ImageAnnotationModalMap = ({
     }
 
     updatePointsOnMap()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataToReview, hasMapLoaded])
+  }, [updatePointsOnMap, hasMapLoaded])
 
   // This effect is essentially triggered by the _setImageScaleOnWindowResize above.
   // It can be combined, but readability becomes comprimised.
@@ -356,6 +374,7 @@ const ImageAnnotationModalMap = ({
           map={map.current}
           lngLat={selectedPoint.lngLat}
           anchor={selectedPoint.popupAnchorPosition}
+          popupRef={popupRef}
         >
           <ImageAnnotationPopup
             dataToReview={dataToReview}
@@ -363,6 +382,7 @@ const ImageAnnotationModalMap = ({
             pointId={selectedPoint.id}
             databaseSwitchboardInstance={databaseSwitchboardInstance}
             setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+            closePopup={closePopup}
           />
         </EditPointPopupWrapper>
       ) : null}

@@ -13,10 +13,6 @@ const moveAnnotationToFront = (array, index) => {
   return [movedAnnotation, ...newArray]
 }
 
-const confirmFirstAnnotationAndUnconfirmRest = (annotation, i) => {
-  annotation.is_confirmed = i === 0
-}
-
 const ClassifierGuesses = ({
   selectedPoint,
   dataToReview,
@@ -36,9 +32,15 @@ const ClassifierGuesses = ({
       classifierGuessesSortedByScore,
       classifierGuessIndex,
     )
-    updatedAnnotations.forEach(confirmFirstAnnotationAndUnconfirmRest)
+
+    const updatedAnnotationsWithResetConfirmation = updatedAnnotations.map((annotation) => ({
+      ...annotation,
+      is_confirmed: false,
+    }))
     const updatedPoints = dataToReview.points.map((point) =>
-      point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
+      point.id === selectedPoint.id
+        ? { ...point, annotations: updatedAnnotationsWithResetConfirmation }
+        : point,
     )
     setDataToReview({ ...dataToReview, points: updatedPoints })
     setIsDataUpdatedSinceLastSave(true)

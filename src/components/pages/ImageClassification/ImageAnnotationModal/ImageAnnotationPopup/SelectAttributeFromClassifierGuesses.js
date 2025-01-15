@@ -36,11 +36,15 @@ const SelectAttributeFromClassifierGuesses = ({
   setIsDataUpdatedSinceLastSave,
   databaseSwitchboardInstance,
 }) => {
-  const rowKeyForPoint = selectedPoint.annotations[0].ba_gr
+  const rowKeyForPoint = selectedPoint.annotations[0]?.ba_gr
 
   const existingRowDropdownOptions = dataToReview.points
     .reduce((acc, currentPoint) => {
-      const { ba_gr, ba_gr_label } = currentPoint.annotations[0]
+      const annotations = currentPoint.annotations[0]
+      if (!annotations) {
+        return acc
+      }
+      const { ba_gr, ba_gr_label } = annotations
 
       if (
         isClassified(currentPoint) &&
@@ -108,7 +112,7 @@ const SelectAttributeFromClassifierGuesses = ({
       ba_gr_label: labelForExistingAnnotation,
       benthic_attribute,
       growth_form: growth_form === 'null' ? null : growth_form,
-      is_confirmed: true,
+      is_confirmed: false,
       is_machine_created: false,
     }
 
@@ -134,7 +138,7 @@ const SelectAttributeFromClassifierGuesses = ({
             name="existing-row-point-selection"
             value="existing-row"
             disabled={!selectedExistingRow}
-            checked={selectedPoint.annotations[0].ba_gr === selectedExistingRow}
+            checked={selectedPoint.annotations[0]?.ba_gr === selectedExistingRow}
             onChange={() => addExistingAnnotation(selectedExistingRow)}
           />
         </PopupTdForRadio>
