@@ -50,29 +50,31 @@ const ImageAnnotationPopup = ({
 
   return (
     <>
-      <EditPointPopupTable aria-labelledby="table-label">
-        <thead>
-          <Tr>
-            <Th colSpan={2}>Classifier Guesses</Th>
-            <Th align="right">Confidence</Th>
-          </Tr>
-        </thead>
-        <tbody>
-          <ClassifierGuesses
-            selectedPoint={selectedPoint}
-            dataToReview={dataToReview}
-            setDataToReview={setDataToReview}
-            setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-          />
-          <SelectAttributeFromClassifierGuesses
-            selectedPoint={selectedPoint}
-            dataToReview={dataToReview}
-            setDataToReview={setDataToReview}
-            setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-            databaseSwitchboardInstance={databaseSwitchboardInstance}
-          />
-        </tbody>
-      </EditPointPopupTable>
+      {isSelectedPointUnclassified ? null : (
+        <EditPointPopupTable aria-labelledby="table-label">
+          <thead>
+            <Tr>
+              <Th colSpan={2}>Classifier Guesses</Th>
+              <Th align="right">Confidence</Th>
+            </Tr>
+          </thead>
+          <tbody>
+            <ClassifierGuesses
+              selectedPoint={selectedPoint}
+              dataToReview={dataToReview}
+              setDataToReview={setDataToReview}
+              setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+            />
+          </tbody>
+        </EditPointPopupTable>
+      )}
+      <SelectAttributeFromClassifierGuesses
+        selectedPoint={selectedPoint}
+        dataToReview={dataToReview}
+        setDataToReview={setDataToReview}
+        setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+        databaseSwitchboardInstance={databaseSwitchboardInstance}
+      />
       <PopupBottomRow>
         <PopupConfirmButton
           type="button"
