@@ -41,24 +41,29 @@ export const useSelectNewAttribute = ({
     setShouldDisplayModal(false)
   }
 
-  const selectClassifierGuessAsConfirmedAnnotation = () => {
-    const updatedAnnotations = selectedPoint.annotations.reduce((acc, currentAnnotation) => {
-      const { ba_gr, is_machine_created } = currentAnnotation
+  const selectClassifierGuess = () => {
+    const updatedAnnotations = selectedPoint.annotations.reduce(
+      (accumulator, currentAnnotation) => {
+        const { ba_gr, is_machine_created: isClassifierGuess } = currentAnnotation
 
-      // only want classifier guesses
-      if (!is_machine_created) {
-        return acc
-      }
+        if (!isClassifierGuess) {
+          return accumulator
+        }
 
-      // Move the matching classifier guess to front of array and confirm. Unconfirm the rest.
-      if (`${selectedBenthicAttr}_${selectedGrowthForm || null}` === ba_gr) {
-        acc.unshift({ ...currentAnnotation, is_confirmed: true })
-      } else {
-        acc.push({ ...currentAnnotation, is_confirmed: false })
-      }
+        const moveMatchingClassifierGuessToAccumulatorStartIndex = () => {
+          if (`${selectedBenthicAttr}_${selectedGrowthForm || null}` === ba_gr) {
+            accumulator.unshift(currentAnnotation)
+          } else {
+            accumulator.push(currentAnnotation)
+          }
+        }
 
-      return acc
-    }, [])
+        moveMatchingClassifierGuessToAccumulatorStartIndex()
+
+        return accumulator
+      },
+      [],
+    )
 
     const updatedPoints = dataToReview.points.map((point) =>
       point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
@@ -70,14 +75,9 @@ export const useSelectNewAttribute = ({
   }
 
   const addNewAnnotation = () => {
-    // Only want classifier guesses, and want them unconfirmed.
-    const resetAnnotationsForPoint = selectedPoint.annotations.reduce((acc, currentAnnotation) => {
-      if (currentAnnotation.is_machine_created) {
-        acc.push({ ...currentAnnotation, is_confirmed: false })
-      }
-
-      return acc
-    }, [])
+    const classifierGuessesWithConfrimationReset = selectedPoint.annotations
+      .filter((annotation) => annotation.is_machine_created)
+      .map((annotation) => ({ ...annotation, is_confirmed: false }))
 
     const benthicAttributeLabel = benthicAttributeSelectOptions.find(
       ({ value }) => value === selectedBenthicAttr,
@@ -93,11 +93,11 @@ export const useSelectNewAttribute = ({
         : benthicAttributeLabel,
       benthic_attribute: selectedBenthicAttr,
       growth_form: selectedGrowthForm || null,
-      is_confirmed: true,
+      is_confirmed: false,
       is_machine_created: false,
     }
 
-    const updatedAnnotations = [annotationToAdd, ...resetAnnotationsForPoint]
+    const updatedAnnotations = [annotationToAdd, ...classifierGuessesWithConfrimationReset]
 
     const updatedPoints = dataToReview.points.map((point) =>
       point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
@@ -115,7 +115,7 @@ export const useSelectNewAttribute = ({
         `${selectedBenthicAttr}_${selectedGrowthForm || null}`,
       )
     ) {
-      selectClassifierGuessAsConfirmedAnnotation()
+      selectClassifierGuess()
     } else {
       addNewAnnotation()
     }
