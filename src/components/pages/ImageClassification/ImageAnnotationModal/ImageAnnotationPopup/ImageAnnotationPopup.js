@@ -9,8 +9,11 @@ import {
   EditPointPopupTable,
   PopupBottomRow,
   PopupConfirmButton,
+  PopupIconButton,
+  PopupZoomButtonContainer,
 } from '../ImageAnnotationModal.styles'
 import './ImageAnnotationPopup.css'
+import { IconZoomIn, IconZoomOut } from '../../../../icons'
 
 const ImageAnnotationPopup = ({
   dataToReview,
@@ -19,6 +22,8 @@ const ImageAnnotationPopup = ({
   databaseSwitchboardInstance,
   setIsDataUpdatedSinceLastSave,
   closePopup,
+  resetZoom,
+  zoomToSelectedPoint,
 }) => {
   const selectedPoint = dataToReview.points.find((point) => point.id === pointId)
   const isSelectedPointConfirmed = selectedPoint.annotations[0]?.is_confirmed
@@ -76,12 +81,21 @@ const ImageAnnotationPopup = ({
         databaseSwitchboardInstance={databaseSwitchboardInstance}
       />
       <PopupBottomRow>
+        <PopupZoomButtonContainer>
+          <PopupIconButton type="button" onClick={resetZoom}>
+            <IconZoomOut />
+          </PopupIconButton>
+          <PopupIconButton type="button" onClick={zoomToSelectedPoint}>
+            <IconZoomIn />
+          </PopupIconButton>
+        </PopupZoomButtonContainer>
+
         <PopupConfirmButton
           type="button"
           onClick={() => confirmPoint(selectedPoint.id)}
           disabled={isSelectedPointConfirmed || isSelectedPointUnclassified}
         >
-          Confirm
+          {isSelectedPointConfirmed ? 'Confirmed' : 'Confirm'}
         </PopupConfirmButton>
       </PopupBottomRow>
     </>
@@ -95,6 +109,8 @@ ImageAnnotationPopup.propTypes = {
   databaseSwitchboardInstance: databaseSwitchboardPropTypes,
   setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
   closePopup: PropTypes.func.isRequired,
+  resetZoom: PropTypes.func.isRequired,
+  zoomToSelectedPoint: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationPopup

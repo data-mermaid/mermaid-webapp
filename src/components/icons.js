@@ -58,6 +58,7 @@ import upload from '@iconify-icons/mdi/upload'
 import user from '@iconify-icons/mdi/user'
 import usersAndTransects from '@iconify-icons/mdi/account-box-multiple-outline'
 import zoomIn from '@iconify-icons/mdi/zoom-in'
+import zoomOut from '@iconify-icons/mdi/zoom-out'
 
 const WarningIcon = styled(InlineIcon)`
   color: ${theme.color.warningColor};
@@ -126,3 +127,4 @@ export const IconUser = (props) => <InlineIcon icon={user} {...props} />
 export const IconUsers = (props) => <InlineIcon icon={accountGroup} {...props} />
 export const IconUsersAndTransects = (props) => <InlineIcon icon={usersAndTransects} {...props} />
 export const IconZoomIn = (props) => <InlineIcon icon={zoomIn} {...props} />
+export const IconZoomOut = (props) => <InlineIcon icon={zoomOut} {...props} />

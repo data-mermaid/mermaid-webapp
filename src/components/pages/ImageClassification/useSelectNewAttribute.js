@@ -75,7 +75,7 @@ export const useSelectNewAttribute = ({
   }
 
   const addNewAnnotation = () => {
-    const classifierGuessesWithConfrimationReset = selectedPoint.annotations
+    const classifierGuessesWithConfirmationReset = selectedPoint.annotations
       .filter((annotation) => annotation.is_machine_created)
       .map((annotation) => ({ ...annotation, is_confirmed: false }))
 
@@ -97,7 +97,7 @@ export const useSelectNewAttribute = ({
       is_machine_created: false,
     }
 
-    const updatedAnnotations = [annotationToAdd, ...classifierGuessesWithConfrimationReset]
+    const updatedAnnotations = [annotationToAdd, ...classifierGuessesWithConfirmationReset]
 
     const updatedPoints = dataToReview.points.map((point) =>
       point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
