@@ -592,6 +592,9 @@ const pages = {
   },
   userTable: {
     title: 'Users',
+    introductionParagraph:
+      'MERMAID gives you the ability to control who can see and access your data.',
+    moreInfoTitle: 'User Roles',
     filterToolbarTextForAdmin: 'Filter this table by name or email',
     filterToolbarTextForNonAdmin: 'Filter this table by name or role',
     searchEmailToolbarText: 'Enter email address of user to add',
