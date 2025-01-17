@@ -1,11 +1,11 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import colorHelper from 'color'
 import theme from '../../../../theme'
-import { Table, Tr, Td } from '../../../generic/Table/table'
+import { Table, Tr, Td, thStyles } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { RowSpaceBetween } from '../../../generic/positioning'
-import { ButtonPrimary } from '../../../generic/buttons'
+import { ButtonPrimary, IconButton } from '../../../generic/buttons'
 
 const confirmed = colorHelper(COLORS.confirmed)
 const unconfirmed = colorHelper(COLORS.unconfirmed)
@@ -157,9 +157,33 @@ export const LoadingIndicatorImageClassificationImage = styled(LoadingIndicator)
   height: 100%;
 `
 export const PopupBottomRow = styled(RowSpaceBetween)`
+  align-items: stretch;
   padding: 1rem;
 `
 
 export const PopupConfirmButton = styled(ButtonPrimary)`
   width: 100%;
+`
+export const PopupIconButton = styled(IconButton)`
+  border: solid thin ${theme.color.border};
+  margin: 0;
+  padding: ${theme.spacing.buttonPadding};
+
+  &:nth-child(2) {
+    border-left: none;
+  }
+`
+export const PopupZoomButtonContainer = styled.div`
+  display: flex;
+`
+export const LabelThatLooksLikeATh = styled.div(
+  (props) => css`
+    ${thStyles(props)}
+  `,
+)
+export const RowThatLooksLikeAnEvenTr = styled.div`
+  display: flex;
+  padding: 10px;
+  gap: 20px;
+  background-color: ${theme.color.tableRowEven};
 `

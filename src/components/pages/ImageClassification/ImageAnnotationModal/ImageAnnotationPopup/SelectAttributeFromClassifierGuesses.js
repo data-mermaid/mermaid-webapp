@@ -10,13 +10,13 @@ import { createPortal } from 'react-dom'
 import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import { IconPlus } from '../../../../icons'
 import {
+  LabelThatLooksLikeATh,
   NewAttributeModalContentContainer,
   NewAttributeModalFooterContainer,
   NewAttributeModalLabel,
+  RowThatLooksLikeAnEvenTr,
 } from '../ImageAnnotationModal.styles'
-import { PopupTd, PopupTdForRadio } from '../ImageAnnotationModal.styles'
 import { Select } from '../../../../generic/form'
-import { Th, Tr } from '../../../../generic/Table/table'
 import { useSelectNewAttribute } from '../../useSelectNewAttribute'
 import InputAutocomplete from '../../../../generic/InputAutocomplete'
 import language from '../../../../../language'
@@ -127,40 +127,35 @@ const SelectAttributeFromClassifierGuesses = ({
 
   return (
     <>
-      <Tr>
-        <Th colSpan={4}>Attribute growth form</Th>
-      </Tr>
-      <Tr>
-        <PopupTdForRadio>
-          <input
-            type="radio"
-            id="existing-row-point-selection"
-            name="existing-row-point-selection"
-            value="existing-row"
-            disabled={!selectedExistingRow}
-            checked={selectedPoint.annotations[0]?.ba_gr === selectedExistingRow}
-            onChange={() => addExistingAnnotation(selectedExistingRow)}
-          />
-        </PopupTdForRadio>
-        <PopupTd colSpan={3}>
-          <Select
-            label="Add to existing row"
-            value={selectedExistingRow}
-            onChange={handleSelectOnChange}
-          >
-            <option value="" disabled>
-              Choose...
+      <LabelThatLooksLikeATh>Attribute growth form</LabelThatLooksLikeATh>
+      <RowThatLooksLikeAnEvenTr>
+        <input
+          type="radio"
+          id="existing-row-point-selection"
+          name="existing-row-point-selection"
+          value="existing-row"
+          disabled={!selectedExistingRow}
+          checked={selectedPoint.annotations[0]?.ba_gr === selectedExistingRow}
+          onChange={() => addExistingAnnotation(selectedExistingRow)}
+        />
+
+        <Select
+          label="Add to existing row"
+          value={selectedExistingRow}
+          onChange={handleSelectOnChange}
+        >
+          <option value="" disabled>
+            Choose...
+          </option>
+          {existingRowDropdownOptions?.map((row) => (
+            <option key={row.value} value={row.value}>
+              {row.label}
             </option>
-            {existingRowDropdownOptions?.map((row) => (
-              <option key={row.value} value={row.value}>
-                {row.label}
-              </option>
-            ))}
-            <option disabled>──────────</option>
-            <option value="selectNewAttribute">Select new attribute...</option>
-          </Select>
-        </PopupTd>
-      </Tr>
+          ))}
+          <option disabled>──────────</option>
+          <option value="selectNewAttribute">Select new attribute...</option>
+        </Select>
+      </RowThatLooksLikeAnEvenTr>
       {createPortal(
         <Modal
           title="Select New Attribute"

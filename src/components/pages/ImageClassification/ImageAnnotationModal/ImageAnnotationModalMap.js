@@ -64,12 +64,20 @@ const ImageAnnotationModalMap = ({
   setHasMapLoaded,
 }) => {
   const [hoveredPointId, setHoveredPointId] = useState(null)
-  const [selectedPoint, setSelectedPoint] = useState({ id: null, lngLat: null })
+  const [selectedPoint, setSelectedPoint] = useState({
+    id: null,
+    popupAnchorLngLat: null,
+    popupAnchorPosition: null,
+  })
   const mapContainer = useRef(null)
   const popupRef = useRef()
 
   const closePopup = () => {
-    setSelectedPoint({ id: null, lngLat: null })
+    setSelectedPoint({
+      id: null,
+      popupAnchorLngLat: null,
+      popupAnchorPosition: null,
+    })
     popupRef.current?.remove()
   }
 
@@ -217,6 +225,14 @@ const ImageAnnotationModalMap = ({
     // eslint-disable-next-line
   }, [])
 
+  const zoomToSelectedPoint = useCallback(() => {
+    if (!selectedPoint.bounds || !map.current) {
+      return
+    }
+
+    map.current.fitBounds(selectedPoint.bounds, { padding: 250 })
+  }, [map, selectedPoint.bounds])
+
   const _displayEditPointPopupOnPointClick = useEffect(() => {
     if (!hasMapLoaded) {
       return
@@ -243,8 +259,9 @@ const ImageAnnotationModalMap = ({
 
       setSelectedPoint({
         id: properties.id,
-        lngLat: latLngLookupByAnchorPosition[popupAnchorPosition],
+        popupAnchorLngLat: latLngLookupByAnchorPosition[popupAnchorPosition],
         popupAnchorPosition,
+        bounds,
       })
     }
 
@@ -353,6 +370,7 @@ const ImageAnnotationModalMap = ({
     map.current.setPaintProperty('patches-outline-layer', 'line-color', lineColor)
   }, [selectedAttributeId, hoveredAttributeId, hoveredPointId, hasMapLoaded, selectedPoint, map])
 
+  const resetZoom = () => easeToDefaultView(map)
   return (
     <ImageAnnotationMapWrapper>
       {!hasMapLoaded ? <LoadingIndicatorImageClassificationImage /> : null}
@@ -364,7 +382,7 @@ const ImageAnnotationModalMap = ({
         }}
       />
       {hasMapLoaded ? (
-        <MapResetButton type="button" onClick={() => easeToDefaultView(map)}>
+        <MapResetButton type="button" onClick={resetZoom}>
           <IconReset />
         </MapResetButton>
       ) : null}
@@ -372,7 +390,7 @@ const ImageAnnotationModalMap = ({
       {selectedPoint.id ? (
         <EditPointPopupWrapper
           map={map.current}
-          lngLat={selectedPoint.lngLat}
+          lngLat={selectedPoint.popupAnchorLngLat}
           anchor={selectedPoint.popupAnchorPosition}
           popupRef={popupRef}
         >
@@ -383,6 +401,8 @@ const ImageAnnotationModalMap = ({
             databaseSwitchboardInstance={databaseSwitchboardInstance}
             setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
             closePopup={closePopup}
+            resetZoom={resetZoom}
+            zoomToSelectedPoint={zoomToSelectedPoint}
           />
         </EditPointPopupWrapper>
       ) : null}
