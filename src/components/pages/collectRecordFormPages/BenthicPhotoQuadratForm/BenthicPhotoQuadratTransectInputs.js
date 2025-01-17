@@ -512,7 +512,7 @@ BenthicPhotoQuadratTransectInputs.propTypes = {
   validationsApiData: PropTypes.shape({ quadrat_transect: benthicpqtValidationPropType })
     .isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
-  isImageClassification: PropTypes.bool.isRequired,
+  isImageClassification: PropTypes.bool,
 }
 
 export default BenthicPhotoQuadratTransectInputs

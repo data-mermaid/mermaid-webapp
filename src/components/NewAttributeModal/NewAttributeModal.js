@@ -355,7 +355,7 @@ MainContentPages.propTypes = {
   handleFormikPageOneValueChange: PropTypes.func.isRequired,
   handleNewAttributeChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  attributeName: PropTypes.string.isRequired,
+  attributeName: PropTypes.string,
 }
 
 NewAttributeModal.propTypes = {
