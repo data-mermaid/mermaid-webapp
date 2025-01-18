@@ -5,7 +5,8 @@ import accountGroup from '@iconify-icons/mdi/account-group'
 import accountRemove from '@iconify-icons/mdi/account-remove'
 import alert from '@iconify-icons/mdi/alert'
 import arrowBack from '@iconify-icons/mdi/arrow-back'
-import arrowRight from '@iconify-icons/mdi/arrow-right-bold-circle'
+import arrowRight from '@iconify-icons/mdi/arrow-right-bold'
+import arrowRightCircle from '@iconify-icons/mdi/arrow-right-bold-circle'
 import asterisk from '@iconify-icons/mdi/asterisk'
 import bellIcon from '@iconify-icons/mdi/bell'
 import book from '@iconify-icons/mdi/book'
@@ -75,6 +76,7 @@ export const IconAdmin = (props) => <InlineIcon icon={fileAccountOutline} {...pr
 export const IconAlert = (props) => <WarningIcon icon={alert} {...props} />
 export const IconArrowBack = (props) => <InlineIcon icon={arrowBack} {...props} />
 export const IconArrowRight = (props) => <InlineIcon icon={arrowRight} {...props} />
+export const IconArrowRightCircle = (props) => <InlineIcon icon={arrowRightCircle} {...props} />
 export const IconBell = (props) => <InlineIcon icon={bellIcon} {...props} />
 export const IconBook = (props) => <InlineIcon icon={book} {...props} />
 export const IconCheck = (props) => <InlineIcon icon={checkIcon} {...props} />

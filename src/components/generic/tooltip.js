@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import theme from '../../theme'
 
-export const Tooltip = styled('p')`
+export const TooltipP = styled('p')`
   white-space: nowrap;
   border-style: dotted;
   border-width: 0 0 ${theme.spacing.borderMedium} 0;
@@ -40,21 +40,51 @@ export const TooltipPopup = styled('span')`
   top: 4rem;
   white-space: normal;
   z-index: 100;
+  text-align: center;
+`
+
+const TooltipWrapper = styled('div')`
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  &:hover span,
+  &:focus span {
+    transition: ${theme.timing.hoverTransition};
+    display: block;
+  }
 `
 
 export const TooltipWithText = ({ text, tooltipText, id, ...restOfProps }) => {
   return (
-    <Tooltip tabIndex="0" id={id} {...restOfProps}>
+    <TooltipP tabIndex="0" id={id} {...restOfProps}>
       {text}
       <TooltipPopup role="tooltip" aria-labelledby={id}>
         {tooltipText}
       </TooltipPopup>
-    </Tooltip>
+    </TooltipP>
   )
 }
 
 TooltipWithText.propTypes = {
   text: PropTypes.node.isRequired,
+  tooltipText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  id: PropTypes.string.isRequired,
+}
+
+export const Tooltip = ({ children, tooltipText, id }) => {
+  return (
+    <TooltipWrapper>
+      {children}
+      <TooltipPopup role="tooltip" aria-labelledby={id}>
+        {tooltipText}
+      </TooltipPopup>
+    </TooltipWrapper>
+  )
+}
+
+Tooltip.propTypes = {
+  children: PropTypes.node.isRequired,
   tooltipText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   id: PropTypes.string.isRequired,
 }
