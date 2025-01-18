@@ -5,7 +5,7 @@ import { Table, Tr, Td, thStyles } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { RowSpaceBetween } from '../../../generic/positioning'
-import { ButtonPrimary, IconButton } from '../../../generic/buttons'
+import { ButtonPrimary, IconButton, buttonSecondaryCss } from '../../../generic/buttons'
 
 const confirmed = colorHelper(COLORS.confirmed)
 const unconfirmed = colorHelper(COLORS.unconfirmed)
@@ -165,6 +165,7 @@ export const PopupConfirmButton = styled(ButtonPrimary)`
   width: 100%;
 `
 export const PopupIconButton = styled(IconButton)`
+  ${buttonSecondaryCss}
   border: solid thin ${theme.color.border};
   margin: 0;
   padding: ${theme.spacing.buttonPadding};
