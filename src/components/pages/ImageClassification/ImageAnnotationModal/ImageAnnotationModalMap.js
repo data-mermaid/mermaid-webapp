@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
+import getBounds from '@turf/bbox'
 
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
@@ -87,7 +88,7 @@ const ImageAnnotationModalMap = ({
 
     hackTemporarilySetMapToDefaultPosition(map)
 
-    map.current.getSource('patches').setData(getPointsGeojson())
+    map.current?.getSource('patches')?.setData(getPointsGeojson())
 
     hackResetMapToCurrentPosition(map, currentZoom, currentCenter)
   }, [getPointsGeojson, map])
@@ -95,7 +96,7 @@ const ImageAnnotationModalMap = ({
   const updateImageSizeOnMap = () => {
     const bounds = map.current.getBounds()
 
-    map.current.getSource('benthicQuadratImage').setCoordinates([
+    map.current?.getSource('benthicQuadratImage')?.setCoordinates([
       // spans the image across the entire map
       [bounds._sw.lng, bounds._ne.lat],
       [bounds._ne.lng, bounds._ne.lat],
@@ -233,36 +234,76 @@ const ImageAnnotationModalMap = ({
     map.current.fitBounds(selectedPoint.bounds, { padding: 250 })
   }, [map, selectedPoint.bounds])
 
+  const zoomToBounds = useCallback(
+    (bounds) => {
+      if (!bounds || !map.current) {
+        return
+      }
+      map.current.fitBounds(bounds, { padding: 250 })
+    },
+    [map],
+  )
+
+  const selectFeature = useCallback((feature) => {
+    const { properties } = feature
+
+    const xAnchor = properties.isPointInLeftHalfOfImage ? 'left' : 'right'
+    const yAnchor = properties.isPointInTopHalfOfImage ? 'top' : 'bottom'
+    const popupAnchorPosition = `${yAnchor}-${xAnchor}`
+
+    const bounds = new maplibregl.LngLatBounds(getBounds(feature))
+    const topLeft = bounds.getNorthWest().toArray()
+    const topRight = bounds.getNorthEast().toArray()
+    const bottomRight = bounds.getSouthEast().toArray()
+    const bottomLeft = bounds.getSouthWest().toArray()
+
+    const latLngLookupByAnchorPosition = {
+      'top-left': bottomRight,
+      'top-right': bottomLeft,
+      'bottom-left': topRight,
+      'bottom-right': topLeft,
+    }
+
+    setSelectedPoint({
+      id: properties.id,
+      popupAnchorLngLat: latLngLookupByAnchorPosition[popupAnchorPosition],
+      popupAnchorPosition,
+      bounds,
+    })
+  }, [])
+
+  const selectNextUnconfirmedPoint = useCallback(() => {
+    map.current.setZoom(DEFAULT_ZOOM)
+    const { features } = getPointsGeojson()
+
+    const selectedPointFeaturesIndex = features.findIndex(
+      (feature) => feature.properties.id === selectedPoint.id,
+    )
+    const backSectionOfFeaturesArray = features.slice(selectedPointFeaturesIndex + 1)
+
+    const frontSectionOfFeaturesArray = features.slice(0, selectedPointFeaturesIndex)
+    const featuresArrayOrderedForSearching = [
+      ...backSectionOfFeaturesArray,
+      ...frontSectionOfFeaturesArray,
+    ]
+    const nextUnconfirmedFeature = featuresArrayOrderedForSearching.find(
+      (feature) => !feature.properties.isConfirmed,
+    )
+
+    zoomToBounds(getBounds(nextUnconfirmedFeature))
+    map.current.once('idle', () => {
+      selectFeature(nextUnconfirmedFeature)
+    })
+  }, [getPointsGeojson, map, selectFeature, selectedPoint.id, zoomToBounds])
+
   const _displayEditPointPopupOnPointClick = useEffect(() => {
     if (!hasMapLoaded) {
       return
     }
 
-    const showFeaturePopup = ({ features }) => {
-      const [{ geometry, properties }] = features
-
-      const xAnchor = properties.isPointInLeftHalfOfImage ? 'left' : 'right'
-      const yAnchor = properties.isPointInTopHalfOfImage ? 'top' : 'bottom'
-      const topLeft = geometry.coordinates[0][0]
-      const topRight = geometry.coordinates[0][1]
-      const bottomRight = geometry.coordinates[0][2]
-      const bottomLeft = geometry.coordinates[0][3]
-      const bounds = new maplibregl.LngLatBounds(topLeft, bottomRight)
-      const popupAnchorPosition = `${yAnchor}-${xAnchor}`
-      const latLngLookupByAnchorPosition = {
-        'top-left': bottomRight,
-        'top-right': bottomLeft,
-        'bottom-left': topRight,
-        'bottom-right': topLeft,
-      }
-      map.current.fitBounds(bounds, { padding: 250 })
-
-      setSelectedPoint({
-        id: properties.id,
-        popupAnchorLngLat: latLngLookupByAnchorPosition[popupAnchorPosition],
-        popupAnchorPosition,
-        bounds,
-      })
+    const showFeaturePopupOnClick = ({ features }) => {
+      const feature = features[0]
+      selectFeature(feature)
     }
 
     const hideFeaturePopup = ({ point }) => {
@@ -273,14 +314,14 @@ const ImageAnnotationModalMap = ({
       }
     }
 
-    map.current.on('click', 'patches-fill-layer', showFeaturePopup)
+    map.current.on('click', 'patches-fill-layer', showFeaturePopupOnClick)
     map.current.on('click', hideFeaturePopup)
 
     return () => {
-      map.current.off('click', 'patches-fill-layer', showFeaturePopup)
+      map.current.off('click', 'patches-fill-layer', showFeaturePopupOnClick)
       map.current.off('click', hideFeaturePopup)
     }
-  }, [dataToReview, hasMapLoaded, map])
+  }, [dataToReview, hasMapLoaded, map, selectFeature])
 
   const _updateStyleOnPointHover = useEffect(() => {
     if (!hasMapLoaded) {
@@ -400,9 +441,9 @@ const ImageAnnotationModalMap = ({
             pointId={selectedPoint.id}
             databaseSwitchboardInstance={databaseSwitchboardInstance}
             setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-            closePopup={closePopup}
             resetZoom={resetZoom}
             zoomToSelectedPoint={zoomToSelectedPoint}
+            selectNextUnconfirmedPoint={selectNextUnconfirmedPoint}
           />
         </EditPointPopupWrapper>
       ) : null}

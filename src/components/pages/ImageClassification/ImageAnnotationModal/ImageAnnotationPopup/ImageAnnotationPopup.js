@@ -13,7 +13,8 @@ import {
   PopupZoomButtonContainer,
 } from '../ImageAnnotationModal.styles'
 import './ImageAnnotationPopup.css'
-import { IconZoomIn, IconZoomOut } from '../../../../icons'
+import { IconArrowRight, IconZoomIn, IconZoomOut } from '../../../../icons'
+import { Tooltip } from '../../../../generic/tooltip'
 
 const ImageAnnotationPopup = ({
   dataToReview,
@@ -21,13 +22,20 @@ const ImageAnnotationPopup = ({
   pointId,
   databaseSwitchboardInstance,
   setIsDataUpdatedSinceLastSave,
-  closePopup,
   resetZoom,
   zoomToSelectedPoint,
+  selectNextUnconfirmedPoint,
 }) => {
   const selectedPoint = dataToReview.points.find((point) => point.id === pointId)
   const isSelectedPointConfirmed = selectedPoint.annotations[0]?.is_confirmed
+  const areAnyClassifierGuesses = !!selectedPoint.annotations.filter(
+    (annotation) => annotation.is_machine_created,
+  ).length
+
   const isSelectedPointUnclassified = selectedPoint.annotations.length === 0
+  const areAllPointsConfirmed = dataToReview.points.every(
+    (point) => point.annotations[0]?.is_confirmed,
+  )
 
   const confirmPoint = useCallback(
     (pointId) => {
@@ -48,14 +56,13 @@ const ImageAnnotationPopup = ({
 
       setDataToReview((previousState) => ({ ...previousState, points: updatedPoints }))
       setIsDataUpdatedSinceLastSave(true)
-      closePopup()
     },
-    [closePopup, dataToReview.points, setDataToReview, setIsDataUpdatedSinceLastSave],
+    [dataToReview.points, setDataToReview, setIsDataUpdatedSinceLastSave],
   )
 
   return (
     <>
-      {isSelectedPointUnclassified ? null : (
+      {areAnyClassifierGuesses ? (
         <EditPointPopupTable aria-labelledby="table-label">
           <thead>
             <Tr>
@@ -72,7 +79,7 @@ const ImageAnnotationPopup = ({
             />
           </tbody>
         </EditPointPopupTable>
-      )}
+      ) : null}
       <SelectAttributeFromClassifierGuesses
         selectedPoint={selectedPoint}
         dataToReview={dataToReview}
@@ -97,6 +104,17 @@ const ImageAnnotationPopup = ({
         >
           {isSelectedPointConfirmed ? 'Confirmed' : 'Confirm'}
         </PopupConfirmButton>
+        <PopupZoomButtonContainer>
+          <Tooltip tooltipText="Next Unconfirmed Point">
+            <PopupIconButton
+              type="button"
+              onClick={selectNextUnconfirmedPoint}
+              disabled={areAllPointsConfirmed}
+            >
+              <IconArrowRight />
+            </PopupIconButton>
+          </Tooltip>
+        </PopupZoomButtonContainer>
       </PopupBottomRow>
     </>
   )
@@ -108,9 +126,9 @@ ImageAnnotationPopup.propTypes = {
   pointId: PropTypes.string.isRequired,
   databaseSwitchboardInstance: databaseSwitchboardPropTypes,
   setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
-  closePopup: PropTypes.func.isRequired,
   resetZoom: PropTypes.func.isRequired,
   zoomToSelectedPoint: PropTypes.func.isRequired,
+  selectNextUnconfirmedPoint: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationPopup
