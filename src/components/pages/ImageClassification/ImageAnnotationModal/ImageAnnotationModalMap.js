@@ -13,6 +13,7 @@ import {
 } from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
+import { getPatchesCenters } from './getPatchesCenters'
 
 const DEFAULT_CENTER = [0, 0] // this value doesn't matter, default to null island
 const DEFAULT_ZOOM = 2 // needs to be > 1 otherwise bounds become > 180 and > 85
@@ -87,8 +88,11 @@ const ImageAnnotationModalMap = ({
     const currentCenter = map.current.getCenter()
 
     hackTemporarilySetMapToDefaultPosition(map)
+    const patchesGeoJson = getPointsGeojson()
+    const patchesCenters = getPatchesCenters(patchesGeoJson)
 
-    map.current?.getSource('patches')?.setData(getPointsGeojson())
+    map.current?.getSource('patches')?.setData(patchesGeoJson)
+    map.current?.getSource('patches-center')?.setData(patchesCenters)
 
     hackResetMapToCurrentPosition(map, currentZoom, currentCenter)
   }, [getPointsGeojson, map])
@@ -128,6 +132,8 @@ const ImageAnnotationModalMap = ({
     map.current.addControl(zoomControl, 'top-left')
 
     const bounds = map.current.getBounds()
+    const pointsGeoJson = getPointsGeojson()
+    const patchesCenters = getPatchesCenters(pointsGeoJson)
 
     map.current.setStyle({
       version: 8,
@@ -146,7 +152,11 @@ const ImageAnnotationModalMap = ({
         },
         patches: {
           type: 'geojson',
-          data: getPointsGeojson(),
+          data: pointsGeoJson,
+        },
+        'patches-center': {
+          type: 'geojson',
+          data: patchesCenters,
         },
       },
       layers: [
@@ -201,6 +211,20 @@ const ImageAnnotationModalMap = ({
 
     const handleMapLoad = () => {
       setHasMapLoaded(true)
+      map.current.loadImage('/cross-hair.png', (error, image) => {
+        if (error) {
+          return
+        }
+        map.current.addImage('crosshair', image)
+        map.current.addLayer({
+          id: 'patches-center-layer',
+          type: 'symbol',
+          source: 'patches-center',
+          layout: {
+            'icon-image': 'crosshair',
+          },
+        })
+      })
     }
     const displayPointFeatureLabel = ({ features }) => {
       const [{ geometry, properties }] = features
