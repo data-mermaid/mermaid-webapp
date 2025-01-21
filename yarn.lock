@@ -3447,6 +3447,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@turf/centroid@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@turf/centroid@npm:7.2.0"
+  dependencies:
+    "@turf/helpers": "npm:^7.2.0"
+    "@turf/meta": "npm:^7.2.0"
+    "@types/geojson": "npm:^7946.0.10"
+    tslib: "npm:^2.8.1"
+  checksum: 10c0/afdf72cbd140337638528055c509cc76c7839d3b0d6d0379d9bb1d9d04db4af840f1c17855dff6202df76072e87b2d9f02d1cd571f63a5ac704bd3a62c235afd
+  languageName: node
+  linkType: hard
+
 "@turf/clone@npm:^7.2.0":
   version: 7.2.0
   resolution: "@turf/clone@npm:7.2.0"
@@ -11971,6 +11983,7 @@ __metadata:
     "@testing-library/user-event": "npm:^14.5.1"
     "@turf/bbox": "npm:^7.2.0"
     "@turf/buffer": "npm:^7.2.0"
+    "@turf/centroid": "npm:^7.2.0"
     axios: "npm:^0.21.1"
     axios-retry: "npm:^3.3.1"
     color: "npm:^3.1.3"
