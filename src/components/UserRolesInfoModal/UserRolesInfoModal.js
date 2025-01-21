@@ -45,7 +45,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
           <Tr>
             <Thead>Accessible Information</Thead>
             <Thead>Admin</Thead>
-            <Thead>Collect</Thead>
+            <Thead>Collector</Thead>
             <Thead>Read-Only</Thead>
           </Tr>
         </thead>
