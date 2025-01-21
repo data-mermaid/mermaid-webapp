@@ -32,6 +32,7 @@ import globe from '@iconify-icons/mdi/web'
 import heartOutline from '@iconify-icons/mdi/heart-outline'
 import homeOutline from '@iconify-icons/mdi/home-outline'
 import informationIcon from '@iconify-icons/mdi/information-outline'
+import label from '@iconify-icons/mdi/label'
 import launch from '@iconify-icons/mdi/launch'
 import libraryBooks from '@iconify-icons/mdi/library-books'
 import mapMarker from '@iconify-icons/mdi/map-marker'
@@ -54,6 +55,7 @@ import sparkles from '@iconify-icons/mdi/sparkles'
 import styled from 'styled-components/macro'
 import swap from '@iconify-icons/mdi/swap-vertical'
 import sync from '@iconify-icons/mdi/sync'
+import table from '@iconify-icons/mdi/table'
 import theme from '../theme'
 import upload from '@iconify-icons/mdi/upload'
 import user from '@iconify-icons/mdi/user'
@@ -99,6 +101,7 @@ export const IconGraph = (props) => <InlineIcon icon={chartBar} {...props} />
 export const IconHeart = (props) => <InlineIcon icon={heartOutline} {...props} />
 export const IconHome = (props) => <InlineIcon icon={homeOutline} {...props} />
 export const IconInfo = (props) => <InlineIcon icon={informationIcon} {...props} />
+export const IconLabel = (props) => <InlineIcon icon={label} {...props} />
 export const IconLibraryBooks = (props) => <InlineIcon icon={libraryBooks} {...props} />
 export const IconManagementRegimes = (props) => <InlineIcon icon={fileTable} {...props} />
 export const IconManagementRegimesOverview = (props) => (
@@ -123,6 +126,7 @@ export const IconSortDown = (props) => <InlineIcon icon={sortDescending} {...pro
 export const IconSortUp = (props) => <InlineIcon icon={sortAscending} {...props} />
 export const IconSparkles = (props) => <InlineIcon icon={sparkles} {...props} />
 export const IconSwap = (props) => <InlineIcon icon={swap} {...props} />
+export const IconTable = (props) => <InlineIcon icon={table} {...props} />
 export const IconUp = (props) => <InlineIcon icon={menuUp} {...props} />
 export const IconUpload = (props) => <InlineIcon icon={upload} {...props} />
 export const IconUser = (props) => <InlineIcon icon={user} {...props} />

@@ -5,11 +5,13 @@ import getBounds from '@turf/bbox'
 
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { IconReset } from '../../../icons'
+import { IconLabel, IconReset, IconTable } from '../../../icons'
 import {
   ImageAnnotationMapWrapper,
   LoadingIndicatorImageClassificationImage,
   MapResetButton,
+  ToggleLabelsButton,
+  ToggleTableButton,
 } from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
@@ -64,6 +66,8 @@ const ImageAnnotationModalMap = ({
   imageScale,
   map,
   setHasMapLoaded,
+  setIsFullTableShowing,
+  isFullTableShowing,
 }) => {
   const [hoveredPointId, setHoveredPointId] = useState(null)
   const [selectedPoint, setSelectedPoint] = useState({
@@ -71,6 +75,7 @@ const ImageAnnotationModalMap = ({
     popupAnchorLngLat: null,
     popupAnchorPosition: null,
   })
+  const [areLablesShowing, setAreLabelsShowing] = useState(false)
   const mapContainer = useRef(null)
   const popupRef = useRef()
 
@@ -81,6 +86,14 @@ const ImageAnnotationModalMap = ({
       popupAnchorPosition: null,
     })
     popupRef.current?.remove()
+  }
+
+  const toggleTable = () => {
+    setIsFullTableShowing(!isFullTableShowing)
+  }
+
+  const toggleLabels = () => {
+    setAreLabelsShowing(!areLablesShowing)
   }
 
   const updatePointsOnMap = useCallback(() => {
@@ -451,6 +464,12 @@ const ImageAnnotationModalMap = ({
           <IconReset />
         </MapResetButton>
       ) : null}
+      <ToggleTableButton type="button" onClick={toggleTable} $isSelected={isFullTableShowing}>
+        <IconTable />
+      </ToggleTableButton>
+      <ToggleLabelsButton type="button" onClick={toggleLabels} $isSelected={areLablesShowing}>
+        <IconLabel />
+      </ToggleLabelsButton>
 
       {selectedPoint.id ? (
         <EditPointPopupWrapper
@@ -487,6 +506,8 @@ ImageAnnotationModalMap.propTypes = {
   imageScale: PropTypes.number.isRequired,
   map: PropTypes.object.isRequired,
   setHasMapLoaded: PropTypes.func.isRequired,
+  isFullTableShowing: PropTypes.bool.isRequired,
+  setIsFullTableShowing: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModalMap
