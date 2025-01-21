@@ -935,7 +935,7 @@ const Users = () => {
       <InfoParagraph>
         <P>{language.pages.userTable.introductionParagraph}</P>
         <ButtonPrimary type="button" onClick={openUserRolesModal}>
-          <IconInfo /> View User Roles...
+          <IconInfo /> Learn more about User Roles...
         </ButtonPrimary>
       </InfoParagraph>
       {isAppOnline && (
