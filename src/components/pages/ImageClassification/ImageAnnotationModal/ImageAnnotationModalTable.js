@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -22,7 +22,16 @@ const ImageAnnotationModalTable = ({
   setHoveredAttributeId,
   setIsDataUpdatedSinceLastSave,
   zoomToPointsByAttributeId,
+  isTableShowing,
 }) => {
+  useEffect(
+    function deselectAttributeIfTableHidden() {
+      if (!isTableShowing) {
+        setSelectedAttributeId('')
+      }
+    },
+    [isTableShowing, setSelectedAttributeId],
+  )
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
   const tableData = Object.groupBy(classifiedPoints, ({ annotations }) => annotations[0].ba_gr)
 
@@ -62,7 +71,7 @@ const ImageAnnotationModalTable = ({
     setSelectedAttributeId(attributeId)
   }
 
-  return (
+  return isTableShowing ? (
     <TableOverflowWrapper id="annotation-modal-table">
       <TableWithNoMinWidth aria-labelledby="table-label">
         <thead>
@@ -125,7 +134,7 @@ const ImageAnnotationModalTable = ({
         </tbody>
       </TableWithNoMinWidth>
     </TableOverflowWrapper>
-  )
+  ) : null
 }
 
 ImageAnnotationModalTable.propTypes = {
@@ -136,6 +145,7 @@ ImageAnnotationModalTable.propTypes = {
   points: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
   setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
   zoomToPointsByAttributeId: PropTypes.func.isRequired,
+  isTableShowing: PropTypes.bool.isRequired,
 }
 
 export default ImageAnnotationModalTable

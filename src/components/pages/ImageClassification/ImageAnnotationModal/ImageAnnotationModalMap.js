@@ -66,8 +66,8 @@ const ImageAnnotationModalMap = ({
   imageScale,
   map,
   setHasMapLoaded,
-  setIsFullTableShowing,
-  isFullTableShowing,
+  setIsTableShowing,
+  isTableShowing,
 }) => {
   const [hoveredPointId, setHoveredPointId] = useState(null)
   const [selectedPoint, setSelectedPoint] = useState({
@@ -89,7 +89,7 @@ const ImageAnnotationModalMap = ({
   }
 
   const toggleTable = () => {
-    setIsFullTableShowing(!isFullTableShowing)
+    setIsTableShowing(!isTableShowing)
   }
 
   const toggleLabels = () => {
@@ -464,7 +464,7 @@ const ImageAnnotationModalMap = ({
           <IconReset />
         </MapResetButton>
       ) : null}
-      <ToggleTableButton type="button" onClick={toggleTable} $isSelected={isFullTableShowing}>
+      <ToggleTableButton type="button" onClick={toggleTable} $isSelected={isTableShowing}>
         <IconTable />
       </ToggleTableButton>
       <ToggleLabelsButton type="button" onClick={toggleLabels} $isSelected={areLablesShowing}>
@@ -506,8 +506,8 @@ ImageAnnotationModalMap.propTypes = {
   imageScale: PropTypes.number.isRequired,
   map: PropTypes.object.isRequired,
   setHasMapLoaded: PropTypes.func.isRequired,
-  isFullTableShowing: PropTypes.bool.isRequired,
-  setIsFullTableShowing: PropTypes.func.isRequired,
+  isTableShowing: PropTypes.bool.isRequired,
+  setIsTableShowing: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModalMap
