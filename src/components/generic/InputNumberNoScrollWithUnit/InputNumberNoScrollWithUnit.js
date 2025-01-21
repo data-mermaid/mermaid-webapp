@@ -28,7 +28,7 @@ const InnerInput = styled(InputNumberNoScroll)`
   padding: ${theme.spacing.xsmall};
 `
 
-const InputNumberNoScrollWithUnit = ({ unit, alignUnitsLeft = false, ...restOfProps }) => {
+const InputNumberNoScrollWithUnit = ({ unit = '', alignUnitsLeft = false, ...restOfProps }) => {
   return (
     <InputContainer>
       {alignUnitsLeft && <UnitContainer>{unit}</UnitContainer>}
