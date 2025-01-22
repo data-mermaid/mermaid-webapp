@@ -10,6 +10,10 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
         // Row and Column represent the center of the patch in pixels,
         // Crop size is the size of the patch in pixels
         // We calculate the corners of the patch in pixels, then convert to lng, lat
+        const topCenter = map.current.unproject([
+          point.column * imageScale,
+          (point.row - halfPatchSize) * imageScale,
+        ])
         const topLeft = map.current.unproject([
           (point.column - halfPatchSize) * imageScale,
           (point.row - halfPatchSize) * imageScale,
@@ -39,6 +43,7 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
             isConfirmed: !!point.annotations[0]?.is_confirmed,
             isPointInLeftHalfOfImage,
             isPointInTopHalfOfImage,
+            labelAnchor: topCenter,
           },
           geometry: {
             type: 'Polygon',

@@ -1,13 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import ReactDOM from 'react-dom/client'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import getBounds from '@turf/bbox'
 
-import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+import {
+  IMAGE_CLASSIFICATION_COLORS as COLORS,
+  IMAGE_CLASSIFICATION_COLORS,
+} from '../../../../library/constants/constants'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { IconLabel, IconReset, IconTable } from '../../../icons'
+import { IconCircle, IconLabel, IconReset, IconTable } from '../../../icons'
 import {
   ImageAnnotationMapWrapper,
+  LabelPopup,
   LoadingIndicatorImageClassificationImage,
   MapResetButton,
   ToggleLabelsButton,
@@ -34,7 +39,7 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
 
 const zoomControl = new maplibregl.NavigationControl({ showCompass: false })
 const pointLabelPopup = new maplibregl.Popup({
-  anchor: 'center',
+  anchor: 'bottom',
   closeButton: false,
 })
 
@@ -240,10 +245,31 @@ const ImageAnnotationModalMap = ({
       })
     }
     const displayPointFeatureLabel = ({ features }) => {
-      const [{ geometry, properties }] = features
+      const [{ properties }] = features
       map.current.getCanvas().style.cursor = 'pointer'
       const label = properties.isUnclassified ? 'Unclassified' : properties.ba_gr_label
-      pointLabelPopup.setLngLat(geometry.coordinates[0][0]).setHTML(label).addTo(map.current)
+      const confirmedStatus = properties.isConfirmed ? 'confirmed' : 'unconfirmed'
+      const pointStatus = properties.isUnclassified ? 'unclassified' : confirmedStatus
+      const popupContent = (
+        <LabelPopup>
+          <IconCircle style={{ color: IMAGE_CLASSIFICATION_COLORS[pointStatus] }} /> {label}
+        </LabelPopup>
+      )
+      const popupContentHack = document.createElement('div')
+      ReactDOM.createRoot(popupContentHack).render(popupContent)
+
+      pointLabelPopup
+        .setLngLat(JSON.parse(properties.labelAnchor))
+        .setDOMContent(popupContentHack)
+        .addTo(map.current)
+
+      pointLabelPopup.once('open', () => {
+        const popupElement = document.querySelector('.mapboxgl-popup-content')
+
+        if (popupElement) {
+          popupElement.style.padding = '0'
+        }
+      })
     }
     const hidePointFeatureLabel = () => {
       map.current.getCanvas().style.cursor = ''
