@@ -15,6 +15,7 @@ import checkAllIcon from '@iconify-icons/mdi/check-all'
 import checkCircleOutline from '@iconify-icons/mdi/check-circle-outline'
 import checkIcon from '@iconify-icons/mdi/check'
 import checkOutline from '@iconify-icons/mdi/check-outline'
+import circle from '@iconify-icons/mdi/circle'
 import circleEditOutline from '@iconify-icons/mdi/circle-edit-outline'
 import clipboardCheck from '@iconify-icons/mdi/clipboard-check-outline'
 import clipboardEdit from '@iconify-icons/mdi/clipboard-edit'
@@ -70,7 +71,6 @@ const WarningIcon = styled(InlineIcon)`
 const DeleteIcon = styled(InlineIcon)`
   color: ${theme.color.cautionText};
 `
-
 export const IconAccount = (props) => <InlineIcon icon={accountCircle} {...props} />
 export const IconAccountConvert = (props) => <InlineIcon icon={accountConvert} {...props} />
 export const IconAccountRemove = (props) => <DeleteIcon icon={accountRemove} {...props} />
@@ -84,6 +84,7 @@ export const IconBook = (props) => <InlineIcon icon={book} {...props} />
 export const IconCheck = (props) => <InlineIcon icon={checkIcon} {...props} />
 export const IconCheckAll = (props) => <InlineIcon icon={checkAllIcon} {...props} />
 export const IconCheckOutline = (props) => <InlineIcon icon={checkOutline} {...props} />
+export const IconCircle = (props) => <InlineIcon icon={circle} {...props} />
 export const IconClose = (props) => <InlineIcon icon={closeIcon} {...props} />
 export const IconCloseCircle = (props) => <InlineIcon icon={closeIconCircle} {...props} />
 export const IconCollect = (props) => <InlineIcon icon={circleEditOutline} {...props} />

@@ -201,3 +201,10 @@ export const RowThatLooksLikeAnEvenTr = styled.div`
   gap: 20px;
   background-color: ${theme.color.tableRowEven};
 `
+
+export const LabelPopup = styled.div`
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+`

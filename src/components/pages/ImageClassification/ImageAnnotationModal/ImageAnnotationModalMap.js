@@ -1,13 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import ReactDOM from 'react-dom/client'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import getBounds from '@turf/bbox'
 
-import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+import {
+  IMAGE_CLASSIFICATION_COLORS as COLORS,
+  IMAGE_CLASSIFICATION_COLORS,
+} from '../../../../library/constants/constants'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { IconLabel, IconReset, IconTable } from '../../../icons'
+import { IconCircle, IconLabel, IconReset, IconTable } from '../../../icons'
 import {
   ImageAnnotationMapWrapper,
+  LabelPopup,
   LoadingIndicatorImageClassificationImage,
   MapResetButton,
   ToggleLabelsButton,
@@ -34,7 +39,7 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
 
 const zoomControl = new maplibregl.NavigationControl({ showCompass: false })
 const pointLabelPopup = new maplibregl.Popup({
-  anchor: 'center',
+  anchor: 'bottom',
   closeButton: false,
 })
 
@@ -62,6 +67,7 @@ const ImageAnnotationModalMap = ({
   databaseSwitchboardInstance,
   setIsDataUpdatedSinceLastSave,
   getPointsGeojson,
+  getPointsLabelAnchorsGeoJson,
   hasMapLoaded,
   imageScale,
   map,
@@ -69,13 +75,13 @@ const ImageAnnotationModalMap = ({
   setIsTableShowing,
   isTableShowing,
 }) => {
+  const [areLabelsShowing, setAreLabelsShowing] = useState(false)
   const [hoveredPointId, setHoveredPointId] = useState(null)
   const [selectedPoint, setSelectedPoint] = useState({
     id: null,
     popupAnchorLngLat: null,
     popupAnchorPosition: null,
   })
-  const [areLablesShowing, setAreLabelsShowing] = useState(false)
   const mapContainer = useRef(null)
   const popupRef = useRef()
 
@@ -93,7 +99,34 @@ const ImageAnnotationModalMap = ({
   }
 
   const toggleLabels = () => {
-    setAreLabelsShowing(!areLablesShowing)
+    const newAreLabelsShowing = !areLabelsShowing
+    setAreLabelsShowing(newAreLabelsShowing)
+
+    if (!map.current) {
+      return
+    }
+
+    if (newAreLabelsShowing) {
+      map.current.addLayer({
+        id: 'patches-label-layer',
+        type: 'symbol',
+        source: 'patches-labels',
+        layout: {
+          'text-field': ['get', 'ba_gr_label'],
+          'text-radial-offset': 1.2,
+          'text-anchor': 'bottom',
+          'icon-text-fit': 'both',
+          'icon-image': 'label-background',
+          'text-size': 11,
+        },
+      })
+
+      return
+    }
+
+    if (map.current.getLayer('patches-label-layer')) {
+      map.current.removeLayer('patches-label-layer')
+    }
   }
 
   const updatePointsOnMap = useCallback(() => {
@@ -106,9 +139,10 @@ const ImageAnnotationModalMap = ({
 
     map.current?.getSource('patches')?.setData(patchesGeoJson)
     map.current?.getSource('patches-center')?.setData(patchesCenters)
+    map.current?.getSource('patches-labels')?.setData(getPointsLabelAnchorsGeoJson())
 
     hackResetMapToCurrentPosition(map, currentZoom, currentCenter)
-  }, [getPointsGeojson, map])
+  }, [getPointsGeojson, getPointsLabelAnchorsGeoJson, map])
 
   const updateImageSizeOnMap = () => {
     const bounds = map.current.getBounds()
@@ -140,6 +174,7 @@ const ImageAnnotationModalMap = ({
       minZoom: DEFAULT_ZOOM,
       renderWorldCopies: false, // prevents the image from repeating
       dragRotate: false,
+      accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
     })
 
     map.current.addControl(zoomControl, 'top-left')
@@ -151,6 +186,7 @@ const ImageAnnotationModalMap = ({
     map.current.setStyle({
       version: 8,
       name: 'image',
+      glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
       sources: {
         benthicQuadratImage: {
           type: 'image',
@@ -171,6 +207,7 @@ const ImageAnnotationModalMap = ({
           type: 'geojson',
           data: patchesCenters,
         },
+        'patches-labels': { type: 'geojson', data: getPointsLabelAnchorsGeoJson() },
       },
       layers: [
         {
@@ -224,44 +261,98 @@ const ImageAnnotationModalMap = ({
 
     const handleMapLoad = () => {
       setHasMapLoaded(true)
+
       map.current.loadImage('/cross-hair.png', (error, image) => {
         if (error) {
           return
         }
-        map.current.addImage('crosshair', image)
+        map.current.addImage('cross-hair', image)
         map.current.addLayer({
           id: 'patches-center-layer',
           type: 'symbol',
           source: 'patches-center',
           layout: {
-            'icon-image': 'crosshair',
+            'icon-image': 'cross-hair',
           },
         })
       })
+      map.current.loadImage('/label-background.png', (error, image) => {
+        if (error) {
+          return
+        }
+
+        map.current.addImage('label-background', image, {
+          // this configuration allows the image to stretch around the label text
+          stretchX: [[5, 135]],
+          stretchY: [[5, 135]],
+          content: [5, 5, 135, 135],
+          pixelRatio: 2,
+        })
+      })
     }
-    const displayPointFeatureLabel = ({ features }) => {
-      const [{ geometry, properties }] = features
-      map.current.getCanvas().style.cursor = 'pointer'
-      const label = properties.isUnclassified ? 'Unclassified' : properties.ba_gr_label
-      pointLabelPopup.setLngLat(geometry.coordinates[0][0]).setHTML(label).addTo(map.current)
-    }
-    const hidePointFeatureLabel = () => {
-      map.current.getCanvas().style.cursor = ''
-      pointLabelPopup.remove()
-    }
+
     map.current.on('load', handleMapLoad)
-    map.current.on('mouseenter', 'patches-fill-layer', displayPointFeatureLabel)
-    map.current.on('mouseleave', 'patches-fill-layer', hidePointFeatureLabel)
 
     const currentMap = map.current
     return () => {
       currentMap.off('load', handleMapLoad)
-      currentMap.off('mouseenter', 'patches-fill-layer', displayPointFeatureLabel)
-      currentMap.off('mouseleave', 'patches-fill-layer', hidePointFeatureLabel)
       currentMap.remove()
     }
     // eslint-disable-next-line
   }, [])
+
+  useEffect(
+    function configurePatchesPopup() {
+      if (!map.current) {
+        return
+      }
+      const displayPointFeatureLabel = ({ features }) => {
+        if (areLabelsShowing) {
+          return
+        }
+        const [{ properties }] = features
+        map.current.getCanvas().style.cursor = 'pointer'
+        const label = properties.isUnclassified ? 'Unclassified' : properties.ba_gr_label
+        const confirmedStatus = properties.isConfirmed ? 'confirmed' : 'unconfirmed'
+        const pointStatus = properties.isUnclassified ? 'unclassified' : confirmedStatus
+        const popupContent = (
+          <LabelPopup>
+            <IconCircle style={{ color: IMAGE_CLASSIFICATION_COLORS[pointStatus] }} /> {label}
+          </LabelPopup>
+        )
+        const popupContentHack = document.createElement('div')
+        ReactDOM.createRoot(popupContentHack).render(popupContent)
+
+        pointLabelPopup
+          .setLngLat(JSON.parse(properties.labelAnchor))
+          .setDOMContent(popupContentHack)
+          .addTo(map.current)
+
+        pointLabelPopup.once('open', () => {
+          // eslint-disable-next-line testing-library/no-node-access
+          const popupElementForStylingHack = document.querySelector('.mapboxgl-popup-content')
+
+          if (popupElementForStylingHack) {
+            popupElementForStylingHack.style.padding = '0'
+          }
+        })
+      }
+      const hidePointFeatureLabel = () => {
+        map.current.getCanvas().style.cursor = ''
+        pointLabelPopup.remove()
+      }
+
+      map.current.on('mouseenter', 'patches-fill-layer', displayPointFeatureLabel)
+      map.current.on('mouseleave', 'patches-fill-layer', hidePointFeatureLabel)
+
+      const currentMap = map.current
+      return () => {
+        currentMap.off('mouseenter', 'patches-fill-layer', displayPointFeatureLabel)
+        currentMap.off('mouseleave', 'patches-fill-layer', hidePointFeatureLabel)
+      }
+    },
+    [areLabelsShowing, map],
+  )
 
   const zoomToSelectedPoint = useCallback(() => {
     if (!selectedPoint.bounds || !map.current) {
@@ -467,7 +558,7 @@ const ImageAnnotationModalMap = ({
       <ToggleTableButton type="button" onClick={toggleTable} $isSelected={isTableShowing}>
         <IconTable />
       </ToggleTableButton>
-      <ToggleLabelsButton type="button" onClick={toggleLabels} $isSelected={areLablesShowing}>
+      <ToggleLabelsButton type="button" onClick={toggleLabels} $isSelected={areLabelsShowing}>
         <IconLabel />
       </ToggleLabelsButton>
 
@@ -502,6 +593,7 @@ ImageAnnotationModalMap.propTypes = {
   databaseSwitchboardInstance: PropTypes.object.isRequired,
   setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
   getPointsGeojson: PropTypes.func.isRequired,
+  getPointsLabelAnchorsGeoJson: PropTypes.func.isRequired,
   hasMapLoaded: PropTypes.bool.isRequired,
   imageScale: PropTypes.number.isRequired,
   map: PropTypes.object.isRequired,

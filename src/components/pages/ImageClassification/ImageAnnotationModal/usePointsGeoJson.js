@@ -10,6 +10,10 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
         // Row and Column represent the center of the patch in pixels,
         // Crop size is the size of the patch in pixels
         // We calculate the corners of the patch in pixels, then convert to lng, lat
+        const topCenter = map.current.unproject([
+          point.column * imageScale,
+          (point.row - halfPatchSize) * imageScale,
+        ])
         const topLeft = map.current.unproject([
           (point.column - halfPatchSize) * imageScale,
           (point.row - halfPatchSize) * imageScale,
@@ -34,11 +38,12 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
           properties: {
             id: point.id,
             ba_gr: point.annotations[0]?.ba_gr,
-            ba_gr_label: point.annotations[0]?.ba_gr_label,
+            ba_gr_label: point.annotations[0]?.ba_gr_label ?? 'Unclassified',
             isUnclassified: !point.annotations.length,
             isConfirmed: !!point.annotations[0]?.is_confirmed,
             isPointInLeftHalfOfImage,
             isPointInTopHalfOfImage,
+            labelAnchor: topCenter,
           },
           geometry: {
             type: 'Polygon',
@@ -65,5 +70,30 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
     ],
   )
 
-  return { getPointsGeojson }
+  const getPointsLabelAnchorsGeoJson = useCallback(
+    () => ({
+      type: 'FeatureCollection',
+      features: dataToReview.points.flatMap((point) => {
+        const labelPosition = map.current.unproject([
+          point.column * imageScale,
+          (point.row - halfPatchSize) * imageScale,
+        ])
+
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [labelPosition.lng, labelPosition.lat],
+          },
+          properties: {
+            id: point.id,
+            ba_gr_label: point.annotations[0]?.ba_gr_label ?? 'Unclassified',
+          },
+        }
+      }),
+    }),
+    [dataToReview, map, imageScale, halfPatchSize],
+  )
+
+  return { getPointsGeojson, getPointsLabelAnchorsGeoJson }
 }
