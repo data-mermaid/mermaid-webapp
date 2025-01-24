@@ -53,7 +53,11 @@ const ImageAnnotationModal = ({
 
   const { imageScale } = useImageScale({ hasMapLoaded, dataToReview })
 
-  const { getPointsGeojson } = usePointsGeoJson({ dataToReview, imageScale, map })
+  const { getPointsGeojson, getPointsLabelAnchorsGeoJson } = usePointsGeoJson({
+    dataToReview,
+    imageScale,
+    map,
+  })
 
   const { zoomToPointsByAttributeId } = useZoomToPointsByAttributeId({
     getPointsGeojson,
@@ -157,6 +161,7 @@ const ImageAnnotationModal = ({
                 databaseSwitchboardInstance={databaseSwitchboardInstance}
                 setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
                 getPointsGeojson={getPointsGeojson}
+                getPointsLabelAnchorsGeoJson={getPointsLabelAnchorsGeoJson}
                 hasMapLoaded={hasMapLoaded}
                 imageScale={imageScale}
                 map={map}
