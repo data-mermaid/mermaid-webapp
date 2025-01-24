@@ -48,6 +48,7 @@ const ImageAnnotationModal = ({
   const [isSaving, setIsSaving] = useState(false)
   const [isDataUpdatedSinceLastSave, setIsDataUpdatedSinceLastSave] = useState(false)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
+  const [isTableShowing, setIsTableShowing] = useState(true)
   const map = useRef(null)
 
   const { imageScale } = useImageScale({ hasMapLoaded, dataToReview })
@@ -146,6 +147,7 @@ const ImageAnnotationModal = ({
                 setHoveredAttributeId={setHoveredAttributeId}
                 setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
                 zoomToPointsByAttributeId={zoomToPointsByAttributeId}
+                isTableShowing={isTableShowing}
               />
               <ImageAnnotationModalMap
                 dataToReview={dataToReview}
@@ -159,6 +161,8 @@ const ImageAnnotationModal = ({
                 imageScale={imageScale}
                 map={map}
                 setHasMapLoaded={setHasMapLoaded}
+                setIsTableShowing={setIsTableShowing}
+                isTableShowing={isTableShowing}
               />
             </ImageAnnotationModalContainer>
           ) : (

@@ -128,18 +128,31 @@ export const NewAttributeModalFooterContainer = styled.div`
 export const NewAttributeModalLabel = styled.label`
   font-weight: bold;
 `
-
-export const MapResetButton = styled.button`
+export const MapControlButton = styled.button`
+  z-index: 1;
+  padding: 2px 7px; // don't like specific values but need to match maplibre zoom buttons
+  cursor: hover;
+  border: ${(props) => (props.$isSelected ? `solid thin ${theme.color.white}` : 'none')};
+  border-radius: ${theme.spacing.borderMedium};
+  background-color: ${(props) =>
+    props.$isSelected ? theme.color.primaryColor : theme.color.white};
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1); // copy maplibre button shadow
+  color: ${(props) => (props.$isSelected ? theme.color.white : 'inherit')};
+`
+export const MapResetButton = styled(MapControlButton)`
   position: absolute;
   top: 75px;
   left: 10px;
-  z-index: 1;
-  padding: 2px 7px; // don't like specific values but need to match maplibre zoom buttons
-  cursor: pointer;
-  border: none;
-  border-radius: ${theme.spacing.borderMedium};
-  background-color: ${theme.color.white};
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1); // copy maplibre button shadow
+`
+export const ToggleTableButton = styled(MapControlButton)`
+  position: absolute;
+  top: 110px;
+  left: 10px;
+`
+export const ToggleLabelsButton = styled(MapControlButton)`
+  position: absolute;
+  top: 145px;
+  left: 10px;
 `
 
 export const ButtonZoom = styled.button`
