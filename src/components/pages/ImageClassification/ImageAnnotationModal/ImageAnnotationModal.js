@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -21,6 +21,8 @@ import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import { useImageScale } from '../useImageScale'
 import { usePointsGeoJson } from './usePointsGeoJson'
 import { useZoomToPointsByAttributeId } from './useZoomToPointsByAttributeId'
+import { getToastArguments } from '../../../../library/getToastArguments'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
 const EXCLUDE_PARAMS =
   'classification_status,collect_record_id,comments,created_by,created_on,data,id,location,name,num_confirmed,num_unclassified,num_unconfirmed,photo_timestamp,thumbnail,updated_by,updated_on'
@@ -52,6 +54,7 @@ const ImageAnnotationModal = ({
   const map = useRef(null)
 
   const { imageScale } = useImageScale({ hasMapLoaded, dataToReview })
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const { getPointsGeojson, getPointsLabelAnchorsGeoJson } = usePointsGeoJson({
     dataToReview,
@@ -64,20 +67,29 @@ const ImageAnnotationModal = ({
     mapRef: map,
   })
 
-  const getBenthicAttributeLabel = (benthicAttributeId) => {
-    const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-    return matchingBenthicAttribute?.name ?? ''
-  }
+  const getBenthicAttributeLabel = useCallback(
+    (benthicAttributeId) => {
+      const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
+      return matchingBenthicAttribute?.name ?? ''
+    },
+    [benthicAttributes],
+  )
 
-  const getGrowthFormLabel = (growthFormId) => {
-    const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
-    return matchingGrowthForm?.name.toLowerCase() ?? ''
-  }
+  const getGrowthFormLabel = useCallback(
+    (growthFormId) => {
+      const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
+      return matchingGrowthForm?.name.toLowerCase() ?? ''
+    },
+    [growthForms],
+  )
 
-  const getAttributeGrowthFormLabel = ({ benthic_attribute, growth_form }) =>
-    growth_form
-      ? `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(growth_form)}`
-      : getBenthicAttributeLabel(benthic_attribute)
+  const getAttributeGrowthFormLabel = useCallback(
+    ({ benthic_attribute, growth_form }) =>
+      growth_form
+        ? `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(growth_form)}`
+        : getBenthicAttributeLabel(benthic_attribute),
+    [getBenthicAttributeLabel, getGrowthFormLabel],
+  )
 
   const _fetchImageAnnotations = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
@@ -97,12 +109,25 @@ const ImageAnnotationModal = ({
 
           setDataToReview({ ...data, points: formattedPoints })
         })
-        .catch(() => {
-          toast.error('Failed to fetch image annotations')
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(
+                ...getToastArguments(`Failed to fetch image annotations. ${error.message}`),
+              )
+            },
+            shouldShowServerNonResponseMessage: false,
+          })
         })
     }
-    // eslint-disable-next-line
-  }, [])
+  }, [
+    databaseSwitchboardInstance,
+    getAttributeGrowthFormLabel,
+    handleHttpResponseError,
+    imageId,
+    projectId,
+  ])
 
   const handleCloseModal = () => {
     if (
@@ -123,8 +148,14 @@ const ImageAnnotationModal = ({
         onAnnotationSaveSuccess()
         toast.success('Successfully saved image annotations')
       })
-      .catch(() => {
-        toast.error('Failed to save image annotations')
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(`Failed to save image annotations. ${error.message}`))
+          },
+          shouldShowServerNonResponseMessage: false,
+        })
       })
       .finally(() => {
         setIsSaving(false)

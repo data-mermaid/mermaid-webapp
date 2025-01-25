@@ -27,6 +27,8 @@ import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaid
 import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { RowRight } from '../../../generic/positioning'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import { getToastArguments } from '../../../../library/getToastArguments'
 
 const EXCLUDE_PARAMS =
   'data,created_by,updated_by,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
@@ -111,6 +113,7 @@ const ImageClassificationObservationTable = ({
   const [deletingImage, setDeletingImage] = useState()
   const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
   const [hoveredImageIndex, setHoveredImageIndex] = useState(null)
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const isImageProcessed = (status) => status === 3 || status === 4
 
@@ -161,8 +164,18 @@ const ImageClassificationObservationTable = ({
 
         toast.warn('File removed')
       })
-      .catch(() => {
-        toast.error('Failed to delete image')
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(
+              ...getToastArguments(
+                `Failed to delete image: ${file.original_image_name}. ${error.message}`,
+              ),
+            )
+          },
+          shouldShowServerNonResponseMessage: false,
+        })
       })
       .finally(() => {
         setDeletingImage()
@@ -211,7 +224,13 @@ const ImageClassificationObservationTable = ({
 
       setImages(sortedImages)
     } catch (error) {
-      console.error('Error fetching data:', error)
+      handleHttpResponseError({
+        error,
+        callback: () => {
+          console.error('Error fetching images:', error)
+        },
+        shouldShowServerNonResponseMessage: false,
+      })
     } finally {
       setIsFetching(false)
     }
@@ -324,7 +343,13 @@ const ImageClassificationObservationTable = ({
           intervalId = setTimeout(startPolling, 5000)
         }
       } catch (error) {
-        console.error('Error polling images:', error)
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            console.error('Error polling images:', error)
+          },
+          shouldShowServerNonResponseMessage: false,
+        })
         intervalId = setTimeout(startPolling, 5000)
       }
     }

@@ -7,6 +7,8 @@ import { DropZone, HiddenInput, ButtonContainer } from './ImageUploadModal.style
 import { toast } from 'react-toastify'
 import language from '../../../../language'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import { getToastArguments } from '../../../../library/getToastArguments'
 
 const renderUploadProgress = (processedCount, totalFiles, handleCancelUpload) => (
   <div>
@@ -25,6 +27,7 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles, setIs
   const { recordId, projectId } = useParams()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const toastId = useRef(null)
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
@@ -74,7 +77,13 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles, setIs
 
       return imageData
     } catch (error) {
-      toast.error(`Failed to upload ${file.name}: ${error.message}`)
+      handleHttpResponseError({
+        error,
+        callback: () => {
+          toast.error(...getToastArguments(`Failed to upload ${file.name}: ${error.message}`))
+        },
+        shouldShowServerNonResponseMessage: false,
+      })
       return null
     }
   }
