@@ -29,9 +29,8 @@ import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal
 import { RowRight } from '../../../generic/positioning'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { getToastArguments } from '../../../../library/getToastArguments'
-
-const EXCLUDE_PARAMS =
-  'data,created_by,updated_by,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
+import { EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD } from '../imageClassificationConstants'
+import { getIsImageProcessed } from '../getIsImageProcessed'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -98,11 +97,10 @@ const ImageClassificationObservationTable = ({
   areValidationsShowing,
   ignoreObservationValidations,
   resetObservationValidations,
-  isUploading,
+  images,
+  setImages,
 }) => {
   const [imageId, setImageId] = useState()
-  const [images, setImages] = useState([])
-  const [polling, setPolling] = useState(false)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId, recordId } = useParams()
   const [growthForms, setGrowthForms] = useState()
@@ -114,8 +112,6 @@ const ImageClassificationObservationTable = ({
   const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
   const [hoveredImageIndex, setHoveredImageIndex] = useState(null)
   const handleHttpResponseError = useHttpResponseErrorHandler()
-
-  const isImageProcessed = (status) => status === 3 || status === 4
 
   const observationsSummaryStats = useMemo(() => {
     if (!distilledImages.length || !benthicAttributes) {
@@ -148,7 +144,7 @@ const ImageClassificationObservationTable = ({
   }, [distilledImages, benthicAttributes])
 
   const handleImageClick = (file) => {
-    if (isImageProcessed(file.classification_status?.status)) {
+    if (getIsImageProcessed(file.classification_status?.status)) {
       setImageId(file.id)
     }
   }
@@ -211,7 +207,7 @@ const ImageClassificationObservationTable = ({
       const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
         projectId,
         recordId,
-        EXCLUDE_PARAMS,
+        EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD,
       )
 
       const sortedImages = response.results.map((image) => {
@@ -319,53 +315,6 @@ const ImageClassificationObservationTable = ({
       .sort(sortByLatest)
   }, [distillAnnotationData, images, numPointsPerQuadrat])
 
-  // Poll every 5 seconds after the first image is uploaded
-  const _pollImageStatuses = useEffect(() => {
-    let intervalId
-
-    const startPolling = async () => {
-      try {
-        const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
-          projectId,
-          recordId,
-          EXCLUDE_PARAMS,
-        )
-
-        setImages(response.results)
-
-        const areAllImagesProcessed = response.results.every((file) =>
-          isImageProcessed(file.classification_status?.status),
-        )
-
-        if (areAllImagesProcessed) {
-          setPolling(false)
-        } else {
-          intervalId = setTimeout(startPolling, 5000)
-        }
-      } catch (error) {
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            console.error('Error polling images:', error)
-          },
-          shouldShowServerNonResponseMessage: false,
-        })
-        intervalId = setTimeout(startPolling, 5000)
-      }
-    }
-
-    if (polling) {
-      startPolling()
-    }
-
-    return () => {
-      if (intervalId) {
-        clearTimeout(intervalId)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [polling, projectId, recordId])
-
   const _fetchImagesOnLoad = useEffect(() => {
     if (!recordId || !projectId || isFetching || !isFirstLoad.current) {
       return
@@ -384,12 +333,6 @@ const ImageClassificationObservationTable = ({
       setDistilledImages(distilled)
     }
   }, [benthicAttributes, growthForms, images, distillImagesData])
-
-  const _startPollingOnUpload = useEffect(() => {
-    if (isUploading) {
-      setPolling(true)
-    }
-  }, [images, isUploading])
 
   let rowIndex = 1
 
@@ -466,7 +409,7 @@ const ImageClassificationObservationTable = ({
                               : 'center'
                           }
                         >
-                          {!isImageProcessed(file.classification_status?.status) ? (
+                          {!getIsImageProcessed(file.classification_status?.status) ? (
                             <>
                               <Spinner />
                               {statusLabels[file.classification_status?.status]}...
@@ -574,7 +517,9 @@ const ImageClassificationObservationTable = ({
                                   <ButtonPrimary
                                     type="button"
                                     onClick={() => setImageId(file.id)}
-                                    disabled={!isImageProcessed(file.classification_status?.status)}
+                                    disabled={
+                                      !getIsImageProcessed(file.classification_status?.status)
+                                    }
                                   >
                                     Review
                                   </ButtonPrimary>
@@ -678,6 +623,8 @@ ImageClassificationObservationTable.propTypes = {
   ignoreObservationValidations: PropTypes.func.isRequired,
   resetObservationValidations: PropTypes.func.isRequired,
   isUploading: PropTypes.bool.isRequired,
+  images: PropTypes.array.isRequired,
+  setImages: PropTypes.func.isRequired,
 }
 
 export default ImageClassificationObservationTable

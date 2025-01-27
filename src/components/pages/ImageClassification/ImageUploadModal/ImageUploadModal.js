@@ -21,7 +21,14 @@ const renderUploadProgress = (processedCount, totalFiles, handleCancelUpload) =>
   </div>
 )
 
-const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles, setIsUploading }) => {
+const ImageUploadModal = ({
+  existingFiles,
+  isOpen,
+  onClose,
+  onFilesUpload,
+  pollCollectRecordUntilAllImagesProcessed,
+  setIsUploading,
+}) => {
   const isCancelledRef = useRef(false)
   const fileInputRef = useRef(null)
   const { recordId, projectId } = useParams()
@@ -172,12 +179,14 @@ const ImageUploadModal = ({ isOpen, onClose, onFilesUpload, existingFiles, setIs
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files)
     validateAndUploadFiles(files)
+    pollCollectRecordUntilAllImagesProcessed()
   }
 
   const handleDrop = (event) => {
     event.preventDefault()
     const files = Array.from(event.dataTransfer.files)
     validateAndUploadFiles(files)
+    pollCollectRecordUntilAllImagesProcessed()
   }
 
   const handleDragOver = (event) => {
@@ -237,6 +246,7 @@ ImageUploadModal.propTypes = {
   onFilesUpload: PropTypes.func.isRequired,
   existingFiles: PropTypes.array.isRequired,
   setIsUploading: PropTypes.func.isRequired,
+  pollCollectRecordUntilAllImagesProcessed: PropTypes.func.isRequired,
 }
 
 export default ImageUploadModal
