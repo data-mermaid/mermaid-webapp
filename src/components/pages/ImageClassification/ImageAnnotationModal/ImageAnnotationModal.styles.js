@@ -130,14 +130,20 @@ export const NewAttributeModalLabel = styled.label`
 `
 export const MapControlButton = styled.button`
   z-index: 1;
-  padding: 2px 7px; // don't like specific values but need to match maplibre zoom buttons
-  cursor: hover;
+  cursor: pointer;
   border: ${(props) => (props.$isSelected ? `solid thin ${theme.color.white}` : 'none')};
-  border-radius: ${theme.spacing.borderMedium};
+  padding: ${(props) =>
+    props.$isSelected
+      ? '2px 5px'
+      : '2px 7px'}; // keep the icon centered if border showing with box-sizing
+  border-radius: ${theme.spacing.borderLarge};
   background-color: ${(props) =>
     props.$isSelected ? theme.color.primaryColor : theme.color.white};
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1); // copy maplibre button shadow
   color: ${(props) => (props.$isSelected ? theme.color.white : 'inherit')};
+  box-sizing: border-box;
+  height: 29px;
+  width: 29px;
 `
 export const MapResetButton = styled(MapControlButton)`
   position: absolute;
