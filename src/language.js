@@ -1100,43 +1100,6 @@ const pages = {
         created by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
       </>
     ),
-    f6_2: 'Number of people with increased income and/or nutrition',
-    getF6_2_men_helper: () => (
-      <>
-        Total number of men with increased income and/or nutrition due to GFCR Programme, e.g., in
-        fisheries related business opportunities that seek to improve nutrition access by local
-        opportunities. Report as cumulative total since the start of the Programme. If there is no
-        direct increased income and/or nutrition by GFCR Programme, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    getF6_2_women_helper: () => (
-      <>
-        Total number of women with increased income and/or nutrition due to GFCR Programme, e.g., in
-        fisheries related business opportunities that seek to improve nutrition access by local
-        opportunities. Report as cumulative total since the start of the Programme. If there is no
-        direct increased income and/or nutrition by GFCR Programme, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    getF6_2_youth_helper: () => (
-      <>
-        Total number of young people (aged between 15-24, as defined by United Nations) with
-        increased income and/or nutrition due to GFCR Programme, e.g., in fisheries related business
-        opportunities that seek to improve nutrition access by local opportunities. Report as
-        cumulative total since the start of the Programme. If there is no direct increased income
-        and/or nutrition by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF6_2_indigenous_helper: () => (
-      <>
-        Total number of Indigenous people with increased income and/or nutrition due to GFCR
-        Programme, e.g., in fisheries related business opportunities that seek to improve nutrition
-        access by local opportunities. Report as cumulative total since the start of the Programme.
-        If there is no direct increased income and/or nutrition by GFCR Programme, enter
-        &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
     f7Heading:
       'Number of people supported to better adapt, respond and recover to the effects of climate change and major external shocks as a result of GFCR',
     getF7_1: () => (
