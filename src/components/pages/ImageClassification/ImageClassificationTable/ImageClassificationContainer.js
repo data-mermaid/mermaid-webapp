@@ -4,15 +4,64 @@ import ImageUploadModal from '../ImageUploadModal/ImageUploadModal'
 import { ButtonPrimary } from '../../../generic/buttons'
 import { IconUpload } from '../../../icons'
 import { ButtonContainer, IconContainer } from './ImageClassificationObservationTable.styles'
+import { EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD } from '../imageClassificationConstants'
+import { getIsImageProcessed } from '../getIsImageProcessed'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import { useParams } from 'react-router-dom'
 
 const ImageClassificationContainer = (props) => {
+  const [images, setImages] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [uploadedFiles, setUploadedFiles] = useState([])
   const [isUploading, setIsUploading] = useState(false)
+  const [uploadedFiles, setUploadedFiles] = useState([])
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { projectId, recordId } = useParams()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const handleFilesUpload = (files) => {
     setUploadedFiles([...uploadedFiles, ...files])
     setIsModalOpen(false)
+  }
+
+  const pollCollectRecordUntilAllImagesProcessed = () => {
+    if (!databaseSwitchboardInstance || !handleHttpResponseError || !projectId || !recordId) {
+      throw new Error('pollCollectRecordUntilAllImagesProcessed has missing dependencies')
+    }
+    let intervalId
+
+    const pollCollectRecordForImages = async () => {
+      try {
+        const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
+          projectId,
+          recordId,
+          EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD,
+        )
+
+        setImages(response.results)
+
+        const areAllImagesProcessed =
+          response.results.length &&
+          response.results.every((file) => getIsImageProcessed(file.classification_status?.status))
+
+        if (areAllImagesProcessed) {
+          clearTimeout(intervalId)
+        } else {
+          intervalId = setTimeout(pollCollectRecordForImages, 5000)
+        }
+      } catch (error) {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            console.error('Error polling images:', error)
+          },
+          shouldShowServerNonResponseMessage: false,
+        })
+        intervalId = setTimeout(pollCollectRecordForImages, 5000)
+      }
+    }
+
+    pollCollectRecordForImages()
   }
 
   return (
@@ -21,6 +70,8 @@ const ImageClassificationContainer = (props) => {
         uploadedFiles={uploadedFiles}
         setUploadedFiles={setUploadedFiles}
         isUploading={isUploading}
+        setImages={setImages}
+        images={images}
         {...props}
       />
       <ButtonContainer>
@@ -38,6 +89,7 @@ const ImageClassificationContainer = (props) => {
           setIsUploading={setIsUploading}
           isOpen={isModalOpen}
           existingFiles={uploadedFiles}
+          pollCollectRecordUntilAllImagesProcessed={pollCollectRecordUntilAllImagesProcessed}
         />
       )}
     </>

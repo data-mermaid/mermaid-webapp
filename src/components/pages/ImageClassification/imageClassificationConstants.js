@@ -1,0 +1,2 @@
+export const EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD =
+  'data,created_by,updated_by,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp'
