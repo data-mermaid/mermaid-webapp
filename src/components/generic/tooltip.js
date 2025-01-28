@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
 
 export const TooltipP = styled('p')`
@@ -17,6 +17,35 @@ export const TooltipP = styled('p')`
     display: block;
   }
 `
+
+const tooltipCssByPosition = {
+  bottom: css`
+    top: 4rem;
+    padding-top: calc(4rem - 15px);
+    clip-path: polygon(
+      calc(50% - 10px) 15px,
+      50% 0,
+      calc(50% + 10px) 15px,
+      100% 15px,
+      100% 100%,
+      0 100%,
+      0 15px
+    );
+  `,
+  right: css`
+    left: 4rem;
+    padding-left: calc(4rem - 50%);
+    clip-path: polygon(
+      15px calc(50% - 6px),
+      0 50%,
+      15px calc(50% + 6px),
+      15px 100%,
+      100% 100%,
+      100% 0,
+      15px 0
+    );
+  `,
+}
 export const TooltipPopup = styled('span')`
   display: none;
   min-width: 26ch;
@@ -26,21 +55,11 @@ export const TooltipPopup = styled('span')`
   color: ${theme.color.white};
   position: absolute;
   font-size: ${theme.typography.smallFontSize};
-  clip-path: polygon(
-    calc(50% - 10px) 15px,
-    50% 0,
-    calc(50% + 10px) 15px,
-    100% 15px,
-    100% 100%,
-    0 100%,
-    0 15px
-  );
   padding: ${theme.spacing.small};
-  padding-top: calc(4rem - 15px);
-  top: 4rem;
   white-space: normal;
   z-index: 100;
   text-align: center;
+  ${({ $position }) => tooltipCssByPosition[$position]};
 `
 
 const TooltipWrapper = styled('div')`
@@ -55,11 +74,17 @@ const TooltipWrapper = styled('div')`
   }
 `
 
-export const TooltipWithText = ({ text, tooltipText, id, ...restOfProps }) => {
+export const TooltipWithText = ({
+  text,
+  tooltipText,
+  id,
+  $position = 'bottom',
+  ...restOfProps
+}) => {
   return (
     <TooltipP tabIndex="0" id={id} {...restOfProps}>
       {text}
-      <TooltipPopup role="tooltip" aria-labelledby={id}>
+      <TooltipPopup role="tooltip" aria-labelledby={id} $position={$position}>
         {tooltipText}
       </TooltipPopup>
     </TooltipP>
@@ -70,13 +95,14 @@ TooltipWithText.propTypes = {
   text: PropTypes.node.isRequired,
   tooltipText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   id: PropTypes.string.isRequired,
+  $position: PropTypes.oneOf(['bottom', 'right']),
 }
 
-export const Tooltip = ({ children, tooltipText, id }) => {
+export const Tooltip = ({ children, tooltipText, id, $position = 'bottom' }) => {
   return (
     <TooltipWrapper>
       {children}
-      <TooltipPopup role="tooltip" aria-labelledby={id}>
+      <TooltipPopup role="tooltip" aria-labelledby={id} $position={$position}>
         {tooltipText}
       </TooltipPopup>
     </TooltipWrapper>
@@ -87,4 +113,5 @@ Tooltip.propTypes = {
   children: PropTypes.node.isRequired,
   tooltipText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   id: PropTypes.string.isRequired,
+  $position: PropTypes.oneOf(['bottom', 'right']),
 }
