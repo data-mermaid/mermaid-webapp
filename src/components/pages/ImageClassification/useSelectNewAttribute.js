@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { getBenthicOptions } from '../../../library/getOptions'
 import { toast } from 'react-toastify'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
   annotations.some((annotation) => annotation.is_machine_created && annotation.ba_gr === ba_gr)
@@ -17,6 +18,7 @@ export const useSelectNewAttribute = ({
   const [growthFormSelectOptions, setGrowthFormSelectOptions] = useState([])
   const [selectedBenthicAttr, setSelectedBenthicAttr] = useState('')
   const [selectedGrowthForm, setSelectedGrowthForm] = useState('')
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const handleDisplayNewRowSelection = () => {
     const promises = [
@@ -30,8 +32,14 @@ export const useSelectNewAttribute = ({
         setGrowthFormSelectOptions(choices.growthforms.data)
         setShouldDisplayModal(true)
       })
-      .catch(() => {
-        toast.error('Failed to retrieve benthic attributes and growth forms')
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error('Failed to retrieve benthic attributes and growth forms.', error.message)
+          },
+          shouldShowServerNonResponseMessage: false,
+        })
       })
   }
 
