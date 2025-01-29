@@ -398,7 +398,14 @@ const ImageClassificationObservationTable = ({
                           }
                         >
                           <ImageWrapper>
-                            <Thumbnail imageUrl={file.thumbnail} />
+                            {file.thumbnail ? (
+                              <Thumbnail imageUrl={file.thumbnail} />
+                            ) : (
+                              <div>
+                                <Spinner />
+                                Loading {file.original_image_name}
+                              </div>
+                            )}
                           </ImageWrapper>
                         </TdWithHoverText>
                         <StyledTd
