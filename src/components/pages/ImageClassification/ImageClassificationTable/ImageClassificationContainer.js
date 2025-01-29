@@ -14,13 +14,11 @@ const ImageClassificationContainer = (props) => {
   const [images, setImages] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
-  const [uploadedFiles, setUploadedFiles] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId, recordId } = useParams()
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
-  const handleFilesUpload = (files) => {
-    setUploadedFiles([...uploadedFiles, ...files])
+  const handleFilesUpload = () => {
     setIsModalOpen(false)
   }
 
@@ -67,11 +65,9 @@ const ImageClassificationContainer = (props) => {
   return (
     <>
       <ImageClassificationObservationTable
-        uploadedFiles={uploadedFiles}
-        setUploadedFiles={setUploadedFiles}
+        images={images}
         isUploading={isUploading}
         setImages={setImages}
-        images={images}
         {...props}
       />
       <ButtonContainer>
@@ -88,7 +84,7 @@ const ImageClassificationContainer = (props) => {
           onFilesUpload={handleFilesUpload}
           setIsUploading={setIsUploading}
           isOpen={isModalOpen}
-          existingFiles={uploadedFiles}
+          existingFiles={images}
           pollCollectRecordUntilAllImagesProcessed={pollCollectRecordUntilAllImagesProcessed}
         />
       )}
