@@ -142,7 +142,7 @@ const ImageUploadModal = ({
       const uploadedFile = await processSingleImage(file)
       if (uploadedFile) {
         uploadedFiles.push(uploadedFile)
-        onFilesUpload(uploadedFiles)
+        onFilesUpload()
 
         processedCount += 1
 
