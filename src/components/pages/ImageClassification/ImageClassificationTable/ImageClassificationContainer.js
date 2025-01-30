@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ImageClassificationObservationTable from './ImageClassificationObservationTable'
 import ImageUploadModal from '../ImageUploadModal/ImageUploadModal'
 import { ButtonPrimary } from '../../../generic/buttons'
@@ -17,10 +17,20 @@ const ImageClassificationContainer = (props) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId, recordId } = useParams()
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const isUploadingRef = useRef(isUploading) // we use a ref for state here so that we can access non-stale value from within setInterval callbacks
 
   const handleFilesUpload = () => {
     setIsModalOpen(false)
   }
+
+  useEffect(
+    function syncronizeIsUploadingRefWithState() {
+      // we use a ref for state here so that we can access
+      // non-stale value from within setInterval callback closures
+      isUploadingRef.current = isUploading
+    },
+    [isUploading],
+  )
 
   const pollCollectRecordUntilAllImagesProcessed = () => {
     if (!databaseSwitchboardInstance || !handleHttpResponseError || !projectId || !recordId) {
@@ -38,11 +48,17 @@ const ImageClassificationContainer = (props) => {
 
         setImages(response.results)
 
-        const areAllImagesProcessed =
+        // if an upload is slow, this may return true before
+        // the upload is complete if previously processed images are present
+        const areAllUploadedImagesProcessed =
           response.results.length &&
           response.results.every((file) => getIsImageProcessed(file.classification_status?.status))
 
-        if (areAllImagesProcessed) {
+        // ... so we need to check if any images are still being uploaded as well
+        // (since useState values will be stale within a closure/setInterval callback,
+        // we use a reference to access the current value for isUploading instead of the stale closure value directly)
+        const areMoreImagesStillBeingUploaded = isUploadingRef.current
+        if (areAllUploadedImagesProcessed && !areMoreImagesStillBeingUploaded) {
           clearTimeout(intervalId)
         } else {
           intervalId = setTimeout(pollCollectRecordForImages, 5000)

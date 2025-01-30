@@ -140,6 +140,13 @@ const ImageUploadModal = ({
 
       // Start processing the file as soon as it's validated.
       const uploadedFile = await processSingleImage(file)
+      const isFirstUploadedFile = uploadedFile && uploadedFiles.length === 0
+      if (isFirstUploadedFile) {
+        // wait for first image to be successfully
+        // uploaded before initiating polling
+        // to avoid hitting the API unecessarily
+        pollCollectRecordUntilAllImagesProcessed()
+      }
       if (uploadedFile) {
         uploadedFiles.push(uploadedFile)
         onFilesUpload()
@@ -179,14 +186,12 @@ const ImageUploadModal = ({
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files)
     validateAndUploadFiles(files)
-    pollCollectRecordUntilAllImagesProcessed()
   }
 
   const handleDrop = (event) => {
     event.preventDefault()
     const files = Array.from(event.dataTransfer.files)
     validateAndUploadFiles(files)
-    pollCollectRecordUntilAllImagesProcessed()
   }
 
   const handleDragOver = (event) => {
