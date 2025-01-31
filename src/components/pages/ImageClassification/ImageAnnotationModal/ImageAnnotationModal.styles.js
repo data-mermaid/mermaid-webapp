@@ -6,6 +6,7 @@ import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/const
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { RowSpaceBetween } from '../../../generic/positioning'
 import { ButtonPrimary, IconButton, buttonSecondaryCss } from '../../../generic/buttons'
+import { Tooltip } from '../../../generic/tooltip'
 
 const confirmed = colorHelper(COLORS.confirmed)
 const unconfirmed = colorHelper(COLORS.unconfirmed)
@@ -144,18 +145,22 @@ export const MapControlButton = styled.button`
   box-sizing: border-box;
   height: 29px;
   width: 29px;
+  &:hover { {
+    background-color: ${({ $isSelected }) =>
+      $isSelected ? theme.color.primaryHover : theme.color.secondaryHover};
+  }
 `
-export const MapResetButton = styled(MapControlButton)`
+export const MapResetTooltip = styled(Tooltip)`
   position: absolute;
   top: 75px;
   left: 10px;
 `
-export const ToggleTableButton = styled(MapControlButton)`
+export const ToggleTableTooltip = styled(Tooltip)`
   position: absolute;
   top: 110px;
   left: 10px;
 `
-export const ToggleLabelsButton = styled(MapControlButton)`
+export const ToggleLabelsTooltip = styled(Tooltip)`
   position: absolute;
   top: 145px;
   left: 10px;

@@ -14,9 +14,10 @@ import {
   ImageAnnotationMapWrapper,
   LabelPopup,
   LoadingIndicatorImageClassificationImage,
-  MapResetButton,
-  ToggleLabelsButton,
-  ToggleTableButton,
+  MapControlButton,
+  MapResetTooltip,
+  ToggleLabelsTooltip,
+  ToggleTableTooltip,
 } from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
@@ -551,17 +552,30 @@ const ImageAnnotationModalMap = ({
         }}
       />
       {hasMapLoaded ? (
-        <MapResetButton type="button" onClick={resetZoom}>
-          <IconReset />
-        </MapResetButton>
+        <MapResetTooltip tooltipText="Reset Zoom" id="reset-zoom" position="right">
+          <MapControlButton type="button" onClick={resetZoom} title="reset zoom">
+            <IconReset />
+          </MapControlButton>
+        </MapResetTooltip>
       ) : null}
-      <ToggleTableButton type="button" onClick={toggleTable} $isSelected={isTableShowing}>
-        <IconTable />
-      </ToggleTableButton>
-      <ToggleLabelsButton type="button" onClick={toggleLabels} $isSelected={areLabelsShowing}>
-        <IconLabel />
-      </ToggleLabelsButton>
-
+      <ToggleTableTooltip
+        tooltipText="Toggle Table Visibility"
+        id="table-visibility"
+        position="right"
+      >
+        <MapControlButton type="button" onClick={toggleTable} $isSelected={isTableShowing}>
+          <IconTable />
+        </MapControlButton>
+      </ToggleTableTooltip>
+      <ToggleLabelsTooltip
+        tooltipText="Toggle Labels Visibility"
+        id="toggle-labels"
+        position="right"
+      >
+        <MapControlButton type="button" onClick={toggleLabels} $isSelected={areLabelsShowing}>
+          <IconLabel />
+        </MapControlButton>
+      </ToggleLabelsTooltip>
       {selectedPoint.id ? (
         <EditPointPopupWrapper
           map={map.current}
