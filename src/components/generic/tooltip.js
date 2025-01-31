@@ -74,17 +74,11 @@ const TooltipWrapper = styled('div')`
   }
 `
 
-export const TooltipWithText = ({
-  text,
-  tooltipText,
-  id,
-  $position = 'bottom',
-  ...restOfProps
-}) => {
+export const TooltipWithText = ({ text, tooltipText, id, position = 'bottom', ...restOfProps }) => {
   return (
     <TooltipP tabIndex="0" id={id} {...restOfProps}>
       {text}
-      <TooltipPopup role="tooltip" aria-labelledby={id} $position={$position}>
+      <TooltipPopup role="tooltip" aria-labelledby={id} $position={position}>
         {tooltipText}
       </TooltipPopup>
     </TooltipP>
@@ -95,14 +89,16 @@ TooltipWithText.propTypes = {
   text: PropTypes.node.isRequired,
   tooltipText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   id: PropTypes.string.isRequired,
-  $position: PropTypes.oneOf(['bottom', 'right']),
+  position: PropTypes.oneOf(['bottom', 'right']),
 }
 
-export const Tooltip = ({ children, tooltipText, id, $position = 'bottom' }) => {
+export const Tooltip = ({ children, tooltipText, id, className, position = 'bottom' }) => {
   return (
-    <TooltipWrapper>
+    // className is so that we can override styles using styled-components,
+    // which we need to do for image classification map control buttons
+    <TooltipWrapper className={className}>
       {children}
-      <TooltipPopup role="tooltip" aria-labelledby={id} $position={$position}>
+      <TooltipPopup role="tooltip" aria-labelledby={id} $position={position}>
         {tooltipText}
       </TooltipPopup>
     </TooltipWrapper>
@@ -113,5 +109,6 @@ Tooltip.propTypes = {
   children: PropTypes.node.isRequired,
   tooltipText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   id: PropTypes.string.isRequired,
-  $position: PropTypes.oneOf(['bottom', 'right']),
+  position: PropTypes.oneOf(['bottom', 'right']),
+  className: PropTypes.string,
 }

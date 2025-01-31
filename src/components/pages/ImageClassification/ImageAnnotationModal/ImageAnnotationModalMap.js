@@ -14,14 +14,14 @@ import {
   ImageAnnotationMapWrapper,
   LabelPopup,
   LoadingIndicatorImageClassificationImage,
-  MapResetButton,
-  ToggleLabelsButton,
-  ToggleTableButton,
+  MapControlButton,
+  MapResetTooltip,
+  ToggleLabelsTooltip,
+  ToggleTableTooltip,
 } from './ImageAnnotationModal.styles'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
 import { getPatchesCenters } from './getPatchesCenters'
-import { Tooltip } from '../../../generic/tooltip'
 
 const DEFAULT_CENTER = [0, 0] // this value doesn't matter, default to null island
 const DEFAULT_ZOOM = 2 // needs to be > 1 otherwise bounds become > 180 and > 85
@@ -552,23 +552,30 @@ const ImageAnnotationModalMap = ({
         }}
       />
       {hasMapLoaded ? (
-        <MapResetButton type="button" onClick={resetZoom} title="reset zoom">
-          <Tooltip tooltipText="Reset Zoom" id="reset-zoom" $position="right">
+        <MapResetTooltip tooltipText="Reset Zoom" id="reset-zoom" position="right">
+          <MapControlButton type="button" onClick={resetZoom} title="reset zoom">
             <IconReset />
-          </Tooltip>
-        </MapResetButton>
+          </MapControlButton>
+        </MapResetTooltip>
       ) : null}
-      <ToggleTableButton type="button" onClick={toggleTable} $isSelected={isTableShowing}>
-        <Tooltip tooltipText="Toggle Table Visibility" id="table-visibility" $position="right">
+      <ToggleTableTooltip
+        tooltipText="Toggle Table Visibility"
+        id="table-visibility"
+        position="right"
+      >
+        <MapControlButton type="button" onClick={toggleTable} $isSelected={isTableShowing}>
           <IconTable />
-        </Tooltip>
-      </ToggleTableButton>
-      <ToggleLabelsButton type="button" onClick={toggleLabels} $isSelected={areLabelsShowing}>
-        <Tooltip tooltipText="Toggle Labels Visibility" id="toggle-labels" $position="right">
+        </MapControlButton>
+      </ToggleTableTooltip>
+      <ToggleLabelsTooltip
+        tooltipText="Toggle Labels Visibility"
+        id="toggle-labels"
+        position="right"
+      >
+        <MapControlButton type="button" onClick={toggleLabels} $isSelected={areLabelsShowing}>
           <IconLabel />
-        </Tooltip>
-      </ToggleLabelsButton>
-
+        </MapControlButton>
+      </ToggleLabelsTooltip>
       {selectedPoint.id ? (
         <EditPointPopupWrapper
           map={map.current}
