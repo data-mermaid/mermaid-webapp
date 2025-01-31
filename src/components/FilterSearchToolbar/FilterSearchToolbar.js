@@ -126,7 +126,7 @@ FilterSearchToolbar.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
-  globalSearchText: PropTypes.string.isRequired,
+  globalSearchText: PropTypes.string,
   handleGlobalFilterChange: PropTypes.func.isRequired,
   type: PropTypes.string,
 }
