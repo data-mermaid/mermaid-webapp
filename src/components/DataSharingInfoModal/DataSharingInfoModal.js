@@ -187,6 +187,18 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
               <IconCheck />
             </Tcell>
           </Tr>
+          <Tr>
+            <Tcell cellWithText>Colonies bleached and benthic percent cover</Tcell>
+            <TcellWithIconClose>
+              <IconClose />
+            </TcellWithIconClose>
+            <TcellWithIconClose>
+              <IconClose />
+            </TcellWithIconClose>
+            <Tcell>
+              <IconCheck />
+            </Tcell>
+          </Tr>
         </tbody>
       </Table>
     </TableOverflowWrapper>
