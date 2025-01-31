@@ -487,53 +487,56 @@ const UsersAndTransects = () => {
       <StickyTableOverflowWrapper>
         <StickyOverviewTable {...getTableProps()}>
           <OverviewThead>
-            {headerGroups.map((headerGroup) => (
-              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => {
-                  const isMultiSortColumn = headerGroup.headers.some(
-                    (header) => header.sortedIndex > 0,
-                  )
-                  const ThClassName = column.parent ? column.parent.id : undefined
+            {headerGroups.map((headerGroup) => {
+              const headerGroupProps = headerGroup.getHeaderGroupProps()
+              return (
+                <Tr {...headerGroupProps} key={headerGroupProps.key}>
+                  {headerGroup.headers.map((column) => {
+                    const isMultiSortColumn = headerGroup.headers.some(
+                      (header) => header.sortedIndex > 0,
+                    )
+                    const ThClassName = column.parent ? column.parent.id : undefined
 
-                  const headerAlignment =
-                    column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
-                  const isUserHeader = ThClassName === 'user-headers'
-                  const userProfileId = isUserHeader ? column.id : null
+                    const headerAlignment =
+                      column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
+                    const isUserHeader = ThClassName === 'user-headers'
+                    const userProfileId = isUserHeader ? column.id : null
 
-                  return (
-                    <OverviewTh
-                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                      key={column.id}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
-                      isSortingEnabled={!column.disableSortBy}
-                      disabledHover={column.disableSortBy}
-                      align={headerAlignment}
-                      className={ThClassName}
-                    >
-                      {isUserHeader ? (
-                        <UserColumnHeader>
-                          {column.render('Header')}{' '}
-                          <ActiveRecordsCount>
-                            {getUserHeaderCount(userProfileId)}
-                          </ActiveRecordsCount>
-                        </UserColumnHeader>
-                      ) : (
-                        column.render('Header')
-                      )}
-                    </OverviewTh>
-                  )
-                })}
-              </Tr>
-            ))}
+                    return (
+                      <OverviewTh
+                        {...column.getHeaderProps(getTableColumnHeaderProps(column))}
+                        key={column.id}
+                        isSortedDescending={column.isSortedDesc}
+                        sortedIndex={column.sortedIndex}
+                        isMultiSortColumn={isMultiSortColumn}
+                        isSortingEnabled={!column.disableSortBy}
+                        disabledHover={column.disableSortBy}
+                        align={headerAlignment}
+                        className={ThClassName}
+                      >
+                        {isUserHeader ? (
+                          <UserColumnHeader>
+                            {column.render('Header')}{' '}
+                            <ActiveRecordsCount>
+                              {getUserHeaderCount(userProfileId)}
+                            </ActiveRecordsCount>
+                          </UserColumnHeader>
+                        ) : (
+                          column.render('Header')
+                        )}
+                      </OverviewTh>
+                    )
+                  })}
+                </Tr>
+              )
+            })}
           </OverviewThead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
 
               return (
-                <OverviewTr key={row.id} {...row.getRowProps()}>
+                <OverviewTr {...row.getRowProps()} key={row.id}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
                     const cellColumnGroupId = cell.column.parent.id
