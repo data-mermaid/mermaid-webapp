@@ -45,6 +45,8 @@ import {
 } from '../../../App/mermaidData/recordProtocolHelpers'
 import { getIsUserReadOnlyForProject } from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import { RECORD_STATUS_LABELS } from './collectConstants'
+import { TrCollectRecordStatus } from './Collect.styles'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
@@ -138,13 +140,18 @@ const Collect = () => {
         accessor: 'observers',
         sortType: reactTableNaturalSort,
       },
+      {
+        Header: 'Status',
+        accessor: 'status',
+        sortType: reactTableNaturalSort,
+      },
     ],
     [],
   )
 
   const tableCellData = useMemo(
     () =>
-      collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
+      collectRecordsForUiDisplay.map(({ id, data, uiLabels, validations }) => {
         const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
 
         return {
@@ -165,6 +172,7 @@ const Collect = () => {
           depth: uiLabels.depth,
           sampleDate: uiLabels.sampleDate,
           observers: uiLabels.observers,
+          status: RECORD_STATUS_LABELS[validations.status],
         }
       }),
     [collectRecordsForUiDisplay, currentProjectPath],
@@ -335,7 +343,11 @@ const Collect = () => {
               prepareRow(row)
 
               return (
-                <Tr key={row.id} {...row.getRowProps()}>
+                <TrCollectRecordStatus
+                  key={row.id}
+                  {...row.getRowProps()}
+                  $recordStatusLabel={row.values.status}
+                >
                   {row.cells.map((cell) => {
                     return (
                       <Td key={cell.column.id} {...cell.getCellProps()} align={cell.column.align}>
@@ -343,7 +355,7 @@ const Collect = () => {
                       </Td>
                     )
                   })}
-                </Tr>
+                </TrCollectRecordStatus>
               )
             })}
           </tbody>
