@@ -172,7 +172,7 @@ const Collect = () => {
           depth: uiLabels.depth,
           sampleDate: uiLabels.sampleDate,
           observers: uiLabels.observers,
-          status: RECORD_STATUS_LABELS[validations.status],
+          status: RECORD_STATUS_LABELS[validations?.status],
         }
       }),
     [collectRecordsForUiDisplay, currentProjectPath],
