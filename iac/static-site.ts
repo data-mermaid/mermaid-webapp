@@ -12,8 +12,8 @@ import * as iam from 'aws-cdk-lib/aws-iam'
 import { Construct } from 'constructs'
 
 export interface StaticSiteProps {
-  domainName: string;
-  siteSubDomain: string;
+  domainName: string
+  siteSubDomain: string
   isPreview?: boolean
 }
 
@@ -32,7 +32,7 @@ export class StaticSite extends Construct {
     const zone = route53.HostedZone.fromLookup(this, 'Zone', { domainName: props.domainName })
     const siteDomain = `${props.siteSubDomain}.${props.domainName}`
     const cloudfrontOAI = new cloudfront.OriginAccessIdentity(this, 'CloudfrontOAI', {
-      comment: `OAI for ${name}`
+      comment: `OAI for ${name}`,
     })
 
     new CfnOutput(this, 'Site', { value: `https://${siteDomain}` })
@@ -58,17 +58,25 @@ export class StaticSite extends Construct {
     })
 
     // Grant access to cloudfront
-    siteBucket.addToResourcePolicy(new iam.PolicyStatement({
-      actions: ['s3:GetObject'],
-      resources: [siteBucket.arnForObjects('*')],
-      principals: [new iam.CanonicalUserPrincipal(cloudfrontOAI.cloudFrontOriginAccessIdentityS3CanonicalUserId)]
-    }))
+    siteBucket.addToResourcePolicy(
+      new iam.PolicyStatement({
+        actions: ['s3:GetObject'],
+        resources: [siteBucket.arnForObjects('*')],
+        principals: [
+          new iam.CanonicalUserPrincipal(
+            cloudfrontOAI.cloudFrontOriginAccessIdentityS3CanonicalUserId,
+          ),
+        ],
+      }),
+    )
     new CfnOutput(this, 'BucketName', { value: siteBucket.bucketName })
 
     // TLS certificate
     // NOTE: This depends on the cert already created (manually)
-    const certificate = acm.Certificate.fromCertificateArn(this, 'DefaultSSLCert',
-      `arn:aws:acm:us-east-1:${parent.account}:certificate/783d7a91-1ebd-4387-9518-e28521086db6`
+    const certificate = acm.Certificate.fromCertificateArn(
+      this,
+      'DefaultSSLCert',
+      `arn:aws:acm:us-east-1:${parent.account}:certificate/783d7a91-1ebd-4387-9518-e28521086db6`,
     )
 
     // CloudFront distribution
@@ -76,18 +84,18 @@ export class StaticSite extends Construct {
 
     // allow the prod/preview domains into the cloudfront distribution
     if (props.siteSubDomain === 'dev') {
-      domainNames.push("dev-app.datamermaid.org")
+      domainNames.push('dev-app.datamermaid.org')
     }
     if (props.siteSubDomain === 'prod') {
-      domainNames.push("app.datamermaid.org")
+      domainNames.push('app.datamermaid.org')
     }
     if (props.siteSubDomain === 'preview') {
-      domainNames.push("preview.datamermaid.org")
+      domainNames.push('preview.datamermaid.org')
     }
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
       certificate,
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
-      defaultRootObject: "index.html",
+      defaultRootObject: 'index.html',
       domainNames,
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
       // if you do a hard refresh, then the app goes to an error page. We need it to
@@ -97,16 +105,19 @@ export class StaticSite extends Construct {
           httpStatus: 403,
           responseHttpStatus: 200,
           responsePagePath: '/index.html',
-        }
+        },
       ],
       defaultBehavior: {
-        cachePolicy: props.isPreview ?
-          cloudfront.CachePolicy.CACHING_DISABLED : cloudfront.CachePolicy.CACHING_OPTIMIZED,
-        origin: new cloudfront_origins.S3Origin(siteBucket, { originAccessIdentity: cloudfrontOAI }),
+        cachePolicy: props.isPreview
+          ? cloudfront.CachePolicy.CACHING_DISABLED
+          : cloudfront.CachePolicy.CACHING_OPTIMIZED,
+        origin: new cloudfront_origins.S3Origin(siteBucket, {
+          originAccessIdentity: cloudfrontOAI,
+        }),
         compress: true,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-      }
+      },
     })
 
     new CfnOutput(this, 'DistributionId', { value: distribution.distributionId })
@@ -115,7 +126,7 @@ export class StaticSite extends Construct {
     new route53.ARecord(this, 'AliasRecord', {
       recordName: siteDomain,
       target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
-      zone
+      zone,
     })
 
     // Deploy site contents to S3 bucket
