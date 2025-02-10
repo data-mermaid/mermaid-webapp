@@ -8,7 +8,7 @@ import { StaticSiteStack } from './stacks/static-site-stack'
 const app = new cdk.App()
 
 const tags = {
-  "Owner": "sysadmin@datamermaid.org",
+  Owner: 'sysadmin@datamermaid.org',
 }
 
 const subdomain = app.node.tryGetContext('subdomain') || 'dev'
@@ -20,17 +20,17 @@ const cdkEnv = {
 }
 
 new StaticSiteStack(app, `${subdomain}-webapp`, {
-    env: cdkEnv,
-    tags,
-    domainName: domain,
-    siteSubDomain: subdomain
+  env: cdkEnv,
+  tags,
+  domainName: domain,
+  siteSubDomain: subdomain,
 })
 
 new StaticSiteStack(app, `preview-webapp`, {
   env: cdkEnv,
   tags,
   domainName: domain,
-  siteSubDomain: "preview",
+  siteSubDomain: 'preview',
   isPreview: true,
 })
 
