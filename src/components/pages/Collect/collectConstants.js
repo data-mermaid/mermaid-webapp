@@ -14,5 +14,6 @@ export const RECORD_STATUS_LABELS = {
   [VALIDATION_STATUS.ok]: 'Ready to submit',
   [VALIDATION_STATUS.stale]: 'Saved',
   [VALIDATION_STATUS.warning]: 'Warnings',
+  [undefined]: 'Saved', // if a record is created offline, it will have no validation status yet.
 }
 Object.freeze(RECORD_STATUS_LABELS)
