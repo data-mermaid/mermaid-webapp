@@ -1,20 +1,16 @@
-import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
+import { useFormik } from 'formik'
 import { useNavigate, useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
-import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
 
-import { CloseButton, ButtonThatLooksLikeLink } from '../../generic/buttons'
+import { ButtonPrimary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import { createUuid } from '../../../library/createUuid'
 import { getOptions } from '../../../library/getOptions'
 import { getProjectInitialValues } from './projectRecordInitialFormValue'
-import { H2, H3, P } from '../../generic/text'
+import { H2, H3, P, PSmall } from '../../generic/text'
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
-import { hoverState } from '../../../library/styling/mediaQueries'
-import { IconClose } from '../../icons'
+import { IconPen } from '../../icons'
 import { InputWrapper, InputRow } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
@@ -27,7 +23,6 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import NewOrganizationModal from '../../NewOrganizationModal'
 import PageUnavailable from '../PageUnavailable'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
-import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
@@ -38,140 +33,52 @@ import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandl
 import DeleteProjectButton from '../../DeleteProjectButton/DeleteProjectButton'
 import GfcrCallout from '../../GfcrCallout'
 import { useCurrentProject } from '../../../App/CurrentProjectContext'
+import { EditCitationModal } from './EditCitationModal'
+import {
+  BlockquoteInForm,
+  InputAutocompleteWrapper,
+  SuggestNewOrganizationButton,
+} from './ProjectInfo.styles'
+import { OrganizationList } from './OrganizationsList'
 
-const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
-  ${hoverState(css`
-    background-color: ${theme.color.primaryColor};
-    color: ${theme.color.white};
-  `)}
-`
-const TagStyleWrapper = styled.ul`
-  padding: 0;
-`
-const ClearTagButton = styled(CloseButton)`
-  position: relative;
-  color: ${theme.color.textColor};
-  opacity: 0;
-  transition: 0;
-  &:focus {
-    opacity: 1;
-  }
-  &:hover,
-  &:focus {
-    & + span {
-      display: block;
-    }
-  }
-`
-const TagStyle = styled.li`
-  position: relative;
-  color: ${theme.color.textColor};
-  border-radius: 50px;
-  background-color: ${theme.color.white};
-  padding: 0 4rem 0 0;
-  margin: 1rem 0.5rem;
-  border: solid ${theme.spacing.borderMedium} ${theme.color.primaryColor};
-  display: inline-block;
-  white-space: nowrap;
-  &:focus {
-    ${ClearTagButton} {
-      opacity: 1;
-    }
-  }
-  ${hoverState(css`
-    ${ClearTagButton} {
-      opacity: 1;
-    }
-  `)}
-  @media (hover: none) {
-    ${ClearTagButton} {
-      opacity: 1;
-    }
-  }
-`
-
-const TooltipPopup = styled('span')`
-  display: none;
-  background: ${theme.color.primaryColor};
-  color: ${theme.color.white};
-  position: absolute;
-  font-size: ${theme.typography.smallFontSize};
-  clip-path: polygon(
-    calc(20px - 10px) 15px,
-    20px 0,
-    calc(20px + 10px) 15px,
-    100% 15px,
-    100% 100%,
-    0 100%,
-    0 15px
-  );
-  padding: ${theme.spacing.small};
-  padding-top: calc(4rem - 15px);
-  top: 4rem;
-  white-space: normal;
-  text-align: start;
-  line-height: ${theme.typography.lineHeight};
-  z-index: 101;
-  ${theme.typography.upperCase};
-`
-const InputAutocompleteWrapper = styled(InputRow)`
-  height: 100px;
-`
-
-const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
-  return (
-    organizations && (
-      <TagStyleWrapper>
-        {organizations.map((item) => {
-          const uid = createUuid()
-
-          return (
-            <TagStyle tabIndex="0" key={item}>
-              <ClearTagButton
-                type="button"
-                onClick={() => handleOrganizationsChange(item)}
-                id={`remove-button-${uid}`}
-                aria-labelledby={`aria-tooltip-label${uid}`}
-              >
-                <IconClose />
-              </ClearTagButton>
-              <TooltipPopup id={`aria-tooltip-label${uid}`}>
-                {language.pages.projectInfo.removeOrganization}
-              </TooltipPopup>
-              {item}
-            </TagStyle>
-          )
-        })}
-      </TagStyleWrapper>
-    )
-  )
-}
+const getWhichServerCitationToUse = (project) =>
+  project?.user_citation // false if empty string, which is how the server stores undefined
+    ? project?.user_citation
+    : project?.default_citation
 
 const ProjectInfo = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
+  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false)
+  const [isDeletingProject, setIsDeletingProject] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [projectTagOptions, setProjectTagOptions] = useState([])
-  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { currentProject: projectBeingEdited, setCurrentProject: setProjectBeingEdited } =
-    useCurrentProject()
-  const { isAppOnline } = useOnlineStatus()
-  const { projectId } = useParams()
-  const { currentUser } = useCurrentUser()
-  const navigate = useNavigate()
-  const isMounted = useIsMounted()
-  const handleHttpResponseError = useHttpResponseErrorHandler()
-  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
+  const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const [isUpdatingGfcr, setIsUpdatingGfcr] = useState(false)
   const [projectNameError, setProjectNameError] = useState(false)
-  const [isDeletingProject, setIsDeletingProject] = useState(false)
-  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false)
+  const [projectTagOptions, setProjectTagOptions] = useState([])
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [isEditCitationModalOpen, setIsEditCitationModalOpen] = useState(false)
+  const [citationToUse, setCitationToUse] = useState('')
+  const [projectProfiles, setProjectProfiles] = useState([])
 
-  useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
+  const { currentUser } = useCurrentUser()
+  const { currentProject: projectBeingEdited, setCurrentProject: setProjectBeingEdited } =
+    useCurrentProject()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
+  const { projectId } = useParams()
+  const citationFromServerToUse = getWhichServerCitationToUse(projectBeingEdited)
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
+  const isMounted = useIsMounted()
+  const isSuggestedCitationDirty = citationToUse !== citationFromServerToUse
+  const navigate = useNavigate()
 
-  const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
+  const openEditCitationModal = () => setIsEditCitationModalOpen(true)
+  const closeEditCitationModal = () => setIsEditCitationModalOpen(false)
+
+  useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -182,18 +89,22 @@ const ProjectInfo = () => {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
-        databaseSwitchboardInstance.getProjects(),
+        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
-        .then(([projectResponse, projectTagsResponse]) => {
+        .then(([projectResponse, projectTagsResponse, projectProfilesResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
 
+            const initialCitation = getWhichServerCitationToUse(projectResponse)
+
             setProjectBeingEdited(projectResponse)
+            setCitationToUse(initialCitation)
             setProjectTagOptions(getOptions(projectTagsResponse))
+            setProjectProfiles(projectProfilesResponse)
             setIsLoading(false)
           }
         })
@@ -230,14 +141,18 @@ const ProjectInfo = () => {
     initialValues: initialFormValues,
     enableReinitialize: true,
     onSubmit: (values, actions) => {
+      const valuesToUse = isSuggestedCitationDirty
+        ? { ...values, user_citation: citationToUse }
+        : values
       setSaveButtonState(buttonGroupStates.saving)
       setProjectNameError(false)
+
       databaseSwitchboardInstance
-        .saveProject({ projectId, editedValues: values })
+        .saveProject({ projectId, editedValues: valuesToUse })
         .then(() => {
           setSaveButtonState(buttonGroupStates.saved)
           toast.success(...getToastArguments(language.success.projectSave))
-          actions.resetForm({ values }) // resets formiks dirty state
+          actions.resetForm({ values }) // resets formik's dirty state
         })
         .catch((error) => {
           // validation error is a custom error (doesn't have the same structure as HTTP response error)
@@ -268,10 +183,10 @@ const ProjectInfo = () => {
   })
 
   const _setSaveButtonUnsaved = useEffect(() => {
-    if (formik.dirty) {
+    if (formik.dirty || isSuggestedCitationDirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
-  }, [formik.dirty])
+  }, [formik.dirty, isSuggestedCitationDirty])
 
   const noOrganizationResult = (
     <>
@@ -358,6 +273,22 @@ const ProjectInfo = () => {
         })
       })
   }
+  const citationMarkup = (
+    <InputRow>
+      <label htmlFor="suggested-citation">{language.pages.projectInfo.citationLabel}</label>
+      <div>
+        <BlockquoteInForm id="suggested-citation">
+          {citationToUse} {projectBeingEdited?.citation_retrieved_text}
+        </BlockquoteInForm>
+        <PSmall>{language.pages.projectInfo.citationHelperText}</PSmall>
+        {isAdminUser ? (
+          <ButtonPrimary type="button" onClick={openEditCitationModal}>
+            <IconPen /> {language.pages.projectInfo.editCitation}
+          </ButtonPrimary>
+        ) : null}
+      </div>
+    </InputRow>
+  )
 
   const adminContent = (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
@@ -410,6 +341,8 @@ const ProjectInfo = () => {
             formik.setFieldValue('tags', existingOrganizations)
           }}
         />
+        {citationMarkup}
+
         <GfcrCallout
           isGfcr={projectBeingEdited?.includes_gfcr}
           handleUpdateIncludesGfcr={updateIncludesGfcr}
@@ -426,35 +359,29 @@ const ProjectInfo = () => {
           openModal={openDeleteProjectModal}
         />
       </InputWrapper>
-      <NewOrganizationModal
-        isOpen={IsNewOrganizationNameModalOpen}
-        onDismiss={closeNewOrganizationNameModal}
-        onSubmit={(selectedItemLabel) => {
-          const existingOrganizations = [...formik.getFieldProps('tags').value]
-
-          formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
-        }}
-      />
     </form>
   )
 
   const { name, notes, tags } = formik.values
   const readOnlyContent = (
-    <InputWrapper>
-      <H2>{name}</H2>
-      <H3>{language.pages.projectInfo.notes}</H3>
-      <P>{notes.length ? notes : <em>{language.pages.projectInfo.noNotes}</em>}</P>
-      <H3>{language.pages.projectInfo.organizations}</H3>
-      {tags.length ? (
-        <ul>
-          {tags.map((org) => (
-            <li key={org}>{org}</li>
-          ))}
-        </ul>
-      ) : (
-        <em>{language.pages.projectInfo.noOrganization}</em>
-      )}
-    </InputWrapper>
+    <>
+      <InputWrapper>
+        <H2>{name}</H2>
+        <H3>{language.pages.projectInfo.notes}</H3>
+        <P>{notes.length ? notes : <em>{language.pages.projectInfo.noNotes}</em>}</P>
+        <H3>{language.pages.projectInfo.organizations}</H3>
+        {tags.length ? (
+          <ul>
+            {tags.map((org) => (
+              <li key={org}>{org}</li>
+            ))}
+          </ul>
+        ) : (
+          <em>{language.pages.projectInfo.noOrganization}</em>
+        )}
+      </InputWrapper>
+      {citationMarkup}
+    </>
   )
 
   const contentViewByRole = isAdminUser ? adminContent : readOnlyContent
@@ -483,7 +410,7 @@ const ProjectInfo = () => {
                 formId="project-info-form"
                 saveButtonState={saveButtonState}
                 formHasErrors={!!Object.keys(formik.errors).length}
-                formDirty={formik.dirty}
+                formDirty={formik.dirty || isSuggestedCitationDirty}
               />
             )}
           </ContentPageToolbarWrapper>
@@ -492,13 +419,25 @@ const ProjectInfo = () => {
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       {/* Prompt user if they attempt to navigate away from dirty form */}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
+      <NewOrganizationModal
+        isOpen={IsNewOrganizationNameModalOpen}
+        onDismiss={closeNewOrganizationNameModal}
+        onSubmit={(selectedItemLabel) => {
+          const existingOrganizations = [...formik.getFieldProps('tags').value]
+
+          formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
+        }}
+      />
+      <EditCitationModal
+        citationToUse={citationToUse}
+        isOpen={isEditCitationModalOpen}
+        onDismiss={closeEditCitationModal}
+        projectBeingEdited={projectBeingEdited}
+        projectProfiles={projectProfiles}
+        setCitationToUse={setCitationToUse}
+      />
     </>
   )
-}
-
-OrganizationList.propTypes = {
-  organizations: PropTypes.arrayOf(PropTypes.string).isRequired,
-  handleOrganizationsChange: PropTypes.func.isRequired,
 }
 
 export default ProjectInfo
