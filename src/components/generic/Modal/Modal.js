@@ -8,6 +8,8 @@ import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { InputRow } from '../form'
 import { TableOverflowWrapper } from '../Table/table'
 
+export const MODAL_CONTENT_HEIGHT = '80vh'
+
 const StyledDialogOverlay = styled('div')`
   background: rgba(0, 0, 0, 0.5);
   width: 100vw;
@@ -54,11 +56,11 @@ const ModalToolbar = styled.div`
 `
 const ModalContent = styled.div`
   ${(props) =>
-    !props.contentOverflowIsVisible &&
+    props.contentOverflowIsVisible &&
     css`
       overflow: auto;
     `}
-  max-height: 80vh;
+  max-height: ${MODAL_CONTENT_HEIGHT};
   padding: ${theme.spacing.medium};
 `
 const ModalFooter = styled.div`
@@ -112,6 +114,8 @@ const LeftFooter = styled('div')`
 `
 const RightFooter = styled('div')`
   justify-self: end;
+  display: flex;
+  gap: ${theme.spacing.buttonSpacing};
 `
 
 const ModalInputRow = styled(InputRow)`

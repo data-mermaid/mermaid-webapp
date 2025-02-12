@@ -320,9 +320,9 @@ const Collect = () => {
           <thead>
             {headerGroups.map((headerGroup) => {
               const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
-
+              const headerProps = headerGroup.getHeaderGroupProps()
               return (
-                <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+                <Tr {...headerProps} key={headerProps.key}>
                   {headerGroup.headers.map((column) => (
                     <Th
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
@@ -344,13 +344,13 @@ const Collect = () => {
 
               return (
                 <TrCollectRecordStatus
-                  key={row.id}
                   {...row.getRowProps()}
+                  key={row.id}
                   $recordStatusLabel={row.values.status}
                 >
                   {row.cells.map((cell) => {
                     return (
-                      <Td key={cell.column.id} {...cell.getCellProps()} align={cell.column.align}>
+                      <Td {...cell.getCellProps()} align={cell.column.align} key={cell.column.id}>
                         {cell.render('Cell')}
                       </Td>
                     )
