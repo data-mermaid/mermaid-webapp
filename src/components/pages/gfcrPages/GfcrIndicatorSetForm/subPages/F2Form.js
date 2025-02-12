@@ -133,11 +133,11 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
             <strong>F 2.5</strong> {gfcrIndicatorSetLanguage.f2_5}
           </>
         }
-        id="f2_opt1"
+        id="f2_5"
         type="number"
         unit="km²"
-        {...formik.getFieldProps('f2_opt1')}
-        onBlur={(event) => handleInputBlur(formik, event, 'f2_opt1')}
+        {...formik.getFieldProps('f2_5')}
+        onBlur={(event) => handleInputBlur(formik, event, 'f2_5')}
         onFocus={(event) => handleInputFocus(event)}
         onKeyDown={(event) => enforceNumberInput(event)}
         helperText={gfcrIndicatorSetLanguage.getF2_5_helper()}
