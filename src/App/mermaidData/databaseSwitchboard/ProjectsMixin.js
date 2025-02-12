@@ -1,6 +1,6 @@
 import axios from '../../../library/axiosRetry'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getPaginatedMermaidData } from '../getPaginatedMermeidData'
+import { getPaginatedMermaidData } from '../getPaginatedMermaidData'
 
 const ProjectsMixin = (Base) =>
   class extends Base {
@@ -80,7 +80,7 @@ const ProjectsMixin = (Base) =>
         authorizationHeaders: await getAuthorizationHeaders(this._getAccessToken),
         axios,
         errorCallback: () => {
-          Promise.reject(this._notAuthenticatedAndReadyError)
+          return Promise.reject(this._notAuthenticatedAndReadyError)
         },
       })
     }
