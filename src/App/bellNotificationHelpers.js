@@ -1,6 +1,7 @@
 import axios from '../library/axiosRetry'
 import language from '../language'
 import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
+import { getPaginatedMermaidData } from './mermaidData/getPaginatedMermaidData'
 
 export const getBellNotifications = async ({
   apiBaseUrl,
@@ -15,25 +16,18 @@ export const getBellNotifications = async ({
   const isAuthenticatedAndReady = isMermaidAuthenticated
   const isOnlineAuthenticatedAndReady = isAuthenticatedAndReady && isAppOnline
 
-  if (isOnlineAuthenticatedAndReady) {
-    return axios
-      .get(`${apiBaseUrl}/notifications/?limit=5000`, await getAuthorizationHeaders(getAccessToken))
-      .then((apiResults) => {
-        const notificationsResponse = apiResults.data
-
-        if (!notificationsResponse) {
-          throw Error('Notifications not returned from API')
-        }
-
-        return notificationsResponse
-      })
-      .catch((error) => {
-        console.error(error.response || error)
-        throw error
-      })
+  if (!isOnlineAuthenticatedAndReady) {
+    return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
   }
-
-  return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
+  return await getPaginatedMermaidData({
+    url: `${apiBaseUrl}/notifications/`,
+    authorizationHeaders: await getAuthorizationHeaders(getAccessToken),
+    axios,
+    errorCallback: (error) => {
+      console.error(error.response || error)
+      throw error
+    },
+  })
 }
 
 export const deleteBellNotification = async (

@@ -36,7 +36,7 @@ const BellNotificationDropDown = () => {
     event.stopPropagation()
   }
 
-  if (!notifications?.results || !notifications.results?.length) {
+  if (!notifications || !notifications.length) {
     return (
       <NotificationCardWrapper>
         <NoNotifications>
@@ -46,7 +46,7 @@ const BellNotificationDropDown = () => {
     )
   }
 
-  const sortedNotifications = sortArrayByObjectKey(notifications.results, 'created_on', false)
+  const sortedNotifications = sortArrayByObjectKey(notifications, 'created_on', false)
 
   return (
     <NotificationCardWrapper>
