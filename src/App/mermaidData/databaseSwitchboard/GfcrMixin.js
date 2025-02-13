@@ -1,6 +1,6 @@
 import axios from '../../../library/axiosRetry'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getPaginatedMermaidData } from '../getPaginatedMermeidData'
+import { getPaginatedMermaidData } from '../getPaginatedMermaidData'
 
 const GfcrMixin = (Base) =>
   class extends Base {
