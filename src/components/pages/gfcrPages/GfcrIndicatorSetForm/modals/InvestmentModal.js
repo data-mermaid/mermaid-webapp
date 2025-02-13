@@ -1,29 +1,30 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 
-import language from '../../../../../language'
-import { Textarea } from '../../../../generic/form'
-import Modal, { RightFooter } from '../../../../generic/Modal/Modal'
 import {
   StyledModalInputRow,
   StyledModalFooterWrapper,
   StyledModalLeftFooter,
 } from '../subPages/subPages.styles'
-import { useFormik } from 'formik'
+import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
 import { buttonGroupStates } from '../../../../../library/buttonGroupStates'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
-import SaveButton from './SaveButton'
-import { getInvestmentInitialValues } from './investmentInitialValues'
-import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useParams } from 'react-router-dom'
-import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
-import { toast } from 'react-toastify'
-import { getToastArguments } from '../../../../../library/getToastArguments'
-import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
-import { getOptions } from '../../../../../library/getOptions'
-import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
+import { formikHandleNumericTwoDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
+import { getInvestmentInitialValues } from './investmentInitialValues'
+import { getOptions } from '../../../../../library/getOptions'
+import { getToastArguments } from '../../../../../library/getToastArguments'
+import { Textarea } from '../../../../generic/form'
+import { toast } from 'react-toastify'
+import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useFormik } from 'formik'
+import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
+import { useParams } from 'react-router-dom'
+import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
+import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
+import language from '../../../../../language'
+import Modal, { RightFooter } from '../../../../generic/Modal/Modal'
+import SaveButton from './SaveButton'
 
 const modalLanguage = language.gfcrInvestmentModal
 
@@ -288,6 +289,13 @@ const InvestmentModal = ({
             helperText={modalLanguage.getInvestmentAmountHelper()}
             showHelperText={displayHelp}
             required={true}
+            onChange={(event) =>
+              formikHandleNumericTwoDecimalInputChange({
+                formik,
+                event,
+                fieldName: 'investment_amount',
+              })
+            }
           />
         </StyledModalInputRow>
         <hr />
