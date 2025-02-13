@@ -81,7 +81,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         .then(([choicesResponse, indicatorSetsResponse]) => {
           if (isMounted.current) {
             setChoices(choicesResponse)
-            setGfcrIndicatorSets(indicatorSetsResponse.results)
+            setGfcrIndicatorSets(indicatorSetsResponse)
           }
 
           setIsLoading(false)
