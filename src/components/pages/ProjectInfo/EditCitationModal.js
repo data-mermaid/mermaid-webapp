@@ -47,7 +47,7 @@ export const EditCitationModal = ({
     .map((profile) => profile.profile_name)
     .join(', ')
 
-  const latestSampleEventDate = new Date(updated_on).toLocaleDateString(undefined, {
+  const projectLastUpdated = new Date(updated_on).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -98,8 +98,8 @@ export const EditCitationModal = ({
             <dd>{admins}</dd>
             <dt>{modalLanguage.otherProjectMembers}</dt>
             <dd>{otherProjectMembers}</dd>
-            <dt>{modalLanguage.latestSampleEventDate}</dt>
-            <dd>{latestSampleEventDate}</dd>
+            <dt>{modalLanguage.projectLastUpdated}</dt>
+            <dd>{projectLastUpdated}</dd>
             <dt>{modalLanguage.countries}</dt>
             <dd>{projectCountries}</dd>
           </CitationDefinitionList>

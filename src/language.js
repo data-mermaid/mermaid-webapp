@@ -581,7 +581,7 @@ const pages = {
       projectName: 'Project Name',
       projectAdmins: 'Project Admins',
       otherProjectMembers: 'Other Project Members',
-      latestSampleEventDate: 'Latest Sample Event Date',
+      projectLastUpdated: 'Project Last Updated',
       countries: 'Countries',
       defaultCitation: 'Default Citation',
       editCitation: 'Edit Citation',
