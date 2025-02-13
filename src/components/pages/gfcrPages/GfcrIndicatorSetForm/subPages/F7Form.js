@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import { formikHandleIntegerInputChange } from '../../../../../library/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formikPropType'
-import language from '../../../../../language'
-import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
-import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
-import { InputRow } from '../../../../generic/form'
-import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { H2 } from '../../../../generic/text'
+import { InputRow } from '../../../../generic/form'
+import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
+import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import language from '../../../../../language'
+import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
@@ -28,7 +28,9 @@ const F7Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f7_1a')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1a')}
             onFocus={(event) => handleInputFocus(event)}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f7_1a' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF7_1_men_helper()}
             showHelperText={displayHelp}
           />
@@ -40,7 +42,9 @@ const F7Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             type="number"
             {...formik.getFieldProps('f7_1b')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1b')}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f7_1b' })
+            }
             onFocus={(event) => handleInputFocus(event)}
             helperText={gfcrIndicatorSetLanguage.getF7_1_women_helper()}
             showHelperText={displayHelp}
@@ -63,7 +67,9 @@ const F7Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             type="number"
             {...formik.getFieldProps('f7_1c')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1c')}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f7_1c' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF7_1_youth_helper()}
             showHelperText={displayHelp}
           />
@@ -75,7 +81,9 @@ const F7Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             type="number"
             {...formik.getFieldProps('f7_1d')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_1d')}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f7_1d' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF7_1_indigenous_helper()}
             showHelperText={displayHelp}
           />
@@ -93,7 +101,9 @@ const F7Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f7_2a')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_2a')}
             onFocus={(event) => handleInputFocus(event)}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f7_2a' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF7_2_men_helper()}
             showHelperText={displayHelp}
           />
@@ -106,7 +116,9 @@ const F7Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f7_2b')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_2b')}
             onFocus={(event) => handleInputFocus(event)}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f7_2b' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF7_2_women_helper()}
             showHelperText={displayHelp}
           />
@@ -128,7 +140,9 @@ const F7Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             type="number"
             {...formik.getFieldProps('f7_2c')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_2c')}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f7_2c' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF7_2_youth_helper()}
             showHelperText={displayHelp}
           />
@@ -140,7 +154,9 @@ const F7Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             type="number"
             {...formik.getFieldProps('f7_2d')}
             onBlur={(event) => handleInputBlur(formik, event, 'f7_2d')}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f7_2d' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF7_2_indigenous_helper()}
             showHelperText={displayHelp}
           />
@@ -157,7 +173,7 @@ const F7Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         {...formik.getFieldProps('f7_3')}
         onBlur={(event) => handleInputBlur(formik, event, 'f7_3')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f7_3' })}
         helperText={gfcrIndicatorSetLanguage.getF7_3_helper()}
         showHelperText={displayHelp}
       />
@@ -172,7 +188,7 @@ const F7Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         {...formik.getFieldProps('f7_4')}
         onBlur={(event) => handleInputBlur(formik, event, 'f7_4')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f7_4' })}
         helperText={gfcrIndicatorSetLanguage.getF7_4_helper()}
         showHelperText={displayHelp}
       />

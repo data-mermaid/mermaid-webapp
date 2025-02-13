@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import { formikHandleIntegerInputChange } from '../../../../../library/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formikPropType'
-import language from '../../../../../language'
-import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
-import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
-import { InputRow } from '../../../../generic/form'
-import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { H2 } from '../../../../generic/text'
+import { InputRow } from '../../../../generic/form'
+import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
+import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import language from '../../../../../language'
+import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
@@ -27,7 +27,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         {...formik.getFieldProps('f5_1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_1')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_1' })}
         helperText={gfcrIndicatorSetLanguage.getF5_1_helper()}
         showHelperText={displayHelp}
       />
@@ -42,7 +42,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         {...formik.getFieldProps('f5_2')}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_2')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_2' })}
         helperText={gfcrIndicatorSetLanguage.getF5_2_helper()}
         showHelperText={displayHelp}
       />
@@ -57,7 +57,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         {...formik.getFieldProps('f5_3')}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_3')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_3' })}
         helperText={gfcrIndicatorSetLanguage.getF5_3_helper()}
         showHelperText={displayHelp}
       />
@@ -73,7 +73,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f5_4a')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4a')}
             onFocus={(event) => handleInputFocus(event)}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_4a' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF5_4_men_helper()}
             showHelperText={displayHelp}
           />
@@ -86,7 +88,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f5_4b')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4b')}
             onFocus={(event) => handleInputFocus(event)}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_4b' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF5_4_women_helper()}
             showHelperText={displayHelp}
           />
@@ -108,7 +112,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             type="number"
             {...formik.getFieldProps('f5_4c')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4c')}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_4c' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF5_4_youth_helper()}
             showHelperText={displayHelp}
           />
@@ -120,7 +126,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             type="number"
             {...formik.getFieldProps('f5_4d')}
             onBlur={(event) => handleInputBlur(formik, event, 'f5_4d')}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_4d' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF5_4_indigenous_helper()}
             showHelperText={displayHelp}
           />
@@ -139,7 +147,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         validationMessages={formik.errors.title}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_5')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_5' })}
         helperText={gfcrIndicatorSetLanguage.getF5_5_helper()}
         showHelperText={displayHelp}
       />
@@ -156,7 +164,7 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         validationMessages={formik.errors.title}
         onBlur={(event) => handleInputBlur(formik, event, 'f5_6')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_6' })}
         helperText={gfcrIndicatorSetLanguage.getF5_6_helper()}
         showHelperText={displayHelp}
       />
