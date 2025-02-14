@@ -47,6 +47,7 @@ import { getIsUserReadOnlyForProject } from '../../../App/currentUserProfileHelp
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { RECORD_STATUS_LABELS } from './collectConstants'
 import { TrCollectRecordStatus } from './Collect.styles'
+import { getIsEmptyStringOrWhitespace } from '../../../library/getIsEmptyStringOrWhitespace'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
@@ -349,9 +350,16 @@ const Collect = () => {
                   $recordStatusLabel={row.values.status}
                 >
                   {row.cells.map((cell) => {
+                    const isCellEmpty =
+                      cell.value === undefined ||
+                      cell.value === null ||
+                      getIsEmptyStringOrWhitespace(cell.value)
+
+                    const cellContents = isCellEmpty ? '-' : cell.render('Cell')
+
                     return (
                       <Td {...cell.getCellProps()} align={cell.column.align} key={cell.column.id}>
-                        {cell.render('Cell')}
+                        {cellContents}
                       </Td>
                     )
                   })}

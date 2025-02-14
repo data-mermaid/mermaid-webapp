@@ -40,6 +40,7 @@ import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
 import useDocumentTitle from '../../../library/useDocumentTitle'
+import { getIsEmptyStringOrWhitespace } from '../../../library/getIsEmptyStringOrWhitespace'
 
 const groupManagementRegimes = (records) => {
   return records.reduce((accumulator, record) => {
@@ -172,7 +173,7 @@ const ManagementRegimesOverview = () => {
 
       const rowRecordManagementRegimes = managementRegimeRecordNames.reduce(
         (accumulator, record) => {
-          accumulator[record.id] = rowRecordManagementRegimesWithoutNonEmptyValues[record.id] || '-'
+          accumulator[record.id] = rowRecordManagementRegimesWithoutNonEmptyValues[record.id] || ''
 
           return accumulator
         },
@@ -365,7 +366,10 @@ const ManagementRegimesOverview = () => {
                 )
               })
               const mrTransectNumberRowCellsWithNonEmptyValue = mrTransectNumberRowCells.filter(
-                (cell) => cell.value !== '-',
+                (cell) =>
+                  cell.value !== undefined &&
+                  cell.value !== null &&
+                  !getIsEmptyStringOrWhitespace(cell.value),
               )
 
               const mrTransectNumberRowCellValues = mrTransectNumberRowCellsWithNonEmptyValue?.map(
@@ -392,7 +396,10 @@ const ManagementRegimesOverview = () => {
                       cellColumnGroupId === 'first-transect-header'
 
                     const managementRegimeCellNonEmpty =
-                      cell.value !== '-' && !areSiteOrMethodOrEmptyHeaderColumns
+                      cell.value !== undefined &&
+                      cell.value !== null &&
+                      !getIsEmptyStringOrWhitespace(cell.value) &&
+                      !areSiteOrMethodOrEmptyHeaderColumns
 
                     const isCellValueLessThanMaxSampleUnitCount =
                       managementRegimeCellNonEmpty &&
