@@ -103,7 +103,7 @@ F6Form.propTypes = {
   handleInputBlur: PropTypes.func.isRequired,
   handleInputFocus: PropTypes.func.isRequired,
   getFieldValueTotal: PropTypes.func.isRequired,
-  displayHelp: PropTypes.string,
+  displayHelp: PropTypes.bool,
 }
 
 export default F6Form
