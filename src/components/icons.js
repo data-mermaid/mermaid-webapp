@@ -1,3 +1,4 @@
+import React from 'react'
 import { InlineIcon } from '@iconify/react'
 import accountCircle from '@iconify-icons/mdi/account-circle'
 import accountConvert from '@iconify-icons/mdi/account-convert'
@@ -43,8 +44,8 @@ import openInNew from '@iconify-icons/mdi/open-in-new'
 import pencilIcon from '@iconify-icons/mdi/pencil'
 import playButton from '@iconify-icons/mdi/play-circle-outline'
 import plus from '@iconify-icons/mdi/plus'
-import React from 'react'
 import send from '@iconify-icons/mdi/send'
+import refresh from '@iconify-icons/mdi/refresh'
 import shareVariantOutline from '@iconify-icons/mdi/share-variant-outline'
 import sortAscending from '@iconify-icons/mdi/sort-ascending'
 import sortDescending from '@iconify-icons/mdi/sort-descending'
@@ -97,17 +98,18 @@ export const IconMenu = (props) => <InlineIcon icon={menu} {...props} />
 export const IconMgmt = (props) => <InlineIcon icon={fileTable} {...props} />
 export const IconOpenInNew = (props) => <InlineIcon icon={openInNew} {...props} />
 export const IconPen = (props) => <InlineIcon icon={pencilIcon} {...props} />
+export const IconMapMarker = (props) => <InlineIcon icon={mapMarker} {...props} />
 export const IconPlus = (props) => <InlineIcon icon={plus} {...props} />
-export const IconRefresh = (props) => <InlineIcon icon={sync} {...props} />
+export const IconRefresh = (props) => <InlineIcon icon={refresh} {...props} />
 export const IconRequired = (props) => <InlineIcon icon={asterisk} {...props} />
 export const IconSave = (props) => <InlineIcon icon={contentSave} {...props} />
 export const IconSend = (props) => <InlineIcon icon={send} {...props} />
 export const IconSharing = (props) => <InlineIcon icon={shareVariantOutline} {...props} />
 export const IconSites = (props) => <InlineIcon icon={mapMarkerRadiusOutline} {...props} />
-export const IconMapMarker = (props) => <InlineIcon icon={mapMarker} {...props} />
 export const IconSortDown = (props) => <InlineIcon icon={sortDescending} {...props} />
 export const IconSortUp = (props) => <InlineIcon icon={sortAscending} {...props} />
 export const IconSwap = (props) => <InlineIcon icon={swap} {...props} />
+export const IconSync = (props) => <InlineIcon icon={sync} {...props} />
 export const IconUp = (props) => <InlineIcon icon={menuUp} {...props} />
 export const IconUpload = (props) => <InlineIcon icon={upload} {...props} />
 export const IconUser = (props) => <InlineIcon icon={user} {...props} />

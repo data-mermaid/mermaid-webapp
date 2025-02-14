@@ -36,7 +36,6 @@ export const CitationDefinitionList = styled.dl`
   }
   & > dd {
     all: unset;
-    cursor: text;
   }
 `
 export const CitationModalColumn = styled.div`
@@ -47,4 +46,15 @@ export const CitationModalColumn = styled.div`
 `
 export const CitationLabel = styled.label`
   ${citationLabelStyles}
+`
+export const EditCitationLabelWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${theme.spacing.small};
+
+  & > label {
+    margin: 0;
+  }
 `

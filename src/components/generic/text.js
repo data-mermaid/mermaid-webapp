@@ -4,6 +4,9 @@ import theme from '../../theme'
 export const P = styled.p`
   max-width: ${theme.spacing.maxTextWidth};
 `
+export const PNoMargins = styled(P)`
+  margin: 0;
+`
 export const PSmall = styled(P)`
   font-size: ${theme.typography.smallFontSize};
 `
@@ -17,4 +20,7 @@ export const H6 = styled.h6``
 export const ItalicizedInfo = styled.p`
   font-style: italic;
   color: ${theme.color.grey0};
+`
+export const DisabledText = styled.span`
+  color: ${theme.color.disabledColor};
 `

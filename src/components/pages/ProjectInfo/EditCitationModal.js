@@ -7,12 +7,15 @@ import {
   CitationModalColumn,
   MainContentWrapper,
   ProjectInfoWrapper,
+  EditCitationLabelWrapper,
 } from './EditCitationModal.styles'
-import { ButtonPrimary, ButtonSecondary } from '../../generic/buttons'
+import { ButtonPrimary, ButtonSecondary, ButtonSecondarySmall } from '../../generic/buttons'
+import { DisabledText, PNoMargins } from '../../generic/text'
 import { HelpTextWithIcon } from '../../generic/HelpTextWithIcon/HelpTextWithIcon'
+import { IconRefresh } from '../../icons'
+import { Textarea } from '../../generic/form'
 import language from '../../../language'
 import Modal, { RightFooter } from '../../generic/Modal/Modal'
-import { Textarea } from '../../generic/form'
 
 const modalLanguage = language.pages.projectInfo.editCitationModal
 
@@ -37,23 +40,30 @@ export const EditCitationModal = ({
     citation_retrieved_text,
   } = projectBeingEdited ?? {}
 
+  const applyDefaultCitation = () => {
+    setEditCitationValue(default_citation)
+  }
+
   const admins = projectProfiles
     .filter((profile) => profile.is_admin)
     .map((profile) => profile.profile_name)
-    .join(', ')
+  const adminsString = admins.join(', ')
+  const isAdminsPlural = admins.length > 1
 
   const otherProjectMembers = projectProfiles
     .filter((profile) => !profile.is_admin && profile.profile_name !== '(pending user)')
     .map((profile) => profile.profile_name)
-    .join(', ')
+  const otherProjectMembersString = otherProjectMembers.join(', ')
+  const isOtherProjectMembersPlural = otherProjectMembers.length > 1
 
-  const latestSampleEventDate = new Date(updated_on).toLocaleDateString(undefined, {
+  const projectLastUpdatedString = new Date(updated_on).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   })
 
-  const projectCountries = countries.join(', ')
+  const projectCountriesString = countries.join(', ')
+  const isCountriesPlural = countries.length > 1
 
   useEffect(
     function initializeEditCitationValue() {
@@ -82,9 +92,15 @@ export const EditCitationModal = ({
     onDismiss()
   }
 
-  const citationPreview = editCitationValue.trim()
-    ? `${editCitationValue} ${citation_retrieved_text}`
-    : `${default_citation} ${citation_retrieved_text}`
+  const citationPreview = editCitationValue.trim() ? (
+    <>
+      {editCitationValue} <DisabledText>{citation_retrieved_text}</DisabledText>
+    </>
+  ) : (
+    <>
+      {default_citation} <DisabledText>{citation_retrieved_text}</DisabledText>
+    </>
+  )
 
   const mainContent = (
     <MainContentWrapper>
@@ -94,25 +110,40 @@ export const EditCitationModal = ({
           <CitationDefinitionList>
             <dt>{modalLanguage.projectName}</dt>
             <dd>{name}</dd>
-            <dt>{modalLanguage.projectAdmins}</dt>
-            <dd>{admins}</dd>
-            <dt>{modalLanguage.otherProjectMembers}</dt>
-            <dd>{otherProjectMembers}</dd>
-            <dt>{modalLanguage.latestSampleEventDate}</dt>
-            <dd>{latestSampleEventDate}</dd>
-            <dt>{modalLanguage.countries}</dt>
-            <dd>{projectCountries}</dd>
+            <dt>{isAdminsPlural ? modalLanguage.projectAdmins : modalLanguage.projectAdmin}</dt>
+            <dd>{adminsString}</dd>
+            {otherProjectMembers.length ? (
+              <>
+                <dt>
+                  {isOtherProjectMembersPlural
+                    ? modalLanguage.otherProjectMembers
+                    : modalLanguage.otherProjectMember}
+                </dt>
+                <dd>{otherProjectMembersString}</dd>
+              </>
+            ) : null}
+
+            <dt>{modalLanguage.projectLastUpdated}</dt>
+            <dd>{projectLastUpdatedString}</dd>
+            {countries.length ? (
+              <>
+                <dt>{isCountriesPlural ? modalLanguage.countries : modalLanguage.country}</dt>
+                <dd>{projectCountriesString}</dd>
+              </>
+            ) : null}
           </CitationDefinitionList>
         </ProjectInfoWrapper>
       </CitationModalColumn>
 
       <CitationModalColumn>
-        <CitationDefinitionList>
-          <dt>{modalLanguage.defaultCitation}</dt>
-          <dd>{default_citation}</dd>
-        </CitationDefinitionList>
         <form>
-          <CitationLabel htmlFor="editCitation">{modalLanguage.editCitation}</CitationLabel>
+          <EditCitationLabelWrapper>
+            <CitationLabel htmlFor="editCitation">{modalLanguage.editCitation}</CitationLabel>
+            <ButtonSecondarySmall type="button" onClick={applyDefaultCitation}>
+              <IconRefresh /> {modalLanguage.useDefaultCitation}
+            </ButtonSecondarySmall>
+          </EditCitationLabelWrapper>
+
           <Textarea
             id="editCitation"
             value={editCitationValue}
@@ -121,7 +152,7 @@ export const EditCitationModal = ({
         </form>
 
         <CitationLabel>{modalLanguage.citationPreview}</CitationLabel>
-        <div>{citationPreview}</div>
+        <PNoMargins>{citationPreview}</PNoMargins>
       </CitationModalColumn>
     </MainContentWrapper>
   )
