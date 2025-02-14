@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { MODAL_CONTENT_HEIGHT } from '../../generic/Modal/Modal'
 import theme from '../../../theme'
+import { Dl } from '../../generic/miscellaneous'
 
 const citationLabelStyles = css`
   display: block;
@@ -25,17 +26,9 @@ export const ProjectInfoWrapper = styled.div`
   overflow-y: auto;
 `
 
-export const CitationDefinitionList = styled.dl`
-  all: unset;
-  & > dt {
-    font-weight: bold;
-    margin-top: ${theme.spacing.medium};
-  }
-  & > dt:first-child {
-    margin-top: 0;
-  }
+export const CitationDefinitionList = styled(Dl)`
   & > dd {
-    all: unset;
+    margin-left: 0;
   }
 `
 export const CitationModalColumn = styled.div`
