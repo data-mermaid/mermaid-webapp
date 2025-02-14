@@ -4,9 +4,8 @@ import theme from '../../theme'
 export const P = styled.p`
   max-width: ${theme.spacing.maxTextWidth};
 `
-export const PTextCursor = styled(P)`
+export const PNoMargins = styled(P)`
   margin: 0;
-  cursor: text;
 `
 export const PSmall = styled(P)`
   font-size: ${theme.typography.smallFontSize};

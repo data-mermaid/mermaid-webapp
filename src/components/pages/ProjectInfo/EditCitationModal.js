@@ -10,7 +10,7 @@ import {
   EditCitationLabelWrapper,
 } from './EditCitationModal.styles'
 import { ButtonPrimary, ButtonSecondary, ButtonSecondarySmall } from '../../generic/buttons'
-import { DisabledText, PTextCursor } from '../../generic/text'
+import { DisabledText, PNoMargins } from '../../generic/text'
 import { HelpTextWithIcon } from '../../generic/HelpTextWithIcon/HelpTextWithIcon'
 import { IconRefresh } from '../../icons'
 import { Textarea } from '../../generic/form'
@@ -152,7 +152,7 @@ export const EditCitationModal = ({
         </form>
 
         <CitationLabel>{modalLanguage.citationPreview}</CitationLabel>
-        <PTextCursor>{citationPreview}</PTextCursor>
+        <PNoMargins>{citationPreview}</PNoMargins>
       </CitationModalColumn>
     </MainContentWrapper>
   )

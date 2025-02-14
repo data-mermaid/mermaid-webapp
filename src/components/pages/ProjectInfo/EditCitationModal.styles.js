@@ -36,7 +36,6 @@ export const CitationDefinitionList = styled.dl`
   }
   & > dd {
     all: unset;
-    cursor: text;
   }
 `
 export const CitationModalColumn = styled.div`
