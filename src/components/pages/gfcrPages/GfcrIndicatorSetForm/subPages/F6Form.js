@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import { formikHandleIntegerInputChange } from '../../../../../library/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formikPropType'
-import language from '../../../../../language'
-import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
-import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
-import { InputRow } from '../../../../generic/form'
-import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { H2 } from '../../../../generic/text'
+import { InputRow } from '../../../../generic/form'
+import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
+import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import language from '../../../../../language'
+import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
@@ -28,7 +28,9 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f6_1a')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1a')}
             onFocus={(event) => handleInputFocus(event)}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f6_1a' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF6_1_men_helper()}
             showHelperText={displayHelp}
           />
@@ -41,7 +43,9 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f6_1b')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1b')}
             onFocus={(event) => handleInputFocus(event)}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f6_1b' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF6_1_women_helper()}
             showHelperText={displayHelp}
           />
@@ -63,7 +67,9 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             type="number"
             {...formik.getFieldProps('f6_1c')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1c')}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f6_1c' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF6_1_youth_helper()}
             showHelperText={displayHelp}
           />
@@ -75,7 +81,9 @@ const F6Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             type="number"
             {...formik.getFieldProps('f6_1d')}
             onBlur={(event) => handleInputBlur(formik, event, 'f6_1d')}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f6_1d' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF6_1_indigenous_helper()}
             showHelperText={displayHelp}
           />

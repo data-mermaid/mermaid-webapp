@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
-import { formikPropType } from '../../../../../library/formikPropType'
-import language from '../../../../../language'
-import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
-import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
-import { InputRow } from '../../../../generic/form'
 import { ButtonPrimary } from '../../../../generic/buttons'
-import theme from '../../../../../theme'
-import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
+import { formikHandleNumericTwoDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
+import { formikPropType } from '../../../../../library/formikPropType'
 import { H2 } from '../../../../generic/text'
+import { InputRow } from '../../../../generic/form'
+import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
+import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import language from '../../../../../language'
+import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
+import theme from '../../../../../theme'
 
 const StyledButtonPrimary = styled(ButtonPrimary)`
   width: 100%;
@@ -179,7 +179,9 @@ const F4Form = ({
           onFocus={(event) => handleInputFocus(event)}
           helperText={gfcrIndicatorSetLanguage.getF4_1_helper()}
           showHelperText={displayHelp}
-          onKeyDown={(event) => enforceNumberInput(event)}
+          onChange={(event) =>
+            formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f4_1' })
+          }
         />
         {isReport && <StyledValueUpdateText>{f41ValueUpdateText}</StyledValueUpdateText>}
       </StyledInputRowQuestions>
@@ -198,7 +200,9 @@ const F4Form = ({
           onFocus={(event) => handleInputFocus(event)}
           helperText={gfcrIndicatorSetLanguage.getF4_2_helper()}
           showHelperText={displayHelp}
-          onKeyDown={(event) => enforceNumberInput(event)}
+          onChange={(event) =>
+            formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f4_2' })
+          }
         />
         {isReport && <StyledValueUpdateText>{f42ValueUpdateText}</StyledValueUpdateText>}
       </StyledInputRowQuestions>
@@ -217,7 +221,9 @@ const F4Form = ({
           onFocus={(event) => handleInputFocus(event)}
           helperText={gfcrIndicatorSetLanguage.getF4_3_helper()}
           showHelperText={displayHelp}
-          onKeyDown={(event) => enforceNumberInput(event)}
+          onChange={(event) =>
+            formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f4_3' })
+          }
         />
         {isReport && <StyledValueUpdateText>{f43ValueUpdateText}</StyledValueUpdateText>}
       </StyledInputRowQuestions>
