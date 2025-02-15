@@ -45,7 +45,11 @@ export const NotificationActualDate = styled('p')`
 `
 export const NotificationTimeAgoDate = styled('p')``
 export const NotificationCloseButton = styled(CloseButton)``
-export const NotificationContent = styled('div')``
+export const NotificationContent = styled('div')`
+  word-wrap: break-word;
+  word-break: break-word; /* Ensure words break */
+  overflow-wrap: break-word; /* Ensure words wrap */
+`
 
 const getNotificationStatusColor = (props) => {
   const statusColors = {
