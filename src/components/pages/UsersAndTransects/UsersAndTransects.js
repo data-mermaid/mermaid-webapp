@@ -46,8 +46,9 @@ import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
 import useDocumentTitle from '../../../library/useDocumentTitle'
+import { getIsEmptyStringOrWhitespace } from '../../../library/getIsEmptyStringOrWhitespace'
 
-const EMPTY_VALUE = '-'
+const EMPTY_TABLE_CELL_VALUE = '-'
 
 const UserColumnHeader = styled.span`
   display: flex;
@@ -248,7 +249,7 @@ const UsersAndTransects = () => {
 
       const submittedTransectNumbersRow = submittedTransectNumbers.reduce((accumulator, number) => {
         if (!accumulator[number]) {
-          accumulator[number] = EMPTY_VALUE
+          accumulator[number] = EMPTY_TABLE_CELL_VALUE
         }
 
         if (rowNumbers.includes(number)) {
@@ -284,7 +285,7 @@ const UsersAndTransects = () => {
               recordProfileSummary={rowRecord.profile_summary[record.profileId]}
             />
           ) : (
-            EMPTY_VALUE
+            EMPTY_TABLE_CELL_VALUE
           )
 
           return accumulator
@@ -442,7 +443,7 @@ const UsersAndTransects = () => {
 
     return userTableCellData.reduce((accumulator, userCollectRecord) => {
       const collectRecordCount =
-        userCollectRecord !== '-'
+        userCollectRecord !== EMPTY_TABLE_CELL_VALUE
           ? userCollectRecord.props.recordProfileSummary.collect_records.length
           : 0
 
@@ -558,29 +559,43 @@ const UsersAndTransects = () => {
 
                     const filteredEmptyCellValuesLength =
                       cellRowValuesForSubmittedTransectNumbers.filter(
-                        (value) => value[1] === EMPTY_VALUE,
+                        (value) => value[1] === EMPTY_TABLE_CELL_VALUE,
                       ).length
 
                     const isNotRowWithAllEmptyCellValues =
                       filteredEmptyCellValuesLength < submittedTransectNumbers.length
 
                     const isSubmittedNumberCellHightLighted =
-                      cell.value === EMPTY_VALUE &&
+                      cell.value === EMPTY_TABLE_CELL_VALUE &&
                       isNotBleachingMethodRow &&
                       isNotRowWithAllEmptyCellValues &&
                       isCellInSubmittedTransectNumberColumns
 
                     const isCollectingNumberCellHighLighted =
-                      cell.value !== EMPTY_VALUE &&
+                      cell.value !== EMPTY_TABLE_CELL_VALUE &&
                       !isCellInSubmittedTransectNumberColumns &&
                       !areSiteOrMethodOrEmptyHeaderColumns
 
                     const cellAlignment = areSiteOrMethodOrEmptyHeaderColumns ? 'left' : 'right'
 
-                    const cellClassName =
+                    const isCellHighlighted =
                       isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
-                        ? `${cellColumnGroupId} highlighted`
-                        : cellColumnGroupId
+
+                    const cellClassName = isCellHighlighted
+                      ? `${cellColumnGroupId} highlighted`
+                      : cellColumnGroupId
+
+                    const isCellEmpty =
+                      cell.value === EMPTY_TABLE_CELL_VALUE ||
+                      cell.value === null ||
+                      cell.value === undefined ||
+                      getIsEmptyStringOrWhitespace(cell.value)
+
+                    const emptyCellContents = isCellHighlighted ? EMPTY_TABLE_CELL_VALUE : null
+
+                    const cellContents = (
+                      <>{isCellEmpty ? emptyCellContents : cell.render('Cell')} </>
+                    )
 
                     return (
                       <OverviewTd
@@ -590,7 +605,7 @@ const UsersAndTransects = () => {
                         className={cellClassName}
                       >
                         <span>
-                          {cell.render('Cell')}{' '}
+                          {cellContents}
                           {isSubmittedNumberCellHightLighted && (
                             <EmptySampleUnitPopup
                               tableCellData={cell}
