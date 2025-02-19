@@ -179,7 +179,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
                 button={
                   <HeaderButtonThatLooksLikeLink>
                     <BiggerIconBell />
-                    {notifications?.results?.length ? (
+                    {notifications.length ? (
                       <NotificationIndicator>&bull;</NotificationIndicator>
                     ) : undefined}
                   </HeaderButtonThatLooksLikeLink>
@@ -204,7 +204,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
                 button={
                   <HeaderButtonThatLooksLikeLink>
                     <BiggerIconBell />
-                    {notifications?.results?.length ? (
+                    {notifications.length ? (
                       <NotificationIndicator>&bull;</NotificationIndicator>
                     ) : undefined}
                   </HeaderButtonThatLooksLikeLink>

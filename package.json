@@ -78,7 +78,8 @@
     "test": "TZ=UTC react-scripts test",
     "eject": "react-scripts eject",
     "prettier": "prettier --write ./src/**/*.js ",
-    "lint": "eslint './src/**/*.js'"
+    "lint": "eslint './src/**/*.js'",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": [
@@ -101,10 +102,10 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/plugin-syntax-flow": "^7.23.3",
-    "@testing-library/dom": "^9.3.3",
-    "@testing-library/jest-dom": "^6.1.4",
-    "@testing-library/react": "^14.1.2",
-    "@testing-library/user-event": "^14.5.1",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
     "eslint": "^8.55.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-jest-dom": "^5.1.0",
@@ -113,17 +114,11 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-testing-library": "^6.2.0",
     "fake-indexeddb": "^3.1.2",
-    "husky": "3.1.0",
+    "husky": "^9.1.7",
     "msw": "^0.27.0",
     "plop": "^2.7.4",
     "prettier": "^2.4.1",
     "typescript": "^5.3.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn run prettier",
-      "pre-push": "yarn run lint"
-    }
   },
   "jest": {
     "restoreMocks": true,

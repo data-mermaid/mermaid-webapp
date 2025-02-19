@@ -1,10 +1,12 @@
 ## workflow
 
 ### upload image
+
 - one `POST` per image (one at a time)
 - multipart form request, not usual JSON
 - nested classification status in response
-  - statuses: 
+  - statuses:
+
 ```
     UNKNOWN = 0
     PENDING = 1
@@ -12,11 +14,13 @@
     COMPLETED = 3
     FAILED = 4
 ```
-- example: 
+
+- example:
   - POST https://dev-api.datamermaid.org/v1/projects/df2bb123-5bfc-4f3f-aa88-bb102d3b2b35/classification/images/
     - `"collect_record_id": "95d853ff-7a54-41a6-a3e2-7841b931496c"`
     - `"image": <blob>`
   - response:
+
 ```json
 {
   "id": "103502bf-dfb7-4cb6-a13f-0b7094651f0d",
@@ -108,16 +112,19 @@
   "created_by": "4eb4bf65-6aee-4014-beee-04ad23484bcd"
 }
 ```
+
 - EXIF data is stripped from the images themselves (which are stored in a public S3 bucket), but stored with the db record
 - images are renamed but original image name, width, height, location, and timestamp are stored with the db record. The original file name should be displayed to the user where necessary.
 - not yet implemented: normalize all images to PNG (we can normalize other things too if desirable)
 
 ### poll for classification status
+
 - This may not be necessary by itself, because it might be easier to poll for all images (see below) with a subset of fields, including status.
 - specify an image in the query params to just poll for latest status for that image
 - example:
   - GET https://dev-api.datamermaid.org/v1/projects/df2bb123-5bfc-4f3f-aa88-bb102d3b2b35/classification/statuses/?image=103502bf-dfb7-4cb6-a13f-0b7094651f0d
   - response:
+
 ```json
 {
   "count": 1,
@@ -136,10 +143,12 @@
 ```
 
 ### get all images in project
+
 - use `exclude` query param to greatly reduce response size.
 - example:
   - GET https://dev-api.datamermaid.org/v1/projects/df2bb123-5bfc-4f3f-aa88-bb102d3b2b35/classification/images/?exclude=data,points,created_by,updated_by,created_on,updated_on,original_image_width,original_image_height,location,comments,image,photo_timestamp
   - response:
+
 ```json
 {
   "count": 4,
@@ -223,12 +232,14 @@
 ```
 
 ### get individual image annotations for confirmation modal
+
 - for each point object, annotations are ordered by score (descending)
 - a point without any annotations is 'unclassified' (included in top-level `num_unclassified`)
 - only one annotation can be confirmed (`is_confirmed = true`, included in top-level `num_confirmed`) per point
 - example:
   - GET https://dev-api.datamermaid.org/v1/projects/df2bb123-5bfc-4f3f-aa88-bb102d3b2b35/classification/images/103502bf-dfb7-4cb6-a13f-0b7094651f0d/
   - response:
+
 ```json
 {
   "id": "103502bf-dfb7-4cb6-a13f-0b7094651f0d",
@@ -873,18 +884,20 @@
 ```
 
 ### update annotations when closing modal
+
 - all image object payload properties will be ignored except annotations, and modifications to these should be limited to:
   - add/replace/delete a user annotation (maximum of 1 user annotation per point)
     - a user annotation is automatically assigned `score: 100` and `is_confirmed: true`
   - update (not create or delete) a machine annotation - `is_confirmed` property only
 - expected payload is entire image object, with nested annotations added/updated as necessary
   - recommended: strip all top-level properties from `image` object except `id` and `points`
-  - can send minimal payload too; but any user-defined annotation missing from the `annotations` object for a point will be deleted 
+  - can send minimal payload too; but any user-defined annotation missing from the `annotations` object for a point will be deleted
 - example:
   - PATCH (not PUT) https://dev-api.datamermaid.org/v1/projects/df2bb123-5bfc-4f3f-aa88-bb102d3b2b35/classification/images/103502bf-dfb7-4cb6-a13f-0b7094651f0d/
-  - payload that 
+  - payload that
     - adds or replaces a user-defined annotation for the first point
     - confirms a machine-defined annotation for the second point:
+
 ```json
 {
   "id": "103502bf-dfb7-4cb6-a13f-0b7094651f0d",
@@ -896,9 +909,9 @@
       "column": 666,
       "annotations": [
         {
-					"benthic_attribute": "3dc38d25-ed80-4049-af16-e85f04f97cc6",
-					"growth_form": null,
-					"is_confirmed": true
+          "benthic_attribute": "3dc38d25-ed80-4049-af16-e85f04f97cc6",
+          "growth_form": null,
+          "is_confirmed": true
         },
         {
           "id": "0e3965e0-9cf4-4c61-9a50-8d2b7113728c",
@@ -1447,9 +1460,11 @@
   ]
 }
 ```
-  - response: same as GET for individual image above, with modified annotations
+
+- response: same as GET for individual image above, with modified annotations
 
 ### delete image
+
 - example:
   - DELETE https://dev-api.datamermaid.org/v1/projects/df2bb123-5bfc-4f3f-aa88-bb102d3b2b35/classification/images/103502bf-dfb7-4cb6-a13f-0b7094651f0d/
   - response: 204

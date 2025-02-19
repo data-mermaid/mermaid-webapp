@@ -1,5 +1,6 @@
 import axios from '../../../library/axiosRetry'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
+import { getPaginatedMermaidData } from '../getPaginatedMermaidData'
 
 const GfcrMixin = (Base) =>
   class extends Base {
@@ -8,14 +9,18 @@ const GfcrMixin = (Base) =>
         Promise.reject(this._operationMissingParameterError)
       }
 
-      return this._isOnlineAuthenticatedAndReady
-        ? axios
-            .get(
-              `${this._apiBaseUrl}/projects/${projectId}/indicatorsets/`,
-              await getAuthorizationHeaders(this._getAccessToken),
-            )
-            .then((apiResults) => apiResults.data)
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+      if (!this._isOnlineAuthenticatedAndReady) {
+        return Promise.reject(this._notAuthenticatedAndReadyError)
+      }
+
+      return await getPaginatedMermaidData({
+        url: `${this._apiBaseUrl}/projects/${projectId}/indicatorsets/`,
+        authorizationHeaders: await getAuthorizationHeaders(this._getAccessToken),
+        axios,
+        errorCallback: () => {
+          return Promise.reject(this._notAuthenticatedAndReadyError)
+        },
+      })
     }
 
     saveIndicatorSet = async function saveIndicatorSet(projectId, editedValues) {

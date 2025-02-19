@@ -82,6 +82,10 @@ export const buttonSecondaryCss = css`
 export const ButtonSecondary = styled(Button)`
   ${buttonSecondaryCss}
 `
+
+export const ButtonSecondarySmall = styled(ButtonSecondary)`
+  line-height: 1;
+`
 export const LinkLooksLikeButtonSecondary = styled(Link)`
   ${buttonCss}
   ${buttonSecondaryCss}

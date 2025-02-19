@@ -1,13 +1,13 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 
-import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import { formikHandleNumericTwoDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formikPropType'
-import language from '../../../../../language'
-import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
-import { StyledGfcrInputWrapper } from './subPages.styles'
-import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { H2 } from '../../../../generic/text'
+import { StyledGfcrInputWrapper } from './subPages.styles'
+import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import language from '../../../../../language'
+import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
@@ -27,7 +27,9 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         {...formik.getFieldProps('f2_1a')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_1a')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) =>
+          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_1a' })
+        }
         helperText={gfcrIndicatorSetLanguage.getF2_1a_helper()}
         showHelperText={displayHelp}
       />
@@ -43,7 +45,9 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         {...formik.getFieldProps('f2_1b')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_1b')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) =>
+          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_1b' })
+        }
         helperText={gfcrIndicatorSetLanguage.getF2_1b_helper()}
         showHelperText={displayHelp}
       />
@@ -59,7 +63,9 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         {...formik.getFieldProps('f2_2a')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_2a')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) =>
+          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_2a' })
+        }
         helperText={gfcrIndicatorSetLanguage.getF2_2a_helper()}
         showHelperText={displayHelp}
       />
@@ -75,7 +81,9 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         {...formik.getFieldProps('f2_2b')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_2b')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) =>
+          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_2b' })
+        }
         helperText={gfcrIndicatorSetLanguage.getF2_2b_helper()}
         showHelperText={displayHelp}
       />
@@ -91,7 +99,9 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         {...formik.getFieldProps('f2_3a')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_3a')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) =>
+          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_3a' })
+        }
         helperText={gfcrIndicatorSetLanguage.getF2_3a_helper()}
         showHelperText={displayHelp}
       />
@@ -107,7 +117,9 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         {...formik.getFieldProps('f2_3b')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_3b')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) =>
+          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_3b' })
+        }
         helperText={gfcrIndicatorSetLanguage.getF2_3b_helper()}
         showHelperText={displayHelp}
       />
@@ -123,7 +135,9 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         {...formik.getFieldProps('f2_4')}
         onBlur={(event) => handleInputBlur(formik, event, 'f2_4')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) =>
+          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_4' })
+        }
         helperText={gfcrIndicatorSetLanguage.getF2_4_helper()}
         showHelperText={displayHelp}
       />
@@ -133,13 +147,15 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
             <strong>F 2.5</strong> {gfcrIndicatorSetLanguage.f2_5}
           </>
         }
-        id="f2_opt1"
+        id="f2_5"
         type="number"
         unit="km²"
-        {...formik.getFieldProps('f2_opt1')}
-        onBlur={(event) => handleInputBlur(formik, event, 'f2_opt1')}
+        {...formik.getFieldProps('f2_5')}
+        onBlur={(event) => handleInputBlur(formik, event, 'f2_5')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) =>
+          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_5' })
+        }
         helperText={gfcrIndicatorSetLanguage.getF2_5_helper()}
         showHelperText={displayHelp}
       />

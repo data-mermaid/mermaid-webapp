@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title>Mermaid Preview</title>
-</head>
-<body>
-  <script>
-    const PRNumber = localStorage.getItem("pullRequestNumber");
-    const redirectURL = `${window.location.origin}${PRNumber}/index.html${window.location.search}`
-  
-    if (PRNumber) {
-      window.location.replace(redirectURL)
-    } else {
-      let container = document.createElement("div")
-      container.innerHTML = `
+  </head>
+  <body>
+    <script>
+      const PRNumber = localStorage.getItem('pullRequestNumber')
+      const redirectURL = `${window.location.origin}${PRNumber}/index.html${window.location.search}`
+
+      if (PRNumber) {
+        window.location.replace(redirectURL)
+      } else {
+        let container = document.createElement('div')
+        container.innerHTML = `
         <h1>You are not authenticated</h1>
         <p>Add the pull request number to the url path (ex. preview.app2.datamermaid.org/123/index.html) to sign in.</p>
         <p>If there are no open pull requests, no previews of this application are available.</p>  
       `
-      document.body.appendChild(container)
-    }
-  </script>
-</body>
+        document.body.appendChild(container)
+      }
+    </script>
+  </body>
 </html>

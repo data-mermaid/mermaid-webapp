@@ -64,7 +64,7 @@ const Gfcr = () => {
       Promise.all([databaseSwitchboardInstance.getIndicatorSets(projectId)])
         .then(([indicatorSetsResponse]) => {
           if (isMounted.current) {
-            setGfcrIndicatorSets(indicatorSetsResponse.results)
+            setGfcrIndicatorSets(indicatorSetsResponse)
           }
 
           setIsLoading(false)

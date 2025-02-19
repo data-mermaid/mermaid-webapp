@@ -45,6 +45,9 @@ import {
 } from '../../../App/mermaidData/recordProtocolHelpers'
 import { getIsUserReadOnlyForProject } from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import { RECORD_STATUS_LABELS } from './collectConstants'
+import { TrCollectRecordStatus } from './Collect.styles'
+import { getIsEmptyStringOrWhitespace } from '../../../library/getIsEmptyStringOrWhitespace'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
@@ -138,13 +141,18 @@ const Collect = () => {
         accessor: 'observers',
         sortType: reactTableNaturalSort,
       },
+      {
+        Header: 'Status',
+        accessor: 'status',
+        sortType: reactTableNaturalSort,
+      },
     ],
     [],
   )
 
   const tableCellData = useMemo(
     () =>
-      collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
+      collectRecordsForUiDisplay.map(({ id, data, uiLabels, validations }) => {
         const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
 
         return {
@@ -165,6 +173,7 @@ const Collect = () => {
           depth: uiLabels.depth,
           sampleDate: uiLabels.sampleDate,
           observers: uiLabels.observers,
+          status: RECORD_STATUS_LABELS[validations?.status],
         }
       }),
     [collectRecordsForUiDisplay, currentProjectPath],
@@ -312,9 +321,9 @@ const Collect = () => {
           <thead>
             {headerGroups.map((headerGroup) => {
               const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
-
+              const headerProps = headerGroup.getHeaderGroupProps()
               return (
-                <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+                <Tr {...headerProps} key={headerProps.key}>
                   {headerGroup.headers.map((column) => (
                     <Th
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
@@ -335,15 +344,26 @@ const Collect = () => {
               prepareRow(row)
 
               return (
-                <Tr key={row.id} {...row.getRowProps()}>
+                <TrCollectRecordStatus
+                  {...row.getRowProps()}
+                  key={row.id}
+                  $recordStatusLabel={row.values.status}
+                >
                   {row.cells.map((cell) => {
+                    const isCellEmpty =
+                      cell.value === undefined ||
+                      cell.value === null ||
+                      getIsEmptyStringOrWhitespace(cell.value)
+
+                    const cellContents = isCellEmpty ? '-' : cell.render('Cell')
+
                     return (
-                      <Td key={cell.column.id} {...cell.getCellProps()} align={cell.column.align}>
-                        {cell.render('Cell')}
+                      <Td {...cell.getCellProps()} align={cell.column.align} key={cell.column.id}>
+                        {cellContents}
                       </Td>
                     )
                   })}
-                </Tr>
+                </TrCollectRecordStatus>
               )
             })}
           </tbody>

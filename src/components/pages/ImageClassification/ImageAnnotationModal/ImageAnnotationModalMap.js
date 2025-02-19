@@ -9,7 +9,7 @@ import {
   IMAGE_CLASSIFICATION_COLORS,
 } from '../../../../library/constants/constants'
 import { imageClassificationResponsePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { IconCircle, IconLabel, IconReset, IconTable } from '../../../icons'
+import { IconCircle, IconLabel, IconRefresh, IconTable } from '../../../icons'
 import {
   ImageAnnotationMapWrapper,
   LabelPopup,
@@ -554,7 +554,7 @@ const ImageAnnotationModalMap = ({
       {hasMapLoaded ? (
         <MapResetTooltip tooltipText="Reset Zoom" id="reset-zoom" position="right">
           <MapControlButton type="button" onClick={resetZoom} title="reset zoom">
-            <IconReset />
+            <IconRefresh />
           </MapControlButton>
         </MapResetTooltip>
       ) : null}

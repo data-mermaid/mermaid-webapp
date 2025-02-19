@@ -1,5 +1,6 @@
 import axios from '../../../library/axiosRetry'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
+import { getPaginatedMermaidData } from '../getPaginatedMermaidData'
 
 const ProjectsMixin = (Base) =>
   class extends Base {
@@ -70,15 +71,18 @@ const ProjectsMixin = (Base) =>
     }
 
     getProjectTags = async function getProjectTags() {
-      return this._isOnlineAuthenticatedAndReady
-        ? axios
-            .get(
-              `${this._apiBaseUrl}/projecttags/?limit=5000`,
-              await getAuthorizationHeaders(this._getAccessToken),
-            )
-            .then((apiResults) => apiResults.data.results)
-            .catch(() => Promise.reject(this._notAuthenticatedAndReadyError))
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+      if (!this._isOnlineAuthenticatedAndReady) {
+        return Promise.reject(this._notAuthenticatedAndReadyError)
+      }
+
+      return await getPaginatedMermaidData({
+        url: `${this._apiBaseUrl}/projecttags/`,
+        authorizationHeaders: await getAuthorizationHeaders(this._getAccessToken),
+        axios,
+        errorCallback: () => {
+          return Promise.reject(this._notAuthenticatedAndReadyError)
+        },
+      })
     }
 
     getProjectProfiles = function getProjectProfiles(projectId) {
