@@ -25,7 +25,7 @@ test('App renders the initial screen as expected for an offline user who is auth
 
   expect(await screen.findByText('Projects', { selector: 'h1' }))
 
-  fireEvent.click(screen.getByText('FakeFirstNameOffline'))
+  fireEvent.click(screen.getByText('FF')) // user icon initials for offline user
 
   // there is not a logout button
 

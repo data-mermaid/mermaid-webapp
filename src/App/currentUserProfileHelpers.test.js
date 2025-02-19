@@ -21,9 +21,9 @@ test('getCurrentUserProfile online returns data from the API', async () => {
 
   expect(userProfile).toEqual({
     id: 'fake-id',
-    first_name: 'FakeFirstNameOnline',
-    last_name: 'FakeLastNameOnline',
-    full_name: 'FakeFirstNameOnline FakeLastNameOnline',
+    first_name: 'W-FakeFirstNameOnline',
+    last_name: 'W-FakeLastNameOnline',
+    full_name: 'W-FakeFirstNameOnline W-FakeLastNameOnline',
   })
 })
 test('getCurrentUserProfile online returns error message upon API error', async () => {

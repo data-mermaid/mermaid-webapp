@@ -97,7 +97,7 @@ test('Benthic LIT observations add new benthic attribute - filling out new attri
   const userNameElement = within(modal).getByLabelText('User')
   const projectNameElement = within(modal).getByLabelText('Project')
 
-  expect(within(userNameElement).getByText('FakeFirstNameOnline FakeLastNameOnline'))
+  expect(within(userNameElement).getByText('W-FakeFirstNameOnline W-FakeLastNameOnline'))
   expect(within(projectNameElement).getByText('Project V'))
   expect(within(benthicAttributeElement).getByText('Dead Coral with Algae unicorn'))
 

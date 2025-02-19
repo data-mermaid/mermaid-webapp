@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 
 import {
-  AvatarWrapper,
+  UserButton,
   GlobalNav,
   HeaderButtonThatLooksLikeLink,
   StyledHeader,
@@ -21,9 +21,10 @@ import {
   BiggerIconMenu,
   LoggedInAs,
   HeaderIconWrapper,
+  UserCircle,
 } from './Header.styles'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { IconDown, IconGlobe, IconLibraryBooks } from '../icons'
+import { IconGlobe, IconLibraryBooks } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
@@ -95,6 +96,22 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
   const { notifications } = useBellNotifications()
   const { isAppOnline } = useOnlineStatus()
   const [hasImageError, setHasImageError] = useState(false)
+  const currentUserFirstInitial = currentUser?.first_name?.charAt(0).toUpperCase()
+  const currentUserLastInitial = currentUser?.last_name?.charAt(0).toUpperCase()
+  const isProfileImageButtonShowing = currentUser?.picture && !hasImageError
+  const isInitialsButtonShowing = currentUserFirstInitial || currentUserLastInitial
+
+  useLayoutEffect(
+    function resetImageErrorWhenUserPictureChanges() {
+      // we clear the error before (re)rendering the image tag (which may or may not trigger an error)
+      setHasImageError(false)
+    },
+    [currentUser],
+  )
+
+  const handleImageError = () => {
+    setHasImageError(true)
+  }
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
@@ -103,66 +120,30 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
     </OfflineHide>
   )
 
-  const handleImageError = () => {
-    setHasImageError(true)
-  }
+  const profileImageButton = isProfileImageButtonShowing ? (
+    <UserButton aria-label="User account dropdown">
+      <CurrentUserImg src={currentUser?.picture} alt="User picture" onError={handleImageError} />
+    </UserButton>
+  ) : null
+  const initialsButton =
+    isInitialsButtonShowing && !isProfileImageButtonShowing ? (
+      <UserButton aria-label="User account dropdown">
+        <UserCircle>
+          {currentUserFirstInitial}
+          {currentUserLastInitial}
+        </UserCircle>
+      </UserButton>
+    ) : null
 
-  const getUserButton = () => {
-    // Avatar with user image
-    if (currentUser && currentUser.picture && !hasImageError) {
-      return (
-        <AvatarWrapper>
-          <CurrentUserImg src={currentUser.picture} alt="" onError={handleImageError} />
-        </AvatarWrapper>
-      )
-    }
+  const fallbackButton = (
+    <UserButton aria-label="User account dropdown">
+      <BiggerIconUser />
+    </UserButton>
+  )
 
-    // Avatar with fallback image
-    if (currentUser && currentUser.picture && hasImageError) {
-      return (
-        <AvatarWrapper>
-          <BiggerIconUser />
-        </AvatarWrapper>
-      )
-    }
+  const userIconButton = profileImageButton || initialsButton || fallbackButton
 
-    // First name
-    if (currentUser && currentUser.first_name) {
-      return (
-        <AvatarWrapper>
-          {currentUser && currentUser.first_name} <IconDown />
-        </AvatarWrapper>
-      )
-    }
-
-    // Full name
-    if (currentUser && currentUser.full_name) {
-      return (
-        <AvatarWrapper>
-          {currentUser && currentUser.full_name} <IconDown />
-        </AvatarWrapper>
-      )
-    }
-
-    // User icon
-    return (
-      <AvatarWrapper>
-        <BiggerIconUser />
-      </AvatarWrapper>
-    )
-  }
-
-  const getUserDisplayName = () => {
-    if (currentUser && currentUser.first_name) {
-      return currentUser.first_name
-    }
-
-    if (currentUser && currentUser.first_name) {
-      return currentUser.full_name
-    }
-
-    return currentUser.email
-  }
+  const userDisplayName = currentUser?.first_name || currentUser?.full_name || currentUser?.email
 
   return (
     <>
@@ -189,10 +170,10 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
             )}
             <HideShow
               closeOnClickWithin={true}
-              button={getUserButton()}
+              button={userIconButton}
               contents={
                 <UserMenu>
-                  {currentUser && <LoggedInAs>Logged in as {getUserDisplayName()}</LoggedInAs>}
+                  {currentUser && <LoggedInAs>Logged in as {userDisplayName}</LoggedInAs>}
                   <UserMenuDropDownContent />
                 </UserMenu>
               }
@@ -221,7 +202,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
               contents={
                 <UserMenu>
                   <GlobalLinks />
-                  {currentUser && <LoggedInAs>Logged in as {getUserDisplayName()}</LoggedInAs>}
+                  {currentUser && <LoggedInAs>Logged in as {userDisplayName}</LoggedInAs>}
                   <UserMenuDropDownContent />
                 </UserMenu>
               }

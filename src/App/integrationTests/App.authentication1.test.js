@@ -23,7 +23,7 @@ test('App renders the initial screen as expected for an online and authenticated
 
   expect(await screen.findByText('Projects', { selector: 'h1' }))
 
-  fireEvent.click(screen.getByText('FakeFirstNameOnline'))
+  fireEvent.click(screen.getByText('WW')) // user icon initials for online user
 
   // there is a logout button
   expect(screen.getByText('Logout'))
@@ -37,7 +37,7 @@ test('App: an online and authenticated user can logout', async () => {
     dexiePerUserDataInstance,
   })
 
-  fireEvent.click(await screen.findByText('FakeFirstNameOnline'))
+  fireEvent.click(await screen.findByText('WW')) // user icon initials for online user
   fireEvent.click(screen.getByText('Logout'))
   await waitFor(() =>
     expect(screen.queryByRole('heading', { name: 'Projects' })).not.toBeInTheDocument(),
