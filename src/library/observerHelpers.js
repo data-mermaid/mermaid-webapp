@@ -1,7 +1,9 @@
+import { PENDING_USER_PROFILE_NAME } from './constants/constants'
+
 export const getObserverNameToUse = ({ profile_name, email, profile }) => {
   const emailOrAlternative = email ?? `${profile_name}: ${profile}`
 
-  return profile_name === '(pending user)' ? emailOrAlternative : profile_name
+  return profile_name === PENDING_USER_PROFILE_NAME ? emailOrAlternative : profile_name
 }
 
 export const getObserverNameOptions = (users) => {

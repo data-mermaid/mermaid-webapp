@@ -2,23 +2,23 @@ import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import styled, { css } from 'styled-components/macro'
 
+import {
+  ActiveSampleUnitsIconAlert,
+  InfoParagraph,
+  InlineStyle,
+  NameCellStyle,
+  TableRadioLabel,
+  ToolbarRowWrapper,
+  UserTableTd,
+} from './Users.styles'
 import { ButtonSecondary, ButtonCaution, IconButton, ButtonPrimary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
-import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
-import {
-  IconAccount,
-  IconAccountConvert,
-  IconPlus,
-  IconInfo,
-  IconAlert,
-  IconAccountRemove,
-} from '../../icons'
+import { IconAccountConvert, IconPlus, IconInfo, IconAccountRemove } from '../../icons'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodesSecondChild,
@@ -28,7 +28,6 @@ import { splitSearchQueryStrings } from '../../../library/splitSearchQueryString
 import {
   Tr,
   Th,
-  Td,
   TableNavigation,
   StickyTableOverflowWrapper,
   GenericStickyTable,
@@ -48,7 +47,6 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import PageUnavailable from '../PageUnavailable'
 import RemoveUserModal from '../../RemoveUserModal'
-import theme from '../../../theme'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
@@ -59,80 +57,12 @@ import {
   getIsUserAdminForProject,
   getIsProjectProfileReadOnly,
 } from '../../../App/currentUserProfileHelpers'
-import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import { PENDING_USER_PROFILE_NAME, PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { LabelContainer } from '../../generic/form'
 import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 import UserRolesInfoModal from '../../UserRolesInfoModal/UserRolesInfoModal'
-
-const ToolbarRowWrapper = styled('div')`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: ${theme.spacing.small};
-  ${mediaQueryPhoneOnly(css`
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: auto;
-  `)}
-`
-
-const InfoParagraph = styled('div')`
-  margin-bottom: 1.5em;
-`
-
-const InlineStyle = styled('div')`
-  display: inline-flex;
-  margin-bottom: ${theme.spacing.small};
-`
-
-const ActiveSampleUnitsIconAlert = styled(IconAlert)`
-  color: ${theme.color.textColor};
-  margin: 0 ${theme.spacing.small};
-`
-const ProfileImage = styled('div')`
-  border-radius: 50%;
-  ${(props) =>
-    props.img &&
-    css`
-      background-image: url(${props.img});
-      background-position: center center;
-      background-size: ${props.theme.typography.xLargeIconSize};
-    `}
-  width: ${theme.typography.xLargeIconSize};
-  height: ${theme.typography.xLargeIconSize};
-  margin-right: 1rem;
-`
-
-const NameCellStyle = styled('div')`
-  display: flex;
-  white-space: nowrap;
-  align-items: center;
-  svg {
-    width: ${(props) => props.theme.typography.xLargeIconSize};
-    height: ${(props) => props.theme.typography.xLargeIconSize};
-  }
-`
-const UserTableTd = styled(Td)`
-  position: relative;
-`
-const TableRadioLabel = styled.label(
-  (props) => css`
-    top: 0;
-    right: 0;
-    cursor: ${props.cursor};
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    display: grid;
-    place-items: center;
-    ${hoverState(css`
-      border: solid 1px ${theme.color.primaryColor};
-    `)}
-
-    input {
-      cursor: ${props.cursor};
-    }
-  `,
-)
+import { UserIcon } from '../../UserIcon/UserIcon'
 
 const getRoleLabel = (roleCode) => {
   return {
@@ -616,6 +546,12 @@ const Users = () => {
         role,
         profile: userId,
       } = profile
+      const nameParts = (profile_name ?? '')
+        .replace(PENDING_USER_PROFILE_NAME, 'pending user')
+        .split(' ')
+      const firstName = nameParts[0]
+      const lastNameIndex = nameParts.length - 1
+      const lastName = lastNameIndex === 0 ? undefined : nameParts[lastNameIndex]
 
       const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
       const isUserRoleReadOnly = getIsProjectProfileReadOnly(profile)
@@ -636,7 +572,12 @@ const Users = () => {
       return {
         name: (
           <NameCellStyle>
-            {picture ? <ProfileImage img={picture} /> : <IconAccount />}
+            <UserIcon
+              userImageUrl={picture}
+              firstName={firstName}
+              lastName={lastName}
+              dark={true}
+            />{' '}
             {profile_name}
           </NameCellStyle>
         ),

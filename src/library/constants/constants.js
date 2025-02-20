@@ -19,3 +19,5 @@ export const apiDataTypes = {
 }
 Object.freeze(PROJECT_CODES)
 Object.freeze(apiDataTypes)
+
+export const PENDING_USER_PROFILE_NAME = '(pending user)'

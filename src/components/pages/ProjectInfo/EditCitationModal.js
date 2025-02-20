@@ -16,6 +16,7 @@ import { IconRefresh } from '../../icons'
 import { Textarea } from '../../generic/form'
 import language from '../../../language'
 import Modal, { RightFooter } from '../../generic/Modal/Modal'
+import { PENDING_USER_PROFILE_NAME } from '../../../library/constants/constants'
 
 const modalLanguage = language.pages.projectInfo.editCitationModal
 
@@ -51,7 +52,7 @@ export const EditCitationModal = ({
   const isAdminsPlural = admins.length > 1
 
   const otherProjectMembers = projectProfiles
-    .filter((profile) => !profile.is_admin && profile.profile_name !== '(pending user)')
+    .filter((profile) => !profile.is_admin && profile.profile_name !== PENDING_USER_PROFILE_NAME)
     .map((profile) => profile.profile_name)
   const otherProjectMembersString = otherProjectMembers.join(', ')
   const isOtherProjectMembersPlural = otherProjectMembers.length > 1
