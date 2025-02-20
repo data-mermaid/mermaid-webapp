@@ -22,5 +22,5 @@ export const ItalicizedInfo = styled.p`
   color: ${theme.color.grey0};
 `
 export const DisabledText = styled.span`
-  color: ${theme.color.disabledColor};
+  color: ${theme.color.disabledTextDark};
 `
