@@ -194,7 +194,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Transfer unsubbmitted sample units</Tcell>
+            <Tcell cellWithText>Transfer unsubmitted sample units</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
