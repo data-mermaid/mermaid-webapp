@@ -21,9 +21,9 @@ test('App renders shows the users name from the API for an online and authentica
   // wait for page to load in lieu of being able to test for a loading indicator to have vanished
   expect(await screen.findByText('Projects', { selector: 'h1' }))
 
-  await waitFor(() => expect(screen.queryByText('FakeFirstNameOffline')).not.toBeInTheDocument())
+  await waitFor(() => expect(screen.queryByText('FF')).not.toBeInTheDocument()) // user icon initials for offline user
 
-  expect(await screen.findByText('FakeFirstNameOnline'))
+  expect(await screen.findByText('WW')) // user icon initials for online user
 })
 
 test('App renders shows the users name from offline storage for an offline user who is authenticated when online', async () => {
@@ -40,6 +40,6 @@ test('App renders shows the users name from offline storage for an offline user 
       selector: 'h1',
     }),
   )
-  await waitFor(() => expect(screen.queryByText('FakeFirstNameOnline')).not.toBeInTheDocument())
-  expect(await screen.findByText('FakeFirstNameOffline'))
+  await waitFor(() => expect(screen.queryByText('WW')).not.toBeInTheDocument()) // user icon initials for online user
+  expect(await screen.findByText('FF')) // user icon initials for offline user
 })

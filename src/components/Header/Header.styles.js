@@ -16,7 +16,7 @@ export const StyledHeader = styled('header')`
   z-index: 102;
   height: ${theme.spacing.headerHeight};
 `
-export const AvatarWrapper = styled('button')`
+export const UserButton = styled('button')`
   cursor: pointer;
   height: ${theme.spacing.headerHeight};
   width: ${theme.spacing.headerHeight};
@@ -26,8 +26,18 @@ export const AvatarWrapper = styled('button')`
   background: none;
   border: none;
 `
-export const AvatarWrapperFallback = styled('button')`
-  color: white;
+
+export const UserCircle = styled.div`
+  width: ${theme.typography.largeIconSize};
+  height: ${theme.typography.largeIconSize};
+  border-radius: 50%;
+  text-align: center;
+  line-height: ${theme.typography.largeIconSize};
+  font-weight: bold;
+  color: ${theme.color.primaryColor};
+  letter-spacing: 0.1rem;
+  background-color: ${theme.color.white};
+  font-size: ${theme.typography.smallFontSize};
 `
 
 export const CurrentUserImg = styled('img')`
