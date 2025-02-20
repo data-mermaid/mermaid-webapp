@@ -771,29 +771,33 @@ const Users = () => {
       <StickyTableOverflowWrapper>
         <GenericStickyTable {...getTableProps()} cursor={isTableUpdating ? 'wait' : 'pointer'}>
           <thead>
-            {headerGroups.map((headerGroup) => (
-              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => {
-                  const isMultiSortColumn = headerGroup.headers.some(
-                    (header) => header.sortedIndex > 0,
-                  )
+            {headerGroups.map((headerGroup) => {
+              const headerProps = headerGroup.getHeaderGroupProps()
 
-                  return (
-                    <Th
-                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                      key={column.id}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
-                      isSortingEnabled={!column.disableSortBy}
-                      disabledHover={column.disableSortBy}
-                    >
-                      <span id="header-span">{column.render('Header')}</span>
-                    </Th>
-                  )
-                })}
-              </Tr>
-            ))}
+              return (
+                <Tr {...headerProps} key={headerProps.key}>
+                  {headerGroup.headers.map((column) => {
+                    const isMultiSortColumn = headerGroup.headers.some(
+                      (header) => header.sortedIndex > 0,
+                    )
+
+                    return (
+                      <Th
+                        {...column.getHeaderProps(getTableColumnHeaderProps(column))}
+                        key={column.id}
+                        isSortedDescending={column.isSortedDesc}
+                        sortedIndex={column.sortedIndex}
+                        isMultiSortColumn={isMultiSortColumn}
+                        isSortingEnabled={!column.disableSortBy}
+                        disabledHover={column.disableSortBy}
+                      >
+                        <span id="header-span">{column.render('Header')}</span>
+                      </Th>
+                    )
+                  })}
+                </Tr>
+              )
+            })}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
@@ -805,7 +809,7 @@ const Users = () => {
                     const { key: _, ...restCellProps } = cell.getCellProps()
                     const uniqueKey = `${row.id}-${cell.column.id}`
                     return (
-                      <UserTableTd key={uniqueKey} {...restCellProps} align={cell.column.align}>
+                      <UserTableTd {...restCellProps} align={cell.column.align} key={uniqueKey}>
                         {cell.render('Cell')}
                       </UserTableTd>
                     )
