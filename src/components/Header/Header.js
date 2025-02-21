@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import {
   UserButton,
@@ -8,8 +8,6 @@ import {
   HeaderButtonThatLooksLikeLink,
   StyledHeader,
   LogoImg,
-  CurrentUserImg,
-  BiggerIconUser,
   StyledNavLink,
   NotificationIndicator,
   UserMenuButton,
@@ -21,12 +19,12 @@ import {
   BiggerIconMenu,
   LoggedInAs,
   HeaderIconWrapper,
-  UserCircle,
 } from './Header.styles'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { IconGlobe, IconLibraryBooks } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
+import { UserIcon } from '../UserIcon/UserIcon'
 import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
 import HideShow from '../generic/HideShow'
 import Logo from '../../assets/mermaid-logo.svg'
@@ -95,23 +93,13 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
   const closeProfileModal = () => setIsProfileModalOpen(false)
   const { notifications } = useBellNotifications()
   const { isAppOnline } = useOnlineStatus()
-  const [hasImageError, setHasImageError] = useState(false)
-  const currentUserFirstInitial = currentUser?.first_name?.charAt(0).toUpperCase()
-  const currentUserLastInitial = currentUser?.last_name?.charAt(0).toUpperCase()
-  const isProfileImageButtonShowing = currentUser?.picture && !hasImageError
-  const isInitialsButtonShowing = currentUserFirstInitial || currentUserLastInitial
-
-  useLayoutEffect(
-    function resetImageErrorWhenUserPictureChanges() {
-      // we clear the error before (re)rendering the image tag (which may or may not trigger an error)
-      setHasImageError(false)
-    },
-    [currentUser],
-  )
-
-  const handleImageError = () => {
-    setHasImageError(true)
-  }
+  const {
+    first_name: currentUserFirstName,
+    last_name: currentUserLastName,
+    picture: currentUserImageUrl,
+    email: currentUserEmail,
+    full_name: currentUserFullName,
+  } = currentUser ?? {}
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
@@ -120,30 +108,17 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
     </OfflineHide>
   )
 
-  const profileImageButton = isProfileImageButtonShowing ? (
+  const userIconButton = (
     <UserButton aria-label="User account dropdown">
-      <CurrentUserImg src={currentUser?.picture} alt="User picture" onError={handleImageError} />
-    </UserButton>
-  ) : null
-  const initialsButton =
-    isInitialsButtonShowing && !isProfileImageButtonShowing ? (
-      <UserButton aria-label="User account dropdown">
-        <UserCircle>
-          {currentUserFirstInitial}
-          {currentUserLastInitial}
-        </UserCircle>
-      </UserButton>
-    ) : null
-
-  const fallbackButton = (
-    <UserButton aria-label="User account dropdown">
-      <BiggerIconUser />
+      <UserIcon
+        firstName={currentUserFirstName}
+        lastName={currentUserLastName}
+        userImageUrl={currentUserImageUrl}
+      />
     </UserButton>
   )
 
-  const userIconButton = profileImageButton || initialsButton || fallbackButton
-
-  const userDisplayName = currentUser?.first_name || currentUser?.full_name || currentUser?.email
+  const userDisplayName = currentUserFirstName || currentUserFullName || currentUserEmail
 
   return (
     <>

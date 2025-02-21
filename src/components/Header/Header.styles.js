@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components/macro'
-import { IconBell, IconOpenInNew, IconExcel, IconMenu, IconUser } from '../icons'
+import { IconBell, IconOpenInNew, IconExcel, IconMenu } from '../icons'
 import theme from '../../theme'
 import { ButtonThatLooksLikeLink } from '../generic/buttons'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
@@ -26,35 +26,6 @@ export const UserButton = styled('button')`
   background: none;
   border: none;
 `
-
-export const UserCircle = styled.div`
-  width: ${theme.typography.largeIconSize};
-  height: ${theme.typography.largeIconSize};
-  border-radius: 50%;
-  text-align: center;
-  line-height: ${theme.typography.largeIconSize};
-  font-weight: bold;
-  color: ${theme.color.primaryColor};
-  letter-spacing: 0.1rem;
-  background-color: ${theme.color.white};
-  font-size: ${theme.typography.smallFontSize};
-`
-
-export const CurrentUserImg = styled('img')`
-  height: calc(${theme.spacing.headerHeight} - 10px);
-  width: calc(${theme.spacing.headerHeight} - 10px);
-  border-radius: 50%;
-  ${hoverState(
-    css`
-      outline: solid 3px ${theme.color.callout};
-    `,
-  )};
-  ${mediaQueryTabletLandscapeOnly(css`
-    height: calc(${theme.spacing.headerHeight} - 15px);
-    margin-top: 7px;
-  `)}
-`
-
 export const HeaderIconWrapper = styled('div')`
   margin-right: 0.3em;
 `
@@ -175,11 +146,6 @@ export const BiggerIconBell = styled(IconBell)`
 `
 export const BiggerIconMenu = styled(IconMenu)`
   ${biggerIcons}
-`
-export const BiggerIconUser = styled(IconUser)`
-  ${biggerIcons}
-  color: white;
-  position: inherit;
 `
 export const NotificationIndicator = styled.span`
   color: red;
