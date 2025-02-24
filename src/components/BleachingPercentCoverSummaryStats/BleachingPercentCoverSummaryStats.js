@@ -9,6 +9,7 @@ const BleachingPercentCoverSummaryStats = ({ observations = [] }) => {
   const softPercentages = observations.map((item) => Number(item.percent_soft))
   const algaePercentages = observations.map((item) => Number(item.percent_algae))
   const quadratCounts = observations.map((item) => Number(item.quadrat_number))
+  console.log('hardPercentages', hardPercentages)
 
   return (
     <ObservationsSummaryStats>
