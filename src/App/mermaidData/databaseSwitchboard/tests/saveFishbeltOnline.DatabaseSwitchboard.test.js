@@ -50,7 +50,7 @@ test('saveFishbelt throws error if any parameters are missing', async () => {
 test('saveFishBelt online sends properties that the API expects to function properly', async () => {
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
 
       (req, res, ctx) => {
         const { profile, project } = req.body.collect_records[0]
@@ -79,7 +79,7 @@ test('saveFishBelt online sends properties that the API expects to function prop
       },
     ),
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/pull/`,
+      `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
       (req, res, ctx) => {
         return res(ctx.json({ collect_records: { updates: [] } }))
@@ -105,7 +105,7 @@ test('saveFishBelt online sends properties that the API expects to function prop
 test('saveFishBelt online returns a rejected promise if the status code from the API for the record is not successful', async () => {
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
 
       (req, res, ctx) => {
         // this call captures the second call to push which will be a delete
@@ -166,7 +166,7 @@ test('saveFishBelt online returns saved record with protocol info automatically 
   }
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/push/`, (req, res, ctx) => {
+    rest.post(`${import.meta.env.VITE_MERMAID_API}/push/`, (req, res, ctx) => {
       const fishbeltSentToApi = req.body.collect_records[0]
 
       // test fails if saveFishBeltOnline doesnt formulate protocol or profile properly
@@ -182,7 +182,7 @@ test('saveFishBelt online returns saved record with protocol info automatically 
 
       return res(ctx.json(response))
     }),
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
+    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
       const response = {
         collect_records: {
           updates: [{ ...fishBeltToBeSaved, _last_revision_num: 40 }],
@@ -216,7 +216,7 @@ test('saveFishBelt online returns saved record with protocol info automatically 
 test('saveFishBelt online replaces previous fishBelt record with same id (acts like a put)', async () => {
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/pull/`,
+      `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
       (req, res, ctx) => {
         return res(ctx.json({ collect_records: { updates: [] } }))
@@ -262,7 +262,7 @@ test('saveFishBelt online replaces previous fishBelt record with same id (acts l
 test('saveFishBelt online returns saved record including id, project, profile, if those properties dont exist on the record', async () => {
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/pull/`,
+      `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
       (req, res, ctx) => {
         return res(
@@ -274,7 +274,7 @@ test('saveFishBelt online returns saved record including id, project, profile, i
         )
       },
     ),
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/push/`, (req, res, ctx) => {
+    rest.post(`${import.meta.env.VITE_MERMAID_API}/push/`, (req, res, ctx) => {
       const collectRecordsWithStatusCodes = req.body.collect_records.map((record) => ({
         data: { ...record, _last_revision_num: 1000 },
         status_code: 200,
@@ -313,7 +313,7 @@ test('saveFishBelt online returns and stores a saved record including existing i
 
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/pull/`,
+      `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
       (req, res, ctx) => {
         return res(
@@ -366,7 +366,7 @@ test('saveFishBelt online returns error message upon dexie error', async () => {
 test('saveFishBelt online saves the record in indexeddb in the case of network error', async () => {
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
 
       (_req, res, _ctx) => {
         return res.networkError()
