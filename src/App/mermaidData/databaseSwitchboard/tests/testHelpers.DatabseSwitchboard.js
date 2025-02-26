@@ -6,7 +6,7 @@ import {
 import SyncApiDataIntoOfflineStorage from '../../syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import DatabaseSwitchboard from '../DatabaseSwitchboard'
 
-const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () => {
   const getAccessToken = async () => 'fake token'
