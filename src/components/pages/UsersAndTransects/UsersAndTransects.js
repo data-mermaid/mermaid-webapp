@@ -211,7 +211,7 @@ const UsersAndTransects = () => {
         disableSortBy: true,
       },
       {
-        Header: () => <HeaderCenter>Submitted Transect Number</HeaderCenter>,
+        Header: () => <HeaderCenter>Submitted</HeaderCenter>,
         id: 'transect-numbers',
         columns: getSubmittedTransectNumberColumnHeaders,
         disableSortBy: true,
@@ -223,7 +223,7 @@ const UsersAndTransects = () => {
         disableSortBy: true,
       },
       {
-        Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
+        Header: () => <HeaderCenter>Collecting</HeaderCenter>,
         id: 'user-headers',
         columns: getUserColumnHeaders,
         disableSortBy: true,
