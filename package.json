@@ -35,14 +35,12 @@
     "moment": "^2.29.3",
     "postcss": "^8.4.32",
     "prop-types": "^15.7.2",
-    "raw.macro": "^0.4.2",
     "react": "^18.2.0",
     "react-csv": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-error-overlay": "^6.0.9",
     "react-is": "^18.2.0",
     "react-router-dom": "6.19.0",
-    "react-scripts": "5.0.0",
     "react-table": "^7.6.3",
     "react-toastify": "^7.0.3",
     "styled-components": "^5",
@@ -70,10 +68,10 @@
     "react-error-overlay": "6.0.9"
   },
   "scripts": {
-    "start": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
     "test": "TZ=UTC react-scripts test",
-    "eject": "react-scripts eject",
     "prettier": "prettier --write ./src/**/*.js ",
     "lint": "eslint './src/**/*.js'",
     "prepare": "husky"
@@ -103,6 +101,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
+    "@vitejs/plugin-react-swc": "^3.8.0",
     "eslint": "^8.55.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-jest-dom": "^5.1.0",
@@ -115,7 +114,9 @@
     "msw": "^0.27.0",
     "plop": "^2.7.4",
     "prettier": "^2.4.1",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",
+    "vite": "^6.2.0",
+		"vite-plugin-svgr": "^4.3.0"
   },
   "jest": {
     "restoreMocks": true,
