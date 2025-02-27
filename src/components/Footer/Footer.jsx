@@ -5,14 +5,12 @@ import {
   FooterNav,
   VersionWrapper,
   CssToggle,
-  StyledSelect,
+  HelpLinksWrapper,
   HelpContainer,
 } from './Footer.styles'
 import { TextLink } from '../generic/links'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { versionNumber } from '../../version'
-import MermaidDocsEN from '../../docs/MERMAID-user-docs-EN-min.pdf'
-import MermaidDocsBIN from '../../docs/MERMAID-user-docs-ID-min.pdf'
 import OfflineHide from '../generic/OfflineHide'
 import OfflineToggle from '../OfflineToggle'
 
@@ -34,18 +32,6 @@ const Footer = () => {
       document.removeEventListener('click', handleClickOutsideDropdown)
     }
   }, [isDropdownOpen])
-
-  const handleLanguageSelect = (event) => {
-    const language = event.target.value
-
-    setIsDropdownOpen(false)
-
-    if (language === 'English') {
-      window.open(MermaidDocsEN, '_blank')
-    } else if (language === 'Bahasa Indonesia') {
-      window.open(MermaidDocsBIN, '_blank')
-    }
-  }
 
   return (
     <StyledFooter>
@@ -70,10 +56,19 @@ const Footer = () => {
             Help (PDF) ▲
           </TextLink>
           {isDropdownOpen && (
-            <StyledSelect size="2" onChange={handleLanguageSelect}>
-              <option value="English">English</option>
-              <option value="Bahasa Indonesia">Bahasa Indonesia</option>
-            </StyledSelect>
+            <HelpLinksWrapper>
+              <li>
+                <a href="/src/docs/MERMAID-user-docs-EN-min.pdf" target="_blank" rel="noreferrer">
+                  English
+                </a>
+              </li>
+
+              <li value="Bahasa Indonesia">
+                <a href="/src/docs/MERMAID-user-docs-ID-min.pdf" target="_blank">
+                  Bahasa Indonesia
+                </a>
+              </li>
+            </HelpLinksWrapper>
           )}
         </HelpContainer>
         <OfflineHide>
