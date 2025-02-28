@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { toast } from 'react-toastify'
+import { Slide, toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useParams, useNavigate } from 'react-router-dom'
 
@@ -31,10 +31,12 @@ import PageUnavailable from '../../PageUnavailable'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import { ButtonSecondary } from '../../../generic/buttons'
 import { IconInfo } from '../../../icons'
+import { Dl, Figure } from '../../../generic/miscellaneous'
+import { P } from '../../../generic/text'
 
 const ButtonContainer = styled.div`
-  display: 'flex';
-  justify-content: 'right';
+  display: flex;
+  justify-content: right;
 `
 
 const HelpButton = styled(ButtonSecondary)`
@@ -66,6 +68,12 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
 
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
+  useEffect(function closeToastsWhenLeavingPage() {
+    return () => {
+      toast.dismiss()
+    }
+  }, [])
+
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
       setIsLoading(false)
@@ -81,7 +89,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         .then(([choicesResponse, indicatorSetsResponse]) => {
           if (isMounted.current) {
             setChoices(choicesResponse)
-            setGfcrIndicatorSets(indicatorSetsResponse.results)
+            setGfcrIndicatorSets(indicatorSetsResponse)
           }
 
           setIsLoading(false)
@@ -166,7 +174,30 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         setSaveButtonState(buttonGroupStates.unsaved)
 
         if (error && isAppOnline) {
-          toast.error(...getToastArguments(language.error.gfcrIndicatorSetSave))
+          const questionErrors = Object.entries(error.response.data)
+
+          const errorMarkup = (
+            <>
+              <P>{language.error.gfcrIndicatorSetSave}</P>
+              <Figure>
+                <figcaption>Form errors: </figcaption>
+                <Dl>
+                  {questionErrors.map(([key, value]) => (
+                    <div key={key}>
+                      <dt>{key.replace('f', 'F ').replace('_', '.')}</dt>
+                      <dd>{value}</dd>
+                    </div>
+                  ))}
+                </Dl>
+              </Figure>
+            </>
+          )
+
+          toast.dismiss()
+          toast.error(errorMarkup, {
+            transition: Slide,
+            autoClose: questionErrors.length ? false : 5000,
+          })
 
           handleHttpResponseError({
             error,

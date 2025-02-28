@@ -20,14 +20,14 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
   const popupTitle = `${sample_unit_method} ${site_name}`
 
   const sampleUnitsWithPopup = sampleUnitNumbersRow.map((row, index) => {
-    const { label: transectNumberLabel, management, sample_date, updated_by, observers } = row
+    const { label: transectNumberLabel, management, sample_date, updated_by, observers, id } = row
 
     const managementName =
       management.name === API_NULL_NAME
         ? language.pages.usersAndTransectsTable.missingMRName
         : management.name
 
-    const keyName = transectNumberLabel + site_name + managementName + updated_by + sample_date
+    const keyName = transectNumberLabel + site_name + managementName + updated_by + sample_date + id
 
     return (
       <SampleUnitNumber tabIndex="0" id={index} key={keyName}>

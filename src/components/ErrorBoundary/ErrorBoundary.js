@@ -5,7 +5,7 @@ import styled from 'styled-components/macro'
 import theme from '../../theme'
 import { ButtonPrimary } from '../generic/buttons'
 import language from '../../language'
-import { IconRefresh } from '../icons'
+import { IconSync } from '../icons'
 
 const StyledErrorBoundary = styled.div`
   background-color: ${theme.color.background};
@@ -95,7 +95,7 @@ class ErrorBoundary extends React.Component {
                   })
                 }}
               >
-                <IconRefresh />
+                <IconSync />
                 <span> {language.error.errorBoundaryTryAgain}</span>
               </ErrorButton>
             )}

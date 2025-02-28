@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconRefresh } from '../../icons'
+import { IconSync } from '../../icons'
 import ButtonSecondaryDropdown from '.'
 import { ButtonPrimary, ButtonSecondary, ButtonCaution } from '../buttons'
 
@@ -15,10 +15,10 @@ export const basic = () => (
       <a href="./">with a divider</a>
       <hr />
       <a href="./">
-        Then a link &amp; icon <IconRefresh />
+        Then a link &amp; icon <IconSync />
       </a>
       <a href="./">
-        <IconRefresh /> Then a icon &amp; link
+        <IconSync /> Then a icon &amp; link
       </a>
       <a href="./">ohanotherreallylongtextlinkicantbelievehowlongthiswordiswowowowowow</a>
       <hr />

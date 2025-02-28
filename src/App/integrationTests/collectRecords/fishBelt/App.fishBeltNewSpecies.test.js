@@ -97,7 +97,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
   const userNameElement = within(modal).getByLabelText('User')
   const projectNameElement = within(modal).getByLabelText('Project')
 
-  expect(within(userNameElement).getByText('FakeFirstNameOnline FakeLastNameOnline'))
+  expect(within(userNameElement).getByText('W-FakeFirstNameOnline W-FakeLastNameOnline'))
   expect(within(projectNameElement).getByText('Project V'))
   expect(within(speciesNameElement).getByText('Nebrius ridens'))
 

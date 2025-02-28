@@ -9,9 +9,9 @@ const mockMermaidApiAllSuccessful = setupServer(
     return res(
       ctx.json({
         id: 'fake-id',
-        first_name: 'FakeFirstNameOnline',
-        last_name: 'FakeLastNameOnline',
-        full_name: 'FakeFirstNameOnline FakeLastNameOnline',
+        first_name: 'W-FakeFirstNameOnline', // W is to differentiate online user icon initials from offline initials
+        last_name: 'W-FakeLastNameOnline', // W is to differentiate online user icon initials from offline initials
+        full_name: 'W-FakeFirstNameOnline W-FakeLastNameOnline',
       }),
     )
   }),

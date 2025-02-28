@@ -46,8 +46,9 @@ import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
 import useDocumentTitle from '../../../library/useDocumentTitle'
+import { getIsEmptyStringOrWhitespace } from '../../../library/getIsEmptyStringOrWhitespace'
 
-const EMPTY_VALUE = '-'
+const EMPTY_TABLE_CELL_VALUE = '-'
 
 const UserColumnHeader = styled.span`
   display: flex;
@@ -210,7 +211,7 @@ const UsersAndTransects = () => {
         disableSortBy: true,
       },
       {
-        Header: () => <HeaderCenter>Submitted Transect Number</HeaderCenter>,
+        Header: () => <HeaderCenter>Submitted</HeaderCenter>,
         id: 'transect-numbers',
         columns: getSubmittedTransectNumberColumnHeaders,
         disableSortBy: true,
@@ -222,7 +223,7 @@ const UsersAndTransects = () => {
         disableSortBy: true,
       },
       {
-        Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
+        Header: () => <HeaderCenter>Collecting</HeaderCenter>,
         id: 'user-headers',
         columns: getUserColumnHeaders,
         disableSortBy: true,
@@ -248,7 +249,7 @@ const UsersAndTransects = () => {
 
       const submittedTransectNumbersRow = submittedTransectNumbers.reduce((accumulator, number) => {
         if (!accumulator[number]) {
-          accumulator[number] = EMPTY_VALUE
+          accumulator[number] = EMPTY_TABLE_CELL_VALUE
         }
 
         if (rowNumbers.includes(number)) {
@@ -284,7 +285,7 @@ const UsersAndTransects = () => {
               recordProfileSummary={rowRecord.profile_summary[record.profileId]}
             />
           ) : (
-            EMPTY_VALUE
+            EMPTY_TABLE_CELL_VALUE
           )
 
           return accumulator
@@ -442,7 +443,7 @@ const UsersAndTransects = () => {
 
     return userTableCellData.reduce((accumulator, userCollectRecord) => {
       const collectRecordCount =
-        userCollectRecord !== '-'
+        userCollectRecord !== EMPTY_TABLE_CELL_VALUE
           ? userCollectRecord.props.recordProfileSummary.collect_records.length
           : 0
 
@@ -487,53 +488,56 @@ const UsersAndTransects = () => {
       <StickyTableOverflowWrapper>
         <StickyOverviewTable {...getTableProps()}>
           <OverviewThead>
-            {headerGroups.map((headerGroup) => (
-              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => {
-                  const isMultiSortColumn = headerGroup.headers.some(
-                    (header) => header.sortedIndex > 0,
-                  )
-                  const ThClassName = column.parent ? column.parent.id : undefined
+            {headerGroups.map((headerGroup) => {
+              const headerGroupProps = headerGroup.getHeaderGroupProps()
+              return (
+                <Tr {...headerGroupProps} key={headerGroupProps.key}>
+                  {headerGroup.headers.map((column) => {
+                    const isMultiSortColumn = headerGroup.headers.some(
+                      (header) => header.sortedIndex > 0,
+                    )
+                    const ThClassName = column.parent ? column.parent.id : undefined
 
-                  const headerAlignment =
-                    column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
-                  const isUserHeader = ThClassName === 'user-headers'
-                  const userProfileId = isUserHeader ? column.id : null
+                    const headerAlignment =
+                      column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
+                    const isUserHeader = ThClassName === 'user-headers'
+                    const userProfileId = isUserHeader ? column.id : null
 
-                  return (
-                    <OverviewTh
-                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                      key={column.id}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
-                      isSortingEnabled={!column.disableSortBy}
-                      disabledHover={column.disableSortBy}
-                      align={headerAlignment}
-                      className={ThClassName}
-                    >
-                      {isUserHeader ? (
-                        <UserColumnHeader>
-                          {column.render('Header')}{' '}
-                          <ActiveRecordsCount>
-                            {getUserHeaderCount(userProfileId)}
-                          </ActiveRecordsCount>
-                        </UserColumnHeader>
-                      ) : (
-                        column.render('Header')
-                      )}
-                    </OverviewTh>
-                  )
-                })}
-              </Tr>
-            ))}
+                    return (
+                      <OverviewTh
+                        {...column.getHeaderProps(getTableColumnHeaderProps(column))}
+                        key={column.id}
+                        isSortedDescending={column.isSortedDesc}
+                        sortedIndex={column.sortedIndex}
+                        isMultiSortColumn={isMultiSortColumn}
+                        isSortingEnabled={!column.disableSortBy}
+                        disabledHover={column.disableSortBy}
+                        align={headerAlignment}
+                        className={ThClassName}
+                      >
+                        {isUserHeader ? (
+                          <UserColumnHeader>
+                            {column.render('Header')}{' '}
+                            <ActiveRecordsCount>
+                              {getUserHeaderCount(userProfileId)}
+                            </ActiveRecordsCount>
+                          </UserColumnHeader>
+                        ) : (
+                          column.render('Header')
+                        )}
+                      </OverviewTh>
+                    )
+                  })}
+                </Tr>
+              )
+            })}
           </OverviewThead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
 
               return (
-                <OverviewTr key={row.id} {...row.getRowProps()}>
+                <OverviewTr {...row.getRowProps()} key={row.id}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
                     const cellColumnGroupId = cell.column.parent.id
@@ -555,29 +559,43 @@ const UsersAndTransects = () => {
 
                     const filteredEmptyCellValuesLength =
                       cellRowValuesForSubmittedTransectNumbers.filter(
-                        (value) => value[1] === EMPTY_VALUE,
+                        (value) => value[1] === EMPTY_TABLE_CELL_VALUE,
                       ).length
 
                     const isNotRowWithAllEmptyCellValues =
                       filteredEmptyCellValuesLength < submittedTransectNumbers.length
 
                     const isSubmittedNumberCellHightLighted =
-                      cell.value === EMPTY_VALUE &&
+                      cell.value === EMPTY_TABLE_CELL_VALUE &&
                       isNotBleachingMethodRow &&
                       isNotRowWithAllEmptyCellValues &&
                       isCellInSubmittedTransectNumberColumns
 
                     const isCollectingNumberCellHighLighted =
-                      cell.value !== EMPTY_VALUE &&
+                      cell.value !== EMPTY_TABLE_CELL_VALUE &&
                       !isCellInSubmittedTransectNumberColumns &&
                       !areSiteOrMethodOrEmptyHeaderColumns
 
                     const cellAlignment = areSiteOrMethodOrEmptyHeaderColumns ? 'left' : 'right'
 
-                    const cellClassName =
+                    const isCellHighlighted =
                       isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
-                        ? `${cellColumnGroupId} highlighted`
-                        : cellColumnGroupId
+
+                    const cellClassName = isCellHighlighted
+                      ? `${cellColumnGroupId} highlighted`
+                      : cellColumnGroupId
+
+                    const isCellEmpty =
+                      cell.value === EMPTY_TABLE_CELL_VALUE ||
+                      cell.value === null ||
+                      cell.value === undefined ||
+                      getIsEmptyStringOrWhitespace(cell.value)
+
+                    const emptyCellContents = isCellHighlighted ? EMPTY_TABLE_CELL_VALUE : null
+
+                    const cellContents = (
+                      <>{isCellEmpty ? emptyCellContents : cell.render('Cell')} </>
+                    )
 
                     return (
                       <OverviewTd
@@ -587,7 +605,7 @@ const UsersAndTransects = () => {
                         className={cellClassName}
                       >
                         <span>
-                          {cell.render('Cell')}{' '}
+                          {cellContents}
                           {isSubmittedNumberCellHightLighted && (
                             <EmptySampleUnitPopup
                               tableCellData={cell}

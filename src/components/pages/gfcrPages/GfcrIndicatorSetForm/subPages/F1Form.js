@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import { formikHandleNumericTwoDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formikPropType'
-import language from '../../../../../language'
-import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
-import { StyledGfcrInputWrapper } from './subPages.styles'
-import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { H2 } from '../../../../generic/text'
+import { StyledGfcrInputWrapper } from './subPages.styles'
+import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import language from '../../../../../language'
+import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
@@ -29,7 +29,9 @@ const F1Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         onFocus={(event) => handleInputFocus(event)}
         helperText={gfcrIndicatorSetLanguage.getF1_1_helper()}
         showHelperText={displayHelp}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) =>
+          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f1_1' })
+        }
       />
       <TextareaWithLabelAndValidation
         id="f1_notes"

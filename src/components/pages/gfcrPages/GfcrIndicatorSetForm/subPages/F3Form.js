@@ -1,14 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import {
+  formikHandleIntegerInputChange,
+  formikHandleNumericTwoDecimalInputChange,
+} from '../../../../../library/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formikPropType'
-import language from '../../../../../language'
-import { enforceNumberInput } from '../../../../../library/enforceNumberInput'
-import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
-import { InputRow } from '../../../../generic/form'
-import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { H2 } from '../../../../generic/text'
+import { InputRow } from '../../../../generic/form'
+import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
+import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import language from '../../../../../language'
+import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
@@ -28,7 +31,9 @@ const F3Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         {...formik.getFieldProps('f3_1')}
         onBlur={(event) => handleInputBlur(formik, event, 'f3_1')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) =>
+          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f3_1' })
+        }
         helperText={gfcrIndicatorSetLanguage.getF3_1_helper()}
         showHelperText={displayHelp}
       />
@@ -43,7 +48,7 @@ const F3Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         {...formik.getFieldProps('f3_2')}
         onBlur={(event) => handleInputBlur(formik, event, 'f3_2')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_2' })}
         helperText={gfcrIndicatorSetLanguage.getF3_2_helper()}
         showHelperText={displayHelp}
       />
@@ -58,7 +63,7 @@ const F3Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         {...formik.getFieldProps('f3_3')}
         onBlur={(event) => handleInputBlur(formik, event, 'f3_3')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_3' })}
         helperText={gfcrIndicatorSetLanguage.getF3_3_helper()}
         showHelperText={displayHelp}
       />
@@ -73,7 +78,7 @@ const F3Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         {...formik.getFieldProps('f3_4')}
         onBlur={(event) => handleInputBlur(formik, event, 'f3_4')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_4' })}
         helperText={gfcrIndicatorSetLanguage.getF3_4_helper()}
         showHelperText={displayHelp}
       />
@@ -89,7 +94,9 @@ const F3Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f3_5a')}
             onBlur={(event) => handleInputBlur(formik, event, 'f3_5a')}
             onFocus={(event) => handleInputFocus(event)}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_5a' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF3_5_men_helper()}
             showHelperText={displayHelp}
           />
@@ -102,7 +109,9 @@ const F3Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             {...formik.getFieldProps('f3_5b')}
             onBlur={(event) => handleInputBlur(formik, event, 'f3_5b')}
             onFocus={(event) => handleInputFocus(event)}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_5b' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF3_5_women_helper()}
             showHelperText={displayHelp}
           />
@@ -124,7 +133,9 @@ const F3Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             type="number"
             {...formik.getFieldProps('f3_5c')}
             onBlur={(event) => handleInputBlur(formik, event, 'f3_5c')}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_5c' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF3_5_youth_helper()}
             showHelperText={displayHelp}
           />
@@ -136,7 +147,9 @@ const F3Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             type="number"
             {...formik.getFieldProps('f3_5d')}
             onBlur={(event) => handleInputBlur(formik, event, 'f3_5d')}
-            onKeyDown={(event) => enforceNumberInput(event)}
+            onChange={(event) =>
+              formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_5d' })
+            }
             helperText={gfcrIndicatorSetLanguage.getF3_5_indigenous_helper()}
             showHelperText={displayHelp}
           />
@@ -155,7 +168,7 @@ const F3Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         validationMessages={formik.errors.title}
         onBlur={(event) => handleInputBlur(formik, event, 'f3_6')}
         onFocus={(event) => handleInputFocus(event)}
-        onKeyDown={(event) => enforceNumberInput(event)}
+        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_6' })}
         helperText={gfcrIndicatorSetLanguage.getF3_6_helper()}
         showHelperText={displayHelp}
       />

@@ -19,7 +19,7 @@ export const useInitializeBellNotifications = ({
 }) => {
   const location = useLocation() // Changes when the route changes. Useful for fetching notifications again
 
-  const [notifications, setNotifications] = useState()
+  const [notifications, setNotifications] = useState([])
 
   const updateNotifications = () => {
     let isMounted = true
@@ -31,9 +31,9 @@ export const useInitializeBellNotifications = ({
         isMermaidAuthenticated,
         isAppOnline,
       })
-        .then((results) => {
-          if (isMounted && results) {
-            setNotifications(results)
+        .then((notifications) => {
+          if (isMounted && notifications) {
+            setNotifications(notifications)
           }
         })
         .catch((error) => {
