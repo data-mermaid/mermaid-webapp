@@ -69,7 +69,7 @@ function App({ dexieCurrentUserInstance }) {
     },
     [navigate],
   )
-
+  // change
   const handleUserDeniedSyncPush = useCallback(
     (projectsWithSyncErrors) => {
       // projectsWithSyncErrors's type: { projectId: { name: string, apiDataTablesThatRejectedSyncing: string[] } }
