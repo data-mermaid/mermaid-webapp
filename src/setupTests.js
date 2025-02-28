@@ -6,8 +6,12 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
 import { configure } from '@testing-library/react'
+import { enableFetchMocks } from 'jest-fetch-mock'
+
 import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSuccessful'
 import { mockDocumentCookie } from './testUtilities/mockDocumentCookie'
+
+enableFetchMocks() // avoids ReferenceError: Request is not defined errors in tests
 
 jest.setTimeout(300000)
 window.URL.createObjectURL = () => {}
