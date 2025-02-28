@@ -1,7 +1,7 @@
 import { Route, useLocation, Routes, Navigate, useNavigate } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { toast } from 'react-toastify'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 
 import { BellNotificationProvider } from './BellNotificationContext'
 import { CurrentUserProvider } from './CurrentUserContext'
