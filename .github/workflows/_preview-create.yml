@@ -10,6 +10,7 @@ on:
 env:
   S3_BUCKET: preview.app2.datamermaid.org
   PR_NUMBER: ${{ github.event.number }}
+  BASE_PATH: ${{ github.event.number }}
   VITE_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
   VITE_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
   VITE_AUTH0_DOMAIN: datamermaid.auth0.com
@@ -51,7 +52,7 @@ jobs:
           cat src/version.js
 
       - name: Yarn Build
-        run: yarn build
+        run: yarn build --base="${BASE_PATH}"
 
       - name: Upload files to S3 with AWS CLI
         env:
