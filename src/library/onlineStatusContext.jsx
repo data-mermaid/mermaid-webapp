@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 
-const apiBaseUrl = import.meta.env.VITE_APP_MERMAID_API
+const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 const OnlineStatusContext = createContext()
 
 const OnlineStatusProvider = ({ children, value = {} }) => {
