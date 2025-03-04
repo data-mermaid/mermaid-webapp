@@ -59,7 +59,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
           AWS_DEFAULT_REGION: us-east-1
         run: |
-          aws s3 sync build/ s3://${S3_BUCKET}/${PR_NUMBER} --delete
+          ls build && ls build/assets && aws s3 sync build/ s3://${S3_BUCKET}/${PR_NUMBER} --delete
 
       - name: 'PR Preview Comment'
         uses: actions/github-script@0.3.0
