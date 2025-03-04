@@ -323,7 +323,6 @@ const RevenueModal = ({
       title={revenue ? modalLanguage.titleUpdate : modalLanguage.titleAdd}
       mainContent={revenueForm()}
       footerContent={footer}
-      contentOverflowIsVisible={false}
       maxWidth="65rem"
     />
   )

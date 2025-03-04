@@ -54,11 +54,7 @@ const ModalToolbar = styled.div`
   padding: 0 ${theme.spacing.medium};
 `
 const ModalContent = styled.div`
-  ${(props) =>
-    props.contentOverflowIsVisible &&
-    css`
-      overflow: auto;
-    `}
+  overflow: auto;
   max-height: ${MODAL_CONTENT_HEIGHT};
   padding: ${theme.spacing.medium};
 `
@@ -139,7 +135,6 @@ const Modal = ({
   isOpen,
   onDismiss,
   footerContent,
-  contentOverflowIsVisible = false,
   toolbarContent = undefined,
   maxWidth,
 }) => {
@@ -171,9 +166,7 @@ const Modal = ({
             </CloseButton>
           </ModalTitle>
           <ModalToolbar>{toolbarContent}</ModalToolbar>
-          <ModalContent contentOverflowIsVisible={contentOverflowIsVisible} id="modal-content">
-            {mainContent}
-          </ModalContent>
+          <ModalContent id="modal-content">{mainContent}</ModalContent>
           <ModalFooter>{footerContent}</ModalFooter>
         </StyledDialog>
       </StyledDialogOverlay>
@@ -187,7 +180,6 @@ Modal.propTypes = {
   mainContent: PropTypes.node.isRequired,
   onDismiss: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  contentOverflowIsVisible: PropTypes.bool,
   toolbarContent: PropTypes.node,
   maxWidth: PropTypes.string,
 }

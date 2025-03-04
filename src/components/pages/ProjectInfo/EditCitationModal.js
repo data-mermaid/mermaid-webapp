@@ -180,7 +180,6 @@ export const EditCitationModal = ({
       title={modalLanguage.title}
       mainContent={mainContent}
       footerContent={footerContent}
-      contentOverflowIsVisible={false}
     />
   )
 }

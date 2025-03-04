@@ -321,7 +321,6 @@ const InvestmentModal = ({
       title={investment ? modalLanguage.titleUpdate : modalLanguage.titleAdd}
       mainContent={investmentForm()}
       footerContent={footer}
-      contentOverflowIsVisible={false}
       maxWidth="65rem"
     />
   )
