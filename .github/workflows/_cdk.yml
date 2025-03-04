@@ -64,6 +64,13 @@ jobs:
       - name: Yarn Build
         run: yarn build
 
+
+      - name: troubleshoot
+        run: |
+          ls .
+          ls build
+          ls build/assets        
+
       # IaC deps
       - name: Fetch iac node cache
         uses: actions/cache@v3
