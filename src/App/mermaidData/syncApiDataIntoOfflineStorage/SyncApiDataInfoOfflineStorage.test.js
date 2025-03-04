@@ -11,7 +11,7 @@ test('pushThenPullAllProjectDataExceptChoices keeps track of returned last_revis
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
+    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
       const areLastRevisionNumbersNull =
         req.body.benthic_attributes.last_revision === null &&
         req.body.collect_records.last_revision === null &&
@@ -46,7 +46,7 @@ test('pushThenPullAllProjectDataExceptChoices keeps track of returned last_revis
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    apiBaseUrl: import.meta.env.VITE_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
     handleUserDeniedSyncPull: () => {},
@@ -65,7 +65,7 @@ test('pushThenPullAllProjectData keeps track of returned last_revision_nums and 
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
+    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
       const areLastRevisionNumbersNull =
         req.body.benthic_attributes.last_revision === null &&
         req.body.choices.last_revision === null &&
@@ -101,7 +101,7 @@ test('pushThenPullAllProjectData keeps track of returned last_revision_nums and 
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    apiBaseUrl: import.meta.env.VITE_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
     handleUserDeniedSyncPull: () => {},
@@ -120,7 +120,7 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
+    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
       const areLastRevisionNumbersNull =
         req.body.benthic_attributes.last_revision === null &&
         req.body.choices.last_revision === null &&
@@ -152,7 +152,7 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    apiBaseUrl: import.meta.env.VITE_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
     handleUserDeniedSyncPull: () => {},
@@ -171,7 +171,7 @@ test('pushThenPullAllProjectDataExceptChoices updates IDB with API data', async 
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    apiBaseUrl: import.meta.env.VITE_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
     handleUserDeniedSyncPull: () => {},
@@ -216,7 +216,7 @@ test('pushThenPullAllProjectDataExceptChoices updates IDB with API data', async 
   )
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
+    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
       const response = {
         benthic_attributes: {
           updates: [mockMermaidData.benthic_attributes[1]],
@@ -347,7 +347,7 @@ test('pushThenPullAllProjectData updates IDB with API data', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    apiBaseUrl: import.meta.env.VITE_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
     handleUserDeniedSyncPull: () => {},
@@ -400,7 +400,7 @@ test('pushThenPullAllProjectData updates IDB with API data', async () => {
   )
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
+    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
       const response = {
         benthic_attributes: {
           updates: [mockMermaidData.benthic_attributes[1]],
@@ -538,7 +538,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
   await dexiePerUserDataInstance.uiState_offlineReadyProjects.put({ id: '5' })
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    apiBaseUrl: import.meta.env.VITE_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
     handleUserDeniedSyncPull: () => {},
@@ -583,7 +583,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
   )
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
+    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
       const response = {
         benthic_attributes: {
           updates: [mockMermaidData.benthic_attributes[1]],
@@ -711,7 +711,7 @@ test('pushChanges includes the force flag', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    apiBaseUrl: import.meta.env.VITE_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
     handleUserDeniedSyncPull: () => {},
@@ -721,7 +721,7 @@ test('pushChanges includes the force flag', async () => {
 
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
 
       (req, res, ctx) => {
         const force = req.url.searchParams.get('force')
@@ -781,7 +781,7 @@ test('pushChanges includes the expected modified data', async () => {
     uiState_pushToApi: true,
   })
   const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    apiBaseUrl: import.meta.env.VITE_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
     handleUserDeniedSyncPull: () => {},
@@ -791,7 +791,7 @@ test('pushChanges includes the expected modified data', async () => {
 
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
 
       (req, res, ctx) => {
         const {
@@ -832,7 +832,7 @@ test('All of the push functions handle sync errors with the handleUserDeniedSync
 
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
 
       (req, res, ctx) => {
         return res(ctx.json(mockUserDoesntHavePushSyncPermissionForProjects))
@@ -841,7 +841,7 @@ test('All of the push functions handle sync errors with the handleUserDeniedSync
   )
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    apiBaseUrl: import.meta.env.VITE_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
     handleUserDeniedSyncPull: () => {},

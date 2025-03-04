@@ -10,7 +10,7 @@ export const getPaginatedMermaidData = async ({
   const loadPaginatedDataItems = async (url) => {
     try {
       const response = await axios.get(url, authorizationHeaders)
-      const paginatedDataItems = response.data.results
+      const paginatedDataItems = response.data.results ?? []
       const nextPageUrl = response.data.next
       dataItems.push(...paginatedDataItems)
 
