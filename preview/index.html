@@ -13,7 +13,12 @@
       alert(redirectURL)
 
       if (redirectUrl) {
-        window.location.replace(redirectUrl)
+        // window.location.replace(redirectUrl)
+        let container = document.createElement('div')
+        container.innerHTML = `
+        <h1>SOMETHING ELSE</h1>
+      `
+        document.body.appendChild(container)
       } else {
         // eslint-disable-next-line no-console
         console.log('no PR number found')
