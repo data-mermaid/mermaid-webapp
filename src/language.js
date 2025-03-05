@@ -665,7 +665,7 @@ const pages = {
     title: 'Management Regimes',
   },
   usersAndTransectsTable: {
-    title: 'Observers and Transects',
+    title: 'Observers and Sample Units',
     filterToolbarText: 'Filter this table by site',
     missingSiteName: '(Missing Site Name)',
     missingMRName: '(Missing MR Name)',
