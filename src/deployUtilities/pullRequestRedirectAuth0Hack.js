@@ -10,7 +10,16 @@
 
 const pullRequestRedirectAuth0Hack = () => {
   if (window.location.origin.includes('preview')) {
-    localStorage.setItem('pullRequestNumber', process.env.PUBLIC_URL)
+    const indexHtmlPath = window.location.href.indexOf('index.html')
+
+    const redirectUrl =
+      indexHtmlPath === -1
+        ? window.location.href
+        : window.location.href.slice(0, window.location.href.indexOf('index.html')) // remove the preview/index.html CI hack from the url
+
+    alert(redirectUrl)
+
+    localStorage.setItem('pullRequestNumber', redirectUrl)
   }
 }
 
