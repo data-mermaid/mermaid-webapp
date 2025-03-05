@@ -18,7 +18,7 @@ import { ClearPersistedFormDataHackProvider } from './App/ClearDirtyFormDataHack
 // We keep the jsx routes as defined in app.js instead of having ALL routes defined here because we were not able to have conditional rendering of the loader otherwise
 const router = createBrowserRouter(
   [{ path: '*', element: <App dexieCurrentUserInstance={dexieCurrentUserInstance} /> }],
-  { basename: import.meta.env.BASE_URL },
+  { basename: import.meta.env.PUBLIC_URL },
 )
 console.log('foo', import.meta.env.BASE_URL)
 const container = document.getElementById('root')
