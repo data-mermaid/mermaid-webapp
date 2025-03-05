@@ -10,8 +10,12 @@
       const redirectURL = `${window.location.origin}${PRNumber}/index.html${window.location.search}`
 
       if (PRNumber) {
+        // eslint-disable-next-line no-console
+        console.log('redirecting to', redirectURL)
         window.location.replace(redirectURL)
       } else {
+        // eslint-disable-next-line no-console
+        console.log('no PR number found')
         let container = document.createElement('div')
         container.innerHTML = `
         <h1>You are not authenticated</h1>

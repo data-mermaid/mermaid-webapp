@@ -10,7 +10,9 @@
 
 const pullRequestRedirectAuth0Hack = () => {
   if (window.location.origin.includes('preview')) {
-    localStorage.setItem('pullRequestNumber', import.meta.env.BASE_URL)
+    // eslint-disable-next-line no-console
+    console.log('pullRequestRedirectAuth0Hack', process.env)
+    localStorage.setItem('pullRequestNumber', process.env.PUBLIC_URL)
   }
 }
 
