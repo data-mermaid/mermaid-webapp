@@ -101,7 +101,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
 
       const sectorName = choices.sectors.data?.find(
         (sectorChoice) => sectorChoice.id === sector,
-      ).name
+      )?.name
       const incubatorName = choices.incubatortypes.data?.find(
         (incubatorTypeChoice) => incubatorTypeChoice.id === used_an_incubator,
       )?.name

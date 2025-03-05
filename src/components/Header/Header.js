@@ -3,13 +3,11 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
 import {
-  AvatarWrapper,
+  UserButton,
   GlobalNav,
   HeaderButtonThatLooksLikeLink,
   StyledHeader,
   LogoImg,
-  CurrentUserImg,
-  BiggerIconUser,
   StyledNavLink,
   NotificationIndicator,
   UserMenuButton,
@@ -23,9 +21,10 @@ import {
   HeaderIconWrapper,
 } from './Header.styles'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { IconDown, IconGlobe, IconLibraryBooks } from '../icons'
+import { IconGlobe, IconLibraryBooks } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
+import { UserIcon } from '../UserIcon/UserIcon'
 import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
 import HideShow from '../generic/HideShow'
 import Logo from '../../assets/mermaid-logo.svg'
@@ -94,7 +93,13 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
   const closeProfileModal = () => setIsProfileModalOpen(false)
   const { notifications } = useBellNotifications()
   const { isAppOnline } = useOnlineStatus()
-  const [hasImageError, setHasImageError] = useState(false)
+  const {
+    first_name: currentUserFirstName,
+    last_name: currentUserLastName,
+    picture: currentUserImageUrl,
+    email: currentUserEmail,
+    full_name: currentUserFullName,
+  } = currentUser ?? {}
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
@@ -103,66 +108,17 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
     </OfflineHide>
   )
 
-  const handleImageError = () => {
-    setHasImageError(true)
-  }
+  const userIconButton = (
+    <UserButton aria-label="User account dropdown">
+      <UserIcon
+        firstName={currentUserFirstName}
+        lastName={currentUserLastName}
+        userImageUrl={currentUserImageUrl}
+      />
+    </UserButton>
+  )
 
-  const getUserButton = () => {
-    // Avatar with user image
-    if (currentUser && currentUser.picture && !hasImageError) {
-      return (
-        <AvatarWrapper>
-          <CurrentUserImg src={currentUser.picture} alt="" onError={handleImageError} />
-        </AvatarWrapper>
-      )
-    }
-
-    // Avatar with fallback image
-    if (currentUser && currentUser.picture && hasImageError) {
-      return (
-        <AvatarWrapper>
-          <BiggerIconUser />
-        </AvatarWrapper>
-      )
-    }
-
-    // First name
-    if (currentUser && currentUser.first_name) {
-      return (
-        <AvatarWrapper>
-          {currentUser && currentUser.first_name} <IconDown />
-        </AvatarWrapper>
-      )
-    }
-
-    // Full name
-    if (currentUser && currentUser.full_name) {
-      return (
-        <AvatarWrapper>
-          {currentUser && currentUser.full_name} <IconDown />
-        </AvatarWrapper>
-      )
-    }
-
-    // User icon
-    return (
-      <AvatarWrapper>
-        <BiggerIconUser />
-      </AvatarWrapper>
-    )
-  }
-
-  const getUserDisplayName = () => {
-    if (currentUser && currentUser.first_name) {
-      return currentUser.first_name
-    }
-
-    if (currentUser && currentUser.first_name) {
-      return currentUser.full_name
-    }
-
-    return currentUser.email
-  }
+  const userDisplayName = currentUserFirstName || currentUserFullName || currentUserEmail
 
   return (
     <>
@@ -189,10 +145,10 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
             )}
             <HideShow
               closeOnClickWithin={true}
-              button={getUserButton()}
+              button={userIconButton}
               contents={
                 <UserMenu>
-                  {currentUser && <LoggedInAs>Logged in as {getUserDisplayName()}</LoggedInAs>}
+                  {currentUser && <LoggedInAs>Logged in as {userDisplayName}</LoggedInAs>}
                   <UserMenuDropDownContent />
                 </UserMenu>
               }
@@ -221,7 +177,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
               contents={
                 <UserMenu>
                   <GlobalLinks />
-                  {currentUser && <LoggedInAs>Logged in as {getUserDisplayName()}</LoggedInAs>}
+                  {currentUser && <LoggedInAs>Logged in as {userDisplayName}</LoggedInAs>}
                   <UserMenuDropDownContent />
                 </UserMenu>
               }

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components/macro'
-import { IconBell, IconOpenInNew, IconExcel, IconMenu, IconUser } from '../icons'
+import { IconBell, IconOpenInNew, IconExcel, IconMenu } from '../icons'
 import theme from '../../theme'
 import { ButtonThatLooksLikeLink } from '../generic/buttons'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
@@ -16,7 +16,7 @@ export const StyledHeader = styled('header')`
   z-index: 102;
   height: ${theme.spacing.headerHeight};
 `
-export const AvatarWrapper = styled('button')`
+export const UserButton = styled('button')`
   cursor: pointer;
   height: ${theme.spacing.headerHeight};
   width: ${theme.spacing.headerHeight};
@@ -26,25 +26,6 @@ export const AvatarWrapper = styled('button')`
   background: none;
   border: none;
 `
-export const AvatarWrapperFallback = styled('button')`
-  color: white;
-`
-
-export const CurrentUserImg = styled('img')`
-  height: calc(${theme.spacing.headerHeight} - 10px);
-  width: calc(${theme.spacing.headerHeight} - 10px);
-  border-radius: 50%;
-  ${hoverState(
-    css`
-      outline: solid 3px ${theme.color.callout};
-    `,
-  )};
-  ${mediaQueryTabletLandscapeOnly(css`
-    height: calc(${theme.spacing.headerHeight} - 15px);
-    margin-top: 7px;
-  `)}
-`
-
 export const HeaderIconWrapper = styled('div')`
   margin-right: 0.3em;
 `
@@ -165,11 +146,6 @@ export const BiggerIconBell = styled(IconBell)`
 `
 export const BiggerIconMenu = styled(IconMenu)`
   ${biggerIcons}
-`
-export const BiggerIconUser = styled(IconUser)`
-  ${biggerIcons}
-  color: white;
-  position: inherit;
 `
 export const NotificationIndicator = styled.span`
   color: red;

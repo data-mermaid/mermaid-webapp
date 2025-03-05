@@ -29,3 +29,5 @@ export const IMAGE_CLASSIFICATION_COLORS = {
 Object.freeze(PROJECT_CODES)
 Object.freeze(apiDataTypes)
 Object.freeze(IMAGE_CLASSIFICATION_COLORS)
+
+export const PENDING_USER_PROFILE_NAME = '(pending user)'

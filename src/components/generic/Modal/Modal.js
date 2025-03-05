@@ -54,11 +54,7 @@ const ModalToolbar = styled.div`
   padding: 0 ${theme.spacing.medium};
 `
 const ModalContent = styled.div`
-  ${(props) =>
-    props.contentOverflowIsVisible &&
-    css`
-      overflow: auto;
-    `}
+  overflow: auto;
   max-height: ${MODAL_CONTENT_HEIGHT};
   padding: ${theme.spacing.medium};
 `
@@ -139,7 +135,6 @@ const Modal = ({
   isOpen,
   onDismiss,
   footerContent,
-  contentOverflowIsVisible = false,
   toolbarContent = undefined,
   maxWidth,
   padding,
@@ -158,31 +153,31 @@ const Modal = ({
     return () => window.removeEventListener('keydown', close)
   }, [onDismiss, allowCloseWithEscapeKey])
 
-  return isOpen ? (
-    <StyledDialogOverlay aria-label={`${title} Modal`}>
-      <StyledDialog
-        role="dialog"
-        aria-labelledby="modal-title"
-        aria-describedby="modal-content"
-        maxWidth={maxWidth}
-        padding={padding}
-      >
-        <ModalTitle>
-          <h2 id="modal-title">{title}</h2>
-          {displayCloseIcon ? (
-            <CloseButton type="button" className="close-button" onClick={onDismiss}>
-              <IconClose aria-label="close" />
-            </CloseButton>
-          ) : null}
-        </ModalTitle>
-        <ModalToolbar>{toolbarContent}</ModalToolbar>
-        <ModalContent contentOverflowIsVisible={contentOverflowIsVisible} id="modal-content">
-          {mainContent}
-        </ModalContent>
-        <ModalFooter>{footerContent}</ModalFooter>
-      </StyledDialog>
-    </StyledDialogOverlay>
-  ) : undefined
+  return (
+    isOpen && (
+      <StyledDialogOverlay aria-label={`${title} Modal`}>
+        <StyledDialog
+          role="dialog"
+          aria-labelledby="modal-title"
+          aria-describedby="modal-content"
+          maxWidth={maxWidth}
+          padding={padding}
+        >
+          <ModalTitle>
+            <h2 id="modal-title">{title}</h2>
+            {displayCloseIcon ? (
+              <CloseButton type="button" className="close-button" onClick={onDismiss}>
+                <IconClose aria-label="close" />
+              </CloseButton>
+            ) : null}
+          </ModalTitle>
+          <ModalToolbar>{toolbarContent}</ModalToolbar>
+          <ModalContent id="modal-content">{mainContent}</ModalContent>
+          <ModalFooter>{footerContent}</ModalFooter>
+        </StyledDialog>
+      </StyledDialogOverlay>
+    )
+  )
 }
 
 Modal.propTypes = {
@@ -192,7 +187,6 @@ Modal.propTypes = {
   mainContent: PropTypes.node.isRequired,
   onDismiss: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  contentOverflowIsVisible: PropTypes.bool,
   toolbarContent: PropTypes.node,
   maxWidth: PropTypes.string,
   padding: PropTypes.string,

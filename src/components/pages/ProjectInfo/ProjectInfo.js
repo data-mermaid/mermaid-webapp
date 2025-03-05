@@ -149,7 +149,8 @@ const ProjectInfo = () => {
 
       databaseSwitchboardInstance
         .saveProject({ projectId, editedValues: valuesToUse })
-        .then(() => {
+        .then((updatedProject) => {
+          setProjectBeingEdited(updatedProject) // to ensure isSuggestedCitationDirty is fresh
           setSaveButtonState(buttonGroupStates.saved)
           toast.success(...getToastArguments(language.success.projectSave))
           actions.resetForm({ values }) // resets formik's dirty state
