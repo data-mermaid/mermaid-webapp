@@ -20,6 +20,7 @@ const handleHttpResponseError = ({
     }
 
     setServerNotReachable()
+    callback?.()
 
     return
   }
