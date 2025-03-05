@@ -8,9 +8,12 @@
     <script>
       const redirectUrl = localStorage.getItem('pullRequestNumber') // looks like s3 isnt uploading new assets
       // const redirectURL = `${window.location.origin}${prNumber}/index.html${window.location.search}`
+      const paramsFromAuthORedirectUrl = window.location.search
+      const redirectURL = `${redirectUrl}${paramsFromAuthORedirectUrl}`
+      alert(redirectURL)
 
       if (redirectUrl) {
-        // window.location.replace(redirectUrl)
+        window.location.replace(redirectUrl)
       } else {
         // eslint-disable-next-line no-console
         console.log('no PR number found')
