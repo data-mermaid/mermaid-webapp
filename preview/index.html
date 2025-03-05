@@ -6,13 +6,11 @@
   </head>
   <body>
     <script>
-      const prNumber = localStorage.getItem('pullRequestNumber') // looks like s3 isnt uploading new assets
-      const redirectURL = `${window.location.origin}${prNumber}/index.html${window.location.search}`
-      // eslint-disable-next-line no-console
-      alert('redirecting to:' + redirectURL + ', pr no: ' + prNumber)
+      const redirectUrl = localStorage.getItem('pullRequestNumber') // looks like s3 isnt uploading new assets
+      // const redirectURL = `${window.location.origin}${prNumber}/index.html${window.location.search}`
 
-      if (prNumber) {
-        window.location.replace(prNumber)
+      if (redirectUrl) {
+        window.location.replace(redirectUrl)
       } else {
         // eslint-disable-next-line no-console
         console.log('no PR number found')
