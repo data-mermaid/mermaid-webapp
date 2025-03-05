@@ -36,7 +36,6 @@ import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 import { routes } from './routes'
 
 function App({ dexieCurrentUserInstance }) {
-  console.log('app')
   const { isAppOnline, setServerNotReachable } = useOnlineStatus()
   const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()
   const apiBaseUrl = import.meta.env.VITE_MERMAID_API

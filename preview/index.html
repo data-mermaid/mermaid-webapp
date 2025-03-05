@@ -6,12 +6,12 @@
   </head>
   <body>
     <script>
-      const PRNumber = localStorage.getItem('pullRequestNumber')
-      const redirectURL = `${window.location.origin}${PRNumber}/index.html${window.location.search}`
+      const prNumber = localStorage.getItem('authORedirectUrl')
+      const redirectURL = `${window.location.origin}${prNumber}/index.html${window.location.search}`
+      // eslint-disable-next-line no-console
+      console.log('redirecting to', redirectURL, prNumber)
 
-      if (PRNumber) {
-        // eslint-disable-next-line no-console
-        console.log('redirecting to', redirectURL)
+      if (prNumber) {
         window.location.replace(redirectURL)
       } else {
         // eslint-disable-next-line no-console

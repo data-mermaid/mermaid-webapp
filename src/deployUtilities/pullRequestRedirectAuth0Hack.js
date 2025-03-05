@@ -10,9 +10,14 @@
 
 const pullRequestRedirectAuth0Hack = () => {
   if (window.location.origin.includes('preview')) {
-    // eslint-disable-next-line no-console
-    console.log('pullRequestRedirectAuth0Hack', process.env)
-    localStorage.setItem('pullRequestNumber', process.env.PUBLIC_URL)
+    const indexHtmlPath = window.location.href.indexOf('index.html')
+
+    const redirectUrl =
+      indexHtmlPath === -1
+        ? window.Location.href
+        : window.location.href.slice(0, window.location.href.indexOf('index.html')) // remove the preview/index.html CI hack from the url
+
+    localStorage.setItem('authORedirectUrl', redirectUrl)
   }
 }
 

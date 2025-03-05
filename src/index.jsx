@@ -20,7 +20,14 @@ const router = createBrowserRouter(
   [{ path: '*', element: <App dexieCurrentUserInstance={dexieCurrentUserInstance} /> }],
   { basename: import.meta.env.PUBLIC_URL },
 )
-console.log('foo', import.meta.env.BASE_URL)
+
+const indexHtmlPath = window.location.href.indexOf('index.html')
+
+const baseUrlToUSe =
+  indexHtmlPath === -1
+    ? window.Location.href
+    : window.location.href.slice(0, window.location.href.indexOf('index.html'))
+console.log('baseUrlToUSe', baseUrlToUSe, window.location.href)
 const container = document.getElementById('root')
 const root = createRoot(container)
 
