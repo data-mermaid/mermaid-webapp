@@ -6,10 +6,10 @@
   </head>
   <body>
     <script>
-      const prNumber = localStorage.getItem('authORedirectUrl')
+      const prNumber = localStorage.getItem('pullRequestNumber') // looks like s3 isnt uploading new assets
       const redirectURL = `${window.location.origin}${prNumber}/index.html${window.location.search}`
       // eslint-disable-next-line no-console
-      console.log('redirecting to', redirectURL, prNumber)
+      alert('redirecting to:' + redirectURL + ', pr no: ' + prNumber)
 
       if (prNumber) {
         window.location.replace(redirectURL)

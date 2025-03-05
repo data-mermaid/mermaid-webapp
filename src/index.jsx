@@ -24,10 +24,8 @@ const router = createBrowserRouter(
 const indexHtmlPath = window.location.href.indexOf('index.html')
 
 const baseUrlToUSe =
-  indexHtmlPath === -1
-    ? window.Location.href
-    : window.location.href.slice(0, window.location.href.indexOf('index.html'))
-console.log('baseUrlToUSe', baseUrlToUSe, window.location.href)
+  indexHtmlPath == -1 ? window.location.href : window.location.href.slice(0, indexHtmlPath)
+console.log('baseUrlToUSe', baseUrlToUSe, indexHtmlPath, indexHtmlPath === -1)
 const container = document.getElementById('root')
 const root = createRoot(container)
 
