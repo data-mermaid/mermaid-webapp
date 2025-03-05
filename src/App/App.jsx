@@ -248,6 +248,7 @@ function App({ dexieCurrentUserInstance }) {
                               like so: https://preview.app2.datamermaid.org/123/index.html */}
                             <Route exact path="/index.html" element={<Navigate to="/projects" />} />
                             <Route path="/*" element={<PageNotFound />} />
+                            <Route path="*" element={<PageNotFound />} />
                           </Routes>
                         </ErrorBoundary>
                       ) : (
