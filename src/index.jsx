@@ -21,6 +21,11 @@ const router = createBrowserRouter(
   { basename: import.meta.env.PUBLIC_URL },
 )
 
+const indexHtmlPath = window.location.href.indexOf('index.html')
+
+const baseUrlToUSe =
+  indexHtmlPath == -1 ? window.location.href : window.location.href.slice(0, indexHtmlPath)
+console.log('baseUrlToUSe', baseUrlToUSe, indexHtmlPath, indexHtmlPath === -1)
 const container = document.getElementById('root')
 const root = createRoot(container)
 

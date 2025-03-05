@@ -6,12 +6,16 @@
   </head>
   <body>
     <script>
-      const PRNumber = localStorage.getItem('pullRequestNumber')
-      const redirectURL = `${window.location.origin}${PRNumber}/index.html${window.location.search}`
+      const prNumber = localStorage.getItem('pullRequestNumber') // looks like s3 isnt uploading new assets
+      const redirectURL = `${window.location.origin}${prNumber}/index.html${window.location.search}`
+      // eslint-disable-next-line no-console
+      alert('redirecting to:' + redirectURL + ', pr no: ' + prNumber)
 
-      if (PRNumber) {
-        window.location.replace(redirectURL)
+      if (prNumber) {
+        // window.location.replace(redirectURL)
       } else {
+        // eslint-disable-next-line no-console
+        console.log('no PR number found')
         let container = document.createElement('div')
         container.innerHTML = `
         <h1>You are not authenticated</h1>
