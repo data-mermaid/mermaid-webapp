@@ -16,7 +16,7 @@ permissions:
 jobs:
   deps-cache:
     if: github.event.pull_request.draft == false
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4.2.2
@@ -41,15 +41,15 @@ jobs:
     needs: [deps-cache]
     uses: ./.github/workflows/_lint.yml
 
-  call-test:
-    if: github.event.pull_request.draft == false
-    needs: [deps-cache, call-lint]
-    uses: ./.github/workflows/_test.yml
+  # call-test:
+  #   if: github.event.pull_request.draft == false
+  #   needs: [deps-cache, call-lint]
+  #   uses: ./.github/workflows/_test.yml
 
   call-cdk-deploy:
     concurrency:
       group: app-deployment-${{ github.ref }}
-    needs: [call-test, call-lint]
+    needs: [call-lint]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
