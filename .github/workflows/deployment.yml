@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-      - 165-gh-actions
+      # - 165-gh-actions
     tags:
       - 'v[0-9]+.[0-9]+'        # eg: v1.1
       - 'v[0-9]+.[0-9]+.[0-9]+' # eg: v1.1.1
@@ -79,7 +79,8 @@ jobs:
           role-skip-session-tagging: true
 
       - name: Create version file for dev
-        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions')
+        if: startsWith(github.ref, 'refs/heads/develop')
+        # || startsWith(github.ref, 'refs/heads/165-gh-actions')
         run: |
           short_sha=$(git rev-parse --short ${{ github.sha }})
           echo "export const versionNumber = '$short_sha'" > src/version.js
@@ -130,11 +131,6 @@ jobs:
         if: ${{ steps.iac-cache.outputs.cache-hit != 'true' }}
         working-directory: iac
         run: npm ci
-
-      - uses: actions/checkout@v4.2.2
-      - name: Install CDK
-        run: |
-          iac/install_cdk.sh
 
       - name: CDK Deploy DEV
         if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions')
