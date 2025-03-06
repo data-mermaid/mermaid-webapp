@@ -14,6 +14,7 @@ import { Construct } from 'constructs'
 export interface StaticSiteProps {
   domainName: string
   siteSubDomain: string
+  hostedZoneId: string
   isPreview?: boolean
 }
 
@@ -29,7 +30,11 @@ export class StaticSite extends Construct {
   constructor(parent: Stack, name: string, props: StaticSiteProps) {
     super(parent, name)
 
-    const zone = route53.HostedZone.fromLookup(this, 'Zone', { domainName: props.domainName })
+    const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'Zone', {
+      hostedZoneId: props.hostedZoneId,
+      zoneName: props.domainName,
+    })
+
     const siteDomain = `${props.siteSubDomain}.${props.domainName}`
     const cloudfrontOAI = new cloudfront.OriginAccessIdentity(this, 'CloudfrontOAI', {
       comment: `OAI for ${name}`,
@@ -111,9 +116,7 @@ export class StaticSite extends Construct {
         cachePolicy: props.isPreview
           ? cloudfront.CachePolicy.CACHING_DISABLED
           : cloudfront.CachePolicy.CACHING_OPTIMIZED,
-        origin: new cloudfront_origins.S3Origin(siteBucket, {
-          originAccessIdentity: cloudfrontOAI,
-        }),
+        origin: new cloudfront_origins.S3StaticWebsiteOrigin(siteBucket),
         compress: true,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,

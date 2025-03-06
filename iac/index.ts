@@ -13,6 +13,7 @@ const tags = {
 
 const subdomain = app.node.tryGetContext('subdomain') || 'dev'
 const domain = app.node.tryGetContext('domain') || 'app2.datamermaid.org'
+const hostedZoneId = app.node.tryGetContext('hostedZoneId') || 'Z057628713VX646WVHWOJ'
 
 const cdkEnv = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
@@ -24,6 +25,7 @@ new StaticSiteStack(app, `${subdomain}-webapp`, {
   tags,
   domainName: domain,
   siteSubDomain: subdomain,
+  hostedZoneId,
 })
 
 new StaticSiteStack(app, `preview-webapp`, {
@@ -31,6 +33,7 @@ new StaticSiteStack(app, `preview-webapp`, {
   tags,
   domainName: domain,
   siteSubDomain: 'preview',
+  hostedZoneId,
   isPreview: true,
 })
 
