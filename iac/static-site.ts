@@ -116,7 +116,9 @@ export class StaticSite extends Construct {
         cachePolicy: props.isPreview
           ? cloudfront.CachePolicy.CACHING_DISABLED
           : cloudfront.CachePolicy.CACHING_OPTIMIZED,
-        origin: new cloudfront_origins.S3StaticWebsiteOrigin(siteBucket),
+        origin: cloudfront_origins.S3BucketOrigin.withOriginAccessIdentity(siteBucket, {
+          originAccessIdentity: cloudfrontOAI,
+        }),
         compress: true,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
