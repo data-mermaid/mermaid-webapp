@@ -19,15 +19,15 @@ concurrency:
 jobs:
   deps-cache:
     if: github.event.pull_request.draft == false
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-node@v4.2.0
         with:
           node-version-file: '.nvmrc'
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4.2.2
         id: yarn-cache
         with:
           path: node_modules
@@ -41,7 +41,7 @@ jobs:
     if: github.event.pull_request.draft == false
     needs: [deps-cache]
     uses: ./.github/workflows/_lint.yml
-  
+
   call-preview:
     if: github.event.pull_request.draft == false
     needs: [call-lint]
@@ -55,4 +55,3 @@ jobs:
     with:
       cdk_subcommand: diff
     secrets: inherit
-  
