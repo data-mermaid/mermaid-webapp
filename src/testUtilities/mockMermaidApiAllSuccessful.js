@@ -2,7 +2,7 @@ import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import mockMermaidData from './mockMermaidData'
 
-const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 const mockMermaidApiAllSuccessful = setupServer(
   rest.get(`${apiBaseUrl}/me`, (req, res, ctx) => {

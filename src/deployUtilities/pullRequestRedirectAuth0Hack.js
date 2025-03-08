@@ -10,7 +10,7 @@
 
 const pullRequestRedirectAuth0Hack = () => {
   if (window.location.origin.includes('preview')) {
-    localStorage.setItem('pullRequestNumber', process.env.PUBLIC_URL)
+    localStorage.setItem('pullRequestNumber', import.meta.env.BASE_URL)
   }
 }
 

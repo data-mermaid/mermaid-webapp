@@ -17,14 +17,14 @@ const allTheDataNames = [
   'project_sites',
   'projects',
 ]
-const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 const projectId = '5'
 
 test('pullApiData strips uiState_pushToApi properties from api response', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
+    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
       const response = {
         benthic_attributes: {
           updates: [
