@@ -1,21 +1,24 @@
 {
   "extends": [
     "eslint:recommended",
+    "plugin:jest-dom/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:react/jsx-runtime",
     "plugin:react/recommended",
     "plugin:testing-library/react",
-    "plugin:jest-dom/recommended"
+    "prettier"
   ],
   "plugins": ["react-hooks", "jsx-a11y"],
   "parserOptions": {
-    "parser": "@babel/eslint-parser",
+    "ecmaVersion": "latest",
     "sourceType": "module",
-    "ecmaVersion": 2023,
     "ecmaFeatures": {
       "jsx": true
     },
     "settings": {
       "react": {
-        "version": "detect"
+        "version": "detect",
+        "defaultVersion": ""
       }
     },
     "babelOptions": {

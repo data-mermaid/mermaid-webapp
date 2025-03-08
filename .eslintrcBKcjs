@@ -1,0 +1,70 @@
+const { node } = require('prop-types')
+
+module.exports = {
+  root: true,
+  env: { browser: true, es2020: true },
+
+  extends: [
+    'eslint:recommended',
+
+    'plugin:react-hooks/recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'prettier',
+  ],
+  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
+  plugins: ['react-refresh', 'react-hooks', 'jsx-a11y'],
+  rules: {
+    camelcase: 'off',
+    curly: ['error', 'all'],
+    'no-underscore-dangle': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'react/jsx-boolean-value': 'off',
+    'react/jsx-key': [1, { checkFragmentShorthand: true }],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
+    'no-console': ['error', { allow: ['warn', 'error'] }],
+    'no-undef-init': 'error',
+    'no-unused-vars': [
+      'error',
+      {
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_',
+      },
+    ],
+    'no-useless-return': 'off',
+    'jsx-a11y/label-has-associated-control': [
+      'error',
+      {
+        assert: 'either',
+      },
+    ],
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      extends: [
+        'plugin:@typescript-eslint/recommended-type-checked',
+        'plugin:@typescript-eslint/stylistic-type-checked',
+      ],
+      parserOptions: {
+        project: ['./tsconfig.json'],
+        tsconfigRootDir: __dirname,
+      },
+    },
+    {
+      files: ['src/testUtilities/**/*'],
+      rules: { 'import/no-extraneous-dependencies': 'off' },
+    },
+  ],
+}
