@@ -1,10 +1,19 @@
 import React, { useEffect } from 'react'
-import styled, { css } from 'styled-components'
-import { NavLink, useParams, useLocation } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
+
+import {
+  CollectionAvatar,
+  LiCollecting,
+  LiNavPrimary,
+  LiNavSecondary,
+  NavHeader,
+  NavHeaderSecondary,
+  NavLinkSidebar,
+  NavList,
+  NavWrapper,
+} from './NavMenu.styles'
 import { subNavNodePropTypes } from '../SubNavMenuRecordName/subNavNodePropTypes'
-import theme from '../../theme'
-import { mediaQueryPhoneOnly, hoverState } from '../../library/styling/mediaQueries'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import {
@@ -31,117 +40,6 @@ import { getToastArguments } from '../../library/getToastArguments'
 import language from '../../language'
 import { useCurrentProject } from '../../App/CurrentProjectContext'
 
-const NavWrapper = styled('nav')`
-  background: ${theme.color.grey4};
-  height: 100%;
-  width: ${theme.spacing.sideNavWidth};
-  ${mediaQueryPhoneOnly(css`
-    width: ${theme.spacing.mobileSideNavWidth};
-    font-size: ${theme.typography.xSmallFontSize};
-  `)}
-`
-const LiCollecting = styled('li')`
-  border-style: solid;
-  border-color: ${theme.color.primaryColor};
-  border-width: 2px 0;
-  position: relative;
-  ${mediaQueryPhoneOnly(css`
-    border: none;
-  `)}
-`
-const CollectionAvatar = styled('img')`
-  border-radius: 50%;
-  position: absolute;
-  right: 1rem;
-  top: -1.75rem;
-  border: solid 2px ${theme.color.primaryColor};
-  width: 32px;
-  aspect-ratio: 1 / 1;
-  z-index: 1;
-  ${mediaQueryPhoneOnly(css`
-    display: none;
-  `)}
-`
-const LiNavPrimary = styled('li')`
-  background: ${theme.color.white};
-  font-size: ${theme.typography.defaultFontSize};
-  font-weight: 700;
-  ${mediaQueryPhoneOnly(css`
-    font-size: 1.2rem;
-  `)}
-`
-const LiNavSecondary = styled('li')`
-  background: ${theme.color.grey4};
-  font-size: ${theme.typography.smallFontSize};
-`
-const NavList = styled('ul')`
-  position: sticky;
-  top: ${theme.spacing.headerHeight};
-  padding: 0;
-  margin: 0;
-  & ul {
-    padding: 0;
-    li {
-      a {
-        font-size: inherit;
-        color: inherit;
-        ${mediaQueryPhoneOnly(css`
-          padding: ${theme.spacing.small} ${theme.spacing.xsmall};
-        `)}
-      }
-    }
-  }
-`
-
-const NavHeader = styled('p')`
-  margin: 0;
-  color: ${theme.color.textColor};
-  padding: ${theme.spacing.large} 0 ${theme.spacing.medium} ${theme.spacing.medium};
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-weight: 700;
-  font-size: ${theme.typography.largeFontSize};
-  ${mediaQueryPhoneOnly(css`
-    font-size: ${theme.typography.defaultFontSize};
-    padding-left: ${theme.spacing.xsmall};
-  `)}
-`
-const NavHeaderSecondary = styled(NavHeader)`
-  font-size: 1.4rem;
-  ${mediaQueryPhoneOnly(css`
-    font-size: 1.2rem;
-    letter-spacing: 1px;
-  `)}
-`
-const NavLinkSidebar = styled(NavLink)`
-  padding: 0.75rem ${theme.spacing.small};
-  text-decoration: none;
-  display: grid;
-  grid-template-columns: 3rem auto;
-  align-items: baseline;
-  ${theme.typography.noWordBreak};
-  ${hoverState(css`
-    background-color: ${theme.color.primaryHover};
-    color: ${theme.color.white};
-  `)}
-  &:active {
-    background-color: ${theme.color.primaryActive};
-  }
-  & > svg {
-    margin: 0.25rem ${theme.spacing.small} 0 ${theme.spacing.small};
-  }
-  &.active {
-    background-color: ${theme.color.primaryColor};
-    color: ${theme.color.white};
-  }
-  ${mediaQueryPhoneOnly(css`
-    display: block;
-    svg {
-      display: none;
-    }
-  `)}
-`
-
 const NavMenu = ({ subNavNode = null }) => {
   const projectUrl = useCurrentProjectPath()
   const { recordId, submittedRecordId, siteId, managementRegimeId, projectId, indicatorSetId } =
@@ -160,11 +58,11 @@ const NavMenu = ({ subNavNode = null }) => {
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
 
   const { currentProject, setCurrentProject } = useCurrentProject()
-
-  const handleImageError = (event) => {
-    // eslint-disable-next-line no-param-reassign
-    event.target.style.display = 'none'
-  }
+  const {
+    first_name: currentUserFirstName,
+    last_name: currentUserLastName,
+    picture: currentUserImageUrl,
+  } = currentUser ?? {}
 
   const _getProjectData = useEffect(() => {
     if (!currentProject && isAppOnline && databaseSwitchboardInstance && projectId) {
@@ -205,8 +103,13 @@ const NavMenu = ({ subNavNode = null }) => {
             {!isReadOnlyUser && (
               <LiCollecting>
                 <NavLinkSidebar end to={`${projectUrl}/collecting`}>
-                  {currentUser.picture ? (
-                    <CollectionAvatar src={currentUser.picture} onError={handleImageError} />
+                  {currentUserImageUrl || currentUserFirstName || currentUserLastName ? (
+                    <CollectionAvatar
+                      userImageUrl={currentUserImageUrl}
+                      firstName={currentUserFirstName}
+                      lastName={currentUserLastName}
+                      dark={true}
+                    />
                   ) : null}
                   <IconCollect />
                   <span>Collecting</span>
@@ -251,7 +154,8 @@ const NavMenu = ({ subNavNode = null }) => {
             <ul>
               <li>
                 <NavLinkSidebar to={`${projectUrl}/observers-and-transects`}>
-                  <IconUsersAndTransects /> <span>Observers and Transects</span>
+                  <IconUsersAndTransects />{' '}
+                  <span>{language.pages.usersAndTransectsTable.title}</span>
                 </NavLinkSidebar>
               </li>
               <li>

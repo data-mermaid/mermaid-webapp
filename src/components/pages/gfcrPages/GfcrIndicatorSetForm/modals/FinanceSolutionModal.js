@@ -65,8 +65,6 @@ const FinanceSolutionModal = ({
         id: financeSolution?.id,
         used_an_incubator:
           formikValues.used_an_incubator === 'none' ? null : formikValues.used_an_incubator,
-        local_enterprise: formikValues.local_enterprise === 'true',
-        gender_smart: formikValues.gender_smart === 'true',
       }
 
       const existingFinanceSolutions = indicatorSet.finance_solutions
@@ -290,8 +288,8 @@ const FinanceSolutionModal = ({
             id="local-enterprise-select"
             {...formik.getFieldProps('local_enterprise')}
             options={[
-              { value: 'true', label: modalLanguage.yes },
-              { value: 'false', label: modalLanguage.no },
+              { value: true, label: modalLanguage.yes },
+              { value: false, label: modalLanguage.no },
             ]}
             helperText={modalLanguage.getLocalEnterpriseHelper()}
             showHelperText={displayHelp}
@@ -304,8 +302,8 @@ const FinanceSolutionModal = ({
             id="gender-smart-select"
             {...formik.getFieldProps('gender_smart')}
             options={[
-              { value: 'true', label: modalLanguage.yes },
-              { value: 'false', label: modalLanguage.no },
+              { value: true, label: modalLanguage.yes },
+              { value: false, label: modalLanguage.no },
             ]}
             helperText={modalLanguage.getGenderSmartHelper()}
             showHelperText={displayHelp}
@@ -379,7 +377,6 @@ const FinanceSolutionModal = ({
       title={financeSolution ? modalLanguage.titleUpdate : modalLanguage.titleAdd}
       mainContent={financeSolutionForm()}
       footerContent={footer}
-      contentOverflowIsVisible={false}
       maxWidth="65rem"
     />
   )
