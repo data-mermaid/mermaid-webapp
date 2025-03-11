@@ -688,7 +688,8 @@ const pages = {
         Sample Units / <br /> Management Regimes
       </>
     ),
-    title: 'Submitted / Management Regime',
+    title: 'Sample Units / Management Regime',
+    tableSubSectionTitle: 'Submitted / Management Regime',
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubText:
       'This page will show the Management Regime of submitted sample units by method and site.',
