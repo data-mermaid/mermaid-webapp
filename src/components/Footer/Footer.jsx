@@ -58,13 +58,13 @@ const Footer = () => {
           {isDropdownOpen && (
             <HelpLinksWrapper>
               <li>
-                <a href="/src/docs/MERMAID-user-docs-EN-min.pdf" target="_blank" rel="noreferrer">
+                <a href="MERMAID-user-docs-EN-min.pdf" target="_blank" rel="noreferrer">
                   English
                 </a>
               </li>
 
               <li value="Bahasa Indonesia">
-                <a href="/src/docs/MERMAID-user-docs-ID-min.pdf" target="_blank">
+                <a href="MERMAID-user-docs-ID-min.pdf" target="_blank">
                   Bahasa Indonesia
                 </a>
               </li>
