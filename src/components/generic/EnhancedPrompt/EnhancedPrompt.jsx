@@ -7,7 +7,6 @@ import language from '../../../language'
 function Prompt({ shouldPromptTrigger = false, message }) {
   useBlocker(() => {
     if (shouldPromptTrigger) {
-      // eslint-disable-next-line no-alert
       return !window.confirm(message)
     }
 

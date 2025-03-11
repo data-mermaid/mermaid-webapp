@@ -369,7 +369,7 @@ const Users = () => {
   const tableColumnsForAdmin = useMemo(() => {
     const handleInfoIconClick = (event, label) => {
       if (currentHelperTextLabel === label) {
-        isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+        setIsHelperTextShowing(!isHelperTextShowing)
       } else {
         setIsHelperTextShowing(true)
         setCurrentHelperTextLabel(label)

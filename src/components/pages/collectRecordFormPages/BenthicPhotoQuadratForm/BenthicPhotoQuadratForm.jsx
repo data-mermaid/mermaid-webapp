@@ -49,7 +49,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
   const [sites, setSites] = useState([])
 
-  const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
+  const [observationsDispatch] = observationsReducer
 
   useEffect(
     function loadSupportingData() {

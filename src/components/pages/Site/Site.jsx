@@ -139,7 +139,6 @@ const SiteForm = ({
           validationType={formik.errors.country && formik.touched.country ? 'error' : null}
           data-testid="country-select"
         >
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label id="country-label">
             Country <RequiredIndicator />{' '}
           </label>

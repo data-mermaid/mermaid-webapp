@@ -43,7 +43,6 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
   const modalContent = (
     <>
       <ModalInputRow>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label id="modal-input-for-org-label" htmlFor="modal-input-for-org">
           New Organization Name
         </label>
@@ -53,7 +52,8 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
             aria-describedby="modal-input-for-org-descp"
             id="modal-input-for-org"
             value={newOrganizationSuggestion}
-            autoFocus
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
             onChange={(event) => setNewOrganizationSuggestion(event.target.value)}
           />
           {helperText && <HelperText id="modal-input-for-org-descp">{helperText}</HelperText>}

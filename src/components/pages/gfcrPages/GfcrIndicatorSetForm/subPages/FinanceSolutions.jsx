@@ -17,9 +17,12 @@ import PageUnavailable from '../../../PageUnavailable'
 import language from '../../../../../language'
 import { ToolBarRow } from '../../../../generic/positioning'
 import FilterSearchToolbar from '../../../../FilterSearchToolbar/FilterSearchToolbar'
-import { TableContentToolbar, StyledTableContentWrapper } from './subPages.styles'
+import {
+  TableContentToolbar,
+  StyledTableContentWrapper,
+  StyledTableAnchor,
+} from './subPages.styles'
 import FinanceSolutionModal from '../modals/FinanceSolutionModal'
-import { StyledTableAnchor } from './subPages.styles'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
@@ -88,6 +91,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
       return
     }
 
+    // eslint-disable-next-line consistent-return
     return indicatorSet.finance_solutions.map((indicatorSet) => {
       const {
         id,
@@ -107,6 +111,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
       )?.name
       const sustainableFinanceMechanismNames = sustainable_finance_mechanisms.map((mechanism) => {
         return choices.sustainablefinancemechanisms.data?.find(
+          // eslint-disable-next-line max-nested-callbacks
           (sfmChoice) => sfmChoice.id === mechanism,
         ).name
       })
