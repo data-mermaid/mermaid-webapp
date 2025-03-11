@@ -16,6 +16,7 @@ env:
   # dev specific; set prod versions in step below
   REACT_APP_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
   REACT_APP_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
+  REACT_APP_MAPBOX_ACCESS_TOKEN: pk.eyJ1IjoibWVybWFpZC1hZG1pbiIsImEiOiJjanh1djd1d20wMThoM2ZsaXZvdzZ3NGQxIn0.MrVUTQrUGJaTxjmn3h4udw
   REACT_APP_MERMAID_API: https://dev-api.datamermaid.org/v1
   REACT_APP_MERMAID_DASHBOARD_LINK: https://dev-dashboard.datamermaid.org
   REACT_APP_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
@@ -55,6 +56,7 @@ jobs:
           echo "TARGET=prod" >> "$GITHUB_ENV"
           echo "REACT_APP_AUTH0_AUDIENCE=https://api.datamermaid.org" >> "$GITHUB_ENV"
           echo "REACT_APP_AUTH0_CLIENT_ID=Yahf5mGpQDyYOqbvQlaKE1WqBnUeFPj0" >> "$GITHUB_ENV"
+          echo "REACT_APP_MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoibWVybWFpZC1hZG1pbiIsImEiOiJjanh1djd1d20wMThoM2ZsaXZvdzZ3NGQxIn0.MrVUTQrUGJaTxjmn3h4udw"
           echo "REACT_APP_MERMAID_API=https://api.datamermaid.org/v1" >> "$GITHUB_ENV"
           echo "REACT_APP_MERMAID_DASHBOARD_LINK=https://dashboard.datamermaid.org" >> "$GITHUB_ENV"
           echo "REACT_APP_MERMAID_REFERENCE_LINK=https://public.datamermaid.org/mermaid_attributes.xlsx" >> "$GITHUB_ENV"
