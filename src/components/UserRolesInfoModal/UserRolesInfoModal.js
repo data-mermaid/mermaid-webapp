@@ -218,7 +218,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>View observers and transects overview</Tcell>
+            <Tcell cellWithText>View observers and sample units overview</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
