@@ -50,7 +50,6 @@ const InputCheckboxGroupWithLabelAndValidation = ({
 
   return (
     <InputRow validationType={validationType}>
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label id={`${id}-checkbox-group-with-label-and-validation`}>
         {label}
         {required ? <RequiredIndicator /> : null}

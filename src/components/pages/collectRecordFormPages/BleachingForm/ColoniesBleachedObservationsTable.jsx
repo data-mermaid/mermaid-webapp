@@ -206,7 +206,8 @@ const ColoniesBleachedObservationTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
-                  autoFocus={autoFocusAllowed}
+                  // eslint-disable-next-line jsx-a11y/no-autofocus
+                  autoFocus={autoFocusAllowed} // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
@@ -228,7 +229,6 @@ const ColoniesBleachedObservationTable = ({
               aria-labelledby="growth-form-label"
               onKeyDown={handleObservationKeyDown}
             >
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <option value=""> </option>
               {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>

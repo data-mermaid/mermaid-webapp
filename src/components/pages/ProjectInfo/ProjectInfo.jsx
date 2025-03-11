@@ -309,7 +309,6 @@ const ProjectInfo = () => {
           {...formik.getFieldProps('notes')}
         />
         <InputAutocompleteWrapper>
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label htmlFor="organizations">Organizations</label>
           <InputAutocomplete
             id="organizations"

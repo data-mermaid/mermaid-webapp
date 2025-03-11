@@ -85,8 +85,7 @@ const FilterSearchToolbar = ({
   }
 
   const handleInfoIconClick = (event) => {
-    isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
-
+    setIsHelperTextShowing(!isHelperTextShowing)
     event.stopPropagation()
   }
 

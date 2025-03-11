@@ -86,7 +86,9 @@ const groupCollectSampleUnitsByProfileSummary = (records) => {
       if (profileSummary[collectRecordProfile]) {
         const collectRecords = profileSummary[collectRecordProfile]?.collect_records
 
+        // eslint-disable-next-line no-param-reassign
         accumulator[collectRecordProfile] = accumulator[collectRecordProfile] || {}
+        // eslint-disable-next-line no-param-reassign
         accumulator[collectRecordProfile] = {
           profileId: collectRecordProfile,
           profileName: profileSummary[collectRecordProfile].profile_name,
@@ -249,6 +251,7 @@ const UsersAndTransects = () => {
 
       const submittedTransectNumbersRow = submittedTransectNumbers.reduce((accumulator, number) => {
         if (!accumulator[number]) {
+          // eslint-disable-next-line no-param-reassign
           accumulator[number] = EMPTY_TABLE_CELL_VALUE
         }
 
@@ -256,7 +259,7 @@ const UsersAndTransects = () => {
           const filteredRowSampleUnitNumbers = rowRecord.sample_unit_numbers.filter(
             ({ label }) => label === number,
           )
-
+          // eslint-disable-next-line no-param-reassign
           accumulator[number] = (
             <SubmittedSampleUnitPopup
               rowRecord={rowRecord}
@@ -279,6 +282,7 @@ const UsersAndTransects = () => {
 
       const collectTransectNumbersRow = collectRecordsByProfileValues.reduce(
         (accumulator, record) => {
+          // eslint-disable-next-line no-param-reassign
           accumulator[record.profileId] = rowRecord.profile_summary[record.profileId] ? (
             <CollectSampleUnitPopup
               rowRecord={rowRecord}

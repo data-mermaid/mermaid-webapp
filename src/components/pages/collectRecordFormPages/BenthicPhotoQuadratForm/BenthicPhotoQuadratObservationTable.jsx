@@ -92,7 +92,7 @@ const BenthicPhotoQuadratObservationTable = ({
 
   const handleInfoIconClick = (event, label) => {
     if (currentHelperTextLabel === label) {
-      isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+      setIsHelperTextShowing(!isHelperTextShowing)
     } else {
       setIsHelperTextShowing(true)
       setCurrentHelperTextLabel(label)
@@ -113,7 +113,7 @@ const BenthicPhotoQuadratObservationTable = ({
 
     const categoryGroups = addTopCategoryInfoToObservation.reduce((accumulator, obs) => {
       const benthicAttributeName = getCategory(obs.top_level_category)?.label
-
+      // eslint-disable-next-line no-param-reassign
       accumulator[benthicAttributeName] = accumulator[benthicAttributeName] || []
       accumulator[benthicAttributeName].push(obs)
 
@@ -268,7 +268,8 @@ const BenthicPhotoQuadratObservationTable = ({
           <Td align="right">
             <InputNumberNumericCharactersOnly
               type="number"
-              autoFocus={true}
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus={true} // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
               min="0"
               value={quadratNumberOrEmptyStringToAvoidInputValueErrors}
               step="any"
@@ -304,7 +305,6 @@ const BenthicPhotoQuadratObservationTable = ({
               value={growthFormOrEmptyStringToAvoidInputValueErrors}
               aria-labelledby="growth-form-label"
             >
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <option value=""> </option>
               {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>

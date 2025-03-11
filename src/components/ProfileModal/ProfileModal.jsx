@@ -33,7 +33,6 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
         <div>{formik.values.email}</div>
       </ModalInputRow>
       <ModalInputRow>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label id="modal-input-for-firstname-label" htmlFor="modal-input-for-firstname">
           First Name
         </label>
@@ -41,12 +40,12 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
           aria-labelledby="modal-input-for-firstname-label"
           id="modal-input-for-firstname"
           value={formik.values.first_name}
-          autoFocus
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
           onChange={(event) => formik.setFieldValue('first_name', event.target.value)}
         />
       </ModalInputRow>
       <ModalInputRow>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label id="modal-input-for-lastname-label" htmlFor="modal-input-for-lastname">
           Last Name
         </label>

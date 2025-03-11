@@ -17,8 +17,11 @@ import PageUnavailable from '../../../PageUnavailable'
 import language from '../../../../../language'
 import { ToolBarRow } from '../../../../generic/positioning'
 import FilterSearchToolbar from '../../../../FilterSearchToolbar/FilterSearchToolbar'
-import { TableContentToolbar, StyledTableContentWrapper } from './subPages.styles'
-import { StyledTableAnchor } from './subPages.styles'
+import {
+  TableContentToolbar,
+  StyledTableContentWrapper,
+  StyledTableAnchor,
+} from './subPages.styles'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
@@ -81,6 +84,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
       return
     }
 
+    // eslint-disable-next-line consistent-return
     return revenues.map((revenue) => {
       const { id, finance_solution, revenue_type, sustainable_revenue_stream, revenue_amount } =
         revenue

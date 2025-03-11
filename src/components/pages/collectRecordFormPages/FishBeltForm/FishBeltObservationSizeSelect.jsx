@@ -53,7 +53,6 @@ export const FishBeltObservationSizeSelect = ({
         aria-labelledby={labelledBy}
         {...restOfProps}
       >
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <option value=""> </option>
         {binsToUse.map(({ value: optionValue, label }) => {
           return (

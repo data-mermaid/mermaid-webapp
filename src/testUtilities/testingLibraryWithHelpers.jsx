@@ -313,9 +313,12 @@ const renderOverride = () => {
 }
 
 export { default as mockMermaidApiAllSuccessful } from './mockMermaidApiAllSuccessful'
+// eslint-disable-next-line import/export
 export * from '@testing-library/react'
+// eslint-disable-next-line import/export
 export { waitFor, waitForElementToBeRemoved } from '@testing-library/react' // helps with auto imports
 export {
+  // eslint-disable-next-line import/export
   renderOverride as render,
   renderAuthenticated,
   renderAuthenticatedOffline,

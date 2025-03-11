@@ -640,7 +640,6 @@ CollectRecordFormPage.propTypes = {
   isNewRecord: PropTypes.bool.isRequired,
   isParentDataLoading: PropTypes.bool.isRequired,
   observationsTable1Reducer: observationsReducerPropType,
-  // eslint-disable-next-line react/forbid-prop-types
   observationsTable2Reducer: PropTypes.array,
   ObservationTable1: PropTypes.elementType.isRequired,
   ObservationTable2: PropTypes.elementType,
