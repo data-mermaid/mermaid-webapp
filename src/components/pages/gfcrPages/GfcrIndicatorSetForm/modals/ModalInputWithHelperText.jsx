@@ -8,14 +8,14 @@ import {
   HelperText,
   LabelContainer,
   RequiredIndicator,
-} from '../../generic/form'
-import { useStopInputScrollingIncrementNumber } from '../../../library/useStopInputScrollingIncrementNumber'
-import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit'
+} from '../../../../generic/form'
+import { useStopInputScrollingIncrementNumber } from '../../../../../library/useStopInputScrollingIncrementNumber'
+import InputNumberNoScrollWithUnit from '../../../../generic/InputNumberNoScrollWithUnit'
 
-import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
-import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import { IconButton } from '../../generic/buttons'
-import { IconInfo } from '../../icons'
+import InputValidationInfo from '../../../../mermaidInputs/InputValidationInfo/InputValidationInfo'
+import mermaidInputsPropTypes from '../../../../mermaidInputs/mermaidInputsPropTypes'
+import { IconButton } from '../../../../generic/buttons'
+import { IconInfo } from '../../../../icons'
 
 const InputWithLabelAndValidation = ({
   required = false,

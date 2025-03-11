@@ -44,7 +44,6 @@ const F4Form = ({
   handleInputFocus,
   indicatorSetType,
   indicatorSet,
-  setInputToDefaultValue,
   handleFormSubmit,
   displayHelp,
 }) => {
@@ -54,20 +53,17 @@ const F4Form = ({
 
   const _indicatorSetChanged = useEffect(() => {
     if (isUpdateFromCalc) {
+      const formikInitialValues = formik.initialValues
+      const { f4_1_calc, f4_2_calc, f4_3_calc } = indicatorSet ?? {}
+
       // Set values to calculated values or defaults
-      indicatorSet?.f4_1_calc
-        ? formik.setFieldValue('f4_1', indicatorSet.f4_1_calc)
-        : setInputToDefaultValue(formik, 'f4_1')
-      indicatorSet?.f4_2_calc
-        ? formik.setFieldValue('f4_2', indicatorSet.f4_2_calc)
-        : setInputToDefaultValue(formik, 'f4_1')
-      indicatorSet?.f4_3_calc
-        ? formik.setFieldValue('f4_3', indicatorSet.f4_3_calc)
-        : setInputToDefaultValue(formik, 'f4_3')
+      formik.setFieldValue('f4_1', f4_1_calc ? f4_1_calc : formikInitialValues.f4_1)
+      formik.setFieldValue('f4_2', f4_2_calc ? f4_2_calc : formikInitialValues.f4_2)
+      formik.setFieldValue('f4_3', f4_3_calc ? f4_3_calc : formikInitialValues.f4_3)
 
       setIsUpdateFromCalc(false)
     }
-  }, [formik, indicatorSet, isUpdateFromCalc, setInputToDefaultValue])
+  }, [formik, indicatorSet, isUpdateFromCalc])
 
   const handleSaveAndUpdateValues = async () => {
     // Save

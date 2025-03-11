@@ -138,7 +138,6 @@ const MiniMap = ({ mainMap }) => {
 
 MiniMap.propTypes = {
   // complex mapbox object
-  // eslint-disable-next-line react/forbid-prop-types
   mainMap: PropTypes.object.isRequired,
 }
 

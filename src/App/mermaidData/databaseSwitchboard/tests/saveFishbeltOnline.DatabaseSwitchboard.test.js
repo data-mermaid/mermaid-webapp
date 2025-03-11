@@ -1,4 +1,3 @@
-/* eslint-disable max-nested-callbacks */
 import { rest } from 'msw'
 import { validate as validateUuid } from 'uuid'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'

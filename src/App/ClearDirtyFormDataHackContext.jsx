@@ -31,7 +31,6 @@ const useRouterFromClearPersistedFormDataHack = () => {
 
 ClearPersistedFormDataHackProvider.propTypes = {
   children: PropTypes.node.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
   value: PropTypes.any,
 }
 
