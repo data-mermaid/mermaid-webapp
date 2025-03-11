@@ -22,6 +22,9 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
     initialValues: { newOrganizationSuggestion: '' },
   })
 
+  const isInputDirty =
+    formik.values.newOrganizationSuggestion !== formik.initialValues.newOrganizationSuggestion
+
   const resetAndCloseModal = () => {
     formik.resetForm()
     onDismiss()
@@ -61,7 +64,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={resetAndCloseModal}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={handleOnSubmit}>
+      <ButtonPrimary onClick={handleOnSubmit} disabled={!isInputDirty}>
         <IconSend />
         Send to MERMAID for review
       </ButtonPrimary>
