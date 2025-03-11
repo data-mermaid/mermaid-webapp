@@ -160,7 +160,8 @@ const NavMenu = ({ subNavNode = null }) => {
               </li>
               <li>
                 <NavLinkSidebar to={`${projectUrl}/management-regimes-overview`}>
-                  <IconManagementRegimesOverview /> <span>Management Regimes Overview</span>
+                  <IconManagementRegimesOverview />
+                  <span>{language.pages.managementRegimesOverview.navTitle}</span>
                 </NavLinkSidebar>
               </li>
             </ul>
