@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-      # - 165-gh-actions
+      - 165-gh-actions
     tags:
       - 'v[0-9]+.[0-9]+'        # eg: v1.1
       - 'v[0-9]+.[0-9]+.[0-9]+' # eg: v1.1.1
@@ -12,6 +12,12 @@ on:
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read  # This is required for actions/checkout
+
+env:
+  REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
+  REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
+  REACT_APP_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
+  REACT_APP_GFCR_TEST_USERS: ${{ secrets.REACT_APP_GFCR_TEST_USERS }}
 
 jobs:
   deps-cache:
@@ -41,10 +47,10 @@ jobs:
     needs: [deps-cache]
     uses: ./.github/workflows/_lint.yml
 
-  # call-test:
-  #   if: github.event.pull_request.draft == false
-  #   needs: [deps-cache, call-lint]
-  #   uses: ./.github/workflows/_test.yml
+  call-test:
+    if: github.event.pull_request.draft == false
+    needs: [deps-cache, call-lint]
+    uses: ./.github/workflows/_test.yml
 
   call-cdk-deploy:
     concurrency:
@@ -79,19 +85,11 @@ jobs:
           role-skip-session-tagging: true
 
       - name: Create version file for dev
-        if: startsWith(github.ref, 'refs/heads/develop')
-        # || startsWith(github.ref, 'refs/heads/165-gh-actions')
+        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions')
         run: |
           short_sha=$(git rev-parse --short ${{ github.sha }})
           echo "export const versionNumber = '$short_sha'" > src/version.js
           cat src/version.js
-
-      - name: Set common variables
-        run: |
-          echo "REACT_APP_AUTH0_DOMAIN=datamermaid.auth0.com" >> "$GITHUB_ENV"
-          echo "REACT_APP_CORAL_ATLAS_APP_ID=v8nkxznp3m" >> "$GITHUB_ENV"
-          echo "REACT_APP_MERMAID_API=https://dev-api.datamermaid.org/v1" >> "$GITHUB_ENV"
-          echo "REACT_APP_MERMAID_WHATS_NEW_LINK=https://datamermaid.org/reef-stories/mermaid-v2-what-s-new" >> "$GITHUB_ENV"
 
       - name: Set variables and version for dev
         if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions')
@@ -135,8 +133,6 @@ jobs:
       - name: CDK Deploy DEV
         if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions')
         env:
-          DEPLOY_AWS_ROLE: ${{ secrets.DEPLOY_AWS_ROLE }}
-          SYS_EMAIL: ${{ secrets.SYS_EMAIL }}
           PYTHONPATH: ${{ github.workspace }}
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           CDK_DEFAULT_REGION: us-east-1
@@ -148,8 +144,6 @@ jobs:
       - name: CDK Deploy PROD
         if: startsWith(github.ref, 'refs/tags')
         env:
-          DEPLOY_AWS_ROLE: ${{ secrets.DEPLOY_AWS_ROLE }}
-          SYS_EMAIL: ${{ secrets.SYS_EMAIL }}
           PYTHONPATH: ${{ github.workspace }}
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           CDK_DEFAULT_REGION: us-east-1
