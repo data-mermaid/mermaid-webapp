@@ -31,7 +31,7 @@ export const EditCitationModal = ({
   const [editCitationValue, setEditCitationValue] = useState('')
 
   const isEditCitationValueDirty = citationToUse !== editCitationValue
-  const isEditCitationValueDefined = !!editCitationValue.trim()
+  const isEditCitationValueDefined = !!editCitationValue?.trim()
 
   const {
     updated_on,
@@ -93,7 +93,7 @@ export const EditCitationModal = ({
     onDismiss()
   }
 
-  const citationPreview = editCitationValue.trim() ? (
+  const citationPreview = editCitationValue?.trim() ? (
     <>
       {editCitationValue} <DisabledText>{citation_retrieved_text}</DisabledText>
     </>

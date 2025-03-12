@@ -58,7 +58,7 @@ The purpose of this list is to provide a list of features to be manually checked
 
 - [ ] edit sample unit
 
-## Observers and transects
+## Sample Units / Observers
 
 ## Management regimes overview
 

@@ -147,7 +147,11 @@ const ManagementRegimesOverview = () => {
         disableSortBy: true,
       },
       {
-        Header: () => <HeaderCenter>Transect Number / Management Regime</HeaderCenter>,
+        Header: () => (
+          <HeaderCenter>
+            {language.pages.managementRegimesOverview.tableSubSectionTitle}
+          </HeaderCenter>
+        ),
         id: 'management-regime-numbers',
         columns: getManagementRegimeTransectNumberColumnHeaders,
         disableSortBy: true,

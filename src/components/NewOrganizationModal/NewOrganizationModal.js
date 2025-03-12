@@ -1,6 +1,5 @@
 import { toast } from 'react-toastify'
-import { useFormik } from 'formik'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -17,18 +16,25 @@ const ModalInputRow = styled(InputRow)`
   display: block;
   border: none;
 `
-const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
-  const formik = useFormik({
-    initialValues: { newOrganizationSuggestion: '' },
-  })
+const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }) => {
+  const [newOrganizationSuggestion, setNewOrganizationSuggestion] = useState(initialValue)
+  const isSubmitButtonDisabled = newOrganizationSuggestion === ''
+  useEffect(
+    function useOrganizationSelectSearchTextAsInitialValue() {
+      if (initialValue) {
+        setNewOrganizationSuggestion(initialValue)
+      }
+    },
+    [initialValue],
+  )
 
   const resetAndCloseModal = () => {
-    formik.resetForm()
+    setNewOrganizationSuggestion('')
     onDismiss()
   }
 
   const handleOnSubmit = () => {
-    onSubmit(formik.values.newOrganizationSuggestion)
+    onSubmit(newOrganizationSuggestion)
     resetAndCloseModal()
     toast.success(...getToastArguments(language.success.newOrganizationAdd))
   }
@@ -46,11 +52,9 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
             aria-labelledby="modal-input-for-org-label"
             aria-describedby="modal-input-for-org-descp"
             id="modal-input-for-org"
-            value={formik.values.newOrganizationSuggestion}
+            value={newOrganizationSuggestion}
             autoFocus
-            onChange={(event) =>
-              formik.setFieldValue('newOrganizationSuggestion', event.target.value)
-            }
+            onChange={(event) => setNewOrganizationSuggestion(event.target.value)}
           />
           {helperText && <HelperText id="modal-input-for-org-descp">{helperText}</HelperText>}
         </div>
@@ -61,7 +65,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={resetAndCloseModal}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={handleOnSubmit}>
+      <ButtonPrimary onClick={handleOnSubmit} disabled={isSubmitButtonDisabled}>
         <IconSend />
         Send to MERMAID for review
       </ButtonPrimary>
@@ -83,6 +87,7 @@ NewOrganizationModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  initialValue: PropTypes.string,
 }
 
 export default NewOrganizationModal
