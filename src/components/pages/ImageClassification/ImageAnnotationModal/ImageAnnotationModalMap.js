@@ -277,7 +277,12 @@ const ImageAnnotationModalMap = ({
           },
         })
       })
-      map.current.loadImage('/label-background.png', (error, image) => {
+      const prNumber = process.env.REACT_APP_PR_NUMBER
+      const labelBackgroundUrl = prNumber ? +'/label-background.png' : '/label-background.png'
+
+      // eslint-disable-next-line no-console
+      console.log('labelBackgroundUrl', labelBackgroundUrl)
+      map.current.loadImage(labelBackgroundUrl, (error, image) => {
         if (error) {
           return
         }
