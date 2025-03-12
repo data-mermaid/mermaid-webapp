@@ -277,7 +277,7 @@ const ImageAnnotationModalMap = ({
           },
         })
       })
-      map.current.loadImage('/label-background.png', (error, image) => {
+      map.current.loadImage(process.env.PUBLIC_URL + '/label-background.png', (error, image) => {
         if (error) {
           return
         }

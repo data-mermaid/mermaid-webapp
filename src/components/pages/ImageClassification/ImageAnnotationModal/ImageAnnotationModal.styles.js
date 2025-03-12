@@ -120,6 +120,7 @@ export const PopupTdForRadio = styled(PopupTd)`
 export const NewAttributeModalContentContainer = styled.div`
   display: flex;
   gap: ${theme.spacing.large};
+  min-height: 250px;
 `
 
 export const NewAttributeModalFooterContainer = styled.div`
