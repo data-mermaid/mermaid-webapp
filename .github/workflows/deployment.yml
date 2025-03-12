@@ -127,7 +127,7 @@ jobs:
       - name: Install IaC dependancies
         if: ${{ steps.iac-cache.outputs.cache-hit != 'true' }}
         working-directory: iac
-        run: npm ci
+        run: npm ci && npm install -g aws-cdk
 
       - name: CDK Deploy DEV
         if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions')
