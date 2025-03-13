@@ -40,7 +40,7 @@ jobs:
 
       - name: Install yarn dependencies
         if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
       - name: SED Add homepage route based on PR Number
         run: |

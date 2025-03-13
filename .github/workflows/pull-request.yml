@@ -35,7 +35,7 @@ jobs:
 
       - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
         name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
   call-lint:
     if: github.event.pull_request.draft == false

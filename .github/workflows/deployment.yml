@@ -39,7 +39,7 @@ jobs:
 
       - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
         name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
   call-lint:
     if: github.event.pull_request.draft == false
@@ -71,7 +71,7 @@ jobs:
 
       - name: Install yarn dependencies
         if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4.1.0
