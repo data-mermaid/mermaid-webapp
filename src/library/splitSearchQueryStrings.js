@@ -13,11 +13,11 @@ export const splitSearchQueryStrings = (words) => {
   const parts = words.split(regex)
   const searchItems = []
 
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let n = 0; n < parts.length; n++) {
     let item = parts[n]
 
     if (!item || item.trim().length === 0) {
-      // eslint-disable-next-line no-continue
       continue
     }
     if (item.startsWith('"')) {
