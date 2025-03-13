@@ -154,8 +154,8 @@ const NavMenu = ({ subNavNode = null }) => {
             <ul>
               <li>
                 <NavLinkSidebar to={`${projectUrl}/observers-and-transects`}>
-                  <IconUsersAndTransects />{' '}
-                  <span>{language.pages.usersAndTransectsTable.title}</span>
+                  <IconUsersAndTransects />
+                  <span>{language.pages.usersAndTransectsTable.navTitle}</span>
                 </NavLinkSidebar>
               </li>
               <li>

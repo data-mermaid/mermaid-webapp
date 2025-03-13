@@ -665,7 +665,8 @@ const pages = {
     title: 'Management Regimes',
   },
   usersAndTransectsTable: {
-    title: (
+    title: 'Sample Units / Observers',
+    navTitle: (
       <>
         Sample Units / <br /> Observers
       </>
@@ -688,7 +689,7 @@ const pages = {
         Sample Units / <br /> Management Regimes
       </>
     ),
-    title: 'Sample Units / Management Regime',
+    title: 'Sample Units / Management Regimes',
     tableSubSectionTitle: 'Submitted / Management Regime',
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubText:
