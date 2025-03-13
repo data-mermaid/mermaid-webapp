@@ -10,7 +10,6 @@ on:
 env:
   S3_BUCKET: preview.app2.datamermaid.org
   PR_NUMBER: ${{ github.event.number }}
-  PUBLIC_URL: ${{github.event.number}}
   REACT_APP_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
   REACT_APP_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
   REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
