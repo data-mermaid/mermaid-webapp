@@ -75,7 +75,7 @@ const DatabaseSwitchboardState = class {
     }
 
     if (statusCode === 409) {
-      const { sampleevent, ...sampleUnitProtocols } = itemReturnedFromApiPush.data // eslint-disable-line no-unused-vars
+      const { sampleevent, ...sampleUnitProtocols } = itemReturnedFromApiPush.data // eslint-disable-line @typescript-eslint/no-unused-vars
       const sampleUnitProtocolValues = Object.values(sampleUnitProtocols).flat()
       const associatedSampleUnits =
         getAssociatedSubmittedSampleUnitObjectsIncludingUiLabel(sampleUnitProtocolValues)

@@ -1,11 +1,11 @@
 import { createGlobalStyle, css } from 'styled-components'
-import raw from 'raw.macro'
 import theme from '../../theme'
 import { hoverState } from './mediaQueries'
 import '@fontsource/open-sans'
 import '@fontsource/open-sans/700.css'
 
-const toastifyCss = raw('react-toastify/dist/ReactToastify.css')
+// eslint-disable-next-line import/no-unresolved
+import toastifyCss from 'react-toastify/dist/ReactToastify.css?raw'
 
 const GlobalStyle = createGlobalStyle`
     ${toastifyCss}

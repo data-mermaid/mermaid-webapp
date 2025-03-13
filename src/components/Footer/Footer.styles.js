@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components/macro'
+import styled, { css } from 'styled-components'
 import theme from '../../theme'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
@@ -106,7 +106,10 @@ export const FooterNav = styled('nav')`
   align-items: center;
 `
 
-export const StyledSelect = styled('select')`
+export const HelpLinksWrapper = styled.ul`
+  all: unset;
+  background-color: ${theme.color.white};
+  text-align: left;
   position: absolute;
   cursor: pointer;
   top: calc(100% - 9rem);
@@ -115,18 +118,21 @@ export const StyledSelect = styled('select')`
   min-width: auto;
   min-height: auto;
   overflow: hidden;
+  border: ${theme.spacing.borderSmall} solid ${theme.color.secondary};
 
-  option {
+  & li > a {
+    all: unset;
+    font-size: ${theme.typography.defaultFontSize};
+    white-space: nowrap;
+  }
+
+  li {
     padding: 0.3em;
   }
 
-  option:hover {
+  li:hover {
     background-color: ${theme.color.secondaryHover};
     color: black;
-  }
-
-  option:checked {
-    background-color: ${theme.color.secondaryHover};
   }
 `
 export const HelpContainer = styled('div')`
