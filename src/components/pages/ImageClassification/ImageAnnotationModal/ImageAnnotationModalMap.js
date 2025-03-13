@@ -277,6 +277,7 @@ const ImageAnnotationModalMap = ({
           },
         })
       })
+      // why branch not working,but /1064 is?
       map.current.loadImage(process.env.PUBLIC_URL + '/label-background.png', (error, image) => {
         if (error) {
           return
