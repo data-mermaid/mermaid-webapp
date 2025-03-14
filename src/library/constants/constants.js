@@ -17,7 +17,17 @@ export const apiDataTypes = {
   projectProfiles: 'project_profiles',
   projectSites: 'project_sites',
 }
+export const IMAGE_CLASSIFICATION_COLORS = {
+  confirmed: '#5EFF13',
+  unconfirmed: '#0080FF',
+  unclassified: '#BF6B69',
+  hover: '#ffb3fe',
+  selected: '#FF00FB',
+  outline: '#000',
+}
+
 Object.freeze(PROJECT_CODES)
 Object.freeze(apiDataTypes)
+Object.freeze(IMAGE_CLASSIFICATION_COLORS)
 
 export const PENDING_USER_PROFILE_NAME = '(pending user)'

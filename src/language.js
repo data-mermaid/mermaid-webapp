@@ -1380,6 +1380,7 @@ const getValidationMessage = (validation, projectId = '') => {
     unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
     value_not_set: () => 'Value is not set',
     default: () => code || name,
+    unconfirmed_annotation: () => 'Wrong number of confirmed annotations',
   }
 
   return (validationMessages[code] || validationMessages.default)()
@@ -1567,6 +1568,30 @@ const tooltipText = {
   softCoralPercentage: 'Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
 }
 
+const imageClassification = {
+  sampleUnitInputSelector: {
+    title: 'Image classification is now available in MERMAID.',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel leo pellentesque lorem interdum pretium. Aenean varius luctus ex, vel blandit elit mollis non. Nam risus felis, finibus et nisl vel, convallis viverra odio. Nunc ut turpis tortor. Praesent consectetur nibh quis tortor bibendum fermentum',
+    button1: 'Use image classification for this sample unit',
+    button2: 'Manually input observation for this sample unit',
+    offlineHeader: 'Sample unit observations unavailable offline',
+    offlineBody: 'This sample unit is using image classification and is unavailable offline.',
+  },
+  imageClassficationModal: {
+    errors: {
+      duplicateFiles: 'Some files are duplicates and were not added.',
+      invalidFiles:
+        'Some files were not added due to invalid file types. Only JPEG, PJPEG, PNG, and MPO files are allowed.',
+      oversizedFiles: 'Some files were not added because they exceed the 30 MB size limit.',
+      dimensionsExceededFiles:
+        'Some files were not added because they exceed the 8000x8000 dimensions limit.',
+      corruptFiles: 'Some files were not added because they appear to be corrupt.',
+    },
+    success: 'Files uploaded successfully.',
+  },
+}
+
 export default {
   apiDataTableNames,
   autocomplete,
@@ -1583,6 +1608,7 @@ export default {
   getValidationMessage,
   header,
   helperText,
+  imageClassification,
   inlineMessage,
   loadingIndicator,
   map,
