@@ -8,7 +8,7 @@ import theme from '../../../../theme'
 const PaginationButtonStyles = css`
   border: none;
   cursor: pointer;
-  padding: ${theme.spacing.xsmall};
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
   &:disabled {
     cursor: not-allowed;
     color: ${theme.color.primaryDisabledColor};
