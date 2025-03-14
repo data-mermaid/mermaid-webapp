@@ -25,10 +25,10 @@ export default [
     settings: {
       'import/resolver': {
         node: {
-          extensions: ['.js', '.jsx', 'ts', 'tsx'],
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
       },
-      'import/extensions': ['.js', '.jsx', 'ts', 'tsx'],
+      'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
     },
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     rules: {
