@@ -47,7 +47,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
   const _initializeAuthentication = useEffect(() => {
     let isMounted = true
     const auth0CookieName =
-      ' ' + `auth0.${process.env.REACT_APP_AUTH0_CLIENT_ID}.is.authenticated=true`
+      ' ' + `auth0.${import.meta.env.VITE_AUTH0_CLIENT_ID}.is.authenticated=true`
 
     const auth0CookieExists = document?.cookie?.split(';').includes(auth0CookieName)
 
@@ -69,9 +69,9 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
         let errorDescription = urlParams.get('error_description')
         if (errorDescription && errorDescription === 'email_not_verified') {
           let returnMsg = 'You must verify your email before you can login.'
-          const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID
+          const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID
           window.location.href = `https://${
-            process.env.REACT_APP_AUTH0_DOMAIN
+            import.meta.env.VITE_AUTH0_DOMAIN
           }/login?client=${clientId}&error=${error}&error_description=${encodeURIComponent(
             returnMsg,
           )}`
