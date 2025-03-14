@@ -182,7 +182,6 @@ const ManagementRulesInput = ({
 
   return (
     <InputRow {...restOfProps} validationType={validationType}>
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <LabelContainer>
         <label id={`${id}-management-rules-input`}>{label}</label>
         <span>{required ? <RequiredIndicator /> : null}</span>

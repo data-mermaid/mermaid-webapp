@@ -131,7 +131,12 @@ const ProjectModal = ({
   }
 
   const handleOnSubmit = () => {
-    project ? copyExistingProject() : createNewProject()
+    if (project) {
+      copyExistingProject()
+    }
+    if (!project) {
+      createNewProject()
+    }
   }
 
   const checkValidationMessage = () => {

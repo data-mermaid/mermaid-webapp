@@ -155,7 +155,7 @@ const FishBeltObservationTable = ({
 
   const handleInfoIconClick = (event, label) => {
     if (currentHelperTextLabel === label) {
-      isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+      setIsHelperTextShowing(!isHelperTextShowing)
     } else {
       setIsHelperTextShowing(true)
       setCurrentHelperTextLabel(label)
@@ -354,7 +354,8 @@ const FishBeltObservationTable = ({
                   // This approach seems easier than handling a list of refs for each observation
                   // and the logic to focus on the right one. in react autoFocus just focuses
                   // the newest element with the autoFocus tag
-                  autoFocus={autoFocusAllowed}
+                  // eslint-disable-next-line jsx-a11y/no-autofocus
+                  autoFocus={autoFocusAllowed} // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
                   isLastRow={observationsState.length === rowNumber}
                   aria-labelledby="fish-name-label"
                   options={fishNameOptions}

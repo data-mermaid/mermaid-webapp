@@ -48,6 +48,7 @@ const groupManagementRegimes = (records) => {
 
     for (const managementRegime of management_regimes) {
       accumulator[managementRegime.mr_id] = accumulator[managementRegime.mr_id] || {}
+
       accumulator[managementRegime.mr_id] = {
         id: managementRegime.mr_id,
         name: managementRegime.mr_name,

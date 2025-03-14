@@ -34,7 +34,6 @@ const InputRadioWithLabelAndValidation = ({
 
   return (
     <InputRow required={required} validationType={validationType} data-testid={testId}>
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label id={`${id}-input-radio-with-label-and-validation`}>
         {label}
         {required ? <RequiredIndicator /> : null}

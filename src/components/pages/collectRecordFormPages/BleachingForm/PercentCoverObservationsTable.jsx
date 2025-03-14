@@ -74,7 +74,7 @@ const PercentCoverObservationTable = ({
 
   const handleInfoIconClick = (event, label) => {
     if (currentHelperTextLabel === label) {
-      isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+      setIsHelperTextShowing(!isHelperTextShowing)
     } else {
       setIsHelperTextShowing(true)
       setCurrentHelperTextLabel(label)
@@ -180,7 +180,8 @@ const PercentCoverObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateHardCoralPercent' })
               }}
-              autoFocus={autoFocusAllowed}
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus={autoFocusAllowed} // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
               onKeyDown={handleObservationKeyDown}
             />
           </Td>

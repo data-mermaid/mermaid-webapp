@@ -1,4 +1,3 @@
-/* eslint-disable max-nested-callbacks */
 import { validate as validateUuid } from 'uuid'
 import {
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess,

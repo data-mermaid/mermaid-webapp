@@ -87,6 +87,7 @@ const groupCollectSampleUnitsByProfileSummary = (records) => {
         const collectRecords = profileSummary[collectRecordProfile]?.collect_records
 
         accumulator[collectRecordProfile] = accumulator[collectRecordProfile] || {}
+
         accumulator[collectRecordProfile] = {
           profileId: collectRecordProfile,
           profileName: profileSummary[collectRecordProfile].profile_name,

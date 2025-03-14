@@ -1,5 +1,4 @@
-import { css } from 'styled-components'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import theme from '../../../theme'
 import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { IconAlert } from '../../icons'

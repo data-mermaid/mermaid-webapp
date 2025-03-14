@@ -101,7 +101,7 @@ const BenthicPitObservationsTable = ({
 
   const handleInfoIconClick = (event, label) => {
     if (currentHelperTextLabel === label) {
-      isHelperTextShowing ? setIsHelperTextShowing(false) : setIsHelperTextShowing(true)
+      setIsHelperTextShowing(!isHelperTextShowing)
     } else {
       setIsHelperTextShowing(true)
       setCurrentHelperTextLabel(label)
@@ -218,7 +218,8 @@ const BenthicPitObservationsTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
-                  autoFocus={autoFocusAllowed}
+                  // eslint-disable-next-line jsx-a11y/no-autofocus
+                  autoFocus={autoFocusAllowed} // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
                   isLastRow={observationsState.length === rowNumber}
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
@@ -243,7 +244,6 @@ const BenthicPitObservationsTable = ({
               value={growth_form}
               aria-labelledby="growth-form-label"
             >
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
               <option value=""> </option>
               {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>

@@ -17,8 +17,11 @@ import PageUnavailable from '../../../PageUnavailable'
 import language from '../../../../../language'
 import { ToolBarRow } from '../../../../generic/positioning'
 import FilterSearchToolbar from '../../../../FilterSearchToolbar/FilterSearchToolbar'
-import { TableContentToolbar, StyledTableContentWrapper } from './subPages.styles'
-import { StyledTableAnchor } from './subPages.styles'
+import {
+  TableContentToolbar,
+  StyledTableContentWrapper,
+  StyledTableAnchor,
+} from './subPages.styles'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import InvestmentModal from '../modals/InvestmentModal'
@@ -86,6 +89,7 @@ const Investments = ({
       return
     }
 
+    // eslint-disable-next-line consistent-return
     return investments.map((investment) => {
       const { id, finance_solution, investment_source, investment_type, investment_amount } =
         investment
