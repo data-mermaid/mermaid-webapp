@@ -55,7 +55,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const [sites, setSites] = useState([])
   const [isImageClassificationSelected, setIsImageClassification] = useState(null)
 
-  const [observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
+  const [observationsDispatch] = observationsReducer
   const enableImageClassification = collectRecordBeingEdited?.data?.image_classification
 
   useEffect(

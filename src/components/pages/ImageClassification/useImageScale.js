@@ -24,6 +24,7 @@ export const useImageScale = ({ hasMapLoaded, dataToReview }) => {
 
     window.addEventListener('resize', updateImgScaleOnWindowResize)
 
+    // eslint-disable-next-line consistent-return
     return () => {
       window.removeEventListener('resize', updateImgScaleOnWindowResize)
     }

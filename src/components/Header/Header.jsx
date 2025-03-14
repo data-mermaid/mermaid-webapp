@@ -42,7 +42,7 @@ const GlobalLinks = () => {
     // we use a hover event instead of click so devs can confirm the strategy, and the hover behaviour shows the href in the
     // browser bottom left corner that will
     // be followed onClick (instead of a stale one from the last click)
-    // eslint-disable-next-line no-param-reassign
+
     event.target.href = isAppOnline
       ? `${import.meta.env.VITE_MERMAID_REFERENCE_LINK}?nocache=${Date.now()}`
       : import.meta.env.VITE_MERMAID_REFERENCE_LINK

@@ -28,7 +28,7 @@ const BenthicPitLitObservationSummaryStats = ({
     const observationsGroupedByTopLevelCategory = observationsWithTopLevelCategoryNames.reduce(
       (accumulator, observation) => {
         const { topLevelCategoryName } = observation
-        // eslint-disable-next-line no-param-reassign
+
         accumulator[topLevelCategoryName] = accumulator[topLevelCategoryName] || []
         accumulator[topLevelCategoryName].push(observation)
 

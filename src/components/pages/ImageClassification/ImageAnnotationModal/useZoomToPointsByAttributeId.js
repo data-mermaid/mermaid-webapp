@@ -1,6 +1,6 @@
 // importing from @turf/turf causes issues with tests, so import each utility individually
-import bbox from '@turf/bbox'
-import buffer from '@turf/buffer'
+import { bbox } from '@turf/bbox'
+import { buffer } from '@turf/buffer'
 
 export const useZoomToPointsByAttributeId = ({ getPointsGeojson, mapRef }) => {
   const zoomToPointsByAttributeId = (attributeId) => {
