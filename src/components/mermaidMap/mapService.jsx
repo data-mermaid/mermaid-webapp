@@ -453,21 +453,17 @@ export const addClusterEventListeners = (map, popUpRef, choices) => {
   })
 
   map.on('mouseenter', 'clusters', () => {
-    // eslint-disable-next-line no-param-reassign
     map.getCanvas().style.cursor = 'pointer'
   })
   map.on('mouseleave', 'clusters', () => {
-    // eslint-disable-next-line no-param-reassign
     map.getCanvas().style.cursor = ''
   })
 
   map.on('mouseenter', 'unclustered-point', () => {
-    // eslint-disable-next-line no-param-reassign
     map.getCanvas().style.cursor = 'pointer'
   })
 
   map.on('mouseleave', 'unclustered-point', () => {
-    // eslint-disable-next-line no-param-reassign
     map.getCanvas().style.cursor = ''
   })
 }

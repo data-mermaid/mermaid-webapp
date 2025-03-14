@@ -68,7 +68,7 @@ export default [
         },
       ],
       '@typescript-eslint/no-empty-function': 'off',
-      'no-param-reassign': ['error', { props: true }],
+      'no-param-reassign': 'error',
       'react/no-danger': 'error',
       'max-nested-callbacks': ['error', { max: 3 }],
       'consistent-return': 'error',

@@ -35,7 +35,6 @@ const ProjectHealthMixin = (Base) =>
       sampleUnitNumbers,
     ) {
       return sampleUnitNumbers.reduce((accumulator, sampleUnit) => {
-        // eslint-disable-next-line no-param-reassign
         accumulator[sampleUnit.sample_date] = accumulator[sampleUnit.sample_date] || []
         accumulator[sampleUnit.sample_date].push(sampleUnit)
 
@@ -45,9 +44,8 @@ const ProjectHealthMixin = (Base) =>
 
     #groupSampleEventUnitBySite = function groupSampleEventUnitBySite(sampleEventUnitRows) {
       return sampleEventUnitRows.reduce((accumulator, record) => {
-        // eslint-disable-next-line no-param-reassign
         accumulator[record.site_id] = accumulator[record.site_id] || {}
-        // eslint-disable-next-line no-param-reassign
+
         accumulator[record.site_id] = {
           site_id: record.site_id,
           site_name: record.site_name,
@@ -155,9 +153,9 @@ const ProjectHealthMixin = (Base) =>
             const sampleUnitMethods = Object.keys(sampleUnit[1].sample_unit_methods).map(
               (method) => language.protocolTitles[method],
             )
-            // eslint-disable-next-line no-param-reassign
+
             accumulator[sampleUnit[0]] = accumulator[sampleUnit[0]] || []
-            // eslint-disable-next-line no-param-reassign
+
             accumulator[sampleUnit[0]] = sampleUnitMethods
 
             return accumulator
@@ -367,9 +365,8 @@ const ProjectHealthMixin = (Base) =>
 
           for (const [sampleUnit, sampleUnitNumbers] of Object.entries(otherProtocols)) {
             const managements = sampleUnitNumbers.reduce((accumulator, item) => {
-              // eslint-disable-next-line no-param-reassign
               accumulator[item.management.id] = accumulator[item.management.id] || {}
-              // eslint-disable-next-line no-param-reassign
+
               accumulator[item.management.id] = {
                 mr_name: item.management.name,
                 mr_id: item.management.id,

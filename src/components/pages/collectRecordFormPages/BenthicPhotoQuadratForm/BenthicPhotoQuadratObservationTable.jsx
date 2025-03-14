@@ -113,7 +113,7 @@ const BenthicPhotoQuadratObservationTable = ({
 
     const categoryGroups = addTopCategoryInfoToObservation.reduce((accumulator, obs) => {
       const benthicAttributeName = getCategory(obs.top_level_category)?.label
-      // eslint-disable-next-line no-param-reassign
+
       accumulator[benthicAttributeName] = accumulator[benthicAttributeName] || []
       accumulator[benthicAttributeName].push(obs)
 
