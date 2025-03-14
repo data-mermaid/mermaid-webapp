@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import styled, { css } from 'styled-components/macro'
+import styled, { css } from 'styled-components'
 
 import { hoverState } from '../../library/styling/mediaQueries'
 import theme from '../../theme'
@@ -61,7 +61,7 @@ export const ButtonPrimary = styled(Button)`
   }
 `
 
-const buttonSecondaryCss = css`
+export const buttonSecondaryCss = css`
   background-color: ${theme.color.white};
   color: ${theme.color.secondaryText};
   border: solid 1px ${theme.color.secondaryBorder};

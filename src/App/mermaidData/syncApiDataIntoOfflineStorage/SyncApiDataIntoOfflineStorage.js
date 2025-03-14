@@ -59,8 +59,7 @@ const SyncApiDataIntoOfflineStorage = class {
         // New, edited, and deleted items will all have a uiState_pushToApi flag locally which can be used to filter
         .filter((item) => item.uiState_pushToApi)
         // Destructuring assignment with "rest property" removes uiState_pushToApi so it will be omitted from the API request
-        // eslint-disable-next-line no-unused-vars
-        .map(({ uiState_pushToApi, ...keepProps }) => keepProps)
+        .map(({ uiState_pushToApi, ...keepProps }) => keepProps) // eslint-disable-line @typescript-eslint/no-unused-vars
     )
   }
 
