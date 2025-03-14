@@ -36,6 +36,7 @@ import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 import { routes } from './routes'
 
 function App({ dexieCurrentUserInstance }) {
+  // some comments bla bla
   const { isAppOnline, setServerNotReachable } = useOnlineStatus()
   const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
