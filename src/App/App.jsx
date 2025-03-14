@@ -36,6 +36,7 @@ import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 import { routes } from './routes'
 
 function App({ dexieCurrentUserInstance }) {
+  // trigger pr deploy cause it didnt work last time
   const { isAppOnline, setServerNotReachable } = useOnlineStatus()
   const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()
   const apiBaseUrl = import.meta.env.VITE_MERMAID_API
