@@ -45,6 +45,7 @@ const InputAutocomplete = ({
   onKeyDown = undefined,
   options,
   value = '',
+  onInputValueChange = undefined,
   ...restOfProps
 }) => {
   const optionMatchingValueProp = useMemo(
@@ -82,6 +83,8 @@ const InputAutocomplete = ({
     (changes) => {
       const { selectedItem, inputValue } = changes
 
+      onInputValueChange?.(inputValue)
+
       const shouldMenuBeOpen = inputValue?.length >= 1 && inputValue !== selectedValue.label
 
       if (selectedItem) {
@@ -97,7 +100,7 @@ const InputAutocomplete = ({
         setIsMenuOpen(false)
       }
     },
-    [selectedValue.label, onChange],
+    [onInputValueChange, selectedValue.label, onChange],
   )
 
   const handleInputValueChange = useCallback(
@@ -196,6 +199,7 @@ InputAutocomplete.propTypes = {
   onKeyDown: PropTypes.func,
   options: inputOptionsPropTypes.isRequired,
   value: PropTypes.string,
+  onInputValueChange: PropTypes.func,
 }
 
 export default InputAutocomplete

@@ -59,6 +59,7 @@ const ProjectInfo = () => {
   const [isEditCitationModalOpen, setIsEditCitationModalOpen] = useState(false)
   const [citationToUse, setCitationToUse] = useState('')
   const [projectProfiles, setProjectProfiles] = useState([])
+  const [organizationAutocompleteSearchText, setOrganizationAutocompleteSearchText] = useState('')
 
   const { currentUser } = useCurrentUser()
   const { currentProject: projectBeingEdited, setCurrentProject: setProjectBeingEdited } =
@@ -329,6 +330,7 @@ const ProjectInfo = () => {
             }}
             noResultsText={language.pages.projectInfo.noOrganizationFound}
             noResultsAction={noOrganizationResult}
+            onInputValueChange={setOrganizationAutocompleteSearchText}
           />
         </InputAutocompleteWrapper>
         <OrganizationList
@@ -428,6 +430,7 @@ const ProjectInfo = () => {
 
           formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
         }}
+        initialValue={organizationAutocompleteSearchText}
       />
       <EditCitationModal
         citationToUse={citationToUse}

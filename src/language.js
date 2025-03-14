@@ -665,7 +665,12 @@ const pages = {
     title: 'Management Regimes',
   },
   usersAndTransectsTable: {
-    title: 'Observers and Sample Units',
+    title: 'Sample Units / Observers',
+    navTitle: (
+      <>
+        Sample Units / <br /> Observers
+      </>
+    ),
     filterToolbarText: 'Filter this table by site',
     missingSiteName: '(Missing Site Name)',
     missingMRName: '(Missing MR Name)',
@@ -679,7 +684,13 @@ const pages = {
     ],
   },
   managementRegimesOverview: {
-    title: 'Management Regimes Overview',
+    navTitle: (
+      <>
+        Sample Units / <br /> Management Regimes
+      </>
+    ),
+    title: 'Sample Units / Management Regimes',
+    tableSubSectionTitle: 'Submitted / Management Regime',
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubText:
       'This page will show the Management Regime of submitted sample units by method and site.',
