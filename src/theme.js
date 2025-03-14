@@ -1,4 +1,4 @@
-import { css } from 'styled-components/macro'
+import { css } from 'styled-components'
 import colorHelper from 'color'
 
 const primary = colorHelper('#174b82')

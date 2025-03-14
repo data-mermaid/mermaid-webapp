@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 import { InputRow } from '../generic/form'
 import MapPin from '../../assets/map-pin.png'
 

@@ -6,6 +6,7 @@
 
   - As of last readme update 4.1.1 has been tested and works
   - Some developers have had issues when versions of Yarn autogenerate a `packageManager` setting in `package.json`. This has caused tests to fail or other things to have errors. The solution in one case was to add COREPACK_ENABLE_AUTO_PIN=0 to the shell environment before running any yarn commands.
+
 - Node 20.10.0
   - Optionally but recommended, use [NVM](https://github.com/nvm-sh/nvm#installing-and-updating) to set the node version: run `nvm use`
 - [Docker](https://docs.docker.com/get-docker/)
@@ -28,12 +29,13 @@
 - `plop <filename>` scaffolds component files inside the `src/components` directory
 - `src/components/generic` are for reusable components that may be useful for other projects. They should be developed to be completely unaware of their context. If a reusable component is MERMAID-specific, it can go elsewhere.
 - `src/components/pages` are for pages or page-like components
-- Styles use Styled Components for easy scoping, speed, and maintainability. Make sure to import using the macro for easier debugging (it results in more human-friendly classnames) `import styled from 'styled-components/macro'`
+- Styles use Styled Components for easy scoping, speed, and maintainability.
 - Focus on user-focused integration tests, and testing complex pieces of code. 100% test coverage is not a goal for this project.
 - Although there is no comprehensive list, tech debt tickets are tracked in Trello with a label, or the title prefix 'Tech debt:'. Most are in the 'Someday' column.
 - Collect Record form pages use two different approaches to managing form state. Formik had its limitations, so for the observations tables we opted to store form state with a reducer. This inconsistency has led to some tech debt and complexity that was determined to be acceptable, but its worth knowing when handling things like dirty form state, that there are two states to consider.
 - Hot reloading happens inconsistently, notably, changes to DatabaseSwitchboard code seem to require a manual browser refresh.
 - To reset the API and its database, run `make freshinstall`
+- This app was initialized with Create React App, and then migrated to vite. To avoid refactoring tests, we opted to use Jest to run tests instead of Vitest. If a package is installed that creates issues in tests, a possible solution might be to ensure it gets processed with babel in `jest.config.js`'s `transformIgnorePatterns` configuration.
 
 ### General Architecture
 
@@ -89,7 +91,7 @@ Since this app can exist in multiple states (online, offline, various states of 
 
 - renderAuthenticatedOffline, renderAuthenticatedOnline, getMockDexieInstancesAllSuccess, initiallyHydrateOfflineStorageWithMockData (use for offline tests)
 
-If you would like to suppress missing act warnings in your test consile, you can add `REACT_APP_IGNORE_TESTING_ACT_WARNINGS=true` to `.env`
+If you would like to suppress missing act warnings in your test console, you can add `VITE_IGNORE_TESTING_ACT_WARNINGS=true` to `.env`
 
 ## Deploying
 
@@ -117,4 +119,4 @@ If you would like to suppress missing act warnings in your test consile, you can
 
 ### Google Analytics
 
-To opt into tracking with Google Analytics, add the following to a deployment's environment variables: `REACT_APP_CAPTURE_GOOGLE_ANALYTICS=true`. Currently we only want to track activity in our production deployment, so this value to true should only be done for production deploys. This value will default to false.
+To opt into tracking with Google Analytics, add the following to a deployment's environment variables: `VITE_CAPTURE_GOOGLE_ANALYTICS=true`. Currently we only want to track activity in our production deployment, so this value to true should only be done for production deploys. This value will default to false.

@@ -23,6 +23,7 @@ const GfcrMixin = (Base) =>
       })
     }
 
+    // eslint-disable-next-line consistent-return
     saveIndicatorSet = async function saveIndicatorSet(projectId, editedValues) {
       if (!projectId || !editedValues) {
         throw new Error(this._operationMissingParameterError)

@@ -6,7 +6,7 @@ import {
 import mockMermaidApiAllSuccessful from '../testUtilities/mockMermaidApiAllSuccessful'
 import { getCurrentUserProfile } from './currentUserProfileHelpers'
 
-const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 const getAccessToken = async () => 'fake token'
 
 test('getCurrentUserProfile online returns data from the API', async () => {
@@ -39,7 +39,7 @@ test('getCurrentUserProfile online returns error message upon API error', async 
 
   try {
     await getCurrentUserProfile({
-      apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+      apiBaseUrl: import.meta.env.VITE_MERMAID_API,
       getAccessToken,
       dexieCurrentUserInstance,
       isMermaidAuthenticated: true,
@@ -53,7 +53,7 @@ test('getCurrentUserProfile offline returns data from local storage', async () =
   const { dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   const userProfile = await getCurrentUserProfile({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    apiBaseUrl: import.meta.env.VITE_MERMAID_API,
     getAccessToken,
     dexieCurrentUserInstance,
     isMermaidAuthenticated: true,
@@ -73,7 +73,7 @@ test('getCurrentUserProfile offline returns error message upon dexie error', asy
 
   try {
     await getCurrentUserProfile({
-      apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+      apiBaseUrl: import.meta.env.VITE_MERMAID_API,
       getAccessToken,
       dexieCurrentUserInstance: getMockDexieInstanceThatProducesErrors(),
       isMermaidAuthenticated: true,
