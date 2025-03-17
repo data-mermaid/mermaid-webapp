@@ -6,6 +6,7 @@
 
   - As of last readme update 4.1.1 has been tested and works
   - Some developers have had issues when versions of Yarn autogenerate a `packageManager` setting in `package.json`. This has caused tests to fail or other things to have errors. The solution in one case was to add COREPACK_ENABLE_AUTO_PIN=0 to the shell environment before running any yarn commands.
+
 - Node 20.10.0
   - Optionally but recommended, use [NVM](https://github.com/nvm-sh/nvm#installing-and-updating) to set the node version: run `nvm use`
 - [Docker](https://docs.docker.com/get-docker/)
