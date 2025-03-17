@@ -12,6 +12,25 @@ const confirmed = colorHelper(COLORS.confirmed)
 const unconfirmed = colorHelper(COLORS.unconfirmed)
 const white = colorHelper(theme.color.white)
 
+export const RowThatLooksLikeAnEvenTr = styled.div`
+  display: flex;
+  padding: 10px;
+  gap: 20px;
+  background-color: ${theme.color.tableRowEven};
+`
+export const ClickableRowThatLooksLikeAnEvenTr = styled(RowThatLooksLikeAnEvenTr)`
+  &:hover {
+    cursor: pointer;
+    background-color: ${theme.color.tableRowHover};
+  }
+`
+
+export const LabelThatLooksLikeATh = styled.div(
+  (props) => css`
+    ${thStyles(props)}
+  `,
+)
+
 export const Footer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -104,16 +123,17 @@ export const TdUnconfirmed = styled(Td)`
     $hasUnconfirmedPoint ? unconfirmed.mix(white, 0.7) : undefined};
 `
 
-export const EditPointPopupTable = styled(Table)`
+export const EditPointPopupWrapper = styled.div`
   border: ${`2px solid ${COLORS.current}`};
 `
 
-export const PopupTd = styled(Td)`
-  background-color: ${theme.color.tableRowEven};
-  border: none;
+export const PointPopupSectionHeader = styled.div`
+  ${thStyles}
+  display: flex;
+  justify-content: space-between;
 `
 
-export const PopupTdForRadio = styled(PopupTd)`
+export const PopupWrapperForRadio = styled.div`
   width: 15px;
 `
 
@@ -201,17 +221,6 @@ export const PopupIconButton = styled(IconButton)`
 `
 export const PopupZoomButtonContainer = styled.div`
   display: flex;
-`
-export const LabelThatLooksLikeATh = styled.div(
-  (props) => css`
-    ${thStyles(props)}
-  `,
-)
-export const RowThatLooksLikeAnEvenTr = styled.div`
-  display: flex;
-  padding: 10px;
-  gap: 20px;
-  background-color: ${theme.color.tableRowEven};
 `
 
 export const LabelPopup = styled.div`
