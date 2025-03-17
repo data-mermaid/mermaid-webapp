@@ -154,6 +154,7 @@ const ProjectHealthMixin = (Base) =>
             )
 
             accumulator[sampleUnit[0]] = accumulator[sampleUnit[0]] || []
+
             accumulator[sampleUnit[0]] = sampleUnitMethods
 
             return accumulator
@@ -359,11 +360,12 @@ const ProjectHealthMixin = (Base) =>
 
         for (const [siteId, siteInfo] of Object.entries(siteSubmittedSummary)) {
           const siteName = siteInfo.site_name
-          const { bleachingqc, ...otherProtocols } = siteInfo.sample_unit_methods // eslint-disable-line no-unused-vars
+          const { bleachingqc, ...otherProtocols } = siteInfo.sample_unit_methods // eslint-disable-line @typescript-eslint/no-unused-vars
 
           for (const [sampleUnit, sampleUnitNumbers] of Object.entries(otherProtocols)) {
             const managements = sampleUnitNumbers.reduce((accumulator, item) => {
               accumulator[item.management.id] = accumulator[item.management.id] || {}
+
               accumulator[item.management.id] = {
                 mr_name: item.management.name,
                 mr_id: item.management.id,

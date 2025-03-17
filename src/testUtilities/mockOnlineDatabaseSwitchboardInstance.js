@@ -4,7 +4,7 @@ import SyncApiDataIntoOfflineStorage from '../App/mermaidData/syncApiDataIntoOff
 import { getFakeAccessToken } from './getFakeAccessToken'
 
 const getAccessToken = async () => 'fake token'
-const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 const getMockOnlineDatabaseSwitchboardInstance = ({ dexiePerUserDataInstance }) => {
   const { dexiePerUserDataInstance: defaultDexieUserDataDatabaseInstance } =
