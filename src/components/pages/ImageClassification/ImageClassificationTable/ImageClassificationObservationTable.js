@@ -624,7 +624,7 @@ const ImageClassificationObservationTable = ({
 }
 
 ImageClassificationObservationTable.propTypes = {
-  setUploadedFiles: PropTypes.func.isRequired,
+  setUploadedFiles: PropTypes.func,
   areValidationsShowing: PropTypes.bool.isRequired,
   collectRecord: benthicPhotoQuadratPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,

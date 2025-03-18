@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { Tr, Th } from '../../../../generic/Table/table'
 import { imageClassificationResponsePropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import SelectAttributeFromClassifierGuesses from './SelectAttributeFromClassifierGuesses'
 import ClassifierGuesses from './ClassifierGuesses'
 import {
-  EditPointPopupTable,
+  EditPointPopupWrapper,
+  PointPopupSectionHeader,
   PopupBottomRow,
   PopupConfirmButton,
   PopupIconButton,
@@ -62,31 +62,30 @@ const ImageAnnotationPopup = ({
 
   return (
     <>
-      {areAnyClassifierGuesses ? (
-        <EditPointPopupTable aria-labelledby="table-label">
-          <thead>
-            <Tr>
-              <Th colSpan={2}>Classifier Guesses</Th>
-              <Th align="right">Confidence</Th>
-            </Tr>
-          </thead>
-          <tbody>
+      <form>
+        {areAnyClassifierGuesses ? (
+          <EditPointPopupWrapper aria-labelledby="table-label">
+            <PointPopupSectionHeader>
+              <span>Classifier Guesses</span>
+              <span>Confidence</span>
+            </PointPopupSectionHeader>
+
             <ClassifierGuesses
               selectedPoint={selectedPoint}
               dataToReview={dataToReview}
               setDataToReview={setDataToReview}
               setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
             />
-          </tbody>
-        </EditPointPopupTable>
-      ) : null}
-      <SelectAttributeFromClassifierGuesses
-        selectedPoint={selectedPoint}
-        dataToReview={dataToReview}
-        setDataToReview={setDataToReview}
-        setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-        databaseSwitchboardInstance={databaseSwitchboardInstance}
-      />
+          </EditPointPopupWrapper>
+        ) : null}
+        <SelectAttributeFromClassifierGuesses
+          selectedPoint={selectedPoint}
+          dataToReview={dataToReview}
+          setDataToReview={setDataToReview}
+          setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+          databaseSwitchboardInstance={databaseSwitchboardInstance}
+        />
+      </form>
       <PopupBottomRow>
         <PopupZoomButtonContainer>
           <PopupIconButton type="button" onClick={resetZoom}>
@@ -105,7 +104,7 @@ const ImageAnnotationPopup = ({
           {isSelectedPointConfirmed ? 'Confirmed' : 'Confirm'}
         </PopupConfirmButton>
         <PopupZoomButtonContainer>
-          <Tooltip tooltipText="Next Unconfirmed Point">
+          <Tooltip tooltipText="Next Unconfirmed Point" id="next-unconfirmed-point">
             <PopupIconButton
               type="button"
               onClick={selectNextUnconfirmedPoint}

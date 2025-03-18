@@ -1,11 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Tr } from '../../../../generic/Table/table'
-import { PopupTd, PopupTdForRadio } from '../ImageAnnotationModal.styles'
+import {
+  PopupWrapperForRadio,
+  ClickableRowThatLooksLikeAnEvenTr,
+} from '../ImageAnnotationModal.styles'
 import {
   imageClassificationPointPropType,
   imageClassificationResponsePropType,
 } from '../../../../../App/mermaidData/mermaidDataProptypes'
+import { RowSpaceBetween } from '../../../../generic/positioning'
 
 const moveAnnotationToFront = (array, index) => {
   const newArray = [...array]
@@ -47,8 +50,8 @@ const ClassifierGuesses = ({
   }
 
   return classifierGuessesSortedByScore.map((annotation) => (
-    <Tr key={annotation.id}>
-      <PopupTdForRadio>
+    <ClickableRowThatLooksLikeAnEvenTr key={annotation.id} as="label">
+      <PopupWrapperForRadio>
         <input
           type="radio"
           id={annotation.ba_gr}
@@ -56,10 +59,12 @@ const ClassifierGuesses = ({
           checked={annotation.ba_gr === selectedPoint.annotations[0].ba_gr}
           onChange={() => selectClassifierGuess(annotation.id)}
         />
-      </PopupTdForRadio>
-      <PopupTd>{annotation.ba_gr_label}</PopupTd>
-      <PopupTd align="right">{annotation.score}%</PopupTd>
-    </Tr>
+      </PopupWrapperForRadio>
+      <RowSpaceBetween>
+        <span>{annotation.ba_gr_label}</span>
+        <span>{annotation.score}%</span>
+      </RowSpaceBetween>
+    </ClickableRowThatLooksLikeAnEvenTr>
   ))
 }
 
