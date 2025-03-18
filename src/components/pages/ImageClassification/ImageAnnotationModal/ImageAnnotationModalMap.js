@@ -25,6 +25,7 @@ import { getPatchesCenters } from './getPatchesCenters'
 
 const DEFAULT_CENTER = [0, 0] // this value doesn't matter, default to null island
 const DEFAULT_ZOOM = 2 // needs to be > 1 otherwise bounds become > 180 and > 85
+const ZOOM_DURATION = 800
 
 const IMAGE_CLASSIFICATION_COLOR_EXP = [
   'case',
@@ -45,7 +46,7 @@ const pointLabelPopup = new maplibregl.Popup({
 })
 
 const easeToDefaultView = (map) =>
-  map.current.easeTo({ center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM, duration: 500 })
+  map.current.easeTo({ center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM, duration: ZOOM_DURATION })
 
 // HACK: MapLibre's unproject() (used to get pixel coords) doesn't let you pass zoom as parameter.
 // So to ensure that our points remain in the same position we:
@@ -175,6 +176,8 @@ const ImageAnnotationModalMap = ({
       minZoom: DEFAULT_ZOOM,
       renderWorldCopies: false, // prevents the image from repeating
       dragRotate: false,
+      touchZoomRotate: false,
+      touchPitch: false,
       accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
     })
 
@@ -369,7 +372,10 @@ const ImageAnnotationModalMap = ({
       if (!bounds || !map.current) {
         return
       }
-      map.current.fitBounds(bounds, { padding: 250 })
+      map.current.fitBounds(bounds, {
+        padding: 250,
+        duration: ZOOM_DURATION,
+      })
     },
     [map],
   )
@@ -403,27 +409,32 @@ const ImageAnnotationModalMap = ({
   }, [])
 
   const selectNextUnconfirmedPoint = useCallback(() => {
-    map.current.setZoom(DEFAULT_ZOOM)
-    const { features } = getPointsGeojson()
+    const handleEaseToFinished = () => {
+      const { features } = getPointsGeojson()
 
-    const selectedPointFeaturesIndex = features.findIndex(
-      (feature) => feature.properties.id === selectedPoint.id,
-    )
-    const backSectionOfFeaturesArray = features.slice(selectedPointFeaturesIndex + 1)
+      const selectedPointFeaturesIndex = features.findIndex(
+        (feature) => feature.properties.id === selectedPoint.id,
+      )
+      const backSectionOfFeaturesArray = features.slice(selectedPointFeaturesIndex + 1)
 
-    const frontSectionOfFeaturesArray = features.slice(0, selectedPointFeaturesIndex)
-    const featuresArrayOrderedForSearching = [
-      ...backSectionOfFeaturesArray,
-      ...frontSectionOfFeaturesArray,
-    ]
-    const nextUnconfirmedFeature = featuresArrayOrderedForSearching.find(
-      (feature) => !feature.properties.isConfirmed,
-    )
+      const frontSectionOfFeaturesArray = features.slice(0, selectedPointFeaturesIndex)
+      const featuresArrayOrderedForSearching = [
+        ...backSectionOfFeaturesArray,
+        ...frontSectionOfFeaturesArray,
+      ]
+      const nextUnconfirmedFeature = featuresArrayOrderedForSearching.find(
+        (feature) => !feature.properties.isConfirmed,
+      )
+      const handleZoomToBoundsFinished = () => {
+        selectFeature(nextUnconfirmedFeature)
+      }
 
-    zoomToBounds(getBounds(nextUnconfirmedFeature))
-    map.current.once('idle', () => {
-      selectFeature(nextUnconfirmedFeature)
-    })
+      map.current.once('idle', handleZoomToBoundsFinished)
+      zoomToBounds(getBounds(nextUnconfirmedFeature))
+    }
+
+    map.current.once('idle', handleEaseToFinished)
+    map.current.easeTo({ center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM, duration: ZOOM_DURATION })
   }, [getPointsGeojson, map, selectFeature, selectedPoint.id, zoomToBounds])
 
   const _displayEditPointPopupOnPointClick = useEffect(() => {
