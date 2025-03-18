@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { formikPropType } from '../../../../library/formikPropType'
+import { formikPropType } from '../../../../library/formik/formikPropType'
 import { getObserverNameOptions, getObserverNameToUse } from '../../../../library/observerHelpers'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'

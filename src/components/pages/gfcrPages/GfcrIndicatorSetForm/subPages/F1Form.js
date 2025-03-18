@@ -1,17 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { formikHandleNumericDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
-import { formikPropType } from '../../../../../library/formikPropType'
+import { formikHandleNumericDecimalInputChange } from '../../../../../library/formik/formikHandleInputTypes'
+import { formikPropType } from '../../../../../library/formik/formikPropType'
 import { H2 } from '../../../../generic/text'
 import { StyledGfcrInputWrapper } from './subPages.styles'
 import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../../../language'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
+import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F1Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
+const F1Form = ({ formik, displayHelp, handleInputFocus }) => {
   return (
     <StyledGfcrInputWrapper>
       <H2>{gfcrIndicatorSetLanguage.f1Heading}</H2>
@@ -25,7 +26,9 @@ const F1Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         type="number"
         unit="km²"
         {...formik.getFieldProps('f1_1')}
-        onBlur={(event) => handleInputBlur(formik, event, 'f1_1')}
+        onBlur={(event) =>
+          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f1_1' })
+        }
         onFocus={(event) => handleInputFocus(event)}
         helperText={gfcrIndicatorSetLanguage.getF1_1_helper()}
         showHelperText={displayHelp}
@@ -50,7 +53,6 @@ const F1Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
 F1Form.propTypes = {
   formik: formikPropType.isRequired,
   displayHelp: PropTypes.bool,
-  handleInputBlur: PropTypes.func.isRequired,
   handleInputFocus: PropTypes.func.isRequired,
 }
 

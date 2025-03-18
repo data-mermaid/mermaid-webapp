@@ -5,7 +5,7 @@ import {
   benthicpqtValidationPropType,
   choicesPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { formikPropType } from '../../../../library/formikPropType'
+import { formikPropType } from '../../../../library/formik/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { H2 } from '../../../generic/text'
