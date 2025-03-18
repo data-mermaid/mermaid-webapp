@@ -5,7 +5,7 @@ import {
   choicesPropType,
   fishbeltValidationPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { formikPropType } from '../../../../library/formikPropType'
+import { formikPropType } from '../../../../library/formik/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'

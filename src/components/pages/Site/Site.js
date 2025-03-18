@@ -8,7 +8,7 @@ import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
-import { formikPropType } from '../../../library/formikPropType'
+import { formikPropType } from '../../../library/formik/formikPropType'
 import {
   getIsUserReadOnlyForProject,
   getIsUserAdminForProject,

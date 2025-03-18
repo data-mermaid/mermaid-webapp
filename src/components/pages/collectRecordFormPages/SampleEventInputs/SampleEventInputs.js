@@ -6,7 +6,7 @@ import {
   sitePropType,
   benthicPhotoQuadratPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { formikPropType } from '../../../../library/formikPropType'
+import { formikPropType } from '../../../../library/formik/formikPropType'
 import { getManagementRegimeOptions, getOptions } from '../../../../library/getOptions'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { H2 } from '../../../generic/text'
