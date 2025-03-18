@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '../../../../generic/buttons'
-import { formikHandleNumericDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
-import { formikPropType } from '../../../../../library/formikPropType'
+import { formikHandleNumericDecimalInputChange } from '../../../../../library/formik/formikHandleInputTypes'
+import { formikPropType } from '../../../../../library/formik/formikPropType'
 import { H2 } from '../../../../generic/text'
 import { InputRow } from '../../../../generic/form'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
@@ -12,6 +12,7 @@ import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabe
 import language from '../../../../../language'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../../../theme'
+import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
 
 const StyledButtonPrimary = styled(ButtonPrimary)`
   width: 100%;
@@ -40,7 +41,6 @@ const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
 const F4Form = ({
   formik,
-  handleInputBlur,
   handleInputFocus,
   indicatorSetType,
   indicatorSet,
@@ -141,14 +141,18 @@ const F4Form = ({
               id="f4_start_date"
               type="date"
               {...formik.getFieldProps('f4_start_date')}
-              onBlur={(event) => handleInputBlur(formik, event, 'f4_start_date')}
+              onBlur={(event) =>
+                resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f4_start_date' })
+              }
             />
             <InputWithLabelAndValidation
               label={gfcrIndicatorSetLanguage.f4_end_date}
               id="f4_end_date"
               type="date"
               {...formik.getFieldProps('f4_end_date')}
-              onBlur={(event) => handleInputBlur(formik, event, 'f4_end_date')}
+              onBlur={(event) =>
+                resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f4_end_date' })
+              }
             />
             <StyledButtonPrimary
               type="button"
@@ -171,12 +175,19 @@ const F4Form = ({
           type="number"
           unit="%"
           {...formik.getFieldProps('f4_1')}
-          onBlur={(event) => handleInputBlur(formik, event, 'f4_1', true)}
+          onBlur={(event) =>
+            resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f4_1' })
+          }
           onFocus={(event) => handleInputFocus(event)}
           helperText={gfcrIndicatorSetLanguage.getF4_1_helper()}
           showHelperText={displayHelp}
           onChange={(event) =>
-            formikHandleNumericDecimalInputChange({ formik, event, fieldName: 'f4_1' })
+            formikHandleNumericDecimalInputChange({
+              formik,
+              event,
+              fieldName: 'f4_1',
+              maxNumberOfDecimals: 1,
+            })
           }
         />
         {isReport && <StyledValueUpdateText>{f41ValueUpdateText}</StyledValueUpdateText>}
@@ -192,12 +203,19 @@ const F4Form = ({
           type="number"
           unit="%"
           {...formik.getFieldProps('f4_2')}
-          onBlur={(event) => handleInputBlur(formik, event, 'f4_2', true)}
+          onBlur={(event) =>
+            resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f4_2' })
+          }
           onFocus={(event) => handleInputFocus(event)}
           helperText={gfcrIndicatorSetLanguage.getF4_2_helper()}
           showHelperText={displayHelp}
           onChange={(event) =>
-            formikHandleNumericDecimalInputChange({ formik, event, fieldName: 'f4_2' })
+            formikHandleNumericDecimalInputChange({
+              formik,
+              event,
+              fieldName: 'f4_2',
+              maxNumberOfDecimals: 1,
+            })
           }
         />
         {isReport && <StyledValueUpdateText>{f42ValueUpdateText}</StyledValueUpdateText>}
@@ -213,12 +231,19 @@ const F4Form = ({
           type="number"
           unit="kg/ha"
           {...formik.getFieldProps('f4_3')}
-          onBlur={(event) => handleInputBlur(formik, event, 'f4_3', true)}
+          onBlur={(event) =>
+            resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f4_3' })
+          }
           onFocus={(event) => handleInputFocus(event)}
           helperText={gfcrIndicatorSetLanguage.getF4_3_helper()}
           showHelperText={displayHelp}
           onChange={(event) =>
-            formikHandleNumericDecimalInputChange({ formik, event, fieldName: 'f4_3' })
+            formikHandleNumericDecimalInputChange({
+              formik,
+              event,
+              fieldName: 'f4_3',
+              maxNumberOfDecimals: 1,
+            })
           }
         />
         {isReport && <StyledValueUpdateText>{f43ValueUpdateText}</StyledValueUpdateText>}
@@ -235,7 +260,6 @@ const F4Form = ({
 F4Form.propTypes = {
   formik: formikPropType.isRequired,
   indicatorSet: PropTypes.object.isRequired,
-  handleInputBlur: PropTypes.func.isRequired,
   handleInputFocus: PropTypes.func.isRequired,
   handleFormSubmit: PropTypes.func.isRequired,
   setInputToDefaultValue: PropTypes.func.isRequired,

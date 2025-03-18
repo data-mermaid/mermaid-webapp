@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { formikPropType } from '../../../../library/formikPropType'
+import { formikPropType } from '../../../../library/formik/formikPropType'
 import {
   F1Form,
   F2Form,
@@ -12,7 +12,6 @@ import {
   F7Form,
   ReportTitleAndDateForm,
 } from './subPages'
-import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import FinanceSolutions from './subPages/FinanceSolutions'
 import { choicesPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import Investments from './subPages/Investments'
@@ -21,18 +20,6 @@ import Revenues from './subPages/Revenues'
 const StyledForm = styled.form`
   width: 100%;
 `
-
-const handleInputBlur = (formik, event, fieldName, isRoundTo1DP = false) => {
-  const { value } = event.target
-  if (value.trim() === '') {
-    setInputToDefaultValue(formik, fieldName)
-  }
-  const valueAsNumber = Number(value)
-
-  if (value && isRoundTo1DP && !Number.isInteger(valueAsNumber)) {
-    formik.setFieldValue(fieldName, Number(roundToOneDecimal(valueAsNumber)))
-  }
-}
 
 const handleInputFocus = (event) => {
   const { value } = event.target
@@ -44,10 +31,6 @@ const handleInputFocus = (event) => {
 
 const getFieldValueTotal = (fieldValue1, fieldValue2) => {
   return parseInt(fieldValue1) + parseInt(fieldValue2)
-}
-
-const setInputToDefaultValue = (formik, fieldName) => {
-  formik.setFieldValue(fieldName, formik.initialValues[fieldName])
 }
 
 const GfcrIndicatorSetForm = ({
@@ -69,31 +52,19 @@ const GfcrIndicatorSetForm = ({
           {selectedNavItem === 'report-title-and-year' && (
             <ReportTitleAndDateForm
               formik={formik}
-              handleInputBlur={handleInputBlur}
               isNewIndicatorSet={isNewIndicatorSet}
               displayHelp={displayHelp}
             />
           )}
           {selectedNavItem === 'f1' && (
-            <F1Form
-              formik={formik}
-              handleInputBlur={handleInputBlur}
-              handleInputFocus={handleInputFocus}
-              displayHelp={displayHelp}
-            />
+            <F1Form formik={formik} handleInputFocus={handleInputFocus} displayHelp={displayHelp} />
           )}
           {selectedNavItem === 'f2' && (
-            <F2Form
-              formik={formik}
-              handleInputBlur={handleInputBlur}
-              handleInputFocus={handleInputFocus}
-              displayHelp={displayHelp}
-            />
+            <F2Form formik={formik} handleInputFocus={handleInputFocus} displayHelp={displayHelp} />
           )}
           {selectedNavItem === 'f3' && (
             <F3Form
               formik={formik}
-              handleInputBlur={handleInputBlur}
               handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
               displayHelp={displayHelp}
@@ -102,7 +73,6 @@ const GfcrIndicatorSetForm = ({
           {selectedNavItem === 'f4' && (
             <F4Form
               formik={formik}
-              handleInputBlur={handleInputBlur}
               handleInputFocus={handleInputFocus}
               indicatorSetType={indicatorSetType}
               indicatorSet={indicatorSet}
@@ -113,7 +83,6 @@ const GfcrIndicatorSetForm = ({
           {selectedNavItem === 'f5' && (
             <F5Form
               formik={formik}
-              handleInputBlur={handleInputBlur}
               handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
               displayHelp={displayHelp}
@@ -122,7 +91,6 @@ const GfcrIndicatorSetForm = ({
           {selectedNavItem === 'f6' && (
             <F6Form
               formik={formik}
-              handleInputBlur={handleInputBlur}
               handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
               displayHelp={displayHelp}
@@ -131,7 +99,6 @@ const GfcrIndicatorSetForm = ({
           {selectedNavItem === 'f7' && (
             <F7Form
               formik={formik}
-              handleInputBlur={handleInputBlur}
               handleInputFocus={handleInputFocus}
               getFieldValueTotal={getFieldValueTotal}
               displayHelp={displayHelp}

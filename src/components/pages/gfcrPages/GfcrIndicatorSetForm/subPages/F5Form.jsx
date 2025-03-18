@@ -1,18 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { formikHandleIntegerInputChange } from '../../../../../library/formikHandleInputTypes'
-import { formikPropType } from '../../../../../library/formikPropType'
+import { formikHandleIntegerInputChange } from '../../../../../library/formik/formikHandleInputTypes'
+import { formikPropType } from '../../../../../library/formik/formikPropType'
 import { H2 } from '../../../../generic/text'
 import { InputRow } from '../../../../generic/form'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../../../language'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
+import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
-const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFieldValueTotal }) => {
+const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) => {
   return (
     <StyledGfcrInputWrapper>
       <H2>{gfcrIndicatorSetLanguage.f5Heading}</H2>
@@ -25,7 +26,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         id="f5_1"
         type="number"
         {...formik.getFieldProps('f5_1')}
-        onBlur={(event) => handleInputBlur(formik, event, 'f5_1')}
+        onBlur={(event) =>
+          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_1' })
+        }
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_1' })}
         helperText={gfcrIndicatorSetLanguage.getF5_1_helper()}
@@ -40,7 +43,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         id="f5_2"
         type="number"
         {...formik.getFieldProps('f5_2')}
-        onBlur={(event) => handleInputBlur(formik, event, 'f5_2')}
+        onBlur={(event) =>
+          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_2' })
+        }
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_2' })}
         helperText={gfcrIndicatorSetLanguage.getF5_2_helper()}
@@ -55,7 +60,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         id="f5_3"
         type="number"
         {...formik.getFieldProps('f5_3')}
-        onBlur={(event) => handleInputBlur(formik, event, 'f5_3')}
+        onBlur={(event) =>
+          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_3' })
+        }
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_3' })}
         helperText={gfcrIndicatorSetLanguage.getF5_3_helper()}
@@ -71,7 +78,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             id="f5_4a"
             type="number"
             {...formik.getFieldProps('f5_4a')}
-            onBlur={(event) => handleInputBlur(formik, event, 'f5_4a')}
+            onBlur={(event) =>
+              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_4a' })
+            }
             onFocus={(event) => handleInputFocus(event)}
             onChange={(event) =>
               formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_4a' })
@@ -86,7 +95,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             id="f5_4b"
             type="number"
             {...formik.getFieldProps('f5_4b')}
-            onBlur={(event) => handleInputBlur(formik, event, 'f5_4b')}
+            onBlur={(event) =>
+              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_4b' })
+            }
             onFocus={(event) => handleInputFocus(event)}
             onChange={(event) =>
               formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_4b' })
@@ -111,7 +122,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             id="f5_4c"
             type="number"
             {...formik.getFieldProps('f5_4c')}
-            onBlur={(event) => handleInputBlur(formik, event, 'f5_4c')}
+            onBlur={(event) =>
+              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_4c' })
+            }
             onChange={(event) =>
               formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_4c' })
             }
@@ -125,7 +138,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
             id="f5_4d"
             type="number"
             {...formik.getFieldProps('f5_4d')}
-            onBlur={(event) => handleInputBlur(formik, event, 'f5_4d')}
+            onBlur={(event) =>
+              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_4d' })
+            }
             onChange={(event) =>
               formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_4d' })
             }
@@ -145,7 +160,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         {...formik.getFieldProps('f5_5')}
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}
-        onBlur={(event) => handleInputBlur(formik, event, 'f5_5')}
+        onBlur={(event) =>
+          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_5' })
+        }
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_5' })}
         helperText={gfcrIndicatorSetLanguage.getF5_5_helper()}
@@ -162,7 +179,9 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         {...formik.getFieldProps('f5_6')}
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}
-        onBlur={(event) => handleInputBlur(formik, event, 'f5_6')}
+        onBlur={(event) =>
+          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_6' })
+        }
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_6' })}
         helperText={gfcrIndicatorSetLanguage.getF5_6_helper()}
@@ -179,7 +198,6 @@ const F5Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
 
 F5Form.propTypes = {
   formik: formikPropType.isRequired,
-  handleInputBlur: PropTypes.func.isRequired,
   handleInputFocus: PropTypes.func.isRequired,
   getFieldValueTotal: PropTypes.func.isRequired,
   displayHelp: PropTypes.bool,
