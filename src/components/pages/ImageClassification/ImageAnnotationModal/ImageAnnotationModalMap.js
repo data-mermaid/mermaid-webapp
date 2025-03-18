@@ -307,16 +307,17 @@ const ImageAnnotationModalMap = ({
   }, [])
 
   useEffect(
-    function configurePatchesPopup() {
+    function configurePatchesLabels() {
       if (!map.current) {
         return
       }
-      const displayPointFeatureLabel = ({ features }) => {
+      const handlePatchMouseEnter = ({ features }) => {
+        map.current.getCanvas().style.cursor = 'pointer'
+
         if (areLabelsShowing) {
           return
         }
         const [{ properties }] = features
-        map.current.getCanvas().style.cursor = 'pointer'
         const label = properties.isUnclassified ? 'Unclassified' : properties.ba_gr_label
         const confirmedStatus = properties.isConfirmed ? 'confirmed' : 'unconfirmed'
         const pointStatus = properties.isUnclassified ? 'unclassified' : confirmedStatus
@@ -342,18 +343,18 @@ const ImageAnnotationModalMap = ({
           }
         })
       }
-      const hidePointFeatureLabel = () => {
+      const handlePatchMouseLeave = () => {
         map.current.getCanvas().style.cursor = ''
         pointLabelPopup.remove()
       }
 
-      map.current.on('mouseenter', 'patches-fill-layer', displayPointFeatureLabel)
-      map.current.on('mouseleave', 'patches-fill-layer', hidePointFeatureLabel)
+      map.current.on('mouseenter', 'patches-fill-layer', handlePatchMouseEnter)
+      map.current.on('mouseleave', 'patches-fill-layer', handlePatchMouseLeave)
 
       const currentMap = map.current
       return () => {
-        currentMap.off('mouseenter', 'patches-fill-layer', displayPointFeatureLabel)
-        currentMap.off('mouseleave', 'patches-fill-layer', hidePointFeatureLabel)
+        currentMap.off('mouseenter', 'patches-fill-layer', handlePatchMouseEnter)
+        currentMap.off('mouseleave', 'patches-fill-layer', handlePatchMouseLeave)
       }
     },
     [areLabelsShowing, map],
