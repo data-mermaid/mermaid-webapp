@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '../../../../generic/buttons'
-import { formikHandleNumericTwoDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
+import { formikHandleNumericDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formikPropType'
 import { H2 } from '../../../../generic/text'
 import { InputRow } from '../../../../generic/form'
@@ -180,7 +180,7 @@ const F4Form = ({
           helperText={gfcrIndicatorSetLanguage.getF4_1_helper()}
           showHelperText={displayHelp}
           onChange={(event) =>
-            formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f4_1' })
+            formikHandleNumericDecimalInputChange({ formik, event, fieldName: 'f4_1' })
           }
         />
         {isReport && <StyledValueUpdateText>{f41ValueUpdateText}</StyledValueUpdateText>}
@@ -201,7 +201,7 @@ const F4Form = ({
           helperText={gfcrIndicatorSetLanguage.getF4_2_helper()}
           showHelperText={displayHelp}
           onChange={(event) =>
-            formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f4_2' })
+            formikHandleNumericDecimalInputChange({ formik, event, fieldName: 'f4_2' })
           }
         />
         {isReport && <StyledValueUpdateText>{f42ValueUpdateText}</StyledValueUpdateText>}
@@ -222,7 +222,7 @@ const F4Form = ({
           helperText={gfcrIndicatorSetLanguage.getF4_3_helper()}
           showHelperText={displayHelp}
           onChange={(event) =>
-            formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f4_3' })
+            formikHandleNumericDecimalInputChange({ formik, event, fieldName: 'f4_3' })
           }
         />
         {isReport && <StyledValueUpdateText>{f43ValueUpdateText}</StyledValueUpdateText>}

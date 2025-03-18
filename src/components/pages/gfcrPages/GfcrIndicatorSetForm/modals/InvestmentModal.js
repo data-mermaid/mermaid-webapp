@@ -10,7 +10,7 @@ import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
 import { buttonGroupStates } from '../../../../../library/buttonGroupStates'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
-import { formikHandleNumericTwoDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
+import { formikHandleNumericDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
 import { getInvestmentInitialValues } from './investmentInitialValues'
 import { getOptions } from '../../../../../library/getOptions'
 import { getToastArguments } from '../../../../../library/getToastArguments'
@@ -290,7 +290,7 @@ const InvestmentModal = ({
             showHelperText={displayHelp}
             required={true}
             onChange={(event) =>
-              formikHandleNumericTwoDecimalInputChange({
+              formikHandleNumericDecimalInputChange({
                 formik,
                 event,
                 fieldName: 'investment_amount',
