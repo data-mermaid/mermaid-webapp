@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { formikHandleNumericTwoDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
+import { formikHandleNumericDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formikPropType'
 import { H2 } from '../../../../generic/text'
 import { StyledGfcrInputWrapper } from './subPages.styles'
@@ -30,7 +30,12 @@ const F1Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         helperText={gfcrIndicatorSetLanguage.getF1_1_helper()}
         showHelperText={displayHelp}
         onChange={(event) =>
-          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f1_1' })
+          formikHandleNumericDecimalInputChange({
+            formik,
+            event,
+            fieldName: 'f1_1',
+            maxNumberOfDecimals: 5,
+          })
         }
       />
       <TextareaWithLabelAndValidation
