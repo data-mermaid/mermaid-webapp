@@ -176,7 +176,6 @@ const ImageAnnotationModalMap = ({
       minZoom: DEFAULT_ZOOM,
       renderWorldCopies: false, // prevents the image from repeating
       dragRotate: false,
-      touchZoomRotate: false,
       touchPitch: false,
       accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
     })
@@ -553,7 +552,10 @@ const ImageAnnotationModalMap = ({
     map.current.setPaintProperty('patches-outline-layer', 'line-color', lineColor)
   }, [selectedAttributeId, hoveredAttributeId, hoveredPointId, hasMapLoaded, selectedPoint, map])
 
-  const resetZoom = () => easeToDefaultView(map)
+  const resetZoom = () => {
+    map.current.setBearing(0) // If on a touch device, reset the rotation before calling the easeTo function to avoid any potential issues.
+    easeToDefaultView(map)
+  }
   return (
     <ImageAnnotationMapWrapper>
       {!hasMapLoaded ? <LoadingIndicatorImageClassificationImage /> : null}
