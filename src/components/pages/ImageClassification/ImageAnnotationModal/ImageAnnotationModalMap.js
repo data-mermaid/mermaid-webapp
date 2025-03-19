@@ -181,6 +181,7 @@ const ImageAnnotationModalMap = ({
     })
 
     map.current.addControl(zoomControl, 'top-left')
+    map.current.dragRotate.disable()
 
     const bounds = map.current.getBounds()
     const pointsGeoJson = getPointsGeojson()
