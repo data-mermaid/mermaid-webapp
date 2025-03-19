@@ -10,7 +10,7 @@ import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
 import { buttonGroupStates } from '../../../../../library/buttonGroupStates'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
-import { formikHandleNumericTwoDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
+import { formikHandleNumericDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
 import { getOptions } from '../../../../../library/getOptions'
 import { getRevenueInitialValues } from './revenueInitialValues'
 import { getToastArguments } from '../../../../../library/getToastArguments'
@@ -292,7 +292,7 @@ const RevenueModal = ({
             showHelperText={displayHelp}
             required={true}
             onChange={(event) =>
-              formikHandleNumericTwoDecimalInputChange({
+              formikHandleNumericDecimalInputChange({
                 formik,
                 event,
                 fieldName: 'revenue_amount',
