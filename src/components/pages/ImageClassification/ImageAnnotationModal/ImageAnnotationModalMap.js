@@ -371,7 +371,7 @@ const ImageAnnotationModalMap = ({
       if (!bounds || !map.current) {
         return
       }
-      map.current.fitBounds(bounds, { padding: 250 })
+      map.current.fitBounds(bounds, { padding: 250, duration: 0 })
     },
     [map],
   )
