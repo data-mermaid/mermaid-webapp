@@ -176,7 +176,6 @@ const ImageAnnotationModalMap = ({
       minZoom: DEFAULT_ZOOM,
       renderWorldCopies: false, // prevents the image from repeating
       dragRotate: false,
-      touchZoomRotate: false,
       touchPitch: false,
       accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
     })
