@@ -264,7 +264,7 @@ const ImageAnnotationModalMap = ({
     const handleMapLoad = () => {
       setHasMapLoaded(true)
 
-      map.current.loadImage('/cross-hair.png', (error, image) => {
+      map.current.loadImage(process.env.PUBLIC_URL + '/cross-hair.png', (error, image) => {
         if (error) {
           return
         }
