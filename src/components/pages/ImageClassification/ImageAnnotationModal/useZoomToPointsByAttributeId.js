@@ -3,11 +3,11 @@ import bbox from '@turf/bbox'
 
 export const useZoomToPointsByAttributeId = ({ patchesGeoJson, zoomToPaddedBounds }) => {
   const zoomToPointsByAttributeId = (attributeId) => {
-    if (!patchesGeoJson.features.length) {
+    if (!patchesGeoJson?.features.length) {
       return
     }
 
-    const featuresAssociatedWithAttribute = patchesGeoJson.features.filter(
+    const featuresAssociatedWithAttribute = patchesGeoJson?.features?.filter(
       (feature) => feature.properties.ba_gr === attributeId,
     )
 
