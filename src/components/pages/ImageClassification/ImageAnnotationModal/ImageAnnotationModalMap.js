@@ -651,7 +651,7 @@ ImageAnnotationModalMap.propTypes = {
   setHasMapLoaded: PropTypes.func.isRequired,
   setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
   setIsTableShowing: PropTypes.func.isRequired,
-  setPatchesGeoJson: PropTypes.func.isRequired,
+  setPatchesGeoJson: PropTypes.func,
   zoomToPaddedBounds: PropTypes.func.isRequired,
 }
 
