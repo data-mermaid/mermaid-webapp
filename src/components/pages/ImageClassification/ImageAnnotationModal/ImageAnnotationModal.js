@@ -23,6 +23,7 @@ import { usePointsGeoJson } from './usePointsGeoJson'
 import { useZoomToPointsByAttributeId } from './useZoomToPointsByAttributeId'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import { DEFAULT_MAP_ANIMATION_DURATION } from '../imageClassificationConstants'
 
 const EXCLUDE_PARAMS =
   'classification_status,collect_record_id,comments,created_by,created_on,data,id,location,name,num_confirmed,num_unclassified,num_unconfirmed,photo_timestamp,thumbnail,updated_by,updated_on'
@@ -52,9 +53,25 @@ const ImageAnnotationModal = ({
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const [isTableShowing, setIsTableShowing] = useState(true)
   const map = useRef(null)
+  const [patchesGeoJson, setPatchesGeoJson] = useState()
 
   const { imageScale } = useImageScale({ hasMapLoaded, dataToReview })
   const handleHttpResponseError = useHttpResponseErrorHandler()
+
+  const zoomToPaddedBounds = useCallback(
+    (bounds) => {
+      if (!bounds || !map.current) {
+        return
+      }
+
+      map.current.fitBounds(bounds, {
+        padding: 250,
+        duration: DEFAULT_MAP_ANIMATION_DURATION,
+        linear: true,
+      })
+    },
+    [map],
+  )
 
   const { getPointsGeojson, getPointsLabelAnchorsGeoJson } = usePointsGeoJson({
     dataToReview,
@@ -63,8 +80,8 @@ const ImageAnnotationModal = ({
   })
 
   const { zoomToPointsByAttributeId } = useZoomToPointsByAttributeId({
-    getPointsGeojson,
-    mapRef: map,
+    zoomToPaddedBounds,
+    patchesGeoJson,
   })
 
   const getBenthicAttributeLabel = useCallback(
@@ -185,20 +202,23 @@ const ImageAnnotationModal = ({
                 isTableShowing={isTableShowing}
               />
               <ImageAnnotationModalMap
-                dataToReview={dataToReview}
-                setDataToReview={setDataToReview}
-                selectedAttributeId={selectedAttributeId}
-                hoveredAttributeId={hoveredAttributeId}
                 databaseSwitchboardInstance={databaseSwitchboardInstance}
-                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+                dataToReview={dataToReview}
                 getPointsGeojson={getPointsGeojson}
                 getPointsLabelAnchorsGeoJson={getPointsLabelAnchorsGeoJson}
                 hasMapLoaded={hasMapLoaded}
+                hoveredAttributeId={hoveredAttributeId}
                 imageScale={imageScale}
-                map={map}
-                setHasMapLoaded={setHasMapLoaded}
-                setIsTableShowing={setIsTableShowing}
                 isTableShowing={isTableShowing}
+                map={map}
+                patchesGeoJson={patchesGeoJson}
+                selectedAttributeId={selectedAttributeId}
+                setDataToReview={setDataToReview}
+                setHasMapLoaded={setHasMapLoaded}
+                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+                setIsTableShowing={setIsTableShowing}
+                setPatchesGeoJson={setPatchesGeoJson}
+                zoomToPaddedBounds={zoomToPaddedBounds}
               />
             </ImageAnnotationModalContainer>
           ) : (

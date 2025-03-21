@@ -62,30 +62,29 @@ const ImageAnnotationPopup = ({
 
   return (
     <>
-      <form>
-        {areAnyClassifierGuesses ? (
-          <EditPointPopupWrapper aria-labelledby="table-label">
-            <PointPopupSectionHeader>
-              <span>Classifier Guesses</span>
-              <span>Confidence</span>
-            </PointPopupSectionHeader>
+      {areAnyClassifierGuesses ? (
+        <EditPointPopupWrapper aria-labelledby="table-label">
+          <PointPopupSectionHeader>
+            <span>Classifier Guesses</span>
+            <span>Confidence</span>
+          </PointPopupSectionHeader>
 
-            <ClassifierGuesses
-              selectedPoint={selectedPoint}
-              dataToReview={dataToReview}
-              setDataToReview={setDataToReview}
-              setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-            />
-          </EditPointPopupWrapper>
-        ) : null}
-        <SelectAttributeFromClassifierGuesses
-          selectedPoint={selectedPoint}
-          dataToReview={dataToReview}
-          setDataToReview={setDataToReview}
-          setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-          databaseSwitchboardInstance={databaseSwitchboardInstance}
-        />
-      </form>
+          <ClassifierGuesses
+            selectedPoint={selectedPoint}
+            dataToReview={dataToReview}
+            setDataToReview={setDataToReview}
+            setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+          />
+        </EditPointPopupWrapper>
+      ) : null}
+      <SelectAttributeFromClassifierGuesses
+        selectedPoint={selectedPoint}
+        dataToReview={dataToReview}
+        setDataToReview={setDataToReview}
+        setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+        databaseSwitchboardInstance={databaseSwitchboardInstance}
+      />
+
       <PopupBottomRow>
         <PopupZoomButtonContainer>
           <PopupIconButton type="button" onClick={resetZoom}>
