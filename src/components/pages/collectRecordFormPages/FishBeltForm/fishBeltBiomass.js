@@ -1,9 +1,3 @@
-/* eslint-disable no-bitwise */
-/* eslint-disable one-var */
-/* eslint-disable eqeqeq */
-/* eslint-disable func-names */
-/* eslint-disable no-restricted-properties */
-
 import { getObjectById } from '../../../../library/getObjectById'
 
 /* this whole file is copy pasted (for the most part) from v1. */
@@ -106,6 +100,7 @@ const getBeltFishWidthVal = (fishSize, beltfishWidthConditions) => {
 
   const conditions = []
 
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let n = 0; n < beltfishWidthConditions.length; n++) {
     const cnd = beltfishWidthConditions[n]
 
@@ -118,6 +113,7 @@ const getBeltFishWidthVal = (fishSize, beltfishWidthConditions) => {
 
   const combos = utilsCombinations(beltfishWidthConditions)
 
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < combos.length; i++) {
     const combo = combos[i]
 

@@ -46,13 +46,13 @@ const useCollectRecordValidation = ({
     databaseSwitchboardInstance
       .validateSampleUnit({ recordId, projectId })
       .then((validatedRecordResponse) => {
+        const isErrorOrWarning =
+          validatedRecordResponse.validations.status === 'error' ||
+          validatedRecordResponse.validations.status === 'warning'
         setAreValidationsShowing(true)
         handleCollectRecordChange(validatedRecordResponse)
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
-        validatedRecordResponse.validations.status === 'error' ||
-        validatedRecordResponse.validations.status === 'warning'
-          ? setIsSubmitWarningVisible(true)
-          : setIsSubmitWarningVisible(false)
+        setIsSubmitWarningVisible(isErrorOrWarning)
 
         if (validatedRecordResponse.validations.status === 'ok') {
           toast.success(...getToastArguments(language.success.collectRecordValidated))
