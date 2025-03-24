@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import { formikHandleNumericTwoDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
+import { formikHandleNumericDecimalInputChange } from '../../../../../library/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formikPropType'
 import { H2 } from '../../../../generic/text'
 import { StyledGfcrInputWrapper } from './subPages.styles'
@@ -28,7 +28,12 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_1a')}
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) =>
-          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_1a' })
+          formikHandleNumericDecimalInputChange({
+            formik,
+            event,
+            fieldName: 'f2_1a',
+            maxNumberOfDecimals: 5,
+          })
         }
         helperText={gfcrIndicatorSetLanguage.getF2_1a_helper()}
         showHelperText={displayHelp}
@@ -46,7 +51,12 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_1b')}
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) =>
-          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_1b' })
+          formikHandleNumericDecimalInputChange({
+            formik,
+            event,
+            fieldName: 'f2_1b',
+            maxNumberOfDecimals: 5,
+          })
         }
         helperText={gfcrIndicatorSetLanguage.getF2_1b_helper()}
         showHelperText={displayHelp}
@@ -64,7 +74,12 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_2a')}
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) =>
-          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_2a' })
+          formikHandleNumericDecimalInputChange({
+            formik,
+            event,
+            fieldName: 'f2_2a',
+            maxNumberOfDecimals: 5,
+          })
         }
         helperText={gfcrIndicatorSetLanguage.getF2_2a_helper()}
         showHelperText={displayHelp}
@@ -82,7 +97,12 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_2b')}
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) =>
-          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_2b' })
+          formikHandleNumericDecimalInputChange({
+            formik,
+            event,
+            fieldName: 'f2_2b',
+            maxNumberOfDecimals: 5,
+          })
         }
         helperText={gfcrIndicatorSetLanguage.getF2_2b_helper()}
         showHelperText={displayHelp}
@@ -100,7 +120,12 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_3a')}
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) =>
-          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_3a' })
+          formikHandleNumericDecimalInputChange({
+            formik,
+            event,
+            fieldName: 'f2_3a',
+            maxNumberOfDecimals: 5,
+          })
         }
         helperText={gfcrIndicatorSetLanguage.getF2_3a_helper()}
         showHelperText={displayHelp}
@@ -118,7 +143,12 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_3b')}
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) =>
-          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_3b' })
+          formikHandleNumericDecimalInputChange({
+            formik,
+            event,
+            fieldName: 'f2_3b',
+            maxNumberOfDecimals: 5,
+          })
         }
         helperText={gfcrIndicatorSetLanguage.getF2_3b_helper()}
         showHelperText={displayHelp}
@@ -136,7 +166,12 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_4')}
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) =>
-          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_4' })
+          formikHandleNumericDecimalInputChange({
+            formik,
+            event,
+            fieldName: 'f2_4',
+            maxNumberOfDecimals: 5,
+          })
         }
         helperText={gfcrIndicatorSetLanguage.getF2_4_helper()}
         showHelperText={displayHelp}
@@ -154,7 +189,12 @@ const F2Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus }) => {
         onBlur={(event) => handleInputBlur(formik, event, 'f2_5')}
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) =>
-          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f2_5' })
+          formikHandleNumericDecimalInputChange({
+            formik,
+            event,
+            fieldName: 'f2_5',
+            maxNumberOfDecimals: 5,
+          })
         }
         helperText={gfcrIndicatorSetLanguage.getF2_5_helper()}
         showHelperText={displayHelp}

@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { Tr, Th } from '../../../../generic/Table/table'
 import { imageClassificationResponsePropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import SelectAttributeFromClassifierGuesses from './SelectAttributeFromClassifierGuesses'
 import ClassifierGuesses from './ClassifierGuesses'
 import {
-  EditPointPopupTable,
+  EditPointPopupWrapper,
+  PointPopupSectionHeader,
   PopupBottomRow,
   PopupConfirmButton,
   PopupIconButton,
@@ -63,22 +63,19 @@ const ImageAnnotationPopup = ({
   return (
     <>
       {areAnyClassifierGuesses ? (
-        <EditPointPopupTable aria-labelledby="table-label">
-          <thead>
-            <Tr>
-              <Th colSpan={2}>Classifier Guesses</Th>
-              <Th align="right">Confidence</Th>
-            </Tr>
-          </thead>
-          <tbody>
-            <ClassifierGuesses
-              selectedPoint={selectedPoint}
-              dataToReview={dataToReview}
-              setDataToReview={setDataToReview}
-              setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-            />
-          </tbody>
-        </EditPointPopupTable>
+        <EditPointPopupWrapper aria-labelledby="table-label">
+          <PointPopupSectionHeader>
+            <span>Classifier Guesses</span>
+            <span>Confidence</span>
+          </PointPopupSectionHeader>
+
+          <ClassifierGuesses
+            selectedPoint={selectedPoint}
+            dataToReview={dataToReview}
+            setDataToReview={setDataToReview}
+            setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+          />
+        </EditPointPopupWrapper>
       ) : null}
       <SelectAttributeFromClassifierGuesses
         selectedPoint={selectedPoint}
@@ -87,6 +84,7 @@ const ImageAnnotationPopup = ({
         setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
         databaseSwitchboardInstance={databaseSwitchboardInstance}
       />
+
       <PopupBottomRow>
         <PopupZoomButtonContainer>
           <PopupIconButton type="button" onClick={resetZoom}>
@@ -105,7 +103,7 @@ const ImageAnnotationPopup = ({
           {isSelectedPointConfirmed ? 'Confirmed' : 'Confirm'}
         </PopupConfirmButton>
         <PopupZoomButtonContainer>
-          <Tooltip tooltipText="Next Unconfirmed Point">
+          <Tooltip tooltipText="Next Unconfirmed Point" id="next-unconfirmed-point">
             <PopupIconButton
               type="button"
               onClick={selectNextUnconfirmedPoint}

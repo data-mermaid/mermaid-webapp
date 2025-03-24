@@ -175,6 +175,7 @@ const ImageUploadModal = ({
         toast.update(toastId.current, {
           render: uploadText.success,
           type: toast.TYPE.SUCCESS,
+          autoClose: true,
         })
       }
     }

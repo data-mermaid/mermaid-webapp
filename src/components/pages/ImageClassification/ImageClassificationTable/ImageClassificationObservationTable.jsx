@@ -573,13 +573,18 @@ const ImageClassificationObservationTable = ({
                         )
                       })}
                       {totalUnknown > 0 && (
-                        <StyledTr key={`${file.id}-unknown`} $messageType={'error'}>
+                        <StyledTr
+                          key={`${file.id}-unknown`}
+                          $messageType={'error'}
+                          onMouseEnter={() => handleRowMouseEnter(imageIndex)}
+                          onMouseLeave={handleRowMouseLeave}
+                        >
                           <StyledTd>{rowIndex++}</StyledTd>
                           <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
                           <StyledTd colSpan={3} textAlign="center">
                             {`${totalUnknown} Unclassified point${totalUnknown > 1 ? 's' : ''}`}
                           </StyledTd>
-                          <StyledTd colSpan={2} />
+                          <StyledTd />
                         </StyledTr>
                       )}
                     </React.Fragment>
