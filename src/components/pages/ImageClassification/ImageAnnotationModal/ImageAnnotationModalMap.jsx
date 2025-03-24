@@ -6,6 +6,8 @@ import getBounds from '@turf/bbox'
 import { buffer } from '@turf/buffer'
 import { bboxPolygon } from '@turf/bbox-polygon'
 import { booleanContains } from '@turf/boolean-contains'
+import crossHairUrl from '../../../../../public/cross-hair.png'
+import labelBackgroundUrl from '../../../../../public/label-background.png'
 
 import {
   IMAGE_CLASSIFICATION_COLORS as COLORS,
@@ -278,8 +280,7 @@ const ImageAnnotationModalMap = ({
 
     const handleMapLoad = () => {
       setHasMapLoaded(true)
-
-      map.current.loadImage('/cross-hair.png', (error, image) => {
+      map.current.loadImage(crossHairUrl, (error, image) => {
         if (error) {
           return
         }
@@ -294,7 +295,7 @@ const ImageAnnotationModalMap = ({
         })
       })
 
-      map.current.loadImage('/label-background.png', (error, image) => {
+      map.current.loadImage(labelBackgroundUrl, (error, image) => {
         if (error) {
           return
         }
@@ -648,7 +649,7 @@ ImageAnnotationModalMap.propTypes = {
   imageScale: PropTypes.number.isRequired,
   isTableShowing: PropTypes.bool.isRequired,
   map: PropTypes.object.isRequired,
-  patchesGeoJson: PropTypes.object.isRequired,
+  patchesGeoJson: PropTypes.object,
   selectedAttributeId: PropTypes.string.isRequired,
   setDataToReview: PropTypes.func.isRequired,
   setHasMapLoaded: PropTypes.func.isRequired,

@@ -53,7 +53,7 @@ jobs:
           cat src/version.js
 
       - name: Yarn Build
-        run: yarn build --base="${BASE_PATH}"
+        run: yarn build --base="${BASE_PATH}/"
 
       - name: Upload files to S3 with AWS CLI
         env:
