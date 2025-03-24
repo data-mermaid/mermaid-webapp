@@ -45,6 +45,7 @@ const ProjectHealthMixin = (Base) =>
     #groupSampleEventUnitBySite = function groupSampleEventUnitBySite(sampleEventUnitRows) {
       return sampleEventUnitRows.reduce((accumulator, record) => {
         accumulator[record.site_id] = accumulator[record.site_id] || {}
+
         accumulator[record.site_id] = {
           site_id: record.site_id,
           site_name: record.site_name,
