@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import {
   formikHandleIntegerInputChange,
-  formikHandleNumericTwoDecimalInputChange,
+  formikHandleNumericDecimalInputChange,
 } from '../../../../../library/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formikPropType'
 import { H2 } from '../../../../generic/text'
@@ -32,7 +32,12 @@ const F3Form = ({ formik, displayHelp, handleInputBlur, handleInputFocus, getFie
         onBlur={(event) => handleInputBlur(formik, event, 'f3_1')}
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) =>
-          formikHandleNumericTwoDecimalInputChange({ formik, event, fieldName: 'f3_1' })
+          formikHandleNumericDecimalInputChange({
+            formik,
+            event,
+            fieldName: 'f3_1',
+            maxNumberOfDecimals: 5,
+          })
         }
         helperText={gfcrIndicatorSetLanguage.getF3_1_helper()}
         showHelperText={displayHelp}

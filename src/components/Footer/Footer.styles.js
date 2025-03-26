@@ -124,6 +124,8 @@ export const HelpLinksWrapper = styled.ul`
     all: unset;
     font-size: ${theme.typography.defaultFontSize};
     white-space: nowrap;
+    display: inline-block;
+    width: 100%;
   }
 
   li {

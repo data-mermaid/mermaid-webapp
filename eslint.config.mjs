@@ -25,10 +25,10 @@ export default [
     settings: {
       'import/resolver': {
         node: {
-          extensions: ['.js', '.jsx', 'ts', 'tsx'],
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
       },
-      'import/extensions': ['.js', '.jsx', 'ts', 'tsx'],
+      'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
     },
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     rules: {
@@ -68,7 +68,7 @@ export default [
         },
       ],
       '@typescript-eslint/no-empty-function': 'off',
-      'no-param-reassign': ['error', { props: true }],
+      'no-param-reassign': 'error',
       'react/no-danger': 'error',
       'max-nested-callbacks': ['error', { max: 3 }],
       'consistent-return': 'error',

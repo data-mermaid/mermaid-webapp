@@ -47,7 +47,7 @@ const ProjectHealthMixin = (Base) =>
       return sampleEventUnitRows.reduce((accumulator, record) => {
         // eslint-disable-next-line no-param-reassign
         accumulator[record.site_id] = accumulator[record.site_id] || {}
-        // eslint-disable-next-line no-param-reassign
+
         accumulator[record.site_id] = {
           site_id: record.site_id,
           site_name: record.site_name,
@@ -157,7 +157,7 @@ const ProjectHealthMixin = (Base) =>
             )
             // eslint-disable-next-line no-param-reassign
             accumulator[sampleUnit[0]] = accumulator[sampleUnit[0]] || []
-            // eslint-disable-next-line no-param-reassign
+
             accumulator[sampleUnit[0]] = sampleUnitMethods
 
             return accumulator
@@ -369,7 +369,7 @@ const ProjectHealthMixin = (Base) =>
             const managements = sampleUnitNumbers.reduce((accumulator, item) => {
               // eslint-disable-next-line no-param-reassign
               accumulator[item.management.id] = accumulator[item.management.id] || {}
-              // eslint-disable-next-line no-param-reassign
+
               accumulator[item.management.id] = {
                 mr_name: item.management.name,
                 mr_id: item.management.id,

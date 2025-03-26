@@ -88,7 +88,7 @@ const groupCollectSampleUnitsByProfileSummary = (records) => {
 
         // eslint-disable-next-line no-param-reassign
         accumulator[collectRecordProfile] = accumulator[collectRecordProfile] || {}
-        // eslint-disable-next-line no-param-reassign
+
         accumulator[collectRecordProfile] = {
           profileId: collectRecordProfile,
           profileName: profileSummary[collectRecordProfile].profile_name,
