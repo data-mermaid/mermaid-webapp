@@ -136,10 +136,7 @@ jobs:
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           CDK_DEFAULT_REGION: us-east-1
         run: |
-          cd iac && cdk deploy \
-            --require-approval never \
-            preview-webapp \
-            dev-webapp
+          cd iac && cdk synth && cdk diff
       - name: CDK Deploy PROD
         if: startsWith(github.ref, 'refs/tags')
         env:
