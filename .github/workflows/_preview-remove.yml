@@ -34,7 +34,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4.1.0
         env:
-          CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
+          CDK_DEPLOY_ROLE: ${{ vars.CDK_DEPLOY_ROLE }}
         with:
           role-to-assume: $CDK_DEPLOY_ROLE
           aws-region: us-east-1
