@@ -60,9 +60,9 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4.1.0
         env:
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-          DEPLOY_AWS_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
+          CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.CDK_DEFAULT_ACCOUNT }}:role/${{ secrets.CDK_DEPLOY_ROLE }}
+          role-to-assume: arn:aws:iam::$CDK_DEFAULT_ACCOUNT:role/$CDK_DEPLOY_ROLE
           aws-region: us-east-1
           role-skip-session-tagging: true
 
