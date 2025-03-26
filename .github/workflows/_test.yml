@@ -60,7 +60,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4.1.0
         env:
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-          DEPLOY_AWS_ROLE: ${{ secrets.DEPLOY_AWS_ROLE }}
+          DEPLOY_AWS_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
         with:
           role-to-assume: arn:aws:iam::${{ secrets.CDK_DEFAULT_ACCOUNT }}:role/${{ secrets.CDK_DEPLOY_ROLE }}
           aws-region: us-east-1
