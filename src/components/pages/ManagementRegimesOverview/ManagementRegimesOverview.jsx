@@ -47,7 +47,6 @@ const groupManagementRegimes = (records) => {
     const { management_regimes } = record
 
     for (const managementRegime of management_regimes) {
-      // eslint-disable-next-line no-param-reassign
       accumulator[managementRegime.mr_id] = accumulator[managementRegime.mr_id] || {}
 
       accumulator[managementRegime.mr_id] = {
@@ -168,7 +167,6 @@ const ManagementRegimesOverview = () => {
 
       const rowRecordManagementRegimesWithoutNonEmptyValues = management_regimes.reduce(
         (accumulator, record) => {
-          // eslint-disable-next-line no-param-reassign
           accumulator[record.mr_id] = (
             <SampleUnitLinks rowRecord={rowRecord} sampleUnitNumbersRow={record.labels} />
           )
@@ -180,7 +178,6 @@ const ManagementRegimesOverview = () => {
 
       const rowRecordManagementRegimes = managementRegimeRecordNames.reduce(
         (accumulator, record) => {
-          // eslint-disable-next-line no-param-reassign
           accumulator[record.id] = rowRecordManagementRegimesWithoutNonEmptyValues[record.id] || ''
 
           return accumulator
