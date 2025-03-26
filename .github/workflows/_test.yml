@@ -12,6 +12,11 @@ env:
   VITE_CORAL_ATLAS_APP_ID: v8nkxznp3m
   VITE_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
 
+permissions:
+  actions: write
+  contents: read
+  id-token: write
+
 jobs:
   test:
     runs-on: ubuntu-latest

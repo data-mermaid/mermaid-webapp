@@ -10,8 +10,9 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+' # eg: v1.1.1
 
 permissions:
-  id-token: write # This is required for requesting the JWT
-  contents: read  # This is required for actions/checkout
+  actions: write
+  contents: read
+  id-token: write
 
 env:
   VITE_AUTH0_DOMAIN: datamermaid.auth0.com
