@@ -97,7 +97,7 @@ jobs:
           echo "VITE_AUTH0_AUDIENCE: https://dev-api.datamermaid.org" >> "$GITHUB_ENV"
           echo "VITE_MERMAID_API: https://dev-api.datamermaid.org/v1" >> "$GITHUB_ENV"
           echo "VITE_MERMAID_DASHBOARD_LINK: https://dev-dashboard.datamermaid.org" >> "$GITHUB_ENV""
-          echo "VITE_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx" >> "$GITHUB_ENV""
+          echo "VITE_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx" >> "$GITHUB_ENV"
           echo "VITE_CAPTURE_GOOGLE_ANALYTICS: false" >> "$GITHUB_ENV"
           echo "TARGET: dev >> "$GITHUB_ENV"
 
