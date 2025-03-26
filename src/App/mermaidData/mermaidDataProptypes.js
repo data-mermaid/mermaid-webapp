@@ -70,7 +70,7 @@ const _bleachingQuadratPropType = PropTypes.shape({
   quadrat_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   relative_depth: PropTypes.string,
   tide: PropTypes.string,
-  noes: PropTypes.string,
+  notes: PropTypes.string,
 })
 
 const _benthicPhotoQuadratObservationPropType = PropTypes.shape({

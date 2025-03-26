@@ -33,7 +33,7 @@ const StyledPlaceMarkerButton = styled(ButtonSecondary)`
   height: 29px;
   border-radius: 4px;
   border: none;
-  outline: solid 2px ${theme.color.black.fade(0.9)};
+  outline: solid 2px ${theme.color.black90};
   & > svg {
     margin-right: 1px;
   }

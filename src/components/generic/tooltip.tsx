@@ -46,7 +46,7 @@ const tooltipCssByPosition = {
     );
   `,
 }
-export const TooltipPopup = styled('span')`
+export const TooltipPopup = styled('span').withConfig<{ $position: 'bottom' | 'right' }>({})`
   display: none;
   min-width: 26ch;
   width: 100%;
@@ -74,9 +74,20 @@ const TooltipWrapper = styled('div')`
   }
 `
 
-export const TooltipWithText = ({ text, tooltipText, id, position = 'bottom', ...restOfProps }) => {
+export const TooltipWithText = ({
+  text,
+  tooltipText,
+  id,
+  position = 'bottom',
+  ...restOfProps
+}: {
+  text: React.ReactNode
+  tooltipText: string | React.ReactNode
+  id: string
+  position?: 'bottom' | 'right'
+}) => {
   return (
-    <TooltipP tabIndex="0" id={id} {...restOfProps}>
+    <TooltipP tabIndex={0} id={id} {...restOfProps}>
       {text}
       <TooltipPopup role="tooltip" aria-labelledby={id} $position={position}>
         {tooltipText}
@@ -92,7 +103,19 @@ TooltipWithText.propTypes = {
   position: PropTypes.oneOf(['bottom', 'right']),
 }
 
-export const Tooltip = ({ children, tooltipText, id, className, position = 'bottom' }) => {
+export const Tooltip = ({
+  children,
+  tooltipText,
+  id,
+  className,
+  position = 'bottom',
+}: {
+  children: React.ReactNode
+  tooltipText: string
+  id: string
+  className?: string
+  position?: 'bottom' | 'right'
+}) => {
   return (
     // className is so that we can override styles using styled-components,
     // which we need to do for image classification map control buttons
@@ -103,12 +126,4 @@ export const Tooltip = ({ children, tooltipText, id, className, position = 'bott
       </TooltipPopup>
     </TooltipWrapper>
   )
-}
-
-Tooltip.propTypes = {
-  children: PropTypes.node.isRequired,
-  tooltipText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-  id: PropTypes.string.isRequired,
-  position: PropTypes.oneOf(['bottom', 'right']),
-  className: PropTypes.string,
 }

@@ -6,7 +6,16 @@ import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/const
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { RowSpaceBetween } from '../../../generic/positioning'
 import { ButtonPrimary, IconButton, buttonSecondaryCss } from '../../../generic/buttons'
-import { Tooltip } from '../../../generic/tooltip'
+interface IsSelectedProps {
+  $isSelected?: boolean
+}
+interface HasConfirmedPoint {
+  $hasConfirmedPoint?: boolean
+}
+
+interface HasUnconfirmedPoint {
+  $hasUnconfirmedPoint?: boolean
+}
 
 const confirmed = colorHelper(COLORS.confirmed)
 const unconfirmed = colorHelper(COLORS.unconfirmed)
@@ -92,7 +101,7 @@ export const TdZoom = styled(Td)`
   }
 `
 
-export const TrImageClassification = styled(Tr)`
+export const TrImageClassification = styled(Tr)<IsSelectedProps>`
   border: 1px solid transparent;
   border-top: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
   border-bottom: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
@@ -113,18 +122,14 @@ export const TrImageClassification = styled(Tr)`
   }
 `
 
-export const TdConfirmed = styled(Td)`
+export const TdConfirmed = styled(Td)<HasConfirmedPoint>`
   background-color: ${({ $hasConfirmedPoint }) =>
-    $hasConfirmedPoint ? confirmed.mix(white, 0.7) : undefined};
+    $hasConfirmedPoint ? confirmed.mix(white, 0.7).toString() : undefined};
 `
 
-export const TdUnconfirmed = styled(Td)`
+export const TdUnconfirmed = styled(Td)<HasUnconfirmedPoint>`
   background-color: ${({ $hasUnconfirmedPoint }) =>
-    $hasUnconfirmedPoint ? unconfirmed.mix(white, 0.7) : undefined};
-`
-
-export const EditPointPopupWrapper = styled.div`
-  border: ${`2px solid ${COLORS.current}`};
+    $hasUnconfirmedPoint ? unconfirmed.mix(white, 0.7).toString() : undefined};
 `
 
 export const PointPopupSectionHeader = styled.div`
@@ -150,44 +155,8 @@ export const NewAttributeModalFooterContainer = styled.div`
 export const NewAttributeModalLabel = styled.label`
   font-weight: bold;
 `
-export const MapControlButton = styled.button`
-  z-index: 1;
-  cursor: pointer;
-  border: ${(props) => (props.$isSelected ? `solid thin ${theme.color.white}` : 'none')};
-  padding: ${(props) =>
-    props.$isSelected
-      ? '2px 5px'
-      : '2px 7px'}; // keep the icon centered if border showing with box-sizing
-  border-radius: ${theme.spacing.borderLarge};
-  background-color: ${(props) =>
-    props.$isSelected ? theme.color.primaryColor : theme.color.white};
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1); // copy maplibre button shadow
-  color: ${(props) => (props.$isSelected ? theme.color.white : 'inherit')};
-  box-sizing: border-box;
-  height: 29px;
-  width: 29px;
-  &:hover { {
-    background-color: ${({ $isSelected }) =>
-      $isSelected ? theme.color.primaryHover : theme.color.secondaryHover};
-  }
-`
-export const MapResetTooltip = styled(Tooltip)`
-  position: absolute;
-  top: 75px;
-  left: 10px;
-`
-export const ToggleTableTooltip = styled(Tooltip)`
-  position: absolute;
-  top: 110px;
-  left: 10px;
-`
-export const ToggleLabelsTooltip = styled(Tooltip)`
-  position: absolute;
-  top: 145px;
-  left: 10px;
-`
 
-export const ButtonZoom = styled.button`
+export const ButtonZoom = styled.button<IsSelectedProps>`
   all: unset;
   height: 100%;
   width: 100%;
