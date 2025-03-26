@@ -59,7 +59,7 @@ jobs:
         env:
           CDK_DEPLOY_ROLE: ${{ vars.CDK_DEPLOY_ROLE }}
         with:
-          role-to-assume: $CDK_DEPLOY_ROLE
+          role-to-assume: ${{ vars.CDK_DEPLOY_ROLE }}
           aws-region: us-east-1
           role-skip-session-tagging: true
 
