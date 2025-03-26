@@ -54,10 +54,19 @@ jobs:
       - name: Yarn Build
         run: yarn build --base="${BASE_PATH}"
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+          CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
+        with:
+          role-to-assume: arn:aws:iam::$CDK_DEFAULT_ACCOUNT:role/$CDK_DEPLOY_ROLE
+          aws-region: us-east-1
+          role-skip-session-tagging: true
+
       - name: Upload files to S3 with AWS CLI
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           AWS_DEFAULT_REGION: us-east-1
         run: |
           aws s3 sync build/ s3://${S3_BUCKET}/${PR_NUMBER} --delete

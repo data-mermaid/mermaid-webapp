@@ -3,7 +3,7 @@
 
 name: Remove preview
 
-on: 
+on:
   workflow_call:
 
 env:
@@ -15,10 +15,35 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-node@v4.2.0
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Fetch yarn cache
+        uses: actions/cache@v4.2.2
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Install yarn dependencies
+        if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        run: yarn install
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+          CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
+        with:
+          role-to-assume: arn:aws:iam::$CDK_DEFAULT_ACCOUNT:role/$CDK_DEPLOY_ROLE
+          aws-region: us-east-1
+          role-skip-session-tagging: true
+
       - name: Recursively delete files in S3 PR subfolder
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
           AWS_DEFAULT_REGION: us-east-1
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
         run: |
           aws s3 rm s3://${S3_BUCKET}/${PR_NUMBER} --recursive
