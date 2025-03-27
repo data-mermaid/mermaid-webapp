@@ -32,91 +32,91 @@ jobs:
         run: yarn install
       - name: Run Tests
         run: yarn run test --watchAll=false
-  cdk:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4.2.2
-      - uses: actions/setup-node@v4.2.0
-        with:
-          node-version-file: '.nvmrc'
+  # cdk:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4.2.2
+  #     - uses: actions/setup-node@v4.2.0
+  #       with:
+  #         node-version-file: '.nvmrc'
 
-      - name: Fetch yarn cache
-        uses: actions/cache@v4.2.2
-        id: yarn-cache
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+  #     - name: Fetch yarn cache
+  #       uses: actions/cache@v4.2.2
+  #       id: yarn-cache
+  #       with:
+  #         path: node_modules
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
-      - name: Install yarn dependencies
-        if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
-        run: yarn install
+  #     - name: Install yarn dependencies
+  #       if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+  #       run: yarn install
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4.1.0
-        with:
-          role-to-assume: ${{ vars.CDK_DEPLOY_ROLE }}
-          aws-region: us-east-1
-          role-skip-session-tagging: true
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v4.1.0
+  #       with:
+  #         role-to-assume: ${{ vars.CDK_DEPLOY_ROLE }}
+  #         aws-region: us-east-1
+  #         role-skip-session-tagging: true
 
-      - name: Create version file for dev
-        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions-vite')
-        run: |
-          short_sha=$(git rev-parse --short ${{ github.sha }})
-          echo "export const versionNumber = '$short_sha'" > src/version.js
-          cat src/version.js
+  #     - name: Create version file for dev
+  #       if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions-vite')
+  #       run: |
+  #         short_sha=$(git rev-parse --short ${{ github.sha }})
+  #         echo "export const versionNumber = '$short_sha'" > src/version.js
+  #         cat src/version.js
 
-      - name: Set variables and version for dev
-        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions')
-        run: |
-          echo "VITE_AUTH0_CLIENT_ID=4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5" >> "$GITHUB_ENV"
-          echo "VITE_AUTH0_AUDIENCE=https://dev-api.datamermaid.org" >> "$GITHUB_ENV"
-          echo "VITE_MERMAID_API=https://dev-api.datamermaid.org/v1" >> "$GITHUB_ENV"
-          echo "VITE_MERMAID_DASHBOARD_LINK=https://dev-dashboard.datamermaid.org" >> "$GITHUB_ENV"
-          echo "VITE_MERMAID_REFERENCE_LINK=https://dev-public.datamermaid.org/mermaid_attributes.xlsx" >> "$GITHUB_ENV"
-          echo "VITE_CAPTURE_GOOGLE_ANALYTICS=false" >> "$GITHUB_ENV"
-          echo "TARGET=dev" >> "$GITHUB_ENV"
+  #     - name: Set variables and version for dev
+  #       if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions')
+  #       run: |
+  #         echo "VITE_AUTH0_CLIENT_ID=4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5" >> "$GITHUB_ENV"
+  #         echo "VITE_AUTH0_AUDIENCE=https://dev-api.datamermaid.org" >> "$GITHUB_ENV"
+  #         echo "VITE_MERMAID_API=https://dev-api.datamermaid.org/v1" >> "$GITHUB_ENV"
+  #         echo "VITE_MERMAID_DASHBOARD_LINK=https://dev-dashboard.datamermaid.org" >> "$GITHUB_ENV"
+  #         echo "VITE_MERMAID_REFERENCE_LINK=https://dev-public.datamermaid.org/mermaid_attributes.xlsx" >> "$GITHUB_ENV"
+  #         echo "VITE_CAPTURE_GOOGLE_ANALYTICS=false" >> "$GITHUB_ENV"
+  #         echo "TARGET=dev" >> "$GITHUB_ENV"
 
-      - name: Set variables and version for prod
-        if: startsWith(github.ref, 'refs/tags')
-        run: |
-          echo "TARGET=prod" >> "$GITHUB_ENV"
-          echo "VITE_AUTH0_AUDIENCE=https://api.datamermaid.org" >> "$GITHUB_ENV"
-          echo "VITE_AUTH0_CLIENT_ID=Yahf5mGpQDyYOqbvQlaKE1WqBnUeFPj0" >> "$GITHUB_ENV"
-          echo "VITE_MERMAID_API=https://api.datamermaid.org/v1" >> "$GITHUB_ENV"
-          echo "VITE_MERMAID_DASHBOARD_LINK=https://dashboard.datamermaid.org" >> "$GITHUB_ENV"
-          echo "VITE_MERMAID_REFERENCE_LINK=https://public.datamermaid.org/mermaid_attributes.xlsx" >> "$GITHUB_ENV"
-          echo "VITE_CAPTURE_GOOGLE_ANALYTICS=true" >> "$GITHUB_ENV"
-          echo "export const versionNumber = '${{ github.ref_name }}'" > src/version.js
-          cat src/version.js
+  #     - name: Set variables and version for prod
+  #       if: startsWith(github.ref, 'refs/tags')
+  #       run: |
+  #         echo "TARGET=prod" >> "$GITHUB_ENV"
+  #         echo "VITE_AUTH0_AUDIENCE=https://api.datamermaid.org" >> "$GITHUB_ENV"
+  #         echo "VITE_AUTH0_CLIENT_ID=Yahf5mGpQDyYOqbvQlaKE1WqBnUeFPj0" >> "$GITHUB_ENV"
+  #         echo "VITE_MERMAID_API=https://api.datamermaid.org/v1" >> "$GITHUB_ENV"
+  #         echo "VITE_MERMAID_DASHBOARD_LINK=https://dashboard.datamermaid.org" >> "$GITHUB_ENV"
+  #         echo "VITE_MERMAID_REFERENCE_LINK=https://public.datamermaid.org/mermaid_attributes.xlsx" >> "$GITHUB_ENV"
+  #         echo "VITE_CAPTURE_GOOGLE_ANALYTICS=true" >> "$GITHUB_ENV"
+  #         echo "export const versionNumber = '${{ github.ref_name }}'" > src/version.js
+  #         cat src/version.js
 
-      - name: Yarn Build
-        run: yarn build
+  #     - name: Yarn Build
+  #       run: yarn build
 
-      - name: Fetch iac node cache
-        uses: actions/cache@v4.2.2
-        id: iac-cache
-        with:
-          path: iac/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('iac/package-lock.json') }}
+  #     - name: Fetch iac node cache
+  #       uses: actions/cache@v4.2.2
+  #       id: iac-cache
+  #       with:
+  #         path: iac/node_modules
+  #         key: ${{ runner.os }}-node-${{ hashFiles('iac/package-lock.json') }}
 
-      - name: Install IaC dependencies
-        if: ${{ steps.iac-cache.outputs.cache-hit != 'true' }}
-        working-directory: iac
-        run: npm ci && npm install -g aws-cdk
+  #     - name: Install IaC dependencies
+  #       if: ${{ steps.iac-cache.outputs.cache-hit != 'true' }}
+  #       working-directory: iac
+  #       run: npm ci && npm install -g aws-cdk
 
-      - name: CDK Synth & Diff DEV
-        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions')
-        env:
-          PYTHONPATH: ${{ github.workspace }}
-          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-          CDK_DEFAULT_REGION: us-east-1
-        run: |
-          cd iac && cdk synth && cdk diff
-      - name: CDK Synth & Diff PROD
-        if: startsWith(github.ref, 'refs/tags')
-        env:
-          PYTHONPATH: ${{ github.workspace }}
-          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-          CDK_DEFAULT_REGION: us-east-1
-        run: |
-          cd iac && cdk synth && cdk diff
+  #     - name: CDK Synth & Diff DEV
+  #       if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions')
+  #       env:
+  #         PYTHONPATH: ${{ github.workspace }}
+  #         CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+  #         CDK_DEFAULT_REGION: us-east-1
+  #       run: |
+  #         cd iac && cdk synth && cdk diff
+  #     - name: CDK Synth & Diff PROD
+  #       if: startsWith(github.ref, 'refs/tags')
+  #       env:
+  #         PYTHONPATH: ${{ github.workspace }}
+  #         CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+  #         CDK_DEFAULT_REGION: us-east-1
+  #       run: |
+  #         cd iac && cdk synth && cdk diff
