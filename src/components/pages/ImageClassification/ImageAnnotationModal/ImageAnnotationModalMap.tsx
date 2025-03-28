@@ -188,17 +188,20 @@ const ImageAnnotationModalMap = ({
   }
 
   const updatePointsOnMap = useCallback(() => {
-    const currentZoom = map.current?.getZoom()
-    const currentCenter = map.current?.getCenter()
+    if (!map.current) {
+      return
+    }
+    const currentZoom = map.current.getZoom()
+    const currentCenter = map.current.getCenter()
 
     hackTemporarilySetMapToDefaultPosition(map)
     const patches = getPointsGeojson()
     const patchesCenters = getPatchesCenters(patches)
     setPatchesGeoJson(patches)
 
-    const patchesSource = map.current?.getSource('patches') as maplibregl.GeoJSONSource
-    const patchesCenterSource = map.current?.getSource('patches-center') as maplibregl.GeoJSONSource
-    const patchesLabelsSource = map.current?.getSource('patches-labels') as maplibregl.GeoJSONSource
+    const patchesSource = map.current.getSource('patches') as maplibregl.GeoJSONSource
+    const patchesCenterSource = map.current.getSource('patches-center') as maplibregl.GeoJSONSource
+    const patchesLabelsSource = map.current.getSource('patches-labels') as maplibregl.GeoJSONSource
     patchesSource?.setData(patches)
     patchesCenterSource?.setData(patchesCenters)
     patchesLabelsSource?.setData(getPointsLabelAnchorsGeoJson())
@@ -207,7 +210,7 @@ const ImageAnnotationModalMap = ({
     }
   }, [getPointsGeojson, getPointsLabelAnchorsGeoJson, map, setPatchesGeoJson])
 
-  const updateImageSizeOnMap = () => {
+  const updateImageSizeOnMap = useCallback(() => {
     const bounds = map.current?.getBounds()
     if (!bounds || !map.current) {
       return
@@ -231,7 +234,7 @@ const ImageAnnotationModalMap = ({
       [boundsWest, boundsSouth],
       [boundsEast, boundsNorth],
     ])
-  }
+  }, [map])
 
   const _initializeMapAndData = useEffect(() => {
     if (hasMapLoaded) {
@@ -622,16 +625,14 @@ const ImageAnnotationModalMap = ({
   // This effect is essentially triggered by the _setImageScaleOnWindowResize above.
   // It can be combined, but readability becomes comprimised.
   const _updateLayersOnImageScaleChange = useEffect(() => {
-    if (!hasMapLoaded) {
+    if (!hasMapLoaded || !map.current) {
       return
     }
 
-    map.current?.resize()
+    map.current.resize()
     updatePointsOnMap()
     updateImageSizeOnMap()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageScale, hasMapLoaded])
+  }, [imageScale, hasMapLoaded, map, updatePointsOnMap, updateImageSizeOnMap])
 
   const _updateStylingForPoints = useEffect(() => {
     if (!hasMapLoaded || !map.current) {
