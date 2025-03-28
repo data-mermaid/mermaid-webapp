@@ -5,6 +5,7 @@ import {
   ButtonZoom,
   TableWithNoMinWidth,
   TdConfirmed,
+  TdStatus,
   TdUnconfirmed,
   TdZoom,
   TrImageClassification,
@@ -119,7 +120,7 @@ const ImageAnnotationModalTable = ({
                   <TdUnconfirmed align="right" $hasUnconfirmedPoint={!!unconfirmedCount}>
                     {unconfirmedCount}
                   </TdUnconfirmed>
-                  <Td align="center">
+                  <TdStatus align="center">
                     {!unconfirmedCount ? (
                       'Confirmed'
                     ) : (
@@ -132,7 +133,7 @@ const ImageAnnotationModalTable = ({
                         </ButtonSecondary>
                       </MuiTooltipDark>
                     )}
-                  </Td>
+                  </TdStatus>
                 </TrImageClassification>
               )
             })}

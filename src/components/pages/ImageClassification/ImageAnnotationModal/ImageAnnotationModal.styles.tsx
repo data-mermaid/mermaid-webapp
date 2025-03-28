@@ -93,7 +93,7 @@ export const ImageAnnotationPopupContainer = styled.div`
 
 export const TdZoom = styled(Td)`
   padding: 0;
-  height: 31px;
+  height: 57px; // prevents shifts to layout when the attribute is confirmed
   width: 48px;
   background-color: ${theme.color.white}; // stop the row hover colour from showing
   &:hover {
@@ -102,15 +102,23 @@ export const TdZoom = styled(Td)`
 `
 
 export const TrImageClassification = styled(Tr)<IsSelectedProps>`
-  border: 1px solid transparent;
-  border-top: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
-  border-bottom: ${({ $isSelected }) => $isSelected && `2px solid ${COLORS.selected}`};
+  position: relative;
   cursor: pointer;
   &:hover {
-    border-top: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.hover}`};
-    border-bottom: ${({ $isSelected }) => !$isSelected && `2px solid ${COLORS.hover}`};
     svg {
       opacity: 1; // this make the zoom icon visible on hover
+    }
+    &::after {
+      // this is a non-layout impacting hack to receive the hover border
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-top: 2px solid ${COLORS.hover};
+      border-bottom: 2px solid ${COLORS.hover};
+      pointer-events: none;
     }
   }
   &:nth-child(odd),
@@ -120,6 +128,22 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
   &:has(${TdZoom}:hover) {
     background-color: ${theme.color.white};
   }
+  ${({ $isSelected }) =>
+    $isSelected &&
+    css`
+      &::after {
+        // this is a non-layout impacting hack to receive the selected row border
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-top: 2px solid ${COLORS.selected};
+        border-bottom: 2px solid ${COLORS.selected};
+        pointer-events: none;
+      }
+    `}
 `
 
 export const TdConfirmed = styled(Td)<HasConfirmedPoint>`
@@ -131,7 +155,9 @@ export const TdUnconfirmed = styled(Td)<HasUnconfirmedPoint>`
   background-color: ${({ $hasUnconfirmedPoint }) =>
     $hasUnconfirmedPoint ? unconfirmed.mix(white, 0.7).toString() : undefined};
 `
-
+export const TdStatus = styled(Td)`
+  width: 104px; // prevents shifts to layout when the status is confirmed
+`
 export const PointPopupSectionHeader = styled.div`
   ${thStyles}
   display: flex;
