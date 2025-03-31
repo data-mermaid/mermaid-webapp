@@ -13,7 +13,7 @@
       // therefore won't be redirecting to the version of this file in the PR
       const PRNumber = localStorage.getItem('pullRequestNumber')
       const redirectURL = `${window.location.origin}${PRNumber}index.html${window.location.search}`
-
+      alert('redirectURL: ' + redirectURL)
       if (PRNumber) {
         window.location.replace(redirectURL)
       } else {
