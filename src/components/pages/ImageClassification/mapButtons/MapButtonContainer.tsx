@@ -42,13 +42,13 @@ export const ConnectedMapControlButtonContainer = styled.div`
     border-radius: 0;
   }
 
-  & :first-child button {
+  & button:first-child {
     // remember the button is within a tooltip component
     border-top-left-radius: ${theme.spacing.borderLarge};
     border-top-right-radius: ${theme.spacing.borderLarge};
   }
 
-  & :last-child button {
+  & button:last-child {
     border-bottom-left-radius: ${theme.spacing.borderLarge};
     border-bottom-right-radius: ${theme.spacing.borderLarge};
   }
