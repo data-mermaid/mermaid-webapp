@@ -112,7 +112,8 @@ const BenthicPhotoQuadratObservationTable = ({
     })
 
     const categoryGroups = addTopCategoryInfoToObservation.reduce((accumulator, obs) => {
-      const benthicAttributeName = getCategory(obs.top_level_category)?.label
+      const benthicAttributeName =
+        getCategory(obs.top_level_category)?.label ?? 'Missing Benthic Attribute'
 
       accumulator[benthicAttributeName] = accumulator[benthicAttributeName] || []
       accumulator[benthicAttributeName].push(obs)
