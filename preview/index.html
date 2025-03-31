@@ -12,7 +12,7 @@
       // This is because Auth0 wont be redirecting a url with the PR branc number in it, and
       // therefore won't be redirecting to the version of this file in the PR
       const PRNumber = localStorage.getItem('pullRequestNumber')
-      const redirectURL = `${window.location.origin}${PRNumber}/index.html${window.location.search}`
+      const redirectURL = `${window.location.origin}${PRNumber}index.html${window.location.search}`
 
       if (PRNumber) {
         window.location.replace(redirectURL)
