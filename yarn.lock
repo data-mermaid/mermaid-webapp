@@ -2432,7 +2432,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/material@npm:^5.13.6":
+"@mui/material@npm:^5.15.16":
   version: 5.17.1
   resolution: "@mui/material@npm:5.17.1"
   dependencies:
@@ -10297,7 +10297,7 @@ __metadata:
     "@iconify-icons/mdi": "npm:^1.1.12"
     "@iconify-icons/ri": "npm:^1.1.0"
     "@iconify/react": "npm:^1.1.4"
-    "@mui/material": "npm:^5.13.6"
+    "@mui/material": "npm:^5.15.16"
     "@swc/core": "npm:^1.11.9"
     "@swc/plugin-styled-components": "npm:^7.1.0"
     "@testing-library/dom": "npm:^10.4.0"

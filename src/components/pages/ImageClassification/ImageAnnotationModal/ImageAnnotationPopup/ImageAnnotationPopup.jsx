@@ -13,7 +13,7 @@ import {
 } from '../ImageAnnotationModal.styles'
 import './ImageAnnotationPopup.css'
 import { IconArrowRight, IconZoomIn, IconZoomOut } from '../../../../icons'
-import { Tooltip } from '../../../../generic/tooltip'
+import { MuiTooltipDark } from '../../../../generic/MuiTooltip'
 
 const ImageAnnotationPopup = ({
   dataToReview,
@@ -86,12 +86,16 @@ const ImageAnnotationPopup = ({
 
       <PopupBottomRow>
         <PopupZoomButtonContainer>
-          <PopupIconButton type="button" onClick={resetZoom}>
-            <IconZoomOut />
-          </PopupIconButton>
-          <PopupIconButton type="button" onClick={zoomToSelectedPoint}>
-            <IconZoomIn />
-          </PopupIconButton>
+          <MuiTooltipDark title="Reset zoom">
+            <PopupIconButton type="button" onClick={resetZoom}>
+              <IconZoomOut />
+            </PopupIconButton>
+          </MuiTooltipDark>
+          <MuiTooltipDark title="Zoom to point">
+            <PopupIconButton type="button" onClick={zoomToSelectedPoint}>
+              <IconZoomIn />
+            </PopupIconButton>
+          </MuiTooltipDark>
         </PopupZoomButtonContainer>
 
         <PopupConfirmButton
@@ -101,8 +105,9 @@ const ImageAnnotationPopup = ({
         >
           {isSelectedPointConfirmed ? 'Confirmed' : 'Confirm'}
         </PopupConfirmButton>
+
         <PopupZoomButtonContainer>
-          <Tooltip tooltipText="Next Unconfirmed Point" id="next-unconfirmed-point">
+          <MuiTooltipDark title="Next unconfirmed point">
             <PopupIconButton
               type="button"
               onClick={selectNextUnconfirmedPoint}
@@ -110,7 +115,7 @@ const ImageAnnotationPopup = ({
             >
               <IconArrowRight />
             </PopupIconButton>
-          </Tooltip>
+          </MuiTooltipDark>
         </PopupZoomButtonContainer>
       </PopupBottomRow>
     </>

@@ -39,9 +39,9 @@ import {
   DEFAULT_MAP_CENTER,
   DEFAULT_MAP_ZOOM,
 } from '../imageClassificationConstants'
-import { Tooltip } from '../../../generic/tooltip'
 import { ImageClassificationResponse } from '../../../../App/mermaidData/mermaidDataTypes'
 import { MapRef } from '../../../../types/map'
+import { MuiTooltipDarkRight } from '../../../generic/MuiTooltip'
 
 interface SelectedPoint {
   id: number | null
@@ -698,32 +698,32 @@ const ImageAnnotationModalMap = ({
       {hasMapLoaded ? (
         <MapButtonContainer>
           <ConnectedMapControlButtonContainer>
-            <Tooltip tooltipText="Zoom In" id="zoom-in" position="right">
-              <MapControlButton type="button" onClick={zoomMapIn} title="zoom in">
+            <MuiTooltipDarkRight title="Zoom in">
+              <MapControlButton type="button" onClick={zoomMapIn}>
                 <IconPlus />
               </MapControlButton>
-            </Tooltip>
-            <Tooltip tooltipText="Zoom Out" id="zoom-out" position="right">
-              <MapControlButton type="button" onClick={zoomMapOut} title="zoom out">
+            </MuiTooltipDarkRight>
+            <MuiTooltipDarkRight title="Zoom Out">
+              <MapControlButton type="button" onClick={zoomMapOut}>
                 <IconMinus />
               </MapControlButton>
-            </Tooltip>
+            </MuiTooltipDarkRight>
           </ConnectedMapControlButtonContainer>
-          <Tooltip tooltipText="Reset Zoom" id="reset-zoom" position="right">
-            <MapControlButton type="button" onClick={resetZoom} title="reset zoom">
+          <MuiTooltipDarkRight title="Reset Zoom">
+            <MapControlButton type="button" onClick={resetZoom}>
               <IconRefresh />
             </MapControlButton>
-          </Tooltip>
-          <Tooltip tooltipText="Toggle Table Visibility" id="table-visibility" position="right">
+          </MuiTooltipDarkRight>
+          <MuiTooltipDarkRight title="Toggle table visibility">
             <MapControlButton type="button" onClick={toggleTable} $isSelected={isTableShowing}>
               <IconTable />
             </MapControlButton>
-          </Tooltip>
-          <Tooltip tooltipText="Toggle Labels Visibility" id="toggle-labels" position="right">
+          </MuiTooltipDarkRight>
+          <MuiTooltipDarkRight title="Toggle label visibility">
             <MapControlButton type="button" onClick={toggleLabels} $isSelected={areLabelsShowing}>
               <IconLabel />
             </MapControlButton>
-          </Tooltip>
+          </MuiTooltipDarkRight>
         </MapButtonContainer>
       ) : null}
 

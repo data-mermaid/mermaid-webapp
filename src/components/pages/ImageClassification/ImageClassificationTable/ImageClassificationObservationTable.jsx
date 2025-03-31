@@ -31,6 +31,7 @@ import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHa
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD } from '../imageClassificationConstants'
 import { getIsImageProcessed } from '../getIsImageProcessed'
+import { MuiTooltip } from '../../../generic/MuiTooltip'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -521,15 +522,17 @@ const ImageClassificationObservationTable = ({
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
-                                  <ButtonPrimary
-                                    type="button"
-                                    onClick={() => setImageId(file.id)}
-                                    disabled={
-                                      !getIsImageProcessed(file.classification_status?.status)
-                                    }
-                                  >
-                                    Review
-                                  </ButtonPrimary>
+                                  <MuiTooltip title="Review this image">
+                                    <ButtonPrimary
+                                      type="button"
+                                      onClick={() => setImageId(file.id)}
+                                      disabled={
+                                        !getIsImageProcessed(file.classification_status?.status)
+                                      }
+                                    >
+                                      Review
+                                    </ButtonPrimary>
+                                  </MuiTooltip>
                                 </StyledTd>
                                 <StyledTd
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}

@@ -5,6 +5,7 @@ import {
   ButtonZoom,
   TableWithNoMinWidth,
   TdConfirmed,
+  TdStatus,
   TdUnconfirmed,
   TdZoom,
   TrImageClassification,
@@ -13,6 +14,7 @@ import { ButtonSecondary } from '../../../generic/buttons'
 import { Tr, Th, Td, TableOverflowWrapper } from '../../../generic/Table/table'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { IconZoomIn } from '../../../icons'
+import { MuiTooltipDark } from '../../../generic/MuiTooltip'
 
 const ImageAnnotationModalTable = ({
   points,
@@ -100,13 +102,15 @@ const ImageAnnotationModalTable = ({
                   $isAnyRowSelected={selectedAttributeId !== undefined}
                 >
                   <TdZoom>
-                    <ButtonZoom
-                      onClick={(event) => handleZoomClick({ event, attributeId: rowKey })}
-                      $isSelected={rowKey === selectedAttributeId}
-                      type="button"
-                    >
-                      <IconZoomIn />
-                    </ButtonZoom>
+                    <MuiTooltipDark title="Zoom to attribute">
+                      <ButtonZoom
+                        onClick={(event) => handleZoomClick({ event, attributeId: rowKey })}
+                        $isSelected={rowKey === selectedAttributeId}
+                        type="button"
+                      >
+                        <IconZoomIn />
+                      </ButtonZoom>
+                    </MuiTooltipDark>
                   </TdZoom>
                   {/* All points in a row will have the same ba_gr label */}
                   <Td>{tableData[rowKey][0].annotations[0].ba_gr_label}</Td>
@@ -116,18 +120,20 @@ const ImageAnnotationModalTable = ({
                   <TdUnconfirmed align="right" $hasUnconfirmedPoint={!!unconfirmedCount}>
                     {unconfirmedCount}
                   </TdUnconfirmed>
-                  <Td align="center">
+                  <TdStatus align="center">
                     {!unconfirmedCount ? (
                       'Confirmed'
                     ) : (
-                      <ButtonSecondary
-                        type="button"
-                        onClick={(e) => handleRowConfirm(e, tableData[rowKey])}
-                      >
-                        Confirm
-                      </ButtonSecondary>
+                      <MuiTooltipDark title="Confirm all points">
+                        <ButtonSecondary
+                          type="button"
+                          onClick={(e) => handleRowConfirm(e, tableData[rowKey])}
+                        >
+                          Confirm
+                        </ButtonSecondary>
+                      </MuiTooltipDark>
                     )}
-                  </Td>
+                  </TdStatus>
                 </TrImageClassification>
               )
             })}
