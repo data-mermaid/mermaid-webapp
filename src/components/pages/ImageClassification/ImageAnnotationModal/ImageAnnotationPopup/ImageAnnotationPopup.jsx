@@ -5,7 +5,6 @@ import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/dat
 import SelectAttributeFromClassifierGuesses from './SelectAttributeFromClassifierGuesses'
 import ClassifierGuesses from './ClassifierGuesses'
 import {
-  EditPointPopupWrapper,
   PointPopupSectionHeader,
   PopupBottomRow,
   PopupConfirmButton,
@@ -63,7 +62,7 @@ const ImageAnnotationPopup = ({
   return (
     <>
       {areAnyClassifierGuesses ? (
-        <EditPointPopupWrapper aria-labelledby="table-label">
+        <div aria-labelledby="table-label">
           <PointPopupSectionHeader>
             <span>Classifier Guesses</span>
             <span>Confidence</span>
@@ -75,7 +74,7 @@ const ImageAnnotationPopup = ({
             setDataToReview={setDataToReview}
             setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
           />
-        </EditPointPopupWrapper>
+        </div>
       ) : null}
       <SelectAttributeFromClassifierGuesses
         selectedPoint={selectedPoint}
