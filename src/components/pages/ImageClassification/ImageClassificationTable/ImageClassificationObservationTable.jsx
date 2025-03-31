@@ -195,7 +195,7 @@ const ImageClassificationObservationTable = ({
     [growthForms],
   )
 
-  const fetchImages = async () => {
+  const fetchImages = useCallback(async () => {
     try {
       const [choicesResponse, benthicAttributesResponse] = await Promise.all([
         databaseSwitchboardInstance.getChoices(),
@@ -205,13 +205,13 @@ const ImageClassificationObservationTable = ({
       setGrowthForms(choicesResponse.growthforms.data)
       setBenthicAttributes(benthicAttributesResponse)
 
-      const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
+      const imagesResponse = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
         projectId,
         recordId,
         EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD,
       )
 
-      const sortedImages = response.results.map((image) => {
+      const sortedImages = imagesResponse.results.map((image) => {
         const sortedPoints = image.points.map((point) => {
           const sortedAnnotations = point.annotations.sort(prioritizeConfirmedAnnotations)
           return { ...point, annotations: sortedAnnotations }
@@ -231,7 +231,7 @@ const ImageClassificationObservationTable = ({
     } finally {
       setIsFetching(false)
     }
-  }
+  }, [databaseSwitchboardInstance, handleHttpResponseError, projectId, recordId, setImages])
 
   const distillAnnotationData = useCallback(
     (items) => {
@@ -317,16 +317,14 @@ const ImageClassificationObservationTable = ({
   }, [distillAnnotationData, images, numPointsPerQuadrat])
 
   const _fetchImagesOnLoad = useEffect(() => {
-    if (!recordId || !projectId || isFetching || !isFirstLoad.current) {
+    if (!recordId || !projectId || !isFirstLoad.current) {
       return
     }
     setIsFetching(true)
     isFirstLoad.current = false
 
     fetchImages()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [fetchImages, projectId, recordId])
 
   const _distillImagesData = useEffect(() => {
     if (benthicAttributes && growthForms) {
