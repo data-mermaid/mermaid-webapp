@@ -55,7 +55,7 @@ jobs:
   call-cdk-deploy:
     concurrency:
       group: app-deployment-${{ github.ref }}
-    # needs: [call-test, call-lint]
+    needs: [call-test, call-lint]
     uses: ./.github/workflows/_cdk.yml
     with:
       cdk_subcommand: deploy
