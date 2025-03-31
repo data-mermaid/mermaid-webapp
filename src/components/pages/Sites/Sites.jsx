@@ -320,6 +320,19 @@ const Sites = () => {
     </>
   )
 
+  const noSitesTableContent = (
+    <PageUnavailable
+      mainText={language.pages.siteTable.noDataMainText}
+      subText={
+        isAppOnline ? (
+          <ButtonPrimary type="button" onClick={openCopySitesModal}>
+            <IconCopy /> {language.pages.siteTable.copySitesButtonText}
+          </ButtonPrimary>
+        ) : null
+      }
+    />
+  )
+
   const table = siteRecordsForUiDisplay.length ? (
     <>
       <StickyTableOverflowWrapper>
@@ -391,14 +404,7 @@ const Sites = () => {
       {isAppOnline && <ProjectSitesMap sitesForMapMarkers={sitesForMapMarkers} choices={choices} />}
     </>
   ) : (
-    <PageUnavailable
-      mainText={language.pages.siteTable.noDataMainText}
-      subText={
-        <ButtonPrimary type="button" onClick={openCopySitesModal}>
-          <IconCopy /> {language.pages.siteTable.copySitesButtonText}
-        </ButtonPrimary>
-      }
-    />
+    noSitesTableContent
   )
 
   return idsNotAssociatedWithData.length ? (
