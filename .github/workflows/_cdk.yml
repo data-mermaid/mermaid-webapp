@@ -7,6 +7,11 @@ on:
         required: true
         type: string
 
+permissions:
+  actions: write
+  contents: read
+  id-token: write
+
 env:
   # dev and prod
   VITE_AUTH0_DOMAIN: datamermaid.auth0.com
@@ -43,6 +48,9 @@ jobs:
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4.1.0
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+          CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
         with:
           role-to-assume: ${{ secrets.CDK_DEPLOY_ROLE }}
           aws-region: us-east-1
