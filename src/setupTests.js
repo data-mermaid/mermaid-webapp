@@ -12,9 +12,9 @@ import { mockDocumentCookie } from './testUtilities/mockDocumentCookie'
 enableFetchMocks() // avoids ReferenceError: Request is not defined errors in tests
 
 jest.setTimeout(300000)
-window.URL.createObjectURL = () => {}
-window.confirm = () => true // simulates user clicking OK
-window.scrollTo = () => {}
+window?.URL.createObjectURL = () => {}
+window?.confirm = () => true // simulates user clicking OK
+window?.scrollTo = () => {}
 
 jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
   return {

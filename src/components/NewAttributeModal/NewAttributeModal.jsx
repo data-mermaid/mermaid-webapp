@@ -166,7 +166,7 @@ const NewAttributeModal = ({
         .getProject(projectId)
         .then((project) => {
           if (isMounted.current) {
-            setProjectName(project.name)
+            setProjectName(project?.name)
           }
         })
         .catch((error) => {
