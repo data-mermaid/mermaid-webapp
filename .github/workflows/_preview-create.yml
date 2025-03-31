@@ -10,18 +10,17 @@ on:
 env:
   S3_BUCKET: preview.app2.datamermaid.org
   PR_NUMBER: ${{ github.event.number }}
-  REACT_APP_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
-  REACT_APP_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
-  REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
-  REACT_APP_MAPBOX_ACCESS_TOKEN: pk.eyJ1IjoibWVybWFpZC1hZG1pbiIsImEiOiJjanh1djd1d20wMThoM2ZsaXZvdzZ3NGQxIn0.MrVUTQrUGJaTxjmn3h4udw
-  REACT_APP_MERMAID_API: https://dev-api.datamermaid.org/v1
-  REACT_APP_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
-  REACT_APP_MERMAID_DASHBOARD_LINK: https://dev-dashboard.datamermaid.org
-  REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
-  REACT_APP_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
-  REACT_APP_CAPTURE_GOOGLE_ANALYTICS: false
-
- 
+  BASE_PATH: ${{ github.event.number }}
+  VITE_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
+  VITE_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
+  VITE_AUTH0_DOMAIN: datamermaid.auth0.com
+  VITE_MAPBOX_ACCESS_TOKEN: pk.eyJ1IjoibWVybWFpZC1hZG1pbiIsImEiOiJjanh1djd1d20wMThoM2ZsaXZvdzZ3NGQxIn0.MrVUTQrUGJaTxjmn3h4udw
+  VITE_MERMAID_API: https://dev-api.datamermaid.org/v1
+  VITE_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
+  VITE_MERMAID_DASHBOARD_LINK: https://dev-dashboard.datamermaid.org
+  VITE_CORAL_ATLAS_APP_ID: v8nkxznp3m
+  VITE_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
+  VITE_CAPTURE_GOOGLE_ANALYTICS: false
 
 jobs:
   build-and-push-to-s3:
@@ -54,7 +53,7 @@ jobs:
           cat src/version.js
 
       - name: Yarn Build
-        run: yarn build
+        run: yarn build --base="${BASE_PATH}/"
 
       - name: Upload files to S3 with AWS CLI
         env:

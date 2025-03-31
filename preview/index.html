@@ -6,8 +6,13 @@
   </head>
   <body>
     <script>
+      // IMPORTANT: the full functionality of this script for pull requests only takes effect once merged
+      // the file is places in the root directory where the preview app resides, not the version located where the app is served from the url containing the PR number.
+      // it is suspected BUT NOT VERIFIED that a script will place this file at the root of the preview deploy upon merge with develop
+      // This is because Auth0 wont be redirecting a url with the PR branc number in it, and
+      // therefore won't be redirecting to the version of this file in the PR
       const PRNumber = localStorage.getItem('pullRequestNumber')
-      const redirectURL = `${window.location.origin}${PRNumber}/index.html${window.location.search}`
+      const redirectURL = `${window.location.origin}${PRNumber}index.html${window.location.search}`
 
       if (PRNumber) {
         window.location.replace(redirectURL)
@@ -16,7 +21,7 @@
         container.innerHTML = `
         <h1>You are not authenticated</h1>
         <p>Add the pull request number to the url path (ex. preview.app2.datamermaid.org/123/index.html) to sign in.</p>
-        <p>If there are no open pull requests, no previews of this application are available.</p>  
+        <p>If there are no open pull requests, no previews of this application are available.</p>
       `
         document.body.appendChild(container)
       }

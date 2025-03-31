@@ -1,5 +1,5 @@
 // importing from @turf/turf causes issues with tests, so import each utility individually
-import bbox from '@turf/bbox'
+import { bbox } from '@turf/bbox'
 
 export const useZoomToPointsByAttributeId = ({ patchesGeoJson, zoomToPaddedBounds }) => {
   const zoomToPointsByAttributeId = (attributeId) => {

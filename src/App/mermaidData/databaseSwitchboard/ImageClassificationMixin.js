@@ -9,7 +9,7 @@ const ImageClassificationMixin = (Base) =>
       excludeParams = '',
     ) {
       if (!imageId || !projectId) {
-        Promise.reject(this._operationMissingParameterError)
+        return Promise.reject(this._operationMissingParameterError)
       }
 
       const queryParams = new URLSearchParams()
@@ -32,7 +32,7 @@ const ImageClassificationMixin = (Base) =>
 
     saveAnnotationsForImage = async function saveAnnotationsForImage(projectId, imageId, points) {
       if (!imageId || !projectId || !points.length) {
-        Promise.reject(this._operationMissingParameterError)
+        return Promise.reject(this._operationMissingParameterError)
       }
 
       const payload = { id: imageId, points }
@@ -102,7 +102,7 @@ const ImageClassificationMixin = (Base) =>
 
     deleteImage = async (projectId, imageId) => {
       if (!imageId || !projectId) {
-        Promise.reject(this._operationMissingParameterError)
+        return Promise.reject(this._operationMissingParameterError)
       }
 
       return this._isOnlineAuthenticatedAndReady
