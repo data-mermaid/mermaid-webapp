@@ -1,4 +1,3 @@
-/* eslint-disable max-nested-callbacks */
 import { rest } from 'msw'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import {
@@ -24,7 +23,7 @@ test('deleteSampleUnit online returns error message upon dexie error', async () 
 test('deleteSampleUnit online deletes the IDB record if there is no corresponding record on the server', async () => {
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
 
       (req, res, ctx) => {
         // proves that the api call is skipped, otherwise the test will fail
@@ -62,7 +61,7 @@ test('deleteSampleUnit online deletes the record if there is a corresponding cop
 
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
 
       (req, res, ctx) => {
         const { _deleted, profile, project } = req.body.collect_records[0]
@@ -84,7 +83,7 @@ test('deleteSampleUnit online deletes the record if there is a corresponding cop
       },
     ),
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/pull/`,
+      `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
       (req, res, ctx) => {
         return res(
@@ -115,7 +114,7 @@ test('deleteSampleUnit online deletes the record if there is a corresponding cop
 test('deleteSampleUnit online returns a rejected promise if the status code from the API for the record is not successful', async () => {
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
 
       (req, res, ctx) => {
         // this call captures the second call to push which will be a delete
@@ -169,7 +168,7 @@ test('deleteSampleUnit online marks a record in indexedDB with _deleted in the c
   expect.assertions(2)
   mockMermaidApiAllSuccessful.use(
     rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
 
       (_req, res, _ctx) => {
         return res.networkError()
