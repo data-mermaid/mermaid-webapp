@@ -96,7 +96,7 @@ jobs:
         run: npm ci && npm install -g aws-cdk
 
       - name: CDK ${{ inputs.cdk_subcommand }} DEV
-        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions')
+        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions-vite')
         working-directory: iac
         run: |
           cdk ${{ inputs.cdk_subcommand }} preview-webapp dev-webapp --require-approval never
