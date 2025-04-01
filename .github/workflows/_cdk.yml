@@ -113,7 +113,7 @@ jobs:
 
 
       - name: CDK ${{ inputs.cdk_subcommand }} PROD
-        if: startsWith(github.ref, 'refs/tags') || (github.event_name == 'pull_request' && github.event.action == 'diff')
+        if: startsWith(github.ref, 'refs/tags') || (github.event_name == 'pull_request' && inputs.cdk_subcommand == 'diff')
         working-directory: iac
         run: |
           cdk ${{ inputs.cdk_subcommand }} preview-webapp prod-webapp --require-approval never
