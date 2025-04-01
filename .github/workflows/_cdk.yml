@@ -93,7 +93,7 @@ jobs:
           role-skip-session-tagging: true
 
       - name: CDK ${{ inputs.cdk_subcommand }} DEV
-        if: startsWith(github.ref, 'refs/heads/develop') || (github.event_name == 'pull_request' && inputs.cdk_subcommand == 'diff') || startsWith(github.ref, 'refs/heads/165-gh-actions-vite')
+        if: startsWith(github.ref, 'refs/heads/develop') || (github.event_name == 'pull_request' && inputs.cdk_subcommand == 'diff')
         working-directory: iac
         run: |
           npm install -g aws-cdk && cdk ${{ inputs.cdk_subcommand }} preview-webapp dev-webapp --require-approval never
