@@ -49,18 +49,8 @@ jobs:
         if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
         run: yarn install --frozen-lockfile
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4.1.0
-        env:
-          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-          CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
-        with:
-          role-to-assume: ${{ secrets.CDK_DEPLOY_ROLE }}
-          aws-region: us-east-1
-          role-skip-session-tagging: true
-
       - name: Create version file for dev
-        if: startsWith(github.ref, 'refs/heads/develop')
+        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions-vite')
         run: |
           short_sha=$(git rev-parse --short ${{ github.sha }})
           echo "export const versionNumber = '$short_sha'" > src/version.js
@@ -94,6 +84,16 @@ jobs:
         if: ${{ steps.iac-cache.outputs.cache-hit != 'true' }}
         working-directory: iac
         run: npm ci && npm install -g aws-cdk
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+          CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
+        with:
+          role-to-assume: ${{ secrets.CDK_DEPLOY_ROLE }}
+          aws-region: us-east-1
+          role-skip-session-tagging: true
 
       - name: CDK ${{ inputs.cdk_subcommand }} DEV
         if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions-vite')
