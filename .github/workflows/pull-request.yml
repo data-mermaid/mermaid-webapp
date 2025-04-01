@@ -17,6 +17,17 @@ concurrency:
   group: ci-pr-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  actions: write
+  contents: read
+  id-token: write
+
+env:
+  CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+  CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
+  GITHUB_TOKEN: ${{ github.token }}
+
+
 jobs:
   deps-cache:
     if: github.event.pull_request.draft == false
