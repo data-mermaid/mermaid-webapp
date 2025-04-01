@@ -57,6 +57,8 @@ jobs:
       group: app-deployment-${{ github.ref }}
     needs: [call-test, call-lint]
     uses: ./.github/workflows/_cdk.yml
+    secrets: inherit
     with:
       cdk_subcommand: deploy
-    secrets: inherit
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+      CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}

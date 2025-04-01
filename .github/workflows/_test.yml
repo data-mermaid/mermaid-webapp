@@ -44,6 +44,8 @@ jobs:
     uses: ./.github/workflows/_cdk.yml
     with:
       cdk_subcommand: synth
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+      CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
     secrets: inherit
 
   call-cdk-diff:
@@ -52,4 +54,6 @@ jobs:
     uses: ./.github/workflows/_cdk.yml
     with:
       cdk_subcommand: diff
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+      CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
     secrets: inherit
