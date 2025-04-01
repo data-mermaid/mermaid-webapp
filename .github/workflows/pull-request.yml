@@ -26,7 +26,6 @@ env:
   CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
   GITHUB_TOKEN: ${{ github.token }}
 
-
 jobs:
   deps-cache:
     if: github.event.pull_request.draft == false

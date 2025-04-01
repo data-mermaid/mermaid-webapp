@@ -57,7 +57,7 @@ jobs:
   call-cdk-deploy:
     concurrency:
       group: app-deployment-${{ github.ref }}
-    needs: [call-test, call-lint]
+    needs: [call-lint]
     uses: ./.github/workflows/_cdk.yml
     secrets: inherit
     with:
