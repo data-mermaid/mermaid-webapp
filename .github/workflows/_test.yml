@@ -2,10 +2,10 @@ name: 🧪 Test
 
 on: workflow_call
 
-permissions:
-  actions: write
-  contents: read
-  id-token: write
+# permissions:
+#   actions: write
+#   contents: read
+#   id-token: write
 
 env:
   VITE_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
@@ -16,8 +16,8 @@ env:
   VITE_MERMAID_DASHBOARD_LINK: https://dashboard.datamermaid.org
   VITE_CORAL_ATLAS_APP_ID: v8nkxznp3m
   VITE_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
-  CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-  CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
+  # CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+  # CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
 
 
 jobs:
@@ -41,18 +41,18 @@ jobs:
       - name: Run Tests
         run: yarn run test --watchAll=false
 
-  call-cdk-synth:
-    concurrency:
-      group: app-deployment-${{ github.ref }}
-    uses: ./.github/workflows/_cdk.yml
-    with:
-      cdk_subcommand: synth
-    secrets: inherit
+  # call-cdk-synth:
+  #   concurrency:
+  #     group: app-deployment-${{ github.ref }}
+  #   uses: ./.github/workflows/_cdk.yml
+  #   with:
+  #     cdk_subcommand: synth
+  #   secrets: inherit
 
-  call-cdk-diff:
-    concurrency:
-      group: app-deployment-${{ github.ref }}
-    uses: ./.github/workflows/_cdk.yml
-    with:
-      cdk_subcommand: diff
-    secrets: inherit
+  # call-cdk-diff:
+  #   concurrency:
+  #     group: app-deployment-${{ github.ref }}
+  #   uses: ./.github/workflows/_cdk.yml
+  #   with:
+  #     cdk_subcommand: diff
+  #   secrets: inherit
