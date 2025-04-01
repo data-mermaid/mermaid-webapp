@@ -25,6 +25,9 @@ env:
   VITE_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
   VITE_CAPTURE_GOOGLE_ANALYTICS: false
   TARGET: dev
+  CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+  CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
+
 
 jobs:
   cdk:
