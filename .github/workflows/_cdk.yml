@@ -15,7 +15,6 @@ on:
       - converted_to_draft
     branches:
       - develop
-      - 165-gh-actions-vite
 
 permissions:
   actions: write
@@ -57,7 +56,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Create version file for dev
-        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions-vite')
+        if: startsWith(github.ref, 'refs/heads/develop')
         run: |
           short_sha=$(git rev-parse --short ${{ github.sha }})
           echo "export const versionNumber = '$short_sha'" > src/version.js
@@ -103,7 +102,7 @@ jobs:
           role-skip-session-tagging: true
 
       - name: CDK ${{ inputs.cdk_subcommand }} DEV
-        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/165-gh-actions-vite')
+        if: startsWith(github.ref, 'refs/heads/develop') || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request'
         working-directory: iac
         run: |
           cdk ${{ inputs.cdk_subcommand }} preview-webapp dev-webapp --require-approval never
