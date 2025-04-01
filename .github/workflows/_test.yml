@@ -16,12 +16,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-node@v4.2.0
         with:
           node-version-file: '.nvmrc'
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4.2.2
         id: yarn-cache
         with:
           path: node_modules
@@ -29,7 +29,6 @@ jobs:
 
       - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
         name: Install dependencies
-        run: yarn install --frozen-lockfile
-
+        run: yarn install
       - name: Run Tests
         run: yarn run test --watchAll=false

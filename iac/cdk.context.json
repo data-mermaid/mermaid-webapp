@@ -2,5 +2,6 @@
   "hosted-zone:account=554812291621:domainName=app2.datamermaid.org:region=us-east-1": {
     "Id": "/hostedzone/Z057628713VX646WVHWOJ",
     "Name": "app2.datamermaid.org."
-  }
+  },
+  "acknowledged-issue-numbers": [32775]
 }

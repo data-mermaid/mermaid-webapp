@@ -49,3 +49,6 @@ jsconfig.json
 !.yarn/sdks
 !.yarn/versions
 
+**.envrc
+
+
