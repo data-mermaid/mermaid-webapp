@@ -370,6 +370,19 @@ const ManagementRegimes = () => {
     </>
   )
 
+  const noManagementRegimesTableContent = (
+    <PageUnavailable
+      mainText={language.pages.managementRegimeTable.noDataMainText}
+      subText={
+        isAppOnline ? (
+          <ButtonPrimary type="button" onClick={openCopyManagementRegimesModal}>
+            <IconCopy /> {language.pages.managementRegimeTable.copyManagementRegimeButtonText}
+          </ButtonPrimary>
+        ) : null
+      }
+    />
+  )
+
   const table = managementRegimeRecordsForUiDisplay.length ? (
     <>
       <StickyTableOverflowWrapper>
@@ -436,14 +449,7 @@ const ManagementRegimes = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageUnavailable
-      mainText={language.pages.managementRegimeTable.noDataMainText}
-      subText={
-        <ButtonPrimary type="button" onClick={openCopyManagementRegimesModal}>
-          <IconCopy /> {language.pages.managementRegimeTable.copyManagementRegimeButtonText}
-        </ButtonPrimary>
-      }
-    />
+    noManagementRegimesTableContent
   )
 
   return idsNotAssociatedWithData.length ? (

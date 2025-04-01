@@ -10,7 +10,7 @@ import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 
 const Thead = styled.th`
-  text-align: center;
+  text-align: left;
   background-color: ${theme.color.primaryColor};
   color: white;
   padding: ${theme.spacing.small} ${theme.spacing.medium};

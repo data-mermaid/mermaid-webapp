@@ -29,7 +29,6 @@ jobs:
 
       - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
         name: Install dependencies
-        run: node --version && yarn install --frozen-lockfile
-
+        run: yarn install
       - name: Run Tests
-        run: node --version && yarn run test --watchAll=false --runInBand
+        run: yarn run test --watchAll=false

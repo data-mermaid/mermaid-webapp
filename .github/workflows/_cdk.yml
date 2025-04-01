@@ -7,6 +7,11 @@ on:
         required: true
         type: string
 
+permissions:
+  actions: write
+  contents: read
+  id-token: write
+
 env:
   # dev and prod
   VITE_AUTH0_DOMAIN: datamermaid.auth0.com
@@ -77,19 +82,33 @@ jobs:
         working-directory: iac
         run: npm ci
 
-      - name: CDK ${{ inputs.cdk_subcommand }}
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: ${{ inputs.cdk_subcommand }}
-          cdk_args: |
-            --require-approval never \
-            -c domain=app2.datamermaid.org \
-            -c subdomain=${{ env.TARGET }}
-          actions_comment: true
-          working_dir: iac
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-          AWS_DEFAULT_REGION: 'us-east-1'
-          GITHUB_TOKEN: ${{ github.token }}
+          CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
+        with:
+          role-to-assume: ${{ secrets.CDK_DEPLOY_ROLE }}
+          aws-region: us-east-1
+          role-skip-session-tagging: true
+
+      - name: CDK ${{ inputs.cdk_subcommand }} DEV
+        if: startsWith(github.ref, 'refs/heads/develop') || (github.event_name == 'pull_request' && inputs.cdk_subcommand == 'diff')
+        working-directory: iac
+        run: |
+          npm install -g aws-cdk && cdk ${{ inputs.cdk_subcommand }} preview-webapp dev-webapp --require-approval never
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+          CDK_DEFAULT_REGION: us-east-1
+
+
+      - name: CDK ${{ inputs.cdk_subcommand }} PROD
+        if: startsWith(github.ref, 'refs/tags')
+        working-directory: iac
+        run: |
+          npm install -g aws-cdk && cdk ${{ inputs.cdk_subcommand }} preview-webapp prod-webapp --require-approval never
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+          CDK_DEFAULT_REGION: us-east-1
