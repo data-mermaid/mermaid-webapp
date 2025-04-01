@@ -6,9 +6,17 @@ name: Remove preview
 on:
   workflow_call:
 
+permissions:
+  actions: write
+  contents: read
+  id-token: write
+
 env:
   S3_BUCKET: preview.app2.datamermaid.org
   PR_NUMBER: ${{ github.event.number }}
+  CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+  CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
+  GITHUB_TOKEN: ${{ github.token }}
 
 jobs:
   remove-preview:
