@@ -20,6 +20,7 @@ env:
   VITE_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
   CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
   CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
+  GITHUB_TOKEN: ${{ github.token }}
 
 jobs:
   deps-cache:
@@ -60,6 +61,5 @@ jobs:
     needs: [call-test, call-lint]
     uses: ./.github/workflows/_cdk.yml
     secrets: inherit
-
     with:
       cdk_subcommand: deploy
