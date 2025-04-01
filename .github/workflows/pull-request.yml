@@ -10,7 +10,6 @@ on:
       - converted_to_draft
     branches:
       - develop
-      - 165-gh-actions-vite
 
 # Saving Computation Time by Stopping Obsolete Workflows
 concurrency:
