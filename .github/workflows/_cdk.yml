@@ -6,16 +6,6 @@ on:
       cdk_subcommand:
         required: true
         type: string
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
-      - converted_to_draft
-    branches:
-      - develop
-      - 165-gh-actions-vite
 
 permissions:
   actions: write
