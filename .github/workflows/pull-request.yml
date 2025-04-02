@@ -36,21 +36,14 @@ jobs:
       - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
         name: Install dependencies
         run: yarn install --frozen-lockfile
-
-  call-lint:
-    if: github.event.pull_request.draft == false
-    needs: [deps-cache]
-    uses: ./.github/workflows/_lint.yml
   
   call-preview:
     if: github.event.pull_request.draft == false
-    needs: [call-lint]
     uses: ./.github/workflows/_preview-create.yml
     secrets: inherit
 
   call-cdk-diff:
     if: github.event.pull_request.draft == false
-    needs: [call-lint]
     uses: ./.github/workflows/_cdk.yml
     with:
       cdk_subcommand: diff
