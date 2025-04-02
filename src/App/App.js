@@ -34,7 +34,7 @@ import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
 import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 import { routes } from './routes'
-
+// bla bla
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline, setServerNotReachable } = useOnlineStatus()
   const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()
