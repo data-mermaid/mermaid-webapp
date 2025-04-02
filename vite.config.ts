@@ -8,6 +8,7 @@ export default defineConfig({
   plugins: [
     react({ plugins: [['@swc/plugin-styled-components', { displayName: true }]] }),
     VitePWA({
+      filename: 'service-worker.js', // match the old CRA service worker name so we avoid stale caches
       registerType: 'autoUpdate',
       manifest: {
         short_name: 'MERMAID',

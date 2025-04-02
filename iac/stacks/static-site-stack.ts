@@ -14,6 +14,7 @@ import { StaticSite } from '../static-site'
 interface StaticSiteStackProps extends cdk.StackProps {
   domainName: string
   siteSubDomain: string
+  hostedZoneId: string
   isPreview?: boolean
 }
 
@@ -24,6 +25,7 @@ export class StaticSiteStack extends cdk.Stack {
     const site = new StaticSite(this, 'StaticSite', {
       domainName: props.domainName,
       siteSubDomain: props.siteSubDomain,
+      hostedZoneId: props.hostedZoneId,
       isPreview: props.isPreview,
     })
 
