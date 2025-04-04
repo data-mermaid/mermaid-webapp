@@ -38,7 +38,7 @@ const BenthicPhotoQuadratTransectInputs = ({
   resetNonObservationFieldValidations,
   validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
-  isImageClassification,
+  isImageClassificationSelected,
 }) => {
   const { currents, relativedepths, tides, visibilities } = choices
 
@@ -395,7 +395,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           value={formik.values.num_points_per_quadrat}
           onChange={handleNumberOfPointsPerQuadratChange}
           helperText={language.helperText.numberOfPointsPerQuadrat}
-          disabled={isImageClassification}
+          disabled={isImageClassificationSelected}
         />
         <InputSelectWithLabelAndValidation
           label="Visibility"
@@ -512,7 +512,7 @@ BenthicPhotoQuadratTransectInputs.propTypes = {
   validationsApiData: PropTypes.shape({ quadrat_transect: benthicpqtValidationPropType })
     .isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
-  isImageClassification: PropTypes.bool,
+  isImageClassificationSelected: PropTypes.bool,
 }
 
 export default BenthicPhotoQuadratTransectInputs

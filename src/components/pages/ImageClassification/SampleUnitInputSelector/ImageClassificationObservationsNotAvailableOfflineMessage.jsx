@@ -1,9 +1,9 @@
 import React from 'react'
-import { SelectorContainer, TextContainer } from './SampleUnitInputSelector.styles'
+import { SelectorContainer, TextContainer } from './BpqObservationTypeSelector.styles'
 import { H3 } from '../../../generic/text'
 import language from '../../../../language'
 
-const SampleUnitInputSelectorOffline = () => {
+const ImageClassificationObservationsNotAvailableOfflineMessage = () => {
   return (
     <SelectorContainer>
       <TextContainer>
@@ -16,4 +16,4 @@ const SampleUnitInputSelectorOffline = () => {
   )
 }
 
-export default SampleUnitInputSelectorOffline
+export default ImageClassificationObservationsNotAvailableOfflineMessage

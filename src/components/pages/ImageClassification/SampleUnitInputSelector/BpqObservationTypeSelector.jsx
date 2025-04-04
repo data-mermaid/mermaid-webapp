@@ -10,11 +10,11 @@ import {
   OfflineText,
   SelectorContainer,
   TextContainer,
-} from './SampleUnitInputSelector.styles'
+} from './BpqObservationTypeSelector.styles'
 
-const SampleUnitInputSelector = ({ setIsImageClassification, isAppOnline }) => {
+const BpqObservationTypeSelector = ({ setIsImageClassificationSelected, isAppOnline }) => {
   const handleSampleUnitChange = (type) => () => {
-    setIsImageClassification(type)
+    setIsImageClassificationSelected(type)
   }
 
   return (
@@ -46,9 +46,9 @@ const SampleUnitInputSelector = ({ setIsImageClassification, isAppOnline }) => {
   )
 }
 
-SampleUnitInputSelector.propTypes = {
-  setIsImageClassification: PropTypes.func.isRequired,
+BpqObservationTypeSelector.propTypes = {
+  setIsImageClassificationSelected: PropTypes.func.isRequired,
   isAppOnline: PropTypes.bool.isRequired,
 }
 
-export default SampleUnitInputSelector
+export default BpqObservationTypeSelector
