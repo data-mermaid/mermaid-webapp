@@ -28,6 +28,10 @@ import ErrorBoundary from '../../../ErrorBoundary'
 import BenthicPhotoQuadratTransectInputs from './BenthicPhotoQuadratTransectInputs'
 import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
 import benthicpqtObservationReducer from './benthicpqtObservationReducer'
+import ImageClassificationContainer from '../../ImageClassification/ImageClassificationTable/ImageClassificationContainer'
+import { useOnlineStatus } from '../../../../library/onlineStatusContext'
+import BpqObservationTypeSelector from '../../ImageClassification/SampleUnitInputSelector/BpqObservationTypeSelector'
+import ImageClassificationObservationsNotAvailableOfflineMessage from '../../ImageClassification/SampleUnitInputSelector/ImageClassificationObservationsNotAvailableOfflineMessage'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -39,6 +43,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const [observationIdToAddNewBenthicAttributeTo, setObservationIdToAddNewBenthicAttributeTo] =
     useState()
   const [subNavNode, setSubNavNode] = useState(null)
+  const { isAppOnline } = useOnlineStatus()
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -48,8 +53,12 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const isMounted = useIsMounted()
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
   const [sites, setSites] = useState([])
+  const [isImageClassificationSelected, setIsImageClassificationSelected] = useState(null)
 
   const [observationsDispatch] = observationsReducer
+  const doesRecordHaveImageClassificationData = collectRecordBeingEdited?.data?.image_classification
+  const { enabled: isImageClassificationEnabledForUser = false } =
+    currentUser?.optional_features?.image_classification ?? {}
 
   useEffect(
     function loadSupportingData() {
@@ -208,10 +217,31 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       updateBenthicAttributeOptionsStateWithOfflineStorageData,
     ],
   )
+
   const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
     (props) => {
-      // the conditional here makes tests happy
-      if (benthicAttributeSelectOptions.length) {
+      const isImageClassificationObservationsOfflineMessageShowing =
+        !isAppOnline && doesRecordHaveImageClassificationData
+
+      const isBpqObservationTypeSelectorShowing = isNewRecord && isImageClassificationEnabledForUser
+
+      const isRegularObservationsTableShowing = !doesRecordHaveImageClassificationData
+
+      const isImageClassificationObservationsTableShowing =
+        collectRecordBeingEdited && doesRecordHaveImageClassificationData
+
+      if (isImageClassificationObservationsOfflineMessageShowing) {
+        return <ImageClassificationObservationsNotAvailableOfflineMessage />
+      }
+      if (isBpqObservationTypeSelectorShowing) {
+        return (
+          <BpqObservationTypeSelector
+            setIsImageClassificationSelected={setIsImageClassificationSelected}
+            isAppOnline={isAppOnline}
+          />
+        )
+      }
+      if (isRegularObservationsTableShowing) {
         return (
           <BenthicPhotoQuadratObservationTable
             benthicAttributeSelectOptions={benthicAttributeSelectOptions}
@@ -219,11 +249,25 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
           />
         )
       }
-
+      if (isImageClassificationObservationsTableShowing) {
+        return (
+          <ImageClassificationContainer
+            {...props}
+            isImageClassificationEnabledForUser={isImageClassificationEnabledForUser}
+          />
+        )
+      }
       return null
     },
 
-    [benthicAttributeSelectOptions],
+    [
+      collectRecordBeingEdited,
+      isAppOnline,
+      doesRecordHaveImageClassificationData,
+      isNewRecord,
+      isImageClassificationEnabledForUser,
+      benthicAttributeSelectOptions,
+    ],
   )
 
   return (
@@ -246,6 +290,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
         setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
         setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
         subNavNode={subNavNode}
+        isImageClassificationSelected={isImageClassificationSelected}
       />
       {!!projectId && !!currentUser && (
         <NewAttributeModal

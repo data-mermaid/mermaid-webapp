@@ -63,17 +63,31 @@ export const StyledOverflowWrapper = styled(TableOverflowWrapper)`
 `
 
 export const StickyObservationTable = styled(GenericStickyTable)`
+  thead tr:nth-child(1) th {
+    position: sticky;
+    top: calc(
+      ${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + ${theme.spacing.small}
+    );
+    z-index: 4; /* Ensure the first row is above the second */
+    background-color: white;
+  }
+
+  thead tr:nth-child(2) th {
+    position: sticky;
+    top: calc(
+      ${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + ${theme.spacing.small} + 4rem
+    ); /* Adjust for the height of the first row */
+    z-index: 3; /* Ensure the second row is below the first */
+    background-color: white;
+  }
+
   tr {
     &:focus-within button,
     &:hover button {
       display: inline;
       cursor: pointer;
     }
-    th {
-      top: calc(
-        ${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + ${theme.spacing.small}
-      );
-    }
+
     td {
       padding: 0rem;
       & > div {
@@ -121,7 +135,9 @@ export const UnderTableRowButtonArea = styled('div')`
   }
 `
 
-export const CellValidation = styled(Td)``
+export const CellValidation = styled(Td)`
+  border: none;
+`
 
 export const CellValidationButton = styled(ButtonSecondary)`
   font-size: smaller;
