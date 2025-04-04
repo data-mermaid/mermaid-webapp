@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
 import ImageClassificationObservationTable from './ImageClassificationObservationTable'
 import ImageUploadModal from '../ImageUploadModal/ImageUploadModal'
 import { ButtonPrimary } from '../../../generic/buttons'
@@ -11,6 +12,7 @@ import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHa
 import { useParams } from 'react-router-dom'
 
 const ImageClassificationContainer = (props) => {
+  const { isImageClassificationEnabledForUser } = props
   const [images, setImages] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -87,12 +89,19 @@ const ImageClassificationContainer = (props) => {
         {...props}
       />
       <ButtonContainer>
-        <ButtonPrimary type="button" onClick={() => setIsModalOpen(true)}>
-          <IconContainer>
-            <IconUpload />
-          </IconContainer>
-          Upload Photos
-        </ButtonPrimary>
+        {isImageClassificationEnabledForUser ? (
+          <ButtonPrimary type="button" onClick={() => setIsModalOpen(true)}>
+            <IconContainer>
+              <IconUpload />
+            </IconContainer>
+            Upload Photos
+          </ButtonPrimary>
+        ) : (
+          <>
+            You arent currently able to upload new images for classification. You may access and
+            review previously uploaded images.
+          </>
+        )}
       </ButtonContainer>
       {isModalOpen && (
         <ImageUploadModal
@@ -109,3 +118,7 @@ const ImageClassificationContainer = (props) => {
 }
 
 export default ImageClassificationContainer
+
+ImageClassificationContainer.propTypes = {
+  isImageClassificationEnabledForUser: PropTypes.bool.isRequired,
+}

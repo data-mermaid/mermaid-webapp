@@ -113,7 +113,7 @@ const CollectRecordFormPage = ({
   observationsTable2Reducer = [],
   ObservationTable1,
   ObservationTable2 = undefined,
-  isImageClassification = null,
+  isImageClassificationSelected = null,
   sampleUnitFormatSaveFunction,
   sampleUnitName,
   SampleUnitTransectInputs,
@@ -376,7 +376,7 @@ const CollectRecordFormPage = ({
     // ensure image_classification is not overwritten after it has been saved the first time.
     const imageClassificationToSave =
       originalImageClassification === undefined || originalImageClassification === null
-        ? isImageClassification
+        ? isImageClassificationSelected
         : originalImageClassification
 
     const recordToSubmit = sampleUnitFormatSaveFunction({
@@ -397,7 +397,7 @@ const CollectRecordFormPage = ({
         profileId: currentUser.id,
         projectId,
         protocol: sampleUnitName,
-        image_classification: isImageClassification,
+        image_classification: isImageClassificationSelected,
       })
       .then((collectRecordResponse) => {
         setIsFormDirty(false)
@@ -447,12 +447,12 @@ const CollectRecordFormPage = ({
   }
 
   const _handleSaveObservationTableType = useEffect(() => {
-    if (isImageClassification !== null) {
+    if (isImageClassificationSelected !== null) {
       handleSave()
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isImageClassification])
+  }, [isImageClassificationSelected])
 
   const openDeleteRecordModal = () => {
     setIsDeleteRecordModalOpen(true)
@@ -539,7 +539,7 @@ const CollectRecordFormPage = ({
           validationPropertiesWithDirtyResetOnInputChange={
             validationPropertiesWithDirtyResetOnInputChange
           }
-          isImageClassification={collectRecordBeingEdited?.data?.image_classification}
+          isImageClassificationSelected={collectRecordBeingEdited?.data?.image_classification}
         />
 
         <ObserversInput
@@ -671,7 +671,7 @@ CollectRecordFormPage.propTypes = {
   setIsNewBenthicAttributeModalOpen: PropTypes.func,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func,
   subNavNode: subNavNodePropTypes,
-  isImageClassification: PropTypes.bool,
+  isImageClassificationSelected: PropTypes.bool,
 }
 
 export default CollectRecordFormPage
