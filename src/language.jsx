@@ -573,7 +573,7 @@ const pages = {
     },
     citationLabel: 'Suggested Citation',
     citationHelperText:
-      'Citation to suggest for all uses of your project data. This citation will be displayed on the MERMAID dashboard and with any other data access method. ',
+      'Citation to suggest for all uses of your project data. This citation will be displayed on the MERMAID Explore and with any other data access method. ',
     editCitation: 'Edit Citation',
     editCitationModal: {
       title: 'Edit Suggested Citation',
