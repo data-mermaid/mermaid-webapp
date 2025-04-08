@@ -9,7 +9,7 @@ import language from '../../language'
 import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 
-const Thead = styled.th`
+const thStyles = css`
   text-align: left;
   background-color: ${theme.color.primaryColor};
   color: white;
@@ -21,6 +21,16 @@ const Thead = styled.th`
   small {
     display: block;
   }
+`
+
+const TheadLeft = styled.th`
+  ${thStyles}
+  text-align: left;
+`
+
+const TheadCenter = styled.th`
+  ${thStyles}
+  text-align: center;
 `
 
 const Tcell = styled(Td)`
@@ -43,13 +53,13 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
       <Table>
         <thead>
           <Tr>
-            <Thead>Project-level information</Thead>
-            <Thead>Private</Thead>
-            <Thead>
+            <TheadLeft>Project-level information</TheadLeft>
+            <TheadCenter>Private</TheadCenter>
+            <TheadCenter>
               <span>Public Summary</span>
               <small>(default)</small>
-            </Thead>
-            <Thead>Public</Thead>
+            </TheadCenter>
+            <TheadCenter>Public</TheadCenter>
           </Tr>
         </thead>
         <tbody>
