@@ -32,6 +32,7 @@ import ImageClassificationContainer from '../../ImageClassification/ImageClassif
 import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import BpqObservationTypeSelector from '../../ImageClassification/SampleUnitInputSelector/BpqObservationTypeSelector'
 import ImageClassificationObservationsNotAvailableOfflineMessage from '../../ImageClassification/SampleUnitInputSelector/ImageClassificationObservationsNotAvailableOfflineMessage'
+import { getCurrentUserOptionalFeature } from '../../../../library/getCurrentUserOptionalFeature'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -57,8 +58,10 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
 
   const [observationsDispatch] = observationsReducer
   const doesRecordHaveImageClassificationData = collectRecordBeingEdited?.data?.image_classification
-  const { enabled: isImageClassificationEnabledForUser = false } =
-    currentUser?.optional_features?.image_classification ?? {}
+  const { enabled: isImageClassificationEnabledForUser = false } = getCurrentUserOptionalFeature(
+    currentUser,
+    'image_classification',
+  )
 
   useEffect(
     function loadSupportingData() {
