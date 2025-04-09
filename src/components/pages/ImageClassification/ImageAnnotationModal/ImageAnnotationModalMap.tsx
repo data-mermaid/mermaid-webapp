@@ -42,6 +42,7 @@ import {
 import { ImageClassificationResponse } from '../../../../App/mermaidData/mermaidDataTypes'
 import { MapRef } from '../../../../types/map'
 import { MuiTooltipDarkRight } from '../../../generic/MuiTooltip'
+import { usePointsGeoJson } from './usePointsGeoJson'
 
 interface SelectedPoint {
   id: number | null
@@ -96,8 +97,6 @@ const hackResetMapToCurrentPosition = (
 const ImageAnnotationModalMap = ({
   databaseSwitchboardInstance,
   dataToReview,
-  getPointsGeojson,
-  getPointsLabelAnchorsGeoJson,
   hasMapLoaded,
   hoveredAttributeId,
   imageScale,
@@ -114,8 +113,6 @@ const ImageAnnotationModalMap = ({
 }: {
   databaseSwitchboardInstance: object
   dataToReview: ImageClassificationResponse
-  getPointsGeojson: () => GeoJSON.FeatureCollection
-  getPointsLabelAnchorsGeoJson: () => GeoJSON.FeatureCollection
   hasMapLoaded: boolean
   hoveredAttributeId: number
   imageScale: number
@@ -130,6 +127,11 @@ const ImageAnnotationModalMap = ({
   setPatchesGeoJson: Dispatch<SetStateAction<GeoJSON.FeatureCollection>>
   zoomToPaddedBounds: (bounds: number[]) => void
 }) => {
+  const { getPointsGeojson, getPointsLabelAnchorsGeoJson } = usePointsGeoJson({
+    dataToReview,
+    imageScale,
+    map,
+  })
   const [areLabelsShowing, setAreLabelsShowing] = useState(false)
   const [hoveredPointId, setHoveredPointId] = useState(null)
 
@@ -195,7 +197,7 @@ const ImageAnnotationModalMap = ({
     const currentCenter = map.current.getCenter()
 
     hackTemporarilySetMapToDefaultPosition(map)
-    const patches = getPointsGeojson()
+    const patches = getPointsGeojson() as GeoJSON.FeatureCollection
     const patchesCenters = getPatchesCenters(patches)
     setPatchesGeoJson(patches)
 
@@ -204,7 +206,7 @@ const ImageAnnotationModalMap = ({
     const patchesLabelsSource = map.current.getSource('patches-labels') as maplibregl.GeoJSONSource
     patchesSource?.setData(patches)
     patchesCenterSource?.setData(patchesCenters)
-    patchesLabelsSource?.setData(getPointsLabelAnchorsGeoJson())
+    patchesLabelsSource?.setData(getPointsLabelAnchorsGeoJson() as GeoJSON.FeatureCollection)
     if (currentZoom && currentCenter) {
       hackResetMapToCurrentPosition(map, currentZoom, currentCenter)
     }
@@ -258,7 +260,7 @@ const ImageAnnotationModalMap = ({
     const boundsEast = bounds.getEast()
     const boundsNorth = bounds.getNorth()
     const boundsSouth = bounds.getSouth()
-    const patches = getPointsGeojson()
+    const patches = getPointsGeojson() as GeoJSON.FeatureCollection
     const patchesCenters = getPatchesCenters(patches)
     setPatchesGeoJson(patches)
 
@@ -286,7 +288,10 @@ const ImageAnnotationModalMap = ({
           type: 'geojson',
           data: patchesCenters,
         },
-        'patches-labels': { type: 'geojson', data: getPointsLabelAnchorsGeoJson() },
+        'patches-labels': {
+          type: 'geojson',
+          data: getPointsLabelAnchorsGeoJson() as GeoJSON.FeatureCollection,
+        },
       },
       layers: [
         {
@@ -630,9 +635,8 @@ const ImageAnnotationModalMap = ({
     }
 
     map.current.resize()
-    updatePointsOnMap()
     updateImageSizeOnMap()
-  }, [imageScale, hasMapLoaded, map, updatePointsOnMap, updateImageSizeOnMap])
+  }, [hasMapLoaded, imageScale, map, updateImageSizeOnMap])
 
   const _updateStylingForPoints = useEffect(() => {
     if (!hasMapLoaded || !map.current) {

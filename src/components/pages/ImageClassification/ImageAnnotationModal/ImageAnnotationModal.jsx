@@ -19,7 +19,6 @@ import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import { useImageScale } from '../useImageScale'
-import { usePointsGeoJson } from './usePointsGeoJson'
 import { useZoomToPointsByAttributeId } from './useZoomToPointsByAttributeId'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
@@ -72,12 +71,6 @@ const ImageAnnotationModal = ({
     },
     [map],
   )
-
-  const { getPointsGeojson, getPointsLabelAnchorsGeoJson } = usePointsGeoJson({
-    dataToReview,
-    imageScale,
-    map,
-  })
 
   const { zoomToPointsByAttributeId } = useZoomToPointsByAttributeId({
     zoomToPaddedBounds,
@@ -205,8 +198,6 @@ const ImageAnnotationModal = ({
               <ImageAnnotationModalMap
                 databaseSwitchboardInstance={databaseSwitchboardInstance}
                 dataToReview={dataToReview}
-                getPointsGeojson={getPointsGeojson}
-                getPointsLabelAnchorsGeoJson={getPointsLabelAnchorsGeoJson}
                 hasMapLoaded={hasMapLoaded}
                 hoveredAttributeId={hoveredAttributeId}
                 imageScale={imageScale}
