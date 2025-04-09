@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components/macro'
+import styled, { css } from 'styled-components'
 import theme from '../../../theme'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../library/styling/mediaQueries'
 import {
@@ -48,10 +48,11 @@ export const ButtonPopover = styled(Button)`
 `
 export const Popover = styled('div')`
   border: solid thin grey;
+
   position: absolute;
   bottom: 1.4rem;
   right: calc(${theme.typography.xLargeIconSize} + 2px);
-  z-index: 3;
+  z-index: 10;
   background-color: ${theme.color.white};
 `
 
