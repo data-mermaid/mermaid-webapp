@@ -227,7 +227,8 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
         !isAppOnline && doesRecordHaveImageClassificationData
       const isBpqObservationTypeSelectorShowing = isNewRecord && isImageClassificationEnabledForUser
       const isRegularObservationsTableShowing = !doesRecordHaveImageClassificationData
-      const isImageClassificationObservationsTableShowing = doesRecordHaveImageClassificationData
+      const isImageClassificationObservationsTableShowing =
+        collectRecordBeingEdited && doesRecordHaveImageClassificationData
 
       if (isImageClassificationObservationsOfflineMessageShowing) {
         return <ImageClassificationObservationsNotAvailableOfflineMessage />
