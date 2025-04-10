@@ -10,7 +10,7 @@ import {
 } from './Footer.styles'
 import { TextLink } from '../generic/links'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
-import { versionNumber } from '../../version'
+import { versionNumber } from '../../version' 
 import OfflineHide from '../generic/OfflineHide'
 import OfflineToggle from '../OfflineToggle'
 
