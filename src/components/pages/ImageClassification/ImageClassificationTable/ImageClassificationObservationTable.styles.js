@@ -55,6 +55,7 @@ const IconContainer = styled('span')`
 
 const ButtonContainer = styled.div`
   margin-left: 1rem;
+  max-width: 500px;
 `
 
 const ImageWrapper = styled('div')`
