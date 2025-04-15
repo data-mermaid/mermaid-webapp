@@ -6,6 +6,7 @@ env:
   VITE_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
   VITE_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
   VITE_AUTH0_DOMAIN: datamermaid.auth0.com
+  VITE_MAPBOX_ACCESS_TOKEN: pk.eyJ1IjoibWVybWFpZC1hZG1pbiIsImEiOiJjanh1djd1d20wMThoM2ZsaXZvdzZ3NGQxIn0.MrVUTQrUGJaTxjmn3h4udw
   VITE_MERMAID_API: https://dev-api.datamermaid.org/v1
   VITE_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
   VITE_MERMAID_DASHBOARD_LINK: https://dashboard.datamermaid.org

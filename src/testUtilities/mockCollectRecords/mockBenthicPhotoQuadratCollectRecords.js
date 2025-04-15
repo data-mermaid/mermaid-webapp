@@ -4,6 +4,7 @@ export default [
     project: '5',
     profile: 'fake-id',
     data: {
+      image_classification: false,
       protocol: 'benthicpqt',
       observers: [
         {

@@ -11,7 +11,7 @@ import FishNameMixin from './FishNamesMixin'
 import SubmittedRecordsMixin from './SubmittedRecordsMixin'
 import ProjectHealthMixin from './ProjectHealthMixin'
 import GfcrMixin from './GfcrMixin'
-
+import ImageClassificationMixin from './ImageClassificationMixin'
 class DatabaseSwitchboard extends ProjectHealthMixin(
   BenthicAttributesMixin(
     FishNameMixin(
@@ -19,7 +19,9 @@ class DatabaseSwitchboard extends ProjectHealthMixin(
         SitesMixin(
           ProjectsMixin(
             ChoicesMixin(
-              ManagementRegimesMixin(CollectRecordsMixin(GfcrMixin(DatabaseSwitchboardState))),
+              ManagementRegimesMixin(
+                CollectRecordsMixin(GfcrMixin(ImageClassificationMixin(DatabaseSwitchboardState))),
+              ),
             ),
           ),
         ),
@@ -58,6 +60,8 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   deleteSampleUnit: PropTypes.func,
   validateSampleUnit: PropTypes.func,
   saveSampleUnit: PropTypes.func,
+  getAnnotationsForImage: PropTypes.func,
+  saveAnnotationsForImage: PropTypes.func,
 })
 
 export default DatabaseSwitchboard
