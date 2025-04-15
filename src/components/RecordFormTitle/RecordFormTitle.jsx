@@ -9,6 +9,11 @@ import { fishBeltPropType, sitePropType } from '../../App/mermaidData/mermaidDat
 import useDocumentTitle from '../../library/useDocumentTitle'
 import language from '../../language'
 import { getProtocolTransectType } from '../../App/mermaidData/recordProtocolHelpers'
+import { MuiTooltip } from '../generic/MuiTooltip'
+import { useCurrentUser } from '../../App/CurrentUserContext'
+import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
+import { IconButton } from '../generic/buttons'
+import { IconGlobe } from '../icons'
 
 const TitleContainer = styled('div')`
   display: flex;
@@ -16,6 +21,12 @@ const TitleContainer = styled('div')`
   line-height: 1;
   white-space: nowrap;
   gap: 0 1rem;
+
+  button {
+    margin: 0;
+    margin-top: 0.5rem;
+  }
+
   ${mediaQueryTabletLandscapeOnly(css`
     font-size: ${theme.typography.smallFontSize};
     h2 {
@@ -23,12 +34,18 @@ const TitleContainer = styled('div')`
     }
   `)}
 `
+
 const ProjectTooltip = styled(TooltipWithText)`
   ${TooltipPopup} {
     width: auto;
     min-width: max-content;
     text-align: center;
   }
+`
+
+const BiggerIconGlobe = styled(IconGlobe)`
+  width: ${theme.typography.mediumIconSize};
+  height: ${theme.typography.mediumIconSize};
 `
 
 const RecordFormTitle = ({
@@ -43,6 +60,10 @@ const RecordFormTitle = ({
   const siteName = getObjectById(sites, siteId)?.name ?? ''
   const transectNumber = submittedRecordOrCollectRecordDataProperty[transectType]?.number ?? ''
   const label = submittedRecordOrCollectRecordDataProperty[transectType]?.label ?? ''
+  const { currentUser } = useCurrentUser()
+  const { mermaidExploreLink, isExploreLaunchEnabledForUser } = useExploreLaunchFeature({
+    currentUser,
+  })
 
   useDocumentTitle(
     `${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${
@@ -50,27 +71,52 @@ const RecordFormTitle = ({
     }`,
   )
 
+  const handleExploreButtonClick = () => {
+    window.open(`${mermaidExploreLink}/?sample_event_id=${projectName}`, '_blank')
+  }
+
   return (
     <TitleContainer id="collect-form-title" data-testid="edit-collect-record-form-title">
-      <ProjectTooltip
-        forwardedAs="h2"
-        text={primaryTitle}
-        tooltipText="Protocol"
-        id="protocol-tooltip"
-      />
-      <ProjectTooltip
-        forwardedAs="h2"
-        text={siteName}
-        tooltipText="Site Name"
-        id="site-name-tooltip"
-      />
-      <ProjectTooltip
-        forwardedAs="h2"
-        text={transectNumber}
-        tooltipText="Transect Number"
-        id="transect-number-tooltip"
-      />
-      <ProjectTooltip forwardedAs="h2" text={label} tooltipText="Label" id="label-tooltip" />
+      {primaryTitle && (
+        <ProjectTooltip
+          forwardedAs="h2"
+          text={primaryTitle}
+          tooltipText="Protocol"
+          id="protocol-tooltip"
+        />
+      )}
+      {siteName && (
+        <ProjectTooltip
+          forwardedAs="h2"
+          text={siteName}
+          tooltipText="Site Name"
+          id="site-name-tooltip"
+        />
+      )}
+      {transectNumber && (
+        <ProjectTooltip
+          forwardedAs="h2"
+          text={transectNumber}
+          tooltipText="Transect Number"
+          id="transect-number-tooltip"
+        />
+      )}
+      {label && (
+        <ProjectTooltip forwardedAs="h2" text={label} tooltipText="Label" id="label-tooltip" />
+      )}
+      <MuiTooltip
+        title={language.pages.gotoExplore(isExploreLaunchEnabledForUser, 'this Sample Event')}
+        placement="top"
+        arrow
+      >
+        <IconButton
+          type="button"
+          aria-label="View Mermaid Explore"
+          onClick={handleExploreButtonClick}
+        >
+          <BiggerIconGlobe />
+        </IconButton>
+      </MuiTooltip>
     </TitleContainer>
   )
 }
