@@ -12,7 +12,6 @@ import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
 
-const mermaidDashboardLink = import.meta.env.VITE_MERMAID_DASHBOARD_LINK
 const { gfcrCallout: gfcrCalloutLanguage } = language.pages.projectInfo
 
 const StyledGfcrCallout = styled('div')`
