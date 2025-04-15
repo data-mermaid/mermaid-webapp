@@ -10,7 +10,7 @@ import {
 import Header from '.'
 
 const mermaidReferenceLink = import.meta.env.VITE_MERMAID_REFERENCE_LINK
-const mermaidDashboardLink = import.meta.env.VITE_MERMAID_DASHBOARD_LINK
+const mermaidExploreLink = import.meta.env.VITE_MERMAID_EXPLORE_LINK
 
 test('Header component shows projects, whats new, reference, and global dashboard links and their proper href links when online', () => {
   renderAuthenticatedOnline(<Header />)
@@ -38,7 +38,7 @@ test('Header component shows projects, whats new, reference, and global dashboar
   })
 
   expect(globalDashboardLink).toBeInTheDocument()
-  expect(globalDashboardLink).toHaveAttribute('href', mermaidDashboardLink)
+  expect(globalDashboardLink).toHaveAttribute('href', mermaidExploreLink)
 })
 test('Header component shows projects, reference; and hide whats new, global dashboard links when offline', async () => {
   renderAuthenticatedOffline(<Header />)
