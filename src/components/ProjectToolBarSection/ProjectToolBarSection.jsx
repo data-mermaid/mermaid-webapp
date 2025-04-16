@@ -120,19 +120,21 @@ const ProjectToolBarSection = ({
       <RowWrapper>
         <HeaderStyle>
           Projects
-          <MuiTooltip
-            title={language.pages.gotoExplore(isExploreLaunchEnabledForUser, 'all your projects')}
-            placement="top"
-            arrow
-          >
-            <IconButton
-              type="button"
-              aria-label="View Mermaid Explore"
-              onClick={handleExploreButtonClick}
+          {isExploreLaunchEnabledForUser && (
+            <MuiTooltip
+              title={language.pages.gotoExplore('all your projects')}
+              placement="top"
+              arrow
             >
-              <BiggerIconGlobe />
-            </IconButton>
-          </MuiTooltip>
+              <IconButton
+                type="button"
+                aria-label="View Mermaid Explore"
+                onClick={handleExploreButtonClick}
+              >
+                <BiggerIconGlobe />
+              </IconButton>
+            </MuiTooltip>
+          )}
         </HeaderStyle>
         <OfflineHide>
           <ButtonCallout

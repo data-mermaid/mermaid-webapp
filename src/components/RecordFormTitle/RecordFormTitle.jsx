@@ -117,19 +117,17 @@ const RecordFormTitle = ({
       {label && (
         <ProjectTooltip forwardedAs="h2" text={label} tooltipText="Label" id="label-tooltip" />
       )}
-      <MuiTooltip
-        title={language.pages.gotoExplore(isExploreLaunchEnabledForUser, 'this Sample Event')}
-        placement="top"
-        arrow
-      >
-        <IconButton
-          type="button"
-          aria-label="View Mermaid Explore"
-          onClick={handleExploreButtonClick}
-        >
-          <BiggerIconGlobe />
-        </IconButton>
-      </MuiTooltip>
+      {isExploreLaunchEnabledForUser && (
+        <MuiTooltip title={language.pages.gotoExplore('this Sample Event')} placement="top" arrow>
+          <IconButton
+            type="button"
+            aria-label="View Mermaid Explore"
+            onClick={handleExploreButtonClick}
+          >
+            <BiggerIconGlobe />
+          </IconButton>
+        </MuiTooltip>
+      )}
     </TitleContainer>
   )
 }

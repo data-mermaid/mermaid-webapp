@@ -26,6 +26,21 @@ const ProjectNameHeader = styled('h2')`
   margin: 0 ${theme.spacing.small} 0 0;
 `
 
+const ProjectNameLink = styled('a')`
+  padding: 0 ${theme.spacing.small};
+  font-size: ${theme.typography.smallFontSize};
+  display: inline-flex;
+  align-items: center;
+  gap: ${theme.spacing.small};
+  white-space: nowrap;
+  text-decoration: none;
+  border: solid 1px ${theme.color.border};
+  opacity: 0.7;
+  ${hoverState(css`
+    background: ${theme.color.secondaryHover};
+  `)}
+`
+
 const BiggerIconGlobe = styled(IconGlobe)`
   width: ${theme.typography.mediumIconSize};
   height: ${theme.typography.mediumIconSize};
@@ -62,24 +77,27 @@ const ProjectName = () => {
     window.open(`${mermaidExploreLink}/?project=${projectName}`, '_blank')
   }
 
+  const mermaidExploreButton = isExploreLaunchEnabledForUser ? (
+    <MuiTooltip title={language.pages.gotoExplore('this project')} placement="top" arrow>
+      <IconButton
+        type="button"
+        aria-label="View Mermaid Explore"
+        onClick={handleExploreButtonClick}
+      >
+        <BiggerIconGlobe />
+      </IconButton>
+    </MuiTooltip>
+  ) : (
+    <ProjectNameLink href={`${mermaidExploreLink}/?project=${projectName}`} target="_blank">
+      <IconGlobe />
+      <span>{language.pages.goToDashboard}</span>
+    </ProjectNameLink>
+  )
+
   return (
     <ProjectNameWrapper>
       <ProjectNameHeader>{projectName}</ProjectNameHeader>
-      {!isTestProject ? (
-        <MuiTooltip
-          title={language.pages.gotoExplore(isExploreLaunchEnabledForUser, 'this project')}
-          placement="top"
-          arrow
-        >
-          <IconButton
-            type="button"
-            aria-label="View Mermaid Explore"
-            onClick={handleExploreButtonClick}
-          >
-            <BiggerIconGlobe />
-          </IconButton>
-        </MuiTooltip>
-      ) : null}
+      {!isTestProject ? mermaidExploreButton : null}
     </ProjectNameWrapper>
   )
 }

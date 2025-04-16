@@ -1259,11 +1259,8 @@ const pages = {
     investments: 'Investments',
     revenues: 'Revenues',
   },
-  gotoExplore: (isExploreLaunchEnabled, viewText) => {
-    if (!isExploreLaunchEnabled) {
-      return `View ${viewText} on Mermaid Dashboard`
-    }
-
+  goToDashboard: 'View on Dashboard',
+  gotoExplore: (viewText) => {
     return `View ${viewText} on Mermaid Explore`
   },
 }
