@@ -8,7 +8,7 @@ export const useExploreLaunchFeature = ({ currentUser }) => {
 
   const mermaidExploreLink = isExploreLaunchEnabledForUser
     ? import.meta.env.VITE_MERMAID_EXPLORE_LINK
-    : `https://dev-dashboard.datamermaid.org`
+    : `https://dev-explore.datamermaid.org`
 
   return {
     mermaidExploreLink,

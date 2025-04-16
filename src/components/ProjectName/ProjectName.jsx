@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
 import styled, { css } from 'styled-components'
 import theme from '../../theme'
 import language from '../../language'
@@ -8,6 +9,7 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 import useIsMounted from '../../library/useIsMounted'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
+import { getToastArguments } from '../../library/getToastArguments'
 import { IconGlobe } from '../icons'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { IconButton } from '../generic/buttons'
@@ -52,6 +54,11 @@ const ProjectName = () => {
   }, [databaseSwitchboardInstance, isMounted, projectId])
 
   const handleExploreButtonClick = () => {
+    if (!projectName) {
+      toast.error(...getToastArguments(language.error.noProjectMermaidExplore))
+      return
+    }
+
     window.open(`${mermaidExploreLink}/?project=${projectName}`, '_blank')
   }
 

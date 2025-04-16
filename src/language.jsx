@@ -169,6 +169,8 @@ const error = {
   addRowUnavailable: 'You must select a fish size bin before adding any observations.',
   noServerResponse:
     'Unable to communicate with server. Changes saved on your computer, but not online.',
+  noLocationMermaidExplore: 'No location found in Mermaid Explore.',
+  noProjectMermaidExplore: 'No project found in Mermaid Explore.',
 }
 
 const success = {

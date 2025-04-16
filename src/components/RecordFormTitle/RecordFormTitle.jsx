@@ -1,4 +1,5 @@
 import React from 'react'
+import { toast } from 'react-toastify'
 import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 import theme from '../../theme'
@@ -12,6 +13,7 @@ import { getProtocolTransectType } from '../../App/mermaidData/recordProtocolHel
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
+import { getToastArguments } from '../../library/getToastArguments'
 import { IconButton } from '../generic/buttons'
 import { IconGlobe } from '../icons'
 
@@ -58,8 +60,10 @@ const RecordFormTitle = ({
   const primaryTitle = `${protocolTitle}`
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
   const siteName = getObjectById(sites, siteId)?.name ?? ''
+  const siteCoordinates = getObjectById(sites, siteId)?.location?.coordinates ?? []
   const transectNumber = submittedRecordOrCollectRecordDataProperty[transectType]?.number ?? ''
   const label = submittedRecordOrCollectRecordDataProperty[transectType]?.label ?? ''
+  const sampleEventId = submittedRecordOrCollectRecordDataProperty.sample_event?.id ?? ''
   const { currentUser } = useCurrentUser()
   const { mermaidExploreLink, isExploreLaunchEnabledForUser } = useExploreLaunchFeature({
     currentUser,
@@ -72,7 +76,16 @@ const RecordFormTitle = ({
   )
 
   const handleExploreButtonClick = () => {
-    window.open(`${mermaidExploreLink}/?sample_event_id=${projectName}`, '_blank')
+    if (!sampleEventId || siteCoordinates.length === 0) {
+      toast.error(...getToastArguments(language.error.noLocationMermaidExplore))
+      return
+    }
+
+    const [lng, lat] = siteCoordinates
+    window.open(
+      `${mermaidExploreLink}/?sample_event_id=${sampleEventId}&lat=${lat}&lng=${lng}&zoom=15`,
+      '_blank',
+    )
   }
 
   return (
