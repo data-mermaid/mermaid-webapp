@@ -197,6 +197,12 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
   )
 }
 
+GlobalLinks.propTypes = {
+  isAppOnline: PropTypes.bool.isRequired,
+  isExploreLaunchEnabledForUser: PropTypes.bool.isRequired,
+  mermaidExploreLink: PropTypes.string.isRequired,
+}
+
 Header.propTypes = {
   currentUser: currentUserPropType,
   logout: PropTypes.func,

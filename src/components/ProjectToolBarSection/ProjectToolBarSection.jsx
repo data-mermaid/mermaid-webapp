@@ -180,4 +180,5 @@ ProjectToolBarSection.propTypes = {
   setIsProjectSortAsc: PropTypes.func.isRequired,
   addProjectToProjectsPage: PropTypes.func.isRequired,
   isExploreLaunchEnabledForUser: PropTypes.bool.isRequired,
+  handleExploreButtonClick: PropTypes.func.isRequired,
 }

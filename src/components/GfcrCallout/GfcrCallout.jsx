@@ -161,6 +161,8 @@ DisableIndicatorsModal.propTypes = {
   isOpen: PropTypes.bool,
   disableGfcr: PropTypes.func.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  mermaidExploreLink: PropTypes.string.isRequired,
+  isExploreLaunchEnabledForUser: PropTypes.bool.isRequired,
 }
 
 GfcrCallout.propTypes = {
