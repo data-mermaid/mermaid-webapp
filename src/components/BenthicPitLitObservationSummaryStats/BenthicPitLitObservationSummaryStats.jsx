@@ -27,7 +27,7 @@ const BenthicPitLitObservationSummaryStats = ({
 
     const observationsGroupedByTopLevelCategory = observationsWithTopLevelCategoryNames.reduce(
       (accumulator, observation) => {
-        const { topLevelCategoryName = 'Missing Benthic Attribute' } = observation
+        const { topLevelCategoryName = 'Missing benthic attribute' } = observation
 
         accumulator[topLevelCategoryName] = accumulator[topLevelCategoryName] || []
         accumulator[topLevelCategoryName].push(observation)
