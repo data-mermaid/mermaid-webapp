@@ -9,7 +9,7 @@ env:
   VITE_MAPBOX_ACCESS_TOKEN: pk.eyJ1IjoibWVybWFpZC1hZG1pbiIsImEiOiJjanh1djd1d20wMThoM2ZsaXZvdzZ3NGQxIn0.MrVUTQrUGJaTxjmn3h4udw
   VITE_MERMAID_API: https://dev-api.datamermaid.org/v1
   VITE_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
-  VITE_MERMAID_DASHBOARD_LINK: https://dashboard.datamermaid.org
+  VITE_MERMAID_EXPLORE_LINK: https://dev-explore.datamermaid.org
   VITE_CORAL_ATLAS_APP_ID: v8nkxznp3m
   VITE_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
 

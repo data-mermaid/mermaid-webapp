@@ -27,6 +27,7 @@ const StyledTooltip = styled(
   [`& .MuiTooltip-arrow`]: {
     color: `${bgColor}`,
   },
+  boxShadow: '3px 3px 6px rgba(0, 0, 0, 0.1)',
 }))
 
 export const MuiTooltip = ({

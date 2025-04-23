@@ -9,8 +9,9 @@ import theme from '../../theme'
 import { useNavigate } from 'react-router-dom'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
+import { useCurrentUser } from '../../App/CurrentUserContext'
+import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
 
-const mermaidDashboardLink = import.meta.env.VITE_MERMAID_DASHBOARD_LINK
 const { gfcrCallout: gfcrCalloutLanguage } = language.pages.projectInfo
 
 const StyledGfcrCallout = styled('div')`
@@ -56,7 +57,13 @@ const StyledParagraph = styled('p')`
   max-width: ${theme.spacing.maxTextWidth};
 `
 
-const DisableIndicatorsModal = ({ isOpen = false, disableGfcr, onDismiss }) => {
+const DisableIndicatorsModal = ({
+  isOpen = false,
+  disableGfcr,
+  onDismiss,
+  mermaidExploreLink,
+  isExploreLaunchEnabledForUser,
+}) => {
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>{'Cancel'}</ButtonSecondary>
@@ -74,8 +81,8 @@ const DisableIndicatorsModal = ({ isOpen = false, disableGfcr, onDismiss }) => {
   const content = (
     <>
       Disabling GFCR Indicators for this project will not delete them, but just hide them from the{' '}
-      <a href={mermaidDashboardLink} target="_blank" rel="noreferrer">
-        Global Dashboard
+      <a href={mermaidExploreLink} target="_blank" rel="noreferrer">
+        {isExploreLaunchEnabledForUser ? 'Mermaid Explore' : 'Global Dashboard'}
       </a>
       . No data will be lost. You can re-enable them at any time.
     </>
@@ -95,6 +102,10 @@ const DisableIndicatorsModal = ({ isOpen = false, disableGfcr, onDismiss }) => {
 const GfcrCallout = ({ isGfcr = false, isLoading = false, handleUpdateIncludesGfcr }) => {
   const navigate = useNavigate()
   const currentProjectPath = useCurrentProjectPath()
+  const { currentUser } = useCurrentUser()
+  const { mermaidExploreLink, isExploreLaunchEnabledForUser } = useExploreLaunchFeature({
+    currentUser,
+  })
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -139,6 +150,8 @@ const GfcrCallout = ({ isGfcr = false, isLoading = false, handleUpdateIncludesGf
         isOpen={isModalOpen}
         disableGfcr={() => handleUpdateIncludesGfcr(false)}
         onDismiss={() => setIsModalOpen(false)}
+        mermaidExploreLink={mermaidExploreLink}
+        isExploreLaunchEnabledForUser={isExploreLaunchEnabledForUser}
       />
     </>
   )
@@ -148,6 +161,8 @@ DisableIndicatorsModal.propTypes = {
   isOpen: PropTypes.bool,
   disableGfcr: PropTypes.func.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  mermaidExploreLink: PropTypes.string.isRequired,
+  isExploreLaunchEnabledForUser: PropTypes.bool.isRequired,
 }
 
 GfcrCallout.propTypes = {
