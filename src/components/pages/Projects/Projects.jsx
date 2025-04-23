@@ -113,7 +113,9 @@ const Projects = () => {
   }
 
   const handleExploreButtonClick = () => {
-    window.open(mermaidExploreLink, '_blank')
+    const yourMermaidExploreProjectsLink = `${mermaidExploreLink}/?your_projects_only=true`
+
+    window.open(yourMermaidExploreProjectsLink, '_blank')
   }
 
   const renderPageNoData = () => {
