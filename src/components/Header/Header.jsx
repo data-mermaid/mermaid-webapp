@@ -11,7 +11,6 @@ import {
   StyledNavLink,
   NotificationIndicator,
   UserMenuButton,
-  WhatsNewLink,
   UserMenu,
   BiggerIconBell,
   MediumIconExcel,
@@ -34,7 +33,6 @@ import ProfileModal from '../ProfileModal'
 const GlobalLinks = () => {
   const { isAppOnline } = useOnlineStatus()
   const mermaidDashboardLink = import.meta.env.VITE_MERMAID_DASHBOARD_LINK
-  const mermaidWhatsNewLink = import.meta.env.VITE_MERMAID_WHATS_NEW_LINK
 
   const handleReferenceMouseOver = (event) => {
     // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
@@ -75,13 +73,6 @@ const GlobalLinks = () => {
           </HeaderIconWrapper>
           Global Dashboard
         </StyledNavLink>
-
-        <WhatsNewLink href={mermaidWhatsNewLink} target="_blank" rel="noreferrer">
-          What&apos;s new&nbsp;
-          <div>
-            <MediumIconOpenInNew />
-          </div>
-        </WhatsNewLink>
       </OfflineHide>
     </>
   )
