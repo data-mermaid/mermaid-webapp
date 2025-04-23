@@ -79,23 +79,23 @@ const getHeaderSortAfter = (
     }
   `
 }
+export const thStyles = (props) => css`
+  text-align: ${props.align || 'left'};
+  padding: ${theme.spacing.medium};
+  background: ${theme.color.white};
+  vertical-align: top;
+  &::after {
+    content: ${props.isSortingEnabled ? ' \u25b2' : ''};
+    font-size: small;
+    white-space: nowrap;
+  }
+  > span {
+    ${getHeaderSortAfter(props.isMultiSortColumn, props.sortedIndex, props.isSortedDescending)}
+  }
+  font-weight: 700;
+`
 
-export const Th = styled.th(
-  (props) => css`
-    text-align: ${props.align || 'left'};
-    padding: ${theme.spacing.medium};
-    background: ${theme.color.white};
-    vertical-align: top;
-    &::after {
-      content: ${props.isSortingEnabled ? ' \u25b2' : ''};
-      font-size: small;
-      white-space: nowrap;
-    }
-    > span {
-      ${getHeaderSortAfter(props.isMultiSortColumn, props.sortedIndex, props.isSortedDescending)}
-    }
-  `,
-)
+export const Th = styled.th((props) => thStyles(props))
 
 export const Td = styled.td(
   (props) => css`

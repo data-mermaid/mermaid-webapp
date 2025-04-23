@@ -56,6 +56,7 @@ export const reformatFormValuesIntoBenthicPQTRecord = ({
   collectRecordBeingEdited,
   formikValues,
   observationsTable1State,
+  image_classification,
 }) => {
   const {
     depth,
@@ -104,6 +105,7 @@ export const reformatFormValuesIntoBenthicPQTRecord = ({
       },
       obs_benthic_photo_quadrats: observationsTable1State,
       observers,
+      image_classification,
     },
   }
 }
