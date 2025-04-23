@@ -28,7 +28,7 @@ import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
 import { UserIcon } from '../UserIcon/UserIcon'
 import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
 import HideShow from '../generic/HideShow'
-import Logo from '../../assets/mermaid-logo.svg'
+import MermaidCollectLogo from '../../assets/mermaid-collect-logo.svg'
 import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
 
@@ -127,7 +127,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
     <>
       <StyledHeader>
         <Link to="/projects">
-          <LogoImg src={Logo} alt="MERMAID Logo" />
+          <LogoImg src={MermaidCollectLogo} alt="MERMAID Collect Logo" />
         </Link>
         <GlobalNav>
           <div className="desktop">
