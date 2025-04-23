@@ -36,7 +36,7 @@ test('Header component shows projects, reference, and global dashboard links and
   expect(globalDashboardLink).toBeInTheDocument()
   expect(globalDashboardLink).toHaveAttribute('href', mermaidExploreLink)
 })
-test('Header component shows projects, reference; and hide whats new, global dashboard links when offline', async () => {
+test('Header component shows projects, reference; hides global dashboard links when offline', async () => {
   renderAuthenticatedOffline(<Header />)
 
   const projectsLink = screen.getByRole('link', {
