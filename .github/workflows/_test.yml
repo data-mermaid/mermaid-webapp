@@ -11,7 +11,6 @@ env:
   VITE_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
   VITE_MERMAID_EXPLORE_LINK: https://dev-explore.datamermaid.org
   VITE_CORAL_ATLAS_APP_ID: v8nkxznp3m
-  VITE_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
 
 jobs:
   test:

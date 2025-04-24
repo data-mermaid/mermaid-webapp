@@ -73,15 +73,6 @@ export const StyledNavLink = styled('a')`
   display: flex;
 `
 
-export const WhatsNewLink = styled(StyledNavLink)`
-  background: ${theme.color.white};
-  color: ${theme.color.primaryColor};
-  border-style: solid;
-  border-width: 2px 0;
-  border-color: ${theme.color.primaryColor};
-  padding: 0 ${theme.spacing.medium};
-  line-height: calc(${theme.spacing.headerHeight} - (2px * 2));
-`
 export const UserMenu = styled('div')`
   position: absolute;
   top: ${theme.spacing.headerHeight};

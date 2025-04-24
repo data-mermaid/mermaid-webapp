@@ -16,7 +16,6 @@ permissions:
 env:
   VITE_AUTH0_DOMAIN: datamermaid.auth0.com
   VITE_CORAL_ATLAS_APP_ID: v8nkxznp3m
-  VITE_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
   CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
   CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
   GITHUB_TOKEN: ${{ github.token }}

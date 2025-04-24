@@ -16,7 +16,6 @@ env:
   # dev and prod
   VITE_AUTH0_DOMAIN: datamermaid.auth0.com
   VITE_CORAL_ATLAS_APP_ID: v8nkxznp3m
-  VITE_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
   # dev specific; set prod versions in step below
   VITE_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
   VITE_AUTH0_AUDIENCE: https://dev-api.datamermaid.org

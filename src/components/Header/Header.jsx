@@ -11,7 +11,6 @@ import {
   StyledNavLink,
   NotificationIndicator,
   UserMenuButton,
-  WhatsNewLink,
   UserMenu,
   BiggerIconBell,
   MediumIconExcel,
@@ -33,7 +32,6 @@ import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
 
 const GlobalLinks = ({ isAppOnline, isExploreLaunchEnabledForUser, mermaidExploreLink }) => {
-  const mermaidWhatsNewLink = import.meta.env.VITE_MERMAID_WHATS_NEW_LINK
   const exploreHeader = isExploreLaunchEnabledForUser ? 'MERMAID Explore' : 'Global Dashboard'
 
   const handleReferenceMouseOver = (event) => {
@@ -75,13 +73,6 @@ const GlobalLinks = ({ isAppOnline, isExploreLaunchEnabledForUser, mermaidExplor
           </HeaderIconWrapper>
           {exploreHeader}
         </StyledNavLink>
-
-        <WhatsNewLink href={mermaidWhatsNewLink} target="_blank" rel="noreferrer">
-          What&apos;s new&nbsp;
-          <div>
-            <MediumIconOpenInNew />
-          </div>
-        </WhatsNewLink>
       </OfflineHide>
     </>
   )
