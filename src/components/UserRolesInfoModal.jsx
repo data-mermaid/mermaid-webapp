@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import { ButtonSecondary } from '../generic/buttons'
-import { IconCheck, IconClose } from '../icons'
-import { Table, Td, Tr, TableOverflowWrapper } from '../generic/Table/table'
-import language from '../../language'
-import theme from '../../theme'
-import Modal, { RightFooter } from '../generic/Modal/Modal'
+import { ButtonSecondary } from './generic/buttons'
+import { IconCheck, IconClose } from './icons'
+import { Table, Td, Tr, TableOverflowWrapper } from './generic/Table/table'
+import language from '../language'
+import theme from '../theme'
+import Modal, { RightFooter } from './generic/Modal/Modal'
 
 const Thead = styled.th`
   text-align: center;
