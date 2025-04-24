@@ -27,14 +27,10 @@ const Thead = styled.th`
 `
 
 const Tcell = styled(Td)`
-  ${(props) =>
-    props.cellWithText
-      ? css`
-          text-align: left;
-        `
-      : css`
-          text-align: center;
-        `};
+  text-align: center;
+  &:first-of-type {
+    text-align: left;
+  }
 `
 
 const TcellWithIconClose = styled(Tcell)`
@@ -46,20 +42,20 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
       <Table>
         <thead>
           <Tr>
-            <Thead>Accessible Information</Thead>
-            <Thead>Admin</Thead>
-            <Thead>Collector</Thead>
-            <Thead>Read-Only</Thead>
+            <Thead>{language.pages.admin.accessible_information}</Thead>
+            <Thead>{language.pages.admin.admin}</Thead>
+            <Thead>{language.pages.admin.collector}</Thead>
+            <Thead>{language.pages.admin.readOnly}</Thead>
           </Tr>
         </thead>
         <tbody>
           <Tr>
             <Td colSpan="4">
-              <strong>Project management</strong>
+              <strong>{language.pages.admin.projectManagement}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Edit project info</Tcell>
+            <Tcell cellWithText>{language.pages.admin.projectInfo.edit}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -71,7 +67,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Set up data sharing policy</Tcell>
+            <Tcell cellWithText>{language.pages.admin.projectInfo.setUpDataSharing}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -83,7 +79,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Add or remove project members</Tcell>
+            <Tcell cellWithText>{language.pages.admin.projectInfo.addOrRemoveProjectMembers}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -95,7 +91,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell cellWithText>View project member email</Tcell>
+            <Tcell cellWithText>{language.pages.admin.projectInfo.viewMemberEmail}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -107,7 +103,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Delete a project</Tcell>
+            <Tcell cellWithText>{language.pages.admin.projectInfo.delete}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -121,11 +117,11 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
 
           <Tr>
             <Td colSpan="4" cellWithText>
-              <strong>Data collection and management</strong>
+              <strong>{language.pages.admin.dataCollection.title}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Add/update site or management regimes</Tcell>
+            <Tcell cellWithText>{language.pages.admin.dataCollection.addUpdateSiteOrRegimes}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -137,7 +133,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Delete a site or management regime</Tcell>
+            <Tcell cellWithText>{language.pages.admin.dataCollection.deleteSiteOrRegimes}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -149,7 +145,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Download sites and management regimes</Tcell>
+            <Tcell cellWithText>{language.pages.admin.dataCollection.downloadSitesAndRegimes}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -161,7 +157,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Create, validate, and submit sample units</Tcell>
+            <Tcell cellWithText>{language.pages.admin.dataCollection.createValidateSubmitSampleUnits}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -173,7 +169,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Delete unsubmited sample units</Tcell>
+            <Tcell cellWithText>{language.pages.admin.dataCollection.deleteSampleUnits}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -185,7 +181,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Edit submitted sample units</Tcell>
+            <Tcell cellWithText>{language.pages.admin.dataCollection.editSampleUnits}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -197,7 +193,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Transfer unsubmitted sample units</Tcell>
+            <Tcell cellWithText>{language.pages.admin.dataCollection.transferSampleUnits}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -209,7 +205,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Download submitted sample units</Tcell>
+            <Tcell cellWithText>{language.pages.admin.dataCollection.downloadSampleUnits}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -221,7 +217,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>View observers and sample units overview</Tcell>
+            <Tcell cellWithText>{language.pages.admin.dataCollection.viewObserversAndSampleUnits}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -233,7 +229,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>View management regimes overview</Tcell>
+            <Tcell cellWithText>{language.pages.admin.dataCollection.viewRegimesOverview}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -250,7 +246,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
   )
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Close</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{language.buttons.close}</ButtonSecondary>
     </RightFooter>
   )
 
