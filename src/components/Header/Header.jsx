@@ -14,7 +14,6 @@ import {
   UserMenu,
   BiggerIconBell,
   MediumIconExcel,
-  MediumIconOpenInNew,
   BiggerIconMenu,
   LoggedInAs,
   HeaderIconWrapper,
