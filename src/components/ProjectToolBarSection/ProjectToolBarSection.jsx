@@ -7,10 +7,13 @@ import {
   mediaQueryPhoneOnly,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
-import { ButtonCallout } from '../generic/buttons'
+import { ButtonCallout, IconButton } from '../generic/buttons'
 import { Input, inputStyles } from '../generic/form'
 import OfflineHide from '../generic/OfflineHide'
 import ProjectModal from '../ProjectCard/ProjectModal'
+import language from '../../language'
+import { MuiTooltip } from '../generic/MuiTooltip'
+import { IconGlobe } from '../icons'
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -76,6 +79,11 @@ const SortByLabelWrapper = styled.label`
   `)}
 `
 
+const BiggerIconGlobe = styled(IconGlobe)`
+  width: ${theme.typography.mediumIconSize};
+  height: ${theme.typography.mediumIconSize};
+`
+
 const ProjectToolBarSection = ({
   projectFilter,
   setProjectFilter,
@@ -83,6 +91,8 @@ const ProjectToolBarSection = ({
   setProjectSortKey,
   setIsProjectSortAsc,
   addProjectToProjectsPage,
+  isExploreLaunchEnabledForUser,
+  handleExploreButtonClick,
 }) => {
   const setFilter = (event) => {
     setProjectFilter(event.target.value)
@@ -108,7 +118,24 @@ const ProjectToolBarSection = ({
   return (
     <GlobalWrapper>
       <RowWrapper>
-        <HeaderStyle>Projects</HeaderStyle>
+        <HeaderStyle>
+          Projects
+          {isExploreLaunchEnabledForUser && (
+            <MuiTooltip
+              title={language.pages.gotoExplore('all your projects')}
+              placement="top"
+              arrow
+            >
+              <IconButton
+                type="button"
+                aria-label="View MERMAID Explore"
+                onClick={handleExploreButtonClick}
+              >
+                <BiggerIconGlobe />
+              </IconButton>
+            </MuiTooltip>
+          )}
+        </HeaderStyle>
         <OfflineHide>
           <ButtonCallout
             onClick={() => setIsNewProjectModalOpen(true)}
@@ -152,4 +179,6 @@ ProjectToolBarSection.propTypes = {
   setProjectSortKey: PropTypes.func.isRequired,
   setIsProjectSortAsc: PropTypes.func.isRequired,
   addProjectToProjectsPage: PropTypes.func.isRequired,
+  isExploreLaunchEnabledForUser: PropTypes.bool.isRequired,
+  handleExploreButtonClick: PropTypes.func.isRequired,
 }

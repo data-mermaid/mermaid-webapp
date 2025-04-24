@@ -5,7 +5,7 @@ import {
   benthicpqtValidationPropType,
   choicesPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { formikPropType } from '../../../../library/formikPropType'
+import { formikPropType } from '../../../../library/formik/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { H2 } from '../../../generic/text'
@@ -38,6 +38,7 @@ const BenthicPhotoQuadratTransectInputs = ({
   resetNonObservationFieldValidations,
   validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
+  isImageClassificationSelected,
 }) => {
   const { currents, relativedepths, tides, visibilities } = choices
 
@@ -394,6 +395,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           value={formik.values.num_points_per_quadrat}
           onChange={handleNumberOfPointsPerQuadratChange}
           helperText={language.helperText.numberOfPointsPerQuadrat}
+          disabled={isImageClassificationSelected}
         />
         <InputSelectWithLabelAndValidation
           label="Visibility"
@@ -510,6 +512,7 @@ BenthicPhotoQuadratTransectInputs.propTypes = {
   validationsApiData: PropTypes.shape({ quadrat_transect: benthicpqtValidationPropType })
     .isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
+  isImageClassificationSelected: PropTypes.bool,
 }
 
 export default BenthicPhotoQuadratTransectInputs

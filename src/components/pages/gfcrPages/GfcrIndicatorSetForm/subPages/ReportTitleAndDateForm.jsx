@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
-import { formikPropType } from '../../../../../library/formikPropType'
+import { formikPropType } from '../../../../../library/formik/formikPropType'
 import { StyledGfcrInputWrapper } from './subPages.styles'
 import DeleteRecordButton from '../../../../DeleteRecordButton/DeleteRecordButton'
 import language from '../../../../../language'
@@ -13,8 +13,9 @@ import { getToastArguments } from '../../../../../library/getToastArguments'
 import { ensureTrailingSlash } from '../../../../../library/strings/ensureTrailingSlash'
 import useCurrentProjectPath from '../../../../../library/useCurrentProjectPath'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
+import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
 
-const ReportTitleAndDateForm = ({ formik, handleInputBlur, isNewIndicatorSet, displayHelp }) => {
+const ReportTitleAndDateForm = ({ formik, isNewIndicatorSet, displayHelp }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { indicatorSetId, projectId } = useParams()
   const navigate = useNavigate()
@@ -70,7 +71,9 @@ const ReportTitleAndDateForm = ({ formik, handleInputBlur, isNewIndicatorSet, di
         id="gfcr-report_date"
         type="date"
         {...formik.getFieldProps('report_date')}
-        onBlur={(event) => handleInputBlur(formik, event, 'report_date')}
+        onBlur={(event) =>
+          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'report_date' })
+        }
         showHelperText={displayHelp}
         helperText={language.pages.gfcrIndicatorSet.getIndicatorSetReportingDateHelperText()}
       />
@@ -91,7 +94,6 @@ const ReportTitleAndDateForm = ({ formik, handleInputBlur, isNewIndicatorSet, di
 
 ReportTitleAndDateForm.propTypes = {
   formik: formikPropType.isRequired,
-  handleInputBlur: PropTypes.func.isRequired,
   isNewIndicatorSet: PropTypes.bool.isRequired,
   displayHelp: PropTypes.bool,
 }

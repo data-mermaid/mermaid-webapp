@@ -11,6 +11,7 @@ import ProjectToolBarSection from '../../ProjectToolBarSection'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../../library/useIsMounted'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { getObjectById } from '../../../library/getObjectById'
 import PageUnavailable from '../PageUnavailable'
@@ -18,6 +19,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
 import ErrorBoundary from '../../ErrorBoundary'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+import { useExploreLaunchFeature } from '../../../library/useExploreLaunchFeature'
 
 /**
  * All Projects page (lists projects)
@@ -34,6 +36,10 @@ const Projects = () => {
   const { isSyncInProgress } = useSyncStatus()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
+  const { currentUser } = useCurrentUser()
+  const { mermaidExploreLink, isExploreLaunchEnabledForUser } = useExploreLaunchFeature({
+    currentUser,
+  })
 
   useDocumentTitle(`${language.pages.projectsList.title} - ${language.title.mermaid}`)
 
@@ -106,6 +112,12 @@ const Projects = () => {
     setProjects([...projects, project])
   }
 
+  const handleExploreButtonClick = () => {
+    const yourMermaidExploreProjectsLink = `${mermaidExploreLink}/?your_projects_only=true`
+
+    window.open(yourMermaidExploreProjectsLink, '_blank')
+  }
+
   const renderPageNoData = () => {
     const {
       noFilterResults,
@@ -158,6 +170,8 @@ const Projects = () => {
           setProjectSortKey={setProjectSortKey}
           setIsProjectSortAsc={setIsProjectSortAsc}
           addProjectToProjectsPage={addProjectToProjectsPage}
+          isExploreLaunchEnabledForUser={isExploreLaunchEnabledForUser}
+          handleExploreButtonClick={handleExploreButtonClick}
         />
       }
       bottomRow={<div role="list">{projectCardsList}</div>}

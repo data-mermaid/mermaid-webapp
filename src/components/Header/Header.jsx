@@ -11,7 +11,6 @@ import {
   StyledNavLink,
   NotificationIndicator,
   UserMenuButton,
-  WhatsNewLink,
   UserMenu,
   BiggerIconBell,
   MediumIconExcel,
@@ -24,17 +23,16 @@ import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { IconGlobe, IconLibraryBooks } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
+import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
 import { UserIcon } from '../UserIcon/UserIcon'
 import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
 import HideShow from '../generic/HideShow'
-import Logo from '../../assets/mermaid-logo.svg'
+import MermaidCollectLogo from '../../assets/mermaid-collect-logo.svg'
 import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
 
-const GlobalLinks = () => {
-  const { isAppOnline } = useOnlineStatus()
-  const mermaidDashboardLink = import.meta.env.VITE_MERMAID_DASHBOARD_LINK
-  const mermaidWhatsNewLink = import.meta.env.VITE_MERMAID_WHATS_NEW_LINK
+const GlobalLinks = ({ isAppOnline, isExploreLaunchEnabledForUser, mermaidExploreLink }) => {
+  const exploreHeader = isExploreLaunchEnabledForUser ? 'MERMAID Explore' : 'Global Dashboard'
 
   const handleReferenceMouseOver = (event) => {
     // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
@@ -69,19 +67,12 @@ const GlobalLinks = () => {
         Reference&nbsp;
       </StyledNavLink>
       <OfflineHide>
-        <StyledNavLink href={mermaidDashboardLink} target="_blank" rel="noreferrer">
+        <StyledNavLink href={mermaidExploreLink} target="_blank" rel="noreferrer">
           <HeaderIconWrapper>
             <IconGlobe />
           </HeaderIconWrapper>
-          Global Dashboard
+          {exploreHeader}
         </StyledNavLink>
-
-        <WhatsNewLink href={mermaidWhatsNewLink} target="_blank" rel="noreferrer">
-          What&apos;s new&nbsp;
-          <div>
-            <MediumIconOpenInNew />
-          </div>
-        </WhatsNewLink>
       </OfflineHide>
     </>
   )
@@ -100,6 +91,9 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
     email: currentUserEmail,
     full_name: currentUserFullName,
   } = currentUser ?? {}
+  const { mermaidExploreLink, isExploreLaunchEnabledForUser } = useExploreLaunchFeature({
+    currentUser,
+  })
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
@@ -124,11 +118,15 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
     <>
       <StyledHeader>
         <Link to="/projects">
-          <LogoImg src={Logo} alt="MERMAID Logo" />
+          <LogoImg src={MermaidCollectLogo} alt="MERMAID Collect Logo" />
         </Link>
         <GlobalNav>
           <div className="desktop">
-            <GlobalLinks />
+            <GlobalLinks
+              isAppOnline={isAppOnline}
+              isExploreLaunchEnabledForUser={isExploreLaunchEnabledForUser}
+              mermaidExploreLink={mermaidExploreLink}
+            />
             {isAppOnline && (
               <HideShow
                 closeOnClickWithin={false}
@@ -188,6 +186,12 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
       <ProfileModal isOpen={isProfileModalOpen} onDismiss={closeProfileModal} />
     </>
   )
+}
+
+GlobalLinks.propTypes = {
+  isAppOnline: PropTypes.bool.isRequired,
+  isExploreLaunchEnabledForUser: PropTypes.bool.isRequired,
+  mermaidExploreLink: PropTypes.string.isRequired,
 }
 
 Header.propTypes = {

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
-import { IconArrowRight } from '../icons'
+import { IconArrowRightCircle } from '../icons'
 import { Select } from '../generic/form'
 import { Column } from '../generic/positioning'
 import InlineMessage from '../generic/InlineMessage'
@@ -98,7 +98,7 @@ const TransferSampleUnitsModal = ({
               <strong>{getProfileNameOrEmailForPendingUser(fromUser)}</strong>
             </p>
           </ModalBoxItem>
-          <IconArrowRight />
+          <IconArrowRightCircle />
           <ModalBoxItem>
             <label id="modal-transfer-units-to-label" htmlFor="modal-transfer-units-to">
               Transfer sample units to:

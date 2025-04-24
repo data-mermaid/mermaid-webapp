@@ -28,13 +28,4 @@ new StaticSiteStack(app, `${subdomain}-webapp`, {
   hostedZoneId,
 })
 
-new StaticSiteStack(app, `preview-webapp`, {
-  env: cdkEnv,
-  tags,
-  domainName: domain,
-  siteSubDomain: 'preview',
-  hostedZoneId,
-  isPreview: true,
-})
-
 app.synth()
