@@ -82,7 +82,7 @@ const DisableIndicatorsModal = ({
     <>
       Disabling GFCR Indicators for this project will not delete them, but just hide them from the{' '}
       <a href={mermaidExploreLink} target="_blank" rel="noreferrer">
-        {isExploreLaunchEnabledForUser ? 'Mermaid Explore' : 'Global Dashboard'}
+        {isExploreLaunchEnabledForUser ? 'MERMAID Explore' : 'Global Dashboard'}
       </a>
       . No data will be lost. You can re-enable them at any time.
     </>

@@ -34,7 +34,7 @@ import ProfileModal from '../ProfileModal'
 
 const GlobalLinks = ({ isAppOnline, isExploreLaunchEnabledForUser, mermaidExploreLink }) => {
   const mermaidWhatsNewLink = import.meta.env.VITE_MERMAID_WHATS_NEW_LINK
-  const exploreHeader = isExploreLaunchEnabledForUser ? 'Mermaid Explore' : 'Global Dashboard'
+  const exploreHeader = isExploreLaunchEnabledForUser ? 'MERMAID Explore' : 'Global Dashboard'
 
   const handleReferenceMouseOver = (event) => {
     // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
