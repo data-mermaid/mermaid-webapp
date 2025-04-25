@@ -19,6 +19,11 @@ const PaginationButtonStyles = css`
     `)}
   }
 `
+
+const PaginationEllipses = styled.span`
+  cursor: not-allowed;
+  padding: ${theme.spacing.small} 1.25rem;
+`
 const PageNumberButtons = styled(ButtonThatLooksLikeLink)`
   ${PaginationButtonStyles}
   &.paginationCurrentPage {
@@ -113,10 +118,10 @@ const PageSelector = ({
 
       const manageMiddleButtonEllipses = () => {
         if (currentlySelectedPage > 4) {
-          middleButtons.unshift(<span>...</span>)
+          middleButtons.unshift(<PaginationEllipses>...</PaginationEllipses>)
         }
         if (currentlySelectedPage < lastPage - 3) {
-          middleButtons.push(<span>...</span>)
+          middleButtons.push(<PaginationEllipses>...</PaginationEllipses>)
         }
       }
 
@@ -139,7 +144,8 @@ const PageSelector = ({
       )
     }
 
-    if (pageCount > 8) {
+    if (pageCount > 5) {
+      //TODO:Revert from testing
       setPageButtons(getTooManyButtons())
     } else {
       setPageButtons(getNotTooManyButtons())
