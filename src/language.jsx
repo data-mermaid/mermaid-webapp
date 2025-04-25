@@ -58,6 +58,9 @@ const apiDataTableNames = {
   projects: 'project info',
 }
 
+const buttons = {
+  close: 'Close',
+}
 const error = {
   403: 'The current user does not have permission to do that.',
   500: 'MERMAID error: please contact support@datamermaid.org',
@@ -489,6 +492,34 @@ const protocolTitles = {
 }
 
 const pages = {
+  admin: {
+    accessible_information: 'Accessible Information',
+    admin: 'Admin',
+    collector: 'Collector',
+    readOnly: 'Read-Only',
+    projectManagement: 'Project management',
+    projectInfo: {
+      edit: 'Edit project info',
+      setUpDataSharing: 'Set up data sharing policy',
+      addOrRemoveProjectMembers: 'Add or remove project members',
+      viewMemberEmail: 'View project member email',
+      delete: 'Delete a project'
+    },
+    dataCollection: {
+      title: 'Data collection and management',
+      addUpdateSiteOrRegimes: 'Add/update site or management regimes',
+      deleteSiteOrRegimes: 'Delete site or management regimes',
+      downloadSitesAndRegimes: 'Download sites and management regimes',
+      createValidateSubmitSampleUnits: 'Create, validate, and submit sample units',
+      deleteSampleUnits: 'Delete unsubmited sample units',
+      editSampleUnits: 'Edit submitted sample units',
+      transferSampleUnits: 'Transfer unsubmitted sample units',
+      downloadSampleUnits: 'Download submitted sample units',
+      viewObserversAndSampleUnits: 'View observers and sample units overview',
+      viewRegimesOverview: 'View management regimes overview'
+
+    }
+  },
   userDoesntHaveProjectAccess: {
     title: 'You do not have permission to access this project.',
     getSubtitle: (projectName) => {
@@ -1600,6 +1631,7 @@ const imageClassification = {
 export default {
   apiDataTableNames,
   autocomplete,
+  buttons,
   clearSizeValuesModal,
   createNewOptionModal,
   gfcrFinanceSolutionModal,
