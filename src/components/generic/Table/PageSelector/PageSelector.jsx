@@ -144,8 +144,7 @@ const PageSelector = ({
       )
     }
 
-    if (pageCount > 5) {
-      //TODO:Revert from testing
+    if (pageCount > 8) {
       setPageButtons(getTooManyButtons())
     } else {
       setPageButtons(getNotTooManyButtons())
