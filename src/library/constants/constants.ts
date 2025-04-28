@@ -28,7 +28,6 @@ export const IMAGE_CLASSIFICATION_COLORS = {
   hover: '#ffb3fe',
   selected: '#FF00FB',
   outline: '#000',
-  pointStatus: 'red',
 }
 
 Object.freeze(PROJECT_CODES)

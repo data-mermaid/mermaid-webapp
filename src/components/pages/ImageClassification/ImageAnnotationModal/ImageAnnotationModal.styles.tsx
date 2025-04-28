@@ -147,7 +147,6 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
 export const TdConfirmed = styled(Td)<HasConfirmedPoint>`
   background-color: ${({ $hasConfirmedPoint }) => ($hasConfirmedPoint ? COLORS.comfirmed : null)};
 `
-//what
 export const TdUnconfirmed = styled(Td)<HasUnconfirmedPoint>`
   background-color: ${({ $hasUnconfirmedPoint }) =>
     $hasUnconfirmedPoint ? COLORS.unconfirmed : null};

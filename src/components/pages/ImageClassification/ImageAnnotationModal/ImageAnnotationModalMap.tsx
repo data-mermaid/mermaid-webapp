@@ -406,7 +406,6 @@ const ImageAnnotationModalMap = ({
         const label = properties?.isUnclassified ? 'Unclassified' : properties?.ba_gr_label
         const confirmedStatus = properties?.isConfirmed ? 'confirmed' : 'unconfirmed'
         const pointStatus = properties?.isUnclassified ? 'unclassified' : confirmedStatus
-        //Is the data not returning back these values?
         const popupContent = (
           <LabelPopup>
             <IconCircle style={{ color: COLORS[pointStatus] }} /> {label}
