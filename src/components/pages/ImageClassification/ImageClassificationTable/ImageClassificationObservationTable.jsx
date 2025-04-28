@@ -17,8 +17,9 @@ import {
   LoadingTableBody,
   Spinner,
 } from './ImageClassificationObservationTable.styles'
+import language from '../../../../language'
 import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
-import { IconClose } from '../../../icons'
+import { IconClose, IconTrash } from '../../../icons'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
 import Thumbnail from './Thumbnail'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -159,7 +160,7 @@ const ImageClassificationObservationTable = ({
         const updatedImages = images.filter((f) => f.id !== file.id)
         setImages(updatedImages)
 
-        toast.warn('File removed')
+        toast.warn(language.imageClassification.imageClassficationModal.userMessage.photoRemoved)
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -536,16 +537,18 @@ const ImageClassificationObservationTable = ({
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
-                                  <ButtonCaution
-                                    type="button"
-                                    onClick={() => handleRemoveImage(file)}
-                                    disabled={
-                                      file.classification_status?.status !== 3 ||
-                                      deletingImage === file.id
-                                    }
-                                  >
-                                    <IconClose aria-label="close" />
-                                  </ButtonCaution>
+                                  <MuiTooltip title="Remove this image">
+                                    <ButtonCaution
+                                      type="button"
+                                      onClick={() => handleRemoveImage(file)}
+                                      disabled={
+                                        file.classification_status?.status !== 3 ||
+                                        deletingImage === file.id
+                                      }
+                                    >
+                                      <IconTrash aria-label="close" />
+                                    </ButtonCaution>
+                                  </MuiTooltip>
                                 </StyledTd>
                               </>
                             )}
