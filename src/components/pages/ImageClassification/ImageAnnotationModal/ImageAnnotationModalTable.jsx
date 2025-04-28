@@ -15,6 +15,7 @@ import { Tr, Th, Td, TableOverflowWrapper } from '../../../generic/Table/table'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { IconZoomIn } from '../../../icons'
 import { MuiTooltipDark } from '../../../generic/MuiTooltip'
+import language from '../../../../language'
 
 const ImageAnnotationModalTable = ({
   points,
@@ -129,7 +130,7 @@ const ImageAnnotationModalTable = ({
                           type="button"
                           onClick={(e) => handleRowConfirm(e, tableData[rowKey])}
                         >
-                          Confirm
+                          {language.buttons.confirm}
                         </ButtonSecondary>
                       </MuiTooltipDark>
                     )}

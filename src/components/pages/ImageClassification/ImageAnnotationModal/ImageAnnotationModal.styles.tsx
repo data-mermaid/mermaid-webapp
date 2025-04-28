@@ -17,8 +17,6 @@ interface HasUnconfirmedPoint {
   $hasUnconfirmedPoint?: boolean
 }
 
-const confirmed = colorHelper(COLORS.confirmed)
-const unconfirmed = colorHelper(COLORS.unconfirmed)
 const white = colorHelper(theme.color.white)
 
 export const RowThatLooksLikeAnEvenTr = styled.div`
@@ -147,13 +145,12 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
 `
 
 export const TdConfirmed = styled(Td)<HasConfirmedPoint>`
-  background-color: ${({ $hasConfirmedPoint }) =>
-    $hasConfirmedPoint ? confirmed.mix(white, 0.7).toString() : undefined};
+  background-color: ${({ $hasConfirmedPoint }) => ($hasConfirmedPoint ? COLORS.comfirmed : null)};
 `
-
+//what
 export const TdUnconfirmed = styled(Td)<HasUnconfirmedPoint>`
   background-color: ${({ $hasUnconfirmedPoint }) =>
-    $hasUnconfirmedPoint ? unconfirmed.mix(white, 0.7).toString() : undefined};
+    $hasUnconfirmedPoint ? COLORS.unconfirmed : null};
 `
 export const TdStatus = styled(Td)`
   width: 104px; // prevents shifts to layout when the status is confirmed
