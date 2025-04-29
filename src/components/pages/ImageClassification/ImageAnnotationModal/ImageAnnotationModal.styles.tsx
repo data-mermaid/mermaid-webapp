@@ -1,11 +1,10 @@
 import styled, { css } from 'styled-components'
-import colorHelper from 'color'
-import theme from '../../../../theme'
-import { Table, Tr, Td, thStyles } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+import theme from '../../../../theme'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
-import { RowSpaceBetween } from '../../../generic/positioning'
+import { Table, Td, Tr, thStyles } from '../../../generic/Table/table'
 import { ButtonPrimary, IconButton, buttonSecondaryCss } from '../../../generic/buttons'
+import { RowSpaceBetween } from '../../../generic/positioning'
 interface IsSelectedProps {
   $isSelected?: boolean
 }
@@ -16,8 +15,6 @@ interface HasConfirmedPoint {
 interface HasUnconfirmedPoint {
   $hasUnconfirmedPoint?: boolean
 }
-
-const white = colorHelper(theme.color.white)
 
 export const RowThatLooksLikeAnEvenTr = styled.div`
   display: flex;
