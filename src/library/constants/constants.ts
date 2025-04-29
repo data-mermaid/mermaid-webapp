@@ -18,12 +18,11 @@ export const apiDataTypes = {
   projectSites: 'project_sites',
 }
 export const IMAGE_CLASSIFICATION_COLORS = {
-  confirmed: '#5EFF13',
-  confirmedPatch: '#5AE518',
-  comfirmed: '#CFFFB8',
-  unconfirmedPatch: '#BF6B69',
+  confirmedPoint: '#5AE518',
+  confirmed: '#CFFFB8',
+  unconfirmedPoint: '#BF6B69',
   unconfirmed: '#FBAEAE',
-  unclassifiedPatch: '#808080',
+  unclassifiedPoint: '#808080',
   unclassified: '#BCBCBC',
   hover: '#ffb3fe',
   selected: '#FF00FB',

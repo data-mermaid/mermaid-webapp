@@ -52,12 +52,12 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
   'case',
 
   ['get', 'isUnclassified'],
-  COLORS.unclassifiedPatch,
+  COLORS.unclassifiedPoint,
 
   ['get', 'isConfirmed'],
-  COLORS.confirmedPatch,
+  COLORS.confirmedPoint,
 
-  COLORS.unconfirmedPatch,
+  COLORS.unconfirmedPoint,
 ] as Expression
 
 const pointLabelPopup = new maplibregl.Popup({
