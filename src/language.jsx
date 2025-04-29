@@ -1,18 +1,17 @@
 // prettier-ignore
-import React from 'react'
 
+import styled from 'styled-components'
+import { HelperTextLink } from './components/generic/links'
 import { PROJECT_CODES } from './library/constants/constants'
 import {
-  getDuplicateValuesValidationMessage,
   getDuplicateSampleUnitLink,
+  getDuplicateValuesValidationMessage,
   getInvalidBleachingObsMessage,
   getInvalidBleachingObsTotalMessage,
   getObservationsCountMessage,
   getSystemValidationErrorMessage,
   goToManagementOverviewPageLink,
 } from './library/validationMessageHelpers'
-import { HelperTextLink } from './components/generic/links'
-import styled from 'styled-components'
 import theme from './theme'
 
 const StyledLink = styled.a`
@@ -503,7 +502,7 @@ const pages = {
       setUpDataSharing: 'Set up data sharing policy',
       addOrRemoveProjectMembers: 'Add or remove project members',
       viewMemberEmail: 'View project member email',
-      delete: 'Delete a project'
+      delete: 'Delete a project',
     },
     dataCollection: {
       title: 'Data collection and management',
@@ -516,9 +515,8 @@ const pages = {
       transferSampleUnits: 'Transfer unsubmitted sample units',
       downloadSampleUnits: 'Download submitted sample units',
       viewObserversAndSampleUnits: 'View observers and sample units overview',
-      viewRegimesOverview: 'View management regimes overview'
-
-    }
+      viewRegimesOverview: 'View management regimes overview',
+    },
   },
   userDoesntHaveProjectAccess: {
     title: 'You do not have permission to access this project.',
@@ -1615,6 +1613,14 @@ const imageClassification = {
     offlineBody: 'This sample unit is using image classification and is unavailable offline.',
   },
   imageClassficationModal: {
+    review: 'Review',
+    tooltip: {
+      reviewPhoto: 'Review this photo',
+      removePhoto: 'Remove this photo',
+    },
+    userMessage: {
+      photoRemoved: 'Photo removed',
+    },
     errors: {
       duplicateFiles: 'Some files are duplicates and were not added.',
       invalidFiles:
@@ -1623,8 +1629,9 @@ const imageClassification = {
       dimensionsExceededFiles:
         'Some files were not added because they exceed the 8000x8000 dimensions limit.',
       corruptFiles: 'Some files were not added because they appear to be corrupt.',
+      failedDeletion: 'Failed to delete photo: ',
     },
-    success: 'Files uploaded successfully.',
+    success: 'Photos uploaded successfully.',
   },
 }
 
