@@ -1,17 +1,17 @@
 // prettier-ignore
-
-import styled from 'styled-components'
-import { HelperTextLink } from './components/generic/links'
+import React from 'react'
 import { PROJECT_CODES } from './library/constants/constants'
 import {
-  getDuplicateSampleUnitLink,
   getDuplicateValuesValidationMessage,
+  getDuplicateSampleUnitLink,
   getInvalidBleachingObsMessage,
   getInvalidBleachingObsTotalMessage,
   getObservationsCountMessage,
   getSystemValidationErrorMessage,
   goToManagementOverviewPageLink,
 } from './library/validationMessageHelpers'
+import { HelperTextLink } from './components/generic/links'
+import styled from 'styled-components'
 import theme from './theme'
 
 const StyledLink = styled.a`
