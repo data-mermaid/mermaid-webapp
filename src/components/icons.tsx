@@ -60,7 +60,6 @@ import sparkles from '@iconify-icons/mdi/sparkles'
 import swap from '@iconify-icons/mdi/swap-vertical'
 import sync from '@iconify-icons/mdi/sync'
 import table from '@iconify-icons/mdi/table'
-import trashCanOutline from '@iconify-icons/mdi/trash-can-outline'
 import upload from '@iconify-icons/mdi/upload'
 import user from '@iconify-icons/mdi/user'
 import usersAndTransects from '@iconify-icons/mdi/account-box-multiple-outline'
@@ -150,7 +149,6 @@ export const IconSparkles = (props: IconProps) => <InlineIcon {...props} icon={s
 export const IconSwap = (props: IconProps) => <InlineIcon {...props} icon={swap} />
 export const IconSync = (props: IconProps) => <InlineIcon {...props} icon={sync} />
 export const IconTable = (props: IconProps) => <InlineIcon {...props} icon={table} />
-export const IconTrash = (props: IconProps) => <InlineIcon {...props} icon={trashCanOutline} />
 export const IconUp = (props: IconProps) => <InlineIcon {...props} icon={menuUp} />
 export const IconUpload = (props: IconProps) => <InlineIcon {...props} icon={upload} />
 export const IconUser = (props: IconProps) => <InlineIcon {...props} icon={user} />

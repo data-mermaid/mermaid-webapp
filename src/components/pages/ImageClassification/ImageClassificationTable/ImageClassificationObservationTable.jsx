@@ -1,38 +1,38 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
+import PropTypes from 'prop-types'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { H2 } from '../../../generic/text'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import language from '../../../../language'
+import { getToastArguments } from '../../../../library/getToastArguments'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
 import { InputWrapper } from '../../../generic/form'
+import { MuiTooltip } from '../../../generic/MuiTooltip'
+import { RowRight } from '../../../generic/positioning'
+import { ObservationsSummaryStats, Td, Th, Tr } from '../../../generic/Table/table'
+import { H2 } from '../../../generic/text'
+import { IconClose } from '../../../icons'
 import {
-  StyledOverflowWrapper,
   StickyObservationTable,
+  StyledOverflowWrapper,
 } from '../../collectRecordFormPages/CollectingFormPage.Styles'
-import { Tr, Th, ObservationsSummaryStats, Td } from '../../../generic/Table/table'
-import PropTypes from 'prop-types'
+import getObservationValidationInfo from '../../collectRecordFormPages/CollectRecordFormPage/getObservationValidationInfo'
+import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
+import { getIsImageProcessed } from '../getIsImageProcessed'
+import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
+import { EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD } from '../imageClassificationConstants'
 import {
-  StyledTd,
-  TdWithHoverText,
   ImageWrapper,
-  StyledTr,
   LoadingTableBody,
   Spinner,
+  StyledTd,
+  StyledTr,
+  TdWithHoverText,
 } from './ImageClassificationObservationTable.styles'
-import language from '../../../../language'
-import { ButtonPrimary, ButtonCaution } from '../../../generic/buttons'
-import { IconClose, IconTrash } from '../../../icons'
-import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
 import Thumbnail from './Thumbnail'
-import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import getObservationValidationInfo from '../../collectRecordFormPages/CollectRecordFormPage/getObservationValidationInfo'
-import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
-import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import { RowRight } from '../../../generic/positioning'
-import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import { getToastArguments } from '../../../../library/getToastArguments'
-import { EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD } from '../imageClassificationConstants'
-import { getIsImageProcessed } from '../getIsImageProcessed'
-import { MuiTooltip } from '../../../generic/MuiTooltip'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -168,7 +168,7 @@ const ImageClassificationObservationTable = ({
           callback: () => {
             toast.error(
               ...getToastArguments(
-                `Failed to delete image: ${file.original_image_name}. ${error.message}`,
+                `${language.imageClassification.imageClassificationModal.errors.failedDeletion} ${file.original_image_name}. ${error.message}`,
               ),
             )
           },
@@ -225,7 +225,7 @@ const ImageClassificationObservationTable = ({
       handleHttpResponseError({
         error,
         callback: () => {
-          console.error('Error fetching images:', error)
+          console.error('Error fetching photos:', error)
         },
         shouldShowServerNonResponseMessage: false,
       })
@@ -521,7 +521,12 @@ const ImageClassificationObservationTable = ({
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
-                                  <MuiTooltip title="Review this image">
+                                  <MuiTooltip
+                                    title={
+                                      language.imageClassification.imageClassficationModal.tooltip
+                                        .reviewPhoto
+                                    }
+                                  >
                                     <ButtonPrimary
                                       type="button"
                                       onClick={() => setImageId(file.id)}
@@ -529,7 +534,7 @@ const ImageClassificationObservationTable = ({
                                         !getIsImageProcessed(file.classification_status?.status)
                                       }
                                     >
-                                      Review
+                                      {language.imageClassification.imageClassficationModal.review}
                                     </ButtonPrimary>
                                   </MuiTooltip>
                                 </StyledTd>
@@ -537,7 +542,12 @@ const ImageClassificationObservationTable = ({
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
-                                  <MuiTooltip title="Remove this image">
+                                  <MuiTooltip
+                                    title={
+                                      language.imageClassification.imageClassficationModal.tooltip
+                                        .removePhoto
+                                    }
+                                  >
                                     <ButtonCaution
                                       type="button"
                                       onClick={() => handleRemoveImage(file)}
@@ -546,7 +556,7 @@ const ImageClassificationObservationTable = ({
                                         deletingImage === file.id
                                       }
                                     >
-                                      <IconTrash aria-label="close" />
+                                      <IconClose aria-label="close" />
                                     </ButtonCaution>
                                   </MuiTooltip>
                                 </StyledTd>

@@ -1614,6 +1614,11 @@ const imageClassification = {
     offlineBody: 'This sample unit is using image classification and is unavailable offline.',
   },
   imageClassficationModal: {
+    review: 'Review',
+    tooltip: {
+      reviewPhoto: 'Review this photo',
+      removePhoto: 'Remove this photo',
+    },
     userMessage: {
       photoRemoved: 'Photo removed',
     },
@@ -1625,8 +1630,9 @@ const imageClassification = {
       dimensionsExceededFiles:
         'Some files were not added because they exceed the 8000x8000 dimensions limit.',
       corruptFiles: 'Some files were not added because they appear to be corrupt.',
+      failedDeletion: 'Failed to delete photo: ',
     },
-    success: 'Files uploaded successfully.',
+    success: 'Photos uploaded successfully.',
   },
 }
 
