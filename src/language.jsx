@@ -274,6 +274,7 @@ const createNewOptionModal = {
   contactForHelp: 'Contact us for help',
   species: 'Species',
   newBenthicAttribute: 'Benthic Attribute',
+  growthForms: 'Growth Forms',
   benthicAttributeParent: 'Parent',
   newBenthicAttributeName: 'Name',
   goToNextPage: 'Next',
