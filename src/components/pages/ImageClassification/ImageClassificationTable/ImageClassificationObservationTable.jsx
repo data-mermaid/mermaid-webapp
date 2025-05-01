@@ -589,9 +589,9 @@ const ImageClassificationObservationTable = ({
                       {totalUnknown > 0 && (
                         <StyledTr
                           key={`${file.id}-unknown`}
-                          $messageType={'error'}
                           onMouseEnter={() => handleRowMouseEnter(imageIndex)}
                           onMouseLeave={handleRowMouseLeave}
+                          $isUnclassified={true}
                         >
                           <StyledTd>{rowIndex++}</StyledTd>
                           <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>

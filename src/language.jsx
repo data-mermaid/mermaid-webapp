@@ -58,7 +58,10 @@ const apiDataTableNames = {
 }
 
 const buttons = {
+  cancel: 'Cancel',
   close: 'Close',
+  confirm: 'Confirm',
+  saveChanges: 'Save Changes',
 }
 const error = {
   403: 'The current user does not have permission to do that.',
