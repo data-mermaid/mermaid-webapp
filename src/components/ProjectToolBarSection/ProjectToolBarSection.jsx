@@ -120,7 +120,7 @@ const ProjectToolBarSection = ({
       <RowWrapper>
         <HeaderStyle>
           Projects
-          {isExploreLaunchEnabledForUser && (
+          {isExploreLaunchEnabledForUser && isAppOnline && (
             <MuiTooltip
               title={language.pages.gotoExplore('all your projects')}
               placement="top"

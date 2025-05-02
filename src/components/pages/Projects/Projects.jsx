@@ -113,9 +113,17 @@ const Projects = () => {
   }
 
   const handleExploreButtonClick = () => {
-    const yourMermaidExploreProjectsLink = `${mermaidExploreLink}/?your_projects_only=true`
+    const { projects_bbox } = currentUser
+    const queryParams = new URLSearchParams({ your_projects_only: 'true' })
 
-    window.open(yourMermaidExploreProjectsLink, '_blank')
+    if (projects_bbox) {
+      queryParams.append(
+        'bbox',
+        `${projects_bbox.xmin},${projects_bbox.ymin},${projects_bbox.xmax},${projects_bbox.ymax}`,
+      )
+    }
+
+    window.open(`${mermaidExploreLink}/?${queryParams.toString()}`, '_blank')
   }
 
   const renderPageNoData = () => {

@@ -76,16 +76,16 @@ const RecordFormTitle = ({
   )
 
   const handleExploreButtonClick = () => {
-    if (!sampleEventId || siteCoordinates.length === 0) {
-      toast.error(...getToastArguments(language.error.noLocationMermaidExplore))
-      return
+    const [lng, lat] = siteCoordinates
+    const queryParams = new URLSearchParams({ sample_event_id: sampleEventId })
+
+    if (lat != null && lng != null) {
+      queryParams.append('lat', lat)
+      queryParams.append('lng', lng)
+      queryParams.append('zoom', '15')
     }
 
-    const [lng, lat] = siteCoordinates
-    window.open(
-      `${mermaidExploreLink}/?sample_event_id=${sampleEventId}&lat=${lat}&lng=${lng}&zoom=15`,
-      '_blank',
-    )
+    window.open(`${mermaidExploreLink}/?${queryParams.toString()}`, '_blank')
   }
 
   return (
