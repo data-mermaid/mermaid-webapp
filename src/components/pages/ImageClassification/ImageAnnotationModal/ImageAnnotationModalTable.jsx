@@ -81,8 +81,12 @@ const ImageAnnotationModalTable = ({
           <Tr>
             <Th />
             <Th>Attribute growth form</Th>
-            <Th title="Confirmed count">✓</Th>
-            <Th title="Unconfirmed count">?</Th>
+            <MuiTooltipDark title="Confirmed count">
+              <Th>✓</Th>
+            </MuiTooltipDark>
+            <MuiTooltipDark title="Unconfirmed count">
+              <Th>?</Th>
+            </MuiTooltipDark>
             <Th>Status</Th>
           </Tr>
         </thead>

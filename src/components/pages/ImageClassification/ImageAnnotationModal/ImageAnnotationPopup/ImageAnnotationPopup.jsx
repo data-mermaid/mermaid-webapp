@@ -14,6 +14,7 @@ import {
 import './ImageAnnotationPopup.css'
 import { IconArrowRight, IconZoomIn, IconZoomOut } from '../../../../icons'
 import { MuiTooltipDark } from '../../../../generic/MuiTooltip'
+import { Tooltip } from '@mui/material'
 
 const ImageAnnotationPopup = ({
   dataToReview,
@@ -107,7 +108,8 @@ const ImageAnnotationPopup = ({
         </PopupConfirmButton>
 
         <PopupZoomButtonContainer>
-          <MuiTooltipDark title="Next unconfirmed point">
+          <Tooltip title="Next unconfirmed point">
+            {/*<MuiTooltipDark title="Next unconfirmed point">*/}
             <PopupIconButton
               type="button"
               onClick={selectNextUnconfirmedPoint}
@@ -115,7 +117,9 @@ const ImageAnnotationPopup = ({
             >
               <IconArrowRight />
             </PopupIconButton>
-          </MuiTooltipDark>
+          </Tooltip>
+
+          {/*</MuiTooltipDark>*/}
         </PopupZoomButtonContainer>
       </PopupBottomRow>
     </>

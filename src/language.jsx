@@ -62,6 +62,7 @@ const buttons = {
   close: 'Close',
   confirm: 'Confirm',
   saveChanges: 'Save Changes',
+  addNew: 'Add new',
 }
 const error = {
   403: 'The current user does not have permission to do that.',

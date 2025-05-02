@@ -153,7 +153,7 @@ const SelectAttributeFromClassifierGuesses = ({
             </option>
           ))}
           <option disabled>──────────</option>
-          <option value="selectNewAttribute">Select new attribute...</option>
+          <option value="selectNewAttribute">{language.buttons.addNew}...</option>
         </Select>
       </RowThatLooksLikeAnEvenTr>
       {createPortal(
