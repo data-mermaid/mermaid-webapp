@@ -1,9 +1,14 @@
 .edit-point-popup > .maplibregl-popup-content {
-  padding: 0;
-  margin-top: -5px;
+    padding: 0;
+    margin-top: -5px;
 }
 
 /* Remove Tip */
 .edit-point-popup > .maplibregl-popup-tip {
-  display: none;
+    display: none;
+}
+
+.maplibregl-popup-content {
+    font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
+    font-size: 1.6rem;
 }

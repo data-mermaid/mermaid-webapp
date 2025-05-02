@@ -224,12 +224,12 @@ const ImageAnnotationModal = ({
           <Footer>
             <Legend>
               <LegendItem>
-                <LegendSquare color={COLORS.unconfirmed} />
-                Unconfirmed
-              </LegendItem>
-              <LegendItem>
                 <LegendSquare color={COLORS.confirmed} />
                 Confirmed
+              </LegendItem>
+              <LegendItem>
+                <LegendSquare color={COLORS.unconfirmed} />
+                Unconfirmed
               </LegendItem>
               <LegendItem>
                 <LegendSquare color={COLORS.unclassified} />
