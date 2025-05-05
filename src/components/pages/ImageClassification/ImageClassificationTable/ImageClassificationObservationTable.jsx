@@ -595,7 +595,7 @@ const ImageClassificationObservationTable = ({
                         >
                           <StyledTd>{rowIndex++}</StyledTd>
                           <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
-                          <StyledTd colSpan={3} textAlign="center">
+                          <StyledTd colSpan={3} textAlign="center" style={{ fontWeight: '700' }}>
                             {`${totalUnknown} Unclassified point${totalUnknown > 1 ? 's' : ''}`}
                           </StyledTd>
                           <StyledTd />
