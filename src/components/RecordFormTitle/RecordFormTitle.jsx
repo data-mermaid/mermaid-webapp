@@ -117,7 +117,7 @@ const RecordFormTitle = ({
       {label && (
         <ProjectTooltip forwardedAs="h2" text={label} tooltipText="Label" id="label-tooltip" />
       )}
-      {isExploreLaunchEnabledForUser && (
+      {isExploreLaunchEnabledForUser && sampleEventId && (
         <MuiTooltip title={language.pages.gotoExplore('this Sample Event')} placement="top" arrow>
           <IconButton
             type="button"
