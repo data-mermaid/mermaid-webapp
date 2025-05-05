@@ -11,6 +11,7 @@ import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
 import { getToastArguments } from '../../library/getToastArguments'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
+import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
 import { IconGlobe } from '../icons'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { IconButton } from '../generic/buttons'
@@ -72,11 +73,7 @@ const ProjectName = () => {
     const { name, bbox } = project
     const queryParams = new URLSearchParams({ project: name })
 
-    if (bbox) {
-      queryParams.append('bbox', `${bbox.xmin},${bbox.ymin},${bbox.xmax},${bbox.ymax}`)
-    }
-
-    window.open(`${mermaidExploreLink}/?${queryParams.toString()}`, '_blank')
+    openExploreLinkWithBbox(mermaidExploreLink, queryParams, bbox)
   }
 
   const renderExploreButton = () => {
