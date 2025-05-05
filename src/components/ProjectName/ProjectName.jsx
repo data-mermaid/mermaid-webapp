@@ -12,6 +12,7 @@ import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
 import { getToastArguments } from '../../library/getToastArguments'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
+import { PROJECT_CODES } from '../../library/constants/constants'
 import { IconGlobe } from '../icons'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { IconButton } from '../generic/buttons'
@@ -77,7 +78,7 @@ const ProjectName = () => {
   }
 
   const renderExploreButton = () => {
-    const isTestProject = project?.status < 90
+    const isTestProject = project?.status === PROJECT_CODES.status.test
 
     if (!isAppOnline || isTestProject) {
       return null
