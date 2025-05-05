@@ -150,7 +150,7 @@ const SelectAttributeFromClassifierGuesses = ({
           onChange={handleSelectOnChange}
         >
           <option value="" disabled>
-            {language.placeholders.selectAttribute}...
+            {language.placeholders.selectAttribute}
           </option>
           {existingRowDropdownOptions?.map((row) => (
             <option key={row.value} value={row.value}>
