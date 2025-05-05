@@ -10,9 +10,11 @@ export const TableNavigation = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 3rem 0 ${theme.spacing.xsmall} 0;
+
   > * {
     padding: ${theme.spacing.small} ${theme.spacing.medium};
   }
+
   *:nth-child(2) {
     justify-self: end;
   }
@@ -21,13 +23,12 @@ export const TableOverflowWrapper = styled.div`
   max-width: calc(100vw - ${theme.spacing.sideNavWidth} - 20px);
   ${mediaQueryPhoneOnly(css`
     max-width: calc(100vw - ${theme.spacing.mobileSideNavWidth} - 20px);
-  `)}
-  /*
+  `)} /*
   20px is the approx scrollbar width this is to prevent
   a horziontal scrollbar at the bottom of the page
   and to keep the toolbar sticky when needed.
-  */
-  overflow-y: auto;
+  */ overflow-y: auto;
+
   & + button,
   button + & {
     margin: ${theme.spacing.medium} 0;
@@ -84,14 +85,17 @@ export const thStyles = (props) => css`
   padding: ${theme.spacing.medium};
   background: ${theme.color.white};
   vertical-align: top;
+
   &::after {
     content: ${props.isSortingEnabled ? ' \u25b2' : ''};
     font-size: small;
     white-space: nowrap;
   }
+
   > span {
     ${getHeaderSortAfter(props.isMultiSortColumn, props.sortedIndex, props.isSortedDescending)}
   }
+
   font-weight: 700;
 `
 
@@ -105,12 +109,15 @@ export const Td = styled.td(
     border-color: ${theme.color.tableBorderColor};
     border-style: solid;
     position: relative;
+
     &:first-child {
       border-left: none;
     }
+
     &:last-child {
       border-right: none;
     }
+
     ${mediaQueryTabletLandscapeOnly(css`
       &,
       a {
@@ -135,9 +142,11 @@ export const Tr = styled.tr`
   &:nth-child(odd) {
     background-color: ${theme.color.tableRowOdd};
   }
+
   &:nth-child(even) {
     background-color: ${theme.color.tableRowEven};
   }
+
   ${hoverState(css`
     background-color: ${theme.color.tableRowHover};
   `)}
@@ -179,6 +188,7 @@ export const OverviewTh = styled(Th)`
   padding: ${theme.spacing.small} ${theme.spacing.medium};
   background-clip: padding-box;
   border: solid 1px ${theme.color.tableBorderColor};
+
   &.first-transect-header,
   &.first-user-header {
     ${gapStyles}
@@ -188,26 +198,33 @@ export const OverviewTd = styled(Td)`
   height: inherit;
   background-clip: padding-box;
   padding: ${theme.spacing.small} ${theme.spacing.medium};
+
   &.first-transect-header,
   &.first-user-header {
     ${gapStyles}
   }
+
   &.site,
   &.method {
     background-color: ${theme.color.white};
   }
+
   &.transect-numbers {
     background-color: hsl(0, 0%, 97.5%);
   }
+
   &.user-headers {
     background-color: hsl(0, 0%, 92.5%);
   }
+
   &.management-regime-numbers {
     background-color: hsl(0, 0%, 95%);
   }
+
   &.highlighted {
     background-color: hsl(50 80% 80% / 1);
   }
+
   &:hover div,
   &:focus div {
     transition: ${theme.timing.hoverTransition};
@@ -222,17 +239,20 @@ export const ObservationsSummaryStats = styled(Table)`
   max-width: 40rem;
   background: none;
   border: none;
+
   tr:nth-child(even),
   tr:nth-child(odd) {
     &,
     &:hover {
       background-color: ${theme.color.white};
     }
+
     td {
       text-align: right;
       border: none;
     }
   }
+
   ${mediaQueryTabletLandscapeOnly(css`
     font-size: smaller;
   `)}
@@ -249,6 +269,7 @@ export const InlineCell = styled.span`
   max-width: 26ch;
   text-align: inherit;
   display: inline-block;
+
   a {
     color: inherit;
   }
@@ -262,6 +283,7 @@ const stickyStyles = css`
   white-space: nowrap;
   z-index: 3;
   top: calc(${theme.spacing.headerHeight} - 1px);
+
   &::before {
     /* 
     this is to account for the border-bottom
@@ -307,6 +329,7 @@ export const CopyModalToolbarWrapper = styled.div`
 `
 export const ViewSelectedOnly = styled.label`
   padding-bottom: 0.5rem;
+
   input {
     margin: 0 ${theme.spacing.medium} 0 0;
     cursor: pointer;
