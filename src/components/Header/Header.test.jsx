@@ -29,12 +29,12 @@ test('Header component shows projects, reference, and global dashboard links and
   expect(reference).toBeInTheDocument()
   expect(reference).toHaveAttribute('href', expect.stringContaining(`${mermaidReferenceLink}`))
 
-  const mermaidExploreLink = screen.getByRole('link', {
+  const mermaidExploreHeader = screen.getByRole('link', {
     name: /mermaid explore/i,
   })
 
-  expect(mermaidExploreLink).toBeInTheDocument()
-  expect(mermaidExploreLink).toHaveAttribute('href', mermaidExploreLink)
+  expect(mermaidExploreHeader).toBeInTheDocument()
+  expect(mermaidExploreHeader).toHaveAttribute('href', mermaidExploreLink)
 })
 test('Header component shows projects, reference; hides global dashboard links when offline', async () => {
   renderAuthenticatedOffline(<Header />)
@@ -49,13 +49,13 @@ test('Header component shows projects, reference; hides global dashboard links w
 
   expect(reference).toHaveAttribute('href', `${mermaidReferenceLink}`)
 
-  const mermaidExploreLink = screen.queryByRole('link', {
+  const mermaidExploreHeader = screen.queryByRole('link', {
     name: /mermaid explore/i,
   })
 
   expect(projectsLink).toBeInTheDocument()
   expect(reference).toBeInTheDocument()
   await waitFor(() => {
-    expect(mermaidExploreLink).not.toBeInTheDocument()
+    expect(mermaidExploreHeader).not.toBeInTheDocument()
   })
 })
