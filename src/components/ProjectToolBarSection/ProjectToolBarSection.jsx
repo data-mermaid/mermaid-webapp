@@ -120,7 +120,7 @@ const ProjectToolBarSection = ({
       <RowWrapper>
         <HeaderStyle>
           Projects
-          {isExploreLaunchEnabledForUser && (
+          {isExploreLaunchEnabledForUser && isAppOnline && (
             <MuiTooltip
               title={language.pages.gotoExplore('all your projects')}
               placement="top"
@@ -128,7 +128,7 @@ const ProjectToolBarSection = ({
             >
               <IconButton
                 type="button"
-                aria-label="View MERMAID Explore"
+                aria-label={language.pages.gotoExplore('all your projects')}
                 onClick={handleExploreButtonClick}
               >
                 <BiggerIconGlobe />

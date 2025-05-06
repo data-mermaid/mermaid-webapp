@@ -1,5 +1,5 @@
-import { useParams } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import styled, { css } from 'styled-components'
 import theme from '../../theme'
@@ -10,6 +10,9 @@ import useIsMounted from '../../library/useIsMounted'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
 import { getToastArguments } from '../../library/getToastArguments'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
+import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
+import { PROJECT_CODES } from '../../library/constants/constants'
 import { IconGlobe } from '../icons'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { IconButton } from '../generic/buttons'
@@ -47,57 +50,64 @@ const BiggerIconGlobe = styled(IconGlobe)`
 `
 
 const ProjectName = () => {
-  const [projectName, setProjectName] = useState('')
-  const [isTestProject, setIsTestProject] = useState(false)
   const isMounted = useIsMounted()
   const { projectId } = useParams()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
   const { mermaidExploreLink, isExploreLaunchEnabledForUser } = useExploreLaunchFeature({
     currentUser,
   })
+  const [project, setProject] = useState({})
 
   const _getProjectName = useEffect(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance.getProject(projectId).then((projectResponse) => {
         if (isMounted.current) {
-          setProjectName(projectResponse?.name)
-          setIsTestProject(projectResponse?.status < 90)
+          setProject(projectResponse)
         }
       })
     }
   }, [databaseSwitchboardInstance, isMounted, projectId])
 
   const handleExploreButtonClick = () => {
-    if (!projectName) {
-      toast.error(...getToastArguments(language.error.noProjectMermaidExplore))
-      return
-    }
+    const { name, bbox } = project
+    const queryParams = new URLSearchParams({ project: name })
 
-    window.open(`${mermaidExploreLink}/?project=${projectName}`, '_blank')
+    openExploreLinkWithBbox(mermaidExploreLink, queryParams, bbox)
   }
 
-  const mermaidExploreButton = isExploreLaunchEnabledForUser ? (
-    <MuiTooltip title={language.pages.gotoExplore('this project')} placement="top" arrow>
-      <IconButton
-        type="button"
-        aria-label="View MERMAID Explore"
-        onClick={handleExploreButtonClick}
-      >
-        <BiggerIconGlobe />
-      </IconButton>
-    </MuiTooltip>
-  ) : (
-    <ProjectNameLink href={`${mermaidExploreLink}/?project=${projectName}`} target="_blank">
-      <IconGlobe />
-      <span>{language.pages.goToDashboard}</span>
-    </ProjectNameLink>
-  )
+  const renderExploreButton = () => {
+    const isTestProject = project?.status === PROJECT_CODES.status.test
+
+    if (!isAppOnline || isTestProject) {
+      return null
+    }
+
+    const exploreButtonContent = isExploreLaunchEnabledForUser ? (
+      <MuiTooltip title={language.pages.gotoExplore('this project')} placement="top" arrow>
+        <IconButton
+          type="button"
+          aria-label={language.pages.gotoExplore('this project')}
+          onClick={handleExploreButtonClick}
+        >
+          <BiggerIconGlobe />
+        </IconButton>
+      </MuiTooltip>
+    ) : (
+      <ProjectNameLink href={`${mermaidExploreLink}/?project=${project?.name}`} target="_blank">
+        <IconGlobe />
+        <span>{language.pages.goToDashboard}</span>
+      </ProjectNameLink>
+    )
+
+    return exploreButtonContent
+  }
 
   return (
     <ProjectNameWrapper>
-      <ProjectNameHeader>{projectName}</ProjectNameHeader>
-      {!isTestProject ? mermaidExploreButton : null}
+      <ProjectNameHeader>{project?.name}</ProjectNameHeader>
+      {renderExploreButton()}
     </ProjectNameWrapper>
   )
 }
