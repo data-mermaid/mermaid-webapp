@@ -39,7 +39,10 @@ const GfcrPdfLink = () => (
   </>
 )
 
-const placeholders = { select: 'Choose...' }
+const placeholders = {
+  select: 'Choose...',
+  selectAttribute: 'Select attribute',
+}
 
 const inlineMessage = {
   ignore: 'ignored',
@@ -63,6 +66,7 @@ const buttons = {
   confirm: 'Confirm',
   saveChanges: 'Save Changes',
 }
+
 const error = {
   403: 'The current user does not have permission to do that.',
   500: 'MERMAID error: please contact support@datamermaid.org',
@@ -476,6 +480,8 @@ const table = {
   sortRemoveTitle: 'Remove sort',
   noFilterResults: 'No results',
   noFilterResultsSubText: 'No records match the current filter term.',
+  addNewRow: 'Add new row',
+  addExistingRow: 'Add to existing row',
 }
 
 const title = {
@@ -1617,7 +1623,11 @@ const imageClassification = {
     offlineBody: 'This sample unit is using image classification and is unavailable offline.',
   },
   imageClassficationModal: {
+    confirmedCount: 'Confirmed count',
+    unconfirmedCount: 'Unconfirmed count',
+    status: 'Status',
     review: 'Review',
+    attributeGrowthForm: 'Benthic attribute and growth form',
     tooltip: {
       reviewPhoto: 'Review this photo',
       removePhoto: 'Remove this photo',

@@ -27,6 +27,7 @@ const SelectAttributeFromClassifierGuesses = ({
   databaseSwitchboardInstance,
 }) => {
   const rowKeyForPoint = selectedPoint.annotations[0]?.ba_gr
+  const isSelectedPointUnclassified = selectedPoint.annotations?.length === 0
 
   const existingRowDropdownOptions = dataToReview.points
     .reduce((acc, currentPoint) => {
@@ -117,7 +118,11 @@ const SelectAttributeFromClassifierGuesses = ({
 
   return (
     <>
-      <LabelThatLooksLikeATh>Attribute growth form</LabelThatLooksLikeATh>
+      {isSelectedPointUnclassified && (
+        <LabelThatLooksLikeATh>
+          {language.imageClassification.imageClassficationModal.attributeGrowthForm}
+        </LabelThatLooksLikeATh>
+      )}
       <RowThatLooksLikeAnEvenTr>
         <input
           type="radio"
@@ -130,12 +135,12 @@ const SelectAttributeFromClassifierGuesses = ({
         />
 
         <Select
-          label="Add to existing row"
+          label={language.table.addExistingRow}
           value={selectedExistingRow}
           onChange={handleSelectOnChange}
         >
           <option value="" disabled>
-            Choose...
+            {language.placeholders.selectAttribute}
           </option>
           {existingRowDropdownOptions?.map((row) => (
             <option key={row.value} value={row.value}>
@@ -143,7 +148,7 @@ const SelectAttributeFromClassifierGuesses = ({
             </option>
           ))}
           <option disabled>──────────</option>
-          <option value="selectNewAttribute">Select new attribute...</option>
+          <option value="selectNewAttribute">{language.table.addNewRow}...</option>
         </Select>
       </RowThatLooksLikeAnEvenTr>
       {createPortal(
