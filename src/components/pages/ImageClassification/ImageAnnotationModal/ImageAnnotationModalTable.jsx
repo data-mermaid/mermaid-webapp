@@ -11,7 +11,7 @@ import {
   TrImageClassification,
 } from './ImageAnnotationModal.styles'
 import { ButtonSecondary } from '../../../generic/buttons'
-import { Tr, Th, Td, TableOverflowWrapper } from '../../../generic/Table/table'
+import { Tr, Th, Td, TableOverflowWrapper, thStyles } from '../../../generic/Table/table'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { IconZoomIn } from '../../../icons'
 import { MuiTooltipDark } from '../../../generic/MuiTooltip'
@@ -78,12 +78,20 @@ const ImageAnnotationModalTable = ({
     <TableOverflowWrapper id="annotation-modal-table">
       <TableWithNoMinWidth aria-labelledby="table-label">
         <thead>
-          <Tr>
+          <Tr style={{ ...thStyles }}>
             <Th />
-            <Th>Attribute growth form</Th>
-            <Th title="Confirmed count">✓</Th>
-            <Th title="Unconfirmed count">?</Th>
-            <Th>Status</Th>
+            <Th>{language.imageClassification.imageClassficationModal.attributeGrowthForm}</Th>
+            <MuiTooltipDark
+              title={language.imageClassification.imageClassficationModal.confirmedCount}
+            >
+              <Th>✓</Th>
+            </MuiTooltipDark>
+            <MuiTooltipDark
+              title={language.imageClassification.imageClassficationModal.unconfirmedCount}
+            >
+              <Th>?</Th>
+            </MuiTooltipDark>
+            <Th>{language.imageClassification.imageClassficationModal.status}</Th>
           </Tr>
         </thead>
         <tbody>
