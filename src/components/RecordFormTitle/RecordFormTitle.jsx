@@ -1,5 +1,4 @@
 import React from 'react'
-import { toast } from 'react-toastify'
 import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 import theme from '../../theme'
@@ -13,7 +12,6 @@ import { getProtocolTransectType } from '../../App/mermaidData/recordProtocolHel
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
-import { getToastArguments } from '../../library/getToastArguments'
 import { IconButton } from '../generic/buttons'
 import { IconGlobe } from '../icons'
 
