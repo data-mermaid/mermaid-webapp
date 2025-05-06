@@ -14,18 +14,18 @@ const AutoCompleteInput = styled(Input)`
 `
 const AutoCompleteResultsWrapper = styled.div`
   position: relative;
-`
-const NoResultSection = styled.div`
-  position: absolute;
-  top: 4rem;
-  outline: ${theme.color.outline};
-  outline-offset: -3px;
-  background: ${theme.color.white};
-  z-index: 99;
-  width: 100%;
-  p {
-    margin: ${theme.spacing.small};
+
+  & > p {
+    position: absolute;
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    top: 2.5rem;
+    outline: ${theme.color.outline};
+    outline-offset: -2px;
+    background: ${theme.color.white};
   }
+
   button {
     width: 100%;
     border: none;
@@ -55,10 +55,10 @@ const InputAutocomplete = ({
 
   const [selectedValue, setSelectedValue] = useState(optionMatchingValueProp)
   const [menuItems, setMenuItems] = useState(options)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(true)
 
   const _updateSelectedValueWhenPropsChange = useEffect(() => {
-    setIsMenuOpen(false)
+    setIsMenuOpen(true)
     setSelectedValue(optionMatchingValueProp)
   }, [optionMatchingValueProp])
 
@@ -89,15 +89,15 @@ const InputAutocomplete = ({
 
       if (selectedItem) {
         onChange(selectedItem)
-        setIsMenuOpen(false)
+        // setIsMenuOpen(false)
       }
 
       if (!selectedItem && inputValue) {
-        setIsMenuOpen(shouldMenuBeOpen)
+        // setIsMenuOpen(shouldMenuBeOpen)
       }
 
       if (inputValue === '') {
-        setIsMenuOpen(false)
+        // setIsMenuOpen(false)
       }
     },
     [onInputValueChange, selectedValue.label, onChange],
@@ -172,14 +172,18 @@ const InputAutocomplete = ({
               />
               {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
             </div>
-            <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
-              {isMenuOpen && getMenuContents(downshiftObject)}
-            </Menu>
+            {menuItems.length > 0 && (
+              <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
+                {isMenuOpen && getMenuContents(downshiftObject)}
+              </Menu>
+            )}
             {isMenuOpen && !menuItems.length && (
-              <NoResultSection>
-                <p data-testid="noResult">{noResultsText}</p>
+              <>
+                <p data-testid="noResult" id={'noresults'}>
+                  {noResultsText}
+                </p>
                 {noResultsAction}
-              </NoResultSection>
+              </>
             )}
           </AutoCompleteResultsWrapper>
         )
