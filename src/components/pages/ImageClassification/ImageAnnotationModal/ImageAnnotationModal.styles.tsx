@@ -82,12 +82,6 @@ export const TableWithNoMinWidth = styled(Table)`
   border-top: none;
 `
 
-export const ImageAnnotationPopupContainer = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-`
-
 export const TdZoom = styled(Td)`
   padding: 0;
   height: 57px; // prevents shifts to layout when the attribute is confirmed
@@ -176,10 +170,6 @@ export const NewAttributeModalContentContainer = styled.div`
 
 export const NewAttributeModalFooterContainer = styled.div`
   justify-self: right;
-`
-
-export const NewAttributeModalLabel = styled.label`
-  font-weight: bold;
 `
 
 export const ButtonZoom = styled.button<IsSelectedProps>`

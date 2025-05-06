@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import theme from '../../../theme'
 
 export const Menu = styled('ul')`
-  z-index: 15;
+  z-index: 10;
   position: absolute;
   top: 4rem;
   padding: 0;

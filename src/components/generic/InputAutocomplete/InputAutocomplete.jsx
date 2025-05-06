@@ -15,15 +15,20 @@ const AutoCompleteInput = styled(Input)`
 const AutoCompleteResultsWrapper = styled.div`
   position: relative;
 
-  & > p {
+  & > div {
+    z-index: 110;
     position: absolute;
     display: block;
     width: 100%;
-    padding: 1rem;
-    top: 2.5rem;
+    top: 4rem;
     outline: ${theme.color.outline};
     outline-offset: -2px;
     background: ${theme.color.white};
+
+    > * {
+      margin: 0;
+      padding: ${theme.spacing.buttonPadding};
+    }
   }
 
   button {
@@ -170,12 +175,10 @@ const InputAutocomplete = ({
               {isMenuOpen && getMenuContents(downshiftObject)}
             </Menu>
             {isMenuOpen && !menuItems.length && (
-              <>
-                <p data-testid="noResult" id={'noresults'}>
-                  {noResultsText}
-                </p>
+              <div>
+                <p data-testid="noResult">{noResultsText}</p>
                 {noResultsAction}
-              </>
+              </div>
             )}
           </AutoCompleteResultsWrapper>
         )

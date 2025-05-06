@@ -1,7 +1,10 @@
 import InputAutocomplete from '../../../../generic/InputAutocomplete/InputAutocomplete'
 import { Select } from '../../../../generic/form'
 import language from '../../../../../language'
-import { NewAttributeModalFooterContainer } from '../ImageAnnotationModal.styles'
+import {
+  NewAttributeModalContentContainer,
+  NewAttributeModalFooterContainer,
+} from '../ImageAnnotationModal.styles'
 import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
 import { IconPlus } from '../../../../icons'
 import React from 'react'
@@ -29,8 +32,8 @@ const NewAttributeModal = ({
       allowCloseWithEscapeKey={false}
       maxWidth="fit-content"
       mainContent={
-        <div style={{}}>
-          <label htmlFor="benthic-attribute-autocomplete" style={{ display: 'inline-block' }}>
+        <NewAttributeModalContentContainer>
+          <label htmlFor="benthic-attribute-autocomplete">
             {language.createNewOptionModal.newBenthicAttribute}
             <InputAutocomplete
               id="benthic-attribute-autocomplete"
@@ -44,7 +47,7 @@ const NewAttributeModal = ({
             />
           </label>
 
-          <label htmlFor="growth-forms" style={{ display: 'inline-block', paddingLeft: '1rem' }}>
+          <label htmlFor="growth-forms">
             <span>{language.createNewOptionModal.growthForms}</span>
             <Select
               id="growth-forms"
@@ -59,7 +62,7 @@ const NewAttributeModal = ({
               ))}
             </Select>
           </label>
-        </div>
+        </NewAttributeModalContentContainer>
       }
       footerContent={
         <NewAttributeModalFooterContainer>
