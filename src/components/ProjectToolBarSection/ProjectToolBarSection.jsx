@@ -128,7 +128,7 @@ const ProjectToolBarSection = ({
             >
               <IconButton
                 type="button"
-                aria-label={language.accessibilityText.viewMERMAIDExplore}
+                aria-label={language.pages.gotoExplore('all your projects')}
                 onClick={handleExploreButtonClick}
               >
                 <BiggerIconGlobe />

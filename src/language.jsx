@@ -1627,10 +1627,6 @@ const imageClassification = {
   },
 }
 
-const accessibilityText = {
-  viewMERMAIDExplore: 'View MERMAID Explore',
-}
-
 export default {
   apiDataTableNames,
   autocomplete,
@@ -1662,5 +1658,4 @@ export default {
   table,
   title,
   tooltipText,
-  accessibilityText,
 }

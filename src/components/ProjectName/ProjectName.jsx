@@ -88,7 +88,7 @@ const ProjectName = () => {
       <MuiTooltip title={language.pages.gotoExplore('this project')} placement="top" arrow>
         <IconButton
           type="button"
-          aria-label={language.accessibilityText.viewMERMAIDExplore}
+          aria-label={language.pages.gotoExplore('this project')}
           onClick={handleExploreButtonClick}
         >
           <BiggerIconGlobe />
