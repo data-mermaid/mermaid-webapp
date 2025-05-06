@@ -128,7 +128,7 @@ const ProjectToolBarSection = ({
             >
               <IconButton
                 type="button"
-                aria-label="View MERMAID Explore"
+                aria-label={language.accessibilityText.viewMERMAIDExplore}
                 onClick={handleExploreButtonClick}
               >
                 <BiggerIconGlobe />

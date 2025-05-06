@@ -121,7 +121,7 @@ const RecordFormTitle = ({
         <MuiTooltip title={language.pages.gotoExplore('this Sample Event')} placement="top" arrow>
           <IconButton
             type="button"
-            aria-label="View MERMAID Explore"
+            aria-label={language.accessibilityText.viewMERMAIDExplore}
             onClick={handleExploreButtonClick}
           >
             <BiggerIconGlobe />
