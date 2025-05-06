@@ -242,7 +242,7 @@ const ImageUploadModal = ({
       footerContent={
         <ButtonContainer>
           <ButtonSecondary type="button" onClick={onClose}>
-            Close
+            {language.buttons.close}
           </ButtonSecondary>
         </ButtonContainer>
       }

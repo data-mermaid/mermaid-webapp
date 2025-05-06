@@ -1,6 +1,10 @@
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 
+import getBounds from '@turf/bbox'
+import { bboxPolygon } from '@turf/bbox-polygon'
+import { booleanContains } from '@turf/boolean-contains'
+import { buffer } from '@turf/buffer'
 import maplibregl, {
   Expression,
   LngLatLike,
@@ -8,10 +12,6 @@ import maplibregl, {
   MapMouseEvent,
   Popup,
 } from 'maplibre-gl'
-import getBounds from '@turf/bbox'
-import { buffer } from '@turf/buffer'
-import { bboxPolygon } from '@turf/bbox-polygon'
-import { booleanContains } from '@turf/boolean-contains'
 import crossHairUrl from '../../../../../public/cross-hair.png'
 import labelBackgroundUrl from '../../../../../public/label-background.png'
 import {
@@ -20,28 +20,25 @@ import {
   MapControlButton,
 } from '../mapButtons/MapButtonContainer'
 
-import {
-  IMAGE_CLASSIFICATION_COLORS,
-  IMAGE_CLASSIFICATION_COLORS as COLORS,
-} from '../../../../library/constants/constants'
+import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 
+import { ImageClassificationResponse } from '../../../../App/mermaidData/mermaidDataTypes'
+import { MapRef } from '../../../../types/map'
+import { MuiTooltipDarkRight } from '../../../generic/MuiTooltip'
 import { IconCircle, IconLabel, IconMinus, IconPlus, IconRefresh, IconTable } from '../../../icons'
-import {
-  ImageAnnotationMapWrapper,
-  LabelPopup,
-  LoadingIndicatorImageClassificationImage,
-} from './ImageAnnotationModal.styles'
-import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
-import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
-import { getPatchesCenters } from './getPatchesCenters'
 import {
   DEFAULT_MAP_ANIMATION_DURATION,
   DEFAULT_MAP_CENTER,
   DEFAULT_MAP_ZOOM,
 } from '../imageClassificationConstants'
-import { ImageClassificationResponse } from '../../../../App/mermaidData/mermaidDataTypes'
-import { MapRef } from '../../../../types/map'
-import { MuiTooltipDarkRight } from '../../../generic/MuiTooltip'
+import {
+  ImageAnnotationMapWrapper,
+  LabelPopup,
+  LoadingIndicatorImageClassificationImage,
+} from './ImageAnnotationModal.styles'
+import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
+import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
+import { getPatchesCenters } from './getPatchesCenters'
 import { usePointsGeoJson } from './usePointsGeoJson'
 
 interface SelectedPoint {
@@ -55,12 +52,12 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
   'case',
 
   ['get', 'isUnclassified'],
-  COLORS.unclassified,
+  COLORS.unclassifiedPoint,
 
   ['get', 'isConfirmed'],
-  COLORS.confirmed,
+  COLORS.confirmedPoint,
 
-  COLORS.unconfirmed,
+  COLORS.unconfirmedPoint,
 ] as Expression
 
 const pointLabelPopup = new maplibregl.Popup({
@@ -411,7 +408,7 @@ const ImageAnnotationModalMap = ({
         const pointStatus = properties?.isUnclassified ? 'unclassified' : confirmedStatus
         const popupContent = (
           <LabelPopup>
-            <IconCircle style={{ color: IMAGE_CLASSIFICATION_COLORS[pointStatus] }} /> {label}
+            <IconCircle style={{ color: COLORS[pointStatus] }} /> {label}
           </LabelPopup>
         )
         const popupContentHack = document.createElement('div')
