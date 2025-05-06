@@ -20,15 +20,15 @@ export const TableNavigation = styled.div`
   }
 `
 export const TableOverflowWrapper = styled.div`
+  overflow-y: auto;
   max-width: calc(100vw - ${theme.spacing.sideNavWidth} - 20px);
+
   ${mediaQueryPhoneOnly(css`
     max-width: calc(100vw - ${theme.spacing.mobileSideNavWidth} - 20px);
-  `)} /*
-  20px is the approx scrollbar width this is to prevent
+  `)}
+  /*  20px is the approx scrollbar width this is to prevent
   a horziontal scrollbar at the bottom of the page
-  and to keep the toolbar sticky when needed.
-  */ overflow-y: auto;
-
+  and to keep the toolbar sticky when needed. */
   & + button,
   button + & {
     margin: ${theme.spacing.medium} 0;
