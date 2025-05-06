@@ -55,10 +55,10 @@ const InputAutocomplete = ({
 
   const [selectedValue, setSelectedValue] = useState(optionMatchingValueProp)
   const [menuItems, setMenuItems] = useState(options)
-  const [isMenuOpen, setIsMenuOpen] = useState(true)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const _updateSelectedValueWhenPropsChange = useEffect(() => {
-    setIsMenuOpen(true)
+    setIsMenuOpen(false)
     setSelectedValue(optionMatchingValueProp)
   }, [optionMatchingValueProp])
 
@@ -89,15 +89,15 @@ const InputAutocomplete = ({
 
       if (selectedItem) {
         onChange(selectedItem)
-        // setIsMenuOpen(false)
+        setIsMenuOpen(false)
       }
 
       if (!selectedItem && inputValue) {
-        // setIsMenuOpen(shouldMenuBeOpen)
+        setIsMenuOpen(shouldMenuBeOpen)
       }
 
       if (inputValue === '') {
-        // setIsMenuOpen(false)
+        setIsMenuOpen(false)
       }
     },
     [onInputValueChange, selectedValue.label, onChange],
@@ -125,22 +125,18 @@ const InputAutocomplete = ({
     (downshiftObject) => {
       const { getItemProps, highlightedIndex } = downshiftObject
 
-      return menuItems.length
-        ? menuItems.map((item, index) => {
-            return (
-              <Item
-                {...getItemProps({
-                  item,
-                  index,
-                })}
-                key={item.value}
-                highlighted={highlightedIndex === index}
-              >
-                {item.label}
-              </Item>
-            )
-          })
-        : null
+      return menuItems.map((item, index) => (
+        <Item
+          {...getItemProps({
+            item,
+            index,
+          })}
+          key={item.value}
+          highlighted={highlightedIndex === index}
+        >
+          {item.label}
+        </Item>
+      ))
     },
     [menuItems],
   )
@@ -163,20 +159,16 @@ const InputAutocomplete = ({
             })}
             className={className}
           >
-            <div>
-              <AutoCompleteInput
-                {...getInputProps({ onKeyDown })}
-                aria-describedby={`aria-descp${id}`}
-                id={id}
-                {...restOfProps}
-              />
-              {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
-            </div>
-            {menuItems.length > 0 && (
-              <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
-                {isMenuOpen && getMenuContents(downshiftObject)}
-              </Menu>
-            )}
+            <AutoCompleteInput
+              {...getInputProps({ onKeyDown })}
+              aria-describedby={`aria-descp${id}`}
+              id={id}
+              {...restOfProps}
+            />
+            {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
+            <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
+              {isMenuOpen && getMenuContents(downshiftObject)}
+            </Menu>
             {isMenuOpen && !menuItems.length && (
               <>
                 <p data-testid="noResult" id={'noresults'}>

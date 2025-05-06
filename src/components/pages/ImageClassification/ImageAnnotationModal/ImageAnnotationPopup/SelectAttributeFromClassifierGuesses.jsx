@@ -5,19 +5,12 @@ import {
   imageClassificationPointPropType,
   imageClassificationResponsePropType,
 } from '../../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
 import { createPortal } from 'react-dom'
 import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
-import { IconPlus } from '../../../../icons'
-import {
-  LabelThatLooksLikeATh,
-  NewAttributeModalFooterContainer,
-  RowThatLooksLikeAnEvenTr,
-} from '../ImageAnnotationModal.styles'
+import { LabelThatLooksLikeATh, RowThatLooksLikeAnEvenTr } from '../ImageAnnotationModal.styles'
 import { Select } from '../../../../generic/form'
 import { useSelectNewAttribute } from '../../useSelectNewAttribute'
 import NewAttributeModal from './NewAttributeModal'
-import Modal from '../../../../generic/Modal/Modal'
 
 const isClassified = ({ annotations }) => annotations.length > 0
 
@@ -155,40 +148,15 @@ const SelectAttributeFromClassifierGuesses = ({
       </RowThatLooksLikeAnEvenTr>
       {createPortal(
         //modal will otherwise populate within the map container
-        <Modal
-          title="Select New Attribute"
-          isOpen={
-            !!benthicAttributeSelectOptions.length &&
-            !!growthFormSelectOptions.length &&
-            shouldDisplayModal
-          }
-          onDismiss={handleCloseModal}
-          allowCloseWithEscapeKey={false}
-          maxWidth="fit-content"
-          contentOverflowIsVisible
-          mainContent={
-            <NewAttributeModal
-              benthicAttributeSelectOptions={benthicAttributeSelectOptions}
-              setSelectedBenthicAttr={setSelectedBenthicAttr}
-              setSelectedGrowthForm={setSelectedGrowthForm}
-              selectedBenthicAttr={selectedBenthicAttr}
-              growthFormSelectOptions={growthFormSelectOptions}
-            />
-          }
-          footerContent={
-            <NewAttributeModalFooterContainer>
-              <ButtonSecondary type="button" onClick={handleCloseModal}>
-                Cancel
-              </ButtonSecondary>
-              <ButtonPrimary
-                type="button"
-                disabled={!selectedBenthicAttr}
-                onClick={handleAddNewRowClick}
-              >
-                <IconPlus /> Add Row
-              </ButtonPrimary>
-            </NewAttributeModalFooterContainer>
-          }
+        <NewAttributeModal
+          benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+          growthFormSelectOptions={growthFormSelectOptions}
+          shouldDisplayModal={shouldDisplayModal}
+          handleCloseModal={handleCloseModal}
+          selectedBenthicAttr={selectedBenthicAttr}
+          setSelectedBenthicAttr={setSelectedBenthicAttr}
+          handleAddNewRowClick={handleAddNewRowClick}
+          setSelectedGrowthForm={setSelectedGrowthForm}
         />,
         document.body,
       )}

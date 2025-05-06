@@ -2,10 +2,12 @@ import styled from 'styled-components'
 import theme from '../../../theme'
 
 export const Menu = styled('ul')`
+  z-index: 15;
+  position: absolute;
+  top: 4rem;
   padding: 0;
   margin-top: 2px;
   background: ${theme.color.white};
-  position: absolute;
   width: 100%;
   max-height: 18rem;
   cursor: default;
@@ -16,8 +18,6 @@ export const Menu = styled('ul')`
   border-width: 0 1px 1px 1px;
   border-style: solid;
   color: ${theme.color.textColor};
-  z-index: 99;
-  top: 4rem;
   border: ${(props) => (props.isOpen ? null : 'none')};
   outline: ${(props) => (props.isOpen ? null : 'none')};
 `
