@@ -65,6 +65,7 @@ const buttons = {
   close: 'Close',
   confirm: 'Confirm',
   saveChanges: 'Save Changes',
+  addRow: 'Add row',
 }
 
 const error = {

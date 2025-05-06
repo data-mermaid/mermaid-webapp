@@ -11,6 +11,7 @@ import { LabelThatLooksLikeATh, RowThatLooksLikeAnEvenTr } from '../ImageAnnotat
 import { Select } from '../../../../generic/form'
 import { useSelectNewAttribute } from '../../useSelectNewAttribute'
 import NewAttributeModal from './NewAttributeModal'
+import language from '../../../../../language'
 
 const isClassified = ({ annotations }) => annotations.length > 0
 

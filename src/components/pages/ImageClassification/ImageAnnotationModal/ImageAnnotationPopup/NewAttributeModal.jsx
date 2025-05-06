@@ -9,6 +9,18 @@ import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
 import { IconPlus } from '../../../../icons'
 import React from 'react'
 import Modal from '../../../../generic/Modal/Modal'
+import PropTypes from 'prop-types'
+
+NewAttributeModal.propTypes = {
+  benthicAttributeSelectOptions: PropTypes.array,
+  setSelectedBenthicAttr: PropTypes.func.isRequired,
+  setSelectedGrowthForm: PropTypes.func.isRequired,
+  selectedBenthicAttr: PropTypes.string.isRequired,
+  growthFormSelectOptions: PropTypes.array.isRequired,
+  shouldDisplayModal: PropTypes.bool.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
+  handleAddNewRowClick: PropTypes.func.isRequired,
+}
 
 const NewAttributeModal = ({
   benthicAttributeSelectOptions,
@@ -22,7 +34,7 @@ const NewAttributeModal = ({
 }) => {
   return (
     <Modal
-      title="Select New Attribute"
+      title={language.table.addNewRow}
       isOpen={
         !!benthicAttributeSelectOptions.length &&
         !!growthFormSelectOptions.length &&
@@ -67,14 +79,14 @@ const NewAttributeModal = ({
       footerContent={
         <NewAttributeModalFooterContainer>
           <ButtonSecondary type="button" onClick={handleCloseModal}>
-            Cancel
+            {language.buttons.cancel}
           </ButtonSecondary>
           <ButtonPrimary
             type="button"
             disabled={!selectedBenthicAttr}
             onClick={handleAddNewRowClick}
           >
-            <IconPlus /> Add Row
+            <IconPlus /> {language.buttons.addRow}
           </ButtonPrimary>
         </NewAttributeModalFooterContainer>
       }
