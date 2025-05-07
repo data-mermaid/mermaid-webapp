@@ -38,7 +38,7 @@ const ContentToolbar = styled('div')`
   padding: ${theme.spacing.small} ${theme.spacing.medium};
   border-bottom: solid ${theme.spacing.borderMedium} ${theme.color.backgroundColor};
   margin-bottom: 0;
-  z-index: 10;
+  z-index: ${({ theme }) => theme.zIndex.toolbar};
   ${(props) =>
     props.isToolbarSticky &&
     css`

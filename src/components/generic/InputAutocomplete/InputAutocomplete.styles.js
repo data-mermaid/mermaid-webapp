@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import theme from '../../../theme'
 
 export const Menu = styled('ul')`
-  z-index: 10;
+  z-index: ${({ theme }) => theme.zIndex.autocomplete};
   position: absolute;
   top: 4rem;
   padding: 0;

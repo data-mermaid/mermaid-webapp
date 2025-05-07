@@ -1,3 +1,4 @@
+import React from 'react'
 import InputAutocomplete from '../../../../generic/InputAutocomplete/InputAutocomplete'
 import { Select } from '../../../../generic/form'
 import language from '../../../../../language'
@@ -7,20 +8,8 @@ import {
 } from '../ImageAnnotationModal.styles'
 import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
 import { IconPlus } from '../../../../icons'
-import React from 'react'
 import Modal from '../../../../generic/Modal/Modal'
 import PropTypes from 'prop-types'
-
-NewAttributeModal.propTypes = {
-  benthicAttributeSelectOptions: PropTypes.array,
-  setSelectedBenthicAttr: PropTypes.func.isRequired,
-  setSelectedGrowthForm: PropTypes.func.isRequired,
-  selectedBenthicAttr: PropTypes.string.isRequired,
-  growthFormSelectOptions: PropTypes.array.isRequired,
-  shouldDisplayModal: PropTypes.bool.isRequired,
-  handleCloseModal: PropTypes.func.isRequired,
-  handleAddNewRowClick: PropTypes.func.isRequired,
-}
 
 const NewAttributeModal = ({
   benthicAttributeSelectOptions,
@@ -60,7 +49,6 @@ const NewAttributeModal = ({
           </label>
 
           <label htmlFor="growth-forms">
-            <span>{language.createNewOptionModal.growthForms}</span>
             <Select
               id="growth-forms"
               label={language.createNewOptionModal.growthForms}
@@ -95,3 +83,14 @@ const NewAttributeModal = ({
 }
 
 export default NewAttributeModal
+
+NewAttributeModal.propTypes = {
+  benthicAttributeSelectOptions: PropTypes.array,
+  setSelectedBenthicAttr: PropTypes.func.isRequired,
+  setSelectedGrowthForm: PropTypes.func.isRequired,
+  selectedBenthicAttr: PropTypes.string.isRequired,
+  growthFormSelectOptions: PropTypes.array.isRequired,
+  shouldDisplayModal: PropTypes.bool.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
+  handleAddNewRowClick: PropTypes.func.isRequired,
+}

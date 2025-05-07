@@ -19,7 +19,7 @@ const StyledDialogOverlay = styled('div')`
   position: fixed;
   display: grid;
   place-items: center;
-  z-index: 10;
+  z-index: ${({ theme }) => theme.zIndex.modal};
 `
 
 const StyledDialog = styled('div')`
