@@ -49,11 +49,8 @@ const NewAttributeModal = ({
           </label>
 
           <label htmlFor="growth-forms">
-            <Select
-              id="growth-forms"
-              label={language.createNewOptionModal.growthForms}
-              onChange={(e) => setSelectedGrowthForm(e.target.value)}
-            >
+            {language.createNewOptionModal.growthForms}
+            <Select id="growth-forms" onChange={(e) => setSelectedGrowthForm(e.target.value)}>
               <option value=""></option>
               {growthFormSelectOptions.map((growthForm) => (
                 <option key={growthForm.id} value={growthForm.id}>
