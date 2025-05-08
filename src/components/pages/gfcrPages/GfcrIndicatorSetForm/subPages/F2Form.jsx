@@ -23,7 +23,9 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
           </>
         }
         id="f2_1a"
-        type="number"
+        type="text"
+        inputMode="decimal"
+        pattern="[0-9.]*"
         unit="km²"
         {...formik.getFieldProps('f2_1a')}
         onBlur={(event) =>
@@ -48,7 +50,9 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
           </>
         }
         id="f2_1b"
-        type="number"
+        type="text"
+        inputMode="decimal"
+        pattern="[0-9.]*"
         unit="km²"
         {...formik.getFieldProps('f2_1b')}
         onBlur={(event) =>
@@ -73,7 +77,9 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
           </>
         }
         id="f2_2a"
-        type="number"
+        type="text"
+        inputMode="decimal"
+        pattern="[0-9.]*"
         unit="km²"
         {...formik.getFieldProps('f2_2a')}
         onBlur={(event) =>
@@ -98,7 +104,9 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
           </>
         }
         id="f2_2b"
-        type="number"
+        type="text"
+        inputMode="decimal"
+        pattern="[0-9.]*"
         unit="km²"
         {...formik.getFieldProps('f2_2b')}
         onBlur={(event) =>
@@ -123,7 +131,9 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
           </>
         }
         id="f2_3a"
-        type="number"
+        type="text"
+        inputMode="decimal"
+        pattern="[0-9.]*"
         unit="km²"
         {...formik.getFieldProps('f2_3a')}
         onBlur={(event) =>
@@ -148,7 +158,9 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
           </>
         }
         id="f2_3b"
-        type="number"
+        type="text"
+        inputMode="decimal"
+        pattern="[0-9.]*"
         unit="km²"
         {...formik.getFieldProps('f2_3b')}
         onBlur={(event) =>
@@ -173,7 +185,9 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
           </>
         }
         id="f2_4"
-        type="number"
+        type="text"
+        inputMode="decimal"
+        pattern="[0-9.]*"
         unit="km²"
         {...formik.getFieldProps('f2_4')}
         onBlur={(event) =>
@@ -198,7 +212,9 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
           </>
         }
         id="f2_5"
-        type="number"
+        type="text"
+        inputMode="decimal"
+        pattern="[0-9.]*"
         unit="km²"
         {...formik.getFieldProps('f2_5')}
         onBlur={(event) =>

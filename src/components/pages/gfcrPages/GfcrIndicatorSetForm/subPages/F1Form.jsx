@@ -23,7 +23,9 @@ const F1Form = ({ formik, displayHelp, handleInputFocus }) => {
           </>
         }
         id="f1_1"
-        type="number"
+        type="text"
+        inputMode="decimal"
+        pattern="[0-9.]*"
         unit="km²"
         {...formik.getFieldProps('f1_1')}
         onBlur={(event) =>
