@@ -5,22 +5,13 @@ import {
   imageClassificationPointPropType,
   imageClassificationResponsePropType,
 } from '../../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
 import { createPortal } from 'react-dom'
 import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
-import { IconPlus } from '../../../../icons'
-import {
-  LabelThatLooksLikeATh,
-  NewAttributeModalContentContainer,
-  NewAttributeModalFooterContainer,
-  NewAttributeModalLabel,
-  RowThatLooksLikeAnEvenTr,
-} from '../ImageAnnotationModal.styles'
+import { LabelThatLooksLikeATh, RowThatLooksLikeAnEvenTr } from '../ImageAnnotationModal.styles'
 import { Select } from '../../../../generic/form'
 import { useSelectNewAttribute } from '../../useSelectNewAttribute'
-import InputAutocomplete from '../../../../generic/InputAutocomplete'
+import NewAttributeModal from './NewAttributeModal'
 import language from '../../../../../language'
-import Modal from '../../../../generic/Modal/Modal'
 
 const isClassified = ({ annotations }) => annotations.length > 0
 
@@ -162,64 +153,16 @@ const SelectAttributeFromClassifierGuesses = ({
         </Select>
       </RowThatLooksLikeAnEvenTr>
       {createPortal(
-        <Modal
-          title={language.table.addNewRow}
-          isOpen={
-            !!benthicAttributeSelectOptions.length &&
-            !!growthFormSelectOptions.length &&
-            shouldDisplayModal
-          }
-          onDismiss={handleCloseModal}
-          allowCloseWithEscapeKey={false}
-          maxWidth="fit-content"
-          contentOverflowIsVisible
-          mainContent={
-            <NewAttributeModalContentContainer>
-              <NewAttributeModalLabel htmlFor="benthic-attribute-autocomplete">
-                Benthic Attribute
-                <InputAutocomplete
-                  id="benthic-attribute-autocomplete"
-                  // eslint-disable-next-line jsx-a11y/no-autofocus
-                  autoFocus // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
-                  aria-labelledby="benthic-attribute-label"
-                  options={benthicAttributeSelectOptions}
-                  onChange={({ value }) => setSelectedBenthicAttr(value)}
-                  value={selectedBenthicAttr}
-                  noResultsText={language.autocomplete.noResultsDefault}
-                />
-              </NewAttributeModalLabel>
-
-              <NewAttributeModalLabel htmlFor="growth-forms">
-                <span>Growth forms</span>
-                <Select
-                  id="growth-forms"
-                  label="Growth forms"
-                  onChange={(e) => setSelectedGrowthForm(e.target.value)}
-                >
-                  <option value=""></option>
-                  {growthFormSelectOptions.map((growthForm) => (
-                    <option key={growthForm.id} value={growthForm.id}>
-                      {growthForm.name}
-                    </option>
-                  ))}
-                </Select>
-              </NewAttributeModalLabel>
-            </NewAttributeModalContentContainer>
-          }
-          footerContent={
-            <NewAttributeModalFooterContainer>
-              <ButtonSecondary type="button" onClick={handleCloseModal}>
-                Cancel
-              </ButtonSecondary>
-              <ButtonPrimary
-                type="button"
-                disabled={!selectedBenthicAttr}
-                onClick={handleAddNewRowClick}
-              >
-                <IconPlus /> Add Row
-              </ButtonPrimary>
-            </NewAttributeModalFooterContainer>
-          }
+        //modal will otherwise populate within the map container
+        <NewAttributeModal
+          benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+          growthFormSelectOptions={growthFormSelectOptions}
+          shouldDisplayModal={shouldDisplayModal}
+          handleCloseModal={handleCloseModal}
+          selectedBenthicAttr={selectedBenthicAttr}
+          setSelectedBenthicAttr={setSelectedBenthicAttr}
+          handleAddNewRowClick={handleAddNewRowClick}
+          setSelectedGrowthForm={setSelectedGrowthForm}
         />,
         document.body,
       )}

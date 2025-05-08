@@ -208,6 +208,12 @@ const typography = {
   `,
 }
 
-const theme = { color, timing, spacing, typography }
+const zIndex = {
+  toolbar: 10,
+  autocomplete: 15,
+  modal: 20,
+}
+
+const theme = { color, timing, spacing, typography, zIndex }
 
 export default theme

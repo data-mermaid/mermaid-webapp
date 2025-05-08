@@ -181,7 +181,6 @@ const ImageAnnotationModal = ({
         title={dataToReview?.original_image_name ?? ''}
         isOpen
         onDismiss={handleCloseModal}
-        contentOverflowIsVisible={true}
         maxWidth="fit-content"
         mainContent={
           dataToReview && !isSaving && imageScale ? (

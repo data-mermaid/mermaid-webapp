@@ -14,18 +14,23 @@ const AutoCompleteInput = styled(Input)`
 `
 const AutoCompleteResultsWrapper = styled.div`
   position: relative;
-`
-const NoResultSection = styled.div`
-  position: absolute;
-  top: 4rem;
-  outline: ${theme.color.outline};
-  outline-offset: -3px;
-  background: ${theme.color.white};
-  z-index: 99;
-  width: 100%;
-  p {
-    margin: ${theme.spacing.small};
+
+  & > div {
+    z-index: 110;
+    position: absolute;
+    display: block;
+    width: 100%;
+    top: 4rem;
+    outline: ${theme.color.outline};
+    outline-offset: -2px;
+    background: ${theme.color.white};
+
+    > * {
+      margin: 0;
+      padding: ${theme.spacing.buttonPadding};
+    }
   }
+
   button {
     width: 100%;
     border: none;
@@ -125,22 +130,18 @@ const InputAutocomplete = ({
     (downshiftObject) => {
       const { getItemProps, highlightedIndex } = downshiftObject
 
-      return menuItems.length
-        ? menuItems.map((item, index) => {
-            return (
-              <Item
-                {...getItemProps({
-                  item,
-                  index,
-                })}
-                key={item.value}
-                highlighted={highlightedIndex === index}
-              >
-                {item.label}
-              </Item>
-            )
-          })
-        : null
+      return menuItems.map((item, index) => (
+        <Item
+          {...getItemProps({
+            item,
+            index,
+          })}
+          key={item.value}
+          highlighted={highlightedIndex === index}
+        >
+          {item.label}
+        </Item>
+      ))
     },
     [menuItems],
   )
@@ -163,23 +164,21 @@ const InputAutocomplete = ({
             })}
             className={className}
           >
-            <div>
-              <AutoCompleteInput
-                {...getInputProps({ onKeyDown })}
-                aria-describedby={`aria-descp${id}`}
-                id={id}
-                {...restOfProps}
-              />
-              {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
-            </div>
+            <AutoCompleteInput
+              {...getInputProps({ onKeyDown })}
+              aria-describedby={`aria-descp${id}`}
+              id={id}
+              {...restOfProps}
+            />
+            {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
             <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
               {isMenuOpen && getMenuContents(downshiftObject)}
             </Menu>
             {isMenuOpen && !menuItems.length && (
-              <NoResultSection>
+              <div>
                 <p data-testid="noResult">{noResultsText}</p>
                 {noResultsAction}
-              </NoResultSection>
+              </div>
             )}
           </AutoCompleteResultsWrapper>
         )

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import InputAutocomplete from '../generic/InputAutocomplete'
+import InputAutocomplete from '../generic/InputAutocomplete/InputAutocomplete'
 
 export const StyledInputAutocomplete = styled(InputAutocomplete)`
   & input {

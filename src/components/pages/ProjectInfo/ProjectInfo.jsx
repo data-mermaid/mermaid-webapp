@@ -16,7 +16,7 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import InputAutocomplete from '../../generic/InputAutocomplete'
+import InputAutocomplete from '../../generic/InputAutocomplete/InputAutocomplete'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
