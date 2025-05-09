@@ -5,9 +5,10 @@ export const resetEmptyFormikFieldToInitialValue = ({
   resetRemoveDecimal = false,
 }) => {
   const originalInputValue = event.target.value.trim()
+  const valueHasMultipleDots = originalInputValue.split('.').length > 2
 
-  // Reset to initial value if the input is empty
-  if (!originalInputValue) {
+  // Reset to initial value if the input is empty or has multiple dots
+  if (!originalInputValue || valueHasMultipleDots) {
     formik.setFieldValue(fieldName, formik.initialValues[fieldName])
     return
   }
