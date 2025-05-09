@@ -24,10 +24,17 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           </>
         }
         id="f5_1"
-        type="number"
+        type="text"
+        inputMode="integer"
+        pattern="[0-9]*"
         {...formik.getFieldProps('f5_1')}
         onBlur={(event) =>
-          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_1' })
+          resetEmptyFormikFieldToInitialValue({
+            formik,
+            event,
+            fieldName: 'f5_1',
+            resetRemoveDecimal: true,
+          })
         }
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_1' })}
@@ -41,10 +48,17 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           </>
         }
         id="f5_2"
-        type="number"
+        type="text"
+        inputMode="integer"
+        pattern="[0-9]*"
         {...formik.getFieldProps('f5_2')}
         onBlur={(event) =>
-          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_2' })
+          resetEmptyFormikFieldToInitialValue({
+            formik,
+            event,
+            fieldName: 'f5_2',
+            resetRemoveDecimal: true,
+          })
         }
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_2' })}
@@ -58,10 +72,17 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           </>
         }
         id="f5_3"
-        type="number"
+        type="text"
+        inputMode="integer"
+        pattern="[0-9]*"
         {...formik.getFieldProps('f5_3')}
         onBlur={(event) =>
-          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_3' })
+          resetEmptyFormikFieldToInitialValue({
+            formik,
+            event,
+            fieldName: 'f5_3',
+            resetRemoveDecimal: true,
+          })
         }
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_3' })}
@@ -76,10 +97,17 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           <InputWithLabelAndValidation
             label={<>{gfcrIndicatorSetLanguage.men}</>}
             id="f5_4a"
-            type="number"
+            type="text"
+            inputMode="integer"
+            pattern="[0-9]*"
             {...formik.getFieldProps('f5_4a')}
             onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_4a' })
+              resetEmptyFormikFieldToInitialValue({
+                formik,
+                event,
+                fieldName: 'f5_4a',
+                resetRemoveDecimal: true,
+              })
             }
             onFocus={(event) => handleInputFocus(event)}
             onChange={(event) =>
@@ -93,10 +121,17 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           <InputWithLabelAndValidation
             label={<>{gfcrIndicatorSetLanguage.women}</>}
             id="f5_4b"
-            type="number"
+            type="text"
+            inputMode="integer"
+            pattern="[0-9]*"
             {...formik.getFieldProps('f5_4b')}
             onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_4b' })
+              resetEmptyFormikFieldToInitialValue({
+                formik,
+                event,
+                fieldName: 'f5_4b',
+                resetRemoveDecimal: true,
+              })
             }
             onFocus={(event) => handleInputFocus(event)}
             onChange={(event) =>
@@ -120,10 +155,17 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           <InputWithLabelAndValidation
             label={<>{gfcrIndicatorSetLanguage.youth}</>}
             id="f5_4c"
-            type="number"
+            type="text"
+            inputMode="integer"
+            pattern="[0-9]*"
             {...formik.getFieldProps('f5_4c')}
             onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_4c' })
+              resetEmptyFormikFieldToInitialValue({
+                formik,
+                event,
+                fieldName: 'f5_4c',
+                resetRemoveDecimal: true,
+              })
             }
             onChange={(event) =>
               formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_4c' })
@@ -136,10 +178,17 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           <InputWithLabelAndValidation
             label={<>{gfcrIndicatorSetLanguage.indigenous}</>}
             id="f5_4d"
-            type="number"
+            type="text"
+            inputMode="integer"
+            pattern="[0-9]*"
             {...formik.getFieldProps('f5_4d')}
             onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_4d' })
+              resetEmptyFormikFieldToInitialValue({
+                formik,
+                event,
+                fieldName: 'f5_4d',
+                resetRemoveDecimal: true,
+              })
             }
             onChange={(event) =>
               formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_4d' })
@@ -156,12 +205,19 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           </>
         }
         id="f5_5"
-        type="number"
+        type="text"
+        inputMode="integer"
+        pattern="[0-9]*"
         {...formik.getFieldProps('f5_5')}
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}
         onBlur={(event) =>
-          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_5' })
+          resetEmptyFormikFieldToInitialValue({
+            formik,
+            event,
+            fieldName: 'f5_5',
+            resetRemoveDecimal: true,
+          })
         }
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_5' })}
@@ -175,12 +231,19 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           </>
         }
         id="f5_6"
-        type="number"
+        type="text"
+        inputMode="integer"
+        pattern="[0-9]*"
         {...formik.getFieldProps('f5_6')}
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}
         onBlur={(event) =>
-          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f5_6' })
+          resetEmptyFormikFieldToInitialValue({
+            formik,
+            event,
+            fieldName: 'f5_6',
+            resetRemoveDecimal: true,
+          })
         }
         onFocus={(event) => handleInputFocus(event)}
         onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f5_6' })}

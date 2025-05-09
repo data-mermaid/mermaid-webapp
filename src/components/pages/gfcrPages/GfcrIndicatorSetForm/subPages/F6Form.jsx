@@ -25,10 +25,17 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           <InputWithLabelAndValidation
             label={<>{gfcrIndicatorSetLanguage.men}</>}
             id="f6_1a"
-            type="number"
+            type="text"
+            inputMode="integer"
+            pattern="[0-9]*"
             {...formik.getFieldProps('f6_1a')}
             onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f6_1a' })
+              resetEmptyFormikFieldToInitialValue({
+                formik,
+                event,
+                fieldName: 'f6_1a',
+                resetRemoveDecimal: true,
+              })
             }
             onFocus={(event) => handleInputFocus(event)}
             onChange={(event) =>
@@ -42,10 +49,17 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           <InputWithLabelAndValidation
             label={<>{gfcrIndicatorSetLanguage.women}</>}
             id="f6_1b"
-            type="number"
+            type="text"
+            inputMode="integer"
+            pattern="[0-9]*"
             {...formik.getFieldProps('f6_1b')}
             onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f6_1b' })
+              resetEmptyFormikFieldToInitialValue({
+                formik,
+                event,
+                fieldName: 'f6_1b',
+                resetRemoveDecimal: true,
+              })
             }
             onFocus={(event) => handleInputFocus(event)}
             onChange={(event) =>
@@ -69,10 +83,17 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           <InputWithLabelAndValidation
             label={<>{gfcrIndicatorSetLanguage.youth}</>}
             id="f6_1c"
-            type="number"
+            type="text"
+            inputMode="integer"
+            pattern="[0-9]*"
             {...formik.getFieldProps('f6_1c')}
             onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f6_1c' })
+              resetEmptyFormikFieldToInitialValue({
+                formik,
+                event,
+                fieldName: 'f6_1c',
+                resetRemoveDecimal: true,
+              })
             }
             onChange={(event) =>
               formikHandleIntegerInputChange({ formik, event, fieldName: 'f6_1c' })
@@ -85,10 +106,17 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
           <InputWithLabelAndValidation
             label={<>{gfcrIndicatorSetLanguage.indigenous}</>}
             id="f6_1d"
-            type="number"
+            type="text"
+            inputMode="integer"
+            pattern="[0-9]*"
             {...formik.getFieldProps('f6_1d')}
             onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f6_1d' })
+              resetEmptyFormikFieldToInitialValue({
+                formik,
+                event,
+                fieldName: 'f6_1d',
+                resetRemoveDecimal: true,
+              })
             }
             onChange={(event) =>
               formikHandleIntegerInputChange({ formik, event, fieldName: 'f6_1d' })

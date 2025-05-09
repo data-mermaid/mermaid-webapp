@@ -172,7 +172,9 @@ const F4Form = ({
             </>
           }
           id="f4_1"
-          type="number"
+          type="text"
+          inputMode="decimal"
+          pattern="[0-9.]*"
           unit="%"
           {...formik.getFieldProps('f4_1')}
           onBlur={(event) =>
@@ -200,7 +202,9 @@ const F4Form = ({
             </>
           }
           id="f4_2"
-          type="number"
+          type="text"
+          inputMode="decimal"
+          pattern="[0-9.]*"
           unit="%"
           {...formik.getFieldProps('f4_2')}
           onBlur={(event) =>
@@ -228,7 +232,9 @@ const F4Form = ({
             </>
           }
           id="f4_3"
-          type="number"
+          type="text"
+          inputMode="decimal"
+          pattern="[0-9.]*"
           unit="kg/ha"
           {...formik.getFieldProps('f4_3')}
           onBlur={(event) =>
