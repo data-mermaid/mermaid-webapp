@@ -4,18 +4,16 @@ import PropTypes from 'prop-types'
 import {
   ButtonZoom,
   TableWithNoMinWidth,
-  TdConfirmed,
-  TdStatus,
-  TdUnconfirmed,
   TdZoom,
   TrImageClassification,
 } from './ImageAnnotationModal.styles'
 import { ButtonSecondary } from '../../../generic/buttons'
-import { Tr, Th, Td, TableOverflowWrapper, thStyles } from '../../../generic/Table/table'
+import { TableOverflowWrapper, Td, Th, thStyles, Tr } from '../../../generic/Table/table'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { IconZoomIn } from '../../../icons'
 import { MuiTooltipDark } from '../../../generic/MuiTooltip'
 import language from '../../../../language'
+import { IMAGE_CLASSIFICATION_COLORS } from '../../../../library/constants/constants'
 
 const ImageAnnotationModalTable = ({
   points,
@@ -37,12 +35,12 @@ const ImageAnnotationModalTable = ({
   )
   const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
   const tableData = Object.groupBy(classifiedPoints, ({ annotations }) => annotations[0].ba_gr)
+  const unclassifiedPoints = points.filter(({ annotations }) => !annotations.length)
 
   const sortAlphabeticallyByAttributeLabel = (a, b) =>
     tableData[a][0].annotations[0].ba_gr_label?.localeCompare(
       tableData[b][0].annotations[0].ba_gr_label,
     )
-
   const getConfirmedCount = (rowKey) =>
     tableData[rowKey].reduce(
       (count, point) => (point.annotations[0].is_confirmed ? count + 1 : count),
@@ -111,7 +109,11 @@ const ImageAnnotationModalTable = ({
                   $isAnyRowSelected={selectedAttributeId !== undefined}
                 >
                   <TdZoom>
-                    <MuiTooltipDark title="Zoom to attribute">
+                    <MuiTooltipDark
+                      title={
+                        language.imageClassification.imageClassficationModal.tooltip.zoomToAttribute
+                      }
+                    >
                       <ButtonZoom
                         onClick={(event) => handleZoomClick({ event, attributeId: rowKey })}
                         $isSelected={rowKey === selectedAttributeId}
@@ -123,17 +125,33 @@ const ImageAnnotationModalTable = ({
                   </TdZoom>
                   {/* All points in a row will have the same ba_gr label */}
                   <Td>{tableData[rowKey][0].annotations[0].ba_gr_label}</Td>
-                  <TdConfirmed align="right" $hasConfirmedPoint={!!confirmedCount}>
+                  <Td
+                    style={{
+                      backgroundColor:
+                        confirmedCount > 0 ? IMAGE_CLASSIFICATION_COLORS.confirmed : 'null',
+                    }}
+                    align="right"
+                    $hasConfirmedPoint={!!confirmedCount}
+                  >
                     {confirmedCount}
-                  </TdConfirmed>
-                  <TdUnconfirmed align="right" $hasUnconfirmedPoint={!!unconfirmedCount}>
+                  </Td>
+                  <Td
+                    align="right"
+                    $hasUnconfirmedPoint={!!unconfirmedCount}
+                    style={{ backgroundColor: IMAGE_CLASSIFICATION_COLORS.unconfirmed }}
+                  >
                     {unconfirmedCount}
-                  </TdUnconfirmed>
-                  <TdStatus align="center">
+                  </Td>
+                  <Td align="center" style={{ width: '104px' }}>
                     {!unconfirmedCount ? (
-                      'Confirmed'
+                      language.imageClassification.imageClassficationModal.confirmed
                     ) : (
-                      <MuiTooltipDark title="Confirm all points">
+                      <MuiTooltipDark
+                        title={
+                          language.imageClassification.imageClassficationModal.tooltip
+                            .confirmAllPoints
+                        }
+                      >
                         <ButtonSecondary
                           type="button"
                           onClick={(e) => handleRowConfirm(e, tableData[rowKey])}
@@ -142,10 +160,26 @@ const ImageAnnotationModalTable = ({
                         </ButtonSecondary>
                       </MuiTooltipDark>
                     )}
-                  </TdStatus>
+                  </Td>
                 </TrImageClassification>
               )
             })}
+          {unclassifiedPoints.length > 0 && (
+            <Tr>
+              <Td />
+              <Td>{language.imageClassification.imageClassficationModal.unclassified}</Td>
+              <Td
+                style={{
+                  backgroundColor: IMAGE_CLASSIFICATION_COLORS.unclassified,
+                  textAlign: 'center',
+                }}
+                colSpan={2}
+              >
+                {unclassifiedPoints.length}
+              </Td>
+              <Td colSpan={2} />
+            </Tr>
+          )}
         </tbody>
       </TableWithNoMinWidth>
     </TableOverflowWrapper>

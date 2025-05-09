@@ -1622,14 +1622,18 @@ const imageClassification = {
     offlineBody: 'This sample unit is using image classification and is unavailable offline.',
   },
   imageClassficationModal: {
+    confirmed: 'Confirmed',
     confirmedCount: 'Confirmed count',
     unconfirmedCount: 'Unconfirmed count',
+    unclassified: 'Unclassified',
     status: 'Status',
     review: 'Review',
     attributeGrowthForm: 'Benthic attribute and growth form',
     tooltip: {
+      confirmAllPoints: 'Confirm all points',
       reviewPhoto: 'Review this photo',
       removePhoto: 'Remove this photo',
+      zoomToAttribute: 'Zoom to attribute',
     },
     userMessage: {
       photoRemoved: 'Photo removed',
