@@ -19,7 +19,7 @@ const StyledDialogOverlay = styled('div')`
   position: fixed;
   display: grid;
   place-items: center;
-  z-index: ${({ theme }) => theme.zIndex.modal};
+  z-index: ${theme.zIndex.modal};
 `
 
 const StyledDialog = styled('div')`
@@ -56,7 +56,8 @@ const ModalToolbar = styled.div`
   padding: 0 ${theme.spacing.medium};
 `
 const ModalContent = styled.div`
-  overflow: visible;
+  overflow: auto;
+  display: block;
   max-height: ${MODAL_CONTENT_HEIGHT};
   padding: ${theme.spacing.medium};
 `
@@ -146,11 +147,12 @@ const Modal = ({
   isOpen,
   onDismiss,
   footerContent,
-  toolbarContent = undefined,
+  toolbarContent = null,
   maxWidth,
   padding,
   displayCloseIcon = true,
   allowCloseWithEscapeKey = true,
+  contentOverflowStyle = null,
 }) => {
   const _closeModalWithEscapeKey = useEffect(() => {
     const close = (event) => {
@@ -176,14 +178,16 @@ const Modal = ({
         >
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>
-            {displayCloseIcon ? (
+            {displayCloseIcon && (
               <CloseButton type="button" className="close-button" onClick={onDismiss}>
                 <IconClose aria-label="close" />
               </CloseButton>
-            ) : null}
+            )}
           </ModalTitle>
           <ModalToolbar>{toolbarContent}</ModalToolbar>
-          <ModalContent id="modal-content">{mainContent}</ModalContent>
+          <ModalContent id="modal-content" style={{ overflow: contentOverflowStyle ?? 'auto' }}>
+            {mainContent}
+          </ModalContent>
           <ModalFooter>{footerContent}</ModalFooter>
         </StyledDialog>
       </StyledDialogOverlay>
@@ -202,6 +206,7 @@ Modal.propTypes = {
   maxWidth: PropTypes.string,
   padding: PropTypes.string,
   displayCloseIcon: PropTypes.bool,
+  contentOverflowStyle: PropTypes.string,
 }
 
 export default Modal
