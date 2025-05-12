@@ -209,9 +209,10 @@ const typography = {
 }
 
 const zIndex = {
-  toolbar: 10,
   autocomplete: 15,
+  header: 10,
   modal: 20,
+  toolbar: 10,
 }
 
 const theme = { color, timing, spacing, typography, zIndex }
