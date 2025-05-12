@@ -29,6 +29,7 @@ const NewAttributeModal = ({
         !!growthFormSelectOptions.length &&
         shouldDisplayModal
       }
+      contentOverflowStyle="visible"
       onDismiss={handleCloseModal}
       allowCloseWithEscapeKey={false}
       maxWidth="fit-content"
