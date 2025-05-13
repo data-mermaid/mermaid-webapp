@@ -629,7 +629,7 @@ const ImageClassificationObservationTable = ({
           </tbody>
         </ObservationsSummaryStats>
       </RowRight>
-      {!!imageId && !!benthicAttributes && !!growthForms ? (
+      {!!imageId && !!benthicAttributes && !!growthForms && (
         <ImageAnnotationModal
           imageId={imageId}
           setImageId={setImageId}
@@ -637,7 +637,7 @@ const ImageClassificationObservationTable = ({
           growthForms={growthForms}
           onAnnotationSaveSuccess={fetchImages}
         />
-      ) : undefined}
+      )}
     </>
   )
 }

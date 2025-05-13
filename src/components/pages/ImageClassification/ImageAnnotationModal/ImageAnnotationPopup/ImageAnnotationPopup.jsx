@@ -61,7 +61,7 @@ const ImageAnnotationPopup = ({
 
   return (
     <>
-      {areAnyClassifierGuesses ? (
+      {areAnyClassifierGuesses && (
         <div aria-labelledby="table-label">
           <PointPopupSectionHeader>
             <span>Classifier Guesses</span>
@@ -75,7 +75,7 @@ const ImageAnnotationPopup = ({
             setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
           />
         </div>
-      ) : null}
+      )}
       <SelectAttributeFromClassifierGuesses
         selectedPoint={selectedPoint}
         dataToReview={dataToReview}

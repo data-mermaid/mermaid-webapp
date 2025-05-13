@@ -1629,6 +1629,13 @@ const imageClassification = {
     status: 'Status',
     review: 'Review',
     attributeGrowthForm: 'Benthic attribute and growth form',
+    imageMap: {
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      resetZoom: 'Reset zoom',
+      toggleTableVisibility: 'Toggle table visibility',
+      toggleLabelVisibility: 'Toggle label visibility',
+    },
     tooltip: {
       confirmAllPoints: 'Confirm all points',
       reviewPhoto: 'Review this photo',
@@ -1648,7 +1655,9 @@ const imageClassification = {
       corruptFiles: 'Some files were not added because they appear to be corrupt.',
       failedDeletion: 'Failed to delete photo: ',
     },
-    success: 'Photos uploaded successfully.',
+    success: {
+      uploadedPhotos: 'Photos uploaded successfully.',
+    },
   },
 }
 

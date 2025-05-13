@@ -29,6 +29,8 @@ export const IMAGE_CLASSIFICATION_COLORS = {
   outline: '#000',
 }
 
+export const unclassifiedGuid = '00000000-0000-0000-0000-000000000000'
+
 Object.freeze(PROJECT_CODES)
 Object.freeze(apiDataTypes)
 Object.freeze(IMAGE_CLASSIFICATION_COLORS)
