@@ -412,7 +412,7 @@ const ImageAnnotationModalMap = ({
           return
         }
         const [{ properties }] = features ?? []
-        const label = properties?.isUnclassified ? 'Unclassifiedd' : properties?.ba_gr_label
+        const label = properties?.isUnclassified ? 'Unclassified' : properties?.ba_gr_label
         const confirmedStatus = properties?.isConfirmed ? 'confirmed' : 'unconfirmed'
         const pointStatus = properties?.isUnclassified ? 'unclassified' : confirmedStatus
         const popupContent = (

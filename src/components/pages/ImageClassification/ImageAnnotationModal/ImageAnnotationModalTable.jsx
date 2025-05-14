@@ -36,17 +36,28 @@ const ImageAnnotationModalTable = ({
     },
     [isTableShowing, setSelectedAttributeId],
   )
-  const allPoints = points.map(({ annotations }) => {
-    return annotations.length > 0
-      ? annotations
-      : annotations.push({
-          ba_gr: unclassifiedGuid,
-          ba_gr_label: language.imageClassification.imageClassficationModal.unclassified,
+  const { groupedPoints, unclassifiedCount } = points.reduce(
+    (acc, point) => {
+      if (point.annotations.length) {
+        acc.groupedPoints.push(point)
+      } else {
+        acc.unclassifiedCount++
+        acc.groupedPoints.push({
+          ...point,
+          annotations: [
+            {
+              ba_gr: unclassifiedGuid,
+              ba_gr_label: language.imageClassification.imageClassficationModal.unclassified,
+            },
+          ],
         })
-  })
-  const classifiedPoints = points.filter(({ annotations }) => annotations.length > 0)
-  const unclassifiedPoints = points.filter(({ annotations }) => !annotations.length)
-  const tableData = Object.groupBy(points, ({ annotations }) => annotations[0].ba_gr)
+      }
+      return acc
+    },
+    { groupedPoints: [], unclassifiedCount: 0 },
+  )
+
+  const tableData = Object.groupBy(groupedPoints, ({ annotations }) => annotations[0].ba_gr)
 
   const sortAlphabeticallyByAttributeLabel = (a, b) =>
     tableData[a][0].annotations[0].ba_gr_label?.localeCompare(
@@ -142,63 +153,63 @@ const ImageAnnotationModalTable = ({
                       </MuiTooltipDark>
                     </TdZoom>
                     {/* All points in a row will have the same ba_gr label */}
-                    <Td>{tableData[observationRowKey][0].annotations[0].ba_gr_label}</Td>
-                    <Td
-                      style={{
-                        textAlign: 'right',
-                        backgroundColor:
-                          confirmedCount > 0 ? IMAGE_CLASSIFICATION_COLORS.confirmed : 'null',
-                      }}
-                    >
-                      {confirmedCount}
-                    </Td>
-                    <Td
-                      style={{
-                        textAlign: 'right',
-                        backgroundColor:
-                          unconfirmedCount > 0 ? IMAGE_CLASSIFICATION_COLORS.unconfirmed : 'null',
-                      }}
-                    >
-                      {unconfirmedCount}
-                    </Td>
-                    <Td style={{ textAlign: 'center', width: '104px' }}>
-                      {!unconfirmedCount ? (
-                        language.imageClassification.imageClassficationModal.confirmed
-                      ) : (
-                        <MuiTooltipDark
-                          title={
-                            language.imageClassification.imageClassficationModal.tooltip
-                              .confirmAllPoints
-                          }
+                    {observationRowKey === unclassifiedGuid ? (
+                      <>
+                        <Td colSpan={5} align="center">
+                          <span>
+                            {`${unclassifiedCount} ${
+                              language.imageClassification.imageClassficationModal.unclassifiedPoint
+                            }${unclassifiedCount > 1 ? 's' : ''}`}
+                          </span>
+                        </Td>
+                      </>
+                    ) : (
+                      <>
+                        <Td>{tableData[observationRowKey][0].annotations[0].ba_gr_label}</Td>
+                        <Td
+                          style={{
+                            textAlign: 'right',
+                            backgroundColor:
+                              confirmedCount > 0 ? IMAGE_CLASSIFICATION_COLORS.confirmed : 'null',
+                          }}
                         >
-                          <ButtonSecondary
-                            type="button"
-                            onClick={(e) => handleRowConfirm(e, tableData[observationRowKey])}
-                          >
-                            {language.buttons.confirm}
-                          </ButtonSecondary>
-                        </MuiTooltipDark>
-                      )}
-                    </Td>
+                          {confirmedCount}
+                        </Td>
+                        <Td
+                          style={{
+                            textAlign: 'right',
+                            backgroundColor:
+                              unconfirmedCount > 0
+                                ? IMAGE_CLASSIFICATION_COLORS.unconfirmed
+                                : 'null',
+                          }}
+                        >
+                          {unconfirmedCount}
+                        </Td>
+                        <Td style={{ textAlign: 'center', width: '104px' }}>
+                          {!unconfirmedCount ? (
+                            language.imageClassification.imageClassficationModal.confirmed
+                          ) : (
+                            <MuiTooltipDark
+                              title={
+                                language.imageClassification.imageClassficationModal.tooltip
+                                  .confirmAllPoints
+                              }
+                            >
+                              <ButtonSecondary
+                                type="button"
+                                onClick={(e) => handleRowConfirm(e, tableData[observationRowKey])}
+                              >
+                                {language.buttons.confirm}
+                              </ButtonSecondary>
+                            </MuiTooltipDark>
+                          )}
+                        </Td>
+                      </>
+                    )}
                   </TrImageClassification>
                 )
               })}
-            {unclassifiedPoints.length > 0 && (
-              <Tr key={unclassifiedGuid}>
-                <Td />
-                <Td>{language.imageClassification.imageClassficationModal.unclassified}</Td>
-                <Td
-                  style={{
-                    backgroundColor: IMAGE_CLASSIFICATION_COLORS.unclassified,
-                    textAlign: 'center',
-                  }}
-                  colSpan={2}
-                >
-                  {unclassifiedPoints.length}
-                </Td>
-                <Td colSpan={2} />
-              </Tr>
-            )}
           </tbody>
         </TableWithNoMinWidth>
       </TableOverflowWrapper>
