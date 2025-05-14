@@ -1366,6 +1366,7 @@ const getValidationMessage = (validation, projectId = '') => {
     invalid_percent_value: () => getInvalidBleachingObsMessage(context, 'percent cover'),
     invalid_total: () => getInvalidBleachingObsTotalMessage(context),
     exceed_total_colonies: () => 'Maximum number of colonies exceeded',
+    implausibly_old_date: () => 'Sample date is before 1900',
     future_sample_date: () => 'Sample date is in the future',
     high_density: () => `Fish biomass greater than ${context?.biomass_range[1]} kg/ha`,
     incorrect_observation_count: () =>
