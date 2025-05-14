@@ -19,7 +19,7 @@ const StyledDialogOverlay = styled('div')`
   position: fixed;
   display: grid;
   place-items: center;
-  z-index: 103;
+  z-index: ${theme.zIndex.modal};
 `
 
 const StyledDialog = styled('div')`
@@ -39,11 +39,13 @@ const ModalTitle = styled.div`
   display: grid;
   color: ${theme.color.textColor};
   grid-template-columns: auto auto;
+
   h2 {
     justify-self: start;
     align-self: center;
     margin: 0;
   }
+
   button {
     align-self: top;
     justify-self: end;
@@ -55,6 +57,7 @@ const ModalToolbar = styled.div`
 `
 const ModalContent = styled.div`
   overflow: auto;
+  display: block;
   max-height: ${MODAL_CONTENT_HEIGHT};
   padding: ${theme.spacing.medium};
 `
@@ -63,11 +66,13 @@ const ModalFooter = styled.div`
   display: grid;
   grid-auto-columns: auto auto;
   background: ${theme.color.tableRowEven};
+
   ${mediaQueryPhoneOnly(css`
     > * {
       display: block;
       text-align: center;
     }
+
     * > button {
       margin-top: ${theme.spacing.buttonSpacing};
       margin-bottom: ${theme.spacing.buttonSpacing};
@@ -77,9 +82,11 @@ const ModalFooter = styled.div`
     svg {
       margin-right: ${theme.spacing.small};
     }
+
     &:not(:last-child) {
       margin-right: ${theme.spacing.buttonSpacing};
     }
+
     &:first-child {
       margin-left: 0;
     }
@@ -89,13 +96,16 @@ const ModalLoadingIndicatorWrapper = styled('div')`
   position: static;
   width: 100%;
   padding: 5rem 0;
+
   .loadingWrapper {
     position: static;
+
     .objectWrapper {
       div {
         background-color: ${theme.color.background};
       }
     }
+
     .loadingPrimary {
       color: ${theme.color.background};
       width: auto;
@@ -118,9 +128,11 @@ const ModalInputRow = styled(InputRow)`
   color: ${theme.color.primaryColor};
   display: block;
   border: none;
+
   h4 {
     margin: 0;
   }
+
   label {
     font-weight: bold;
   }
@@ -135,11 +147,12 @@ const Modal = ({
   isOpen,
   onDismiss,
   footerContent,
-  toolbarContent = undefined,
+  toolbarContent = null,
   maxWidth,
   padding,
   displayCloseIcon = true,
   allowCloseWithEscapeKey = true,
+  contentOverflowStyle = null,
 }) => {
   const _closeModalWithEscapeKey = useEffect(() => {
     const close = (event) => {
@@ -165,14 +178,16 @@ const Modal = ({
         >
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>
-            {displayCloseIcon ? (
+            {displayCloseIcon && (
               <CloseButton type="button" className="close-button" onClick={onDismiss}>
                 <IconClose aria-label="close" />
               </CloseButton>
-            ) : null}
+            )}
           </ModalTitle>
           <ModalToolbar>{toolbarContent}</ModalToolbar>
-          <ModalContent id="modal-content">{mainContent}</ModalContent>
+          <ModalContent id="modal-content" style={{ overflow: contentOverflowStyle ?? 'auto' }}>
+            {mainContent}
+          </ModalContent>
           <ModalFooter>{footerContent}</ModalFooter>
         </StyledDialog>
       </StyledDialogOverlay>
@@ -191,6 +206,7 @@ Modal.propTypes = {
   maxWidth: PropTypes.string,
   padding: PropTypes.string,
   displayCloseIcon: PropTypes.bool,
+  contentOverflowStyle: PropTypes.string,
 }
 
 export default Modal

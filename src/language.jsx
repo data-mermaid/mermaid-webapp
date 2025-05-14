@@ -65,6 +65,7 @@ const buttons = {
   close: 'Close',
   confirm: 'Confirm',
   saveChanges: 'Save Changes',
+  addRow: 'Add row',
 }
 
 const error = {
@@ -281,6 +282,7 @@ const createNewOptionModal = {
   contactForHelp: 'Contact us for help',
   species: 'Species',
   newBenthicAttribute: 'Benthic Attribute',
+  growthForms: 'Growth Forms',
   benthicAttributeParent: 'Parent',
   newBenthicAttributeName: 'Name',
   goToNextPage: 'Next',
