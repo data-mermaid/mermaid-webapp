@@ -1626,6 +1626,7 @@ const imageClassification = {
     confirmedCount: 'Confirmed count',
     unconfirmedCount: 'Unconfirmed count',
     unclassified: 'Unclassified',
+    unclassifiedPoint: 'Unclassified point',
     status: 'Status',
     review: 'Review',
     attributeGrowthForm: 'Benthic attribute and growth form',
