@@ -1,14 +1,15 @@
 import styled, { css } from 'styled-components'
-import colorHelper from 'color'
-import theme from '../../../../theme'
-import { Table, Tr, Td, thStyles } from '../../../generic/Table/table'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+import theme from '../../../../theme'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
-import { RowSpaceBetween } from '../../../generic/positioning'
+import { Table, Td, Tr, thStyles } from '../../../generic/Table/table'
 import { ButtonPrimary, IconButton, buttonSecondaryCss } from '../../../generic/buttons'
+import { RowSpaceBetween } from '../../../generic/positioning'
+
 interface IsSelectedProps {
   $isSelected?: boolean
 }
+
 interface HasConfirmedPoint {
   $hasConfirmedPoint?: boolean
 }
@@ -16,10 +17,6 @@ interface HasConfirmedPoint {
 interface HasUnconfirmedPoint {
   $hasUnconfirmedPoint?: boolean
 }
-
-const confirmed = colorHelper(COLORS.confirmed)
-const unconfirmed = colorHelper(COLORS.unconfirmed)
-const white = colorHelper(theme.color.white)
 
 export const RowThatLooksLikeAnEvenTr = styled.div`
   display: flex;
@@ -85,17 +82,12 @@ export const TableWithNoMinWidth = styled(Table)`
   border-top: none;
 `
 
-export const ImageAnnotationPopupContainer = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-`
-
 export const TdZoom = styled(Td)`
   padding: 0;
   height: 57px; // prevents shifts to layout when the attribute is confirmed
   width: 48px;
   background-color: ${theme.color.white}; // stop the row hover colour from showing
+
   &:hover {
     background-color: ${theme.color.tableRowHover};
   }
@@ -104,10 +96,12 @@ export const TdZoom = styled(Td)`
 export const TrImageClassification = styled(Tr)<IsSelectedProps>`
   position: relative;
   cursor: pointer;
+
   &:hover {
     svg {
       opacity: 1; // this make the zoom icon visible on hover
     }
+
     &::after {
       // this is a non-layout impacting hack to receive the hover border
       content: '';
@@ -121,13 +115,16 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
       pointer-events: none;
     }
   }
+
   &:nth-child(odd),
   &:nth-child(even) {
     background-color: ${theme.color.white}; // undo default table row striping
   }
+
   &:has(${TdZoom}:hover) {
     background-color: ${theme.color.white};
   }
+
   ${({ $isSelected }) =>
     $isSelected &&
     css`
@@ -147,13 +144,11 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
 `
 
 export const TdConfirmed = styled(Td)<HasConfirmedPoint>`
-  background-color: ${({ $hasConfirmedPoint }) =>
-    $hasConfirmedPoint ? confirmed.mix(white, 0.7).toString() : undefined};
+  background-color: ${({ $hasConfirmedPoint }) => ($hasConfirmedPoint ? COLORS.confirmed : null)};
 `
-
 export const TdUnconfirmed = styled(Td)<HasUnconfirmedPoint>`
   background-color: ${({ $hasUnconfirmedPoint }) =>
-    $hasUnconfirmedPoint ? unconfirmed.mix(white, 0.7).toString() : undefined};
+    $hasUnconfirmedPoint ? COLORS.unconfirmed : null};
 `
 export const TdStatus = styled(Td)`
   width: 104px; // prevents shifts to layout when the status is confirmed
@@ -171,15 +166,10 @@ export const PopupWrapperForRadio = styled.div`
 export const NewAttributeModalContentContainer = styled.div`
   display: flex;
   gap: ${theme.spacing.large};
-  min-height: 250px;
 `
 
 export const NewAttributeModalFooterContainer = styled.div`
   justify-self: right;
-`
-
-export const NewAttributeModalLabel = styled.label`
-  font-weight: bold;
 `
 
 export const ButtonZoom = styled.button<IsSelectedProps>`
@@ -187,6 +177,7 @@ export const ButtonZoom = styled.button<IsSelectedProps>`
   height: 100%;
   width: 100%;
   text-align: center;
+
   & svg {
     opacity: ${({ $isSelected }) => ($isSelected ? 1 : 0)};
   }

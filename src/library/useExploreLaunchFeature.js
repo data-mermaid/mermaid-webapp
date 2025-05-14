@@ -1,7 +1,7 @@
 import { getCurrentUserOptionalFeature } from './getCurrentUserOptionalFeature'
 
 export const useExploreLaunchFeature = ({ currentUser }) => {
-  const { enabled: isExploreLaunchEnabledForUser = false } = getCurrentUserOptionalFeature(
+  const { enabled: isExploreLaunchEnabledForUser = true } = getCurrentUserOptionalFeature(
     currentUser,
     'explore_launch',
   )

@@ -41,12 +41,19 @@ const StyledTd = styled(Td)`
 const StyledTr = styled(Tr)`
   border-width: 0 0 0 ${theme.spacing.xsmall};
   border-style: solid;
-  border-color: ${({ $messageType, $hasUnconfirmedPoint }) =>
-    $messageType
-      ? theme.color.getBorderColor($messageType)
-      : $hasUnconfirmedPoint
-      ? COLORS.unconfirmed
-      : COLORS.confirmed};
+  border-color: ${({ $messageType, $hasUnconfirmedPoint, $isUnclassified }) => {
+    if ($messageType) {
+      return theme.color.getBorderColor($messageType)
+    }
+    if ($hasUnconfirmedPoint) {
+      return COLORS.unconfirmed
+    }
+    if ($isUnclassified) {
+      return COLORS.unclassified
+    }
+
+    return COLORS.confirmed
+  }};
 `
 
 const IconContainer = styled('span')`

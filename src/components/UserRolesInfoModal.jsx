@@ -21,8 +21,8 @@ const Thead = styled.th`
   small {
     display: block;
   }
-  &:first-of-type{
-  text-align: left;
+  &:first-of-type {
+    text-align: left;
   }
 `
 

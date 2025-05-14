@@ -5,22 +5,13 @@ import {
   imageClassificationPointPropType,
   imageClassificationResponsePropType,
 } from '../../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
 import { createPortal } from 'react-dom'
 import { databaseSwitchboardPropTypes } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
-import { IconPlus } from '../../../../icons'
-import {
-  LabelThatLooksLikeATh,
-  NewAttributeModalContentContainer,
-  NewAttributeModalFooterContainer,
-  NewAttributeModalLabel,
-  RowThatLooksLikeAnEvenTr,
-} from '../ImageAnnotationModal.styles'
+import { LabelThatLooksLikeATh, RowThatLooksLikeAnEvenTr } from '../ImageAnnotationModal.styles'
 import { Select } from '../../../../generic/form'
 import { useSelectNewAttribute } from '../../useSelectNewAttribute'
-import InputAutocomplete from '../../../../generic/InputAutocomplete'
+import NewAttributeModal from './NewAttributeModal'
 import language from '../../../../../language'
-import Modal from '../../../../generic/Modal/Modal'
 
 const isClassified = ({ annotations }) => annotations.length > 0
 
@@ -37,6 +28,7 @@ const SelectAttributeFromClassifierGuesses = ({
   databaseSwitchboardInstance,
 }) => {
   const rowKeyForPoint = selectedPoint.annotations[0]?.ba_gr
+  const isSelectedPointUnclassified = selectedPoint.annotations?.length === 0
 
   const existingRowDropdownOptions = dataToReview.points
     .reduce((acc, currentPoint) => {
@@ -127,7 +119,11 @@ const SelectAttributeFromClassifierGuesses = ({
 
   return (
     <>
-      <LabelThatLooksLikeATh>Attribute growth form</LabelThatLooksLikeATh>
+      {isSelectedPointUnclassified && (
+        <LabelThatLooksLikeATh>
+          {language.imageClassification.imageClassficationModal.attributeGrowthForm}
+        </LabelThatLooksLikeATh>
+      )}
       <RowThatLooksLikeAnEvenTr>
         <input
           type="radio"
@@ -140,12 +136,12 @@ const SelectAttributeFromClassifierGuesses = ({
         />
 
         <Select
-          label="Add to existing row"
+          label={language.table.addExistingRow}
           value={selectedExistingRow}
           onChange={handleSelectOnChange}
         >
           <option value="" disabled>
-            Choose...
+            {language.placeholders.selectAttribute}
           </option>
           {existingRowDropdownOptions?.map((row) => (
             <option key={row.value} value={row.value}>
@@ -153,68 +149,20 @@ const SelectAttributeFromClassifierGuesses = ({
             </option>
           ))}
           <option disabled>──────────</option>
-          <option value="selectNewAttribute">Select new attribute...</option>
+          <option value="selectNewAttribute">{language.table.addNewRow}...</option>
         </Select>
       </RowThatLooksLikeAnEvenTr>
       {createPortal(
-        <Modal
-          title="Select New Attribute"
-          isOpen={
-            !!benthicAttributeSelectOptions.length &&
-            !!growthFormSelectOptions.length &&
-            shouldDisplayModal
-          }
-          onDismiss={handleCloseModal}
-          allowCloseWithEscapeKey={false}
-          maxWidth="fit-content"
-          contentOverflowIsVisible
-          mainContent={
-            <NewAttributeModalContentContainer>
-              <NewAttributeModalLabel htmlFor="benthic-attribute-autocomplete">
-                Benthic Attribute
-                <InputAutocomplete
-                  id="benthic-attribute-autocomplete"
-                  // eslint-disable-next-line jsx-a11y/no-autofocus
-                  autoFocus // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
-                  aria-labelledby="benthic-attribute-label"
-                  options={benthicAttributeSelectOptions}
-                  onChange={({ value }) => setSelectedBenthicAttr(value)}
-                  value={selectedBenthicAttr}
-                  noResultsText={language.autocomplete.noResultsDefault}
-                />
-              </NewAttributeModalLabel>
-
-              <NewAttributeModalLabel htmlFor="growth-forms">
-                <span>Growth forms</span>
-                <Select
-                  id="growth-forms"
-                  label="Growth forms"
-                  onChange={(e) => setSelectedGrowthForm(e.target.value)}
-                >
-                  <option value=""></option>
-                  {growthFormSelectOptions.map((growthForm) => (
-                    <option key={growthForm.id} value={growthForm.id}>
-                      {growthForm.name}
-                    </option>
-                  ))}
-                </Select>
-              </NewAttributeModalLabel>
-            </NewAttributeModalContentContainer>
-          }
-          footerContent={
-            <NewAttributeModalFooterContainer>
-              <ButtonSecondary type="button" onClick={handleCloseModal}>
-                Cancel
-              </ButtonSecondary>
-              <ButtonPrimary
-                type="button"
-                disabled={!selectedBenthicAttr}
-                onClick={handleAddNewRowClick}
-              >
-                <IconPlus /> Add Row
-              </ButtonPrimary>
-            </NewAttributeModalFooterContainer>
-          }
+        //modal will otherwise populate within the map container
+        <NewAttributeModal
+          benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+          growthFormSelectOptions={growthFormSelectOptions}
+          shouldDisplayModal={shouldDisplayModal}
+          handleCloseModal={handleCloseModal}
+          selectedBenthicAttr={selectedBenthicAttr}
+          setSelectedBenthicAttr={setSelectedBenthicAttr}
+          handleAddNewRowClick={handleAddNewRowClick}
+          setSelectedGrowthForm={setSelectedGrowthForm}
         />,
         document.body,
       )}

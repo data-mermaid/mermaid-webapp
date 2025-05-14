@@ -1,6 +1,5 @@
 // prettier-ignore
 import React from 'react'
-
 import { PROJECT_CODES } from './library/constants/constants'
 import {
   getDuplicateValuesValidationMessage,
@@ -40,7 +39,10 @@ const GfcrPdfLink = () => (
   </>
 )
 
-const placeholders = { select: 'Choose...' }
+const placeholders = {
+  select: 'Choose...',
+  selectAttribute: 'Select attribute',
+}
 
 const inlineMessage = {
   ignore: 'ignored',
@@ -59,8 +61,13 @@ const apiDataTableNames = {
 }
 
 const buttons = {
+  cancel: 'Cancel',
   close: 'Close',
+  confirm: 'Confirm',
+  saveChanges: 'Save Changes',
+  addRow: 'Add row',
 }
+
 const error = {
   403: 'The current user does not have permission to do that.',
   500: 'MERMAID error: please contact support@datamermaid.org',
@@ -275,6 +282,7 @@ const createNewOptionModal = {
   contactForHelp: 'Contact us for help',
   species: 'Species',
   newBenthicAttribute: 'Benthic Attribute',
+  growthForms: 'Growth Forms',
   benthicAttributeParent: 'Parent',
   newBenthicAttributeName: 'Name',
   goToNextPage: 'Next',
@@ -473,6 +481,8 @@ const table = {
   sortRemoveTitle: 'Remove sort',
   noFilterResults: 'No results',
   noFilterResultsSubText: 'No records match the current filter term.',
+  addNewRow: 'Add new row',
+  addExistingRow: 'Add to existing row',
 }
 
 const title = {
@@ -503,7 +513,7 @@ const pages = {
       setUpDataSharing: 'Set up data sharing policy',
       addOrRemoveProjectMembers: 'Add or remove project members',
       viewMemberEmail: 'View project member email',
-      delete: 'Delete a project'
+      delete: 'Delete a project',
     },
     dataCollection: {
       title: 'Data collection and management',
@@ -516,9 +526,8 @@ const pages = {
       transferSampleUnits: 'Transfer unsubmitted sample units',
       downloadSampleUnits: 'Download submitted sample units',
       viewObserversAndSampleUnits: 'View observers and sample units overview',
-      viewRegimesOverview: 'View management regimes overview'
-
-    }
+      viewRegimesOverview: 'View management regimes overview',
+    },
   },
   userDoesntHaveProjectAccess: {
     title: 'You do not have permission to access this project.',
@@ -1616,6 +1625,18 @@ const imageClassification = {
     offlineBody: 'This sample unit is using image classification and is unavailable offline.',
   },
   imageClassficationModal: {
+    confirmedCount: 'Confirmed count',
+    unconfirmedCount: 'Unconfirmed count',
+    status: 'Status',
+    review: 'Review',
+    attributeGrowthForm: 'Benthic attribute and growth form',
+    tooltip: {
+      reviewPhoto: 'Review this photo',
+      removePhoto: 'Remove this photo',
+    },
+    userMessage: {
+      photoRemoved: 'Photo removed',
+    },
     errors: {
       duplicateFiles: 'Some files are duplicates and were not added.',
       invalidFiles:
@@ -1624,8 +1645,9 @@ const imageClassification = {
       dimensionsExceededFiles:
         'Some files were not added because they exceed the 8000x8000 dimensions limit.',
       corruptFiles: 'Some files were not added because they appear to be corrupt.',
+      failedDeletion: 'Failed to delete photo: ',
     },
-    success: 'Files uploaded successfully.',
+    success: 'Photos uploaded successfully.',
   },
 }
 
