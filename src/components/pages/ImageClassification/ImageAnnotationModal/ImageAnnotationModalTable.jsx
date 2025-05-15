@@ -59,10 +59,17 @@ const ImageAnnotationModalTable = ({
 
   const tableData = Object.groupBy(groupedPoints, ({ annotations }) => annotations[0].ba_gr)
 
-  const sortAlphabeticallyByAttributeLabel = (a, b) =>
-    tableData[a][0].annotations[0].ba_gr_label?.localeCompare(
+  const sortAlphabeticallyByAttributeLabel = (a, b) => {
+    if (a === unclassifiedGuid) {
+      return 1
+    }
+    if (b === unclassifiedGuid) {
+      return -1
+    }
+    return tableData[a][0].annotations[0].ba_gr_label?.localeCompare(
       tableData[b][0].annotations[0].ba_gr_label,
     )
+  }
   const getConfirmedCount = (observationRowKey) =>
     tableData[observationRowKey].reduce(
       (count, point) => (point.annotations[0].is_confirmed ? count + 1 : count),
@@ -70,6 +77,7 @@ const ImageAnnotationModalTable = ({
     )
 
   const handleRowSelect = (observationRowKey) => {
+    debugger
     return observationRowKey === selectedAttributeId
       ? setSelectedAttributeId('')
       : setSelectedAttributeId(observationRowKey)
@@ -155,7 +163,7 @@ const ImageAnnotationModalTable = ({
                     {/* All points in a row will have the same ba_gr label */}
                     {observationRowKey === unclassifiedGuid ? (
                       <>
-                        <Td colSpan={5} align="center">
+                        <Td colSpan={5} align="center" style={{ fontWeight: '700' }}>
                           <span>
                             {`${unclassifiedCount} ${
                               language.imageClassification.imageClassficationModal.unclassifiedPoint
