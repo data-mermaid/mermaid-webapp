@@ -31,7 +31,7 @@ import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDir
 import DeleteRecordButton from '../../DeleteRecordButton'
 import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import InputAutocomplete from '../../generic/InputAutocomplete'
+import InputAutocomplete from '../../generic/InputAutocomplete/InputAutocomplete'
 import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
