@@ -1,0 +1,6 @@
+- [ ] Any user-facing text (within scope) has been added to the language file
+  - [ ] New verbiage added does not already exist
+  - [ ] Tokens match style guide conventions in the language file
+- [ ] `yarn lint` ran and formatted the files
+- [ ] There are no console errors
+- [ ] Unit tests have run and are not failing
