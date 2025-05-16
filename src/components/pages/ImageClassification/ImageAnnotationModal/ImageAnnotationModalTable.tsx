@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -17,6 +17,10 @@ import {
   IMAGE_CLASSIFICATION_COLORS,
   unclassifiedGuid,
 } from '../../../../library/constants/constants'
+import {
+  ImageClassificationPoint,
+  ImageClassificationResponse,
+} from '../../../../App/mermaidData/mermaidDataTypes'
 
 const ImageAnnotationModalTable = ({
   points,
@@ -27,6 +31,15 @@ const ImageAnnotationModalTable = ({
   setIsDataUpdatedSinceLastSave,
   zoomToPointsByAttributeId,
   isTableShowing,
+}: {
+  points: ImageClassificationPoint[]
+  setDataToReview: Dispatch<SetStateAction<ImageClassificationResponse>>
+  selectedAttributeId: string | null
+  setSelectedAttributeId: Dispatch<SetStateAction<string>>
+  setHoveredAttributeId: Dispatch<SetStateAction<string>>
+  setIsDataUpdatedSinceLastSave: Dispatch<SetStateAction<boolean>>
+  zoomToPointsByAttributeId: (items: object) => void
+  isTableShowing: boolean
 }) => {
   useEffect(
     function deselectAttributeIfTableHidden() {
@@ -38,20 +51,10 @@ const ImageAnnotationModalTable = ({
   )
   const { groupedPoints, unclassifiedCount } = points.reduce(
     (acc, point) => {
-      if (point.annotations.length) {
-        acc.groupedPoints.push(point)
-      } else {
+      if (point.annotations[0].ba_gr === unclassifiedGuid) {
         acc.unclassifiedCount++
-        acc.groupedPoints.push({
-          ...point,
-          annotations: [
-            {
-              ba_gr: unclassifiedGuid,
-              ba_gr_label: language.imageClassification.imageClassficationModal.unclassified,
-            },
-          ],
-        })
       }
+      acc.groupedPoints.push(point)
       return acc
     },
     { groupedPoints: [], unclassifiedCount: 0 },
@@ -70,17 +73,16 @@ const ImageAnnotationModalTable = ({
       tableData[b][0].annotations[0].ba_gr_label,
     )
   }
-  const getConfirmedCount = (observationRowKey) =>
-    tableData[observationRowKey].reduce(
+  const getConfirmedCount = (groupedTableRowId) =>
+    tableData[groupedTableRowId].reduce(
       (count, point) => (point.annotations[0].is_confirmed ? count + 1 : count),
       0,
     )
 
-  const handleRowSelect = (observationRowKey) => {
-    debugger
-    return observationRowKey === selectedAttributeId
+  const handleRowSelect = (groupedTableRowId) => {
+    return groupedTableRowId === selectedAttributeId
       ? setSelectedAttributeId('')
-      : setSelectedAttributeId(observationRowKey)
+      : setSelectedAttributeId(groupedTableRowId)
   }
 
   const handleRowConfirm = (e, rowData) => {
@@ -94,7 +96,6 @@ const ImageAnnotationModalTable = ({
 
       return point
     })
-
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
     setIsDataUpdatedSinceLastSave(true)
   }
@@ -129,17 +130,17 @@ const ImageAnnotationModalTable = ({
           <tbody>
             {Object.keys(tableData)
               .sort(sortAlphabeticallyByAttributeLabel)
-              .map((observationRowKey) => {
-                const confirmedCount = getConfirmedCount(observationRowKey)
-                const unconfirmedCount = tableData[observationRowKey].length - confirmedCount
+              .map((groupedTableRowId) => {
+                const confirmedCount = getConfirmedCount(groupedTableRowId)
+                const unconfirmedCount = tableData[groupedTableRowId].length - confirmedCount
 
                 return (
                   <TrImageClassification
-                    key={observationRowKey}
-                    onClick={() => handleRowSelect(observationRowKey)}
-                    onMouseEnter={() => setHoveredAttributeId(observationRowKey)}
+                    key={groupedTableRowId}
+                    onClick={() => handleRowSelect(groupedTableRowId)}
+                    onMouseEnter={() => setHoveredAttributeId(groupedTableRowId)}
                     onMouseLeave={() => setHoveredAttributeId('')}
-                    $isSelected={observationRowKey === selectedAttributeId}
+                    $isSelected={groupedTableRowId === selectedAttributeId}
                     $isAnyRowSelected={selectedAttributeId !== undefined}
                   >
                     <TdZoom>
@@ -151,9 +152,9 @@ const ImageAnnotationModalTable = ({
                       >
                         <ButtonZoom
                           onClick={(event) =>
-                            handleZoomClick({ event, attributeId: observationRowKey })
+                            handleZoomClick({ event, attributeId: groupedTableRowId })
                           }
-                          $isSelected={observationRowKey === selectedAttributeId}
+                          $isSelected={groupedTableRowId === selectedAttributeId}
                           type="button"
                         >
                           <IconZoomIn />
@@ -161,19 +162,17 @@ const ImageAnnotationModalTable = ({
                       </MuiTooltipDark>
                     </TdZoom>
                     {/* All points in a row will have the same ba_gr label */}
-                    {observationRowKey === unclassifiedGuid ? (
-                      <>
-                        <Td colSpan={5} align="center" style={{ fontWeight: '700' }}>
-                          <span>
-                            {`${unclassifiedCount} ${
-                              language.imageClassification.imageClassficationModal.unclassifiedPoint
-                            }${unclassifiedCount > 1 ? 's' : ''}`}
-                          </span>
-                        </Td>
-                      </>
+                    {groupedTableRowId === unclassifiedGuid ? (
+                      <Td colSpan={5} align="center" style={{ fontWeight: '700' }}>
+                        <span>
+                          {`${unclassifiedCount} ${
+                            language.imageClassification.imageClassficationModal.unclassifiedPoint
+                          }${unclassifiedCount > 1 ? 's' : ''}`}
+                        </span>
+                      </Td>
                     ) : (
                       <>
-                        <Td>{tableData[observationRowKey][0].annotations[0].ba_gr_label}</Td>
+                        <Td>{tableData[groupedTableRowId][0].annotations[0].ba_gr_label}</Td>
                         <Td
                           style={{
                             textAlign: 'right',
@@ -206,7 +205,7 @@ const ImageAnnotationModalTable = ({
                             >
                               <ButtonSecondary
                                 type="button"
-                                onClick={(e) => handleRowConfirm(e, tableData[observationRowKey])}
+                                onClick={(e) => handleRowConfirm(e, tableData[groupedTableRowId])}
                               >
                                 {language.buttons.confirm}
                               </ButtonSecondary>

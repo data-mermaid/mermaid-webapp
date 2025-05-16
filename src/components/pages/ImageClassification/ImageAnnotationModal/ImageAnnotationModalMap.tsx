@@ -51,7 +51,7 @@ import { usePointsGeoJson } from './usePointsGeoJson'
 import language from '../../../../language'
 
 interface SelectedPoint {
-  id: number | null
+  id: string | null
   popupAnchorLngLat: LngLatLike | null
   popupAnchorPosition: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | null
   bounds: maplibregl.LngLatBounds | null
@@ -120,12 +120,12 @@ const ImageAnnotationModalMap = ({
   databaseSwitchboardInstance: object
   dataToReview: ImageClassificationResponse
   hasMapLoaded: boolean
-  hoveredAttributeId: number
+  hoveredAttributeId?: string
   imageScale: number
   isTableShowing: boolean
   map: MapRef
   patchesGeoJson: GeoJSON.FeatureCollection
-  selectedAttributeId: number
+  selectedAttributeId?: string
   setDataToReview: Dispatch<SetStateAction<ImageClassificationResponse>>
   setHasMapLoaded: Dispatch<SetStateAction<boolean>>
   setIsDataUpdatedSinceLastSave: Dispatch<SetStateAction<boolean>>
@@ -138,8 +138,8 @@ const ImageAnnotationModalMap = ({
     imageScale,
     map,
   })
-  const [areLabelsShowing, setAreLabelsShowing] = useState(false)
-  const [hoveredPointId, setHoveredPointId] = useState(null)
+  const [areLabelsShowing, setAreLabelsShowing] = useState<boolean>(false)
+  const [hoverPatchAttributeGuid, setHoverPatchAttributeGuid] = useState<string>('')
 
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint>({
     id: null,
@@ -158,10 +158,6 @@ const ImageAnnotationModalMap = ({
       bounds: null,
     })
     popupRef.current?.remove()
-  }
-
-  const toggleTable = () => {
-    setIsTableShowing(!isTableShowing)
   }
 
   const toggleLabels = () => {
@@ -607,11 +603,11 @@ const ImageAnnotationModalMap = ({
     }: MapMouseEvent & { features?: MapboxGeoJSONFeature[] }) => {
       if (features && features.length > 0) {
         const [{ properties }] = features
-        setHoveredPointId(properties?.id)
+        setHoverPatchAttributeGuid(properties?.id)
       }
     }
     const removePointHoverStyle = () => {
-      setHoveredPointId(null)
+      setHoverPatchAttributeGuid('')
     }
     map.current?.on('mousemove', 'patches-fill-layer', applyPointHoverStyle)
 
@@ -625,7 +621,7 @@ const ImageAnnotationModalMap = ({
     }
   }, [hasMapLoaded, map])
 
-  const _updatePointsOnDataChange = useEffect(() => {
+  const _updatePointsOnDataChange = useMemo(() => {
     if (!hasMapLoaded) {
       return
     }
@@ -648,34 +644,33 @@ const ImageAnnotationModalMap = ({
     if (!hasMapLoaded || !map.current) {
       return
     }
-
     const lineColor = [
       'case',
       [
         '==', // checks if point on map is clicked
         ['get', 'id'],
-        selectedPoint.id,
+        selectedPoint.id, //clicked patch id, Map based
       ],
       COLORS.selected,
 
       [
         '==', // checks if point on map is in selected row in table
         ['get', 'ba_gr'],
-        selectedAttributeId,
+        selectedAttributeId, //table row ba_gr guid
       ],
       COLORS.selected,
 
       [
-        '==', // checks if point on map is clicked
+        '==', // checks if patch hovered on map
         ['get', 'id'],
-        hoveredPointId,
+        hoverPatchAttributeGuid, //hovered patch id, Map based
       ],
       COLORS.hover,
 
       [
-        '==', // checks if point on map is in highlighted row in table
+        '==', // checks if hovered table row has a map point
         ['get', 'ba_gr'],
-        hoveredAttributeId,
+        hoveredAttributeId, //table row ba_gr guid
       ],
       COLORS.hover,
 
@@ -684,7 +679,14 @@ const ImageAnnotationModalMap = ({
 
     map.current.setPaintProperty('patches-inline-layer', 'line-color', lineColor)
     map.current.setPaintProperty('patches-outline-layer', 'line-color', lineColor)
-  }, [selectedAttributeId, hoveredAttributeId, hoveredPointId, hasMapLoaded, selectedPoint, map])
+  }, [
+    selectedAttributeId,
+    hoveredAttributeId,
+    hoverPatchAttributeGuid,
+    hasMapLoaded,
+    selectedPoint,
+    map,
+  ])
 
   const resetZoom = () => {
     map.current?.setBearing(0) // If on a touch device, reset the rotation before calling the easeTo function to avoid any potential issues.
@@ -698,7 +700,7 @@ const ImageAnnotationModalMap = ({
   }
   return (
     <ImageAnnotationMapWrapper>
-      {!hasMapLoaded ? <LoadingIndicatorImageClassificationImage /> : null}
+      {!hasMapLoaded && <LoadingIndicatorImageClassificationImage />}
       <div
         ref={mapContainer}
         style={{
@@ -736,7 +738,13 @@ const ImageAnnotationModalMap = ({
               language.imageClassification.imageClassficationModal.imageMap.toggleTableVisibility
             }
           >
-            <MapControlButton type="button" onClick={toggleTable} $isSelected={isTableShowing}>
+            <MapControlButton
+              type="button"
+              onClick={() => {
+                setIsTableShowing(!isTableShowing)
+              }}
+              $isSelected={isTableShowing}
+            >
               <IconTable />
             </MapControlButton>
           </MuiTooltipDarkRight>

@@ -1,9 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Modal from '../../../generic/Modal/Modal'
-import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+import {
+  IMAGE_CLASSIFICATION_COLORS as COLORS,
+  unclassifiedGuid,
+} from '../../../../library/constants/constants'
 import ImageAnnotationModalTable from './ImageAnnotationModalTable'
 import ImageAnnotationModalMap from './ImageAnnotationModalMap'
 import {
@@ -108,17 +111,23 @@ const ImageAnnotationModal = ({
         .getAnnotationsForImage(projectId, imageId, EXCLUDE_PARAMS)
         .then((data) => {
           const formattedPoints = data.points.map((point) => {
-            const sortedAnnotations = point.annotations.toSorted(prioritizeConfirmedAnnotations)
+            if (point.annotations.length === 0) {
+              point.annotations.push({
+                ba_gr: unclassifiedGuid,
+                ba_gr_label: 'Unclassified',
+              })
+            }
+            const sortedAnnotations = point.annotations?.toSorted(prioritizeConfirmedAnnotations)
+
             // eslint-disable-next-line max-nested-callbacks
             const formattedAnnotations = sortedAnnotations.map((annotation) => ({
               ...annotation,
-              ba_gr: annotation.benthic_attribute + '_' + annotation.growth_form,
+              ba_gr: annotation.benthic_attribute ?? unclassifiedGuid, // + '_' + annotation.growth_form,
               ba_gr_label: getAttributeGrowthFormLabel(annotation),
             }))
 
             return { ...point, annotations: formattedAnnotations }
           })
-
           setDataToReview({ ...data, points: formattedPoints })
         })
         .catch((error) => {
