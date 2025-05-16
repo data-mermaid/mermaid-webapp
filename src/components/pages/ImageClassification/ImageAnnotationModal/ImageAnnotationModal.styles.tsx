@@ -5,9 +5,11 @@ import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { Table, Td, Tr, thStyles } from '../../../generic/Table/table'
 import { ButtonPrimary, IconButton, buttonSecondaryCss } from '../../../generic/buttons'
 import { RowSpaceBetween } from '../../../generic/positioning'
+
 interface IsSelectedProps {
   $isSelected?: boolean
 }
+
 interface HasConfirmedPoint {
   $hasConfirmedPoint?: boolean
 }
@@ -80,17 +82,12 @@ export const TableWithNoMinWidth = styled(Table)`
   border-top: none;
 `
 
-export const ImageAnnotationPopupContainer = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-`
-
 export const TdZoom = styled(Td)`
   padding: 0;
   height: 57px; // prevents shifts to layout when the attribute is confirmed
   width: 48px;
   background-color: ${theme.color.white}; // stop the row hover colour from showing
+
   &:hover {
     background-color: ${theme.color.tableRowHover};
   }
@@ -99,10 +96,12 @@ export const TdZoom = styled(Td)`
 export const TrImageClassification = styled(Tr)<IsSelectedProps>`
   position: relative;
   cursor: pointer;
+
   &:hover {
     svg {
       opacity: 1; // this make the zoom icon visible on hover
     }
+
     &::after {
       // this is a non-layout impacting hack to receive the hover border
       content: '';
@@ -116,13 +115,16 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
       pointer-events: none;
     }
   }
+
   &:nth-child(odd),
   &:nth-child(even) {
     background-color: ${theme.color.white}; // undo default table row striping
   }
+
   &:has(${TdZoom}:hover) {
     background-color: ${theme.color.white};
   }
+
   ${({ $isSelected }) =>
     $isSelected &&
     css`
@@ -164,15 +166,10 @@ export const PopupWrapperForRadio = styled.div`
 export const NewAttributeModalContentContainer = styled.div`
   display: flex;
   gap: ${theme.spacing.large};
-  min-height: 250px;
 `
 
 export const NewAttributeModalFooterContainer = styled.div`
   justify-self: right;
-`
-
-export const NewAttributeModalLabel = styled.label`
-  font-weight: bold;
 `
 
 export const ButtonZoom = styled.button<IsSelectedProps>`
@@ -180,6 +177,7 @@ export const ButtonZoom = styled.button<IsSelectedProps>`
   height: 100%;
   width: 100%;
   text-align: center;
+
   & svg {
     opacity: ${({ $isSelected }) => ($isSelected ? 1 : 0)};
   }

@@ -11,7 +11,7 @@ import { ButtonThatLooksLikeLink, ButtonPrimary, ButtonSecondary } from '../gene
 import { IconArrowBack, IconSend } from '../icons'
 import { Input } from '../generic/form'
 import { Row, RowSpaceBetween } from '../generic/positioning'
-import InputAutocomplete from '../generic/InputAutocomplete'
+import InputAutocomplete from '../generic/InputAutocomplete/InputAutocomplete'
 import { Table, Td, Tr } from '../generic/Table/table'
 import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
