@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -105,7 +105,7 @@ const ImageAnnotationModal = ({
     [getBenthicAttributeLabel, getGrowthFormLabel],
   )
 
-  const _fetchImageAnnotations = useMemo(() => {
+  const _fetchImageAnnotations = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
         .getAnnotationsForImage(projectId, imageId, EXCLUDE_PARAMS)
