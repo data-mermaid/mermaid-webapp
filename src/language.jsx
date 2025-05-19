@@ -1647,19 +1647,23 @@ const imageClassification = {
       zoomToAttribute: 'Zoom to attribute',
     },
     userMessage: {
+      confirmDiscardImageChanges: 'Are you sure you want to discard the change to this image?',
       photoRemoved: 'Photo removed',
     },
     errors: {
+      corruptFiles: 'Some files were not added because they appear to be corrupt.',
+      dimensionsExceededFiles:
+        'Some files were not added because they exceed the 8000x8000 dimensions limit.',
       duplicateFiles: 'Some files are duplicates and were not added.',
+      failedDeletion: 'Failed to delete photo: ',
+      failedFetchAnnotations: 'Failed to fetch image annotations.',
+      failedSaveAnnotations: 'Failed to save image annotations.',
       invalidFiles:
         'Some files were not added due to invalid file types. Only JPEG, PJPEG, PNG, and MPO files are allowed.',
       oversizedFiles: 'Some files were not added because they exceed the 30 MB size limit.',
-      dimensionsExceededFiles:
-        'Some files were not added because they exceed the 8000x8000 dimensions limit.',
-      corruptFiles: 'Some files were not added because they appear to be corrupt.',
-      failedDeletion: 'Failed to delete photo: ',
     },
     success: {
+      savedAnnotations: 'Successfully saved image annoations',
       uploadedPhotos: 'Photos uploaded successfully.',
     },
   },

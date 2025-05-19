@@ -122,7 +122,7 @@ const ImageAnnotationModal = ({
             // eslint-disable-next-line max-nested-callbacks
             const formattedAnnotations = sortedAnnotations.map((annotation) => ({
               ...annotation,
-              ba_gr: annotation.benthic_attribute ?? unclassifiedGuid, // + '_' + annotation.growth_form,
+              ba_gr: annotation.benthic_attribute ?? unclassifiedGuid,
               ba_gr_label: getAttributeGrowthFormLabel(annotation),
             }))
 
@@ -135,7 +135,9 @@ const ImageAnnotationModal = ({
             error,
             callback: () => {
               toast.error(
-                ...getToastArguments(`Failed to fetch image annotations. ${error.message}`),
+                ...getToastArguments(
+                  `${language.imageClassification.imageClassficationModal.errors.failedFetchAnnotations} ${error.message}`,
+                ),
               )
             },
             shouldShowServerNonResponseMessage: false,
@@ -153,7 +155,9 @@ const ImageAnnotationModal = ({
   const handleCloseModal = () => {
     if (
       !isDataUpdatedSinceLastSave ||
-      window.confirm('Are you sure you want to discard the change to this image?')
+      window.confirm(
+        language.imageClassification.imageClassficationModal.userMessage.confirmDiscardImageChanges,
+      )
     ) {
       setImageId()
     }
@@ -167,13 +171,17 @@ const ImageAnnotationModal = ({
       .then(() => {
         setImageId()
         onAnnotationSaveSuccess()
-        toast.success('Successfully saved image annotations')
+        toast.success(language.imageClassification.imageClassficationModal.success.savedAnnotations)
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(`Failed to save image annotations. ${error.message}`))
+            toast.error(
+              ...getToastArguments(
+                `${language.imageClassification.imageClassficationModal.errors.failedSaveAnnotations} ${error.message}`,
+              ),
+            )
           },
           shouldShowServerNonResponseMessage: false,
         })
