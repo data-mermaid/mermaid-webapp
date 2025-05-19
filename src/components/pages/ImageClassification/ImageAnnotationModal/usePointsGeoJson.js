@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { unclassifiedGuid } from '../../../../library/constants/constants'
 
 export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
   const halfPatchSize = dataToReview ? dataToReview.patch_size / 2 : undefined
@@ -39,7 +40,7 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
             id: point.id,
             ba_gr: point.annotations[0]?.ba_gr,
             ba_gr_label: point.annotations[0]?.ba_gr_label ?? 'Unclassified',
-            isUnclassified: !point.annotations.length,
+            isUnclassified: point.annotations[0].ba_gr === unclassifiedGuid,
             isConfirmed: !!point.annotations[0]?.is_confirmed,
             isPointInLeftHalfOfImage,
             isPointInTopHalfOfImage,

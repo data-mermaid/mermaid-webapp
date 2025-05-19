@@ -84,7 +84,7 @@ const ImageAnnotationModal = ({
   const getBenthicAttributeLabel = useCallback(
     (benthicAttributeId) => {
       const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-      return matchingBenthicAttribute?.name ?? ''
+      return matchingBenthicAttribute?.name ?? 'Unclassified'
     },
     [benthicAttributes],
   )
@@ -120,13 +120,13 @@ const ImageAnnotationModal = ({
             const sortedAnnotations = point.annotations?.toSorted(prioritizeConfirmedAnnotations)
 
             // eslint-disable-next-line max-nested-callbacks
-            const formattedAnnotations = sortedAnnotations.map((annotation) => ({
+            const labeledAnnotations = sortedAnnotations.map((annotation) => ({
               ...annotation,
               ba_gr: annotation.benthic_attribute ?? unclassifiedGuid,
               ba_gr_label: getAttributeGrowthFormLabel(annotation),
             }))
 
-            return { ...point, annotations: formattedAnnotations }
+            return { ...point, annotations: labeledAnnotations }
           })
           setDataToReview({ ...data, points: formattedPoints })
         })

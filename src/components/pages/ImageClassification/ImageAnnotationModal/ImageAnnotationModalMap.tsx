@@ -390,7 +390,7 @@ const ImageAnnotationModalMap = ({
     // eslint-disable-next-line
   }, [])
 
-  useMemo(
+  useEffect(
     function configurePatchesLabels() {
       if (!map.current) {
         return
@@ -408,12 +408,11 @@ const ImageAnnotationModalMap = ({
           return
         }
         const [{ properties }] = features ?? []
-        const label = properties?.isUnclassified ? 'Unclassified' : properties?.ba_gr_label
         const confirmedStatus = properties?.isConfirmed ? 'confirmed' : 'unconfirmed'
         const pointStatus = properties?.isUnclassified ? 'unclassified' : confirmedStatus
         const popupContent = (
           <LabelPopup>
-            <IconCircle style={{ color: COLORS[pointStatus] }} /> {label}
+            <IconCircle style={{ color: COLORS[pointStatus] }} /> {properties?.ba_gr_label}
           </LabelPopup>
         )
         const popupContentHack = document.createElement('div')
