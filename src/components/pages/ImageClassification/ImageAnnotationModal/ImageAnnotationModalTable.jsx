@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -17,10 +17,6 @@ import {
   IMAGE_CLASSIFICATION_COLORS,
   unclassifiedGuid,
 } from '../../../../library/constants/constants'
-import {
-  ImageClassificationPoint,
-  ImageClassificationResponse,
-} from '../../../../App/mermaidData/mermaidDataTypes'
 
 const ImageAnnotationModalTable = ({
   points,
@@ -31,15 +27,6 @@ const ImageAnnotationModalTable = ({
   setIsDataUpdatedSinceLastSave,
   zoomToPointsByAttributeId,
   isTableShowing,
-}: {
-  points: ImageClassificationPoint[]
-  setDataToReview: Dispatch<SetStateAction<ImageClassificationResponse>>
-  selectedAttributeId: string | null
-  setSelectedAttributeId: Dispatch<SetStateAction<string>>
-  setHoveredAttributeId: Dispatch<SetStateAction<string>>
-  setIsDataUpdatedSinceLastSave: Dispatch<SetStateAction<boolean>>
-  zoomToPointsByAttributeId: (items: object) => void
-  isTableShowing: boolean
 }) => {
   useEffect(
     function deselectAttributeIfTableHidden() {

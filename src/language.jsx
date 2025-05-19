@@ -1663,7 +1663,7 @@ const imageClassification = {
       oversizedFiles: 'Some files were not added because they exceed the 30 MB size limit.',
     },
     success: {
-      savedAnnotations: 'Successfully saved image annoations',
+      savedAnnotations: 'Successfully saved image annotations',
       uploadedPhotos: 'Photos uploaded successfully.',
     },
   },
