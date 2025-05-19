@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { unclassifiedGuid } from '../../../../library/constants/constants'
+import language from '../../../../language'
 
 export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
   const halfPatchSize = dataToReview ? dataToReview.patch_size / 2 : undefined
@@ -39,7 +40,8 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
           properties: {
             id: point.id,
             ba_gr: point.annotations[0]?.ba_gr,
-            ba_gr_label: point.annotations[0]?.ba_gr_label ?? 'Unclassified',
+            ba_gr_label:
+              point.annotations[0]?.ba_gr_label ?? language.imageClassficationModal.unclassified,
             isUnclassified: point.annotations[0].ba_gr === unclassifiedGuid,
             isConfirmed: !!point.annotations[0]?.is_confirmed,
             isPointInLeftHalfOfImage,
@@ -88,7 +90,8 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
           },
           properties: {
             id: point.id,
-            ba_gr_label: point.annotations[0]?.ba_gr_label ?? 'Unclassified',
+            ba_gr_label:
+              point.annotations[0]?.ba_gr_label ?? language.imageClassficationModal.unclassified,
           },
         }
       }),

@@ -84,7 +84,7 @@ const ImageAnnotationModal = ({
   const getBenthicAttributeLabel = useCallback(
     (benthicAttributeId) => {
       const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-      return matchingBenthicAttribute?.name ?? 'Unclassified'
+      return matchingBenthicAttribute?.name ?? language.imageClassficationModal.unclassified
     },
     [benthicAttributes],
   )
@@ -114,7 +114,7 @@ const ImageAnnotationModal = ({
             if (point.annotations.length === 0) {
               point.annotations.push({
                 ba_gr: unclassifiedGuid,
-                ba_gr_label: 'Unclassified',
+                ba_gr_label: language.imageClassficationModal.unclassified,
               })
             }
             const sortedAnnotations = point.annotations?.toSorted(prioritizeConfirmedAnnotations)
@@ -241,15 +241,15 @@ const ImageAnnotationModal = ({
             <Legend>
               <LegendItem>
                 <LegendSquare color={COLORS.confirmed} />
-                Confirmed
+                {language.imageClassficationModal.confirmed}
               </LegendItem>
               <LegendItem>
                 <LegendSquare color={COLORS.unconfirmed} />
-                Unconfirmed
+                {language.imageClassficationModal.unconfirmed}
               </LegendItem>
               <LegendItem>
                 <LegendSquare color={COLORS.unclassified} />
-                Unclassified
+                {language.imageClassficationModal.unclassified}
               </LegendItem>
             </Legend>
             <div>

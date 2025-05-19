@@ -10,14 +10,6 @@ interface IsSelectedProps {
   $isSelected?: boolean
 }
 
-interface HasConfirmedPoint {
-  $hasConfirmedPoint?: boolean
-}
-
-interface HasUnconfirmedPoint {
-  $hasUnconfirmedPoint?: boolean
-}
-
 export const RowThatLooksLikeAnEvenTr = styled.div`
   display: flex;
   padding: 10px;
