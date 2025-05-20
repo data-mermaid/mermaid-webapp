@@ -1,10 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {
-  formikHandleIntegerInputChange,
-  formikHandleNumericDecimalInputChange,
-} from '../../../../../library/formik/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formik/formikPropType'
 import { H2 } from '../../../../generic/text'
 import { InputRow } from '../../../../generic/form'
@@ -12,7 +8,8 @@ import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.st
 import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../../../language'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
-import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
+import GfcrDecimalInputField from '../GfcrDecimalInputField'
+import GfcrIntegerInputField from '../GfcrIntegerInputField'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
@@ -20,155 +17,78 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
   return (
     <StyledGfcrInputWrapper>
       <H2>{gfcrIndicatorSetLanguage.f3Heading}</H2>
-      <InputWithLabelAndValidation
+      <GfcrDecimalInputField
+        id="f3_1"
         label={
           <>
             <strong>F 3.1</strong> {gfcrIndicatorSetLanguage.f3_1}
           </>
         }
-        id="f3_1"
-        type="text"
-        inputMode="decimal"
-        pattern="[0-9.]*"
         unit="km²"
-        {...formik.getFieldProps('f3_1')}
-        onBlur={(event) =>
-          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f3_1' })
-        }
-        onFocus={(event) => handleInputFocus(event)}
-        onChange={(event) =>
-          formikHandleNumericDecimalInputChange({
-            formik,
-            event,
-            fieldName: 'f3_1',
-            maxNumberOfDecimals: 5,
-          })
-        }
+        maxNumberOfDecimals={5}
         helperText={gfcrIndicatorSetLanguage.getF3_1_helper()}
-        showHelperText={displayHelp}
+        displayHelp={displayHelp}
+        handleInputFocus={handleInputFocus}
+        formik={formik}
       />
-      <InputWithLabelAndValidation
+      <GfcrIntegerInputField
+        id="f3_2"
         label={
           <>
             <strong>F 3.2</strong> {gfcrIndicatorSetLanguage.f3_2}
           </>
         }
-        id="f3_2"
-        type="text"
-        inputMode="integer"
-        pattern="[0-9]*"
-        {...formik.getFieldProps('f3_2')}
-        onBlur={(event) =>
-          resetEmptyFormikFieldToInitialValue({
-            formik,
-            event,
-            fieldName: 'f3_2',
-            resetRemoveDecimal: true,
-          })
-        }
-        onFocus={(event) => handleInputFocus(event)}
-        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_2' })}
         helperText={gfcrIndicatorSetLanguage.getF3_2_helper()}
-        showHelperText={displayHelp}
+        displayHelp={displayHelp}
+        handleInputFocus={handleInputFocus}
+        formik={formik}
       />
-      <InputWithLabelAndValidation
+      <GfcrIntegerInputField
+        id="f3_3"
         label={
           <>
             <strong>F 3.3</strong> {gfcrIndicatorSetLanguage.f3_3}
           </>
         }
-        id="f3_3"
-        type="text"
-        inputMode="integer"
-        pattern="[0-9]*"
-        {...formik.getFieldProps('f3_3')}
-        onBlur={(event) =>
-          resetEmptyFormikFieldToInitialValue({
-            formik,
-            event,
-            fieldName: 'f3_3',
-            resetRemoveDecimal: true,
-          })
-        }
-        onFocus={(event) => handleInputFocus(event)}
-        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_3' })}
         helperText={gfcrIndicatorSetLanguage.getF3_3_helper()}
-        showHelperText={displayHelp}
+        displayHelp={displayHelp}
+        handleInputFocus={handleInputFocus}
+        formik={formik}
       />
-      <InputWithLabelAndValidation
+      <GfcrIntegerInputField
+        id="f3_4"
         label={
           <>
             <strong>F 3.4</strong> {gfcrIndicatorSetLanguage.f3_4}
           </>
         }
-        id="f3_4"
-        type="text"
-        inputMode="integer"
-        pattern="[0-9]*"
-        {...formik.getFieldProps('f3_4')}
-        onBlur={(event) =>
-          resetEmptyFormikFieldToInitialValue({
-            formik,
-            event,
-            fieldName: 'f3_4',
-            resetRemoveDecimal: true,
-          })
-        }
-        onFocus={(event) => handleInputFocus(event)}
-        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_4' })}
         helperText={gfcrIndicatorSetLanguage.getF3_4_helper()}
-        showHelperText={displayHelp}
+        displayHelp={displayHelp}
+        handleInputFocus={handleInputFocus}
+        formik={formik}
       />
       <InputRow>
         <label>
           <strong>F 3.5</strong> {gfcrIndicatorSetLanguage.f3_5}
         </label>
         <StyledGfcrSubInputWrapper>
-          <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.men}</>}
+          <GfcrIntegerInputField
             id="f3_5a"
-            type="text"
-            inputMode="integer"
-            pattern="[0-9]*"
-            {...formik.getFieldProps('f3_5a')}
-            onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({
-                formik,
-                event,
-                fieldName: 'f3_5a',
-                resetRemoveDecimal: true,
-              })
-            }
-            onFocus={(event) => handleInputFocus(event)}
-            onChange={(event) =>
-              formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_5a' })
-            }
+            label={<>{gfcrIndicatorSetLanguage.men}</>}
             helperText={gfcrIndicatorSetLanguage.getF3_5_men_helper()}
-            showHelperText={displayHelp}
+            displayHelp={displayHelp}
+            handleInputFocus={handleInputFocus}
+            formik={formik}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
-          <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.women}</>}
+          <GfcrIntegerInputField
             id="f3_5b"
-            type="text"
-            inputMode="integer"
-            pattern="[0-9]*"
-            {...formik.getFieldProps('f3_5b')}
-            onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({
-                formik,
-                event,
-                fieldName: 'f3_5b',
-                resetRemoveDecimal: true,
-              })
-            }
-            onFocus={(event) => handleInputFocus(event)}
-            onChange={(event) =>
-              formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_5b' })
-            }
+            label={<>{gfcrIndicatorSetLanguage.women}</>}
             helperText={gfcrIndicatorSetLanguage.getF3_5_women_helper()}
-            showHelperText={displayHelp}
+            displayHelp={displayHelp}
+            handleInputFocus={handleInputFocus}
+            formik={formik}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
@@ -182,77 +102,37 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         </StyledGfcrSubInputWrapper>
         <div>{gfcrIndicatorSetLanguage.ofTotalHowMany}</div>
         <StyledGfcrSubInputWrapper>
-          <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.youth}</>}
+          <GfcrIntegerInputField
             id="f3_5c"
-            type="text"
-            inputMode="integer"
-            pattern="[0-9]*"
-            {...formik.getFieldProps('f3_5c')}
-            onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({
-                formik,
-                event,
-                fieldName: 'f3_5c',
-                resetRemoveDecimal: true,
-              })
-            }
-            onChange={(event) =>
-              formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_5c' })
-            }
+            label={<>{gfcrIndicatorSetLanguage.youth}</>}
             helperText={gfcrIndicatorSetLanguage.getF3_5_youth_helper()}
-            showHelperText={displayHelp}
+            displayHelp={displayHelp}
+            handleInputFocus={handleInputFocus}
+            formik={formik}
           />
         </StyledGfcrSubInputWrapper>
         <StyledGfcrSubInputWrapper>
-          <InputWithLabelAndValidation
-            label={<>{gfcrIndicatorSetLanguage.indigenous}</>}
+          <GfcrIntegerInputField
             id="f3_5d"
-            type="text"
-            inputMode="integer"
-            pattern="[0-9]*"
-            {...formik.getFieldProps('f3_5d')}
-            onBlur={(event) =>
-              resetEmptyFormikFieldToInitialValue({
-                formik,
-                event,
-                fieldName: 'f3_5d',
-                resetRemoveDecimal: true,
-              })
-            }
-            onChange={(event) =>
-              formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_5d' })
-            }
+            label={<>{gfcrIndicatorSetLanguage.indigenous}</>}
             helperText={gfcrIndicatorSetLanguage.getF3_5_indigenous_helper()}
-            showHelperText={displayHelp}
+            displayHelp={displayHelp}
+            handleInputFocus={handleInputFocus}
+            formik={formik}
           />
         </StyledGfcrSubInputWrapper>
       </InputRow>
-      <InputWithLabelAndValidation
+      <GfcrIntegerInputField
+        id="f3_6"
         label={
           <>
             <strong>F 3.6</strong> {gfcrIndicatorSetLanguage.f3_6}
           </>
         }
-        id="f3_6"
-        type="text"
-        inputMode="integer"
-        pattern="[0-9]*"
-        {...formik.getFieldProps('f3_6')}
-        validationType={formik.errors.title && formik.touched.title ? 'error' : null}
-        validationMessages={formik.errors.title}
-        onBlur={(event) =>
-          resetEmptyFormikFieldToInitialValue({
-            formik,
-            event,
-            fieldName: 'f3_6',
-            resetRemoveDecimal: true,
-          })
-        }
-        onFocus={(event) => handleInputFocus(event)}
-        onChange={(event) => formikHandleIntegerInputChange({ formik, event, fieldName: 'f3_6' })}
         helperText={gfcrIndicatorSetLanguage.getF3_6_helper()}
-        showHelperText={displayHelp}
+        displayHelp={displayHelp}
+        handleInputFocus={handleInputFocus}
+        formik={formik}
       />
       <TextareaWithLabelAndValidation
         id="f3_notes"

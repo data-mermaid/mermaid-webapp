@@ -1,14 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { formikHandleNumericDecimalInputChange } from '../../../../../library/formik/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formik/formikPropType'
 import { H2 } from '../../../../generic/text'
 import { StyledGfcrInputWrapper } from './subPages.styles'
-import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../../../language'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
-import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
+import GfcrDecimalInputField from '../GfcrDecimalInputField'
 
 const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
 
@@ -16,32 +14,19 @@ const F1Form = ({ formik, displayHelp, handleInputFocus }) => {
   return (
     <StyledGfcrInputWrapper>
       <H2>{gfcrIndicatorSetLanguage.f1Heading}</H2>
-      <InputWithLabelAndValidation
+      <GfcrDecimalInputField
+        id={'f1_1'}
         label={
           <>
             <strong>F 1.1</strong> {gfcrIndicatorSetLanguage.f1_1}
           </>
         }
-        id="f1_1"
-        type="text"
-        inputMode="decimal"
-        pattern="[0-9.]*"
         unit="km²"
-        {...formik.getFieldProps('f1_1')}
-        onBlur={(event) =>
-          resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f1_1' })
-        }
-        onFocus={(event) => handleInputFocus(event)}
+        maxNumberOfDecimals={5}
         helperText={gfcrIndicatorSetLanguage.getF1_1_helper()}
-        showHelperText={displayHelp}
-        onChange={(event) =>
-          formikHandleNumericDecimalInputChange({
-            formik,
-            event,
-            fieldName: 'f1_1',
-            maxNumberOfDecimals: 5,
-          })
-        }
+        displayHelp={displayHelp}
+        handleInputFocus={handleInputFocus}
+        formik={formik}
       />
       <TextareaWithLabelAndValidation
         id="f1_notes"
