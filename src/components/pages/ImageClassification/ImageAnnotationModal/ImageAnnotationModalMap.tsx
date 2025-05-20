@@ -300,9 +300,14 @@ const ImageAnnotationModalMap = ({
           id: 'patches-status-layer',
           type: 'line',
           source: 'patches',
+          layout: {
+            'line-cap': 'round',
+            'line-join': 'round',
+            'line-round-limit': 1,
+          },
           paint: {
             'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
-            'line-dasharray': [1, 1],
+            'line-dasharray': [1, 2],
             'line-offset': -3,
             'line-width': 3,
           },

@@ -10,14 +10,6 @@ interface IsSelectedProps {
   $isSelected?: boolean
 }
 
-interface HasConfirmedPoint {
-  $hasConfirmedPoint?: boolean
-}
-
-interface HasUnconfirmedPoint {
-  $hasUnconfirmedPoint?: boolean
-}
-
 export const RowThatLooksLikeAnEvenTr = styled.div`
   display: flex;
   padding: 10px;
@@ -143,13 +135,6 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
     `}
 `
 
-export const TdConfirmed = styled(Td)<HasConfirmedPoint>`
-  background-color: ${({ $hasConfirmedPoint }) => ($hasConfirmedPoint ? COLORS.confirmed : null)};
-`
-export const TdUnconfirmed = styled(Td)<HasUnconfirmedPoint>`
-  background-color: ${({ $hasUnconfirmedPoint }) =>
-    $hasUnconfirmedPoint ? COLORS.unconfirmed : null};
-`
 export const TdStatus = styled(Td)`
   width: 125px; // prevents shifts to layout when the status is confirmed
 `

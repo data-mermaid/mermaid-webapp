@@ -4,14 +4,12 @@ import PropTypes from 'prop-types'
 import {
   ButtonZoom,
   TableWithNoMinWidth,
-  TdConfirmed,
   TdStatus,
-  TdUnconfirmed,
   TdZoom,
   TrImageClassification,
 } from './ImageAnnotationModal.styles'
 import { ButtonSecondary } from '../../../generic/buttons'
-import { Tr, Th, Td, TableOverflowWrapper, thStyles } from '../../../generic/Table/table'
+import { TableOverflowWrapper, Td, Th, thStyles, Tr } from '../../../generic/Table/table'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { IconZoomIn } from '../../../icons'
 import { MuiTooltipDark } from '../../../generic/MuiTooltip'
