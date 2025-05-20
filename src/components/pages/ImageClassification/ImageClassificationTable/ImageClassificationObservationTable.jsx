@@ -168,7 +168,7 @@ const ImageClassificationObservationTable = ({
           callback: () => {
             toast.error(
               ...getToastArguments(
-                `${language.imageClassification.imageClassificationModal.errors.failedDeletion} ${file.original_image_name}. ${error.message}`,
+                `${language.imageClassification.imageClassficationModal.errors.failedDeletion} ${file.original_image_name}. ${error.message}`,
               ),
             )
           },

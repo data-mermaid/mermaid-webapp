@@ -1,12 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 
 import getBounds from '@turf/bbox'
@@ -620,7 +612,7 @@ const ImageAnnotationModalMap = ({
     }
   }, [hasMapLoaded, map])
 
-  const _updatePointsOnDataChange = useMemo(() => {
+  const _updatePointsOnDataChange = useEffect(() => {
     if (!hasMapLoaded) {
       return
     }
