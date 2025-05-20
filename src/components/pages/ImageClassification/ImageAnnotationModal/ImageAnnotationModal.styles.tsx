@@ -55,7 +55,7 @@ export const LegendItem = styled.div`
 export const LegendSquare = styled.div`
   width: 15px;
   height: 15px;
-  margin-right: 2px;
+  margin-right: 3px;
   border: ${({ color }) => `3px solid ${color}`};
 `
 
