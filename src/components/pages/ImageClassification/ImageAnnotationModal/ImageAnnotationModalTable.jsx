@@ -80,16 +80,13 @@ const ImageAnnotationModalTable = ({
         <thead>
           <Tr style={{ ...thStyles }}>
             <Th />
-            <Th>{language.imageClassification.imageClassficationModal.attributeGrowthForm}</Th>
+            <Th style={{ maxWidth: '200px' }}>
+              {language.imageClassification.imageClassficationModal.attributeGrowthForm}
+            </Th>
             <MuiTooltipDark
               title={language.imageClassification.imageClassficationModal.confirmedCount}
             >
-              <Th>✓</Th>
-            </MuiTooltipDark>
-            <MuiTooltipDark
-              title={language.imageClassification.imageClassficationModal.unconfirmedCount}
-            >
-              <Th>?</Th>
+              <Th>{language.imageClassification.imageClassficationModal.confirmed}</Th>
             </MuiTooltipDark>
             <Th>{language.imageClassification.imageClassficationModal.status}</Th>
           </Tr>
@@ -123,22 +120,19 @@ const ImageAnnotationModalTable = ({
                   </TdZoom>
                   {/* All points in a row will have the same ba_gr label */}
                   <Td>{tableData[rowKey][0].annotations[0].ba_gr_label}</Td>
-                  <TdConfirmed align="right" $hasConfirmedPoint={!!confirmedCount}>
-                    {confirmedCount}
-                  </TdConfirmed>
-                  <TdUnconfirmed align="right" $hasUnconfirmedPoint={!!unconfirmedCount}>
-                    {unconfirmedCount}
-                  </TdUnconfirmed>
+                  <Td align="right">
+                    {confirmedCount} / {unconfirmedCount + confirmedCount}
+                  </Td>
                   <TdStatus align="center">
                     {!unconfirmedCount ? (
-                      'Confirmed'
+                      language.imageClassification.imageClassficationModal.confirmed
                     ) : (
                       <MuiTooltipDark title="Confirm all points">
                         <ButtonSecondary
                           type="button"
                           onClick={(e) => handleRowConfirm(e, tableData[rowKey])}
                         >
-                          {language.buttons.confirm}
+                          {language.buttons.confirmAll}
                         </ButtonSecondary>
                       </MuiTooltipDark>
                     )}

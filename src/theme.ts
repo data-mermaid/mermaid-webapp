@@ -59,6 +59,7 @@ const color = {
   primaryDisabledColor: primary.mix(colorHelper('grey'), 0.6).toString(),
   primaryDisabledText: '#9AA8B7',
 
+  secondary: '#f2645a',
   secondaryColor: secondary.toString(),
   secondaryHover: secondary.mix(colorHelper('white'), 0.2).toString(),
   secondaryActive: secondary.mix(colorHelper('black'), 0.2).toString(),

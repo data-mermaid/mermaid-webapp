@@ -301,10 +301,10 @@ const ImageAnnotationModalMap = ({
           type: 'line',
           source: 'patches',
           paint: {
-            'line-width': 3,
-            'line-offset': -3,
-
             'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
+            'line-dasharray': [1, 1],
+            'line-offset': -3,
+            'line-width': 3,
           },
         },
         {

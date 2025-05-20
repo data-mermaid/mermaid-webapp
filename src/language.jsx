@@ -61,11 +61,12 @@ const apiDataTableNames = {
 }
 
 const buttons = {
+  addRow: 'Add row',
   cancel: 'Cancel',
   close: 'Close',
   confirm: 'Confirm',
+  confirmAll: 'Confirm all',
   saveChanges: 'Save Changes',
-  addRow: 'Add row',
 }
 
 const error = {
@@ -1625,11 +1626,13 @@ const imageClassification = {
     offlineBody: 'This sample unit is using image classification and is unavailable offline.',
   },
   imageClassficationModal: {
+    confirm: 'Confirm',
+    confirmed: 'Confirmed',
     confirmedCount: 'Confirmed count',
     unconfirmedCount: 'Unconfirmed count',
     status: 'Status',
     review: 'Review',
-    attributeGrowthForm: 'Benthic attribute and growth form',
+    attributeGrowthForm: 'Benthic attribute / growth form',
     tooltip: {
       reviewPhoto: 'Review this photo',
       removePhoto: 'Remove this photo',

@@ -53,10 +53,10 @@ export const LegendItem = styled.div`
 `
 
 export const LegendSquare = styled.div`
-  width: 12px;
-  height: 12px;
+  width: 15px;
+  height: 15px;
   margin-right: 2px;
-  border: ${({ color }) => `2px solid ${color}`};
+  border: ${({ color }) => `3px solid ${color}`};
 `
 
 export const LoadingContainer = styled.div`
@@ -151,7 +151,7 @@ export const TdUnconfirmed = styled(Td)<HasUnconfirmedPoint>`
     $hasUnconfirmedPoint ? COLORS.unconfirmed : null};
 `
 export const TdStatus = styled(Td)`
-  width: 104px; // prevents shifts to layout when the status is confirmed
+  width: 125px; // prevents shifts to layout when the status is confirmed
 `
 export const PointPopupSectionHeader = styled.div`
   ${thStyles}

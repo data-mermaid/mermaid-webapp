@@ -1,3 +1,4 @@
+import theme from '../../theme'
 export const PAGE_SIZE_DEFAULT = 15
 export const DEFAULT_RECORDS_PER_PAGE = 1000
 export const API_NULL_NAME = '__null__'
@@ -18,14 +19,14 @@ export const apiDataTypes = {
   projectSites: 'project_sites',
 }
 export const IMAGE_CLASSIFICATION_COLORS = {
-  confirmedPoint: '#5AE518',
-  confirmed: '#CFFFB8',
-  unconfirmedPoint: '#BF6B69',
-  unconfirmed: '#FBAEAE',
+  confirmedPoint: theme.color.secondary,
+  confirmed: theme.color.secondary,
+  unconfirmedPoint: theme.color.secondary,
+  unconfirmed: theme.color.secondary,
   unclassifiedPoint: '#808080',
   unclassified: '#BCBCBC',
-  hover: '#ffb3fe',
-  selected: '#FF00FB',
+  hover: '#ccc',
+  selected: '#FFF',
   outline: '#000',
 }
 
