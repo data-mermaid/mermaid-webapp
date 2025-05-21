@@ -26,7 +26,8 @@ export const IMAGE_CLASSIFICATION_COLORS = {
   unclassifiedPoint: '#808080',
   unclassified: '#BCBCBC',
   hover: '#ccc',
-  selected: '#FFF',
+  selectedPoint: '#fff',
+  selected: '#DDDCE4',
   outline: '#000',
 }
 

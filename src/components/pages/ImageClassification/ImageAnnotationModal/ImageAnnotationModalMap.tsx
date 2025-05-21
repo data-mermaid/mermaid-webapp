@@ -652,14 +652,14 @@ const ImageAnnotationModalMap = ({
         ['get', 'id'],
         selectedPoint.id,
       ],
-      COLORS.selected,
+      COLORS.selectedPoint,
 
       [
         '==', // checks if point on map is in selected row in table
         ['get', 'ba_gr'],
         selectedAttributeId,
       ],
-      COLORS.selected,
+      COLORS.selectedPoint,
 
       [
         '==', // checks if point on map is clicked
