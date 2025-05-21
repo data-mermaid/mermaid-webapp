@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '../../../../generic/buttons'
-import { formikHandleNumericDecimalInputChange } from '../../../../../library/formik/formikHandleInputTypes'
 import { formikPropType } from '../../../../../library/formik/formikPropType'
 import { H2 } from '../../../../generic/text'
 import { InputRow } from '../../../../generic/form'
@@ -13,6 +12,7 @@ import language from '../../../../../language'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../../../theme'
 import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
+import GfcrDecimalInputField from '../GfcrDecimalInputField'
 
 const StyledButtonPrimary = styled(ButtonPrimary)`
   width: 100%;
@@ -165,86 +165,53 @@ const F4Form = ({
         </StyledInputRowDates>
       )}
       <StyledInputRowQuestions>
-        <InputWithLabelAndValidation
+        <GfcrDecimalInputField
+          id={'f4_1'}
           label={
             <>
               <strong>F 4.1</strong> {gfcrIndicatorSetLanguage.f4_1}
             </>
           }
-          id="f4_1"
-          type="number"
           unit="%"
-          {...formik.getFieldProps('f4_1')}
-          onBlur={(event) =>
-            resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f4_1' })
-          }
-          onFocus={(event) => handleInputFocus(event)}
+          maxNumberOfDecimals={1}
           helperText={gfcrIndicatorSetLanguage.getF4_1_helper()}
-          showHelperText={displayHelp}
-          onChange={(event) =>
-            formikHandleNumericDecimalInputChange({
-              formik,
-              event,
-              fieldName: 'f4_1',
-              maxNumberOfDecimals: 1,
-            })
-          }
+          displayHelp={displayHelp}
+          handleInputFocus={handleInputFocus}
+          formik={formik}
         />
         {isReport && <StyledValueUpdateText>{f41ValueUpdateText}</StyledValueUpdateText>}
       </StyledInputRowQuestions>
       <StyledInputRowQuestions>
-        <InputWithLabelAndValidation
+        <GfcrDecimalInputField
+          id={'f4_2'}
           label={
             <>
               <strong>F 4.2</strong> {gfcrIndicatorSetLanguage.f4_2}
             </>
           }
-          id="f4_2"
-          type="number"
           unit="%"
-          {...formik.getFieldProps('f4_2')}
-          onBlur={(event) =>
-            resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f4_2' })
-          }
-          onFocus={(event) => handleInputFocus(event)}
+          maxNumberOfDecimals={1}
           helperText={gfcrIndicatorSetLanguage.getF4_2_helper()}
-          showHelperText={displayHelp}
-          onChange={(event) =>
-            formikHandleNumericDecimalInputChange({
-              formik,
-              event,
-              fieldName: 'f4_2',
-              maxNumberOfDecimals: 1,
-            })
-          }
+          displayHelp={displayHelp}
+          handleInputFocus={handleInputFocus}
+          formik={formik}
         />
         {isReport && <StyledValueUpdateText>{f42ValueUpdateText}</StyledValueUpdateText>}
       </StyledInputRowQuestions>
       <StyledInputRowQuestions>
-        <InputWithLabelAndValidation
+        <GfcrDecimalInputField
+          id={'f4_3'}
           label={
             <>
               <strong>F 4.3</strong> {gfcrIndicatorSetLanguage.f4_3}
             </>
           }
-          id="f4_3"
-          type="number"
           unit="kg/ha"
-          {...formik.getFieldProps('f4_3')}
-          onBlur={(event) =>
-            resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'f4_3' })
-          }
-          onFocus={(event) => handleInputFocus(event)}
+          maxNumberOfDecimals={1}
           helperText={gfcrIndicatorSetLanguage.getF4_3_helper()}
-          showHelperText={displayHelp}
-          onChange={(event) =>
-            formikHandleNumericDecimalInputChange({
-              formik,
-              event,
-              fieldName: 'f4_3',
-              maxNumberOfDecimals: 1,
-            })
-          }
+          displayHelp={displayHelp}
+          handleInputFocus={handleInputFocus}
+          formik={formik}
         />
         {isReport && <StyledValueUpdateText>{f43ValueUpdateText}</StyledValueUpdateText>}
       </StyledInputRowQuestions>
