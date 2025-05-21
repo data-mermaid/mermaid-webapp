@@ -86,7 +86,9 @@ const ImageAnnotationModalTable = ({
             >
               <Th>{language.imageClassification.imageClassficationModal.confirmed}</Th>
             </MuiTooltipDark>
-            <Th>{language.imageClassification.imageClassficationModal.status}</Th>
+            <Th style={{ textAlign: 'center' }}>
+              {language.imageClassification.imageClassficationModal.status}
+            </Th>
           </Tr>
         </thead>
         <tbody>
