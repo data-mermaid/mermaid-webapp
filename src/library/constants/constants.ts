@@ -19,10 +19,11 @@ export const apiDataTypes = {
   projectSites: 'project_sites',
 }
 export const IMAGE_CLASSIFICATION_COLORS = {
-  confirmedPoint: theme.color.secondary,
-  confirmed: theme.color.secondary,
-  unconfirmedPoint: theme.color.secondary,
-  unconfirmed: theme.color.secondary,
+  // leaving these redundant for now until colors are finalized
+  confirmedPoint: theme.color.brandSecondary,
+  confirmed: theme.color.brandSecondary,
+  unconfirmedPoint: theme.color.brandSecondary,
+  unconfirmed: theme.color.brandSecondary,
   unclassifiedPoint: '#808080',
   unclassified: '#BCBCBC',
   hover: '#ccc',

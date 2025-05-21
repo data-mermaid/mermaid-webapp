@@ -120,7 +120,7 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
   ${({ $isSelected }) =>
     $isSelected &&
     css`
-      background-color: ${COLORS.selected} !important;
+      background-color: ${COLORS.selected} !important; //hack to override the table row striping
       &::after {
         // this is a non-layout impacting hack to receive the selected row border
         content: '';

@@ -228,10 +228,7 @@ const ImageAnnotationModal = ({
                 Confirmed
               </LegendItem>
               <LegendItem>
-                <LegendSquare
-                  style={{ border: `2px dotted ${theme.color.secondary}` }}
-                  color={COLORS.unconfirmed}
-                />
+                <LegendSquare style={{ border: `3px dotted ${theme.color.brandSecondary}` }} />
                 Unconfirmed
               </LegendItem>
               <LegendItem>

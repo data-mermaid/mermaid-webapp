@@ -78,7 +78,7 @@ const ImageAnnotationModalTable = ({
         <thead>
           <Tr style={{ ...thStyles }}>
             <Th />
-            <Th style={{ maxWidth: '200px' }}>
+            <Th style={{ maxWidth: '200px' /**force text wrapping**/ }}>
               {language.imageClassification.imageClassficationModal.attributeGrowthForm}
             </Th>
             <MuiTooltipDark
