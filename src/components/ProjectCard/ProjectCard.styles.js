@@ -33,7 +33,7 @@ export const ProjectCardHeader = styled('div')`
   justify-content: space-between;
   background: ${theme.color.primaryColor};
   color: ${theme.color.white};
-   gap: ${theme.spacing.large}
+  gap: ${theme.spacing.large};
   ${theme.typography.noWordBreak};
   ${mediaQueryPhoneOnly(css`
     font-size: ${theme.typography.defaultFontSize};
