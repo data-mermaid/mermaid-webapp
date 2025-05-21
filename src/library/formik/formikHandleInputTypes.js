@@ -17,7 +17,7 @@ export const formikHandleNumericDecimalInputChange = ({
   )
 }
 
-export const formikHandleIntegerInputChange = ({ formik, event, fieldName }) => {
+export const formikHandleGfcrNumberInputChange = ({ formik, event, fieldName }) => {
   const originalValue = event.target.value
   const formattedValue = originalValue.replace(/[^0-9.]/g, '')
   formik.setFieldValue(fieldName, formattedValue)
@@ -27,8 +27,7 @@ export const formikHandleIntegerInputOnBlur = ({ formik, event, fieldName }) => 
   const originalInputValue = event.target.value.trim()
   const valueHasMultipleDots = originalInputValue.split('.').length > 2
 
-  // Reset to initial value if the input is empty or has multiple dots
-  if (!originalInputValue || valueHasMultipleDots) {
+  if (!originalInputValue || valueHasMultipleDots || originalInputValue === '.') {
     formik.setFieldValue(fieldName, formik.initialValues[fieldName])
     return
   }
@@ -46,8 +45,7 @@ export const formikHandleDecimalInputOnBlur = ({
   const originalInputValue = event.target.value.trim()
   const valueHasMultipleDots = originalInputValue.split('.').length > 2
 
-  // Reset to initial value if the input is empty or has multiple dots
-  if (!originalInputValue || valueHasMultipleDots) {
+  if (!originalInputValue || valueHasMultipleDots || originalInputValue === '.') {
     formik.setFieldValue(fieldName, formik.initialValues[fieldName])
     return
   }

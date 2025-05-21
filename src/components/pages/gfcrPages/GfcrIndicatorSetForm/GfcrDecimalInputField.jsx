@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   formikHandleDecimalInputOnBlur,
-  formikHandleIntegerInputChange,
+  formikHandleGfcrNumberInputChange,
 } from '../../../../library/formik/formikHandleInputTypes'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 
@@ -26,7 +26,7 @@ const GfcrDecimalInputField = ({
   }
 
   const handleChange = (event) => {
-    formikHandleIntegerInputChange({
+    formikHandleGfcrNumberInputChange({
       formik,
       event,
       fieldName: id,
