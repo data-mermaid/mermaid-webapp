@@ -42,7 +42,8 @@ const SelectAttributeFromClassifierGuesses = ({
       if (
         isClassified(currentPoint) &&
         !isOptionAlreadyAdded(acc, ba_gr) &&
-        !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr)
+        !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr) &&
+        ba_gr !== unclassifiedGuid
       ) {
         acc.push({ label: ba_gr_label, value: ba_gr })
       }
