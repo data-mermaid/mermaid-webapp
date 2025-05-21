@@ -1629,6 +1629,7 @@ const imageClassification = {
     confirm: 'Confirm',
     confirmed: 'Confirmed',
     confirmedCount: 'Confirmed count',
+    confirmedTotal: 'Confirmed / total',
     unconfirmedCount: 'Unconfirmed count',
     status: 'Status',
     review: 'Review',
