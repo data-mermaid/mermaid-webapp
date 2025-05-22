@@ -522,7 +522,7 @@ const pages = {
       deleteSiteOrRegimes: 'Delete site or management regimes',
       downloadSitesAndRegimes: 'Download sites and management regimes',
       createValidateSubmitSampleUnits: 'Create, validate, and submit sample units',
-      deleteSampleUnits: 'Delete unsubmited sample units',
+      deleteSampleUnits: 'Delete unsubmitted sample units',
       editSampleUnits: 'Edit submitted sample units',
       transferSampleUnits: 'Transfer unsubmitted sample units',
       downloadSampleUnits: 'Download submitted sample units',
