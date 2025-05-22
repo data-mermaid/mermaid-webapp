@@ -60,20 +60,6 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
   COLORS.unconfirmedPoint,
 ] as Expression
 
-const IMAGE_CLASSIFICATION_POINT_DASH_EXP = (isDashed: boolean) => {
-  debugger
-  return ['literal', [1, 2]]
-}
-// = [
-//   'case',
-//   ['get', 'isUnclassified'],
-//
-//   ['get', 'isConfirmed'],
-//   ['literal', [0, 0]],
-//
-//   ['literal', [1, 2]],
-// ] as Expression
-
 const pointLabelPopup = new maplibregl.Popup({
   anchor: 'bottom',
   closeButton: false,
@@ -314,6 +300,19 @@ const ImageAnnotationModalMap = ({
           id: 'patches-status-layer',
           type: 'line',
           source: 'patches',
+          filter: ['case', ['get', 'isUnconfirmed'], false, ['get', 'isUnclassified'], false, true],
+          paint: {
+            'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
+            'line-offset': -3,
+            'line-width': 3,
+          },
+        },
+        {
+          //Maplibre doesn't support conditional dashed items, this filter layer is a workaround
+          id: 'dotted-patches-status-layer',
+          type: 'line',
+          source: 'patches',
+          filter: ['case', ['get', 'isUnconfirmed'], true, ['get', 'isUnclassified'], true, false],
           layout: {
             'line-cap': 'round',
             'line-join': 'round',
@@ -321,7 +320,7 @@ const ImageAnnotationModalMap = ({
           },
           paint: {
             'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
-            // 'line-dasharray': IMAGE_CLASSIFICATION_POINT_DASH_EXP() as StyleFunction,
+            'line-dasharray': [1, 3],
             'line-offset': -3,
             'line-width': 3,
           },
