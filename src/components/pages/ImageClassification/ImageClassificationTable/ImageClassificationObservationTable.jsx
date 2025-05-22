@@ -24,7 +24,10 @@ import ObservationValidationInfo from '../../collectRecordFormPages/ObservationV
 import { getIsImageProcessed } from '../getIsImageProcessed'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
 import RemovePhotoModal from '../../../RemovePhotoModal/RemovePhotoModal'
-import { EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD } from '../imageClassificationConstants'
+import {
+  EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD,
+  IMAGE_CLASSIFICATION_STATUS,
+} from '../imageClassificationConstants'
 import {
   ImageWrapper,
   LoadingTableBody,
@@ -87,13 +90,12 @@ const SubHeaderRow = () => (
   </Tr>
 )
 
-const statusLabels = {
-  0: 'Unknown',
-  1: 'Queued',
-  2: 'Processing',
-  3: 'Completed',
-  4: 'Failed',
-}
+const statusLabels = Object.fromEntries(
+  Object.entries(IMAGE_CLASSIFICATION_STATUS).map(([key, value]) => [
+    value,
+    key.charAt(0).toUpperCase() + key.slice(1),
+  ]),
+)
 
 const ImageClassificationObservationTable = ({
   collectRecord = undefined,
@@ -407,7 +409,8 @@ const ImageClassificationObservationTable = ({
                           data-tooltip={file.original_image_name}
                           onClick={() => handleImageClick(file)}
                           cursor={
-                            statusLabels[file.classification_status?.status] === 'Completed'
+                            file.classification_status?.status ===
+                            IMAGE_CLASSIFICATION_STATUS.completed
                               ? 'pointer'
                               : 'default'
                           }
@@ -426,7 +429,8 @@ const ImageClassificationObservationTable = ({
                         <StyledTd
                           colSpan={8}
                           textAlign={
-                            statusLabels[file.classification_status?.status] === 'Completed'
+                            file.classification_status?.status ===
+                            IMAGE_CLASSIFICATION_STATUS.completed
                               ? 'left'
                               : 'center'
                           }
@@ -489,7 +493,10 @@ const ImageClassificationObservationTable = ({
                                   data-tooltip={file.original_image_name}
                                   onClick={() => handleImageClick(file)}
                                   cursor={
-                                    file.classification_status.status === 3 ? 'pointer' : 'default'
+                                    file.classification_status?.status ===
+                                    IMAGE_CLASSIFICATION_STATUS.completed
+                                      ? 'pointer'
+                                      : 'default'
                                   }
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
@@ -566,7 +573,10 @@ const ImageClassificationObservationTable = ({
                                     <ButtonCaution
                                       type="button"
                                       onClick={() => openRemovePhotoModal(file)}
-                                      disabled={file.classification_status?.status !== 3}
+                                      disabled={
+                                        file.classification_status?.status !==
+                                        IMAGE_CLASSIFICATION_STATUS.completed
+                                      }
                                     >
                                       <IconClose aria-label="close" />
                                     </ButtonCaution>
