@@ -25,7 +25,7 @@ import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/const
 import { ImageClassificationResponse } from '../../../../App/mermaidData/mermaidDataTypes'
 import { MapRef } from '../../../../types/map'
 import { MuiTooltipDarkRight } from '../../../generic/MuiTooltip'
-import { IconCircle, IconLabel, IconMinus, IconPlus, IconRefresh, IconTable } from '../../../icons'
+import { IconLabel, IconMinus, IconPlus, IconRefresh, IconTable } from '../../../icons'
 import {
   DEFAULT_MAP_ANIMATION_DURATION,
   DEFAULT_MAP_CENTER,
@@ -59,6 +59,20 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
 
   COLORS.unconfirmedPoint,
 ] as Expression
+
+const IMAGE_CLASSIFICATION_POINT_DASH_EXP = (isDashed: boolean) => {
+  debugger
+  return ['literal', [1, 2]]
+}
+// = [
+//   'case',
+//   ['get', 'isUnclassified'],
+//
+//   ['get', 'isConfirmed'],
+//   ['literal', [0, 0]],
+//
+//   ['literal', [1, 2]],
+// ] as Expression
 
 const pointLabelPopup = new maplibregl.Popup({
   anchor: 'bottom',
@@ -307,7 +321,7 @@ const ImageAnnotationModalMap = ({
           },
           paint: {
             'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
-            'line-dasharray': [1, 2],
+            // 'line-dasharray': IMAGE_CLASSIFICATION_POINT_DASH_EXP() as StyleFunction,
             'line-offset': -3,
             'line-width': 3,
           },
@@ -339,6 +353,7 @@ const ImageAnnotationModalMap = ({
         },
       ],
     })
+    // map.current.
 
     // Keep the max extent of the map to the size of the image
     map.current.setMaxBounds([
@@ -409,13 +424,7 @@ const ImageAnnotationModalMap = ({
         }
         const [{ properties }] = features ?? []
         const label = properties?.isUnclassified ? 'Unclassified' : properties?.ba_gr_label
-        const confirmedStatus = properties?.isConfirmed ? 'confirmed' : 'unconfirmed'
-        const pointStatus = properties?.isUnclassified ? 'unclassified' : confirmedStatus
-        const popupContent = (
-          <LabelPopup>
-            <IconCircle style={{ color: COLORS[pointStatus] }} /> {label}
-          </LabelPopup>
-        )
+        const popupContent = <LabelPopup>{label}</LabelPopup>
         const popupContentHack = document.createElement('div')
         ReactDOM.createRoot(popupContentHack).render(popupContent)
         let popupLngLat
