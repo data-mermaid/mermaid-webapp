@@ -23,6 +23,7 @@ import getObservationValidationInfo from '../../collectRecordFormPages/CollectRe
 import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
 import { getIsImageProcessed } from '../getIsImageProcessed'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
+import RemovePhotoModal from '../../../RemovePhotoModal/RemovePhotoModal'
 import { EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD } from '../imageClassificationConstants'
 import {
   ImageWrapper,
@@ -102,18 +103,22 @@ const ImageClassificationObservationTable = ({
   images,
   setImages,
 }) => {
-  const [imageId, setImageId] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId, recordId } = useParams()
+  const isFirstLoad = useRef(true)
+
+  const [imageId, setImageId] = useState()
   const [growthForms, setGrowthForms] = useState()
   const [benthicAttributes, setBenthicAttributes] = useState()
   const [distilledImages, setDistilledImages] = useState([])
   const [isFetching, setIsFetching] = useState(false)
-  const isFirstLoad = useRef(true)
-  const [deletingImage, setDeletingImage] = useState()
-  const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
   const [hoveredImageIndex, setHoveredImageIndex] = useState(null)
-  const handleHttpResponseError = useHttpResponseErrorHandler()
+  const [removingPhotoFile, setRemovingPhotoFile] = useState()
+  const [isRemovePhotoModalOpen, setIsRemovePhotoModalOpen] = useState(false)
+  const [isRemovingPhoto, setIsRemovingPhoto] = useState(false)
+
+  const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
 
   const observationsSummaryStats = useMemo(() => {
     if (!distilledImages.length || !benthicAttributes) {
@@ -151,13 +156,21 @@ const ImageClassificationObservationTable = ({
     }
   }
 
-  const handleRemoveImage = (file) => {
-    setDeletingImage(file.id)
+  const openRemovePhotoModal = (file) => {
+    setRemovingPhotoFile(file)
+    setIsRemovePhotoModalOpen(true)
+  }
+  const closeRemovePhotoModal = () => {
+    setIsRemovePhotoModalOpen(false)
+  }
+
+  const handleRemovePhoto = () => {
+    setIsRemovingPhoto(true)
 
     databaseSwitchboardInstance
-      .deleteImage(projectId, file.id)
+      .deleteImage(projectId, removingPhotoFile.id)
       .then(() => {
-        const updatedImages = images.filter((f) => f.id !== file.id)
+        const updatedImages = images.filter((f) => f.id !== removingPhotoFile.id)
         setImages(updatedImages)
 
         toast.warn(language.imageClassification.imageClassficationModal.userMessage.photoRemoved)
@@ -168,7 +181,7 @@ const ImageClassificationObservationTable = ({
           callback: () => {
             toast.error(
               ...getToastArguments(
-                `${language.imageClassification.imageClassificationModal.errors.failedDeletion} ${file.original_image_name}. ${error.message}`,
+                `${language.imageClassification.imageClassificationModal.errors.failedDeletion} ${removingPhotoFile.original_image_name}. ${error.message}`,
               ),
             )
           },
@@ -176,7 +189,9 @@ const ImageClassificationObservationTable = ({
         })
       })
       .finally(() => {
-        setDeletingImage()
+        setRemovingPhotoFile()
+        setIsRemovingPhoto(false)
+        closeRemovePhotoModal()
       })
   }
 
@@ -550,11 +565,8 @@ const ImageClassificationObservationTable = ({
                                   >
                                     <ButtonCaution
                                       type="button"
-                                      onClick={() => handleRemoveImage(file)}
-                                      disabled={
-                                        file.classification_status?.status !== 3 ||
-                                        deletingImage === file.id
-                                      }
+                                      onClick={() => openRemovePhotoModal(file)}
+                                      disabled={file.classification_status?.status !== 3}
                                     >
                                       <IconClose aria-label="close" />
                                     </ButtonCaution>
@@ -638,6 +650,13 @@ const ImageClassificationObservationTable = ({
           onAnnotationSaveSuccess={fetchImages}
         />
       ) : undefined}
+      <RemovePhotoModal
+        isOpen={isRemovePhotoModalOpen}
+        isLoading={isRemovingPhoto}
+        onDismiss={closeRemovePhotoModal}
+        modalText={language.removePhotoModal}
+        removePhoto={handleRemovePhoto}
+      />
     </>
   )
 }

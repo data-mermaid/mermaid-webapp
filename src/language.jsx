@@ -261,6 +261,13 @@ const deleteProject = (project) => {
   }
 }
 
+const removePhotoModal = {
+  title: 'Remove Photo',
+  prompt: 'Are you sure you want to remove this photo?',
+  yes: 'Remove Photo',
+  no: 'Cancel',
+}
+
 const loadingIndicator = {
   loadingPrimary: 'Loading',
   loadingSecondary: 'Still working...',
@@ -1663,6 +1670,7 @@ export default {
   gfcrNewIndicatorSetModal,
   deleteProject,
   deleteRecord,
+  removePhotoModal,
   error,
   getResolveModalLanguage,
   getValidationMessage,
