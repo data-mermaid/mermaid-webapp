@@ -1624,7 +1624,7 @@ const imageClassification = {
     offlineHeader: 'Sample unit observations unavailable offline',
     offlineBody: 'This sample unit is using image classification and is unavailable offline.',
   },
-  imageClassficationModal: {
+  imageClassificationModal: {
     confirmedCount: 'Confirmed count',
     unconfirmedCount: 'Unconfirmed count',
     status: 'Status',

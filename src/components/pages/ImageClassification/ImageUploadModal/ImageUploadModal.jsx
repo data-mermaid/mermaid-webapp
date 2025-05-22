@@ -40,7 +40,7 @@ const ImageUploadModal = ({
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
   const maxWidth = 8000
   const maxHeight = 8000
-  const uploadText = language.imageClassification.imageClassficationModal
+  const uploadText = language.imageClassification.imageClassificationModal
 
   const validateDimensions = (file) => {
     return new Promise((resolve) => {

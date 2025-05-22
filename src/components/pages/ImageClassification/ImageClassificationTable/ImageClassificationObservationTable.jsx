@@ -122,7 +122,6 @@ const ImageClassificationObservationTable = ({
   const [isRemovingPhoto, setIsRemovingPhoto] = useState(false)
 
   const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
-  const removeModalText = language.imageClassification.removePhotoModal
 
   const observationsSummaryStats = useMemo(() => {
     if (!distilledImages.length || !benthicAttributes) {
@@ -177,7 +176,7 @@ const ImageClassificationObservationTable = ({
         const updatedImages = images.filter((f) => f.id !== removingPhotoFile.id)
         setImages(updatedImages)
 
-        toast.warn(language.imageClassification.imageClassficationModal.userMessage.photoRemoved)
+        toast.warn(language.imageClassification.imageClassificationModal.userMessage.photoRemoved)
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -380,15 +379,15 @@ const ImageClassificationObservationTable = ({
   const removePhotoModal = (
     <>
       <Modal
-        title={removeModalText.title}
+        title={language.imageClassification.removePhotoModal.title}
         isOpen={isRemovePhotoModalOpen}
         onDismiss={closeRemovePhotoModal}
-        mainContent={removeModalText.prompt}
+        mainContent={language.imageClassification.removePhotoModal.prompt}
         footerContent={
           <RightFooter>
-            <ButtonSecondary onClick={closeRemovePhotoModal}>{removeModalText.no}</ButtonSecondary>
+            <ButtonSecondary onClick={closeRemovePhotoModal}>{language.buttons.cancel}</ButtonSecondary>
             <ButtonCaution disabled={isRemovingPhoto} onClick={handleRemovePhoto}>
-              {removeModalText.yes}
+              {language.imageClassification.removePhotoModal.yes}
             </ButtonCaution>
           </RightFooter>
         }
@@ -567,7 +566,7 @@ const ImageClassificationObservationTable = ({
                                 >
                                   <MuiTooltip
                                     title={
-                                      language.imageClassification.imageClassficationModal.tooltip
+                                      language.imageClassification.imageClassificationModal.tooltip
                                         .reviewPhoto
                                     }
                                   >
@@ -578,7 +577,7 @@ const ImageClassificationObservationTable = ({
                                         !getIsImageProcessed(file.classification_status?.status)
                                       }
                                     >
-                                      {language.imageClassification.imageClassficationModal.review}
+                                      {language.imageClassification.imageClassificationModal.review}
                                     </ButtonPrimary>
                                   </MuiTooltip>
                                 </StyledTd>
@@ -588,7 +587,7 @@ const ImageClassificationObservationTable = ({
                                 >
                                   <MuiTooltip
                                     title={
-                                      language.imageClassification.imageClassficationModal.tooltip
+                                      language.imageClassification.imageClassificationModal.tooltip
                                         .removePhoto
                                     }
                                   >

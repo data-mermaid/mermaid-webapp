@@ -80,18 +80,18 @@ const ImageAnnotationModalTable = ({
         <thead>
           <Tr style={{ ...thStyles }}>
             <Th />
-            <Th>{language.imageClassification.imageClassficationModal.attributeGrowthForm}</Th>
+            <Th>{language.imageClassification.imageClassificationModal.attributeGrowthForm}</Th>
             <MuiTooltipDark
-              title={language.imageClassification.imageClassficationModal.confirmedCount}
+              title={language.imageClassification.imageClassificationModal.confirmedCount}
             >
               <Th>✓</Th>
             </MuiTooltipDark>
             <MuiTooltipDark
-              title={language.imageClassification.imageClassficationModal.unconfirmedCount}
+              title={language.imageClassification.imageClassificationModal.unconfirmedCount}
             >
               <Th>?</Th>
             </MuiTooltipDark>
-            <Th>{language.imageClassification.imageClassficationModal.status}</Th>
+            <Th>{language.imageClassification.imageClassificationModal.status}</Th>
           </Tr>
         </thead>
         <tbody>
