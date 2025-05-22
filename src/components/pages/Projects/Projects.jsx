@@ -20,6 +20,7 @@ import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectK
 import ErrorBoundary from '../../ErrorBoundary'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { useExploreLaunchFeature } from '../../../library/useExploreLaunchFeature'
+import { openExploreLinkWithBbox } from '../../../library/openExploreLinkWithBbox'
 
 /**
  * All Projects page (lists projects)
@@ -113,9 +114,10 @@ const Projects = () => {
   }
 
   const handleExploreButtonClick = () => {
-    const yourMermaidExploreProjectsLink = `${mermaidExploreLink}/?your_projects_only=true`
+    const { projects_bbox } = currentUser
+    const queryParams = new URLSearchParams({ your_projects_only: 'true' })
 
-    window.open(yourMermaidExploreProjectsLink, '_blank')
+    openExploreLinkWithBbox(mermaidExploreLink, queryParams, projects_bbox)
   }
 
   const renderPageNoData = () => {

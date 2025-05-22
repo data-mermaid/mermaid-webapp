@@ -1,5 +1,4 @@
 import React from 'react'
-import { toast } from 'react-toastify'
 import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 import theme from '../../theme'
@@ -13,7 +12,6 @@ import { getProtocolTransectType } from '../../App/mermaidData/recordProtocolHel
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
-import { getToastArguments } from '../../library/getToastArguments'
 import { IconButton } from '../generic/buttons'
 import { IconGlobe } from '../icons'
 
@@ -76,16 +74,16 @@ const RecordFormTitle = ({
   )
 
   const handleExploreButtonClick = () => {
-    if (!sampleEventId || siteCoordinates.length === 0) {
-      toast.error(...getToastArguments(language.error.noLocationMermaidExplore))
-      return
+    const [lng, lat] = siteCoordinates
+    const queryParams = new URLSearchParams({ sample_event_id: sampleEventId })
+
+    if (lat != null && lng != null) {
+      queryParams.append('lat', lat)
+      queryParams.append('lng', lng)
+      queryParams.append('zoom', '15')
     }
 
-    const [lng, lat] = siteCoordinates
-    window.open(
-      `${mermaidExploreLink}/?sample_event_id=${sampleEventId}&lat=${lat}&lng=${lng}&zoom=15`,
-      '_blank',
-    )
+    window.open(`${mermaidExploreLink}/?${queryParams.toString()}`, '_blank')
   }
 
   return (
@@ -117,11 +115,11 @@ const RecordFormTitle = ({
       {label && (
         <ProjectTooltip forwardedAs="h2" text={label} tooltipText="Label" id="label-tooltip" />
       )}
-      {isExploreLaunchEnabledForUser && (
+      {isExploreLaunchEnabledForUser && sampleEventId && (
         <MuiTooltip title={language.pages.gotoExplore('this Sample Event')} placement="top" arrow>
           <IconButton
             type="button"
-            aria-label="View MERMAID Explore"
+            aria-label={language.pages.gotoExplore('this Sample Event')}
             onClick={handleExploreButtonClick}
           >
             <BiggerIconGlobe />

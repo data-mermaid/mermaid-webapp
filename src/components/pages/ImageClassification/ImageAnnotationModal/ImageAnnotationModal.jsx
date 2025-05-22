@@ -14,6 +14,7 @@ import {
   LegendSquare,
   LoadingContainer,
 } from './ImageAnnotationModal.styles'
+import language from '../../../../language'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
@@ -180,7 +181,6 @@ const ImageAnnotationModal = ({
         title={dataToReview?.original_image_name ?? ''}
         isOpen
         onDismiss={handleCloseModal}
-        contentOverflowIsVisible={true}
         maxWidth="fit-content"
         mainContent={
           dataToReview && !isSaving && imageScale ? (
@@ -223,12 +223,12 @@ const ImageAnnotationModal = ({
           <Footer>
             <Legend>
               <LegendItem>
-                <LegendSquare color={COLORS.unconfirmed} />
-                Unconfirmed
-              </LegendItem>
-              <LegendItem>
                 <LegendSquare color={COLORS.confirmed} />
                 Confirmed
+              </LegendItem>
+              <LegendItem>
+                <LegendSquare color={COLORS.unconfirmed} />
+                Unconfirmed
               </LegendItem>
               <LegendItem>
                 <LegendSquare color={COLORS.unclassified} />
@@ -237,10 +237,10 @@ const ImageAnnotationModal = ({
             </Legend>
             <div>
               <ButtonSecondary type="button" onClick={handleCloseModal} disabled={isSaving}>
-                Cancel
+                {language.buttons.close}
               </ButtonSecondary>
               <ButtonPrimary type="button" onClick={handleSaveChanges} disabled={isSaving}>
-                Save Changes
+                {language.buttons.saveChanges}
               </ButtonPrimary>
             </div>
           </Footer>

@@ -61,7 +61,7 @@ import { PENDING_USER_PROFILE_NAME, PAGE_SIZE_DEFAULT } from '../../../library/c
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { LabelContainer } from '../../generic/form'
 import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
-import UserRolesInfoModal from '../../UserRolesInfoModal/UserRolesInfoModal'
+import UserRolesInfoModal from '../../UserRolesInfoModal'
 import { UserIcon } from '../../UserIcon/UserIcon'
 
 const getRoleLabel = (roleCode) => {

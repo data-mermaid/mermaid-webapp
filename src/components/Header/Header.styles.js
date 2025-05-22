@@ -13,7 +13,7 @@ export const StyledHeader = styled('header')`
   position: fixed;
   width: 100%;
   top: 0;
-  z-index: 102;
+  z-index: ${theme.zIndex.toolbar};
   height: ${theme.spacing.headerHeight};
 `
 export const UserButton = styled('button')`
