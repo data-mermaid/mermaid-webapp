@@ -261,13 +261,6 @@ const deleteProject = (project) => {
   }
 }
 
-const removePhotoModal = {
-  title: 'Remove Photo',
-  prompt: 'Are you sure you want to remove this photo?',
-  yes: 'Remove Photo',
-  no: 'Cancel',
-}
-
 const loadingIndicator = {
   loadingPrimary: 'Loading',
   loadingSecondary: 'Still working...',
@@ -1656,6 +1649,12 @@ const imageClassification = {
     },
     success: 'Photos uploaded successfully.',
   },
+  removePhotoModal: {
+    title: 'Remove Photo',
+    prompt: 'Are you sure you want to remove this photo?',
+    yes: 'Remove Photo',
+    no: 'Cancel',
+  },
 }
 
 export default {
@@ -1670,7 +1669,6 @@ export default {
   gfcrNewIndicatorSetModal,
   deleteProject,
   deleteRecord,
-  removePhotoModal,
   error,
   getResolveModalLanguage,
   getValidationMessage,

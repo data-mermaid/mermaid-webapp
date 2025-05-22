@@ -8,7 +8,8 @@ import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaid
 import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
+import Modal, { RightFooter } from '../../../generic/Modal/Modal'
+import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 import { InputWrapper } from '../../../generic/form'
 import { MuiTooltip } from '../../../generic/MuiTooltip'
 import { RowRight } from '../../../generic/positioning'
@@ -23,7 +24,7 @@ import getObservationValidationInfo from '../../collectRecordFormPages/CollectRe
 import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
 import { getIsImageProcessed } from '../getIsImageProcessed'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
-import RemovePhotoModal from '../../../RemovePhotoModal/RemovePhotoModal'
+import LoadingModal from '../../../LoadingModal'
 import {
   EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD,
   IMAGE_CLASSIFICATION_STATUS,
@@ -121,6 +122,7 @@ const ImageClassificationObservationTable = ({
   const [isRemovingPhoto, setIsRemovingPhoto] = useState(false)
 
   const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
+  const removeModalText = language.imageClassification.removePhotoModal
 
   const observationsSummaryStats = useMemo(() => {
     if (!distilledImages.length || !benthicAttributes) {
@@ -374,6 +376,26 @@ const ImageClassificationObservationTable = ({
   const handleRowMouseLeave = () => {
     setHoveredImageIndex(null)
   }
+
+  const removePhotoModal = (
+    <>
+      <Modal
+        title={removeModalText.title}
+        isOpen={isRemovePhotoModalOpen}
+        onDismiss={closeRemovePhotoModal}
+        mainContent={removeModalText.prompt}
+        footerContent={
+          <RightFooter>
+            <ButtonSecondary onClick={closeRemovePhotoModal}>{removeModalText.no}</ButtonSecondary>
+            <ButtonCaution disabled={isRemovingPhoto} onClick={handleRemovePhoto}>
+              {removeModalText.yes}
+            </ButtonCaution>
+          </RightFooter>
+        }
+      />
+      {isRemovingPhoto && <LoadingModal />}
+    </>
+  )
 
   return (
     <>
@@ -660,13 +682,7 @@ const ImageClassificationObservationTable = ({
           onAnnotationSaveSuccess={fetchImages}
         />
       ) : undefined}
-      <RemovePhotoModal
-        isOpen={isRemovePhotoModalOpen}
-        isLoading={isRemovingPhoto}
-        onDismiss={closeRemovePhotoModal}
-        modalText={language.removePhotoModal}
-        removePhoto={handleRemovePhoto}
-      />
+      {removePhotoModal}
     </>
   )
 }
