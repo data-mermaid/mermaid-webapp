@@ -173,7 +173,11 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
               }
               contents={
                 <UserMenu>
-                  <GlobalLinks />
+                  <GlobalLinks
+                    isAppOnline={isAppOnline}
+                    isExploreLaunchEnabledForUser={isExploreLaunchEnabledForUser}
+                    mermaidExploreLink={mermaidExploreLink}
+                  />
                   {currentUser && <LoggedInAs>Logged in as {userDisplayName}</LoggedInAs>}
                   <UserMenuDropDownContent />
                 </UserMenu>
