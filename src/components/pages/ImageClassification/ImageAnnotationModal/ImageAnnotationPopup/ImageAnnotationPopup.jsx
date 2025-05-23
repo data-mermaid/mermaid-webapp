@@ -26,7 +26,7 @@ const ImageAnnotationPopup = ({
                                   zoomToSelectedPoint,
                                   selectNextUnconfirmedPoint,
                               }) => {
-    const {t, i18n} = useTranslation()
+    const {t} = useTranslation()
     const selectedPoint = dataToReview.points.find((point) => point.id === pointId)
     const isSelectedPointConfirmed = selectedPoint.annotations[0]?.is_confirmed
     const areAnyClassifierGuesses = selectedPoint.annotations.filter(
