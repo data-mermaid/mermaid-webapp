@@ -1,6 +1,16 @@
 {
-  "imageClassification": {
-    "classifierGuesses_one": "Classifier guess",
-    "classifierGuesses_other": "Classifier guesses"
+  "image_classification": {
+    "classifier_guesses_one": "Classifier guess",
+    "classifier_guesses_other": "Classifier guesses",
+    "confidence": "Confidence",
+    "annotation": {
+      "confirm": "Confirm",
+      "confirmed": "Confirmed",
+      "next_unconfirmed_point": "Next unconfirmed point"
+    }
+  },
+  "map_tooling": {
+    "reset_zoom": "Reset zoom",
+    "zoom_to_point": "Zoom to point"
   }
 }
