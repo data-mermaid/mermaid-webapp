@@ -4,14 +4,12 @@ import PropTypes from 'prop-types'
 import {
   ButtonZoom,
   TableWithNoMinWidth,
-  TdConfirmed,
   TdStatus,
-  TdUnconfirmed,
   TdZoom,
   TrImageClassification,
 } from './ImageAnnotationModal.styles'
 import { ButtonSecondary } from '../../../generic/buttons'
-import { Tr, Th, Td, TableOverflowWrapper, thStyles } from '../../../generic/Table/table'
+import { TableOverflowWrapper, Td, Th, thStyles, Tr } from '../../../generic/Table/table'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { IconZoomIn } from '../../../icons'
 import { MuiTooltipDark } from '../../../generic/MuiTooltip'
@@ -80,18 +78,17 @@ const ImageAnnotationModalTable = ({
         <thead>
           <Tr style={{ ...thStyles }}>
             <Th />
-            <Th>{language.imageClassification.imageClassificationModal.attributeGrowthForm}</Th>
+            <Th style={{ maxWidth: '200px' /**force text wrapping**/ }}>
+              {language.imageClassification.imageClassificationModal.attributeGrowthForm}
+            </Th>
             <MuiTooltipDark
-              title={language.imageClassification.imageClassificationModal.confirmedCount}
+              title={language.imageClassification.imageClassificationModal.confirmedTotal}
             >
-              <Th>✓</Th>
+              <Th>{language.imageClassification.imageClassificationModal.confirmed}</Th>
             </MuiTooltipDark>
-            <MuiTooltipDark
-              title={language.imageClassification.imageClassificationModal.unconfirmedCount}
-            >
-              <Th>?</Th>
-            </MuiTooltipDark>
-            <Th>{language.imageClassification.imageClassificationModal.status}</Th>
+            <Th style={{ textAlign: 'center' }}>
+              {language.imageClassification.imageClassificationModal.status}
+            </Th>
           </Tr>
         </thead>
         <tbody>
@@ -123,22 +120,19 @@ const ImageAnnotationModalTable = ({
                   </TdZoom>
                   {/* All points in a row will have the same ba_gr label */}
                   <Td>{tableData[rowKey][0].annotations[0].ba_gr_label}</Td>
-                  <TdConfirmed align="right" $hasConfirmedPoint={!!confirmedCount}>
-                    {confirmedCount}
-                  </TdConfirmed>
-                  <TdUnconfirmed align="right" $hasUnconfirmedPoint={!!unconfirmedCount}>
-                    {unconfirmedCount}
-                  </TdUnconfirmed>
+                  <Td align="right">
+                    {confirmedCount} / {unconfirmedCount + confirmedCount}
+                  </Td>
                   <TdStatus align="center">
                     {!unconfirmedCount ? (
-                      'Confirmed'
+                      language.imageClassification.imageClassificationModal.confirmed
                     ) : (
                       <MuiTooltipDark title="Confirm all points">
                         <ButtonSecondary
                           type="button"
                           onClick={(e) => handleRowConfirm(e, tableData[rowKey])}
                         >
-                          {language.buttons.confirm}
+                          {language.buttons.confirmAll}
                         </ButtonSecondary>
                       </MuiTooltipDark>
                     )}

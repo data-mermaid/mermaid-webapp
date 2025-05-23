@@ -61,11 +61,12 @@ const apiDataTableNames = {
 }
 
 const buttons = {
+  addRow: 'Add row',
   cancel: 'Cancel',
   close: 'Close',
   confirm: 'Confirm',
+  confirmAll: 'Confirm all',
   saveChanges: 'Save Changes',
-  addRow: 'Add row',
 }
 
 const error = {
@@ -521,7 +522,7 @@ const pages = {
       deleteSiteOrRegimes: 'Delete site or management regimes',
       downloadSitesAndRegimes: 'Download sites and management regimes',
       createValidateSubmitSampleUnits: 'Create, validate, and submit sample units',
-      deleteSampleUnits: 'Delete unsubmited sample units',
+      deleteSampleUnits: 'Delete unsubmitted sample units',
       editSampleUnits: 'Edit submitted sample units',
       transferSampleUnits: 'Transfer unsubmitted sample units',
       downloadSampleUnits: 'Download submitted sample units',
@@ -1625,11 +1626,14 @@ const imageClassification = {
     offlineBody: 'This sample unit is using image classification and is unavailable offline.',
   },
   imageClassificationModal: {
+    confirm: 'Confirm',
+    confirmed: 'Confirmed',
     confirmedCount: 'Confirmed count',
+    confirmedTotal: 'Confirmed / total',
     unconfirmedCount: 'Unconfirmed count',
     status: 'Status',
     review: 'Review',
-    attributeGrowthForm: 'Benthic attribute and growth form',
+    attributeGrowthForm: 'Benthic attribute / growth form',
     tooltip: {
       reviewPhoto: 'Review this photo',
       removePhoto: 'Remove this photo',

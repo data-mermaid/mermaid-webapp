@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
+import theme from '../../../../theme'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Modal from '../../../generic/Modal/Modal'
@@ -227,7 +228,7 @@ const ImageAnnotationModal = ({
                 Confirmed
               </LegendItem>
               <LegendItem>
-                <LegendSquare color={COLORS.unconfirmed} />
+                <LegendSquare style={{ border: `3px dotted ${theme.color.brandSecondary}` }} />
                 Unconfirmed
               </LegendItem>
               <LegendItem>
