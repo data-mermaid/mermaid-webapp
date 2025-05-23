@@ -38,6 +38,7 @@ const ImageUploadModal = ({
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
+  const minImageWidthAndHeight = 1124
   const maxWidth = 8000
   const maxHeight = 8000
   const uploadText = language.imageClassification.imageClassficationModal
@@ -58,6 +59,10 @@ const ImageUploadModal = ({
         img.onload = () => {
           if (isCancelledRef.current) {
             return resolve({ file, valid: false, cancelled: true })
+          }
+
+          if (img.width < minImageWidthAndHeight || img.height < minImageWidthAndHeight) {
+            return resolve({ file, valid: false, tooSmall: true })
           }
 
           if (img.width <= maxWidth && img.height <= maxHeight) {
@@ -138,7 +143,11 @@ const ImageUploadModal = ({
 
       const result = await validateDimensions(file)
       if (!result.valid || result.corrupt) {
-        toast.error(`File is invalid or corrupt: ${file.name}`)
+        if (result.tooSmall) {
+          toast.error(`Image Too Small: ${file.name}`)
+        } else {
+          toast.error(`File is invalid or corrupt: ${file.name}`)
+        }
         continue
       }
 
