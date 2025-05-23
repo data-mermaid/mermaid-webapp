@@ -1636,7 +1636,6 @@ const imageClassification = {
     status: 'Status',
     review: 'Review',
     attributeGrowthForm: 'Benthic attribute / growth form',
-    attributeGrowthForm: 'Benthic attribute and growth form',
     imageMap: {
       zoomIn: 'Zoom in',
       zoomOut: 'Zoom out',

@@ -419,7 +419,7 @@ const ImageAnnotationModalMap = ({
         }
         const [{ properties }] = features ?? []
         const label = properties?.isUnclassified
-          ? language.imageClassification.imageClassficationModal.unclassified
+          ? language.imageClassification.imageClassificationModal.unclassified
           : properties?.ba_gr_label
         const popupContent = <LabelPopup>{label}</LabelPopup>
         const popupContentHack = document.createElement('div')
@@ -719,14 +719,14 @@ const ImageAnnotationModalMap = ({
         <MapButtonContainer>
           <ConnectedMapControlButtonContainer>
             <MuiTooltipDarkRight
-              title={language.imageClassification.imageClassficationModal.imageMap.zoomIn}
+              title={language.imageClassification.imageClassificationModal.imageMap.zoomIn}
             >
               <MapControlButton type="button" onClick={zoomMapIn}>
                 <IconPlus />
               </MapControlButton>
             </MuiTooltipDarkRight>
             <MuiTooltipDarkRight
-              title={language.imageClassification.imageClassficationModal.imageMap.zoomOut}
+              title={language.imageClassification.imageClassificationModal.imageMap.zoomOut}
             >
               <MapControlButton type="button" onClick={zoomMapOut}>
                 <IconMinus />
@@ -734,7 +734,7 @@ const ImageAnnotationModalMap = ({
             </MuiTooltipDarkRight>
           </ConnectedMapControlButtonContainer>
           <MuiTooltipDarkRight
-            title={language.imageClassification.imageClassficationModal.imageMap.resetZoom}
+            title={language.imageClassification.imageClassificationModal.imageMap.resetZoom}
           >
             <MapControlButton type="button" onClick={resetZoom}>
               <IconRefresh />
@@ -742,7 +742,7 @@ const ImageAnnotationModalMap = ({
           </MuiTooltipDarkRight>
           <MuiTooltipDarkRight
             title={
-              language.imageClassification.imageClassficationModal.imageMap.toggleTableVisibility
+              language.imageClassification.imageClassificationModal.imageMap.toggleTableVisibility
             }
           >
             <MapControlButton
@@ -757,7 +757,7 @@ const ImageAnnotationModalMap = ({
           </MuiTooltipDarkRight>
           <MuiTooltipDarkRight
             title={
-              language.imageClassification.imageClassficationModal.imageMap.toggleLabelVisibility
+              language.imageClassification.imageClassificationModal.imageMap.toggleLabelVisibility
             }
           >
             <MapControlButton type="button" onClick={toggleLabels} $isSelected={areLabelsShowing}>

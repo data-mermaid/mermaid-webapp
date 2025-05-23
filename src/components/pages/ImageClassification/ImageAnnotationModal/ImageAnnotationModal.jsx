@@ -87,7 +87,7 @@ const ImageAnnotationModal = ({
       const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
       return (
         matchingBenthicAttribute?.name ??
-        language.imageClassification.imageClassficationModal.unclassified
+        language.imageClassification.imageClassificationModal.unclassified
       )
     },
     [benthicAttributes],
@@ -118,7 +118,7 @@ const ImageAnnotationModal = ({
             if (point.annotations.length === 0) {
               point.annotations.push({
                 ba_gr: unclassifiedGuid,
-                ba_gr_label: language.imageClassification.imageClassficationModal.unclassified,
+                ba_gr_label: language.imageClassification.imageClassificationModal.unclassified,
               })
             }
             const sortedAnnotations = point.annotations?.toSorted(prioritizeConfirmedAnnotations)
@@ -140,7 +140,7 @@ const ImageAnnotationModal = ({
             callback: () => {
               toast.error(
                 ...getToastArguments(
-                  `${language.imageClassification.imageClassficationModal.errors.failedFetchAnnotations} ${error.message}`,
+                  `${language.imageClassification.imageClassificationModal.errors.failedFetchAnnotations} ${error.message}`,
                 ),
               )
             },
@@ -160,7 +160,8 @@ const ImageAnnotationModal = ({
     if (
       !isDataUpdatedSinceLastSave ||
       window.confirm(
-        language.imageClassification.imageClassficationModal.userMessage.confirmDiscardImageChanges,
+        language.imageClassification.imageClassificationModal.userMessage
+          .confirmDiscardImageChanges,
       )
     ) {
       setImageId()
@@ -175,7 +176,9 @@ const ImageAnnotationModal = ({
       .then(() => {
         setImageId()
         onAnnotationSaveSuccess()
-        toast.success(language.imageClassification.imageClassficationModal.success.savedAnnotations)
+        toast.success(
+          language.imageClassification.imageClassificationModal.success.savedAnnotations,
+        )
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -183,7 +186,7 @@ const ImageAnnotationModal = ({
           callback: () => {
             toast.error(
               ...getToastArguments(
-                `${language.imageClassification.imageClassficationModal.errors.failedSaveAnnotations} ${error.message}`,
+                `${language.imageClassification.imageClassificationModal.errors.failedSaveAnnotations} ${error.message}`,
               ),
             )
           },
@@ -245,15 +248,15 @@ const ImageAnnotationModal = ({
             <Legend>
               <LegendItem>
                 <LegendSquare color={COLORS.confirmed} />
-                {language.imageClassification.imageClassficationModal.confirmed}
+                {language.imageClassification.imageClassificationModal.confirmed}
               </LegendItem>
               <LegendItem>
                 <LegendSquare style={{ border: `3px dotted ${theme.color.brandSecondary}` }} />
-                {language.imageClassification.imageClassficationModal.unconfirmed}
+                {language.imageClassification.imageClassificationModal.unconfirmed}
               </LegendItem>
               <LegendItem>
                 <LegendSquare color={COLORS.unclassified} />
-                {language.imageClassification.imageClassficationModal.unclassified}
+                {language.imageClassification.imageClassificationModal.unclassified}
               </LegendItem>
             </Legend>
             <div>

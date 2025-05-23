@@ -42,7 +42,7 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
             ba_gr: point.annotations[0]?.ba_gr,
             ba_gr_label:
               point.annotations[0]?.ba_gr_label ??
-              language.imageClassification.imageClassficationModal.unclassified,
+              language.imageClassification.imageClassificationModal.unclassified,
             isUnclassified: point.annotations[0].ba_gr === unclassifiedGuid,
             isUnconfirmed: !point.annotations[0]?.is_confirmed,
             isConfirmed: !!point.annotations[0]?.is_confirmed,
@@ -94,7 +94,7 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
             id: point.id,
             ba_gr_label:
               point.annotations[0]?.ba_gr_label ??
-              language.imageClassification.imageClassficationModal.unclassified,
+              language.imageClassification.imageClassificationModal.unclassified,
           },
         }
       }),

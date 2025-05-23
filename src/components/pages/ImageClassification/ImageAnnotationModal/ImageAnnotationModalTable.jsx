@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import {
   ButtonZoom,
   TableWithNoMinWidth,
-  TdStatus,
   TdZoom,
   TrImageClassification,
 } from './ImageAnnotationModal.styles'
@@ -99,20 +98,20 @@ const ImageAnnotationModalTable = ({
       <TableOverflowWrapper id="annotation-modal-table">
         <TableWithNoMinWidth aria-labelledby="table-label">
           <thead>
-          <Tr style={{ ...thStyles }}>
-            <Th />
-            <Th style={{ maxWidth: '200px' /**force text wrapping**/ }}>
-              {language.imageClassification.imageClassificationModal.attributeGrowthForm}
-            </Th>
-            <MuiTooltipDark
-              title={language.imageClassification.imageClassificationModal.confirmedTotal}
-            >
-              <Th>{language.imageClassification.imageClassificationModal.confirmed}</Th>
-            </MuiTooltipDark>
-            <Th style={{ textAlign: 'center' }}>
-              {language.imageClassification.imageClassificationModal.status}
-            </Th>
-          </Tr>
+            <Tr style={{ ...thStyles }}>
+              <Th />
+              <Th style={{ maxWidth: '200px' /**force text wrapping**/ }}>
+                {language.imageClassification.imageClassificationModal.attributeGrowthForm}
+              </Th>
+              <MuiTooltipDark
+                title={language.imageClassification.imageClassificationModal.confirmedTotal}
+              >
+                <Th>{language.imageClassification.imageClassificationModal.confirmed}</Th>
+              </MuiTooltipDark>
+              <Th style={{ textAlign: 'center' }}>
+                {language.imageClassification.imageClassificationModal.status}
+              </Th>
+            </Tr>
           </thead>
           <tbody>
             {Object.keys(tableData)
@@ -133,7 +132,7 @@ const ImageAnnotationModalTable = ({
                     <TdZoom>
                       <MuiTooltipDark
                         title={
-                          language.imageClassification.imageClassficationModal.tooltip
+                          language.imageClassification.imageClassificationModal.tooltip
                             .zoomToAttribute
                         }
                       >
@@ -182,11 +181,11 @@ const ImageAnnotationModalTable = ({
                         </Td>
                         <Td style={{ textAlign: 'center', width: '104px' }}>
                           {!unconfirmedCount ? (
-                            language.imageClassification.imageClassficationModal.confirmed
+                            language.imageClassification.imageClassificationModal.confirmed
                           ) : (
                             <MuiTooltipDark
                               title={
-                                language.imageClassification.imageClassficationModal.tooltip
+                                language.imageClassification.imageClassificationModal.tooltip
                                   .confirmAllPoints
                               }
                             >
