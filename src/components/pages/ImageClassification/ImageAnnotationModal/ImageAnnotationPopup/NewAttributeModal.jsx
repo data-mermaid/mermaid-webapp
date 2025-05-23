@@ -23,7 +23,7 @@ const NewAttributeModal = ({
 }) => {
   return (
     <Modal
-      title={language.table.addNewRow}
+      title={language.imageClassification.imageClassficationModal.addAttribute}
       isOpen={
         !!benthicAttributeSelectOptions.length &&
         !!growthFormSelectOptions.length &&

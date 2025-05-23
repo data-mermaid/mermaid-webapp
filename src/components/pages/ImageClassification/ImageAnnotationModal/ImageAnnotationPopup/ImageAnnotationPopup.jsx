@@ -14,6 +14,7 @@ import {
 import './ImageAnnotationPopup.css'
 import { IconArrowRight, IconZoomIn, IconZoomOut } from '../../../../icons'
 import { MuiTooltipDark } from '../../../../generic/MuiTooltip'
+import language from '../../../../../language'
 
 const ImageAnnotationPopup = ({
   dataToReview,
@@ -64,8 +65,9 @@ const ImageAnnotationPopup = ({
       {areAnyClassifierGuesses ? (
         <div aria-labelledby="table-label">
           <PointPopupSectionHeader>
-            <span>Classifier Guesses</span>
-            <span>Confidence</span>
+            {/**Needs plurals**/}
+            <span>{language.imageClassification.classifierGuesses}</span>
+            <span>{language.imageClassification.confidence}</span>
           </PointPopupSectionHeader>
 
           <ClassifierGuesses
