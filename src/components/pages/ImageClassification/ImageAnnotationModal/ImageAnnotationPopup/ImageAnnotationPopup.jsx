@@ -15,6 +15,7 @@ import './ImageAnnotationPopup.css'
 import { IconArrowRight, IconZoomIn, IconZoomOut } from '../../../../icons'
 import { MuiTooltipDark } from '../../../../generic/MuiTooltip'
 import language from '../../../../../language'
+import { useTranslation } from 'react-i18next'
 
 const ImageAnnotationPopup = ({
   dataToReview,
@@ -26,9 +27,10 @@ const ImageAnnotationPopup = ({
   zoomToSelectedPoint,
   selectNextUnconfirmedPoint,
 }) => {
+  const { t, i18n } = useTranslation()
   const selectedPoint = dataToReview.points.find((point) => point.id === pointId)
   const isSelectedPointConfirmed = selectedPoint.annotations[0]?.is_confirmed
-  const areAnyClassifierGuesses = !!selectedPoint.annotations.filter(
+  const areAnyClassifierGuesses = selectedPoint.annotations.filter(
     (annotation) => annotation.is_machine_created,
   ).length
 
@@ -62,11 +64,12 @@ const ImageAnnotationPopup = ({
 
   return (
     <>
-      {areAnyClassifierGuesses ? (
+      {!!areAnyClassifierGuesses && (
         <div aria-labelledby="table-label">
           <PointPopupSectionHeader>
-            {/**Needs plurals**/}
-            <span>{language.imageClassification.classifierGuesses}</span>
+            <span>
+              {t('imageClassification.classifierGuesses', { count: areAnyClassifierGuesses })}
+            </span>
             <span>{language.imageClassification.confidence}</span>
           </PointPopupSectionHeader>
 
@@ -77,7 +80,7 @@ const ImageAnnotationPopup = ({
             setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
           />
         </div>
-      ) : null}
+      )}
       <SelectAttributeFromClassifierGuesses
         selectedPoint={selectedPoint}
         dataToReview={dataToReview}
