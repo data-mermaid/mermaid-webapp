@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import { VitePWA } from 'vite-plugin-pwa'
+import i18nextLoader from 'vite-plugin-i18next-loader'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -32,6 +33,7 @@ export default defineConfig({
 
       includeAssets: ['**/*'], //cache all the static assets in the public folder
     }),
+    i18nextLoader({ paths: ['./src/locales', './locales'] }),
   ],
   server: {
     port: 3000,
