@@ -504,6 +504,11 @@ export interface ImageClassificationPoint {
     ba_gr_label: string
     id: string
     is_confirmed: boolean
+    is_machine_created?: boolean
+    score?: number
+    benthicAttributeId?: string
+    growthFormId?: string
+    unconfirmedCount?: number
   }[]
 }
 
