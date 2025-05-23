@@ -10,7 +10,7 @@ i18next
     ),
   )
   .init({
-    fallbackLng: 'en-US',
+    fallbackLng: 'en',
   })
 
 export default i18next
