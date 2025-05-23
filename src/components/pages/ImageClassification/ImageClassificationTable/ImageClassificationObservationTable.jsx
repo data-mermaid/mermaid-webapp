@@ -8,7 +8,8 @@ import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaid
 import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
+import Modal, { RightFooter } from '../../../generic/Modal/Modal'
+import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 import { InputWrapper } from '../../../generic/form'
 import { MuiTooltip } from '../../../generic/MuiTooltip'
 import { RowRight } from '../../../generic/positioning'
@@ -23,7 +24,12 @@ import getObservationValidationInfo from '../../collectRecordFormPages/CollectRe
 import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
 import { getIsImageProcessed } from '../getIsImageProcessed'
 import ImageAnnotationModal from '../ImageAnnotationModal/ImageAnnotationModal'
-import { EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD } from '../imageClassificationConstants'
+import LoadingModal from '../../../LoadingModal'
+import {
+  EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD,
+  IMAGE_CLASSIFICATION_STATUS,
+  IMAGE_CLASSIFICATION_STATUS_LABEL,
+} from '../imageClassificationConstants'
 import {
   ImageWrapper,
   LoadingTableBody,
@@ -86,14 +92,6 @@ const SubHeaderRow = () => (
   </Tr>
 )
 
-const statusLabels = {
-  0: 'Unknown',
-  1: 'Queued',
-  2: 'Processing',
-  3: 'Completed',
-  4: 'Failed',
-}
-
 const ImageClassificationObservationTable = ({
   collectRecord = undefined,
   areValidationsShowing,
@@ -102,18 +100,22 @@ const ImageClassificationObservationTable = ({
   images,
   setImages,
 }) => {
-  const [imageId, setImageId] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId, recordId } = useParams()
+  const isFirstLoad = useRef(true)
+
+  const [imageId, setImageId] = useState()
   const [growthForms, setGrowthForms] = useState()
   const [benthicAttributes, setBenthicAttributes] = useState()
   const [distilledImages, setDistilledImages] = useState([])
   const [isFetching, setIsFetching] = useState(false)
-  const isFirstLoad = useRef(true)
-  const [deletingImage, setDeletingImage] = useState()
-  const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
   const [hoveredImageIndex, setHoveredImageIndex] = useState(null)
-  const handleHttpResponseError = useHttpResponseErrorHandler()
+  const [removingPhotoFile, setRemovingPhotoFile] = useState()
+  const [isRemovePhotoModalOpen, setIsRemovePhotoModalOpen] = useState(false)
+  const [isRemovingPhoto, setIsRemovingPhoto] = useState(false)
+
+  const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
 
   const observationsSummaryStats = useMemo(() => {
     if (!distilledImages.length || !benthicAttributes) {
@@ -151,16 +153,24 @@ const ImageClassificationObservationTable = ({
     }
   }
 
-  const handleRemoveImage = (file) => {
-    setDeletingImage(file.id)
+  const openRemovePhotoModal = (file) => {
+    setRemovingPhotoFile(file)
+    setIsRemovePhotoModalOpen(true)
+  }
+  const closeRemovePhotoModal = () => {
+    setIsRemovePhotoModalOpen(false)
+  }
+
+  const handleRemovePhoto = () => {
+    setIsRemovingPhoto(true)
 
     databaseSwitchboardInstance
-      .deleteImage(projectId, file.id)
+      .deleteImage(projectId, removingPhotoFile.id)
       .then(() => {
-        const updatedImages = images.filter((f) => f.id !== file.id)
+        const updatedImages = images.filter((f) => f.id !== removingPhotoFile.id)
         setImages(updatedImages)
 
-        toast.warn(language.imageClassification.imageClassficationModal.userMessage.photoRemoved)
+        toast.warn(language.imageClassification.imageClassificationModal.userMessage.photoRemoved)
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -168,7 +178,7 @@ const ImageClassificationObservationTable = ({
           callback: () => {
             toast.error(
               ...getToastArguments(
-                `${language.imageClassification.imageClassificationModal.errors.failedDeletion} ${file.original_image_name}. ${error.message}`,
+                `${language.imageClassification.imageClassificationModal.errors.failedDeletion} ${removingPhotoFile.original_image_name}. ${error.message}`,
               ),
             )
           },
@@ -176,7 +186,9 @@ const ImageClassificationObservationTable = ({
         })
       })
       .finally(() => {
-        setDeletingImage()
+        setRemovingPhotoFile()
+        setIsRemovingPhoto(false)
+        closeRemovePhotoModal()
       })
   }
 
@@ -358,6 +370,28 @@ const ImageClassificationObservationTable = ({
     setHoveredImageIndex(null)
   }
 
+  const removePhotoModal = (
+    <>
+      <Modal
+        title={language.imageClassification.removePhotoModal.title}
+        isOpen={isRemovePhotoModalOpen}
+        onDismiss={closeRemovePhotoModal}
+        mainContent={language.imageClassification.removePhotoModal.prompt}
+        footerContent={
+          <RightFooter>
+            <ButtonSecondary onClick={closeRemovePhotoModal}>
+              {language.buttons.cancel}
+            </ButtonSecondary>
+            <ButtonCaution disabled={isRemovingPhoto} onClick={handleRemovePhoto}>
+              {language.imageClassification.removePhotoModal.yes}
+            </ButtonCaution>
+          </RightFooter>
+        }
+      />
+      {isRemovingPhoto && <LoadingModal />}
+    </>
+  )
+
   return (
     <>
       <InputWrapper>
@@ -392,7 +426,8 @@ const ImageClassificationObservationTable = ({
                           data-tooltip={file.original_image_name}
                           onClick={() => handleImageClick(file)}
                           cursor={
-                            statusLabels[file.classification_status?.status] === 'Completed'
+                            file.classification_status?.status ===
+                            IMAGE_CLASSIFICATION_STATUS.completed
                               ? 'pointer'
                               : 'default'
                           }
@@ -411,7 +446,8 @@ const ImageClassificationObservationTable = ({
                         <StyledTd
                           colSpan={8}
                           textAlign={
-                            statusLabels[file.classification_status?.status] === 'Completed'
+                            file.classification_status?.status ===
+                            IMAGE_CLASSIFICATION_STATUS.completed
                               ? 'left'
                               : 'center'
                           }
@@ -419,10 +455,15 @@ const ImageClassificationObservationTable = ({
                           {!getIsImageProcessed(file.classification_status?.status) ? (
                             <>
                               <Spinner />
-                              {statusLabels[file.classification_status?.status]}...
+                              {
+                                IMAGE_CLASSIFICATION_STATUS_LABEL[
+                                  file.classification_status?.status
+                                ]
+                              }
+                              ...
                             </>
                           ) : (
-                            statusLabels[file.classification_status?.status]
+                            IMAGE_CLASSIFICATION_STATUS_LABEL[file.classification_status?.status]
                           )}
                         </StyledTd>
                       </Tr>
@@ -474,7 +515,10 @@ const ImageClassificationObservationTable = ({
                                   data-tooltip={file.original_image_name}
                                   onClick={() => handleImageClick(file)}
                                   cursor={
-                                    file.classification_status.status === 3 ? 'pointer' : 'default'
+                                    file.classification_status?.status ===
+                                    IMAGE_CLASSIFICATION_STATUS.completed
+                                      ? 'pointer'
+                                      : 'default'
                                   }
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
@@ -523,7 +567,7 @@ const ImageClassificationObservationTable = ({
                                 >
                                   <MuiTooltip
                                     title={
-                                      language.imageClassification.imageClassficationModal.tooltip
+                                      language.imageClassification.imageClassificationModal.tooltip
                                         .reviewPhoto
                                     }
                                   >
@@ -534,7 +578,7 @@ const ImageClassificationObservationTable = ({
                                         !getIsImageProcessed(file.classification_status?.status)
                                       }
                                     >
-                                      {language.imageClassification.imageClassficationModal.review}
+                                      {language.imageClassification.imageClassificationModal.review}
                                     </ButtonPrimary>
                                   </MuiTooltip>
                                 </StyledTd>
@@ -544,16 +588,16 @@ const ImageClassificationObservationTable = ({
                                 >
                                   <MuiTooltip
                                     title={
-                                      language.imageClassification.imageClassficationModal.tooltip
+                                      language.imageClassification.imageClassificationModal.tooltip
                                         .removePhoto
                                     }
                                   >
                                     <ButtonCaution
                                       type="button"
-                                      onClick={() => handleRemoveImage(file)}
+                                      onClick={() => openRemovePhotoModal(file)}
                                       disabled={
-                                        file.classification_status?.status !== 3 ||
-                                        deletingImage === file.id
+                                        file.classification_status?.status !==
+                                        IMAGE_CLASSIFICATION_STATUS.completed
                                       }
                                     >
                                       <IconClose aria-label="close" />
@@ -638,6 +682,7 @@ const ImageClassificationObservationTable = ({
           onAnnotationSaveSuccess={fetchImages}
         />
       ) : undefined}
+      {removePhotoModal}
     </>
   )
 }

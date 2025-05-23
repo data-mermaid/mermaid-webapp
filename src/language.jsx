@@ -1625,7 +1625,7 @@ const imageClassification = {
     offlineHeader: 'Sample unit observations unavailable offline',
     offlineBody: 'This sample unit is using image classification and is unavailable offline.',
   },
-  imageClassficationModal: {
+  imageClassificationModal: {
     confirm: 'Confirm',
     confirmed: 'Confirmed',
     confirmedCount: 'Confirmed count',
@@ -1652,6 +1652,11 @@ const imageClassification = {
       failedDeletion: 'Failed to delete photo: ',
     },
     success: 'Photos uploaded successfully.',
+  },
+  removePhotoModal: {
+    title: 'Remove Photo',
+    prompt: 'Are you sure you want to remove this photo?',
+    yes: 'Remove Photo',
   },
 }
 

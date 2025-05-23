@@ -79,15 +79,15 @@ const ImageAnnotationModalTable = ({
           <Tr style={{ ...thStyles }}>
             <Th />
             <Th style={{ maxWidth: '200px' /**force text wrapping**/ }}>
-              {language.imageClassification.imageClassficationModal.attributeGrowthForm}
+              {language.imageClassification.imageClassificationModal.attributeGrowthForm}
             </Th>
             <MuiTooltipDark
-              title={language.imageClassification.imageClassficationModal.confirmedTotal}
+              title={language.imageClassification.imageClassificationModal.confirmedTotal}
             >
-              <Th>{language.imageClassification.imageClassficationModal.confirmed}</Th>
+              <Th>{language.imageClassification.imageClassificationModal.confirmed}</Th>
             </MuiTooltipDark>
             <Th style={{ textAlign: 'center' }}>
-              {language.imageClassification.imageClassficationModal.status}
+              {language.imageClassification.imageClassificationModal.status}
             </Th>
           </Tr>
         </thead>
@@ -125,7 +125,7 @@ const ImageAnnotationModalTable = ({
                   </Td>
                   <TdStatus align="center">
                     {!unconfirmedCount ? (
-                      language.imageClassification.imageClassficationModal.confirmed
+                      language.imageClassification.imageClassificationModal.confirmed
                     ) : (
                       <MuiTooltipDark title="Confirm all points">
                         <ButtonSecondary
