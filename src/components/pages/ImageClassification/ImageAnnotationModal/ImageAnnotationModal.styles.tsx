@@ -45,10 +45,10 @@ export const LegendItem = styled.div`
 `
 
 export const LegendSquare = styled.div`
-  width: 12px;
-  height: 12px;
-  margin-right: 2px;
-  border: ${({ color }) => `2px solid ${color}`};
+  width: 15px;
+  height: 15px;
+  margin-right: 3px;
+  border: ${({ color }) => `3px solid ${color}`};
 `
 
 export const LoadingContainer = styled.div`
@@ -120,6 +120,7 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
   ${({ $isSelected }) =>
     $isSelected &&
     css`
+      background-color: ${COLORS.selected} !important; //hack to override the table row striping
       &::after {
         // this is a non-layout impacting hack to receive the selected row border
         content: '';
@@ -135,6 +136,9 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
     `}
 `
 
+export const TdStatus = styled(Td)`
+  width: 125px; // prevents shifts to layout when the status is confirmed
+`
 export const PointPopupSectionHeader = styled.div`
   ${thStyles}
   display: flex;

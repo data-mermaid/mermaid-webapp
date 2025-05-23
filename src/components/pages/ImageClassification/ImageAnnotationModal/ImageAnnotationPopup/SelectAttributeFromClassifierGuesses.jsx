@@ -123,7 +123,7 @@ const SelectAttributeFromClassifierGuesses = ({
     <>
       {isSelectedPointUnclassified && (
         <LabelThatLooksLikeATh>
-          {language.imageClassification.imageClassficationModal.attributeGrowthForm}
+          {language.imageClassification.imageClassificationModal.attributeGrowthForm}
         </LabelThatLooksLikeATh>
       )}
       <RowThatLooksLikeAnEvenTr>

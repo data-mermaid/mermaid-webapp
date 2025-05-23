@@ -44,6 +44,7 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
               point.annotations[0]?.ba_gr_label ??
               language.imageClassification.imageClassficationModal.unclassified,
             isUnclassified: point.annotations[0].ba_gr === unclassifiedGuid,
+            isUnconfirmed: !point.annotations[0]?.is_confirmed,
             isConfirmed: !!point.annotations[0]?.is_confirmed,
             isPointInLeftHalfOfImage,
             isPointInTopHalfOfImage,

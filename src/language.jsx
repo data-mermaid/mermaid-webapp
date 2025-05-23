@@ -61,11 +61,12 @@ const apiDataTableNames = {
 }
 
 const buttons = {
+  addRow: 'Add row',
   cancel: 'Cancel',
   close: 'Close',
   confirm: 'Confirm',
+  confirmAll: 'Confirm all',
   saveChanges: 'Save Changes',
-  addRow: 'Add row',
 }
 
 const error = {
@@ -521,7 +522,7 @@ const pages = {
       deleteSiteOrRegimes: 'Delete site or management regimes',
       downloadSitesAndRegimes: 'Download sites and management regimes',
       createValidateSubmitSampleUnits: 'Create, validate, and submit sample units',
-      deleteSampleUnits: 'Delete unsubmited sample units',
+      deleteSampleUnits: 'Delete unsubmitted sample units',
       editSampleUnits: 'Edit submitted sample units',
       transferSampleUnits: 'Transfer unsubmitted sample units',
       downloadSampleUnits: 'Download submitted sample units',
@@ -1624,14 +1625,17 @@ const imageClassification = {
     offlineHeader: 'Sample unit observations unavailable offline',
     offlineBody: 'This sample unit is using image classification and is unavailable offline.',
   },
-  imageClassficationModal: {
+  imageClassificationModal: {
+    confirm: 'Confirm',
     confirmed: 'Confirmed',
     confirmedCount: 'Confirmed count',
+    confirmedTotal: 'Confirmed / total',
     unconfirmedCount: 'Unconfirmed count',
     unclassified: 'Unclassified',
     unclassifiedPoint: 'Unclassified point',
     status: 'Status',
     review: 'Review',
+    attributeGrowthForm: 'Benthic attribute / growth form',
     attributeGrowthForm: 'Benthic attribute and growth form',
     imageMap: {
       zoomIn: 'Zoom in',
@@ -1666,6 +1670,11 @@ const imageClassification = {
       savedAnnotations: 'Successfully saved image annotations',
       uploadedPhotos: 'Photos uploaded successfully.',
     },
+  },
+  removePhotoModal: {
+    title: 'Remove Photo',
+    prompt: 'Are you sure you want to remove this photo?',
+    yes: 'Remove Photo',
   },
 }
 

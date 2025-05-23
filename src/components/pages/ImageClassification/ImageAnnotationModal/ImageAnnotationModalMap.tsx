@@ -25,7 +25,7 @@ import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/const
 import { ImageClassificationResponse } from '../../../../App/mermaidData/mermaidDataTypes'
 import { MapRef } from '../../../../types/map'
 import { MuiTooltipDarkRight } from '../../../generic/MuiTooltip'
-import { IconCircle, IconLabel, IconMinus, IconPlus, IconRefresh, IconTable } from '../../../icons'
+import { IconLabel, IconMinus, IconPlus, IconRefresh, IconTable } from '../../../icons'
 import {
   DEFAULT_MAP_ANIMATION_DURATION,
   DEFAULT_MAP_CENTER,
@@ -297,11 +297,29 @@ const ImageAnnotationModalMap = ({
           id: 'patches-status-layer',
           type: 'line',
           source: 'patches',
+          filter: ['case', ['get', 'isUnconfirmed'], false, ['get', 'isUnclassified'], false, true],
           paint: {
-            'line-width': 3,
-            'line-offset': -3,
-
             'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
+            'line-offset': -3,
+            'line-width': 3,
+          },
+        },
+        {
+          //Maplibre doesn't support conditional dashed items, this filter layer is a workaround
+          id: 'dotted-patches-status-layer',
+          type: 'line',
+          source: 'patches',
+          filter: ['case', ['get', 'isUnconfirmed'], true, ['get', 'isUnclassified'], true, false],
+          layout: {
+            'line-cap': 'round',
+            'line-join': 'round',
+            'line-round-limit': 1,
+          },
+          paint: {
+            'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
+            'line-dasharray': [1, 3],
+            'line-offset': -3,
+            'line-width': 3,
           },
         },
         {
@@ -400,13 +418,10 @@ const ImageAnnotationModalMap = ({
           return
         }
         const [{ properties }] = features ?? []
-        const confirmedStatus = properties?.isConfirmed ? 'confirmed' : 'unconfirmed'
-        const pointStatus = properties?.isUnclassified ? 'unclassified' : confirmedStatus
-        const popupContent = (
-          <LabelPopup>
-            <IconCircle style={{ color: COLORS[pointStatus] }} /> {properties?.ba_gr_label}
-          </LabelPopup>
-        )
+        const label = properties?.isUnclassified
+          ? language.imageClassification.imageClassficationModal.unclassified
+          : properties?.ba_gr_label
+        const popupContent = <LabelPopup>{label}</LabelPopup>
         const popupContentHack = document.createElement('div')
         ReactDOM.createRoot(popupContentHack).render(popupContent)
         let popupLngLat
@@ -635,6 +650,7 @@ const ImageAnnotationModalMap = ({
     if (!hasMapLoaded || !map.current) {
       return
     }
+
     const lineColor = [
       'case',
       [
@@ -642,14 +658,14 @@ const ImageAnnotationModalMap = ({
         ['get', 'id'],
         selectedPoint.id, //clicked patch id, Map based
       ],
-      COLORS.selected,
+      COLORS.selectedPoint,
 
       [
         '==', // checks if point on map is in selected row in table
         ['get', 'ba_gr'],
         selectedAttributeId, //table row ba_gr guid
       ],
-      COLORS.selected,
+      COLORS.selectedPoint,
 
       [
         '==', // checks if patch hovered on map

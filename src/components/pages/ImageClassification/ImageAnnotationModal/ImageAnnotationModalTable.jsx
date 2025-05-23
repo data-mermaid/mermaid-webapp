@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {
   ButtonZoom,
   TableWithNoMinWidth,
+  TdStatus,
   TdZoom,
   TrImageClassification,
 } from './ImageAnnotationModal.styles'
@@ -98,21 +99,20 @@ const ImageAnnotationModalTable = ({
       <TableOverflowWrapper id="annotation-modal-table">
         <TableWithNoMinWidth aria-labelledby="table-label">
           <thead>
-            <Tr style={{ ...thStyles }}>
-              <Th />
-              <Th>{language.imageClassification.imageClassficationModal.attributeGrowthForm}</Th>
-              <MuiTooltipDark
-                title={language.imageClassification.imageClassficationModal.confirmedCount}
-              >
-                <Th>✓</Th>
-              </MuiTooltipDark>
-              <MuiTooltipDark
-                title={language.imageClassification.imageClassficationModal.unconfirmedCount}
-              >
-                <Th>?</Th>
-              </MuiTooltipDark>
-              <Th>{language.imageClassification.imageClassficationModal.status}</Th>
-            </Tr>
+          <Tr style={{ ...thStyles }}>
+            <Th />
+            <Th style={{ maxWidth: '200px' /**force text wrapping**/ }}>
+              {language.imageClassification.imageClassificationModal.attributeGrowthForm}
+            </Th>
+            <MuiTooltipDark
+              title={language.imageClassification.imageClassificationModal.confirmedTotal}
+            >
+              <Th>{language.imageClassification.imageClassificationModal.confirmed}</Th>
+            </MuiTooltipDark>
+            <Th style={{ textAlign: 'center' }}>
+              {language.imageClassification.imageClassificationModal.status}
+            </Th>
+          </Tr>
           </thead>
           <tbody>
             {Object.keys(tableData)
@@ -153,7 +153,7 @@ const ImageAnnotationModalTable = ({
                       <Td colSpan={5} align="center" style={{ fontWeight: '700' }}>
                         <span>
                           {`${unclassifiedCount} ${
-                            language.imageClassification.imageClassficationModal.unclassifiedPoint
+                            language.imageClassification.imageClassificationModal.unclassifiedPoint
                           }${unclassifiedCount > 1 ? 's' : ''}`}
                         </span>
                       </Td>
@@ -194,7 +194,7 @@ const ImageAnnotationModalTable = ({
                                 type="button"
                                 onClick={(e) => handleRowConfirm(e, tableData[groupedTableRowId])}
                               >
-                                {language.buttons.confirm}
+                                {language.buttons.confirmAll}
                               </ButtonSecondary>
                             </MuiTooltipDark>
                           )}
