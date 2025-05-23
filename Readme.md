@@ -35,7 +35,7 @@
 - Collect Record form pages use two different approaches to managing form state. Formik had its limitations, so for the observations tables we opted to store form state with a reducer. This inconsistency has led to some tech debt and complexity that was determined to be acceptable, but its worth knowing when handling things like dirty form state, that there are two states to consider.
 - Hot reloading happens inconsistently, notably, changes to DatabaseSwitchboard code seem to require a manual browser refresh.
 - To reset the API and its database, run `make freshinstall`
-- This app was initialized with Create React App, and then migrated to vite. To avoid refactoring tests, we opted to use Jest to run tests instead of Vitest. If a package is installed that creates issues in tests, a possible solution might be to ensure it gets processed with babel in `jest.config.js`'s `transformIgnorePatterns` configuration.
+- This app was initialized with Create React App, and then migrated to vite. To avoid refactoring tests, we opted to use Jest to run tests instead of Vitest. If a package is installed that creates issues in tests, a possible solution might be to ensure it gets processed with babel in `jest.config.ts`'s `transformIgnorePatterns` configuration.
 
 ### General Architecture
 

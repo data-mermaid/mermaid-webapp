@@ -1,4 +1,4 @@
-module.exports = {
+export default  {
   restoreMocks: true,
   transformIgnorePatterns: [
     '<rootDir>/node_modules/(?!(@iconify-icons|@reach|@fontsource|uuid|dexie)/.*)', // ignore transforming node_modules except for the libraries inside the inner brackets
