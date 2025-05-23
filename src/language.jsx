@@ -1654,7 +1654,7 @@ const imageClassification = {
     success: 'Photos uploaded successfully.',
   },
   removePhotoModal: {
-    title: 'Remove Photo from Image Classification',
+    title: 'Remove Photo',
     prompt: 'Are you sure you want to remove this photo?',
     yes: 'Remove Photo',
   },
