@@ -12,6 +12,7 @@ import { Select } from '../../../../generic/form'
 import { useSelectNewAttribute } from '../../useSelectNewAttribute'
 import NewAttributeModal from './NewAttributeModal'
 import language from '../../../../../language'
+import { unclassifiedGuid } from '../../../../../library/constants/constants'
 
 const isClassified = ({ annotations }) => annotations.length > 0
 
@@ -28,7 +29,7 @@ const SelectAttributeFromClassifierGuesses = ({
   databaseSwitchboardInstance,
 }) => {
   const rowKeyForPoint = selectedPoint.annotations[0]?.ba_gr
-  const isSelectedPointUnclassified = selectedPoint.annotations?.length === 0
+  const isSelectedPointUnclassified = rowKeyForPoint === unclassifiedGuid
 
   const existingRowDropdownOptions = dataToReview.points
     .reduce((acc, currentPoint) => {
@@ -41,7 +42,8 @@ const SelectAttributeFromClassifierGuesses = ({
       if (
         isClassified(currentPoint) &&
         !isOptionAlreadyAdded(acc, ba_gr) &&
-        !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr)
+        !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr) &&
+        ba_gr !== unclassifiedGuid
       ) {
         acc.push({ label: ba_gr_label, value: ba_gr })
       }

@@ -176,6 +176,7 @@ export interface FishBeltRecord {
     observers: Observer[]
   }
 }
+
 export interface BenthicPhotoQuadratRecord {
   id: string
   data: {
@@ -386,9 +387,11 @@ type DepthValidationContext = string | { depth_range: number[] }
 type LenSurveyedValidationContext = string | { len_surveyed_range: number[] }
 type SampleTimeValidationContext = string | { time_range: string[] }
 type Validations = ValidationObjectBase[]
+
 interface DepthValidation extends ValidationObjectBase {
   context: DepthValidationContext
 }
+
 interface LenSurveyedValidation extends ValidationObjectBase {
   context: LenSurveyedValidationContext
 }
@@ -396,7 +399,9 @@ interface LenSurveyedValidation extends ValidationObjectBase {
 interface SampleTimeValidation extends ValidationObjectBase {
   context: SampleTimeValidationContext
 }
+
 export type ObservationsValidation = Validations
+
 export interface FishBeltValidation {
   depth: DepthValidation
   len_surveyed: LenSurveyedValidation
@@ -444,6 +449,7 @@ export interface SubNavNode {
   number: number | string
   label: string
 }
+
 export type MermaidRecord =
   | BenthicLitRecord
   | BenthicPhotoQuadratRecord
@@ -489,8 +495,21 @@ export type FishGroupings = FishFamily[]
 export type FishSpecies = FishSpeciesSingular[]
 
 export interface ImageClassificationPoint {
+  id: string
   row: number
   column: number
+  annotations: {
+    ba_gr: string
+    benthic_attribute: string
+    ba_gr_label: string
+    id: string
+    is_confirmed: boolean
+    is_machine_created?: boolean
+    score?: number
+    benthicAttributeId?: string
+    growthFormId?: string
+    unconfirmedCount?: number
+  }[]
 }
 
 export interface ImageClassificationResponse {
