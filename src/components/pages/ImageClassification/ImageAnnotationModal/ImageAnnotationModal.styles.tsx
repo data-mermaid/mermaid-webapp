@@ -10,14 +10,6 @@ interface IsSelectedProps {
   $isSelected?: boolean
 }
 
-interface HasConfirmedPoint {
-  $hasConfirmedPoint?: boolean
-}
-
-interface HasUnconfirmedPoint {
-  $hasUnconfirmedPoint?: boolean
-}
-
 export const RowThatLooksLikeAnEvenTr = styled.div`
   display: flex;
   padding: 10px;
@@ -53,10 +45,10 @@ export const LegendItem = styled.div`
 `
 
 export const LegendSquare = styled.div`
-  width: 12px;
-  height: 12px;
-  margin-right: 2px;
-  border: ${({ color }) => `2px solid ${color}`};
+  width: 15px;
+  height: 15px;
+  margin-right: 3px;
+  border: ${({ color }) => `3px solid ${color}`};
 `
 
 export const LoadingContainer = styled.div`
@@ -128,6 +120,7 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
   ${({ $isSelected }) =>
     $isSelected &&
     css`
+      background-color: ${COLORS.selected} !important; //hack to override the table row striping
       &::after {
         // this is a non-layout impacting hack to receive the selected row border
         content: '';
@@ -143,15 +136,8 @@ export const TrImageClassification = styled(Tr)<IsSelectedProps>`
     `}
 `
 
-export const TdConfirmed = styled(Td)<HasConfirmedPoint>`
-  background-color: ${({ $hasConfirmedPoint }) => ($hasConfirmedPoint ? COLORS.confirmed : null)};
-`
-export const TdUnconfirmed = styled(Td)<HasUnconfirmedPoint>`
-  background-color: ${({ $hasUnconfirmedPoint }) =>
-    $hasUnconfirmedPoint ? COLORS.unconfirmed : null};
-`
 export const TdStatus = styled(Td)`
-  width: 104px; // prevents shifts to layout when the status is confirmed
+  width: 125px; // prevents shifts to layout when the status is confirmed
 `
 export const PointPopupSectionHeader = styled.div`
   ${thStyles}
