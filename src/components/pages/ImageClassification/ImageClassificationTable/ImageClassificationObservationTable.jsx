@@ -370,7 +370,7 @@ const ImageClassificationObservationTable = ({
     setHoveredImageIndex(null)
   }
 
-  const removePhotoModal = isRemovePhotoModalOpen && (
+  const removePhotoModal = (
     <>
       <Modal
         title={language.imageClassification.removePhotoModal.title}
@@ -389,7 +389,7 @@ const ImageClassificationObservationTable = ({
         }
       />
       {isRemovingPhoto && <LoadingModal />}
-    </>,
+    </>
   )
 
   return (
