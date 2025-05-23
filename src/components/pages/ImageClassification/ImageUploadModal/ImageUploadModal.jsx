@@ -151,7 +151,7 @@ const ImageUploadModal = ({
       if (!result.valid || result.corrupt) {
         if (result.isImageTooSmall) {
           toast.error(
-            `${language.imageClassification.imageUploadNotification.imageTooSmall}: ${file.name}`,
+            `${language.imageClassification.imageUploadNotification.imageTooSmall}: ${file.name}. ${language.imageClassification.imageUploadNotification.minImageDimension}`,
           )
         } else {
           toast.error(

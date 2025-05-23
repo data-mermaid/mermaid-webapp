@@ -1650,7 +1650,8 @@ const imageClassification = {
     success: 'Photos uploaded successfully.',
   },
   imageUploadNotification: {
-    imageTooSmall: 'Image too small',
+    imageTooSmall: 'This photo is too small',
+    minImageDimension: ' Photos should be a minimum height and width of 1124 pixels.',
     fileInvalidOrCorrupt: 'File is invalid or corrupt',
     fileSizeExceedsLimit: 'File size exceeds size limit',
     fileTypeInvalid: 'Invalid file type',
