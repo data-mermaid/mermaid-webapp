@@ -1649,6 +1649,13 @@ const imageClassification = {
     },
     success: 'Photos uploaded successfully.',
   },
+  imageUploadNotification: {
+    imageTooSmall: 'Image too small',
+    fileInvalidOrCorrupt: 'File is invalid or corrupt',
+    fileSizeExceedsLimit: 'File size exceeds size limit',
+    fileTypeInvalid: 'Invalid file type',
+    duplicateFile: 'Duplicate file',
+  },
 }
 
 export default {

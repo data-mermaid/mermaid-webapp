@@ -62,7 +62,7 @@ const ImageUploadModal = ({
           }
 
           if (img.width < minImageWidthAndHeight || img.height < minImageWidthAndHeight) {
-            return resolve({ file, valid: false, tooSmall: true })
+            return resolve({ file, valid: false, isImageTooSmall: true })
           }
 
           if (img.width <= maxWidth && img.height <= maxHeight) {
@@ -128,25 +128,35 @@ const ImageUploadModal = ({
 
       // Validate file type, size, dimensions, and uniqueness.
       if (!validFileTypes.includes(file.type)) {
-        toast.error(`Invalid file type: ${file.name}`)
+        toast.error(
+          `${language.imageClassification.imageUploadNotification.fileTypeInvalid}: ${file.name}`,
+        )
         continue
       }
       if (file.size > maxFileSize) {
-        toast.error(`File size exceeds the limit: ${file.name}`)
+        toast.error(
+          `${language.imageClassification.imageUploadNotification.fileSizeExceedsLimit}: ${file.name}`,
+        )
         continue
       }
 
       if (existingFiles.some((existingFile) => existingFile.original_image_name === file.name)) {
-        toast.error(`Duplicate file: ${file.name}`)
+        toast.error(
+          `${language.imageClassification.imageUploadNotification.duplicateFile}: ${file.name}`,
+        )
         continue
       }
 
       const result = await validateDimensions(file)
       if (!result.valid || result.corrupt) {
-        if (result.tooSmall) {
-          toast.error(`Image Too Small: ${file.name}`)
+        if (result.isImageTooSmall) {
+          toast.error(
+            `${language.imageClassification.imageUploadNotification.imageTooSmall}: ${file.name}`,
+          )
         } else {
-          toast.error(`File is invalid or corrupt: ${file.name}`)
+          toast.error(
+            `${language.imageClassification.imageUploadNotification.fileInvalidOrCorrupt}: ${file.name}`,
+          )
         }
         continue
       }
