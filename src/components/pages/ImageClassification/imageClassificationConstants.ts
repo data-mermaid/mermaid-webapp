@@ -12,3 +12,11 @@ export const IMAGE_CLASSIFICATION_STATUS = {
   completed: 3,
   failed: 4,
 }
+
+export const IMAGE_CLASSIFICATION_STATUS_LABEL = {
+  [IMAGE_CLASSIFICATION_STATUS.unknown]: 'Unknown',
+  [IMAGE_CLASSIFICATION_STATUS.queued]: 'Queued',
+  [IMAGE_CLASSIFICATION_STATUS.processing]: 'Processing',
+  [IMAGE_CLASSIFICATION_STATUS.completed]: 'Completed',
+  [IMAGE_CLASSIFICATION_STATUS.failed]: 'Failed',
+}

@@ -28,6 +28,7 @@ import LoadingModal from '../../../LoadingModal'
 import {
   EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD,
   IMAGE_CLASSIFICATION_STATUS,
+  IMAGE_CLASSIFICATION_STATUS_LABEL,
 } from '../imageClassificationConstants'
 import {
   ImageWrapper,
@@ -89,13 +90,6 @@ const SubHeaderRow = () => (
     ))}
     <Th colSpan={4} />
   </Tr>
-)
-
-const statusLabels = Object.fromEntries(
-  Object.entries(IMAGE_CLASSIFICATION_STATUS).map(([key, value]) => [
-    value,
-    key.charAt(0).toUpperCase() + key.slice(1),
-  ]),
 )
 
 const ImageClassificationObservationTable = ({
@@ -376,7 +370,7 @@ const ImageClassificationObservationTable = ({
     setHoveredImageIndex(null)
   }
 
-  const removePhotoModal = (
+  const removePhotoModal = isRemovePhotoModalOpen && (
     <>
       <Modal
         title={language.imageClassification.removePhotoModal.title}
@@ -385,7 +379,9 @@ const ImageClassificationObservationTable = ({
         mainContent={language.imageClassification.removePhotoModal.prompt}
         footerContent={
           <RightFooter>
-            <ButtonSecondary onClick={closeRemovePhotoModal}>{language.buttons.cancel}</ButtonSecondary>
+            <ButtonSecondary onClick={closeRemovePhotoModal}>
+              {language.buttons.cancel}
+            </ButtonSecondary>
             <ButtonCaution disabled={isRemovingPhoto} onClick={handleRemovePhoto}>
               {language.imageClassification.removePhotoModal.yes}
             </ButtonCaution>
@@ -393,7 +389,7 @@ const ImageClassificationObservationTable = ({
         }
       />
       {isRemovingPhoto && <LoadingModal />}
-    </>
+    </>,
   )
 
   return (
@@ -459,10 +455,15 @@ const ImageClassificationObservationTable = ({
                           {!getIsImageProcessed(file.classification_status?.status) ? (
                             <>
                               <Spinner />
-                              {statusLabels[file.classification_status?.status]}...
+                              {
+                                IMAGE_CLASSIFICATION_STATUS_LABEL[
+                                  file.classification_status?.status
+                                ]
+                              }
+                              ...
                             </>
                           ) : (
-                            statusLabels[file.classification_status?.status]
+                            IMAGE_CLASSIFICATION_STATUS_LABEL[file.classification_status?.status]
                           )}
                         </StyledTd>
                       </Tr>
