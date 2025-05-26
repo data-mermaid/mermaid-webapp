@@ -26,11 +26,11 @@ const SelectAttributeFromClassifierGuesses = ({
                                                   dataToReview,
                                                   setDataToReview,
                                                   setIsDataUpdatedSinceLastSave,
+                                                  showTitle,
                                                   databaseSwitchboardInstance,
                                               }) => {
     const {t} = useTranslation()
     const rowKeyForPoint = selectedPoint.annotations[0]?.ba_gr
-    const isSelectedPointUnclassified = rowKeyForPoint === unclassifiedGuid
 
     const existingRowDropdownOptions = dataToReview.points
         .reduce((acc, currentPoint) => {
@@ -122,7 +122,7 @@ const SelectAttributeFromClassifierGuesses = ({
 
     return (
         <>
-            {isSelectedPointUnclassified && (
+            {showTitle && (
                 <LabelThatLooksLikeATh>
                     {t('image_classification.attribute_growth_form')}
                 </LabelThatLooksLikeATh>
@@ -155,20 +155,23 @@ const SelectAttributeFromClassifierGuesses = ({
                     <option value="selectNewAttribute">{t('image_classification.select_new_attribute')}...</option>
                 </Select>
             </RowThatLooksLikeAnEvenTr>
-            {createPortal(
-                //modal will otherwise populate within the map container
-                <NewAttributeModal
-                    benthicAttributeSelectOptions={benthicAttributeSelectOptions}
-                    growthFormSelectOptions={growthFormSelectOptions}
-                    shouldDisplayModal={shouldDisplayModal}
-                    handleCloseModal={handleCloseModal}
-                    selectedBenthicAttr={selectedBenthicAttr}
-                    setSelectedBenthicAttr={setSelectedBenthicAttr}
-                    handleAddNewRowClick={handleAddNewRowClick}
-                    setSelectedGrowthForm={setSelectedGrowthForm}
-                />,
-                document.body,
-            )}
+            {!!benthicAttributeSelectOptions.length &&
+                !!growthFormSelectOptions.length &&
+                shouldDisplayModal &&
+                createPortal(
+                    //modal will otherwise populate within the map container
+                    <NewAttributeModal
+                        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+                        growthFormSelectOptions={growthFormSelectOptions}
+                        shouldDisplayModal={shouldDisplayModal}
+                        handleCloseModal={handleCloseModal}
+                        selectedBenthicAttr={selectedBenthicAttr}
+                        setSelectedBenthicAttr={setSelectedBenthicAttr}
+                        handleAddNewRowClick={handleAddNewRowClick}
+                        setSelectedGrowthForm={setSelectedGrowthForm}
+                    />,
+                    document.body,
+                )}
         </>
     )
 }
@@ -178,6 +181,7 @@ SelectAttributeFromClassifierGuesses.propTypes = {
     dataToReview: imageClassificationResponsePropType.isRequired,
     setDataToReview: PropTypes.func.isRequired,
     setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
+    showTitle: PropTypes.bool,
     databaseSwitchboardInstance: databaseSwitchboardPropTypes,
 }
 

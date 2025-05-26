@@ -5,7 +5,11 @@ import {databaseSwitchboardPropTypes} from '../../../../../App/mermaidData/datab
 import SelectAttributeFromClassifierGuesses from './SelectAttributeFromClassifierGuesses'
 import ClassifierGuesses from './ClassifierGuesses'
 import {
-    PointPopupSectionHeader, PopupBottomRow, PopupConfirmButton, PopupIconButton, PopupZoomButtonContainer,
+    PointPopupSectionHeader,
+    PopupBottomRow,
+    PopupConfirmButton,
+    PopupIconButton,
+    PopupZoomButtonContainer,
 } from '../ImageAnnotationModal.styles'
 import './ImageAnnotationPopup.css'
 import {IconArrowRight, IconZoomIn, IconZoomOut} from '../../../../icons'
@@ -68,6 +72,7 @@ const ImageAnnotationPopup = ({
         </div>)}
         <SelectAttributeFromClassifierGuesses
             selectedPoint={selectedPoint}
+            showTitle={!areAnyClassifierGuesses}
             dataToReview={dataToReview}
             setDataToReview={setDataToReview}
             setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
