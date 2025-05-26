@@ -1,16 +1,42 @@
 {
+  "buttons": {
+    "add_row": "Add row",
+    "cancel": "Cancel",
+    "close": "Close",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "save_changes": "Save changes",
+    "submit": "Submit",
+    "view": "View"
+  },
   "image_classification": {
+    "add_attribute": "Add new attribute",
+    "attribute_growth_form": "Benthic attribute / growth form",
+    "benthic_attribute": "Benthic attribute",
     "classifier_guesses_one": "Classifier guess",
     "classifier_guesses_other": "Classifier guesses",
     "confidence": "Confidence",
+    "confirmed_total_count": "Confirmed / total",
     "annotation": {
       "confirm": "Confirm",
       "confirmed": "Confirmed",
-      "next_unconfirmed_point": "Next unconfirmed point"
-    }
+      "next_unconfirmed_point": "Next unconfirmed point",
+      "status": "Status"
+    },
+    "buttons": {
+      "confirm_all_points": "Confirm all points",
+      "confirm_all": "Confirm all",
+      "zoom_to_attribute": "Zoom to attribute"
+    },
+    "growth_forms": "Growth forms"
   },
   "map_tooling": {
     "reset_zoom": "Reset zoom",
     "zoom_to_point": "Zoom to point"
+  },
+  "search": {
+    "no_results": "No results found"
   }
 }

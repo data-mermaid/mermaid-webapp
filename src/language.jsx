@@ -1626,12 +1626,10 @@ const imageClassification = {
         offlineBody: 'This sample unit is using image classification and is unavailable offline.',
     },
     imageClassificationModal: {
-        addAttribute: 'Add new attribute',
         attributeGrowthForm: 'Benthic attribute / growth form',
         confirm: 'Confirm',
         confirmed: 'Confirmed',
         confirmedCount: 'Confirmed count',
-        confirmedTotal: 'Confirmed / total',
         status: 'Status',
         review: 'Review',
         unconfirmedCount: 'Unconfirmed count',
