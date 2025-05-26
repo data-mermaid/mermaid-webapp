@@ -16,10 +16,11 @@
     "attribute_growth_form": "Benthic attribute / growth form",
     "benthic_attribute": "Benthic attribute",
     "classifier_guesses_one": "Classifier guess",
-    "classifier_guesses__one": "Classifier guess",
     "classifier_guesses_other": "Classifier guesses",
     "confidence": "Confidence",
     "confirmed_total_count": "Confirmed / total",
+    "select_attribute": "Select attribute",
+    "select_new_attribute": "Select new attribute",
     "annotation": {
       "confirm": "Confirm",
       "confirmed": "Confirmed",
@@ -33,7 +34,7 @@
       "confirm_all": "Confirm all",
       "zoom_to_attribute": "Zoom to attribute"
     },
-    "growth_forms": "Growth forms"
+    "growth_form": "Growth form"
   },
   "map_tooling": {
     "reset_zoom": "Reset zoom",
