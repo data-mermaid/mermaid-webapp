@@ -98,7 +98,7 @@ const ImageAnnotationPopup = ({
                 onClick={() => confirmPoint(selectedPoint.id)}
                 disabled={isSelectedPointConfirmed || isSelectedPointUnclassified}
             >
-                {isSelectedPointConfirmed ? t('image_classification.annotation.confirmed') : t('image_classification.annotation.confirm')}
+                {isSelectedPointConfirmed ? t('image_classification.annotation.confirmed') : t('buttons.confirm')}
             </PopupConfirmButton>
 
             <PopupZoomButtonContainer>
