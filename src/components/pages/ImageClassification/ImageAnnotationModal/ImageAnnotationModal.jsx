@@ -4,7 +4,10 @@ import theme from '../../../../theme'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Modal from '../../../generic/Modal/Modal'
-import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+import {
+  IMAGE_CLASSIFICATION_COLORS as COLORS,
+  unclassifiedGuid,
+} from '../../../../library/constants/constants'
 import ImageAnnotationModalTable from './ImageAnnotationModalTable'
 import ImageAnnotationModalMap from './ImageAnnotationModalMap'
 import {
@@ -82,7 +85,10 @@ const ImageAnnotationModal = ({
   const getBenthicAttributeLabel = useCallback(
     (benthicAttributeId) => {
       const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-      return matchingBenthicAttribute?.name ?? ''
+      return (
+        matchingBenthicAttribute?.name ??
+        language.imageClassification.imageClassificationModal.unclassified
+      )
     },
     [benthicAttributes],
   )
@@ -109,17 +115,23 @@ const ImageAnnotationModal = ({
         .getAnnotationsForImage(projectId, imageId, EXCLUDE_PARAMS)
         .then((data) => {
           const formattedPoints = data.points.map((point) => {
-            const sortedAnnotations = point.annotations.toSorted(prioritizeConfirmedAnnotations)
+            if (point.annotations.length === 0) {
+              point.annotations.push({
+                ba_gr: unclassifiedGuid,
+                ba_gr_label: language.imageClassification.imageClassificationModal.unclassified,
+              })
+            }
+            const sortedAnnotations = point.annotations?.toSorted(prioritizeConfirmedAnnotations)
+
             // eslint-disable-next-line max-nested-callbacks
-            const formattedAnnotations = sortedAnnotations.map((annotation) => ({
+            const labeledAnnotations = sortedAnnotations.map((annotation) => ({
               ...annotation,
-              ba_gr: annotation.benthic_attribute + '_' + annotation.growth_form,
+              ba_gr: annotation.benthic_attribute ?? unclassifiedGuid,
               ba_gr_label: getAttributeGrowthFormLabel(annotation),
             }))
 
-            return { ...point, annotations: formattedAnnotations }
+            return { ...point, annotations: labeledAnnotations }
           })
-
           setDataToReview({ ...data, points: formattedPoints })
         })
         .catch((error) => {
@@ -127,7 +139,9 @@ const ImageAnnotationModal = ({
             error,
             callback: () => {
               toast.error(
-                ...getToastArguments(`Failed to fetch image annotations. ${error.message}`),
+                ...getToastArguments(
+                  `${language.imageClassification.imageClassificationModal.errors.failedFetchAnnotations} ${error.message}`,
+                ),
               )
             },
             shouldShowServerNonResponseMessage: false,
@@ -145,7 +159,10 @@ const ImageAnnotationModal = ({
   const handleCloseModal = () => {
     if (
       !isDataUpdatedSinceLastSave ||
-      window.confirm('Are you sure you want to discard the change to this image?')
+      window.confirm(
+        language.imageClassification.imageClassificationModal.userMessage
+          .confirmDiscardImageChanges,
+      )
     ) {
       setImageId()
     }
@@ -159,13 +176,19 @@ const ImageAnnotationModal = ({
       .then(() => {
         setImageId()
         onAnnotationSaveSuccess()
-        toast.success('Successfully saved image annotations')
+        toast.success(
+          language.imageClassification.imageClassificationModal.success.savedAnnotations,
+        )
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(`Failed to save image annotations. ${error.message}`))
+            toast.error(
+              ...getToastArguments(
+                `${language.imageClassification.imageClassificationModal.errors.failedSaveAnnotations} ${error.message}`,
+              ),
+            )
           },
           shouldShowServerNonResponseMessage: false,
         })
@@ -225,15 +248,15 @@ const ImageAnnotationModal = ({
             <Legend>
               <LegendItem>
                 <LegendSquare color={COLORS.confirmed} />
-                Confirmed
+                {language.imageClassification.imageClassificationModal.confirmed}
               </LegendItem>
               <LegendItem>
                 <LegendSquare style={{ border: `3px dotted ${theme.color.brandSecondary}` }} />
-                Unconfirmed
+                {language.imageClassification.imageClassificationModal.unconfirmed}
               </LegendItem>
               <LegendItem>
                 <LegendSquare color={COLORS.unclassified} />
-                Unclassified
+                {language.imageClassification.imageClassificationModal.unclassified}
               </LegendItem>
             </Legend>
             <div>

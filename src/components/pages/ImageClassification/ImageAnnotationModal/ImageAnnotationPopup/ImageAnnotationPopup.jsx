@@ -14,6 +14,7 @@ import {
 import './ImageAnnotationPopup.css'
 import {IconArrowRight, IconZoomIn, IconZoomOut} from '../../../../icons'
 import {MuiTooltipDark} from '../../../../generic/MuiTooltip'
+import {unclassifiedGuid} from '../../../../../library/constants/constants'
 import {useTranslation} from 'react-i18next'
 
 const ImageAnnotationPopup = ({
@@ -33,7 +34,7 @@ const ImageAnnotationPopup = ({
         (annotation) => annotation.is_machine_created,
     ).length
 
-    const isSelectedPointUnclassified = selectedPoint.annotations.length === 0
+    const isSelectedPointUnclassified = selectedPoint.annotations[0].ba_gr === unclassifiedGuid
     const areAllPointsConfirmed = dataToReview.points.every(
         (point) => point.annotations[0]?.is_confirmed,
     )

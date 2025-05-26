@@ -1616,42 +1616,60 @@ const tooltipText = {
 }
 
 const imageClassification = {
-    sampleUnitInputSelector: {
-        title: 'Image classification is now available in MERMAID.',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel leo pellentesque lorem interdum pretium. Aenean varius luctus ex, vel blandit elit mollis non. Nam risus felis, finibus et nisl vel, convallis viverra odio. Nunc ut turpis tortor. Praesent consectetur nibh quis tortor bibendum fermentum',
-        button1: 'Use image classification for this sample unit',
-        button2: 'Manually input observation for this sample unit',
-        offlineHeader: 'Sample unit observations unavailable offline',
-        offlineBody: 'This sample unit is using image classification and is unavailable offline.',
+  sampleUnitInputSelector: {
+    title: 'Image classification is now available in MERMAID.',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel leo pellentesque lorem interdum pretium. Aenean varius luctus ex, vel blandit elit mollis non. Nam risus felis, finibus et nisl vel, convallis viverra odio. Nunc ut turpis tortor. Praesent consectetur nibh quis tortor bibendum fermentum',
+    button1: 'Use image classification for this sample unit',
+    button2: 'Manually input observation for this sample unit',
+    offlineHeader: 'Sample unit observations unavailable offline',
+    offlineBody: 'This sample unit is using image classification and is unavailable offline.',
+  },
+  imageClassificationModal: {
+    confirm: 'Confirm',
+    confirmed: 'Confirmed',
+    confirmedCount: 'Confirmed count',
+    confirmedTotal: 'Confirmed / total',
+    unconfirmedCount: 'Unconfirmed count',
+    unclassified: 'Unclassified',
+    unclassifiedPoint: 'Unclassified point',
+    status: 'Status',
+    review: 'Review',
+    attributeGrowthForm: 'Benthic attribute / growth form',
+    imageMap: {
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      resetZoom: 'Reset zoom',
+      toggleTableVisibility: 'Toggle table visibility',
+      toggleLabelVisibility: 'Toggle label visibility',
     },
-    imageClassificationModal: {
-        attributeGrowthForm: 'Benthic attribute / growth form',
-        confirm: 'Confirm',
-        confirmed: 'Confirmed',
-        confirmedCount: 'Confirmed count',
-        status: 'Status',
-        review: 'Review',
-        unconfirmedCount: 'Unconfirmed count',
-        tooltip: {
-            reviewPhoto: 'Review this photo',
-            removePhoto: 'Remove this photo',
-        },
-        userMessage: {
-            photoRemoved: 'Photo removed',
-        },
-        errors: {
-            duplicateFiles: 'Some files are duplicates and were not added.',
-            invalidFiles:
-                'Some files were not added due to invalid file types. Only JPEG, PJPEG, PNG, and MPO files are allowed.',
-            oversizedFiles: 'Some files were not added because they exceed the 30 MB size limit.',
-            dimensionsExceededFiles:
-                'Some files were not added because they exceed the 8000x8000 dimensions limit.',
-            corruptFiles: 'Some files were not added because they appear to be corrupt.',
-            failedDeletion: 'Failed to delete photo: ',
-        },
-        success: 'Photos uploaded successfully.',
+    tooltip: {
+      confirmAllPoints: 'Confirm all points',
+      reviewPhoto: 'Review this photo',
+      removePhoto: 'Remove this photo',
+      zoomToAttribute: 'Zoom to attribute',
     },
+    userMessage: {
+      confirmDiscardImageChanges: 'Are you sure you want to discard the change to this image?',
+      photoRemoved: 'Photo removed',
+    },
+    errors: {
+      corruptFiles: 'Some files were not added because they appear to be corrupt.',
+      dimensionsExceededFiles:
+        'Some files were not added because they exceed the 8000x8000 dimensions limit.',
+      duplicateFiles: 'Some files are duplicates and were not added.',
+      failedDeletion: 'Failed to delete photo: ',
+      failedFetchAnnotations: 'Failed to fetch image annotations.',
+      failedSaveAnnotations: 'Failed to save image annotations.',
+      invalidFiles:
+        'Some files were not added due to invalid file types. Only JPEG, PJPEG, PNG, and MPO files are allowed.',
+      oversizedFiles: 'Some files were not added because they exceed the 30 MB size limit.',
+    },
+    success: {
+      savedAnnotations: 'Successfully saved image annotations',
+      uploadedPhotos: 'Photos uploaded successfully.',
+    },
+  },
   removePhotoModal: {
     title: 'Remove Photo',
     prompt: 'Are you sure you want to remove this photo?',
