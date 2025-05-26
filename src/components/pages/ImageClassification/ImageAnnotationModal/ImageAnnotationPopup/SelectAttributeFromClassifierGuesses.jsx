@@ -155,15 +155,11 @@ const SelectAttributeFromClassifierGuesses = ({
                     <option value="selectNewAttribute">{t('image_classification.select_new_attribute')}...</option>
                 </Select>
             </RowThatLooksLikeAnEvenTr>
-            {!!benthicAttributeSelectOptions.length &&
-                !!growthFormSelectOptions.length &&
-                shouldDisplayModal &&
+            {shouldDisplayModal &&
                 createPortal(
                     //modal will otherwise populate within the map container
-                    <NewAttributeModal
-                        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+                    <NewAttributeModal  benthicAttributeSelectOptions={benthicAttributeSelectOptions}
                         growthFormSelectOptions={growthFormSelectOptions}
-                        shouldDisplayModal={shouldDisplayModal}
                         handleCloseModal={handleCloseModal}
                         selectedBenthicAttr={selectedBenthicAttr}
                         setSelectedBenthicAttr={setSelectedBenthicAttr}
