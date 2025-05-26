@@ -7,7 +7,6 @@ import {TableOverflowWrapper, Td, Th, thStyles, Tr} from '../../../generic/Table
 import {imageClassificationPointPropType} from '../../../../App/mermaidData/mermaidDataProptypes'
 import {IconZoomIn} from '../../../icons'
 import {MuiTooltipDark} from '../../../generic/MuiTooltip'
-import language from '../../../../language'
 import {unclassifiedGuid,} from '../../../../library/constants/constants'
 import {useTranslation} from 'react-i18next'
 
@@ -143,9 +142,7 @@ const ImageAnnotationModalTable = ({
                                     {groupedTableRowId === unclassifiedGuid ? (
                                         <Td colSpan={5} align="center" style={{fontWeight: '700'}}>
                         <span>
-                          {`${unclassifiedCount} ${
-                              language.imageClassification.imageClassificationModal.unclassifiedPoint
-                          }${unclassifiedCount > 1 ? 's' : ''}`}
+                          {t('image_classification.annotation.unclassified_points', {count: unclassifiedCount})}
                         </span>
                                         </Td>
                                     ) : (

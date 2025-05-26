@@ -24,7 +24,9 @@
       "confirm": "Confirm",
       "confirmed": "Confirmed",
       "next_unconfirmed_point": "Next unconfirmed point",
-      "status": "Status"
+      "status": "Status",
+      "unclassified_points_one": "Unclassified point",
+      "unclassified_points_other": "Unclassified points"
     },
     "buttons": {
       "confirm_all_points": "Confirm all points",
