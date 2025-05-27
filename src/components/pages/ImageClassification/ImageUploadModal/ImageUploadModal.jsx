@@ -38,7 +38,7 @@ const ImageUploadModal = ({
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
-  const minImageWidthAndHeight = 1124
+  const minImageWidthAndHeight = 1500
   const maxWidth = 8000
   const maxHeight = 8000
   const uploadText = language.imageClassification.imageClassificationModal
