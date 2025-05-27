@@ -3,6 +3,7 @@ import colorHelper from 'color'
 
 const primary = colorHelper('#174b82')
 const secondary = colorHelper('#DDDCE4')
+
 const callout = colorHelper('#DB3B00')
 const caution = colorHelper('#BB1600')
 const warning = colorHelper('#FEDD2F')
@@ -28,6 +29,7 @@ const xlarge = '2rem'
 
 const color = {
   textColor,
+  brandSecondary: '#f2645a',
   white: white.toString(),
   grey0: grey0.toString(),
   grey1: grey1.toString(),
@@ -212,7 +214,8 @@ const zIndex = {
   autocomplete: 15,
   header: 10,
   modal: 20,
-  toolbar: 10,
+  stickyToolbar: 1,
+  nestedStickyPageHeader: 1,
 }
 
 const theme = { color, timing, spacing, typography, zIndex }

@@ -61,11 +61,12 @@ const apiDataTableNames = {
 }
 
 const buttons = {
+  addRow: 'Add row',
   cancel: 'Cancel',
   close: 'Close',
   confirm: 'Confirm',
+  confirmAll: 'Confirm all',
   saveChanges: 'Save Changes',
-  addRow: 'Add row',
 }
 
 const error = {
@@ -521,7 +522,7 @@ const pages = {
       deleteSiteOrRegimes: 'Delete site or management regimes',
       downloadSitesAndRegimes: 'Download sites and management regimes',
       createValidateSubmitSampleUnits: 'Create, validate, and submit sample units',
-      deleteSampleUnits: 'Delete unsubmited sample units',
+      deleteSampleUnits: 'Delete unsubmitted sample units',
       editSampleUnits: 'Edit submitted sample units',
       transferSampleUnits: 'Transfer unsubmitted sample units',
       downloadSampleUnits: 'Download submitted sample units',
@@ -1624,30 +1625,55 @@ const imageClassification = {
     offlineHeader: 'Sample unit observations unavailable offline',
     offlineBody: 'This sample unit is using image classification and is unavailable offline.',
   },
-  imageClassficationModal: {
+  imageClassificationModal: {
+    confirm: 'Confirm',
+    confirmed: 'Confirmed',
     confirmedCount: 'Confirmed count',
+    confirmedTotal: 'Confirmed / total',
     unconfirmedCount: 'Unconfirmed count',
+    unclassified: 'Unclassified',
+    unclassifiedPoint: 'Unclassified point',
     status: 'Status',
     review: 'Review',
-    attributeGrowthForm: 'Benthic attribute and growth form',
+    attributeGrowthForm: 'Benthic attribute / growth form',
+    imageMap: {
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      resetZoom: 'Reset zoom',
+      toggleTableVisibility: 'Toggle table visibility',
+      toggleLabelVisibility: 'Toggle label visibility',
+    },
     tooltip: {
+      confirmAllPoints: 'Confirm all points',
       reviewPhoto: 'Review this photo',
       removePhoto: 'Remove this photo',
+      zoomToAttribute: 'Zoom to attribute',
     },
     userMessage: {
+      confirmDiscardImageChanges: 'Are you sure you want to discard the change to this image?',
       photoRemoved: 'Photo removed',
     },
     errors: {
+      corruptFiles: 'Some files were not added because they appear to be corrupt.',
+      dimensionsExceededFiles:
+        'Some files were not added because they exceed the 8000x8000 dimensions limit.',
       duplicateFiles: 'Some files are duplicates and were not added.',
+      failedDeletion: 'Failed to delete photo: ',
+      failedFetchAnnotations: 'Failed to fetch image annotations.',
+      failedSaveAnnotations: 'Failed to save image annotations.',
       invalidFiles:
         'Some files were not added due to invalid file types. Only JPEG, PJPEG, PNG, and MPO files are allowed.',
       oversizedFiles: 'Some files were not added because they exceed the 30 MB size limit.',
-      dimensionsExceededFiles:
-        'Some files were not added because they exceed the 8000x8000 dimensions limit.',
-      corruptFiles: 'Some files were not added because they appear to be corrupt.',
-      failedDeletion: 'Failed to delete photo: ',
     },
-    success: 'Photos uploaded successfully.',
+    success: {
+      savedAnnotations: 'Successfully saved image annotations',
+      uploadedPhotos: 'Photos uploaded successfully.',
+    },
+  },
+  removePhotoModal: {
+    title: 'Remove Photo',
+    prompt: 'Are you sure you want to remove this photo?',
+    yes: 'Remove Photo',
   },
   imageUploadNotification: {
     imageTooSmall: 'This photo is too small',

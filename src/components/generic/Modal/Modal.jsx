@@ -149,7 +149,7 @@ const Modal = ({
   footerContent,
   toolbarContent = null,
   maxWidth,
-  padding,
+  padding = null,
   displayCloseIcon = true,
   allowCloseWithEscapeKey = true,
   contentOverflowStyle = null,

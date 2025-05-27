@@ -1,3 +1,4 @@
+import theme from '../../theme'
 export const PAGE_SIZE_DEFAULT = 15
 export const DEFAULT_RECORDS_PER_PAGE = 1000
 export const API_NULL_NAME = '__null__'
@@ -18,16 +19,20 @@ export const apiDataTypes = {
   projectSites: 'project_sites',
 }
 export const IMAGE_CLASSIFICATION_COLORS = {
-  confirmedPoint: '#5AE518',
-  confirmed: '#CFFFB8',
-  unconfirmedPoint: '#BF6B69',
-  unconfirmed: '#FBAEAE',
+  // leaving these redundant for now until colors are finalized
+  confirmedPoint: theme.color.brandSecondary,
+  confirmed: theme.color.brandSecondary,
+  unconfirmedPoint: theme.color.brandSecondary,
+  unconfirmed: theme.color.brandSecondary,
   unclassifiedPoint: '#808080',
   unclassified: '#BCBCBC',
-  hover: '#ffb3fe',
-  selected: '#FF00FB',
+  hover: '#ccc',
+  selectedPoint: '#fff',
+  selected: '#DDDCE4',
   outline: '#000',
 }
+
+export const unclassifiedGuid = '00000000-0000-0000-0000-000000000000'
 
 Object.freeze(PROJECT_CODES)
 Object.freeze(apiDataTypes)

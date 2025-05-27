@@ -41,7 +41,7 @@ const ImageUploadModal = ({
   const minImageWidthAndHeight = 1124
   const maxWidth = 8000
   const maxHeight = 8000
-  const uploadText = language.imageClassification.imageClassficationModal
+  const uploadText = language.imageClassification.imageClassificationModal
 
   const validateDimensions = (file) => {
     return new Promise((resolve) => {

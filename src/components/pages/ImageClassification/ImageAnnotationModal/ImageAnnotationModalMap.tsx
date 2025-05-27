@@ -12,8 +12,8 @@ import maplibregl, {
   MapMouseEvent,
   Popup,
 } from 'maplibre-gl'
-import crossHairUrl from '../../../../../public/cross-hair.png'
-import labelBackgroundUrl from '../../../../../public/label-background.png'
+import crossHairIcon from '../../../../assets/cross-hair.png'
+import labelBackgroundUrl from '../../../../assets/label-background.png'
 import {
   ConnectedMapControlButtonContainer,
   MapButtonContainer,
@@ -25,7 +25,7 @@ import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/const
 import { ImageClassificationResponse } from '../../../../App/mermaidData/mermaidDataTypes'
 import { MapRef } from '../../../../types/map'
 import { MuiTooltipDarkRight } from '../../../generic/MuiTooltip'
-import { IconCircle, IconLabel, IconMinus, IconPlus, IconRefresh, IconTable } from '../../../icons'
+import { IconLabel, IconMinus, IconPlus, IconRefresh, IconTable } from '../../../icons'
 import {
   DEFAULT_MAP_ANIMATION_DURATION,
   DEFAULT_MAP_CENTER,
@@ -40,9 +40,10 @@ import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import { getPatchesCenters } from './getPatchesCenters'
 import { usePointsGeoJson } from './usePointsGeoJson'
+import language from '../../../../language'
 
 interface SelectedPoint {
-  id: number | null
+  id: string | null
   popupAnchorLngLat: LngLatLike | null
   popupAnchorPosition: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | null
   bounds: maplibregl.LngLatBounds | null
@@ -111,12 +112,12 @@ const ImageAnnotationModalMap = ({
   databaseSwitchboardInstance: object
   dataToReview: ImageClassificationResponse
   hasMapLoaded: boolean
-  hoveredAttributeId: number
+  hoveredAttributeId?: string
   imageScale: number
   isTableShowing: boolean
   map: MapRef
   patchesGeoJson: GeoJSON.FeatureCollection
-  selectedAttributeId: number
+  selectedAttributeId?: string
   setDataToReview: Dispatch<SetStateAction<ImageClassificationResponse>>
   setHasMapLoaded: Dispatch<SetStateAction<boolean>>
   setIsDataUpdatedSinceLastSave: Dispatch<SetStateAction<boolean>>
@@ -129,8 +130,8 @@ const ImageAnnotationModalMap = ({
     imageScale,
     map,
   })
-  const [areLabelsShowing, setAreLabelsShowing] = useState(false)
-  const [hoveredPointId, setHoveredPointId] = useState(null)
+  const [areLabelsShowing, setAreLabelsShowing] = useState<boolean>(false)
+  const [hoverPatchAttributeGuid, setHoverPatchAttributeGuid] = useState<string>('')
 
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint>({
     id: null,
@@ -149,10 +150,6 @@ const ImageAnnotationModalMap = ({
       bounds: null,
     })
     popupRef.current?.remove()
-  }
-
-  const toggleTable = () => {
-    setIsTableShowing(!isTableShowing)
   }
 
   const toggleLabels = () => {
@@ -300,11 +297,29 @@ const ImageAnnotationModalMap = ({
           id: 'patches-status-layer',
           type: 'line',
           source: 'patches',
+          filter: ['case', ['get', 'isUnconfirmed'], false, ['get', 'isUnclassified'], false, true],
           paint: {
-            'line-width': 3,
-            'line-offset': -3,
-
             'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
+            'line-offset': -3,
+            'line-width': 3,
+          },
+        },
+        {
+          //Maplibre doesn't support conditional dashed items, this filter layer is a workaround
+          id: 'dotted-patches-status-layer',
+          type: 'line',
+          source: 'patches',
+          filter: ['case', ['get', 'isUnconfirmed'], true, ['get', 'isUnclassified'], true, false],
+          layout: {
+            'line-cap': 'round',
+            'line-join': 'round',
+            'line-round-limit': 1,
+          },
+          paint: {
+            'line-color': IMAGE_CLASSIFICATION_COLOR_EXP,
+            'line-dasharray': [1, 3],
+            'line-offset': -3,
+            'line-width': 3,
           },
         },
         {
@@ -343,7 +358,7 @@ const ImageAnnotationModalMap = ({
 
     const handleMapLoad = () => {
       setHasMapLoaded(true)
-      map.current?.loadImage(crossHairUrl, (error: Error, image: HTMLImageElement) => {
+      map.current?.loadImage(crossHairIcon, (error: Error, image: HTMLImageElement) => {
         if (error) {
           return
         }
@@ -403,21 +418,17 @@ const ImageAnnotationModalMap = ({
           return
         }
         const [{ properties }] = features ?? []
-        const label = properties?.isUnclassified ? 'Unclassified' : properties?.ba_gr_label
-        const confirmedStatus = properties?.isConfirmed ? 'confirmed' : 'unconfirmed'
-        const pointStatus = properties?.isUnclassified ? 'unclassified' : confirmedStatus
-        const popupContent = (
-          <LabelPopup>
-            <IconCircle style={{ color: COLORS[pointStatus] }} /> {label}
-          </LabelPopup>
-        )
+        const label = properties?.isUnclassified
+          ? language.imageClassification.imageClassificationModal.unclassified
+          : properties?.ba_gr_label
+        const popupContent = <LabelPopup>{label}</LabelPopup>
         const popupContentHack = document.createElement('div')
         ReactDOM.createRoot(popupContentHack).render(popupContent)
         let popupLngLat
         try {
           popupLngLat = JSON.parse(properties?.labelAnchor)
         } catch {
-          console.warn('unable to derive coordinates for label display on hover')
+          console.warn('Unable to derive coordinates for label display on hover')
           return
         }
 
@@ -598,11 +609,11 @@ const ImageAnnotationModalMap = ({
     }: MapMouseEvent & { features?: MapboxGeoJSONFeature[] }) => {
       if (features && features.length > 0) {
         const [{ properties }] = features
-        setHoveredPointId(properties?.id)
+        setHoverPatchAttributeGuid(properties?.id)
       }
     }
     const removePointHoverStyle = () => {
-      setHoveredPointId(null)
+      setHoverPatchAttributeGuid('')
     }
     map.current?.on('mousemove', 'patches-fill-layer', applyPointHoverStyle)
 
@@ -645,28 +656,28 @@ const ImageAnnotationModalMap = ({
       [
         '==', // checks if point on map is clicked
         ['get', 'id'],
-        selectedPoint.id,
+        selectedPoint.id, //clicked patch id, Map based
       ],
-      COLORS.selected,
+      COLORS.selectedPoint,
 
       [
         '==', // checks if point on map is in selected row in table
         ['get', 'ba_gr'],
-        selectedAttributeId,
+        selectedAttributeId, //table row ba_gr guid
       ],
-      COLORS.selected,
+      COLORS.selectedPoint,
 
       [
-        '==', // checks if point on map is clicked
+        '==', // checks if patch hovered on map
         ['get', 'id'],
-        hoveredPointId,
+        hoverPatchAttributeGuid, //hovered patch id, Map based
       ],
       COLORS.hover,
 
       [
-        '==', // checks if point on map is in highlighted row in table
+        '==', // checks if hovered table row has a map point
         ['get', 'ba_gr'],
-        hoveredAttributeId,
+        hoveredAttributeId, //table row ba_gr guid
       ],
       COLORS.hover,
 
@@ -675,7 +686,14 @@ const ImageAnnotationModalMap = ({
 
     map.current.setPaintProperty('patches-inline-layer', 'line-color', lineColor)
     map.current.setPaintProperty('patches-outline-layer', 'line-color', lineColor)
-  }, [selectedAttributeId, hoveredAttributeId, hoveredPointId, hasMapLoaded, selectedPoint, map])
+  }, [
+    selectedAttributeId,
+    hoveredAttributeId,
+    hoverPatchAttributeGuid,
+    hasMapLoaded,
+    selectedPoint,
+    map,
+  ])
 
   const resetZoom = () => {
     map.current?.setBearing(0) // If on a touch device, reset the rotation before calling the easeTo function to avoid any potential issues.
@@ -689,7 +707,7 @@ const ImageAnnotationModalMap = ({
   }
   return (
     <ImageAnnotationMapWrapper>
-      {!hasMapLoaded ? <LoadingIndicatorImageClassificationImage /> : null}
+      {!hasMapLoaded && <LoadingIndicatorImageClassificationImage />}
       <div
         ref={mapContainer}
         style={{
@@ -697,39 +715,59 @@ const ImageAnnotationModalMap = ({
           height: dataToReview.original_image_height * imageScale,
         }}
       />
-      {hasMapLoaded ? (
+      {hasMapLoaded && (
         <MapButtonContainer>
           <ConnectedMapControlButtonContainer>
-            <MuiTooltipDarkRight title="Zoom in">
+            <MuiTooltipDarkRight
+              title={language.imageClassification.imageClassificationModal.imageMap.zoomIn}
+            >
               <MapControlButton type="button" onClick={zoomMapIn}>
                 <IconPlus />
               </MapControlButton>
             </MuiTooltipDarkRight>
-            <MuiTooltipDarkRight title="Zoom Out">
+            <MuiTooltipDarkRight
+              title={language.imageClassification.imageClassificationModal.imageMap.zoomOut}
+            >
               <MapControlButton type="button" onClick={zoomMapOut}>
                 <IconMinus />
               </MapControlButton>
             </MuiTooltipDarkRight>
           </ConnectedMapControlButtonContainer>
-          <MuiTooltipDarkRight title="Reset Zoom">
+          <MuiTooltipDarkRight
+            title={language.imageClassification.imageClassificationModal.imageMap.resetZoom}
+          >
             <MapControlButton type="button" onClick={resetZoom}>
               <IconRefresh />
             </MapControlButton>
           </MuiTooltipDarkRight>
-          <MuiTooltipDarkRight title="Toggle table visibility">
-            <MapControlButton type="button" onClick={toggleTable} $isSelected={isTableShowing}>
+          <MuiTooltipDarkRight
+            title={
+              language.imageClassification.imageClassificationModal.imageMap.toggleTableVisibility
+            }
+          >
+            <MapControlButton
+              type="button"
+              onClick={() => {
+                setIsTableShowing(!isTableShowing)
+              }}
+              $isSelected={isTableShowing}
+            >
               <IconTable />
             </MapControlButton>
           </MuiTooltipDarkRight>
-          <MuiTooltipDarkRight title="Toggle label visibility">
+          <MuiTooltipDarkRight
+            title={
+              language.imageClassification.imageClassificationModal.imageMap.toggleLabelVisibility
+            }
+          >
             <MapControlButton type="button" onClick={toggleLabels} $isSelected={areLabelsShowing}>
               <IconLabel />
             </MapControlButton>
           </MuiTooltipDarkRight>
         </MapButtonContainer>
-      ) : null}
+      )}
 
-      {selectedPoint.id ? (
+      {selectedPoint.id && (
         <EditPointPopupWrapper
           map={map.current}
           lngLat={selectedPoint.popupAnchorLngLat}
@@ -747,7 +785,7 @@ const ImageAnnotationModalMap = ({
             selectNextUnconfirmedPoint={selectNextUnconfirmedPoint}
           />
         </EditPointPopupWrapper>
-      ) : null}
+      )}
     </ImageAnnotationMapWrapper>
   )
 }
