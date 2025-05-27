@@ -26,7 +26,7 @@ const SelectAttributeFromClassifierGuesses = ({
                                                   dataToReview,
                                                   setDataToReview,
                                                   setIsDataUpdatedSinceLastSave,
-                                                  showTitle,
+                                                  isTitleShowing,
                                                   databaseSwitchboardInstance,
                                               }) => {
     const {t} = useTranslation()
@@ -122,7 +122,7 @@ const SelectAttributeFromClassifierGuesses = ({
 
     return (
         <>
-            {showTitle && (
+            {isTitleShowing && (
                 <LabelThatLooksLikeATh>
                     {t('image_classification.attribute_growth_form')}
                 </LabelThatLooksLikeATh>
@@ -177,7 +177,7 @@ SelectAttributeFromClassifierGuesses.propTypes = {
     dataToReview: imageClassificationResponsePropType.isRequired,
     setDataToReview: PropTypes.func.isRequired,
     setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
-    showTitle: PropTypes.bool,
+    isTitleShowing: PropTypes.bool,
     databaseSwitchboardInstance: databaseSwitchboardPropTypes,
 }
 
