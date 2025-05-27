@@ -72,7 +72,7 @@ const ImageAnnotationPopup = ({
         </div>)}
         <SelectAttributeFromClassifierGuesses
             selectedPoint={selectedPoint}
-            showTitle={!areAnyClassifierGuesses}
+            isTitleShowing={!areAnyClassifierGuesses}
             dataToReview={dataToReview}
             setDataToReview={setDataToReview}
             setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
