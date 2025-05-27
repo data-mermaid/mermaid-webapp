@@ -30,7 +30,10 @@ export const useSelectNewAttribute = ({
       .then(([benthicAttributes, choices]) => {
         setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributes))
         setGrowthFormSelectOptions(choices.growthforms.data)
-        setShouldDisplayModal(true)
+        if (benthicAttributeSelectOptions.length &&
+        growthFormSelectOptions.length) {
+          setShouldDisplayModal(true)
+        }
       })
       .catch((error) => {
         handleHttpResponseError({
