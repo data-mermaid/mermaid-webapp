@@ -97,7 +97,7 @@ const ImageAnnotationModalTable = ({
                             {t('image_classification.attribute_growth_form')}
                         </Th>
                         <MuiTooltipDark
-                            title={t('image_classification.annotation.confirmed_total_count')}
+                            title={t('image_classification.annotation.confirmed_total')}
                         >
                             <Th>{t('image_classification.annotation.confirmed')}</Th>
                         </MuiTooltipDark>
@@ -142,7 +142,7 @@ const ImageAnnotationModalTable = ({
                                     {groupedTableRowId === unclassifiedGuid ? (
                                         <Td colSpan={5} align="center" style={{fontWeight: '700'}}>
                                             <span>
-                                              {`${unclassifiedCount} ${t('image_classification.annotation.unclassified_points', {count: unclassifiedCount})}`}
+                                              {t('image_classification.annotation.unclassified_points', {count: unclassifiedCount})}
                                             </span>
                                         </Td>
                                     ) : (

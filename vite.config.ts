@@ -33,7 +33,7 @@ export default defineConfig({
 
       includeAssets: ['**/*'], //cache all the static assets in the public folder
     }),
-    i18nextLoader({ paths: ['./src/locales', './locales'] }),
+    i18nextLoader({ paths: ['./src/locales'] }),
   ],
   server: {
     port: 3000,
