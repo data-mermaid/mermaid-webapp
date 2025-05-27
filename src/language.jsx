@@ -1675,6 +1675,14 @@ const imageClassification = {
         prompt: 'Are you sure you want to remove this photo?',
         yes: 'Remove Photo',
     },
+    imageUploadNotification: {
+        imageTooSmall: 'This photo is too small',
+        minImageDimension: ' Photos should be a minimum height and width of 1500 pixels.',
+        fileInvalidOrCorrupt: 'File is invalid or corrupt',
+        fileSizeExceedsLimit: 'File size exceeds size limit',
+        fileTypeInvalid: 'Invalid file type',
+        duplicateFile: 'Duplicate file',
+    },
 }
 
 export default {
