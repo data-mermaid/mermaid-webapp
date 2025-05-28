@@ -11,10 +11,6 @@ const BenthicPitLitObservationSummaryStats = ({
   observations = [],
   transectLengthSurveyed = null
 }) => {
-  if (!transectLengthSurveyed) {
-    return null
-  }
-  
   const observationTopLevelAttributeCategoryOccurance = useMemo(() => {
     const transectLengthSurveyedInCm = transectLengthSurveyed * 100
 
@@ -57,11 +53,10 @@ const BenthicPitLitObservationSummaryStats = ({
         return { topLevelCategory, percent }
       })
 
-    // Sort categories alphabetically
     return sortArrayByObjectKey(topLevelCategoryStats, 'topLevelCategory')
   }, [observations, benthicAttributeSelectOptions, transectLengthSurveyed])
 
-  return (
+  return (transectLengthSurveyed ?
     <ObservationsSummaryStats>
       <tbody>
         {observationTopLevelAttributeCategoryOccurance.map((occurance) => {
@@ -77,7 +72,7 @@ const BenthicPitLitObservationSummaryStats = ({
           )
         })}
       </tbody>
-    </ObservationsSummaryStats>
+    </ObservationsSummaryStats> : null
   )
 }
 

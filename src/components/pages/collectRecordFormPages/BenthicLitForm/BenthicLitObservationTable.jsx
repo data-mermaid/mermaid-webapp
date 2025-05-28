@@ -393,6 +393,7 @@ BenthicLitObservationsTable.propTypes = {
     values: PropTypes.shape({
       interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       interval_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     }),
   }).isRequired,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
