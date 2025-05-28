@@ -1,36 +1,35 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, {useCallback, useEffect, useRef, useState} from 'react'
 import PropTypes from 'prop-types'
 import theme from '../../../../theme'
-import { useParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import {useParams} from 'react-router-dom'
+import {toast} from 'react-toastify'
 import Modal from '../../../generic/Modal/Modal'
-import {
-  IMAGE_CLASSIFICATION_COLORS as COLORS,
-  unclassifiedGuid,
-} from '../../../../library/constants/constants'
+import {IMAGE_CLASSIFICATION_COLORS as COLORS, unclassifiedGuid,} from '../../../../library/constants/constants'
 import ImageAnnotationModalTable from './ImageAnnotationModalTable'
 import ImageAnnotationModalMap from './ImageAnnotationModalMap'
 import {
-  Footer,
-  ImageAnnotationModalContainer,
-  Legend,
-  LegendItem,
-  LegendSquare,
-  LoadingContainer,
+    Footer,
+    ImageAnnotationModalContainer,
+    Legend,
+    LegendItem,
+    LegendSquare,
+    LoadingContainer,
 } from './ImageAnnotationModal.styles'
 import language from '../../../../language'
-import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import {
+    useDatabaseSwitchboardInstance
+} from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
-import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
+import {ButtonPrimary, ButtonSecondary} from '../../../generic/buttons'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
-import { useImageScale } from '../useImageScale'
-import { useZoomToPointsByAttributeId } from './useZoomToPointsByAttributeId'
-import { getToastArguments } from '../../../../library/getToastArguments'
-import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import { DEFAULT_MAP_ANIMATION_DURATION } from '../imageClassificationConstants'
+import {useImageScale} from '../useImageScale'
+import {useZoomToPointsByAttributeId} from './useZoomToPointsByAttributeId'
+import {getToastArguments} from '../../../../library/getToastArguments'
+import {useHttpResponseErrorHandler} from '../../../../App/HttpResponseErrorHandlerContext'
+import {DEFAULT_MAP_ANIMATION_DURATION} from '../imageClassificationConstants'
 
 const EXCLUDE_PARAMS =
-  'classification_status,collect_record_id,comments,created_by,created_on,data,id,location,name,num_confirmed,num_unclassified,num_unconfirmed,photo_timestamp,thumbnail,updated_by,updated_on'
+    'classification_status,collect_record_id,comments,created_by,created_on,data,id,location,name,num_confirmed,num_unclassified,num_unconfirmed,photo_timestamp,thumbnail,updated_by,updated_on'
 
 // Context: Strategy for the Image Annotation Modal is to use the 1st annotation in the array for each point
 // as the "current" annotation. The 1st annotation is used to group points into rows for the table,
@@ -41,245 +40,245 @@ const EXCLUDE_PARAMS =
 const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
 const ImageAnnotationModal = ({
-  imageId,
-  setImageId,
-  benthicAttributes,
-  growthForms,
-  onAnnotationSaveSuccess,
-}) => {
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { projectId } = useParams()
-  const [dataToReview, setDataToReview] = useState()
-  const [selectedAttributeId, setSelectedAttributeId] = useState('')
-  const [hoveredAttributeId, setHoveredAttributeId] = useState('')
-  const [isSaving, setIsSaving] = useState(false)
-  const [isDataUpdatedSinceLastSave, setIsDataUpdatedSinceLastSave] = useState(false)
-  const [hasMapLoaded, setHasMapLoaded] = useState(false)
-  const [isTableShowing, setIsTableShowing] = useState(true)
-  const map = useRef(null)
-  const [patchesGeoJson, setPatchesGeoJson] = useState()
+                                  imageId,
+                                  setImageId,
+                                  benthicAttributes,
+                                  growthForms,
+                                  onAnnotationSaveSuccess,
+                              }) => {
+    const {databaseSwitchboardInstance} = useDatabaseSwitchboardInstance()
+    const {projectId} = useParams()
+    const [dataToReview, setDataToReview] = useState()
+    const [selectedAttributeId, setSelectedAttributeId] = useState('')
+    const [hoveredAttributeId, setHoveredAttributeId] = useState('')
+    const [isSaving, setIsSaving] = useState(false)
+    const [isDataUpdatedSinceLastSave, setIsDataUpdatedSinceLastSave] = useState(false)
+    const [hasMapLoaded, setHasMapLoaded] = useState(false)
+    const [isTableShowing, setIsTableShowing] = useState(true)
+    const map = useRef(null)
+    const [patchesGeoJson, setPatchesGeoJson] = useState()
 
-  const { imageScale } = useImageScale({ hasMapLoaded, dataToReview })
-  const handleHttpResponseError = useHttpResponseErrorHandler()
+    const {imageScale} = useImageScale({hasMapLoaded, dataToReview})
+    const handleHttpResponseError = useHttpResponseErrorHandler()
 
-  const zoomToPaddedBounds = useCallback(
-    (bounds) => {
-      if (!bounds || !map.current) {
-        return
-      }
-
-      map.current.fitBounds(bounds, {
-        padding: 250,
-        duration: DEFAULT_MAP_ANIMATION_DURATION,
-        linear: true,
-      })
-    },
-    [map],
-  )
-
-  const { zoomToPointsByAttributeId } = useZoomToPointsByAttributeId({
-    zoomToPaddedBounds,
-    patchesGeoJson,
-  })
-
-  const getBenthicAttributeLabel = useCallback(
-    (benthicAttributeId) => {
-      const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-      return (
-        matchingBenthicAttribute?.name ??
-        language.imageClassification.imageClassificationModal.unclassified
-      )
-    },
-    [benthicAttributes],
-  )
-
-  const getGrowthFormLabel = useCallback(
-    (growthFormId) => {
-      const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
-      return matchingGrowthForm?.name.toLowerCase() ?? ''
-    },
-    [growthForms],
-  )
-
-  const getAttributeGrowthFormLabel = useCallback(
-    ({ benthic_attribute, growth_form }) =>
-      growth_form
-        ? `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(growth_form)}`
-        : getBenthicAttributeLabel(benthic_attribute),
-    [getBenthicAttributeLabel, getGrowthFormLabel],
-  )
-
-  const _fetchImageAnnotations = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId) {
-      databaseSwitchboardInstance
-        .getAnnotationsForImage(projectId, imageId, EXCLUDE_PARAMS)
-        .then((data) => {
-          const formattedPoints = data.points.map((point) => {
-            if (point.annotations.length === 0) {
-              point.annotations.push({
-                ba_gr: unclassifiedGuid,
-                ba_gr_label: language.imageClassification.imageClassificationModal.unclassified,
-              })
+    const zoomToPaddedBounds = useCallback(
+        (bounds) => {
+            if (!bounds || !map.current) {
+                return
             }
-            const sortedAnnotations = point.annotations?.toSorted(prioritizeConfirmedAnnotations)
 
-            // eslint-disable-next-line max-nested-callbacks
-            const labeledAnnotations = sortedAnnotations.map((annotation) => ({
-              ...annotation,
-              ba_gr: annotation.benthic_attribute ?? unclassifiedGuid,
-              ba_gr_label: getAttributeGrowthFormLabel(annotation),
-            }))
+            map.current.fitBounds(bounds, {
+                padding: 250,
+                duration: DEFAULT_MAP_ANIMATION_DURATION,
+                linear: true,
+            })
+        },
+        [map],
+    )
 
-            return { ...point, annotations: labeledAnnotations }
-          })
-          setDataToReview({ ...data, points: formattedPoints })
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(
-                ...getToastArguments(
-                  `${language.imageClassification.imageClassificationModal.errors.failedFetchAnnotations} ${error.message}`,
-                ),
-              )
-            },
-            shouldShowServerNonResponseMessage: false,
-          })
-        })
-    }
-  }, [
-    databaseSwitchboardInstance,
-    getAttributeGrowthFormLabel,
-    handleHttpResponseError,
-    imageId,
-    projectId,
-  ])
+    const {zoomToPointsByAttributeId} = useZoomToPointsByAttributeId({
+        zoomToPaddedBounds,
+        patchesGeoJson,
+    })
 
-  const handleCloseModal = () => {
-    if (
-      !isDataUpdatedSinceLastSave ||
-      window.confirm(
-        language.imageClassification.imageClassificationModal.userMessage
-          .confirmDiscardImageChanges,
-      )
-    ) {
-      setImageId()
-    }
-  }
-
-  const handleSaveChanges = () => {
-    setIsSaving(true)
-
-    databaseSwitchboardInstance
-      .saveAnnotationsForImage(projectId, imageId, dataToReview.points)
-      .then(() => {
-        setImageId()
-        onAnnotationSaveSuccess()
-        toast.success(
-          language.imageClassification.imageClassificationModal.success.savedAnnotations,
-        )
-      })
-      .catch((error) => {
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            toast.error(
-              ...getToastArguments(
-                `${language.imageClassification.imageClassificationModal.errors.failedSaveAnnotations} ${error.message}`,
-              ),
+    const getBenthicAttributeLabel = useCallback(
+        (benthicAttributeId) => {
+            const matchingBenthicAttribute = benthicAttributes.find(({id}) => id === benthicAttributeId)
+            return (
+                matchingBenthicAttribute?.name ??
+                language.imageClassification.imageClassificationModal.unclassified
             )
-          },
-          shouldShowServerNonResponseMessage: false,
-        })
-      })
-      .finally(() => {
-        setIsSaving(false)
-      })
-  }
+        },
+        [benthicAttributes],
+    )
 
-  return (
-    <>
-      <EnhancedPrompt shouldPromptTrigger={isDataUpdatedSinceLastSave} />
-      <Modal
-        title={dataToReview?.original_image_name ?? ''}
-        isOpen
-        onDismiss={handleCloseModal}
-        maxWidth="fit-content"
-        mainContent={
-          dataToReview && !isSaving && imageScale ? (
-            <ImageAnnotationModalContainer>
-              <ImageAnnotationModalTable
-                points={dataToReview.points}
-                setDataToReview={setDataToReview}
-                selectedAttributeId={selectedAttributeId}
-                setSelectedAttributeId={setSelectedAttributeId}
-                setHoveredAttributeId={setHoveredAttributeId}
-                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-                zoomToPointsByAttributeId={zoomToPointsByAttributeId}
-                isTableShowing={isTableShowing}
-              />
-              <ImageAnnotationModalMap
-                databaseSwitchboardInstance={databaseSwitchboardInstance}
-                dataToReview={dataToReview}
-                hasMapLoaded={hasMapLoaded}
-                hoveredAttributeId={hoveredAttributeId}
-                imageScale={imageScale}
-                isTableShowing={isTableShowing}
-                map={map}
-                patchesGeoJson={patchesGeoJson}
-                selectedAttributeId={selectedAttributeId}
-                setDataToReview={setDataToReview}
-                setHasMapLoaded={setHasMapLoaded}
-                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
-                setIsTableShowing={setIsTableShowing}
-                setPatchesGeoJson={setPatchesGeoJson}
-                zoomToPaddedBounds={zoomToPaddedBounds}
-              />
-            </ImageAnnotationModalContainer>
-          ) : (
-            <LoadingContainer>
-              <LoadingIndicator />
-            </LoadingContainer>
-          )
+    const getGrowthFormLabel = useCallback(
+        (growthFormId) => {
+            const matchingGrowthForm = growthForms.find(({id}) => id === growthFormId)
+            return matchingGrowthForm?.name.toLowerCase() ?? ''
+        },
+        [growthForms],
+    )
+
+    const getAttributeGrowthFormLabel = useCallback(
+        ({benthic_attribute, growth_form}) =>
+            growth_form
+                ? `${getBenthicAttributeLabel(benthic_attribute)} ${getGrowthFormLabel(growth_form)}`
+                : getBenthicAttributeLabel(benthic_attribute),
+        [getBenthicAttributeLabel, getGrowthFormLabel],
+    )
+
+    const _fetchImageAnnotations = useEffect(() => {
+        if (databaseSwitchboardInstance && projectId) {
+            databaseSwitchboardInstance
+                .getAnnotationsForImage(projectId, imageId, EXCLUDE_PARAMS)
+                .then((data) => {
+                    const formattedPoints = data.points.map((point) => {
+                        if (point.annotations.length === 0) {
+                            point.annotations.push({
+                                ba_gr: unclassifiedGuid,
+                                ba_gr_label: language.imageClassification.imageClassificationModal.unclassified,
+                            })
+                        }
+                        const sortedAnnotations = point.annotations?.toSorted(prioritizeConfirmedAnnotations)
+
+                        // eslint-disable-next-line max-nested-callbacks
+                        const labeledAnnotations = sortedAnnotations.map((annotation) => ({
+                            ...annotation,
+                            ba_gr: annotation.benthic_attribute ?? unclassifiedGuid,
+                            ba_gr_label: getAttributeGrowthFormLabel(annotation),
+                        }))
+
+                        return {...point, annotations: labeledAnnotations}
+                    })
+                    setDataToReview({...data, points: formattedPoints})
+                })
+                .catch((error) => {
+                    handleHttpResponseError({
+                        error,
+                        callback: () => {
+                            toast.error(
+                                ...getToastArguments(
+                                    `${language.imageClassification.imageClassificationModal.errors.failedFetchAnnotations} ${error.message}`,
+                                ),
+                            )
+                        },
+                        shouldShowServerNonResponseMessage: false,
+                    })
+                })
         }
-        footerContent={
-          <Footer>
-            <Legend>
-              <LegendItem>
-                <LegendSquare color={COLORS.confirmed} />
-                {language.imageClassification.imageClassificationModal.confirmed}
-              </LegendItem>
-              <LegendItem>
-                <LegendSquare style={{ border: `3px dotted ${theme.color.brandSecondary}` }} />
-                {language.imageClassification.imageClassificationModal.unconfirmed}
-              </LegendItem>
-              <LegendItem>
-                <LegendSquare color={COLORS.unclassified} />
-                {language.imageClassification.imageClassificationModal.unclassified}
-              </LegendItem>
-            </Legend>
-            <div>
-              <ButtonSecondary type="button" onClick={handleCloseModal} disabled={isSaving}>
-                {language.buttons.close}
-              </ButtonSecondary>
-              <ButtonPrimary type="button" onClick={handleSaveChanges} disabled={isSaving}>
-                {language.buttons.saveChanges}
-              </ButtonPrimary>
-            </div>
-          </Footer>
+    }, [
+        databaseSwitchboardInstance,
+        getAttributeGrowthFormLabel,
+        handleHttpResponseError,
+        imageId,
+        projectId,
+    ])
+
+    const handleCloseModal = () => {
+        if (
+            !isDataUpdatedSinceLastSave ||
+            window.confirm(
+                language.imageClassification.imageClassificationModal.userMessage
+                    .confirmDiscardImageChanges,
+            )
+        ) {
+            setImageId()
         }
-      />
-    </>
-  )
+    }
+
+    const handleSaveChanges = () => {
+        setIsSaving(true)
+
+        databaseSwitchboardInstance
+            .saveAnnotationsForImage(projectId, imageId, dataToReview.points)
+            .then(() => {
+                setImageId()
+                onAnnotationSaveSuccess()
+                toast.success(
+                    language.imageClassification.imageClassificationModal.success.savedAnnotations,
+                )
+            })
+            .catch((error) => {
+                handleHttpResponseError({
+                    error,
+                    callback: () => {
+                        toast.error(
+                            ...getToastArguments(
+                                `${language.imageClassification.imageClassificationModal.errors.failedSaveAnnotations} ${error.message}`,
+                            ),
+                        )
+                    },
+                    shouldShowServerNonResponseMessage: false,
+                })
+            })
+            .finally(() => {
+                setIsSaving(false)
+            })
+    }
+
+    return (
+        <>
+            <EnhancedPrompt shouldPromptTrigger={isDataUpdatedSinceLastSave}/>
+            <Modal
+                title={dataToReview?.original_image_name ?? ''}
+                isOpen
+                onDismiss={handleCloseModal}
+                maxWidth="fit-content"
+                mainContent={
+                    dataToReview && !isSaving && imageScale ? (
+                        <ImageAnnotationModalContainer>
+                            <ImageAnnotationModalTable
+                                points={dataToReview.points}
+                                setDataToReview={setDataToReview}
+                                selectedAttributeId={selectedAttributeId}
+                                setSelectedAttributeId={setSelectedAttributeId}
+                                setHoveredAttributeId={setHoveredAttributeId}
+                                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+                                zoomToPointsByAttributeId={zoomToPointsByAttributeId}
+                                isTableShowing={isTableShowing}
+                            />
+                            <ImageAnnotationModalMap
+                                databaseSwitchboardInstance={databaseSwitchboardInstance}
+                                dataToReview={dataToReview}
+                                hasMapLoaded={hasMapLoaded}
+                                hoveredAttributeId={hoveredAttributeId}
+                                imageScale={imageScale}
+                                isTableShowing={isTableShowing}
+                                map={map}
+                                patchesGeoJson={patchesGeoJson}
+                                selectedAttributeId={selectedAttributeId}
+                                setDataToReview={setDataToReview}
+                                setHasMapLoaded={setHasMapLoaded}
+                                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+                                setIsTableShowing={setIsTableShowing}
+                                setPatchesGeoJson={setPatchesGeoJson}
+                                zoomToPaddedBounds={zoomToPaddedBounds}
+                            />
+                        </ImageAnnotationModalContainer>
+                    ) : (
+                        <LoadingContainer>
+                            <LoadingIndicator/>
+                        </LoadingContainer>
+                    )
+                }
+                footerContent={
+                    <Footer>
+                        <Legend>
+                            <LegendItem>
+                                <LegendSquare color={COLORS.confirmed}/>
+                                {language.imageClassification.imageClassificationModal.confirmed}
+                            </LegendItem>
+                            <LegendItem>
+                                <LegendSquare style={{border: `3px dotted ${theme.color.brandSecondary}`}}/>
+                                {language.imageClassification.imageClassificationModal.unconfirmed}
+                            </LegendItem>
+                            <LegendItem>
+                                <LegendSquare style={{border: `3px dotted ${COLORS.unclassified}`}}/>
+                                {language.imageClassification.imageClassificationModal.unclassified}
+                            </LegendItem>
+                        </Legend>
+                        <div>
+                            <ButtonSecondary type="button" onClick={handleCloseModal} disabled={isSaving}>
+                                {language.buttons.close}
+                            </ButtonSecondary>
+                            <ButtonPrimary type="button" onClick={handleSaveChanges} disabled={isSaving}>
+                                {language.buttons.saveChanges}
+                            </ButtonPrimary>
+                        </div>
+                    </Footer>
+                }
+            />
+        </>
+    )
 }
 
 ImageAnnotationModal.propTypes = {
-  imageId: PropTypes.string.isRequired,
-  setImageId: PropTypes.func.isRequired,
-  benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
-  growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onAnnotationSaveSuccess: PropTypes.func.isRequired,
+    imageId: PropTypes.string.isRequired,
+    setImageId: PropTypes.func.isRequired,
+    benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
+    growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
+    onAnnotationSaveSuccess: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModal
