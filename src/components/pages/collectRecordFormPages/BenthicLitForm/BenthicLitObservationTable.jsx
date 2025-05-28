@@ -48,6 +48,7 @@ const BenthicLitObservationsTable = ({
   benthicAttributeSelectOptions,
   choices,
   collectRecord = undefined,
+  formik,
   ignoreObservationValidations,
   observationsReducer = [],
   resetObservationValidations,
@@ -56,6 +57,7 @@ const BenthicLitObservationsTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
+  const transectLengthSurveyed = formik?.values?.len_surveyed
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
@@ -369,6 +371,7 @@ const BenthicLitObservationsTable = ({
             <BenthicPitLitObservationSummaryStats
               benthicAttributeSelectOptions={benthicAttributeSelectOptions}
               observations={observationsState}
+              transectLengthSurveyed={transectLengthSurveyed}
             />
           </UnderTableRow>
         </>
