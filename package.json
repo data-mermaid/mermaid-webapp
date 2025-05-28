@@ -71,7 +71,7 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "TZ=UTC jest",
-    "prettier": "prettier --write ./src/**/*.js ",
+    "prettier": "prettier --write ./src",
     "lint": "tsc && eslint './src/**/*'",
     "prepare": "husky",
     "preview": "vite preview"
