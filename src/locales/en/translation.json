@@ -18,7 +18,7 @@
     "classifier_guesses_one": "Classifier guess",
     "classifier_guesses_other": "Classifier guesses",
     "confidence": "Confidence",
-    "confirmed_total_count": "Confirmed / total",
+    "confirmed_total": "Confirmed / total",
     "select_attribute": "Select attribute",
     "select_new_attribute": "Select new attribute",
     "annotation": {
@@ -26,8 +26,8 @@
       "confirmed": "Confirmed",
       "next_unconfirmed_point": "Next unconfirmed point",
       "status": "Status",
-      "unclassified_points_one": "Unclassified point",
-      "unclassified_points_other": "Unclassified points"
+      "unclassified_points_one": "{{count}} Unclassified point",
+      "unclassified_points_other": "{{count}} Unclassified points"
     },
     "buttons": {
       "confirm_all_points": "Confirm all points",
