@@ -149,7 +149,7 @@ const ImageAnnotationModalTable = ({
                                         <>
                                             <Td>{tableData[groupedTableRowId][0].annotations[0].ba_gr_label}</Td>
                                             <Td align="right">
-                                                {confirmedCount} / {unconfirmedCount + confirmedCount}
+                                                {`${confirmedCount} / ${unconfirmedCount + confirmedCount}`}
                                             </Td>
                                             <Td style={{textAlign: 'center', width: '104px'}}>
                                                 {!unconfirmedCount ? t('image_classification.annotation.confirmed') : (
