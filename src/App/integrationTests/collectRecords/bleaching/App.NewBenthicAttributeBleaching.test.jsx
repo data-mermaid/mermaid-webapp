@@ -93,7 +93,7 @@ test('Bleaching collect record observations add new benthic attribute - filling 
     ),
   )
 
-  const benthicAttributeElement = within(modal).getByLabelText('Benthic Attribute')
+  const benthicAttributeElement = within(modal).getByLabelText('Benthic attribute')
   const userNameElement = within(modal).getByLabelText('User')
   const projectNameElement = within(modal).getByLabelText('Project')
 
