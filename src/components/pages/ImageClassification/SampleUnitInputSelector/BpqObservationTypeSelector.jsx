@@ -31,7 +31,15 @@ const BpqObservationTypeSelector = ({
           <Trans
             i18nKey="image_classification.feature_introduction.description"
             components={{
-              a: <a href="https://coralnet.ucsd.edu">CoralNet</a>,
+              a: (
+                <a
+                  href="https://coralnet.ucsd.edu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CoralNet
+                </a>
+              ),
             }}
           />
         </p>
