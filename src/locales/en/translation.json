@@ -30,7 +30,6 @@
       "unclassified_points_other": "{{count}} Unclassified points"
     },
     "buttons": {
-      "confirm_all_points": "Confirm all points",
       "confirm_all": "Confirm all",
       "zoom_to_attribute": "Zoom to attribute"
     },
