@@ -290,6 +290,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
         setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
         subNavNode={subNavNode}
         isImageClassificationSelected={isImageClassificationSelected}
+        isImageClassificationEnabledForUser={isImageClassificationEnabledForUser}
       />
       {!!projectId && !!currentUser && (
         <NewAttributeModal

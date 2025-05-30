@@ -122,6 +122,7 @@ const CollectRecordFormPage = ({
   setIsNewBenthicAttributeModalOpen = () => {},
   setObservationIdToAddNewBenthicAttributeTo = () => {},
   subNavNode = null,
+  isImageClassificationEnabledForUser = false
 }) => {
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [choices, setChoices] = useState({})
@@ -164,6 +165,7 @@ const CollectRecordFormPage = ({
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const observationTableRef = useRef(null)
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new record is saved (and that triggers a navigation to its new page)
+  const isBenthicPQTNewRecordWithImageClassificationEnabled = isImageClassificationEnabledForUser && isNewRecord && sampleUnitName === 'benthicpqt'
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
   const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
@@ -515,7 +517,7 @@ const CollectRecordFormPage = ({
         aria-labelledby="collect-record-form"
         onSubmit={formik.handleSubmit}
       >
-        <SampleEventInputs
+        {!isBenthicPQTNewRecordWithImageClassificationEnabled && <SampleEventInputs
           areValidationsShowing={areValidationsShowing}
           collectRecord={collectRecordBeingEdited}
           formik={formik}
@@ -528,8 +530,8 @@ const CollectRecordFormPage = ({
           validationPropertiesWithDirtyResetOnInputChange={
             validationPropertiesWithDirtyResetOnInputChange
           }
-        />
-        <SampleUnitTransectInputs
+        />}
+        {!isBenthicPQTNewRecordWithImageClassificationEnabled && <SampleUnitTransectInputs
           areValidationsShowing={areValidationsShowing}
           choices={choices}
           formik={formik}
@@ -540,9 +542,8 @@ const CollectRecordFormPage = ({
             validationPropertiesWithDirtyResetOnInputChange
           }
           isImageClassificationSelected={collectRecordBeingEdited?.data?.image_classification}
-        />
-
-        <ObserversInput
+        />}
+        {!isBenthicPQTNewRecordWithImageClassificationEnabled && <ObserversInput
           data-testid="observers"
           areValidationsShowing={areValidationsShowing}
           formik={formik}
@@ -553,7 +554,7 @@ const CollectRecordFormPage = ({
           validationPropertiesWithDirtyResetOnInputChange={
             validationPropertiesWithDirtyResetOnInputChange
           }
-        />
+        />}
         <div ref={observationTableRef}>
           <ObservationTable1
             testId="observations-section"
@@ -585,7 +586,7 @@ const CollectRecordFormPage = ({
           />
         ) : null}
       </form>
-      <DeleteRecordButton
+      {!isBenthicPQTNewRecordWithImageClassificationEnabled && <DeleteRecordButton
         isLoading={isDeletingRecord}
         isNewRecord={isNewRecord}
         isOpen={isDeleteRecordModalOpen}
@@ -593,7 +594,7 @@ const CollectRecordFormPage = ({
         deleteRecord={deleteRecord}
         onDismiss={closeDeleteRecordModal}
         openModal={openDeleteRecordModal}
-      />
+      />}
       {!isSubmitWarningVisible ? errorBoxContent : null}
     </>
   ) : (
@@ -672,6 +673,7 @@ CollectRecordFormPage.propTypes = {
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func,
   subNavNode: subNavNodePropTypes,
   isImageClassificationSelected: PropTypes.bool,
+  isImageClassificationEnabledForUser: PropTypes.bool,
 }
 
 export default CollectRecordFormPage
