@@ -168,16 +168,18 @@ const ImageAnnotationModal = ({
   const removeMappedUnclassifiedPointData = (points) => {
     return points.map((point) => {
       if (point.annotations[0].ba_gr === unclassifiedGuid) {
-        point.annotations = []
+        return { ...point, annotations: [] }
+      } else {
+        return point
       }
     })
   }
 
   const handleSaveChanges = () => {
     setIsSaving(true)
-    removeMappedUnclassifiedPointData(dataToReview.points)
+    const strippedPoints = removeMappedUnclassifiedPointData(dataToReview.points)
     databaseSwitchboardInstance
-      .saveAnnotationsForImage(projectId, imageId, dataToReview.points)
+      .saveAnnotationsForImage(projectId, imageId, strippedPoints)
       .then(() => {
         setImageId()
         onAnnotationSaveSuccess()
