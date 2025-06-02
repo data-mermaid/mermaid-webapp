@@ -88,7 +88,7 @@ const ImageAnnotationModal = ({
       const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
       return matchingBenthicAttribute?.name ?? t('image_classification.annotation.unclassified')
     },
-    [benthicAttributes],
+    [benthicAttributes, t],
   )
 
   const getGrowthFormLabel = useCallback(
@@ -152,6 +152,7 @@ const ImageAnnotationModal = ({
     handleHttpResponseError,
     imageId,
     projectId,
+    t,
   ])
 
   const handleCloseModal = () => {
