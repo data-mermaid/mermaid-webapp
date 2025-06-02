@@ -1,59 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="/mermaid_favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <title>MERMAID - Marine Ecological Research Management Aid</title>
-    <meta
-      name="description"
-      content="Transform your underwater insights into data-driven actions that save coral reefs"
-    />
-
-    <!-- Facebook Meta Tags -->
-    <meta property="og:url" content="/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="MERMAID - Marine Ecological Research Management Aid" />
-    <meta
-      property="og:description"
-      content="Transform your underwater insights into data-driven actions that save coral reefs"
-    />
-    <meta property="og:image" content="/mermaid_opengraph.png" />
-    <meta property="og:site_name" content="MERMAID - Marine Ecological Research Management Aid" />
-    <meta property="og:locale" content="en_US" />
-    <!-- Twitter Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta property="twitter:domain" content="/" />
-    <meta property="twitter:url" content="/" />
-    <meta name="twitter:title" content="MERMAID - Marine Ecological Research Management Aid" />
-    <meta
-      name="twitter:description"
-      content="Transform your underwater insights into data-driven actions that save coral reefs"
-    />
-    <meta name="twitter:image" content="/mermaid_opengraph.png" />
-
-    <link rel="apple-touch-icon" href="/mermaid_favicon.png" />
-
+<head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NG1KXL2TSG"></script>
     <script>
-      const shouldCaptureGoogleAnalytics =
-        '%VITE_CAPTURE_GOOGLE_ANALYTICS%'.toLowerCase() === 'true' // defaults to false
-      if (shouldCaptureGoogleAnalytics) {
         window.dataLayer = window.dataLayer || []
-        function gtag() {
-          dataLayer.push(arguments)
-        }
-        gtag('js', new Date())
 
+        function gtag() {
+            dataLayer.push(arguments)
+        }
+
+        gtag('js', new Date())
         gtag('config', 'G-NG1KXL2TSG')
-      }
     </script>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <script type="module" src="/src/index.jsx"></script>
-  </body>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/mermaid_favicon.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <title>MERMAID - Marine Ecological Research Management Aid</title>
+    <meta
+            name="description"
+            content="Transform your underwater insights into data-driven actions that save coral reefs"
+    />
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="/"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="MERMAID - Marine Ecological Research Management Aid"/>
+    <meta
+            property="og:description"
+            content="Transform your underwater insights into data-driven actions that save coral reefs"
+    />
+    <meta property="og:image" content="/mermaid_opengraph.png"/>
+    <meta property="og:site_name" content="MERMAID - Marine Ecological Research Management Aid"/>
+    <meta property="og:locale" content="en_US"/>
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta property="twitter:domain" content="/"/>
+    <meta property="twitter:url" content="/"/>
+    <meta name="twitter:title" content="MERMAID - Marine Ecological Research Management Aid"/>
+    <meta
+            name="twitter:description"
+            content="Transform your underwater insights into data-driven actions that save coral reefs"
+    />
+    <meta name="twitter:image" content="/mermaid_opengraph.png"/>
+
+    <link rel="apple-touch-icon" href="/mermaid_favicon.png"/>
+
+
+</head>
+<body>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<div id="root"></div>
+<script type="module" src="/src/index.jsx"></script>
+</body>
 </html>
