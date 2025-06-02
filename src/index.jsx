@@ -14,6 +14,7 @@ import dexieCurrentUserInstance from './App/dexieCurrentUserInstance'
 import { DexiePerUserDataInstanceProvider } from './App/dexiePerUserDataInstanceContext'
 import { ClearPersistedFormDataHackProvider } from './App/ClearDirtyFormDataHackContext'
 import '../i18n'
+import { PostHogProvider } from 'posthog-js/react'
 
 // Upgrading to react router v6 because of dependabot issues and data routers (createBrowserRouter) which is necessary for many functions we use(eg: useNavigate).
 // We keep the jsx routes as defined in app.js instead of having ALL routes defined here because we were not able to have conditional rendering of the loader otherwise
@@ -24,33 +25,38 @@ const router = createBrowserRouter(
 
 const container = document.getElementById('root')
 const root = createRoot(container)
+const options = {
+  api_host: import.meta.env.REACT_APP_PUBLIC_POSTHOG_HOST,
+}
 
 root.render(
   <React.StrictMode>
-    <Auth0Provider
-      domain={import.meta.env.VITE_AUTH0_DOMAIN}
-      clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
-      redirectUri={window.location.origin}
-      audience={import.meta.env.VITE_AUTH0_AUDIENCE}
-      useRefreshTokens={true}
-      // Note that while storing tokens in local storage provides persistence
-      // across page refreshes and browser tabs, it increases the risk of
-      // cross-site scripting (XSS) attacks.
-      // More information here: https://auth0.com/docs/libraries/auth0-single-page-app-sdk#change-storage-options
-      // Reccomend researching a different approach to authentication
-      cacheLocation="localstorage"
-      scope="read:current_user update:current_user_metadata"
-    >
-      <OnlineStatusProvider>
-        <SyncStatusProvider>
-          <DexiePerUserDataInstanceProvider>
-            <ClearPersistedFormDataHackProvider value={router}>
-              <RouterProvider router={router} />
-            </ClearPersistedFormDataHackProvider>
-          </DexiePerUserDataInstanceProvider>
-        </SyncStatusProvider>
-      </OnlineStatusProvider>
-    </Auth0Provider>
+    <PostHogProvider apiKey={import.meta.env.REACT_APP_PUBLIC_POSTHOG_KEY} options={options}>
+      <Auth0Provider
+        domain={import.meta.env.VITE_AUTH0_DOMAIN}
+        clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+        redirectUri={window.location.origin}
+        audience={import.meta.env.VITE_AUTH0_AUDIENCE}
+        useRefreshTokens={true}
+        // Note that while storing tokens in local storage provides persistence
+        // across page refreshes and browser tabs, it increases the risk of
+        // cross-site scripting (XSS) attacks.
+        // More information here: https://auth0.com/docs/libraries/auth0-single-page-app-sdk#change-storage-options
+        // Recommend researching a different approach to authentication
+        cacheLocation="localstorage"
+        scope="read:current_user update:current_user_metadata"
+      >
+        <OnlineStatusProvider>
+          <SyncStatusProvider>
+            <DexiePerUserDataInstanceProvider>
+              <ClearPersistedFormDataHackProvider value={router}>
+                <RouterProvider router={router} />
+              </ClearPersistedFormDataHackProvider>
+            </DexiePerUserDataInstanceProvider>
+          </SyncStatusProvider>
+        </OnlineStatusProvider>
+      </Auth0Provider>
+    </PostHogProvider>
   </React.StrictMode>,
 )
 
