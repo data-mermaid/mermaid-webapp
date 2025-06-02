@@ -163,9 +163,18 @@ const ImageAnnotationModal = ({
     }
   }
 
+  // Image annotations that are unclassified have additional values added that need to be stripped before saving
+  const removeMappedUnclassifiedPointData = (points) => {
+    return points.map((point) => {
+      if (point.annotations[0].ba_gr === unclassifiedGuid) {
+        point.annotations = []
+      }
+    })
+  }
+
   const handleSaveChanges = () => {
     setIsSaving(true)
-
+    removeMappedUnclassifiedPointData(dataToReview.points)
     databaseSwitchboardInstance
       .saveAnnotationsForImage(projectId, imageId, dataToReview.points)
       .then(() => {
