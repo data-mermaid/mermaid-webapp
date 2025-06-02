@@ -62,7 +62,7 @@ const BenthicPitTransectInputs = ({
   const currentOptions = getOptions(currents.data)
   const tideOptions = getOptions(tides.data)
   const benthic_transect = validationsApiData?.benthic_transect
-  const isIntervalSizeAsStartCheck = formik.values?.is_interval_size_as_start
+  const isIntervalSizeAsStartChecked = formik.values?.is_interval_size_as_start
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     benthic_transect?.number,
@@ -198,7 +198,7 @@ const BenthicPitTransectInputs = ({
   }
 
   const handleIntervalSizeChange = (event) => {
-    if (isIntervalSizeAsStartCheck) {
+    if (isIntervalSizeAsStartChecked) {
       formik.setFieldValue('interval_start', event.target.value)
     }
     formik.handleChange(event)
@@ -375,12 +375,12 @@ const BenthicPitTransectInputs = ({
           helperText={language.helperText.intervalStart}
           renderItemAboveInput={
             <IntervalCheckbox
-              isChecked={isIntervalSizeAsStartCheck}
+              isChecked={isIntervalSizeAsStartChecked}
               handleChange={handleSyncIntervalChange}
               checkboxLabel={language.pages.collectRecord.benthicPitSyncCheckbox}
             />
           }
-          isInputDisabled={isIntervalSizeAsStartCheck}
+          isInputDisabled={isIntervalSizeAsStartChecked}
         />
         <InputSelectWithLabelAndValidation
           label="Reef Slope"
