@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
+import theme from '../../../../theme'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Modal from '../../../generic/Modal/Modal'
-import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+import {
+  IMAGE_CLASSIFICATION_COLORS as COLORS,
+  unclassifiedGuid,
+} from '../../../../library/constants/constants'
 import ImageAnnotationModalTable from './ImageAnnotationModalTable'
 import ImageAnnotationModalMap from './ImageAnnotationModalMap'
 import {
@@ -14,7 +18,6 @@ import {
   LegendSquare,
   LoadingContainer,
 } from './ImageAnnotationModal.styles'
-import language from '../../../../language'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
@@ -24,6 +27,7 @@ import { useZoomToPointsByAttributeId } from './useZoomToPointsByAttributeId'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { DEFAULT_MAP_ANIMATION_DURATION } from '../imageClassificationConstants'
+import { useTranslation } from 'react-i18next'
 
 const EXCLUDE_PARAMS =
   'classification_status,collect_record_id,comments,created_by,created_on,data,id,location,name,num_confirmed,num_unclassified,num_unconfirmed,photo_timestamp,thumbnail,updated_by,updated_on'
@@ -43,6 +47,7 @@ const ImageAnnotationModal = ({
   growthForms,
   onAnnotationSaveSuccess,
 }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const [dataToReview, setDataToReview] = useState()
@@ -81,9 +86,9 @@ const ImageAnnotationModal = ({
   const getBenthicAttributeLabel = useCallback(
     (benthicAttributeId) => {
       const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-      return matchingBenthicAttribute?.name ?? ''
+      return matchingBenthicAttribute?.name ?? t('image_classification.annotation.unclassified')
     },
-    [benthicAttributes],
+    [benthicAttributes, t],
   )
 
   const getGrowthFormLabel = useCallback(
@@ -108,17 +113,23 @@ const ImageAnnotationModal = ({
         .getAnnotationsForImage(projectId, imageId, EXCLUDE_PARAMS)
         .then((data) => {
           const formattedPoints = data.points.map((point) => {
-            const sortedAnnotations = point.annotations.toSorted(prioritizeConfirmedAnnotations)
+            if (point.annotations.length === 0) {
+              point.annotations.push({
+                ba_gr: unclassifiedGuid,
+                ba_gr_label: t('image_classification.annotation.unclassified'),
+              })
+            }
+            const sortedAnnotations = point.annotations?.toSorted(prioritizeConfirmedAnnotations)
+
             // eslint-disable-next-line max-nested-callbacks
-            const formattedAnnotations = sortedAnnotations.map((annotation) => ({
+            const labeledAnnotations = sortedAnnotations.map((annotation) => ({
               ...annotation,
-              ba_gr: annotation.benthic_attribute + '_' + annotation.growth_form,
+              ba_gr: annotation.benthic_attribute ?? unclassifiedGuid,
               ba_gr_label: getAttributeGrowthFormLabel(annotation),
             }))
 
-            return { ...point, annotations: formattedAnnotations }
+            return { ...point, annotations: labeledAnnotations }
           })
-
           setDataToReview({ ...data, points: formattedPoints })
         })
         .catch((error) => {
@@ -126,7 +137,9 @@ const ImageAnnotationModal = ({
             error,
             callback: () => {
               toast.error(
-                ...getToastArguments(`Failed to fetch image annotations. ${error.message}`),
+                ...getToastArguments(
+                  `${t('image_classification.errors.failed_annotations_fetch')} ${error.message}`,
+                ),
               )
             },
             shouldShowServerNonResponseMessage: false,
@@ -139,32 +152,48 @@ const ImageAnnotationModal = ({
     handleHttpResponseError,
     imageId,
     projectId,
+    t,
   ])
 
   const handleCloseModal = () => {
     if (
       !isDataUpdatedSinceLastSave ||
-      window.confirm('Are you sure you want to discard the change to this image?')
+      window.confirm(t('image_classification.user_message.confirm_image_changes'))
     ) {
       setImageId()
     }
   }
 
+  // Image annotations that are unclassified have additional values added that need to be stripped before saving
+  const removeMappedUnclassifiedPointData = (points) => {
+    return points.map((point) => {
+      if (point.annotations[0].ba_gr === unclassifiedGuid) {
+        return { ...point, annotations: [] }
+      } else {
+        return point
+      }
+    })
+  }
+
   const handleSaveChanges = () => {
     setIsSaving(true)
-
+    const strippedPoints = removeMappedUnclassifiedPointData(dataToReview.points)
     databaseSwitchboardInstance
-      .saveAnnotationsForImage(projectId, imageId, dataToReview.points)
+      .saveAnnotationsForImage(projectId, imageId, strippedPoints)
       .then(() => {
         setImageId()
         onAnnotationSaveSuccess()
-        toast.success('Successfully saved image annotations')
+        toast.success(t('image_classification.success.annotations_saved'))
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(`Failed to save image annotations. ${error.message}`))
+            toast.error(
+              ...getToastArguments(
+                `${t('image_classification.errors.failed_annotations_save')} ${error.message}`,
+              ),
+            )
           },
           shouldShowServerNonResponseMessage: false,
         })
@@ -224,23 +253,23 @@ const ImageAnnotationModal = ({
             <Legend>
               <LegendItem>
                 <LegendSquare color={COLORS.confirmed} />
-                Confirmed
+                {t('image_classification.annotation.confirmed')}
               </LegendItem>
               <LegendItem>
-                <LegendSquare color={COLORS.unconfirmed} />
-                Unconfirmed
+                <LegendSquare style={{ border: `3px dotted ${theme.color.brandSecondary}` }} />
+                {t('image_classification.annotation.unconfirmed')}
               </LegendItem>
               <LegendItem>
-                <LegendSquare color={COLORS.unclassified} />
-                Unclassified
+                <LegendSquare style={{ border: `3px dotted ${COLORS.unclassified}` }} />
+                {t('image_classification.annotation.unclassified')}
               </LegendItem>
             </Legend>
             <div>
               <ButtonSecondary type="button" onClick={handleCloseModal} disabled={isSaving}>
-                {language.buttons.close}
+                {t('buttons.close')}
               </ButtonSecondary>
               <ButtonPrimary type="button" onClick={handleSaveChanges} disabled={isSaving}>
-                {language.buttons.saveChanges}
+                {t('buttons.save_changes')}
               </ButtonPrimary>
             </div>
           </Footer>

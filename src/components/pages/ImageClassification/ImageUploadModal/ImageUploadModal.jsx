@@ -38,9 +38,10 @@ const ImageUploadModal = ({
 
   const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
   const maxFileSize = 30 * 1024 * 1024 // 30 MB
+  const minImageWidthAndHeight = 1500
   const maxWidth = 8000
   const maxHeight = 8000
-  const uploadText = language.imageClassification.imageClassficationModal
+  const uploadText = language.imageClassification.imageClassificationModal
 
   const validateDimensions = (file) => {
     return new Promise((resolve) => {
@@ -58,6 +59,10 @@ const ImageUploadModal = ({
         img.onload = () => {
           if (isCancelledRef.current) {
             return resolve({ file, valid: false, cancelled: true })
+          }
+
+          if (img.width < minImageWidthAndHeight || img.height < minImageWidthAndHeight) {
+            return resolve({ file, valid: false, isImageTooSmall: true })
           }
 
           if (img.width <= maxWidth && img.height <= maxHeight) {
@@ -123,22 +128,36 @@ const ImageUploadModal = ({
 
       // Validate file type, size, dimensions, and uniqueness.
       if (!validFileTypes.includes(file.type)) {
-        toast.error(`Invalid file type: ${file.name}`)
+        toast.error(
+          `${language.imageClassification.imageUploadNotification.fileTypeInvalid}: ${file.name}`,
+        )
         continue
       }
       if (file.size > maxFileSize) {
-        toast.error(`File size exceeds the limit: ${file.name}`)
+        toast.error(
+          `${language.imageClassification.imageUploadNotification.fileSizeExceedsLimit}: ${file.name}`,
+        )
         continue
       }
 
       if (existingFiles.some((existingFile) => existingFile.original_image_name === file.name)) {
-        toast.error(`Duplicate file: ${file.name}`)
+        toast.error(
+          `${language.imageClassification.imageUploadNotification.duplicateFile}: ${file.name}`,
+        )
         continue
       }
 
       const result = await validateDimensions(file)
       if (!result.valid || result.corrupt) {
-        toast.error(`File is invalid or corrupt: ${file.name}`)
+        if (result.isImageTooSmall) {
+          toast.error(
+            `${language.imageClassification.imageUploadNotification.imageTooSmall}: ${file.name}. ${language.imageClassification.imageUploadNotification.minImageDimension}`,
+          )
+        } else {
+          toast.error(
+            `${language.imageClassification.imageUploadNotification.fileInvalidOrCorrupt}: ${file.name}`,
+          )
+        }
         continue
       }
 
