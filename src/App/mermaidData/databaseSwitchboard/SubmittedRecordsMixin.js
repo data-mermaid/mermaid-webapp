@@ -118,13 +118,37 @@ const SubmittedRecordsMixin = (Base) =>
     }
 
     exportSubmittedRecords = async function exportSubmittedRecords({ projectId, protocol }) {
+      if (!projectId || !protocol) {
+        return Promise.reject(this._operationMissingParameterError)
+      }
+
       const token = await this._getAccessToken()
-
       const method = getProtocolMethodsType(protocol)
-
       const report_url = `${this._apiBaseUrl}/projects/${projectId}/${method}/xlsx/?access_token=${token}`
 
-      window.open(report_url)
+      return this._isOnlineAuthenticatedAndReady
+        ? axios
+            .get(report_url, {
+              responseType: 'blob',
+            })
+            .then((response) => {
+              const contentDisposition = response.headers['content-disposition']
+              const filename = contentDisposition
+                ? contentDisposition.split('filename=')[1].replace(/["']/g, '')
+                : `${projectId}_${protocol}_${new Date().toISOString().split('T')[0]}.zip`
+
+              const url = window.URL.createObjectURL(new Blob([response.data]))
+
+              const link = document.createElement('a')
+              link.href = url
+              link.setAttribute('download', filename)
+              document.body.appendChild(link)
+              link.click()
+
+              link.parentNode.removeChild(link)
+              window.URL.revokeObjectURL(url)
+            })
+        : Promise.reject(this._notAuthenticatedAndReadyError)
     }
   }
 

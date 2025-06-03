@@ -9,7 +9,8 @@
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View"
+    "view": "View",
+    "done": "Done"
   },
   "image_classification": {
     "add_attribute": "Add new attribute",
@@ -50,5 +51,21 @@
   },
   "search": {
     "no_results": "No results found"
+  },
+  "modals": {
+    "export_success": {
+      "title": "Export successful",
+      "description": "An email has been sent to <email />. This can sometimes take up to 15 minutes.",
+      "citation_1_header": "Included in this export",
+      "metadata_export": "Metadata for this project",
+      "sample_event_level_export_one": "Sample event level data ({{count}} survey)",
+      "sample_event_level_export_other": "Sample event level data ({{count}} surveys)",
+      "no_sample_event_level_export": "No sample event level data (this method is set to private. <a />)",
+      "observation_level_export_one": "Observation level data ({{count}} survey)",
+      "observation_level_export_other": "Observation level data ({{count}} surveys)",
+      "no_observation_level_export": "No observation level data (This method is set to {{data_sharing_policy}}. <a />)",
+      "citation_2_header": "Please credit the data owners",
+      "citation_2_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
+    }
   }
 }
