@@ -14,6 +14,10 @@ import { DropdownItemStyle } from '../../generic/ButtonSecondaryDropdown/ButtonS
 import SuccessExportModal from '../../SuccessExportModal/SuccessExportModal'
 import { toast } from 'react-toastify'
 import { ButtonSecondary } from '../../generic/buttons'
+import { getDataSharingPolicyLabel } from '../../../library/getDataSharingPolicyLabel'
+import { getSampleEventCount } from '../../../library/getSampleEventCount'
+import { getToastArguments } from '../../../library/getToastArguments'
+import { useTranslation } from 'react-i18next'
 
 const SubmittedToolbarSection = ({
   name,
@@ -29,15 +33,26 @@ const SubmittedToolbarSection = ({
   isMethodFilterEnabled = false,
   setMethodsFilter,
   handleSetTableUserPrefs,
+  submittedRecordsForUiDisplay,
 }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
+  const [projectDataPolicy, setProjectDataPolicy] = useState({})
   const [isSuccessExportModalOpen, setIsSuccessExportModalOpen] = useState(false)
-  const [isExporting, setIsExporting] = useState(false)
+  const [exportingDataPolicy, setExportingDataPolicy] = useState('')
+  const [protocolSampleEventCount, setProtocolSampleEventCount] = useState(0)
 
   const _getSupportingData = useEffect(() => {
     databaseSwitchboardInstance.getProject(projectId).then((project) => {
-      console.log('Project data:', project)
+      setProjectDataPolicy({
+        fishbelt: project.data_policy_beltfish,
+        benthicpit: project.data_policy_benthicpit,
+        benthiclit: project.data_policy_benthiclit,
+        benthicpqt: project.data_policy_benthicpqt,
+        bleachingqc: project.data_policy_bleachingqc,
+        habitatcomplexity: project.data_policy_habitatcomplexity,
+      })
     })
   }, [databaseSwitchboardInstance, projectId])
 
@@ -48,16 +63,19 @@ const SubmittedToolbarSection = ({
   )
 
   const handleExportSubmitted = (protocol) => {
-    setIsExporting(true)
+    const dataPolicyLabel = getDataSharingPolicyLabel(projectDataPolicy[protocol])
+    const sampleEventCount = getSampleEventCount(submittedRecordsForUiDisplay, protocol)
+
+    setExportingDataPolicy(dataPolicyLabel)
+    setProtocolSampleEventCount(sampleEventCount)
 
     databaseSwitchboardInstance
       .exportSubmittedRecords({ projectId, protocol })
-      .catch(() => {
-        toast.error('There was an error exporting the report.')
-      })
-      .finally(() => {
+      .then(() => {
         setIsSuccessExportModalOpen(true)
-        setIsExporting(false)
+      })
+      .catch(() => {
+        toast.error(...getToastArguments(t('toasts.export_error')))
       })
   }
 
@@ -65,6 +83,12 @@ const SubmittedToolbarSection = ({
     setMethodsFilter([])
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: '' })
     handleGlobalFilterChange('')
+  }
+
+  const closeModal = () => {
+    setIsSuccessExportModalOpen(false)
+    setExportingDataPolicy('')
+    setProtocolSampleEventCount(0)
   }
 
   return (
@@ -94,42 +118,38 @@ const SubmittedToolbarSection = ({
             />
           ) : null}
         </FilterItems>
-        {isExporting ? (
-          <ButtonSecondary disabled={isExporting}>
-            <IconDownload /> Exporting...
-          </ButtonSecondary>
-        ) : (
-          <ButtonSecondaryDropdown label={label}>
-            <Column as="nav" data-testid="export-to-csv">
-              <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('fishbelt')}>
-                Fish Belt
-              </DropdownItemStyle>
-              <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpit')}>
-                Benthic PIT
-              </DropdownItemStyle>
-              <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthiclit')}>
-                Benthic LIT
-              </DropdownItemStyle>
-              <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpqt')}>
-                Benthic Photo Quadrat
-              </DropdownItemStyle>
-              <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('bleachingqc')}>
-                Bleaching
-              </DropdownItemStyle>
-              <DropdownItemStyle
-                as="button"
-                onClick={() => handleExportSubmitted('habitatcomplexity')}
-              >
-                Habitat Complexity
-              </DropdownItemStyle>
-            </Column>
-          </ButtonSecondaryDropdown>
-        )}
+        <ButtonSecondaryDropdown label={label}>
+          <Column as="nav" data-testid="export-to-csv">
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('fishbelt')}>
+              Fish Belt
+            </DropdownItemStyle>
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpit')}>
+              Benthic PIT
+            </DropdownItemStyle>
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthiclit')}>
+              Benthic LIT
+            </DropdownItemStyle>
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpqt')}>
+              Benthic Photo Quadrat
+            </DropdownItemStyle>
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('bleachingqc')}>
+              Bleaching
+            </DropdownItemStyle>
+            <DropdownItemStyle
+              as="button"
+              onClick={() => handleExportSubmitted('habitatcomplexity')}
+            >
+              Habitat Complexity
+            </DropdownItemStyle>
+          </Column>
+        </ButtonSecondaryDropdown>
       </ToolBarItemsRow>
       <SuccessExportModal
-        projectId={projectId}
         isOpen={isSuccessExportModalOpen}
-        onDismiss={() => setIsSuccessExportModalOpen(false)}
+        onDismiss={closeModal}
+        projectId={projectId}
+        exportingDataPolicy={exportingDataPolicy}
+        protocolSampleEventCount={protocolSampleEventCount}
       />
     </>
   )
@@ -137,7 +157,7 @@ const SubmittedToolbarSection = ({
 
 SubmittedToolbarSection.propTypes = {
   name: PropTypes.string.isRequired,
-  globalSearchText: PropTypes.string.isRequired,
+  globalSearchText: PropTypes.string,
   handleGlobalFilterChange: PropTypes.func.isRequired,
   handleMethodsColumnFilterChange: PropTypes.func.isRequired,
   methodFilterValue: PropTypes.arrayOf(string),
@@ -149,6 +169,11 @@ SubmittedToolbarSection.propTypes = {
   isSearchFilterEnabled: PropTypes.bool,
   setMethodsFilter: PropTypes.func.isRequired,
   handleSetTableUserPrefs: PropTypes.func.isRequired,
+  submittedRecordsForUiDisplay: PropTypes.arrayOf(
+    PropTypes.shape({
+      protocol: PropTypes.string,
+    }),
+  ).isRequired,
 }
 
 export default SubmittedToolbarSection

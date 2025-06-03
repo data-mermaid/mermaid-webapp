@@ -1,9 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import theme from '../../theme'
 import styled from 'styled-components'
+import { Trans, useTranslation } from 'react-i18next'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { ButtonSecondary } from '../generic/buttons'
-import { Trans, useTranslation } from 'react-i18next'
 
 const CitationContainer = styled.div`
   background-color: ${theme.color.grey1};
@@ -15,9 +17,21 @@ const SuccessExportModal = ({
   isOpen,
   onDismiss,
   projectId,
-  selectedExportDataSharingPolicy = 'Public',
+  exportingDataPolicy,
+  protocolSampleEventCount,
 }) => {
   const { t } = useTranslation()
+  const { currentUser } = useCurrentUser()
+
+  const contactLink = (
+    <a
+      href={`https://datamermaid.org/contact-project?project_id=${projectId}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Contact Admins
+    </a>
+  )
 
   const getSampleEventLevelExportText = (dataSharing) => {
     if (dataSharing === 'Private') {
@@ -25,21 +39,13 @@ const SuccessExportModal = ({
         <Trans
           i18nKey="modals.export_success.no_sample_event_level_export"
           components={{
-            a: (
-              <a
-                href={`https://datamermaid.org/contact-project?project_id=${projectId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Contact Admins
-              </a>
-            ),
+            contactLink,
           }}
         />
       )
     }
 
-    return t('modals.export_success.sample_event_level_export', { count: 10 })
+    return t('modals.export_success.sample_event_level_export', { count: protocolSampleEventCount })
   }
 
   const getObservationLevelExportText = (dataSharing) => {
@@ -47,38 +53,30 @@ const SuccessExportModal = ({
       return (
         <Trans
           i18nKey="modals.export_success.no_observation_level_export"
-          values={{ data_sharing_policy: dataSharing.toLowerCase() }}
+          values={{ data_sharing_policy: dataSharing?.toLowerCase() }}
           components={{
-            a: (
-              <a
-                href={`https://datamermaid.org/contact-project?project_id=${projectId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Contact Admins
-              </a>
-            ),
+            contactLink,
           }}
         />
       )
     }
 
-    return t('modals.export_success.observation_level_export', { count: 10 })
+    return t('modals.export_success.observation_level_export', { count: protocolSampleEventCount })
   }
 
   const modalContent = (
     <>
       <Trans
         i18nKey="modals.export_success.description"
-        components={{ email: <strong>{'nick@sparkgeo.com'}</strong> }}
+        components={{ currentUserEmail: <strong>{currentUser?.email}</strong> }}
       />
       {projectId && (
         <CitationContainer>
           <h4>{t('modals.export_success.citation_1_header')}</h4>
           <ul>
             <li>{t('modals.export_success.metadata_export')}</li>
-            <li>{getSampleEventLevelExportText(selectedExportDataSharingPolicy)} </li>
-            <li>{getObservationLevelExportText(selectedExportDataSharingPolicy)} </li>
+            <li>{getSampleEventLevelExportText(exportingDataPolicy)} </li>
+            <li>{getObservationLevelExportText(exportingDataPolicy)} </li>
           </ul>
         </CitationContainer>
       )}
@@ -104,6 +102,14 @@ const SuccessExportModal = ({
       footerContent={footerContent}
     />
   )
+}
+
+SuccessExportModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onDismiss: PropTypes.func.isRequired,
+  projectId: PropTypes.string.isRequired,
+  exportingDataPolicy: PropTypes.string.isRequired,
+  protocolSampleEventCount: PropTypes.number.isRequired,
 }
 
 export default SuccessExportModal
