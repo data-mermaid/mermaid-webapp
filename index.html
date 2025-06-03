@@ -3,15 +3,18 @@
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NG1KXL2TSG"></script>
-    <script>
-        window.dataLayer = window.dataLayer || []
+    <script type="module">
+        const env = import.meta.env.VITE_ENVIRONMENT || 'local';
+        if (env === 'production') {
+            window.dataLayer = window.dataLayer || []
 
-        function gtag() {
-            dataLayer.push(arguments)
+            function gtag() {
+                dataLayer.push(arguments)
+            }
+
+            gtag('js', new Date())
+            gtag('config', 'G-NG1KXL2TSG')
         }
-
-        gtag('js', new Date())
-        gtag('config', 'G-NG1KXL2TSG')
     </script>
     <meta charset="utf-8"/>
     <link rel="icon" href="/mermaid_favicon.png"/>
