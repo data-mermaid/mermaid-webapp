@@ -26,12 +26,12 @@ const router = createBrowserRouter(
 const container = document.getElementById('root')
 const root = createRoot(container)
 const options = {
-  api_host: import.meta.env.REACT_APP_PUBLIC_POSTHOG_HOST,
+  api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
 }
 
 root.render(
   <React.StrictMode>
-    <PostHogProvider apiKey={import.meta.env.REACT_APP_PUBLIC_POSTHOG_KEY} options={options}>
+    <PostHogProvider apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY} options={options}>
       <Auth0Provider
         domain={import.meta.env.VITE_AUTH0_DOMAIN}
         clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}

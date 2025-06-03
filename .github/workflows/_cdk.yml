@@ -24,6 +24,8 @@ env:
   VITE_MERMAID_EXPLORE_LINK: https://dev-explore.datamermaid.org
   VITE_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
   VITE_CAPTURE_GOOGLE_ANALYTICS: false
+  VITE_PUBLIC_POSTHOG_KEY: ph
+  VITE_PUBLIC_POSTHOG_HOST: https://us.i.posthog.com
   TARGET: dev
 
 jobs:
@@ -63,6 +65,7 @@ jobs:
           echo "VITE_MERMAID_API=https://api.datamermaid.org/v1" >> "$GITHUB_ENV"
           echo "VITE_MERMAID_EXPLORE_LINK=https://explore.datamermaid.org" >> "$GITHUB_ENV"
           echo "VITE_MERMAID_REFERENCE_LINK=https://public.datamermaid.org/mermaid_attributes.xlsx" >> "$GITHUB_ENV"
+          echo "VITE_PUBLIC_POSTHOG_KEY=phc_4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5" >> "$GITHUB_ENV"
           echo "VITE_CAPTURE_GOOGLE_ANALYTICS=true"
           echo "export const versionNumber = '${{ github.ref_name }}'" > src/version.js
           cat src/version.js
