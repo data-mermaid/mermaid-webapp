@@ -1,5 +1,4 @@
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getProtocolMethodsType } from '../recordProtocolHelpers'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
