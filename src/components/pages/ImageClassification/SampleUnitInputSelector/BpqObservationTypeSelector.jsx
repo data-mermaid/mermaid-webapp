@@ -47,10 +47,16 @@ const BpqObservationTypeSelector = ({ setIsImageClassificationSelected, isAppOnl
             disabled={!isAppOnline}
           >
             <IconSparkles />
-            <ButtonText>{t('image_classification.feature_introduction.use_ai_button')}</ButtonText>
+            <ButtonText id="gtm-image-classification-selection-text">
+              {t('image_classification.feature_introduction.use_ai_button')}
+            </ButtonText>
           </ButtonPrimary>
         </div>
-        <ButtonSecondary type="button" onClick={handleSampleUnitChange(false)}>
+        <ButtonSecondary
+          id="gtm-manual-entry"
+          type="button"
+          onClick={handleSampleUnitChange(false)}
+        >
           <IconPen />
           <ButtonText>
             {t('image_classification.feature_introduction.use_manual_observations_button')}
