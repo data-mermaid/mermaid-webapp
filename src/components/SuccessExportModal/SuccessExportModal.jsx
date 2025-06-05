@@ -13,56 +13,9 @@ const CitationContainer = styled.div`
   margin-bottom: 1rem;
 `
 
-const SuccessExportModal = ({
-  isOpen,
-  onDismiss,
-  projectId,
-  exportingDataPolicy,
-  protocolSampleEventCount,
-}) => {
+const SuccessExportModal = ({ isOpen, onDismiss, projectId, protocolSampleEventCount }) => {
   const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
-
-  const contactLink = (
-    <a
-      href={`https://datamermaid.org/contact-project?project_id=${projectId}`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Contact Admins
-    </a>
-  )
-
-  const getSampleEventLevelExportText = (dataSharing) => {
-    if (dataSharing === 'Private') {
-      return (
-        <Trans
-          i18nKey="modals.export_success.no_sample_event_level_export"
-          components={{
-            contactLink,
-          }}
-        />
-      )
-    }
-
-    return t('modals.export_success.sample_event_level_export', { count: protocolSampleEventCount })
-  }
-
-  const getObservationLevelExportText = (dataSharing) => {
-    if (dataSharing !== 'Public') {
-      return (
-        <Trans
-          i18nKey="modals.export_success.no_observation_level_export"
-          values={{ data_sharing_policy: dataSharing?.toLowerCase() }}
-          components={{
-            contactLink,
-          }}
-        />
-      )
-    }
-
-    return t('modals.export_success.observation_level_export', { count: protocolSampleEventCount })
-  }
 
   const modalContent = (
     <>
@@ -75,8 +28,16 @@ const SuccessExportModal = ({
           <h4>{t('modals.export_success.citation_1_header')}</h4>
           <ul>
             <li>{t('modals.export_success.metadata_export')}</li>
-            <li>{getSampleEventLevelExportText(exportingDataPolicy)} </li>
-            <li>{getObservationLevelExportText(exportingDataPolicy)} </li>
+            <li>
+              {t('modals.export_success.sample_event_level_export', {
+                count: protocolSampleEventCount,
+              })}{' '}
+            </li>
+            <li>
+              {t('modals.export_success.observation_level_export', {
+                count: protocolSampleEventCount,
+              })}{' '}
+            </li>
           </ul>
         </CitationContainer>
       )}
@@ -108,7 +69,6 @@ SuccessExportModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   projectId: PropTypes.string.isRequired,
-  exportingDataPolicy: PropTypes.string.isRequired,
   protocolSampleEventCount: PropTypes.number.isRequired,
 }
 

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { getDataSharingPolicyLabel } from '../../../library/getDataSharingPolicyLabel'
-import { getSampleEventCount } from '../../../library/getSampleEventCount'
+import { getSampleEventCounts } from '../../../library/getSampleEventCounts'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { Column, FilterItems, ToolBarItemsRow } from '../../generic/positioning'
 import { H2 } from '../../generic/text'
@@ -39,8 +39,8 @@ const SubmittedToolbarSection = ({
   const { projectId } = useParams()
   const [projectDataPolicy, setProjectDataPolicy] = useState({})
   const [isSuccessExportModalOpen, setIsSuccessExportModalOpen] = useState(false)
-  const [exportingDataPolicy, setExportingDataPolicy] = useState('')
   const [protocolSampleEventCount, setProtocolSampleEventCount] = useState(0)
+  const sampleEventCounts = getSampleEventCounts(submittedRecordsForUiDisplay)
 
   const _getSupportingData = useEffect(() => {
     databaseSwitchboardInstance.getProject(projectId).then((project) => {
@@ -62,10 +62,7 @@ const SubmittedToolbarSection = ({
   )
 
   const handleExportSubmitted = (protocol) => {
-    const dataPolicyLabel = getDataSharingPolicyLabel(projectDataPolicy[protocol])
-    const sampleEventCount = getSampleEventCount(submittedRecordsForUiDisplay, protocol)
-
-    setExportingDataPolicy(dataPolicyLabel)
+    const sampleEventCount = sampleEventCounts[protocol] || 0
     setProtocolSampleEventCount(sampleEventCount)
 
     databaseSwitchboardInstance
@@ -86,7 +83,6 @@ const SubmittedToolbarSection = ({
 
   const closeModal = () => {
     setIsSuccessExportModalOpen(false)
-    setExportingDataPolicy('')
     setProtocolSampleEventCount(0)
   }
 
@@ -119,23 +115,44 @@ const SubmittedToolbarSection = ({
         </FilterItems>
         <ButtonSecondaryDropdown label={label}>
           <Column as="nav" data-testid="export-to-csv">
-            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('fishbelt')}>
+            <DropdownItemStyle
+              as="button"
+              disabled={!sampleEventCounts?.fishbelt}
+              onClick={() => handleExportSubmitted('fishbelt')}
+            >
               Fish Belt
             </DropdownItemStyle>
-            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpit')}>
+            <DropdownItemStyle
+              as="button"
+              disabled={!sampleEventCounts?.benthicpit}
+              onClick={() => handleExportSubmitted('benthicpit')}
+            >
               Benthic PIT
             </DropdownItemStyle>
-            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthiclit')}>
+            <DropdownItemStyle
+              as="button"
+              disabled={!sampleEventCounts?.benthiclit}
+              onClick={() => handleExportSubmitted('benthiclit')}
+            >
               Benthic LIT
             </DropdownItemStyle>
-            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpqt')}>
+            <DropdownItemStyle
+              as="button"
+              disabled={!sampleEventCounts?.benthicpqt}
+              onClick={() => handleExportSubmitted('benthicpqt')}
+            >
               Benthic Photo Quadrat
             </DropdownItemStyle>
-            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('bleachingqc')}>
+            <DropdownItemStyle
+              as="button"
+              disabled={!sampleEventCounts?.bleachingqc}
+              onClick={() => handleExportSubmitted('bleachingqc')}
+            >
               Bleaching
             </DropdownItemStyle>
             <DropdownItemStyle
               as="button"
+              disabled={!sampleEventCounts?.habitatcomplexity}
               onClick={() => handleExportSubmitted('habitatcomplexity')}
             >
               Habitat Complexity
@@ -147,7 +164,6 @@ const SubmittedToolbarSection = ({
         isOpen={isSuccessExportModalOpen}
         onDismiss={closeModal}
         projectId={projectId}
-        exportingDataPolicy={exportingDataPolicy}
         protocolSampleEventCount={protocolSampleEventCount}
       />
     </>

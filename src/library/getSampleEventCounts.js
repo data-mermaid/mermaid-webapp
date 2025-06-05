@@ -5,10 +5,13 @@
  * @param {string} protocol - The protocol type to count (e.g., 'benthicpit', 'fishbelt')
  * @returns {number} The count of records matching the specified protocol
  */
-export const getSampleEventCount = (records, protocol) => {
+export const getSampleEventCounts = (records, protocol) => {
   if (!records || !Array.isArray(records)) {
-    return 0
+    return {}
   }
 
-  return records.filter((record) => record?.protocol === protocol).length
+  return records.reduce((acc, record) => {
+    acc[record.protocol] = (acc[record.protocol] || 0) + 1
+    return acc
+  }, {})
 }
