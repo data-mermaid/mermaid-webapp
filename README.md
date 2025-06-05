@@ -111,12 +111,8 @@ If you would like to suppress missing act warnings in your test console, you can
 ### Production
 
 - Available at [app.datamermaid.org](https://app.datamermaid.org)
-- Is updated on specific (eg: `v2.0` or `v2.0.0`) tag creation
+- Is updated using semantically versioned (eg: `v2.0` or `v2.0.0`) tag creation
 
 ### Infrastructure as Code (IaC)
 
 - see `iac/README.md`
-
-### Google Analytics
-
-To opt into tracking with Google Analytics, add the following to a deployment's environment variables: `VITE_CAPTURE_GOOGLE_ANALYTICS=true`. Currently we only want to track activity in our production deployment, so this value to true should only be done for production deploys. This value will default to false.

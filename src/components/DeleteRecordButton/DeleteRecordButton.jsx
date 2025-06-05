@@ -19,6 +19,7 @@ const DeleteRecordButton = ({
   openModal,
 }) => {
   const currentProjectPath = useCurrentProjectPath()
+  const gtmId = modalText.title === 'Delete Record' ? 'gtm-delete-record' : 'gtm-delete'
 
   const mainContentPageTwo = (
     <>
@@ -68,7 +69,7 @@ const DeleteRecordButton = ({
   return (
     <>
       <DeleteRecordButtonCautionWrapper>
-        <ButtonCaution onClick={openModal} disabled={isNewRecord}>
+        <ButtonCaution id={gtmId} onClick={openModal} disabled={isNewRecord}>
           {modalText.title}
         </ButtonCaution>
       </DeleteRecordButtonCautionWrapper>
