@@ -10,8 +10,10 @@ import { getIsImageProcessed } from '../getIsImageProcessed'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const ImageClassificationContainer = (props) => {
+  const { t } = useTranslation()
   const { isImageClassificationEnabledForUser } = props
   const [images, setImages] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -98,13 +100,10 @@ const ImageClassificationContainer = (props) => {
             <IconContainer>
               <IconUpload />
             </IconContainer>
-            Upload Photos
+            {t('image_classification.buttons.upload_photos')}
           </ButtonPrimary>
         ) : (
-          <>
-            You aren&apos;t currently able to upload new images for classification. You may access
-            and review previously uploaded images.
-          </>
+          <>{t('image_classification.errors.no_classification_enabled')}</>
         )}
       </ButtonContainer>
       {isModalOpen && (
