@@ -1,5 +1,5 @@
 import { Auth0Provider } from '@auth0/auth0-react'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -31,22 +31,22 @@ const options = {
 
 root.render(
   <React.StrictMode>
-    <PostHogProvider apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY} options={options}>
-      <Auth0Provider
-        domain={import.meta.env.VITE_AUTH0_DOMAIN}
-        clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
-        redirectUri={window.location.origin}
-        audience={import.meta.env.VITE_AUTH0_AUDIENCE}
-        useRefreshTokens={true}
-        // Note that while storing tokens in local storage provides persistence
-        // across page refreshes and browser tabs, it increases the risk of
-        // cross-site scripting (XSS) attacks.
-        // More information here: https://auth0.com/docs/libraries/auth0-single-page-app-sdk#change-storage-options
-        // Recommend researching a different approach to authentication
-        cacheLocation="localstorage"
-        scope="read:current_user update:current_user_metadata"
-      >
-        <OnlineStatusProvider>
+    <Auth0Provider
+      domain={import.meta.env.VITE_AUTH0_DOMAIN}
+      clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+      redirectUri={window.location.origin}
+      audience={import.meta.env.VITE_AUTH0_AUDIENCE}
+      useRefreshTokens={true}
+      // Note that while storing tokens in local storage provides persistence
+      // across page refreshes and browser tabs, it increases the risk of
+      // cross-site scripting (XSS) attacks.
+      // More information here: https://auth0.com/docs/libraries/auth0-single-page-app-sdk#change-storage-options
+      // Recommend researching a different approach to authentication
+      cacheLocation="localstorage"
+      scope="read:current_user update:current_user_metadata"
+    >
+      <OnlineStatusProvider>
+        <PostHogProvider apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY} options={options}>
           <SyncStatusProvider>
             <DexiePerUserDataInstanceProvider>
               <ClearPersistedFormDataHackProvider value={router}>
@@ -54,9 +54,9 @@ root.render(
               </ClearPersistedFormDataHackProvider>
             </DexiePerUserDataInstanceProvider>
           </SyncStatusProvider>
-        </OnlineStatusProvider>
-      </Auth0Provider>
-    </PostHogProvider>
+        </PostHogProvider>
+      </OnlineStatusProvider>
+    </Auth0Provider>
   </React.StrictMode>,
 )
 
