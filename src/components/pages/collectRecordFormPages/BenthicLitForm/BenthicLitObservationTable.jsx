@@ -57,7 +57,7 @@ const BenthicLitObservationsTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
-  const transectLengthSurveyed = formik?.values?.len_surveyed
+  const transectLengthSurveyed = Number(formik?.values?.len_surveyed) || null
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)

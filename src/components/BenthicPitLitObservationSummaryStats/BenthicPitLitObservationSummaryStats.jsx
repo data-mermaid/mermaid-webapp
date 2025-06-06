@@ -12,7 +12,7 @@ const BenthicPitLitObservationSummaryStats = ({
   transectLengthSurveyed = null
 }) => {
   const observationTopLevelAttributeCategoryOccurance = useMemo(() => {
-    const transectLengthSurveyedInCm = Number(transectLengthSurveyed) * 100
+    const transectLengthSurveyedInCm = transectLengthSurveyed * 100
 
     const getBenthicAttributeById = (benthicAttributeId) =>
       benthicAttributeSelectOptions.find((benthic) => benthic.value === benthicAttributeId)
@@ -83,7 +83,7 @@ const BenthicPitLitObservationSummaryStats = ({
 BenthicPitLitObservationSummaryStats.propTypes = {
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   observations: PropTypes.arrayOf(PropTypes.shape({})),
-  transectLengthSurveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  transectLengthSurveyed: PropTypes.number,
 }
 
 export default BenthicPitLitObservationSummaryStats
