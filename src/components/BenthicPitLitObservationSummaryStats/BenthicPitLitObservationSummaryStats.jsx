@@ -9,26 +9,28 @@ import { ObservationsSummaryStats, Td, Th, Tr } from '../generic/Table/table'
 const BenthicPitLitObservationSummaryStats = ({
   benthicAttributeSelectOptions,
   observations = [],
+  transectLengthSurveyed = null
 }) => {
   const observationTopLevelAttributeCategoryOccurance = useMemo(() => {
-    const totalNumberOfObservations = observations.length
+    const transectLengthSurveyedInCm = transectLengthSurveyed * 100
 
     const getBenthicAttributeById = (benthicAttributeId) =>
       benthicAttributeSelectOptions.find((benthic) => benthic.value === benthicAttributeId)
 
     const observationsWithTopLevelCategoryNames = observations.map((observation) => {
       const benthicAttribute = getBenthicAttributeById(observation.attribute)
-
+      const topLevelCategory = getBenthicAttributeById(benthicAttribute?.topLevelCategory)
+      
       return {
         ...observation,
-        topLevelCategoryName: getBenthicAttributeById(benthicAttribute?.topLevelCategory)?.label,
+        topLevelCategoryName: topLevelCategory?.label || 'Missing benthic attribute',
       }
     })
 
     const observationsGroupedByTopLevelCategory = observationsWithTopLevelCategoryNames.reduce(
       (accumulator, observation) => {
-        const { topLevelCategoryName = 'Missing benthic attribute' } = observation
-
+        const { topLevelCategoryName } = observation
+        
         accumulator[topLevelCategoryName] = accumulator[topLevelCategoryName] || []
         accumulator[topLevelCategoryName].push(observation)
 
@@ -36,20 +38,29 @@ const BenthicPitLitObservationSummaryStats = ({
       },
       {},
     )
+    
+    const topLevelCategoryStats = Object.entries(observationsGroupedByTopLevelCategory)
+      .map(([topLevelCategory, categoryObservations]) => {
+        if (transectLengthSurveyedInCm === 0) {
+          return { topLevelCategory, percent: 0 }
+        }
 
-    const topLevelCategoryNamesWithObservationOccurance = Object.entries(
-      observationsGroupedByTopLevelCategory,
-    ).map(([topLevelCategory, observationsBelongingToTopLevelCategory]) => ({
-      topLevelCategory,
-      percent: roundToOneDecimal(
-        (observationsBelongingToTopLevelCategory.length / totalNumberOfObservations) * 100,
-      ),
-    }))
+        const topLevelCategoryTotalLength = categoryObservations.reduce(
+          (total, observation) => total + Number(observation.length || 0),
+          0,
+        )
+        
+        const percent = roundToOneDecimal(
+          (topLevelCategoryTotalLength / transectLengthSurveyedInCm) * 100,
+        )
+        
+        return { topLevelCategory, percent }
+      })
 
-    return sortArrayByObjectKey(topLevelCategoryNamesWithObservationOccurance, 'topLevelCategory')
-  }, [observations, benthicAttributeSelectOptions])
+    return sortArrayByObjectKey(topLevelCategoryStats, 'topLevelCategory')
+  }, [observations, benthicAttributeSelectOptions, transectLengthSurveyed])
 
-  return (
+  return (transectLengthSurveyed ?
     <ObservationsSummaryStats>
       <tbody>
         {observationTopLevelAttributeCategoryOccurance.map((occurance) => {
@@ -65,13 +76,14 @@ const BenthicPitLitObservationSummaryStats = ({
           )
         })}
       </tbody>
-    </ObservationsSummaryStats>
+    </ObservationsSummaryStats> : null
   )
 }
 
 BenthicPitLitObservationSummaryStats.propTypes = {
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   observations: PropTypes.arrayOf(PropTypes.shape({})),
+  transectLengthSurveyed: PropTypes.number,
 }
 
 export default BenthicPitLitObservationSummaryStats
