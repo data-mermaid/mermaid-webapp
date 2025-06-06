@@ -46,10 +46,11 @@ const tableHeaders = [
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
   { align: 'left', id: 'growth-form-label', text: 'Growth Form' },
-  { colSpan: 2, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
+  { align: 'right', id: 'confirmed-points', text: 'Confirmed Points' },
+  { align: 'right', id: 'unconfirmed-points', text: 'Unconfirmed Points' },
   { align: 'left', id: 'validations', text: 'Validations' },
-  { align: 'right', id: 'review', text: '' },
-  { align: 'right', id: 'remove', text: '' },
+  { align: 'center', id: 'review', text: '' },
+  { align: 'center', id: 'remove', text: '' },
 ]
 
 const sortByLatest = (a, b) => new Date(a.file.created_on) - new Date(b.file.created_on)
@@ -74,23 +75,6 @@ const TableHeaderRow = ({ areValidationsShowing }) => {
 TableHeaderRow.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
 }
-
-const subHeaderColumns = [
-  { align: 'right', text: 'Confirmed' },
-  { align: 'right', text: 'Unconfirmed' },
-]
-
-const SubHeaderRow = () => (
-  <Tr>
-    <Th colSpan={5} />
-    {subHeaderColumns.map((col, index) => (
-      <Th key={index} align={col.align}>
-        <span>{col.text}</span>
-      </Th>
-    ))}
-    <Th colSpan={4} />
-  </Tr>
-)
 
 const ImageClassificationObservationTable = ({
   collectRecord = undefined,
@@ -400,7 +384,6 @@ const ImageClassificationObservationTable = ({
           <StickyObservationTable aria-labelledby="table-label">
             <thead>
               <TableHeaderRow areValidationsShowing={areValidationsShowing} />
-              <SubHeaderRow />
             </thead>
 
             {isFetching ? (
@@ -421,7 +404,7 @@ const ImageClassificationObservationTable = ({
                     // If no subrows exist (image not processed), display a single row with thumbnail, status
                     return (
                       <Tr key={file.id}>
-                        <StyledTd>{rowIndex++}</StyledTd>
+                        <StyledTd textAlign="right">{rowIndex++}</StyledTd>
                         <TdWithHoverText
                           data-tooltip={file.original_image_name}
                           onClick={() => handleImageClick(file)}
@@ -507,7 +490,7 @@ const ImageClassificationObservationTable = ({
                             onMouseEnter={() => handleRowMouseEnter(imageIndex)}
                             onMouseLeave={handleRowMouseLeave}
                           >
-                            <StyledTd>{rowIndex++}</StyledTd>
+                            <StyledTd textAlign="right">{rowIndex++}</StyledTd>
                             {subIndex === 0 && (
                               <>
                                 <TdWithHoverText
@@ -562,6 +545,7 @@ const ImageClassificationObservationTable = ({
                                   </StyledTd>
                                 ) : null}
                                 <StyledTd
+                                  textAlign="center"
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
@@ -583,6 +567,7 @@ const ImageClassificationObservationTable = ({
                                   </MuiTooltip>
                                 </StyledTd>
                                 <StyledTd
+                                  textAlign="center"
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
@@ -637,7 +622,7 @@ const ImageClassificationObservationTable = ({
                           onMouseLeave={handleRowMouseLeave}
                           $isUnclassified={true}
                         >
-                          <StyledTd>{rowIndex++}</StyledTd>
+                          <StyledTd textAlign="right">{rowIndex++}</StyledTd>
                           <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
                           <StyledTd colSpan={3} textAlign="center" style={{ fontWeight: '700' }}>
                             {`${totalUnknown} Unclassified point${totalUnknown > 1 ? 's' : ''}`}
