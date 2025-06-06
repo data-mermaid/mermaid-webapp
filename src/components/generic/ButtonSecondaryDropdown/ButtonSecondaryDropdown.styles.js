@@ -17,4 +17,9 @@ export const DropdownItemStyle = styled.button`
   ${hoverState(css`
     background-color: ${theme.color.secondaryHover};
   `)}
+
+  &:disabled {
+    background-color: ${theme.color.grey1};
+    cursor: not-allowed;
+  }
 `
