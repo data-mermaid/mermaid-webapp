@@ -13,7 +13,7 @@ const CitationContainer = styled.div`
   margin-bottom: 1rem;
 `
 
-const SuccessExportModal = ({ isOpen, onDismiss, projectId, protocolSampleEventCount }) => {
+const SuccessExportModal = ({ isOpen, onDismiss, protocolSampleEventCount }) => {
   const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
 
@@ -23,24 +23,22 @@ const SuccessExportModal = ({ isOpen, onDismiss, projectId, protocolSampleEventC
         i18nKey="modals.export_success.description"
         components={{ currentUserEmail: <strong>{currentUser?.email}</strong> }}
       />
-      {projectId && (
-        <CitationContainer>
-          <h4>{t('modals.export_success.citation_1_header')}</h4>
-          <ul>
-            <li>{t('modals.export_success.metadata_export')}</li>
-            <li>
-              {t('modals.export_success.sample_event_level_export', {
-                count: protocolSampleEventCount,
-              })}{' '}
-            </li>
-            <li>
-              {t('modals.export_success.observation_level_export', {
-                count: protocolSampleEventCount,
-              })}{' '}
-            </li>
-          </ul>
-        </CitationContainer>
-      )}
+      <CitationContainer>
+        <h4>{t('modals.export_success.citation_1_header')}</h4>
+        <ul>
+          <li>{t('modals.export_success.metadata_export')}</li>
+          <li>
+            {t('modals.export_success.sample_event_level_export', {
+              count: protocolSampleEventCount,
+            })}{' '}
+          </li>
+          <li>
+            {t('modals.export_success.observation_level_export', {
+              count: protocolSampleEventCount,
+            })}{' '}
+          </li>
+        </ul>
+      </CitationContainer>
       <CitationContainer>
         <h4>{t('modals.export_success.citation_2_header')}</h4>
         <p>{t('modals.export_success.citation_2_description')}</p>
@@ -68,7 +66,6 @@ const SuccessExportModal = ({ isOpen, onDismiss, projectId, protocolSampleEventC
 SuccessExportModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
-  projectId: PropTypes.string.isRequired,
   protocolSampleEventCount: PropTypes.number.isRequired,
 }
 

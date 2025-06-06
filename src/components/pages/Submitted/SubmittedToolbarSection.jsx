@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import PropTypes, { string } from 'prop-types'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { getDataSharingPolicyLabel } from '../../../library/getDataSharingPolicyLabel'
 import { getSampleEventCounts } from '../../../library/getSampleEventCounts'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { Column, FilterItems, ToolBarItemsRow } from '../../generic/positioning'
@@ -37,23 +36,9 @@ const SubmittedToolbarSection = ({
   const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
-  const [projectDataPolicy, setProjectDataPolicy] = useState({})
   const [isSuccessExportModalOpen, setIsSuccessExportModalOpen] = useState(false)
   const [protocolSampleEventCount, setProtocolSampleEventCount] = useState(0)
   const sampleEventCounts = getSampleEventCounts(submittedRecordsForUiDisplay)
-
-  const _getSupportingData = useEffect(() => {
-    databaseSwitchboardInstance.getProject(projectId).then((project) => {
-      setProjectDataPolicy({
-        fishbelt: project.data_policy_beltfish,
-        benthicpit: project.data_policy_benthicpit,
-        benthiclit: project.data_policy_benthiclit,
-        benthicpqt: project.data_policy_benthicpqt,
-        bleachingqc: project.data_policy_bleachingqc,
-        habitatcomplexity: project.data_policy_habitatcomplexity,
-      })
-    })
-  }, [databaseSwitchboardInstance, projectId])
 
   const label = (
     <>
@@ -186,8 +171,18 @@ SubmittedToolbarSection.propTypes = {
   handleSetTableUserPrefs: PropTypes.func.isRequired,
   submittedRecordsForUiDisplay: PropTypes.arrayOf(
     PropTypes.shape({
-      protocol: PropTypes.string,
-    }),
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      protocol: PropTypes.string.isRequired,
+      uiLabels: PropTypes.shape({
+        protocol: PropTypes.string.isRequired,
+        site: PropTypes.string.isRequired,
+        management: PropTypes.string.isRequired,
+        size: PropTypes.string.isRequired,
+        depth: PropTypes.string.isRequired,
+        sampleDate: PropTypes.string.isRequired,
+        observers: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
   ).isRequired,
 }
 
