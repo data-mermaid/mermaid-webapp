@@ -404,7 +404,7 @@ const ImageClassificationObservationTable = ({
                     // If no subrows exist (image not processed), display a single row with thumbnail, status
                     return (
                       <Tr key={file.id}>
-                        <StyledTd align="right">{rowIndex++}</StyledTd>
+                        <StyledTd textAlign="right">{rowIndex++}</StyledTd>
                         <TdWithHoverText
                           data-tooltip={file.original_image_name}
                           onClick={() => handleImageClick(file)}
@@ -490,7 +490,7 @@ const ImageClassificationObservationTable = ({
                             onMouseEnter={() => handleRowMouseEnter(imageIndex)}
                             onMouseLeave={handleRowMouseLeave}
                           >
-                            <StyledTd align="right">{rowIndex++}</StyledTd>
+                            <StyledTd textAlign="right">{rowIndex++}</StyledTd>
                             {subIndex === 0 && (
                               <>
                                 <TdWithHoverText
@@ -545,7 +545,7 @@ const ImageClassificationObservationTable = ({
                                   </StyledTd>
                                 ) : null}
                                 <StyledTd
-                                  align="center"
+                                  textAlign="center"
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
@@ -567,7 +567,7 @@ const ImageClassificationObservationTable = ({
                                   </MuiTooltip>
                                 </StyledTd>
                                 <StyledTd
-                                  align="center"
+                                  textAlign="center"
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
@@ -622,7 +622,7 @@ const ImageClassificationObservationTable = ({
                           onMouseLeave={handleRowMouseLeave}
                           $isUnclassified={true}
                         >
-                          <StyledTd align="right">{rowIndex++}</StyledTd>
+                          <StyledTd textAlign="right">{rowIndex++}</StyledTd>
                           <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
                           <StyledTd colSpan={3} textAlign="center" style={{ fontWeight: '700' }}>
                             {`${totalUnknown} Unclassified point${totalUnknown > 1 ? 's' : ''}`}
