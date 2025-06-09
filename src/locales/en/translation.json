@@ -42,5 +42,8 @@
   },
   "search": {
     "no_results": "No results found"
+  },
+  "benthic_observations": {
+    "missing_benthic_attribute": "Missing benthic attribute"
   }
 }

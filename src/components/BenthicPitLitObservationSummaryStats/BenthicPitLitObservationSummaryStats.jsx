@@ -5,13 +5,15 @@ import { inputOptionsPropTypes } from '../../library/miscPropTypes'
 import { roundToOneDecimal } from '../../library/numbers/roundToOneDecimal'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 import { ObservationsSummaryStats, Td, Th, Tr } from '../generic/Table/table'
+import { useTranslation } from 'react-i18next'
 
 const BenthicPitLitObservationSummaryStats = ({
   benthicAttributeSelectOptions,
   observations = [],
   transectLengthSurveyed = null
 }) => {
-  const observationTopLevelAttributeCategoryOccurance = useMemo(() => {
+  const {t} = useTranslation()
+  const observationTopLevelAttributeCategoryOccurrence = useMemo(() => {
     const transectLengthSurveyedInCm = transectLengthSurveyed * 100
 
     const getBenthicAttributeById = (benthicAttributeId) =>
@@ -23,7 +25,7 @@ const BenthicPitLitObservationSummaryStats = ({
       
       return {
         ...observation,
-        topLevelCategoryName: topLevelCategory?.label || 'Missing benthic attribute',
+        topLevelCategoryName: topLevelCategory?.label || t('benthic_observations.missing_benthic_attribute'),
       }
     })
 
@@ -63,7 +65,7 @@ const BenthicPitLitObservationSummaryStats = ({
   return (transectLengthSurveyed ?
     <ObservationsSummaryStats>
       <tbody>
-        {observationTopLevelAttributeCategoryOccurance.map((occurance) => {
+        {observationTopLevelAttributeCategoryOccurrence.map((occurance) => {
           const isPercentageAvailable = !Number.isNaN(parseFloat(occurance.percent))
 
           return (
