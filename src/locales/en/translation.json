@@ -30,12 +30,24 @@
       "confirmed": "Confirmed",
       "next_unconfirmed_point": "Next unconfirmed point",
       "status": "Status",
+      "unclassified": "Unclassified",
+      "unconfirmed": "Unconfirmed",
       "unclassified_points_one": "{{count}} Unclassified point",
       "unclassified_points_other": "{{count}} Unclassified points"
     },
     "buttons": {
       "confirm_all": "Confirm all",
       "zoom_to_attribute": "Zoom to attribute"
+    },
+    "errors": {
+      "failed_annotations_fetch": "Failed to fetch image annotations.",
+      "failed_annotations_save": "Failed to save image annotations."
+    },
+    "user_message": {
+      "confirm_image_changes": "Are you sure you want to discard the change to this image?"
+    },
+    "success": {
+      "annotations_saved": "Successfully saved image annotations"
     },
     "growth_form": "Growth form",
     "feature_introduction": {

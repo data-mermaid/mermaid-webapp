@@ -3,13 +3,14 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { ButtonCallout } from '../../../generic/buttons'
-import { IconSave, IconCheck, IconUpload } from '../../../icons'
+import { IconCheck, IconSave, IconUpload } from '../../../icons'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import OfflineHide from '../../../generic/OfflineHide'
 import theme from '../../../../theme'
 
 const SaveValidateSubmitButtonWrapper = styled('div')`
   padding-right: ${theme.spacing.xlarge};
+
   button {
     white-space: nowrap;
   }
@@ -33,6 +34,7 @@ const ArrowRightButton = styled(ButtonCallout)`
   padding: ${theme.spacing.small} ${theme.spacing.xlarge};
   position: relative;
   background: ${theme.color.calloutBorder};
+
   &:before {
     clip-path: ${clipPath};
     z-index: -1;
@@ -45,13 +47,16 @@ const ArrowRightButton = styled(ButtonCallout)`
     right: ${borderSize};
     bottom: ${borderSize};
   }
+
   &:not(:disabled):hover {
     cursor: pointer;
     background: ${theme.color.calloutBorder};
+
     &:before {
       background: ${theme.color.calloutHover};
     }
   }
+
   &:disabled {
     background-color: ${theme.color.disabledColor};
     color: ${theme.color.disabledTextDark};
@@ -114,21 +119,21 @@ const SaveValidateSubmitButtonGroup = ({
     saveButtonState === buttonGroupStates.saving
 
   const saveButton = (
-    <ArrowRightButton type="button" disabled={isSaveDisabled} onClick={onSave}>
+    <ArrowRightButton id="gtm-record-save" type="button" disabled={isSaveDisabled} onClick={onSave}>
       <IconSave />
       {getSaveButtonText()}
     </ArrowRightButton>
   )
 
   const validateButton = (
-    <ArrowRightButton onClick={onValidate} disabled={isValidateDisabled}>
+    <ArrowRightButton id="gtm-record-validate" onClick={onValidate} disabled={isValidateDisabled}>
       <IconCheck />
       {getValidateButtonText()}
     </ArrowRightButton>
   )
 
   const submitButton = (
-    <ArrowRightButton disabled={isSubmitDisabled} onClick={onSubmit}>
+    <ArrowRightButton id="gtm-record-submit" disabled={isSubmitDisabled} onClick={onSubmit}>
       <IconUpload />
       {getSubmitButtonText()}
     </ArrowRightButton>
