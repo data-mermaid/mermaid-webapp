@@ -43,7 +43,7 @@
       "invalid_file_type": "Invalid file type",
       "invalid_file": "File is invalid or corrupt",
       "duplicate_file": "Duplicate file",
-      "photo_too_small": "This photo is too small: {{fileName}} Photos should be a minimum height and width of 1500 pixels.",
+      "photo_too_small": "Photos should be a minimum height and width of 1500 pixels. This photo is too small: {{fileName}}",
       "no_classification_enabled": "You aren't currently able to upload new images for classification. You may access and review previously uploaded images."
     },
     "user_message": {
@@ -67,18 +67,23 @@
     "zoom_to_point": "Zoom to point"
   },
   "media": {
+    "user_guidance": {
+      "crop_icon": "Cropped transition icon",
+      "cropped_photo_example": "Cropped example",
+      "more_photo_upload_info": "Read more about how to get your photos ready for upload <a>in the documentation</a>",
+      "uncropped_photo_example": "Uncropped example"
+    },
+    "buttons": {
+      "cancel_upload": "Cancel upload"
+    },
     "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
-    "cancel_upload": "Cancel upload",
     "max_file_size": "Maximum file size is 30mb",
     "min_image_size": "Photos must be larger than 1500 pixels by 1500 pixels",
-    "put_files_here": "Drop files here",
+    "put_files_here": "Drop files here <br> or <br>",
     "req_crop_photos": "Crop photos to size before uploading",
     "select_local_files": "Select files from your computer...",
-    "more_photo_upload_info": "Read more about how to get your photos ready for upload <a>in the documentation</a>",
     "upload_cancelled": "Upload cancelled",
-    "uploading_files": "<p>Uploading {{processedCount}}\/{{totalCount}} files...</p><button>Cancel upload</button>",
-    "uncropped_photo_example": "Uncropped photo example",
-    "cropped_photo_example": "Cropped photo example"
+    "uploading_files": "<p>Uploading {{processedCount}}\/{{totalCount}} files...</p><button>Cancel upload</button>"
   },
   "offline": {
     "unavailable_offline": "Unavailable offline."

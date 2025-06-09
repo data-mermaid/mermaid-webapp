@@ -2,8 +2,8 @@ import React, { useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Modal from '../../../generic/Modal'
-import { ButtonPrimary, ButtonCaution, ButtonSecondary } from '../../../generic/buttons'
-import { DropZone, HiddenInput, ButtonContainer } from './ImageUploadModal.styles'
+import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
+import { ButtonContainer, DropZone, HiddenInput } from './ImageUploadModal.styles'
 import { toast } from 'react-toastify'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
@@ -154,9 +154,13 @@ const ImageUploadModal = ({
         if (result.isImageTooSmall) {
           toast.error(
             `${t('image_classification.errors.photo_too_small', { fileName: file.name })}`,
-          ) //TODO TEST
+          )
         } else {
-          toast.error(`${t('image_classification.errors.invalid_file')}: ${file.name}`)
+          toast.error(
+            `${t('media.accepted_photo_types')} ${t('image_classification.errors.invalid_file')}: ${
+              file.name
+            }`,
+          )
         }
         continue
       }
@@ -243,10 +247,7 @@ const ImageUploadModal = ({
       mainContent={
         <>
           <DropZone onDrop={handleDrop} onDragOver={handleDragOver} onClick={handleButtonClick}>
-            {t('media.put_files_here')}
-            <br />
-            or
-            <br />
+            <Trans i18nKey={t('media.put_files_here')} components={{ br: <br /> }} />
             <ButtonPrimary type="button">{t('media.select_local_files')}</ButtonPrimary>
             <HiddenInput
               type="file"
@@ -263,7 +264,7 @@ const ImageUploadModal = ({
               <li>{t('media.req_crop_photos')}</li>
               <li>
                 <Trans
-                  i18nKey="media.more_photo_upload_info"
+                  i18nKey="media.user_guidance.more_photo_upload_info"
                   components={{
                     a: (
                       // eslint-disable-next-line jsx-a11y/anchor-has-content
@@ -278,9 +279,9 @@ const ImageUploadModal = ({
               </li>
             </ul>
             <div id={styles.imageCropGuidelines}>
-              <img src={preCropPhoto} alt="Uncropped photo example" />
-              <img src={cropTransitionIcon} alt="Cropped photo example" />
-              <img src={postCropPhoto} alt="Cropped transition icon" />
+              <img src={preCropPhoto} alt={t('media.user_guidance.uncropped_photo_example')} />
+              <img src={cropTransitionIcon} alt={t('media.user_guidance.crop_icon')} />
+              <img src={postCropPhoto} alt={t('media.user_guidance.cropped_photo_example')} />
             </div>
           </div>
         </>
