@@ -226,8 +226,6 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       const isImageClassificationObservationsOfflineMessageShowing =
         !isAppOnline && doesRecordHaveImageClassificationData
       const isBpqObservationTypeSelectorShowing = isNewRecord && isImageClassificationEnabledForUser
-      const isRegularObservationsTableShowing = !doesRecordHaveImageClassificationData
-      const isImageClassificationObservationsTableShowing = doesRecordHaveImageClassificationData
 
       if (isImageClassificationObservationsOfflineMessageShowing) {
         return <ImageClassificationObservationsNotAvailableOfflineMessage />
@@ -240,7 +238,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
           />
         )
       }
-      if (isRegularObservationsTableShowing) {
+      if (!doesRecordHaveImageClassificationData) {
         return (
           <BenthicPhotoQuadratObservationTable
             benthicAttributeSelectOptions={benthicAttributeSelectOptions}
@@ -248,7 +246,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
           />
         )
       }
-      if (isImageClassificationObservationsTableShowing) {
+      if (doesRecordHaveImageClassificationData) {
         return (
           <ImageClassificationContainer
             {...props}
