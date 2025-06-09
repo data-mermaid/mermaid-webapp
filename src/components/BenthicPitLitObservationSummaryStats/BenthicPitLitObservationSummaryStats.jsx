@@ -49,7 +49,7 @@ const BenthicPitLitObservationSummaryStats = ({
         }
 
         const topLevelCategoryTotalLength = categoryObservations.reduce(
-          (total, observation) => total + Number(observation.length || 0),
+          (total, observation) => total + observation.length,
           0,
         )
 
