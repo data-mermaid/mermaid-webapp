@@ -62,9 +62,7 @@ const BenthicPitTransectInputs = ({
   const currentOptions = getOptions(currents.data)
   const tideOptions = getOptions(tides.data)
   const benthic_transect = validationsApiData?.benthic_transect
-
-  const [isSyncIntervalStart, setIsSyncIntervalStart] = useState(false)
-  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
+  const isIntervalSizeAsStartChecked = formik.values?.is_interval_size_as_start
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     benthic_transect?.number,
@@ -200,7 +198,7 @@ const BenthicPitTransectInputs = ({
   }
 
   const handleIntervalSizeChange = (event) => {
-    if (isSyncIntervalStart) {
+    if (isIntervalSizeAsStartChecked) {
       formik.setFieldValue('interval_start', event.target.value)
     }
     formik.handleChange(event)
@@ -217,13 +215,10 @@ const BenthicPitTransectInputs = ({
   }
 
   const handleSyncIntervalChange = (checked) => {
-    setIsCheckboxChecked(checked)
+    formik.setFieldValue('is_interval_size_as_start', checked)
     if (checked) {
-      setIsSyncIntervalStart(true)
       formik.setFieldValue('interval_start', formik.values.interval_size)
-    } else {
-      setIsSyncIntervalStart(false)
-    }
+    } 
   }
 
   return (
@@ -380,12 +375,12 @@ const BenthicPitTransectInputs = ({
           helperText={language.helperText.intervalStart}
           renderItemAboveInput={
             <IntervalCheckbox
-              isChecked={isCheckboxChecked}
+              isChecked={isIntervalSizeAsStartChecked}
               handleChange={handleSyncIntervalChange}
               checkboxLabel={language.pages.collectRecord.benthicPitSyncCheckbox}
             />
           }
-          isInputDisabled={isCheckboxChecked}
+          isInputDisabled={isIntervalSizeAsStartChecked}
         />
         <InputSelectWithLabelAndValidation
           label="Reef Slope"
