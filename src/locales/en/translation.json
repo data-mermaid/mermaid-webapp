@@ -9,7 +9,11 @@
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View"
+    "view": "View",
+    "done": "Done"
+  },
+  "toasts": {
+    "export_error": "There was an error exporting the report."
   },
   "image_classification": {
     "add_attribute": "Add new attribute",
@@ -62,5 +66,17 @@
   },
   "search": {
     "no_results": "No results found"
+  },
+  "exports": {
+    "success": "Export successful",
+    "email_sent": "An email has been sent to <currentUserEmail />. This can sometimes take up to 15 minutes.",
+    "included_in_export": "Included in this export",
+    "project_metadata": "Metadata for this project",
+    "sample_event_level_data_one": "Sample event level data ({{count}} survey)",
+    "sample_event_level_data_other": "Sample event level data ({{count}} surveys)",
+    "observation_level_data_one": "Observation level data ({{count}} survey)",
+    "observation_level_data_other": "Observation level data ({{count}} surveys)",
+    "credit_request": "Please credit the data owners",
+    "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
   }
 }
