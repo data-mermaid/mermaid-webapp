@@ -62,7 +62,7 @@ const BenthicPitLitObservationSummaryStats = ({
     )
 
     return sortArrayByObjectKey(topLevelCategoryStats, 'topLevelCategory')
-  }, [observations, benthicAttributeSelectOptions, transectLengthSurveyed])
+  }, [observations, benthicAttributeSelectOptions, transectLengthSurveyed, t])
 
   return (
     transectLengthSurveyed &&
