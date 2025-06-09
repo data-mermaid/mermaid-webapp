@@ -541,32 +541,34 @@ const ImageClassificationObservationTable = ({
                             <StyledTd textAlign="right">{annotation?.unconfirmedCount}</StyledTd>
                             {subIndex === 0 && (
                               <>
-                                {areValidationsShowing ? (
+                                {areValidationsShowing && (
                                   <StyledTd>
                                     {hasObservationErrorValidation &&
-                                    annotation?.unconfirmedCount ? (
-                                      <ObservationValidationInfo
-                                        hasObservationErrorValidation={
-                                          hasObservationErrorValidation
-                                        }
-                                        hasObservationIgnoredValidation={
-                                          hasObservationIgnoredValidation
-                                        }
-                                        hasObservationWarningValidation={
-                                          hasObservationWarningValidation
-                                        }
-                                        ignoreObservationValidations={ignoreObservationValidations}
-                                        isObservationValid={isObservationValid}
-                                        observationId={obsId}
-                                        observationValidationMessages={
-                                          observationValidationMessages
-                                        }
-                                        observationValidationType={observationValidationType}
-                                        resetObservationValidations={resetObservationValidations}
-                                      />
-                                    ) : null}
+                                      annotation?.unconfirmedCount && (
+                                        <ObservationValidationInfo
+                                          hasObservationErrorValidation={
+                                            hasObservationErrorValidation
+                                          }
+                                          hasObservationIgnoredValidation={
+                                            hasObservationIgnoredValidation
+                                          }
+                                          hasObservationWarningValidation={
+                                            hasObservationWarningValidation
+                                          }
+                                          ignoreObservationValidations={
+                                            ignoreObservationValidations
+                                          }
+                                          isObservationValid={isObservationValid}
+                                          observationId={obsId}
+                                          observationValidationMessages={
+                                            observationValidationMessages
+                                          }
+                                          observationValidationType={observationValidationType}
+                                          resetObservationValidations={resetObservationValidations}
+                                        />
+                                      )}
                                   </StyledTd>
-                                ) : null}
+                                )}
                                 <StyledTd
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
