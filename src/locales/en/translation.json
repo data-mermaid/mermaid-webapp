@@ -78,10 +78,13 @@
     "review_this_photo": "Review this photo"
   },
   "observations": {
-    "observations": "Observations",
+    "observations": "Observations"
   },
   "offline": {
     "unavailable_offline": "Unavailable offline."
+  },
+  "power_user_tips": {
+    "observation_table": "Pro tip: Hit 'enter' to create a blank row and use 'tab' to duplicate the benthic attribute into the next row."
   },
   "search": {
     "no_results": "No results found"

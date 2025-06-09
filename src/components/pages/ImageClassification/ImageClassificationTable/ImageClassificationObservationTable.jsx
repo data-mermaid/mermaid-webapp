@@ -682,7 +682,7 @@ const ImageClassificationObservationTable = ({
           onAnnotationSaveSuccess={fetchImages}
         />
       )}
-      {removePhotoModal}
+      {isRemovePhotoModalOpen && removePhotoModal}
     </>
   )
 }
