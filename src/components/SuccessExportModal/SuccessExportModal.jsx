@@ -17,36 +17,36 @@ const SuccessExportModal = ({ isOpen, onDismiss, protocolSampleEventCount }) => 
   const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
 
-  const modalContent = (
+  const MainContent = (
     <>
       <Trans
-        i18nKey="modals.export_success.description"
+        i18nKey="exports.email_sent"
         components={{ currentUserEmail: <strong>{currentUser?.email}</strong> }}
       />
       <CitationContainer>
-        <h4>{t('modals.export_success.citation_1_header')}</h4>
+        <h4>{t('exports.included_in_export')}</h4>
         <ul>
-          <li>{t('modals.export_success.metadata_export')}</li>
+          <li>{t('exports.project_metadata')}</li>
           <li>
-            {t('modals.export_success.sample_event_level_export', {
+            {t('exports.sample_event_level_data', {
               count: protocolSampleEventCount,
-            })}{' '}
+            })}
           </li>
           <li>
-            {t('modals.export_success.observation_level_export', {
+            {t('exports.observation_level_data', {
               count: protocolSampleEventCount,
             })}{' '}
           </li>
         </ul>
       </CitationContainer>
       <CitationContainer>
-        <h4>{t('modals.export_success.citation_2_header')}</h4>
-        <p>{t('modals.export_success.citation_2_description')}</p>
+        <h4>{t('exports.credit_request')}</h4>
+        <p>{t('exports.citation_description')}</p>
       </CitationContainer>
     </>
   )
 
-  const footerContent = (
+  const FooterContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>{t('buttons.done')}</ButtonSecondary>
     </RightFooter>
@@ -56,9 +56,9 @@ const SuccessExportModal = ({ isOpen, onDismiss, protocolSampleEventCount }) => 
     <Modal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      title={t('modals.export_success.title')}
-      mainContent={modalContent}
-      footerContent={footerContent}
+      title={t('exports.success')}
+      mainContent={MainContent}
+      footerContent={FooterContent}
     />
   )
 }
