@@ -1,8 +1,7 @@
 import React from 'react'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 import { H3 } from '../../../generic/text'
-import { IconSparkles, IconPen } from '../../../icons'
-import language from '../../../../language'
+import { IconPen, IconSparkles } from '../../../icons'
 import PropTypes from 'prop-types'
 import {
   ButtonContainer,
@@ -11,8 +10,10 @@ import {
   SelectorContainer,
   TextContainer,
 } from './BpqObservationTypeSelector.styles'
+import { Trans, useTranslation } from 'react-i18next'
 
 const BpqObservationTypeSelector = ({ setIsImageClassificationSelected, isAppOnline }) => {
+  const { t } = useTranslation()
   const handleSampleUnitChange = (type) => () => {
     setIsImageClassificationSelected(type)
   }
@@ -21,25 +22,45 @@ const BpqObservationTypeSelector = ({ setIsImageClassificationSelected, isAppOnl
     <SelectorContainer>
       <TextContainer>
         <H3 htmlFor="image-classification-selection">
-          {language.imageClassification.sampleUnitInputSelector.title}
+          {t('image_classification.feature_introduction.title')}
         </H3>
-        <p>{language.imageClassification.sampleUnitInputSelector.description}</p>
+        <p>
+          <Trans
+            i18nKey="image_classification.feature_introduction.description"
+            components={{
+              a: (
+                <a href="https://coralnet.ucsd.edu" target="_blank" rel="noopener noreferrer">
+                  CoralNet
+                </a>
+              ),
+            }}
+          />
+        </p>
       </TextContainer>
       <ButtonContainer>
         <div>
-          {!isAppOnline ? <OfflineText>Unavailable offline.</OfflineText> : null}
+          {!isAppOnline && <OfflineText>{t('offline.unavailable_offline')}</OfflineText>}
           <ButtonPrimary
             type="button"
+            id="gtm-image-classification-selection"
             onClick={handleSampleUnitChange(true)}
             disabled={!isAppOnline}
           >
             <IconSparkles />
-            <ButtonText>{language.imageClassification.sampleUnitInputSelector.button1}</ButtonText>
+            <ButtonText id="gtm-image-classification-selection-text">
+              {t('image_classification.feature_introduction.use_ai_button')}
+            </ButtonText>
           </ButtonPrimary>
         </div>
-        <ButtonSecondary type="button" onClick={handleSampleUnitChange(false)}>
+        <ButtonSecondary
+          id="gtm-manual-entry"
+          type="button"
+          onClick={handleSampleUnitChange(false)}
+        >
           <IconPen />
-          <ButtonText>{language.imageClassification.sampleUnitInputSelector.button2}</ButtonText>
+          <ButtonText>
+            {t('image_classification.feature_introduction.use_manual_observations_button')}
+          </ButtonText>
         </ButtonSecondary>
       </ButtonContainer>
     </SelectorContainer>

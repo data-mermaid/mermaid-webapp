@@ -26,19 +26,39 @@
       "confirmed": "Confirmed",
       "next_unconfirmed_point": "Next unconfirmed point",
       "status": "Status",
+      "unclassified": "Unclassified",
+      "unconfirmed": "Unconfirmed",
       "unclassified_points_one": "{{count}} Unclassified point",
       "unclassified_points_other": "{{count}} Unclassified points"
     },
     "buttons": {
-      "confirm_all_points": "Confirm all points",
       "confirm_all": "Confirm all",
       "zoom_to_attribute": "Zoom to attribute"
     },
-    "growth_form": "Growth form"
+    "errors": {
+      "failed_annotations_fetch": "Failed to fetch image annotations.",
+      "failed_annotations_save": "Failed to save image annotations."
+    },
+    "user_message": {
+      "confirm_image_changes": "Are you sure you want to discard the change to this image?"
+    },
+    "success": {
+      "annotations_saved": "Successfully saved image annotations"
+    },
+    "growth_form": "Growth form",
+    "feature_introduction": {
+      "title": "MERMAID just got smarter",
+      "description": "Through a partnership with <a /> from the University of California San Diego and Scripps Institution of Oceanography, MERMAID now includes AI-based classification using a pyspacer deep learning model. This integration enables fast, scalable analysis of benthic photos so that you can generate insights quickly and consistently with machine learning and AI.",
+      "use_ai_button": "Classify photos with AI (Beta)",
+      "use_manual_observations_button": "Enter observations manually"
+    }
   },
   "map_tooling": {
     "reset_zoom": "Reset zoom",
     "zoom_to_point": "Zoom to point"
+  },
+  "offline": {
+    "unavailable_offline": "Unavailable offline."
   },
   "search": {
     "no_results": "No results found"

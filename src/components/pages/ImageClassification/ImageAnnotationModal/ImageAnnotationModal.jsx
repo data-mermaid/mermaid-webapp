@@ -18,7 +18,6 @@ import {
   LegendSquare,
   LoadingContainer,
 } from './ImageAnnotationModal.styles'
-import language from '../../../../language'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
@@ -28,6 +27,7 @@ import { useZoomToPointsByAttributeId } from './useZoomToPointsByAttributeId'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { DEFAULT_MAP_ANIMATION_DURATION } from '../imageClassificationConstants'
+import { useTranslation } from 'react-i18next'
 
 const EXCLUDE_PARAMS =
   'classification_status,collect_record_id,comments,created_by,created_on,data,id,location,name,num_confirmed,num_unclassified,num_unconfirmed,photo_timestamp,thumbnail,updated_by,updated_on'
@@ -47,6 +47,7 @@ const ImageAnnotationModal = ({
   growthForms,
   onAnnotationSaveSuccess,
 }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const [dataToReview, setDataToReview] = useState()
@@ -85,12 +86,9 @@ const ImageAnnotationModal = ({
   const getBenthicAttributeLabel = useCallback(
     (benthicAttributeId) => {
       const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
-      return (
-        matchingBenthicAttribute?.name ??
-        language.imageClassification.imageClassificationModal.unclassified
-      )
+      return matchingBenthicAttribute?.name ?? t('image_classification.annotation.unclassified')
     },
-    [benthicAttributes],
+    [benthicAttributes, t],
   )
 
   const getGrowthFormLabel = useCallback(
@@ -118,7 +116,7 @@ const ImageAnnotationModal = ({
             if (point.annotations.length === 0) {
               point.annotations.push({
                 ba_gr: unclassifiedGuid,
-                ba_gr_label: language.imageClassification.imageClassificationModal.unclassified,
+                ba_gr_label: t('image_classification.annotation.unclassified'),
               })
             }
             const sortedAnnotations = point.annotations?.toSorted(prioritizeConfirmedAnnotations)
@@ -140,7 +138,7 @@ const ImageAnnotationModal = ({
             callback: () => {
               toast.error(
                 ...getToastArguments(
-                  `${language.imageClassification.imageClassificationModal.errors.failedFetchAnnotations} ${error.message}`,
+                  `${t('image_classification.errors.failed_annotations_fetch')} ${error.message}`,
                 ),
               )
             },
@@ -154,31 +152,38 @@ const ImageAnnotationModal = ({
     handleHttpResponseError,
     imageId,
     projectId,
+    t,
   ])
 
   const handleCloseModal = () => {
     if (
       !isDataUpdatedSinceLastSave ||
-      window.confirm(
-        language.imageClassification.imageClassificationModal.userMessage
-          .confirmDiscardImageChanges,
-      )
+      window.confirm(t('image_classification.user_message.confirm_image_changes'))
     ) {
       setImageId()
     }
   }
 
+  // Image annotations that are unclassified have additional values added that need to be stripped before saving
+  const removeMappedUnclassifiedPointData = (points) => {
+    return points.map((point) => {
+      if (point.annotations[0].ba_gr === unclassifiedGuid) {
+        return { ...point, annotations: [] }
+      } else {
+        return point
+      }
+    })
+  }
+
   const handleSaveChanges = () => {
     setIsSaving(true)
-
+    const strippedPoints = removeMappedUnclassifiedPointData(dataToReview.points)
     databaseSwitchboardInstance
-      .saveAnnotationsForImage(projectId, imageId, dataToReview.points)
+      .saveAnnotationsForImage(projectId, imageId, strippedPoints)
       .then(() => {
         setImageId()
         onAnnotationSaveSuccess()
-        toast.success(
-          language.imageClassification.imageClassificationModal.success.savedAnnotations,
-        )
+        toast.success(t('image_classification.success.annotations_saved'))
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -186,7 +191,7 @@ const ImageAnnotationModal = ({
           callback: () => {
             toast.error(
               ...getToastArguments(
-                `${language.imageClassification.imageClassificationModal.errors.failedSaveAnnotations} ${error.message}`,
+                `${t('image_classification.errors.failed_annotations_save')} ${error.message}`,
               ),
             )
           },
@@ -248,23 +253,23 @@ const ImageAnnotationModal = ({
             <Legend>
               <LegendItem>
                 <LegendSquare color={COLORS.confirmed} />
-                {language.imageClassification.imageClassificationModal.confirmed}
+                {t('image_classification.annotation.confirmed')}
               </LegendItem>
               <LegendItem>
                 <LegendSquare style={{ border: `3px dotted ${theme.color.brandSecondary}` }} />
-                {language.imageClassification.imageClassificationModal.unconfirmed}
+                {t('image_classification.annotation.unconfirmed')}
               </LegendItem>
               <LegendItem>
-                <LegendSquare color={COLORS.unclassified} />
-                {language.imageClassification.imageClassificationModal.unclassified}
+                <LegendSquare style={{ border: `3px dotted ${COLORS.unclassified}` }} />
+                {t('image_classification.annotation.unclassified')}
               </LegendItem>
             </Legend>
             <div>
               <ButtonSecondary type="button" onClick={handleCloseModal} disabled={isSaving}>
-                {language.buttons.close}
+                {t('buttons.close')}
               </ButtonSecondary>
               <ButtonPrimary type="button" onClick={handleSaveChanges} disabled={isSaving}>
-                {language.buttons.saveChanges}
+                {t('buttons.save_changes')}
               </ButtonPrimary>
             </div>
           </Footer>

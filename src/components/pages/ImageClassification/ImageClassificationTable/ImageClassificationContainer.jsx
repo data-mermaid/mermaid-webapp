@@ -90,7 +90,11 @@ const ImageClassificationContainer = (props) => {
       />
       <ButtonContainer>
         {isImageClassificationEnabledForUser ? (
-          <ButtonPrimary type="button" onClick={() => setIsModalOpen(true)}>
+          <ButtonPrimary
+            id="gtm-collect-record-upload-photos"
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+          >
             <IconContainer>
               <IconUpload />
             </IconContainer>

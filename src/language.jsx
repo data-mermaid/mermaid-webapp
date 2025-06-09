@@ -1348,7 +1348,8 @@ const getValidationMessage = (validation, projectId = '') => {
     const validationMessages = {
         all_attributes_same_category: () => `All benthic attributes are ${context?.category}`,
         all_equal: () => 'All observations are the same',
-        diff_num_quadrats: () => 'Defined number of quadrats does not match',
+        diff_num_images: () => 'Defined number of quadrats does not match count of images uploaded',
+        diff_num_quadrats: () => 'Defined number of quadrats does not match count of quadrats in observations',
         duplicate_benthic_transect: () =>
             getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
         duplicate_fishbelt_transect: () =>
