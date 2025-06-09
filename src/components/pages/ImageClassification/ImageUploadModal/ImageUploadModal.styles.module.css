@@ -1,0 +1,13 @@
+#image-guidelines {
+    max-width: 500px;
+    margin: 0 auto;
+}
+#image-crop-guidelines {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    > * {
+        max-width: 33%;
+    }
+}

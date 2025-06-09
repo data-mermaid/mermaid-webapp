@@ -45,6 +45,11 @@ export default defineConfig({
     outDir: 'build',
     emptyOutDir: true,
   },
+  css: {
+    modules: {
+      localsConvention: 'camelCaseOnly',
+    },
+  },
   define: {
     'process.env': process.env,
   },

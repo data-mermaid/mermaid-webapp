@@ -67,15 +67,18 @@
     "zoom_to_point": "Zoom to point"
   },
   "media": {
-    "uploading_files": "<p>Uploading {{processedCount}}\/{{totalCount}} files...</p><button>Cancel upload</button>",
-    "put_files_here": "Drop files here",
-    "select_local_files": "Select files from your computer...",
+    "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
     "cancel_upload": "Cancel upload",
-    "upload_cancelled": "Upload cancelled",
+    "max_file_size": "Maximum file size is 30mb",
     "min_image_size": "Photos must be larger than 1500 pixels by 1500 pixels",
-    "max_file_size": "Maximum file size is 15mb",
+    "put_files_here": "Drop files here",
     "req_crop_photos": "Crop photos to size before uploading",
-    "more_photo_upload_info": "Read more about how to get your photos ready for upload <a>in the documentation</a>"
+    "select_local_files": "Select files from your computer...",
+    "more_photo_upload_info": "Read more about how to get your photos ready for upload <a>in the documentation</a>",
+    "upload_cancelled": "Upload cancelled",
+    "uploading_files": "<p>Uploading {{processedCount}}\/{{totalCount}} files...</p><button>Cancel upload</button>",
+    "uncropped_photo_example": "Uncropped photo example",
+    "cropped_photo_example": "Cropped photo example"
   },
   "offline": {
     "unavailable_offline": "Unavailable offline."

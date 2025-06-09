@@ -12,6 +12,8 @@ import { Trans, useTranslation } from 'react-i18next'
 import preCropPhoto from '../../../../assets/negative-photo-upload-cropping.png'
 import postCropPhoto from '../../../../assets/positive-user-photo-cropping.png'
 import cropTransitionIcon from '../../../../assets/photo-crop-arrow-transition.png'
+import styles from './ImageUploadModal.styles.module.css'
+import imageClassificationLinks from '../../../../link_constants'
 
 const renderUploadProgress = (processedCount, totalFiles, handleCancelUpload) => (
   <Trans
@@ -234,7 +236,7 @@ const ImageUploadModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={onClose}
-      title="Upload Photos"
+      title="Upload photos"
       maxWidth="80rem"
       padding="0.5rem"
       displayCloseIcon={false}
@@ -243,7 +245,7 @@ const ImageUploadModal = ({
           <DropZone onDrop={handleDrop} onDragOver={handleDragOver} onClick={handleButtonClick}>
             {t('media.put_files_here')}
             <br />
-            or //TODO FIX
+            or
             <br />
             <ButtonPrimary type="button">{t('media.select_local_files')}</ButtonPrimary>
             <HiddenInput
@@ -254,7 +256,7 @@ const ImageUploadModal = ({
               accept={validFileTypes.join(',')}
             />
           </DropZone>
-          <div style={{ maxWidth: '500px', margin: '0 auto' }}>
+          <div id={styles.imageGuidelines}>
             <ul>
               <li>{t('media.min_image_size')}</li>
               <li>{t('media.max_file_size')}</li>
@@ -266,7 +268,7 @@ const ImageUploadModal = ({
                     a: (
                       // eslint-disable-next-line jsx-a11y/anchor-has-content
                       <a
-                        href="https://datamermaid.org/documentation/preparing-photos-for-ai-image-classification"
+                        href={imageClassificationLinks.photoPreparationDoc}
                         target="_blank"
                         rel="noopener noreferrer"
                       />
@@ -275,14 +277,10 @@ const ImageUploadModal = ({
                 />
               </li>
             </ul>
-            <div>
-              <img src={preCropPhoto} alt="TODO:Don't do this." />
-              <img
-                src={cropTransitionIcon}
-                alt="TODO:Don't do this."
-                style={{ position: 'relative', top: '-75px' }}
-              />
-              <img src={postCropPhoto} alt="TODO:Don't do this." />
+            <div id={styles.imageCropGuidelines}>
+              <img src={preCropPhoto} alt="Uncropped photo example" />
+              <img src={cropTransitionIcon} alt="Cropped photo example" />
+              <img src={postCropPhoto} alt="Cropped transition icon" />
             </div>
           </div>
         </>
