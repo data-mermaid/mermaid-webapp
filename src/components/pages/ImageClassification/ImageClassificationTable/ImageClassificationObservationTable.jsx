@@ -5,7 +5,6 @@ import { toast } from 'react-toastify'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import Modal, { RightFooter } from '../../../generic/Modal/Modal'
@@ -39,15 +38,21 @@ import {
   TdWithHoverText,
 } from './ImageClassificationObservationTable.styles'
 import Thumbnail from './Thumbnail'
+import { useTranslation, Trans } from 'react-i18next'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
-  { align: 'center', id: 'photo-label', text: 'Photo' },
-  { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
-  { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
-  { align: 'left', id: 'growth-form-label', text: 'Growth Form' },
-  { colSpan: 2, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
-  { align: 'left', id: 'validations', text: 'Validations' },
+  { align: 'center', id: 'photo-label', text: 'media.photo' },
+  { align: 'right', id: 'quadrat-number-label', text: 'benthic.quadrat' },
+  { align: 'left', id: 'benthic-attribute-label', text: 'benthic.benthic_attribute' },
+  { align: 'left', id: 'growth-form-label', text: 'benthic.growth_form' },
+  {
+    colSpan: 2,
+    align: 'center',
+    id: 'number-of-points-label',
+    text: 'image_classification.annotation.number_of_points',
+  },
+  { align: 'left', id: 'validations', text: 'forms.validations' },
   { align: 'right', id: 'review', text: '' },
   { align: 'right', id: 'remove', text: '' },
 ]
@@ -65,7 +70,7 @@ const TableHeaderRow = ({ areValidationsShowing }) => {
     <Tr>
       {filteredHeaders.map((header) => (
         <Th key={header.id} align={header.align} id={header.id} colSpan={header.colSpan || 1}>
-          <span>{header.text}</span>
+          <Trans i18nKey={header.text} />
         </Th>
       ))}
     </Tr>
@@ -76,8 +81,8 @@ TableHeaderRow.propTypes = {
 }
 
 const subHeaderColumns = [
-  { align: 'right', text: 'Confirmed' },
-  { align: 'right', text: 'Unconfirmed' },
+  { align: 'right', text: 'image_classification.annotation.confirmed' },
+  { align: 'right', text: 'image_classification.annotation.unconfirmed' },
 ]
 
 const SubHeaderRow = () => (
@@ -85,7 +90,7 @@ const SubHeaderRow = () => (
     <Th colSpan={5} />
     {subHeaderColumns.map((col, index) => (
       <Th key={index} align={col.align}>
-        <span>{col.text}</span>
+        <Trans i18nKey={col.text} />
       </Th>
     ))}
     <Th colSpan={4} />
@@ -100,6 +105,7 @@ const ImageClassificationObservationTable = ({
   images,
   setImages,
 }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId, recordId } = useParams()
@@ -170,7 +176,7 @@ const ImageClassificationObservationTable = ({
         const updatedImages = images.filter((f) => f.id !== removingPhotoFile.id)
         setImages(updatedImages)
 
-        toast.warn(language.imageClassification.imageClassificationModal.userMessage.photoRemoved)
+        toast.warn(t('image_classification.success.photo_removed'))
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -178,7 +184,9 @@ const ImageClassificationObservationTable = ({
           callback: () => {
             toast.error(
               ...getToastArguments(
-                `${language.imageClassification.imageClassificationModal.errors.failedDeletion} ${removingPhotoFile.original_image_name}. ${error.message}`,
+                `${t('image_classification.errors.failed_image_delete', {
+                  filename: removingPhotoFile.original_image_name,
+                })} ${error.message}`,
               ),
             )
           },
@@ -373,17 +381,15 @@ const ImageClassificationObservationTable = ({
   const removePhotoModal = (
     <>
       <Modal
-        title={language.imageClassification.removePhotoModal.title}
+        title={t('media.remove_photo')}
         isOpen={isRemovePhotoModalOpen}
         onDismiss={closeRemovePhotoModal}
-        mainContent={language.imageClassification.removePhotoModal.prompt}
+        mainContent={t('media.remove_photo_confirmation')}
         footerContent={
           <RightFooter>
-            <ButtonSecondary onClick={closeRemovePhotoModal}>
-              {language.buttons.cancel}
-            </ButtonSecondary>
+            <ButtonSecondary onClick={closeRemovePhotoModal}>{t('buttons.cancel')}</ButtonSecondary>
             <ButtonCaution disabled={isRemovingPhoto} onClick={handleRemovePhoto}>
-              {language.imageClassification.removePhotoModal.yes}
+              {t('media.remove_photo')}
             </ButtonCaution>
           </RightFooter>
         }
@@ -395,7 +401,7 @@ const ImageClassificationObservationTable = ({
   return (
     <>
       <InputWrapper>
-        <H2 id="table-label">Observations</H2>
+        <H2 id="table-label">{t('observations.observations')}</H2>
         <StyledOverflowWrapper>
           <StickyObservationTable aria-labelledby="table-label">
             <thead>
@@ -407,7 +413,7 @@ const ImageClassificationObservationTable = ({
               <LoadingTableBody>
                 <tr>
                   <td colSpan={8}>
-                    <Spinner /> Loading...
+                    <Spinner /> {t('loading')}
                   </td>
                 </tr>
               </LoadingTableBody>
@@ -438,7 +444,7 @@ const ImageClassificationObservationTable = ({
                             ) : (
                               <div>
                                 <Spinner />
-                                Loading {file.original_image_name}
+                                {t('loading', { item: file.original_image_name })}
                               </div>
                             )}
                           </ImageWrapper>
@@ -565,12 +571,7 @@ const ImageClassificationObservationTable = ({
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
-                                  <MuiTooltip
-                                    title={
-                                      language.imageClassification.imageClassificationModal.tooltip
-                                        .reviewPhoto
-                                    }
-                                  >
+                                  <MuiTooltip title={t('media.review_this_photo')}>
                                     <ButtonPrimary
                                       type="button"
                                       onClick={() => setImageId(file.id)}
@@ -578,7 +579,7 @@ const ImageClassificationObservationTable = ({
                                         !getIsImageProcessed(file.classification_status?.status)
                                       }
                                     >
-                                      {language.imageClassification.imageClassificationModal.review}
+                                      {t('buttons.review')}
                                     </ButtonPrimary>
                                   </MuiTooltip>
                                 </StyledTd>
@@ -586,12 +587,7 @@ const ImageClassificationObservationTable = ({
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
-                                  <MuiTooltip
-                                    title={
-                                      language.imageClassification.imageClassificationModal.tooltip
-                                        .removePhoto
-                                    }
-                                  >
+                                  <MuiTooltip title={t('media.remove_this_photo')}>
                                     <ButtonCaution
                                       type="button"
                                       onClick={() => openRemovePhotoModal(file)}
@@ -600,15 +596,15 @@ const ImageClassificationObservationTable = ({
                                         IMAGE_CLASSIFICATION_STATUS.completed
                                       }
                                     >
-                                      <IconClose aria-label="close" />
+                                      <IconClose aria-label={t('buttons.close')} />
                                     </ButtonCaution>
                                   </MuiTooltip>
                                 </StyledTd>
                               </>
                             )}
-                            {areValidationsShowing && subIndex >= 1 ? (
+                            {areValidationsShowing && subIndex >= 1 && (
                               <StyledTd>
-                                {hasObservationErrorValidation && annotation?.unconfirmedCount ? (
+                                {hasObservationErrorValidation && annotation?.unconfirmedCount && (
                                   <ObservationValidationInfo
                                     hasObservationErrorValidation={hasObservationErrorValidation}
                                     hasObservationIgnoredValidation={
@@ -624,9 +620,9 @@ const ImageClassificationObservationTable = ({
                                     observationValidationType={observationValidationType}
                                     resetObservationValidations={resetObservationValidations}
                                   />
-                                ) : null}
+                                )}
                               </StyledTd>
-                            ) : null}
+                            )}
                           </StyledTr>
                         )
                       })}
@@ -640,7 +636,9 @@ const ImageClassificationObservationTable = ({
                           <StyledTd>{rowIndex++}</StyledTd>
                           <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
                           <StyledTd colSpan={3} textAlign="center" style={{ fontWeight: '700' }}>
-                            {`${totalUnknown} Unclassified point${totalUnknown > 1 ? 's' : ''}`}
+                            {$t('image_classification.annotation.unclassified_points', {
+                              count: totalUnknown,
+                            })}
                           </StyledTd>
                           <StyledTd />
                         </StyledTr>
@@ -663,12 +661,14 @@ const ImageClassificationObservationTable = ({
                   (observationsSummaryStats[obs] / observationsSummaryStats.total) * 100,
                 )
 
-                return obs !== 'total' ? (
-                  <Tr key={obs}>
-                    <Th>% {obs}</Th>
-                    <Td>{percentage}</Td>
-                  </Tr>
-                ) : null
+                return (
+                  obs !== 'total' && (
+                    <Tr key={obs}>
+                      <Th>% {obs}</Th>
+                      <Td>{percentage}</Td>
+                    </Tr>
+                  )
+                )
               })}
           </tbody>
         </ObservationsSummaryStats>

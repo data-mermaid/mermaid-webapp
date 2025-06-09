@@ -1,4 +1,9 @@
 {
+  "benthic": {
+    "benthic_attribute": "Benthic attribute",
+    "growth_form": "Growth form",
+    "quadrat": "Quadrat"
+  },
   "buttons": {
     "add_row": "Add row",
     "cancel": "Cancel",
@@ -6,15 +11,18 @@
     "confirm": "Confirm",
     "delete": "Delete",
     "edit": "Edit",
+    "review": "Review",
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
     "view": "View"
   },
+  "forms": {
+    "validations": "Validations"
+  },
   "image_classification": {
     "add_attribute": "Add new attribute",
     "attribute_growth_form": "Benthic attribute / growth form",
-    "benthic_attribute": "Benthic attribute",
     "classifier_guesses_one": "Classifier guess",
     "classifier_guesses_other": "Classifier guesses",
     "confidence": "Confidence",
@@ -25,6 +33,7 @@
       "confirm": "Confirm",
       "confirmed": "Confirmed",
       "next_unconfirmed_point": "Next unconfirmed point",
+      "number_of_points": "Number of points",
       "status": "Status",
       "unclassified": "Unclassified",
       "unconfirmed": "Unconfirmed",
@@ -37,13 +46,15 @@
     },
     "errors": {
       "failed_annotations_fetch": "Failed to fetch image annotations.",
-      "failed_annotations_save": "Failed to save image annotations."
+      "failed_annotations_save": "Failed to save image annotations.",
+      "failed_image_delete": "Failed to delete photo: {{filename}}."
     },
     "user_message": {
       "confirm_image_changes": "Are you sure you want to discard the change to this image?"
     },
     "success": {
-      "annotations_saved": "Successfully saved image annotations"
+      "annotations_saved": "Successfully saved image annotations",
+      "photo_removed": "Photo removed"
     },
     "growth_form": "Growth form",
     "feature_introduction": {
@@ -53,9 +64,21 @@
       "use_manual_observations_button": "Enter observations manually"
     }
   },
+  "loading": "Loading...",
+  "loading_item": "Loading {{item}}",
   "map_tooling": {
     "reset_zoom": "Reset zoom",
     "zoom_to_point": "Zoom to point"
+  },
+  "media": {
+    "photo": "Photo",
+    "remove_photo_confirmation": "Are you sure you want to remove this photo?",
+    "remove_photo": "Remove photo",
+    "remove_this_photo": "Remove this photo",
+    "review_this_photo": "Review this photo"
+  },
+  "observations": {
+    "observations": "Observations",
   },
   "offline": {
     "unavailable_offline": "Unavailable offline."
