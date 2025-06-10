@@ -12,7 +12,8 @@ const BenthicPitLitObservationSummaryStats = ({
   observations = [],
   transectLengthSurveyed = null,
 }) => {
-  const { i18n } = useTranslation()
+  const { t } = useTranslation()
+  const missingBenthicAttributeLabel = t('benthic_observations.missing_benthic_attribute')
   const observationTopLevelAttributeCategoryOccurrence = useMemo(() => {
     const transectLengthSurveyedInCm = transectLengthSurveyed * 100
 
@@ -25,8 +26,7 @@ const BenthicPitLitObservationSummaryStats = ({
 
       return {
         ...observation,
-        topLevelCategoryName:
-          topLevelCategory?.label || i18n.t('benthic_observations.missing_benthic_attribute'),
+        topLevelCategoryName: topLevelCategory?.label || missingBenthicAttributeLabel,
       }
     })
 
@@ -62,7 +62,12 @@ const BenthicPitLitObservationSummaryStats = ({
     )
 
     return sortArrayByObjectKey(topLevelCategoryStats, 'topLevelCategory')
-  }, [observations, benthicAttributeSelectOptions, transectLengthSurveyed, i18n])
+  }, [
+    observations,
+    benthicAttributeSelectOptions,
+    transectLengthSurveyed,
+    missingBenthicAttributeLabel,
+  ])
 
   return (
     transectLengthSurveyed &&
