@@ -1,19 +1,18 @@
 import React, { useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import Modal from '../../../generic/Modal'
-import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
-import { ButtonContainer, DropZone, HiddenInput } from './ImageUploadModal.styles'
+import Modal from '../../generic/Modal/index.js'
+import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../generic/buttons.js'
 import { toast } from 'react-toastify'
-import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import { getToastArguments } from '../../../../library/getToastArguments'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext.jsx'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext.jsx'
+import { getToastArguments } from '../../../library/getToastArguments.js'
 import { Trans, useTranslation } from 'react-i18next'
-import preCropPhoto from '../../../../assets/negative-photo-upload-cropping.png'
-import postCropPhoto from '../../../../assets/positive-user-photo-cropping.png'
-import cropTransitionIcon from '../../../../assets/photo-crop-arrow-transition.png'
-import styles from './ImageUploadModal.styles.module.css'
-import imageClassificationLinks from '../../../../link_constants'
+import preCropPhoto from '../../../assets/negative-photo-upload-cropping.png'
+import postCropPhoto from '../../../assets/positive-user-photo-cropping.png'
+import cropTransitionIcon from '../../../assets/photo-crop-arrow-transition.png'
+import styles from '../../../style/ImageUploadModal.module.scss'
+import imageClassificationLinks from '../../../link_constants.js'
 
 const renderUploadProgress = (processedCount, totalFiles, handleCancelUpload) => (
   <Trans
@@ -245,7 +244,7 @@ const ImageUploadModal = ({
       mainContent={
         <>
           <div
-            className={styles.dropZone}
+            className={styles['drop-zone']}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onClick={handleButtonClick}
@@ -255,13 +254,13 @@ const ImageUploadModal = ({
             <input
               type="file"
               multiple
-              className={styles.hiddenInput}
+              className={styles['hidden-input']}
               onChange={handleFileChange}
               ref={fileInputRef}
               accept={validFileTypes.join(',')}
             />
           </div>
-          <div className={styles.imageGuidelines}>
+          <div className={styles['image-guidelines']}>
             <ul>
               <li>{t('media.min_image_size')}</li>
               <li>{t('media.max_file_size')}</li>
@@ -282,16 +281,28 @@ const ImageUploadModal = ({
                 />
               </li>
             </ul>
-            <div className={styles.imageCropGuidelines}>
-              <img src={preCropPhoto} alt={t('media.user_guidance.uncropped_photo_example')} />
-              <img src={cropTransitionIcon} alt={t('media.user_guidance.crop_icon')} />
-              <img src={postCropPhoto} alt={t('media.user_guidance.cropped_photo_example')} />
+            <div className={styles['image-guidelines__div']}>
+              <img
+                className={styles['image-guidelines__img']}
+                src={preCropPhoto}
+                alt={t('media.user_guidance.uncropped_photo_example')}
+              />
+              <img
+                className={styles['image-guidelines__img']}
+                src={cropTransitionIcon}
+                alt={t('media.user_guidance.crop_icon')}
+              />
+              <img
+                className={styles['image-guidelines__img']}
+                src={postCropPhoto}
+                alt={t('media.user_guidance.cropped_photo_example')}
+              />
             </div>
           </div>
         </>
       }
       footerContent={
-        <div className={styles.buttonContainer}>
+        <div className={styles['button-container']}>
           <ButtonSecondary type="button" onClick={onClose}>
             {t('buttons.close')}
           </ButtonSecondary>

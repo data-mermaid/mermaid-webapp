@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import ImageClassificationObservationTable from './ImageClassificationObservationTable'
-import ImageUploadModal from '../ImageUploadModal/ImageUploadModal'
+import ImageUploadModal from '../ImageUploadModal.jsx'
 import { ButtonPrimary } from '../../../generic/buttons'
 import { IconUpload } from '../../../icons'
 import { ButtonContainer, IconContainer } from './ImageClassificationObservationTable.styles'

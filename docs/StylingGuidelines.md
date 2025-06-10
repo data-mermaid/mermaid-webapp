@@ -14,6 +14,7 @@ Using CSS Modules in JSX
 import styles from './Button.module.css'
 ...  
 <button className={styles.btn}>{...}</button>
+<button className={styles['btn--orange']}>{...}</button>
 ```
 
 
