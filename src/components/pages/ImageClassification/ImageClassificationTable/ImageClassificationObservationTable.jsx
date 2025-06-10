@@ -41,7 +41,7 @@ import {
 import Thumbnail from './Thumbnail'
 
 const tableHeaders = [
-  { align: 'right', id: 'number-label', text: '#' },
+  { align: 'left', id: 'number-label', text: '#' },
   { align: 'center', id: 'photo-label', text: 'Photo' },
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
