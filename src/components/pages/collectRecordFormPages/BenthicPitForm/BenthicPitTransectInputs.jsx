@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -218,7 +218,7 @@ const BenthicPitTransectInputs = ({
     formik.setFieldValue('is_interval_size_as_start', checked)
     if (checked) {
       formik.setFieldValue('interval_start', formik.values.interval_size)
-    } 
+    }
   }
 
   return (

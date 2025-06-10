@@ -5,29 +5,34 @@ import { inputOptionsPropTypes } from '../../library/miscPropTypes'
 import { roundToOneDecimal } from '../../library/numbers/roundToOneDecimal'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 import { ObservationsSummaryStats, Td, Th, Tr } from '../generic/Table/table'
+import { useTranslation } from 'react-i18next'
 
 const BenthicPitLitObservationSummaryStats = ({
   benthicAttributeSelectOptions,
   observations = [],
+  transectLengthSurveyed = null,
 }) => {
-  const observationTopLevelAttributeCategoryOccurance = useMemo(() => {
-    const totalNumberOfObservations = observations.length
+  const { t } = useTranslation()
+  const missingBenthicAttributeLabel = t('benthic_observations.missing_benthic_attribute')
+  const observationTopLevelAttributeCategoryOccurrence = useMemo(() => {
+    const transectLengthSurveyedInCm = transectLengthSurveyed * 100
 
     const getBenthicAttributeById = (benthicAttributeId) =>
       benthicAttributeSelectOptions.find((benthic) => benthic.value === benthicAttributeId)
 
     const observationsWithTopLevelCategoryNames = observations.map((observation) => {
       const benthicAttribute = getBenthicAttributeById(observation.attribute)
+      const topLevelCategory = getBenthicAttributeById(benthicAttribute?.topLevelCategory)
 
       return {
         ...observation,
-        topLevelCategoryName: getBenthicAttributeById(benthicAttribute?.topLevelCategory)?.label,
+        topLevelCategoryName: topLevelCategory?.label || missingBenthicAttributeLabel,
       }
     })
 
     const observationsGroupedByTopLevelCategory = observationsWithTopLevelCategoryNames.reduce(
       (accumulator, observation) => {
-        const { topLevelCategoryName = 'Missing benthic attribute' } = observation
+        const { topLevelCategoryName } = observation
 
         accumulator[topLevelCategoryName] = accumulator[topLevelCategoryName] || []
         accumulator[topLevelCategoryName].push(observation)
@@ -37,41 +42,62 @@ const BenthicPitLitObservationSummaryStats = ({
       {},
     )
 
-    const topLevelCategoryNamesWithObservationOccurance = Object.entries(
-      observationsGroupedByTopLevelCategory,
-    ).map(([topLevelCategory, observationsBelongingToTopLevelCategory]) => ({
-      topLevelCategory,
-      percent: roundToOneDecimal(
-        (observationsBelongingToTopLevelCategory.length / totalNumberOfObservations) * 100,
-      ),
-    }))
+    const topLevelCategoryStats = Object.entries(observationsGroupedByTopLevelCategory).map(
+      ([topLevelCategory, categoryObservations]) => {
+        if (transectLengthSurveyedInCm === 0) {
+          return { topLevelCategory, percent: 0 }
+        }
 
-    return sortArrayByObjectKey(topLevelCategoryNamesWithObservationOccurance, 'topLevelCategory')
-  }, [observations, benthicAttributeSelectOptions])
+        const topLevelCategoryTotalLength = categoryObservations.reduce(
+          (total, observation) => total + observation.length,
+          0,
+        )
+
+        const percent = roundToOneDecimal(
+          (topLevelCategoryTotalLength / transectLengthSurveyedInCm) * 100,
+        )
+
+        return { topLevelCategory, percent }
+      },
+    )
+
+    return sortArrayByObjectKey(topLevelCategoryStats, 'topLevelCategory')
+  }, [
+    observations,
+    benthicAttributeSelectOptions,
+    transectLengthSurveyed,
+    missingBenthicAttributeLabel,
+  ])
 
   return (
-    <ObservationsSummaryStats>
-      <tbody>
-        {observationTopLevelAttributeCategoryOccurance.map((occurance) => {
-          const isPercentageAvailable = !Number.isNaN(parseFloat(occurance.percent))
+    // TODO: Refine this condition once the component is migrated to TypeScript for better type safety
+    transectLengthSurveyed &&
+    !Number.isNaN(Number(transectLengthSurveyed)) &&
+    Number(transectLengthSurveyed) > 0 && (
+      <ObservationsSummaryStats>
+        <tbody>
+          {observationTopLevelAttributeCategoryOccurrence.map((occurance) => {
+            const isPercentageAvailable = !Number.isNaN(parseFloat(occurance.percent))
 
-          return (
-            isPercentageAvailable && (
-              <Tr key={occurance.topLevelCategory}>
-                <Th>{`% ${occurance.topLevelCategory}`}</Th>
-                <Td>{occurance.percent}</Td>
-              </Tr>
+            return (
+              isPercentageAvailable && (
+                <Tr key={occurance.topLevelCategory}>
+                  <Th>{`% ${occurance.topLevelCategory}`}</Th>
+                  <Td>{occurance.percent}</Td>
+                </Tr>
+              )
             )
-          )
-        })}
-      </tbody>
-    </ObservationsSummaryStats>
+          })}
+        </tbody>
+      </ObservationsSummaryStats>
+    )
   )
 }
 
 BenthicPitLitObservationSummaryStats.propTypes = {
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   observations: PropTypes.arrayOf(PropTypes.shape({})),
+  transectLengthSurveyed: PropTypes.number,
 }
 
 export default BenthicPitLitObservationSummaryStats
