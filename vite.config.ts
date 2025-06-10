@@ -35,13 +35,6 @@ export default defineConfig({
     }),
     i18nextLoader({ paths: ['./src/locales'] }),
   ],
-  css: {
-    preprocessorOptions: {
-      scss: {
-        // additionalData: `@import './src/style/theme.scss';`,
-      },
-    },
-  },
   server: {
     port: 3000,
   },

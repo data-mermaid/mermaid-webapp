@@ -243,6 +243,7 @@ const ImageUploadModal = ({
       displayCloseIcon={false}
       mainContent={
         <>
+          {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events */}
           <div
             className={styles['drop-zone']}
             onDrop={handleDrop}
