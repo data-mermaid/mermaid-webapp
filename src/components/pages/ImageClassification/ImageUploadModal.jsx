@@ -200,10 +200,7 @@ const ImageUploadModal = ({
       }
     }
 
-    if (toastId.current) {
-      toast.dismiss(toastId.current)
-      toastId.current = null
-    }
+    toastId.current = null
 
     setIsUploading(false)
   }
@@ -231,6 +228,10 @@ const ImageUploadModal = ({
     isCancelledRef.current = true
 
     toast.info(t('media.upload_cancelled'))
+    if (toastId.current) {
+      toast.dismiss(toastId.current)
+      toastId.current = null
+    }
   }
 
   return (
@@ -250,7 +251,7 @@ const ImageUploadModal = ({
             onDragOver={handleDragOver}
             onClick={handleButtonClick}
           >
-            <Trans i18nKey={t('media.put_files_here')} components={{ br: <br /> }} />
+            <Trans i18nKey="media.put_files_here" components={{ br: <br /> }} />
             <ButtonPrimary type="button">{t('media.select_local_files')}</ButtonPrimary>
             <input
               type="file"
