@@ -70,6 +70,7 @@ const BenthicPitLitObservationSummaryStats = ({
   ])
 
   return (
+    // TODO: Refine this condition once the component is migrated to TypeScript for better type safety
     transectLengthSurveyed &&
     !Number.isNaN(Number(transectLengthSurveyed)) &&
     Number(transectLengthSurveyed) > 0 && (
