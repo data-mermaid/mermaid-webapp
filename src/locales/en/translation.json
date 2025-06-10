@@ -41,8 +41,8 @@
       "failed_annotations_save": "Failed to save image annotations.",
       "file_too_big": "File size exceeds size limit of 30MB",
       "invalid_file_type": "Invalid file type",
-      "invalid_file": "File is invalid or corrupt",
-      "duplicate_file": "Duplicate file",
+      "invalid_file": "File is invalid or corrupt: {{fileName}}",
+      "duplicate_file": "Duplicate file: {{fileName}}",
       "photo_too_small": "Photos should be a minimum height and width of 1500 pixels. This photo is too small: {{fileName}}",
       "no_classification_enabled": "You aren't currently able to upload new images for classification. You may access and review previously uploaded images."
     },

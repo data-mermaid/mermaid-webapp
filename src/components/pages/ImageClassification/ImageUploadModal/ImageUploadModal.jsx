@@ -145,21 +145,19 @@ const ImageUploadModal = ({
       }
 
       if (existingFiles.some((existingFile) => existingFile.original_image_name === file.name)) {
-        toast.error(`${t('image_classification.errors.duplicate_file')}: ${file.name}`)
+        toast.error(t('image_classification.errors.duplicate_file', { fileName: file.name }))
         continue
       }
 
       const result = await validateDimensions(file)
       if (!result.valid || result.corrupt) {
         if (result.isImageTooSmall) {
-          toast.error(
-            `${t('image_classification.errors.photo_too_small', { fileName: file.name })}`,
-          )
+          toast.error(t('image_classification.errors.photo_too_small', { fileName: file.name }))
         } else {
           toast.error(
-            `${t('media.accepted_photo_types')} ${t('image_classification.errors.invalid_file')}: ${
-              file.name
-            }`,
+            `${t('media.accepted_photo_types')} ${t('image_classification.errors.invalid_file', {
+              fileName: file.name,
+            })}`,
           )
         }
         continue
@@ -240,24 +238,30 @@ const ImageUploadModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={onClose}
-      title="Upload photos"
+      title={t('image_classification.buttons.upload_photos')}
       maxWidth="80rem"
       padding="0.5rem"
       displayCloseIcon={false}
       mainContent={
         <>
-          <DropZone onDrop={handleDrop} onDragOver={handleDragOver} onClick={handleButtonClick}>
+          <div
+            className={styles.dropZone}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onClick={handleButtonClick}
+          >
             <Trans i18nKey={t('media.put_files_here')} components={{ br: <br /> }} />
             <ButtonPrimary type="button">{t('media.select_local_files')}</ButtonPrimary>
-            <HiddenInput
+            <input
               type="file"
               multiple
+              className={styles.hiddenInput}
               onChange={handleFileChange}
               ref={fileInputRef}
               accept={validFileTypes.join(',')}
             />
-          </DropZone>
-          <div id={styles.imageGuidelines}>
+          </div>
+          <div className={styles.imageGuidelines}>
             <ul>
               <li>{t('media.min_image_size')}</li>
               <li>{t('media.max_file_size')}</li>
@@ -278,7 +282,7 @@ const ImageUploadModal = ({
                 />
               </li>
             </ul>
-            <div id={styles.imageCropGuidelines}>
+            <div className={styles.imageCropGuidelines}>
               <img src={preCropPhoto} alt={t('media.user_guidance.uncropped_photo_example')} />
               <img src={cropTransitionIcon} alt={t('media.user_guidance.crop_icon')} />
               <img src={postCropPhoto} alt={t('media.user_guidance.cropped_photo_example')} />
@@ -287,11 +291,11 @@ const ImageUploadModal = ({
         </>
       }
       footerContent={
-        <ButtonContainer>
+        <div className={styles.buttonContainer}>
           <ButtonSecondary type="button" onClick={onClose}>
             {t('buttons.close')}
           </ButtonSecondary>
-        </ButtonContainer>
+        </div>
       }
     />
   )

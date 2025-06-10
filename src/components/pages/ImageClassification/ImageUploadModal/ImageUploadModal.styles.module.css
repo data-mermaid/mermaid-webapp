@@ -1,12 +1,31 @@
-#image-guidelines {
+.drop-zone {
+    border: 2px dashed #007bff;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.hidden-input {
+    display: none;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.image-guidelines {
     max-width: 500px;
     margin: 0 auto;
 }
-#image-crop-guidelines {
+.image-guidelines__div {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+
     > * {
         max-width: 33%;
     }
