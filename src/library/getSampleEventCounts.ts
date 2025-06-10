@@ -4,9 +4,8 @@
  * @param {Array} records - An array of sample event records to filter
  * @returns {Object} An object mapping each protocol to its count
  */
-type SampleEventRecord = {
+interface SampleEventRecord {
   protocol: string
-  [key: string]: any // allows for other properties
 }
 
 export const getSampleEventCounts = (
