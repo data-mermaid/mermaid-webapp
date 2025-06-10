@@ -1,5 +1,4 @@
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getProtocolMethodsType } from '../recordProtocolHelpers'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
@@ -118,13 +117,25 @@ const SubmittedRecordsMixin = (Base) =>
     }
 
     exportSubmittedRecords = async function exportSubmittedRecords({ projectId, protocol }) {
-      const token = await this._getAccessToken()
+      if (!projectId || !protocol) {
+        return Promise.reject(this._operationMissingParameterError)
+      }
 
-      const method = getProtocolMethodsType(protocol)
+      const reportUrl = `${this._apiBaseUrl}/reports/`
+      const requestData = {
+        report_type: 'summary_sample_unit_method',
+        project_ids: [projectId],
+        protocol: protocol,
+      }
 
-      const report_url = `${this._apiBaseUrl}/projects/${projectId}/${method}/xlsx/?access_token=${token}`
-
-      window.open(report_url)
+      return this._isOnlineAuthenticatedAndReady
+        ? axios.post(reportUrl, requestData, {
+            headers: {
+              ...(await getAuthorizationHeaders(this._getAccessToken)).headers,
+              'Content-Type': 'application/json',
+            },
+          })
+        : Promise.reject(this._notAuthenticatedAndReadyError)
     }
   }
 
