@@ -427,7 +427,7 @@ const ImageClassificationObservationTable = ({
                           </ImageWrapper>
                         </TdWithHoverText>
                         <StyledTd
-                          colSpan={8}
+                          colSpan={6}
                           textAlign={
                             file.classification_status?.status ===
                             IMAGE_CLASSIFICATION_STATUS.completed
@@ -448,6 +448,18 @@ const ImageClassificationObservationTable = ({
                           ) : (
                             IMAGE_CLASSIFICATION_STATUS_LABEL[file.classification_status?.status]
                           )}
+                        </StyledTd>
+                        <StyledTd textAlign="center">
+                          <MuiTooltip
+                            title={
+                              language.imageClassification.imageClassificationModal.tooltip
+                                .removePhoto
+                            }
+                          >
+                            <ButtonCaution type="button" onClick={() => openRemovePhotoModal(file)}>
+                              <IconClose aria-label="close" />
+                            </ButtonCaution>
+                          </MuiTooltip>
                         </StyledTd>
                       </Tr>
                     )
@@ -580,10 +592,6 @@ const ImageClassificationObservationTable = ({
                                     <ButtonCaution
                                       type="button"
                                       onClick={() => openRemovePhotoModal(file)}
-                                      disabled={
-                                        file.classification_status?.status !==
-                                        IMAGE_CLASSIFICATION_STATUS.completed
-                                      }
                                     >
                                       <IconClose aria-label="close" />
                                     </ButtonCaution>
