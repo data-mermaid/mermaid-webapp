@@ -145,35 +145,41 @@ const ImageClassificationObservationTable = ({
     setIsRemovePhotoModalOpen(false)
   }
 
-  const handleRemovePhoto = () => {
+  // Regular function with optional photo parameter
+  const removePhotoFromDatabase = async (photo = undefined) => {
     setIsRemovingPhoto(true)
 
-    databaseSwitchboardInstance
-      .deleteImage(projectId, removingPhotoFile.id)
-      .then(() => {
-        const updatedImages = images.filter((f) => f.id !== removingPhotoFile.id)
-        setImages(updatedImages)
+    try {
+      const photoToBeRemoved = isRemovePhotoModalOpen ? removingPhotoFile : photo
 
-        toast.warn(language.imageClassification.imageClassificationModal.userMessage.photoRemoved)
+      if (!photoToBeRemoved?.id) {
+        console.error('No valid photo provided to remove')
+        return
+      }
+
+      await databaseSwitchboardInstance.deleteImage(projectId, photoToBeRemoved.id)
+
+      const updatedImages = images.filter((image) => image.id !== photoToBeRemoved.id)
+      setImages(updatedImages)
+
+      toast.warn(language.imageClassification.imageClassificationModal.userMessage.photoRemoved)
+    } catch (error) {
+      handleHttpResponseError({
+        error,
+        callback: () => {
+          const errorMessage = `${language.imageClassification.imageClassificationModal.errors.failedDeletion} ${photoToBeRemoved?.original_image_name}. ${error.message}`
+          toast.error(...getToastArguments(errorMessage))
+        },
+        shouldShowServerNonResponseMessage: false,
       })
-      .catch((error) => {
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            toast.error(
-              ...getToastArguments(
-                `${language.imageClassification.imageClassificationModal.errors.failedDeletion} ${removingPhotoFile.original_image_name}. ${error.message}`,
-              ),
-            )
-          },
-          shouldShowServerNonResponseMessage: false,
-        })
-      })
-      .finally(() => {
-        setRemovingPhotoFile()
-        setIsRemovingPhoto(false)
+    } finally {
+      setIsRemovingPhoto(false)
+
+      if (isRemovePhotoModalOpen) {
+        setRemovingPhotoFile(undefined)
         closeRemovePhotoModal()
-      })
+      }
+    }
   }
 
   const getBenthicAttributeLabel = useCallback(
@@ -366,7 +372,7 @@ const ImageClassificationObservationTable = ({
             <ButtonSecondary onClick={closeRemovePhotoModal}>
               {language.buttons.cancel}
             </ButtonSecondary>
-            <ButtonCaution disabled={isRemovingPhoto} onClick={handleRemovePhoto}>
+            <ButtonCaution disabled={isRemovingPhoto} onClick={removePhotoFromDatabase}>
               {language.imageClassification.removePhotoModal.yes}
             </ButtonCaution>
           </RightFooter>
@@ -591,7 +597,7 @@ const ImageClassificationObservationTable = ({
                                   >
                                     <ButtonCaution
                                       type="button"
-                                      onClick={() => openRemovePhotoModal(file)}
+                                      onClick={() => removePhotoFromDatabase(file)}
                                     >
                                       <IconClose aria-label="close" />
                                     </ButtonCaution>
