@@ -1,24 +1,31 @@
 import React, { useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import Modal from '../../../generic/Modal'
-import { ButtonPrimary, ButtonCaution, ButtonSecondary } from '../../../generic/buttons'
-import { DropZone, HiddenInput, ButtonContainer } from './ImageUploadModal.styles'
+import Modal from '../../generic/Modal/index.js'
+import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../generic/buttons.js'
 import { toast } from 'react-toastify'
-import language from '../../../../language'
-import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import { getToastArguments } from '../../../../library/getToastArguments'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext.jsx'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext.jsx'
+import { getToastArguments } from '../../../library/getToastArguments.js'
+import { Trans, useTranslation } from 'react-i18next'
+import preCropPhoto from '../../../assets/negative-photo-upload-cropping.png'
+import postCropPhoto from '../../../assets/positive-user-photo-cropping.png'
+import cropTransitionIcon from '../../../assets/photo-crop-arrow-transition.png'
+import styles from '../../../style/ImageUploadModal.module.scss'
+import imageClassificationLinks from '../../../link_constants.js'
 
 const renderUploadProgress = (processedCount, totalFiles, handleCancelUpload) => (
-  <div>
-    <p>
-      Uploading {processedCount}/{totalFiles} images...
-    </p>
-    <ButtonCaution type="button" onClick={handleCancelUpload}>
-      Cancel Upload
-    </ButtonCaution>
-  </div>
+  <Trans
+    i18nKey="media.uploading_files"
+    components={{
+      p: <p />,
+      button: <ButtonCaution type="button" onClick={handleCancelUpload} />,
+    }}
+    values={{
+      processedCount: processedCount,
+      totalCount: totalFiles,
+    }}
+  />
 )
 
 const ImageUploadModal = ({
@@ -29,6 +36,7 @@ const ImageUploadModal = ({
   pollCollectRecordUntilAllImagesProcessed,
   setIsUploading,
 }) => {
+  const { t } = useTranslation()
   const isCancelledRef = useRef(false)
   const fileInputRef = useRef(null)
   const { recordId, projectId } = useParams()
@@ -41,7 +49,6 @@ const ImageUploadModal = ({
   const minImageWidthAndHeight = 1500
   const maxWidth = 8000
   const maxHeight = 8000
-  const uploadText = language.imageClassification.imageClassificationModal
 
   const validateDimensions = (file) => {
     return new Promise((resolve) => {
@@ -128,34 +135,28 @@ const ImageUploadModal = ({
 
       // Validate file type, size, dimensions, and uniqueness.
       if (!validFileTypes.includes(file.type)) {
-        toast.error(
-          `${language.imageClassification.imageUploadNotification.fileTypeInvalid}: ${file.name}`,
-        )
+        toast.error(`${t('image_classification.errors.invalid_file_type')}: ${file.name}`)
         continue
       }
       if (file.size > maxFileSize) {
-        toast.error(
-          `${language.imageClassification.imageUploadNotification.fileSizeExceedsLimit}: ${file.name}`,
-        )
+        toast.error(`${t('image_classification.errors.file_too_big')}: ${file.name}`)
         continue
       }
 
       if (existingFiles.some((existingFile) => existingFile.original_image_name === file.name)) {
-        toast.error(
-          `${language.imageClassification.imageUploadNotification.duplicateFile}: ${file.name}`,
-        )
+        toast.error(t('image_classification.errors.duplicate_file', { fileName: file.name }))
         continue
       }
 
       const result = await validateDimensions(file)
       if (!result.valid || result.corrupt) {
         if (result.isImageTooSmall) {
-          toast.error(
-            `${language.imageClassification.imageUploadNotification.imageTooSmall}: ${file.name}. ${language.imageClassification.imageUploadNotification.minImageDimension}`,
-          )
+          toast.error(t('image_classification.errors.photo_too_small', { fileName: file.name }))
         } else {
           toast.error(
-            `${language.imageClassification.imageUploadNotification.fileInvalidOrCorrupt}: ${file.name}`,
+            `${t('media.accepted_photo_types')} ${t('image_classification.errors.invalid_file', {
+              fileName: file.name,
+            })}`,
           )
         }
         continue
@@ -192,17 +193,14 @@ const ImageUploadModal = ({
     if (uploadedFiles.length > 0) {
       if (toastId.current) {
         toast.update(toastId.current, {
-          render: uploadText.success,
+          render: t('image_classification.success.file_upload', { count: uploadedFiles.length }),
           type: toast.TYPE.SUCCESS,
           autoClose: true,
         })
       }
     }
 
-    if (toastId.current) {
-      toast.dismiss(toastId.current)
-      toastId.current = null
-    }
+    toastId.current = null
 
     setIsUploading(false)
   }
@@ -229,41 +227,88 @@ const ImageUploadModal = ({
   const handleCancelUpload = () => {
     isCancelledRef.current = true
 
-    toast.info('Upload cancelled.')
+    toast.info(t('media.upload_cancelled'))
+    if (toastId.current) {
+      toast.dismiss(toastId.current)
+      toastId.current = null
+    }
   }
 
   return (
     <Modal
       isOpen={isOpen}
       onDismiss={onClose}
-      title="Upload Photos"
+      title={t('image_classification.buttons.upload_photos')}
       maxWidth="80rem"
       padding="0.5rem"
       displayCloseIcon={false}
       mainContent={
         <>
-          <DropZone onDrop={handleDrop} onDragOver={handleDragOver} onClick={handleButtonClick}>
-            Drop files here
-            <br />
-            or
-            <br />
-            <ButtonPrimary type="button">Select files from your computer...</ButtonPrimary>
-            <HiddenInput
+          {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events */}
+          <div
+            className={styles['drop-zone']}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onClick={handleButtonClick}
+          >
+            <Trans i18nKey="media.put_files_here" components={{ br: <br /> }} />
+            <ButtonPrimary type="button">{t('media.select_local_files')}</ButtonPrimary>
+            <input
               type="file"
               multiple
+              className={styles['hidden-input']}
               onChange={handleFileChange}
               ref={fileInputRef}
               accept={validFileTypes.join(',')}
             />
-          </DropZone>
+          </div>
+          <div className={styles['image-guidelines']}>
+            <ul>
+              <li>{t('media.min_image_size')}</li>
+              <li>{t('media.max_file_size')}</li>
+              <li>{t('media.req_crop_photos')}</li>
+              <li>
+                <Trans
+                  i18nKey="media.user_guidance.more_photo_upload_info"
+                  components={{
+                    a: (
+                      // eslint-disable-next-line jsx-a11y/anchor-has-content
+                      <a
+                        href={imageClassificationLinks.photoPreparationDoc}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      />
+                    ),
+                  }}
+                />
+              </li>
+            </ul>
+            <div className={styles['image-guidelines__div']}>
+              <img
+                className={styles['image-guidelines__img']}
+                src={preCropPhoto}
+                alt={t('media.user_guidance.uncropped_photo_example')}
+              />
+              <img
+                className={styles['image-guidelines__img']}
+                src={cropTransitionIcon}
+                alt={t('media.user_guidance.crop_icon')}
+              />
+              <img
+                className={styles['image-guidelines__img']}
+                src={postCropPhoto}
+                alt={t('media.user_guidance.cropped_photo_example')}
+              />
+            </div>
+          </div>
         </>
       }
       footerContent={
-        <ButtonContainer>
+        <div className={styles['button-container']}>
           <ButtonSecondary type="button" onClick={onClose}>
-            {language.buttons.close}
+            {t('buttons.close')}
           </ButtonSecondary>
-        </ButtonContainer>
+        </div>
       }
     />
   )
