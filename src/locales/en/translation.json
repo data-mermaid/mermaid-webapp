@@ -37,16 +37,25 @@
     },
     "buttons": {
       "confirm_all": "Confirm all",
+      "upload_photos": "Upload photos",
       "zoom_to_attribute": "Zoom to attribute"
     },
     "errors": {
       "failed_annotations_fetch": "Failed to fetch image annotations.",
-      "failed_annotations_save": "Failed to save image annotations."
+      "failed_annotations_save": "Failed to save image annotations.",
+      "file_too_big": "File size exceeds size limit of 30MB",
+      "invalid_file_type": "Invalid file type",
+      "invalid_file": "File is invalid or corrupt: {{fileName}}",
+      "duplicate_file": "Duplicate file: {{fileName}}",
+      "photo_too_small": "Photos should be a minimum height and width of 1500 pixels. This photo is too small: {{fileName}}",
+      "no_classification_enabled": "You aren't currently able to upload new images for classification. You may access and review previously uploaded images."
     },
     "user_message": {
       "confirm_image_changes": "Are you sure you want to discard the change to this image?"
     },
     "success": {
+      "file_upload_one": "Photo uploaded successfully",
+      "file_upload_other": "Photos uploaded successfully",
       "annotations_saved": "Successfully saved image annotations"
     },
     "growth_form": "Growth form",
@@ -60,6 +69,25 @@
   "map_tooling": {
     "reset_zoom": "Reset zoom",
     "zoom_to_point": "Zoom to point"
+  },
+  "media": {
+    "user_guidance": {
+      "crop_icon": "Cropped transition icon",
+      "cropped_photo_example": "Cropped example",
+      "more_photo_upload_info": "Read more about how to get your photos ready for upload <a>in the documentation</a>",
+      "uncropped_photo_example": "Uncropped example"
+    },
+    "buttons": {
+      "cancel_upload": "Cancel upload"
+    },
+    "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
+    "max_file_size": "Maximum file size is 30mb",
+    "min_image_size": "Photos must be larger than 1500 pixels by 1500 pixels",
+    "put_files_here": "Drop files here <br> or <br>",
+    "req_crop_photos": "Crop photos to size before uploading",
+    "select_local_files": "Select files from your computer...",
+    "upload_cancelled": "Upload cancelled",
+    "uploading_files": "<p>Uploading {{processedCount}}\/{{totalCount}} files...</p><button>Cancel upload</button>"
   },
   "offline": {
     "unavailable_offline": "Unavailable offline."

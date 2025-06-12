@@ -1,0 +1,44 @@
+@use './theme.scss';
+
+.drop-zone {
+  border: 2px dashed theme.$primary;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.image-guidelines {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.image-guidelines__div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+
+  @media (max-width: theme.$mobile-break) {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    max-width: 300px;
+    background-color: hotpink;
+    > * {
+      height:100%;
+      width: 33%;
+    }
+  }
+}
