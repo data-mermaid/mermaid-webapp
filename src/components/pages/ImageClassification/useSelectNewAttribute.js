@@ -105,7 +105,7 @@ export const useSelectNewAttribute = ({
         : benthicAttributeLabel,
       benthic_attribute: selectedBenthicAttr,
       growth_form: selectedGrowthForm || null,
-      is_confirmed: false,
+      is_confirmed: true,
       is_machine_created: false,
     }
 

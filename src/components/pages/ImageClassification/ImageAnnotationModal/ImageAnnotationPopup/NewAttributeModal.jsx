@@ -6,7 +6,6 @@ import {
   NewAttributeModalFooterContainer,
 } from '../ImageAnnotationModal.styles'
 import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
-import { IconPlus } from '../../../../icons'
 import Modal from '../../../../generic/Modal/Modal'
 import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
@@ -68,7 +67,7 @@ const NewAttributeModal = ({
             disabled={!selectedBenthicAttr}
             onClick={handleAddNewRowClick}
           >
-            <IconPlus /> {t('buttons.add_row')}
+            {t('buttons.confirm')}
           </ButtonPrimary>
         </NewAttributeModalFooterContainer>
       }
