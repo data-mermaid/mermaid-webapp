@@ -145,7 +145,6 @@ const ImageClassificationObservationTable = ({
     setIsRemovePhotoModalOpen(false)
   }
 
-  // Regular function with optional photo parameter
   const removePhotoFromDatabase = async (photo = undefined) => {
     setIsRemovingPhoto(true)
 
@@ -462,7 +461,10 @@ const ImageClassificationObservationTable = ({
                                 .removePhoto
                             }
                           >
-                            <ButtonCaution type="button" onClick={() => openRemovePhotoModal(file)}>
+                            <ButtonCaution
+                              type="button"
+                              onClick={() => removePhotoFromDatabase(file)}
+                            >
                               <IconClose aria-label="close" />
                             </ButtonCaution>
                           </MuiTooltip>
@@ -597,7 +599,7 @@ const ImageClassificationObservationTable = ({
                                   >
                                     <ButtonCaution
                                       type="button"
-                                      onClick={() => removePhotoFromDatabase(file)}
+                                      onClick={() => openRemovePhotoModal(file)}
                                     >
                                       <IconClose aria-label="close" />
                                     </ButtonCaution>
