@@ -55,7 +55,8 @@
       "failed_deletion": "Failed to delete photo: {{imageName}}. {{errorMessage}}"
     },
     "warns": {
-      "photo_removed": "Photo removed"},
+      "photo_removed": "Photo removed"
+    },
     "user_message": {
       "confirm_image_changes": "Are you sure you want to discard the change to this image?"
     },
