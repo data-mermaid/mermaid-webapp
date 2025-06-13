@@ -47,7 +47,7 @@
       "invalid_file_type": "Invalid file type",
       "invalid_file": "File is invalid or corrupt: {{fileName}}",
       "duplicate_file": "Duplicate file: {{fileName}}",
-      "photo_too_small": "Photos should be a minimum height and width of 1500 pixels. This photo is too small: {{fileName}}",
+      "photo_too_small": "Photos should be a minimum height and width of {{minImageWidthAndHeight}} pixels. This photo is too small: {{fileName}}",
       "no_classification_enabled": "You aren't currently able to upload new images for classification. You may access and review previously uploaded images."
     },
     "user_message": {
@@ -87,7 +87,7 @@
     "req_crop_photos": "Crop photos to size before uploading",
     "select_local_files": "Select files from your computer...",
     "upload_cancelled": "Upload cancelled",
-    "uploading_files": "<p>Uploading {{processedCount}}\/{{totalCount}} files...</p><button>Cancel upload</button>"
+    "uploading_files": "<p>Uploading {{processedCount}}/{{totalCount}} files...</p><button>Cancel upload</button>"
   },
   "offline": {
     "unavailable_offline": "Unavailable offline."
