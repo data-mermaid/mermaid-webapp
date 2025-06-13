@@ -11,6 +11,36 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { ImageClassificationImage } from '../../../../types/ImageClassificationTypes'
+
+const testingImageData: ImageClassificationImage = {
+  id: 'test-image-id',
+  updated_by: 'test-user',
+  classification_status: {
+    id: 'test-status-id',
+    image: 'test-image-id',
+    status: IMAGE_CLASSIFICATION_STATUS.failed,
+    message: null,
+  },
+  patch_size: 100,
+  num_confirmed: 5,
+  num_unconfirmed: 2,
+  num_unclassified: 0,
+  points: [],
+  created_on: '2023-10-01T00:00:00Z',
+  updated_on: '2023-10-01T00:00:00Z',
+  collect_record_id: 'test-collect-record-id',
+  image: 'test-image-url',
+  thumbnail: 'test-thumbnail-url',
+  name: 'Test Image',
+  original_image_name: 'original-test-image.jpg',
+  original_image_width: 1920,
+  original_image_height: 1580,
+  photo_timestamp: null,
+  location: null,
+  comments: null,
+  data: {},
+}
 
 const ImageClassificationContainer = (props) => {
   const { t } = useTranslation()

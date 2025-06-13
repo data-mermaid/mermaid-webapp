@@ -39,6 +39,7 @@ import {
   TdWithHoverText,
 } from './ImageClassificationObservationTable.styles'
 import Thumbnail from './Thumbnail'
+import { ImageClassificationImage } from '../../../../types/ImageClassificationTypes'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -89,14 +90,14 @@ const ImageClassificationObservationTable = ({
   const { projectId, recordId } = useParams()
   const isFirstLoad = useRef(true)
 
-  const [imageId, setImageId] = useState()
+  const [imageId, setImageId] = useState<string>()
   const [growthForms, setGrowthForms] = useState()
   const [benthicAttributes, setBenthicAttributes] = useState()
   const [distilledImages, setDistilledImages] = useState([])
   const [isFetching, setIsFetching] = useState(false)
   const [hoveredImageIndex, setHoveredImageIndex] = useState(null)
-  const [removingPhotoFile, setRemovingPhotoFile] = useState()
-  const [isRemovePhotoModalOpen, setIsRemovePhotoModalOpen] = useState(false)
+  const [removingPhotoFile, setRemovingPhotoFile] = useState<ImageClassificationImage>()
+  const [isRemovePhotoModalOpen, setIsRemovePhotoModalOpen] = useState<boolean>(false)
   const [isRemovingPhoto, setIsRemovingPhoto] = useState(false)
 
   const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
@@ -106,7 +107,9 @@ const ImageClassificationObservationTable = ({
       return {}
     }
 
-    const allPoints = distilledImages.flatMap((image) => image.distilledAnnotationData)
+    const allPoints = distilledImages.flatMap(
+      (image: ImageClassificationImage) => image.distilledAnnotationData,
+    )
     const categoryGroups = allPoints.reduce(
       (accumulator, point) => {
         const topLevelId = benthicAttributes.find(
@@ -131,13 +134,13 @@ const ImageClassificationObservationTable = ({
     return categoryGroups
   }, [distilledImages, benthicAttributes])
 
-  const handleImageClick = (file) => {
+  const handleImageClick = (file: ImageClassificationImage) => {
     if (getIsImageProcessed(file.classification_status?.status)) {
       setImageId(file.id)
     }
   }
 
-  const openRemovePhotoModal = (file) => {
+  const openRemovePhotoModal = (file: ImageClassificationImage) => {
     setRemovingPhotoFile(file)
     setIsRemovePhotoModalOpen(true)
   }
@@ -149,9 +152,9 @@ const ImageClassificationObservationTable = ({
     setIsRemovingPhoto(true)
 
     databaseSwitchboardInstance
-      .deleteImage(projectId, removingPhotoFile.id)
+      .deleteImage(projectId, removingPhotoFile?.id)
       .then(() => {
-        const updatedImages = images.filter((f) => f.id !== removingPhotoFile.id)
+        const updatedImages = images.filter((f) => f.id !== removingPhotoFile?.id)
         setImages(updatedImages)
 
         toast.warn(language.imageClassification.imageClassificationModal.userMessage.photoRemoved)
@@ -673,12 +676,10 @@ const ImageClassificationObservationTable = ({
 }
 
 ImageClassificationObservationTable.propTypes = {
-  setUploadedFiles: PropTypes.func,
   areValidationsShowing: PropTypes.bool.isRequired,
   collectRecord: benthicPhotoQuadratPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
   resetObservationValidations: PropTypes.func.isRequired,
-  isUploading: PropTypes.bool.isRequired,
   images: PropTypes.array.isRequired,
   setImages: PropTypes.func.isRequired,
 }
