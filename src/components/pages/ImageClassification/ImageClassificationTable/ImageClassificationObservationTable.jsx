@@ -149,11 +149,12 @@ const ImageClassificationObservationTable = ({
   const removePhotoFromDatabase = async (photo = undefined) => {
     setIsRemovingPhoto(true)
 
+    let photoToBeRemoved
     try {
-      const photoToBeRemoved = isRemovePhotoModalOpen ? removingPhotoFile : photo
+      photoToBeRemoved = isRemovePhotoModalOpen ? removingPhotoFile : photo
 
       if (!photoToBeRemoved?.id) {
-        console.error('No valid photo provided to remove')
+        toast.error(t('image_classification.errors.no_photo_found'))
         return
       }
 
@@ -168,7 +169,7 @@ const ImageClassificationObservationTable = ({
         error,
         callback: () => {
           toast.error(
-            t('image_classification.image_classification.errors.failed_deletion', {
+            t('image_classification.errors.failed_deletion', {
               imageName: photoToBeRemoved?.original_image_name,
               errorMessage: error.message,
             }),

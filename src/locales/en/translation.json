@@ -52,7 +52,8 @@
       "duplicate_file": "Duplicate file: {{fileName}}",
       "photo_too_small": "Photos should be a minimum height and width of {{minImageWidthAndHeight}} pixels. This photo is too small: {{fileName}}",
       "no_classification_enabled": "You aren't currently able to upload new images for classification. You may access and review previously uploaded images.",
-      "failed_deletion": "Failed to delete photo: {{imageName}}. {{errorMessage}}"
+      "failed_deletion": "Failed to delete photo: {{imageName}}. {{errorMessage}}",
+      "no_photo_found": "Failed to delete photo! No photo found."
     },
     "warns": {
       "photo_removed": "Photo removed"
