@@ -48,10 +48,10 @@ const BenthicPitLitObservationSummaryStats = ({
           return { topLevelCategory, percent: 0 }
         }
 
-        const topLevelCategoryTotalLength = categoryObservations.reduce(
-          (total, observation) => total + observation.length,
-          0,
-        )
+        const topLevelCategoryTotalLength = categoryObservations.reduce((total, observation) => {
+          const observationTransectLength = Number(observation?.length) || 0
+          return total + observationTransectLength
+        }, 0)
 
         const percent = roundToOneDecimal(
           (topLevelCategoryTotalLength / transectLengthSurveyedInCm) * 100,
