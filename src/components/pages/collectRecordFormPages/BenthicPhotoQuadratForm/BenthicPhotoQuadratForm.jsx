@@ -58,7 +58,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
 
   const [observationsDispatch] = observationsReducer
   const doesRecordHaveImageClassificationData = collectRecordBeingEdited?.data?.image_classification
-  const { enabled: isImageClassificationEnabledForUser = false } = getCurrentUserOptionalFeature(
+  const { enabled: isImageClassificationEnabledForUser = true } = getCurrentUserOptionalFeature(
     currentUser,
     'image_classification',
   )

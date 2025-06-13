@@ -2,10 +2,10 @@ import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import Modal, { RightFooter } from '../../../generic/Modal/Modal'
@@ -88,6 +88,7 @@ const ImageClassificationObservationTable = ({
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId, recordId } = useParams()
   const isFirstLoad = useRef(true)
+  const { t } = useTranslation()
 
   const [imageId, setImageId] = useState()
   const [growthForms, setGrowthForms] = useState()
@@ -161,13 +162,17 @@ const ImageClassificationObservationTable = ({
       const updatedImages = images.filter((image) => image.id !== photoToBeRemoved.id)
       setImages(updatedImages)
 
-      toast.warn(language.imageClassification.imageClassificationModal.userMessage.photoRemoved)
+      toast.warn(t('image_classification.warns.photo_removed'))
     } catch (error) {
       handleHttpResponseError({
         error,
         callback: () => {
-          const errorMessage = `${language.imageClassification.imageClassificationModal.errors.failedDeletion} ${photoToBeRemoved?.original_image_name}. ${error.message}`
-          toast.error(...getToastArguments(errorMessage))
+          toast.error(
+            t('image_classification.image_classification.errors.failed_deletion', {
+              imageName: photoToBeRemoved?.original_image_name,
+              errorMessage: error.message,
+            }),
+          )
         },
         shouldShowServerNonResponseMessage: false,
       })
@@ -362,17 +367,15 @@ const ImageClassificationObservationTable = ({
   const removePhotoModal = (
     <>
       <Modal
-        title={language.imageClassification.removePhotoModal.title}
+        title={t('image_classification.remove_photo')}
         isOpen={isRemovePhotoModalOpen}
         onDismiss={closeRemovePhotoModal}
-        mainContent={language.imageClassification.removePhotoModal.prompt}
+        mainContent={t('image_classification.remove_photo_confirmation')}
         footerContent={
           <RightFooter>
-            <ButtonSecondary onClick={closeRemovePhotoModal}>
-              {language.buttons.cancel}
-            </ButtonSecondary>
+            <ButtonSecondary onClick={closeRemovePhotoModal}>{t('buttons.cancel')}</ButtonSecondary>
             <ButtonCaution disabled={isRemovingPhoto} onClick={removePhotoFromDatabase}>
-              {language.imageClassification.removePhotoModal.yes}
+              {t('image_classification.remove_photo')}
             </ButtonCaution>
           </RightFooter>
         }
@@ -455,12 +458,7 @@ const ImageClassificationObservationTable = ({
                           )}
                         </StyledTd>
                         <StyledTd textAlign="center">
-                          <MuiTooltip
-                            title={
-                              language.imageClassification.imageClassificationModal.tooltip
-                                .removePhoto
-                            }
-                          >
+                          <MuiTooltip title={t('image_classification.tooltips.remove_this_photo')}>
                             <ButtonCaution
                               type="button"
                               onClick={() => removePhotoFromDatabase(file)}
@@ -570,10 +568,7 @@ const ImageClassificationObservationTable = ({
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
                                   <MuiTooltip
-                                    title={
-                                      language.imageClassification.imageClassificationModal.tooltip
-                                        .reviewPhoto
-                                    }
+                                    title={t('image_classification.tooltips.review_this_photo')}
                                   >
                                     <ButtonPrimary
                                       type="button"
@@ -582,7 +577,7 @@ const ImageClassificationObservationTable = ({
                                         !getIsImageProcessed(file.classification_status?.status)
                                       }
                                     >
-                                      {language.imageClassification.imageClassificationModal.review}
+                                      {t('buttons.review')}
                                     </ButtonPrimary>
                                   </MuiTooltip>
                                 </StyledTd>
@@ -592,10 +587,7 @@ const ImageClassificationObservationTable = ({
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
                                   <MuiTooltip
-                                    title={
-                                      language.imageClassification.imageClassificationModal.tooltip
-                                        .removePhoto
-                                    }
+                                    title={t('image_classification.tooltips.remove_photo')}
                                   >
                                     <ButtonCaution
                                       type="button"
