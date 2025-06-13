@@ -160,9 +160,7 @@ const ImageClassificationObservationTable = ({
 
       await databaseSwitchboardInstance.deleteImage(projectId, photoToBeRemoved.id)
 
-      const updatedImages = images.filter((image) => image.id !== photoToBeRemoved.id)
-      setImages(updatedImages)
-
+      setImages((prev) => prev.filter((img) => img.id !== photoToBeRemoved.id))
       toast.warn(t('image_classification.warns.photo_removed'))
     } catch (error) {
       handleHttpResponseError({
