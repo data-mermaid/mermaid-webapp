@@ -1,4 +1,5 @@
 # Translation Token Naming Conventions
+
 **Note:** This is a living document and will be updated as we learn more about best practices for translation tokens.
 
 ## 1. Hierarchical Structure Using Dot Notation
@@ -131,6 +132,7 @@ Avoid nesting namespaces more than 2 levels deep to help keep the translation fi
 - ✅explore_module.add_new_location
 
 Translations of this highly depends on the context, as 'Add' can be synonymous with multiple words even in English.
+
 - ❌add: 'Add'
 - ✅add_record: 'Add Record'
 - ✅add_record: 'Add'

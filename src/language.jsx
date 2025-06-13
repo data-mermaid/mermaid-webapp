@@ -1645,22 +1645,14 @@ const imageClassification = {
       toggleTableVisibility: 'Toggle table visibility',
       toggleLabelVisibility: 'Toggle label visibility',
     },
-    tooltip: {
-      confirmAllPoints: 'Confirm all points',
-      reviewPhoto: 'Review this photo',
-      removePhoto: 'Remove this photo',
-      zoomToAttribute: 'Zoom to attribute',
-    },
     userMessage: {
       confirmDiscardImageChanges: 'Are you sure you want to discard the change to this image?',
-      photoRemoved: 'Photo removed',
     },
     errors: {
       corruptFiles: 'Some files were not added because they appear to be corrupt.',
       dimensionsExceededFiles:
         'Some files were not added because they exceed the 8000x8000 dimensions limit.',
       duplicateFiles: 'Some files are duplicates and were not added.',
-      failedDeletion: 'Failed to delete photo: ',
       failedFetchAnnotations: 'Failed to fetch image annotations.',
       failedSaveAnnotations: 'Failed to save image annotations.',
       invalidFiles:
@@ -1671,11 +1663,6 @@ const imageClassification = {
       savedAnnotations: 'Successfully saved image annotations',
       uploadedPhotos: 'Photos uploaded successfully.',
     },
-  },
-  removePhotoModal: {
-    title: 'Remove Photo',
-    prompt: 'Are you sure you want to remove this photo?',
-    yes: 'Remove Photo',
   },
   imageUploadNotification: {
     fileInvalidOrCorrupt: 'File is invalid or corrupt',

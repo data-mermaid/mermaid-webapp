@@ -1,72 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <!-- Google Tag Manager -->
     <script type="module">
-        const env = import.meta.env.VITE_ENVIRONMENT || 'local';
-        if (env === 'production') {
-            (function (w, d, s, l, i) {
-                w[l] = w[l] || [];
-                w[l].push({
-                    'gtm.start':
-                        new Date().getTime(), event: 'gtm.js'
-                });
-                var f = d.getElementsByTagName(s)[0],
-                    j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-                j.async = true;
-                j.src =
-                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-                f.parentNode.insertBefore(j, f);
-            })(window, document, 'script', 'dataLayer', 'GTM-TNLL74G6');
-        }
+      const env = import.meta.env.VITE_ENVIRONMENT || 'local'
+      if (env === 'production') {
+        ;(function (w, d, s, l, i) {
+          w[l] = w[l] || []
+          w[l].push({
+            'gtm.start': new Date().getTime(),
+            event: 'gtm.js',
+          })
+          var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != 'dataLayer' ? '&l=' + l : ''
+          j.async = true
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+          f.parentNode.insertBefore(j, f)
+        })(window, document, 'script', 'dataLayer', 'GTM-TNLL74G6')
+      }
     </script>
     <!-- End Google Tag Manager -->
 
-    <meta charset="utf-8"/>
-    <link rel="icon" href="/mermaid_favicon.png"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="theme-color" content="#000000"/>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/mermaid_favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
     <title>MERMAID - Marine Ecological Research Management Aid</title>
     <meta
-            name="description"
-            content="Transform your underwater insights into data-driven actions that save coral reefs"
+      name="description"
+      content="Transform your underwater insights into data-driven actions that save coral reefs"
     />
 
     <!-- Facebook Meta Tags -->
-    <meta property="og:url" content="/"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:title" content="MERMAID - Marine Ecological Research Management Aid"/>
+    <meta property="og:url" content="/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MERMAID - Marine Ecological Research Management Aid" />
     <meta
-            property="og:description"
-            content="Transform your underwater insights into data-driven actions that save coral reefs"
+      property="og:description"
+      content="Transform your underwater insights into data-driven actions that save coral reefs"
     />
-    <meta property="og:image" content="/mermaid_opengraph.png"/>
-    <meta property="og:site_name" content="MERMAID - Marine Ecological Research Management Aid"/>
-    <meta property="og:locale" content="en_US"/>
+    <meta property="og:image" content="/mermaid_opengraph.png" />
+    <meta property="og:site_name" content="MERMAID - Marine Ecological Research Management Aid" />
+    <meta property="og:locale" content="en_US" />
     <!-- Twitter Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image"/>
-    <meta property="twitter:domain" content="/"/>
-    <meta property="twitter:url" content="/"/>
-    <meta name="twitter:title" content="MERMAID - Marine Ecological Research Management Aid"/>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="/" />
+    <meta property="twitter:url" content="/" />
+    <meta name="twitter:title" content="MERMAID - Marine Ecological Research Management Aid" />
     <meta
-            name="twitter:description"
-            content="Transform your underwater insights into data-driven actions that save coral reefs"
+      name="twitter:description"
+      content="Transform your underwater insights into data-driven actions that save coral reefs"
     />
-    <meta name="twitter:image" content="/mermaid_opengraph.png"/>
+    <meta name="twitter:image" content="/mermaid_opengraph.png" />
 
-    <link rel="apple-touch-icon" href="/mermaid_favicon.png"/>
-
-
-</head>
-<body>
-<!-- Google Tag Manager (noscript) -->
-<noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TNLL74G6"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
-<!-- End Google Tag Manager (noscript) -->
-<noscript>You need to enable JavaScript to run this app.</noscript>
-<div id="root"></div>
-<script type="module" src="/src/index.jsx"></script>
-</body>
+    <link rel="apple-touch-icon" href="/mermaid_favicon.png" />
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-TNLL74G6"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/index.jsx"></script>
+  </body>
 </html>

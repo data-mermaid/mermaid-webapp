@@ -122,7 +122,7 @@ const CollectRecordFormPage = ({
   setIsNewBenthicAttributeModalOpen = () => {},
   setObservationIdToAddNewBenthicAttributeTo = () => {},
   subNavNode = null,
-  isImageClassificationEnabledForUser = false
+  isImageClassificationEnabledForUser = false,
 }) => {
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [choices, setChoices] = useState({})
@@ -165,7 +165,8 @@ const CollectRecordFormPage = ({
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const observationTableRef = useRef(null)
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new record is saved (and that triggers a navigation to its new page)
-  const isBenthicPQTNewRecordWithImageClassificationEnabled = isImageClassificationEnabledForUser && isNewRecord && sampleUnitName === 'benthicpqt'
+  const isBenthicPQTNewRecordWithImageClassificationEnabled =
+    isImageClassificationEnabledForUser && isNewRecord && sampleUnitName === 'benthicpqt'
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
   const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
@@ -517,44 +518,50 @@ const CollectRecordFormPage = ({
         aria-labelledby="collect-record-form"
         onSubmit={formik.handleSubmit}
       >
-        {!isBenthicPQTNewRecordWithImageClassificationEnabled && <SampleEventInputs
-          areValidationsShowing={areValidationsShowing}
-          collectRecord={collectRecordBeingEdited}
-          formik={formik}
-          managementRegimes={managementRegimes}
-          handleManagementRegimesChange={handleManagementRegimesChange}
-          sites={sites}
-          handleSitesChange={handleSitesChange}
-          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-          resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-          validationPropertiesWithDirtyResetOnInputChange={
-            validationPropertiesWithDirtyResetOnInputChange
-          }
-        />}
-        {!isBenthicPQTNewRecordWithImageClassificationEnabled && <SampleUnitTransectInputs
-          areValidationsShowing={areValidationsShowing}
-          choices={choices}
-          formik={formik}
-          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-          resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-          validationsApiData={validationsApiData}
-          validationPropertiesWithDirtyResetOnInputChange={
-            validationPropertiesWithDirtyResetOnInputChange
-          }
-          isImageClassificationSelected={collectRecordBeingEdited?.data?.image_classification}
-        />}
-        {!isBenthicPQTNewRecordWithImageClassificationEnabled && <ObserversInput
-          data-testid="observers"
-          areValidationsShowing={areValidationsShowing}
-          formik={formik}
-          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-          usersBelongingToProject={observerProfiles}
-          resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-          validationsApiData={validationsApiData}
-          validationPropertiesWithDirtyResetOnInputChange={
-            validationPropertiesWithDirtyResetOnInputChange
-          }
-        />}
+        {!isBenthicPQTNewRecordWithImageClassificationEnabled && (
+          <SampleEventInputs
+            areValidationsShowing={areValidationsShowing}
+            collectRecord={collectRecordBeingEdited}
+            formik={formik}
+            managementRegimes={managementRegimes}
+            handleManagementRegimesChange={handleManagementRegimesChange}
+            sites={sites}
+            handleSitesChange={handleSitesChange}
+            ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+            resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            validationPropertiesWithDirtyResetOnInputChange={
+              validationPropertiesWithDirtyResetOnInputChange
+            }
+          />
+        )}
+        {!isBenthicPQTNewRecordWithImageClassificationEnabled && (
+          <SampleUnitTransectInputs
+            areValidationsShowing={areValidationsShowing}
+            choices={choices}
+            formik={formik}
+            ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+            resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            validationsApiData={validationsApiData}
+            validationPropertiesWithDirtyResetOnInputChange={
+              validationPropertiesWithDirtyResetOnInputChange
+            }
+            isImageClassificationSelected={collectRecordBeingEdited?.data?.image_classification}
+          />
+        )}
+        {!isBenthicPQTNewRecordWithImageClassificationEnabled && (
+          <ObserversInput
+            data-testid="observers"
+            areValidationsShowing={areValidationsShowing}
+            formik={formik}
+            ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+            usersBelongingToProject={observerProfiles}
+            resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            validationsApiData={validationsApiData}
+            validationPropertiesWithDirtyResetOnInputChange={
+              validationPropertiesWithDirtyResetOnInputChange
+            }
+          />
+        )}
         <div ref={observationTableRef}>
           <ObservationTable1
             testId="observations-section"
@@ -586,15 +593,17 @@ const CollectRecordFormPage = ({
           />
         ) : null}
       </form>
-      {!isBenthicPQTNewRecordWithImageClassificationEnabled && <DeleteRecordButton
-        isLoading={isDeletingRecord}
-        isNewRecord={isNewRecord}
-        isOpen={isDeleteRecordModalOpen}
-        modalText={language.deleteRecord('Record')}
-        deleteRecord={deleteRecord}
-        onDismiss={closeDeleteRecordModal}
-        openModal={openDeleteRecordModal}
-      />}
+      {!isBenthicPQTNewRecordWithImageClassificationEnabled && (
+        <DeleteRecordButton
+          isLoading={isDeletingRecord}
+          isNewRecord={isNewRecord}
+          isOpen={isDeleteRecordModalOpen}
+          modalText={language.deleteRecord('Record')}
+          deleteRecord={deleteRecord}
+          onDismiss={closeDeleteRecordModal}
+          openModal={openDeleteRecordModal}
+        />
+      )}
       {!isSubmitWarningVisible ? errorBoxContent : null}
     </>
   ) : (

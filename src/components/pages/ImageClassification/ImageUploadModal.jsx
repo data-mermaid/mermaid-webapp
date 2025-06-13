@@ -151,7 +151,12 @@ const ImageUploadModal = ({
       const result = await validateDimensions(file)
       if (!result.valid || result.corrupt) {
         if (result.isImageTooSmall) {
-          toast.error(t('image_classification.errors.photo_too_small', { fileName: file.name }))
+          toast.error(
+            t('image_classification.errors.photo_too_small', {
+              fileName: file.name,
+              minImageWidthAndHeight: minImageWidthAndHeight,
+            }),
+          )
         } else {
           toast.error(
             `${t('media.accepted_photo_types')} ${t('image_classification.errors.invalid_file', {
