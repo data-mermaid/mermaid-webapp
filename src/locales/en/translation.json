@@ -10,7 +10,8 @@
     "save_changes": "Save changes",
     "submit": "Submit",
     "view": "View",
-    "done": "Done"
+    "done": "Done",
+    "review": "Review"
   },
   "toasts": {
     "export_error": "There was an error exporting the report."
@@ -25,6 +26,8 @@
     "confirmed_total": "Confirmed / total",
     "select_attribute": "Select attribute",
     "select_new_attribute": "Select new attribute",
+    "remove_photo": "Remove photo",
+    "remove_photo_confirmation": "Are you sure you want to remove this photo?",
     "annotation": {
       "confirm": "Confirm",
       "confirmed": "Confirmed",
@@ -47,8 +50,13 @@
       "invalid_file_type": "Invalid file type",
       "invalid_file": "File is invalid or corrupt: {{fileName}}",
       "duplicate_file": "Duplicate file: {{fileName}}",
-      "photo_too_small": "Photos should be a minimum height and width of 1500 pixels. This photo is too small: {{fileName}}",
-      "no_classification_enabled": "You aren't currently able to upload new images for classification. You may access and review previously uploaded images."
+      "photo_too_small": "Photos should be a minimum height and width of {{minImageWidthAndHeight}} pixels. This photo is too small: {{fileName}}",
+      "no_classification_enabled": "You aren't currently able to upload new images for classification. You may access and review previously uploaded images.",
+      "failed_deletion": "Failed to delete photo: {{imageName}}. {{errorMessage}}",
+      "no_photo_found": "Failed to delete photo! No photo found."
+    },
+    "warns": {
+      "photo_removed": "Photo removed"
     },
     "user_message": {
       "confirm_image_changes": "Are you sure you want to discard the change to this image?"
@@ -64,6 +72,10 @@
       "description": "Through a partnership with <a /> from the University of California San Diego and Scripps Institution of Oceanography, MERMAID now includes AI-based classification using a pyspacer deep learning model. This integration enables fast, scalable analysis of benthic photos so that you can generate insights quickly and consistently with machine learning and AI.",
       "use_ai_button": "Classify photos with AI (Beta)",
       "use_manual_observations_button": "Enter observations manually"
+    },
+    "tooltips": {
+      "review_this_photo": "Review this photo",
+      "remove_this_photo": "Remove this photo"
     }
   },
   "map_tooling": {
@@ -87,7 +99,7 @@
     "req_crop_photos": "Crop photos to size before uploading",
     "select_local_files": "Select files from your computer...",
     "upload_cancelled": "Upload cancelled",
-    "uploading_files": "<p>Uploading {{processedCount}}\/{{totalCount}} files...</p><button>Cancel upload</button>"
+    "uploading_files": "<p>Uploading {{processedCount}}/{{totalCount}} files...</p><button>Cancel upload</button>"
   },
   "offline": {
     "unavailable_offline": "Unavailable offline."
