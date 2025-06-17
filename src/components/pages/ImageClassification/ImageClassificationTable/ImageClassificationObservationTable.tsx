@@ -413,7 +413,7 @@ const ImageClassificationObservationTable = ({
                     // If no subrows exist (image not processed), display a single row with thumbnail, status
                     return (
                       <Tr key={file.id}>
-                        <StyledTd textAlign="right">{rowIndex++}</StyledTd>
+                        <StyledTd style={{ textAlign: 'right' }}>{rowIndex++}</StyledTd>
                         <TdWithHoverText
                           data-tooltip={file.original_image_name}
                           onClick={() => handleImageClick(file)}
@@ -458,7 +458,7 @@ const ImageClassificationObservationTable = ({
                             IMAGE_CLASSIFICATION_STATUS_LABEL[file.classification_status?.status]
                           )}
                         </StyledTd>
-                        <StyledTd textAlign="center">
+                        <StyledTd style={{ textAlign: 'center' }}>
                           <MuiTooltip title={t('image_classification.tooltips.remove_this_photo')}>
                             <ButtonCaution
                               type="button"
@@ -509,7 +509,7 @@ const ImageClassificationObservationTable = ({
                             onMouseEnter={() => handleRowMouseEnter(imageIndex)}
                             onMouseLeave={handleRowMouseLeave}
                           >
-                            <StyledTd textAlign="right">{rowIndex++}</StyledTd>
+                            <StyledTd style={{ textAlign: 'right' }}>{rowIndex++}</StyledTd>
                             {subIndex === 0 && (
                               <>
                                 <TdWithHoverText
@@ -530,11 +530,15 @@ const ImageClassificationObservationTable = ({
                                 </TdWithHoverText>
                               </>
                             )}
-                            <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
+                            <StyledTd style={{ textAlign: 'right' }}>{imageIndex + 1}</StyledTd>
                             <StyledTd>{annotation?.benthicAttributeLabel}</StyledTd>
                             <StyledTd>{annotation?.growthFormLabel || ''}</StyledTd>
-                            <StyledTd textAlign="right">{annotation?.confirmedCount} </StyledTd>
-                            <StyledTd textAlign="right">{annotation?.unconfirmedCount}</StyledTd>
+                            <StyledTd style={{ textAlign: 'right' }}>
+                              {annotation?.confirmedCount}{' '}
+                            </StyledTd>
+                            <StyledTd style={{ textAlign: 'right' }}>
+                              {annotation?.unconfirmedCount}
+                            </StyledTd>
                             {subIndex === 0 && (
                               <>
                                 {areValidationsShowing && (
@@ -566,7 +570,7 @@ const ImageClassificationObservationTable = ({
                                   </StyledTd>
                                 )}
                                 <StyledTd
-                                  textAlign="center"
+                                  style={{ textAlign: 'center' }}
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
@@ -585,7 +589,7 @@ const ImageClassificationObservationTable = ({
                                   </MuiTooltip>
                                 </StyledTd>
                                 <StyledTd
-                                  textAlign="center"
+                                  style={{ textAlign: 'center' }}
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
@@ -633,9 +637,9 @@ const ImageClassificationObservationTable = ({
                           onMouseLeave={handleRowMouseLeave}
                           $isUnclassified={true}
                         >
-                          <StyledTd textAlign="right">{rowIndex++}</StyledTd>
-                          <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
-                          <StyledTd colSpan={3} textAlign="center" style={{ fontWeight: '700' }}>
+                          <StyledTd style={{ textAlign: 'right' }}>{rowIndex++}</StyledTd>
+                          <StyledTd style={{ textAlign: 'right' }}>{imageIndex + 1}</StyledTd>
+                          <StyledTd colSpan={3} style={{ fontWeight: '700', textAlign: 'center' }}>
                             {t('image_classification.annotation.unclassified_points', {
                               count: totalUnknown,
                             })}
