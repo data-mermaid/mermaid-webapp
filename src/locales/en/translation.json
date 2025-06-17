@@ -16,6 +16,8 @@
   "toasts": {
     "export_error": "There was an error exporting the report."
   },
+  "loading": "Loading",
+  "loading_item:": "Loading {{itemName}}",
   "image_classification": {
     "add_attribute": "Add new attribute",
     "attribute_growth_form": "Benthic attribute / growth form",
@@ -120,6 +122,7 @@
     "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
   },
   "benthic_observations": {
+    "observations": "Observations",
     "missing_benthic_attribute": "Missing benthic attribute"
   }
 }

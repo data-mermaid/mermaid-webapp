@@ -69,7 +69,7 @@ const BellNotificationDropDown = () => {
                 <NotificationCloseButton
                   onClick={(event) => dismissNotification(event, notification.id)}
                 >
-                  <IconClose aria-label="close" />
+                  <IconClose aria-label={t('buttons.close')} />
                 </NotificationCloseButton>
               </NotificationHeader>
               {/*  eslint-disable-next-line react/no-danger */}

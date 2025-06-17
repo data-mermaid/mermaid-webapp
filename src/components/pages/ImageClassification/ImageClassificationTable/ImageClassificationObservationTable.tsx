@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { getToastArguments } from '../../../../library/getToastArguments'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import Modal, { RightFooter } from '../../../generic/Modal/Modal'
 import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
@@ -39,7 +38,7 @@ import {
   TdWithHoverText,
 } from './ImageClassificationObservationTable.styles'
 import Thumbnail from './Thumbnail'
-import { ImageClassificationImage } from '../../../../types/ImageClassificationTypes'
+import { ImageClassificationImageType } from '../../../../types/ImageClassificationTypes'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -97,9 +96,9 @@ const ImageClassificationObservationTable = ({
   const [distilledImages, setDistilledImages] = useState([])
   const [isFetching, setIsFetching] = useState(false)
   const [hoveredImageIndex, setHoveredImageIndex] = useState(null)
-  const [removingPhotoFile, setRemovingPhotoFile] = useState<ImageClassificationImage>()
+  const [removingPhotoFile, setRemovingPhotoFile] = useState<ImageClassificationImageType>()
   const [isRemovePhotoModalOpen, setIsRemovePhotoModalOpen] = useState<boolean>(false)
-  const [isRemovingPhoto, setIsRemovingPhoto] = useState(false)
+  const [isRemovingPhoto, setIsRemovingPhoto] = useState<boolean>(false)
 
   const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
 
@@ -109,7 +108,7 @@ const ImageClassificationObservationTable = ({
     }
 
     const allPoints = distilledImages.flatMap(
-      (image: ImageClassificationImage) => image.distilledAnnotationData,
+      (image: ImageClassificationImageType) => image.distilledAnnotationData,
     )
     const categoryGroups = allPoints.reduce(
       (accumulator, point) => {
@@ -135,13 +134,13 @@ const ImageClassificationObservationTable = ({
     return categoryGroups
   }, [distilledImages, benthicAttributes])
 
-  const handleImageClick = (file: ImageClassificationImage) => {
+  const handleImageClick = (file: ImageClassificationImageType) => {
     if (getIsImageProcessed(file.classification_status?.status)) {
       setImageId(file.id)
     }
   }
 
-  const openRemovePhotoModal = (file: ImageClassificationImage) => {
+  const openRemovePhotoModal = (file: ImageClassificationImageType) => {
     setRemovingPhotoFile(file)
     setIsRemovePhotoModalOpen(true)
   }
@@ -220,7 +219,7 @@ const ImageClassificationObservationTable = ({
         EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD,
       )
 
-      const sortedImages = imagesResponse.results.map((image) => {
+      const sortedImages = imagesResponse.results.map((image: ImageClassificationImageType) => {
         const sortedPoints = image.points.map((point) => {
           const sortedAnnotations = point.annotations.sort(prioritizeConfirmedAnnotations)
           return { ...point, annotations: sortedAnnotations }
@@ -389,7 +388,7 @@ const ImageClassificationObservationTable = ({
   return (
     <>
       <InputWrapper>
-        <H2 id="table-label">Observations</H2>
+        <H2 id="table-label">{t('benthic_observations.observations')}</H2>
         <StyledOverflowWrapper>
           <StickyObservationTable aria-labelledby="table-label">
             <thead>
@@ -400,7 +399,7 @@ const ImageClassificationObservationTable = ({
               <LoadingTableBody>
                 <tr>
                   <td colSpan={8}>
-                    <Spinner /> Loading...
+                    <Spinner /> {t('loading')}...
                   </td>
                 </tr>
               </LoadingTableBody>
@@ -410,7 +409,7 @@ const ImageClassificationObservationTable = ({
                   const { file, distilledAnnotationData, numSubRows, totalUnknown } = image
                   const imgId = file.id
 
-                  if (numSubRows === 0) {
+                  if (numSubRows === 0 || file.classification_status?.status === 4) {
                     // If no subrows exist (image not processed), display a single row with thumbnail, status
                     return (
                       <Tr key={file.id}>
@@ -431,7 +430,7 @@ const ImageClassificationObservationTable = ({
                             ) : (
                               <div>
                                 <Spinner />
-                                Loading {file.original_image_name}
+                                {t('loading_item', { itemName: file.original_image_name })}
                               </div>
                             )}
                           </ImageWrapper>
@@ -465,7 +464,7 @@ const ImageClassificationObservationTable = ({
                               type="button"
                               onClick={() => removePhotoFromDatabase(file)}
                             >
-                              <IconClose aria-label="close" />
+                              <IconClose aria-label={t('buttons.close')} />
                             </ButtonCaution>
                           </MuiTooltip>
                         </StyledTd>
@@ -538,32 +537,34 @@ const ImageClassificationObservationTable = ({
                             <StyledTd textAlign="right">{annotation?.unconfirmedCount}</StyledTd>
                             {subIndex === 0 && (
                               <>
-                                {areValidationsShowing ? (
+                                {areValidationsShowing && (
                                   <StyledTd>
                                     {hasObservationErrorValidation &&
-                                    annotation?.unconfirmedCount ? (
-                                      <ObservationValidationInfo
-                                        hasObservationErrorValidation={
-                                          hasObservationErrorValidation
-                                        }
-                                        hasObservationIgnoredValidation={
-                                          hasObservationIgnoredValidation
-                                        }
-                                        hasObservationWarningValidation={
-                                          hasObservationWarningValidation
-                                        }
-                                        ignoreObservationValidations={ignoreObservationValidations}
-                                        isObservationValid={isObservationValid}
-                                        observationId={obsId}
-                                        observationValidationMessages={
-                                          observationValidationMessages
-                                        }
-                                        observationValidationType={observationValidationType}
-                                        resetObservationValidations={resetObservationValidations}
-                                      />
-                                    ) : null}
+                                      annotation?.unconfirmedCount && (
+                                        <ObservationValidationInfo
+                                          hasObservationErrorValidation={
+                                            hasObservationErrorValidation
+                                          }
+                                          hasObservationIgnoredValidation={
+                                            hasObservationIgnoredValidation
+                                          }
+                                          hasObservationWarningValidation={
+                                            hasObservationWarningValidation
+                                          }
+                                          ignoreObservationValidations={
+                                            ignoreObservationValidations
+                                          }
+                                          isObservationValid={isObservationValid}
+                                          observationId={obsId}
+                                          observationValidationMessages={
+                                            observationValidationMessages
+                                          }
+                                          observationValidationType={observationValidationType}
+                                          resetObservationValidations={resetObservationValidations}
+                                        />
+                                      )}
                                   </StyledTd>
-                                ) : null}
+                                )}
                                 <StyledTd
                                   textAlign="center"
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
@@ -595,15 +596,15 @@ const ImageClassificationObservationTable = ({
                                       type="button"
                                       onClick={() => openRemovePhotoModal(file)}
                                     >
-                                      <IconClose aria-label="close" />
+                                      <IconClose aria-label={t('buttons.close')} />
                                     </ButtonCaution>
                                   </MuiTooltip>
                                 </StyledTd>
                               </>
                             )}
-                            {areValidationsShowing && subIndex >= 1 ? (
+                            {areValidationsShowing && subIndex >= 1 && (
                               <StyledTd>
-                                {hasObservationErrorValidation && annotation?.unconfirmedCount ? (
+                                {hasObservationErrorValidation && annotation?.unconfirmedCount && (
                                   <ObservationValidationInfo
                                     hasObservationErrorValidation={hasObservationErrorValidation}
                                     hasObservationIgnoredValidation={
@@ -619,9 +620,9 @@ const ImageClassificationObservationTable = ({
                                     observationValidationType={observationValidationType}
                                     resetObservationValidations={resetObservationValidations}
                                   />
-                                ) : null}
+                                )}
                               </StyledTd>
-                            ) : null}
+                            )}
                           </StyledTr>
                         )
                       })}
@@ -635,7 +636,9 @@ const ImageClassificationObservationTable = ({
                           <StyledTd textAlign="right">{rowIndex++}</StyledTd>
                           <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
                           <StyledTd colSpan={3} textAlign="center" style={{ fontWeight: '700' }}>
-                            {`${totalUnknown} Unclassified point${totalUnknown > 1 ? 's' : ''}`}
+                            {t('image_classification.annotation.unclassified_points', {
+                              count: totalUnknown,
+                            })}
                           </StyledTd>
                           <StyledTd />
                         </StyledTr>
@@ -658,12 +661,14 @@ const ImageClassificationObservationTable = ({
                   (observationsSummaryStats[obs] / observationsSummaryStats.total) * 100,
                 )
 
-                return obs !== 'total' ? (
-                  <Tr key={obs}>
-                    <Th>% {obs}</Th>
-                    <Td>{percentage}</Td>
-                  </Tr>
-                ) : null
+                return (
+                  obs !== 'total' && (
+                    <Tr key={obs}>
+                      <Th>% {obs}</Th>
+                      <Td>{percentage}</Td>
+                    </Tr>
+                  )
+                )
               })}
           </tbody>
         </ObservationsSummaryStats>

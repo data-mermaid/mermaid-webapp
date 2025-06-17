@@ -180,7 +180,7 @@ const Modal = ({
             <h2 id="modal-title">{title}</h2>
             {displayCloseIcon && (
               <CloseButton type="button" className="close-button" onClick={onDismiss}>
-                <IconClose aria-label="close" />
+                <IconClose aria-label={t('buttons.close')} />
               </CloseButton>
             )}
           </ModalTitle>

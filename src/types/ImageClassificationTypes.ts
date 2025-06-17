@@ -1,6 +1,6 @@
 import { ImageClassificationPoint } from '../App/mermaidData/mermaidDataTypes'
 
-export interface ImageClassificationImage {
+export interface ImageClassificationImageType {
   id: string
   updated_by: string
   classification_status: {
