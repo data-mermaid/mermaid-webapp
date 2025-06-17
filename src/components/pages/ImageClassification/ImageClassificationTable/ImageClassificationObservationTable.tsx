@@ -409,7 +409,7 @@ const ImageClassificationObservationTable = ({
                   const { file, distilledAnnotationData, numSubRows, totalUnknown } = image
                   const imgId = file.id
 
-                  if (numSubRows === 0 || file.classification_status?.status === 4) {
+                  if (numSubRows === 0 || file.classification_status?.status === 4 /**failed**/) {
                     // If no subrows exist (image not processed), display a single row with thumbnail, status
                     return (
                       <Tr key={file.id}>
