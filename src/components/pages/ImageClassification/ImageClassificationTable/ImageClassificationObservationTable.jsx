@@ -457,12 +457,13 @@ const ImageClassificationObservationTable = ({
                           )}
                         </StyledTd>
                         <StyledTd textAlign="center">
-                          <MuiTooltip title={t('image_classification.tooltips.remove_this_photo')}>
+                          <MuiTooltip title={t('image_classification.remove_this_photo')}>
                             <ButtonCaution
                               type="button"
                               onClick={() => removePhotoFromDatabase(file)}
+                              aria-label={t('buttons.close')}
                             >
-                              <IconClose aria-label="close" />
+                              <IconClose />
                             </ButtonCaution>
                           </MuiTooltip>
                         </StyledTd>
@@ -566,9 +567,7 @@ const ImageClassificationObservationTable = ({
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
-                                  <MuiTooltip
-                                    title={t('image_classification.tooltips.review_this_photo')}
-                                  >
+                                  <MuiTooltip title={t('image_classification.review_this_photo')}>
                                     <ButtonPrimary
                                       type="button"
                                       onClick={() => setImageId(file.id)}
@@ -585,14 +584,13 @@ const ImageClassificationObservationTable = ({
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
-                                  <MuiTooltip
-                                    title={t('image_classification.tooltips.remove_photo')}
-                                  >
+                                  <MuiTooltip title={t('image_classification.remove_photo')}>
                                     <ButtonCaution
                                       type="button"
                                       onClick={() => openRemovePhotoModal(file)}
+                                      aria-label={t('buttons.close')}
                                     >
-                                      <IconClose aria-label="close" />
+                                      <IconClose />
                                     </ButtonCaution>
                                   </MuiTooltip>
                                 </StyledTd>
