@@ -70,20 +70,23 @@
     "user_guidance": {
       "crop_icon": "Cropped transition icon",
       "cropped_photo_example": "Cropped example",
-      "more_photo_upload_info": "Read more about how to get your photos ready for upload <a>in the documentation</a>",
+      "more_photo_upload_info": "Read more about how to get your photos ready for upload in the <a>documentation</a>",
       "uncropped_photo_example": "Uncropped example"
     },
     "buttons": {
       "cancel_upload": "Cancel upload"
     },
+    "errors": {
+      "failed_upload": "Failed to upload {{fileName}}"
+    },
     "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
-    "max_file_size": "Maximum file size is 30mb",
+    "max_file_size": "Maximum file size is 30MB",
     "min_image_size": "Photos must be larger than 1500 pixels by 1500 pixels",
     "put_files_here": "Drop files here <br> or <br>",
     "req_crop_photos": "Crop photos to size before uploading",
     "select_local_files": "Select files from your computer...",
     "upload_cancelled": "Upload cancelled",
-    "uploading_files": "<p>Uploading {{processedCount}}\/{{totalCount}} files...</p><button>Cancel upload</button>"
+    "uploading_files": "<p>Uploading {{processedCount}}/{{totalCount}} files...</p><button>Cancel upload</button>"
   },
   "offline": {
     "unavailable_offline": "Unavailable offline."

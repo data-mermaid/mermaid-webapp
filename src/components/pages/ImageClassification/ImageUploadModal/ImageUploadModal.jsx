@@ -104,7 +104,11 @@ const ImageUploadModal = ({
       handleHttpResponseError({
         error,
         callback: () => {
-          toast.error(...getToastArguments(`Failed to upload ${file.name}: ${error.message}`))
+          toast.error(
+            ...getToastArguments(
+              `${t('media.errors.fail_uploaded', { fileName: file.name })}: ${error.message}`,
+            ),
+          )
         },
         shouldShowServerNonResponseMessage: false,
       })
@@ -240,7 +244,7 @@ const ImageUploadModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={onClose}
-      title="Upload photos"
+      title={t('image_classification.buttons.upload_photos')}
       maxWidth="80rem"
       padding="0.5rem"
       displayCloseIcon={false}
@@ -257,7 +261,7 @@ const ImageUploadModal = ({
               accept={validFileTypes.join(',')}
             />
           </DropZone>
-          <div id={styles.imageGuidelines}>
+          <div className={styles.imageGuidelines}>
             <ul>
               <li>{t('media.min_image_size')}</li>
               <li>{t('media.max_file_size')}</li>
@@ -278,7 +282,7 @@ const ImageUploadModal = ({
                 />
               </li>
             </ul>
-            <div id={styles.imageCropGuidelines}>
+            <div className={styles.imageCropGuidelines}>
               <img src={preCropPhoto} alt={t('media.user_guidance.uncropped_photo_example')} />
               <img src={cropTransitionIcon} alt={t('media.user_guidance.crop_icon')} />
               <img src={postCropPhoto} alt={t('media.user_guidance.cropped_photo_example')} />
