@@ -70,7 +70,7 @@ const ImageAnnotationModal = ({
       }
 
       map.current.fitBounds(bounds, {
-        padding: 250,
+        padding: 25,
         duration: DEFAULT_MAP_ANIMATION_DURATION,
         linear: true,
       })
