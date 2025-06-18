@@ -367,6 +367,7 @@ const Submitted = () => {
       isMethodFilterEnabled={!!methodsFilter?.length}
       setMethodsFilter={setMethodsFilter}
       handleSetTableUserPrefs={handleSetTableUserPrefs}
+      submittedRecordsForUiDisplay={submittedRecordsForUiDisplay}
     />
   ) : (
     <H2>{language.pages.submittedTable.title}</H2>
