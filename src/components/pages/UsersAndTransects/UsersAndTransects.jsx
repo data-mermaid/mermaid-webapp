@@ -278,23 +278,32 @@ const UsersAndTransects = () => {
     (rowRecord) => {
       const collectRecordsByProfileValues = Object.values(collectRecordsByProfile)
 
-      const collectTransectNumbersRow = collectRecordsByProfileValues.reduce(
-        (accumulator, record) => {
-          accumulator[record.profileId] = rowRecord.profile_summary[record.profileId] ? (
-            <CollectSampleUnitPopup
-              rowRecord={rowRecord}
-              recordProfileSummary={rowRecord.profile_summary[record.profileId]}
-            />
-          ) : (
-            EMPTY_TABLE_CELL_VALUE
+      return collectRecordsByProfileValues.reduce((accumulator, record) => {
+        const { profileId } = record
+        const profileSummary = rowRecord.profile_summary?.[profileId]
+        let cellValue = EMPTY_TABLE_CELL_VALUE
+
+        if (profileSummary?.collect_records) {
+          const sortedCollectRecords = [...profileSummary.collect_records].sort(
+            (a, b) => Number(a.name) - Number(b.name),
           )
 
-          return accumulator
-        },
-        {},
-      )
+          const recordProfileSummaryWithSortedCollectRecords = {
+            ...profileSummary,
+            collect_records: sortedCollectRecords,
+          }
 
-      return collectTransectNumbersRow
+          cellValue = (
+            <CollectSampleUnitPopup
+              rowRecord={rowRecord}
+              recordProfileSummary={recordProfileSummaryWithSortedCollectRecords}
+            />
+          )
+        }
+
+        accumulator[profileId] = cellValue
+        return accumulator
+      }, {})
     },
     [collectRecordsByProfile],
   )
