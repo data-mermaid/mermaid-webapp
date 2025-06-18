@@ -105,7 +105,7 @@ const ImageUploadModal = ({
         callback: () => {
           toast.error(
             ...getToastArguments(
-              `${t('media.errors.fail_uploaded', { fileName: file.name })}: ${error.message}`,
+              `${t('media.errors.failed_uploaded', { fileName: file.name })}: ${error.message}`,
             ),
           )
         },
