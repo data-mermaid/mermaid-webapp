@@ -93,7 +93,7 @@
       "failed_upload": "Failed to upload {{fileName}}"
     },
     "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
-    "max_file_size": "Maximum file size is 30MB",
+    "max_file_size": "Maximum file size is 30 MB",
     "min_image_size": "Photos must be larger than 1500 pixels by 1500 pixels",
     "put_files_here": "Drop files here <br> or <br>",
     "req_crop_photos": "Crop photos to size before uploading",

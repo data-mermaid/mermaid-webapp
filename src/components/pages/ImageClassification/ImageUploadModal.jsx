@@ -10,7 +10,7 @@ import { getToastArguments } from '../../../library/getToastArguments.js'
 import { Trans, useTranslation } from 'react-i18next'
 import preCropPhoto from '../../../assets/negative-photo-upload-cropping.png'
 import postCropPhoto from '../../../assets/positive-user-photo-cropping.png'
-import cropTransitionIcon from '../../../assets/photo-crop-arrow-transition.png'
+import cropTransitionIcon from '../../../assets/photo-crop-arrow-transition.svg'
 import styles from '../../../style/ImageUploadModal.module.scss'
 import imageClassificationLinks from '../../../link_constants.js'
 
