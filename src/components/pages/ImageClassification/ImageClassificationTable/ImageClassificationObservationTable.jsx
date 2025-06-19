@@ -2,11 +2,10 @@ import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import language from '../../../../language'
-import { getToastArguments } from '../../../../library/getToastArguments'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import Modal, { RightFooter } from '../../../generic/Modal/Modal'
 import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
@@ -46,10 +45,11 @@ const tableHeaders = [
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
   { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
   { align: 'left', id: 'growth-form-label', text: 'Growth Form' },
-  { colSpan: 2, align: 'center', id: 'number-of-points-label', text: 'Number of Points' },
+  { align: 'right', id: 'confirmed-points', text: 'Confirmed Points' },
+  { align: 'right', id: 'unconfirmed-points', text: 'Unconfirmed Points' },
   { align: 'left', id: 'validations', text: 'Validations' },
-  { align: 'right', id: 'review', text: '' },
-  { align: 'right', id: 'remove', text: '' },
+  { align: 'center', id: 'review', text: '' },
+  { align: 'center', id: 'remove', text: '' },
 ]
 
 const sortByLatest = (a, b) => new Date(a.file.created_on) - new Date(b.file.created_on)
@@ -75,23 +75,6 @@ TableHeaderRow.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
 }
 
-const subHeaderColumns = [
-  { align: 'right', text: 'Confirmed' },
-  { align: 'right', text: 'Unconfirmed' },
-]
-
-const SubHeaderRow = () => (
-  <Tr>
-    <Th colSpan={5} />
-    {subHeaderColumns.map((col, index) => (
-      <Th key={index} align={col.align}>
-        <span>{col.text}</span>
-      </Th>
-    ))}
-    <Th colSpan={4} />
-  </Tr>
-)
-
 const ImageClassificationObservationTable = ({
   collectRecord = undefined,
   areValidationsShowing,
@@ -104,6 +87,7 @@ const ImageClassificationObservationTable = ({
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId, recordId } = useParams()
   const isFirstLoad = useRef(true)
+  const { t } = useTranslation()
 
   const [imageId, setImageId] = useState()
   const [growthForms, setGrowthForms] = useState()
@@ -161,35 +145,43 @@ const ImageClassificationObservationTable = ({
     setIsRemovePhotoModalOpen(false)
   }
 
-  const handleRemovePhoto = () => {
+  const removePhotoFromDatabase = async (photo = undefined) => {
     setIsRemovingPhoto(true)
 
-    databaseSwitchboardInstance
-      .deleteImage(projectId, removingPhotoFile.id)
-      .then(() => {
-        const updatedImages = images.filter((f) => f.id !== removingPhotoFile.id)
-        setImages(updatedImages)
+    let photoToBeRemoved
+    try {
+      photoToBeRemoved = isRemovePhotoModalOpen ? removingPhotoFile : photo
 
-        toast.warn(language.imageClassification.imageClassificationModal.userMessage.photoRemoved)
+      if (!photoToBeRemoved?.id) {
+        toast.error(t('image_classification.errors.no_photo_found'))
+        return
+      }
+
+      await databaseSwitchboardInstance.deleteImage(projectId, photoToBeRemoved.id)
+
+      setImages((prev) => prev.filter((img) => img.id !== photoToBeRemoved.id))
+      toast.warn(t('image_classification.warns.photo_removed'))
+    } catch (error) {
+      handleHttpResponseError({
+        error,
+        callback: () => {
+          toast.error(
+            t('image_classification.errors.failed_deletion', {
+              imageName: photoToBeRemoved?.original_image_name,
+              errorMessage: error.message,
+            }),
+          )
+        },
+        shouldShowServerNonResponseMessage: false,
       })
-      .catch((error) => {
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            toast.error(
-              ...getToastArguments(
-                `${language.imageClassification.imageClassificationModal.errors.failedDeletion} ${removingPhotoFile.original_image_name}. ${error.message}`,
-              ),
-            )
-          },
-          shouldShowServerNonResponseMessage: false,
-        })
-      })
-      .finally(() => {
-        setRemovingPhotoFile()
-        setIsRemovingPhoto(false)
+    } finally {
+      setIsRemovingPhoto(false)
+
+      if (isRemovePhotoModalOpen) {
+        setRemovingPhotoFile(undefined)
         closeRemovePhotoModal()
-      })
+      }
+    }
   }
 
   const getBenthicAttributeLabel = useCallback(
@@ -373,17 +365,15 @@ const ImageClassificationObservationTable = ({
   const removePhotoModal = (
     <>
       <Modal
-        title={language.imageClassification.removePhotoModal.title}
+        title={t('image_classification.remove_photo')}
         isOpen={isRemovePhotoModalOpen}
         onDismiss={closeRemovePhotoModal}
-        mainContent={language.imageClassification.removePhotoModal.prompt}
+        mainContent={t('image_classification.remove_photo_confirmation')}
         footerContent={
           <RightFooter>
-            <ButtonSecondary onClick={closeRemovePhotoModal}>
-              {language.buttons.cancel}
-            </ButtonSecondary>
-            <ButtonCaution disabled={isRemovingPhoto} onClick={handleRemovePhoto}>
-              {language.imageClassification.removePhotoModal.yes}
+            <ButtonSecondary onClick={closeRemovePhotoModal}>{t('buttons.cancel')}</ButtonSecondary>
+            <ButtonCaution disabled={isRemovingPhoto} onClick={removePhotoFromDatabase}>
+              {t('image_classification.remove_photo')}
             </ButtonCaution>
           </RightFooter>
         }
@@ -400,7 +390,6 @@ const ImageClassificationObservationTable = ({
           <StickyObservationTable aria-labelledby="table-label">
             <thead>
               <TableHeaderRow areValidationsShowing={areValidationsShowing} />
-              <SubHeaderRow />
             </thead>
 
             {isFetching ? (
@@ -421,7 +410,7 @@ const ImageClassificationObservationTable = ({
                     // If no subrows exist (image not processed), display a single row with thumbnail, status
                     return (
                       <Tr key={file.id}>
-                        <StyledTd>{rowIndex++}</StyledTd>
+                        <StyledTd textAlign="right">{rowIndex++}</StyledTd>
                         <TdWithHoverText
                           data-tooltip={file.original_image_name}
                           onClick={() => handleImageClick(file)}
@@ -444,7 +433,7 @@ const ImageClassificationObservationTable = ({
                           </ImageWrapper>
                         </TdWithHoverText>
                         <StyledTd
-                          colSpan={8}
+                          colSpan={6}
                           textAlign={
                             file.classification_status?.status ===
                             IMAGE_CLASSIFICATION_STATUS.completed
@@ -465,6 +454,17 @@ const ImageClassificationObservationTable = ({
                           ) : (
                             IMAGE_CLASSIFICATION_STATUS_LABEL[file.classification_status?.status]
                           )}
+                        </StyledTd>
+                        <StyledTd textAlign="center">
+                          <MuiTooltip title={t('image_classification.remove_photo')}>
+                            <ButtonCaution
+                              type="button"
+                              onClick={() => removePhotoFromDatabase(file)}
+                              aria-label={t('buttons.close')}
+                            >
+                              <IconClose />
+                            </ButtonCaution>
+                          </MuiTooltip>
                         </StyledTd>
                       </Tr>
                     )
@@ -507,7 +507,7 @@ const ImageClassificationObservationTable = ({
                             onMouseEnter={() => handleRowMouseEnter(imageIndex)}
                             onMouseLeave={handleRowMouseLeave}
                           >
-                            <StyledTd>{rowIndex++}</StyledTd>
+                            <StyledTd textAlign="right">{rowIndex++}</StyledTd>
                             {subIndex === 0 && (
                               <>
                                 <TdWithHoverText
@@ -562,15 +562,11 @@ const ImageClassificationObservationTable = ({
                                   </StyledTd>
                                 ) : null}
                                 <StyledTd
+                                  textAlign="center"
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
-                                  <MuiTooltip
-                                    title={
-                                      language.imageClassification.imageClassificationModal.tooltip
-                                        .reviewPhoto
-                                    }
-                                  >
+                                  <MuiTooltip title={t('image_classification.review_this_photo')}>
                                     <ButtonPrimary
                                       type="button"
                                       onClick={() => setImageId(file.id)}
@@ -578,29 +574,22 @@ const ImageClassificationObservationTable = ({
                                         !getIsImageProcessed(file.classification_status?.status)
                                       }
                                     >
-                                      {language.imageClassification.imageClassificationModal.review}
+                                      {t('buttons.review')}
                                     </ButtonPrimary>
                                   </MuiTooltip>
                                 </StyledTd>
                                 <StyledTd
+                                  textAlign="center"
                                   rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                                   className={isGroupHovered ? 'hover-highlight' : ''}
                                 >
-                                  <MuiTooltip
-                                    title={
-                                      language.imageClassification.imageClassificationModal.tooltip
-                                        .removePhoto
-                                    }
-                                  >
+                                  <MuiTooltip title={t('image_classification.remove_photo')}>
                                     <ButtonCaution
                                       type="button"
                                       onClick={() => openRemovePhotoModal(file)}
-                                      disabled={
-                                        file.classification_status?.status !==
-                                        IMAGE_CLASSIFICATION_STATUS.completed
-                                      }
+                                      aria-label={t('buttons.close')}
                                     >
-                                      <IconClose aria-label="close" />
+                                      <IconClose />
                                     </ButtonCaution>
                                   </MuiTooltip>
                                 </StyledTd>
@@ -637,7 +626,7 @@ const ImageClassificationObservationTable = ({
                           onMouseLeave={handleRowMouseLeave}
                           $isUnclassified={true}
                         >
-                          <StyledTd>{rowIndex++}</StyledTd>
+                          <StyledTd textAlign="right">{rowIndex++}</StyledTd>
                           <StyledTd textAlign="right">{imageIndex + 1}</StyledTd>
                           <StyledTd colSpan={3} textAlign="center" style={{ fontWeight: '700' }}>
                             {`${totalUnknown} Unclassified point${totalUnknown > 1 ? 's' : ''}`}
