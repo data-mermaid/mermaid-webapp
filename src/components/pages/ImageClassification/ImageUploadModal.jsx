@@ -10,7 +10,7 @@ import { getToastArguments } from '../../../library/getToastArguments.js'
 import { Trans, useTranslation } from 'react-i18next'
 import preCropPhoto from '../../../assets/negative-photo-upload-cropping.png'
 import postCropPhoto from '../../../assets/positive-user-photo-cropping.png'
-import cropTransitionIcon from '../../../assets/photo-crop-arrow-transition.png'
+import cropTransitionIcon from '../../../assets/photo-crop-arrow-transition.svg'
 import styles from '../../../style/ImageUploadModal.module.scss'
 import imageClassificationLinks from '../../../link_constants.js'
 
@@ -103,7 +103,11 @@ const ImageUploadModal = ({
       handleHttpResponseError({
         error,
         callback: () => {
-          toast.error(...getToastArguments(`Failed to upload ${file.name}: ${error.message}`))
+          toast.error(
+            ...getToastArguments(
+              `${t('media.errors.failed_uploaded', { fileName: file.name })}: ${error.message}`,
+            ),
+          )
         },
         shouldShowServerNonResponseMessage: false,
       })
@@ -151,7 +155,12 @@ const ImageUploadModal = ({
       const result = await validateDimensions(file)
       if (!result.valid || result.corrupt) {
         if (result.isImageTooSmall) {
-          toast.error(t('image_classification.errors.photo_too_small', { fileName: file.name }))
+          toast.error(
+            t('image_classification.errors.photo_too_small', {
+              fileName: file.name,
+              minImageWidthAndHeight: minImageWidthAndHeight,
+            }),
+          )
         } else {
           toast.error(
             `${t('media.accepted_photo_types')} ${t('image_classification.errors.invalid_file', {
