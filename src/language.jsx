@@ -1638,13 +1638,6 @@ const imageClassification = {
     status: 'Status',
     review: 'Review',
     attributeGrowthForm: 'Benthic attribute / growth form',
-    imageMap: {
-      zoomIn: 'Zoom in',
-      zoomOut: 'Zoom out',
-      resetZoom: 'Reset zoom',
-      toggleTableVisibility: 'Toggle table visibility',
-      toggleLabelVisibility: 'Toggle label visibility',
-    },
     userMessage: {
       confirmDiscardImageChanges: 'Are you sure you want to discard the change to this image?',
     },

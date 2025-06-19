@@ -5,6 +5,8 @@ import getBounds from '@turf/bbox'
 import { bboxPolygon } from '@turf/bbox-polygon'
 import { booleanContains } from '@turf/boolean-contains'
 import { buffer } from '@turf/buffer'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import maplibregl, {
   Expression,
   LngLatLike,
@@ -40,7 +42,6 @@ import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import { getPatchesCenters } from './getPatchesCenters'
 import { usePointsGeoJson } from './usePointsGeoJson'
-import language from '../../../../language'
 
 interface SelectedPoint {
   id: string | null
@@ -108,6 +109,10 @@ const ImageAnnotationModalMap = ({
   setIsTableShowing,
   setPatchesGeoJson,
   zoomToPaddedBounds,
+  selectedPoint,
+  setSelectedPoint,
+  popupRef,
+  closePopup,
 }: {
   databaseSwitchboardInstance: object
   dataToReview: ImageClassificationResponse
@@ -123,34 +128,24 @@ const ImageAnnotationModalMap = ({
   setIsDataUpdatedSinceLastSave: Dispatch<SetStateAction<boolean>>
   setIsTableShowing: Dispatch<SetStateAction<boolean>>
   setPatchesGeoJson: Dispatch<SetStateAction<GeoJSON.FeatureCollection>>
-  zoomToPaddedBounds: (bounds: number[]) => void
+  zoomToPaddedBounds: (bounds: number[], isPointLabelPopupOpen?: boolean) => void
+  selectedPoint: SelectedPoint
+  setSelectedPoint: Dispatch<SetStateAction<SelectedPoint>>
+  popupRef: Popup
+  closePopup: () => void
 }) => {
   const { getPointsGeojson, getPointsLabelAnchorsGeoJson } = usePointsGeoJson({
     dataToReview,
     imageScale,
     map,
   })
+  const { t }: { t: TFunction } = useTranslation()
   const [areLabelsShowing, setAreLabelsShowing] = useState<boolean>(false)
   const [hoverPatchAttributeGuid, setHoverPatchAttributeGuid] = useState<string>('')
+  const [isPointLabelPopupOpen, setIsPointLabelPopupOpen] = useState<boolean>(false)
 
-  const [selectedPoint, setSelectedPoint] = useState<SelectedPoint>({
-    id: null,
-    popupAnchorLngLat: null,
-    popupAnchorPosition: null,
-    bounds: null,
-  })
   const mapContainer = useRef<HTMLDivElement>(null)
-  const popupRef = useRef<Popup>(null)
-
-  const closePopup = () => {
-    setSelectedPoint({
-      id: null,
-      popupAnchorLngLat: null,
-      popupAnchorPosition: null,
-      bounds: null,
-    })
-    popupRef.current?.remove()
-  }
+  const unclassifiedImageText = t('image_classification.annotation.unclassified')
 
   const toggleLabels = () => {
     const newAreLabelsShowing = !areLabelsShowing
@@ -418,9 +413,7 @@ const ImageAnnotationModalMap = ({
           return
         }
         const [{ properties }] = features ?? []
-        const label = properties?.isUnclassified
-          ? language.imageClassification.imageClassificationModal.unclassified
-          : properties?.ba_gr_label
+        const label = properties?.isUnclassified ? unclassifiedImageText : properties?.ba_gr_label
         const popupContent = <LabelPopup>{label}</LabelPopup>
         const popupContentHack = document.createElement('div')
         ReactDOM.createRoot(popupContentHack).render(popupContent)
@@ -461,7 +454,7 @@ const ImageAnnotationModalMap = ({
         currentMap.off('mouseleave', 'patches-fill-layer', handlePatchMouseLeave)
       }
     },
-    [areLabelsShowing, map],
+    [areLabelsShowing, map, unclassifiedImageText],
   )
 
   const zoomToSelectedPoint = useCallback(() => {
@@ -469,44 +462,47 @@ const ImageAnnotationModalMap = ({
       return
     }
 
-    zoomToPaddedBounds(selectedPoint.bounds as unknown as number[])
-  }, [map, selectedPoint.bounds, zoomToPaddedBounds])
+    zoomToPaddedBounds(selectedPoint.bounds as unknown as number[], isPointLabelPopupOpen)
+  }, [map, selectedPoint.bounds, zoomToPaddedBounds, isPointLabelPopupOpen])
 
-  const selectFeature = useCallback((feature: GeoJSON.Feature) => {
-    const { properties } = feature
+  const selectFeature = useCallback(
+    (feature: GeoJSON.Feature) => {
+      const { properties } = feature
 
-    const xAnchor = properties?.isPointInLeftHalfOfImage ? 'left' : 'right'
-    const yAnchor = properties?.isPointInTopHalfOfImage ? 'top' : 'bottom'
-    const popupAnchorPosition = `${yAnchor}-${xAnchor}` as
-      | 'top-left'
-      | 'top-right'
-      | 'bottom-left'
-      | 'bottom-right'
+      const xAnchor = properties?.isPointInLeftHalfOfImage ? 'left' : 'right'
+      const yAnchor = properties?.isPointInTopHalfOfImage ? 'top' : 'bottom'
+      const popupAnchorPosition = `${yAnchor}-${xAnchor}` as
+        | 'top-left'
+        | 'top-right'
+        | 'bottom-left'
+        | 'bottom-right'
 
-    const bounds = new maplibregl.LngLatBounds(
-      getBounds(feature) as unknown as [LngLatLike, LngLatLike],
-    )
-    const topLeft = bounds.getNorthWest().toArray() as LngLatLike
-    const topRight = bounds.getNorthEast().toArray() as LngLatLike
-    const bottomRight = bounds.getSouthEast().toArray() as LngLatLike
-    const bottomLeft = bounds.getSouthWest().toArray() as LngLatLike
+      const bounds = new maplibregl.LngLatBounds(
+        getBounds(feature) as unknown as [LngLatLike, LngLatLike],
+      )
+      const topLeft = bounds.getNorthWest().toArray() as LngLatLike
+      const topRight = bounds.getNorthEast().toArray() as LngLatLike
+      const bottomRight = bounds.getSouthEast().toArray() as LngLatLike
+      const bottomLeft = bounds.getSouthWest().toArray() as LngLatLike
 
-    const latLngLookupByAnchorPosition = {
-      'top-left': bottomRight,
-      'top-right': bottomLeft,
-      'bottom-left': topRight,
-      'bottom-right': topLeft,
-    }
-    const selectedPointToUse = {
-      id: properties?.id,
-      popupAnchorLngLat: latLngLookupByAnchorPosition[popupAnchorPosition],
-      popupAnchorPosition,
-      bounds,
-    }
-    setSelectedPoint(selectedPointToUse)
+      const latLngLookupByAnchorPosition = {
+        'top-left': bottomRight,
+        'top-right': bottomLeft,
+        'bottom-left': topRight,
+        'bottom-right': topLeft,
+      }
+      const selectedPointToUse = {
+        id: properties?.id,
+        popupAnchorLngLat: latLngLookupByAnchorPosition[popupAnchorPosition],
+        popupAnchorPosition,
+        bounds,
+      }
+      setSelectedPoint(selectedPointToUse)
 
-    return selectedPointToUse
-  }, [])
+      return selectedPointToUse
+    },
+    [setSelectedPoint],
+  )
 
   const selectNextUnconfirmedPoint = useCallback(() => {
     const patchesFeatures = patchesGeoJson?.features
@@ -530,10 +526,10 @@ const ImageAnnotationModalMap = ({
     if (!nextUnconfirmedFeature) {
       return
     }
-    zoomToPaddedBounds(getBounds(nextUnconfirmedFeature))
+    zoomToPaddedBounds(getBounds(nextUnconfirmedFeature), isPointLabelPopupOpen)
 
     selectFeature(nextUnconfirmedFeature)
-  }, [patchesGeoJson, selectFeature, selectedPoint.id, zoomToPaddedBounds])
+  }, [patchesGeoJson, selectFeature, selectedPoint.id, zoomToPaddedBounds, isPointLabelPopupOpen])
 
   const _displayEditPointPopupOnPointClick = useEffect(() => {
     if (!hasMapLoaded) {
@@ -579,6 +575,7 @@ const ImageAnnotationModalMap = ({
       if (!isBufferedFeatureCompletelyWithinMapBounds) {
         map.current.easeTo(easeToOptions)
       }
+      setIsPointLabelPopupOpen(true)
     }
 
     const hideFeaturePopup = ({ point }: MapMouseEvent) => {
@@ -587,6 +584,7 @@ const ImageAnnotationModalMap = ({
       const isClickFromFeatureLayer = !!patches
       if (!isClickFromFeatureLayer) {
         closePopup()
+        setIsPointLabelPopupOpen(false)
       }
     }
 
@@ -598,7 +596,7 @@ const ImageAnnotationModalMap = ({
       map.current?.off('click', 'patches-fill-layer', showFeaturePopupOnClick)
       map.current?.off('click', hideFeaturePopup)
     }
-  }, [hasMapLoaded, map, selectFeature, zoomToPaddedBounds])
+  }, [hasMapLoaded, map, selectFeature, zoomToPaddedBounds, closePopup])
 
   const _updateStyleOnPointHover = useEffect(() => {
     if (!hasMapLoaded) {
@@ -718,33 +716,23 @@ const ImageAnnotationModalMap = ({
       {hasMapLoaded && (
         <MapButtonContainer>
           <ConnectedMapControlButtonContainer>
-            <MuiTooltipDarkRight
-              title={language.imageClassification.imageClassificationModal.imageMap.zoomIn}
-            >
+            <MuiTooltipDarkRight title={t('map_tooling.zoom_in')}>
               <MapControlButton type="button" onClick={zoomMapIn}>
                 <IconPlus />
               </MapControlButton>
             </MuiTooltipDarkRight>
-            <MuiTooltipDarkRight
-              title={language.imageClassification.imageClassificationModal.imageMap.zoomOut}
-            >
+            <MuiTooltipDarkRight title={t('map_tooling.zoom_out')}>
               <MapControlButton type="button" onClick={zoomMapOut}>
                 <IconMinus />
               </MapControlButton>
             </MuiTooltipDarkRight>
           </ConnectedMapControlButtonContainer>
-          <MuiTooltipDarkRight
-            title={language.imageClassification.imageClassificationModal.imageMap.resetZoom}
-          >
+          <MuiTooltipDarkRight title={t('map_tooling.reset_zoom')}>
             <MapControlButton type="button" onClick={resetZoom}>
               <IconRefresh />
             </MapControlButton>
           </MuiTooltipDarkRight>
-          <MuiTooltipDarkRight
-            title={
-              language.imageClassification.imageClassificationModal.imageMap.toggleTableVisibility
-            }
-          >
+          <MuiTooltipDarkRight title={t('toggle_table_visibility')}>
             <MapControlButton
               type="button"
               onClick={() => {
@@ -755,11 +743,7 @@ const ImageAnnotationModalMap = ({
               <IconTable />
             </MapControlButton>
           </MuiTooltipDarkRight>
-          <MuiTooltipDarkRight
-            title={
-              language.imageClassification.imageClassificationModal.imageMap.toggleLabelVisibility
-            }
-          >
+          <MuiTooltipDarkRight title={t('toggle_label_visibility')}>
             <MapControlButton type="button" onClick={toggleLabels} $isSelected={areLabelsShowing}>
               <IconLabel />
             </MapControlButton>

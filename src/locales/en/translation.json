@@ -77,7 +77,9 @@
   },
   "map_tooling": {
     "reset_zoom": "Reset zoom",
-    "zoom_to_point": "Zoom to point"
+    "zoom_to_point": "Zoom to point",
+    "zoom_in": "Zoom in",
+    "zoom_out": "Zoom out"
   },
   "media": {
     "user_guidance": {
@@ -121,5 +123,7 @@
   },
   "benthic_observations": {
     "missing_benthic_attribute": "Missing benthic attribute"
-  }
+  },
+  "toggle_table_visibility": "Toggle table visibility",
+  "toggle_label_visibility": "Toggle label visibility"
 }

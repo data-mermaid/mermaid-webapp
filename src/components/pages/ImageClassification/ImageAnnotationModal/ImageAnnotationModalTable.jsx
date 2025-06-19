@@ -24,6 +24,7 @@ const ImageAnnotationModalTable = ({
   setIsDataUpdatedSinceLastSave,
   zoomToPointsByAttributeId,
   isTableShowing,
+  closePopup,
 }) => {
   useEffect(
     function deselectAttributeIfTableHidden() {
@@ -89,6 +90,7 @@ const ImageAnnotationModalTable = ({
     event.stopPropagation()
     zoomToPointsByAttributeId(attributeId)
     setSelectedAttributeId(attributeId)
+    closePopup()
   }
 
   return (
@@ -188,6 +190,7 @@ ImageAnnotationModalTable.propTypes = {
   setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
   zoomToPointsByAttributeId: PropTypes.func.isRequired,
   isTableShowing: PropTypes.bool.isRequired,
+  closePopup: PropTypes.func.isRequired,
 }
 
 export default ImageAnnotationModalTable
