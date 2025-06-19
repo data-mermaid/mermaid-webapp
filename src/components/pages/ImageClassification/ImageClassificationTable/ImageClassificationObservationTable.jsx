@@ -456,7 +456,7 @@ const ImageClassificationObservationTable = ({
                           )}
                         </StyledTd>
                         <StyledTd textAlign="center">
-                          <MuiTooltip title={t('image_classification.remove_this_photo')}>
+                          <MuiTooltip title={t('image_classification.remove_photo')}>
                             <ButtonCaution
                               type="button"
                               onClick={() => removePhotoFromDatabase(file)}
