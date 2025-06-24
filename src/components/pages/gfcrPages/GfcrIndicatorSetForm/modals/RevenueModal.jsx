@@ -23,7 +23,7 @@ import { useParams } from 'react-router-dom'
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
 import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 import language from '../../../../../language'
-import Modal, { RightFooter } from '../../../../generic/Modal/Modal'
+import Modal, { RightFooter } from '../../../../generic/Modal.tsx'
 import SaveButton from './SaveButton'
 
 const modalLanguage = language.gfcrRevenueModal

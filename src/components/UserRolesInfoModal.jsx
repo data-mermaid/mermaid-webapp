@@ -7,7 +7,7 @@ import { IconCheck, IconClose } from './icons'
 import { Table, Td, Tr, TableOverflowWrapper } from './generic/Table/table'
 import language from '../language'
 import theme from '../theme'
-import Modal, { RightFooter } from './generic/Modal/Modal'
+import Modal, { RightFooter } from './generic/Modal.tsx'
 
 const Thead = styled.th`
   text-align: center;

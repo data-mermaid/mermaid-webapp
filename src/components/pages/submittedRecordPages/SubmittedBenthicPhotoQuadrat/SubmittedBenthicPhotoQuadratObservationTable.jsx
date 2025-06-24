@@ -14,7 +14,7 @@ import Thumbnail from '../../ImageClassification/ImageClassificationTable/Thumbn
 import {
   ImageWrapper,
   TdWithHoverText,
-} from '../../ImageClassification/ImageClassificationTable/ImageClassificationObservationTable.styles'
+} from '../../ImageClassification/ImageClassificationTable/ImageClassificationObservationTable.styles.js'
 
 const SubmittedBenthicPhotoQuadratObservationTable = ({
   choices,

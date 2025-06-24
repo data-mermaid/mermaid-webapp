@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import { IconClose } from '../../icons'
-import theme from '../../../theme'
-import { CloseButton } from '../buttons'
-import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
-import { InputRow } from '../form'
-import { TableOverflowWrapper } from '../Table/table'
+import { IconClose } from '../icons'
+import theme from '../../theme'
+import { CloseButton } from './buttons'
+import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
+import { InputRow } from './form'
+import { TableOverflowWrapper } from './Table/table'
+import { useTranslation } from 'react-i18next'
 
 export const MODAL_CONTENT_HEIGHT = '80vh'
 
@@ -154,6 +155,7 @@ const Modal = ({
   allowCloseWithEscapeKey = true,
   contentOverflowStyle = null,
 }) => {
+  const { t } = useTranslation()
   const _closeModalWithEscapeKey = useEffect(() => {
     const close = (event) => {
       if (allowCloseWithEscapeKey && event.code === 'Escape') {

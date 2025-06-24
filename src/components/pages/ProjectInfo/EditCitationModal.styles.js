@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { MODAL_CONTENT_HEIGHT } from '../../generic/Modal/Modal'
+import { MODAL_CONTENT_HEIGHT } from '../../generic/Modal.tsx'
 import theme from '../../../theme'
 import { Dl } from '../../generic/miscellaneous'
 

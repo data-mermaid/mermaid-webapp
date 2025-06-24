@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
-import Modal, { RightFooter } from '../generic/Modal/Modal'
+import Modal, { RightFooter } from '../generic/Modal.tsx'
 import InlineMessage from '../generic/InlineMessage'
 import theme from '../../theme'
 

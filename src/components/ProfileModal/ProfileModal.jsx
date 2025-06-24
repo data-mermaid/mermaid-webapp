@@ -7,7 +7,7 @@ import { IconSave } from '../icons'
 import { Input } from '../generic/form'
 import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
-import Modal, { RightFooter, ModalInputRow } from '../generic/Modal/Modal'
+import Modal, { RightFooter, ModalInputRow } from '../generic/Modal.tsx'
 import { getProfileInitialValues } from './profileFormInitialValues'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 

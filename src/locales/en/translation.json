@@ -17,7 +17,7 @@
     "export_error": "There was an error exporting the report."
   },
   "loading": "Loading",
-  "loading_item:": "Loading {{itemName}}",
+  "loading_item": "Loading {{itemName}}",
   "image_classification": {
     "add_attribute": "Add new attribute",
     "attribute_growth_form": "Benthic attribute / growth form",

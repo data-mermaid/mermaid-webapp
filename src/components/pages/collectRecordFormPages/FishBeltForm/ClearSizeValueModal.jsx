@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { ButtonCaution, ButtonSecondary } from '../../../generic/buttons'
-import Modal, { RightFooter } from '../../../generic/Modal/Modal'
+import Modal, { RightFooter } from '../../../generic/Modal.tsx'
 
 const ClearSizeValuesModal = ({ isOpen, modalText, handleResetSizeValues, onDismiss }) => {
   const footerContent = (

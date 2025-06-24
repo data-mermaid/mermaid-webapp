@@ -27,6 +27,8 @@ const medium = '1rem'
 const large = '1.5rem'
 const xlarge = '2rem'
 
+export type MessageType = 'ignore' | 'info' | 'warning' | 'error'
+
 const color = {
   textColor,
   brandSecondary: '#f2645a',
@@ -123,7 +125,7 @@ const color = {
 
     return undefined
   },
-  getBorderColor: function getBorderColor(messageType: 'ignore' | 'info' | 'warning' | 'error') {
+  getBorderColor: function getBorderColor(messageType: MessageType) {
     if (messageType === 'ignore') {
       return ignore.toString()
     }

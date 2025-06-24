@@ -7,7 +7,7 @@ import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHa
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import Modal, { RightFooter } from '../../../generic/Modal/Modal'
+import Modal, { RightFooter } from '../../../generic/Modal'
 import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
 import { InputWrapper } from '../../../generic/form'
 import { MuiTooltip } from '../../../generic/MuiTooltip'
@@ -39,6 +39,7 @@ import {
 } from './ImageClassificationObservationTable.styles'
 import Thumbnail from './Thumbnail'
 import { ImageClassificationImageType } from '../../../../types/ImageClassificationTypes'
+import { MessageType } from '../../../../theme'
 
 const tableHeaders = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -437,12 +438,14 @@ const ImageClassificationObservationTable = ({
                         </TdWithHoverText>
                         <StyledTd
                           colSpan={6}
-                          textAlign={
-                            file.classification_status?.status ===
-                            IMAGE_CLASSIFICATION_STATUS.completed
-                              ? 'left'
-                              : 'center'
-                          }
+                          style={{
+                            textAlign: `${
+                              file.classification_status?.status ===
+                              IMAGE_CLASSIFICATION_STATUS.completed
+                                ? 'left'
+                                : 'center'
+                            }`,
+                          }}
                         >
                           {!getIsImageProcessed(file.classification_status?.status) ? (
                             <>
@@ -494,18 +497,19 @@ const ImageClassificationObservationTable = ({
                           areValidationsShowing,
                           observationsPropertyName: 'obs_benthic_photo_quadrats',
                         })
+                        let trMessageType: MessageType
+
+                        if (hasObservationErrorValidation) {
+                          trMessageType = 'error'
+                        } else if (hasObservationWarningValidation) {
+                          trMessageType = 'warning'
+                        }
 
                         return (
                           <StyledTr
                             key={`${file.id}-${subIndex}`}
                             $hasUnconfirmedPoint={annotation.unconfirmedCount > 0}
-                            $messageType={
-                              hasObservationErrorValidation
-                                ? 'error'
-                                : hasObservationWarningValidation
-                                ? 'warning'
-                                : null
-                            }
+                            $messageType={trMessageType}
                             onMouseEnter={() => handleRowMouseEnter(imageIndex)}
                             onMouseLeave={handleRowMouseLeave}
                           >

@@ -9,7 +9,7 @@ import { Input, InputRow, HelperText } from '../generic/form'
 import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
-import Modal, { RightFooter } from '../generic/Modal/Modal'
+import Modal, { RightFooter } from '../generic/Modal.tsx'
 
 const ModalInputRow = styled(InputRow)`
   background: ${theme.color.white};

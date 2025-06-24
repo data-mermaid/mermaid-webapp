@@ -1,28 +1,40 @@
 import styled from 'styled-components'
 import { Td, Tr } from '../../../generic/Table/table'
-import theme from '../../../../theme'
+import theme, { MessageType } from '../../../../theme'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+
+interface StyledTrProps {
+  $messageType?: MessageType
+  $hasUnconfirmedPoint?: boolean
+  $isUnclassified?: boolean
+}
 
 const StyledColgroup = styled('colgroup')`
   col {
     &.thumbnail {
       width: 5rem;
     }
+
     &.quadrat {
       width: 15rem;
     }
+
     &.benthicAttribute {
       width: auto;
     }
+
     &.growthForm {
       width: 20%;
     }
+
     &.numberOfPoints {
       width: 20rem;
     }
+
     &.validation {
       width: auto;
     }
+
     &.remove {
       width: 5rem;
     }
@@ -38,7 +50,7 @@ const StyledTd = styled(Td)`
   }
 `
 
-const StyledTr = styled(Tr)`
+const StyledTr = styled(Tr)<StyledTrProps>`
   border-width: 0 0 0 ${theme.spacing.xsmall};
   border-style: solid;
   border-color: ${({ $messageType, $hasUnconfirmedPoint, $isUnclassified }) => {

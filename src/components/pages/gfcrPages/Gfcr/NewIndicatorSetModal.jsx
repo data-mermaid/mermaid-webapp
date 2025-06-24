@@ -19,7 +19,7 @@ import {
   StyledModalInputRow,
   StyledModalLeftFooter,
 } from '../GfcrIndicatorSetForm/subPages/subPages.styles'
-import Modal, { RightFooter } from '../../../generic/Modal/Modal'
+import Modal, { RightFooter } from '../../../generic/Modal.tsx'
 import SaveButton from '../GfcrIndicatorSetForm/modals/SaveButton'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import InputNoRowWithLabelAndValidation from '../../../mermaidInputs/InputNoRowWithLabelAndValidation'

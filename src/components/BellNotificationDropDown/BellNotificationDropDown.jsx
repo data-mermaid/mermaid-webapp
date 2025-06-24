@@ -20,10 +20,12 @@ import { IconClose } from '../icons'
 import language from '../../language'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
+import { useTranslation } from 'react-i18next'
 
 const sanitizeHtml = domPurify.sanitize
 
 const BellNotificationDropDown = () => {
+  const { t } = useTranslation()
   const { notifications, deleteNotification, deleteAllNotifications } = useBellNotifications()
 
   const dismissNotification = (event, id) => {

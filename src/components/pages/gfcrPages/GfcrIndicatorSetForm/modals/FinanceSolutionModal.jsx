@@ -9,7 +9,7 @@ import {
   CustomMenuItem,
   CustomMuiSelect,
 } from '../../../../mermaidInputs/InputMuiChipSelectWithLabelAndValidation/InputMuiChipSelectWithLabelAndValidation.styles'
-import Modal, { RightFooter } from '../../../../generic/Modal/Modal'
+import Modal, { RightFooter } from '../../../../generic/Modal.tsx'
 import {
   StyledModalInputRow,
   StyledModalFooterWrapper,
