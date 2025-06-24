@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { getToastArguments } from '../../../../library/getToastArguments'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import Modal, { RightFooter } from '../../../generic/Modal/Modal'
 import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
@@ -457,7 +456,7 @@ const ImageClassificationObservationTable = ({
                           )}
                         </StyledTd>
                         <StyledTd textAlign="center">
-                          <MuiTooltip title={t('image_classification.remove_this_photo')}>
+                          <MuiTooltip title={t('image_classification.remove_photo')}>
                             <ButtonCaution
                               type="button"
                               onClick={() => removePhotoFromDatabase(file)}
