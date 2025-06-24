@@ -50,6 +50,28 @@ interface SelectedPoint {
   bounds: maplibregl.LngLatBounds | null
 }
 
+interface ImageAnnotationModalMapProps {
+  databaseSwitchboardInstance: object
+  dataToReview: ImageClassificationResponse
+  hasMapLoaded: boolean
+  hoveredAttributeId?: string
+  imageScale: number
+  isTableShowing: boolean
+  map: MapRef
+  patchesGeoJson: GeoJSON.FeatureCollection
+  selectedAttributeId?: string
+  setDataToReview: Dispatch<SetStateAction<ImageClassificationResponse>>
+  setHasMapLoaded: Dispatch<SetStateAction<boolean>>
+  setIsDataUpdatedSinceLastSave: Dispatch<SetStateAction<boolean>>
+  setIsTableShowing: Dispatch<SetStateAction<boolean>>
+  setPatchesGeoJson: Dispatch<SetStateAction<GeoJSON.FeatureCollection>>
+  zoomToPaddedBounds: (bounds: number[], isPointLabelPopupOpen?: boolean) => void
+  selectedPoint: SelectedPoint
+  setSelectedPoint: Dispatch<SetStateAction<SelectedPoint>>
+  popupRef: Popup
+  closePopup: () => void
+}
+
 const IMAGE_CLASSIFICATION_COLOR_EXP = [
   'case',
 
@@ -113,27 +135,7 @@ const ImageAnnotationModalMap = ({
   setSelectedPoint,
   popupRef,
   closePopup,
-}: {
-  databaseSwitchboardInstance: object
-  dataToReview: ImageClassificationResponse
-  hasMapLoaded: boolean
-  hoveredAttributeId?: string
-  imageScale: number
-  isTableShowing: boolean
-  map: MapRef
-  patchesGeoJson: GeoJSON.FeatureCollection
-  selectedAttributeId?: string
-  setDataToReview: Dispatch<SetStateAction<ImageClassificationResponse>>
-  setHasMapLoaded: Dispatch<SetStateAction<boolean>>
-  setIsDataUpdatedSinceLastSave: Dispatch<SetStateAction<boolean>>
-  setIsTableShowing: Dispatch<SetStateAction<boolean>>
-  setPatchesGeoJson: Dispatch<SetStateAction<GeoJSON.FeatureCollection>>
-  zoomToPaddedBounds: (bounds: number[], isPointLabelPopupOpen?: boolean) => void
-  selectedPoint: SelectedPoint
-  setSelectedPoint: Dispatch<SetStateAction<SelectedPoint>>
-  popupRef: Popup
-  closePopup: () => void
-}) => {
+}: ImageAnnotationModalMapProps) => {
   const { getPointsGeojson, getPointsLabelAnchorsGeoJson } = usePointsGeoJson({
     dataToReview,
     imageScale,
@@ -531,6 +533,9 @@ const ImageAnnotationModalMap = ({
     selectFeature(nextUnconfirmedFeature)
   }, [patchesGeoJson, selectFeature, selectedPoint.id, zoomToPaddedBounds, isPointLabelPopupOpen])
 
+  const closePopupRef = useRef<() => void>(() => {})
+  closePopupRef.current = closePopup
+
   const _displayEditPointPopupOnPointClick = useEffect(() => {
     if (!hasMapLoaded) {
       return
@@ -565,9 +570,6 @@ const ImageAnnotationModalMap = ({
         duration: DEFAULT_MAP_ANIMATION_DURATION,
       }
       if (shouldAlsoZoom) {
-        // Setting null zoom on easeTo will zoom all the way out;
-        // setting undefined will cause errors, so we need to make
-        // the zoom setting conditional.
         // @ts-expect-error - maplibre-gl types are incomplete
         easeToOptions.zoom = 4.5
       }
@@ -583,7 +585,7 @@ const ImageAnnotationModalMap = ({
         map.current?.queryRenderedFeatures(point, { layers: ['patches-fill-layer'] }) ?? []
       const isClickFromFeatureLayer = !!patches
       if (!isClickFromFeatureLayer) {
-        closePopup()
+        closePopupRef.current?.()
         setIsPointLabelPopupOpen(false)
       }
     }
@@ -591,12 +593,11 @@ const ImageAnnotationModalMap = ({
     map.current?.on('click', 'patches-fill-layer', showFeaturePopupOnClick)
     map.current?.on('click', hideFeaturePopup)
 
-    // eslint-disable-next-line consistent-return
     return () => {
       map.current?.off('click', 'patches-fill-layer', showFeaturePopupOnClick)
       map.current?.off('click', hideFeaturePopup)
     }
-  }, [hasMapLoaded, map, selectFeature, zoomToPaddedBounds, closePopup])
+  }, [hasMapLoaded, map, selectFeature, zoomToPaddedBounds])
 
   const _updateStyleOnPointHover = useEffect(() => {
     if (!hasMapLoaded) {
