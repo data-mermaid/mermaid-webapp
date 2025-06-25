@@ -50,6 +50,8 @@ const ImageAnnotationModal = ({
   const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
+  const popupRef = useRef(null)
+
   const [dataToReview, setDataToReview] = useState()
   const [selectedAttributeId, setSelectedAttributeId] = useState('')
   const [hoveredAttributeId, setHoveredAttributeId] = useState('')
@@ -59,18 +61,24 @@ const ImageAnnotationModal = ({
   const [isTableShowing, setIsTableShowing] = useState(true)
   const map = useRef(null)
   const [patchesGeoJson, setPatchesGeoJson] = useState()
+  const [selectedPoint, setSelectedPoint] = useState({
+    id: null,
+    popupAnchorLngLat: null,
+    popupAnchorPosition: null,
+    bounds: null,
+  })
 
   const { imageScale } = useImageScale({ hasMapLoaded, dataToReview })
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const zoomToPaddedBounds = useCallback(
-    (bounds) => {
+    (bounds, isPointLabelPopupOpen = false) => {
       if (!bounds || !map.current) {
         return
       }
 
       map.current.fitBounds(bounds, {
-        padding: 250,
+        padding: isPointLabelPopupOpen ? 200 : 50,
         duration: DEFAULT_MAP_ANIMATION_DURATION,
         linear: true,
       })
@@ -155,6 +163,16 @@ const ImageAnnotationModal = ({
     t,
   ])
 
+  const closePopup = () => {
+    setSelectedPoint({
+      id: null,
+      popupAnchorLngLat: null,
+      popupAnchorPosition: null,
+      bounds: null,
+    })
+    popupRef.current?.remove()
+  }
+
   const handleCloseModal = () => {
     if (
       !isDataUpdatedSinceLastSave ||
@@ -223,6 +241,7 @@ const ImageAnnotationModal = ({
                 setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
                 zoomToPointsByAttributeId={zoomToPointsByAttributeId}
                 isTableShowing={isTableShowing}
+                closePopup={closePopup}
               />
               <ImageAnnotationModalMap
                 databaseSwitchboardInstance={databaseSwitchboardInstance}
@@ -240,6 +259,10 @@ const ImageAnnotationModal = ({
                 setIsTableShowing={setIsTableShowing}
                 setPatchesGeoJson={setPatchesGeoJson}
                 zoomToPaddedBounds={zoomToPaddedBounds}
+                selectedPoint={selectedPoint}
+                setSelectedPoint={setSelectedPoint}
+                popupRef={popupRef}
+                closePopup={closePopup}
               />
             </ImageAnnotationModalContainer>
           ) : (

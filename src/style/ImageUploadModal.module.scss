@@ -28,6 +28,8 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
   margin-block-start: 1em;
   margin-block-end: 1em;
 
@@ -35,10 +37,18 @@
     margin-block-start: 0;
     margin-block-end: 0;
     max-width: 300px;
-    background-color: hotpink;
-    > * {
-      height: 100%;
-      width: 33%;
-    }
+  }
+}
+
+.image-guidelines__img {
+  height: 100%;
+  width: 15%;
+
+  &:first-of-type {
+    width: 45%;
+  }
+
+  &:last-of-type {
+    width: 33%;
   }
 }

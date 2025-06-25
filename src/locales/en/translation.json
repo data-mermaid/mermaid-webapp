@@ -30,6 +30,7 @@
     "select_new_attribute": "Select new attribute",
     "remove_photo": "Remove photo",
     "remove_photo_confirmation": "Are you sure you want to remove this photo?",
+    "review_this_photo": "Review this photo",
     "annotation": {
       "confirm": "Confirm",
       "confirmed": "Confirmed",
@@ -74,28 +75,29 @@
       "description": "Through a partnership with <a /> from the University of California San Diego and Scripps Institution of Oceanography, MERMAID now includes AI-based classification using a pyspacer deep learning model. This integration enables fast, scalable analysis of benthic photos so that you can generate insights quickly and consistently with machine learning and AI.",
       "use_ai_button": "Classify photos with AI (Beta)",
       "use_manual_observations_button": "Enter observations manually"
-    },
-    "tooltips": {
-      "review_this_photo": "Review this photo",
-      "remove_this_photo": "Remove this photo"
     }
   },
   "map_tooling": {
     "reset_zoom": "Reset zoom",
-    "zoom_to_point": "Zoom to point"
+    "zoom_to_point": "Zoom to point",
+    "zoom_in": "Zoom in",
+    "zoom_out": "Zoom out"
   },
   "media": {
     "user_guidance": {
       "crop_icon": "Cropped transition icon",
       "cropped_photo_example": "Cropped example",
-      "more_photo_upload_info": "Read more about how to get your photos ready for upload <a>in the documentation</a>",
+      "more_photo_upload_info": "Read more about how to get your photos ready for upload in the <a>documentation</a>",
       "uncropped_photo_example": "Uncropped example"
     },
     "buttons": {
       "cancel_upload": "Cancel upload"
     },
+    "errors": {
+      "failed_upload": "Failed to upload {{fileName}}"
+    },
     "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
-    "max_file_size": "Maximum file size is 30mb",
+    "max_file_size": "Maximum file size is 30 MB",
     "min_image_size": "Photos must be larger than 1500 pixels by 1500 pixels",
     "put_files_here": "Drop files here <br> or <br>",
     "req_crop_photos": "Crop photos to size before uploading",
@@ -124,5 +126,7 @@
   "benthic_observations": {
     "observations": "Observations",
     "missing_benthic_attribute": "Missing benthic attribute"
-  }
+  },
+  "toggle_table_visibility": "Toggle table visibility",
+  "toggle_label_visibility": "Toggle label visibility"
 }
