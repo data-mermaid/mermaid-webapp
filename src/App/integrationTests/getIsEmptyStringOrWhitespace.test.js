@@ -1,4 +1,4 @@
-import { getIsEmptyStringOrWhitespace } from './getIsEmptyStringOrWhitespace'
+import { getIsEmptyStringOrWhitespace } from '../../library/getIsEmptyStringOrWhitespace.js'
 
 test('getIsEmptyStringOrWhitespace on empty string', () => {
   expect(getIsEmptyStringOrWhitespace('')).toBe(true)
