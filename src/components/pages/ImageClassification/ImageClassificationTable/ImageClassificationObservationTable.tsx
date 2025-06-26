@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -36,12 +35,17 @@ import {
 } from './ImageClassificationObservationTable.styles'
 import Thumbnail from './Thumbnail'
 import { ImageClassificationImageType } from '../../../../types/ImageClassificationTypes'
-import { benthicPhotoQuadratPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import getObservationValidationInfo from '../../collectRecordFormPages/CollectRecordFormPage/getObservationValidationInfo'
 import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
 import { MessageType } from '../../../../theme'
 
-const tableHeaders = [
+interface TableHeaderProps {
+  align: 'left' | 'right' | 'center'
+  id: string
+  text: string
+}
+
+const tableHeaders: TableHeaderProps[] = [
   { align: 'right', id: 'number-label', text: '#' },
   { align: 'center', id: 'photo-label', text: 'Photo' },
   { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
@@ -76,7 +80,7 @@ interface BenthicAttribute {
 interface CategoryGroup {
   [categoryName: string]: number
 
-  total: number
+  total?: number
 }
 
 interface DistilledAnnotationData {
@@ -309,7 +313,7 @@ const ImageClassificationObservationTable = ({
     }
   }, [benthicAttributes, growthForms, imageSet, distillImagesData])
 
-  const observationsSummaryStats = useMemo((): CategoryGroup[] => {
+  const observationsSummaryStats = useMemo((): CategoryGroup => {
     if (!distilledImages?.length || !benthicAttributes) {
       return {}
     }
@@ -698,7 +702,7 @@ const ImageClassificationObservationTable = ({
               .sort()
               .map((obs) => {
                 const percentage = roundToOneDecimal(
-                  (observationsSummaryStats[obs] / observationsSummaryStats.total) * 100,
+                  (observationsSummaryStats[obs] / observationsSummaryStats?.total) * 100,
                 )
 
                 return (
