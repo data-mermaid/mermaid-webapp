@@ -9,6 +9,11 @@ interface StyledTrProps {
   $isUnclassified?: boolean
 }
 
+interface StyledTdProps {
+  textAlign?: string
+  cursor?: string
+}
+
 const StyledColgroup = styled('colgroup')`
   col {
     &.thumbnail {
@@ -41,7 +46,7 @@ const StyledColgroup = styled('colgroup')`
   }
 `
 
-const StyledTd = styled(Td)`
+const StyledTd = styled(Td)<StyledTdProps>`
   padding: 0.5em !important;
   text-align: ${(props) => props.textAlign};
 
@@ -83,7 +88,7 @@ const ImageWrapper = styled('div')`
   align-items: center;
 `
 
-const TdWithHoverText = styled(StyledTd)`
+const TdWithHoverText = styled(StyledTd)<StyledTdProps>`
   cursor: ${(props) => props.cursor};
 
   &.hover-highlight {

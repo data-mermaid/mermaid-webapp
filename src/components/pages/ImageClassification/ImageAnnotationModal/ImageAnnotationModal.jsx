@@ -8,7 +8,7 @@ import {
   IMAGE_CLASSIFICATION_COLORS as COLORS,
   unclassifiedGuid,
 } from '../../../../library/constants/constants'
-import ImageAnnotationModalTable from './ImageAnnotationModalTable.tsx'
+import ImageAnnotationModalTable from './ImageAnnotationModalTable'
 import ImageAnnotationModalMap from './ImageAnnotationModalMap'
 import {
   Footer,

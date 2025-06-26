@@ -11,6 +11,11 @@ import { useTranslation } from 'react-i18next'
 
 export const MODAL_CONTENT_HEIGHT = '80vh'
 
+interface StyledDialogProps {
+  maxWidth?: string
+  padding?: string
+}
+
 const StyledDialogOverlay = styled('div')`
   background: rgba(0, 0, 0, 0.5);
   width: 100vw;
@@ -23,7 +28,7 @@ const StyledDialogOverlay = styled('div')`
   z-index: ${theme.zIndex.modal};
 `
 
-const StyledDialog = styled('div')`
+const StyledDialog = styled('div')<StyledDialogProps>`
   padding: ${(props) => props.padding || '0'};
   margin: 0;
   min-width: 30rem;
@@ -149,7 +154,7 @@ const Modal = ({
   onDismiss,
   footerContent,
   toolbarContent = null,
-  maxWidth,
+  maxWidth = null,
   padding = null,
   displayCloseIcon = true,
   allowCloseWithEscapeKey = true,

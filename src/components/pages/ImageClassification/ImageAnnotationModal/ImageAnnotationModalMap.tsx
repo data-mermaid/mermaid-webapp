@@ -235,7 +235,6 @@ const ImageAnnotationModalMap = ({
     }
 
     map.current = new maplibregl.Map({
-      // @ts-expect-error - maplibre-gl types are incomplete
       container: mapContainer.current,
       center: DEFAULT_MAP_CENTER,
       zoom: DEFAULT_MAP_ZOOM,
