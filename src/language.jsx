@@ -269,16 +269,6 @@ const loadingIndicator = {
 
 const createNewOptionModal = {
   addNewAttributeTitle: (attribute) => `Add New ${attribute}`,
-  genusNotFound: () => (
-    <>
-      Genus not found in MERMAID
-      <br />
-      {/* eslint-disable-next-line react/jsx-no-target-blank */}
-      <a target="_blank" href="https://datamermaid.org/contact-us">
-        Contact us for help
-      </a>
-    </>
-  ),
   genus: 'Genus',
   contactForHelp: 'Contact us for help',
   species: 'Species',

@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify'
+import { Slide, toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useParams } from 'react-router-dom'
 
@@ -13,7 +13,6 @@ import { Input } from '../generic/form'
 import { Row, RowSpaceBetween } from '../generic/positioning'
 import InputAutocomplete from '../generic/InputAutocomplete/InputAutocomplete'
 import { Table, Td, Tr } from '../generic/Table/table'
-import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { LeftFooter, RightFooter } from '../generic/Modal/Modal'
 import theme from '../../theme'
@@ -22,6 +21,8 @@ import useIsMounted from '../../library/useIsMounted'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useTranslation, Trans } from 'react-i18next'
+import { links } from '../../link_constants'
 
 const DetailsTable = styled(Table)`
   border: solid 1px ${theme.color.secondaryColor};
@@ -56,6 +57,17 @@ const MainContentPages = ({
   attributeName,
 }) => {
   const { currentUser } = useCurrentUser()
+  const { t } = useTranslation()
+
+  const NoResults = (
+    <Trans
+      i18nKey="taxonomies.genus_not_found"
+      components={{
+        // eslint-disable-next-line jsx-a11y/anchor-has-content
+        a: <a href={links.contactUs} target="_blank" rel="noopener noreferrer" />,
+      }}
+    />
+  )
 
   const mainContentPageOne = (
     <form id="form-page-1" onSubmit={handleSubmit}>
@@ -69,7 +81,7 @@ const MainContentPages = ({
             aria-labelledby="attribute-label"
             options={modalAttributeOptions}
             value={pageOneFirstInputValue}
-            noResultsText={language.createNewOptionModal.genusNotFound()}
+            noResultsText={NoResults}
             onChange={handleFormikPageOneValueChange}
           />
           {pageOneFirstInputError && <span id="attribute-required">{pageOneFirstInputError}</span>}
@@ -101,11 +113,11 @@ const MainContentPages = ({
             <Td aria-labelledby="new-attribute-label">{`${attributeName} ${pageOneSecondInputValue}`}</Td>
           </Tr>
           <Tr>
-            <Td id="user-label">{language.createNewOptionModal.user}</Td>
+            <Td id="user-label">{t('user')}</Td>
             <Td aria-labelledby="user-label">{currentUser.full_name}</Td>
           </Tr>
           <Tr>
-            <Td id="project-label">{language.createNewOptionModal.project}</Td>
+            <Td id="project-label">{t('project')}</Td>
             <Td aria-labelledby="project-label">{projectName}</Td>
           </Tr>
         </tbody>
@@ -133,26 +145,11 @@ const NewAttributeModal = ({
   const isMounted = useIsMounted()
   const { projectId } = useParams()
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const { t } = useTranslation()
 
   const [currentPage, setCurrentPage] = useState(1)
   const [projectName, setProjectName] = useState('')
   const [attributeName, setAttributeName] = useState()
-  const {
-    createNewOptionModal: {
-      addNewAttributeTitle,
-      proposedSummaryText,
-      genus: genusText,
-      species: speciesText,
-      newBenthicAttribute: newBenthicAttributeText,
-      benthicAttributeParent: benthicAttributeParentText,
-      newBenthicAttributeName: newBenthicAttributeNameText,
-      goToNextPage: goToNextPageText,
-      cancel: cancelText,
-      back: backText,
-      submit: submitText,
-    },
-    error: { projectsUnavailable: projectsUnavailableText },
-  } = language
 
   const goToPageTwo = () => {
     setCurrentPage(2)
@@ -174,34 +171,30 @@ const NewAttributeModal = ({
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(projectsUnavailableText))
+              toast.error(t('projects.data_unavailable'), {
+                messageId: 'data-unavailable',
+                transition: Slide,
+              })
             },
           })
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    projectId,
-    isMounted,
-    handleHttpResponseError,
-    projectsUnavailableText,
-  ])
+  }, [databaseSwitchboardInstance, projectId, isMounted, handleHttpResponseError])
 
-  const formValuesAndValidationSchema = isFishBeltSampleUnit
-    ? {
-        initialValues: { genusId: '', species: '' },
-        validationSchema: Yup.object().shape({
-          genusId: Yup.string().required(language.error.formValidation.required),
-          species: Yup.string().required(language.error.formValidation.required),
-        }),
-      }
-    : {
-        initialValues: { benthicAttributeParentId: '', newBenthicAttribute: '' },
-        validationSchema: Yup.object().shape({
-          benthicAttributeParentId: Yup.string().required(language.error.formValidation.required),
-          newBenthicAttribute: Yup.string().required(language.error.formValidation.required),
-        }),
-      }
+  const fishBeltValidationSchema = {
+    initialValues: { genusId: '', species: '' },
+    validationSchema: Yup.object().shape({
+      genusId: Yup.string().required(t('forms.required_field')),
+      species: Yup.string().required(t('forms.required_field')),
+    }),
+  }
+  const benthicAttributeValidationSchema = {
+    initialValues: { benthicAttributeParentId: '', newBenthicAttribute: '' },
+    validationSchema: Yup.object().shape({
+      benthicAttributeParentId: Yup.string().required(t('forms.required_field')),
+      newBenthicAttribute: Yup.string().required(t('forms.required_field')),
+    }),
+  }
 
   const formikPageOne = useFormik({
     ...formValuesAndValidationSchema,
@@ -251,17 +244,17 @@ const NewAttributeModal = ({
     })
   }
 
-  const cancelButton = (
+  const CancelButton = (
     <ButtonSecondary type="button" onClick={resetAndCloseModal}>
-      {cancelText}
+      {t('buttons.cancel')}
     </ButtonSecondary>
   )
 
   const footerPageOne = (
     <RightFooter>
-      {cancelButton}
+      {CancelButton}
       <ButtonPrimary type="submit" form="form-page-1">
-        {goToNextPageText}
+        {t('buttons.next')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -269,14 +262,14 @@ const NewAttributeModal = ({
     <RowSpaceBetween>
       <LeftFooter>
         <ButtonThatLooksLikeLink type="button" onClick={goToPageOne}>
-          <IconArrowBack /> {backText}
+          <IconArrowBack /> {t('buttons.back')}
         </ButtonThatLooksLikeLink>
       </LeftFooter>
 
       <RightFooter>
-        {cancelButton}
+        {t('buttons.cancel')}
         <ButtonPrimary type="button" onClick={handleOnSubmit}>
-          <IconSend /> {submitText}
+          <IconSend /> {t('buttons.submit')}
         </ButtonPrimary>
       </RightFooter>
     </RowSpaceBetween>
@@ -289,27 +282,33 @@ const NewAttributeModal = ({
     </>
   )
 
-  const modalTitle = isFishBeltSampleUnit
-    ? addNewAttributeTitle('Fish Species')
-    : addNewAttributeTitle('Benthic Attribute')
-  const pageOneFirstInputLabel = isFishBeltSampleUnit ? genusText : benthicAttributeParentText
-  const pageOneFirstInputValue = isFishBeltSampleUnit
-    ? formikPageOne.values.genusId
-    : formikPageOne.values.benthicAttributeParentId
-  const pageTwoFirstLabel = isFishBeltSampleUnit ? speciesText : newBenthicAttributeText
-  const pageOneSecondInputLabel = isFishBeltSampleUnit ? speciesText : newBenthicAttributeNameText
-  const pageOneSecondInputValue = isFishBeltSampleUnit
-    ? formikPageOne.values.species
-    : formikPageOne.values.newBenthicAttribute
-  const pageOneFirstInputError = isFishBeltSampleUnit
-    ? formikPageOne.errors.genusId
-    : formikPageOne.errors.benthicAttributeParentId
-  const pageOneSecondInputError = isFishBeltSampleUnit
-    ? formikPageOne.errors.species
-    : formikPageOne.errors.newBenthicAttribute
-  const proposedSummary = isFishBeltSampleUnit
-    ? proposedSummaryText('fish species')
-    : proposedSummaryText('benthic attribute')
+  const fishBeltSampleUnitText = {
+    modalTitle: t('taxonomies.add_fish_species'),
+    pageOneFirstInputLabel: formikPageOne.values.genusId,
+    pageOneFirstInputValue: t(''),
+    pageTwoFirstLabel: t('taxonomies.species'),
+    pageOneSecondInputLabel: t('taxonomies.species'),
+    pageOneSecondInputValue: formikPageOne.values.species,
+    pageOneFirstInputError: formikPageOne.errors.genusId,
+    pageOneSecondInputError: formikPageOne.errors.species,
+    proposedSummary: t('benthic_observations.attribute_proposal_summary', {
+      attribute: 'fish species',
+    }),
+  }
+
+  const generalBenthicAttributeText = {
+    modalTitle: t('benthic_observations.add_benthic_attribute'),
+    pageOneFirstInputLabel: t('taxonomies.parent'),
+    pageOneFirstInputValue: formikPageOne.values.benthicAttributeParentId,
+    pageTwoFirstLabel: t('benthic_observations.benthic_attribute'),
+    pageOneSecondInputLabel: t('name'),
+    pageOneSecondInputValue: formikPageOne.values.newBenthicAttribute,
+    pageOneFirstInputError: formikPageOne.errors.benthicAttributeParentId,
+    pageOneSecondInputError: formikPageOne.errors.newBenthicAttribute,
+    proposedSummary: t('benthic_observations.attribute_proposal_summary', {
+      attribute: 'benthic attribute',
+    }),
+  }
 
   return (
     <Modal

@@ -1,17 +1,24 @@
 {
   "buttons": {
     "add_row": "Add row",
+    "back": "Back",
     "cancel": "Cancel",
     "close": "Close",
     "confirm": "Confirm",
     "delete": "Delete",
+    "done": "Done",
     "edit": "Edit",
+    "next_page": "Next",
+    "review": "Review",
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View",
-    "done": "Done",
-    "review": "Review"
+    "view": "View"
+  },
+  "contact_us": "Contact us for help",
+  "forms": {
+    "required_field": "This field is required",
+    "submit_for_review": "Send to MERMAID for review"
   },
   "toasts": {
     "export_error": "There was an error exporting the report."
@@ -56,6 +63,7 @@
       "failed_deletion": "Failed to delete photo: {{imageName}}. {{errorMessage}}",
       "no_photo_found": "Failed to delete photo! No photo found."
     },
+    "name": "Name",
     "warns": {
       "photo_removed": "Photo removed"
     },
@@ -106,6 +114,10 @@
   "offline": {
     "unavailable_offline": "Unavailable offline."
   },
+  "projects": {
+    "data_unavailable": "Project data is currently unavailable.",
+    "project": "Project"
+  },
   "search": {
     "no_results": "No results found"
   },
@@ -122,8 +134,18 @@
     "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
   },
   "benthic_observations": {
+    "add_benthic_attribute": "Add new benthic attribute",
+    "attribute_proposal_summary": "Your proposed new {{attribute}} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.",
+    "benthic_attribute": "Benthic attribute",
     "missing_benthic_attribute": "Missing benthic attribute"
   },
+  "taxonomies": {
+    "add_fish_species": "Add new fish species",
+    "genus_not_found": "Genus not found in MERMAID",
+    "parent": "Parent",
+    "species": "Species"
+  },
   "toggle_table_visibility": "Toggle table visibility",
-  "toggle_label_visibility": "Toggle label visibility"
+  "toggle_label_visibility": "Toggle label visibility",
+  "user": "User"
 }
