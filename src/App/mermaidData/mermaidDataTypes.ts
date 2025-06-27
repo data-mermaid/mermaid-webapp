@@ -57,7 +57,7 @@ interface BenthicPhotoQuadratTransect {
   quadrat_size?: number | string
   quadrat_number_start?: number | string
   relative_depth?: string
-  num_points_per_quadrat?: number | string
+  num_points_per_quadrat?: number
   notes?: string
 }
 
@@ -519,59 +519,4 @@ export interface ImageClassificationResponse {
   original_image_height: number
   patch_size: number
   points: ImageClassificationPoint[]
-}
-
-export interface SampleEventType {
-  site: string
-  management: string
-  sample_date: string
-}
-
-export interface BenthicPhotoQuadratTransectType {
-  tide: string
-  depth: number | string
-  label: string
-  number: number | string
-  current: string
-  reef_slope: string
-  visibility: string
-  sample_time: string
-  len_surveyed: number | string
-  num_quadrats: number | string
-  quadrat_size: number | string
-  quadrat_number_start: number | string
-  relative_depth: string
-  num_points_per_quadrat: number | string
-  notes: string
-}
-
-export interface BenthicPhotoQuadratObservationType {
-  id: string
-  attribute: string
-  num_points: number | string
-  growth_form: string
-  quadrat_number: number | string
-}
-
-export interface ObserverType {
-  id: string
-  updated_by: string
-  profile_name: string
-  created_on: string
-  updated_on: string
-  role: number
-  created_by: string
-  project: string
-  profile: string
-}
-
-export interface BenthicPhotoQuadratTransectRecord {
-  id: string
-  data: {
-    protocol: string
-    sample_event: SampleEventType
-    quadrat_transect: BenthicPhotoQuadratTransectType
-    observers: ObserverType[]
-    obs_benthic_photo_quadrats: BenthicPhotoQuadratObservationType[]
-  }
 }

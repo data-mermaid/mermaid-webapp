@@ -34,10 +34,11 @@ import {
   TdWithHoverText,
 } from './ImageClassificationObservationTable.styles'
 import Thumbnail from './Thumbnail'
-import { ImageClassificationImageType } from '../../../../types/ImageClassificationTypes'
+import { ImageClassificationImage } from '../../../../types/ImageClassificationTypes'
 import getObservationValidationInfo from '../../collectRecordFormPages/CollectRecordFormPage/getObservationValidationInfo'
 import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
 import { MessageType } from '../../../../theme'
+import { BenthicPhotoQuadratRecord } from '../../../../App/mermaidData/mermaidDataTypes'
 
 interface TableHeaderProps {
   align: 'left' | 'right' | 'center'
@@ -57,14 +58,6 @@ const tableHeaders: TableHeaderProps[] = [
   { align: 'center', id: 'review', text: '' },
   { align: 'center', id: 'remove', text: '' },
 ]
-
-interface CollectRecord {
-  data?: {
-    quadrat_transect?: {
-      num_points_per_quadrat?: number
-    }
-  }
-}
 
 interface GrowthForm {
   id: string
@@ -93,7 +86,7 @@ interface DistilledAnnotationData {
 }
 
 interface DistilledImage {
-  file: ImageClassificationImageType
+  file: ImageClassificationImage
   numSubRows: number
   distilledAnnotationData: DistilledAnnotationData[]
   totalConfirmed: number
@@ -102,12 +95,12 @@ interface DistilledImage {
 }
 
 interface ImageClassificationObservationTableProps {
-  collectRecord?: CollectRecord
+  collectRecord?: BenthicPhotoQuadratRecord
   areValidationsShowing: boolean
   ignoreObservationValidations: () => void
   resetObservationValidations: () => void
-  images: ImageClassificationImageType[]
-  setImages: React.Dispatch<React.SetStateAction<ImageClassificationImageType[]>>
+  images: ImageClassificationImage[]
+  setImages: React.Dispatch<React.SetStateAction<ImageClassificationImage[]>>
 }
 
 const sortByLatest = (a, b) =>
@@ -151,13 +144,12 @@ const ImageClassificationObservationTable = ({
   const [distilledImages, setDistilledImages] = useState<DistilledImage[]>([])
   const [isFetching, setIsFetching] = useState<boolean>(false)
   const [hoveredImageIndex, setHoveredImageIndex] = useState<number | null>(null)
-  const [removingPhotoFile, setRemovingPhotoFile] = useState<
-    ImageClassificationImageType | undefined
-  >()
+  const [removingPhotoFile, setRemovingPhotoFile] = useState<ImageClassificationImage | undefined>()
   const [isRemovePhotoModalOpen, setIsRemovePhotoModalOpen] = useState<boolean>(false)
   const [isRemovingPhoto, setIsRemovingPhoto] = useState<boolean>(false)
 
-  const numPointsPerQuadrat = collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
+  const numPointsPerQuadrat: number =
+    collectRecord?.data?.quadrat_transect?.num_points_per_quadrat ?? 0
 
   const fetchImages = useCallback(async () => {
     try {
@@ -175,7 +167,7 @@ const ImageClassificationObservationTable = ({
         EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD,
       )
 
-      const sortedImages = imagesResponse.results.map((image: ImageClassificationImageType) => {
+      const sortedImages = imagesResponse.results.map((image: ImageClassificationImage) => {
         const sortedPoints = image.points.map((point) => {
           const sortedAnnotations = point.annotations.sort(prioritizeConfirmedAnnotations)
           return { ...point, annotations: sortedAnnotations }
@@ -257,7 +249,7 @@ const ImageClassificationObservationTable = ({
 
   const distillImagesData = useCallback((): DistilledImage[] => {
     return imageSet
-      .map((file: ImageClassificationImageType) => {
+      .map((file: ImageClassificationImage) => {
         const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
         let totalConfirmed = 0
         let totalUnconfirmed = 0
@@ -318,7 +310,7 @@ const ImageClassificationObservationTable = ({
       return {}
     }
 
-    const allPoints = distilledImages?.flatMap((image /**: ImageClassificationImageType**/) => {
+    const allPoints = distilledImages?.flatMap((image) => {
       return image.distilledAnnotationData
     })
     const categoryGroups = allPoints.reduce(
@@ -345,13 +337,13 @@ const ImageClassificationObservationTable = ({
     return categoryGroups
   }, [distilledImages, benthicAttributes])
 
-  const handleImageClick = (file: ImageClassificationImageType) => {
+  const handleImageClick = (file: ImageClassificationImage) => {
     if (getIsImageProcessed(file.classification_status?.status)) {
       setImageId(file.id)
     }
   }
 
-  const openRemovePhotoModal = (file: ImageClassificationImageType) => {
+  const openRemovePhotoModal = (file: ImageClassificationImage) => {
     setRemovingPhotoFile(file)
     setIsRemovePhotoModalOpen(true)
   }
@@ -448,7 +440,10 @@ const ImageClassificationObservationTable = ({
         {distilledImages?.map((image, imageIndex) => {
           const { file, distilledAnnotationData, numSubRows, totalUnknown } = image
           const imgId = file.id
-          if (numSubRows === 0 || file.classification_status?.status === 4 /**failed**/) {
+          if (
+            numSubRows === 0 ||
+            file.classification_status?.status === IMAGE_CLASSIFICATION_STATUS.failed
+          ) {
             // If no subrows exist (image not processed), display a single row with thumbnail, status
             return (
               <Tr key={file.id}>
@@ -546,24 +541,22 @@ const ImageClassificationObservationTable = ({
                   >
                     <StyledTd style={{ textAlign: 'right' }}>{rowIndex++}</StyledTd>
                     {subIndex === 0 && (
-                      <>
-                        <TdWithHoverText
-                          rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
-                          data-tooltip={file.original_image_name}
-                          onClick={() => handleImageClick(file)}
-                          cursor={
-                            file.classification_status?.status ===
-                            IMAGE_CLASSIFICATION_STATUS.completed
-                              ? 'pointer'
-                              : 'default'
-                          }
-                          className={isGroupHovered ? 'hover-highlight' : ''}
-                        >
-                          <ImageWrapper>
-                            <Thumbnail imageUrl={file.thumbnail} />
-                          </ImageWrapper>
-                        </TdWithHoverText>
-                      </>
+                      <TdWithHoverText
+                        rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
+                        data-tooltip={file.original_image_name}
+                        onClick={() => handleImageClick(file)}
+                        cursor={
+                          file.classification_status?.status ===
+                          IMAGE_CLASSIFICATION_STATUS.completed
+                            ? 'pointer'
+                            : 'default'
+                        }
+                        className={isGroupHovered ? 'hover-highlight' : ''}
+                      >
+                        <ImageWrapper>
+                          <Thumbnail imageUrl={file.thumbnail} />
+                        </ImageWrapper>
+                      </TdWithHoverText>
                     )}
                     <StyledTd style={{ textAlign: 'right' }}>{imageIndex + 1}</StyledTd>
                     <StyledTd>{annotation?.benthicAttributeLabel}</StyledTd>
