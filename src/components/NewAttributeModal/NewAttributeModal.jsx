@@ -25,6 +25,7 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 
 const DetailsTable = styled(Table)`
   border: solid 1px ${theme.color.secondaryColor};
+
   tr td:first-child {
     background: ${theme.color.tableRowEven};
   }
@@ -315,6 +316,7 @@ const NewAttributeModal = ({
       isOpen={isOpen}
       onDismiss={resetAndCloseModal}
       title={modalTitle}
+      contentOverflowStyle="visible"
       mainContent={
         <MainContentPages
           currentPage={currentPage}
