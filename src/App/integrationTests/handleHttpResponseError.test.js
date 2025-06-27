@@ -1,5 +1,5 @@
 import { toast, Slide } from 'react-toastify'
-import handleHttpResponseError from '../../library/handleHttpResponseError.js'
+import handleHttpResponseError from '../../library/handleHttpResponseError'
 
 test('handleHttpResponseError produces the appropriate toast message if the status is 401', () => {
   const callback = jest.fn()

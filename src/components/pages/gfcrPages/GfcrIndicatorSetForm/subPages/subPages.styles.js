@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { InputWrapper } from '../../../../generic/form'
 import theme from '../../../../../theme'
-import { LeftFooter } from '../../../../generic/Modal.tsx'
+import { LeftFooter } from '../../../../generic/Modal'
 
 export const StyledGfcrInputWrapper = styled(InputWrapper)`
   display: flex;

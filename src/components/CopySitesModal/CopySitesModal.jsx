@@ -21,7 +21,7 @@ import Modal, {
   ModalLoadingIndicatorWrapper,
   ModalTableOverflowWrapper,
   RightFooter,
-} from '../generic/Modal.tsx'
+} from '../generic/Modal'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import usePersistUserTablePreferences from '../generic/Table/usePersistUserTablePreferences'
 import { useCurrentUser } from '../../App/CurrentUserContext'

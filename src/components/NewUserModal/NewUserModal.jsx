@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
-import Modal, { RightFooter } from '../generic/Modal.tsx'
+import Modal, { RightFooter } from '../generic/Modal'
 
 const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit, isLoading }) => {
   const modalContent = (

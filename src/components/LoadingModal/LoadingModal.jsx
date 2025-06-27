@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { StyledDialogOverlay, ModalContent } from '../generic/Modal.tsx'
+import { StyledDialogOverlay, ModalContent } from '../generic/Modal'
 import LoadingIndicator from '../LoadingIndicator'
 
 const LoadingModal = ({ displayModalTimingSeconds = 1 }) => {

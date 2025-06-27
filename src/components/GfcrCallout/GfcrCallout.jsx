@@ -8,7 +8,7 @@ import language from '../../language'
 import theme from '../../theme'
 import { useNavigate } from 'react-router-dom'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
-import Modal, { RightFooter } from '../generic/Modal.tsx'
+import Modal, { RightFooter } from '../generic/Modal'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
 

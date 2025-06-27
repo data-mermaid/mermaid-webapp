@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
-import Modal, { RightFooter } from '../generic/Modal.tsx'
+import Modal, { RightFooter } from '../generic/Modal'
 import { getObserverNameToUse } from '../../library/observerHelpers'
 import { observerPropType } from '../../App/mermaidData/mermaidDataProptypes'
 
