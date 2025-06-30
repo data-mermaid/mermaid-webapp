@@ -519,3 +519,8 @@ export interface ImageClassificationResponse {
   patch_size: number
   points: ImageClassificationPoint[]
 }
+
+export interface InputOption {
+  label: string
+  value: string | number
+}

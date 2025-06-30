@@ -148,7 +148,7 @@ const Modal = ({
   onDismiss,
   footerContent,
   toolbarContent = null,
-  maxWidth,
+  maxWidth = null,
   padding = null,
   displayCloseIcon = true,
   allowCloseWithEscapeKey = true,

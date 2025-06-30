@@ -63,7 +63,6 @@
       "failed_deletion": "Failed to delete photo: {{imageName}}. {{errorMessage}}",
       "no_photo_found": "Failed to delete photo! No photo found."
     },
-    "name": "Name",
     "warns": {
       "photo_removed": "Photo removed"
     },
@@ -111,6 +110,7 @@
     "upload_cancelled": "Upload cancelled",
     "uploading_files": "<p>Uploading {{processedCount}}/{{totalCount}} files...</p><button>Cancel upload</button>"
   },
+  "name": "Name",
   "offline": {
     "unavailable_offline": "Unavailable offline."
   },
@@ -141,6 +141,7 @@
   },
   "taxonomies": {
     "add_fish_species": "Add new fish species",
+    "genus": "Genus",
     "genus_not_found": "Genus not found in MERMAID",
     "parent": "Parent",
     "species": "Species"
