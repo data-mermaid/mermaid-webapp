@@ -4,16 +4,15 @@ import { useParams } from 'react-router-dom'
 
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { ButtonThatLooksLikeLink, ButtonPrimary, ButtonSecondary } from '../generic/buttons'
+import { ButtonPrimary, ButtonSecondary, ButtonThatLooksLikeLink } from '../generic/buttons'
 import { IconArrowBack, IconSend } from '../icons'
 import { Input } from '../generic/form'
 import { Row, RowSpaceBetween } from '../generic/positioning'
 import InputAutocomplete from '../generic/InputAutocomplete/InputAutocomplete'
 import { Table, Td, Tr } from '../generic/Table/table'
-import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { LeftFooter, RightFooter } from '../generic/Modal/Modal'
 import theme from '../../theme'
 import { inputOptionsPropTypes } from '../../library/miscPropTypes'
@@ -21,7 +20,7 @@ import useIsMounted from '../../library/useIsMounted'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useTranslation, Trans } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { links } from '../../link_constants'
 
 const DetailsTable = styled(Table)`
@@ -69,7 +68,7 @@ const MainContentPages = ({
     />
   )
 
-  const mainContentPageOne = (
+  const MainContentPageOne = (
     <form id="form-page-1" onSubmit={handleSubmit}>
       <StyledRow>
         <InputContainer>
@@ -104,7 +103,7 @@ const MainContentPages = ({
     </form>
   )
 
-  const mainContentPageTwo = (
+  const MainContentPageTwo = (
     <>
       <DetailsTable>
         <tbody>
@@ -128,8 +127,8 @@ const MainContentPages = ({
 
   return (
     <>
-      {currentPage === 1 && mainContentPageOne}
-      {currentPage === 2 && mainContentPageTwo}
+      {currentPage === 1 && MainContentPageOne}
+      {currentPage === 2 && MainContentPageTwo}
     </>
   )
 }
@@ -179,7 +178,7 @@ const NewAttributeModal = ({
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, handleHttpResponseError])
+  }, [databaseSwitchboardInstance, projectId, isMounted, handleHttpResponseError, t])
 
   const fishBeltValidationSchema = {
     initialValues: { genusId: '', species: '' },
@@ -195,6 +194,9 @@ const NewAttributeModal = ({
       newBenthicAttribute: Yup.string().required(t('forms.required_field')),
     }),
   }
+  const formValuesAndValidationSchema = isFishBeltSampleUnit
+    ? fishBeltValidationSchema
+    : benthicAttributeValidationSchema
 
   const formikPageOne = useFormik({
     ...formValuesAndValidationSchema,
@@ -226,20 +228,23 @@ const NewAttributeModal = ({
     formikPageOne.setFieldValue(attributeProperty, valueToUse)
   }
 
-  const formValuesOnSubmit = isFishBeltSampleUnit
-    ? {
-        genusId: formikPageOne.values.genusId,
-        genusName: attributeName,
-        speciesName: formikPageOne.values.species,
-      }
-    : {
-        benthicAttributeParentId: formikPageOne.values.benthicAttributeParentId,
-        benthicAttributeParentName: attributeName,
-        newBenthicAttributeName: formikPageOne.values.newBenthicAttribute,
-      }
+  const fishBeltSubmitValues = {
+    genusId: formikPageOne.values.genusId,
+    genusName: attributeName,
+    speciesName: formikPageOne.values.species,
+  }
+
+  const benthicAttributeSubmitValues = {
+    benthicAttributeParentId: formikPageOne.values.benthicAttributeParentId,
+    benthicAttributeParentName: attributeName,
+    newBenthicAttributeName: formikPageOne.values.newBenthicAttribute,
+  }
 
   const handleOnSubmit = () => {
-    onSubmit(formValuesOnSubmit).then(() => {
+    let submissionValues = isFishBeltSampleUnit
+      ? fishBeltSubmitValues
+      : benthicAttributeSubmitValues
+    onSubmit(submissionValues).then(() => {
       resetAndCloseModal()
     })
   }
@@ -267,7 +272,7 @@ const NewAttributeModal = ({
       </LeftFooter>
 
       <RightFooter>
-        {t('buttons.cancel')}
+        {CancelButton}
         <ButtonPrimary type="button" onClick={handleOnSubmit}>
           <IconSend /> {t('buttons.submit')}
         </ButtonPrimary>
@@ -310,25 +315,27 @@ const NewAttributeModal = ({
     }),
   }
 
+  const modalText = isFishBeltSampleUnit ? fishBeltSampleUnitText : generalBenthicAttributeText
+
   return (
     <Modal
       isOpen={isOpen}
       onDismiss={resetAndCloseModal}
-      title={modalTitle}
+      title={modalText.modalTitle}
       contentOverflowStyle="visible"
       mainContent={
         <MainContentPages
           currentPage={currentPage}
           projectName={projectName}
-          proposedSummary={proposedSummary}
+          proposedSummary={modalText.proposedSummary}
           modalAttributeOptions={modalAttributeOptions}
-          pageOneFirstInputLabel={pageOneFirstInputLabel}
-          pageOneFirstInputValue={pageOneFirstInputValue}
-          pageOneFirstInputError={pageOneFirstInputError}
-          pageOneSecondInputLabel={pageOneSecondInputLabel}
-          pageOneSecondInputValue={pageOneSecondInputValue}
-          pageOneSecondInputError={pageOneSecondInputError}
-          pageTwoFirstLabel={pageTwoFirstLabel}
+          pageOneFirstInputLabel={modalText.pageOneFirstInputLabel}
+          pageOneFirstInputValue={modalText.pageOneFirstInputValue}
+          pageOneFirstInputError={modalText.pageOneFirstInputError}
+          pageOneSecondInputLabel={modalText.pageOneSecondInputLabel}
+          pageOneSecondInputValue={modalText.pageOneSecondInputValue}
+          pageOneSecondInputError={modalText.pageOneSecondInputError}
+          pageTwoFirstLabel={modalText.pageTwoFirstLabel}
           handleSubmit={formikPageOne.handleSubmit}
           attributeName={attributeName}
           handleNewAttributeChange={handleNewAttributeChange}
