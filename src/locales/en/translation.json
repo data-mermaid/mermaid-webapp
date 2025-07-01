@@ -135,9 +135,11 @@
   },
   "benthic_observations": {
     "add_benthic_attribute": "Add new benthic attribute",
+    "attribute_already_exists": "",
     "attribute_proposal_summary": "Your proposed new {{attribute}} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.",
     "benthic_attribute": "Benthic attribute",
-    "missing_benthic_attribute": "Missing benthic attribute"
+    "missing_benthic_attribute": "Missing benthic attribute",
+    "proposed_attribute_saved": "Proposed benthic {{attribute}} saved. The observation has been edited to show it selected."
   },
   "taxonomies": {
     "add_fish_species": "Add new fish species",

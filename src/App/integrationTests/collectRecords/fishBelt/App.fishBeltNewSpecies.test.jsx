@@ -12,6 +12,23 @@ import {
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => {
+    return {
+      t: (i18nKey) => i18nKey,
+      // or with TypeScript:
+      //t: (i18nKey: string) => i18nKey,
+      i18n: {
+        changeLanguage: () => new Promise(() => {}),
+      },
+    }
+  },
+  initReactI18next: {
+    type: '3rdParty',
+    init: () => {},
+  },
+}))
 test('Fishbelt observations add new species - filling out new species form adds a new species to dexie and the observation fish name input', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -63,10 +80,10 @@ test('Fishbelt observations add new species - filling out new species form adds 
 
   await user.click(noResultsButton)
 
-  const modal = screen.getByLabelText('Add New Fish Species')
+  const modal = screen.getByTestId('attribute-proposal-modal')
 
-  const genusInput = await within(modal).findByLabelText('Genus')
-  const speciesInput = within(modal).getByLabelText('Species')
+  const genusInput = await within(modal).findByTestId('attribute-label')
+  const speciesInput = within(modal).getByTestId('new-attribute-name')
 
   await user.type(genusInput, 'Neb')
 
@@ -81,33 +98,25 @@ test('Fishbelt observations add new species - filling out new species form adds 
   // note uppercase first letter. Species names must be transformed to lowercase
   await user.type(speciesInput, 'Ridens')
 
-  const nextScreenButton = within(modal).getByRole('button', {
-    name: 'Next',
-  })
+  const nextScreenButton = within(modal).getByTestId('next-form-page')
 
   await user.click(nextScreenButton)
 
-  expect(
-    await within(modal).findByText(
-      'Your proposed new fish species will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.',
-    ),
-  )
+  expect(await within(modal).findByTestId('proposed-summary'))
 
-  const speciesNameElement = within(modal).getByLabelText('Species')
-  const userNameElement = within(modal).getByLabelText('User')
-  const projectNameElement = within(modal).getByLabelText('Project')
+  const speciesNameElement = within(modal).getByTestId('proposed-attribute-type')
+  const userNameElement = within(modal).getByTestId('proposed-attribute-user')
+  const projectNameElement = within(modal).getByTestId('proposed-attribute-project')
 
   expect(within(userNameElement).getByText('W-FakeFirstNameOnline W-FakeLastNameOnline'))
   expect(within(projectNameElement).getByText('Project V'))
   expect(within(speciesNameElement).getByText('Nebrius ridens'))
 
-  const submitButton = within(modal).getByRole('button', {
-    name: 'Send to MERMAID for review',
-  })
+  const submitButton = within(modal).getByTestId('submit-proposal-button')
 
   await user.click(submitButton)
 
-  expect(screen.queryByLabelText('Add New Fish Species')).not.toBeInTheDocument()
+  expect(screen.queryByTestId('attribute-proposal-modal')).not.toBeInTheDocument()
   const fishbeltFormAfterSubmit = screen.getByRole('form')
 
   expect(await within(fishbeltFormAfterSubmit).findByDisplayValue('Nebrius ridens'))
@@ -164,10 +173,10 @@ test('Fishbelt observations add new species - proposing new species that already
 
   await user.click(noResultsButton)
 
-  const modal = screen.getByLabelText('Add New Fish Species')
+  const modal = screen.getByTestId('attribute-proposal-modal')
 
-  const genusInput = await within(modal).findByLabelText('Genus')
-  const speciesInput = within(modal).getByLabelText('Species')
+  const genusInput = await within(modal).findByTestId('attribute-label')
+  const speciesInput = within(modal).getByTestId('new-attribute-name')
 
   await user.type(genusInput, 'holo')
 
@@ -182,19 +191,15 @@ test('Fishbelt observations add new species - proposing new species that already
   // note uppercase first letter. Species names must be transformed to lowercase
   await user.type(speciesInput, 'Longipes')
 
-  const nextScreenButton = await within(modal).findByRole('button', {
-    name: 'Next',
-  })
+  const nextScreenButton = within(modal).getByTestId('next-form-page')
 
   await user.click(nextScreenButton)
 
-  const submitButton = await within(modal).findByRole('button', {
-    name: 'Send to MERMAID for review',
-  })
+  const submitButton = within(modal).getByTestId('submit-proposal-button')
 
   await user.click(submitButton)
 
-  expect(screen.queryByLabelText('Add New Fish Species')).not.toBeInTheDocument()
+  expect(screen.queryByTestId('attribute-proposal-modal')).not.toBeInTheDocument()
   const fishbeltFormAfterSubmit = screen.getByRole('form')
 
   // input display value is updated with *existing* species selected

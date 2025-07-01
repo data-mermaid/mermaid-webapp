@@ -64,6 +64,12 @@ const NewAttributeModal = ({
     setCurrentPage(1)
   }
 
+  const toastError = () => {
+    return toast.error(t('projects.data_unavailable'), {
+      transition: Slide,
+    })
+  }
+
   //Get Project Name
   useEffect(() => {
     if (databaseSwitchboardInstance && isMounted.current) {
@@ -77,15 +83,12 @@ const NewAttributeModal = ({
         .catch((error: Error) => {
           handleHttpResponseError({
             error,
-            callback: () => {
-              toast.error(t('projects.data_unavailable'), {
-                transition: Slide,
-              })
-            },
+            callback: toastError(),
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, handleHttpResponseError, t])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [databaseSwitchboardInstance, projectId, isMounted, handleHttpResponseError])
 
   const formValidationSchema = {
     validateOnBlur: false,
@@ -204,7 +207,7 @@ const NewAttributeModal = ({
   const ProposalFormFooter = (
     <RightFooter>
       {CancelButton}
-      <ButtonPrimary type="submit" form="form-page-1">
+      <ButtonPrimary type="submit" form="form-page-1" data-testid="next-form-page">
         {t('buttons.next_page')}
       </ButtonPrimary>
     </RightFooter>
@@ -219,8 +222,8 @@ const NewAttributeModal = ({
 
       <RightFooter>
         {CancelButton}
-        <ButtonPrimary type="button" onClick={handleOnSubmit}>
-          <IconSend /> {t('buttons.submit')}
+        <ButtonPrimary type="button" data-testid="submit-proposal-button" onClick={handleOnSubmit}>
+          <IconSend /> {t('forms.submit_for_review')}
         </ButtonPrimary>
       </RightFooter>
     </RowSpaceBetween>
@@ -228,9 +231,9 @@ const NewAttributeModal = ({
 
   const AttributeProposalForm = (
     <form id="form-page-1" onSubmit={attributeProposalForm.handleSubmit}>
-      <Row className={style.styledRow}>
-        <div className={style.inputContainer}>
-          <label id="attribute-label" htmlFor="attribute">
+      <Row className={style['styled-row']}>
+        <div className={style['input-container']}>
+          <label id="attribute-label" data-testid="attribute-label" htmlFor="attribute">
             {modalAssets.proposedAttributeParentIdLabel}
           </label>
           <InputAutocomplete
@@ -246,12 +249,13 @@ const NewAttributeModal = ({
             <span id="attribute-required">{modalAssets.proposedParentIdError}</span>
           )}
         </div>
-        <div className={style.inputContainer}>
+        <div className={style['input-container']}>
           <label id="new-attribute-label" htmlFor="new-attribute">
             {modalAssets.proposedAttributeInputLabel}
           </label>
           <Input
             id="new-attribute"
+            data-testid="new-attribute-name"
             aria-describedby="new-attribute-label"
             value={modalAssets.proposedAttributeValue}
             onChange={handleNewAttributeChange}
@@ -265,23 +269,30 @@ const NewAttributeModal = ({
   )
   const AttributeReview = (
     <>
-      <Table className={style.detailsTable}>
+      <Table className={style['details-table']}>
         <tbody>
           <Tr>
             <Td id="new-attribute-label">{modalAssets.pageTwoFirstLabel}</Td>
-            <Td aria-labelledby="new-attribute-label">{`${attributeName} ${modalAssets.proposedAttributeValue}`}</Td>
+            <Td
+              data-testid="proposed-attribute-type"
+              aria-labelledby="new-attribute-label"
+            >{`${attributeName} ${modalAssets.proposedAttributeValue}`}</Td>
           </Tr>
           <Tr>
             <Td id="user-label">{t('user')}</Td>
-            <Td aria-labelledby="user-label">{currentUser.full_name}</Td>
+            <Td data-testid="proposed-attribute-user" aria-labelledby="user-label">
+              {currentUser.full_name}
+            </Td>
           </Tr>
           <Tr>
             <Td id="project-label">{t('projects.project')}</Td>
-            <Td aria-labelledby="project-label">{projectName}</Td>
+            <Td data-testid="proposed-attribute-project" aria-labelledby="project-label">
+              {projectName}
+            </Td>
           </Tr>
         </tbody>
       </Table>
-      <p>{modalAssets.proposedSummary}</p>
+      <p data-testid="proposed-summary">{modalAssets.proposedSummary}</p>
     </>
   )
 
@@ -291,6 +302,7 @@ const NewAttributeModal = ({
       onDismiss={resetAndCloseModal}
       title={modalAssets.modalTitle}
       contentOverflowStyle={'visible' as never}
+      testId="attribute-proposal-modal"
       mainContent={
         <>
           {currentPage === 1 && AttributeProposalForm}
