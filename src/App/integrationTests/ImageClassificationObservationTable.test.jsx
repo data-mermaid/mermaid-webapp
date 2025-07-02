@@ -1,7 +1,8 @@
-// src/components/pages/ImageClassification/ImageClassificationTable/__tests__/ImageClassificationObservationTable.test.tsx
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import ImageClassificationObservationTable from '../../components/pages/ImageClassification/ImageClassificationTable/ImageClassificationObservationTable'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie.js'
+import { DatabaseSwitchboardInstanceProvider } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const mockSetImages = jest.fn()
 const mockIgnoreObservationValidations = jest.fn()
@@ -22,9 +23,39 @@ const defaultProps = {
   setImages: mockSetImages,
 }
 
+beforeEach(() => {
+  jest.mock('../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext', () => {
+    const actual = jest.requireActual(
+      '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext',
+    )
+    return {
+      ...actual,
+      useDatabaseSwitchboardInstance: () => ({
+        databaseSwitchboardInstance: {
+          getChoices: jest.fn(),
+          getBenthicAttributes: jest.fn(),
+          getAllImagesInCollectRecord: jest.fn(),
+          deleteImage: jest.fn(),
+        },
+      }),
+    }
+  })
+
+  jest.mock('../../App/HttpResponseErrorHandlerContext', () => {
+    return {
+      HttpResponseErrorHandlerProvider: jest.fn(),
+      useHttpResponseErrorHandler: () => () => {},
+    }
+  })
+})
+
 describe('ImageClassificationObservationTable', () => {
   test('renders table headers', () => {
-    render(<ImageClassificationObservationTable {...defaultProps} />)
+    render(
+      <DatabaseSwitchboardInstanceProvider>
+        <ImageClassificationObservationTable {...defaultProps} />
+      </DatabaseSwitchboardInstanceProvider>,
+    )
     expect(screen.getByText(/Photo/i)).toBeInTheDocument()
     expect(screen.getByText(/Benthic Attribute/i)).toBeInTheDocument()
   })
