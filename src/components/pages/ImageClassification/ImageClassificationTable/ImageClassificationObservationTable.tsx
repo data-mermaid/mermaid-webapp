@@ -418,6 +418,7 @@ const ImageClassificationObservationTable = ({
     <>
       <Modal
         title={t('image_classification.remove_photo')}
+        data-testid="remove-photo-modal"
         isOpen={isRemovePhotoModalOpen}
         onDismiss={closeRemovePhotoModal}
         mainContent={t('image_classification.remove_photo_confirmation')}
@@ -492,6 +493,7 @@ const ImageClassificationObservationTable = ({
                   <MuiTooltip title={t('image_classification.remove_photo')}>
                     <ButtonCaution
                       type="button"
+                      data-testid={`remove-photo-${file.id}`}
                       onClick={() => removePhotoFromDatabase(file)}
                       aria-label={t('buttons.close')}
                     >
@@ -594,6 +596,7 @@ const ImageClassificationObservationTable = ({
                           <MuiTooltip title={t('image_classification.review_this_photo')}>
                             <ButtonPrimary
                               type="button"
+                              data-testid={`review-photo-${file.id}`}
                               onClick={() => setImageId(file.id)}
                               disabled={!getIsImageProcessed(file.classification_status?.status)}
                             >
