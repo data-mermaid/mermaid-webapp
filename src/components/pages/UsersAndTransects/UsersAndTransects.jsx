@@ -278,32 +278,37 @@ const UsersAndTransects = () => {
     (rowRecord) => {
       const collectRecordsByProfileValues = Object.values(collectRecordsByProfile)
 
-      return collectRecordsByProfileValues.reduce((accumulator, record) => {
-        const { profileId } = record
-        const profileSummary = rowRecord.profile_summary?.[profileId]
-        let cellValue = EMPTY_TABLE_CELL_VALUE
+      const collectRecordCellsByProfile = collectRecordsByProfileValues.reduce(
+        (accumulator, record) => {
+          const { profileId } = record
+          const profileSummary = rowRecord.profile_summary?.[profileId]
+          let cellValue = EMPTY_TABLE_CELL_VALUE
 
-        if (profileSummary?.collect_records) {
-          const sortedCollectRecords = [...profileSummary.collect_records].sort(
-            (a, b) => Number(a.name) - Number(b.name),
-          )
+          if (profileSummary?.collect_records) {
+            const sortedCollectRecords = [...profileSummary.collect_records].sort(
+              (a, b) => Number(a.name) - Number(b.name),
+            )
 
-          const recordProfileSummaryWithSortedCollectRecords = {
-            ...profileSummary,
-            collect_records: sortedCollectRecords,
+            const recordProfileSummaryWithSortedCollectRecords = {
+              ...profileSummary,
+              collect_records: sortedCollectRecords,
+            }
+
+            cellValue = (
+              <CollectSampleUnitPopup
+                rowRecord={rowRecord}
+                recordProfileSummary={recordProfileSummaryWithSortedCollectRecords}
+              />
+            )
           }
 
-          cellValue = (
-            <CollectSampleUnitPopup
-              rowRecord={rowRecord}
-              recordProfileSummary={recordProfileSummaryWithSortedCollectRecords}
-            />
-          )
-        }
+          accumulator[profileId] = cellValue
+          return accumulator
+        },
+        {},
+      )
 
-        accumulator[profileId] = cellValue
-        return accumulator
-      }, {})
+      return collectRecordCellsByProfile
     },
     [collectRecordsByProfile],
   )
