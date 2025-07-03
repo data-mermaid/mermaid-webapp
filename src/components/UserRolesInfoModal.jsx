@@ -36,7 +36,7 @@ const Tcell = styled(Td)`
 const TcellWithIconClose = styled(Tcell)`
   color: ${theme.color.cautionColor};
 `
-const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
+const UserRolesInfoModal = ({ onDismiss }) => {
   const modalContent = (
     <TableOverflowWrapper>
       <Table>
@@ -252,7 +252,6 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
 
   return (
     <Modal
-      isOpen={isOpen}
       onDismiss={onDismiss}
       title={language.pages.userTable.moreInfoTitle}
       mainContent={modalContent}
@@ -262,7 +261,6 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
 }
 
 UserRolesInfoModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
 }
 

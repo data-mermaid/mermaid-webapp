@@ -819,7 +819,7 @@ const Users = () => {
             })}
           </tbody>
         </GenericStickyTable>
-        <UserRolesInfoModal isOpen={isUserRolesModalOpen} onDismiss={closeUserRolesModal} />
+        {isUserRolesModalOpen && <UserRolesInfoModal onDismiss={closeUserRolesModal} />}
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
@@ -841,13 +841,14 @@ const Users = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
-      <NewUserModal
-        isLoading={isTableUpdating}
-        isOpen={isSendEmailToNewUserPromptOpen}
-        onDismiss={closeSendEmailToNewUserPrompt}
-        newUser={newUserEmail}
-        onSubmit={addNewUserAndSendEmail}
-      />
+      {isSendEmailToNewUserPromptOpen && (
+        <NewUserModal
+          isLoading={isTableUpdating}
+          onDismiss={closeSendEmailToNewUserPrompt}
+          newUser={newUserEmail}
+          onSubmit={addNewUserAndSendEmail}
+        />
+      )}
       <TransferSampleUnitsModal
         isOpen={isTransferSampleUnitsModalOpen}
         onDismiss={closeTransferSampleUnitsModal}
@@ -858,14 +859,15 @@ const Users = () => {
         handleTransferSampleUnitChange={handleTransferSampleUnitChange}
         onSubmit={transferSampleUnits}
       />
-      <RemoveUserModal
-        isOpen={isRemoveUserModalOpen}
-        isLoading={isTableUpdating}
-        onDismiss={closeRemoveUserModal}
-        onSubmit={removeUserProfile}
-        userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
-        projectName={projectName}
-      />
+      {isRemoveUserModalOpen && (
+        <RemoveUserModal
+          isLoading={isTableUpdating}
+          onDismiss={closeRemoveUserModal}
+          onSubmit={removeUserProfile}
+          userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
+          projectName={projectName}
+        />
+      )}
     </>
   )
 
