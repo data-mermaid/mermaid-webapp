@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types'
-import React, { useState, useEffect, useCallback, useReducer, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 
 import {
-  getCollectRecordDataInitialValues,
-  getTransectInitialValues,
-  getSampleInfoInitialValues,
   getBenthicPhotoQuadratAdditionalValues,
+  getCollectRecordDataInitialValues,
+  getSampleInfoInitialValues,
+  getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
 
 import { getBenthicOptions } from '../../../../library/getOptions'
@@ -20,7 +20,6 @@ import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHa
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import CollectRecordFormPage from '../CollectRecordFormPage'
-import language from '../../../../language'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
 import ErrorBoundary from '../../../ErrorBoundary'
@@ -33,8 +32,10 @@ import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import BpqObservationTypeSelector from '../../ImageClassification/SampleUnitInputSelector/BpqObservationTypeSelector'
 import ImageClassificationObservationsNotAvailableOfflineMessage from '../../ImageClassification/SampleUnitInputSelector/ImageClassificationObservationsNotAvailableOfflineMessage'
 import { getCurrentUserOptionalFeature } from '../../../../library/getCurrentUserOptionalFeature'
+import { useTranslation } from 'react-i18next'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
+  const { t } = useTranslation
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
@@ -107,8 +108,8 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
               error,
               callback: () => {
                 const errorMessage = isNewRecord
-                  ? language.error.collectRecordSupportingDataUnavailable
-                  : language.error.collectRecordUnavailable
+                  ? t('sample_units.errors.supporting_data_unavailable')
+                  : t('sample_units.errors.data_unavailable')
 
                 toast.error(...getToastArguments(errorMessage))
               },
@@ -185,7 +186,13 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
             },
           })
           updateBenthicAttributeOptionsStateWithOfflineStorageData()
-          toast.success(...getToastArguments(language.success.attributeSave('benthic attribute')))
+          toast.success(
+            ...getToastArguments(
+              t('benthic_observations.proposed_attribute_saved', {
+                attribute: newBenthicAttributeName,
+              }),
+            ),
+          )
         })
         .catch((error) => {
           handleHttpResponseError({
@@ -193,7 +200,11 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
             callback: () => {
               if (error.message === 'Benthic attribute already exists') {
                 toast.error(
-                  ...getToastArguments(language.error.attributeAlreadyExists('benthic attribute')),
+                  ...getToastArguments(
+                    t('benthic_observations.attribute_already_exists', {
+                      attribute: newBenthicAttributeName,
+                    }),
+                  ),
                 )
 
                 observationsDispatch({
@@ -204,7 +215,13 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
                   },
                 })
               } else {
-                toast.error(...getToastArguments(language.error.attributeSave('benthic attribute')))
+                toast.error(
+                  ...getToastArguments(
+                    t('benthic_observations.errors.attribute_proposal_unsaved', {
+                      attribute: newBenthicAttributeName,
+                    }),
+                  ),
+                )
               }
             },
           })

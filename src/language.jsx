@@ -90,10 +90,6 @@ const error = {
   collectRecordSubmitDisabled: 'Errors or warnings are preventing you from submitting',
   duplicateNewUserAdd: 'User has already been added to project.',
   emptyEmailAdd: 'Please enter an email address.',
-  fishSpeciesAlreadyExists:
-    'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
-  fishSpeciesSave: 'The new fish species has not been saved.',
-  attributeSave: (attribute) => `The new ${attribute} has not been saved.`,
   formValidation: {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
@@ -140,9 +136,6 @@ const error = {
   userProfileUnavailable: 'The user profile is unavailable.',
   userRecordsUnavailable: 'User record data are currently unavailable.',
   projectHealthRecordsUnavailable: 'Summary record data are currently unavailable.',
-  attributeAlreadyExists: (attribute) =>
-    `The proposed ${attribute} already exists in the list. The observation has been edited to show the existing ${attribute} selected.`,
-
   getIdsNotFoundDetails: (id) =>
     id.length > 1
       ? `The items with the ids ${id} cannot be found.`
@@ -190,8 +183,6 @@ const success = {
   collectRecordValidated: 'Record successfully validated.',
   collectRecordDelete: 'Record deleted.',
   newOrganizationAdd: 'Organization added.',
-  fishSpeciesSave:
-    'Proposed fish species saved. The observation has been edited to show it selected.',
   getProjectTurnOnOfflineReadySuccess: (projectName) => `${projectName} is now offline ready`,
   getProjectTurnOffOfflineReadySuccess: (projectName) =>
     `${projectName} has been removed from being offline ready`,
@@ -234,8 +225,6 @@ const success = {
     }
   },
   userProfileUpdate: 'Profile updated',
-  attributeSave: (attribute) =>
-    `Proposed benthic ${attribute} saved. The observation has been edited to show it selected.`,
 }
 
 const deleteRecord = (pageName) => {
@@ -268,7 +257,6 @@ const loadingIndicator = {
 }
 
 const createNewOptionModal = {
-  addNewAttributeTitle: (attribute) => `Add New ${attribute}`,
   genus: 'Genus',
   contactForHelp: 'Contact us for help',
   species: 'Species',
@@ -281,8 +269,6 @@ const createNewOptionModal = {
   details: 'Details',
   user: 'User',
   project: 'Project',
-  proposedSummaryText: (attribute) =>
-    `Your proposed new ${attribute} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.`,
   submit: 'Send to MERMAID for review',
 }
 
