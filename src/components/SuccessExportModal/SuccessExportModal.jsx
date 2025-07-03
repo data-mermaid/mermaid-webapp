@@ -13,7 +13,7 @@ const CitationContainer = styled.div`
   margin-bottom: 1rem;
 `
 
-const SuccessExportModal = ({ isOpen, onDismiss, protocolSampleEventCount }) => {
+const SuccessExportModal = ({ onDismiss, protocolSampleEventCount }) => {
   const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
 
@@ -54,7 +54,6 @@ const SuccessExportModal = ({ isOpen, onDismiss, protocolSampleEventCount }) => 
 
   return (
     <Modal
-      isOpen={isOpen}
       onDismiss={onDismiss}
       title={t('exports.success')}
       mainContent={MainContent}
@@ -64,7 +63,6 @@ const SuccessExportModal = ({ isOpen, onDismiss, protocolSampleEventCount }) => 
 }
 
 SuccessExportModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   protocolSampleEventCount: PropTypes.number.isRequired,
 }

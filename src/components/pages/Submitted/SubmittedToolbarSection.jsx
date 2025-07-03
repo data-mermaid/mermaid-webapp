@@ -145,12 +145,12 @@ const SubmittedToolbarSection = ({
           </Column>
         </ButtonSecondaryDropdown>
       </ToolBarItemsRow>
-      <SuccessExportModal
-        isOpen={isSuccessExportModalOpen}
-        onDismiss={closeModal}
-        projectId={projectId}
-        protocolSampleEventCount={protocolSampleEventCount}
-      />
+      {isSuccessExportModalOpen && (
+        <SuccessExportModal
+          onDismiss={closeModal}
+          protocolSampleEventCount={protocolSampleEventCount}
+        />
+      )}
     </>
   )
 }

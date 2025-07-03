@@ -36,7 +36,6 @@ const InlineFlex = styled('div')`
 `
 
 const TransferSampleUnitsModal = ({
-  isOpen,
   onDismiss,
   currentUserId,
   fromUser,
@@ -133,7 +132,6 @@ const TransferSampleUnitsModal = ({
 
   return (
     <Modal
-      isOpen={isOpen}
       onDismiss={onDismiss}
       title={language.pages.userTable.transferSampleUnitsModalTitle}
       mainContent={modalContent}
@@ -143,7 +141,6 @@ const TransferSampleUnitsModal = ({
 }
 
 TransferSampleUnitsModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   currentUserId: PropTypes.string.isRequired,
   fromUser: PropTypes.shape({

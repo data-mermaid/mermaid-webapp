@@ -849,16 +849,17 @@ const Users = () => {
           onSubmit={addNewUserAndSendEmail}
         />
       )}
-      <TransferSampleUnitsModal
-        isOpen={isTransferSampleUnitsModalOpen}
-        onDismiss={closeTransferSampleUnitsModal}
-        currentUserId={currentUser.id}
-        fromUser={fromUser}
-        userOptions={observerProfiles}
-        showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
-        handleTransferSampleUnitChange={handleTransferSampleUnitChange}
-        onSubmit={transferSampleUnits}
-      />
+      {isTransferSampleUnitsModalOpen && (
+        <TransferSampleUnitsModal
+          onDismiss={closeTransferSampleUnitsModal}
+          currentUserId={currentUser.id}
+          fromUser={fromUser}
+          userOptions={observerProfiles}
+          showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
+          handleTransferSampleUnitChange={handleTransferSampleUnitChange}
+          onSubmit={transferSampleUnits}
+        />
+      )}
       {isRemoveUserModalOpen && (
         <RemoveUserModal
           isLoading={isTableUpdating}

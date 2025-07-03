@@ -54,7 +54,7 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   )
 })
 
-const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagementRegimeTable }) => {
+const CopyManagementRegimesModal = ({ onDismiss, addCopiedMRsToManagementRegimeTable }) => {
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
@@ -73,7 +73,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       setIsModalContentLoading(false)
     }
 
-    if (isAppOnline && databaseSwitchboardInstance && projectId && isOpen) {
+    if (isAppOnline && databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
         .getManagementRegimesExcludedInCurrentProjectByPage(projectId)
         .then((managementRegimesResponse) => {
@@ -96,7 +96,6 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     projectId,
     isAppOnline,
     isMounted,
-    isOpen,
     handleHttpResponseError,
   ])
 
@@ -418,7 +417,6 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
   return (
     <>
       <Modal
-        isOpen={isOpen}
         onDismiss={onDismiss}
         title={language.pages.copyManagementRegimeTable.title}
         mainContent={
@@ -439,7 +437,6 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
 }
 
 CopyManagementRegimesModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   addCopiedMRsToManagementRegimeTable: PropTypes.func.isRequired,
 }
