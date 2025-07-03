@@ -186,7 +186,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
           </div>
         </GlobalNav>
       </StyledHeader>
-      <ProfileModal isOpen={isProfileModalOpen} onDismiss={closeProfileModal} />
+      {isProfileModalOpen && <ProfileModal onDismiss={closeProfileModal} />}
     </>
   )
 }
