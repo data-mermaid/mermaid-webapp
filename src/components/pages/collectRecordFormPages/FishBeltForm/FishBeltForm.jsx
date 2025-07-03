@@ -58,6 +58,10 @@ const FishBeltForm = ({ isNewRecord = true }) => {
   const [fishFamilies, setFishFamilies] = useState([])
   const [fishGroupings, setFishGroupings] = useState([])
 
+  const errorMessage = isNewRecord
+    ? t('sample_units.errors.supporting_data_unavailable')
+    : t('sample_units.errors.data_unavailable')
+
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
@@ -138,10 +142,6 @@ const FishBeltForm = ({ isNewRecord = true }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              const errorMessage = isNewRecord
-                ? t('sample_units.errors.supporting_data_unavailable')
-                : t('sample_units.errors.data_unavailable')
-
               toast.error(...getToastArguments(errorMessage))
             },
           })
@@ -155,6 +155,7 @@ const FishBeltForm = ({ isNewRecord = true }) => {
     projectId,
     handleHttpResponseError,
     isSyncInProgress,
+    errorMessage,
   ])
 
   const closeNewObservationModal = () => {

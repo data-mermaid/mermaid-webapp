@@ -50,6 +50,9 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
   const observationsReducer = useReducer(benthicPitObservationReducer, [])
 
   const [, observationsDispatch] = observationsReducer
+  const errorMessage = isNewRecord
+    ? t('sample_units.errors.supporting_data_unavailable')
+    : t('sample_units.errors.data_unavailable')
 
   useEffect(
     function loadSupportingData() {
@@ -94,10 +97,6 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
             handleHttpResponseError({
               error,
               callback: () => {
-                const errorMessage = isNewRecord
-                  ? t('sample_units.errors.supporting_data_unavailable')
-                  : t('sample_units.errors.data_unavailable')
-
                 toast.error(...getToastArguments(errorMessage))
               },
             })
@@ -112,6 +111,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
       projectId,
       handleHttpResponseError,
       isSyncInProgress,
+      errorMessage,
     ],
   )
 

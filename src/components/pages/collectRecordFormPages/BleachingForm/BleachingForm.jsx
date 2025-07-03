@@ -51,6 +51,9 @@ const BleachingForm = ({ isNewRecord = true }) => {
   const isMounted = useIsMounted()
 
   const [, coloniesBleachedDispatch] = coloniesBleachedReducer
+  const errorMessage = isNewRecord
+    ? t('sample_units.errors.supporting_data_unavailable')
+    : t('sample_units.errors.data_unavailable')
 
   useEffect(
     function loadSupportingData() {
@@ -94,10 +97,6 @@ const BleachingForm = ({ isNewRecord = true }) => {
             handleHttpResponseError({
               error,
               callback: () => {
-                const errorMessage = isNewRecord
-                  ? t('sample_units.errors.supporting_data_unavailable')
-                  : t('sample_units.errors.data_unavailable')
-
                 toast.error(...getToastArguments(errorMessage))
               },
             })
@@ -112,6 +111,7 @@ const BleachingForm = ({ isNewRecord = true }) => {
       projectId,
       handleHttpResponseError,
       isSyncInProgress,
+      errorMessage,
     ],
   )
 

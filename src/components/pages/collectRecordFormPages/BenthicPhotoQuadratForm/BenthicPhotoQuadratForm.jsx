@@ -64,6 +64,10 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
     'image_classification',
   )
 
+  const errorMessage = isNewRecord
+    ? t('sample_units.errors.supporting_data_unavailable')
+    : t('sample_units.errors.data_unavailable')
+
   useEffect(
     function loadSupportingData() {
       if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -107,10 +111,6 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
             handleHttpResponseError({
               error,
               callback: () => {
-                const errorMessage = isNewRecord
-                  ? t('sample_units.errors.supporting_data_unavailable')
-                  : t('sample_units.errors.data_unavailable')
-
                 toast.error(...getToastArguments(errorMessage))
               },
             })
@@ -125,6 +125,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       projectId,
       handleHttpResponseError,
       isSyncInProgress,
+      errorMessage,
     ],
   )
 
