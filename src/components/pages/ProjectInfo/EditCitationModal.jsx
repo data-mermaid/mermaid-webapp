@@ -22,7 +22,6 @@ const modalLanguage = language.pages.projectInfo.editCitationModal
 
 export const EditCitationModal = ({
   citationToUse,
-  isOpen,
   onDismiss,
   projectBeingEdited,
   projectProfiles,
@@ -175,7 +174,6 @@ export const EditCitationModal = ({
 
   return (
     <Modal
-      isOpen={isOpen}
       onDismiss={handleCancel}
       title={modalLanguage.title}
       mainContent={mainContent}
@@ -187,7 +185,6 @@ export const EditCitationModal = ({
 EditCitationModal.propTypes = {
   citationToUse: PropTypes.string,
   initialEditableCitation: PropTypes.string,
-  isOpen: PropTypes.bool,
   onDismiss: PropTypes.func,
   projectBeingEdited: PropTypes.object,
   setCitationToUse: PropTypes.func,

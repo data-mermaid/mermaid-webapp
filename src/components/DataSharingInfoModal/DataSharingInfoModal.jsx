@@ -47,7 +47,7 @@ const Tcell = styled(Td)`
 const TcellWithIconClose = styled(Tcell)`
   color: ${theme.color.cautionColor};
 `
-const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
+const DataSharingInfoModal = ({ onDismiss }) => {
   const modalContent = (
     <TableOverflowWrapper>
       <Table>
@@ -221,7 +221,6 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
 
   return (
     <Modal
-      isOpen={isOpen}
       onDismiss={onDismiss}
       title={language.pages.dataSharing.moreInfoTitle}
       mainContent={modalContent}
@@ -231,7 +230,6 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
 }
 
 DataSharingInfoModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
 }
 

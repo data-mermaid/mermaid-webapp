@@ -327,10 +327,9 @@ const DataSharing = () => {
         </>
       ) : null}
       {!isAdminUser && isTestProject ? <p>{language.pages.dataSharing.isTestProject}</p> : null}
-      <DataSharingInfoModal
-        isOpen={isDataSharingInfoModalOpen}
-        onDismiss={closeDataSharingInfoModal}
-      />
+      {isDataSharingInfoModalOpen && (
+        <DataSharingInfoModal onDismiss={closeDataSharingInfoModal} />
+      )}
     </MaxWidthInputWrapper>
   )
 
