@@ -226,7 +226,6 @@ const ImageAnnotationModal = ({
       <EnhancedPrompt shouldPromptTrigger={isDataUpdatedSinceLastSave} />
       <Modal
         title={dataToReview?.original_image_name ?? ''}
-        isOpen
         onDismiss={handleCloseModal}
         maxWidth="fit-content"
         mainContent={

@@ -362,11 +362,12 @@ const ManagementRegimes = () => {
         ) : null}
         {readOnlyMrsHeaderContent}
       </ToolbarButtonWrapper>
-      <CopyManagementRegimesModal
-        isOpen={isCopyManagementRegimesModalOpen}
-        onDismiss={closeCopyManagementRegimesModal}
-        addCopiedMRsToManagementRegimeTable={addCopiedMRsToManagementRegimeTable}
-      />
+      {isCopyManagementRegimesModalOpen && (
+        <CopyManagementRegimesModal
+          onDismiss={closeCopyManagementRegimesModal}
+          addCopiedMRsToManagementRegimeTable={addCopiedMRsToManagementRegimeTable}
+        />
+      )}
     </>
   )
 

@@ -15,7 +15,6 @@ const InlineFlex = styled('div')`
 `
 
 const RemoveUserModal = ({
-  isOpen,
   onDismiss,
   onSubmit,
   userNameToBeRemoved = 'user',
@@ -103,7 +102,6 @@ const RemoveUserModal = ({
 
   return (
     <Modal
-      isOpen={isOpen}
       onDismiss={closeModal}
       title={title[currentPage]}
       mainContent={mainContent}
@@ -113,7 +111,6 @@ const RemoveUserModal = ({
 }
 
 RemoveUserModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   userNameToBeRemoved: PropTypes.string,

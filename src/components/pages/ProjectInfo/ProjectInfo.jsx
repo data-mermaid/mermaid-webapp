@@ -431,14 +431,15 @@ const ProjectInfo = () => {
         }}
         initialValue={organizationAutocompleteSearchText}
       />
-      <EditCitationModal
-        citationToUse={citationToUse}
-        isOpen={isEditCitationModalOpen}
-        onDismiss={closeEditCitationModal}
-        projectBeingEdited={projectBeingEdited}
-        projectProfiles={projectProfiles}
-        setCitationToUse={setCitationToUse}
-      />
+      {isEditCitationModalOpen && (
+        <EditCitationModal
+          citationToUse={citationToUse}
+          onDismiss={closeEditCitationModal}
+          projectBeingEdited={projectBeingEdited}
+          projectProfiles={projectProfiles}
+          setCitationToUse={setCitationToUse}
+        />
+      )}
     </>
   )
 }

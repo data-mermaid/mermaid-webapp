@@ -11,7 +11,7 @@ import Modal, { RightFooter, ModalInputRow } from '../generic/Modal/Modal'
 import { getProfileInitialValues } from './profileFormInitialValues'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 
-const ProfileModal = ({ isOpen, onDismiss }) => {
+const ProfileModal = ({ onDismiss }) => {
   const { currentUser, saveUserProfile } = useCurrentUser()
   const initialFormValues = useMemo(() => getProfileInitialValues(currentUser), [currentUser])
 
@@ -71,7 +71,6 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
 
   return (
     <Modal
-      isOpen={isOpen}
       onDismiss={onDismiss}
       title={language.title.userProfileModal}
       mainContent={modalContent}
@@ -81,7 +80,6 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
 }
 
 ProfileModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
 }
 

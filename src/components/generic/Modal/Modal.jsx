@@ -144,7 +144,6 @@ export const ModalTableOverflowWrapper = styled(TableOverflowWrapper)`
 const Modal = ({
   title,
   mainContent,
-  isOpen,
   onDismiss,
   footerContent,
   toolbarContent = null,
@@ -167,38 +166,35 @@ const Modal = ({
   }, [onDismiss, allowCloseWithEscapeKey])
 
   return (
-    isOpen && (
-      <StyledDialogOverlay aria-label={`${title} Modal`}>
-        <StyledDialog
-          role="dialog"
-          aria-labelledby="modal-title"
-          aria-describedby="modal-content"
-          maxWidth={maxWidth}
-          padding={padding}
-        >
-          <ModalTitle>
-            <h2 id="modal-title">{title}</h2>
-            {displayCloseIcon && (
-              <CloseButton type="button" className="close-button" onClick={onDismiss}>
-                <IconClose aria-label="close" />
-              </CloseButton>
-            )}
-          </ModalTitle>
-          <ModalToolbar>{toolbarContent}</ModalToolbar>
-          <ModalContent id="modal-content" style={{ overflow: contentOverflowStyle ?? 'auto' }}>
-            {mainContent}
-          </ModalContent>
-          <ModalFooter>{footerContent}</ModalFooter>
-        </StyledDialog>
-      </StyledDialogOverlay>
-    )
+    <StyledDialogOverlay aria-label={`${title} Modal`}>
+      <StyledDialog
+        role="dialog"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-content"
+        maxWidth={maxWidth}
+        padding={padding}
+      >
+        <ModalTitle>
+          <h2 id="modal-title">{title}</h2>
+          {displayCloseIcon && (
+            <CloseButton type="button" className="close-button" onClick={onDismiss}>
+              <IconClose aria-label="close" />
+            </CloseButton>
+          )}
+        </ModalTitle>
+        <ModalToolbar>{toolbarContent}</ModalToolbar>
+        <ModalContent id="modal-content" style={{ overflow: contentOverflowStyle ?? 'auto' }}>
+          {mainContent}
+        </ModalContent>
+        <ModalFooter>{footerContent}</ModalFooter>
+      </StyledDialog>
+    </StyledDialogOverlay>
   )
 }
 
 Modal.propTypes = {
   allowCloseWithEscapeKey: PropTypes.bool,
   footerContent: PropTypes.node.isRequired,
-  isOpen: PropTypes.bool.isRequired,
   mainContent: PropTypes.node.isRequired,
   onDismiss: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,

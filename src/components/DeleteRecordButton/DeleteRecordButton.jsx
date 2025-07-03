@@ -73,13 +73,14 @@ const DeleteRecordButton = ({
           {modalText.title}
         </ButtonCaution>
       </DeleteRecordButtonCautionWrapper>
-      <Modal
-        title={modalText.title}
-        isOpen={isOpen}
-        onDismiss={onDismiss}
-        mainContent={mainContent}
-        footerContent={footerContent}
-      />
+      {isOpen && (
+        <Modal
+          title={modalText.title}
+          onDismiss={onDismiss}
+          mainContent={mainContent}
+          footerContent={footerContent}
+        />
+      )}
       {isLoading && <LoadingModal />}
     </>
   )

@@ -819,7 +819,7 @@ const Users = () => {
             })}
           </tbody>
         </GenericStickyTable>
-        <UserRolesInfoModal isOpen={isUserRolesModalOpen} onDismiss={closeUserRolesModal} />
+        {isUserRolesModalOpen && <UserRolesInfoModal onDismiss={closeUserRolesModal} />}
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
@@ -841,31 +841,34 @@ const Users = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
-      <NewUserModal
-        isLoading={isTableUpdating}
-        isOpen={isSendEmailToNewUserPromptOpen}
-        onDismiss={closeSendEmailToNewUserPrompt}
-        newUser={newUserEmail}
-        onSubmit={addNewUserAndSendEmail}
-      />
-      <TransferSampleUnitsModal
-        isOpen={isTransferSampleUnitsModalOpen}
-        onDismiss={closeTransferSampleUnitsModal}
-        currentUserId={currentUser.id}
-        fromUser={fromUser}
-        userOptions={observerProfiles}
-        showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
-        handleTransferSampleUnitChange={handleTransferSampleUnitChange}
-        onSubmit={transferSampleUnits}
-      />
-      <RemoveUserModal
-        isOpen={isRemoveUserModalOpen}
-        isLoading={isTableUpdating}
-        onDismiss={closeRemoveUserModal}
-        onSubmit={removeUserProfile}
-        userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
-        projectName={projectName}
-      />
+      {isSendEmailToNewUserPromptOpen && (
+        <NewUserModal
+          isLoading={isTableUpdating}
+          onDismiss={closeSendEmailToNewUserPrompt}
+          newUser={newUserEmail}
+          onSubmit={addNewUserAndSendEmail}
+        />
+      )}
+      {isTransferSampleUnitsModalOpen && (
+        <TransferSampleUnitsModal
+          onDismiss={closeTransferSampleUnitsModal}
+          currentUserId={currentUser.id}
+          fromUser={fromUser}
+          userOptions={observerProfiles}
+          showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
+          handleTransferSampleUnitChange={handleTransferSampleUnitChange}
+          onSubmit={transferSampleUnits}
+        />
+      )}
+      {isRemoveUserModalOpen && (
+        <RemoveUserModal
+          isLoading={isTableUpdating}
+          onDismiss={closeRemoveUserModal}
+          onSubmit={removeUserProfile}
+          userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
+          projectName={projectName}
+        />
+      )}
     </>
   )
 

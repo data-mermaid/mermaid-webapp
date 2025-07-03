@@ -5,7 +5,7 @@ import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 
-const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit, isLoading }) => {
+const NewUserModal = ({ onDismiss, newUser, onSubmit, isLoading }) => {
   const modalContent = (
     <p>
       <strong>{newUser}</strong> {language.pages.userTable.newUserModalText}
@@ -23,7 +23,6 @@ const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit, isLoading }) => {
 
   return (
     <Modal
-      isOpen={isOpen}
       onDismiss={onDismiss}
       title={language.pages.userTable.newUserModalTitle}
       mainContent={modalContent}
@@ -33,7 +32,6 @@ const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit, isLoading }) => {
 }
 
 NewUserModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   newUser: PropTypes.string.isRequired,
