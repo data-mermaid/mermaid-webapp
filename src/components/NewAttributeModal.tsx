@@ -83,7 +83,7 @@ const NewAttributeModal = ({
         .catch((error: Error) => {
           handleHttpResponseError({
             error,
-            callback: toastError(),
+            callback: toastError,
           })
         })
     }

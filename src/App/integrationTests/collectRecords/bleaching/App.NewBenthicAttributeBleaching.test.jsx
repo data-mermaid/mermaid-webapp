@@ -15,12 +15,9 @@ import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
 jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => {
     return {
       t: (i18nKey) => i18nKey,
-      // or with TypeScript:
-      //t: (i18nKey: string) => i18nKey,
       i18n: {
         changeLanguage: () => new Promise(() => {}),
       },

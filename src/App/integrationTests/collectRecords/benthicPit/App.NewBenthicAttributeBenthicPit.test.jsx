@@ -196,7 +196,7 @@ test('Benthic PIT observations add new benthic attribute - proposing new attribu
   await user.click(submitButton)
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('Add new benthic attribute')).not.toBeInTheDocument(),
+    expect(screen.queryByTestId('attribute-proposal-modal')).not.toBeInTheDocument(),
   )
   const proposedBenthicAttributeDuplicateToast = await screen.findByText(
     'The proposed benthic attribute already exists in the list. The observation has been edited to show the existing benthic attribute selected.',
