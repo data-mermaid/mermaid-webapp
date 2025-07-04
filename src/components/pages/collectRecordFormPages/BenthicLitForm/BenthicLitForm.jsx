@@ -36,7 +36,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
   const [observationIdToAddNewBenthicAttributeTo, setObservationIdToAddNewBenthicAttributeTo] =
     useState()
   const [subNavNode, setSubNavNode] = useState()
-  const { t } = useTranslation
+  const { t } = useTranslation()
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()

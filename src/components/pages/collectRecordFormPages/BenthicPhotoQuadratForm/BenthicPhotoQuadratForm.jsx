@@ -35,7 +35,7 @@ import { getCurrentUserOptionalFeature } from '../../../../library/getCurrentUse
 import { useTranslation } from 'react-i18next'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
-  const { t } = useTranslation
+  const { t } = useTranslation()
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()

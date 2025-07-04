@@ -31,7 +31,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { useTranslation } from 'react-i18next'
 
 const FishBeltForm = ({ isNewRecord = true }) => {
-  const { t } = useTranslation
+  const { t } = useTranslation()
   const { recordId, projectId } = useParams()
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()

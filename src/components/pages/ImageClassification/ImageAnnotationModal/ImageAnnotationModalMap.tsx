@@ -593,7 +593,6 @@ const ImageAnnotationModalMap = ({
     map.current?.on('click', 'patches-fill-layer', showFeaturePopupOnClick)
     map.current?.on('click', hideFeaturePopup)
 
-    // eslint-disable-next-line consistent-return
     return () => {
       map.current?.off('click', 'patches-fill-layer', showFeaturePopupOnClick)
       map.current?.off('click', hideFeaturePopup)

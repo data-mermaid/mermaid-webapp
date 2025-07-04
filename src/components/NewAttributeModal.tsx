@@ -21,11 +21,23 @@ import { links } from '../link_constants'
 import style from '../style/NewAttributeModal.module.scss'
 import { InputOption } from '../App/mermaidData/mermaidDataTypes'
 
+interface FishBeltSubmission {
+  genusId: string
+  genusName: string | undefined
+  speciesName: string
+}
+
+interface BenthicAttributeSubmission {
+  benthicAttributeParentId: string
+  benthicAttributeParentName: string | undefined
+  newBenthicAttributeName: string
+}
+
 interface NewAttributeModalProps {
   isFishBeltSampleUnit: boolean
   isOpen: boolean
   onDismiss: () => void
-  onSubmit: (submissionValues: unknown) => Promise<void>
+  onSubmit: (submissionValues: FishBeltSubmission | BenthicAttributeSubmission) => Promise<void>
   modalAttributeOptions: InputOption[]
 }
 

@@ -29,7 +29,7 @@ import ErrorBoundary from '../../../ErrorBoundary'
 import { useTranslation } from 'react-i18next'
 
 const BenthicPitForm = ({ isNewRecord = true }) => {
-  const { t } = useTranslation
+  const { t } = useTranslation()
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
