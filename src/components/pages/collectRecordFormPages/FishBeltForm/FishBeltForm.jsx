@@ -26,11 +26,12 @@ import ErrorBoundary from '../../../ErrorBoundary'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import FishBeltObservationTable from './FishBeltObservationTable'
 import FishBeltTransectInputs from './FishBeltTransectInputs'
-import language from '../../../../language'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
+import { useTranslation } from 'react-i18next'
 
 const FishBeltForm = ({ isNewRecord = true }) => {
+  const { t } = useTranslation()
   const { recordId, projectId } = useParams()
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
@@ -56,6 +57,10 @@ const FishBeltForm = ({ isNewRecord = true }) => {
   const [fishGenera, setFishGenera] = useState([])
   const [fishFamilies, setFishFamilies] = useState([])
   const [fishGroupings, setFishGroupings] = useState([])
+
+  const errorMessage = isNewRecord
+    ? t('sample_units.errors.supporting_data_unavailable')
+    : t('sample_units.errors.data_unavailable')
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -137,10 +142,6 @@ const FishBeltForm = ({ isNewRecord = true }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              const errorMessage = isNewRecord
-                ? language.error.collectRecordSupportingDataUnavailable
-                : language.error.collectRecordUnavailable
-
               toast.error(...getToastArguments(errorMessage))
             },
           })
@@ -154,6 +155,7 @@ const FishBeltForm = ({ isNewRecord = true }) => {
     projectId,
     handleHttpResponseError,
     isSyncInProgress,
+    errorMessage,
   ])
 
   const closeNewObservationModal = () => {
@@ -222,11 +224,17 @@ const FishBeltForm = ({ isNewRecord = true }) => {
           },
         })
         updateFishNameOptionsStateWithOfflineStorageData()
-        toast.success(...getToastArguments(language.success.fishSpeciesSave))
+        toast.success(...getToastArguments(t('fish_belt_observations.proposed_species_saved')))
       })
       .catch((error) => {
         if (error.message === 'Species already exists') {
-          toast.warning(...getToastArguments(language.error.fishSpeciesAlreadyExists))
+          toast.warning(
+            ...getToastArguments(
+              t('fish_belt_observations.errors.species_already_exists', {
+                speciesName: speciesName,
+              }),
+            ),
+          )
 
           observationsDispatch({
             type: 'updateFishName',
@@ -239,7 +247,13 @@ const FishBeltForm = ({ isNewRecord = true }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.fishSpeciesSave))
+              toast.error(
+                ...getToastArguments(
+                  t('fish_belt_observations.errors.proposed_species_unsaved', {
+                    speciesName: speciesName,
+                  }),
+                ),
+              )
             },
           })
         }

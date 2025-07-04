@@ -19,12 +19,12 @@ import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHa
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import CollectRecordFormPage from '../CollectRecordFormPage'
-import language from '../../../../language'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
 import { BenthicLitTransectInputs } from './BenthicLitTransectInputs'
 import { BenthicLitObservationsTable } from './BenthicLitObservationTable'
 import { benthicLitObservationReducer } from './benthicLitObservationReducer'
+import { useTranslation } from 'react-i18next'
 
 const BenthicLitform = ({ isNewRecord = true }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -36,6 +36,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
   const [observationIdToAddNewBenthicAttributeTo, setObservationIdToAddNewBenthicAttributeTo] =
     useState()
   const [subNavNode, setSubNavNode] = useState()
+  const { t } = useTranslation()
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -47,6 +48,9 @@ const BenthicLitform = ({ isNewRecord = true }) => {
   const [sites, setSites] = useState()
 
   const [, observationsDispatch] = observationsReducer
+  const errorMessage = isNewRecord
+    ? t('sample_units.errors.supporting_data_unavailable')
+    : t('sample_units.errors.data_unavailable')
 
   useEffect(
     function loadSupportingData() {
@@ -90,10 +94,6 @@ const BenthicLitform = ({ isNewRecord = true }) => {
             handleHttpResponseError({
               error,
               callback: () => {
-                const errorMessage = isNewRecord
-                  ? language.error.collectRecordSupportingDataUnavailable
-                  : language.error.collectRecordUnavailable
-
                 toast.error(...getToastArguments(errorMessage))
               },
             })
@@ -108,6 +108,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
       projectId,
       handleHttpResponseError,
       isSyncInProgress,
+      errorMessage,
     ],
   )
 
@@ -168,7 +169,13 @@ const BenthicLitform = ({ isNewRecord = true }) => {
           },
         })
         updateBenthicAttributeOptionsStateWithOfflineStorageData()
-        toast.success(...getToastArguments(language.success.attributeSave('benthic attribute')))
+        toast.success(
+          ...getToastArguments(
+            t('benthic_observations.proposed_attribute_saved', {
+              attribute: newBenthicAttributeName,
+            }),
+          ),
+        )
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -176,7 +183,11 @@ const BenthicLitform = ({ isNewRecord = true }) => {
           callback: () => {
             if (error.message === 'Benthic attribute already exists') {
               toast.error(
-                ...getToastArguments(language.error.attributeAlreadyExists('benthic attribute')),
+                ...getToastArguments(
+                  t('benthic_observations.attribute_already_exists', {
+                    attribute: newBenthicAttributeName,
+                  }),
+                ),
               )
 
               observationsDispatch({
@@ -187,7 +198,13 @@ const BenthicLitform = ({ isNewRecord = true }) => {
                 },
               })
             } else {
-              toast.error(...getToastArguments(language.error.attributeSave('benthic attribute')))
+              toast.error(
+                ...getToastArguments(
+                  t('benthic_observations.errors.attribute_proposal_unsaved', {
+                    attribute: newBenthicAttributeName,
+                  }),
+                ),
+              )
             }
           },
         })

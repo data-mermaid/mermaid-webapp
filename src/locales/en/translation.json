@@ -1,17 +1,24 @@
 {
   "buttons": {
     "add_row": "Add row",
+    "back": "Back",
     "cancel": "Cancel",
     "close": "Close",
     "confirm": "Confirm",
     "delete": "Delete",
+    "done": "Done",
     "edit": "Edit",
+    "next_page": "Next",
+    "review": "Review",
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View",
-    "done": "Done",
-    "review": "Review"
+    "view": "View"
+  },
+  "contact_us": "Contact us for help",
+  "forms": {
+    "required_field": "This field is required",
+    "submit_for_review": "Send to MERMAID for review"
   },
   "toasts": {
     "export_error": "There was an error exporting the report."
@@ -105,8 +112,13 @@
     "upload_cancelled": "Upload cancelled",
     "uploading_files": "<p>Uploading {{processedCount}}/{{totalCount}} files...</p><button>Cancel upload</button>"
   },
+  "name": "Name",
   "offline": {
     "unavailable_offline": "Unavailable offline."
+  },
+  "projects": {
+    "data_unavailable": "Project data is currently unavailable.",
+    "project": "Project"
   },
   "search": {
     "no_results": "No results found"
@@ -124,9 +136,38 @@
     "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
   },
   "benthic_observations": {
+    "add_benthic_attribute": "Add new benthic attribute",
+    "attribute_already_exists": "The proposed attribute {{attribute}} already exists in the list. The observation has been updated with this attribute.",
+    "attribute_proposal_summary": "Your proposed attribute {{attribute}} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.",
+    "benthic_attribute": "Benthic attribute",
+    "missing_benthic_attribute": "Missing benthic attribute",
     "observations": "Observations",
-    "missing_benthic_attribute": "Missing benthic attribute"
+    "proposed_attribute_saved": "Proposed attribute {{attribute}} saved. The observation has been updated with this attribute.",
+    "errors": {
+      "attribute_proposal_unsaved": "The proposed attribute {{attribute}} has not been saved."
+    }
+  },
+  "sample_units": {
+    "errors": {
+      "data_unavailable": "Sample unit data is currently unavailable.",
+      "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable."
+    }
+  },
+  "fish_belt_observations": {
+    "proposed_species_saved": "Proposed fish species {{speciesName}} saved. The observation has been updated with this species.",
+    "errors": {
+      "species_already_exists": "The proposed fish species {{speciesName}} already exists in the list. The observation has been updated with this species.",
+      "proposed_species_unsaved": "The proposed fish species {{speciesName}} has not been saved."
+    }
+  },
+  "taxonomies": {
+    "add_fish_species": "Add new fish species",
+    "genus": "Genus",
+    "genus_not_found": "Genus not found in MERMAID",
+    "parent": "Parent",
+    "species": "Species"
   },
   "toggle_table_visibility": "Toggle table visibility",
-  "toggle_label_visibility": "Toggle label visibility"
+  "toggle_label_visibility": "Toggle label visibility",
+  "user": "User"
 }
