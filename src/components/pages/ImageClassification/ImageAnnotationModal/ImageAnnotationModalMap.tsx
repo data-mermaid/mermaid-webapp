@@ -537,7 +537,7 @@ const ImageAnnotationModalMap = ({
 
   const _displayEditPointPopupOnPointClick = useEffect(() => {
     if (!hasMapLoaded) {
-      return
+      return () => {}
     }
 
     const showFeaturePopupOnClick = (
