@@ -235,7 +235,6 @@ const ImageAnnotationModalMap = ({
     }
 
     map.current = new maplibregl.Map({
-      // @ts-expect-error - maplibre-gl types are incomplete
       container: mapContainer.current,
       center: DEFAULT_MAP_CENTER,
       zoom: DEFAULT_MAP_ZOOM,
@@ -593,6 +592,7 @@ const ImageAnnotationModalMap = ({
     map.current?.on('click', 'patches-fill-layer', showFeaturePopupOnClick)
     map.current?.on('click', hideFeaturePopup)
 
+    // eslint-disable-next-line consistent-return
     return () => {
       map.current?.off('click', 'patches-fill-layer', showFeaturePopupOnClick)
       map.current?.off('click', hideFeaturePopup)

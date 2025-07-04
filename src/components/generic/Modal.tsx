@@ -1,14 +1,20 @@
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import { IconClose } from '../../icons'
-import theme from '../../../theme'
-import { CloseButton } from '../buttons'
-import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
-import { InputRow } from '../form'
-import { TableOverflowWrapper } from '../Table/table'
+import { IconClose } from '../icons'
+import theme from '../../theme'
+import { CloseButton } from './buttons'
+import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
+import { InputRow } from './form'
+import { TableOverflowWrapper } from './Table/table'
+import { useTranslation } from 'react-i18next'
 
 export const MODAL_CONTENT_HEIGHT = '80vh'
+
+interface StyledDialogProps {
+  maxWidth?: string
+  padding?: string
+}
 
 const StyledDialogOverlay = styled('div')`
   background: rgba(0, 0, 0, 0.5);
@@ -22,7 +28,7 @@ const StyledDialogOverlay = styled('div')`
   z-index: ${theme.zIndex.modal};
 `
 
-const StyledDialog = styled('div')`
+const StyledDialog = styled('div')<StyledDialogProps>`
   padding: ${(props) => props.padding || '0'};
   margin: 0;
   min-width: 30rem;
@@ -148,12 +154,13 @@ const Modal = ({
   onDismiss,
   footerContent,
   toolbarContent = null,
-  maxWidth,
+  maxWidth = null,
   padding = null,
   displayCloseIcon = true,
   allowCloseWithEscapeKey = true,
   contentOverflowStyle = null,
 }) => {
+  const { t } = useTranslation()
   const _closeModalWithEscapeKey = useEffect(() => {
     const close = (event) => {
       if (allowCloseWithEscapeKey && event.code === 'Escape') {
@@ -180,7 +187,7 @@ const Modal = ({
             <h2 id="modal-title">{title}</h2>
             {displayCloseIcon && (
               <CloseButton type="button" className="close-button" onClick={onDismiss}>
-                <IconClose aria-label="close" />
+                <IconClose aria-label={t('buttons.close')} />
               </CloseButton>
             )}
           </ModalTitle>

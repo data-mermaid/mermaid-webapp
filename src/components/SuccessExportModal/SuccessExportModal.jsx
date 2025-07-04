@@ -4,7 +4,7 @@ import theme from '../../theme'
 import styled from 'styled-components'
 import { Trans, useTranslation } from 'react-i18next'
 import { useCurrentUser } from '../../App/CurrentUserContext'
-import Modal, { RightFooter } from '../generic/Modal/Modal'
+import Modal, { RightFooter } from '../generic/Modal'
 import { ButtonSecondary } from '../generic/buttons'
 
 const CitationContainer = styled.div`

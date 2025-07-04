@@ -15,7 +15,7 @@ import { HelpTextWithIcon } from '../../generic/HelpTextWithIcon/HelpTextWithIco
 import { IconRefresh } from '../../icons'
 import { Textarea } from '../../generic/form'
 import language from '../../../language'
-import Modal, { RightFooter } from '../../generic/Modal/Modal'
+import Modal, { RightFooter } from '../../generic/Modal'
 import { PENDING_USER_PROFILE_NAME } from '../../../library/constants/constants'
 
 const modalLanguage = language.pages.projectInfo.editCitationModal
