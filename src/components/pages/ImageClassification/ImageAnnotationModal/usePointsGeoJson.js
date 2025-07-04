@@ -1,8 +1,10 @@
 import { useCallback } from 'react'
 import { unclassifiedGuid } from '../../../../library/constants/constants'
-import language from '../../../../language'
+import { useTranslation } from 'react-i18next'
 
 export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
+  const { t } = useTranslation()
+  const unclassifiedToken = t('image_classification.annotation.unclassified')
   const halfPatchSize = dataToReview ? dataToReview.patch_size / 2 : undefined
 
   const getPointsGeojson = useCallback(
@@ -40,9 +42,7 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
           properties: {
             id: point.id,
             ba_gr: point.annotations[0]?.ba_gr,
-            ba_gr_label:
-              point.annotations[0]?.ba_gr_label ??
-              language.imageClassification.imageClassificationModal.unclassified,
+            ba_gr_label: point.annotations[0]?.ba_gr_label ?? unclassifiedToken,
             isUnclassified: point.annotations[0].ba_gr === unclassifiedGuid,
             isUnconfirmed: !point.annotations[0]?.is_confirmed,
             isConfirmed: !!point.annotations[0]?.is_confirmed,
@@ -72,6 +72,7 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
       halfPatchSize,
       imageScale,
       map,
+      unclassifiedToken,
     ],
   )
 
@@ -92,14 +93,12 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
           },
           properties: {
             id: point.id,
-            ba_gr_label:
-              point.annotations[0]?.ba_gr_label ??
-              language.imageClassification.imageClassificationModal.unclassified,
+            ba_gr_label: point.annotations[0]?.ba_gr_label ?? unclassifiedToken,
           },
         }
       }),
     }),
-    [dataToReview, map, imageScale, halfPatchSize],
+    [dataToReview, map, imageScale, halfPatchSize, unclassifiedToken],
   )
 
   return { getPointsGeojson, getPointsLabelAnchorsGeoJson }

@@ -1595,8 +1595,6 @@ const tooltipText = {
 const imageClassification = {
   sampleUnitInputSelector: {
     title: 'Image classification is now available in MERMAID.',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel leo pellentesque lorem interdum pretium. Aenean varius luctus ex, vel blandit elit mollis non. Nam risus felis, finibus et nisl vel, convallis viverra odio. Nunc ut turpis tortor. Praesent consectetur nibh quis tortor bibendum fermentum',
     button1: 'Use image classification for this sample unit',
     button2: 'Manually input observation for this sample unit',
     offlineHeader: 'Sample unit observations unavailable offline',

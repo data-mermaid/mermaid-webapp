@@ -150,14 +150,16 @@
   "sample_units": {
     "errors": {
       "data_unavailable": "Sample unit data is currently unavailable.",
+      "observations_unavailable_offline": "Sample unit observations unavailable offline",
+      "classification_unavailable_offline": "This sample unit is using image classification and is unavailable offline.",
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable."
     }
   },
   "fish_belt_observations": {
     "proposed_species_saved": "Proposed fish species {{speciesName}} saved. The observation has been updated with this species.",
     "errors": {
-      "species_already_exists": "The proposed fish species {{speciesName}} already exists in the list. The observation has been updated with this species.",
-      "proposed_species_unsaved": "The proposed fish species {{speciesName}} has not been saved."
+      "proposed_species_unsaved": "The proposed fish species {{speciesName}} has not been saved.",
+      "species_already_exists": "The proposed fish species {{speciesName}} already exists in the list. The observation has been updated with this species."
     }
   },
   "taxonomies": {

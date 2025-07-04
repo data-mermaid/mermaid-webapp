@@ -156,7 +156,6 @@ const Modal = ({
   toolbarContent = null,
   maxWidth = null,
   testId = '',
-  maxWidth = null,
   padding = null,
   displayCloseIcon = true,
   allowCloseWithEscapeKey = true,
