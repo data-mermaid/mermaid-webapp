@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Td, Tr } from '../../../generic/Table/table'
-import theme, { MessageType } from '../../../../theme'
+import theme from '../../../../theme'
+import { MessageType } from '../../../../types/constants'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 
 interface StyledTrProps {

@@ -37,7 +37,7 @@ import Thumbnail from './Thumbnail'
 import { ImageClassificationImage } from '../../../../types/ImageClassificationTypes'
 import getObservationValidationInfo from '../../collectRecordFormPages/CollectRecordFormPage/getObservationValidationInfo'
 import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
-import { MessageType } from '../../../../theme'
+import { MessageType } from '../../../../types/constants'
 import {
   BenthicPhotoQuadratRecord,
   ImageClassificationPointAnnotation,
