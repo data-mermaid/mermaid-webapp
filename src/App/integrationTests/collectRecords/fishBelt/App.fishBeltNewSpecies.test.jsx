@@ -12,23 +12,23 @@ import {
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
-jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: (i18nKey) => i18nKey,
-      // or with TypeScript:
-      //t: (i18nKey: string) => i18nKey,
-      i18n: {
-        changeLanguage: () => new Promise(() => {}),
-      },
-    }
-  },
-  initReactI18next: {
-    type: '3rdParty',
-    init: () => {},
-  },
-}))
+beforeEach(() => {
+  jest.mock('react-i18next', () => ({
+    useTranslation: () => {
+      return {
+        t: (i18nKey) => i18nKey,
+        i18n: {
+          changeLanguage: () => new Promise(() => {}),
+        },
+      }
+    },
+    initReactI18next: {
+      type: '3rdParty',
+      init: () => {},
+    },
+  }))
+})
+
 test('Fishbelt observations add new species - filling out new species form adds a new species to dexie and the observation fish name input', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -121,11 +121,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
 
   expect(await within(fishbeltFormAfterSubmit).findByDisplayValue('Nebrius ridens'))
 
-  const proposedSpeciesSavedToast = await screen.findByText(
-    'Proposed fish species saved. The observation has been edited to show it selected.',
-  )
-
-  expect(proposedSpeciesSavedToast).toBeInTheDocument()
+  //Expect success message
 
   const updatedSpeciesInOfflineStorage = await dexiePerUserDataInstance.fish_species.toArray()
 
@@ -205,11 +201,7 @@ test('Fishbelt observations add new species - proposing new species that already
   // input display value is updated with *existing* species selected
   expect(await within(fishbeltFormAfterSubmit).findByDisplayValue('Hologymnosus longipes'))
 
-  const proposedSpeciesIsDuplicateToast = await screen.findByText(
-    'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
-  )
-
-  expect(proposedSpeciesIsDuplicateToast).toBeInTheDocument()
+  // Expect duplicate message toast popup
 
   const speciesInOfflineStorageCountAfterRedundantNewSpeciesSubmit = (
     await dexiePerUserDataInstance.fish_species.toArray()

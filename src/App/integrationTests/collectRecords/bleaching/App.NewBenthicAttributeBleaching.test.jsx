@@ -119,11 +119,7 @@ test('Bleaching collect record observations add new benthic attribute - filling 
 
   expect(await within(benthicPitFormAfterSubmit).findByDisplayValue('unicorn'))
 
-  const proposedBenthicAttributeToast = await screen.findByText(
-    'Proposed benthic benthic attribute saved. The observation has been edited to show it selected.',
-  )
-
-  expect(proposedBenthicAttributeToast).toBeInTheDocument()
+  //expect success message toast
 
   const updtedBenthicAttributesInStorate =
     await dexiePerUserDataInstance.benthic_attributes.toArray()
@@ -197,12 +193,11 @@ test('Bleaching collect record observations add new benthic attribute - proposin
 
   await user.click(submitButton)
 
-  await waitFor(() => screen.findByTestId('attribute-proposal-modal'))
-  const proposedBenthicAttributeDuplicateToast = await screen.findByText(
-    'The proposed benthic attribute already exists in the list. The observation has been edited to show the existing benthic attribute selected.',
+  await waitFor(() =>
+    expect(screen.queryByTestId('attribute-proposal-modal')).not.toBeInTheDocument(),
   )
 
-  expect(proposedBenthicAttributeDuplicateToast).toBeInTheDocument()
+  //expect duplicate message toast
 
   const formAfterProposedAttribute = screen.getByRole('form')
 

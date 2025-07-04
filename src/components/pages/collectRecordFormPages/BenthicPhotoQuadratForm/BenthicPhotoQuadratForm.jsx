@@ -170,74 +170,67 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
     }
   }, [databaseSwitchboardInstance])
 
-  const onSubmitNewBenthicAttribute = useCallback(
-    ({ benthicAttributeParentId, benthicAttributeParentName, newBenthicAttributeName }) => {
-      databaseSwitchboardInstance
-        .addBenthicAttribute({
-          benthicAttributeParentId,
-          benthicAttributeParentName,
-          newBenthicAttributeName,
+  const onSubmitNewBenthicAttribute = ({
+    benthicAttributeParentId,
+    benthicAttributeParentName,
+    newBenthicAttributeName,
+  }) => {
+    return databaseSwitchboardInstance
+      .addBenthicAttribute({
+        benthicAttributeParentId,
+        benthicAttributeParentName,
+        newBenthicAttributeName,
+      })
+      .then((newBenthicAttribute) => {
+        observationsDispatch({
+          type: 'updateBenthicAttribute',
+          payload: {
+            observationId: observationIdToAddNewBenthicAttributeTo,
+            newBenthicAttribute: newBenthicAttribute.id,
+          },
         })
-        .then((newBenthicAttribute) => {
-          observationsDispatch({
-            type: 'updateBenthicAttribute',
-            payload: {
-              observationId: observationIdToAddNewBenthicAttributeTo,
-              newBenthicAttribute: newBenthicAttribute.id,
-            },
-          })
-          updateBenthicAttributeOptionsStateWithOfflineStorageData()
-          toast.success(
-            ...getToastArguments(
-              t('benthic_observations.proposed_attribute_saved', {
-                attribute: newBenthicAttributeName,
-              }),
-            ),
-          )
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              if (error.message === 'Benthic attribute already exists') {
-                toast.error(
-                  ...getToastArguments(
-                    t('benthic_observations.attribute_already_exists', {
-                      attribute: newBenthicAttributeName,
-                    }),
-                  ),
-                )
+        updateBenthicAttributeOptionsStateWithOfflineStorageData()
+        toast.success(
+          ...getToastArguments(
+            t('benthic_observations.proposed_attribute_saved', {
+              attribute: newBenthicAttributeName,
+            }),
+          ),
+        )
+      })
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            if (error.message === 'Benthic attribute already exists') {
+              toast.error(
+                ...getToastArguments(
+                  t('benthic_observations.attribute_already_exists', {
+                    attribute: newBenthicAttributeName,
+                  }),
+                ),
+              )
 
-                observationsDispatch({
-                  type: 'updateBenthicAttribute',
-                  payload: {
-                    observationId: observationIdToAddNewBenthicAttributeTo,
-                    newBenthicAttribute: error.existingBenthicAttribute.id,
-                  },
-                })
-              } else {
-                toast.error(
-                  ...getToastArguments(
-                    t('benthic_observations.errors.attribute_proposal_unsaved', {
-                      attribute: newBenthicAttributeName,
-                    }),
-                  ),
-                )
-              }
-            },
-          })
+              observationsDispatch({
+                type: 'updateBenthicAttribute',
+                payload: {
+                  observationId: observationIdToAddNewBenthicAttributeTo,
+                  newBenthicAttribute: error.existingBenthicAttribute.id,
+                },
+              })
+            } else {
+              toast.error(
+                ...getToastArguments(
+                  t('benthic_observations.errors.attribute_proposal_unsaved', {
+                    attribute: newBenthicAttributeName,
+                  }),
+                ),
+              )
+            }
+          },
         })
-
-      return Promise.resolve()
-    },
-    [
-      databaseSwitchboardInstance,
-      handleHttpResponseError,
-      observationIdToAddNewBenthicAttributeTo,
-      observationsDispatch,
-      updateBenthicAttributeOptionsStateWithOfflineStorageData,
-    ],
-  )
+      })
+  }
 
   const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
     (props) => {
