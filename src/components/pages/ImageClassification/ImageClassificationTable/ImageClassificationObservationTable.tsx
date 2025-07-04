@@ -38,7 +38,10 @@ import { ImageClassificationImage } from '../../../../types/ImageClassificationT
 import getObservationValidationInfo from '../../collectRecordFormPages/CollectRecordFormPage/getObservationValidationInfo'
 import ObservationValidationInfo from '../../collectRecordFormPages/ObservationValidationInfo'
 import { MessageType } from '../../../../theme'
-import { BenthicPhotoQuadratRecord } from '../../../../App/mermaidData/mermaidDataTypes'
+import {
+  BenthicPhotoQuadratRecord,
+  ImageClassificationPointAnnotation,
+} from '../../../../App/mermaidData/mermaidDataTypes'
 
 interface TableHeaderProps {
   align: 'left' | 'right' | 'center'
@@ -86,6 +89,7 @@ interface DistilledAnnotationData {
 }
 
 interface DistilledImage {
+  annotations: ImageClassificationPointAnnotation[]
   file: ImageClassificationImage
   numSubRows: number
   distilledAnnotationData: DistilledAnnotationData[]
@@ -189,14 +193,14 @@ const ImageClassificationObservationTable = ({
     }
   }, [databaseSwitchboardInstance, handleHttpResponseError, projectId, recordId, setImages])
   const getGrowthFormLabel = useCallback(
-    (growthFormId) => {
+    (growthFormId: string) => {
       const matchingGrowthForm = growthForms.find(({ id }) => id === growthFormId)
       return matchingGrowthForm?.name ?? ''
     },
     [growthForms],
   )
   const getBenthicAttributeLabel = useCallback(
-    (benthicAttributeId) => {
+    (benthicAttributeId: string) => {
       const matchingBenthicAttribute = benthicAttributes.find(({ id }) => id === benthicAttributeId)
       return matchingBenthicAttribute?.name ?? ''
     },
@@ -392,7 +396,11 @@ const ImageClassificationObservationTable = ({
 
   let rowIndex = 1
 
-  const buildObservationId = (imageId, benthicAttributeId = null, growthFormId = null) => {
+  const buildObservationId = (
+    imageId: string,
+    benthicAttributeId?: string,
+    growthFormId?: string,
+  ) => {
     let observationId = imageId
 
     if (benthicAttributeId) {
@@ -406,7 +414,7 @@ const ImageClassificationObservationTable = ({
     return observationId
   }
 
-  const handleRowMouseEnter = (imageIndex) => {
+  const handleRowMouseEnter = (imageIndex: number) => {
     setHoveredImageIndex(imageIndex)
   }
 

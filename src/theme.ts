@@ -1,5 +1,6 @@
 import { css } from 'styled-components'
 import colorHelper from 'color'
+import { MessageType } from './types/constants'
 
 const primary = colorHelper('#174b82')
 const secondary = colorHelper('#DDDCE4')
@@ -26,8 +27,6 @@ const small = '0.5rem'
 const medium = '1rem'
 const large = '1.5rem'
 const xlarge = '2rem'
-
-export type MessageType = 'ignore' | 'info' | 'warning' | 'error'
 
 const color = {
   textColor,
@@ -107,9 +106,7 @@ const color = {
   inputBackground: white.toString(),
   outline: `solid 2px ${primary}`,
   headerDropdownMenuBackground: `#174b82ee`,
-  getMessageColorBackground: function getMessageColorBackground(
-    messageType: 'ignore' | 'info' | 'warning' | 'error',
-  ) {
+  getMessageColorBackground: function getMessageColorBackground(messageType: MessageType) {
     if (messageType === 'ignore') {
       return ignore.alpha(0.15).toString()
     }
@@ -141,7 +138,7 @@ const color = {
 
     return primary.toString()
   },
-  getHoverColor: function getHoverColor(messageType: 'ignore' | 'info' | 'warning' | 'error') {
+  getHoverColor: function getHoverColor(messageType: MessageType) {
     if (messageType === 'ignore') {
       return ignore.alpha(0.4).toString()
     }

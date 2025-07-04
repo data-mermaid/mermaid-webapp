@@ -498,19 +498,21 @@ export interface ImageClassificationPoint {
   id: string
   row: number
   column: number
-  annotations: {
-    ba_gr: string
-    benthic_attribute: string
-    ba_gr_label: string
-    id: string
-    is_confirmed: boolean
-    is_machine_created?: boolean
-    score?: number
-    benthicAttributeId?: string
-    growth_form?: string
-    growthFormId?: string
-    unconfirmedCount?: number
-  }[]
+  annotations: ImageClassificationPointAnnotation[]
+}
+
+export interface ImageClassificationPointAnnotation {
+  ba_gr: string
+  benthic_attribute: string
+  ba_gr_label: string
+  id: string
+  is_confirmed: boolean
+  is_machine_created?: boolean
+  score?: number
+  benthicAttributeId?: string
+  growth_form?: string
+  growthFormId?: string
+  unconfirmedCount?: number
 }
 
 export interface ImageClassificationResponse {
