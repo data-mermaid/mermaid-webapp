@@ -103,9 +103,9 @@
     "errors": {
       "failed_upload": "Failed to upload {{fileName}}"
     },
-    "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
+    "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .pjpeg, .png, .mpo",
     "max_file_size": "Maximum file size is 30 MB",
-    "min_image_size": "Photos must be larger than 1500 pixels by 1500 pixels",
+    "min_image_size": "Photos must be at least 1500 x 1500 pixels",
     "put_files_here": "Drop files here <br> or <br>",
     "req_crop_photos": "Crop photos to size before uploading",
     "select_local_files": "Select files from your computer...",
