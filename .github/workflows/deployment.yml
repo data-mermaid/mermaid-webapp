@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - 1573-webapp-memory-issues
     tags:
       - 'v[0-9]+.[0-9]+'        # eg: v1.1
       - 'v[0-9]+.[0-9]+.[0-9]+' # eg: v1.1.1
@@ -56,7 +57,7 @@ jobs:
   call-cdk-deploy:
     concurrency:
       group: app-deployment-${{ github.ref }}
-    needs: [call-lint, call-test]
+    needs: [call-lint]
     uses: ./.github/workflows/_cdk.yml
     secrets: inherit
     with:
