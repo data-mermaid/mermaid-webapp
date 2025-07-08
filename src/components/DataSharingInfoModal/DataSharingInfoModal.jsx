@@ -7,7 +7,7 @@ import { IconCheck, IconClose } from '../icons'
 import { Table, Td, Tr, TableOverflowWrapper } from '../generic/Table/table'
 import language from '../../language'
 import theme from '../../theme'
-import Modal, { RightFooter } from '../generic/Modal/Modal'
+import Modal, { RightFooter } from '../generic/Modal'
 
 const thStyles = css`
   text-align: left;
@@ -15,9 +15,11 @@ const thStyles = css`
   color: white;
   padding: ${theme.spacing.small} ${theme.spacing.medium};
   vertical-align: top;
+
   span {
     white-space: nowrap;
   }
+
   small {
     display: block;
   }

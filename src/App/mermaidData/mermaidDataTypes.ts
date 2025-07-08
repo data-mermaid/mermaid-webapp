@@ -57,7 +57,7 @@ interface BenthicPhotoQuadratTransect {
   quadrat_size?: number | string
   quadrat_number_start?: number | string
   relative_depth?: string
-  num_points_per_quadrat?: number | string
+  num_points_per_quadrat?: number
   notes?: string
 }
 
@@ -498,18 +498,21 @@ export interface ImageClassificationPoint {
   id: string
   row: number
   column: number
-  annotations: {
-    ba_gr: string
-    benthic_attribute: string
-    ba_gr_label: string
-    id: string
-    is_confirmed: boolean
-    is_machine_created?: boolean
-    score?: number
-    benthicAttributeId?: string
-    growthFormId?: string
-    unconfirmedCount?: number
-  }[]
+  annotations: ImageClassificationPointAnnotation[]
+}
+
+export interface ImageClassificationPointAnnotation {
+  ba_gr: string
+  benthic_attribute: string
+  ba_gr_label: string
+  id: string
+  is_confirmed: boolean
+  is_machine_created?: boolean
+  score?: number
+  benthicAttributeId?: string
+  growth_form?: string
+  growthFormId?: string
+  unconfirmedCount?: number
 }
 
 export interface ImageClassificationResponse {
