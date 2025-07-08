@@ -153,7 +153,6 @@ const NewAttributeModal = ({
     setAttributeName(selectedItem.label)
   }
 
-  // @ts-expect-error Typing needs to be updated on InputAutocomplete
   const handleNewAttributeChange = (event) => {
     const valueToUse = isFishBeltSampleUnit ? event.target.value.toLowerCase() : event.target.value
     attributeProposalForm.setFieldValue(formAttributes.attributeProperty, valueToUse)
@@ -253,7 +252,6 @@ const NewAttributeModal = ({
             aria-labelledby="attribute-label"
             options={modalAttributeOptions}
             value={modalAssets.proposedAttributeParentId}
-            // @ts-expect-error Typing needs to be updated on InputAutocomplete
             noResultsAction={NoResults}
             onChange={handleAttributeProposalFormValueChange}
           />
