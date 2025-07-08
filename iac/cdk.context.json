@@ -3,5 +3,8 @@
     "Id": "/hostedzone/Z057628713VX646WVHWOJ",
     "Name": "app2.datamermaid.org."
   },
-  "acknowledged-issue-numbers": [32775]
+  "acknowledged-issue-numbers": [
+    32775,
+    34892
+  ]
 }
