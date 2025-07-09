@@ -6,7 +6,7 @@ import {
   NewAttributeModalFooterContainer,
 } from '../ImageAnnotationModal.styles'
 import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
-import Modal from '../../../../generic/Modal/Modal'
+import Modal from '../../../../generic/Modal'
 import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
 

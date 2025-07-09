@@ -1,35 +1,53 @@
 import styled from 'styled-components'
 import { Td, Tr } from '../../../generic/Table/table'
 import theme from '../../../../theme'
+import { MessageType } from '../../../../types/constants'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
+
+interface StyledTrProps {
+  $messageType?: MessageType
+  $hasUnconfirmedPoint?: boolean
+  $isUnclassified?: boolean
+}
+
+interface StyledTdProps {
+  textAlign?: string
+  cursor?: string
+}
 
 const StyledColgroup = styled('colgroup')`
   col {
     &.thumbnail {
       width: 5rem;
     }
+
     &.quadrat {
       width: 15rem;
     }
+
     &.benthicAttribute {
       width: auto;
     }
+
     &.growthForm {
       width: 20%;
     }
+
     &.numberOfPoints {
       width: 20rem;
     }
+
     &.validation {
       width: auto;
     }
+
     &.remove {
       width: 5rem;
     }
   }
 `
 
-const StyledTd = styled(Td)`
+const StyledTd = styled(Td)<StyledTdProps>`
   padding: 0.5em !important;
   text-align: ${(props) => props.textAlign};
 
@@ -38,7 +56,7 @@ const StyledTd = styled(Td)`
   }
 `
 
-const StyledTr = styled(Tr)`
+const StyledTr = styled(Tr)<StyledTrProps>`
   border-width: 0 0 0 ${theme.spacing.xsmall};
   border-style: solid;
   border-color: ${({ $messageType, $hasUnconfirmedPoint, $isUnclassified }) => {
@@ -71,7 +89,7 @@ const ImageWrapper = styled('div')`
   align-items: center;
 `
 
-const TdWithHoverText = styled(StyledTd)`
+const TdWithHoverText = styled(StyledTd)<StyledTdProps>`
   cursor: ${(props) => props.cursor};
 
   &.hover-highlight {

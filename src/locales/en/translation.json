@@ -13,7 +13,9 @@
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View"
+    "view": "View",
+    "done": "Done",
+    "review": "Review"
   },
   "contact_us": "Contact us for help",
   "forms": {
@@ -23,6 +25,8 @@
   "toasts": {
     "export_error": "There was an error exporting the report."
   },
+  "loading": "Loading",
+  "loading_item": "Loading {{itemName}}",
   "image_classification": {
     "add_attribute": "Add new attribute",
     "attribute_growth_form": "Benthic attribute / growth form",
@@ -140,6 +144,7 @@
     "benthic_attribute": "Benthic attribute",
     "missing_benthic_attribute": "Missing benthic attribute",
     "proposed_attribute_saved": "Proposed attribute {{attribute}} saved. The observation has been updated with this attribute.",
+    "observations": "Observations",
     "errors": {
       "attribute_proposal_unsaved": "The proposed attribute {{attribute}} has not been saved."
     }

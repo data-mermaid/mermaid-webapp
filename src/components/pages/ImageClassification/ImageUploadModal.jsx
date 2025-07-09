@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import Modal from '../../generic/Modal/index.js'
+import Modal from '../../generic/Modal'
 import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../generic/buttons.js'
 import { toast } from 'react-toastify'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext.jsx'

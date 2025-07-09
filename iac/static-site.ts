@@ -145,6 +145,8 @@ export class StaticSite extends Construct {
       destinationBucket: siteBucket,
       distribution,
       distributionPaths: ['/*'],
+      memoryLimit: 1024, // Increase memory if deployment is stuck due to resource limits
+      retainOnDelete: false, // Ensure cleanup on stack deletion
     })
 
     // export

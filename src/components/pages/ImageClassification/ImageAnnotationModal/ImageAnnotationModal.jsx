@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import theme from '../../../../theme'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import Modal from '../../../generic/Modal/Modal'
+import Modal from '../../../generic/Modal'
 import {
   IMAGE_CLASSIFICATION_COLORS as COLORS,
   unclassifiedGuid,

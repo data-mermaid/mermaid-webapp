@@ -21,7 +21,7 @@ import Modal, {
   ModalLoadingIndicatorWrapper,
   ModalTableOverflowWrapper,
   RightFooter,
-} from '../generic/Modal/Modal'
+} from '../generic/Modal'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { getToastArguments } from '../../library/getToastArguments'
 import language from '../../language'

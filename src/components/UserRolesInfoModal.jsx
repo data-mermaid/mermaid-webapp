@@ -7,7 +7,7 @@ import { IconCheck, IconClose } from './icons'
 import { Table, Td, Tr, TableOverflowWrapper } from './generic/Table/table'
 import language from '../language'
 import theme from '../theme'
-import Modal, { RightFooter } from './generic/Modal/Modal'
+import Modal, { RightFooter } from './generic/Modal'
 
 const Thead = styled.th`
   text-align: center;
@@ -15,12 +15,15 @@ const Thead = styled.th`
   color: white;
   padding: ${theme.spacing.small} ${theme.spacing.medium};
   vertical-align: top;
+
   span {
     white-space: nowrap;
   }
+
   small {
     display: block;
   }
+
   &:first-of-type {
     text-align: left;
   }
@@ -28,6 +31,7 @@ const Thead = styled.th`
 
 const Tcell = styled(Td)`
   text-align: center;
+
   &:first-of-type {
     text-align: left;
   }
