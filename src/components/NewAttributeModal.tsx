@@ -11,7 +11,7 @@ import { Input } from './generic/form'
 import { Row, RowSpaceBetween } from './generic/positioning'
 import InputAutocomplete from './generic/InputAutocomplete/InputAutocomplete'
 import { Table, Td, Tr } from './generic/Table/table'
-import Modal, { LeftFooter, RightFooter } from './generic/Modal/Modal'
+import Modal, { LeftFooter, RightFooter } from './generic/Modal'
 import useIsMounted from '../library/useIsMounted'
 import { useCurrentUser } from '../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../App/HttpResponseErrorHandlerContext'
@@ -158,7 +158,6 @@ const NewAttributeModal = ({
     setAttributeName(selectedItem.label)
   }
 
-  // @ts-expect-error Typing needs to be updated on InputAutocomplete
   const handleNewAttributeChange = (event) => {
     const valueToUse = isFishBeltSampleUnit ? event.target.value.toLowerCase() : event.target.value
     attributeProposalForm.setFieldValue(formAttributes.attributeProperty, valueToUse)
@@ -258,7 +257,6 @@ const NewAttributeModal = ({
             aria-labelledby="attribute-label"
             options={modalAttributeOptions}
             value={modalAssets.proposedAttributeParentId}
-            // @ts-expect-error Typing needs to be updated on InputAutocomplete
             noResultsAction={NoResults}
             onChange={handleAttributeProposalFormValueChange}
           />
