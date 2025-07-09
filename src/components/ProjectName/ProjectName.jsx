@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import theme from '../../theme'
-import { mediaQueryPhoneOnly, hoverState } from '../../library/styling/mediaQueries'
+import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../library/useIsMounted'
-import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
 import { PROJECT_CODES } from '../../library/constants/constants'
@@ -26,21 +25,6 @@ const ProjectNameHeader = styled('h2')`
   margin: 0 ${theme.spacing.small} 0 0;
 `
 
-const ProjectNameLink = styled('a')`
-  padding: 0 ${theme.spacing.small};
-  font-size: ${theme.typography.smallFontSize};
-  display: inline-flex;
-  align-items: center;
-  gap: ${theme.spacing.small};
-  white-space: nowrap;
-  text-decoration: none;
-  border: solid 1px ${theme.color.border};
-  opacity: 0.7;
-  ${hoverState(css`
-    background: ${theme.color.secondaryHover};
-  `)}
-`
-
 const BiggerIconGlobe = styled(IconGlobe)`
   width: ${theme.typography.mediumIconSize};
   height: ${theme.typography.mediumIconSize};
@@ -51,7 +35,6 @@ const ProjectName = () => {
   const { projectId } = useParams()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
-  const { currentUser } = useCurrentUser()
   const { t } = useTranslation()
   const [project, setProject] = useState({})
 

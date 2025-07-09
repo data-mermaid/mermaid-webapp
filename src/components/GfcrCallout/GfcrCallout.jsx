@@ -8,7 +8,6 @@ import theme from '../../theme'
 import { useNavigate } from 'react-router-dom'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import Modal, { RightFooter } from '../generic/Modal'
-import { useCurrentUser } from '../../App/CurrentUserContext'
 import { Trans, useTranslation } from 'react-i18next'
 
 const StyledGfcrCallout = styled('div')`
@@ -93,7 +92,7 @@ const DisableIndicatorsModal = ({ isOpen = false, disableGfcr, onDismiss }) => {
       title={t('disable_gfcr')}
       isOpen={isOpen}
       onDismiss={onDismiss}
-      mainContent={content}
+      mainContent={mainContent}
       footerContent={footerContent}
     />
   )
@@ -102,7 +101,6 @@ const DisableIndicatorsModal = ({ isOpen = false, disableGfcr, onDismiss }) => {
 const GfcrCallout = ({ isGfcr = false, isLoading = false, handleUpdateIncludesGfcr }) => {
   const navigate = useNavigate()
   const currentProjectPath = useCurrentProjectPath()
-  const { currentUser } = useCurrentUser()
   const { t } = useTranslation()
 
   const [isModalOpen, setIsModalOpen] = useState(false)

@@ -9,7 +9,6 @@ import { fishBeltPropType, sitePropType } from '../../App/mermaidData/mermaidDat
 import useDocumentTitle from '../../library/useDocumentTitle'
 import { getProtocolTransectType } from '../../App/mermaidData/recordProtocolHelpers'
 import { MuiTooltip } from '../generic/MuiTooltip'
-import { useCurrentUser } from '../../App/CurrentUserContext'
 import { IconButton } from '../generic/buttons'
 import { IconGlobe } from '../icons'
 import { useTranslation } from 'react-i18next'
@@ -52,7 +51,6 @@ const RecordFormTitle = ({
   sites,
   protocol,
 }) => {
-  const { currentUser } = useCurrentUser()
   const { t } = useTranslation()
   const transectType = getProtocolTransectType(protocol)
   const protocolTitle = t(`titles.${protocol}`) ?? ''
