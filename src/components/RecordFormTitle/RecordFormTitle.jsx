@@ -112,13 +112,13 @@ const RecordFormTitle = ({
       )}
       {sampleEventId && (
         <MuiTooltip
-          title={t('go_to_explore', { pageType: 'this Sample Event' })}
+          title={t('go_to_explore', { pageType: 'this sample event' })}
           placement="top"
           arrow
         >
           <IconButton
             type="button"
-            aria-label={t('go_to_explore', { pageType: 'this Sample Event' })}
+            aria-label={t('go_to_explore', { pageType: 'this sample event' })}
             onClick={handleExploreButtonClick}
           >
             <BiggerIconGlobe />
