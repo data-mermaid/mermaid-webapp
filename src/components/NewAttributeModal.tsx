@@ -67,7 +67,7 @@ const NewAttributeModal = ({
 
   const [currentPage, setCurrentPage] = useState<1 | 2>(1)
   const [projectName, setProjectName] = useState<string>('')
-  const [attributeName, setAttributeName] = useState<string>()
+  const [attributeName, setAttributeName] = useState<string>('')
 
   const goToPageTwo = () => {
     setCurrentPage(2)
@@ -76,11 +76,7 @@ const NewAttributeModal = ({
     setCurrentPage(1)
   }
 
-  const toastError = () => {
-    return toast.error(t('projects.data_unavailable'), {
-      transition: Slide,
-    })
-  }
+  const dataUnavailableText = t('projects.data_unavailable')
 
   //Get Project Name
   useEffect(() => {
@@ -95,12 +91,21 @@ const NewAttributeModal = ({
         .catch((error: Error) => {
           handleHttpResponseError({
             error,
-            callback: toastError,
+            callback: () => {
+              toast.error(dataUnavailableText, {
+                transition: Slide,
+              })
+            },
           })
         })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [databaseSwitchboardInstance, projectId, isMounted, handleHttpResponseError])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isMounted,
+    handleHttpResponseError,
+    dataUnavailableText,
+  ])
 
   const formValidationSchema = {
     validateOnBlur: false,
