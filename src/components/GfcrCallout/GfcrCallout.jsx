@@ -4,15 +4,12 @@ import styled from 'styled-components'
 
 import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconCloseCircle, IconGfcr } from '../icons'
-import language from '../../language'
 import theme from '../../theme'
 import { useNavigate } from 'react-router-dom'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import Modal, { RightFooter } from '../generic/Modal'
 import { useCurrentUser } from '../../App/CurrentUserContext'
-import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
-
-const { gfcrCallout: gfcrCalloutLanguage } = language.pages.projectInfo
+import { Trans, useTranslation } from 'react-i18next'
 
 const StyledGfcrCallout = styled('div')`
   padding: 10px;
@@ -57,40 +54,43 @@ const StyledParagraph = styled('p')`
   max-width: ${theme.spacing.maxTextWidth};
 `
 
-const DisableIndicatorsModal = ({
-  isOpen = false,
-  disableGfcr,
-  onDismiss,
-  mermaidExploreLink,
-  isExploreLaunchEnabledForUser,
-}) => {
+const DisableIndicatorsModal = ({ isOpen = false, disableGfcr, onDismiss }) => {
+  const { t } = useTranslation()
+
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>{'Cancel'}</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('cancel')}</ButtonSecondary>
       <ButtonCaution
         onClick={() => {
           disableGfcr()
           onDismiss()
         }}
       >
-        {gfcrCalloutLanguage.disableButton}
+        {t('disable_gfcr')}
       </ButtonCaution>
     </RightFooter>
   )
 
-  const content = (
-    <>
-      Disabling GFCR Indicators for this project will not delete them, but just hide them from the{' '}
-      <a href={mermaidExploreLink} target="_blank" rel="noreferrer">
-        {isExploreLaunchEnabledForUser ? 'MERMAID Explore' : 'Global Dashboard'}
-      </a>
-      . No data will be lost. You can re-enable them at any time.
-    </>
+  const mainContent = (
+    <Trans
+      i18nKey="disabled_gfcr_info"
+      components={{
+        a: (
+          <a
+            href={import.meta.env.VITE_MERMAID_EXPLORE_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            MERMAID Explore
+          </a>
+        ),
+      }}
+    />
   )
 
   return (
     <Modal
-      title={gfcrCalloutLanguage.disableButton}
+      title={t('disable_gfcr')}
       isOpen={isOpen}
       onDismiss={onDismiss}
       mainContent={content}
@@ -103,45 +103,43 @@ const GfcrCallout = ({ isGfcr = false, isLoading = false, handleUpdateIncludesGf
   const navigate = useNavigate()
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
-  const { mermaidExploreLink, isExploreLaunchEnabledForUser } = useExploreLaunchFeature({
-    currentUser,
-  })
+  const { t } = useTranslation()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <>
       <StyledGfcrCallout>
-        <h3>{gfcrCalloutLanguage.calloutHeading}</h3>
+        <h3>{t('titles.gfcr')}</h3>
         {isGfcr ? (
           <>
-            <StyledParagraph>{gfcrCalloutLanguage.removeParagraph}</StyledParagraph>
+            <StyledParagraph>{t('remove_gfcr_Indicators')}</StyledParagraph>
             <StyledGfcrEnableButtonsContainer>
               <StyledButtonPrimary
                 type="button"
                 disabled={isLoading}
                 onClick={() => navigate(`${currentProjectPath}/gfcr/`)}
               >
-                <StyledIconGfcr inline={true} /> {gfcrCalloutLanguage.goToButton}
+                <StyledIconGfcr inline={true} /> {t('go_to_gfcr')}
               </StyledButtonPrimary>
               <StyledButtonSecondary
                 type="button"
                 disabled={isLoading}
                 onClick={() => setIsModalOpen(true)}
               >
-                <StyledIconCloseCircle inline={true} /> {gfcrCalloutLanguage.disableButton}
+                <StyledIconCloseCircle inline={true} /> {t('disable_gfcr')}
               </StyledButtonSecondary>
             </StyledGfcrEnableButtonsContainer>
           </>
         ) : (
           <>
-            <StyledParagraph>{gfcrCalloutLanguage.addParagraph}</StyledParagraph>
+            <StyledParagraph>{t('add_gfcr_indicators')}</StyledParagraph>
             <StyledButtonPrimary
               type="button"
               disabled={isLoading}
               onClick={() => handleUpdateIncludesGfcr(true)}
             >
-              <StyledIconGfcr /> {gfcrCalloutLanguage.enableButton}
+              <StyledIconGfcr /> {t('enable_gfcr')}
             </StyledButtonPrimary>
           </>
         )}
@@ -150,8 +148,6 @@ const GfcrCallout = ({ isGfcr = false, isLoading = false, handleUpdateIncludesGf
         isOpen={isModalOpen}
         disableGfcr={() => handleUpdateIncludesGfcr(false)}
         onDismiss={() => setIsModalOpen(false)}
-        mermaidExploreLink={mermaidExploreLink}
-        isExploreLaunchEnabledForUser={isExploreLaunchEnabledForUser}
       />
     </>
   )
@@ -161,8 +157,6 @@ DisableIndicatorsModal.propTypes = {
   isOpen: PropTypes.bool,
   disableGfcr: PropTypes.func.isRequired,
   onDismiss: PropTypes.func.isRequired,
-  mermaidExploreLink: PropTypes.string.isRequired,
-  isExploreLaunchEnabledForUser: PropTypes.bool.isRequired,
 }
 
 GfcrCallout.propTypes = {

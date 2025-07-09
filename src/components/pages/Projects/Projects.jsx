@@ -2,7 +2,6 @@ import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 
 import { HomePageLayout } from '../../Layout'
-import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
@@ -19,8 +18,8 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
 import ErrorBoundary from '../../ErrorBoundary'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
-import { useExploreLaunchFeature } from '../../../library/useExploreLaunchFeature'
 import { openExploreLinkWithBbox } from '../../../library/openExploreLinkWithBbox'
+import { useTranslation } from 'react-i18next'
 
 /**
  * All Projects page (lists projects)
@@ -38,11 +37,10 @@ const Projects = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
-  const { mermaidExploreLink, isExploreLaunchEnabledForUser } = useExploreLaunchFeature({
-    currentUser,
-  })
+  const { t } = useTranslation()
+  const unavailableProjectsErrorText = t('toast.unavailable_projects_error')
 
-  useDocumentTitle(`${language.pages.projectsList.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${t('titles.projects')} - ${t('titles.mermaid')}`)
 
   const _getProjectsInfo = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -61,12 +59,18 @@ const Projects = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.projectsUnavailable))
+              toast.error(...getToastArguments(unavailableProjectsErrorText))
             },
           })
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, handleHttpResponseError])
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    isSyncInProgress,
+    handleHttpResponseError,
+    unavailableProjectsErrorText,
+  ])
 
   const getIsProjectOffline = (projectId) =>
     !!offlineReadyProjectIds.find((offlineProject) => offlineProject.id === projectId)
@@ -117,17 +121,10 @@ const Projects = () => {
     const { projects_bbox } = currentUser
     const queryParams = new URLSearchParams({ your_projects_only: 'true' })
 
-    openExploreLinkWithBbox(mermaidExploreLink, queryParams, projects_bbox)
+    openExploreLinkWithBbox(queryParams, projects_bbox)
   }
 
   const renderPageNoData = () => {
-    const {
-      noFilterResults,
-      noFilterResultsSubText,
-      noDataSubText,
-      noDataMainTextOnline,
-      noDataMainTextOffline,
-    } = language.pages.projectsList
     const isProjectFilter = projectFilter !== ''
 
     let mainText
@@ -135,13 +132,13 @@ const Projects = () => {
     let subText
 
     if (isAppOnline) {
-      mainText = isProjectFilter ? noFilterResults : noDataMainTextOnline
-      subText = isProjectFilter ? noFilterResultsSubText : noDataSubText
+      mainText = isProjectFilter ? t('no_results') : t('not_your_projects')
+      subText = isProjectFilter ? t('no_projects_match') : t('create_or_join_project')
     }
 
     if (!isAppOnline) {
-      mainText = isProjectFilter ? noFilterResults : noDataMainTextOffline
-      subText = isProjectFilter ? noFilterResultsSubText : noDataSubText
+      mainText = isProjectFilter ? t('no_results') : t('no_offline_projects')
+      subText = isProjectFilter ? t('no_projects_match') : t('create_or_join_project')
     }
 
     return <PageUnavailable mainText={mainText} subText={subText} align="center" />
@@ -172,7 +169,6 @@ const Projects = () => {
           setProjectSortKey={setProjectSortKey}
           setIsProjectSortAsc={setIsProjectSortAsc}
           addProjectToProjectsPage={addProjectToProjectsPage}
-          isExploreLaunchEnabledForUser={isExploreLaunchEnabledForUser}
           handleExploreButtonClick={handleExploreButtonClick}
         />
       }

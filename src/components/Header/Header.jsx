@@ -22,7 +22,6 @@ import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { IconGlobe, IconLibraryBooks } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
-import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
 import { UserIcon } from '../UserIcon/UserIcon'
 import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
 import HideShow from '../generic/HideShow'
@@ -30,9 +29,7 @@ import MermaidCollectLogo from '../../assets/mermaid-collect-logo.svg'
 import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
 
-const GlobalLinks = ({ isAppOnline, isExploreLaunchEnabledForUser, mermaidExploreLink }) => {
-  const exploreHeader = isExploreLaunchEnabledForUser ? 'MERMAID Explore' : 'Global Dashboard'
-
+const GlobalLinks = ({ isAppOnline }) => {
   const handleReferenceMouseOver = (event) => {
     // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
     // (eg a user has just added a new fish species and it has been approved, but the service worker has cahed the old one)
@@ -66,11 +63,15 @@ const GlobalLinks = ({ isAppOnline, isExploreLaunchEnabledForUser, mermaidExplor
         Reference&nbsp;
       </StyledNavLink>
       <OfflineHide>
-        <StyledNavLink href={mermaidExploreLink} target="_blank" rel="noreferrer">
+        <StyledNavLink
+          href={import.meta.env.VITE_MERMAID_EXPLORE_LINK}
+          target="_blank"
+          rel="noreferrer"
+        >
           <HeaderIconWrapper>
             <IconGlobe />
           </HeaderIconWrapper>
-          {exploreHeader}
+          MERMAID Explore
         </StyledNavLink>
       </OfflineHide>
     </>
@@ -90,9 +91,6 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
     email: currentUserEmail,
     full_name: currentUserFullName,
   } = currentUser ?? {}
-  const { mermaidExploreLink, isExploreLaunchEnabledForUser } = useExploreLaunchFeature({
-    currentUser,
-  })
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
@@ -121,11 +119,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
         </Link>
         <GlobalNav>
           <div className="desktop">
-            <GlobalLinks
-              isAppOnline={isAppOnline}
-              isExploreLaunchEnabledForUser={isExploreLaunchEnabledForUser}
-              mermaidExploreLink={mermaidExploreLink}
-            />
+            <GlobalLinks isAppOnline={isAppOnline} />
             {isAppOnline && (
               <HideShow
                 closeOnClickWithin={false}
@@ -173,11 +167,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
               }
               contents={
                 <UserMenu>
-                  <GlobalLinks
-                    isAppOnline={isAppOnline}
-                    isExploreLaunchEnabledForUser={isExploreLaunchEnabledForUser}
-                    mermaidExploreLink={mermaidExploreLink}
-                  />
+                  <GlobalLinks isAppOnline={isAppOnline} />
                   {currentUser && <LoggedInAs>Logged in as {userDisplayName}</LoggedInAs>}
                   <UserMenuDropDownContent />
                 </UserMenu>
@@ -193,8 +183,6 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
 
 GlobalLinks.propTypes = {
   isAppOnline: PropTypes.bool.isRequired,
-  isExploreLaunchEnabledForUser: PropTypes.bool.isRequired,
-  mermaidExploreLink: PropTypes.string.isRequired,
 }
 
 Header.propTypes = {

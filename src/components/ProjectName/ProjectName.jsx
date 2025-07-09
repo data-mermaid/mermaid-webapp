@@ -2,18 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import theme from '../../theme'
-import language from '../../language'
 import { mediaQueryPhoneOnly, hoverState } from '../../library/styling/mediaQueries'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../library/useIsMounted'
 import { useCurrentUser } from '../../App/CurrentUserContext'
-import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
 import { PROJECT_CODES } from '../../library/constants/constants'
 import { IconGlobe } from '../icons'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { IconButton } from '../generic/buttons'
+import { useTranslation } from 'react-i18next'
 
 const ProjectNameWrapper = styled('div')`
   background: ${theme.color.white};
@@ -53,9 +52,7 @@ const ProjectName = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
-  const { mermaidExploreLink, isExploreLaunchEnabledForUser } = useExploreLaunchFeature({
-    currentUser,
-  })
+  const { t } = useTranslation()
   const [project, setProject] = useState({})
 
   const _getProjectName = useEffect(() => {
@@ -72,7 +69,7 @@ const ProjectName = () => {
     const { name, bbox } = project
     const queryParams = new URLSearchParams({ project: name })
 
-    openExploreLinkWithBbox(mermaidExploreLink, queryParams, bbox)
+    openExploreLinkWithBbox(queryParams, bbox)
   }
 
   const renderExploreButton = () => {
@@ -82,24 +79,17 @@ const ProjectName = () => {
       return null
     }
 
-    const exploreButtonContent = isExploreLaunchEnabledForUser ? (
-      <MuiTooltip title={language.pages.gotoExplore('this project')} placement="top" arrow>
+    return (
+      <MuiTooltip title={t('go_to_explore', { pageType: 'this project' })} placement="top" arrow>
         <IconButton
           type="button"
-          aria-label={language.pages.gotoExplore('this project')}
+          aria-label={t('go_to_explore', { pageType: 'this project' })}
           onClick={handleExploreButtonClick}
         >
           <BiggerIconGlobe />
         </IconButton>
       </MuiTooltip>
-    ) : (
-      <ProjectNameLink href={`${mermaidExploreLink}/?project=${project?.name}`} target="_blank">
-        <IconGlobe />
-        <span>{language.pages.goToDashboard}</span>
-      </ProjectNameLink>
     )
-
-    return exploreButtonContent
   }
 
   return (

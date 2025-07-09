@@ -541,11 +541,7 @@ const pages = {
   projectsList: {
     title: 'Projects',
     offlineReadyCheckboxLabel: 'Offline Ready',
-    noDataMainTextOnline: `You are not part of any projects yet.`,
     noDataSubText: `Create a new project or get your admin to add you to some.`,
-    noDataMainTextOffline: `You do not have any offline projects.`,
-    noFilterResults: 'No results',
-    noFilterResultsSubText: 'No projects match the current filter term.',
     readOnlyUserWithActiveSampleUnits:
       'You cannot submit these collect records because you only have read-only access to this project. Please contact the project admin.',
   },
