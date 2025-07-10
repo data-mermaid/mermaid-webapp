@@ -13,6 +13,12 @@ import postCropPhoto from '../../../assets/positive-user-photo-cropping.png'
 import cropTransitionIcon from '../../../assets/photo-crop-arrow-transition.svg'
 import styles from '../../../style/ImageUploadModal.module.scss'
 import imageClassificationLinks from '../../../link_constants.js'
+import {
+  MAX_IMAGE_UPLOAD_SIZE,
+  VALID_IMAGE_TYPES,
+  MAX_IMAGE_WIDTH_HEIGHT,
+  MIN_IMAGE_WIDTH_HEIGHT,
+} from '../../../library/constants/constants'
 
 const renderUploadProgress = (processedCount, totalFiles, handleCancelUpload) => (
   <Trans
@@ -44,12 +50,6 @@ const ImageUploadModal = ({
   const toastId = useRef(null)
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
-  const validFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
-  const maxFileSize = 30 * 1024 * 1024 // 30 MB
-  const minImageWidthAndHeight = 1500
-  const maxWidth = 8000
-  const maxHeight = 8000
-
   const validateDimensions = (file) => {
     return new Promise((resolve) => {
       if (isCancelledRef.current) {
@@ -68,11 +68,11 @@ const ImageUploadModal = ({
             return resolve({ file, valid: false, cancelled: true })
           }
 
-          if (img.width < minImageWidthAndHeight || img.height < minImageWidthAndHeight) {
+          if (img.width < MIN_IMAGE_WIDTH_HEIGHT || img.height < MIN_IMAGE_WIDTH_HEIGHT) {
             return resolve({ file, valid: false, isImageTooSmall: true })
           }
 
-          if (img.width <= maxWidth && img.height <= maxHeight) {
+          if (img.width <= MAX_IMAGE_WIDTH_HEIGHT && img.height <= MAX_IMAGE_WIDTH_HEIGHT) {
             return resolve({ file, valid: true })
           } else {
             return resolve({ file, valid: false })
@@ -138,11 +138,11 @@ const ImageUploadModal = ({
       }
 
       // Validate file type, size, dimensions, and uniqueness.
-      if (!validFileTypes.includes(file.type)) {
+      if (!VALID_IMAGE_TYPES.includes(file.type)) {
         toast.error(`${t('image_classification.errors.invalid_file_type')}: ${file.name}`)
         continue
       }
-      if (file.size > maxFileSize) {
+      if (file.size > MAX_IMAGE_UPLOAD_SIZE) {
         toast.error(`${t('image_classification.errors.file_too_big')}: ${file.name}`)
         continue
       }
@@ -158,7 +158,7 @@ const ImageUploadModal = ({
           toast.error(
             t('image_classification.errors.photo_too_small', {
               fileName: file.name,
-              minImageWidthAndHeight: minImageWidthAndHeight,
+              minImageWidthAndHeight: MIN_IMAGE_WIDTH_HEIGHT,
             }),
           )
         } else {
@@ -268,12 +268,12 @@ const ImageUploadModal = ({
               className={styles['hidden-input']}
               onChange={handleFileChange}
               ref={fileInputRef}
-              accept={validFileTypes.join(',')}
+              accept={VALID_IMAGE_TYPES.join(',')}
             />
           </div>
           <div className={styles['image-guidelines']}>
             <ul>
-              <li>{t('media.min_image_size')}</li>
+              <li>{t('media.min_image_size', { imgWidthHeight: MIN_IMAGE_WIDTH_HEIGHT })}</li>
               <li>{t('media.max_file_size')}</li>
               <li>{t('media.req_crop_photos')}</li>
               <li>

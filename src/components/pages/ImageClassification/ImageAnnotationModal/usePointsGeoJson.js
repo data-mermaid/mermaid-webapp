@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
   const { t } = useTranslation()
-  const unclassifiedToken = t('image_classification.annotation.unclassified')
+  const unclassifiedText = t('image_classification.annotation.unclassified')
   const halfPatchSize = dataToReview ? dataToReview.patch_size / 2 : undefined
 
   const getPointsGeojson = useCallback(
@@ -42,7 +42,7 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
           properties: {
             id: point.id,
             ba_gr: point.annotations[0]?.ba_gr,
-            ba_gr_label: point.annotations[0]?.ba_gr_label ?? unclassifiedToken,
+            ba_gr_label: point.annotations[0]?.ba_gr_label ?? unclassifiedText,
             isUnclassified: point.annotations[0].ba_gr === unclassifiedGuid,
             isUnconfirmed: !point.annotations[0]?.is_confirmed,
             isConfirmed: !!point.annotations[0]?.is_confirmed,
@@ -72,7 +72,7 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
       halfPatchSize,
       imageScale,
       map,
-      unclassifiedToken,
+      unclassifiedText,
     ],
   )
 
@@ -93,12 +93,12 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
           },
           properties: {
             id: point.id,
-            ba_gr_label: point.annotations[0]?.ba_gr_label ?? unclassifiedToken,
+            ba_gr_label: point.annotations[0]?.ba_gr_label ?? unclassifiedText,
           },
         }
       }),
     }),
-    [dataToReview, map, imageScale, halfPatchSize, unclassifiedToken],
+    [dataToReview, map, imageScale, halfPatchSize, unclassifiedText],
   )
 
   return { getPointsGeojson, getPointsLabelAnchorsGeoJson }

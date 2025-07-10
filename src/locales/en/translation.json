@@ -13,9 +13,7 @@
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View",
-    "done": "Done",
-    "review": "Review"
+    "view": "View"
   },
   "contact_us": "Contact us for help",
   "forms": {
@@ -143,7 +141,6 @@
     "attribute_proposal_summary": "Your proposed attribute {{attribute}} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.",
     "benthic_attribute": "Benthic attribute",
     "missing_benthic_attribute": "Missing benthic attribute",
-    "observations": "Observations",
     "proposed_attribute_saved": "Proposed attribute {{attribute}} saved. The observation has been updated with this attribute.",
     "observations": "Observations",
     "errors": {
