@@ -18,6 +18,7 @@ import {
   VALID_IMAGE_TYPES,
   MAX_IMAGE_WIDTH_HEIGHT,
   MIN_IMAGE_WIDTH_HEIGHT,
+  MAX_IMAGE_UPLOAD_SIZE_MB,
 } from '../../../library/constants/constants'
 
 const renderUploadProgress = (processedCount, totalFiles, handleCancelUpload) => (
@@ -274,7 +275,7 @@ const ImageUploadModal = ({
           <div className={styles['image-guidelines']}>
             <ul>
               <li>{t('media.min_image_size', { imgWidthHeight: MIN_IMAGE_WIDTH_HEIGHT })}</li>
-              <li>{t('media.max_file_size')}</li>
+              <li>{t('media.max_file_size', { fileSize: MAX_IMAGE_UPLOAD_SIZE_MB })}</li>
               <li>{t('media.req_crop_photos')}</li>
               <li>
                 <Trans

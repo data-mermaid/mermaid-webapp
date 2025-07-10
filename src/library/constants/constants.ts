@@ -39,6 +39,7 @@ export const PENDING_USER_PROFILE_NAME = '(pending user)'
 
 export const VALID_IMAGE_TYPES = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
 export const MAX_IMAGE_UPLOAD_SIZE = 30 * 1024 * 1024 // 30 MB
+export const MAX_IMAGE_UPLOAD_SIZE_MB = 30 // 30 MB
 export const MIN_IMAGE_WIDTH_HEIGHT = 1500
 export const MAX_IMAGE_WIDTH_HEIGHT = 8000
 
