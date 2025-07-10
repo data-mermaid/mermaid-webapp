@@ -56,6 +56,35 @@ jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
   }
 })
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key) => key,
+    i18n: {
+      changeLanguage: jest.fn(() => Promise.resolve()),
+      language: 'en',
+      languages: ['en'],
+      isInitialized: true,
+      exists: jest.fn(() => true),
+      getFixedT: jest.fn(() => (key) => key),
+      hasResourceBundle: jest.fn(() => true),
+      loadNamespaces: jest.fn(() => Promise.resolve()),
+      loadLanguages: jest.fn(() => Promise.resolve()),
+      off: jest.fn(),
+      on: jest.fn(),
+      emit: jest.fn(),
+      store: {},
+      services: {},
+      options: {},
+    },
+  }),
+  initReactI18next: {
+    type: '3rdParty',
+    init: jest.fn(),
+  },
+  Trans: ({ children }) => children,
+  I18nextProvider: ({ children }) => children,
+}))
+
 configure({ asyncUtilTimeout: 10000 })
 
 beforeAll(() => {

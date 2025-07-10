@@ -13,7 +13,9 @@
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View"
+    "view": "View",
+    "done": "Done",
+    "review": "Review"
   },
   "contact_us": "Contact us for help",
   "forms": {
@@ -143,6 +145,7 @@
     "missing_benthic_attribute": "Missing benthic attribute",
     "observations": "Observations",
     "proposed_attribute_saved": "Proposed attribute {{attribute}} saved. The observation has been updated with this attribute.",
+    "observations": "Observations",
     "errors": {
       "attribute_proposal_unsaved": "The proposed attribute {{attribute}} has not been saved."
     }

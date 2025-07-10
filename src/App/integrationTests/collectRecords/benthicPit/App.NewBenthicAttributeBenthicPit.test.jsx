@@ -13,19 +13,6 @@ import {
 
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
-import { useTranslation } from 'react-i18next'
-
-jest.mock('react-i18next', () => ({
-  useTranslation: jest.fn(),
-}))
-const useTranslationSpy = useTranslation
-const tSpy = jest.fn((str) => str)
-useTranslationSpy.mockReturnValue({
-  t: tSpy,
-  i18n: {
-    changeLanguage: () => new Promise(() => {}),
-  },
-})
 
 test('Benthic PIT observations add new benthic attribute - filling out new attribute form adds a new attribute to dexie and the observation benthic attribute input', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()

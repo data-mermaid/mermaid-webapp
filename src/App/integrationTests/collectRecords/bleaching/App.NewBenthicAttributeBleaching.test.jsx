@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { rest } from 'msw'
-import React from 'react'
 
+import React from 'react'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
@@ -10,24 +10,9 @@ import {
   waitForElementToBeRemoved,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
-
 import App from '../../../App'
-import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => {
-    return {
-      t: (i18nKey) => i18nKey,
-      i18n: {
-        changeLanguage: () => new Promise(() => {}),
-      },
-    }
-  },
-  initReactI18next: {
-    type: '3rdParty',
-    init: () => {},
-  },
-}))
+import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
 test('Bleaching collect record observations add new benthic attribute - filling out new attribute form adds a new attribute to dexie and the observation benthic attribute input', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()

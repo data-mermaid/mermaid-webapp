@@ -12,23 +12,6 @@ import {
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
-beforeEach(() => {
-  jest.mock('react-i18next', () => ({
-    useTranslation: () => {
-      return {
-        t: (i18nKey) => i18nKey,
-        i18n: {
-          changeLanguage: () => new Promise(() => {}),
-        },
-      }
-    },
-    initReactI18next: {
-      type: '3rdParty',
-      init: () => {},
-    },
-  }))
-})
-
 test('Fishbelt observations add new species - filling out new species form adds a new species to dexie and the observation fish name input', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
