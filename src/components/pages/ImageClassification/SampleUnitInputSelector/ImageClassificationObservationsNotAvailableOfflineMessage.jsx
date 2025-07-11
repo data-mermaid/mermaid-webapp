@@ -1,16 +1,17 @@
 import React from 'react'
 import { SelectorContainer, TextContainer } from './BpqObservationTypeSelector.styles'
 import { H3 } from '../../../generic/text'
-import language from '../../../../language'
+import { useTranslation } from 'react-i18next'
 
 const ImageClassificationObservationsNotAvailableOfflineMessage = () => {
+  const { t } = useTranslation()
   return (
     <SelectorContainer>
       <TextContainer>
         <H3 htmlFor="image-classification-selection">
-          {language.imageClassification.sampleUnitInputSelector.offlineHeader}
+          {t('sample_units.errors.observations_unavailable_offline')}
         </H3>
-        <p>{language.imageClassification.sampleUnitInputSelector.offlineBody}</p>
+        <p>{t('sample_units.errors.classification_unavailable_offline')}</p>
       </TextContainer>
     </SelectorContainer>
   )
