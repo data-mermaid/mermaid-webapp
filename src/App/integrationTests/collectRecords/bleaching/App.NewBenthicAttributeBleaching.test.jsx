@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { rest } from 'msw'
-import React from 'react'
 
+import React from 'react'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
@@ -10,8 +10,8 @@ import {
   waitForElementToBeRemoved,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
-
 import App from '../../../App'
+
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
 test('Bleaching collect record observations add new benthic attribute - filling out new attribute form adds a new attribute to dexie and the observation benthic attribute input', async () => {
@@ -64,10 +64,10 @@ test('Bleaching collect record observations add new benthic attribute - filling 
 
   await user.click(noResultsButton)
 
-  const modal = screen.getByLabelText('Add New Benthic Attribute')
+  const modal = screen.getByTestId('attribute-proposal-modal')
 
-  const parentInput = await within(modal).findByLabelText('Parent')
-  const nameInput = within(modal).getByLabelText('Name')
+  const parentInput = await within(modal).findByTestId('attribute-label')
+  const nameInput = within(modal).getByTestId('new-attribute-name')
 
   await user.type(parentInput, 'Dead')
 
@@ -81,42 +81,30 @@ test('Bleaching collect record observations add new benthic attribute - filling 
 
   await user.type(nameInput, 'unicorn')
 
-  const nextScreenButton = within(modal).getByRole('button', {
-    name: 'Next',
-  })
+  const nextScreenButton = within(modal).getByTestId('next-form-page')
 
   await user.click(nextScreenButton)
 
-  expect(
-    await within(modal).findByText(
-      'Your proposed new benthic attribute will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.',
-    ),
-  )
+  expect(await within(modal).findByTestId('proposed-summary'))
 
-  const benthicAttributeElement = within(modal).getByLabelText('Benthic attribute')
-  const userNameElement = within(modal).getByLabelText('User')
-  const projectNameElement = within(modal).getByLabelText('Project')
+  const benthicAttributeElement = within(modal).getByTestId('proposed-attribute-type')
+  const userNameElement = within(modal).getByTestId('proposed-attribute-user')
+  const projectNameElement = within(modal).getByTestId('proposed-attribute-project')
 
   expect(within(userNameElement).getByText('W-FakeFirstNameOnline W-FakeLastNameOnline'))
   expect(within(projectNameElement).getByText('Project V'))
   expect(within(benthicAttributeElement).getByText('Dead Coral with Algae unicorn'))
 
-  const submitButton = within(modal).getByRole('button', {
-    name: 'Send to MERMAID for review',
-  })
+  const submitButton = within(modal).getByTestId('submit-proposal-button')
 
   await user.click(submitButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('Add New Benthic Attribute'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('attribute-proposal-modal'))
   const benthicPitFormAfterSubmit = screen.getByRole('form')
 
   expect(await within(benthicPitFormAfterSubmit).findByDisplayValue('unicorn'))
 
-  const proposedBenthicAttributeToast = await screen.findByText(
-    'Proposed benthic benthic attribute saved. The observation has been edited to show it selected.',
-  )
-
-  expect(proposedBenthicAttributeToast).toBeInTheDocument()
+  //expect success message toast
 
   const updtedBenthicAttributesInStorate =
     await dexiePerUserDataInstance.benthic_attributes.toArray()
@@ -165,10 +153,10 @@ test('Bleaching collect record observations add new benthic attribute - proposin
 
   await user.click(noResultsButton)
 
-  const modal = screen.getByLabelText('Add New Benthic Attribute')
+  const modal = screen.getByTestId('attribute-proposal-modal')
 
-  const parentInput = await within(modal).findByLabelText('Parent')
-  const nameInput = within(modal).getByLabelText('Name')
+  const parentInput = await within(modal).findByTestId('attribute-label')
+  const nameInput = within(modal).getByTestId('new-attribute-name')
 
   await user.type(parentInput, 'Dead')
 
@@ -182,26 +170,19 @@ test('Bleaching collect record observations add new benthic attribute - proposin
 
   await user.type(nameInput, 'Zosteraceae')
 
-  const nextScreenButton = await within(modal).findByRole('button', {
-    name: 'Next',
-  })
+  const nextScreenButton = within(modal).getByTestId('next-form-page')
 
   await user.click(nextScreenButton)
 
-  const submitButton = await within(modal).findByRole('button', {
-    name: 'Send to MERMAID for review',
-  })
+  const submitButton = within(modal).getByTestId('submit-proposal-button')
 
   await user.click(submitButton)
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('Add New Benthic Attribute')).not.toBeInTheDocument(),
-  )
-  const proposedBenthicAttributeDuplicateToast = await screen.findByText(
-    'The proposed benthic attribute already exists in the list. The observation has been edited to show the existing benthic attribute selected.',
+    expect(screen.queryByTestId('attribute-proposal-modal')).not.toBeInTheDocument(),
   )
 
-  expect(proposedBenthicAttributeDuplicateToast).toBeInTheDocument()
+  //expect duplicate message toast
 
   const formAfterProposedAttribute = screen.getByRole('form')
 

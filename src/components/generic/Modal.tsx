@@ -155,6 +155,7 @@ const Modal = ({
   footerContent,
   toolbarContent = null,
   maxWidth = null,
+  testId = '',
   padding = null,
   displayCloseIcon = true,
   allowCloseWithEscapeKey = true,
@@ -175,7 +176,7 @@ const Modal = ({
 
   return (
     isOpen && (
-      <StyledDialogOverlay aria-label={`${title} Modal`}>
+      <StyledDialogOverlay aria-label={`${title} Modal`} data-testid={testId}>
         <StyledDialog
           role="dialog"
           aria-labelledby="modal-title"
@@ -211,6 +212,7 @@ Modal.propTypes = {
   title: PropTypes.string.isRequired,
   toolbarContent: PropTypes.node,
   maxWidth: PropTypes.string,
+  testId: PropTypes.string,
   padding: PropTypes.string,
   displayCloseIcon: PropTypes.bool,
   contentOverflowStyle: PropTypes.string,
