@@ -40,7 +40,7 @@ const Projects = () => {
   const { t } = useTranslation()
   const unavailableProjectsErrorText = t('toast.unavailable_projects_error')
 
-  useDocumentTitle(`${t('titles.projects')} - ${t('titles.mermaid')}`)
+  useDocumentTitle(`${t('projects.projects')} - ${t('mermaid')}`)
 
   const _getProjectsInfo = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -132,13 +132,17 @@ const Projects = () => {
     let subText
 
     if (isAppOnline) {
-      mainText = isProjectFilter ? t('no_results') : t('not_your_projects')
-      subText = isProjectFilter ? t('no_projects_match') : t('create_or_join_project')
+      mainText = isProjectFilter ? t('search.no_results') : t('projects.not_your_projects')
+      subText = isProjectFilter
+        ? t('projects.no_projects_match')
+        : t('projects.create_or_join_project')
     }
 
     if (!isAppOnline) {
-      mainText = isProjectFilter ? t('no_results') : t('no_offline_projects')
-      subText = isProjectFilter ? t('no_projects_match') : t('create_or_join_project')
+      mainText = isProjectFilter ? t('search.no_results') : t('projects.no_offline_projects')
+      subText = isProjectFilter
+        ? t('projects.no_projects_match')
+        : t('projects.create_or_join_project')
     }
 
     return <PageUnavailable mainText={mainText} subText={subText} align="center" />

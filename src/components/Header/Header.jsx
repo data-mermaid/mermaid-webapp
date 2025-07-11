@@ -28,8 +28,10 @@ import HideShow from '../generic/HideShow'
 import MermaidCollectLogo from '../../assets/mermaid-collect-logo.svg'
 import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
+import { useTranslation } from 'react-i18next'
 
 const GlobalLinks = ({ isAppOnline }) => {
+  const { t } = useTranslation()
   const handleReferenceMouseOver = (event) => {
     // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
     // (eg a user has just added a new fish species and it has been approved, but the service worker has cahed the old one)
@@ -48,7 +50,7 @@ const GlobalLinks = ({ isAppOnline }) => {
         <HeaderIconWrapper>
           <IconLibraryBooks />
         </HeaderIconWrapper>
-        Projects
+        {t('projects.projects')}
       </StyledNavLink>
       <StyledNavLink
         href={import.meta.env.VITE_MERMAID_REFERENCE_LINK}
@@ -60,7 +62,7 @@ const GlobalLinks = ({ isAppOnline }) => {
         <HeaderIconWrapper>
           <MediumIconExcel />
         </HeaderIconWrapper>
-        Reference&nbsp;
+        {t('reference')}
       </StyledNavLink>
       <OfflineHide>
         <StyledNavLink
@@ -71,7 +73,7 @@ const GlobalLinks = ({ isAppOnline }) => {
           <HeaderIconWrapper>
             <IconGlobe />
           </HeaderIconWrapper>
-          MERMAID Explore
+          {t('mermaid_explore')}
         </StyledNavLink>
       </OfflineHide>
     </>

@@ -53,7 +53,7 @@ const RecordFormTitle = ({
 }) => {
   const { t } = useTranslation()
   const transectType = getProtocolTransectType(protocol)
-  const protocolTitle = t(`titles.${protocol}`) ?? ''
+  const protocolTitle = t(`protocol_titles.${protocol}`) ?? ''
   const primaryTitle = `${protocolTitle}`
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
   const siteName = getObjectById(sites, siteId)?.name ?? ''
@@ -63,7 +63,7 @@ const RecordFormTitle = ({
   const sampleEventId = submittedRecordOrCollectRecordDataProperty.sample_event?.id ?? ''
 
   useDocumentTitle(
-    `${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${t('titles.mermaid')}`,
+    `${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${t('mermaid')}`,
   )
 
   const handleExploreButtonClick = () => {
@@ -109,14 +109,10 @@ const RecordFormTitle = ({
         <ProjectTooltip forwardedAs="h2" text={label} tooltipText="Label" id="label-tooltip" />
       )}
       {sampleEventId && (
-        <MuiTooltip
-          title={t('go_to_explore', { pageType: 'this sample event' })}
-          placement="top"
-          arrow
-        >
+        <MuiTooltip title={t('go_to_explore_sample_event')} placement="top" arrow>
           <IconButton
             type="button"
-            aria-label={t('go_to_explore', { pageType: 'this sample event' })}
+            aria-label={t('go_to_explore_sample_event')}
             onClick={handleExploreButtonClick}
           >
             <BiggerIconGlobe />

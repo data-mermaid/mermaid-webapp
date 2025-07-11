@@ -1,15 +1,4 @@
 {
-  "titles": {
-    "projects": "Projects",
-    "mermaid": "MERMAID",
-    "gfcr": "Global Fund for Coral Reefs (GFCR)",
-    "fishbelt": "Fish Belt",
-    "benthiclit": "Benthic LIT",
-    "benthicpit": "Benthic PIT",
-    "habitatcomplexity": "Habitat Complexity",
-    "bleachingqc": "Bleaching",
-    "benthicpqt": "Benthic Photo Quadrat"
-  },
   "buttons": {
     "add_row": "Add row",
     "back": "Back",
@@ -132,7 +121,12 @@
   },
   "projects": {
     "data_unavailable": "Project data is currently unavailable.",
-    "project": "Project"
+    "project": "Project",
+    "projects": "Projects",
+    "no_projects_match": "No projects match the current filter term.",
+    "not_your_projects": "You are not part of any projects yet.",
+    "no_offline_projects": "You do not have any offline projects.",
+    "create_or_join_project": "Create a new project or get your admin to add you to some."
   },
   "search": {
     "no_results": "No results found"
@@ -184,16 +178,29 @@
   "toggle_table_visibility": "Toggle table visibility",
   "toggle_label_visibility": "Toggle label visibility",
   "user": "User",
-  "remove_gfcr_Indicators": "Removing GFCR indicators from this project will not delete them, but just hide them.",
-  "add_gfcr_indicators": "GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world.",
-  "disable_gfcr": "Disable GFCR Indicators",
-  "enable_gfcr": "Enable GFCR Indicators for this project",
-  "go_to_gfcr": "Go to GFCR Indicators",
-  "disabled_gfcr_info": "Disabling GFCR Indicators for this project will not delete them, but just hide them from the <a />. No data will be lost. You can re-enable them at any time.",
-  "no_results": "No results",
-  "no_projects_match": "No projects match the current filter term.",
-  "not_your_projects": "You are not part of any projects yet.",
-  "no_offline_projects": "You do not have any offline projects.",
-  "create_or_join_project": "Create a new project or get your admin to add you to some.",
-  "go_to_explore": "View {{pageType}} on MERMAID Explore"
+  "mermaid_": "MERMAID",
+  "mermaid_explore": "MERMAID Explore",
+  "reference": "Reference",
+  "go_to_explore_projects": "View all your projects on MERMAID Explore",
+  "go_to_explore_sample_event": "View this sample event on MERMAID Explore",
+  "go_to_explore_this_project": "View this project on MERMAID Explore",
+  "gfcr": {
+    "title": "Global Fund for Coral Reefs (GFCR)",
+    "add_gfcr_indicators": "GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world.",
+    "remove_gfcr_Indicators": "Removing GFCR indicators from this project will not delete them, but just hide them.",
+    "disabled_gfcr_info": "Disabling GFCR Indicators for this project will not delete them, but just hide them from the <a />. No data will be lost. You can re-enable them at any time.",
+    "buttons": {
+      "go_to_gfcr": "Go to GFCR Indicators",
+      "disable_gfcr": "Disable GFCR Indicators",
+      "enable_gfcr": "Enable GFCR Indicators for this project"
+    }
+  },
+  "protocol_titles": {
+    "fishbelt": "Fish Belt",
+    "benthiclit": "Benthic LIT",
+    "benthicpit": "Benthic PIT",
+    "habitatcomplexity": "Habitat Complexity",
+    "bleachingqc": "Bleaching",
+    "benthicpqt": "Benthic Photo Quadrat"
+  }
 }

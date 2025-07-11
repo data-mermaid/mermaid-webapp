@@ -58,21 +58,21 @@ const DisableIndicatorsModal = ({ isOpen = false, disableGfcr, onDismiss }) => {
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>{t('cancel')}</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonCaution
         onClick={() => {
           disableGfcr()
           onDismiss()
         }}
       >
-        {t('disable_gfcr')}
+        {t('gfcr.buttons.disable_gfcr')}
       </ButtonCaution>
     </RightFooter>
   )
 
   const mainContent = (
     <Trans
-      i18nKey="disabled_gfcr_info"
+      i18nKey="gfcr.disabled_gfcr_info"
       components={{
         a: (
           <a
@@ -89,7 +89,7 @@ const DisableIndicatorsModal = ({ isOpen = false, disableGfcr, onDismiss }) => {
 
   return (
     <Modal
-      title={t('disable_gfcr')}
+      title={t('gfcr.buttons.disable_gfcr')}
       isOpen={isOpen}
       onDismiss={onDismiss}
       mainContent={mainContent}
@@ -108,36 +108,36 @@ const GfcrCallout = ({ isGfcr = false, isLoading = false, handleUpdateIncludesGf
   return (
     <>
       <StyledGfcrCallout>
-        <h3>{t('titles.gfcr')}</h3>
+        <h3>{t('gfcr.title')}</h3>
         {isGfcr ? (
           <>
-            <StyledParagraph>{t('remove_gfcr_Indicators')}</StyledParagraph>
+            <StyledParagraph>{t('gfcr.remove_gfcr_Indicators')}</StyledParagraph>
             <StyledGfcrEnableButtonsContainer>
               <StyledButtonPrimary
                 type="button"
                 disabled={isLoading}
                 onClick={() => navigate(`${currentProjectPath}/gfcr/`)}
               >
-                <StyledIconGfcr inline={true} /> {t('go_to_gfcr')}
+                <StyledIconGfcr inline={true} /> {t('gfcr.buttons.go_to_gfcr')}
               </StyledButtonPrimary>
               <StyledButtonSecondary
                 type="button"
                 disabled={isLoading}
                 onClick={() => setIsModalOpen(true)}
               >
-                <StyledIconCloseCircle inline={true} /> {t('disable_gfcr')}
+                <StyledIconCloseCircle inline={true} /> {t('gfcr.buttons.disable_gfcr')}
               </StyledButtonSecondary>
             </StyledGfcrEnableButtonsContainer>
           </>
         ) : (
           <>
-            <StyledParagraph>{t('add_gfcr_indicators')}</StyledParagraph>
+            <StyledParagraph>{t('gfcr.add_gfcr_indicators')}</StyledParagraph>
             <StyledButtonPrimary
               type="button"
               disabled={isLoading}
               onClick={() => handleUpdateIncludesGfcr(true)}
             >
-              <StyledIconGfcr /> {t('enable_gfcr')}
+              <StyledIconGfcr /> {t('gfcr.buttons.enable_gfcr')}
             </StyledButtonPrimary>
           </>
         )}

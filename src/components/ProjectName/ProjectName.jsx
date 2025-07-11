@@ -63,10 +63,10 @@ const ProjectName = () => {
     }
 
     return (
-      <MuiTooltip title={t('go_to_explore', { pageType: 'this project' })} placement="top" arrow>
+      <MuiTooltip title={t('go_to_explore_this_project')} placement="top" arrow>
         <IconButton
           type="button"
-          aria-label={t('go_to_explore', { pageType: 'this project' })}
+          aria-label={t('go_to_explore_this_project')}
           onClick={handleExploreButtonClick}
         >
           <BiggerIconGlobe />

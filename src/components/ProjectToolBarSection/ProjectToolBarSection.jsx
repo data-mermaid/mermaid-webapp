@@ -121,14 +121,10 @@ const ProjectToolBarSection = ({
         <HeaderStyle>
           Projects
           {isAppOnline && (
-            <MuiTooltip
-              title={t('go_to_explore', { pageType: 'all your projects' })}
-              placement="top"
-              arrow
-            >
+            <MuiTooltip title={t('go_to_explore_projects')} placement="top" arrow>
               <IconButton
                 type="button"
-                aria-label={t('go_to_explore', { pageType: 'all your projects' })}
+                aria-label={t('go_to_explore_projects')}
                 onClick={handleExploreButtonClick}
               >
                 <BiggerIconGlobe />
