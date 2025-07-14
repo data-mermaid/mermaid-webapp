@@ -7,13 +7,11 @@ import { getObjectById } from '../../library/getObjectById'
 import { TooltipWithText, TooltipPopup } from '../generic/tooltip'
 import { fishBeltPropType, sitePropType } from '../../App/mermaidData/mermaidDataProptypes'
 import useDocumentTitle from '../../library/useDocumentTitle'
-import language from '../../language'
 import { getProtocolTransectType } from '../../App/mermaidData/recordProtocolHelpers'
 import { MuiTooltip } from '../generic/MuiTooltip'
-import { useCurrentUser } from '../../App/CurrentUserContext'
-import { useExploreLaunchFeature } from '../../library/useExploreLaunchFeature'
 import { IconButton } from '../generic/buttons'
 import { IconGlobe } from '../icons'
+import { useTranslation } from 'react-i18next'
 
 const TitleContainer = styled('div')`
   display: flex;
@@ -53,8 +51,9 @@ const RecordFormTitle = ({
   sites,
   protocol,
 }) => {
+  const { t } = useTranslation()
   const transectType = getProtocolTransectType(protocol)
-  const protocolTitle = language.protocolTitles[protocol] ?? ''
+  const protocolTitle = t(`protocol_titles.${protocol}`) ?? ''
   const primaryTitle = `${protocolTitle}`
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
   const siteName = getObjectById(sites, siteId)?.name ?? ''
@@ -62,15 +61,9 @@ const RecordFormTitle = ({
   const transectNumber = submittedRecordOrCollectRecordDataProperty[transectType]?.number ?? ''
   const label = submittedRecordOrCollectRecordDataProperty[transectType]?.label ?? ''
   const sampleEventId = submittedRecordOrCollectRecordDataProperty.sample_event?.id ?? ''
-  const { currentUser } = useCurrentUser()
-  const { mermaidExploreLink, isExploreLaunchEnabledForUser } = useExploreLaunchFeature({
-    currentUser,
-  })
 
   useDocumentTitle(
-    `${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${
-      language.title.mermaid
-    }`,
+    `${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${t('mermaid')}`,
   )
 
   const handleExploreButtonClick = () => {
@@ -83,7 +76,7 @@ const RecordFormTitle = ({
       queryParams.append('zoom', '15')
     }
 
-    window.open(`${mermaidExploreLink}/?${queryParams.toString()}`, '_blank')
+    window.open(`${import.meta.env.VITE_MERMAID_EXPLORE_LINK}/?${queryParams.toString()}`, '_blank')
   }
 
   return (
@@ -115,11 +108,11 @@ const RecordFormTitle = ({
       {label && (
         <ProjectTooltip forwardedAs="h2" text={label} tooltipText="Label" id="label-tooltip" />
       )}
-      {isExploreLaunchEnabledForUser && sampleEventId && (
-        <MuiTooltip title={language.pages.gotoExplore('this Sample Event')} placement="top" arrow>
+      {sampleEventId && (
+        <MuiTooltip title={t('go_to_explore_sample_event')} placement="top" arrow>
           <IconButton
             type="button"
-            aria-label={language.pages.gotoExplore('this Sample Event')}
+            aria-label={t('go_to_explore_sample_event')}
             onClick={handleExploreButtonClick}
           >
             <BiggerIconGlobe />

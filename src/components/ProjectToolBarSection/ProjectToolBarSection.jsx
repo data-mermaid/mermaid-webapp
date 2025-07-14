@@ -11,9 +11,9 @@ import { ButtonCallout, IconButton } from '../generic/buttons'
 import { Input, inputStyles } from '../generic/form'
 import OfflineHide from '../generic/OfflineHide'
 import ProjectModal from '../ProjectCard/ProjectModal'
-import language from '../../language'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { IconGlobe } from '../icons'
+import { useTranslation } from 'react-i18next'
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -91,14 +91,14 @@ const ProjectToolBarSection = ({
   setProjectSortKey,
   setIsProjectSortAsc,
   addProjectToProjectsPage,
-  isExploreLaunchEnabledForUser,
   handleExploreButtonClick,
 }) => {
+  const { isAppOnline } = useOnlineStatus()
+  const { t } = useTranslation()
+
   const setFilter = (event) => {
     setProjectFilter(event.target.value)
   }
-
-  const { isAppOnline } = useOnlineStatus()
 
   const setSortBy = (event) => {
     setProjectSortKey(event.target.value)
@@ -120,15 +120,11 @@ const ProjectToolBarSection = ({
       <RowWrapper>
         <HeaderStyle>
           Projects
-          {isExploreLaunchEnabledForUser && isAppOnline && (
-            <MuiTooltip
-              title={language.pages.gotoExplore('all your projects')}
-              placement="top"
-              arrow
-            >
+          {isAppOnline && (
+            <MuiTooltip title={t('go_to_explore_projects')} placement="top" arrow>
               <IconButton
                 type="button"
-                aria-label={language.pages.gotoExplore('all your projects')}
+                aria-label={t('go_to_explore_projects')}
                 onClick={handleExploreButtonClick}
               >
                 <BiggerIconGlobe />
@@ -179,6 +175,5 @@ ProjectToolBarSection.propTypes = {
   setProjectSortKey: PropTypes.func.isRequired,
   setIsProjectSortAsc: PropTypes.func.isRequired,
   addProjectToProjectsPage: PropTypes.func.isRequired,
-  isExploreLaunchEnabledForUser: PropTypes.bool.isRequired,
   handleExploreButtonClick: PropTypes.func.isRequired,
 }
