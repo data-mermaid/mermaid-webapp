@@ -46,7 +46,7 @@ const GlobalLinks = ({ isAppOnline }) => {
 
   return (
     <>
-      <StyledNavLink as={Link} to="/projects">
+      <StyledNavLink as={Link} to="/projects" data-testid="projects-link">
         <HeaderIconWrapper>
           <IconLibraryBooks />
         </HeaderIconWrapper>
@@ -58,6 +58,7 @@ const GlobalLinks = ({ isAppOnline }) => {
         rel="noreferrer"
         download
         onMouseOver={handleReferenceMouseOver}
+        data-testid="reference-link"
       >
         <HeaderIconWrapper>
           <MediumIconExcel />
@@ -69,6 +70,7 @@ const GlobalLinks = ({ isAppOnline }) => {
           href={import.meta.env.VITE_MERMAID_EXPLORE_LINK}
           target="_blank"
           rel="noreferrer"
+          data-testid="mermaid-explore-link"
         >
           <HeaderIconWrapper>
             <IconGlobe />
