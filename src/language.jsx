@@ -1588,55 +1588,6 @@ const tooltipText = {
   softCoralPercentage: 'Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
 }
 
-const imageClassification = {
-  sampleUnitInputSelector: {
-    title: 'Image classification is now available in MERMAID.',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel leo pellentesque lorem interdum pretium. Aenean varius luctus ex, vel blandit elit mollis non. Nam risus felis, finibus et nisl vel, convallis viverra odio. Nunc ut turpis tortor. Praesent consectetur nibh quis tortor bibendum fermentum',
-    button1: 'Use image classification for this sample unit',
-    button2: 'Manually input observation for this sample unit',
-    offlineHeader: 'Sample unit observations unavailable offline',
-    offlineBody: 'This sample unit is using image classification and is unavailable offline.',
-  },
-  imageClassificationModal: {
-    confirm: 'Confirm',
-    confirmed: 'Confirmed',
-    confirmedCount: 'Confirmed count',
-    confirmedTotal: 'Confirmed / total',
-    unconfirmedCount: 'Unconfirmed count',
-    unconfirmed: 'Unconfirmed',
-    unclassified: 'Unclassified',
-    unclassifiedPoint: 'Unclassified point',
-    status: 'Status',
-    review: 'Review',
-    attributeGrowthForm: 'Benthic attribute / growth form',
-    userMessage: {
-      confirmDiscardImageChanges: 'Are you sure you want to discard the change to this image?',
-    },
-    errors: {
-      corruptFiles: 'Some files were not added because they appear to be corrupt.',
-      dimensionsExceededFiles:
-        'Some files were not added because they exceed the 8000x8000 dimensions limit.',
-      duplicateFiles: 'Some files are duplicates and were not added.',
-      failedFetchAnnotations: 'Failed to fetch image annotations.',
-      failedSaveAnnotations: 'Failed to save image annotations.',
-      invalidFiles:
-        'Some files were not added due to invalid file types. Only JPEG, PJPEG, PNG, and MPO files are allowed.',
-      oversizedFiles: 'Some files were not added because they exceed the 30 MB size limit.',
-    },
-    success: {
-      savedAnnotations: 'Successfully saved image annotations',
-      uploadedPhotos: 'Photos uploaded successfully.',
-    },
-  },
-  imageUploadNotification: {
-    fileInvalidOrCorrupt: 'File is invalid or corrupt',
-    fileSizeExceedsLimit: 'File size exceeds size limit',
-    fileTypeInvalid: 'Invalid file type',
-    duplicateFile: 'Duplicate file',
-  },
-}
-
 export default {
   apiDataTableNames,
   autocomplete,
@@ -1654,7 +1605,6 @@ export default {
   getValidationMessage,
   header,
   helperText,
-  imageClassification,
   inlineMessage,
   loadingIndicator,
   map,

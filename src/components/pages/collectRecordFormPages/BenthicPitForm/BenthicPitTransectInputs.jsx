@@ -198,10 +198,18 @@ const BenthicPitTransectInputs = ({
   }
 
   const handleIntervalSizeChange = (event) => {
-    if (isIntervalSizeAsStartChecked) {
-      formik.setFieldValue('interval_start', event.target.value)
+    const newIntervalSizeValue = event.target.value
+
+    const newValues = {
+      ...formik.values,
+      interval_size: newIntervalSizeValue,
     }
-    formik.handleChange(event)
+
+    if (isIntervalSizeAsStartChecked) {
+      newValues.interval_start = newIntervalSizeValue
+    }
+
+    formik.setValues(newValues)
     resetNonObservationFieldValidations({
       validationPath: INTERVAL_SIZE_VALIDATION_PATH,
     })
@@ -215,10 +223,21 @@ const BenthicPitTransectInputs = ({
   }
 
   const handleSyncIntervalChange = (checked) => {
-    formik.setFieldValue('is_interval_size_as_start', checked)
-    if (checked) {
-      formik.setFieldValue('interval_start', formik.values.interval_size)
+    const currentIntervalSizeValue = formik.values.interval_size
+
+    const newValues = {
+      ...formik.values,
+      is_interval_size_as_start: checked,
     }
+
+    if (checked && currentIntervalSizeValue) {
+      newValues.interval_start = currentIntervalSizeValue
+    }
+
+    formik.setValues(newValues)
+    resetNonObservationFieldValidations({
+      validationPath: INTERVAL_START_VALIDATION_PATH,
+    })
   }
 
   return (

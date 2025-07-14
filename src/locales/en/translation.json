@@ -13,9 +13,7 @@
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View",
-    "done": "Done",
-    "review": "Review"
+    "view": "View"
   },
   "contact_us": "Contact us for help",
   "forms": {
@@ -106,9 +104,9 @@
     "errors": {
       "failed_upload": "Failed to upload {{fileName}}"
     },
-    "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
-    "max_file_size": "Maximum file size is 30 MB",
-    "min_image_size": "Photos must be larger than 1500 pixels by 1500 pixels",
+    "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .pjpeg, .png, .mpo",
+    "max_file_size": "Maximum file size is {{fileSize}} MB",
+    "min_image_size": "Photos must be at least {{imgWidthHeight}} x {{imgWidthHeight}} pixels",
     "put_files_here": "Drop files here <br> or <br>",
     "req_crop_photos": "Crop photos to size before uploading",
     "select_local_files": "Select files from your computer...",
@@ -158,14 +156,16 @@
   "sample_units": {
     "errors": {
       "data_unavailable": "Sample unit data is currently unavailable.",
+      "observations_unavailable_offline": "Sample unit observations unavailable offline",
+      "classification_unavailable_offline": "This sample unit is using image classification and is unavailable offline.",
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable."
     }
   },
   "fish_belt_observations": {
     "proposed_species_saved": "Proposed fish species {{speciesName}} saved. The observation has been updated with this species.",
     "errors": {
-      "species_already_exists": "The proposed fish species {{speciesName}} already exists in the list. The observation has been updated with this species.",
-      "proposed_species_unsaved": "The proposed fish species {{speciesName}} has not been saved."
+      "proposed_species_unsaved": "The proposed fish species {{speciesName}} has not been saved.",
+      "species_already_exists": "The proposed fish species {{speciesName}} already exists in the list. The observation has been updated with this species."
     }
   },
   "taxonomies": {
