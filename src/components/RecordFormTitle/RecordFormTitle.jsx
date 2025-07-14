@@ -53,7 +53,7 @@ const RecordFormTitle = ({
 }) => {
   const { t } = useTranslation()
   const transectType = getProtocolTransectType(protocol)
-  const protocolTitle = t(`protocol_titles.${protocol}`) ?? ''
+  const protocolTitle = t(`protocol_titles.${protocol}`, '')
   const primaryTitle = `${protocolTitle}`
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
   const siteName = getObjectById(sites, siteId)?.name ?? ''
@@ -87,6 +87,7 @@ const RecordFormTitle = ({
           text={primaryTitle}
           tooltipText="Protocol"
           id="protocol-tooltip"
+          data-testid="protocol-tooltip"
         />
       )}
       {siteName && (

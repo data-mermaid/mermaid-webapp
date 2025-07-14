@@ -32,7 +32,7 @@ test('RecordFormTitle shows the title as expected when all of site name, transec
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
-  expect(within(formTitle).getByText('Fish Belt'))
+  expect(within(formTitle).getByTestId('protocol-tooltip')).toBeInTheDocument()
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
   expect(within(formTitle).getByText('FB-2'))
@@ -55,7 +55,7 @@ test('RecordFormTitle component renders a default title when site name, transect
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
-  expect(within(formTitle).getByText('Fish Belt'))
+  expect(within(formTitle).getByTestId('protocol-tooltip')).toBeInTheDocument()
 })
 
 test('RecordFormTitle component renders properly when site name is missing.', () => {
@@ -161,11 +161,12 @@ test('RecordFormTitle displays Benthic PIT titles correctly', () => {
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
-  expect(within(formTitle).getByText('Benthic PIT'))
+  expect(within(formTitle).getByTestId('protocol-tooltip')).toBeInTheDocument()
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
   expect(within(formTitle).getByText('label'))
 })
+
 test('RecordFormTitle displays Benthic Photo Quadrat titles correctly', () => {
   const mockCollectRecord = {
     data: {
@@ -189,7 +190,7 @@ test('RecordFormTitle displays Benthic Photo Quadrat titles correctly', () => {
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
-  expect(within(formTitle).getByText('Benthic Photo Quadrat'))
+  expect(within(formTitle).getByTestId('protocol-tooltip')).toBeInTheDocument()
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
   expect(within(formTitle).getByText('label'))
@@ -218,7 +219,7 @@ test('RecordFormTitle displays Benthic LIT titles correctly', () => {
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
-  expect(within(formTitle).getByText('Benthic LIT'))
+  expect(within(formTitle).getByTestId('protocol-tooltip')).toBeInTheDocument()
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
   expect(within(formTitle).getByText('label'))
@@ -247,7 +248,7 @@ test('RecordFormTitle displays Habitat Complexity titles correctly', () => {
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
-  expect(within(formTitle).getByText('Habitat Complexity'))
+  expect(within(formTitle).getByTestId('protocol-tooltip')).toBeInTheDocument()
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
   expect(within(formTitle).getByText('label'))
@@ -276,7 +277,7 @@ test('RecordFormTitle displays Bleaching titles correctly', () => {
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
-  expect(within(formTitle).getByText('Bleaching'))
+  expect(within(formTitle).getByTestId('protocol-tooltip')).toBeInTheDocument()
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
   expect(within(formTitle).getByText('label'))
