@@ -23,7 +23,7 @@ import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus, IconInfo } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../../generic/form'
-import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal.js'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
@@ -39,21 +39,27 @@ const StyledColgroup = styled('colgroup')`
     &.number {
       width: 5rem;
     }
+
     &.quadrat {
       width: 15rem;
     }
+
     &.benthicAttribute {
       width: auto;
     }
+
     &.growthForm {
       width: 20%;
     }
+
     &.numberOfPoints {
       width: 20rem;
     }
+
     &.validation {
       width: auto;
     }
+
     &.remove {
       width: 5rem;
     }

@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react'
-import { roundToOneDecimal } from '../../library/numbers/roundToOneDecimal'
-import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
-import { ObservationsSummaryStats, Td, Th, Tr } from '../generic/Table/table'
+import { roundToOneDecimal } from '../library/numbers/roundToOneDecimal'
+import { sortArrayByObjectKey } from '../library/arrays/sortArrayByObjectKey'
+import { ObservationsSummaryStats, Td, Th, Tr } from './generic/Table/table'
 import { useTranslation } from 'react-i18next'
-import { InputOption } from '../../App/mermaidData/mermaidDataTypes'
+import { InputOption } from '../App/mermaidData/mermaidDataTypes'
 
 interface BenthicAttribute extends InputOption {
   topLevelCategory: string

@@ -25,7 +25,7 @@ import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../.
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import language from '../../../../language'
-import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats/BenthicPitLitObservationSummaryStats'
+import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats.js'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'

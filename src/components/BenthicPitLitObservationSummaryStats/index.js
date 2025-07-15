@@ -1,3 +1,0 @@
-import BenthicPitLitObservationSummaryStats from './BenthicPitLitObservationSummaryStats.js'
-
-export default BenthicPitLitObservationSummaryStats

@@ -33,7 +33,7 @@ import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus, IconInfo, IconBook } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, LabelContainer, RequiredIndicator } from '../../../generic/form'
-import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal.js'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
@@ -51,21 +51,27 @@ const StyledColgroup = styled('colgroup')`
     &.number {
       width: 5rem;
     }
+
     &.fishName {
       width: auto;
     }
+
     &.size {
       width: 15%;
     }
+
     &.count {
       width: 10%;
     }
+
     &.biomass {
       width: 10rem;
     }
+
     &.validation {
       width: auto;
     }
+
     &.remove {
       width: 5rem;
     }
