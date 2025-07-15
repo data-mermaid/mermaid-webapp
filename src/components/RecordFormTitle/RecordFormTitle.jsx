@@ -53,8 +53,7 @@ const RecordFormTitle = ({
 }) => {
   const { t } = useTranslation()
   const transectType = getProtocolTransectType(protocol)
-  const protocolTitle = t(`protocol_titles.${protocol}`, '')
-  const primaryTitle = `${protocolTitle}`
+  const protocolTitle = t(`protocol_titles.${protocol}`)
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
   const siteName = getObjectById(sites, siteId)?.name ?? ''
   const siteCoordinates = getObjectById(sites, siteId)?.location?.coordinates ?? []
@@ -62,9 +61,7 @@ const RecordFormTitle = ({
   const label = submittedRecordOrCollectRecordDataProperty[transectType]?.label ?? ''
   const sampleEventId = submittedRecordOrCollectRecordDataProperty.sample_event?.id ?? ''
 
-  useDocumentTitle(
-    `${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${t('mermaid')}`,
-  )
+  useDocumentTitle(`${protocolTitle} ${siteName} ${transectNumber} - ${t('mermaid')}`)
 
   const handleExploreButtonClick = () => {
     const [lng, lat] = siteCoordinates
@@ -81,10 +78,10 @@ const RecordFormTitle = ({
 
   return (
     <TitleContainer id="collect-form-title" data-testid="edit-collect-record-form-title">
-      {primaryTitle && (
+      {protocolTitle && (
         <ProjectTooltip
           forwardedAs="h2"
-          text={primaryTitle}
+          text={protocolTitle}
           tooltipText="Protocol"
           id="protocol-tooltip"
           data-testid="protocol-tooltip"
