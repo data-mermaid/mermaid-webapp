@@ -36,18 +36,23 @@ const StyledColgroup = styled('colgroup')`
     &.number {
       width: 5rem;
     }
+
     &.interval {
       width: 15rem;
     }
+
     &.benthicAttribute {
       width: auto;
     }
+
     &.growthForm {
       width: 20%;
     }
+
     &.validation {
       width: auto;
     }
+
     &.remove {
       width: 5rem;
     }
@@ -73,7 +78,11 @@ const BenthicPitObservationsTable = ({
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
 
-  const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
+  const {
+    interval_start: intervalStart,
+    interval_size: intervalSize,
+    len_surveyed: transectLengthSurveyed,
+  } = formik.values
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -244,7 +253,7 @@ const BenthicPitObservationsTable = ({
               value={growth_form}
               aria-labelledby="growth-form-label"
             >
-              <option value=""> </option>
+              <option value=""></option>
               {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
@@ -367,6 +376,7 @@ const BenthicPitObservationsTable = ({
             <BenthicPitLitObservationSummaryStats
               benthicAttributeSelectOptions={benthicAttributeSelectOptions}
               observations={observationsState}
+              transectLengthSurveyed={transectLengthSurveyed}
             />
           </UnderTableRow>
         </>
@@ -388,6 +398,7 @@ BenthicPitObservationsTable.propTypes = {
     values: PropTypes.shape({
       interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       interval_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     }),
   }).isRequired,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,

@@ -13,7 +13,7 @@ import {
   Th,
 } from '../../../generic/Table/table'
 import { getObservationBiomass } from '../../collectRecordFormPages/FishBeltForm/fishBeltBiomass'
-import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal.js'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import language from '../../../../language'
 import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.styles'

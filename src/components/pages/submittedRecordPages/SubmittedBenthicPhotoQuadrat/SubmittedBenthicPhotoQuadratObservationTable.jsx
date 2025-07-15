@@ -6,7 +6,7 @@ import {
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { getObjectById } from '../../../../library/getObjectById'
 import { getOptions } from '../../../../library/getOptions'
-import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal.js'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Table, Tr, Td, Th } from '../../../generic/Table/table'
 import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.styles'

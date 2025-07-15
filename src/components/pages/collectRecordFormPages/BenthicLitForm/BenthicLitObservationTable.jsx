@@ -24,7 +24,7 @@ import { IconClose, IconPlus, IconInfo } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats/BenthicPitLitObservationSummaryStats'
+import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats/BenthicPitLitObservationSummaryStats.js'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'
@@ -37,6 +37,7 @@ const StyledColgroup = styled('colgroup')`
     &.small-width {
       width: 5rem;
     }
+
     &.auto-width {
       width: auto;
     }
@@ -238,7 +239,7 @@ const BenthicLitObservationsTable = ({
               aria-labelledby="growth-form-label"
               onKeyDown={handleObservationKeyDown}
             >
-              <option value=""> </option>
+              <option value=""></option>
               {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}

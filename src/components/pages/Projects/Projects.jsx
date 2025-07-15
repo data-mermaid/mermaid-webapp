@@ -38,7 +38,7 @@ const Projects = () => {
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
   const { t } = useTranslation()
-  const unavailableProjectsErrorText = t('toast.unavailable_projects_error')
+  const unavailableProjectsErrorText = t('toasts.unavailable_projects_error')
 
   useDocumentTitle(`${t('projects.projects')} - ${t('mermaid')}`)
 

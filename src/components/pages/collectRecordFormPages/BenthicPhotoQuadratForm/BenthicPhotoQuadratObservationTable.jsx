@@ -23,7 +23,7 @@ import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus, IconInfo } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../../generic/form'
-import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal.js'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
@@ -306,7 +306,7 @@ const BenthicPhotoQuadratObservationTable = ({
               value={growthFormOrEmptyStringToAvoidInputValueErrors}
               aria-labelledby="growth-form-label"
             >
-              <option value=""> </option>
+              <option value=""></option>
               {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
