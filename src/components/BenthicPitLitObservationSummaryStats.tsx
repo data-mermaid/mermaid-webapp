@@ -14,8 +14,6 @@ interface Observation {
   growth_form: string
   id: string
   length?: number //LIT records
-  interval?: string //PIT records
-  interval_size?: number //PIT records
 }
 
 interface ObservationWithAttributeCategory extends Observation {
