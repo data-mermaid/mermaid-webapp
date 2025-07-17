@@ -29,7 +29,7 @@ interface CategoryStat {
 
 interface BenthicPitLitObservationSummaryStatsProps {
   benthicAttributeSelectOptions: BenthicAttribute[]
-  observations?: Observation[]
+  observations: Observation[]
   transectLengthSurveyed?: number
 }
 
@@ -80,7 +80,6 @@ const BenthicPitLitObservationSummaryStats = ({
 
       //LIT
       if (transectLengthSurveyed) {
-        // totalObservationsSum = transectLengthSurveyed * 100
         totalObservationsSum = observations.reduce((total, observation) => {
           return total + Number(observation.length)
         }, 0)
