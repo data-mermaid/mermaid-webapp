@@ -24,7 +24,7 @@ interface ObservationWithAttributeCategory extends Observation {
 
 interface CategoryStat {
   topLevelCategory: string
-  percent: number
+  percent: string
 }
 
 interface BenthicPitLitObservationSummaryStatsProps {
@@ -84,7 +84,7 @@ const BenthicPitLitObservationSummaryStats = ({
           return total + Number(observation.length)
         }, 0)
         if (totalObservationsSum === 0) {
-          return { topLevelCategory, percent: 0 }
+          return { topLevelCategory, percent: '0.0' }
         }
         topLevelCategorySum = categoryObservations.reduce((total, observation) => {
           return total + Number(observation.length)
@@ -97,8 +97,8 @@ const BenthicPitLitObservationSummaryStats = ({
 
       const percent =
         topLevelCategorySum === 0 && totalObservationsSum === 0
-          ? 0
-          : parseFloat(roundToOneDecimal((topLevelCategorySum / totalObservationsSum) * 100))
+          ? '0.0'
+          : roundToOneDecimal((topLevelCategorySum / totalObservationsSum) * 100)
 
       return { topLevelCategory, percent }
     })
