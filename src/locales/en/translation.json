@@ -171,7 +171,7 @@
   "taxonomies": {
     "add_fish_species": "Add new fish species",
     "genus": "Genus",
-    "genus_not_found": "Genus not found in MERMAID",
+    "genus_not_found": "Genus not found in MERMAID <b><a>$contact_us</a>",
     "parent": "Parent",
     "species": "Species"
   },
