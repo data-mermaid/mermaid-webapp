@@ -22,7 +22,7 @@
   },
   "toasts": {
     "export_error": "There was an error exporting the report.",
-    "unavailable_projects_error": "Project data are currently unavailable."
+    "unavailable_projects_error": "Project data is currently unavailable."
   },
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",

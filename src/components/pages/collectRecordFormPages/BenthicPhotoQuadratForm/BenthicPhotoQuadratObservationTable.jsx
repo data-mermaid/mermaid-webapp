@@ -39,21 +39,27 @@ const StyledColgroup = styled('colgroup')`
     &.number {
       width: 5rem;
     }
+
     &.quadrat {
       width: 15rem;
     }
+
     &.benthicAttribute {
       width: auto;
     }
+
     &.growthForm {
       width: 20%;
     }
+
     &.numberOfPoints {
       width: 20rem;
     }
+
     &.validation {
       width: auto;
     }
+
     &.remove {
       width: 5rem;
     }
@@ -306,7 +312,7 @@ const BenthicPhotoQuadratObservationTable = ({
               value={growthFormOrEmptyStringToAvoidInputValueErrors}
               aria-labelledby="growth-form-label"
             >
-              <option value=""> </option>
+              <option value=""></option>
               {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}

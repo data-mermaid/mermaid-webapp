@@ -51,21 +51,27 @@ const StyledColgroup = styled('colgroup')`
     &.number {
       width: 5rem;
     }
+
     &.fishName {
       width: auto;
     }
+
     &.size {
       width: 15%;
     }
+
     &.count {
       width: 10%;
     }
+
     &.biomass {
       width: 10rem;
     }
+
     &.validation {
       width: auto;
     }
+
     &.remove {
       width: 5rem;
     }
