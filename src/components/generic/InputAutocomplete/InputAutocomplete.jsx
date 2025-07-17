@@ -176,7 +176,7 @@ const InputAutocomplete = ({
             </Menu>
             {isMenuOpen && !menuItems.length && (
               <div>
-                <p data-testid="noResult">{noResultsText}</p>
+                {noResultsText && <p data-testid="noResult">{noResultsText}</p>}
                 {noResultsAction}
               </div>
             )}
