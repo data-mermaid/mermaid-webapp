@@ -78,11 +78,7 @@ const BenthicPitObservationsTable = ({
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
 
-  const {
-    interval_start: intervalStart,
-    interval_size: intervalSize,
-    len_surveyed: transectLengthSurveyed,
-  } = formik.values
+  const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -376,7 +372,6 @@ const BenthicPitObservationsTable = ({
             <BenthicPitLitObservationSummaryStats
               benthicAttributeSelectOptions={benthicAttributeSelectOptions}
               observations={observationsState}
-              transectLengthSurveyed={transectLengthSurveyed}
             />
           </UnderTableRow>
         </>

@@ -13,9 +13,9 @@ interface Observation {
   attribute: string
   growth_form: string
   id: string
-  interval?: string //PIT records
-  interval_size?: number
   length?: number //LIT records
+  interval?: string //PIT records
+  interval_size?: number //PIT records
 }
 
 interface ObservationWithAttributeCategory extends Observation {
@@ -24,7 +24,7 @@ interface ObservationWithAttributeCategory extends Observation {
 
 interface CategoryStat {
   topLevelCategory: string
-  percent: string
+  percent: number
 }
 
 interface BenthicPitLitObservationSummaryStatsProps {
@@ -33,33 +33,37 @@ interface BenthicPitLitObservationSummaryStatsProps {
   transectLengthSurveyed?: number
 }
 
+// TopLevelCategory = TLC
+//LIT records: category percentage = (sum of TLC obs lengths / sum of all obs lengths) * 100
+//PIT records: category percentage = (TLC obs count)  / (total category obs) * 100
+/** These observation calculations are based on the observations provided in the table for on-the-fly user visualization of the total observations given so far. The total length of all observations is checked against the form recorded survey length in the API on validation**/
 const BenthicPitLitObservationSummaryStats = ({
   benthicAttributeSelectOptions,
   observations,
   transectLengthSurveyed,
 }: BenthicPitLitObservationSummaryStatsProps) => {
   const { t } = useTranslation()
+
   const missingBenthicAttributeLabel = t('benthic_observations.missing_benthic_attribute')
 
   const observationCategoryStats = useMemo(() => {
-    const transectLengthSurveyedInCm = transectLengthSurveyed * 100
-
     const getBenthicAttributeById = (benthicAttributeId: string) =>
       benthicAttributeSelectOptions.find((benthic) => benthic.value === benthicAttributeId)
 
-    const observationsWithTopLevelCategoryNames: ObservationWithAttributeCategory[] =
-      observations.map((observation: Observation) => {
+    const observationsMatchedWithCategories: ObservationWithAttributeCategory[] = observations.map(
+      (observation: Observation) => {
         const benthicAttribute = getBenthicAttributeById(observation.attribute)
         const topLevelCategory = getBenthicAttributeById(benthicAttribute?.topLevelCategory)
         return {
           ...observation,
           topLevelCategoryName: topLevelCategory?.label || missingBenthicAttributeLabel,
         }
-      })
+      },
+    )
 
     //group observations TO the top level category name
     const observationsGroupedByTopLevelCategory: Record<string, Observation[]> =
-      observationsWithTopLevelCategoryNames.reduce((accumulator, observation) => {
+      observationsMatchedWithCategories.reduce((accumulator, observation) => {
         const { topLevelCategoryName } = observation
 
         accumulator[topLevelCategoryName] = accumulator[topLevelCategoryName] || []
@@ -71,19 +75,31 @@ const BenthicPitLitObservationSummaryStats = ({
     const topLevelCategoryStats: CategoryStat[] = Object.entries(
       observationsGroupedByTopLevelCategory,
     ).map(([topLevelCategory, categoryObservations]) => {
-      let percent = '0'
-      if (transectLengthSurveyedInCm === 0) {
-        return { topLevelCategory, percent }
+      let topLevelCategorySum: number
+      let totalObservationsSum: number
+
+      //LIT
+      if (transectLengthSurveyed) {
+        // totalObservationsSum = transectLengthSurveyed * 100
+        totalObservationsSum = observations.reduce((total, observation) => {
+          return total + Number(observation.length)
+        }, 0)
+        if (totalObservationsSum === 0) {
+          return { topLevelCategory, percent: 0 }
+        }
+        topLevelCategorySum = categoryObservations.reduce((total, observation) => {
+          return total + Number(observation.length)
+        }, 0)
+      } else {
+        //PIT
+        topLevelCategorySum = categoryObservations.length
+        totalObservationsSum = observations.length
       }
 
-      const topLevelCategoryTotalLength = categoryObservations.reduce((total, observation) => {
-        const observationMeasurementLength = observation.interval_size
-          ? observation.interval_size * 100
-          : observation.length
-        return total + observationMeasurementLength
-      }, 0)
-
-      percent = roundToOneDecimal((topLevelCategoryTotalLength / transectLengthSurveyedInCm) * 100)
+      const percent =
+        topLevelCategorySum === 0 && totalObservationsSum === 0
+          ? 0
+          : parseFloat(roundToOneDecimal((topLevelCategorySum / totalObservationsSum) * 100))
 
       return { topLevelCategory, percent }
     })
