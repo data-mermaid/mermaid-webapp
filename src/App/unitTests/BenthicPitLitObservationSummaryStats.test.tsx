@@ -20,7 +20,7 @@ describe('BenthicPitLitObservationSummaryStats', () => {
       <BenthicPitLitObservationSummaryStats
         benthicAttributeSelectOptions={benthicAttributeSelectOptions}
         observations={observations}
-        transectLengthSurveyed={60}
+        recordType={'lit'}
       />,
     )
     expect(screen.getByText('% Category 1')).toBeInTheDocument()
@@ -41,6 +41,7 @@ describe('BenthicPitLitObservationSummaryStats', () => {
       <BenthicPitLitObservationSummaryStats
         benthicAttributeSelectOptions={benthicAttributeSelectOptions}
         observations={observations}
+        recordType={'pit'}
       />,
     )
     expect(screen.getByText('% Category 1')).toBeInTheDocument()
@@ -49,11 +50,23 @@ describe('BenthicPitLitObservationSummaryStats', () => {
     expect(screen.getByText('33.3')).toBeInTheDocument() // 1/3*100 = 33.3
   })
 
-  it('will show "missing attribute" of 100.0 percent if no observations with attributes are present', () => {
+  it('will show "missing attribute" of 100.0 percent if no observations with attributes are present on a PIT record', () => {
     render(
       <BenthicPitLitObservationSummaryStats
         benthicAttributeSelectOptions={benthicAttributeSelectOptions}
         observations={[{ attribute: '', growth_form: '', id: '1' }]}
+        recordType={'pit'}
+      />,
+    )
+    expect(screen.getByText('100.0')).toBeInTheDocument() // Missing category will be 100.0%
+  })
+
+  it('will show "missing attribute" of 100.0 percent if no observations with attributes are present on a LIT record', () => {
+    render(
+      <BenthicPitLitObservationSummaryStats
+        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+        observations={[{ attribute: '', growth_form: '', id: '1', length: 10 }]}
+        recordType={'lit'}
       />,
     )
     expect(screen.getByText('100.0')).toBeInTheDocument() // Missing category will be 100.0%
