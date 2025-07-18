@@ -25,7 +25,7 @@ import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../.
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import language from '../../../../language'
-import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats/BenthicPitLitObservationSummaryStats'
+import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
@@ -36,18 +36,23 @@ const StyledColgroup = styled('colgroup')`
     &.number {
       width: 5rem;
     }
+
     &.interval {
       width: 15rem;
     }
+
     &.benthicAttribute {
       width: auto;
     }
+
     &.growthForm {
       width: 20%;
     }
+
     &.validation {
       width: auto;
     }
+
     &.remove {
       width: 5rem;
     }
@@ -244,7 +249,7 @@ const BenthicPitObservationsTable = ({
               value={growth_form}
               aria-labelledby="growth-form-label"
             >
-              <option value=""> </option>
+              <option value=""></option>
               {growthFormOptions.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
@@ -388,6 +393,7 @@ BenthicPitObservationsTable.propTypes = {
     values: PropTypes.shape({
       interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       interval_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     }),
   }).isRequired,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
