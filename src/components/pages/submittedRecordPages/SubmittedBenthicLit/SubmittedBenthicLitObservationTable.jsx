@@ -49,6 +49,7 @@ const SubmittedBenthicLitObservationTable = ({
         <BenthicPitLitObservationSummaryStats
           benthicAttributeSelectOptions={benthicAttributeOptions}
           observations={obs_benthic_lits}
+          recordType={'lit'}
         />
       </UnderTableRow>
     </InputWrapper>
