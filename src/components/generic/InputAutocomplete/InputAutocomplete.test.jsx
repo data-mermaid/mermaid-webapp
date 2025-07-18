@@ -20,18 +20,31 @@ const options = [
   { label: 'label10', value: 'value10' },
 ]
 
-test('InputAutocomplete: default no results view', async () => {
+test('InputAutocomplete: default no results view, noResultsText provided', async () => {
+  const { user } = renderAuthenticatedOffline(
+    <InputAutocomplete
+      options={options}
+      onChange={() => {}}
+      noResultsText={'No results'}
+      id="someId"
+    />,
+  )
+
+  expect(screen.queryByTestId('noResult')).not.toBeInTheDocument()
+
+  await user.type(screen.getByRole('textbox'), 'teiwhjfkdsjfskdl')
+  expect(screen.getByTestId('noResult')).toBeInTheDocument()
+})
+
+test('InputAutocomplete: default no results view, no noResultsText provided', async () => {
   const { user } = renderAuthenticatedOffline(
     <InputAutocomplete options={options} onChange={() => {}} id="someId" />,
   )
 
-  const noResults = screen.queryByText('No Results')
-
-  expect(noResults).not.toBeInTheDocument()
+  expect(screen.queryByTestId('noResult')).not.toBeInTheDocument()
 
   await user.type(screen.getByRole('textbox'), 'teiwhjfkdsjfskdl')
-
-  expect(screen.getByTestId('noResult')).toBeInTheDocument()
+  expect(screen.queryByTestId('noResult')).not.toBeInTheDocument()
 })
 
 test('InputAutocomplete: custom no results view', async () => {
