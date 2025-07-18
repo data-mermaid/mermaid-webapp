@@ -372,6 +372,7 @@ const BenthicPitObservationsTable = ({
             <BenthicPitLitObservationSummaryStats
               benthicAttributeSelectOptions={benthicAttributeSelectOptions}
               observations={observationsState}
+              recordType={'pit'}
             />
           </UnderTableRow>
         </>

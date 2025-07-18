@@ -49,7 +49,6 @@ const BenthicLitObservationsTable = ({
   benthicAttributeSelectOptions,
   choices,
   collectRecord = undefined,
-  formik,
   ignoreObservationValidations,
   observationsReducer = [],
   resetObservationValidations,
@@ -58,7 +57,6 @@ const BenthicLitObservationsTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
-  const transectLengthSurveyed = Number(formik?.values?.len_surveyed) || null
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
@@ -372,7 +370,7 @@ const BenthicLitObservationsTable = ({
             <BenthicPitLitObservationSummaryStats
               benthicAttributeSelectOptions={benthicAttributeSelectOptions}
               observations={observationsState}
-              transectLengthSurveyed={transectLengthSurveyed}
+              recordType={'lit'}
             />
           </UnderTableRow>
         </>
@@ -390,13 +388,6 @@ BenthicLitObservationsTable.propTypes = {
   observationsReducer: observationsReducerPropType,
   resetObservationValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
-  formik: PropTypes.shape({
-    values: PropTypes.shape({
-      interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      interval_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    }),
-  }).isRequired,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
   testId: PropTypes.string.isRequired,

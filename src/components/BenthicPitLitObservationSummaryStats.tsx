@@ -28,7 +28,7 @@ interface CategoryStat {
 interface BenthicPitLitObservationSummaryStatsProps {
   benthicAttributeSelectOptions: BenthicAttribute[]
   observations: Observation[]
-  transectLengthSurveyed?: number
+  recordType: 'pit' | 'lit'
 }
 
 // TopLevelCategory = TLC
@@ -38,7 +38,7 @@ interface BenthicPitLitObservationSummaryStatsProps {
 const BenthicPitLitObservationSummaryStats = ({
   benthicAttributeSelectOptions,
   observations,
-  transectLengthSurveyed,
+  recordType,
 }: BenthicPitLitObservationSummaryStatsProps) => {
   const { t } = useTranslation()
 
@@ -77,7 +77,7 @@ const BenthicPitLitObservationSummaryStats = ({
       let totalObservationsSum: number
 
       //LIT
-      if (transectLengthSurveyed) {
+      if (recordType === 'lit') {
         totalObservationsSum = observations.reduce((total, observation) => {
           return total + Number(observation.length)
         }, 0)
@@ -102,12 +102,7 @@ const BenthicPitLitObservationSummaryStats = ({
     })
 
     return sortArrayByObjectKey(topLevelCategoryStats, 'topLevelCategory')
-  }, [
-    observations,
-    benthicAttributeSelectOptions,
-    transectLengthSurveyed,
-    missingBenthicAttributeLabel,
-  ])
+  }, [observations, benthicAttributeSelectOptions, recordType, missingBenthicAttributeLabel])
 
   return (
     <ObservationsSummaryStats>
