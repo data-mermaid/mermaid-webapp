@@ -118,10 +118,12 @@ const Projects = () => {
   }
 
   const handleExploreButtonClick = () => {
-    const { projects_bbox } = currentUser
-    const queryParams = new URLSearchParams({ your_projects_only: 'true' })
+    const queryParamObject = {
+      your_projects_only: true,
+      bbox: currentUser?.projects_bbox,
+    }
 
-    openExploreLinkWithBbox(queryParams, projects_bbox)
+    openExploreLinkWithBbox(queryParamObject)
   }
 
   const renderPageNoData = () => {
