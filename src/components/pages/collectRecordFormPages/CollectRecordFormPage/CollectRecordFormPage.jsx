@@ -374,7 +374,6 @@ const CollectRecordFormPage = ({
   })
 
   const handleSave = () => {
-    console.log('handleSave called')
     const originalImageClassification = collectRecordBeingEdited?.data?.image_classification
 
     // ensure image_classification is not overwritten after it has been saved the first time.
@@ -390,7 +389,6 @@ const CollectRecordFormPage = ({
       observationsTable2State,
       image_classification: imageClassificationToSave,
     })
-    console.log('recordToSubmit', recordToSubmit)
 
     setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
