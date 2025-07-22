@@ -32,6 +32,7 @@ export default [
         sample_time: '11:55',
         tide: '79693274-4ec6-4052-afe1-4bb02eaa04ec',
         visibility: '40702fad-754a-4982-8ca5-9b97106eca31',
+        reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
         quadrat_size: 10,
         num_quadrats: 3,
         num_points_per_quadrat: 3,

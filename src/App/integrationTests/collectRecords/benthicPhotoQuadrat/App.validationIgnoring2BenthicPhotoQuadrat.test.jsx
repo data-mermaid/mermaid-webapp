@@ -352,6 +352,18 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
                     status: 'ignore',
                   },
                 ],
+                reef_slope: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
                 visibility: [
                   {
                     validation_id: Math.random(),
@@ -508,6 +520,7 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
   const quadratSizeRow = screen.getByTestId('quadrat_size')
   const numberOfQuadratsRow = screen.getByTestId('num_quadrats')
   const numberOfPointsPerQuadratRow = screen.getByTestId('num_points_per_quadrat')
+  const reefSlopeRow = screen.getByTestId('reef_slope')
 
   expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
@@ -545,6 +558,8 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
   expect(within(numberOfQuadratsRow).getAllByText('ignored')[1]).toBeInTheDocument()
   expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   await user.selectOptions(within(siteRow).getByLabelText('Site'), '1')
   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
@@ -603,6 +618,13 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
     'bca0273a-51a3-4274-8425-457ca3afcfea',
   )
   await waitFor(() => expect(within(tideRow).queryByText('Ignored')).not.toBeInTheDocument())
+
+  // Reef Slope select on crest
+  await user.selectOptions(
+    within(reefSlopeRow).getByLabelText('Reef Slope'),
+    '12dc11ae-3a4b-4309-8fae-66f51398d96f',
+  )
+  await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   await user.type(within(notesRow).getByLabelText('Notes'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())

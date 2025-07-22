@@ -29,6 +29,7 @@ const VISIBILITY_VALIDATION_PATH = 'data.quadrat_transect.visibility'
 const CURRENT_VALIDATION_PATH = 'data.quadrat_transect.current'
 const RELATIVE_DEPTH_VALIDATION_PATH = 'data.quadrat_transect.relative_depth'
 const TIDE_VALIDATION_PATH = 'data.quadrat_transect.tide'
+const REEF_SLOPE_VALIDATION_PATH = 'data.quadrat_transect.reef_slope'
 
 const BenthicPhotoQuadratTransectInputs = ({
   areValidationsShowing,
@@ -40,8 +41,9 @@ const BenthicPhotoQuadratTransectInputs = ({
   validationPropertiesWithDirtyResetOnInputChange,
   isImageClassificationSelected,
 }) => {
-  const { currents, relativedepths, tides, visibilities } = choices
+  const { reefslopes, currents, relativedepths, tides, visibilities } = choices
 
+  const reefSlopeOptions = getOptions(reefslopes.data)
   const visibilityOptions = getOptions(visibilities.data)
   const currentOptions = getOptions(currents.data)
   const relativeDepthOptions = getOptions(relativedepths.data)
@@ -100,7 +102,10 @@ const BenthicPhotoQuadratTransectInputs = ({
     quadrat_transect?.tide,
     areValidationsShowing,
   )
-
+  const reefSlopeValidationProperties = getValidationPropertiesForInput(
+    quadrat_transect?.reef_slope,
+    areValidationsShowing,
+  )
   const notesValidationProperties = getValidationPropertiesForInput(
     quadrat_transect?.notes,
     areValidationsShowing,
@@ -167,6 +172,13 @@ const BenthicPhotoQuadratTransectInputs = ({
     resetNonObservationFieldValidations({
       inputName: 'num_points_per_quadrat',
       validationPath: NUM_POINTS_PER_QUADRAT_VALIDATION_PATH,
+    })
+  }
+  const handleReefSlopeChange = (event) => {
+    formik.handleChange(event)
+    resetNonObservationFieldValidations({
+      inputName: 'reef_slope',
+      validationPath: REEF_SLOPE_VALIDATION_PATH,
     })
   }
   const handleVisibilityChange = (event) => {
@@ -396,6 +408,28 @@ const BenthicPhotoQuadratTransectInputs = ({
           onChange={handleNumberOfPointsPerQuadratChange}
           helperText={language.helperText.numberOfPointsPerQuadrat}
           disabled={isImageClassificationSelected}
+        />
+        <InputSelectWithLabelAndValidation
+          label="Reef Slope"
+          required={false}
+          id="reef_slope"
+          testId="reef_slope"
+          options={reefSlopeOptions}
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
+          }}
+          {...reefSlopeValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            reefSlopeValidationProperties,
+            'reef_slope',
+          )}
+          onBlur={formik.handleBlur}
+          value={formik.values.reef_slope}
+          onChange={handleReefSlopeChange}
+          helperText={language.helperText.getReefSlope()}
         />
         <InputSelectWithLabelAndValidation
           label="Visibility"
