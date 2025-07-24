@@ -5,24 +5,44 @@ interface BboxParams {
   ymax: number
 }
 
+interface OpenExploreLinkQueryParams {
+  project?: string
+  your_projects_only?: string | boolean
+  bbox?: BboxParams
+}
+
 /**
- * Opens a new browser tab with a constructed URL that includes query parameters and an optional bounding box (bbox).
+ * Opens a new browser tab to the MERMAID Explore tool with query parameters constructed from the provided object.
+ * Optionally includes a bounding box (`bbox`) as a comma-separated string.
  *
- * @param {Record<string, string>} queryParamsObject - An object containing key-value pairs to be converted into query parameters.
- * @param {BboxParams} [bbox] - An optional bounding box object with properties xmin, ymin, xmax, and ymax.
- *                              If provided, it will be appended to the query parameters as "bbox".
- *                              Example: { xmin: -75.0, ymin: 45.0, xmax: -74.0, ymax: 46.0 }
+ * @param {OpenExploreLinkQueryParams} params - An object containing optional query parameters for the Explore URL.
+ *   - `project`: (string) Optional. The project name to include in the URL.
+ *   - `your_projects_only`: (string | boolean) Optional. Flag indicating if only user-specific projects should be shown.
+ *   - `bbox`: (BboxParams) Optional. An object defining the bounding box (spatial extent) to include.
+ *       - Format: { xmin: number, ymin: number, xmax: number, ymax: number }
+ *       - Will be appended as a single "bbox" query parameter: "xmin,ymin,xmax,ymax"
+ *
+ * Notes:
+ * - Each parameter (if provided) is encoded and appended to the query string.
+ * - The resulting URL is opened in a new browser tab.
  */
 
-export const openExploreLinkWithBbox = (
-  queryParamsObject: Record<string, string>,
-  bbox?: BboxParams,
-): void => {
-  const queryParams = new URLSearchParams(queryParamsObject)
+export const openExploreLinkWithBbox = (params: OpenExploreLinkQueryParams): void => {
+  const searchParams = new URLSearchParams()
 
-  if (bbox) {
-    queryParams.append('bbox', `${bbox.xmin},${bbox.ymin},${bbox.xmax},${bbox.ymax}`)
+  for (const [key, value] of Object.entries(params)) {
+    if (key === 'bbox' && typeof value === 'object' && value !== null) {
+      const { xmin, ymin, xmax, ymax } = value as BboxParams
+      searchParams.append('bbox', `${xmin},${ymin},${xmax},${ymax}`)
+    } else if (
+      typeof value === 'string' ||
+      typeof value === 'boolean' ||
+      typeof value === 'number'
+    ) {
+      searchParams.append(key, encodeURIComponent(value.toString()))
+    }
   }
 
-  window.open(`${import.meta.env.VITE_MERMAID_EXPLORE_LINK}/?${queryParams.toString()}`, '_blank')
+  const url = `${import.meta.env.VITE_MERMAID_EXPLORE_LINK}/?${searchParams.toString()}`
+  window.open(url, '_blank')
 }

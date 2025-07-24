@@ -49,10 +49,16 @@ const ProjectName = () => {
   }, [databaseSwitchboardInstance, isMounted, projectId])
 
   const handleExploreButtonClick = () => {
-    const { name, bbox } = project
-    const queryParams = new URLSearchParams({ project: name })
+    if (!project) {
+      return
+    }
 
-    openExploreLinkWithBbox(queryParams, bbox)
+    const queryParamObject = {
+      project: project.name,
+      bbox: project.bbox,
+    }
+
+    openExploreLinkWithBbox(queryParamObject)
   }
 
   const renderExploreButton = () => {
