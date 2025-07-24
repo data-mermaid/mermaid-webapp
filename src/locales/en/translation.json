@@ -212,7 +212,7 @@
   "quadrat_number_start_info": "Number of the first quadrat/photo along the transect (e.g. 1).",
   "quadrat_size_info": "Quadrat size used per transect, in square meters (e.g. 1).",
   "number_of_quadrats_info": "Total number of quadrats in the transect (e.g. 10).",
-  "number_of_points_per_quadrat_info": "Total number of points per quadrat used in a transect (e.g. 100).",
+  "points_per_quadrat_info": "Total number of points per quadrat used in a transect (e.g. 100).",
   "visibility_info": "The horizontal distance at which an object underwater can still be identified.",
   "current_info": "Water speed during the survey.",
   "notes_info": "",

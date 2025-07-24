@@ -15,6 +15,7 @@ import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithL
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 import { Trans, useTranslation } from 'react-i18next'
 import { HelperTextLink } from '../../../generic/links'
+import { links } from '../../../../link_constants'
 
 const DEPTH_VALIDATION_PATH = 'data.quadrat_transect.depth'
 const LABEL_VALIDATION_PATH = 'data.quadrat_transect.label'
@@ -408,7 +409,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.num_points_per_quadrat}
           onChange={handleNumberOfPointsPerQuadratChange}
-          helperText={t('number_of_points_per_quadrat_info')}
+          helperText={t('points_per_quadrat_info')}
           disabled={isImageClassificationSelected}
         />
         <InputSelectWithLabelAndValidation
@@ -437,7 +438,7 @@ const BenthicPhotoQuadratTransectInputs = ({
               components={{
                 a: (
                   <HelperTextLink
-                    href="https://reefresilience.org/wp-content/uploads/REEF-COVER-CLASS-DEFINITIONS.pdf"
+                    href={links.reefCoverClassDefinitions}
                     target="_blank"
                     rel="noopener noreferrer"
                   />
@@ -535,7 +536,7 @@ const BenthicPhotoQuadratTransectInputs = ({
               components={{
                 a: (
                   <HelperTextLink
-                    href="https://oceanservice.noaa.gov/education/tutorial_tides/tides01_intro.html"
+                    href={links.tideIntroduction}
                     target="_blank"
                     rel="noopener noreferrer"
                   />
