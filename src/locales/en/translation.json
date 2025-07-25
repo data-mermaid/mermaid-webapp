@@ -22,7 +22,8 @@
   },
   "toasts": {
     "export_error": "There was an error exporting the report.",
-    "unavailable_projects_error": "Project data is currently unavailable."
+    "unavailable_projects_error": "Project data is currently unavailable.",
+    "same_project_name_exists": "A project with the same name already exists."
   },
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",
@@ -124,7 +125,19 @@
     "no_projects_match": "No projects match the current filter term.",
     "not_your_projects": "You are not part of any projects yet.",
     "no_offline_projects": "You do not have any offline projects.",
-    "create_or_join_project": "Create a new project or get your admin to add you to some."
+    "create_or_join_project": "Create a new project or get your admin to add you to some.",
+    "createProject": "Create Project",
+    "copyProject": "Copy Project",
+    "adminForProject": "You will be an admin for this project.",
+    "dataCopyToProject": "Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.",
+    "copyOfProjectName": "Copy of {{projectName}}",
+    "errors": {
+      "project_name_exists": "Project name already exists in MERMAID"
+    },
+    "success": {
+      "projectCopied": "Project copied",
+      "projectCreated": "Project created"
+    }
   },
   "search": {
     "no_results": "No results found"
@@ -202,5 +215,9 @@
     "habitatcomplexity": "Habitat Complexity",
     "bleachingqc": "Bleaching",
     "benthicpqt": "Benthic Photo Quadrat"
+  },
+  "notify_user_email": "Notify users by email",
+  "input_field_labels": {
+    "project_name": "Project Name"
   }
 }
