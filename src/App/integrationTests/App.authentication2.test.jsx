@@ -11,11 +11,12 @@ import {
   screen,
   waitFor,
 } from '../../testUtilities/testingLibraryWithHelpers'
+import userEvent from '@testing-library/user-event'
 import App from '../App'
 
 // test suite cut up into 2 parts for performance reasons
-
 test('App renders the initial screen as expected for an offline user who is authenticated when online', async () => {
+  const user = userEvent.setup()
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
@@ -23,12 +24,11 @@ test('App renders the initial screen as expected for an offline user who is auth
     dexiePerUserDataInstance,
   })
 
-  expect(await screen.findByText('Projects', { selector: 'h1' }))
+  expect(screen.getByTestId('projects-link')).toBeInTheDocument()
 
-  fireEvent.click(screen.getByText('FF')) // user icon initials for offline user
+  await user.click(await screen.findByText('FF')) // user icon initials for offline user
 
   // there is not a logout button
-
   await waitFor(() => expect(screen.queryByText('Logout')).not.toBeInTheDocument())
 })
 

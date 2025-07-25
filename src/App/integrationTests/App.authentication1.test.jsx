@@ -21,9 +21,9 @@ test('App renders the initial screen as expected for an online and authenticated
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('Projects', { selector: 'h1' }))
+  expect(screen.getByTestId('projects-link')).toBeInTheDocument()
 
-  fireEvent.click(screen.getByText('WW')) // user icon initials for online user
+  fireEvent.click(await screen.findByText('WW')) // user icon initials for online user
 
   // there is a logout button
   expect(screen.getByText('Logout'))

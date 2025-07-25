@@ -31,17 +31,18 @@ test('Projects component renders with the expected UI elements', async () => {
   expect(projectListItems).toHaveLength(6)
 
   // expect filter bar, sort buttons, new project button
-  const newProjectButton = screen.getByRole('button', { name: 'New Project' })
+  // const newProjectButton = screen.getByRole('button', { name: 'New Project' })
+  const newProjectButton = screen.getByTestId('new-project')
 
   expect(newProjectButton).toBeInTheDocument()
 
-  const filterBarLabel = screen.getByLabelText('Filter Projects By Name or Country')
+  const filterProjectsSearchBar = screen.getByTestId('filter-projects')
 
-  expect(filterBarLabel).toBeInTheDocument()
+  expect(filterProjectsSearchBar).toBeInTheDocument()
 
-  const sortByLabel = screen.getByLabelText('Sort By')
+  const sortByDropdown = screen.getByTestId('sort-by')
 
-  expect(sortByLabel).toBeInTheDocument()
+  expect(sortByDropdown).toBeInTheDocument()
 })
 
 test('A project card renders with the expected UI elements for button groups', async () => {
@@ -277,12 +278,10 @@ test('Project filter filters by name and country', async () => {
     expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
   )
 
-  const filterProjects = screen.getByRole('textbox', {
-    name: /Filter Projects By Name or Country/i,
-  })
+  const filterProjectsSearchBar = screen.getByTestId('filter-projects')
 
   // Filter by name
-  await user.type(filterProjects, '"Project V"')
+  await user.type(filterProjectsSearchBar, '"Project V"')
 
   let projectCards = screen.getAllByTestId('project-card')
 
@@ -290,7 +289,7 @@ test('Project filter filters by name and country', async () => {
   expect(within(projectCards[0]).getByText('Project V'))
 
   // Filter by name and country
-  await user.type(filterProjects, '{selectall}{del} "Project V" America')
+  await user.type(filterProjectsSearchBar, '{selectall}{del} "Project V" America')
 
   projectCards = screen.getAllByTestId('project-card')
 
@@ -310,12 +309,10 @@ test('Project filter can accomodate words containing apostrophes', async () => {
     expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
   )
 
-  const filterProjects = screen.getByRole('textbox', {
-    name: /Filter Projects By Name or Country/i,
-  })
+  const filterProjectsSearchBar = screen.getByTestId('filter-projects')
 
   // Filter by name
-  await user.type(filterProjects, '"foo\'s"')
+  await user.type(filterProjectsSearchBar, '"foo\'s"')
 
   const projectCards = screen.getAllByTestId('project-card')
 

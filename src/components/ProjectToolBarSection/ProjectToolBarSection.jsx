@@ -137,6 +137,7 @@ const ProjectToolBarSection = ({
             onClick={() => setIsNewProjectModalOpen(true)}
             aria-label={t('projects.new_project')}
             disabled={!isAppOnline}
+            data-testid="new-project"
           >
             <span>{t('projects.new_project')}</span>
           </ButtonCallout>
@@ -151,11 +152,11 @@ const ProjectToolBarSection = ({
       <FilterRowWrapper>
         <FilterLabelWrapper htmlFor="filter_projects" value={projectFilter} onChange={setFilter}>
           {t('projects.filter_projects')}
-          <Input type="text" id="filter_projects" />
+          <Input type="text" id="filter_projects" data-testid="filter-projects" />
         </FilterLabelWrapper>
         <SortByLabelWrapper htmlFor="sort_by">
           {t('projects.sort_by')}
-          <select id="sort_by" onChange={setSortBy} value={projectSortKey}>
+          <select id="sort_by" onChange={setSortBy} value={projectSortKey} data-testid="sort-by">
             <option value="updated_on">{t('projects.last_updated_date')}</option>
             <option value="name">{t('projects.project_name')}</option>
             <option value="countries">{t('projects.country')}</option>

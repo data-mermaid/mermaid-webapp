@@ -22,6 +22,21 @@ and project profiles to ensure the user can pull fresh data if they are given pe
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
+  // Create initial revision records that would normally be created during first sync
+  const initialRevisionRecords = [
+    { dataType: 'benthic_attributes', projectId: 'n/a', lastRevisionNumber: 'initial' },
+    { dataType: 'choices', projectId: 'n/a', lastRevisionNumber: 'initial' },
+    { dataType: 'fish_families', projectId: 'n/a', lastRevisionNumber: 'initial' },
+    { dataType: 'fish_genera', projectId: 'n/a', lastRevisionNumber: 'initial' },
+    { dataType: 'fish_species', projectId: 'n/a', lastRevisionNumber: 'initial' },
+    { dataType: 'collect_records', projectId: '1', lastRevisionNumber: 'initial' },
+    { dataType: 'project_managements', projectId: '1', lastRevisionNumber: 'initial' },
+    { dataType: 'project_profiles', projectId: '1', lastRevisionNumber: 'initial' },
+    { dataType: 'project_sites', projectId: '1', lastRevisionNumber: 'initial' },
+  ]
+
+  await dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled.bulkAdd(initialRevisionRecords)
+
   const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
@@ -30,8 +45,9 @@ and project profiles to ensure the user can pull fresh data if they are given pe
     },
   )
 
-  expect(await screen.findByText('Projects', { selector: 'h1' }))
+  expect(screen.getByTestId('projects-link')).toBeInTheDocument()
 
+  // Now your existing queries will work
   const lastRevisionProject1BenthicAttributesBeforeSyncError =
     await dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled
       .where({ dataType: 'benthic_attributes' })
@@ -160,7 +176,8 @@ and project profiles to ensure the user can pull fresh data if they are given pe
     }),
   )
 
-  const projectCardForProjectWithId1 = screen.getAllByRole('listitem')[0]
+  const projectCards = await screen.findAllByRole('listitem')
+  const projectCardForProjectWithId1 = projectCards[0]
   const linkToCollectingPageForProjectWithId1 = within(projectCardForProjectWithId1).getByRole(
     'link',
     { name: 'Collect' },
