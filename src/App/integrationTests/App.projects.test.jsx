@@ -3,11 +3,7 @@ import '@testing-library/jest-dom'
 import React from 'react'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
-import {
-  renderAuthenticatedOffline,
-  screen,
-  waitFor,
-} from '../../testUtilities/testingLibraryWithHelpers'
+import { renderAuthenticatedOffline, screen } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 
 test('Clicking anywhere on a project card navigates to the project collect page when offline', async () => {
