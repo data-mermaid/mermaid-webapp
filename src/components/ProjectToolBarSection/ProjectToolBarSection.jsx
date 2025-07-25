@@ -119,7 +119,7 @@ const ProjectToolBarSection = ({
     <GlobalWrapper>
       <RowWrapper>
         <HeaderStyle>
-          Projects
+          {t('projects.projects')}
           {isAppOnline && (
             <MuiTooltip title={t('go_to_explore_projects')} placement="top" arrow>
               <IconButton
@@ -135,10 +135,10 @@ const ProjectToolBarSection = ({
         <OfflineHide>
           <ButtonCallout
             onClick={() => setIsNewProjectModalOpen(true)}
-            aria-label="New Project"
+            aria-label={t('projects.new_project')}
             disabled={!isAppOnline}
           >
-            <span>New Project</span>
+            <span>{t('projects.new_project')}</span>
           </ButtonCallout>
           <ProjectModal
             isOpen={isNewProjectModalOpen}
@@ -150,15 +150,15 @@ const ProjectToolBarSection = ({
       </RowWrapper>
       <FilterRowWrapper>
         <FilterLabelWrapper htmlFor="filter_projects" value={projectFilter} onChange={setFilter}>
-          Filter Projects By Name or Country
+          {t('projects.filter_projects')}
           <Input type="text" id="filter_projects" />
         </FilterLabelWrapper>
         <SortByLabelWrapper htmlFor="sort_by">
-          Sort By
+          {t('projects.sort_by')}
           <select id="sort_by" onChange={setSortBy} value={projectSortKey}>
-            <option value="updated_on">Last Updated Date</option>
-            <option value="name">Project Name</option>
-            <option value="countries">Country</option>
+            <option value="updated_on">{t('projects.last_updated_date')}</option>
+            <option value="name">{t('projects.project_name')}</option>
+            <option value="countries">{t('projects.country')}</option>
           </select>
         </SortByLabelWrapper>
       </FilterRowWrapper>

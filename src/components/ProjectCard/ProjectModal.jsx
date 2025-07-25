@@ -42,7 +42,7 @@ const ProjectModal = ({
 
   const initialFormValues = project
     ? {
-        name: t('projects.copyOfProjectName', { projectName: project.name }),
+        name: t('projects.copy_of_project_name', { projectName: project.name }),
         sendEmail: true,
       }
     : {
@@ -157,7 +157,7 @@ const ProjectModal = ({
         <label id="modal-input-for-projectname-label" htmlFor="modal-input-for-projectname" />
         <InputWithLabelAndValidation
           required
-          label={t('input_field_labels.project_name')}
+          label={t('projects.project_name')}
           id="name"
           type="text"
           value={formik.values.name}
@@ -176,7 +176,7 @@ const ProjectModal = ({
   }
   const modalContent = project ? (
     <>
-      {getModalContent('Name of project')}
+      {getModalContent(t('projects.name_of_project'))}
       <ModalInputRow>
         <CheckBoxLabel>
           <input
@@ -186,20 +186,20 @@ const ProjectModal = ({
             checked={formik.values.sendEmail}
             onChange={formik.handleChange}
           />
-          {t('notify_user_email')}
+          {t('projects.notify_user_email')}
         </CheckBoxLabel>
       </ModalInputRow>
-      <p>{t('projects.dataCopyToProject')}</p>
-      <p>{t('projects.adminForProject')}</p>
+      <p>{t('projects.data_copy_to_project')}</p>
+      <p>{t('projects.admin_for_project')}</p>
     </>
   ) : (
     <>
       {getModalContent()}
-      <p>{t('projects.adminForProject')}</p>
+      <p>{t('projects.admin_for_project')}</p>
     </>
   )
 
-  const modalTitle = project ? t('projects.copyProject') : t('projects.createProject')
+  const modalTitle = project ? t('projects.copy_project') : t('projects.create_project')
 
   const footerContent = (
     <RightFooter>
