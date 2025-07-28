@@ -47,7 +47,6 @@ and project profiles to ensure the user can pull fresh data if they are given pe
 
   expect(screen.getByTestId('projects-link')).toBeInTheDocument()
 
-  // Now your existing queries will work
   const lastRevisionProject1BenthicAttributesBeforeSyncError =
     await dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled
       .where({ dataType: 'benthic_attributes' })

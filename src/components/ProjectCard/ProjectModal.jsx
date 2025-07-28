@@ -77,7 +77,7 @@ const ProjectModal = ({
           setNameAlreadyExists(true)
           setExistingName(formik.values.name)
           toast.error(
-            ...getToastArguments(...getToastArguments(t('toasts.same_project_name_exists'))),
+            ...getToastArguments(...getToastArguments(t('projects.errors.duplicate_name'))),
           )
         }
       },
@@ -110,7 +110,7 @@ const ProjectModal = ({
     databaseSwitchboardInstance
       .copyProject(project.id, formik.values.name, formik.values.sendEmail)
       .then((response) => {
-        handleSuccessResponse(response, t('projects.success.projectCopied'))
+        handleSuccessResponse(response, t('projects.success.project_copied'))
       })
       .catch((error) => {
         handleResponseError(error, 'Copying')
@@ -122,7 +122,7 @@ const ProjectModal = ({
     databaseSwitchboardInstance
       .addProject(formik.values.name)
       .then((response) => {
-        handleSuccessResponse(response, t('projects.success.projectCreated'))
+        handleSuccessResponse(response, t('projects.success.project_created'))
       })
       .catch((error) => {
         handleResponseError(error, 'Creating')

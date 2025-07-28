@@ -38,7 +38,7 @@ const Projects = () => {
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
   const { t } = useTranslation()
-  const unavailableProjectsErrorText = t('toasts.unavailable_projects_error')
+  const unavailableProjectsErrorText = t('projects.errors.data_unavailable')
 
   useDocumentTitle(`${t('projects.projects')} - ${t('mermaid')}`)
 
@@ -164,7 +164,10 @@ const Projects = () => {
     : renderPageNoData()
 
   return isLoading ? (
-    <LoadingIndicator aria-label="projects list loading indicator" />
+    <LoadingIndicator
+      aria-label={t('projects.loading_indicator')}
+      data-testid="projects-loading-indicator"
+    />
   ) : (
     <HomePageLayout
       topRow={

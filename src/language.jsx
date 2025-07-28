@@ -202,8 +202,6 @@ const success = {
   projectSave: 'Project saved',
   projectAddGfcr: 'Added GFCR indicators to project',
   projectRemoveGfcr: 'Removed GFCR indicators from project',
-  projectCopied: 'Project copied',
-  projectCreated: 'Project created',
   projectDeleted: 'Project deleted',
   getMermaidDataSaveSuccess: ({ mermaidDataTypeLabel, isAppOnline }) =>
     isAppOnline

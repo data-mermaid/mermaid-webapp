@@ -55,8 +55,8 @@ test('Push sync status code of 500 shows toasts on project list page', async () 
     dexieCurrentUserInstance,
   })
 
-  await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
+  await screen.findByTestId('projects-loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('projects-loading-indicator'))
 
   expect(await screen.findByText('MERMAID sync error: please contact support@datamermaid.org'))
 })

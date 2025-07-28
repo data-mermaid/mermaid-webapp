@@ -21,12 +21,11 @@
     "submit_for_review": "Send to MERMAID for review"
   },
   "toasts": {
-    "export_error": "There was an error exporting the report.",
-    "unavailable_projects_error": "Project data is currently unavailable.",
-    "same_project_name_exists": "A project with the same name already exists."
+    "export_error": "There was an error exporting the report."
   },
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",
+  "projects_loading_indicator": "projects list loading indicator",
   "image_classification": {
     "add_attribute": "Add new attribute",
     "attribute_growth_form": "Benthic attribute / growth form",
@@ -139,12 +138,15 @@
     "country": "Country",
     "new_project": "New Project",
     "name_of_project": "Name of project",
+    "loading_indicator": "projects list loading indicator",
     "errors": {
-      "project_name_exists": "Project name already exists in MERMAID"
+      "project_name_exists": "Project name already exists in MERMAID",
+      "data_unavailable": "Project data is currently unavailable.",
+      "duplicate_name": "A project with the same name already exists."
     },
     "success": {
-      "projectCopied": "Project copied",
-      "projectCreated": "Project created"
+      "project_copied": "Project copied",
+      "project_created": "Project created"
     }
   },
   "search": {

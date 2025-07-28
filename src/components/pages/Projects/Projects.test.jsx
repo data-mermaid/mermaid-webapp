@@ -23,7 +23,7 @@ test('Projects component renders with the expected UI elements', async () => {
   })
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+    expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
   )
 
   const projectListItems = screen.getAllByTestId('project-card')
@@ -31,7 +31,6 @@ test('Projects component renders with the expected UI elements', async () => {
   expect(projectListItems).toHaveLength(6)
 
   // expect filter bar, sort buttons, new project button
-  // const newProjectButton = screen.getByRole('button', { name: 'New Project' })
   const newProjectButton = screen.getByTestId('new-project')
 
   expect(newProjectButton).toBeInTheDocument()
@@ -56,7 +55,7 @@ test('A project card renders with the expected UI elements for button groups', a
   })
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+    expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
@@ -86,7 +85,7 @@ test('A project card shows relevant data for a project', async () => {
   })
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+    expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
@@ -133,7 +132,7 @@ test('A project card renders appropriately when offline', async () => {
   })
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+    expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
@@ -169,7 +168,7 @@ test('A project card renders appropriately when online', async () => {
   })
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+    expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
@@ -208,7 +207,7 @@ test('Hide new project button in project toolbar when offline', async () => {
   })
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+    expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
   )
 
   await waitFor(() =>
@@ -227,7 +226,7 @@ test('Projects can be sorted by countries', async () => {
   })
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+    expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
   )
 
   const selectMenu = screen.getAllByRole('combobox')[0]
@@ -251,7 +250,7 @@ test('Projects can be sorted by updated on date', async () => {
   })
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+    expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
   )
 
   const selectMenu = screen.getAllByRole('combobox')[0]
@@ -275,7 +274,7 @@ test('Project filter filters by name and country', async () => {
   })
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+    expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
   )
 
   const filterProjectsSearchBar = screen.getByTestId('filter-projects')
@@ -295,6 +294,7 @@ test('Project filter filters by name and country', async () => {
 
   expect(projectCards.length).toEqual(2)
 })
+
 test('Project filter can accomodate words containing apostrophes', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
@@ -306,7 +306,7 @@ test('Project filter can accomodate words containing apostrophes', async () => {
   })
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+    expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
   )
 
   const filterProjectsSearchBar = screen.getByTestId('filter-projects')
