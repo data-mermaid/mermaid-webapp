@@ -413,7 +413,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           disabled={isImageClassificationSelected}
         />
         <InputSelectWithLabelAndValidation
-          label="Reef Slope"
+          label={t('reef_slope')}
           required={false}
           id="reef_slope"
           testId="reef_slope"
@@ -559,7 +559,6 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
-          helperText={t('notes_info')}
         />
       </InputWrapper>
     </>

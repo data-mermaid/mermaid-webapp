@@ -215,8 +215,8 @@
   "points_per_quadrat_info": "Total number of points per quadrat used in a transect (e.g. 100).",
   "visibility_info": "The horizontal distance at which an object underwater can still be identified.",
   "current_info": "Water speed during the survey.",
-  "notes_info": "",
   "reef_slope_info": "An indication of coral reef profile of the survey location. See definitions <a>here</a>.",
   "relative_depth_info": "Whether the survey is 'deep' or 'shallow' relative to other transects surveyed, regardless of numerical depth in meters.",
-  "tide_info": "Tide characteristics during the survey (<a>more detail</a>)."
+  "tide_info": "Tide characteristics during the survey (<a>more detail</a>).",
+  "reef_slope": "Reef Slope"
 }

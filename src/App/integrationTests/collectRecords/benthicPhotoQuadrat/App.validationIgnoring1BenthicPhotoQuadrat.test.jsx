@@ -526,12 +526,12 @@ test('Benthic Photo Quadrat validation: user can dismiss non-observations input 
   expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
-  // await user.click(within(reefSlopeRow).getByRole('checkbox', { name: 'Ignore warning' }))
-  // await waitFor(() => expect(within(reefSlopeRow).queryByText('warning')).not.toBeInTheDocument())
-  // expect(within(reefSlopeRow).getByText('firstWarning')).toBeInTheDocument()
-  // expect(within(reefSlopeRow).getByText('secondWarning')).toBeInTheDocument()
-  // expect(within(reefSlopeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  // expect(within(reefSlopeRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  await user.click(within(reefSlopeRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await waitFor(() => expect(within(reefSlopeRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(reefSlopeRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(reefSlopeRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[1]).toBeInTheDocument()
 }, 50000)
 
 test('Benthic Photo Quadrat validation: user can dismiss record-level warnings ', async () => {
