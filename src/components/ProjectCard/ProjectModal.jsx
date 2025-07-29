@@ -76,9 +76,7 @@ const ProjectModal = ({
         if (isDuplicateError) {
           setNameAlreadyExists(true)
           setExistingName(formik.values.name)
-          toast.error(
-            ...getToastArguments(...getToastArguments(t('projects.errors.duplicate_name'))),
-          )
+          toast.error(...getToastArguments(t('projects.errors.duplicate_name')))
         }
       },
     })
