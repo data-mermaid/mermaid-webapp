@@ -225,5 +225,21 @@
     "habitatcomplexity": "Habitat Complexity",
     "bleachingqc": "Bleaching",
     "benthicpqt": "Benthic Photo Quadrat"
-  }
+  },
+  "transect": "Transect",
+  "transect_number_info": "Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.",
+  "label_info": "Arbitrary text to distinguish sample units that are distinct but should be combined analytically (i.e. all other properties are identical). For example: Long swim. Rarely used.",
+  "sample_time_info": "Time when data was collected",
+  "depth_info": "Depth of sample unit, in meters (e.g. 3).",
+  "transect_length_info": "Length of transect for a sample unit, in meters. May include decimal (e.g. 50.0).",
+  "quadrat_number_start_info": "Number of the first quadrat/photo along the transect (e.g. 1).",
+  "quadrat_size_info": "Quadrat size used per transect, in square meters (e.g. 1).",
+  "number_of_quadrats_info": "Total number of quadrats in the transect (e.g. 10).",
+  "points_per_quadrat_info": "Total number of points per quadrat used in a transect (e.g. 100).",
+  "visibility_info": "The horizontal distance at which an object underwater can still be identified.",
+  "current_info": "Water speed during the survey.",
+  "reef_slope_info": "An indication of coral reef profile of the survey location. See definitions <a>here</a>.",
+  "relative_depth_info": "Whether the survey is 'deep' or 'shallow' relative to other transects surveyed, regardless of numerical depth in meters.",
+  "tide_info": "Tide characteristics during the survey (<a>more detail</a>).",
+  "reef_slope": "Reef Slope"
 }

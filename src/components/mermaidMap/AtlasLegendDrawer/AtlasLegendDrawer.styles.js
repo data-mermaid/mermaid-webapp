@@ -10,7 +10,6 @@ export const SliderContainer = styled.div`
   right: ${(props) => (props.isOpen ? '0px' : '-270px')};
   background: ${(props) => props.isOpen && 'rgba(255, 255, 255, 1)'};
   top: 1px;
-  z-index: 2;
   transition: 0.3s ease-out;
 `
 

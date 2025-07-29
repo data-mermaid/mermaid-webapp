@@ -250,6 +250,18 @@ test('Benthic Photo Quadrat validation: user can dismiss non-observations input 
                     status: 'warning',
                   },
                 ],
+                reef_slope: [
+                  {
+                    validation_id: Math.random(),
+                    code: 'firstWarning',
+                    status: 'warning',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    code: 'secondWarning',
+                    status: 'warning',
+                  },
+                ],
               },
               obs_benthic_photo_quadrats: [],
             },
@@ -311,6 +323,7 @@ test('Benthic Photo Quadrat validation: user can dismiss non-observations input 
   const quadratSizeRow = screen.getByTestId('quadrat_size')
   const numberOfQuadratsRow = screen.getByTestId('num_quadrats')
   const numberOfPointsPerQuadratRow = screen.getByTestId('num_points_per_quadrat')
+  const reefSlopeRow = screen.getByTestId('reef_slope')
 
   expect(within(siteRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(siteRow).getByText('secondWarning')).toBeInTheDocument()
@@ -348,6 +361,8 @@ test('Benthic Photo Quadrat validation: user can dismiss non-observations input 
   expect(within(numberOfQuadratsRow).getByText('secondWarning')).toBeInTheDocument()
   expect(within(numberOfPointsPerQuadratRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(numberOfPointsPerQuadratRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(reefSlopeRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(reefSlopeRow).getByText('secondWarning')).toBeInTheDocument()
 
   await user.click(within(siteRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
@@ -510,6 +525,13 @@ test('Benthic Photo Quadrat validation: user can dismiss non-observations input 
   expect(within(numberOfPointsPerQuadratRow).getByText('secondWarning')).toBeInTheDocument()
   expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[1]).toBeInTheDocument()
+
+  await user.click(within(reefSlopeRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await waitFor(() => expect(within(reefSlopeRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(reefSlopeRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(reefSlopeRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[1]).toBeInTheDocument()
 }, 50000)
 
 test('Benthic Photo Quadrat validation: user can dismiss record-level warnings ', async () => {
@@ -858,6 +880,18 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
                     status: 'ignore',
                   },
                 ],
+                reef_slope: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
                 visibility: [
                   {
                     validation_id: Math.random(),
@@ -1013,6 +1047,7 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   const quadratSizeRow = screen.getByTestId('quadrat_size')
   const numberOfQuadratsRow = screen.getByTestId('num_quadrats')
   const numberOfPointsPerQuadratRow = screen.getByTestId('num_points_per_quadrat')
+  const reefSlopeRow = screen.getByTestId('reef_slope')
 
   expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
@@ -1050,6 +1085,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   expect(within(numberOfQuadratsRow).getAllByText('ignored')[1]).toBeInTheDocument()
   expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   await user.click(
     await within(siteRow).findByRole('checkbox', {
@@ -1160,6 +1197,16 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   expect(within(relativeDepthRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(relativeDepthRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(relativeDepthRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+
+  await user.click(
+    within(reefSlopeRow).getByRole('checkbox', {
+      name: 'Ignore warning',
+    }),
+  )
+  await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  expect(within(reefSlopeRow).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(reefSlopeRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(reefSlopeRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   await user.click(
     within(visibilityRow).getByRole('checkbox', {
