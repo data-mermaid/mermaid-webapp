@@ -13,7 +13,9 @@ import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAn
 import { InputWrapper } from '../../../generic/form'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
-import language from '../../../../language'
+import { Trans, useTranslation } from 'react-i18next'
+import { HelperTextLink } from '../../../generic/links'
+import { links } from '../../../../link_constants'
 
 const DEPTH_VALIDATION_PATH = 'data.quadrat_transect.depth'
 const LABEL_VALIDATION_PATH = 'data.quadrat_transect.label'
@@ -29,6 +31,7 @@ const VISIBILITY_VALIDATION_PATH = 'data.quadrat_transect.visibility'
 const CURRENT_VALIDATION_PATH = 'data.quadrat_transect.current'
 const RELATIVE_DEPTH_VALIDATION_PATH = 'data.quadrat_transect.relative_depth'
 const TIDE_VALIDATION_PATH = 'data.quadrat_transect.tide'
+const REEF_SLOPE_VALIDATION_PATH = 'data.quadrat_transect.reef_slope'
 
 const BenthicPhotoQuadratTransectInputs = ({
   areValidationsShowing,
@@ -40,8 +43,10 @@ const BenthicPhotoQuadratTransectInputs = ({
   validationPropertiesWithDirtyResetOnInputChange,
   isImageClassificationSelected,
 }) => {
-  const { currents, relativedepths, tides, visibilities } = choices
+  const { t } = useTranslation()
+  const { reefslopes, currents, relativedepths, tides, visibilities } = choices
 
+  const reefSlopeOptions = getOptions(reefslopes.data)
   const visibilityOptions = getOptions(visibilities.data)
   const currentOptions = getOptions(currents.data)
   const relativeDepthOptions = getOptions(relativedepths.data)
@@ -100,7 +105,10 @@ const BenthicPhotoQuadratTransectInputs = ({
     quadrat_transect?.tide,
     areValidationsShowing,
   )
-
+  const reefSlopeValidationProperties = getValidationPropertiesForInput(
+    quadrat_transect?.reef_slope,
+    areValidationsShowing,
+  )
   const notesValidationProperties = getValidationPropertiesForInput(
     quadrat_transect?.notes,
     areValidationsShowing,
@@ -169,6 +177,13 @@ const BenthicPhotoQuadratTransectInputs = ({
       validationPath: NUM_POINTS_PER_QUADRAT_VALIDATION_PATH,
     })
   }
+  const handleReefSlopeChange = (event) => {
+    formik.handleChange(event)
+    resetNonObservationFieldValidations({
+      inputName: 'reef_slope',
+      validationPath: REEF_SLOPE_VALIDATION_PATH,
+    })
+  }
   const handleVisibilityChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
@@ -209,7 +224,7 @@ const BenthicPhotoQuadratTransectInputs = ({
   return (
     <>
       <InputWrapper>
-        <H2>{language.pages.collectRecord.formSectionTitle.transect}</H2>
+        <H2>{t('transect')}</H2>
         <InputWithLabelAndValidation
           label="Transect Number"
           required={true}
@@ -231,7 +246,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.number}
           onChange={handleTransectNumberChange}
-          helperText={language.helperText.transectNumber}
+          helperText={t('transect_number_info')}
         />
         <InputWithLabelAndValidation
           label="Label"
@@ -248,7 +263,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
-          helperText={language.helperText.label}
+          helperText={t('label_info')}
         />
         <InputWithLabelAndValidation
           label="Sample Time"
@@ -268,7 +283,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
-          helperText={language.helperText.sampleTime}
+          helperText={t('sample_time_info')}
         />
         <InputWithLabelAndValidation
           label="Depth"
@@ -287,7 +302,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           value={formik.values.depth}
           onChange={handleDepthChange}
           unit="m"
-          helperText={language.helperText.depth}
+          helperText={t('depth_info')}
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
@@ -311,7 +326,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
           unit="m"
-          helperText={language.helperText.transectLengthSurveyed}
+          helperText={t('transect_length_info')}
         />
         <InputWithLabelAndValidation
           label="Quadrat Number Start"
@@ -334,7 +349,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_number_start}
           onChange={handleQuadratNumberStartChange}
-          helperText={language.helperText.quadratNumberStart}
+          helperText={t('quadrat_number_start_info')}
         />
         <InputWithLabelAndValidation
           label="Quadrat Size"
@@ -354,7 +369,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_size}
           onChange={handleQuadratSizeChange}
-          helperText={language.helperText.quadratSize}
+          helperText={t('quadrat_size_info')}
         />
         <InputWithLabelAndValidation
           label="Number of Quadrats"
@@ -372,7 +387,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.num_quadrats}
           onChange={handleNumberOfQuadratsChange}
-          helperText={language.helperText.numberOfQuadrats}
+          helperText={t('number_of_quadrats_info')}
         />
         <InputWithLabelAndValidation
           label="Number of Points per Quadrat"
@@ -394,8 +409,43 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.num_points_per_quadrat}
           onChange={handleNumberOfPointsPerQuadratChange}
-          helperText={language.helperText.numberOfPointsPerQuadrat}
+          helperText={t('points_per_quadrat_info')}
           disabled={isImageClassificationSelected}
+        />
+        <InputSelectWithLabelAndValidation
+          label={t('reef_slope')}
+          required={false}
+          id="reef_slope"
+          testId="reef_slope"
+          options={reefSlopeOptions}
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
+          }}
+          {...reefSlopeValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            reefSlopeValidationProperties,
+            'reef_slope',
+          )}
+          onBlur={formik.handleBlur}
+          value={formik.values.reef_slope}
+          onChange={handleReefSlopeChange}
+          helperText={
+            <Trans
+              i18nKey="reef_slope_info"
+              components={{
+                a: (
+                  <HelperTextLink
+                    href={links.reefCoverClassDefinitions}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                ),
+              }}
+            />
+          }
         />
         <InputSelectWithLabelAndValidation
           label="Visibility"
@@ -417,7 +467,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
           onChange={handleVisibilityChange}
-          helperText={language.helperText.visibility}
+          helperText={t('visibility_info')}
         />
         <InputSelectWithLabelAndValidation
           label="Current"
@@ -439,7 +489,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.current}
           onChange={handleCurrentChange}
-          helperText={language.helperText.current}
+          helperText={t('current_info')}
         />
         <InputSelectWithLabelAndValidation
           label="Relative Depth"
@@ -461,7 +511,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
-          helperText={language.helperText.getRelativeDepth()}
+          helperText={t('relative_depth_info')}
         />
         <InputSelectWithLabelAndValidation
           label="Tide"
@@ -480,7 +530,20 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
-          helperText={language.helperText.getTide()}
+          helperText={
+            <Trans
+              i18nKey="tide_info"
+              components={{
+                a: (
+                  <HelperTextLink
+                    href={links.tideIntroduction}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                ),
+              }}
+            />
+          }
         />
         <TextareaWithLabelAndValidation
           label="Notes"
@@ -496,7 +559,6 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
-          helperText={language.helperText.notes}
         />
       </InputWrapper>
     </>
