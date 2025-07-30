@@ -19,13 +19,11 @@ test('Clicking anywhere on a project card navigates to the project collect page 
     },
   )
 
-  expect(
-    await screen.findByText('Projects', {
-      selector: 'h1',
-    }),
-  )
+  expect(screen.getByTestId('projects-link')).toBeInTheDocument()
 
-  const projectCard = screen.getAllByRole('listitem')[0]
+  const projectCards = await screen.findAllByRole('listitem')
+
+  const projectCard = projectCards[0]
 
   await user.click(projectCard)
 
@@ -33,7 +31,7 @@ test('Clicking anywhere on a project card navigates to the project collect page 
     await screen.findByText('Collecting', {
       selector: 'h2',
     }),
-  )
+  ).toBeInTheDocument()
 })
 // commented out for alpha, reactivate post alpha
 // test('Clicking anywhere on a project card navigates to the project health page when online', async () => {

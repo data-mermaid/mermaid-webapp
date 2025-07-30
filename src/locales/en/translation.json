@@ -21,11 +21,11 @@
     "submit_for_review": "Send to MERMAID for review"
   },
   "toasts": {
-    "export_error": "There was an error exporting the report.",
-    "unavailable_projects_error": "Project data is currently unavailable."
+    "export_error": "There was an error exporting the report."
   },
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",
+  "projects_loading_indicator": "projects list loading indicator",
   "image_classification": {
     "add_attribute": "Add new attribute",
     "attribute_growth_form": "Benthic attribute / growth form",
@@ -124,7 +124,30 @@
     "no_projects_match": "No projects match the current filter term.",
     "not_your_projects": "You are not part of any projects yet.",
     "no_offline_projects": "You do not have any offline projects.",
-    "create_or_join_project": "Create a new project or get your admin to add you to some."
+    "create_or_join_project": "Create a new project or get your admin to add you to some.",
+    "create_project": "Create Project",
+    "copy_project": "Copy Project",
+    "admin_for_project": "You will be an admin for this project.",
+    "data_copy_to_project": "Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.",
+    "copy_of_project_name": "Copy of {{projectName}}",
+    "notify_user_email": "Notify users by email",
+    "filter_projects": "Filter Projects By Name or Country",
+    "sort_by": "Sort By",
+    "last_updated_date": "Last Updated Date",
+    "project_name": "Project Name",
+    "country": "Country",
+    "new_project": "New Project",
+    "name_of_project": "Name of project",
+    "loading_indicator": "projects list loading indicator",
+    "errors": {
+      "project_name_exists": "Project name already exists in MERMAID",
+      "data_unavailable": "Project data is currently unavailable.",
+      "duplicate_name": "A project with the same name already exists."
+    },
+    "success": {
+      "project_copied": "Project copied",
+      "project_created": "Project created"
+    }
   },
   "search": {
     "no_results": "No results found"

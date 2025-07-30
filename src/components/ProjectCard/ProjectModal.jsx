@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
-import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { RightFooter, ModalInputRow } from '../generic/Modal'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
@@ -16,6 +15,7 @@ import theme from '../../theme'
 import InputWithLabelAndValidation from '../mermaidInputs/InputWithLabelAndValidation'
 import LoadingModal from '../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../App/CurrentUserContext'
+import { useTranslation } from 'react-i18next'
 
 const CheckBoxLabel = styled.label`
   display: inline-block;
@@ -32,18 +32,17 @@ const ProjectModal = ({
   addProjectToProjectsPage,
 }) => {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [nameAlreadyExists, setNameAlreadyExists] = useState(false)
   const [existingName, setExistingName] = useState('')
   const { refreshCurrentUser } = useCurrentUser()
   // using same error format as Formik so message can be used in InputWithLabelAndValidation
-  const nameExistsError = [
-    { code: language.error.formValidation.projectNameExists, id: 'Name Exists' },
-  ]
+  const nameExistsError = [{ code: t('projects.errors.project_name_exists'), id: 'Name Exists' }]
 
   const initialFormValues = project
     ? {
-        name: `Copy of ${project.name}`,
+        name: t('projects.copy_of_project_name', { projectName: project.name }),
         sendEmail: true,
       }
     : {
@@ -56,7 +55,7 @@ const ProjectModal = ({
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       return errors
@@ -77,9 +76,7 @@ const ProjectModal = ({
         if (isDuplicateError) {
           setNameAlreadyExists(true)
           setExistingName(formik.values.name)
-          toast.error(
-            ...getToastArguments(...getToastArguments(language.error.projectWithSameName)),
-          )
+          toast.error(...getToastArguments(t('projects.errors.duplicate_name')))
         }
       },
     })
@@ -111,7 +108,7 @@ const ProjectModal = ({
     databaseSwitchboardInstance
       .copyProject(project.id, formik.values.name, formik.values.sendEmail)
       .then((response) => {
-        handleSuccessResponse(response, language.success.projectCopied)
+        handleSuccessResponse(response, t('projects.success.project_copied'))
       })
       .catch((error) => {
         handleResponseError(error, 'Copying')
@@ -123,7 +120,7 @@ const ProjectModal = ({
     databaseSwitchboardInstance
       .addProject(formik.values.name)
       .then((response) => {
-        handleSuccessResponse(response, language.success.projectCreated)
+        handleSuccessResponse(response, t('projects.success.project_created'))
       })
       .catch((error) => {
         handleResponseError(error, 'Creating')
@@ -158,7 +155,7 @@ const ProjectModal = ({
         <label id="modal-input-for-projectname-label" htmlFor="modal-input-for-projectname" />
         <InputWithLabelAndValidation
           required
-          label="Project Name"
+          label={t('projects.project_name')}
           id="name"
           type="text"
           value={formik.values.name}
@@ -170,15 +167,14 @@ const ProjectModal = ({
           }
           placeholder={placeholderName || ''}
           validationMessages={checkValidationMessage()}
-          setErrors={language.error.formValidation.required}
+          setErrors={t('forms.required_field')}
         />
       </ModalInputRow>
     )
   }
   const modalContent = project ? (
     <>
-      {getModalContent('Name of project')}
-
+      {getModalContent(t('projects.name_of_project'))}
       <ModalInputRow>
         <CheckBoxLabel>
           <input
@@ -188,24 +184,24 @@ const ProjectModal = ({
             checked={formik.values.sendEmail}
             onChange={formik.handleChange}
           />
-          Notify users by email
+          {t('projects.notify_user_email')}
         </CheckBoxLabel>
       </ModalInputRow>
-      <p>{language.projectModal.copyMessage}</p>
-      <p>{language.projectModal.footerMessage}</p>
+      <p>{t('projects.data_copy_to_project')}</p>
+      <p>{t('projects.admin_for_project')}</p>
     </>
   ) : (
     <>
       {getModalContent()}
-      <p>{language.projectModal.footerMessage}</p>
+      <p>{t('projects.admin_for_project')}</p>
     </>
   )
 
-  const modalTitle = project ? language.projectModal.copyTitle : language.projectModal.createTitle
+  const modalTitle = project ? t('projects.copy_project') : t('projects.create_project')
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary disabled={isLoading} onClick={handleOnSubmit}>
         <IconSend />
         {modalTitle}

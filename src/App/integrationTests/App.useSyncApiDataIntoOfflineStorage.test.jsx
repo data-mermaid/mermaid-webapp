@@ -62,8 +62,8 @@ test('Sync: initial page load on non project page', async () => {
     dexieCurrentUserInstance,
   })
 
-  await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
+  await screen.findByTestId('projects-loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('projects-loading-indicator'))
 
   expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(
     mockMermaidData.benthic_attributes.length,
@@ -149,8 +149,8 @@ test('Sync: initial page load already done, navigate to non project page', async
     },
   )
 
-  await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
+  await screen.findByTestId('projects-loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('projects-loading-indicator'))
 
   /**
    * because of the other landing page initial load sync test,

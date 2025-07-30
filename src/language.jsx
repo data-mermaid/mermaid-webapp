@@ -202,8 +202,6 @@ const success = {
   projectSave: 'Project saved',
   projectAddGfcr: 'Added GFCR indicators to project',
   projectRemoveGfcr: 'Removed GFCR indicators from project',
-  projectCopied: 'Project copied',
-  projectCreated: 'Project created',
   projectDeleted: 'Project deleted',
   getMermaidDataSaveSuccess: ({ mermaidDataTypeLabel, isAppOnline }) =>
     isAppOnline
@@ -1280,14 +1278,6 @@ const pages = {
 const navigateAwayPrompt =
   'Are you sure you want to leave this page? You have some unsaved changes.'
 
-const projectModal = {
-  copyMessage:
-    'Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.',
-  copyTitle: 'Copy Project',
-  createTitle: 'Create Project',
-  footerMessage: 'You will be an admin for this project.',
-}
-
 const map = {
   attribution:
     'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
@@ -1612,7 +1602,6 @@ export default {
   pages,
   placeholders,
   popoverTexts,
-  projectModal,
   protocolTitles,
   success,
   table,

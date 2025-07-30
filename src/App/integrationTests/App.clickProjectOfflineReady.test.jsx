@@ -66,8 +66,8 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
    * the loading indicator to show first before we wait for it to disappear
    */
 
-  await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
+  await screen.findByTestId('projects-loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('projects-loading-indicator'))
 
   expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.project_managements.toArray()).length).toEqual(0)
