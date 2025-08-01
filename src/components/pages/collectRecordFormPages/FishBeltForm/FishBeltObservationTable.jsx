@@ -123,6 +123,11 @@ const FishBeltObservationTable = ({
     useState()
   const [fishNamePopoverContent, setFishNamePopoverContent] = useState()
 
+  const searchNoResultsText = t('search.no_results')
+  const proposeNewSpeciesText = t('propose_new_species')
+  const viewFishInfoText = t('view_fish_info')
+  const deleteObservationText = t('delete_observation')
+
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
@@ -370,10 +375,10 @@ const FishBeltObservationTable = ({
                   options={fishNameOptions}
                   onChange={handleFishNameChange}
                   value={fishNameId}
-                  noResultsText={t('search.no_results')}
+                  noResultsText={searchNoResultsText}
                   noResultsAction={
                     <NewOptionButton type="button" onClick={proposeNewSpeciesClick}>
-                      {t('propose_new_species')}
+                      {proposeNewSpeciesText}
                     </NewOptionButton>
                   }
                 />
@@ -384,7 +389,7 @@ const FishBeltObservationTable = ({
                   <ButtonPopover
                     tabIndex="-1"
                     type="button"
-                    aria-label={t('view_fish_info')}
+                    aria-label={viewFishInfoText}
                     onClick={() => handlePopoverButtonClick({ observationId, fishNameId })}
                   >
                     {/* we set height ahd with here in addition in the styled component to suppress svg errors */}
@@ -429,7 +434,7 @@ const FishBeltObservationTable = ({
               tabIndex="-1"
               type="button"
               onClick={handleDeleteObservation}
-              aria-label={t('delete_observation')}
+              aria-label={deleteObservationText}
             >
               <IconClose />
             </ButtonRemoveRow>
@@ -454,6 +459,10 @@ const FishBeltObservationTable = ({
     setAreObservationsInputsDirty,
     setIsNewBenthicAttributeModalOpen,
     setObservationIdToAddNewBenthicAttributeTo,
+    proposeNewSpeciesText,
+    searchNoResultsText,
+    viewFishInfoText,
+    deleteObservationText,
   ])
 
   return (
