@@ -433,13 +433,6 @@ const gfcrNewIndicatorSetModal = {
   dateInput: 'Date',
 }
 
-const clearSizeValuesModal = {
-  title: `Clear Size Values`,
-  prompt: `This will clear all the size values for all observations.`,
-  yes: `Clear Size Values`,
-  no: 'Cancel',
-}
-
 const autocomplete = {
   noResultsDefault: 'No results found',
 }
@@ -1582,7 +1575,6 @@ export default {
   apiDataTableNames,
   autocomplete,
   buttons,
-  clearSizeValuesModal,
   createNewOptionModal,
   gfcrFinanceSolutionModal,
   gfcrInvestmentModal,
