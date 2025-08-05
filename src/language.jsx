@@ -525,24 +525,6 @@ const pages = {
       observers: 'Observers',
       transect: 'Transect',
     },
-    observersSelectHelper: 'Select one or more observers to add',
-    getObserverRemovedFromProjectMessage: (userName) => (
-      <>
-        <strong>{userName}</strong> is an observer on this sample unit but is no longer a part of
-        this project.
-      </>
-    ),
-    removeObserverFromCollectRecord: 'Remove as observer',
-    removeObserverModal: {
-      title: 'Remove observer from record',
-      getModalContent: (userName) => (
-        <>
-          Are you sure you want to remove <strong>{userName}</strong> as an observer?
-        </>
-      ),
-      removeObserverSubmitButton: 'Remove user',
-      removeObserverCancelButton: 'Cancel',
-    },
     fishNamePopover: {
       family: 'Family',
       biomasConstants: 'Biomass Constants',

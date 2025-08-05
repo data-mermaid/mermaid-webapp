@@ -256,6 +256,13 @@
   "fish_size_bin": "Fish Size Bin (cm)",
   "fish_size_bin_info": "Name of bin scheme used to estimate fish size for the transect. Choose 1 cm if the fish size recorded does not use bins.",
   "notes": "Notes",
+  "observers": "Observers",
+  "observers_info": "Select one or more observers to add",
+  "removed_from_project_message": "<strong>{{userName}}</strong> is an observer on this sample unit but is no longer a part of this project.",
+  "remove_as_observer": "Remove as observer",
+  "remove_user": "Remove user",
+  "remove_observer_from_record": "Remove observer from record",
+  "remove_user_confirmation": "Are you sure you want to remove <strong>{{userName}}</strong> as an observer?",
   "clear_size_values": "Clear Size Values",
   "clear_size_confirmation": "This will clear all the size values for all observations.",
   "view_fish_info": "view fish name information",
@@ -269,5 +276,11 @@
   "must_select_fish_warning": "You must select a fish size bin before adding any observations.",
   "total_biomass": "Total Biomass (kg/ha)",
   "total_abundance": "Total Abundance",
-  "delete_observation": "delete observation"
+  "delete_observation": "delete observation",
+  "observations": "Observations",
+  "fish_name": "Fish Name",
+  "size_cm": "Size (cm)",
+  "count": "Count",
+  "biomass": "Biomass",
+  "validations": "Validations"
 }

@@ -467,7 +467,7 @@ const FishBeltObservationTable = ({
 
   return (
     <InputWrapper data-testid={testId}>
-      <H2 id="table-label">Observations</H2>
+      <H2 id="table-label">{t('observations')}</H2>
       <StyledOverflowWrapper>
         <StickyObservationTable
           data-testid="fish-observations-table"
@@ -488,7 +488,7 @@ const FishBeltObservationTable = ({
               <Th> </Th>
               <Th align="left" id="fish-name-label">
                 <LabelContainer>
-                  Fish Name <RequiredIndicator />
+                  {t('fish_name')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishName' ? (
                     <ColumnHeaderToolTip
                       helperText={
@@ -521,7 +521,7 @@ const FishBeltObservationTable = ({
               </Th>
               <Th align="right" id="fish-size-label">
                 <LabelContainer>
-                  Size (cm) <RequiredIndicator />
+                  {t('size_cm')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishSize' ? (
                     <ColumnHeaderToolTip
                       helperText={t('fish_size_observed')}
@@ -539,7 +539,7 @@ const FishBeltObservationTable = ({
               </Th>
               <Th align="right" id="fish-count-label">
                 <LabelContainer>
-                  Count <RequiredIndicator />
+                  {t('count')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishCount' ? (
                     <ColumnHeaderToolTip
                       helperText={t('fish_count_observed')}
@@ -556,11 +556,11 @@ const FishBeltObservationTable = ({
                 </LabelContainer>
               </Th>
               <Th align="right">
-                Biomass
+                {t('biomass')}
                 <br />
                 <small>(kg/ha)</small>
               </Th>
-              {areValidationsShowing ? <Th align="center">Validations</Th> : null}
+              {areValidationsShowing ? <Th align="center">{t('validations')}</Th> : null}
               <Th> </Th>
             </Tr>
           </thead>
