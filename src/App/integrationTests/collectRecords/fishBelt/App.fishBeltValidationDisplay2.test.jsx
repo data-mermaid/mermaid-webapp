@@ -107,7 +107,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
 
   // observations table (has one empty observation)
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('observation error')).toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation warning')).not.toBeInTheDocument()
@@ -252,7 +252,7 @@ test('Fishbelt validations will show only the first error when there are multipl
 
   // observations table (has one empty observation)
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('observation error 1')).toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation error 2')).not.toBeInTheDocument()

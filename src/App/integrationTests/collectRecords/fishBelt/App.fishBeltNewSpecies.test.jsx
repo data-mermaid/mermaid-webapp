@@ -57,9 +57,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
 
   await user.type(firstFishNameInput, 'supercalifragilistic')
 
-  const noResultsButton = await screen.findByRole('button', {
-    name: 'Propose New Species...',
-  })
+  const noResultsButton = await screen.findByTestId('propose-new-species-button')
 
   await user.click(noResultsButton)
 
@@ -146,9 +144,7 @@ test('Fishbelt observations add new species - proposing new species that already
 
   await user.type(firstFishNameInput, 'supercalifragilistic')
 
-  const noResultsButton = await screen.findByRole('button', {
-    name: 'Propose New Species...',
-  })
+  const noResultsButton = await screen.findByTestId('propose-new-species-button')
 
   await user.click(noResultsButton)
 

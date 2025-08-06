@@ -16,7 +16,7 @@ const RemoveObserverModal = ({ isOpen, onDismiss, observer = undefined, onSubmit
       <ButtonSecondary type="button" onClick={onDismiss}>
         {t('button.cancel')}
       </ButtonSecondary>
-      <ButtonCaution type="button" onClick={onSubmit}>
+      <ButtonCaution type="button" onClick={onSubmit} data-testid="remove-observer-confirm-button">
         {t('remove_user')}
       </ButtonCaution>
     </RightFooter>
@@ -29,6 +29,7 @@ const RemoveObserverModal = ({ isOpen, onDismiss, observer = undefined, onSubmit
       title={t('remove_observer_from_record')}
       mainContent={<>{t('remove_user_confirmation', { userName: observerNameToUse })}</>}
       footerContent={footerContent}
+      testid="remove-observer-modal"
     />
   )
 }

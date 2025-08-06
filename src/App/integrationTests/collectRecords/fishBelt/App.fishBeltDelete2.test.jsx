@@ -34,8 +34,8 @@ describe('Offline', () => {
     )
     // make an unsaved change
 
-    await user.clear(screen.getByLabelText('Depth'))
-    await user.type(screen.getByLabelText('Depth'), '45')
+    await user.clear(screen.getByTestId('depth-input'))
+    await user.type(screen.getByTestId('depth-input'), '45')
 
     await user.click(screen.getByText('Delete Record'))
 
@@ -53,6 +53,6 @@ describe('Offline', () => {
       screen.queryByText('Are you sure you want to delete this record?'),
     ).not.toBeInTheDocument()
 
-    await waitFor(async () => expect(screen.getByLabelText('Depth')).toHaveValue(45))
+    await waitFor(async () => expect(screen.getByTestId('depth-input')).toHaveValue(45))
   })
 })

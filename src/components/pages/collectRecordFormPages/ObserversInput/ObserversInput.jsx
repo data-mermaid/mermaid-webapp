@@ -132,7 +132,7 @@ const ObserversInput = ({
           {...validationPropertiesWithDirtyResetOnInputChange(validationProperties, 'observers')}
           onChange={({ selectedItems }) => handleObserversChange(selectedItems)}
           additionalInputContent={
-            <AdditionalInputContentWrapper>
+            <AdditionalInputContentWrapper data-testid="removed-observer-warning">
               <label htmlFor="Observers">{t('observers_info')}</label>
               <ul>
                 {includedObserversNoLongerOnProject.map((removedObserver) => (
@@ -143,6 +143,7 @@ const ObserversInput = ({
                       })}{' '}
                       <ButtonThatLooksLikeLinkUnderlined
                         type="button"
+                        data-testid="remove-observer-button"
                         onClick={() => handleOpenObserversModal(removedObserver)}
                       >
                         {t('remove_as_observer')}

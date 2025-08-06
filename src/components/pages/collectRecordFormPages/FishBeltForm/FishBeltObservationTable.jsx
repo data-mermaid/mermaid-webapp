@@ -289,6 +289,7 @@ const FishBeltObservationTable = ({
           fishBinSelectedLabel={fishBinSelectedLabel}
           value={sizeOrEmptyStringToAvoidInputValueErrors}
           labelledBy="fish-size-label"
+          testid="fish-size-select"
         />
       ) : null
 
@@ -298,6 +299,7 @@ const FishBeltObservationTable = ({
           step="any"
           disabled={!fishBinSelectedLabel}
           aria-labelledby="fish-size-label"
+          data-testid="fish-size-input"
           onChange={handleUpdateSizeEvent}
           onKeyDown={handleObservationKeyDown}
         />
@@ -361,6 +363,7 @@ const FishBeltObservationTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
+                  data-testid="fish-name-autocomplete"
                   disabled={!fishBinSelectedLabel}
                   // we only want autofocus to take over focus after the user adds
                   // new observations, not before. Otherwise initial page load focus
@@ -377,7 +380,11 @@ const FishBeltObservationTable = ({
                   value={fishNameId}
                   noResultsText={searchNoResultsText}
                   noResultsAction={
-                    <NewOptionButton type="button" onClick={proposeNewSpeciesClick}>
+                    <NewOptionButton
+                      type="button"
+                      data-testid="propose-new-species-button"
+                      onClick={proposeNewSpeciesClick}
+                    >
                       {proposeNewSpeciesText}
                     </NewOptionButton>
                   }
@@ -410,6 +417,7 @@ const FishBeltObservationTable = ({
               aria-labelledby="fish-count-label"
               onChange={handleUpdateCount}
               disabled={!fishBinSelectedLabel}
+              data-testid="fish-count-input"
               onKeyDown={(event) => {
                 handleKeyDown({ event, index, observation, isCount: true })
               }}
@@ -435,6 +443,7 @@ const FishBeltObservationTable = ({
               type="button"
               onClick={handleDeleteObservation}
               aria-label={deleteObservationText}
+              data-testid='delete-observation-button'
             >
               <IconClose />
             </ButtonRemoveRow>
@@ -555,12 +564,16 @@ const FishBeltObservationTable = ({
                   </IconButton>
                 </LabelContainer>
               </Th>
-              <Th align="right">
+              <Th align="right" id="fish-biomass-label">
                 {t('biomass')}
                 <br />
                 <small>(kg/ha)</small>
               </Th>
-              {areValidationsShowing ? <Th align="center">{t('validations')}</Th> : null}
+              {areValidationsShowing ? (
+                <Th align="center" id="fish-validations-label">
+                  {t('validations')}
+                </Th>
+              ) : null}
               <Th> </Th>
             </Tr>
           </thead>

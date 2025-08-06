@@ -56,6 +56,7 @@ const InputMuiChipSelectWithLabelAndValidation = ({
           renderValue={(selected) => (selected.length ? chips : language.placeholders.select)}
           label=""
           displayEmpty={true}
+          data-testid={`${id}-select`}
         >
           {options.map((option) => (
             <CustomMenuItem
