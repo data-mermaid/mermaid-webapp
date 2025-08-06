@@ -22,7 +22,6 @@ const InputWithLabelAndValidation = ({
   renderItemAboveInput = undefined,
   isInputDisabled = false,
   showHelperText = false,
-
   ...restOfProps
 }) => {
   const textFieldRef = useRef()

@@ -29,6 +29,7 @@ const TextareaWithLabelAndValidation = ({
           aria-describedby={`aria-descp${id}`}
           rows="6"
           id={id}
+          data-testid={`${testId}-textarea`}
           {...restOfProps}
         />
         {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}

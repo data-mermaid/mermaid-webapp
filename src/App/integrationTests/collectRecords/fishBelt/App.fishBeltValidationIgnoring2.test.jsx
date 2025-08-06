@@ -107,7 +107,7 @@ test('Validation: user can reset ignored observation warnings ', async () => {
     ),
   )
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = await screen.findByTestId('observations-section')
 
   // only one observation will have warnings
 
@@ -476,55 +476,55 @@ test('Validation: user edits non-observation input with ignored validation reset
   await user.selectOptions(within(managementRow).getByLabelText('Management'), '1')
   await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(depthRow).getByLabelText('Depth'), '1')
+  await user.type(screen.getByTestId('depth-input'), '1')
   await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(sampleDateRow).getByLabelText('Sample Date'), '2021-11-09')
+  await user.type(screen.getByTestId('sample_date-input'), '2021-11-09')
   await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(sampleTimeRow).getByLabelText('Sample Time'), '02:39 PM')
+  await user.type(screen.getByTestId('sample_time-input'), '02:39 PM')
   await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(transectNumberRow).getByLabelText('Transect Number'), '12')
+  await user.type(screen.getByTestId('transect_number-input'), '12')
   await waitFor(() =>
     expect(within(transectNumberRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  await user.type(within(labelRow).getByLabelText('Label'), '1')
+  await user.type(screen.getByTestId('label-input'), '1')
   await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(lengthSurveyedRow).getByLabelText('Transect Length Surveyed'), '1')
+  await user.type(screen.getByTestId('len_surveyed-input'), '1')
   await waitFor(() =>
     expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
   // Width selection 10m
   await user.selectOptions(
-    within(widthRow).getByLabelText('Width'),
+    screen.getByTestId('width-select'),
     '228c932d-b5da-4464-b0df-d15a05c05c02',
   )
   await waitFor(() => expect(within(widthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // Fish Size Bin selection AGRRA
   await user.selectOptions(
-    within(sizeBinRow).getByLabelText('Fish Size Bin (cm)'),
+    screen.getByTestId('size_bin-select'),
     'ccef720a-a1c9-4956-906d-09ed56f16249',
   )
   await waitFor(() => expect(within(sizeBinRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // Reef Slope select on crest
   await user.selectOptions(
-    within(reefSlopeRow).getByLabelText('Reef Slope'),
+    screen.getByTestId('reef_slope-select'),
     '12dc11ae-3a4b-4309-8fae-66f51398d96f',
   )
   await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(notesRow).getByLabelText('Notes'), '1')
+  await user.type(screen.getByTestId('notes-textarea'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  const observersList = within(observersRow).getByLabelText('Observers')
+  const observerSelect = screen.getByTestId('observers-select')
 
-  await user.click(within(observersList).getByText('Melissa Nunes'))
+  await user.click(within(observerSelect).getByText('Melissa Nunes'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // make act error go away

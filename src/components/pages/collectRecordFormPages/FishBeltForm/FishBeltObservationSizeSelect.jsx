@@ -10,6 +10,7 @@ export const FishBeltObservationSizeSelect = ({
   fishBinSelectedLabel = undefined,
   value = '',
   labelledBy = undefined,
+  testid = undefined,
   ...restOfProps
 }) => {
   const binsToUse = fishBeltBins[fishBinSelectedLabel] ?? []
@@ -51,6 +52,7 @@ export const FishBeltObservationSizeSelect = ({
         onChange={handleSelectOnChange}
         value={optionSelected}
         aria-labelledby={labelledBy}
+        data-testid={testid}
         {...restOfProps}
       >
         <option value=""> </option>
@@ -72,6 +74,7 @@ export const FishBeltObservationSizeSelect = ({
           unit="cm"
           step="any"
           aria-labelledby={labelledBy}
+          data-testid="fish-size-50-input"
         />
       )}
     </>
@@ -83,4 +86,5 @@ FishBeltObservationSizeSelect.propTypes = {
   fishBinSelectedLabel: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   labelledBy: PropTypes.string,
+  testid: PropTypes.string,
 }

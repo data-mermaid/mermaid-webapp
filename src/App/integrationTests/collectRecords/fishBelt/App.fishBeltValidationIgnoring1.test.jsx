@@ -658,7 +658,7 @@ test('Fishbelt Validation: user can dismiss observation warnings ', async () => 
     ),
   )
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('firstWarning')).toBeInTheDocument()
   expect(within(observationsTable).getByText('secondWarning')).toBeInTheDocument()

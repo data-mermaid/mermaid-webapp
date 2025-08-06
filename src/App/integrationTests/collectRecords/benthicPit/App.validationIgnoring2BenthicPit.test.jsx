@@ -519,9 +519,9 @@ test('Benthic PIT validation: user edits non-observation input with ignored vali
   await user.type(within(notesRow).getByLabelText('Notes'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  const observersList = within(observersRow).getByLabelText('Observers')
+  const observerSelect = within(observersRow).getByTestId('observers-select')
 
-  await user.click(within(observersList).getByText('Melissa Nunes'))
+  await user.click(within(observerSelect).getByText('Melissa Nunes'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // make act error go away

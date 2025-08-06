@@ -30,7 +30,7 @@ const InputNoRowWithLabelAndValidation = ({
   renderItemAboveInput = undefined,
   isInputDisabled = false,
   showHelperText = false,
-
+  testId = undefined,
   ...restOfProps
 }) => {
   const textFieldRef = useRef()
@@ -54,6 +54,7 @@ const InputNoRowWithLabelAndValidation = ({
       aria-labelledby={`aria-label${id}`}
       aria-describedby={`aria-descp${id}`}
       id={id}
+      data-testid={`${testId}-input`}
       unit={unit}
       disabled={isInputDisabled}
       {...restOfProps}
@@ -63,6 +64,7 @@ const InputNoRowWithLabelAndValidation = ({
       aria-labelledby={`aria-label${id}`}
       aria-describedby={`aria-descp${id}`}
       id={id}
+      data-testid={`${testId}-input`}
       {...restOfProps}
       ref={textFieldRef}
     />

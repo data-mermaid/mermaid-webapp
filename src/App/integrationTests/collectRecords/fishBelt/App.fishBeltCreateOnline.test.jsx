@@ -6,6 +6,7 @@ import {
   within,
   renderAuthenticatedOnline,
   waitFor,
+  waitForElementToBeRemoved,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -13,32 +14,41 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 const saveFishbeltRecord = async (user) => {
   await user.selectOptions(await screen.findByLabelText('Site'), '1')
   await user.selectOptions(screen.getByLabelText('Management'), '2')
-  await user.type(screen.getByLabelText('Depth'), '10000')
-  await user.type(screen.getByLabelText('Sample Date'), '2021-04-21')
-  await user.type(screen.getByLabelText('Sample Time'), '12:34')
-  await user.type(screen.getByLabelText('Transect Number'), '56')
-  await user.type(screen.getByLabelText('Label'), 'some label')
-  await user.type(screen.getByLabelText('Transect Length Surveyed'), '2')
-  await user.selectOptions(screen.getByLabelText('Width'), '228c932d-b5da-4464-b0df-d15a05c05c02')
+  await user.type(screen.getByTestId('depth-input'), '10000')
+  await user.type(screen.getByTestId('sample_date-input'), '2021-04-21')
+  await user.type(screen.getByTestId('sample_time-input'), '12:34')
+  await user.type(screen.getByTestId('transect_number-input'), '56')
+  await user.type(screen.getByTestId('label-input'), 'some label')
+  await user.type(screen.getByTestId('len_surveyed-input'), '2')
   await user.selectOptions(
-    screen.getByLabelText('Fish Size Bin (cm)'),
+    screen.getByTestId('width-select'),
+    '228c932d-b5da-4464-b0df-d15a05c05c02',
+  )
+  await user.selectOptions(
+    screen.getByTestId('size_bin-select'),
     '67c1356f-e0a7-4383-8034-77b2f36e1a49',
   )
   await user.selectOptions(
-    screen.getByLabelText('Reef Slope'),
+    screen.getByTestId('reef_slope-select'),
     'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
   )
   await user.selectOptions(
-    screen.getByLabelText('Visibility'),
+    screen.getByTestId('visibility-select'),
     'a3ba3f14-330d-47ee-9763-bc32d37d03a5',
   )
-  await user.selectOptions(screen.getByLabelText('Current'), 'e5dcb32c-614d-44ed-8155-5911b7ee774a')
   await user.selectOptions(
-    screen.getByLabelText('Relative Depth'),
+    screen.getByTestId('current-select'),
+    'e5dcb32c-614d-44ed-8155-5911b7ee774a',
+  )
+  await user.selectOptions(
+    screen.getByTestId('relative_depth-select'),
     '8f381e71-219e-469c-8c13-231b088fb861',
   )
-  await user.selectOptions(screen.getByLabelText('Tide'), '97a63da7-e98c-4be7-8f13-e95d38aa17ae')
-  await user.type(screen.getByLabelText('Notes'), 'some notes')
+  await user.selectOptions(
+    screen.getByTestId('tide-select'),
+    '97a63da7-e98c-4be7-8f13-e95d38aa17ae',
+  )
+  await user.type(screen.getByTestId('notes-textarea'), 'some notes')
   await user.click(screen.getByText('Save', { selector: 'button' }))
 }
 
@@ -55,6 +65,11 @@ describe('Online', () => {
       dexieCurrentUserInstance,
     )
 
+    await screen.findByLabelText('project pages loading indicator')
+    await waitForElementToBeRemoved(() =>
+      screen.queryByLabelText('project pages loading indicator'),
+    )
+
     await saveFishbeltRecord(user)
 
     expect(await screen.findByText('Record saved.'))
@@ -66,20 +81,20 @@ describe('Online', () => {
     expect(screen.getByDisplayValue('Site A'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes B [Management Regimes 2]'))
-    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
-    expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
-    expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
-    expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
-    expect(screen.getByLabelText('Label')).toHaveValue('some label')
-    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    expect(screen.getByLabelText('Width')).toHaveDisplayValue('10m')
-    expect(screen.getByLabelText('Fish Size Bin (cm)')).toHaveDisplayValue('1')
-    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
-    expect(screen.getByLabelText('Visibility')).toHaveDisplayValue('1-5m - poor')
-    expect(screen.getByLabelText('Current')).toHaveDisplayValue('high')
-    expect(screen.getByLabelText('Relative Depth')).toHaveDisplayValue('deep')
-    expect(screen.getByLabelText('Tide')).toHaveDisplayValue('falling')
-    expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
+    expect(screen.getByTestId('depth-input')).toHaveValue(10000)
+    expect(screen.getByTestId('sample_date-input')).toHaveValue('2021-04-21')
+    expect(screen.getByTestId('sample_time-input')).toHaveValue('12:34')
+    expect(screen.getByTestId('transect_number-input')).toHaveValue(56)
+    expect(screen.getByTestId('label-input')).toHaveValue('some label')
+    expect(screen.getByTestId('len_surveyed-input')).toHaveValue(2)
+    expect(screen.getByTestId('width-select')).toHaveDisplayValue('10m')
+    expect(screen.getByTestId('size_bin-select')).toHaveDisplayValue('1')
+    expect(screen.getByTestId('reef_slope-select')).toHaveDisplayValue('flat')
+    expect(screen.getByTestId('visibility-select')).toHaveDisplayValue('1-5m - poor')
+    expect(screen.getByTestId('current-select')).toHaveDisplayValue('high')
+    expect(screen.getByTestId('relative_depth-select')).toHaveDisplayValue('deep')
+    expect(screen.getByTestId('tide-select')).toHaveDisplayValue('falling')
+    expect(screen.getByTestId('notes-textarea')).toHaveValue('some notes')
   }, 50000)
 
   test('New fishbelt save success show new record in collecting table', async () => {
@@ -130,6 +145,11 @@ describe('Online', () => {
       },
     )
 
+    await screen.findByLabelText('project pages loading indicator')
+    await waitForElementToBeRemoved(() =>
+      screen.queryByLabelText('project pages loading indicator'),
+    )
+
     await saveFishbeltRecord(user)
 
     expect(await screen.findByText('The sample unit has not been saved.'))
@@ -145,19 +165,19 @@ describe('Online', () => {
     expect(screen.getByLabelText('Management')).toHaveDisplayValue(
       'Management Regimes B [Management Regimes 2]',
     )
-    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
-    expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
-    expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
-    expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
-    expect(screen.getByLabelText('Label')).toHaveValue('some label')
-    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    expect(screen.getByLabelText('Width')).toHaveDisplayValue('10m')
-    expect(screen.getByLabelText('Fish Size Bin (cm)')).toHaveDisplayValue('1')
-    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
-    expect(screen.getByLabelText('Visibility')).toHaveDisplayValue('1-5m - poor')
-    expect(screen.getByLabelText('Current')).toHaveDisplayValue('high')
-    expect(screen.getByLabelText('Relative Depth')).toHaveDisplayValue('deep')
-    expect(screen.getByLabelText('Tide')).toHaveDisplayValue('falling')
-    expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
+    expect(screen.getByTestId('depth-input')).toHaveValue(10000)
+    expect(screen.getByTestId('sample_date-input')).toHaveValue('2021-04-21')
+    expect(screen.getByTestId('sample_time-input')).toHaveValue('12:34')
+    expect(screen.getByTestId('transect_number-input')).toHaveValue(56)
+    expect(screen.getByTestId('label-input')).toHaveValue('some label')
+    expect(screen.getByTestId('len_surveyed-input')).toHaveValue(2)
+    expect(screen.getByTestId('width-select')).toHaveDisplayValue('10m')
+    expect(screen.getByTestId('size_bin-select')).toHaveDisplayValue('1')
+    expect(screen.getByTestId('reef_slope-select')).toHaveDisplayValue('flat')
+    expect(screen.getByTestId('visibility-select')).toHaveDisplayValue('1-5m - poor')
+    expect(screen.getByTestId('current-select')).toHaveDisplayValue('high')
+    expect(screen.getByTestId('relative_depth-select')).toHaveDisplayValue('deep')
+    expect(screen.getByTestId('tide-select')).toHaveDisplayValue('falling')
+    expect(screen.getByTestId('notes-textarea')).toHaveValue('some notes')
   }, 50000)
 })

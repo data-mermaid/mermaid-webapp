@@ -14,9 +14,11 @@ import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAn
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import ClearSizeValuesModal from './ClearSizeValueModal'
-import language from '../../../../language'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 import { getFishBinLabel } from './fishBeltBins'
+import { useTranslation, Trans } from 'react-i18next'
+import { HelperTextLink } from '../../../generic/links'
+import { links } from '../../../../link_constants'
 
 const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.depth'
@@ -52,6 +54,7 @@ const FishBeltTransectInputs = ({
     currents,
     tides,
   } = choices
+  const { t } = useTranslation()
   const transectWidthOptions = sortArrayByObjectKey(getOptions(belttransectwidths.data), 'label')
   const fishSizeBinOptions = getOptions(fishsizebins.data)
   const reefSlopeOptions = getOptions(reefslopes.data)
@@ -263,9 +266,9 @@ const FishBeltTransectInputs = ({
   return (
     <>
       <InputWrapper>
-        <H2>{language.pages.collectRecord.formSectionTitle.transect}</H2>
+        <H2>{t('transect')}</H2>
         <InputWithLabelAndValidation
-          label="Transect Number"
+          label={t('transect_number')}
           required={true}
           id="number"
           testId="transect_number"
@@ -285,10 +288,10 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.number}
           onChange={handleTransectNumberChange}
-          helperText={language.helperText.transectNumber}
+          helperText={t('transect_number_info')}
         />
         <InputWithLabelAndValidation
-          label="Label"
+          label={t('label')}
           id="label"
           testId="label"
           type="text"
@@ -302,10 +305,10 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
-          helperText={language.helperText.label}
+          helperText={t('label_info')}
         />
         <InputWithLabelAndValidation
-          label="Sample Time"
+          label={t('sample_time')}
           id="sample_time"
           testId="sample_time"
           type="time"
@@ -322,11 +325,11 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
-          helperText={language.helperText.sampleTime}
+          helperText={t('sample_time_info')}
         />
 
         <InputWithLabelAndValidation
-          label="Depth"
+          label={t('depth')}
           required={true}
           id="depth"
           unit="m"
@@ -342,10 +345,10 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.depth}
           onChange={handleDepthChange}
-          helperText={language.helperText.depth}
+          helperText={t('depth_info')}
         />
         <InputWithLabelAndValidation
-          label="Transect Length Surveyed"
+          label={t('transect_length_surveyed')}
           required={true}
           id="len_surveyed"
           testId="len_surveyed"
@@ -366,10 +369,10 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
-          helperText={language.helperText.transectLengthSurveyed}
+          helperText={t('transect_length_info')}
         />
         <InputSelectWithLabelAndValidation
-          label="Width"
+          label={t('width')}
           required={true}
           id="width"
           testId="width"
@@ -385,10 +388,10 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.width}
           onChange={handleWidthChange}
-          helperText={language.helperText.width}
+          helperText={t('width_info')}
         />
         <InputSelectWithLabelAndValidation
-          label="Fish Size Bin (cm)"
+          label={t('fish_size_bin')}
           required={true}
           id="size_bin"
           testId="size_bin"
@@ -407,10 +410,10 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.size_bin}
           onChange={handleSizeBinChange}
-          helperText={language.helperText.fishSizeBin}
+          helperText={t('fish_size_bin_info')}
         />
         <InputSelectWithLabelAndValidation
-          label="Reef Slope"
+          label={t('reef_slope')}
           required={false}
           id="reef_slope"
           testId="reef_slope"
@@ -429,10 +432,23 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.reef_slope}
           onChange={handleReefSlopeChange}
-          helperText={language.helperText.getReefSlope()}
+          helperText={
+            <Trans
+              i18nKey="reef_slope_info"
+              components={{
+                a: (
+                  <HelperTextLink
+                    href={links.reefCoverClassDefinitions}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                ),
+              }}
+            />
+          }
         />
         <InputSelectWithLabelAndValidation
-          label="Visibility"
+          label={t('visibility')}
           required={false}
           id="visibility"
           testId="visibility"
@@ -451,10 +467,10 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
           onChange={handleVisibilityChange}
-          helperText={language.helperText.visibility}
+          helperText={t('visibility_info')}
         />
         <InputSelectWithLabelAndValidation
-          label="Current"
+          label={t('current')}
           required={false}
           id="current"
           testId="current"
@@ -473,10 +489,10 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.current}
           onChange={handleCurrentChange}
-          helperText={language.helperText.current}
+          helperText={t('current_info')}
         />
         <InputSelectWithLabelAndValidation
-          label="Relative Depth"
+          label={t('relative_depth')}
           required={false}
           id="relative_depth"
           testId="relative_depth"
@@ -495,10 +511,10 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
-          helperText={language.helperText.getRelativeDepth()}
+          helperText={t('relative_depth_info')}
         />
         <InputSelectWithLabelAndValidation
-          label="Tide"
+          label={t('tide')}
           required={false}
           id="tide"
           testId="tide"
@@ -514,10 +530,23 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
-          helperText={language.helperText.getTide()}
+          helperText={
+            <Trans
+              i18nKey="tide_info"
+              components={{
+                a: (
+                  <HelperTextLink
+                    href={links.tideIntroduction}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                ),
+              }}
+            />
+          }
         />
         <TextareaWithLabelAndValidation
-          label="Notes"
+          label={t('notes')}
           id="notes"
           testId="notes"
           ignoreNonObservationFieldValidations={() => {
@@ -530,12 +559,10 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
-          helperText={language.helperText.notes}
         />
       </InputWrapper>
       <ClearSizeValuesModal
         isOpen={isClearSizeValueModalOpen}
-        modalText={language.clearSizeValuesModal}
         handleResetSizeValues={handleResetSizeValues}
         onDismiss={closeClearSizeValuesModal}
         openModal={openClearSizeValuesModal}

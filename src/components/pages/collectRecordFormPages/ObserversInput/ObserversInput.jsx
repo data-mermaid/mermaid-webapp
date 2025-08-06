@@ -11,12 +11,12 @@ import {
   observersValidationPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import language from '../../../../language'
 import InputMuiChipSelectWithLabelAndValidation from '../../../mermaidInputs/InputMuiChipSelectWithLabelAndValidation/InputMuiChipSelectWithLabelAndValidation'
 import { ButtonThatLooksLikeLinkUnderlined } from '../../../generic/buttons'
 
 import theme from '../../../../theme'
 import RemoveObserverModal from '../../../RemoveObserverModal/RemoveObserverModal'
+import { useTranslation } from 'react-i18next'
 
 const AdditionalInputContentWrapper = styled.div`
   font-size: ${theme.typography.smallFontSize};
@@ -45,6 +45,7 @@ const ObserversInput = ({
   validationPropertiesWithDirtyResetOnInputChange,
   ...restOfProps
 }) => {
+  const { t } = useTranslation()
   const [includedObserversNoLongerOnProject, setIncludedObserversNoLongerOnProject] = useState([])
   const [
     observerRemovedFromProjectToRemoveFromCollectRecord,
@@ -115,9 +116,9 @@ const ObserversInput = ({
   return (
     <>
       <InputWrapper {...restOfProps}>
-        <H2>{language.pages.collectRecord.formSectionTitle.observers}</H2>
+        <H2>{t('observers')}</H2>
         <InputMuiChipSelectWithLabelAndValidation
-          label="Observers"
+          label={t('observers')}
           required={true}
           id="observers"
           options={observerNameOptions}
@@ -131,22 +132,21 @@ const ObserversInput = ({
           {...validationPropertiesWithDirtyResetOnInputChange(validationProperties, 'observers')}
           onChange={({ selectedItems }) => handleObserversChange(selectedItems)}
           additionalInputContent={
-            <AdditionalInputContentWrapper>
-              <label htmlFor="Observers">
-                {language.pages.collectRecord.observersSelectHelper}
-              </label>
+            <AdditionalInputContentWrapper data-testid="removed-observer-warning">
+              <label htmlFor="Observers">{t('observers_info')}</label>
               <ul>
                 {includedObserversNoLongerOnProject.map((removedObserver) => (
                   <li key={removedObserver.id}>
                     <>
-                      {language.pages.collectRecord.getObserverRemovedFromProjectMessage(
-                        getObserverNameToUse(removedObserver),
-                      )}{' '}
+                      {t('removed_from_project_message', {
+                        userName: getObserverNameToUse(removedObserver),
+                      })}{' '}
                       <ButtonThatLooksLikeLinkUnderlined
                         type="button"
+                        data-testid="remove-observer-button"
                         onClick={() => handleOpenObserversModal(removedObserver)}
                       >
-                        {language.pages.collectRecord.removeObserverFromCollectRecord}
+                        {t('remove_as_observer')}
                       </ButtonThatLooksLikeLinkUnderlined>
                     </>
                   </li>
