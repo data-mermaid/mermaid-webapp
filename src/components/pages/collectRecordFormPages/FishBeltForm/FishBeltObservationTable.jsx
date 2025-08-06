@@ -443,7 +443,7 @@ const FishBeltObservationTable = ({
               type="button"
               onClick={handleDeleteObservation}
               aria-label={deleteObservationText}
-              data-testid='delete-observation-button'
+              data-testid="delete-observation-button"
             >
               <IconClose />
             </ButtonRemoveRow>
