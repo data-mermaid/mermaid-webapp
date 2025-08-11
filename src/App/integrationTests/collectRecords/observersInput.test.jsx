@@ -10,7 +10,7 @@ import {
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import App from '../../App'
 
-test('Observers input shows users that have been removed from the project and allows for them to be deleted from the collect record. ', async () => {
+test('Observers input shows users that have been removed from the project and allows for them to be deleted from the collect record.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   const { user } = renderAuthenticatedOnline(
@@ -31,7 +31,7 @@ test('Observers input shows users that have been removed from the project and al
 
   await user.click(removeObserverButton)
 
-  // TODO: Not sure the refactor token for removal modal is working correctly, will try again to fix this test late
+  // TODO - TEST TECH DEBT
   // const modal = await screen.findByTestId('remove-observer-modal')
 
   // expect(modal).toHaveTextContent('Are you sure you want to remove Betsy Craig as an observer?')

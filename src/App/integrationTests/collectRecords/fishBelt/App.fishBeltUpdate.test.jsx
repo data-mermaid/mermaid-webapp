@@ -83,7 +83,7 @@ describe('Offline', () => {
       'some fish notes',
     )
   })
-  //TODO: Unfixable test, come back to it later
+  // TODO - TEST TECH DEBT
   // test('Edit fishbelt save stores properly formatted fish belt observations in dexie', async () => {
   //   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
