@@ -627,7 +627,7 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
   await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   await user.type(within(notesRow).getByLabelText('Notes'), '1')
-  await waitFor(() => expect(within(notesRow).queryByText('Ignoredw')).not.toBeInTheDocument())
+  await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   const observerSelect = within(observersRow).getByTestId('observers-select')
 

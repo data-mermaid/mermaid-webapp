@@ -67,11 +67,6 @@ describe('Offline', () => {
       },
     )
 
-    await screen.findByLabelText('project pages loading indicator')
-    await waitForElementToBeRemoved(() =>
-      screen.queryByLabelText('project pages loading indicator'),
-    )
-
     await saveFishbeltRecord(user)
 
     expect(await screen.findByText('Record saved.'))
@@ -150,11 +145,6 @@ describe('Offline', () => {
         dexiePerUserDataInstance,
         dexieCurrentUserInstance,
       },
-    )
-
-    await screen.findByLabelText('project pages loading indicator')
-    await waitForElementToBeRemoved(() =>
-      screen.queryByLabelText('project pages loading indicator'),
     )
 
     await saveFishbeltRecord(user)
