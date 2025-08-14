@@ -6,7 +6,6 @@ import {
   within,
   renderAuthenticatedOffline,
   waitFor,
-  waitForElementToBeRemoved,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
