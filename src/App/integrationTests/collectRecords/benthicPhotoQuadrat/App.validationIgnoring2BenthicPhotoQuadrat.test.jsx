@@ -629,9 +629,9 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
   await user.type(within(notesRow).getByLabelText('Notes'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  const observersList = within(observersRow).getByLabelText('Observers')
+  const observerSelect = within(observersRow).getByTestId('observers-select')
 
-  await user.click(within(observersList).getByText('Melissa Nunes'))
+  await user.click(within(observerSelect).getByText('Melissa Nunes'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   await user.type(within(quadratNumberStartRow).getByLabelText('Quadrat Number Start'), '99')

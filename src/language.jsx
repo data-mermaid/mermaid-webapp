@@ -433,13 +433,6 @@ const gfcrNewIndicatorSetModal = {
   dateInput: 'Date',
 }
 
-const clearSizeValuesModal = {
-  title: `Clear Size Values`,
-  prompt: `This will clear all the size values for all observations.`,
-  yes: `Clear Size Values`,
-  no: 'Cancel',
-}
-
 const autocomplete = {
   noResultsDefault: 'No results found',
 }
@@ -521,7 +514,6 @@ const pages = {
   },
   collectRecord: {
     title: 'Collecting',
-    newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',
     totalBiomassLabel: 'Total Biomass (kg/ha)',
     newBenthicAttributeLink: 'Propose New Benthic Attribute...',
@@ -531,24 +523,6 @@ const pages = {
       quadratCollection: 'Quadrat Collection',
       observers: 'Observers',
       transect: 'Transect',
-    },
-    observersSelectHelper: 'Select one or more observers to add',
-    getObserverRemovedFromProjectMessage: (userName) => (
-      <>
-        <strong>{userName}</strong> is an observer on this sample unit but is no longer a part of
-        this project.
-      </>
-    ),
-    removeObserverFromCollectRecord: 'Remove as observer',
-    removeObserverModal: {
-      title: 'Remove observer from record',
-      getModalContent: (userName) => (
-        <>
-          Are you sure you want to remove <strong>{userName}</strong> as an observer?
-        </>
-      ),
-      removeObserverSubmitButton: 'Remove user',
-      removeObserverCancelButton: 'Cancel',
     },
     fishNamePopover: {
       family: 'Family',
@@ -1582,7 +1556,6 @@ export default {
   apiDataTableNames,
   autocomplete,
   buttons,
-  clearSizeValuesModal,
   createNewOptionModal,
   gfcrFinanceSolutionModal,
   gfcrInvestmentModal,

@@ -124,7 +124,7 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
   expect(within(screen.getByTestId('site')).getByText('firstWarning')).toBeInTheDocument()
   expect(within(screen.getByTestId('site')).getByText('secondWarning')).toBeInTheDocument()
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('observation warning 1')).toBeInTheDocument()
   expect(within(observationsTable).getByText('observation warning 2')).toBeInTheDocument()
@@ -220,7 +220,7 @@ test('Validating an empty collect record, and then editing an input with errors 
 
   expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
 
-  await user.type(screen.getByLabelText('Depth'), '1')
+  await user.type(screen.getByTestId('depth-input'), '1')
 
   // validations remain showing, except Depth is changed
   expect(await within(screen.getByTestId('site')).findByText('Required')).toBeInTheDocument()
@@ -237,10 +237,10 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations')).getByText('observation error'),
+    within(screen.getByTestId('observations-section')).getByText('observation error'),
   ).toBeInTheDocument()
 
-  await user.type(screen.getByLabelText('Depth'), '{backspace}')
+  await user.type(screen.getByTestId('depth-input'), '{backspace}')
 
   await user.click(
     await screen.findByRole('button', {
@@ -275,7 +275,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('notes')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).queryByText('Required')).not.toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations')).queryByText('observation error'),
+    within(screen.getByTestId('observations-section')).queryByText('observation error'),
   ).not.toBeInTheDocument()
 
   await user.click(
@@ -316,7 +316,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations')).getByText('observation error'),
+    within(screen.getByTestId('observations-section')).getByText('observation error'),
   ).toBeInTheDocument()
 }, 60000)
 
@@ -389,6 +389,7 @@ test('Fishbelt validations will show passed input validations', async () => {
 
   // observations table (has three empty observation)
   expect(
-    within(screen.getByLabelText('Observations')).getAllByLabelText('Passed Validation').length,
+    within(screen.getByTestId('observations-section')).getAllByLabelText('Passed Validation')
+      .length,
   ).toEqual(3)
 }, 50000)

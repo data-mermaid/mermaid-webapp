@@ -2,23 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
-import language from '../../language'
 import Modal, { RightFooter } from '../generic/Modal'
 import { getObserverNameToUse } from '../../library/observerHelpers'
 import { observerPropType } from '../../App/mermaidData/mermaidDataProptypes'
-
-const modalLanguage = language.pages.collectRecord.removeObserverModal
+import { useTranslation } from 'react-i18next'
 
 const RemoveObserverModal = ({ isOpen, onDismiss, observer = undefined, onSubmit }) => {
+  const { t } = useTranslation()
   const observerNameToUse = observer ? getObserverNameToUse(observer) : ''
 
   const footerContent = (
     <RightFooter>
       <ButtonSecondary type="button" onClick={onDismiss}>
-        {modalLanguage.removeObserverCancelButton}
+        {t('button.cancel')}
       </ButtonSecondary>
-      <ButtonCaution type="button" onClick={onSubmit}>
-        {modalLanguage.removeObserverSubmitButton}
+      <ButtonCaution type="button" onClick={onSubmit} data-testid="remove-observer-confirm-button">
+        {t('remove_user')}
       </ButtonCaution>
     </RightFooter>
   )
@@ -27,9 +26,10 @@ const RemoveObserverModal = ({ isOpen, onDismiss, observer = undefined, onSubmit
     <Modal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      title={modalLanguage.title}
-      mainContent={modalLanguage.getModalContent(observerNameToUse)}
+      title={t('remove_observer_from_record')}
+      mainContent={<>{t('remove_user_confirmation', { userName: observerNameToUse })}</>}
       footerContent={footerContent}
+      testid="remove-observer-modal"
     />
   )
 }

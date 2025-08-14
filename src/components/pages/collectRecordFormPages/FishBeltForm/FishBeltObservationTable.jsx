@@ -39,12 +39,14 @@ import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/tab
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
-import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 import theme from '../../../../theme'
 import { getFishNameTable } from '../../../../App/mermaidData/fishNameHelpers'
+import { useTranslation, Trans } from 'react-i18next'
+import { HelperTextLink } from '../../../generic/links'
+import { links } from '../../../../link_constants'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -108,6 +110,7 @@ const FishBeltObservationTable = ({
   fishGenera,
   fishSpecies,
 }) => {
+  const { t } = useTranslation()
   const fishBinSelected = formik?.values?.size_bin
   const transectLengthSurveyed = formik?.values?.len_surveyed
   const widthId = formik?.values?.width
@@ -119,6 +122,11 @@ const FishBeltObservationTable = ({
   const [observationIdWithFishNamePopoverShowing, setObservationIdWithFishNamePopoverShowing] =
     useState()
   const [fishNamePopoverContent, setFishNamePopoverContent] = useState()
+
+  const searchNoResultsText = t('search.no_results')
+  const proposeNewSpeciesText = t('propose_new_species')
+  const viewFishInfoText = t('view_fish_info')
+  const deleteObservationText = t('delete_observation')
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -281,6 +289,7 @@ const FishBeltObservationTable = ({
           fishBinSelectedLabel={fishBinSelectedLabel}
           value={sizeOrEmptyStringToAvoidInputValueErrors}
           labelledBy="fish-size-label"
+          testid="fish-size-select"
         />
       ) : null
 
@@ -290,6 +299,7 @@ const FishBeltObservationTable = ({
           step="any"
           disabled={!fishBinSelectedLabel}
           aria-labelledby="fish-size-label"
+          data-testid="fish-size-input"
           onChange={handleUpdateSizeEvent}
           onKeyDown={handleObservationKeyDown}
         />
@@ -353,6 +363,7 @@ const FishBeltObservationTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
+                  data-testid="fish-name-autocomplete"
                   disabled={!fishBinSelectedLabel}
                   // we only want autofocus to take over focus after the user adds
                   // new observations, not before. Otherwise initial page load focus
@@ -367,10 +378,14 @@ const FishBeltObservationTable = ({
                   options={fishNameOptions}
                   onChange={handleFishNameChange}
                   value={fishNameId}
-                  noResultsText={language.autocomplete.noResultsDefault}
+                  noResultsText={searchNoResultsText}
                   noResultsAction={
-                    <NewOptionButton type="button" onClick={proposeNewSpeciesClick}>
-                      {language.pages.collectRecord.newFishSpeciesLink}
+                    <NewOptionButton
+                      type="button"
+                      data-testid="propose-new-species-button"
+                      onClick={proposeNewSpeciesClick}
+                    >
+                      {proposeNewSpeciesText}
                     </NewOptionButton>
                   }
                 />
@@ -381,7 +396,7 @@ const FishBeltObservationTable = ({
                   <ButtonPopover
                     tabIndex="-1"
                     type="button"
-                    aria-label="view fish name information"
+                    aria-label={viewFishInfoText}
                     onClick={() => handlePopoverButtonClick({ observationId, fishNameId })}
                   >
                     {/* we set height ahd with here in addition in the styled component to suppress svg errors */}
@@ -402,6 +417,7 @@ const FishBeltObservationTable = ({
               aria-labelledby="fish-count-label"
               onChange={handleUpdateCount}
               disabled={!fishBinSelectedLabel}
+              data-testid="fish-count-input"
               onKeyDown={(event) => {
                 handleKeyDown({ event, index, observation, isCount: true })
               }}
@@ -426,7 +442,8 @@ const FishBeltObservationTable = ({
               tabIndex="-1"
               type="button"
               onClick={handleDeleteObservation}
-              aria-label="Delete Observation"
+              aria-label={deleteObservationText}
+              data-testid="delete-observation-button"
             >
               <IconClose />
             </ButtonRemoveRow>
@@ -451,11 +468,15 @@ const FishBeltObservationTable = ({
     setAreObservationsInputsDirty,
     setIsNewBenthicAttributeModalOpen,
     setObservationIdToAddNewBenthicAttributeTo,
+    proposeNewSpeciesText,
+    searchNoResultsText,
+    viewFishInfoText,
+    deleteObservationText,
   ])
 
   return (
     <InputWrapper data-testid={testId}>
-      <H2 id="table-label">Observations</H2>
+      <H2 id="table-label">{t('observations')}</H2>
       <StyledOverflowWrapper>
         <StickyObservationTable
           data-testid="fish-observations-table"
@@ -476,10 +497,24 @@ const FishBeltObservationTable = ({
               <Th> </Th>
               <Th align="left" id="fish-name-label">
                 <LabelContainer>
-                  Fish Name <RequiredIndicator />
+                  {t('fish_name')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishName' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.getFishName()}
+                      helperText={
+                        <Trans
+                          i18nKey="fish_name_observed"
+                          components={{
+                            a: (
+                              <HelperTextLink
+                                href={links.fishBaseLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                color="#fff"
+                              />
+                            ),
+                          }}
+                        />
+                      }
                       top="-13.5em"
                       left="-1.5em"
                       paddingBottom="3.5em"
@@ -489,16 +524,16 @@ const FishBeltObservationTable = ({
                     type="button"
                     onClick={(event) => handleInfoIconClick(event, 'fishName')}
                   >
-                    <IconInfo aria-label="info" />
+                    <IconInfo aria-label={t('show_fish_name_info')} />
                   </IconButton>
                 </LabelContainer>
               </Th>
               <Th align="right" id="fish-size-label">
                 <LabelContainer>
-                  Size (cm) <RequiredIndicator />
+                  {t('size_cm')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishSize' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.fishSize}
+                      helperText={t('fish_size_observed')}
                       top="-6em"
                       left="-2.8em"
                     />
@@ -507,16 +542,16 @@ const FishBeltObservationTable = ({
                     type="button"
                     onClick={(event) => handleInfoIconClick(event, 'fishSize')}
                   >
-                    <IconInfo aria-label="info" />
+                    <IconInfo aria-label={t('show_fish_size_info')} />
                   </IconButton>
                 </LabelContainer>
               </Th>
               <Th align="right" id="fish-count-label">
                 <LabelContainer>
-                  Count <RequiredIndicator />
+                  {t('count')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishCount' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.fishCount}
+                      helperText={t('fish_count_observed')}
                       top="-6em"
                       left="-4.7em"
                     />
@@ -525,16 +560,20 @@ const FishBeltObservationTable = ({
                     type="button"
                     onClick={(event) => handleInfoIconClick(event, 'fishCount')}
                   >
-                    <IconInfo aria-label="info" />
+                    <IconInfo aria-label={t('show_fish_count_info')} />
                   </IconButton>
                 </LabelContainer>
               </Th>
-              <Th align="right">
-                Biomass
+              <Th align="right" id="fish-biomass-label">
+                {t('biomass')}
                 <br />
                 <small>(kg/ha)</small>
               </Th>
-              {areValidationsShowing ? <Th align="center">Validations</Th> : null}
+              {areValidationsShowing ? (
+                <Th align="center" id="fish-validations-label">
+                  {t('validations')}
+                </Th>
+              ) : null}
               <Th> </Th>
             </Tr>
           </thead>
@@ -551,16 +590,16 @@ const FishBeltObservationTable = ({
           >
             <IconPlus /> Add Row
           </ButtonPrimary>
-          {!fishBinSelectedLabel ? <p>{language.error.addRowUnavailable}</p> : null}
+          {!fishBinSelectedLabel ? <p>{t('must_select_fish_warning')}</p> : null}
         </UnderTableRowButtonArea>
         <ObservationsSummaryStats>
           <tbody>
             <Tr>
-              <Th>{language.pages.collectRecord.totalBiomassLabel}</Th>
+              <Th>{t('total_biomass')}</Th>
               <Td>{totalBiomass}</Td>
             </Tr>
             <Tr>
-              <Th>{language.pages.collectRecord.totalAbundanceLabel}</Th>
+              <Th>{t('total_abundance')}</Th>
               <Td>{totalAbundance.toFixed(1)}</Td>
             </Tr>
           </tbody>

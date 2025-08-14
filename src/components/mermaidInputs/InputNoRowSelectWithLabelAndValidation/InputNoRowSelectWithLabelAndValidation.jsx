@@ -32,6 +32,7 @@ const InputNoRowSelectWithLabelAndValidation = ({
   updateValueAndResetValidationForDuplicateWarning = () => {},
   displayViewLink = false,
   showHelperText = false,
+  testId = undefined,
   ...restOfProps
 }) => {
   const [internalShowHelperText, setInternalShowHelperText] = useState()
@@ -80,6 +81,7 @@ const InputNoRowSelectWithLabelAndValidation = ({
             aria-labelledby={`aria-label${id}`}
             aria-describedby={`aria-descp${id}`}
             id={id}
+            data-testid={`${testId}-select`}
             value={value}
             {...restOfProps}
           >

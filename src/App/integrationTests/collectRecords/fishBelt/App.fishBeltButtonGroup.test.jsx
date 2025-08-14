@@ -28,8 +28,8 @@ test('Edit Fishbelt - Save button starts with Saved status, make changes, Saved 
 
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
-  await user.clear(await screen.findByLabelText('Depth'))
-  await user.type(screen.getByLabelText('Depth'), '45')
+  await user.clear(await screen.findByTestId('depth-input'))
+  await user.type(screen.getByTestId('depth-input'), '45')
 
   expect(screen.getByText('Save', { selector: 'button' }))
 
