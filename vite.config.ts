@@ -46,6 +46,6 @@ export default defineConfig({
     emptyOutDir: true,
   },
   define: {
-    'process.env': process.env,
+    'process.env': process.env.VITE_ENVIRONMENT,
   },
 })
