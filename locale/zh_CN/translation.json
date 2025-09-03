@@ -1,0 +1,10 @@
+{
+	"benthic_observations": {
+		"missing_benthic_attribute": "缺少底栖属性"
+	},
+	"image_classification": {
+		"feature_introduction": {
+			"description": "通过与加州大学圣地亚哥分校和斯克里普斯海洋研究所的<a \/>合作，MERMAID 现已支持使用 pyspacer 深度学习模型进行基于 AI 的分类。此项集成支持对底栖生物照片进行快速、可扩展的分析，让您能够利用机器学习和 AI 快速、一致地生成洞察。"
+		}
+	}
+}

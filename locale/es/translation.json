@@ -1,0 +1,10 @@
+{
+	"benthic_observations": {
+		"missing_benthic_attribute": "Atributo bentónico faltante"
+	},
+	"image_classification": {
+		"feature_introduction": {
+			"description": "Gracias a una colaboración con <a \/> de la Universidad de California en San Diego y el Instituto Scripps de Oceanografía, MERMAID ahora incluye clasificación basada en IA mediante un modelo de aprendizaje profundo de PySpace. Esta integración permite un análisis rápido y escalable de fotos bentónicas para generar información de forma rápida y consistente con aprendizaje automático e IA."
+		}
+	}
+}
