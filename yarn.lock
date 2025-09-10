@@ -10871,7 +10871,7 @@ __metadata:
     react-table: "npm:^7.6.3"
     react-toastify: "npm:^7.0.3"
     sass-embedded: "npm:^1.89.2"
-    styled-components: "npm:^5"
+    styled-components: "npm:^6"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.3.2"
     typescript-eslint: "npm:^8.26.1"
