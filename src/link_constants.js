@@ -1,6 +1,6 @@
 const imageClassificationLinks = {
   photoPreparationDoc:
-    'https://datamermaid.org/documentation/preparing-photos-for-ai-image-classification',
+    'https://datamermaid.org/documentation/image-classification-photos-preparation',
 }
 export default imageClassificationLinks
 
