@@ -11,6 +11,8 @@ const InputAndButtonWrapper = styled.div`
     ${inputStyles};
     width: 100%;
     border-color: ${theme.color.border};
+    background-color: ${(props) =>
+      props.hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
     &:focus {
       outline-offset: -3px;
     }
@@ -33,12 +35,12 @@ const InputAndButton = ({
   labelText,
   ...restOfProps
 }) => {
-  const { placeholder: _wontBeUsedPlaceholder, ...textPropsWithoutPlaceholder } = restOfProps
+  const { placeholder: _wontBeUsedPlaceholder, value, ...textPropsWithoutPlaceholder } = restOfProps
 
   return (
     <div>
       <label htmlFor={inputId}>{labelText}</label>
-      <InputAndButtonWrapper>
+      <InputAndButtonWrapper hasFilter={value && value.length > 0}>
         <Input {...textPropsWithoutPlaceholder} id={inputId} type="text" />
         <InputButton type={buttonType} onClick={buttonOnClick} disabled={isLoading}>
           {buttonChildren}
