@@ -127,7 +127,7 @@ export const Input = styled.input`
   ${inputTextareaSelectStyles}
   &[type='number'],
   &[type='text'] {
-    text-align: right;
+    text-align: ${(props) => props.textAlign || 'right'};
   }
   &:disabled {
     background: ${theme.color.disabledInputBackground};
