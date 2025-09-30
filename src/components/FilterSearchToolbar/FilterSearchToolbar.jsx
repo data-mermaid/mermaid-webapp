@@ -6,6 +6,7 @@ import { IconInfo } from '../icons'
 import { IconButton } from '../generic/buttons'
 import language from '../../language'
 import ColumnHeaderToolTip from '../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import theme from '../../theme'
 
 const FilterLabelWrapper = styled.label`
   display: flex;
@@ -16,6 +17,8 @@ const FilterLabelWrapper = styled.label`
 
 const FilterInput = styled(Input)`
   ${inputStyles};
+  background-color: ${(props) =>
+    props.hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
 `
 
 const FilterSearchToolbar = ({
@@ -116,6 +119,7 @@ const FilterSearchToolbar = ({
         value={searchText}
         onChange={handleFilterChange}
         disabled={disabled}
+        hasFilter={searchText && searchText.length > 0}
       />
     </FilterLabelWrapper>
   )
