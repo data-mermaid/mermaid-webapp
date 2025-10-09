@@ -545,7 +545,7 @@ const ImageClassificationObservationTable = ({
                 const shouldDisplayObservationValidation = Boolean(
                   hasObservationErrorValidation && annotation?.unconfirmedCount,
                 )
-                
+
                 return (
                   <StyledTr
                     key={`${file.id}-${subIndex}`}
