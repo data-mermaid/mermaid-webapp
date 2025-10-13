@@ -29,11 +29,10 @@ const FilterSearchToolbar = ({
   handleGlobalFilterChange,
   type = 'page',
 }) => {
-  const [searchText, setSearchText] = useState(globalSearchText)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
-  const tooltipRef = useRef(null)
   const [maxWidth, setMaxWidth] = useState('50em')
+  const tooltipRef = useRef(null)
 
   useEffect(() => {
     let pixelAdjustTop = 302
@@ -83,7 +82,6 @@ const FilterSearchToolbar = ({
   const handleFilterChange = (event) => {
     const eventValue = event.target.value
 
-    setSearchText(eventValue)
     handleGlobalFilterChange(eventValue)
   }
 
@@ -116,10 +114,10 @@ const FilterSearchToolbar = ({
       <FilterInput
         type="text"
         id={id}
-        value={searchText}
+        value={globalSearchText}
         onChange={handleFilterChange}
         disabled={disabled}
-        hasFilter={searchText && searchText.length > 0}
+        hasFilter={globalSearchText && globalSearchText.length > 0}
       />
     </FilterLabelWrapper>
   )
