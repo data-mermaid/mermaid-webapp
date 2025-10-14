@@ -46,7 +46,7 @@ const ImageAnnotationModalTable = ({
     { groupedPoints: [], unclassifiedCount: 0 },
   )
 
-  const tableData = Object.groupBy(groupedPoints, ({ annotations }) => annotations[0].ba_gr_label)
+  const tableData = Object.groupBy(groupedPoints, ({ annotations }) => annotations[0].ba_gr)
 
   const sortAlphabeticallyByAttributeLabel = (a, b) => {
     if (a === unclassifiedGuid) {
@@ -141,8 +141,7 @@ const ImageAnnotationModalTable = ({
                         </ButtonZoom>
                       </MuiTooltipDark>
                     </TdZoom>
-                    {/*//HOT FIX M1648: This is a hacky, necessary fix and should be fixed with tech debt to avoid using hard-coded text*/}
-                    {groupedTableRowId === 'Unclassified' ? (
+                    {groupedTableRowId === unclassifiedGuid ? (
                       <Td colSpan={5} align="center" style={{ fontWeight: '700' }}>
                         <span>
                           {t('image_classification.annotation.unclassified_points', {

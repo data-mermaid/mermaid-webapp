@@ -19,8 +19,7 @@ const isClassified = ({ annotations }) => annotations.length > 0
 const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
   annotations.some((annotation) => annotation.is_machine_created && annotation.ba_gr === ba_gr)
 
-const isOptionAlreadyAdded = (acc, annotation) =>
-  acc.some((option) => option.value === annotation.ba_gr && option.label === annotation.ba_gr_label)
+const isOptionAlreadyAdded = (acc, value) => acc.some((option) => option.value === value)
 
 const SelectAttributeFromClassifierGuesses = ({
   selectedPoint,
@@ -43,7 +42,7 @@ const SelectAttributeFromClassifierGuesses = ({
 
       if (
         isClassified(currentPoint) &&
-        !isOptionAlreadyAdded(acc, annotations) &&
+        !isOptionAlreadyAdded(acc, ba_gr) &&
         !isAClassifierGuessOfSelectedPoint(selectedPoint.annotations, ba_gr) &&
         ba_gr !== unclassifiedGuid
       ) {
