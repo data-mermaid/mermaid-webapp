@@ -39,19 +39,19 @@ test('Habitat Complexity observations: intervals are derived from interval size 
     within(observationsSection).getAllByLabelText('Interval')
 
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('1m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('5m')
   })
 
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('6m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('10m')
   })
 
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('11m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('15m')
   })
 
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('16m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('20m')
   })
 
   // user changes interval size value
@@ -61,17 +61,17 @@ test('Habitat Complexity observations: intervals are derived from interval size 
     within(observationsSection).getAllByLabelText('Interval')
 
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterIntervalSizeChange[0]).toHaveTextContent('1m')
+    expect(observationIntervalLabelsAfterIntervalSizeChange[0]).toHaveTextContent('100m')
   })
 
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterIntervalSizeChange[1]).toHaveTextContent('101m')
+    expect(observationIntervalLabelsAfterIntervalSizeChange[1]).toHaveTextContent('200m')
   })
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterIntervalSizeChange[2]).toHaveTextContent('201m')
+    expect(observationIntervalLabelsAfterIntervalSizeChange[2]).toHaveTextContent('300m')
   })
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterIntervalSizeChange[3]).toHaveTextContent('301m')
+    expect(observationIntervalLabelsAfterIntervalSizeChange[3]).toHaveTextContent('400m')
   })
 })
 
@@ -101,16 +101,16 @@ test('Habitat Complexity observations: intervals recalculate when user deletes a
     within(observationsSection).getAllByLabelText('Interval')
 
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('1m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('5m')
   })
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('6m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('10m')
   })
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('11m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('15m')
   })
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('16m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('20m')
   })
 
   // delete the first observation, the intervals should recalculate
@@ -124,9 +124,9 @@ test('Habitat Complexity observations: intervals recalculate when user deletes a
   const observationIntervalLabelsAfterObservationDelete =
     within(observationsSection).getAllByLabelText('Interval')
 
-  expect(observationIntervalLabelsAfterObservationDelete[0]).toHaveTextContent('1m')
-  expect(observationIntervalLabelsAfterObservationDelete[1]).toHaveTextContent('6m')
-  expect(observationIntervalLabelsAfterObservationDelete[2]).toHaveTextContent('11m')
+  expect(observationIntervalLabelsAfterObservationDelete[0]).toHaveTextContent('5m')
+  expect(observationIntervalLabelsAfterObservationDelete[1]).toHaveTextContent('10m')
+  expect(observationIntervalLabelsAfterObservationDelete[2]).toHaveTextContent('15m')
   expect(observationIntervalLabelsAfterObservationDelete[3]).toBeUndefined()
 })
 
@@ -156,16 +156,16 @@ test('Habitat Complexity observations: intervals reclaculate when a user inserts
     within(observationsSection).getAllByLabelText('Interval')
 
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('1m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('5m')
   })
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('6m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('10m')
   })
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('11m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('15m')
   })
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('16m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('20m')
   })
   await waitFor(() => {
     expect(observationIntervalLabelsAfterFourRowsAdded[4]).toBeUndefined()
@@ -182,19 +182,19 @@ test('Habitat Complexity observations: intervals reclaculate when a user inserts
     within(observationsSection).getAllByLabelText('Interval')
 
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterEnterKey[0]).toHaveTextContent('1m')
+    expect(observationIntervalLabelsAfterEnterKey[0]).toHaveTextContent('5m')
   })
 
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterEnterKey[1]).toHaveTextContent('6m')
+    expect(observationIntervalLabelsAfterEnterKey[1]).toHaveTextContent('10m')
   })
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterEnterKey[2]).toHaveTextContent('11m')
+    expect(observationIntervalLabelsAfterEnterKey[2]).toHaveTextContent('15m')
   })
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterEnterKey[3]).toHaveTextContent('16m')
+    expect(observationIntervalLabelsAfterEnterKey[3]).toHaveTextContent('20m')
   })
   await waitFor(() => {
-    expect(observationIntervalLabelsAfterEnterKey[4]).toHaveTextContent('21m')
+    expect(observationIntervalLabelsAfterEnterKey[4]).toHaveTextContent('25m')
   })
 })
