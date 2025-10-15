@@ -130,11 +130,16 @@ const ImageAnnotationModal = ({
             const sortedAnnotations = point.annotations?.toSorted(prioritizeConfirmedAnnotations)
 
             // eslint-disable-next-line max-nested-callbacks
-            const labeledAnnotations = sortedAnnotations.map((annotation) => ({
-              ...annotation,
-              ba_gr: annotation.benthic_attribute ?? unclassifiedGuid,
-              ba_gr_label: getAttributeGrowthFormLabel(annotation),
-            }))
+            const labeledAnnotations = sortedAnnotations.map((annotation) => {
+              const ba = annotation.benthic_attribute ?? unclassifiedGuid
+              const ba_gr = annotation.growth_form ? `${ba}_${annotation.growth_form}` : ba
+
+              return {
+                ...annotation,
+                ba_gr: ba_gr,
+                ba_gr_label: getAttributeGrowthFormLabel(annotation),
+              }
+            })
 
             return { ...point, annotations: labeledAnnotations }
           })
