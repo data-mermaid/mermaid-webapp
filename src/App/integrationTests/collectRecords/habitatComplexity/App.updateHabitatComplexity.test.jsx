@@ -107,7 +107,8 @@ describe('Offline', () => {
     const newObservation = updatedCollectRecord.data.obs_habitat_complexities[3]
 
     expect(newObservation.score).toEqual('1dda77b4-0e00-47ae-8b46-063bc7aed349')
-    expect(newObservation.interval).toEqual(7)
+    //interval size of 2, 4 observations
+    expect(newObservation.interval).toEqual(8)
   })
 
   test('Edit Habitat Complexity save failure shows toast message with new edits persisting', async () => {
