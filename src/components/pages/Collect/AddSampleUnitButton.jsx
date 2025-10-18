@@ -8,6 +8,7 @@ import { IconPlus } from '../../icons'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import theme from '../../../theme'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { useTranslation } from 'react-i18next'
 
 const CustomNavLink = styled(NavLink)`
   padding: ${theme.spacing.buttonPadding};
@@ -20,29 +21,30 @@ const StyledButtonSecondaryDropdown = styled(ButtonSecondaryDropdown)`
   white-space: nowrap;
 `
 const AddSampleUnitButton = () => {
+  const { t } = useTranslation()
   const currentProjectPath = useCurrentProjectPath()
   const label = (
     <>
-      <IconPlus /> Add Sample Unit
+      <IconPlus /> {t('buttons.add_sample_unit')}
     </>
   )
 
   return (
     <StyledButtonSecondaryDropdown label={label}>
       <Column as="nav" data-testid="new-sample-unit-nav">
-        <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`}>Fish Belt</CustomNavLink>
+        <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`}>{t('protocol_titles.fishbelt')}</CustomNavLink>
         <CustomNavLink to={`${currentProjectPath}/collecting/benthicpit`}>
-          Benthic PIT
+          {t('protocol_titles.benthicpit')}
         </CustomNavLink>
         <CustomNavLink to={`${currentProjectPath}/collecting/benthiclit`}>
-          Benthic LIT
+          {t('protocol_titles.benthiclit')}
         </CustomNavLink>
         <CustomNavLink to={`${currentProjectPath}/collecting/benthicpqt`}>
-          Benthic Photo Quadrat
+          {t('protocol_titles.benthicpqt')}
         </CustomNavLink>
-        <CustomNavLink to={`${currentProjectPath}/collecting/bleachingqc`}>Bleaching</CustomNavLink>
+        <CustomNavLink to={`${currentProjectPath}/collecting/bleachingqc`}>{t('protocol_titles.bleachingqc')}</CustomNavLink>
         <CustomNavLink to={`${currentProjectPath}/collecting/habitatcomplexity`}>
-          Habitat Complexity
+          {t('protocol_titles.habitatcomplexity')}
         </CustomNavLink>
       </Column>
     </StyledButtonSecondaryDropdown>

@@ -10,8 +10,10 @@ import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { RightFooter, ModalInputRow } from '../generic/Modal'
 import { getProfileInitialValues } from './profileFormInitialValues'
 import { useCurrentUser } from '../../App/CurrentUserContext'
+import { useTranslation } from 'react-i18next'
 
 const ProfileModal = ({ isOpen, onDismiss }) => {
+  const { t } = useTranslation()
   const { currentUser, saveUserProfile } = useCurrentUser()
   const initialFormValues = useMemo(() => getProfileInitialValues(currentUser), [currentUser])
 
@@ -29,12 +31,12 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
   const modalContent = (
     <>
       <ModalInputRow>
-        <h4>Email address</h4>
+        <h4>{t('forms.labels.email_address')}</h4>
         <div>{formik.values.email}</div>
       </ModalInputRow>
       <ModalInputRow>
         <label id="modal-input-for-firstname-label" htmlFor="modal-input-for-firstname">
-          First Name
+          {t('forms.labels.first_name')}
         </label>
         <Input
           aria-labelledby="modal-input-for-firstname-label"
@@ -47,7 +49,7 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
       </ModalInputRow>
       <ModalInputRow>
         <label id="modal-input-for-lastname-label" htmlFor="modal-input-for-lastname">
-          Last Name
+          {t('forms.labels.last_name')}
         </label>
         <Input
           aria-labelledby="modal-input-for-lastname-label"
@@ -61,10 +63,10 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit}>
         <IconSave />
-        Save Changes
+        {t('buttons.save_changes')}
       </ButtonPrimary>
     </RightFooter>
   )

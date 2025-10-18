@@ -13,8 +13,10 @@ import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { versionNumber } from '../../version'
 import OfflineHide from '../generic/OfflineHide'
 import OfflineToggle from '../OfflineToggle'
+import { useTranslation } from 'react-i18next'
 
 const Footer = () => {
+  const { t } = useTranslation()
   const { isAppOnline } = useOnlineStatus()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
@@ -39,33 +41,25 @@ const Footer = () => {
         <OfflineToggle id="offline-toggle-switch" />
         <CssToggle />
         <span>
-          {isAppOnline ? (
-            <>
-              You&apos;re <strong>ONLINE</strong>
-            </>
-          ) : (
-            <>
-              You&apos;re <strong>OFFLINE</strong>. Some contents may be out of date.
-            </>
-          )}
+          {isAppOnline ? t('status.online') : t('status.offline')}
         </span>
       </StyledToggleLabel>
       <FooterNav>
         <HelpContainer ref={dropdownRef}>
           <TextLink type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-            Help (PDF) ▲
+            {t('footer.help_pdf')}
           </TextLink>
           {isDropdownOpen && (
             <HelpLinksWrapper>
               <li>
                 <a href="MERMAID-user-docs-EN-min.pdf" target="_blank" rel="noreferrer">
-                  English
+                  {t('footer.english')}
                 </a>
               </li>
 
               <li value="Bahasa Indonesia">
                 <a href="MERMAID-user-docs-ID-min.pdf" target="_blank">
-                  Bahasa Indonesia
+                  {t('footer.bahasa_indonesia')}
                 </a>
               </li>
             </HelpLinksWrapper>
@@ -73,13 +67,13 @@ const Footer = () => {
         </HelpContainer>
         <OfflineHide>
           <a href="https://datamermaid.org/terms-of-service" target="_blank" rel="noreferrer">
-            Terms
+            {t('footer.terms')}
           </a>
           <a href="https://datamermaid.org/contact-us" target="_blank" rel="noreferrer">
-            Contact
+            {t('footer.contact')}
           </a>
           <a href="https://datamermaid.org/partners-and-teams/" target="_blank" rel="noreferrer">
-            Credits
+            {t('footer.credits')}
           </a>
         </OfflineHide>
         <VersionWrapper>{versionNumber}</VersionWrapper>
