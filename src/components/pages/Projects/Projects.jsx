@@ -20,6 +20,8 @@ import ErrorBoundary from '../../ErrorBoundary'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { openExploreLinkWithBbox } from '../../../library/openExploreLinkWithBbox'
 import { useTranslation } from 'react-i18next'
+import { driver } from 'driver.js'
+import 'driver.js/dist/driver.css'
 
 /**
  * All Projects page (lists projects)
@@ -41,6 +43,27 @@ const Projects = () => {
   const unavailableProjectsErrorText = t('projects.errors.data_unavailable')
 
   useDocumentTitle(`${t('projects.projects')} - ${t('mermaid')}`)
+  const driverObj = driver({
+    showProgress: true,
+    showButtons: ['next', 'previous', 'close'],
+    steps: [
+      {
+        element: '#driver-test',
+        popover: {
+          title: 'Test Translation',
+          description: `Tokenized value: ${t('transect_number')}`,
+        },
+      },
+      {
+        element: '#driver-test-2',
+        popover: {
+          title: "Here's another",
+          description: "Look, this one's a copied project",
+        },
+      },
+    ],
+  })
+  driverObj.drive()
 
   const _getProjectsInfo = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {

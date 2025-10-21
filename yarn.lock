@@ -6642,6 +6642,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"driver.js@npm:^1.3.6":
+  version: 1.3.6
+  resolution: "driver.js@npm:1.3.6"
+  checksum: 10c0/91c59e85c3a9e8571a97cdc98754ea04a3afa1b05b9c8c27c785a6cda2093bb9de5fc72afebe79714c12a0c0c0f38e9da0e21350d7c18535bcf0f627befc4cf2
+  languageName: node
+  linkType: hard
+
 "dunder-proto@npm:^1.0.0, dunder-proto@npm:^1.0.1":
   version: 1.0.1
   resolution: "dunder-proto@npm:1.0.1"
@@ -10933,6 +10940,7 @@ __metadata:
     dompurify: "npm:^3.0.1"
     dotenv: "npm:^16.4.7"
     downshift: "npm:^9.0.10"
+    driver.js: "npm:^1.3.6"
     eslint: "npm:^9.22.0"
     eslint-plugin-import: "npm:^2.32.0"
     eslint-plugin-jest-dom: "npm:^5.5.0"

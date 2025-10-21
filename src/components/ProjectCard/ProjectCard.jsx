@@ -108,6 +108,12 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
   }
 
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
+  let driverJsName = undefined
+  if (name === 'My Very Own Project') {
+    driverJsName = 'driver-test'
+  } else if (name === 'Copy of Dev Team Test Project') {
+    driverJsName = 'driver-test-2'
+  }
 
   return (
     <CardWrapper
@@ -115,6 +121,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
       {...restOfProps}
       disabled={isReadOnlyUser && !isAppOnline}
       data-testid="project-card"
+      id={driverJsName}
     >
       <ProjectCardHeader>
         <div>
