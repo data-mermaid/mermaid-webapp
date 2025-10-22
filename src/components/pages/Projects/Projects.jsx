@@ -46,24 +46,31 @@ const Projects = () => {
   const driverObj = driver({
     showProgress: true,
     showButtons: ['next', 'previous', 'close'],
-    steps: [
-      {
-        element: '#driver-test',
-        popover: {
-          title: 'Test Translation',
-          description: `Tokenized value: ${t('transect_number')}`,
-        },
-      },
-      {
-        element: '#driver-test-2',
-        popover: {
-          title: "Here's another",
-          description: "Look, this one's a copied project",
-        },
-      },
-    ],
+    // steps: [
+    //   {
+    //     element: '#driver-test',
+    //     popover: {
+    //       title: 'Test Translation',
+    //       description: `Tokenized value: ${t('transect_number')}`,
+    //     },
+    //   },
+    //   {
+    //     element: '#driver-test-2',
+    //     popover: {
+    //       title: "Here's another",
+    //       description: "Look, this one's a copied project",
+    //     },
+    //   },
+    // ],
   })
-  driverObj.drive()
+  driverObj.highlight({
+    element: '#driver-test',
+    popover: {
+      title: 'Test Translation',
+      description: `Tokenized value: ${t('transect_number')}`,
+    },
+  })
+  // driverObj.drive()
 
   const _getProjectsInfo = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
