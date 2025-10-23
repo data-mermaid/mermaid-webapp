@@ -54,7 +54,7 @@ const Submitted = () => {
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.submittedTable.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${t('submitted_table.title')} - ${t('app_title')}`)
 
   const _getSubmittedRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -92,50 +92,50 @@ const Submitted = () => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Method',
+        Header: t('method'),
         accessor: 'method',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Site',
+        Header: t('site'),
         accessor: 'site',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Management Regime',
+        Header: t('management_regime'),
         accessor: 'management',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Sample Unit #',
+        Header: t('sample_unit_number'),
         accessor: 'sampleUnitNumber',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Size',
+        Header: t('size'),
         accessor: 'size',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Depth (m)',
+        Header: t('depth_m'),
         accessor: 'depth',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Sample Date',
+        Header: t('sample_date'),
         accessor: 'sampleDate',
         sortType: reactTableNaturalSortDates,
       },
       {
-        Header: 'Observers',
+        Header: t('observers'),
         accessor: 'observers',
         sortType: reactTableNaturalSort,
       },
     ],
-    [],
+    [t],
   )
 
   const tableCellData = useMemo(
@@ -343,7 +343,7 @@ const Submitted = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageUnavailable mainText={language.pages.submittedTable.noDataMainText} />
+    <PageUnavailable mainText={t('submitted_table.no_data_main_text')} />
   )
 
   const content = isAppOnline ? (
@@ -354,7 +354,7 @@ const Submitted = () => {
 
   const toolbar = isAppOnline ? (
     <SubmittedToolbarSection
-      name={language.pages.submittedTable.filterToolbarText}
+      name={t('submitted_table.filter_toolbar_text')}
       globalSearchText={globalFilter}
       handleGlobalFilterChange={handleGlobalFilterChange}
       searchFilterValue={tableUserPrefs.globalFilter}
@@ -371,7 +371,7 @@ const Submitted = () => {
       submittedRecordsForUiDisplay={submittedRecordsForUiDisplay}
     />
   ) : (
-    <H2>{language.pages.submittedTable.title}</H2>
+    <H2>{t('submitted_table.title')}</H2>
   )
 
   return idsNotAssociatedWithData.length ? (

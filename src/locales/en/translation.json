@@ -515,6 +515,11 @@
   "notes": "Notes",
   "observers": "Observers",
   "observers_info": "Select one or more observers to add",
+  "method": "Method",
+  "management_regime": "Management Regime",
+  "sample_unit_number": "Sample Unit #",
+  "size": "Size",
+  "depth_m": "Depth (m)",
   "removed_from_project_message": "<strong>{{userName}}</strong> is an observer on this sample unit but is no longer a part of this project.",
   "remove_as_observer": "Remove as observer",
   "remove_user": "Remove user",
@@ -700,6 +705,11 @@
     "sample_units_are_read_only": "Submitted sample units are read-only.",
     "move_sample_unit_button": "Edit Sample Unit — move to Collecting",
     "admin_edit_only": "Submitted sample units are read-only and can only be moved to Collecting by an admin."
+  },
+  "submitted_table": {
+    "title": "Submitted",
+    "filter_toolbar_text": "Filter this table by method, site, management regime, or observer",
+    "no_data_main_text": "This project has no submitted sample units yet."
   },
   "management_regimes_overview": {
     "title": "Sample Units / Management Regimes",
