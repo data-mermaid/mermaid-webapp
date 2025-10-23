@@ -192,7 +192,7 @@
   "toggle_label_visibility": "Toggle label visibility",
   "user": "User",
   "submitted": "Submitted",
-  "submitted_filter_toolbar_text": "Filter this table by site, management, or observer",
+  "filter_submitted_table": "Filter this table by site, management, or observer",
   "submitted_no_data_message": "This project has no submitted sample units.",
   "filter_search_helper_text": "<b>Use double quotes to search exact phases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
   "method": "Method",
