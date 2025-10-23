@@ -1,11 +1,11 @@
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import {
@@ -39,6 +39,7 @@ import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const Submitted = () => {
+  const { t } = useTranslation()
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -53,7 +54,16 @@ const Submitted = () => {
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.submittedTable.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${t('submitted')} - ${t('mermaid')}`)
+
+  const methodColumnText = t('method')
+  const siteColumnText = t('site')
+  const managementRegimeColumnText = t('management_regime')
+  const sampleUnitNumberColumnText = t('sample_unit_number')
+  const sizeColumnText = t('size')
+  const depthColumnText = t('depth_m')
+  const sampleDateColumnText = t('sample_date')
+  const observersColumnText = t('observers')
 
   const _getSubmittedRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -80,61 +90,72 @@ const Submitted = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.submittedRecordsUnavailable))
+              toast.error(
+                ...getToastArguments(t('sample_units.errors.submitted_records_unavailable')),
+              )
             },
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError, t])
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Method',
+        Header: methodColumnText,
         accessor: 'method',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Site',
+        Header: siteColumnText,
         accessor: 'site',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Management Regime',
+        Header: managementRegimeColumnText,
         accessor: 'management',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Sample Unit #',
+        Header: sampleUnitNumberColumnText,
         accessor: 'sampleUnitNumber',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Size',
+        Header: sizeColumnText,
         accessor: 'size',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Depth (m)',
+        Header: depthColumnText,
         accessor: 'depth',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Sample Date',
+        Header: sampleDateColumnText,
         accessor: 'sampleDate',
         sortType: reactTableNaturalSortDates,
       },
       {
-        Header: 'Observers',
+        Header: observersColumnText,
         accessor: 'observers',
         sortType: reactTableNaturalSort,
       },
     ],
-    [],
+    [
+      methodColumnText,
+      siteColumnText,
+      managementRegimeColumnText,
+      sampleUnitNumberColumnText,
+      sizeColumnText,
+      depthColumnText,
+      sampleDateColumnText,
+      observersColumnText,
+    ],
   )
 
   const tableCellData = useMemo(
@@ -342,18 +363,21 @@ const Submitted = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageUnavailable mainText={language.pages.submittedTable.noDataMainText} />
+    <PageUnavailable mainText={t('submitted_no_data_message')} />
   )
 
   const content = isAppOnline ? (
     <>{table}</>
   ) : (
-    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+    <PageUnavailable
+      mainText={t('offline.page_unavailable_offline')}
+      testId="submitted-page-offline"
+    />
   )
 
   const toolbar = isAppOnline ? (
     <SubmittedToolbarSection
-      name={language.pages.submittedTable.filterToolbarText}
+      name={t('submitted_filter_toolbar_text')}
       globalSearchText={globalFilter}
       handleGlobalFilterChange={handleGlobalFilterChange}
       searchFilterValue={tableUserPrefs.globalFilter}
@@ -370,7 +394,7 @@ const Submitted = () => {
       submittedRecordsForUiDisplay={submittedRecordsForUiDisplay}
     />
   ) : (
-    <H2>{language.pages.submittedTable.title}</H2>
+    <H2>{t('submitted')}</H2>
   )
 
   return idsNotAssociatedWithData.length ? (
