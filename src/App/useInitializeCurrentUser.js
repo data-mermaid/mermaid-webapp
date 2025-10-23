@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import language from '../language'
+import { useTranslation } from 'react-i18next'
 import { getToastArguments } from '../library/getToastArguments'
 import { getCurrentUserProfile, setCurrentUserProfile } from './currentUserProfileHelpers'
 
@@ -12,6 +12,7 @@ export const useInitializeCurrentUser = ({
   isAppOnline,
   handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
 }) => {
+  const { t } = useTranslation()
   const [currentUser, setCurrentUser] = useState()
 
   const getCurrentUser = useCallback(() => {
@@ -34,7 +35,7 @@ export const useInitializeCurrentUser = ({
           handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.userProfileUnavailable))
+              toast.error(...getToastArguments(t('error.user_profile_unavailable')))
             },
           })
         })
@@ -71,7 +72,7 @@ export const useInitializeCurrentUser = ({
           handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () =>
-              toast.error(...getToastArguments(language.error.userProfileUnavailable)),
+              toast.error(...getToastArguments(t('error.user_profile_unavailable'))),
           })
         })
     }

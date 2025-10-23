@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useState, useCallback, useEffect } from 'react'
-
-import language from '../../../../language'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { useFormik } from 'formik'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -24,10 +23,10 @@ import SaveButton from '../GfcrIndicatorSetForm/modals/SaveButton'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import InputNoRowWithLabelAndValidation from '../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 import { displayErrorMessagesGFCR } from '../../../../library/displayErrorMessagesGFCR'
-
-const modalLanguage = language.gfcrNewIndicatorSetModal
+import { HelperTextLink } from '../../../generic/links'
 
 const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId } = useParams()
@@ -54,7 +53,7 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
         formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
 
         navigate(`${ensureTrailingSlash(currentProjectPath)}gfcr/${response.id}`)
-        toast.success(...getToastArguments(language.success.gfcrIndicatorSetSave))
+        toast.success(...getToastArguments(t('success.gfcr_indicator_set_save')))
         setIsLoading(false)
       } catch (error) {
         setIsLoading(false)
@@ -90,11 +89,11 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
       const errors = {}
 
       if (!values.title) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (!values.report_date) {
-        errors.report_date = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.report_date = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       return errors
@@ -107,13 +106,13 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
     <StyledModalFooterWrapper>
       <StyledModalLeftFooter>
         <ButtonSecondary onClick={() => onDismiss(formik.resetForm)} disabled={isLoading}>
-          {modalLanguage.cancel}
+          {t('gfcr_modals.new_indicator_set.cancel')}
         </ButtonSecondary>
       </StyledModalLeftFooter>
       <RightFooter>
         <SaveButton
           formId="new-indicator-set-modal-form"
-          unsavedTitle={modalLanguage.create}
+          unsavedTitle={t('gfcr_modals.new_indicator_set.create')}
           saveButtonState={saveButtonState}
           formHasErrors={!!Object.keys(formik.errors).length}
           formDirty={isFormDirty}
@@ -130,27 +129,51 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
     <Modal
       isOpen={isOpen}
       onDismiss={() => onDismiss(formik.resetForm)}
-      title={language.pages.gfcrTable.createIndicatorSetTitle}
+      title={t('gfcr_modals.new_indicator_set.title')}
       mainContent={
         <form id="new-indicator-set-modal-form" onSubmit={formik.handleSubmit}>
           <StyledModalInputRow>
             <InputNoRowWithLabelAndValidation
               required
-              label={language.pages.gfcrIndicatorSet.indicatorSetTitle}
+              label={t('gfcr_indicator_set.indicator_set_title')}
               id="indicator-set-title-input"
               type="text"
               {...formik.getFieldProps('title')}
-              helperText={language.pages.gfcrIndicatorSet.getIndicatorSetTitleHelperText()}
+              helperText={
+                <Trans
+                  i18nKey="gfcr_indicator_set.indicator_set_title_helper"
+                  components={{
+                    a: (
+                      <HelperTextLink
+                        href="https://globalfundcoralreefs.org/wp-content/uploads/2023/04/GFCR-ME-Framework_Mar2023_Final.pdf"
+                        target="_blank"
+                      />
+                    ),
+                  }}
+                />
+              }
             />
           </StyledModalInputRow>
           <StyledModalInputRow>
             <InputNoRowWithLabelAndValidation
               required
-              label={language.pages.gfcrIndicatorSet.indicatorSetReportingDate}
+              label={t('gfcr_indicator_set.indicator_set_reporting_date')}
               id="indicator-set-date-input"
               type="date"
               {...formik.getFieldProps('report_date')}
-              helperText={language.pages.gfcrIndicatorSet.getIndicatorSetReportingDateHelperText()}
+              helperText={
+                <Trans
+                  i18nKey="gfcr_indicator_set.indicator_set_reporting_date_helper"
+                  components={{
+                    a: (
+                      <HelperTextLink
+                        href="https://globalfundcoralreefs.org/wp-content/uploads/2023/04/GFCR-ME-Framework_Mar2023_Final.pdf"
+                        target="_blank"
+                      />
+                    ),
+                  }}
+                />
+              }
             />
           </StyledModalInputRow>
         </form>

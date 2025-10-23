@@ -1,22 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
-import language from '../../language'
 import Modal, { RightFooter } from '../generic/Modal'
 
 const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit, isLoading }) => {
+  const { t } = useTranslation()
+
   const modalContent = (
     <p>
-      <strong>{newUser}</strong> {language.pages.userTable.newUserModalText}
+      <strong>{newUser}</strong> {t('user_table.new_user_modal_text')}
     </p>
   )
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary onClick={onSubmit} disabled={isLoading}>
-        Send email
+        {t('buttons.send_email')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -25,7 +27,7 @@ const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit, isLoading }) => {
     <Modal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      title={language.pages.userTable.newUserModalTitle}
+      title={t('user_table.new_user_modal_title')}
       mainContent={modalContent}
       footerContent={footerContent}
     />

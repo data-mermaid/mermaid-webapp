@@ -1,4 +1,4 @@
-import language from '../../../language'
+import i18next from 'i18next'
 import axios from '../../../library/axiosRetry'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
@@ -193,7 +193,7 @@ const ManagementRegimesMixin = (Base) =>
               )
             }
 
-            return Promise.reject(new Error(language.error.generic))
+            return Promise.reject(new Error(i18next.t('error.generic')))
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
@@ -272,7 +272,7 @@ const ManagementRegimesMixin = (Base) =>
               return Promise.reject(syncError)
             }
 
-            return Promise.reject(new Error(language.error.generic))
+            return Promise.reject(new Error(i18next.t('error.generic')))
           })
       }
 

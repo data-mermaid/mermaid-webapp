@@ -2,8 +2,8 @@ import React from 'react'
 
 import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import { useTranslation, Trans } from 'react-i18next'
 
-import language from '../../language'
 import theme from '../../theme'
 import { H2, P } from '../generic/text'
 
@@ -16,14 +16,21 @@ const CenterCenter = styled('div')`
 `
 
 const UserDoesntHaveProjectAccess = () => {
+  const { t } = useTranslation()
   const { projectName } = useParams()
 
   return (
     <CenterCenter>
       <div>
-        <H2>{language.pages.userDoesntHaveProjectAccess.title}</H2>
-        <P>{language.pages.userDoesntHaveProjectAccess.getSubtitle(projectName)}</P>
-        <Link to="/projects"> {language.pages.userDoesntHaveProjectAccess.homepageLink}</Link>
+        <H2>{t('user_access.no_permission_title')}</H2>
+        <P>
+          <Trans
+            i18nKey="user_access.admin_can_add"
+            values={{ projectName: projectName || 'unknown project name' }}
+            components={{ code: <code /> }}
+          />
+        </P>
+        <Link to="/projects"> {t('user_access.homepage_link')}</Link>
       </div>
     </CenterCenter>
   )

@@ -3,6 +3,7 @@ import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } fro
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 import {
   Tr,
   Th,
@@ -28,7 +29,6 @@ import { useCurrentUser } from '../../App/CurrentUserContext'
 import LoadingModal from '../LoadingModal/LoadingModal'
 import { getToastArguments } from '../../library/getToastArguments'
 import { pluralize } from '../../library/strings/pluralize'
-import language from '../../language'
 import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import PageSelector from '../generic/Table/PageSelector'
 import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
@@ -57,6 +57,7 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 })
 
 const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { currentUser } = useCurrentUser()
   const { projectId } = useParams()
@@ -87,7 +88,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
+              toast.error(...getToastArguments(t('error.site_records_unavailable')))
             },
           })
         })

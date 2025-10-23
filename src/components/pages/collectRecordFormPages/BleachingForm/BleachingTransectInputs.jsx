@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation, Trans } from 'react-i18next'
 
 import {
   benthicPitValidationPropType,
@@ -13,7 +14,7 @@ import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
-import language from '../../../../language'
+import { HelperTextLink } from '../../../generic/links'
 
 const CURRENT_VALIDATION_PATH = 'data.quadrat_collection.current'
 const DEPTH_VALIDATION_PATH = 'data.quadrat_collection.depth'
@@ -34,6 +35,7 @@ const BleachingTransectInputs = ({
   validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
+  const { t } = useTranslation()
   const { relativedepths, visibilities, currents, tides } = choices
 
   const visibilityOptions = getOptions(visibilities.data)
@@ -145,7 +147,7 @@ const BleachingTransectInputs = ({
   return (
     <>
       <InputWrapper>
-        <H2>{language.pages.collectRecord.formSectionTitle.quadratCollection}</H2>
+        <H2>{t('collect_record.form_section_title.quadrat_collection')}</H2>
 
         <InputWithLabelAndValidation
           disabled
@@ -155,7 +157,7 @@ const BleachingTransectInputs = ({
           type="number"
           {...labelValidationProperties}
           value={formik.values.number}
-          helperText={language.helperText.number}
+          helperText={t('number_info')}
         />
         <InputWithLabelAndValidation
           label="Label"
@@ -172,7 +174,7 @@ const BleachingTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
-          helperText={language.helperText.label}
+          helperText={t('label_info')}
         />
         <InputWithLabelAndValidation
           label="Sample Time"
@@ -192,7 +194,7 @@ const BleachingTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
-          helperText={language.helperText.sampleTime}
+          helperText={t('sample_time_info')}
         />
         <InputWithLabelAndValidation
           label="Depth"
@@ -211,7 +213,7 @@ const BleachingTransectInputs = ({
           value={formik.values.depth}
           onChange={handleDepthChange}
           unit="m"
-          helperText={language.helperText.depth}
+          helperText={t('depth_info')}
         />
         <InputWithLabelAndValidation
           label="Quadrat Size"
@@ -235,7 +237,7 @@ const BleachingTransectInputs = ({
           value={formik.values.quadrat_size}
           onChange={handleQuadratSizeChange}
           unit="m²"
-          helperText={language.helperText.quadratSize}
+          helperText={t('quadrat_size_info')}
         />
         <InputSelectWithLabelAndValidation
           label="Visibility"
@@ -257,7 +259,7 @@ const BleachingTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
           onChange={handleVisibilityChange}
-          helperText={language.helperText.visibility}
+          helperText={t('visibility_info')}
         />
         <InputSelectWithLabelAndValidation
           label="Current"
@@ -279,7 +281,7 @@ const BleachingTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.current}
           onChange={handleCurrentChange}
-          helperText={language.helperText.current}
+          helperText={t('current_info')}
         />
         <InputSelectWithLabelAndValidation
           label="Relative Depth"
@@ -301,7 +303,7 @@ const BleachingTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
-          helperText={language.helperText.getRelativeDepth()}
+          helperText={t('relative_depth_info')}
         />
         <InputSelectWithLabelAndValidation
           label="Tide"
@@ -320,7 +322,19 @@ const BleachingTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
-          helperText={language.helperText.getTide()}
+          helperText={
+            <Trans
+              i18nKey="tide_info"
+              components={{
+                a: (
+                  <HelperTextLink
+                    href="https://oceanservice.noaa.gov/education/tutorial_tides/tides01_intro.html"
+                    target="_blank"
+                  />
+                ),
+              }}
+            />
+          }
         />
         <TextareaWithLabelAndValidation
           label="Notes"
@@ -336,7 +350,6 @@ const BleachingTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
-          helperText={language.helperText.notes}
         />
       </InputWrapper>
     </>

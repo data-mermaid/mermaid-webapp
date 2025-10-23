@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { Checkbox, OutlinedInput } from '@mui/material'
+import { useTranslation, Trans } from 'react-i18next'
 
-import language from '../../../../../language'
 import theme from '../../../../../theme'
 import { HelperText, Textarea } from '../../../../generic/form'
+import { HelperTextLink } from '../../../../generic/links'
 import {
   CustomMenuItem,
   CustomMuiSelect,
@@ -33,8 +34,6 @@ import { getOptions } from '../../../../../library/getOptions'
 import { IconInfo } from '../../../../icons'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
 
-const modalLanguage = language.gfcrFinanceSolutionModal
-
 const FinanceSolutionModal = ({
   isOpen,
   onDismiss,
@@ -44,6 +43,7 @@ const FinanceSolutionModal = ({
   choices,
   displayHelp,
 }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const handleHttpResponseError = useHttpResponseErrorHandler()
@@ -94,7 +94,7 @@ const FinanceSolutionModal = ({
 
         setIndicatorSet(response)
 
-        toast.success(...getToastArguments(language.success.gfcrFinanceSolutionSave))
+        toast.success(...getToastArguments(t('success.gfcr_finance_solution_save')))
       } catch (error) {
         setSaveButtonState(buttonGroupStates.unsaved)
 
@@ -129,25 +129,25 @@ const FinanceSolutionModal = ({
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (!values.sector) {
-        errors.sector = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.sector = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (values.used_an_incubator === '') {
         errors.used_an_incubator = [
-          { code: language.error.formValidation.required, id: 'Required' },
+          { code: t('error.form_validation_required'), id: 'Required' },
         ]
       }
 
       if (values.local_enterprise === '') {
-        errors.local_enterprise = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.local_enterprise = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (values.gender_smart === '') {
-        errors.gender_smart = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.gender_smart = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       return errors
@@ -171,10 +171,10 @@ const FinanceSolutionModal = ({
 
       setIndicatorSet(response)
 
-      toast.success(...getToastArguments(language.success.gfcrFinanceSolutionDelete))
+      toast.success(...getToastArguments(t('success.gfcr_finance_solution_delete')))
     } catch (error) {
       if (error) {
-        toast.error(...getToastArguments(language.error.gfcrFinanceSolutionDelete))
+        toast.error(...getToastArguments(t('error.gfcr_finance_solution_delete')))
 
         handleHttpResponseError({
           error,
@@ -217,7 +217,7 @@ const FinanceSolutionModal = ({
 
   const cancelButton = (
     <ButtonSecondary type="button" onClick={() => onDismiss(formik.resetForm)}>
-      {modalLanguage.cancel}
+      {t('gfcr_modals.finance_solution.cancel')}
     </ButtonSecondary>
   )
 
@@ -226,7 +226,7 @@ const FinanceSolutionModal = ({
       <StyledModalLeftFooter>
         {!!financeSolution && (
           <ButtonCaution onClick={handleDelete} disabled={isDeleting}>
-            {modalLanguage.remove}
+            {t('gfcr_modals.finance_solution.remove')}
           </ButtonCaution>
         )}
       </StyledModalLeftFooter>
@@ -234,7 +234,7 @@ const FinanceSolutionModal = ({
         {cancelButton}
         <SaveButton
           formId="finance-solution-form"
-          unsavedTitle={financeSolution ? modalLanguage.save : modalLanguage.add}
+          unsavedTitle={financeSolution ? t('gfcr_modals.finance_solution.save') : t('gfcr_modals.finance_solution.add')}
           saveButtonState={saveButtonState}
           formHasErrors={!!Object.keys(formik.errors).length}
           formDirty={isFormDirty}
@@ -248,64 +248,100 @@ const FinanceSolutionModal = ({
       <form id="finance-solution-form" onSubmit={formik.handleSubmit}>
         <StyledModalInputRow>
           <InputNoRowWithLabelAndValidation
-            label={modalLanguage.name}
+            label={t('gfcr_modals.finance_solution.name')}
             id="finance-solution-input"
             type="text"
             {...formik.getFieldProps('name')}
-            helperText={modalLanguage.getNameHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.finance_solution.name_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.sector}
+            label={t('gfcr_modals.finance_solution.sector')}
             id="sector-select"
             {...formik.getFieldProps('sector')}
             options={getOptions(choices.sectors.data)}
-            helperText={modalLanguage.getSectorHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.finance_solution.sector_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.usedAnIncubator}
+            label={t('gfcr_modals.finance_solution.used_an_incubator')}
             id="used-an-incubator-select"
             {...formik.getFieldProps('used_an_incubator')}
             options={[
-              { value: 'none', label: modalLanguage.no },
+              { value: 'none', label: t('gfcr_modals.finance_solution.no') },
               ...getOptions(choices.incubatortypes.data),
             ]}
-            helperText={modalLanguage.getUsedAnIncubatorHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.finance_solution.used_an_incubator_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.localEnterprise}
+            label={t('gfcr_modals.finance_solution.local_enterprise')}
             id="local-enterprise-select"
             {...formik.getFieldProps('local_enterprise')}
             options={[
-              { value: true, label: modalLanguage.yes },
-              { value: false, label: modalLanguage.no },
+              { value: true, label: t('gfcr_modals.finance_solution.yes') },
+              { value: false, label: t('gfcr_modals.finance_solution.no') },
             ]}
-            helperText={modalLanguage.getLocalEnterpriseHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.finance_solution.local_enterprise_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.genderSmart}
+            label={t('gfcr_modals.finance_solution.gender_smart')}
             id="gender-smart-select"
             {...formik.getFieldProps('gender_smart')}
             options={[
-              { value: true, label: modalLanguage.yes },
-              { value: false, label: modalLanguage.no },
+              { value: true, label: t('gfcr_modals.finance_solution.yes') },
+              { value: false, label: t('gfcr_modals.finance_solution.no') },
             ]}
-            helperText={modalLanguage.getGenderSmartHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.finance_solution.gender_smart_helper"
+                components={{
+                  twoXLink: <HelperTextLink href="https://www.2xchallenge.org/2xcriteria" target="_blank" />,
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
           />
@@ -315,7 +351,7 @@ const FinanceSolutionModal = ({
             id="sustainable-finance-mechanisms-label"
             htmlFor="sustainable-finance-mechanisms-select"
           >
-            {modalLanguage.sustainableFinanceMechanisms}
+            {t('gfcr_modals.finance_solution.sustainable_finance_mechanisms')}
             <IconButton type="button" onClick={(event) => handleSFMInfoIconClick(event)}>
               <IconInfo aria-label="info" />
             </IconButton>
@@ -329,7 +365,7 @@ const FinanceSolutionModal = ({
             renderValue={(selected) =>
               selected?.length
                 ? getChips(selected, choices.sustainablefinancemechanisms.data)
-                : language.placeholders.select
+                : t('placeholders.select')
             }
             displayEmpty={true}
           >
@@ -350,14 +386,19 @@ const FinanceSolutionModal = ({
           </CustomMuiSelect>
           {displayHelp || SFMShowHelperText ? (
             <HelperText id="sfm-helper">
-              {modalLanguage.getSustainableFinanceMechanismsHelper()}
+              <Trans
+                i18nKey="gfcr_modals.finance_solution.sustainable_finance_mechanisms_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
             </HelperText>
           ) : null}
         </StyledModalInputRow>
         <hr />
         <StyledModalInputRow>
           <label id="notes-label" htmlFor="notes-input">
-            {modalLanguage.notes}
+            {t('gfcr_modals.finance_solution.notes')}
           </label>
           <Textarea
             aria-labelledby={'notes-label'}
@@ -374,7 +415,7 @@ const FinanceSolutionModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={() => onDismiss(formik.resetForm)}
-      title={financeSolution ? modalLanguage.titleUpdate : modalLanguage.titleAdd}
+      title={financeSolution ? t('gfcr_modals.finance_solution.title_update') : t('gfcr_modals.finance_solution.title_add')}
       mainContent={financeSolutionForm()}
       footerContent={footer}
       maxWidth="65rem"

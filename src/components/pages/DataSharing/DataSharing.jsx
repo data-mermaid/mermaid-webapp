@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper } from '../../generic/Table/table'
 import { hoverState } from '../../../library/styling/mediaQueries'
@@ -18,7 +19,6 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import DataSharingInfoModal from '../../DataSharingInfoModal'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { getDataSharingPolicyLabel } from '../../../library/getDataSharingPolicyLabel'
 import PageUnavailable from '../PageUnavailable'
@@ -75,6 +75,7 @@ const ReadOnlyDataSharingContent = ({ project = {} }) => (
 )
 
 const DataSharing = () => {
+  const { t } = useTranslation()
   const [dataPolicyOptions, setDataPolicyOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -90,7 +91,7 @@ const DataSharing = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${t('data_sharing.title')} - ${t('app_title')}`)
 
   const [isDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(false)
   const openDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(true)
@@ -122,7 +123,7 @@ const DataSharing = () => {
         .catch((error) => {
           handleHttpResponseError({
             error,
-            callback: toast.error(...getToastArguments(language.error.projectsUnavailable)),
+            callback: toast.error(...getToastArguments(t('error.projects_unavailable'))),
           })
         })
     }
@@ -131,14 +132,20 @@ const DataSharing = () => {
   const getToastMessageForDataPolicyChange = (property, policy) => {
     switch (property) {
       case 'data_policy_beltfish':
-        return language.success.getDataSharingPolicyChangeSuccess('Fish Belt', policy)
-      case 'data_policy_benthiclit':
-        return language.success.getDataSharingPolicyChangeSuccess(
-          'Benthic: PIT, LIT, PQT, and Habitat Complexity',
+        return t('success.data_sharing_policy_change_success', {
+          protocol: 'Fish Belt',
           policy,
-        )
+        })
+      case 'data_policy_benthiclit':
+        return t('success.data_sharing_policy_change_success', {
+          protocol: 'Benthic: PIT, LIT, PQT, and Habitat Complexity',
+          policy,
+        })
       case 'data_policy_bleachingqc':
-        return language.success.getDataSharingPolicyChangeSuccess('Bleaching', policy)
+        return t('success.data_sharing_policy_change_success', {
+          protocol: 'Bleaching',
+          policy,
+        })
       default:
         return 'Project Saved'
     }
@@ -162,7 +169,7 @@ const DataSharing = () => {
         .catch((error) => {
           handleHttpResponseError({
             error,
-            callback: toast.error(...getToastArguments(language.error.projectSave)),
+            callback: toast.error(...getToastArguments(t('error.project_save'))),
           })
         })
     },
@@ -194,7 +201,7 @@ const DataSharing = () => {
     const status = isChecked ? PROJECT_CODES.status.test : PROJECT_CODES.status.open
     const editedValues = { ...projectBeingEdited, status }
 
-    handleSaveProject(editedValues, language.success.projectStatusSaved)
+    handleSaveProject(editedValues, t('success.project_status_saved'))
   }
 
   const findToolTipDescription = (policy) =>
@@ -204,7 +211,7 @@ const DataSharing = () => {
   const contentViewByRole = (
     <MaxWidthInputWrapper cursor={isDataUpdating ? 'wait' : 'auto'}>
       <h3>Data are much more powerful when shared.</h3>
-      <P>{language.pages.dataSharing.introductionParagraph}</P>
+      <P>{t('data_sharing.introduction_paragraph')}</P>
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
         <IconInfo /> Learn more about how your data are shared...
       </ButtonPrimary>
@@ -321,12 +328,12 @@ const DataSharing = () => {
               disabled={isDataUpdating}
               cursor={isDataUpdating ? 'wait' : 'pointer'}
             />{' '}
-            {language.pages.dataSharing.isTestProject}
+            {t('data_sharing.is_test_project')}
           </CheckBoxLabel>
-          <P>{language.pages.dataSharing.testProjectHelperText}</P>
+          <P>{t('data_sharing.test_project_helper_text')}</P>
         </>
       ) : null}
-      {!isAdminUser && isTestProject ? <p>{language.pages.dataSharing.isTestProject}</p> : null}
+      {!isAdminUser && isTestProject ? <p>{t('data_sharing.is_test_project')}</p> : null}
       <DataSharingInfoModal
         isOpen={isDataSharingInfoModalOpen}
         onDismiss={closeDataSharingInfoModal}
@@ -346,12 +353,12 @@ const DataSharing = () => {
         isAppOnline ? (
           contentViewByRole
         ) : (
-          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+          <PageUnavailable mainText={t('error.page_unavailable_offline')} />
         )
       }
       toolbar={
         <ContentPageToolbarWrapper>
-          <H2>{language.pages.dataSharing.title}</H2>
+          <H2>{t('data_sharing.title')}</H2>
         </ContentPageToolbarWrapper>
       }
     />

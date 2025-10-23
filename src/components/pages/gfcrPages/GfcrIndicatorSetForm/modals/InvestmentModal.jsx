@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useTranslation, Trans } from 'react-i18next'
 
 import {
   StyledModalInputRow,
@@ -15,6 +16,7 @@ import { getInvestmentInitialValues } from './investmentInitialValues'
 import { getOptions } from '../../../../../library/getOptions'
 import { getToastArguments } from '../../../../../library/getToastArguments'
 import { Textarea } from '../../../../generic/form'
+import { HelperTextLink } from '../../../../generic/links'
 import { toast } from 'react-toastify'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useFormik } from 'formik'
@@ -22,11 +24,8 @@ import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErro
 import { useParams } from 'react-router-dom'
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
 import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
-import language from '../../../../../language'
 import Modal, { RightFooter } from '../../../../generic/Modal'
 import SaveButton from './SaveButton'
-
-const modalLanguage = language.gfcrInvestmentModal
 
 const InvestmentModal = ({
   isOpen,
@@ -38,6 +37,7 @@ const InvestmentModal = ({
   financeSolutions,
   displayHelp,
 }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const handleHttpResponseError = useHttpResponseErrorHandler()
@@ -97,7 +97,7 @@ const InvestmentModal = ({
         )
         setIndicatorSet(response)
 
-        toast.success(...getToastArguments(language.success.gfcrInvestmentSave))
+        toast.success(...getToastArguments(t('success.gfcr_investment_save')))
       } catch (error) {
         setSaveButtonState(buttonGroupStates.unsaved)
 
@@ -132,22 +132,22 @@ const InvestmentModal = ({
       const errors = {}
 
       if (!values.finance_solution) {
-        errors.finance_solution = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.finance_solution = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (!values.investment_source) {
         errors.investment_source = [
-          { code: language.error.formValidation.required, id: 'Required' },
+          { code: t('error.form_validation_required'), id: 'Required' },
         ]
       }
 
       if (!values.investment_type) {
-        errors.investment_type = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.investment_type = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (values.investment_amount === '') {
         errors.investment_amount = [
-          { code: language.error.formValidation.required, id: 'Required' },
+          { code: t('error.form_validation_required'), id: 'Required' },
         ]
       }
 
@@ -182,10 +182,10 @@ const InvestmentModal = ({
 
       setIndicatorSet(response)
 
-      toast.success(...getToastArguments(language.success.gfcrInvestmentDelete))
+      toast.success(...getToastArguments(t('success.gfcr_investment_delete')))
     } catch (error) {
       if (error) {
-        toast.error(...getToastArguments(language.error.gfcrInvestmentDelete))
+        toast.error(...getToastArguments(t('error.gfcr_investment_delete')))
 
         handleHttpResponseError({
           error,
@@ -216,7 +216,7 @@ const InvestmentModal = ({
 
   const cancelButton = (
     <ButtonSecondary type="button" onClick={() => onDismiss(formik.resetForm)}>
-      {modalLanguage.cancel}
+      {t('gfcr_modals.investment.cancel')}
     </ButtonSecondary>
   )
 
@@ -225,7 +225,7 @@ const InvestmentModal = ({
       <StyledModalLeftFooter>
         {!!investment && (
           <ButtonCaution onClick={handleDelete} disabled={isDeleting}>
-            {modalLanguage.remove}
+            {t('gfcr_modals.investment.remove')}
           </ButtonCaution>
         )}
       </StyledModalLeftFooter>
@@ -233,7 +233,7 @@ const InvestmentModal = ({
         {cancelButton}
         <SaveButton
           formId="investment-form"
-          unsavedTitle={investment ? modalLanguage.save : modalLanguage.add}
+          unsavedTitle={investment ? t('gfcr_modals.investment.save') : t('gfcr_modals.investment.add')}
           saveButtonState={saveButtonState}
           formHasErrors={!!Object.keys(formik.errors).length}
           formDirty={isFormDirty}
@@ -247,46 +247,74 @@ const InvestmentModal = ({
       <form id="investment-form" onSubmit={formik.handleSubmit}>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.financeSolution}
+            label={t('gfcr_modals.investment.finance_solution')}
             id="finance-solution-select"
             {...formik.getFieldProps('finance_solution')}
             options={financeSolutions.map((fs) => ({ value: fs.id, label: fs.name }))}
-            helperText={modalLanguage.getFinanceSolutionHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.investment.finance_solution_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.investmentSource}
+            label={t('gfcr_modals.investment.investment_source')}
             id="investment-source-select"
             {...formik.getFieldProps('investment_source')}
             options={getOptions(choices.investmentsources.data)}
-            helperText={modalLanguage.getInvestmentSourceHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.investment.investment_source_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.investmentType}
+            label={t('gfcr_modals.investment.investment_type')}
             id="investment-type-select"
             {...formik.getFieldProps('investment_type')}
             options={getOptions(choices.investmenttypes.data)}
-            helperText={modalLanguage.getInvestmentTypeHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.investment.investment_type_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowWithLabelAndValidation
-            label={modalLanguage.investmentAmount}
+            label={t('gfcr_modals.investment.investment_amount')}
             id="investment-amount-input"
             type="number"
             unit="USD $"
             alignUnitsLeft={true}
             {...formik.getFieldProps('investment_amount')}
-            helperText={modalLanguage.getInvestmentAmountHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.investment.investment_amount_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
             onChange={(event) =>
@@ -301,7 +329,7 @@ const InvestmentModal = ({
         <hr />
         <StyledModalInputRow>
           <label id="notes-label" htmlFor="notes-input">
-            {modalLanguage.notes}
+            {t('gfcr_modals.investment.notes')}
           </label>
           <Textarea
             aria-labelledby={'notes-label'}
@@ -318,7 +346,7 @@ const InvestmentModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={() => onDismiss(formik.resetForm)}
-      title={investment ? modalLanguage.titleUpdate : modalLanguage.titleAdd}
+      title={investment ? t('gfcr_modals.investment.title_update') : t('gfcr_modals.investment.title_add')}
       mainContent={investmentForm()}
       footerContent={footer}
       maxWidth="65rem"

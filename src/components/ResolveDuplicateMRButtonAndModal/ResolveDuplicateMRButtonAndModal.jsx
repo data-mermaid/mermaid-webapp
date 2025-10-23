@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import useIsMounted from '../../library/useIsMounted'
 
-import language from '../../language'
 import { getOptions } from '../../library/getOptions'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
@@ -37,16 +37,19 @@ const ResolveDuplicateMRButtonAndModal = ({
   updateValueAndResetValidationForDuplicateWarning,
   ignoreNonObservationFieldValidations,
 }) => {
-  const {
-    original,
-    duplicate,
-    keepEither,
-    editEither,
-    keepBoth,
-    cancel,
-    merge,
-    getConfirmMergeMessage,
-  } = language.getResolveModalLanguage('MR')
+  const { t } = useTranslation()
+  const original = t('resolve_modal.original_mr')
+  const duplicate = t('resolve_modal.duplicate_mr')
+  const keepEither = t('resolve_modal.keep_mr')
+  const editEither = t('resolve_modal.edit_mr')
+  const keepBoth = t('resolve_modal.keep_both')
+  const cancel = t('buttons.cancel')
+  const merge = t('resolve_modal.merge')
+  const getConfirmMergeMessage = (recordToKeep) =>
+    t('resolve_modal.confirm_merge_message', {
+      recordType: 'management regime',
+      anotherRecord: recordToKeep,
+    })
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId } = useParams()
@@ -102,7 +105,7 @@ const ResolveDuplicateMRButtonAndModal = ({
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
+                toast.error(...getToastArguments(t('error.management_regime_records_unavailable')))
               },
             })
           })
@@ -143,19 +146,19 @@ const ResolveDuplicateMRButtonAndModal = ({
     } = managementRegime
 
     const rules = [
-      no_take && 'No Take',
-      open_access && 'Open Access',
-      access_restriction && 'Access Restriction',
-      periodic_closure && 'Periodic Closure',
-      size_limits && 'Size Limits',
-      gear_restriction && 'Gear Restrictions',
-      species_restriction && 'Species Restrictions',
+      no_take && t('management_rules.no_take_display'),
+      open_access && t('management_rules.open_access_display'),
+      access_restriction && t('management_rules.access_restriction_display'),
+      periodic_closure && t('management_rules.periodic_closure_display'),
+      size_limits && t('management_rules.size_limits_display'),
+      gear_restriction && t('management_rules.gear_restriction_display'),
+      species_restriction && t('management_rules.species_restriction_display'),
     ]
     const filteredRules = rules.filter((rule) => !!rule)
     const managementRules =
       no_take || open_access
         ? filteredRules[0]
-        : `Partial Restrictions: ${filteredRules.join(', ')}`
+        : t('management_rules.partial_restrictions', { rules: filteredRules.join(', ') })
 
     return managementRules
   }
@@ -195,7 +198,9 @@ const ResolveDuplicateMRButtonAndModal = ({
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments('Failing find and replace management regime'))
+            toast.error(
+              ...getToastArguments(t('error.find_replace_management_regime_failure')),
+            )
           },
         })
       })
@@ -276,35 +281,35 @@ const ResolveDuplicateMRButtonAndModal = ({
         </thead>
         <tbody>
           <TableRowItem
-            title="Name"
+            title={t('resolve_modal.field_name')}
             value={currentManagementRegimeData?.name}
             extraValue={duplicateManagementRegimeData?.name}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Secondary Name"
+            title={t('resolve_modal.field_secondary_name')}
             value={currentManagementRegimeData?.name_secondary}
             extraValue={duplicateManagementRegimeData?.name_secondary}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Year Established"
+            title={t('resolve_modal.field_year_established')}
             value={currentManagementRegimeData?.est_year}
             extraValue={duplicateManagementRegimeData?.est_year}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Area"
+            title={t('resolve_modal.field_area')}
             value={currentManagementRegimeData?.size}
             extraValue={duplicateManagementRegimeData?.size}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Parties"
+            title={t('resolve_modal.field_parties')}
             options={managementPartyOptions}
             value={currentManagementRegimeData?.parties}
             extraValue={duplicateManagementRegimeData?.parties}
@@ -312,7 +317,7 @@ const ResolveDuplicateMRButtonAndModal = ({
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Compliance"
+            title={t('resolve_modal.field_compliance')}
             options={managementComplianceOptions}
             value={currentManagementRegimeData?.compliance}
             extraValue={duplicateManagementRegimeData?.compliance}
@@ -320,14 +325,14 @@ const ResolveDuplicateMRButtonAndModal = ({
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Rules"
+            title={t('resolve_modal.field_rules')}
             value={getManagementRegimeRules(currentManagementRegimeData)}
             extraValue={getManagementRegimeRules(duplicateManagementRegimeData)}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Notes"
+            title={t('resolve_modal.field_notes')}
             value={currentManagementRegimeData?.notes}
             extraValue={duplicateManagementRegimeData?.notes}
             isOriginalSelected={isOriginalSelected}
@@ -336,7 +341,7 @@ const ResolveDuplicateMRButtonAndModal = ({
         </tbody>
       </Table>
       <Modal
-        title="Confirm Merge Management"
+        title={t('resolve_modal.confirm_modal_title_mr')}
         isOpen={isConfirmationModalOpen}
         onDismiss={closeConfirmationModalOpen}
         mainContent={confirmationModalMainContent}
@@ -359,10 +364,10 @@ const ResolveDuplicateMRButtonAndModal = ({
   return (
     <>
       <InlineValidationButton type="button" onClick={openResolveDuplicateModal}>
-        Resolve
+        {t('resolve_modal.resolve_button')}
       </InlineValidationButton>
       <Modal
-        title="Resolve Duplicate Management"
+        title={t('resolve_modal.modal_title_mr')}
         isOpen={isResolveDuplicateModalOpen}
         onDismiss={closeResolveDuplicateModal}
         mainContent={

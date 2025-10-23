@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
@@ -14,7 +15,6 @@ import { StyledToolbarButtonWrapper } from '../../Gfcr/Gfcr.styles'
 import { IconPlus } from '../../../../icons'
 import { ButtonSecondary, ToolbarButtonWrapper } from '../../../../generic/buttons'
 import PageUnavailable from '../../../PageUnavailable'
-import language from '../../../../../language'
 import { ToolBarRow } from '../../../../generic/positioning'
 import FilterSearchToolbar from '../../../../FilterSearchToolbar/FilterSearchToolbar'
 import {
@@ -27,9 +27,8 @@ import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataPropt
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
 
-const tableLanguage = language.pages.gfcrFinanceSolutionsTable
-
 const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp }) => {
+  const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -38,39 +37,39 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Business / Finance Solution Name',
+        Header: t('gfcr.finance_solutions_table.headers.name'),
         accessor: 'name',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Sector',
+        Header: t('gfcr.finance_solutions_table.headers.sector'),
         accessor: 'sector',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Used An Incubator',
+        Header: t('gfcr.finance_solutions_table.headers.used_an_incubator'),
         accessor: 'used_an_incubator',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Gender 2X Criteria',
+        Header: t('gfcr.finance_solutions_table.headers.gender_smart'),
         accessor: 'gender_smart',
         sortType: reactTableNaturalSort,
         align: 'center',
       },
       {
-        Header: 'Local Enterprise',
+        Header: t('gfcr.finance_solutions_table.headers.local_enterprise'),
         accessor: 'local_enterprise',
         sortType: reactTableNaturalSort,
         align: 'center',
       },
       {
-        Header: 'Sustainable Finance Mechanisms',
+        Header: t('gfcr.finance_solutions_table.headers.sustainable_finance_mechanisms'),
         accessor: 'sustainable_finance_mechanisms',
         sortType: reactTableNaturalSort,
       },
     ],
-    [],
+    [t],
   )
 
   const handleEditFinanceSolution = useCallback(
@@ -241,7 +240,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
     <>
       <StyledToolbarButtonWrapper>
         <ButtonSecondary onClick={(event) => handleAddFinanceSolution(event)}>
-          <IconPlus /> {tableLanguage.add}
+          <IconPlus /> {t('gfcr.finance_solutions_table.add')}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
     </>
@@ -269,8 +268,8 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
     />
   ) : (
     <PageUnavailable
-      mainText={tableLanguage.noDataMainText}
-      subText={tableLanguage.noDataSubText}
+      mainText={t('gfcr.finance_solutions_table.no_data_main_text')}
+      subText={t('gfcr.finance_solutions_table.no_data_sub_text')}
     />
   )
 
@@ -279,7 +278,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
       <TableContentToolbar>
         <ToolBarRow>
           <FilterSearchToolbar
-            name={tableLanguage.filterToolbarText}
+            name={t('gfcr.finance_solutions_table.filter_toolbar_text')}
             disabled={indicatorSet.finance_solutions.length === 0}
             globalSearchText={globalFilter || ''}
             handleGlobalFilterChange={handleGlobalFilterChange}

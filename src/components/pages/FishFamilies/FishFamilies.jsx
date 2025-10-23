@@ -1,17 +1,18 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
-import language from '../../../language'
 import PageUnavailable from '../PageUnavailable'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const FishFamilies = () => {
+  const { t } = useTranslation()
   const { isAppOnline } = useOnlineStatus()
 
   const content = isAppOnline ? (
     <>Fish Families Placeholder</>
   ) : (
-    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+    <PageUnavailable mainText={t('error.page_unavailable_offline')} />
   )
 
   return (

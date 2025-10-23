@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import {
   choicesPropType,
@@ -15,7 +16,6 @@ import {
 import { getObservationBiomass } from '../../collectRecordFormPages/FishBeltForm/fishBeltBiomass'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
-import language from '../../../../language'
 import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.styles'
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
@@ -26,6 +26,7 @@ const SubmittedFishBeltObservationTable = ({
   fishNameConstants,
   submittedRecord = undefined,
 }) => {
+  const { t } = useTranslation()
   const { obs_belt_fishes } = submittedRecord
   const { width, len_surveyed } = submittedRecord.fishbelt_transect
 
@@ -70,16 +71,16 @@ const SubmittedFishBeltObservationTable = ({
 
   return (
     <InputWrapper>
-      <FormSubTitle id="table-label">Observations</FormSubTitle>
+      <FormSubTitle id="table-label">{t('observations')}</FormSubTitle>
       <StyledOverflowWrapper>
         <SubmittedObservationStickyTable>
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem align="left">Fish Name</TheadItem>
-              <TheadItem align="right">Size (cm)</TheadItem>
-              <TheadItem align="right">Count</TheadItem>
-              <TheadItem align="right">Biomass (kg/ha)</TheadItem>
+              <TheadItem align="left">{t('fish_name')}</TheadItem>
+              <TheadItem align="right">{t('size_cm')}</TheadItem>
+              <TheadItem align="right">{t('count')}</TheadItem>
+              <TheadItem align="right">{t('biomass_kg_ha')}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationBeltFish}</tbody>
@@ -89,11 +90,11 @@ const SubmittedFishBeltObservationTable = ({
         <ObservationsSummaryStats>
           <tbody>
             <Tr>
-              <Th>{language.pages.collectRecord.totalBiomassLabel}</Th>
+              <Th>{t('total_biomass')}</Th>
               <Td>{totalBiomass}</Td>
             </Tr>
             <Tr>
-              <Th>{language.pages.collectRecord.totalAbundanceLabel}</Th>
+              <Th>{t('total_abundance')}</Th>
               <Td>{totalAbundance.toFixed(1)}</Td>
             </Tr>
           </tbody>

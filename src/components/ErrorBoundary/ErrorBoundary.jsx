@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { withTranslation } from 'react-i18next'
 
 import theme from '../../theme'
 import { ButtonPrimary } from '../generic/buttons'
-import language from '../../language'
 import { IconSync } from '../icons'
 
 const StyledErrorBoundary = styled.div`
@@ -63,7 +63,7 @@ class ErrorBoundary extends React.Component {
 
   render() {
     const { errorMessage, attemptedRerender } = this.state
-    const { children } = this.props
+    const { children, t } = this.props
 
     if (errorMessage) {
       // Render a fallback UI
@@ -75,12 +75,12 @@ class ErrorBoundary extends React.Component {
           </ErrorBoundaryStatusContainer>
           <ErrorBoundaryContentContainer>
             <ErrorBoundaryPrimaryText>
-              {language.error.errorBoundaryPrimary}
+              {t('error.error_boundary_primary')}
             </ErrorBoundaryPrimaryText>
             <p>
-              {language.error.errorBoundarySecondary}{' '}
+              {t('error.error_boundary_secondary')}{' '}
               <a target="_blank" href="https://datamermaid.org/contact-us" rel="noreferrer">
-                {language.error.errorBoundaryContactUs}
+                {t('error.error_boundary_contact_us')}
               </a>
               .
             </p>
@@ -96,7 +96,7 @@ class ErrorBoundary extends React.Component {
                 }}
               >
                 <IconSync />
-                <span> {language.error.errorBoundaryTryAgain}</span>
+                <span> {t('error.error_boundary_try_again')}</span>
               </ErrorButton>
             )}
           </ErrorButtonContainer>
@@ -110,6 +110,7 @@ class ErrorBoundary extends React.Component {
 
 ErrorBoundary.propTypes = {
   children: PropTypes.node.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
-export default ErrorBoundary
+export default withTranslation()(ErrorBoundary)

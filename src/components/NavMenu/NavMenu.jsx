@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 
 import {
   CollectionAvatar,
@@ -37,10 +38,10 @@ import { useOnlineStatus } from '../../library/onlineStatusContext'
 import useIsMounted from '../../library/useIsMounted'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { getToastArguments } from '../../library/getToastArguments'
-import language from '../../language'
 import { useCurrentProject } from '../../App/CurrentProjectContext'
 
 const NavMenu = ({ subNavNode = null }) => {
+  const { t } = useTranslation()
   const projectUrl = useCurrentProjectPath()
   const { recordId, submittedRecordId, siteId, managementRegimeId, projectId, indicatorSetId } =
     useParams()
@@ -79,7 +80,7 @@ const NavMenu = ({ subNavNode = null }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.projectsUnavailable))
+              toast.error(...getToastArguments(t('error.projects_unavailable')))
             },
           })
         })

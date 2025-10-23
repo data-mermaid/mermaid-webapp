@@ -2,16 +2,17 @@ import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSave } from '../icons'
 import { Input } from '../generic/form'
-import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { RightFooter, ModalInputRow } from '../generic/Modal'
 import { getProfileInitialValues } from './profileFormInitialValues'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 
 const ProfileModal = ({ isOpen, onDismiss }) => {
+  const { t } = useTranslation()
   const { currentUser, saveUserProfile } = useCurrentUser()
   const initialFormValues = useMemo(() => getProfileInitialValues(currentUser), [currentUser])
 
@@ -23,7 +24,7 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
   const handleOnSubmit = () => {
     saveUserProfile(formik.values)
     onDismiss()
-    toast.success(...getToastArguments(language.success.userProfileUpdate))
+    toast.success(...getToastArguments(t('success.user_profile_update')))
   }
 
   const modalContent = (

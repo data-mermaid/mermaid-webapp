@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useTranslation, Trans } from 'react-i18next'
 
 import {
   StyledModalInputRow,
@@ -15,6 +16,7 @@ import { getOptions } from '../../../../../library/getOptions'
 import { getRevenueInitialValues } from './revenueInitialValues'
 import { getToastArguments } from '../../../../../library/getToastArguments'
 import { Textarea } from '../../../../generic/form'
+import { HelperTextLink } from '../../../../generic/links'
 import { toast } from 'react-toastify'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useFormik } from 'formik'
@@ -22,11 +24,8 @@ import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErro
 import { useParams } from 'react-router-dom'
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
 import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
-import language from '../../../../../language'
 import Modal, { RightFooter } from '../../../../generic/Modal'
 import SaveButton from './SaveButton'
-
-const modalLanguage = language.gfcrRevenueModal
 
 const RevenueModal = ({
   indicatorSet,
@@ -38,6 +37,7 @@ const RevenueModal = ({
   financeSolutions,
   displayHelp,
 }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const handleHttpResponseError = useHttpResponseErrorHandler()
@@ -100,7 +100,7 @@ const RevenueModal = ({
 
         setIndicatorSet(response)
 
-        toast.success(...getToastArguments(language.success.gfcrRevenueSave))
+        toast.success(...getToastArguments(t('success.gfcr_revenue_save')))
       } catch (error) {
         setSaveButtonState(buttonGroupStates.unsaved)
 
@@ -135,21 +135,21 @@ const RevenueModal = ({
       const errors = {}
 
       if (!values.finance_solution) {
-        errors.finance_solution = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.finance_solution = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (!values.revenue_type) {
-        errors.revenue_type = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.revenue_type = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (values.sustainable_revenue_stream === '') {
         errors.sustainable_revenue_stream = [
-          { code: language.error.formValidation.required, id: 'Required' },
+          { code: t('error.form_validation_required'), id: 'Required' },
         ]
       }
 
       if (values.revenue_amount === '') {
-        errors.revenue_amount = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.revenue_amount = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       return errors
@@ -181,10 +181,10 @@ const RevenueModal = ({
 
       setIndicatorSet(response)
 
-      toast.success(...getToastArguments(language.success.gfcrRevenueDelete))
+      toast.success(...getToastArguments(t('success.gfcr_revenue_delete')))
     } catch (error) {
       if (error) {
-        toast.error(...getToastArguments(language.error.gfcrRevenueDelete))
+        toast.error(...getToastArguments(t('error.gfcr_revenue_delete')))
 
         handleHttpResponseError({
           error,
@@ -215,7 +215,7 @@ const RevenueModal = ({
 
   const cancelButton = (
     <ButtonSecondary type="button" onClick={() => onDismiss(formik.resetForm)}>
-      {modalLanguage.cancel}
+      {t('gfcr_modals.revenue.cancel')}
     </ButtonSecondary>
   )
 
@@ -224,7 +224,7 @@ const RevenueModal = ({
       <StyledModalLeftFooter>
         {!!revenue && (
           <ButtonCaution onClick={handleDelete} disabled={isDeleting}>
-            {modalLanguage.remove}
+            {t('gfcr_modals.revenue.remove')}
           </ButtonCaution>
         )}
       </StyledModalLeftFooter>
@@ -232,7 +232,7 @@ const RevenueModal = ({
         {cancelButton}
         <SaveButton
           formId="revenue-form"
-          unsavedTitle={revenue ? modalLanguage.save : modalLanguage.add}
+          unsavedTitle={revenue ? t('gfcr_modals.revenue.save') : t('gfcr_modals.revenue.add')}
           saveButtonState={saveButtonState}
           formHasErrors={!!Object.keys(formik.errors).length}
           formDirty={isFormDirty}
@@ -246,49 +246,77 @@ const RevenueModal = ({
       <form id="revenue-form" onSubmit={formik.handleSubmit}>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.financeSolution}
+            label={t('gfcr_modals.revenue.finance_solution')}
             id="finance-solution-select"
             {...formik.getFieldProps('finance_solution')}
             options={financeSolutions.map((fs) => ({ value: fs.id, label: fs.name }))}
-            helperText={modalLanguage.getFinanceSolutionHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.revenue.finance_solution_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.revenueType}
+            label={t('gfcr_modals.revenue.revenue_type')}
             id="revenue-type-select"
             {...formik.getFieldProps('revenue_type')}
             options={getOptions(choices.revenuetypes.data)}
-            helperText={modalLanguage.getRevenueTypeHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.revenue.revenue_type_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.sustainableRevenueStream}
+            label={t('gfcr_modals.revenue.sustainable_revenue_stream')}
             id="sustainable-revenue-stream-select"
             {...formik.getFieldProps('sustainable_revenue_stream')}
             options={[
-              { value: 'true', label: modalLanguage.yes },
-              { value: 'false', label: modalLanguage.no },
+              { value: 'true', label: t('gfcr_modals.revenue.yes') },
+              { value: 'false', label: t('gfcr_modals.revenue.no') },
             ]}
-            helperText={modalLanguage.getSustainableRevenueStreamHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.revenue.sustainable_revenue_stream_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowWithLabelAndValidation
-            label={modalLanguage.annualRevenue}
+            label={t('gfcr_modals.revenue.annual_revenue')}
             id="revenue-amount-input"
             type="number"
             unit="USD $"
             alignUnitsLeft={true}
             {...formik.getFieldProps('revenue_amount')}
-            helperText={modalLanguage.getAnnualRevenueHelper()}
+            helperText={
+              <Trans
+                i18nKey="gfcr_modals.revenue.annual_revenue_helper"
+                components={{
+                  a: <HelperTextLink href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf" target="_blank" />
+                }}
+              />
+            }
             showHelperText={displayHelp}
             required={true}
             onChange={(event) =>
@@ -303,7 +331,7 @@ const RevenueModal = ({
         <hr />
         <StyledModalInputRow>
           <label id="notes-label" htmlFor="notes-input">
-            {modalLanguage.notes}
+            {t('gfcr_modals.revenue.notes')}
           </label>
           <Textarea
             aria-labelledby={'notes-label'}
@@ -320,7 +348,7 @@ const RevenueModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={() => onDismiss(formik.resetForm)}
-      title={revenue ? modalLanguage.titleUpdate : modalLanguage.titleAdd}
+      title={revenue ? t('gfcr_modals.revenue.title_update') : t('gfcr_modals.revenue.title_add')}
       mainContent={revenueForm()}
       footerContent={footer}
       maxWidth="65rem"

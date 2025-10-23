@@ -2,12 +2,12 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { toast } from 'react-toastify'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { ContentPageLayout } from '../../Layout'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { H2 } from '../../generic/text'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
 import PageUnavailable from '../PageUnavailable'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -60,6 +60,7 @@ const groupManagementRegimes = (records) => {
 }
 
 const ManagementRegimesOverview = () => {
+  const { t } = useTranslation()
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -76,7 +77,7 @@ const ManagementRegimesOverview = () => {
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.managementRegimesOverview.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${t('management_regimes_overview.title')} - ${t('app_title')}`)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -110,7 +111,7 @@ const ManagementRegimesOverview = () => {
                 setIsLoading(false)
               }
 
-              toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
+              toast.error(...getToastArguments(t('error.project_health_records_unavailable')))
             },
           })
         })
@@ -150,7 +151,7 @@ const ManagementRegimesOverview = () => {
       {
         Header: () => (
           <HeaderCenter>
-            {language.pages.managementRegimesOverview.tableSubSectionTitle}
+            {t('management_regimes_overview.table_sub_section_title')}
           </HeaderCenter>
         ),
         id: 'management-regime-numbers',
@@ -466,24 +467,24 @@ const ManagementRegimesOverview = () => {
     </>
   ) : (
     <PageUnavailable
-      mainText={language.pages.managementRegimesOverview.noDataMainText}
-      subText={language.pages.managementRegimesOverview.noDataSubText}
+      mainText={t('management_regimes_overview.no_data_main_text')}
+      subText={t('management_regimes_overview.no_data_sub_text')}
     />
   )
 
   const content = isAppOnline ? (
     table
   ) : (
-    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+    <PageUnavailable mainText={t('error.page_unavailable_offline')} />
   )
   const toolbar = (
     <>
-      <H2>{language.pages.managementRegimesOverview.title}</H2>
+      <H2>{t('management_regimes_overview.title')}</H2>
       {isAppOnline && (
         <ToolBarItemsRow>
           <FilterItems>
             <FilterSearchToolbar
-              name={language.pages.usersAndTransectsTable.filterToolbarText}
+              name={t('users_and_transects.filter_toolbar_text')}
               disabled={sampleUnitWithManagementRegimeRecords.length === 0}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}

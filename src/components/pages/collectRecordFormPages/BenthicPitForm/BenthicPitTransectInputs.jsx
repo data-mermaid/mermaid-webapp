@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation, Trans } from 'react-i18next'
 
 import {
   benthicPitValidationPropType,
@@ -13,8 +14,8 @@ import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
-import language from '../../../../language'
 import { CheckBoxContainer } from '../../../generic/buttons'
+import { HelperTextLink } from '../../../generic/links'
 
 const CURRENT_VALIDATION_PATH = 'data.benthic_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.benthic_transect.depth'
@@ -54,6 +55,7 @@ const BenthicPitTransectInputs = ({
   validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
+  const { t } = useTranslation()
   const { reefslopes, relativedepths, visibilities, currents, tides } = choices
 
   const reefSlopeOptions = getOptions(reefslopes.data)
@@ -243,7 +245,7 @@ const BenthicPitTransectInputs = ({
   return (
     <>
       <InputWrapper>
-        <H2>{language.pages.collectRecord.formSectionTitle.transect}</H2>
+        <H2>{t('collect_record.form_section_title.transect')}</H2>
         <InputWithLabelAndValidation
           label="Transect Number"
           required={true}
@@ -265,7 +267,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.number}
           onChange={handleTransectNumberChange}
-          helperText={language.helperText.transectNumber}
+          helperText={t('transect_number_info')}
         />
         <InputWithLabelAndValidation
           label="Label"
@@ -282,7 +284,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
-          helperText={language.helperText.label}
+          helperText={t('label_info')}
         />
         <InputWithLabelAndValidation
           label="Sample Time"
@@ -302,7 +304,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
-          helperText={language.helperText.sampleTime}
+          helperText={t('sample_time_info')}
         />
         <InputWithLabelAndValidation
           label="Depth"
@@ -321,7 +323,7 @@ const BenthicPitTransectInputs = ({
           value={formik.values.depth}
           onChange={handleDepthChange}
           unit="m"
-          helperText={language.helperText.depth}
+          helperText={t('depth_info')}
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
@@ -345,7 +347,7 @@ const BenthicPitTransectInputs = ({
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
           unit="m"
-          helperText={language.helperText.transectLengthSurveyed}
+          helperText={t('transect_length_info')}
         />
         <InputWithLabelAndValidation
           label="Interval Size"
@@ -367,7 +369,7 @@ const BenthicPitTransectInputs = ({
           value={formik.values.interval_size}
           onChange={handleIntervalSizeChange}
           unit="m"
-          helperText={language.helperText.intervalSize}
+          helperText={t('interval_size_info')}
         />
         <InputWithLabelAndValidation
           label="Interval Start"
@@ -391,12 +393,12 @@ const BenthicPitTransectInputs = ({
           value={formik.values.interval_start}
           onChange={handleIntervalStartChange}
           unit="m"
-          helperText={language.helperText.intervalStart}
+          helperText={t('interval_start_info')}
           renderItemAboveInput={
             <IntervalCheckbox
               isChecked={isIntervalSizeAsStartChecked}
               handleChange={handleSyncIntervalChange}
-              checkboxLabel={language.pages.collectRecord.benthicPitSyncCheckbox}
+              checkboxLabel={t('collect_record.benthic_pit_sync_checkbox')}
             />
           }
           isInputDisabled={isIntervalSizeAsStartChecked}
@@ -421,7 +423,19 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.reef_slope}
           onChange={handleReefSlopeChange}
-          helperText={language.helperText.getReefSlope()}
+          helperText={
+            <Trans
+              i18nKey="reef_slope_info"
+              components={{
+                a: (
+                  <HelperTextLink
+                    href="https://reefresilience.org/wp-content/uploads/REEF-COVER-CLASS-DEFINITIONS.pdf"
+                    target="_blank"
+                  />
+                ),
+              }}
+            />
+          }
         />
         <InputSelectWithLabelAndValidation
           label="Visibility"
@@ -443,7 +457,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
           onChange={handleVisibilityChange}
-          helperText={language.helperText.visibility}
+          helperText={t('visibility_info')}
         />
         <InputSelectWithLabelAndValidation
           label="Current"
@@ -465,7 +479,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.current}
           onChange={handleCurrentChange}
-          helperText={language.helperText.current}
+          helperText={t('current_info')}
         />
         <InputSelectWithLabelAndValidation
           label="Relative Depth"
@@ -487,7 +501,7 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
-          helperText={language.helperText.getRelativeDepth()}
+          helperText={t('relative_depth_info')}
         />
         <InputSelectWithLabelAndValidation
           label="Tide"
@@ -506,7 +520,19 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
-          helperText={language.helperText.getTide()}
+          helperText={
+            <Trans
+              i18nKey="tide_info"
+              components={{
+                a: (
+                  <HelperTextLink
+                    href="https://oceanservice.noaa.gov/education/tutorial_tides/tides01_intro.html"
+                    target="_blank"
+                  />
+                ),
+              }}
+            />
+          }
         />
         <TextareaWithLabelAndValidation
           label="Notes"
@@ -522,7 +548,6 @@ const BenthicPitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
-          helperText={language.helperText.notes}
         />
       </InputWrapper>
     </>

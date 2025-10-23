@@ -1,6 +1,5 @@
 import React from 'react'
-
-import language from '../language'
+import i18next from 'i18next'
 
 export const getErrorMessageHtmlListThatMayHaveSyncStatusCodeErrors = (error) => {
   // we want to handle actual error objects as that is useful and conventional
@@ -24,7 +23,7 @@ export const getErrorMessageHtmlListThatMayHaveSyncStatusCodeErrors = (error) =>
   } catch {
     return (
       <ul>
-        <li>{language.error.generic}</li>
+        <li>{i18next.t('error.generic')}</li>
       </ul>
     )
   }

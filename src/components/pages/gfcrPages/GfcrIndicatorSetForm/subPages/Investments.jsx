@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation, Trans } from 'react-i18next'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
@@ -14,7 +15,6 @@ import { StyledToolbarButtonWrapper } from '../../Gfcr/Gfcr.styles'
 import { IconPlus } from '../../../../icons'
 import { ButtonSecondary, ToolbarButtonWrapper } from '../../../../generic/buttons'
 import PageUnavailable from '../../../PageUnavailable'
-import language from '../../../../../language'
 import { ToolBarRow } from '../../../../generic/positioning'
 import FilterSearchToolbar from '../../../../FilterSearchToolbar/FilterSearchToolbar'
 import {
@@ -27,8 +27,6 @@ import GfcrGenericTable from '../../GfcrGenericTable'
 import InvestmentModal from '../modals/InvestmentModal'
 import formattedCurrencyAmount from '../../../../../library/formatCurrencyAmount'
 
-const tableLanguage = language.pages.gfcrInvestmentsTable
-
 const Investments = ({
   indicatorSet,
   setIndicatorSet,
@@ -37,6 +35,7 @@ const Investments = ({
   setSelectedNavItem,
   displayHelp,
 }) => {
+  const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -49,28 +48,28 @@ const Investments = ({
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Business / Finance Solution',
+        Header: t('gfcr.investments_table.headers.finance_solution'),
         accessor: 'finance_solution',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Investment Source',
+        Header: t('gfcr.investments_table.headers.investment_source'),
         accessor: 'investment_source',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Investment Type',
+        Header: t('gfcr.investments_table.headers.investment_type'),
         accessor: 'investment_type',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Investment Amount',
+        Header: t('gfcr.investments_table.headers.investment_amount'),
         accessor: 'investment_amount',
         sortType: reactTableNaturalSort,
         align: 'right',
       },
     ],
-    [],
+    [t],
   )
 
   const handleEditInvestment = useCallback(
@@ -227,7 +226,7 @@ const Investments = ({
           onClick={(event) => handleAddInvestment(event)}
           disabled={!indicatorSet.finance_solutions.length}
         >
-          <IconPlus /> {tableLanguage.add}
+          <IconPlus /> {t('gfcr.investments_table.add')}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
     </>
@@ -255,13 +254,24 @@ const Investments = ({
     />
   ) : (
     <PageUnavailable
-      mainText={tableLanguage.noDataMainText}
+      mainText={t('gfcr.investments_table.no_data_main_text')}
       subText={
-        indicatorSet.finance_solutions.length
-          ? tableLanguage.noDataSubText
-          : tableLanguage.getNoFinanceSolutions(() => {
-              setSelectedNavItem('finance-solutions')
-            })
+        indicatorSet.finance_solutions.length ? (
+          t('gfcr.investments_table.no_data_sub_text')
+        ) : (
+          <Trans
+            i18nKey="gfcr.investments_table.no_finance_solutions"
+            components={{
+              a: (
+                <StyledTableAnchor
+                  onClick={() => {
+                    setSelectedNavItem('finance-solutions')
+                  }}
+                />
+              ),
+            }}
+          />
+        )
       }
     />
   )
@@ -271,7 +281,7 @@ const Investments = ({
       <TableContentToolbar>
         <ToolBarRow>
           <FilterSearchToolbar
-            name={tableLanguage.filterToolbarText}
+            name={t('gfcr.investments_table.filter_toolbar_text')}
             disabled={investments.length === 0}
             globalSearchText={globalFilter || ''}
             handleGlobalFilterChange={handleGlobalFilterChange}

@@ -24,7 +24,7 @@ import { getObservationsPropertyNames } from '../../../../App/mermaidData/record
 import BleachingPercentCoverSummaryStats from '../../../BleachingPercentCoverSummaryStats/BleachingPercentCoverSummaryStats'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
-import language from '../../../../language'
+import { useTranslation } from 'react-i18next'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -52,6 +52,7 @@ const PercentCoverObservationTable = ({
   setAreObservationsInputsDirty,
   testId,
 }) => {
+  const { t } = useTranslation()
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
@@ -273,7 +274,7 @@ const PercentCoverObservationTable = ({
                       Quadrat <RequiredIndicator />
                       {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.quadrat}
+                          helperText={t('tooltip.quadrat')}
                           left="-3em"
                           top="-6.1em"
                         />
@@ -293,7 +294,7 @@ const PercentCoverObservationTable = ({
                       </div>
                       {isHelperTextShowing && currentHelperTextLabel === 'hardCoralPercentage' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.hardCoralPercentage}
+                          helperText={t('tooltip.hard_coral_percentage')}
                           left="4.2em"
                           top="-7.5em"
                         />
@@ -313,7 +314,7 @@ const PercentCoverObservationTable = ({
                       </div>
                       {isHelperTextShowing && currentHelperTextLabel === 'softCoralPercentage' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.softCoralPercentage}
+                          helperText={t('tooltip.soft_coral_percentage')}
                           left="3.6em"
                           top="-7.5em"
                         />
@@ -333,7 +334,7 @@ const PercentCoverObservationTable = ({
                       </div>
                       {isHelperTextShowing && currentHelperTextLabel === 'macroalgaePercentage' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.macroalgaePercentage}
+                          helperText={t('tooltip.macroalgae_percentage')}
                           left="5em"
                           top="-7.5em"
                         />

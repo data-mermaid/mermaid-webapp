@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal'
 import {
@@ -9,7 +10,6 @@ import {
 } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
 import LoadingModal from '../LoadingModal/LoadingModal'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
-import language from '../../language'
 
 const DeleteProjectButton = ({
   currentPage = 1,
@@ -23,6 +23,7 @@ const DeleteProjectButton = ({
   onDismiss,
   openModal,
 }) => {
+  const { t } = useTranslation()
   const currentProjectPath = useCurrentProjectPath()
 
   const mainContentPageTwo = (
@@ -52,7 +53,7 @@ const DeleteProjectButton = ({
 
   const footerContentPageTwo = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Close</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.close')}</ButtonSecondary>
     </RightFooter>
   )
 
@@ -77,12 +78,8 @@ const DeleteProjectButton = ({
           {modalText.title}
         </ButtonCaution>
       </DeleteProjectButtonCautionWrapper>
-      {hasSampleUnits ? (
-        <WarningText>{language.deleteProject('Project').hasSampleUnits}</WarningText>
-      ) : null}
-      {hasOtherUsers ? (
-        <WarningText>{language.deleteProject('Project').hasOtherUsers}</WarningText>
-      ) : null}
+      {hasSampleUnits ? <WarningText>{t('delete_project.has_sample_units')}</WarningText> : null}
+      {hasOtherUsers ? <WarningText>{t('delete_project.has_other_users')}</WarningText> : null}
       <Modal
         title={modalText.title}
         isOpen={isOpen}

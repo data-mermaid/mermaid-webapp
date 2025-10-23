@@ -27,9 +27,9 @@ import { Tr, Td, Th } from '../../../generic/Table/table'
 import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBleachedSummaryStats/BleachingColoniesBleachedSummaryStats'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
-import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
+import { useTranslation } from 'react-i18next'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -61,6 +61,7 @@ const ColoniesBleachedObservationTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
+  const { t } = useTranslation()
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
 
@@ -212,10 +213,10 @@ const ColoniesBleachedObservationTable = ({
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
                   value={attribute}
-                  noResultsText={language.autocomplete.noResultsDefault}
+                  noResultsText={t('autocomplete.no_results_default')}
                   noResultsAction={
                     <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
-                      {language.pages.collectRecord.newBenthicAttributeLink}
+                      {t('pages.collect_record.new_benthic_attribute_link')}
                     </NewOptionButton>
                   }
                 />

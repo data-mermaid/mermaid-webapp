@@ -2,8 +2,8 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
+import { useTranslation } from 'react-i18next'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -40,6 +40,7 @@ const CollectRecordsCountWrapper = styled.strong`
 `
 
 const CollectRecordsCount = () => {
+  const { t } = useTranslation()
   const [collectRecordsCount, setCollectRecordsCount] = useState(0)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
@@ -60,7 +61,7 @@ const CollectRecordsCount = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
+              toast.error(...getToastArguments(t('error.collect_records_unavailable')))
             },
           })
         })

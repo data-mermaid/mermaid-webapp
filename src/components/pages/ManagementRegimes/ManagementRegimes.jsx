@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { CSVLink } from 'react-csv'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getObjectById } from '../../../library/getObjectById'
 import {
   Tr,
@@ -35,7 +36,6 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -52,6 +52,7 @@ import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const ManagementRegimes = () => {
+  const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
@@ -99,7 +100,7 @@ const ManagementRegimes = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
+              toast.error(...getToastArguments(t('error.management_regime_records_unavailable')))
             },
           })
         })

@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useReducer, useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   getCollectRecordDataInitialValues,
@@ -23,10 +24,10 @@ import ErrorBoundary from '../../../ErrorBoundary'
 import habitatComplexityObservationsReducer from './habitatComplexityObservationsReducer'
 import HabitatComplexityObservationsTable from './HabitatComplexityObservationTable'
 import HabitatComplexityTransectInputs from './HabitatComplexityTransectInputs'
-import language from '../../../../language'
 import useIsMounted from '../../../../library/useIsMounted'
 
 const HabitatComplexityForm = ({ isNewRecord = true }) => {
+  const { t } = useTranslation()
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -81,8 +82,8 @@ const HabitatComplexityForm = ({ isNewRecord = true }) => {
               error,
               callback: () => {
                 const errorMessage = isNewRecord
-                  ? language.error.collectRecordSupportingDataUnavailable
-                  : language.error.collectRecordUnavailable
+                  ? t('error.collect_record_supporting_data_unavailable')
+                  : t('error.collect_record_unavailable')
 
                 toast.error(...getToastArguments(errorMessage))
               },

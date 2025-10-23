@@ -1,7 +1,7 @@
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import axios from '../../../library/axiosRetry'
-import language from '../../../language'
+import i18next from 'i18next'
 import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
 
 const SitesMixin = (Base) =>
@@ -179,7 +179,7 @@ const SitesMixin = (Base) =>
               )
             }
 
-            return Promise.reject(new Error(language.error.generic))
+            return Promise.reject(new Error(i18next.t('error.generic')))
           })
       }
 
@@ -254,7 +254,7 @@ const SitesMixin = (Base) =>
               return Promise.reject(syncError)
             }
 
-            return Promise.reject(new Error(language.error.generic))
+            return Promise.reject(new Error(i18next.t('error.generic')))
           })
       }
 

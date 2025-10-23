@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   AdminPill,
@@ -15,7 +16,6 @@ import {
 } from './ProjectCard.styles'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
-import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -33,6 +33,7 @@ import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerC
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...restOfProps }) => {
+  const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
@@ -57,7 +58,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            ...getToastArguments(language.success.getProjectTurnOnOfflineReadySuccess(name)),
+            ...getToastArguments(t('success.project_turn_on_offline_ready', { projectName: name })),
           )
         })
         .catch((error) => {
@@ -65,7 +66,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             error,
             callback: () => {
               toast.error(
-                ...getToastArguments(language.error.getProjectTurnOnOfflineReadyFailure(name)),
+                ...getToastArguments(t('error.project_turn_on_offline_ready_failure', { projectName: name })),
               )
             },
           })
@@ -79,7 +80,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            ...getToastArguments(language.success.getProjectTurnOffOfflineReadySuccess(name)),
+            ...getToastArguments(t('success.project_turn_off_offline_ready', { projectName: name })),
           )
         })
         .catch((error) => {
@@ -87,7 +88,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             error,
             callback: () => {
               toast.error(
-                ...getToastArguments(language.error.getProjectTurnOffOfflineReadyFailure(name)),
+                ...getToastArguments(t('error.project_turn_off_offline_ready_failure', { projectName: name })),
               )
             },
           })

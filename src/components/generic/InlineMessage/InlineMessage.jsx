@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
-import language from '../../../language'
 import theme from '../../../theme'
 
 const MessagePill = styled.span`
@@ -33,11 +33,13 @@ const InlineMessageWrapper = styled.div`
 `
 
 const InlineMessage = ({ type = 'warning', children, className = undefined }) => {
+  const { t } = useTranslation()
+
   return (
     <>
       {type && (
         <MessagePill type={type} className={className}>
-          {language.inlineMessage[type]}
+          {t(`inline_message.${type}`)}
         </MessagePill>
       )}
       <InlineMessageWrapper className={className}>{children}</InlineMessageWrapper>

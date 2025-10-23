@@ -1,4 +1,4 @@
-import language from '../../../language'
+import i18next from 'i18next'
 import { getSampleUnitLabel as getAssociatedSubmittedSampleUnitObjectsIncludingUiLabel } from '../getSampleUnitLabel'
 
 const DatabaseSwitchboardState = class {
@@ -53,7 +53,7 @@ const DatabaseSwitchboardState = class {
     // Their values are just borrowing meaning from HTTP)
     // project synonyms for push status code errors are 'nested errors', or 'push sub-node errors'
     if (statusCode === 500) {
-      const error = new Error(language.error[statusCode])
+      const error = new Error(i18next.t('error.http_500'))
 
       error.isSyncError = true
 
@@ -92,7 +92,7 @@ const DatabaseSwitchboardState = class {
     return undefined
   }
 
-  _notAuthenticatedAndReadyError = new Error(language.error.appNotAuthenticatedOrReady)
+  _notAuthenticatedAndReadyError = new Error(i18next.t('error.app_not_authenticated'))
 
   _operationMissingIdParameterError = new Error('This operation requires an id to be supplied')
 

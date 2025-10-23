@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import language from '../language'
+import i18next from 'i18next'
 import { getToastArguments } from './getToastArguments'
 
 const handleHttpResponseError = ({
@@ -16,7 +16,7 @@ const handleHttpResponseError = ({
 
   if (requestWasMadeWithNoResponse) {
     if (shouldShowServerNonResponseMessage) {
-      toast.error(...getToastArguments(language.error.noServerResponse))
+      toast.error(...getToastArguments(i18next.t('error.no_server_response')))
     }
 
     setServerNotReachable()
@@ -46,7 +46,7 @@ const handleHttpResponseError = ({
 
   // Make sure to only include status codes that need a custom message for a given context
   if (otherErrorStatusesToRespondTo.includes(errorStatus)) {
-    toast.error(...getToastArguments(language.error[errorStatus]))
+    toast.error(...getToastArguments(i18next.t(`error.http_${errorStatus}`)))
 
     return
   }

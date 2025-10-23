@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
-import language from '../../language'
 import Modal, { RightFooter } from '../generic/Modal'
 import InlineMessage from '../generic/InlineMessage'
 import theme from '../../theme'
@@ -22,6 +22,7 @@ const RemoveUserModal = ({
   projectName,
   isLoading,
 }) => {
+  const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(1)
 
   const goToPageOne = () => {
@@ -43,8 +44,8 @@ const RemoveUserModal = ({
   }
 
   const title = {
-    1: language.pages.userTable.deleteUnsyncedModalTitle,
-    2: language.pages.userTable.removeUserModalTitle,
+    1: t('user_table.delete_unsynced_modal_title'),
+    2: t('user_table.remove_user_modal_title'),
   }
 
   const mainContentPageOne = (
@@ -73,14 +74,14 @@ const RemoveUserModal = ({
   )
 
   const cancelButton = (
-    <ButtonSecondary onClick={closeModal}>{language.pages.userTable.cancelButton}</ButtonSecondary>
+    <ButtonSecondary onClick={closeModal}>{t('user_table.cancel_button')}</ButtonSecondary>
   )
 
   const footerContentPageOne = (
     <RightFooter>
       {cancelButton}
       <ButtonCaution onClick={goToPageTwo} disabled={isLoading}>
-        {language.pages.userTable.deleteUnsyncedButton}
+        {t('user_table.delete_unsynced_button')}
       </ButtonCaution>
     </RightFooter>
   )
@@ -88,9 +89,7 @@ const RemoveUserModal = ({
   const footerContentPageTwo = (
     <RightFooter>
       {cancelButton}
-      <ButtonCaution onClick={handleOnSubmit}>
-        {language.pages.userTable.removeUserButton}
-      </ButtonCaution>
+      <ButtonCaution onClick={handleOnSubmit}>{t('user_table.remove_user_button')}</ButtonCaution>
     </RightFooter>
   )
 

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Slide, toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
@@ -17,7 +18,6 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
-import language from '../../../../language'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
 import SaveButton from '../../../generic/SaveButton'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
@@ -44,6 +44,7 @@ const HelpButton = styled(ButtonSecondary)`
 `
 
 const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { indicatorSetId, projectId } = useParams()
@@ -98,7 +99,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.gfcrIndicatorSetsUnavailable))
+              toast.error(...getToastArguments(t('error.gfcr_indicator_sets_unavailable')))
             },
           })
 
@@ -169,7 +170,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         if (newIndicatorSetType) {
           navigate(`${ensureTrailingSlash(currentProjectPath)}gfcr/${response.id}`)
         }
-        toast.success(...getToastArguments(language.success.gfcrIndicatorSetSave))
+        toast.success(...getToastArguments(t('success.gfcr_indicator_set_save')))
       } catch (error) {
         setSaveButtonState(buttonGroupStates.unsaved)
 
@@ -178,7 +179,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
 
           const errorMarkup = (
             <>
-              <P>{language.error.gfcrIndicatorSetSave}</P>
+              <P>{t('error.gfcr_indicator_set_save')}</P>
               <Figure>
                 <figcaption>Form errors: </figcaption>
                 <Dl>
@@ -226,11 +227,11 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       const errors = {}
 
       if (!values.title) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (!values.report_date) {
-        errors.report_date = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.report_date = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       return errors
@@ -276,7 +277,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     </div>
   ) : (
     <GfcrPageUnavailablePadding>
-      <PageUnavailable mainText={language.error.pageAdminOnly} />
+      <PageUnavailable mainText={t('error.page_admin_only')} />
     </GfcrPageUnavailablePadding>
   )
 
@@ -293,14 +294,14 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       isToolbarSticky={true}
       subNavNode={{
         name: newIndicatorSetType
-          ? language.pages.gfcrIndicatorSet.title
+          ? t('gfcr_indicator_set.title')
           : `${formik.values.title} ${formik.values.report_date}`,
       }}
       content={
         isAppOnline ? (
           contentViewByRole
         ) : (
-          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+          <PageUnavailable mainText={t('error.page_unavailable_offline')} />
         )
       }
       toolbar={
@@ -326,7 +327,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
               </ButtonContainer>
             </>
           ) : (
-            <h2>{language.pages.gfcrIndicatorSet.title}</h2>
+            <h2>{t('gfcr_indicator_set.title')}</h2>
           )}
         </ContentPageToolbarWrapper>
       }

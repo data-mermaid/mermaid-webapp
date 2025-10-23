@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
-import language from '../../../../language'
+import { useTranslation } from 'react-i18next'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
@@ -19,6 +19,7 @@ const useCollectRecordValidation = ({
   setValidateButtonState,
   setIsSubmitWarningVisible,
 }) => {
+  const { t } = useTranslation()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const getValidationButtonStatus = useCallback((collectRecord) => {
     return collectRecord?.validations?.status === 'ok'
@@ -55,7 +56,7 @@ const useCollectRecordValidation = ({
         setIsSubmitWarningVisible(isErrorOrWarning)
 
         if (validatedRecordResponse.validations.status === 'ok') {
-          toast.success(...getToastArguments(language.success.collectRecordValidated))
+          toast.success(...getToastArguments(t('success.collect_record_validated')))
         }
       })
       .catch((error) => {
@@ -63,7 +64,7 @@ const useCollectRecordValidation = ({
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.collectRecordValidation))
+            toast.error(...getToastArguments(t('error.collect_record_validation')))
           },
         })
       })
@@ -103,7 +104,7 @@ const useCollectRecordValidation = ({
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+              toast.error(...getToastArguments(t('error.collect_record_validation_ignore')))
             },
           })
         })
@@ -133,7 +134,7 @@ const useCollectRecordValidation = ({
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+                toast.error(...getToastArguments(t('error.collect_record_validation_ignore')))
               },
             })
           })
@@ -162,7 +163,7 @@ const useCollectRecordValidation = ({
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+                toast.error(...getToastArguments(t('error.collect_record_validation_reset')))
               },
             })
           })
@@ -192,7 +193,7 @@ const useCollectRecordValidation = ({
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+              toast.error(...getToastArguments(t('error.collect_record_validation_reset')))
             },
           })
         })
@@ -222,7 +223,7 @@ const useCollectRecordValidation = ({
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+                toast.error(...getToastArguments(t('error.collect_record_validation_reset')))
               },
             })
           })
@@ -252,7 +253,7 @@ const useCollectRecordValidation = ({
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+              toast.error(...getToastArguments(t('error.collect_record_validation_ignore')))
             },
           })
         })

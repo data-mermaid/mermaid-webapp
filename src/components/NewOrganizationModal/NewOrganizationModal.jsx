@@ -2,11 +2,11 @@ import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
 import { Input, InputRow, HelperText } from '../generic/form'
-import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal'
@@ -17,6 +17,7 @@ const ModalInputRow = styled(InputRow)`
   border: none;
 `
 const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }) => {
+  const { t } = useTranslation()
   const [newOrganizationSuggestion, setNewOrganizationSuggestion] = useState(initialValue)
   const isSubmitButtonDisabled = newOrganizationSuggestion === ''
   useEffect(
@@ -36,7 +37,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
   const handleOnSubmit = () => {
     onSubmit(newOrganizationSuggestion)
     resetAndCloseModal()
-    toast.success(...getToastArguments(language.success.newOrganizationAdd))
+    toast.success(...getToastArguments(t('success.new_organization_add')))
   }
 
   const helperText = language.pages.projectInfo.suggestionOrganizationHelperText

@@ -1,11 +1,11 @@
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import {
@@ -39,6 +39,7 @@ import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const Submitted = () => {
+  const { t } = useTranslation()
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -80,7 +81,7 @@ const Submitted = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.submittedRecordsUnavailable))
+              toast.error(...getToastArguments(t('error.submitted_records_unavailable')))
             },
           })
         })
@@ -348,7 +349,7 @@ const Submitted = () => {
   const content = isAppOnline ? (
     <>{table}</>
   ) : (
-    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+    <PageUnavailable mainText={t('error.page_unavailable_offline')} />
   )
 
   const toolbar = isAppOnline ? (

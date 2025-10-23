@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
+import { useTranslation } from 'react-i18next'
 
 import { ContentPageLayout } from '../../../Layout'
 import FilterSearchToolbar from '../../../FilterSearchToolbar/FilterSearchToolbar'
@@ -10,7 +11,6 @@ import { getTableFilteredRows } from '../../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
 import { IconPlus, IconDownload } from '../../../icons'
-import language from '../../../../language'
 import PageUnavailable from '../../PageUnavailable'
 import {
   reactTableNaturalSort,
@@ -36,6 +36,7 @@ import GfcrGenericTable from '../GfcrGenericTable'
 import NewIndicatorSetModal from './NewIndicatorSetModal'
 
 const Gfcr = () => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const currentProjectPath = useCurrentProjectPath()
   const { gfcrIndicatorSets, setGfcrIndicatorSets } = useCurrentProject()
@@ -52,7 +53,7 @@ const Gfcr = () => {
 
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.gfcrTable.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${t('gfcr.table.title')} - ${t('app_title')}`)
   const [isExporting, setIsExporting] = useState(false)
 
   const _getIndicatorSets = useEffect(() => {
@@ -73,7 +74,7 @@ const Gfcr = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.gfcrIndicatorSetsUnavailable))
+              toast.error(...getToastArguments(t('error.gfcr_indicator_sets_unavailable')))
             },
           })
 
@@ -297,8 +298,8 @@ const Gfcr = () => {
     />
   ) : (
     <PageUnavailable
-      mainText={language.pages.gfcrTable.noDataMainText}
-      subText={language.pages.gfcrTable.noDataSubText}
+      mainText={t('gfcr.table.no_data_main_text')}
+      subText={t('gfcr.table.no_data_sub_text')}
     />
   )
 
@@ -306,11 +307,11 @@ const Gfcr = () => {
     <ContentPageLayout
       toolbar={
         <>
-          <H2>{language.pages.gfcrTable.title}</H2>
+          <H2>{t('gfcr.table.title')}</H2>
           {isAppOnline && (
             <ToolBarRow>
               <FilterSearchToolbar
-                name={language.pages.gfcrTable.filterToolbarText}
+                name={t('gfcr.table.filter_toolbar_text')}
                 disabled={gfcrIndicatorSets.length === 0}
                 globalSearchText={globalFilter || ''}
                 handleGlobalFilterChange={handleGlobalFilterChange}
@@ -322,7 +323,7 @@ const Gfcr = () => {
         </>
       }
       content={
-        isAppOnline ? table : <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+        isAppOnline ? table : <PageUnavailable mainText={t('error.page_unavailable_offline')} />
       }
       isPageContentLoading={isLoading}
     />
