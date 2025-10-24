@@ -19,6 +19,11 @@ const FilterInput = styled(Input)`
   ${inputStyles};
   background-color: ${(props) =>
     props.hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
+
+  &:autofill {
+    background-color: ${(props) =>
+      props.hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
+  }
 `
 
 const FilterSearchToolbar = ({
