@@ -663,12 +663,14 @@ const ImageClassificationObservationTable = ({
                 >
                   <StyledTd style={{ textAlign: 'right' }}>{rowIndex++}</StyledTd>
                   <StyledTd style={{ textAlign: 'right' }}>{imageIndex + 1}</StyledTd>
-                  <StyledTd colSpan={3} style={{ fontWeight: '700', textAlign: 'center' }}>
+                  <StyledTd
+                    colSpan={areValidationsShowing ? 5 : 4}
+                    style={{ fontWeight: '700', textAlign: 'center' }}
+                  >
                     {t('image_classification.annotation.unclassified_points', {
                       count: totalUnknown,
                     })}
                   </StyledTd>
-                  <StyledTd />
                 </StyledTr>
               )}
             </React.Fragment>
