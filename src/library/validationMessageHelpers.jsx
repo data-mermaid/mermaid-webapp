@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Trans } from 'react-i18next'
+import i18n from '../i18n'
 
 const SystemValidationMessageBlock = styled.span`
   display: block;
@@ -16,7 +18,9 @@ export const getSystemValidationErrorMessage = (drySubmitContext) => {
 
   return (
     <>
-      <SystemValidationMessageBlock>System validation error: </SystemValidationMessageBlock>
+      <SystemValidationMessageBlock>
+        {i18n.t('validation_messages.system_validation_error')}
+      </SystemValidationMessageBlock>
       <SystemValidationMessageBlock>{errorMap}</SystemValidationMessageBlock>
     </>
   )
@@ -26,9 +30,13 @@ export const getDuplicateSampleUnitLink = (duplicateTransectMethodContext, proje
   const linkToSampleUnit = `/projects/${projectId}/submitted/fishbelt/${duplicateTransectMethodContext}`
 
   return (
-    <span>
-      Duplicate sample unit <a href={linkToSampleUnit}>{duplicateTransectMethodContext}</a>
-    </span>
+    <Trans
+      i18nKey="validation_messages.duplicate_sample_unit"
+      values={{ id: duplicateTransectMethodContext }}
+      components={{
+        a: <a href={linkToSampleUnit} />,
+      }}
+    />
   )
 }
 
@@ -36,11 +44,12 @@ export const goToManagementOverviewPageLink = (projectId) => {
   const linkToMROverviewPage = `/projects/${projectId}/management-regimes-overview`
 
   return (
-    <span>
-      {' '}
-      Other sample events at this site have a different management regime. Go to{' '}
-      <a href={linkToMROverviewPage}>Management Regime Overview</a>.
-    </span>
+    <Trans
+      i18nKey="validation_messages.not_unique_management"
+      components={{
+        a: <a href={linkToMROverviewPage}>Management Regime Overview</a>,
+      }}
+    />
   )
 }
 
@@ -56,53 +65,54 @@ const getObservationFieldName = (fieldName) => {
 
   const cleanFieldName = fieldName.slice(5)
 
-  const observationFieldNameMapping = {
-    obs_colonies_bleached: 'colonies bleached',
-    benthic_photo_quadrats: 'Benthic Photo Quadrats',
+  const fieldNameKeys = {
+    obs_colonies_bleached: 'colonies_bleached',
+    benthic_photo_quadrats: 'benthic_photo_quadrats',
   }
 
-  return observationFieldNameMapping[cleanFieldName]
-    ? observationFieldNameMapping[cleanFieldName]
-    : ''
+  const translationKey = fieldNameKeys[cleanFieldName]
+
+  return translationKey ? i18n.t(`validation_messages.field_names.${translationKey}`) : ''
 }
 
 export const getDuplicateValuesValidationMessage = (field, context) => {
-  return `Duplicate ${getObservationFieldName(field)} observations: ${getDuplicateIndexes(context)}`
+  const fieldName = getObservationFieldName(field)
+  const indexes = getDuplicateIndexes(context)
+
+  return i18n.t('validation_messages.duplicate_values', { fieldName, indexes })
 }
 
 export const getInvalidBleachingObsMessage = (context, obsType) => {
-  const observationCountPaths = {
-    count_normal: 'normal',
-    count_pale: 'pale',
-    count_20: '0-20%',
-    count_50: '20-50%',
-    count_80: '50-80%',
-    count_100: '80-100',
-    count_dead: 'dead',
-  }
-  const observationPercentPaths = {
-    percent_hard: 'hard coral',
-    percent_soft: 'soft coral',
-    percent_algae: 'macroalgae',
-  }
-  const obsPaths = obsType === 'percent cover' ? observationPercentPaths : observationCountPaths
-  const invalidValues = (context?.invalid_paths || []).map((key) => obsPaths[key])
+  const isPercentCover = obsType === 'percent cover'
+  const pathKey = isPercentCover ? 'obs_percent_paths' : 'obs_count_paths'
+
+  const invalidValues = (context?.invalid_paths || []).map((key) =>
+    i18n.t(`validation_messages.${pathKey}.${key}`)
+  )
   const invalidValuesString = invalidValues.join(', ')
 
-  return `Each ${obsType} must be a positive number, and not blank. Invalid values: ${invalidValuesString}`
+  return i18n.t('validation_messages.invalid_count', { obsType, invalidValues: invalidValuesString })
 }
 
 export const getInvalidBleachingObsTotalMessage = (context) => {
-  return `Sum of values must not be less than ${context?.value_range[0]} or greater than ${context?.value_range[1]}`
+  return i18n.t('validation_messages.invalid_total', {
+    min: context?.value_range[0],
+    max: context?.value_range[1],
+  })
 }
 
 export const getObservationsCountMessage = (fields, compWord, compVal) => {
   const obsField = fields[0]
-  const tableStringMap = {
-    'data.obs_quadrat_benthic_percent': ' in Percent Cover',
-    'data.obs_colonies_bleached': ' in Colonies Bleached',
+  const tableSuffixMap = {
+    'data.obs_quadrat_benthic_percent': 'percent_cover',
+    'data.obs_colonies_bleached': 'colonies_bleached',
   }
-  const inObsTableString = tableStringMap[obsField] || ''
+  const suffixKey = tableSuffixMap[obsField]
+  const suffix = suffixKey ? i18n.t(`validation_messages.obs_table_suffixes.${suffixKey}`) : ''
 
-  return `${compWord} than ${compVal} observations${inObsTableString}`
+  return i18n.t('validation_messages.too_many_observations', {
+    comparison: compWord,
+    count: compVal,
+    suffix,
+  })
 }

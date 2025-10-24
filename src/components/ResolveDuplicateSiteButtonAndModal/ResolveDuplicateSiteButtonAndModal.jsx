@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import useIsMounted from '../../library/useIsMounted'
 
-import language from '../../language'
 import { getOptions } from '../../library/getOptions'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
@@ -38,6 +38,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
   updateValueAndResetValidationForDuplicateWarning,
   ignoreNonObservationFieldValidations,
 }) => {
+  const { t } = useTranslation()
   const {
     original,
     duplicate,
@@ -98,7 +99,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.siteRecordUnavailable))
+                toast.error(...getToastArguments(t('error.site_record_unavailable')))
               },
             })
           })

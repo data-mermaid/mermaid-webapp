@@ -2,12 +2,13 @@ import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonSecondary, ButtonThatLooksLikeLink } from '../../../generic/buttons'
 import { hoverState } from '../../../../library/styling/mediaQueries'
 import { ValidationList } from '../../../generic/form'
 import InlineMessage from '../../../generic/InlineMessage/InlineMessage'
-import language from '../../../../language'
+import { getValidationMessage } from '../../../../library/getValidationMessage'
 import theme from '../../../../theme'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
 
@@ -55,6 +56,8 @@ const RecordLevelValidationInfo = ({
   handleScrollToObservation,
 }) => {
   const { projectId } = useParams()
+  const { t } = useTranslation()
+
   const handleIgnoreWarningChange = async ({ event, validationId }) => {
     const isIgnoreChecked = event.target.checked
 
@@ -89,7 +92,7 @@ const RecordLevelValidationInfo = ({
         const isReset = status === 'reset'
         const statusForStyling = isReset ? 'warning' : status
 
-        const validationMessage = language.getValidationMessage(validation, projectId)
+        const validationMessage = getValidationMessage(validation, projectId)
         const isScrollToViewAvailable = checkScrollToObservation(validation)
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
@@ -99,7 +102,7 @@ const RecordLevelValidationInfo = ({
             </InlineMessage>
             {isScrollToViewAvailable && (
               <ScrollToButton onClick={handleScrollToObservation}>
-                Scroll to observations
+                {t('validation_ui.scroll_to_observations')}
               </ScrollToButton>
             )}
             {isWarning || isReset || isIgnored ? (

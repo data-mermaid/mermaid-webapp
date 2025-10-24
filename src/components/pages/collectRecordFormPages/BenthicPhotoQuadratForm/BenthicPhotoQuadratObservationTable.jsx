@@ -32,7 +32,8 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
-import language from '../../../../language'
+import { useTranslation, Trans } from 'react-i18next'
+import { HelperTextLink } from '../../../generic/links'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -79,6 +80,7 @@ const BenthicPhotoQuadratObservationTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
+  const { t } = useTranslation()
   const [observationsState, observationsDispatch] = observationsReducer
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
@@ -292,13 +294,13 @@ const BenthicPhotoQuadratObservationTable = ({
                   id={`observation-${observationId}`}
                   aria-labelledby="benthic-attribute-label"
                   isLastRow={observationsState.length === rowNumber}
-                  noResultsText={language.autocomplete.noResultsDefault}
+                  noResultsText={t('autocomplete.no_results_default')}
                   onChange={handleBenthicAttributeChange}
                   options={benthicAttributeSelectOptions}
                   value={attribute}
                   noResultsAction={
                     <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
-                      {language.pages.collectRecord.newBenthicAttributeLink}
+                      {t('pages.collect_record.new_benthic_attribute_link')}
                     </NewOptionButton>
                   }
                 />
@@ -393,7 +395,7 @@ const BenthicPhotoQuadratObservationTable = ({
                   Quadrat <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.quadrat}
+                      helperText={t('tooltip.quadrat')}
                       left="-3em"
                       top="-6.5em"
                     />
@@ -411,7 +413,19 @@ const BenthicPhotoQuadratObservationTable = ({
                   Benthic Attribute <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.getBenthicAttribute()}
+                      helperText={
+                        <Trans
+                          i18nKey="tooltip.benthic_attribute"
+                          components={{
+                            a: (
+                              <HelperTextLink
+                                href="https://www.marinespecies.org/"
+                                target="_blank"
+                              />
+                            ),
+                          }}
+                        />
+                      }
                       left="3em"
                       top="-13.5em"
                     />
@@ -429,7 +443,7 @@ const BenthicPhotoQuadratObservationTable = ({
                   <div>Growth Form</div>
                   {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.growthForm}
+                      helperText={t('tooltip.growth_form')}
                       left="-0.5em"
                       top="-9em"
                     />
@@ -447,7 +461,7 @@ const BenthicPhotoQuadratObservationTable = ({
                   Number of Points <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'numberOfPoints' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.numberOfPoints}
+                      helperText={t('tooltip.number_of_points')}
                       left="-1em"
                       top="-11em"
                     />

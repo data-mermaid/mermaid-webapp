@@ -1,6 +1,7 @@
 import { Route, useLocation, Routes, Navigate, useNavigate } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { toast } from 'react-toastify'
+import { useTranslation, Trans } from 'react-i18next'
 import React, { useCallback, useMemo } from 'react'
 
 import { BellNotificationProvider } from './BellNotificationContext'
@@ -24,7 +25,6 @@ import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
 import handleHttpResponseError from '../library/handleHttpResponseError'
 import Header from '../components/Header'
-import language from '../language'
 import Layout from '../components/Layout'
 import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 import PageNotFound from '../components/pages/PageNotFound'
@@ -36,6 +36,7 @@ import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 import { routes } from './routes'
 
 function App({ dexieCurrentUserInstance }) {
+  const { t } = useTranslation()
   const { isAppOnline, setServerNotReachable } = useOnlineStatus()
   const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()
   const apiBaseUrl = import.meta.env.VITE_MERMAID_API
@@ -60,7 +61,7 @@ function App({ dexieCurrentUserInstance }) {
   )
 
   const handleNested500SyncError = () => {
-    toast.error(...getToastArguments(language.error.pushSyncErrorMessageStatusCode500))
+    toast.error(...getToastArguments(t('error.push_sync_error_status_code_500')))
   }
 
   const handleUserDeniedSyncPull = useCallback(
@@ -84,13 +85,17 @@ function App({ dexieCurrentUserInstance }) {
         if (isErrorSpecificToProject) {
           const syncErrorUserMessaging = (
             <div data-testid={`sync-error-for-project-${projectId}`}>
-              <P>{language.error.getPushSyncErrorMessage(projectName)}</P>
-              {language.error.pushSyncErrorMessageUnsavedData}
+              <P>
+                <Trans
+                  i18nKey="error.push_sync_error"
+                  values={{ projectName }}
+                  components={{ 0: <strong /> }}
+                />
+              </P>
+              {t('error.push_sync_error_unsaved_data')}
               <ul>
                 {apiDataTablesThatRejectedSyncing?.map((rejectedDataTableName) => (
-                  <li key={rejectedDataTableName}>
-                    {language.apiDataTableNames[rejectedDataTableName]}
-                  </li>
+                  <li key={rejectedDataTableName}>{rejectedDataTableName}</li>
                 ))}
               </ul>
             </div>

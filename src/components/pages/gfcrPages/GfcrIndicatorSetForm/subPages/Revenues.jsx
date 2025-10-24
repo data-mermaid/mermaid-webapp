@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation, Trans } from 'react-i18next'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
@@ -14,7 +15,6 @@ import { StyledToolbarButtonWrapper } from '../../Gfcr/Gfcr.styles'
 import { IconPlus } from '../../../../icons'
 import { ButtonSecondary, ToolbarButtonWrapper } from '../../../../generic/buttons'
 import PageUnavailable from '../../../PageUnavailable'
-import language from '../../../../../language'
 import { ToolBarRow } from '../../../../generic/positioning'
 import FilterSearchToolbar from '../../../../FilterSearchToolbar/FilterSearchToolbar'
 import {
@@ -28,9 +28,8 @@ import IconCheckLabel from './IconCheckLabel'
 import RevenueModal from '../modals/RevenueModal'
 import formattedCurrencyAmount from '../../../../../library/formatCurrencyAmount'
 
-const tableLanguage = language.pages.gfcrRevenuesTable
-
 const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, displayHelp }) => {
+  const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -43,29 +42,29 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Business / Finance Solution',
+        Header: t('gfcr.revenues_table.headers.finance_solution'),
         accessor: 'finance_solution',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Revenue Type',
+        Header: t('gfcr.revenues_table.headers.revenue_type'),
         accessor: 'revenue_type',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Sustainable Revenue Stream',
+        Header: t('gfcr.revenues_table.headers.sustainable_revenue_stream'),
         accessor: 'sustainable_revenue_stream',
         sortType: reactTableNaturalSort,
         align: 'center',
       },
       {
-        Header: 'Revenue Amount',
+        Header: t('gfcr.revenues_table.headers.revenue_amount'),
         accessor: 'revenue_amount',
         sortType: reactTableNaturalSort,
         align: 'right',
       },
     ],
-    [],
+    [t],
   )
 
   const handleEditRevenue = useCallback(
@@ -219,7 +218,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
           onClick={(event) => handleAddRevenue(event)}
           disabled={!indicatorSet.finance_solutions.length}
         >
-          <IconPlus /> {tableLanguage.add}
+          <IconPlus /> {t('gfcr.revenues_table.add')}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
     </>
@@ -247,13 +246,24 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
     />
   ) : (
     <PageUnavailable
-      mainText={tableLanguage.noDataMainText}
+      mainText={t('gfcr.revenues_table.no_data_main_text')}
       subText={
-        indicatorSet.finance_solutions.length
-          ? tableLanguage.noDataSubText
-          : tableLanguage.getNoFinanceSolutions(() => {
-              setSelectedNavItem('finance-solutions')
-            })
+        indicatorSet.finance_solutions.length ? (
+          t('gfcr.revenues_table.no_data_sub_text')
+        ) : (
+          <Trans
+            i18nKey="gfcr.revenues_table.no_finance_solutions"
+            components={{
+              a: (
+                <StyledTableAnchor
+                  onClick={() => {
+                    setSelectedNavItem('finance-solutions')
+                  }}
+                />
+              ),
+            }}
+          />
+        )
       }
     />
   )
@@ -263,7 +273,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
       <TableContentToolbar>
         <ToolBarRow>
           <FilterSearchToolbar
-            name={tableLanguage.filterToolbarText}
+            name={t('gfcr.revenues_table.filter_toolbar_text')}
             disabled={revenues.length === 0}
             globalSearchText={globalFilter || ''}
             handleGlobalFilterChange={handleGlobalFilterChange}

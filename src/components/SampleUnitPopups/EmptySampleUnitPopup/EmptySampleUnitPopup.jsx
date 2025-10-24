@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { EmptyCellPopup, TooltipText } from '../SampleUnitPopups.styles'
-import language from '../../../language'
 
 const EmptySampleUnitPopup = ({ tableCellData, collectRecordsByProfile }) => {
+  const { t } = useTranslation()
   const {
     column: { Header },
     row: { values },
@@ -29,7 +30,7 @@ const EmptySampleUnitPopup = ({ tableCellData, collectRecordsByProfile }) => {
 
     return (
       <EmptyCellPopup>
-        <TooltipText>{language.popoverTexts.inCollectingWith}</TooltipText>
+        <TooltipText>{t('sample_unit_popup.in_collecting_with')}</TooltipText>
         <p>{profileNames}</p>
       </EmptyCellPopup>
     )
@@ -37,7 +38,7 @@ const EmptySampleUnitPopup = ({ tableCellData, collectRecordsByProfile }) => {
 
   return (
     <EmptyCellPopup>
-      <TooltipText>{language.popoverTexts.noSampleUnitMatch}</TooltipText>
+      <TooltipText>{t('sample_unit_popup.no_sample_unit_match')}</TooltipText>
       <h4>{Header}</h4>
       <h4>{values.method}</h4>
       <h4>{values.site}</h4>

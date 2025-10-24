@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonSecondary } from '../generic/buttons'
 import { IconCheck, IconClose } from '../icons'
 import { Table, Td, Tr, TableOverflowWrapper } from '../generic/Table/table'
-import language from '../../language'
 import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal'
 
@@ -50,28 +50,29 @@ const TcellWithIconClose = styled(Tcell)`
   color: ${theme.color.cautionColor};
 `
 const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
+  const { t } = useTranslation()
   const modalContent = (
     <TableOverflowWrapper>
       <Table>
         <thead>
           <Tr>
-            <TheadLeft>Project-level information</TheadLeft>
-            <TheadCenter>Private</TheadCenter>
+            <TheadLeft>{t('data_sharing_info.project_level_info')}</TheadLeft>
+            <TheadCenter>{t('data_sharing_info.private')}</TheadCenter>
             <TheadCenter>
-              <span>Public Summary</span>
-              <small>(default)</small>
+              <span>{t('data_sharing_info.public_summary')}</span>
+              <small>{t('data_sharing_info.public_summary_default')}</small>
             </TheadCenter>
-            <TheadCenter>Public</TheadCenter>
+            <TheadCenter>{t('data_sharing_info.public')}</TheadCenter>
           </Tr>
         </thead>
         <tbody>
           <Tr>
             <Td colSpan="4">
-              <strong>Contact info</strong>
+              <strong>{t('data_sharing_info.contact_info')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Organization and admin names</Tcell>
+            <Tcell cellWithText>{t('data_sharing_info.org_and_admin_names')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -84,13 +85,12 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
           </Tr>
           <Tr>
             <Td colSpan="4" cellWithText>
-              <strong>Metadata</strong>
+              <strong>{t('data_sharing_info.metadata')}</strong>
             </Td>
           </Tr>
           <Tr>
             <Tcell cellWithText>
-              Project name and notes, country, site name and location, survey date, depth, habitat
-              (reef zone, reef type and exposure), management regime name, number of transects
+              {t('data_sharing_info.metadata_description')}
             </Tcell>
             <Tcell>
               <IconCheck />
@@ -104,11 +104,11 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
           </Tr>
           <Tr>
             <Td colSpan="4" cellWithText>
-              <strong>Site-level averages</strong>
+              <strong>{t('data_sharing_info.site_level_averages')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Average benthic cover (%)</Tcell>
+            <Tcell cellWithText>{t('data_sharing_info.avg_benthic_cover')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -120,7 +120,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Average total reef fish biomass (kg/ha)</Tcell>
+            <Tcell cellWithText>{t('data_sharing_info.avg_fish_biomass')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -132,7 +132,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Average habitat complexity scores</Tcell>
+            <Tcell cellWithText>{t('data_sharing_info.avg_habitat_complexity')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -144,7 +144,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Average colonies bleached (%)</Tcell>
+            <Tcell cellWithText>{t('data_sharing_info.avg_colonies_bleached')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -157,11 +157,11 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
           </Tr>
           <Tr>
             <Td colSpan="4" cellWithText>
-              <strong>Transect-level observations</strong>
+              <strong>{t('data_sharing_info.transect_level_obs')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Benthic observations and growth forms</Tcell>
+            <Tcell cellWithText>{t('data_sharing_info.benthic_obs_growth_forms')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -174,8 +174,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
           </Tr>
           <Tr>
             <Tcell cellWithText>
-              Reef fish species, size and abundance, taxonomy and functional group information,
-              biomass coefficients
+              {t('data_sharing_info.fish_species_description')}
             </Tcell>
             <TcellWithIconClose>
               <IconClose />
@@ -188,7 +187,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Individual habitat complexity scores</Tcell>
+            <Tcell cellWithText>{t('data_sharing_info.individual_habitat_scores')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -200,7 +199,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Colonies bleached and benthic percent cover</Tcell>
+            <Tcell cellWithText>{t('data_sharing_info.colonies_bleached_percent_cover')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -217,7 +216,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
   )
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Close</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.close')}</ButtonSecondary>
     </RightFooter>
   )
 
@@ -225,7 +224,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
     <Modal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      title={language.pages.dataSharing.moreInfoTitle}
+      title={t('data_sharing_info.modal_title')}
       mainContent={modalContent}
       footerContent={footerContent}
     />

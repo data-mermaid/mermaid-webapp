@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import React, { useState, useEffect, useMemo } from 'react'
 
 import { ButtonPrimary } from '../../generic/buttons'
@@ -18,7 +19,6 @@ import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete/InputAutocomplete'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import NewOrganizationModal from '../../NewOrganizationModal'
 import PageUnavailable from '../PageUnavailable'
@@ -47,6 +47,7 @@ const getWhichServerCitationToUse = (project) =>
     : project?.default_citation
 
 const ProjectInfo = () => {
+  const { t } = useTranslation()
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false)
   const [isDeletingProject, setIsDeletingProject] = useState(false)
@@ -119,7 +120,7 @@ const ProjectInfo = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.projectsUnavailable))
+              toast.error(...getToastArguments(t('error.projects_unavailable')))
             },
           })
         })
@@ -153,21 +154,21 @@ const ProjectInfo = () => {
         .then((updatedProject) => {
           setProjectBeingEdited(updatedProject) // to ensure isSuggestedCitationDirty is fresh
           setSaveButtonState(buttonGroupStates.saved)
-          toast.success(...getToastArguments(language.success.projectSave))
+          toast.success(...getToastArguments(t('success.project_save')))
           actions.resetForm({ values }) // resets formik's dirty state
         })
         .catch((error) => {
           // validation error is a custom error (doesn't have the same structure as HTTP response error)
           if (error.message === 'Validation Error') {
-            setProjectNameError(language.error.formValidation.projectNameExists)
-            toast.error(...getToastArguments(language.error.projectNameError))
+            setProjectNameError(t('error.form_validation_project_name_exists'))
+            toast.error(...getToastArguments(t('error.form_validation_project_name_exists')))
             setSaveButtonState(buttonGroupStates.unsaved)
           } else {
             setSaveButtonState(buttonGroupStates.unsaved)
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.projectSave))
+                toast.error(...getToastArguments(t('error.project_save')))
               },
             })
           }
@@ -177,7 +178,7 @@ const ProjectInfo = () => {
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       return errors
@@ -226,7 +227,7 @@ const ProjectInfo = () => {
       .then(() => {
         closeDeleteProjectModal()
         setIsDeletingProject(false)
-        toast.success(...getToastArguments(language.success.projectDeleted))
+        toast.success(...getToastArguments(t('success.project_deleted')))
         navigate(`/projects`)
       })
       .catch((error) => {
@@ -234,7 +235,7 @@ const ProjectInfo = () => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.projectDelete))
+            toast.error(...getToastArguments(t('error.project_delete')))
           },
         })
       })
@@ -253,10 +254,10 @@ const ProjectInfo = () => {
         setProjectBeingEdited(updatedProject)
 
         if (includesGfcrValue) {
-          toast.success(...getToastArguments(language.success.projectAddGfcr))
+          toast.success(...getToastArguments(t('success.project_add_gfcr')))
         }
         if (!includesGfcrValue) {
-          toast.success(...getToastArguments(language.success.projectRemoveGfcr))
+          toast.success(...getToastArguments(t('success.project_remove_gfcr')))
         }
       })
       .catch((error) => {
@@ -266,10 +267,10 @@ const ProjectInfo = () => {
           error,
           callback: () => {
             if (includesGfcrValue) {
-              toast.error(...getToastArguments(language.error.projectAddGfcr))
+              toast.error(...getToastArguments(t('error.project_add_gfcr')))
             }
             if (!includesGfcrValue) {
-              toast.error(...getToastArguments(language.error.projectRemoveGfcr))
+              toast.error(...getToastArguments(t('error.project_remove_gfcr')))
             }
           },
         })
@@ -401,7 +402,7 @@ const ProjectInfo = () => {
           isAppOnline ? (
             contentViewByRole
           ) : (
-            <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+            <PageUnavailable mainText={t('error.page_unavailable_offline')} />
           )
         }
         toolbar={

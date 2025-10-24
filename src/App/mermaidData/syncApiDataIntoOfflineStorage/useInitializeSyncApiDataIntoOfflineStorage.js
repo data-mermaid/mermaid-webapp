@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import language from '../../../language'
+import { useTranslation } from 'react-i18next'
 import { getProjectIdFromLocation } from '../../../library/getProjectIdFromLocation'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { useSyncStatus } from './SyncStatusContext'
@@ -15,6 +15,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
   syncApiDataIntoOfflineStorage,
   refreshCurrentUser,
 }) => {
+  const { t } = useTranslation()
   const location = useLocation()
   const isPageReload = useRef(true)
 
@@ -65,11 +66,11 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         })
         .catch((error) => {
           setIsSyncInProgress(false)
-          appendSyncError(language.error.apiDataSync)
+          appendSyncError(t('error.api_data_sync'))
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.apiDataSync))
+              toast.error(...getToastArguments(t('error.api_data_sync')))
             },
           })
         })
@@ -120,11 +121,11 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         })
         .catch((error) => {
           setIsSyncInProgress(false)
-          appendSyncError(language.error.apiDataSync)
+          appendSyncError(t('error.api_data_sync'))
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.apiDataSync))
+              toast.error(...getToastArguments(t('error.api_data_sync')))
             },
           })
         })
@@ -142,11 +143,11 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         })
         .catch((error) => {
           setIsSyncInProgress(false)
-          appendSyncError(language.error.apiDataSync)
+          appendSyncError(t('error.api_data_sync'))
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.apiDataSync))
+              toast.error(...getToastArguments(t('error.api_data_sync')))
             },
           })
         })

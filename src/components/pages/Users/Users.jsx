@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   ActiveSampleUnitsIconAlert,
@@ -41,7 +42,6 @@ import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InlineMessage from '../../generic/InlineMessage'
 import InputAndButton from '../../generic/InputAndButton/InputAndButton'
-import language from '../../../language'
 import NewUserModal from '../../NewUserModal'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -75,6 +75,7 @@ const getRoleLabel = (roleCode) => {
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
 
 const Users = () => {
+  const { t } = useTranslation()
   const [fromUser, setFromUser] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isPageLoading, setIsPageLoading] = useState(true)
@@ -138,7 +139,7 @@ const Users = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+              toast.error(...getToastArguments(t('error.user_records_unavailable')))
             },
           })
         })
@@ -175,7 +176,7 @@ const Users = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+              toast.error(...getToastArguments(t('error.user_records_unavailable')))
             },
           })
         })
@@ -194,16 +195,16 @@ const Users = () => {
       .then(() => {
         setNewUserEmail('')
         setIsTableUpdating(false)
-        toast.success(...getToastArguments(language.success.newUserAdd))
+        toast.success(...getToastArguments(t('success.new_user_add')))
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
             if (error.response.status === 400) {
-              toast.error(...getToastArguments(language.error.duplicateNewUserAdd))
+              toast.error(...getToastArguments(t('error.duplicate_new_user_add')))
             } else {
-              toast.error(...getToastArguments(language.error.generic))
+              toast.error(...getToastArguments(t('error.generic')))
             }
             setIsTableUpdating(false)
           },
@@ -213,12 +214,12 @@ const Users = () => {
 
   const notifyUserIfEmailInvalid = () => {
     if (newUserEmail === '') {
-      toast.warning(...getToastArguments(language.error.emptyEmailAdd))
+      toast.warning(...getToastArguments(t('error.empty_email_add')))
 
       return false
     }
     if (!validateEmail(newUserEmail)) {
-      toast.warning(...getToastArguments(language.error.invalidEmailAdd))
+      toast.warning(...getToastArguments(t('error.invalid_email_add')))
 
       return false
     }
@@ -258,7 +259,7 @@ const Users = () => {
         setNewUserEmail('')
         closeSendEmailToNewUserPrompt()
         setIsTableUpdating(false)
-        toast.success(...getToastArguments(language.success.newPendingUserAdd))
+        toast.success(...getToastArguments(t('success.new_pending_user_add')))
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -303,7 +304,7 @@ const Users = () => {
         handleHttpResponseError({
           error,
           callback: () =>
-            toast.error(...getToastArguments(language.error.transferSampleUnitsUnavailable)),
+            toast.error(...getToastArguments(t('error.transfer_sample_units_unavailable'))),
         })
       })
   }
@@ -344,7 +345,7 @@ const Users = () => {
       })
       .then(() => {
         setIsTableUpdating(false)
-        toast.success(...getToastArguments(language.success.userRemoved))
+        toast.success(...getToastArguments(t('success.user_removed')))
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -508,7 +509,7 @@ const Users = () => {
           setObserverProfiles(updatedObserverProfiles)
           toast.success(
             ...getToastArguments(
-              language.success.getUserRoleChangeSuccessMessage({
+              t('success.user_role_change_success', {
                 userName: editedUserName,
                 role: editedUserRole,
               }),
@@ -524,7 +525,7 @@ const Users = () => {
 
               toast.error(
                 ...getToastArguments(
-                  language.error.getUserRoleChangeFailureMessage(userToBeEdited.profile_name),
+                  t('error.user_role_change_failure', { userName: userToBeEdited.profile_name }),
                 ),
               )
             },

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import language from '../../../language'
+import { useTranslation } from 'react-i18next'
 import theme from '../../../theme'
 
 const PageNotFoundContainer = styled('div')`
@@ -12,12 +12,14 @@ const PageNotFoundContainer = styled('div')`
 `
 
 const PageNotFound = () => {
+  const { t } = useTranslation()
+
   return (
     <PageNotFoundContainer>
       <div>
-        <h1>{language.error.pageNotFound}</h1>
-        <p>{language.error.pageNotFoundRecovery}</p>
-        <Link to="/">{language.error.homePageNavigation}</Link>
+        <h1>{t('error.page_not_found')}</h1>
+        <p>{t('error.page_not_found_recovery')}</p>
+        <Link to="/">{t('error.home_page_navigation')}</Link>
       </div>
     </PageNotFoundContainer>
   )

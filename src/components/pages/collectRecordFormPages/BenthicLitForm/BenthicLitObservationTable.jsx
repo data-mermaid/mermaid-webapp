@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { useTranslation, Trans } from 'react-i18next'
 
 import {
   InputAutocompleteContainer,
@@ -24,10 +25,10 @@ import { IconClose, IconPlus, IconInfo } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
+import { HelperTextLink } from '../../../generic/links'
 import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
-import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
@@ -57,6 +58,7 @@ const BenthicLitObservationsTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
+  const { t } = useTranslation()
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
@@ -220,10 +222,10 @@ const BenthicLitObservationsTable = ({
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
                   value={attribute}
-                  noResultsText={language.autocomplete.noResultsDefault}
+                  noResultsText={t('autocomplete.no_results_default')}
                   noResultsAction={
                     <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
-                      {language.pages.collectRecord.newBenthicAttributeLink}
+                      {t('pages.collect_record.new_benthic_attribute_link')}
                     </NewOptionButton>
                   }
                 />
@@ -321,7 +323,19 @@ const BenthicLitObservationsTable = ({
                       </div>
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.getBenthicAttribute()}
+                          helperText={
+                            <Trans
+                              i18nKey="tooltip.benthic_attribute"
+                              components={{
+                                a: (
+                                  <HelperTextLink
+                                    href="https://www.marinespecies.org/"
+                                    target="_blank"
+                                  />
+                                ),
+                              }}
+                            />
+                          }
                           left="3.3em"
                           top="-13.5em"
                         />
@@ -339,7 +353,7 @@ const BenthicLitObservationsTable = ({
                       <div>Growth Form</div>
                       {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.growthForm}
+                          helperText={t('tooltip.growth_form')}
                           left="-0.5em"
                           top="-9em"
                         />

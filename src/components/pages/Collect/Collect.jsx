@@ -2,6 +2,7 @@ import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Tr,
   Th,
@@ -28,7 +29,6 @@ import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDrop
 import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -50,6 +50,7 @@ import { TrCollectRecordStatus } from './Collect.styles'
 import { getIsEmptyStringOrWhitespace } from '../../../library/getIsEmptyStringOrWhitespace'
 
 const Collect = () => {
+  const { t } = useTranslation()
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -87,7 +88,7 @@ const Collect = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
+              toast.error(...getToastArguments(t('error.collect_records_unavailable')))
             },
           })
         })
@@ -397,7 +398,7 @@ const Collect = () => {
   )
 
   const contentViewByRole = isReadOnlyUser ? (
-    <PageUnavailable mainText={language.error.pageReadOnly} />
+    <PageUnavailable mainText={t('error.page_read_only')} />
   ) : (
     table
   )

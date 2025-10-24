@@ -2,6 +2,7 @@ import { CSVLink } from 'react-csv'
 import { Link, useParams } from 'react-router-dom'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 
 import { ContentPageLayout } from '../../Layout'
@@ -15,7 +16,6 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import PageUnavailable from '../PageUnavailable'
@@ -53,6 +53,7 @@ import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const Sites = () => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const currentProjectPath = useCurrentProjectPath()
   const { isSyncInProgress } = useSyncStatus()
@@ -103,7 +104,7 @@ const Sites = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
+              toast.error(...getToastArguments(t('error.site_records_unavailable')))
             },
           })
         })

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 import { Input, LabelContainer, inputStyles } from '../generic/form'
 import { IconInfo } from '../icons'
 import { IconButton } from '../generic/buttons'
-import language from '../../language'
 import ColumnHeaderToolTip from '../ColumnHeaderToolTip/ColumnHeaderToolTip'
 import theme from '../../theme'
 
@@ -34,6 +34,7 @@ const FilterSearchToolbar = ({
   handleGlobalFilterChange,
   type = 'page',
 }) => {
+  const { t } = useTranslation()
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
   const [maxWidth, setMaxWidth] = useState('50em')
@@ -111,7 +112,7 @@ const FilterSearchToolbar = ({
             left={tooltipPosition.left}
             top={tooltipPosition.top}
             maxWidth={maxWidth}
-            html={language.pages.submittedTable.filterSearchHelperText.__html}
+            html={{ __html: t('filter_search_toolbar.helper_text') }}
             ref={tooltipRef}
           />
         ) : null}

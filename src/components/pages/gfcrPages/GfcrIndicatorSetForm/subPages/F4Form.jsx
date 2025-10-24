@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { ButtonPrimary } from '../../../../generic/buttons'
 import { formikPropType } from '../../../../../library/formik/formikPropType'
@@ -8,11 +9,11 @@ import { H2 } from '../../../../generic/text'
 import { InputRow } from '../../../../generic/form'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../../../language'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../../../theme'
 import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
 import GfcrDecimalInputField from '../GfcrDecimalInputField'
+import { HelperTextLink } from '../../../../generic/links'
 
 const StyledButtonPrimary = styled(ButtonPrimary)`
   width: 100%;
@@ -37,8 +38,6 @@ const StyledValueUpdateText = styled.strong`
   font-size: ${theme.typography.smallFontSize};
 `
 
-const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
-
 const F4Form = ({
   formik,
   handleInputFocus,
@@ -47,6 +46,7 @@ const F4Form = ({
   handleFormSubmit,
   displayHelp,
 }) => {
+  const { t } = useTranslation()
   const [isUpdateFromCalc, setIsUpdateFromCalc] = useState(false)
   // Eventually 'annual_report' can be removed if we're sure there are no indicators sets with this value in the DB
   const isReport = indicatorSetType === 'report' || 'annual_report'
@@ -82,32 +82,32 @@ const F4Form = ({
     f43ValueUpdateText = null
 
   if (isF41UsingCalcValue) {
-    f41ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+    f41ValueUpdateText = t('gfcr_indicator_set.f4_value_from_mermaid_data')
   } else if (!isF41UsingCalcValue && indicatorSet?.f4_1_calc) {
     f41ValueUpdateText = (
       <>
-        {gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc}{' '}
+        {t('gfcr_indicator_set.f4_value_different_from_calc')}{' '}
         <strong>({indicatorSet.f4_1_calc})</strong>
       </>
     )
   } else if (!isF41UsingCalcValue && !indicatorSet?.f4_1_calc && !formik.values.f4_1) {
-    f41ValueUpdateText = gfcrIndicatorSetLanguage.f4_noValue
+    f41ValueUpdateText = t('gfcr_indicator_set.f4_no_value')
   }
 
   if (isF42UsingCalcValue) {
-    f42ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+    f42ValueUpdateText = t('gfcr_indicator_set.f4_value_from_mermaid_data')
   } else if (!isF42UsingCalcValue && indicatorSet?.f4_2_calc) {
-    f42ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc
+    f42ValueUpdateText = t('gfcr_indicator_set.f4_value_different_from_calc')
   } else if (!isF42UsingCalcValue && !indicatorSet?.f4_2_calc && !formik.values.f4_2) {
-    f42ValueUpdateText = gfcrIndicatorSetLanguage.f4_noValue
+    f42ValueUpdateText = t('gfcr_indicator_set.f4_no_value')
   }
 
   if (isF43UsingCalcValue) {
-    f43ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+    f43ValueUpdateText = t('gfcr_indicator_set.f4_value_from_mermaid_data')
   } else if (!isF43UsingCalcValue && indicatorSet?.f4_3_calc) {
-    f43ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc
+    f43ValueUpdateText = t('gfcr_indicator_set.f4_value_different_from_calc')
   } else if (!isF43UsingCalcValue && !indicatorSet?.f4_3_calc && !formik.values.f4_3) {
-    f43ValueUpdateText = gfcrIndicatorSetLanguage.f4_noValue
+    f43ValueUpdateText = t('gfcr_indicator_set.f4_no_value')
   }
 
   const isF41ValueZeroAndCalcValueNull = formik.values.f4_1 === 0 && !indicatorSet?.f4_1_calc
@@ -129,15 +129,15 @@ const F4Form = ({
 
   return (
     <StyledGfcrInputWrapper>
-      <H2>{gfcrIndicatorSetLanguage.f4Heading}</H2>
+      <H2>{t('gfcr_indicator_set.f4_heading')}</H2>
       {isReport && (
         <StyledInputRowDates>
           <label>
-            <strong>{gfcrIndicatorSetLanguage.f4_reportingDateRange}</strong>
+            <strong>{t('gfcr_indicator_set.f4_reporting_date_range')}</strong>
           </label>
           <StyledGfcrSubInputWrapper>
             <InputWithLabelAndValidation
-              label={gfcrIndicatorSetLanguage.f4_start_date}
+              label={t('gfcr_indicator_set.f4_start_date')}
               id="f4_start_date"
               type="date"
               {...formik.getFieldProps('f4_start_date')}
@@ -146,7 +146,7 @@ const F4Form = ({
               }
             />
             <InputWithLabelAndValidation
-              label={gfcrIndicatorSetLanguage.f4_end_date}
+              label={t('gfcr_indicator_set.f4_end_date')}
               id="f4_end_date"
               type="date"
               {...formik.getFieldProps('f4_end_date')}
@@ -159,7 +159,7 @@ const F4Form = ({
               onClick={handleSaveAndUpdateValues}
               disabled={saveAndUpdateValuesButtonDisabled}
             >
-              {gfcrIndicatorSetLanguage.f4_saveAndUpdateValues}
+              {t('gfcr_indicator_set.f4_save_and_update_values')}
             </StyledButtonPrimary>
           </StyledGfcrSubInputWrapper>
         </StyledInputRowDates>
@@ -169,12 +169,24 @@ const F4Form = ({
           id={'f4_1'}
           label={
             <>
-              <strong>F 4.1</strong> {gfcrIndicatorSetLanguage.f4_1}
+              <strong>F 4.1</strong> {t('gfcr_indicator_set.f4_1')}
             </>
           }
           unit="%"
           maxNumberOfDecimals={1}
-          helperText={gfcrIndicatorSetLanguage.getF4_1_helper()}
+          helperText={
+            <Trans
+              i18nKey="gfcr_indicator_set.f4_1_helper"
+              components={{
+                a: (
+                  <HelperTextLink
+                    href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf"
+                    target="_blank"
+                  />
+                ),
+              }}
+            />
+          }
           displayHelp={displayHelp}
           handleInputFocus={handleInputFocus}
           formik={formik}
@@ -186,12 +198,24 @@ const F4Form = ({
           id={'f4_2'}
           label={
             <>
-              <strong>F 4.2</strong> {gfcrIndicatorSetLanguage.f4_2}
+              <strong>F 4.2</strong> {t('gfcr_indicator_set.f4_2')}
             </>
           }
           unit="%"
           maxNumberOfDecimals={1}
-          helperText={gfcrIndicatorSetLanguage.getF4_2_helper()}
+          helperText={
+            <Trans
+              i18nKey="gfcr_indicator_set.f4_2_helper"
+              components={{
+                a: (
+                  <HelperTextLink
+                    href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf"
+                    target="_blank"
+                  />
+                ),
+              }}
+            />
+          }
           displayHelp={displayHelp}
           handleInputFocus={handleInputFocus}
           formik={formik}
@@ -203,12 +227,24 @@ const F4Form = ({
           id={'f4_3'}
           label={
             <>
-              <strong>F 4.3</strong> {gfcrIndicatorSetLanguage.f4_3}
+              <strong>F 4.3</strong> {t('gfcr_indicator_set.f4_3')}
             </>
           }
           unit="kg/ha"
           maxNumberOfDecimals={1}
-          helperText={gfcrIndicatorSetLanguage.getF4_3_helper()}
+          helperText={
+            <Trans
+              i18nKey="gfcr_indicator_set.f4_3_helper"
+              components={{
+                a: (
+                  <HelperTextLink
+                    href="https://globalfundcoralreefs.org/wp-content/uploads/2024/09/GFCR-ME-Toolkit_09.2024_compressed.pdf"
+                    target="_blank"
+                  />
+                ),
+              }}
+            />
+          }
           displayHelp={displayHelp}
           handleInputFocus={handleInputFocus}
           formik={formik}
@@ -217,7 +253,7 @@ const F4Form = ({
       </StyledInputRowQuestions>
       <TextareaWithLabelAndValidation
         id="f4_notes"
-        label={gfcrIndicatorSetLanguage.notes}
+        label={t('gfcr_indicator_set.notes')}
         {...formik.getFieldProps('f4_notes')}
       />
     </StyledGfcrInputWrapper>

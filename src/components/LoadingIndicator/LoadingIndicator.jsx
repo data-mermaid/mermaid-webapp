@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import language from '../../language'
+import { useTranslation } from 'react-i18next'
 import theme from '../../theme'
 
 const size = '3.5rem'
@@ -128,13 +128,17 @@ const LoadingIndicatorContainer = styled.div`
 `
 
 const LoadingIndicator = ({
-  primaryMessage = language.loadingIndicator.loadingPrimary,
-  secondaryMessage = language.loadingIndicator.loadingSecondary,
+  primaryMessage,
+  secondaryMessage,
   displaySecondary = true,
   displaySecondaryTimingSeconds = 10,
   ...props
 }) => {
+  const { t } = useTranslation()
   const [isDisplaySecondaryTime, setIsDisplaySecondaryTime] = useState(false)
+
+  const defaultPrimaryMessage = primaryMessage || t('loading')
+  const defaultSecondaryMessage = secondaryMessage || t('still_working')
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -146,7 +150,7 @@ const LoadingIndicator = ({
     }
   })
 
-  const isDisplaySecondary = displaySecondary && secondaryMessage && isDisplaySecondaryTime
+  const isDisplaySecondary = displaySecondary && defaultSecondaryMessage && isDisplaySecondaryTime
 
   return (
     <LoadingIndicatorContainer {...props}>
@@ -159,8 +163,8 @@ const LoadingIndicator = ({
           <div className="plus">&nbsp;</div>
           <div className="x">&nbsp;</div>
         </div>
-        <p className="loadingPrimary">{primaryMessage}</p>
-        {isDisplaySecondary && <p className="loadingSecondary">{secondaryMessage}</p>}
+        <p className="loadingPrimary">{defaultPrimaryMessage}</p>
+        {isDisplaySecondary && <p className="loadingSecondary">{defaultSecondaryMessage}</p>}
       </div>
     </LoadingIndicatorContainer>
   )

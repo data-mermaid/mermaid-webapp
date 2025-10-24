@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 
 import { ContentPageLayout } from '../../../Layout'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
@@ -11,7 +12,6 @@ import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflin
 import useIsMounted from '../../../../library/useIsMounted'
 import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import language from '../../../../language'
 import { FormSubTitle } from '../SubmittedFormPage.styles'
 import RecordFormTitle from '../../../RecordFormTitle'
 import { RowSpaceBetween } from '../../../generic/positioning'
@@ -27,6 +27,7 @@ import { getBenthicOptions } from '../../../../library/getOptions'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
 const SubmittedBenthicLit = () => {
+  const { t } = useTranslation()
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
 
@@ -103,7 +104,7 @@ const SubmittedBenthicLit = () => {
                 setIdsNotAssociatedWithData([projectId, submittedRecordId])
                 setIsLoading(false)
               }
-              toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+              toast.error(...getToastArguments(t('error.submitted_record_unavailable')))
             },
           })
         })
@@ -127,14 +128,14 @@ const SubmittedBenthicLit = () => {
         sampleUnitMethod: 'benthiclittransectmethods',
       })
       .then(({ id }) => {
-        toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
+        toast.success(...getToastArguments(t('success.submitted_record_move_to_collect')))
         navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/benthiclit/${id}`)
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
+            toast.error(...getToastArguments(t('error.submitted_record_move_to_collect')))
             setIsMoveToButtonDisabled(false)
           },
         })
@@ -174,7 +175,7 @@ const SubmittedBenthicLit = () => {
             />
           </>
         ) : (
-          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+          <PageUnavailable mainText={t('error.page_unavailable_offline')} />
         )
       }
       toolbar={
@@ -189,15 +190,15 @@ const SubmittedBenthicLit = () => {
               <>
                 <p>
                   {isAdminUser
-                    ? language.pages.submittedForm.sampleUnitsAreReadOnly
-                    : language.pages.submittedForm.adminEditOnly}
+                    ? t('submitted_form.sample_units_are_read_only')
+                    : t('submitted_form.admin_edit_only')}
                 </p>
                 <ButtonSecondary
                   onClick={handleMoveToCollect}
                   disabled={isAdminUser ? isMoveToButtonDisabled : 'false'}
                 >
                   <IconPen />
-                  {language.pages.submittedForm.moveSampleUnitButton}
+                  {t('submitted_form.move_sample_unit_button')}
                 </ButtonSecondary>
               </>
             </RowSpaceBetween>

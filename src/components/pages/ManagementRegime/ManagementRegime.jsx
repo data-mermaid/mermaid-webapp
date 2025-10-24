@@ -3,6 +3,7 @@ import { useFormik } from 'formik'
 import { useNavigate, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../Layout'
@@ -34,7 +35,6 @@ import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputCheckboxGroupWithLabelAndValidation from '../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../language'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import ManagementRulesInput from '../ManagementRulesInput'
 import PageUnavailable from '../PageUnavailable'
@@ -188,6 +188,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
 }
 
 const ManagementRegime = ({ isNewManagementRegime }) => {
+  const { t } = useTranslation()
   const { isAppOnline } = useOnlineStatus()
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
@@ -264,7 +265,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.managementRegimeRecordUnavailable))
+              toast.error(...getToastArguments(t('error.management_regime_record_unavailable')))
             },
           })
         })
@@ -336,9 +337,8 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
         .then((response) => {
           toast.success(
-            language.success.getMermaidDataSaveSuccess({
-              mermaidDataTypeLabel: 'management regime',
-              isAppOnline,
+            t(isAppOnline ? 'success.save_online_success' : 'success.save_offline_success', {
+              itemType: 'management regime',
             }),
           )
           clearPersistedUnsavedFormikData()
@@ -355,7 +355,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           const { isSyncError } = error
 
           if (isSyncError && isAppOnline) {
-            const toastTitle = language.error.getSaveOnlineSyncErrorTitle('management regime')
+            const toastTitle = t('error.save_online_sync_error', { itemType: 'management regime' })
 
             showSyncToastError({ toastTitle, error, testId: 'management-regime-toast-error' })
           }
@@ -370,7 +370,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
             toast.error(
               ...getToastArguments(
                 <div data-testid="management-regime-toast-error">
-                  {language.error.getSaveOfflineErrorTitle('management regime')}
+                  {t('error.save_offline_error', { itemType: 'management regime' })}
                 </div>,
               ),
             )
@@ -391,13 +391,13 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         !values.open_access && !values.no_take && isPartialSelectionSelected === false
 
       if (!values.name) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (noPartialRestrictionRulesSelected) {
         errors.rules = [
           {
-            code: language.error.formValidation.managementPartialRestrictionRequired,
+            code: t('error.form_validation_management_partial_restriction_required'),
             id: 'Partial Restriction Required',
           },
         ]
@@ -433,7 +433,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         closeDeleteRecordModal()
         setIsDeletingRecord(false)
         toast.success(
-          ...getToastArguments(language.success.getMermaidDataDeleteSuccess('management regime')),
+          ...getToastArguments(t('success.delete_success', { itemType: 'management regime' })),
         )
         navigate(`${ensureTrailingSlash(currentProjectPath)}management-regimes/`)
       })
@@ -441,7 +441,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         const { isSyncError, isDeleteRejectedError } = error
 
         if (isSyncError && !isDeleteRejectedError) {
-          const toastTitle = language.error.getDeleteOnlineSyncErrorTitle('management regime')
+          const toastTitle = t('error.delete_online_sync_error', { itemType: 'management regime' })
 
           showSyncToastError({ toastTitle, error, testId: 'management-regime-toast-error' })
           setIsDeletingRecord(false)

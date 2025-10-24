@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 
 import { ContentPageLayout } from '../../Layout'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
@@ -12,7 +13,6 @@ import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeader
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
-import language from '../../../language'
 import PageUnavailable from '../PageUnavailable'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -103,6 +103,7 @@ const groupCollectSampleUnitsByProfileSummary = (records) => {
 }
 
 const UsersAndTransects = () => {
+  const { t } = useTranslation()
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -162,7 +163,7 @@ const UsersAndTransects = () => {
                 setIsLoading(false)
               }
 
-              toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
+              toast.error(...getToastArguments(t('error.project_health_records_unavailable')))
             },
           })
         })
@@ -667,7 +668,7 @@ const UsersAndTransects = () => {
   const content = isAppOnline ? (
     table
   ) : (
-    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+    <PageUnavailable mainText={t('error.page_unavailable_offline')} />
   )
 
   const toolbar = (

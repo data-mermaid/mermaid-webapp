@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify'
 import { useParams, useNavigate } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonSecondary } from '../../../generic/buttons'
 import { ContentPageLayout } from '../../../Layout'
@@ -15,7 +16,6 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
-import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import PageUnavailable from '../../PageUnavailable'
 import RecordFormTitle from '../../../RecordFormTitle'
@@ -30,6 +30,7 @@ import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHa
 import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
 
 const SubmittedFishBelt = () => {
+  const { t } = useTranslation()
   const [choices, setChoices] = useState({})
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
@@ -119,7 +120,7 @@ const SubmittedFishBelt = () => {
                 setIdsNotAssociatedWithData([projectId, submittedRecordId])
                 setIsLoading(false)
               }
-              toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+              toast.error(...getToastArguments(t('error.submitted_record_unavailable')))
             },
           })
         })
@@ -140,14 +141,14 @@ const SubmittedFishBelt = () => {
     databaseSwitchboardInstance
       .moveToCollect({ projectId, submittedRecordId, sampleUnitMethod: 'beltfishtransectmethods' })
       .then(({ id }) => {
-        toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
+        toast.success(...getToastArguments(t('success.submitted_record_move_to_collect')))
         navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${id}`)
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
+            toast.error(...getToastArguments(t('error.submitted_record_move_to_collect')))
             setIsMoveToButtonDisabled(false)
           },
         })
@@ -188,7 +189,7 @@ const SubmittedFishBelt = () => {
             />
           </>
         ) : (
-          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+          <PageUnavailable mainText={t('error.page_unavailable_offline')} />
         )
       }
       toolbar={

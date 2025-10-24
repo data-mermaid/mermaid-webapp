@@ -3,6 +3,7 @@ import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } fro
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 import {
   Tr,
   Th,
@@ -24,7 +25,6 @@ import Modal, {
 } from '../generic/Modal'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { getToastArguments } from '../../library/getToastArguments'
-import language from '../../language'
 import PageSelector from '../generic/Table/PageSelector'
 import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import usePersistUserTablePreferences from '../generic/Table/usePersistUserTablePreferences'
@@ -55,6 +55,7 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 })
 
 const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagementRegimeTable }) => {
+  const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
@@ -86,7 +87,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
+              toast.error(...getToastArguments(t('error.management_regime_records_unavailable')))
             },
           })
         })

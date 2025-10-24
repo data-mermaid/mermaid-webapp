@@ -1,5 +1,5 @@
 import axios from '../library/axiosRetry'
-import language from '../language'
+import i18next from 'i18next'
 import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
 import { userRole } from './mermaidData/userRole'
 
@@ -72,7 +72,7 @@ export const getCurrentUserProfile = async ({
     })
   }
 
-  return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
+  return Promise.reject(new Error(i18next.t('error.app_not_authenticated')))
 }
 
 export const setCurrentUserProfile = async ({
@@ -116,7 +116,7 @@ export const setCurrentUserProfile = async ({
       })
   }
 
-  return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
+  return Promise.reject(new Error(i18next.t('error.app_not_authenticated')))
 }
 
 export const getProjectRole = (userProfile, projectId) => {

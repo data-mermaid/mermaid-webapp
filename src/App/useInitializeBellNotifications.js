@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 
-import language from '../language'
 import { getToastArguments } from '../library/getToastArguments'
 import {
   getBellNotifications,
@@ -17,6 +17,7 @@ export const useInitializeBellNotifications = ({
   isAppOnline,
   handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
 }) => {
+  const { t } = useTranslation()
   const location = useLocation() // Changes when the route changes. Useful for fetching notifications again
 
   const [notifications, setNotifications] = useState([])
@@ -40,7 +41,7 @@ export const useInitializeBellNotifications = ({
           handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.notificationsUnavailable))
+              toast.error(...getToastArguments(t('error.notifications_unavailable')))
             },
             shouldShowServerNonResponseMessage: false,
           })
@@ -71,7 +72,7 @@ export const useInitializeBellNotifications = ({
           handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.notificationNotDeleted))
+              toast.error(...getToastArguments(t('error.notification_not_deleted')))
             },
           })
         })
@@ -93,7 +94,7 @@ export const useInitializeBellNotifications = ({
           handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.notificationNotDeleted))
+              toast.error(...getToastArguments(t('error.notification_not_deleted')))
             },
           })
         })

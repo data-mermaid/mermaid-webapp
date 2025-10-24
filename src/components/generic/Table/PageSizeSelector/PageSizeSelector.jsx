@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 import { Select } from '../../form'
 
 const PageSizeSelect = styled(Select)`
@@ -20,6 +21,7 @@ const PageSizeSelector = ({
   isMethodFilterEnabled = false,
   isSearchFilterEnabled = false,
 }) => {
+  const { t } = useTranslation()
   const [pageOptionsToDisplay, setPageOptionsToDisplay] = useState([])
   const [filteredAmountToDisplay, setFilteredAmountToDisplay] = useState(null)
 
@@ -65,7 +67,7 @@ const PageSizeSelector = ({
 
   return (
     <label htmlFor="page-size-selector">
-      Showing{' '}
+      {t('pagination.showing')}{' '}
       <PageSizeSelect
         value={pageSize}
         onChange={onChange}
@@ -78,9 +80,9 @@ const PageSizeSelector = ({
           </option>
         ))}
       </PageSizeSelect>
-      of {filteredAmountToDisplay}
+      {t('pagination.of')} {filteredAmountToDisplay}
       {isSearchFilterEnabled || isMethodFilterEnabled
-        ? `${' '}(filtered from ${unfilteredRowLength}${' '}${pageType}${
+        ? `${' '}(${t('pagination.filtered_from')} ${unfilteredRowLength}${' '}${pageType}${
             unfilteredRowLength > 1 ? 's' : ''
           })`
         : null}

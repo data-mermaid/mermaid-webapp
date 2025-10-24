@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
-import language from '../../language'
 import { IconArrowRightCircle } from '../icons'
 import { Select } from '../generic/form'
 import { Column } from '../generic/positioning'
@@ -45,6 +45,7 @@ const TransferSampleUnitsModal = ({
   handleTransferSampleUnitChange,
   onSubmit,
 }) => {
+  const { t } = useTranslation()
   const initialToUserIdInTransferModal = fromUser.profile === currentUserId ? '' : currentUserId
   const sampleUnitMsg = pluralize(fromUser.num_active_sample_units, 'sample unit', 'sample units')
   const [isInitialToUserIdEmpty, setInitialIsToUserIdEmpty] = useState()
@@ -86,7 +87,7 @@ const TransferSampleUnitsModal = ({
       {showRemoveUserWithActiveSampleUnitsWarning && (
         <InlineFlex>
           <InlineMessage type="warning">
-            <p>{language.pages.userTable.warningTransferSampleUnits}</p>
+            <p>{t('transfer_sample_units.warning')}</p>
           </InlineMessage>
         </InlineFlex>
       )}
@@ -101,7 +102,7 @@ const TransferSampleUnitsModal = ({
           <IconArrowRightCircle />
           <ModalBoxItem>
             <label id="modal-transfer-units-to-label" htmlFor="modal-transfer-units-to">
-              Transfer sample units to:
+              {t('transfer_sample_units.transfer_to_label')}
               <Select
                 id="modal-transfer-units-to"
                 defaultValue={initialToUserIdInTransferModal}
@@ -111,7 +112,7 @@ const TransferSampleUnitsModal = ({
                 }}
               >
                 <option value="" disabled>
-                  {language.placeholders.select}
+                  {t('placeholders.select')}
                 </option>
                 {optionList}
               </Select>
@@ -124,9 +125,9 @@ const TransferSampleUnitsModal = ({
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit} disabled={isInitialToUserIdEmpty}>
-        Transfer Sample Units
+        {t('transfer_sample_units.transfer_button')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -135,7 +136,7 @@ const TransferSampleUnitsModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      title={language.pages.userTable.transferSampleUnitsModalTitle}
+      title={t('transfer_sample_units.modal_title')}
       mainContent={modalContent}
       footerContent={footerContent}
     />

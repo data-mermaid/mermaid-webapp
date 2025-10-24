@@ -1,5 +1,5 @@
 import axios from '../library/axiosRetry'
-import language from '../language'
+import i18next from 'i18next'
 import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
 import { getPaginatedMermaidData } from './mermaidData/getPaginatedMermaidData'
 
@@ -17,7 +17,7 @@ export const getBellNotifications = async ({
   const isOnlineAuthenticatedAndReady = isAuthenticatedAndReady && isAppOnline
 
   if (!isOnlineAuthenticatedAndReady) {
-    return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
+    return Promise.reject(new Error(i18next.t('error.app_not_authenticated')))
   }
   return await getPaginatedMermaidData({
     url: `${apiBaseUrl}/notifications/`,
@@ -53,7 +53,7 @@ export const deleteBellNotification = async (
       })
   }
 
-  return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
+  return Promise.reject(new Error(i18next.t('error.app_not_authenticated')))
 }
 
 export const deleteAllBellNotifications = async ({
@@ -81,5 +81,5 @@ export const deleteAllBellNotifications = async ({
       })
   }
 
-  return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
+  return Promise.reject(new Error(i18next.t('error.app_not_authenticated')))
 }

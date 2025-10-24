@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 
 import { CellValidation, TableValidationList } from './CollectingFormPage.Styles'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
-import language from '../../../language'
+import { getValidationMessage } from '../../../library/getValidationMessage'
 
 const ObservationValidationInfo = ({
   ignoreObservationValidations,
@@ -16,6 +17,8 @@ const ObservationValidationInfo = ({
   observationValidationMessages,
   observationValidationType,
 }) => {
+  const { t } = useTranslation()
+
   const handleIgnoreWarningChange = async (event) => {
     const isIgnoreChecked = event.target.checked
 
@@ -38,12 +41,12 @@ const ObservationValidationInfo = ({
         <TableValidationList>
           {observationValidationMessages.map((validation) => (
             <li className={`${observationValidationType}-indicator`} key={validation.id}>
-              {language.getValidationMessage(validation)}
+              {getValidationMessage(validation)}
             </li>
           ))}
         </TableValidationList>
       ) : null}
-      {hasObservationIgnoredValidation ? <>Ignored</> : null}
+      {hasObservationIgnoredValidation ? <>{t('validation_ui.ignored')}</> : null}
       {hasObservationWarningValidation || hasObservationIgnoredValidation ? (
         <InputIgnoreValidationWarningCheckboxWithLabel
           onChange={handleIgnoreWarningChange}

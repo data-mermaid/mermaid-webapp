@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   managementRegimePropType,
@@ -13,7 +14,6 @@ import { H2 } from '../../../generic/text'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import { InputWrapper } from '../../../generic/form'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
-import language from '../../../../language'
 
 const MANAGEMENT_VALIDATION_PATH = 'data.sample_event.management'
 const SAMPLE_DATE_VALIDATION_PATH = 'data.sample_event.sample_date'
@@ -31,6 +31,7 @@ const SampleEventInputs = ({
   resetNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
+  const { t } = useTranslation()
   const managementRegimeOptions = getManagementRegimeOptions(managementRegimes)
   const siteOptions = getOptions(sites)
   const validationsApiData = collectRecord?.validations?.results?.data
@@ -87,7 +88,7 @@ const SampleEventInputs = ({
   return (
     <>
       <InputWrapper>
-        <H2>{language.pages.collectRecord.formSectionTitle.sampleEvent}</H2>
+        <H2>{t('collect_record.form_section_title.sample_event')}</H2>
         <InputSelectWithLabelAndValidation
           label="Site"
           required={true}
@@ -106,7 +107,7 @@ const SampleEventInputs = ({
           value={formik.values.site}
           onChange={handleSiteChange}
           updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForSite}
-          helperText={language.helperText.site}
+          helperText={t('site_info')}
           displayViewLink={true}
         />
         <InputSelectWithLabelAndValidation
@@ -129,7 +130,7 @@ const SampleEventInputs = ({
           value={formik.values.management}
           onChange={handleManagementChange}
           updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForMR}
-          helperText={language.helperText.management}
+          helperText={t('management_info')}
           displayViewLink={true}
         />
         <InputWithLabelAndValidation
@@ -152,7 +153,7 @@ const SampleEventInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_date}
           onChange={handleSampleDateChange}
-          helperText={language.helperText.sampleDate}
+          helperText={t('sample_date_info')}
         />
       </InputWrapper>
     </>

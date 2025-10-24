@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonSecondary } from './generic/buttons'
 import { IconCheck, IconClose } from './icons'
 import { Table, Td, Tr, TableOverflowWrapper } from './generic/Table/table'
-import language from '../language'
 import theme from '../theme'
 import Modal, { RightFooter } from './generic/Modal'
 
@@ -41,25 +41,27 @@ const TcellWithIconClose = styled(Tcell)`
   color: ${theme.color.cautionColor};
 `
 const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
+  const { t } = useTranslation()
+
   const modalContent = (
     <TableOverflowWrapper>
       <Table>
         <thead>
           <Tr>
-            <Thead>{language.pages.admin.accessible_information}</Thead>
-            <Thead>{language.pages.admin.admin}</Thead>
-            <Thead>{language.pages.admin.collector}</Thead>
-            <Thead>{language.pages.admin.readOnly}</Thead>
+            <Thead>{t('admin.accessible_information')}</Thead>
+            <Thead>{t('admin.admin')}</Thead>
+            <Thead>{t('admin.collector')}</Thead>
+            <Thead>{t('admin.read_only')}</Thead>
           </Tr>
         </thead>
         <tbody>
           <Tr>
             <Td colSpan="4">
-              <strong>{language.pages.admin.projectManagement}</strong>
+              <strong>{t('admin.project_management')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.projectInfo.edit}</Tcell>
+            <Tcell>{t('admin.project_info.edit')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -71,7 +73,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.projectInfo.setUpDataSharing}</Tcell>
+            <Tcell>{t('admin.project_info.set_up_data_sharing')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -83,7 +85,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.projectInfo.addOrRemoveProjectMembers}</Tcell>
+            <Tcell>{t('admin.project_info.add_or_remove_project_members')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -95,7 +97,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.projectInfo.viewMemberEmail}</Tcell>
+            <Tcell>{t('admin.project_info.view_member_email')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -107,7 +109,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.projectInfo.delete}</Tcell>
+            <Tcell>{t('admin.project_info.delete')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -121,11 +123,11 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
 
           <Tr>
             <Td colSpan="4">
-              <strong>{language.pages.admin.dataCollection.title}</strong>
+              <strong>{t('admin.data_collection.title')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.addUpdateSiteOrRegimes}</Tcell>
+            <Tcell>{t('admin.data_collection.add_update_site_or_regimes')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -137,7 +139,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.deleteSiteOrRegimes}</Tcell>
+            <Tcell>{t('admin.data_collection.delete_site_or_regimes')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -149,7 +151,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.downloadSitesAndRegimes}</Tcell>
+            <Tcell>{t('admin.data_collection.download_sites_and_regimes')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -161,7 +163,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.createValidateSubmitSampleUnits}</Tcell>
+            <Tcell>{t('admin.data_collection.create_validate_submit_sample_units')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -173,7 +175,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.deleteSampleUnits}</Tcell>
+            <Tcell>{t('admin.data_collection.delete_sample_units')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -185,7 +187,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.editSampleUnits}</Tcell>
+            <Tcell>{t('admin.data_collection.edit_sample_units')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -197,7 +199,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.transferSampleUnits}</Tcell>
+            <Tcell>{t('admin.data_collection.transfer_sample_units')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -209,7 +211,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.downloadSampleUnits}</Tcell>
+            <Tcell>{t('admin.data_collection.download_sample_units')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -221,7 +223,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.viewObserversAndSampleUnits}</Tcell>
+            <Tcell>{t('admin.data_collection.view_observers_and_sample_units')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -233,7 +235,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.viewRegimesOverview}</Tcell>
+            <Tcell>{t('admin.data_collection.view_regimes_overview')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -250,7 +252,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
   )
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>{language.buttons.close}</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.close')}</ButtonSecondary>
     </RightFooter>
   )
 
@@ -258,7 +260,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
     <Modal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      title={language.pages.userTable.moreInfoTitle}
+      title={t('user_table.more_info_title')}
       mainContent={modalContent}
       footerContent={footerContent}
     />

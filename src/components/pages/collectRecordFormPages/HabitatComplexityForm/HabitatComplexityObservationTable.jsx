@@ -23,8 +23,8 @@ import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../.
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import ObservationValidationInfo from '../ObservationValidationInfo'
-import language from '../../../../language'
 import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import { useTranslation } from 'react-i18next'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -51,6 +51,7 @@ const HabitatComplexityObservationsTable = ({
   setAreObservationsInputsDirty,
   testId,
 }) => {
+  const { t } = useTranslation()
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
@@ -260,7 +261,7 @@ const HabitatComplexityObservationsTable = ({
                       Habitat Complexity Score <RequiredIndicator />
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.habitatComplexityScore}
+                          helperText={t('tooltip.habitat_complexity_score')}
                           left="8.3em"
                           top="-21em"
                         />

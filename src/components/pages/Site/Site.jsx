@@ -3,6 +3,7 @@ import { useFormik } from 'formik'
 import { useParams, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../Layout'
@@ -34,7 +35,6 @@ import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete/InputAutocomplete'
 import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../language'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import PageUnavailable from '../PageUnavailable'
 import SaveButton from '../../generic/SaveButton'
@@ -248,6 +248,7 @@ const SiteForm = ({
 }
 
 const Site = ({ isNewSite }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
@@ -323,7 +324,7 @@ const Site = ({ isNewSite }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.siteRecordUnavailable))
+              toast.error(...getToastArguments(t('error.site_record_unavailable')))
             },
           })
         })
@@ -395,7 +396,7 @@ const Site = ({ isNewSite }) => {
           const { isSyncError } = error
 
           if (isSyncError && isAppOnline) {
-            const toastTitle = language.error.getSaveOnlineSyncErrorTitle('site')
+            const toastTitle = t('error.save_online_sync_error', { itemType: 'site' })
 
             showSyncToastError({ toastTitle, error, testId: 'site-toast-error' })
           }
@@ -409,7 +410,7 @@ const Site = ({ isNewSite }) => {
             toast.error(
               ...getToastArguments(
                 <div data-testid="site-toast-error">
-                  {language.error.getSaveOfflineErrorTitle('site')}
+                  {t('error.save_offline_error', { itemType: 'site' })}
                 </div>,
               ),
             )
@@ -421,41 +422,41 @@ const Site = ({ isNewSite }) => {
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (!values.country) {
-        errors.country = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.country = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (!values.latitude && values.latitude !== 0) {
-        errors.latitude = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.latitude = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (values.latitude > 90 || values.latitude < -90) {
-        errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
+        errors.latitude = [{ code: t('error.form_validation_latitude'), id: 'Invalid Latitude' }]
       }
 
       if (!values.longitude && values.longitude !== 0) {
-        errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.longitude = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (values.longitude > 180 || values.longitude < -180) {
         errors.longitude = [
-          { code: language.error.formValidation.longitude, id: 'Invalid Longitude' },
+          { code: t('error.form_validation_longitude'), id: 'Invalid Longitude' },
         ]
       }
 
       if (!values.exposure) {
-        errors.exposure = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.exposure = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (!values.reef_type) {
-        errors.reef_type = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.reef_type = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       if (!values.reef_zone) {
-        errors.reef_zone = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.reef_zone = [{ code: t('error.form_validation_required'), id: 'Required' }]
       }
 
       return errors
@@ -510,7 +511,7 @@ const Site = ({ isNewSite }) => {
         const { isSyncError, isDeleteRejectedError } = error
 
         if (isSyncError && !isDeleteRejectedError) {
-          const toastTitle = language.error.getDeleteOnlineSyncErrorTitle('site')
+          const toastTitle = t('error.delete_online_sync_error', { itemType: 'site' })
 
           showSyncToastError({ toastTitle, error, testId: 'site-toast-error' })
           setIsDeletingSite(false)
@@ -534,7 +535,7 @@ const Site = ({ isNewSite }) => {
   const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewSite
 
   const contentViewByReadOnlyRole = isNewSite ? (
-    <PageUnavailable mainText={language.error.pageReadOnly} />
+    <PageUnavailable mainText={t('error.page_read_only')} />
   ) : (
     <ReadOnlySiteContent
       site={formik.values}

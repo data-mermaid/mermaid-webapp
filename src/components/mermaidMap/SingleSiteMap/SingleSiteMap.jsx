@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import styled from 'styled-components'
-import language from '../../../language'
+import { useTranslation } from 'react-i18next'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import {
   satelliteBaseMap,
@@ -50,6 +50,7 @@ const SingleSiteMap = ({
   handleLongitudeChange = () => {},
   isReadOnlyUser = false,
 }) => {
+  const { t } = useTranslation()
   const mapContainer = useRef(null)
   const map = useRef(null)
   const recordMarker = useRef(null)
@@ -90,7 +91,7 @@ const SingleSiteMap = ({
       zoom: defaultZoom,
       maxZoom: 16,
       attributionControl: true,
-      customAttribution: language.map.attribution,
+      customAttribution: t('map.attribution'),
     })
 
     if (formLatitudeValue && formLongitudeValue) {
@@ -212,7 +213,7 @@ const SingleSiteMap = ({
   const placeMarkerButton = (
     <StyledPlaceMarkerButton type="button" onClick={handlePlaceMarkerClick}>
       <IconMapMarker />
-      {language.pages.siteForm.placeMarker}
+      Place Site Marker
     </StyledPlaceMarkerButton>
   )
 
@@ -222,7 +223,7 @@ const SingleSiteMap = ({
         <MapWrapper ref={mapContainer} />
         {!isReadOnlyUser && nullishLatitudeOrLongitude ? placeMarkerButton : null}
         {displayHelpText && (
-          <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
+          <MapZoomHelpMessage>{t('map.control_zoom_text')}</MapZoomHelpMessage>
         )}
         <AtlasLegendDrawer
           updateCoralMosaicLayer={updateCoralMosaicLayer}

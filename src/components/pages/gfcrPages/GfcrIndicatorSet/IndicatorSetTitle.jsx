@@ -2,11 +2,11 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 import theme from '../../../../theme'
 import { mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
 import { TooltipWithText, TooltipPopup } from '../../../generic/tooltip'
 import useDocumentTitle from '../../../../library/useDocumentTitle'
-import language from '../../../../language'
 import { H2 } from '../../../generic/text'
 
 const TitleContainer = styled('div')`
@@ -31,16 +31,17 @@ const ProjectTooltip = styled(TooltipWithText)`
 `
 
 const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingDate, isNew = false }) => {
+  const { t } = useTranslation()
   const reportingYear = reportingDate?.getFullYear()
 
   useDocumentTitle(
     isNew
-      ? language.pages.gfcrIndicatorSet.title
-      : `${indicatorSetTitle} ${type} ${reportingYear} - ${language.title.mermaid}`,
+      ? t('gfcr_indicator_set.title')
+      : `${indicatorSetTitle} ${type} ${reportingYear} - ${t('app_title')}`,
   )
 
   if (isNew) {
-    return <H2>{language.pages.gfcrIndicatorSet.title}</H2>
+    return <H2>{t('gfcr_indicator_set.title')}</H2>
   }
 
   return (
@@ -48,14 +49,19 @@ const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingDate, isNew = fal
       <ProjectTooltip
         forwardedAs="h2"
         text={indicatorSetTitle}
-        tooltipText="Title"
+        tooltipText={t('gfcr.indicator_set_title_tooltip.title')}
         id="gfcr-title-tooltip"
       />
-      <ProjectTooltip forwardedAs="h2" text={type} tooltipText="Type" id="gfcr-type-tooltip" />
+      <ProjectTooltip
+        forwardedAs="h2"
+        text={type}
+        tooltipText={t('gfcr.indicator_set_title_tooltip.type')}
+        id="gfcr-type-tooltip"
+      />
       <ProjectTooltip
         forwardedAs="h2"
         text={reportingYear}
-        tooltipText="Reporting Date Year"
+        tooltipText={t('gfcr.indicator_set_title_tooltip.reporting_year')}
         id="gfcr-reporting-year-tooltip"
       />
     </TitleContainer>

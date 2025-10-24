@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 import { IconClose } from '../../icons'
 import theme from '../../../theme'
 import { IconButton } from '../buttons'
@@ -32,6 +33,7 @@ const FilterIndicatorPill = ({
   unfilteredRowLength,
   clearFilters,
 }) => {
+  const { t } = useTranslation()
   const [filteredAmountToDisplay, setFilteredAmountToDisplay] = useState(null)
 
   const _findFilteredAmountToDisplay = useEffect(() => {
@@ -54,7 +56,7 @@ const FilterIndicatorPill = ({
 
   return (
     <FilterIndictorPillContainer>
-      Filtered{' '}
+      {t('filtered')}{' '}
       <FilterAmount>
         {filteredAmountToDisplay} / {unfilteredRowLength}
       </FilterAmount>{' '}
