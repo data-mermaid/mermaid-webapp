@@ -60,6 +60,7 @@ const ReportTitleAndDateForm = ({ formik, isNewIndicatorSet, displayHelp }) => {
         label={language.pages.gfcrIndicatorSet.indicatorSetTitle}
         id="gfcr-title"
         type="text"
+        textAlign="left"
         {...formik.getFieldProps('title')}
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}

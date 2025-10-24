@@ -6,6 +6,7 @@ import { IconInfo } from '../icons'
 import { IconButton } from '../generic/buttons'
 import language from '../../language'
 import ColumnHeaderToolTip from '../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import theme from '../../theme'
 
 const FilterLabelWrapper = styled.label`
   display: flex;
@@ -16,6 +17,13 @@ const FilterLabelWrapper = styled.label`
 
 const FilterInput = styled(Input)`
   ${inputStyles};
+  background-color: ${(props) =>
+    props.hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
+
+  &:autofill {
+    background-color: ${(props) =>
+      props.hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
+  }
 `
 
 const FilterSearchToolbar = ({
@@ -26,11 +34,10 @@ const FilterSearchToolbar = ({
   handleGlobalFilterChange,
   type = 'page',
 }) => {
-  const [searchText, setSearchText] = useState(globalSearchText)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
-  const tooltipRef = useRef(null)
   const [maxWidth, setMaxWidth] = useState('50em')
+  const tooltipRef = useRef(null)
 
   useEffect(() => {
     let pixelAdjustTop = 302
@@ -80,7 +87,6 @@ const FilterSearchToolbar = ({
   const handleFilterChange = (event) => {
     const eventValue = event.target.value
 
-    setSearchText(eventValue)
     handleGlobalFilterChange(eventValue)
   }
 
@@ -113,9 +119,10 @@ const FilterSearchToolbar = ({
       <FilterInput
         type="text"
         id={id}
-        value={searchText}
+        value={globalSearchText}
         onChange={handleFilterChange}
         disabled={disabled}
+        hasFilter={globalSearchText && globalSearchText.length > 0}
       />
     </FilterLabelWrapper>
   )

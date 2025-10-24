@@ -541,6 +541,11 @@ const ImageClassificationObservationTable = ({
                 } else if (hasObservationWarningValidation) {
                   trMessageType = 'warning'
                 }
+
+                const shouldDisplayObservationValidation = Boolean(
+                  hasObservationErrorValidation && annotation?.unconfirmedCount,
+                )
+
                 return (
                   <StyledTr
                     key={`${file.id}-${subIndex}`}
@@ -581,7 +586,7 @@ const ImageClassificationObservationTable = ({
                       <>
                         {areValidationsShowing && (
                           <StyledTd>
-                            {hasObservationErrorValidation && annotation?.unconfirmedCount && (
+                            {shouldDisplayObservationValidation && (
                               <ObservationValidationInfo
                                 hasObservationErrorValidation={hasObservationErrorValidation}
                                 hasObservationIgnoredValidation={hasObservationIgnoredValidation}
@@ -631,7 +636,7 @@ const ImageClassificationObservationTable = ({
                     )}
                     {areValidationsShowing && subIndex >= 1 && (
                       <StyledTd>
-                        {hasObservationErrorValidation && annotation?.unconfirmedCount && (
+                        {shouldDisplayObservationValidation && (
                           <ObservationValidationInfo
                             hasObservationErrorValidation={hasObservationErrorValidation}
                             hasObservationIgnoredValidation={hasObservationIgnoredValidation}
