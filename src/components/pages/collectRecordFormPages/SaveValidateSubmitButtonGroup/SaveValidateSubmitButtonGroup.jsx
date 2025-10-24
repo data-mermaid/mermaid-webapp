@@ -7,6 +7,7 @@ import { IconCheck, IconSave, IconUpload } from '../../../icons'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import OfflineHide from '../../../generic/OfflineHide'
 import theme from '../../../../theme'
+import { useTranslation } from 'react-i18next'
 
 const SaveValidateSubmitButtonWrapper = styled('div')`
   padding-right: ${theme.spacing.xlarge};
@@ -71,33 +72,35 @@ const SaveValidateSubmitButtonGroup = ({
   submitButtonState,
   validateButtonState,
 }) => {
+  const { t } = useTranslation()
+
   const getSaveButtonText = () => {
     if (saveButtonState === buttonGroupStates.saving) {
-      return 'Saving'
+      return t('buttons.states.saving')
     }
     if (
       saveButtonState === buttonGroupStates.saved ||
       saveButtonState === buttonGroupStates.validating
     ) {
-      return 'Saved'
+      return t('buttons.states.saved')
     }
 
-    return 'Save'
+    return t('buttons.save')
   }
 
   const getValidateButtonText = () => {
     if (validateButtonState === buttonGroupStates.validating) {
-      return 'Validating'
+      return t('buttons.states.validating')
     }
     if (validateButtonState === buttonGroupStates.validated) {
-      return 'Validated'
+      return t('buttons.states.validated')
     }
 
-    return 'Validate'
+    return t('buttons.validate')
   }
 
   const getSubmitButtonText = () =>
-    submitButtonState === buttonGroupStates.submitting ? 'Submitting' : 'Submit'
+    submitButtonState === buttonGroupStates.submitting ? t('buttons.states.submitting') : t('buttons.submit')
 
   const isSaveDisabled =
     saveButtonState === buttonGroupStates.untouchedEmptyForm ||

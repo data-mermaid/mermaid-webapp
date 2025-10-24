@@ -1,6 +1,7 @@
 {
   "buttons": {
     "add_row": "Add row",
+    "add_sample_unit": "Add Sample Unit",
     "back": "Back",
     "cancel": "Cancel",
     "close": "Close",
@@ -8,17 +9,48 @@
     "delete": "Delete",
     "done": "Done",
     "edit": "Edit",
+    "export_to_xlsx": "Export To XLSX",
+    "logout": "Logout",
     "next_page": "Next",
+    "profile": "Profile",
     "review": "Review",
     "save": "Save",
-    "save_changes": "Save changes",
+    "save_changes": "Save Changes",
+    "send_email": "Send email",
+    "send_for_review": "Send to MERMAID for review",
     "submit": "Submit",
-    "view": "View"
+    "validate": "Validate",
+    "view": "View",
+    "states": {
+      "saving": "Saving",
+      "saved": "Saved",
+      "validating": "Validating",
+      "validated": "Validated",
+      "submitting": "Submitting"
+    }
   },
   "contact_us": "Contact us for help",
   "forms": {
     "required_field": "This field is required",
-    "submit_for_review": "Send to MERMAID for review"
+    "submit_for_review": "Send to MERMAID for review",
+    "labels": {
+      "email_address": "Email address",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "new_organization_name": "New Organization Name",
+      "ignore_warning": "Ignore warning",
+      "growth_form": "Growth Form"
+    },
+    "management": {
+      "periodic_closure": "Periodic Closure",
+      "size_limits": "Size Limits",
+      "gear_restriction": "Gear Restriction",
+      "species_restriction": "Species Restriction",
+      "access_restriction": "Access Restriction",
+      "rules": "Rules",
+      "no_take": "No Take",
+      "open_access": "Open Access"
+    }
   },
   "toasts": {
     "export_error": "There was an error exporting the report."
@@ -282,5 +314,150 @@
   "size_cm": "Size (cm)",
   "count": "Count",
   "biomass": "Biomass",
-  "validations": "Validations"
+  "validations": "Validations",
+  "navigation": {
+    "overview": "Overview",
+    "collecting": "Collecting",
+    "submitted": "Submitted",
+    "info": "Info",
+    "users_and_transects": "Users And Transects",
+    "collect": "Collect",
+    "project_info": "Project Info"
+  },
+  "status": {
+    "online_only": "Online Only",
+    "read_only": "Read Only",
+    "online": "You're ONLINE",
+    "offline": "You're OFFLINE. Some contents may be out of date.",
+    "logged_in_as": "Logged in as {{userDisplayName}}"
+  },
+  "cards": {
+    "collecting": "Collecting",
+    "submitted": "Submitted",
+    "sites": "Sites",
+    "users": "Users",
+    "data_sharing": "Data sharing"
+  },
+  "labels": {
+    "fish_belt": "Fish belt:",
+    "benthic": "Benthic:",
+    "bleaching": "Bleaching:"
+  },
+  "tables": {
+    "headers": {
+      "number_of_quadrats": "Number of Quadrats",
+      "avg_hard_coral_cover": "Avg Hard Coral Cover %",
+      "avg_soft_coral_cover": "Avg Soft Coral Cover %",
+      "avg_macroalgae_cover": "Avg Macroalgae Cover %",
+      "total_colonies": "Total number of colonies",
+      "total_coral_genera": "Total number of coral genera",
+      "observers": "Observers",
+      "observations": "Observations",
+      "fish_name": "Fish Name"
+    }
+  },
+  "pages": {
+    "submitted": {
+      "title": "Submitted"
+    },
+    "data_sharing": {
+      "main_message": "Data are much more powerful when shared.",
+      "fish_belt": "Fish Belt",
+      "benthic": "Benthic: PIT, LIT, and Habitat Complexity",
+      "bleaching": "Bleaching",
+      "project_level_info": "Project-level information",
+      "private": "Private",
+      "public_summary": "Public Summary (default)",
+      "public": "Public",
+      "contact_info": "Contact info",
+      "organization_admin_names": "Organization and admin names",
+      "metadata": "Metadata",
+      "metadata_description": "Project name and notes, country, site name and location, survey date, depth, habitat (reef zone, reef type and exposure), management regime name, number of transects"
+    }
+  },
+  "footer": {
+    "help_pdf": "Help (PDF) ▲",
+    "english": "English",
+    "bahasa_indonesia": "Bahasa Indonesia",
+    "terms": "Terms",
+    "contact": "Contact",
+    "credits": "Credits"
+  },
+  "errors": {
+    "save_failed": "Item did not save. {{field}}: {{message}}",
+    "export_failed": "There was an error exporting the report."
+  },
+  "modals": {
+    "remove_user": {
+      "warning": "If {{userNameToBeRemoved}} has any offline sample units that have not been synced yet, the sample units will be deleted when they come back online.",
+      "confirmation": "Are you sure you want to remove {{userNameToBeRemoved}} from {{projectName}}"
+    },
+    "transfer_sample_units": {
+      "message": "Transfer {{num_active_sample_units}} unsubmitted {{sampleUnitMsg}} from {{fromUserName}}"
+    },
+    "data_sharing": {
+      "project_level_info": "Project-level information",
+      "private": "Private",
+      "public_summary": "Public Summary (default)",
+      "public": "Public",
+      "contact_info": "Contact info",
+      "organization_admin_names": "Organization and admin names",
+      "metadata": "Metadata"
+    },
+    "confirm_merge_site": "Confirm Merge Site",
+    "resolve_duplicate_site": "Resolve Duplicate Site"
+  },
+  "attributes": {
+    "name": "Name",
+    "country": "Country",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "exposure": "Exposure",
+    "reef_type": "Reef Type",
+    "reef_zone": "Reef Zone",
+    "notes": "Notes",
+    "secondary_name": "Secondary Name",
+    "year_established": "Year Established",
+    "area": "Area",
+    "parties": "Parties",
+    "compliance": "Compliance",
+    "rules": "Rules"
+  },
+  "popups": {
+    "last_edited_by": "Last edited by",
+    "observers": "Observers",
+    "site": "Site",
+    "management": "Management",
+    "sample_date": "Sample Date"
+  },
+  "roles": {
+    "read_only": "Read-only",
+    "collector": "Collector",
+    "admin": "Admin"
+  },
+  "management_regime": {
+    "secondary_name": "Secondary Name",
+    "year_established": "Year Established",
+    "area": "Area",
+    "parties": "Parties",
+    "compliance": "Compliance",
+    "rules": "Rules",
+    "notes": "Notes"
+  },
+  "actions": {
+    "copy": "Copy"
+  },
+  "messages": {
+    "no_data": "No Data"
+  },
+  "aria": {
+    "users_and_transects": "Users And Transects",
+    "collect": "Collect",
+    "submitted": "Submitted",
+    "project_info": "Project Info",
+    "sites": "Sites",
+    "users": "Users",
+    "data_sharing": "Data-Sharing",
+    "user_account_dropdown": "User account dropdown"
+  }
 }
