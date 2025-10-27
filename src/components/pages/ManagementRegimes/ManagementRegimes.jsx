@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { CSVLink } from 'react-csv'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getObjectById } from '../../../library/getObjectById'
 import {
   Tr,
@@ -35,7 +36,6 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -52,6 +52,7 @@ import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const ManagementRegimes = () => {
+  const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
@@ -72,7 +73,26 @@ const ManagementRegimes = () => {
   const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
+  // Extract translated text for use in effects and memos
+  const managementRegimeTableTitle = t('management_regimes')
+  const mermaidTitle = t('mermaid')
+  const filterToolbarText = t('filter_management_regime')
+  const copyMRButtonText = t('copy_mrs_from_other_projects')
+  const noDataMainText = t('no_management_regimes')
+  const managementRegimeNameHeader = t('management_regime_name')
+  const secondaryNameHeader = t('secondary_name')
+  const yearEstHeader = t('year_est')
+  const complianceHeader = t('compliance')
+  const openAccessHeader = t('open_access')
+  const accessRestrictionHeader = t('access_restriction')
+  const periodicClosureHeader = t('periodic_closure')
+  const sizeLimitsHeader = t('size_limits')
+  const gearRestrictionHeader = t('gear_restriction')
+  const speciesRestrictionHeader = t('species_restriction')
+  const noTakeHeader = t('no_take')
+  const submittedRecordsUnavailableText = t('sample_units.errors.submitted_records_unavailable')
+
+  useDocumentTitle(`${managementRegimeTableTitle} - ${mermaidTitle}`)
 
   const _getManagementRegimeRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -99,12 +119,19 @@ const ManagementRegimes = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
+              toast.error(...getToastArguments(submittedRecordsUnavailableText))
             },
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, handleHttpResponseError])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isSyncInProgress,
+    isMounted,
+    handleHttpResponseError,
+    submittedRecordsUnavailableText,
+  ])
 
   const getIconCheckLabel = (property) => property && <IconCheck />
 
@@ -118,62 +145,74 @@ const ManagementRegimes = () => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Management Regime Name',
+        Header: managementRegimeNameHeader,
         accessor: 'name',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Secondary Name',
+        Header: secondaryNameHeader,
         accessor: 'secondaryName',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Year Est.',
+        Header: yearEstHeader,
         accessor: 'estYear',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Compliance',
+        Header: complianceHeader,
         accessor: 'compliance',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Open Access',
+        Header: openAccessHeader,
         accessor: 'openAccess',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Access Restrictions',
+        Header: accessRestrictionHeader,
         accessor: 'accessRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Periodic Closure',
+        Header: periodicClosureHeader,
         accessor: 'periodicClosure',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Size Limits',
+        Header: sizeLimitsHeader,
         accessor: 'sizeLimits',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Gear Restrictions',
+        Header: gearRestrictionHeader,
         accessor: 'gearRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Species Restrictions',
+        Header: speciesRestrictionHeader,
         accessor: 'speciesRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'No Take',
+        Header: noTakeHeader,
         accessor: 'noTake',
         sortType: reactTableNaturalSort,
       },
     ],
-    [],
+    [
+      managementRegimeNameHeader,
+      secondaryNameHeader,
+      yearEstHeader,
+      complianceHeader,
+      openAccessHeader,
+      accessRestrictionHeader,
+      periodicClosureHeader,
+      sizeLimitsHeader,
+      gearRestrictionHeader,
+      speciesRestrictionHeader,
+      noTakeHeader,
+    ],
   )
 
   const tableCellData = useMemo(() => {
@@ -357,7 +396,7 @@ const ManagementRegimes = () => {
         </LinkLooksLikeButtonSecondary>
         {isAppOnline ? (
           <ButtonSecondary type="button" onClick={openCopyManagementRegimesModal}>
-            <IconCopy /> {language.pages.managementRegimeTable.copyManagementRegimeButtonText}
+            <IconCopy /> {copyMRButtonText}
           </ButtonSecondary>
         ) : null}
         {readOnlyMrsHeaderContent}
@@ -372,11 +411,11 @@ const ManagementRegimes = () => {
 
   const noManagementRegimesTableContent = (
     <PageUnavailable
-      mainText={language.pages.managementRegimeTable.noDataMainText}
+      mainText={noDataMainText}
       subText={
         isAppOnline ? (
           <ButtonPrimary type="button" onClick={openCopyManagementRegimesModal}>
-            <IconCopy /> {language.pages.managementRegimeTable.copyManagementRegimeButtonText}
+            <IconCopy /> {copyMRButtonText}
           </ButtonPrimary>
         ) : null
       }
@@ -400,6 +439,7 @@ const ManagementRegimes = () => {
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
+                      data-testid={`management-regime-header-${column.id}`}
                     >
                       <span>{column.render('Header')}</span>
                     </Th>
@@ -461,10 +501,10 @@ const ManagementRegimes = () => {
     <ContentPageLayout
       toolbar={
         <>
-          <H2>{language.pages.managementRegimeTable.title}</H2>
+          <H2>{managementRegimeTableTitle}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
-              name={language.pages.managementRegimeTable.filterToolbarText}
+              name={filterToolbarText}
               disabled={managementRegimeRecordsForUiDisplay.length === 0}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}

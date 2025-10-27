@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types'
 import {
   Tr,
@@ -24,7 +25,6 @@ import Modal, {
 } from '../generic/Modal'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { getToastArguments } from '../../library/getToastArguments'
-import language from '../../language'
 import PageSelector from '../generic/Table/PageSelector'
 import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import usePersistUserTablePreferences from '../generic/Table/usePersistUserTablePreferences'
@@ -55,12 +55,26 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 })
 
 const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagementRegimeTable }) => {
+  const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
+
+  // Extract translated text
+  const nameHeader = t('name')
+  const projectHeader = t('project')
+  const yearEstHeader = t('year_est')
+  const openAccessHeader = t('open_access')
+  const periodicClosureHeader = t('periodic_closure')
+  const sizeLimitsHeader = t('size_limits')
+  const gearRestrictionHeader = t('gear_restriction')
+  const accessRestrictionHeader = t('access_restriction')
+  const speciesRestrictionHeader = t('species_restriction')
+  const noTakeHeader = t('no_take')
+  const submittedRecordsUnavailableText = t('sample_units.errors.submitted_records_unavailable')
 
   const [isCopyMRsLoading, setIsCopyMRsLoading] = useState(false)
   const [isModalContentLoading, setIsModalContentLoading] = useState(true)
@@ -86,7 +100,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
+              toast.error(...getToastArguments(submittedRecordsUnavailableText))
             },
           })
         })
@@ -98,6 +112,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     isMounted,
     isOpen,
     handleHttpResponseError,
+    submittedRecordsUnavailableText,
   ])
 
   const getIconCheckLabel = (property) => property && <IconCheck />
@@ -116,57 +131,68 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         ),
       },
       {
-        Header: 'Name',
+        Header: nameHeader,
         accessor: 'name',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Project',
+        Header: projectHeader,
         accessor: 'projectName',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Year Est.',
+        Header: yearEstHeader,
         accessor: 'estYear',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Open Access',
+        Header: openAccessHeader,
         accessor: 'openAccess',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Periodic Closure',
+        Header: periodicClosureHeader,
         accessor: 'periodicClosure',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Size Limits',
+        Header: sizeLimitsHeader,
         accessor: 'sizeLimits',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Gear Restrictions',
+        Header: gearRestrictionHeader,
         accessor: 'gearRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Access Restrictions',
+        Header: accessRestrictionHeader,
         accessor: 'accessRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Species Restrictions',
+        Header: speciesRestrictionHeader,
         accessor: 'speciesRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'No Take',
+        Header: noTakeHeader,
         accessor: 'noTake',
         sortType: reactTableNaturalSort,
       },
     ],
-    [],
+    [
+      nameHeader,
+      projectHeader,
+      yearEstHeader,
+      openAccessHeader,
+      periodicClosureHeader,
+      sizeLimitsHeader,
+      gearRestrictionHeader,
+      accessRestrictionHeader,
+      speciesRestrictionHeader,
+      noTakeHeader,
+    ],
   )
 
   const tableCellData = useMemo(
@@ -388,7 +414,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     <CopyModalToolbarWrapper>
       <FilterSearchToolbar
         id="copy-management-regimes-filter"
-        name={language.pages.copyManagementRegimeTable.filterToolbarText}
+        name={t('filter_copy_management_regime')}
         globalSearchText={globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
         type="copy-mr-modal"
@@ -410,7 +436,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedManagementRegimes}>
         <IconCopy />
-        {language.pages.copyManagementRegimeTable.copyButtonText}
+        {t('copy_selected_mrs')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -420,7 +446,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
-        title={language.pages.copyManagementRegimeTable.title}
+        title={t('copy_management_regimes')}
         mainContent={
           isModalContentLoading ? (
             <ModalLoadingIndicatorWrapper>
