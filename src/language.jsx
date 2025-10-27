@@ -686,11 +686,6 @@ const pages = {
     filterToolbarText: 'Filter this table by name, project, or country',
     copyButtonText: 'Copy selected sites to project',
   },
-  copyManagementRegimeTable: {
-    title: 'Copy Management Regimes',
-    filterToolbarText: 'Filter management regimes by name, project, or year',
-    copyButtonText: 'Copy selected MRs to project',
-  },
   gfcrTable: {
     filterToolbarText: 'Filter this table by title or date',
     createIndicatorSetTitle: 'Create Indicator Set',

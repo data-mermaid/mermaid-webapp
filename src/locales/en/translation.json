@@ -13,7 +13,11 @@
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View"
+    "view": "View",
+    "copy_mrs_from_other_projects": "Copy MRs from other projects",
+    "copy_selected_mrs": "Copy selected MRs to project",
+    "new_mr": "New MR",
+    "export_mrs": "Export MRs"
   },
   "contact_us": "Contact us for help",
   "forms": {
@@ -311,8 +315,6 @@
   "estimate_compliance": "Estimate compliance",
   "rules": "Rules",
   "management_regime_name": "Management regime name",
-  "copy_mrs_from_other_projects": "Copy MRs from other projects",
-  "copy_selected_mrs": "Copy selected MRs to project",
   "filter_management_regime": "Filter this table by name or year",
   "filter_copy_management_regime": "Filter management regimes by name, project, or year",
   "no_management_regimes": "This project has no Management Regimes.",

@@ -65,7 +65,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
 
   // Extract translated text
   const nameHeader = t('name')
-  const projectHeader = t('project')
+  const projectHeader = t('projects.project')
   const yearEstHeader = t('year_est')
   const openAccessHeader = t('open_access')
   const periodicClosureHeader = t('periodic_closure')
@@ -436,7 +436,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedManagementRegimes}>
         <IconCopy />
-        {t('copy_selected_mrs')}
+        {t('buttons.copy_selected_mrs')}
       </ButtonPrimary>
     </RightFooter>
   )

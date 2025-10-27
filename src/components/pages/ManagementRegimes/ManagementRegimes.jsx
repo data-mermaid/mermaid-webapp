@@ -73,11 +73,11 @@ const ManagementRegimes = () => {
   const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  // Extract translated text for use in effects and memos
+  // Extract translated text
   const managementRegimeTableTitle = t('management_regimes')
   const mermaidTitle = t('mermaid')
   const filterToolbarText = t('filter_management_regime')
-  const copyMRButtonText = t('copy_mrs_from_other_projects')
+  const copyMRButtonText = t('buttons.copy_mrs_from_other_projects')
   const noDataMainText = t('no_management_regimes')
   const managementRegimeNameHeader = t('management_regime_name')
   const secondaryNameHeader = t('secondary_name')
@@ -378,7 +378,7 @@ const ManagementRegimes = () => {
           filename={managementRegimeExportName}
           style={{ margin: 0, textDecoration: 'none' }}
         >
-          <IconDownload /> Export MRs
+          <IconDownload /> {t('buttons.export_mrs')}
         </CSVLink>
       </ButtonSecondary>
     </>
@@ -392,7 +392,7 @@ const ManagementRegimes = () => {
     <>
       <ToolbarButtonWrapper>
         <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/management-regimes/new`}>
-          <IconPlus /> New MR
+          <IconPlus /> {t('buttons.new_mr')}
         </LinkLooksLikeButtonSecondary>
         {isAppOnline ? (
           <ButtonSecondary type="button" onClick={openCopyManagementRegimesModal}>
