@@ -56,14 +56,14 @@ const Submitted = () => {
 
   useDocumentTitle(`${t('submitted')} - ${t('mermaid')}`)
 
-  const methodColumnText = t('method')
-  const siteColumnText = t('site')
-  const managementRegimeColumnText = t('management_regime')
-  const sampleUnitNumberColumnText = t('sample_unit_number')
-  const sizeColumnText = t('size')
-  const depthColumnText = t('depth_m')
-  const sampleDateColumnText = t('sample_date')
-  const observersColumnText = t('observers')
+  const methodHeader = t('method')
+  const siteHeader = t('site')
+  const managementRegimeHeader = t('management_regime')
+  const sampleUnitNumberHeader = t('sample_unit_number')
+  const sizeHeader = t('size')
+  const depthHeader = t('depth_m')
+  const sampleDateHeader = t('sample_date')
+  const observersHeader = t('observers')
 
   const _getSubmittedRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -103,58 +103,58 @@ const Submitted = () => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: methodColumnText,
+        Header: methodHeader,
         accessor: 'method',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: siteColumnText,
+        Header: siteHeader,
         accessor: 'site',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: managementRegimeColumnText,
+        Header: managementRegimeHeader,
         accessor: 'management',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: sampleUnitNumberColumnText,
+        Header: sampleUnitNumberHeader,
         accessor: 'sampleUnitNumber',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: sizeColumnText,
+        Header: sizeHeader,
         accessor: 'size',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: depthColumnText,
+        Header: depthHeader,
         accessor: 'depth',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: sampleDateColumnText,
+        Header: sampleDateHeader,
         accessor: 'sampleDate',
         sortType: reactTableNaturalSortDates,
       },
       {
-        Header: observersColumnText,
+        Header: observersHeader,
         accessor: 'observers',
         sortType: reactTableNaturalSort,
       },
     ],
     [
-      methodColumnText,
-      siteColumnText,
-      managementRegimeColumnText,
-      sampleUnitNumberColumnText,
-      sizeColumnText,
-      depthColumnText,
-      sampleDateColumnText,
-      observersColumnText,
+      methodHeader,
+      siteHeader,
+      managementRegimeHeader,
+      sampleUnitNumberHeader,
+      sizeHeader,
+      depthHeader,
+      sampleDateHeader,
+      observersHeader,
     ],
   )
 
