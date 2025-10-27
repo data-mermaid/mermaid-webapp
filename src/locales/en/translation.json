@@ -13,7 +13,8 @@
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View"
+    "view": "View",
+    "export_to_xlsx": "Export To XLSX"
   },
   "contact_us": "Contact us for help",
   "forms": {
@@ -212,8 +213,7 @@
     "observation_level_data_one": "Observation level data ({{count}} survey)",
     "observation_level_data_other": "Observation level data ({{count}} surveys)",
     "credit_request": "Please credit the data owners",
-    "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners.",
-    "export_to_xlsx": "Export To XLSX"
+    "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
   },
   "mermaid": "MERMAID",
   "mermaid_explore": "MERMAID Explore",

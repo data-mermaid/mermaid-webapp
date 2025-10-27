@@ -7,7 +7,6 @@ import theme from '../../../theme'
 const PageUnavailableContainer = styled(Column)`
   padding-left: ${theme.spacing.large};
   text-align: ${(props) => props.align};
-  /* testId is passed through but not used in styles */
 `
 
 const PageUnavailable = ({

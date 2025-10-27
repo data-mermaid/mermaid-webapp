@@ -42,7 +42,7 @@ const SubmittedToolbarSection = ({
 
   const label = (
     <>
-      <IconDownload /> {t('exports.export_to_xlsx')}
+      <IconDownload /> {t('buttons.export_to_xlsx')}
     </>
   )
 
