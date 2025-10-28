@@ -315,10 +315,10 @@
     "species_restriction": "Species restrictions",
     "no_take": "No take",
     "data_unavailable": "Management Regime records data are currently unavailable.",
-    "no_management_regimes": "This project has no Management Regimes.",
+    "no_management_regimes": "This project has no management regimes.",
     "copy_management_regimes": "Copy Management Regimes",
     "copy_mrs_from_other_projects": "Copy MRs from other projects",
-    "copy_selected_mrs": "Copy selected MRs to project",
+    "copy_selected_mrs_to_project": "Copy selected MRs to project",
     "new_mr": "New MR",
     "export_mrs": "Export MRs"
   },
@@ -326,3 +326,4 @@
     "site": "Site"
   }
 }
+

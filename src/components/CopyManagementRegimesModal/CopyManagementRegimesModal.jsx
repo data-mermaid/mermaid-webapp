@@ -435,7 +435,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedManagementRegimes}>
         <IconCopy />
-        {t('management_regimes.copy_selected_mrs')}
+        {t('management_regimes.copy_selected_mrs_to_project')}
       </ButtonPrimary>
     </RightFooter>
   )
