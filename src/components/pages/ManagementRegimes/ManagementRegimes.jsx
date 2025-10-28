@@ -73,12 +73,8 @@ const ManagementRegimes = () => {
   const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  // Extract translated text
   const managementRegimeTableTitle = t('management_regimes')
-  const mermaidTitle = t('mermaid')
-  const filterToolbarText = t('filter_management_regime')
   const copyMRButtonText = t('buttons.copy_mrs_from_other_projects')
-  const noDataMainText = t('no_management_regimes')
   const managementRegimeNameHeader = t('management_regime_name')
   const secondaryNameHeader = t('secondary_name')
   const yearEstHeader = t('year_est')
@@ -92,7 +88,7 @@ const ManagementRegimes = () => {
   const noTakeHeader = t('no_take')
   const submittedRecordsUnavailableText = t('sample_units.errors.submitted_records_unavailable')
 
-  useDocumentTitle(`${managementRegimeTableTitle} - ${mermaidTitle}`)
+  useDocumentTitle(`${managementRegimeTableTitle} - ${t('mermaid')}`)
 
   const _getManagementRegimeRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -414,7 +410,7 @@ const ManagementRegimes = () => {
 
   const noManagementRegimesTableContent = (
     <PageUnavailable
-      mainText={noDataMainText}
+      mainText={t('no_management_regimes')}
       subText={
         isAppOnline ? (
           <ButtonPrimary type="button" onClick={openCopyManagementRegimesModal}>
@@ -507,7 +503,7 @@ const ManagementRegimes = () => {
           <H2>{managementRegimeTableTitle}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
-              name={filterToolbarText}
+              name={t('filter_management_regime')}
               disabled={managementRegimeRecordsForUiDisplay.length === 0}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}

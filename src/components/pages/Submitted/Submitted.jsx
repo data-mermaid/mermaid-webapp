@@ -54,9 +54,8 @@ const Submitted = () => {
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${t('submitted')} - ${t('mermaid')}`)
-
   const methodHeader = t('method')
+  const submittedTableTitle = t('submitted')
   const siteHeader = t('site')
   const managementRegimeHeader = t('management_regime')
   const sampleUnitNumberHeader = t('sample_unit_number')
@@ -65,6 +64,8 @@ const Submitted = () => {
   const sampleDateHeader = t('sample_date')
   const observersHeader = t('observers')
   const submittedRecordsUnavailableMessage = t('sample_units.errors.submitted_records_unavailable')
+
+  useDocumentTitle(`${submittedTableTitle} - ${t('mermaid')}`)
 
   const _getSubmittedRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -400,7 +401,7 @@ const Submitted = () => {
       submittedRecordsForUiDisplay={submittedRecordsForUiDisplay}
     />
   ) : (
-    <H2>{t('submitted')}</H2>
+    <H2>{submittedTableTitle}</H2>
   )
 
   return idsNotAssociatedWithData.length ? (
