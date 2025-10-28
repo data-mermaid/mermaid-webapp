@@ -65,15 +65,15 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
 
   const nameHeaderText = t('name')
   const projectHeaderText = t('projects.project')
-  const yearEstHeaderText = t('year_est')
-  const openAccessHeaderText = t('open_access')
-  const periodicClosureHeaderText = t('periodic_closure')
-  const sizeLimitsHeaderText = t('size_limits')
-  const gearRestrictionHeaderText = t('gear_restriction')
-  const accessRestrictionHeaderText = t('access_restriction')
-  const speciesRestrictionHeaderText = t('species_restriction')
-  const noTakeHeaderText = t('no_take')
-  const managementRegimeRecordsUnavailableText = t('toasts.management_regime_records_unavailable')
+  const yearEstHeaderText = t('management_regimes.year_est')
+  const openAccessHeaderText = t('management_regimes.open_access')
+  const periodicClosureHeaderText = t('management_regimes.periodic_closure')
+  const sizeLimitsHeaderText = t('management_regimes.size_limits')
+  const gearRestrictionHeaderText = t('management_regimes.gear_restriction')
+  const accessRestrictionHeaderText = t('management_regimes.access_restriction')
+  const speciesRestrictionHeaderText = t('management_regimes.species_restriction')
+  const noTakeHeaderText = t('management_regimes.no_take')
+  const managementRegimeRecordsUnavailableText = t('management_regimes.data_unavailable')
 
   const [isCopyMRsLoading, setIsCopyMRsLoading] = useState(false)
   const [isModalContentLoading, setIsModalContentLoading] = useState(true)
@@ -413,7 +413,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     <CopyModalToolbarWrapper>
       <FilterSearchToolbar
         id="copy-management-regimes-filter"
-        name={t('filter_copy_management_regimes_table')}
+        name={t('filter_table_name_project_year')}
         globalSearchText={globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
         type="copy-mr-modal"
@@ -435,7 +435,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedManagementRegimes}>
         <IconCopy />
-        {t('buttons.copy_selected_mrs')}
+        {t('management_regimes.copy_selected_mrs')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -445,7 +445,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
-        title={t('copy_management_regimes')}
+        title={t('management_regimes.copy_management_regimes')}
         mainContent={
           isModalContentLoading ? (
             <ModalLoadingIndicatorWrapper>

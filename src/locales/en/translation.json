@@ -14,11 +14,7 @@
     "save_changes": "Save changes",
     "submit": "Submit",
     "view": "View",
-    "export_to_xlsx": "Export To XLSX",
-    "copy_mrs_from_other_projects": "Copy MRs from other projects",
-    "copy_selected_mrs": "Copy selected MRs to project",
-    "new_mr": "New MR",
-    "export_mrs": "Export MRs"
+    "export_to_xlsx": "Export To XLSX"
   },
   "contact_us": "Contact us for help",
   "forms": {
@@ -27,8 +23,7 @@
   },
   "toasts": {
     "export_error": "There was an error exporting the report.",
-    "submitted_records_unavailable": "Submitted record data are currently unavailable.",
-    "management_regime_records_unavailable": "Management Regime records data are currently unavailable."
+    "submitted_records_unavailable": "Submitted record data are currently unavailable."
   },
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",
@@ -173,12 +168,20 @@
     }
   },
   "sample_units": {
+    "submitted": "Submitted",
+    "method": "Method",
+    "sample_unit_number": "Sample unit #",
+    "size": "Size",
+    "depth_m": "Depth (m)",
+    "sample_date": "Sample date",
+    "observers": "Observers",
+    "submitted_no_data_message": "This project has no submitted sample units.",
     "errors": {
       "data_unavailable": "Sample unit data is currently unavailable.",
       "observations_unavailable_offline": "Sample unit observations unavailable offline",
       "classification_unavailable_offline": "This sample unit is using image classification and is unavailable offline.",
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable.",
-      "submitted_records_unavailable": "Submitted record data are currently unavailable."
+      "submitted_data_unavailable": "Submitted record data are currently unavailable."
     }
   },
   "fish_belt_observations": {
@@ -198,17 +201,8 @@
   "toggle_table_visibility": "Toggle table visibility",
   "toggle_label_visibility": "Toggle label visibility",
   "user": "User",
-  "submitted": "Submitted",
-  "filter_submitted_table": "Filter this table by site, management, or observer",
-  "submitted_no_data_message": "This project has no submitted sample units.",
+  "filter_table_site_management_observer": "Filter this table by site, management, or observer",
   "filter_search_helper_text": "<b>Use double quotes to search exact phrases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
-  "method": "Method",
-  "site": "Site",
-  "management_regime": "Management regime",
-  "sample_unit_number": "Sample unit #",
-  "size": "Size",
-  "depth_m": "Depth (m)",
-  "sample_date": "Sample date",
   "exports": {
     "success": "Export successful",
     "email_sent": "An email has been sent to <currentUserEmail />. This can sometimes take up to 15 minutes.",
@@ -303,25 +297,35 @@
   "count": "Count",
   "biomass": "Biomass",
   "validations": "Validations",
-  "secondary_name": "Secondary name",
-  "year_est": "Year est.",
-  "compliance": "Compliance",
-  "open_access": "Open access",
-  "access_restriction": "Access restrictions",
-  "periodic_closure": "Periodic closure",
-  "size_limits": "Size limits",
-  "gear_restriction": "Gear restrictions",
-  "species_restriction": "Species restrictions",
-  "no_take": "No take",
-  "governance": "Governance",
-  "estimate_compliance": "Estimate compliance",
-  "rules": "Rules",
-  "management_regime_name": "Management regime name",
-  "filter_management_regimes_table": "Filter this table by name or year",
-  "filter_copy_management_regimes_table": "Filter management regimes by name, project, or year",
-  "no_management_regimes": "This project has no Management Regimes.",
-  "management_regimes": "Management Regimes",
-  "copy_management_regimes": "Copy Management Regimes",
-  "year_established": "Year established",
-  "view_selected_only": "View Selected Only"
+  "filter_table_date_year": "Filter this table by name or year",
+  "filter_table_name_project_year": "Filter this table by name, project, or year",
+  "view_selected_only": "View Selected Only",
+  "management_regimes": {
+    "management_regime": "Management regime",
+    "management_regimes": "Management Regimes",
+    "management_regime_name": "Management regime name",
+    "secondary_name": "Secondary name",
+    "year_est": "Year est.",
+    "compliance": "Compliance",
+    "open_access": "Open access",
+    "access_restriction": "Access restrictions",
+    "periodic_closure": "Periodic closure",
+    "size_limits": "Size limits",
+    "gear_restriction": "Gear restrictions",
+    "species_restriction": "Species restrictions",
+    "no_take": "No take",
+    "governance": "Governance",
+    "estimate_compliance": "Estimate compliance",
+    "rules": "Rules",
+    "data_unavailable": "Management Regime records data are currently unavailable.",
+    "no_management_regimes": "This project has no Management Regimes.",
+    "copy_management_regimes": "Copy Management Regimes",
+    "copy_mrs_from_other_projects": "Copy MRs from other projects",
+    "copy_selected_mrs": "Copy selected MRs to project",
+    "new_mr": "New MR",
+    "export_mrs": "Export MRs"
+  },
+  "sites": {
+    "site": "Site"
+  }
 }

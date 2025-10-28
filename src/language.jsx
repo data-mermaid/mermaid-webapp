@@ -644,12 +644,6 @@ const pages = {
     title: 'Management Regime',
     nonAdminDelete: 'Only admins can delete a management regime.',
   },
-  managementRegimeTable: {
-    copyManagementRegimeButtonText: 'Copy MRs from other projects',
-    filterToolbarText: 'Filter this table by name or year',
-    noDataMainText: `This project has no Management Regimes.`,
-    title: 'Management Regimes',
-  },
   usersAndTransectsTable: {
     title: 'Sample Units / Observers',
     navTitle: (

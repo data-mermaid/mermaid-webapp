@@ -73,20 +73,20 @@ const ManagementRegimes = () => {
   const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  const managementRegimeTableTitle = t('management_regimes')
-  const copyMRButtonText = t('buttons.copy_mrs_from_other_projects')
-  const managementRegimeNameHeaderText = t('management_regime_name')
-  const secondaryNameHeaderText = t('secondary_name')
-  const yearEstHeaderText = t('year_est')
-  const complianceHeaderText = t('compliance')
-  const openAccessHeaderText = t('open_access')
-  const accessRestrictionHeaderText = t('access_restriction')
-  const periodicClosureHeaderText = t('periodic_closure')
-  const sizeLimitsHeaderText = t('size_limits')
-  const gearRestrictionHeaderText = t('gear_restriction')
-  const speciesRestrictionHeaderText = t('species_restriction')
-  const noTakeHeaderText = t('no_take')
-  const managementRegimeRecordsUnavailableText = t('toasts.management_regime_records_unavailable')
+  const managementRegimeTableTitle = t('management_regimes.management_regimes')
+  const copyMRButtonText = t('management_regimes.copy_mrs_from_other_projects')
+  const managementRegimeNameHeaderText = t('management_regimes.management_regime_name')
+  const secondaryNameHeaderText = t('management_regimes.secondary_name')
+  const yearEstHeaderText = t('management_regimes.year_est')
+  const complianceHeaderText = t('management_regimes.compliance')
+  const openAccessHeaderText = t('management_regimes.open_access')
+  const accessRestrictionHeaderText = t('management_regimes.access_restriction')
+  const periodicClosureHeaderText = t('management_regimes.periodic_closure')
+  const sizeLimitsHeaderText = t('management_regimes.size_limits')
+  const gearRestrictionHeaderText = t('management_regimes.gear_restriction')
+  const speciesRestrictionHeaderText = t('management_regimes.species_restriction')
+  const noTakeHeaderText = t('management_regimes.no_take')
+  const managementRegimeRecordsUnavailableText = t('management_regimes.data_unavailable')
 
   useDocumentTitle(`${managementRegimeTableTitle} - ${t('mermaid')}`)
 
@@ -374,7 +374,7 @@ const ManagementRegimes = () => {
           filename={managementRegimeExportName}
           style={{ margin: 0, textDecoration: 'none' }}
         >
-          <IconDownload /> {t('buttons.export_mrs')}
+          <IconDownload /> {t('management_regimes.export_mrs')}
         </CSVLink>
       </ButtonSecondary>
     </>
@@ -391,7 +391,7 @@ const ManagementRegimes = () => {
           to={`${currentProjectPath}/management-regimes/new`}
           data-testid="new-management-regime-button"
         >
-          <IconPlus /> {t('buttons.new_mr')}
+          <IconPlus /> {t('management_regimes.new_mr')}
         </LinkLooksLikeButtonSecondary>
         {isAppOnline ? (
           <ButtonSecondary type="button" onClick={openCopyManagementRegimesModal}>
@@ -410,7 +410,7 @@ const ManagementRegimes = () => {
 
   const noManagementRegimesTableContent = (
     <PageUnavailable
-      mainText={t('no_management_regimes')}
+      mainText={t('management_regimes.no_management_regimes')}
       subText={
         isAppOnline ? (
           <ButtonPrimary type="button" onClick={openCopyManagementRegimesModal}>
@@ -503,7 +503,7 @@ const ManagementRegimes = () => {
           <H2>{managementRegimeTableTitle}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
-              name={t('filter_management_regimes_table')}
+              name={t('filter_table_date_year')}
               disabled={managementRegimeRecordsForUiDisplay.length === 0}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}

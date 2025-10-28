@@ -51,7 +51,7 @@ const FilterSearchToolbar = ({
       setMaxWidth('60em')
     }
     if (type === 'copy-mr-modal') {
-      pixelAdjustLeft = 328
+      pixelAdjustLeft = 422
     }
 
     const handleResize = () => {
