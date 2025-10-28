@@ -13,7 +13,8 @@
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View"
+    "view": "View",
+    "export_to_xlsx": "Export To XLSX"
   },
   "contact_us": "Contact us for help",
   "forms": {
@@ -115,7 +116,8 @@
   },
   "name": "Name",
   "offline": {
-    "unavailable_offline": "Unavailable offline."
+    "unavailable_offline": "Unavailable offline.",
+    "page_unavailable_offline": "This page is unavailable offline."
   },
   "projects": {
     "data_unavailable": "Project data is currently unavailable.",
@@ -152,18 +154,6 @@
   "search": {
     "no_results": "No results found"
   },
-  "exports": {
-    "success": "Export successful",
-    "email_sent": "An email has been sent to <currentUserEmail />. This can sometimes take up to 15 minutes.",
-    "included_in_export": "Included in this export",
-    "project_metadata": "Metadata for this project",
-    "sample_event_level_data_one": "Sample event level data ({{count}} survey)",
-    "sample_event_level_data_other": "Sample event level data ({{count}} surveys)",
-    "observation_level_data_one": "Observation level data ({{count}} survey)",
-    "observation_level_data_other": "Observation level data ({{count}} surveys)",
-    "credit_request": "Please credit the data owners",
-    "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
-  },
   "benthic_observations": {
     "add_benthic_attribute": "Add new benthic attribute",
     "attribute_already_exists": "The proposed attribute {{attribute}} already exists in the list. The observation has been updated with this attribute.",
@@ -181,7 +171,8 @@
       "data_unavailable": "Sample unit data is currently unavailable.",
       "observations_unavailable_offline": "Sample unit observations unavailable offline",
       "classification_unavailable_offline": "This sample unit is using image classification and is unavailable offline.",
-      "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable."
+      "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable.",
+      "submitted_records_unavailable": "Submitted record data are currently unavailable."
     }
   },
   "fish_belt_observations": {
@@ -201,7 +192,30 @@
   "toggle_table_visibility": "Toggle table visibility",
   "toggle_label_visibility": "Toggle label visibility",
   "user": "User",
-  "mermaid_": "MERMAID",
+  "submitted": "Submitted",
+  "filter_submitted_table": "Filter this table by site, management, or observer",
+  "submitted_no_data_message": "This project has no submitted sample units.",
+  "filter_search_helper_text": "<b>Use double quotes to search exact phrases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
+  "method": "Method",
+  "site": "Site",
+  "management_regime": "Management regime",
+  "sample_unit_number": "Sample unit #",
+  "size": "Size",
+  "depth_m": "Depth (m)",
+  "sample_date": "Sample date",
+  "exports": {
+    "success": "Export successful",
+    "email_sent": "An email has been sent to <currentUserEmail />. This can sometimes take up to 15 minutes.",
+    "included_in_export": "Included in this export",
+    "project_metadata": "Metadata for this project",
+    "sample_event_level_data_one": "Sample event level data ({{count}} survey)",
+    "sample_event_level_data_other": "Sample event level data ({{count}} surveys)",
+    "observation_level_data_one": "Observation level data ({{count}} survey)",
+    "observation_level_data_other": "Observation level data ({{count}} surveys)",
+    "credit_request": "Please credit the data owners",
+    "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
+  },
+  "mermaid": "MERMAID",
   "mermaid_explore": "MERMAID Explore",
   "reference": "Reference",
   "go_to_explore_projects": "View all your projects on MERMAID Explore",

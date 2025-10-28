@@ -100,7 +100,7 @@
     "@babel/plugin-syntax-flow": "^7.23.3",
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-typescript": "^7.27.0",
-    "@eslint/js": "^9.22.0",
+    "@eslint/js": "^9.38.0",
     "@swc/core": "^1.11.9",
     "@swc/plugin-styled-components": "^7.1.0",
     "@testing-library/dom": "^10.4.0",

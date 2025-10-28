@@ -42,7 +42,7 @@ const SubmittedToolbarSection = ({
 
   const label = (
     <>
-      <IconDownload /> Export To XLSX
+      <IconDownload /> {t('buttons.export_to_xlsx')}
     </>
   )
 
@@ -73,7 +73,7 @@ const SubmittedToolbarSection = ({
 
   return (
     <>
-      <H2>Submitted</H2>
+      <H2>{t('submitted')}</H2>
       <ToolBarItemsRow>
         <FilterItems>
           <FilterSearchToolbar
@@ -105,42 +105,42 @@ const SubmittedToolbarSection = ({
               disabled={!sampleEventCounts?.fishbelt}
               onClick={() => handleExportSubmitted('fishbelt')}
             >
-              Fish Belt
+              {t('protocol_titles.fishbelt')}
             </DropdownItemStyle>
             <DropdownItemStyle
               as="button"
               disabled={!sampleEventCounts?.benthicpit}
               onClick={() => handleExportSubmitted('benthicpit')}
             >
-              Benthic PIT
+              {t('protocol_titles.benthicpit')}
             </DropdownItemStyle>
             <DropdownItemStyle
               as="button"
               disabled={!sampleEventCounts?.benthiclit}
               onClick={() => handleExportSubmitted('benthiclit')}
             >
-              Benthic LIT
+              {t('protocol_titles.benthiclit')}
             </DropdownItemStyle>
             <DropdownItemStyle
               as="button"
               disabled={!sampleEventCounts?.benthicpqt}
               onClick={() => handleExportSubmitted('benthicpqt')}
             >
-              Benthic Photo Quadrat
+              {t('protocol_titles.benthicpqt')}
             </DropdownItemStyle>
             <DropdownItemStyle
               as="button"
               disabled={!sampleEventCounts?.bleachingqc}
               onClick={() => handleExportSubmitted('bleachingqc')}
             >
-              Bleaching
+              {t('protocol_titles.bleachingqc')}
             </DropdownItemStyle>
             <DropdownItemStyle
               as="button"
               disabled={!sampleEventCounts?.habitatcomplexity}
               onClick={() => handleExportSubmitted('habitatcomplexity')}
             >
-              Habitat Complexity
+              {t('protocol_titles.habitatcomplexity')}
             </DropdownItemStyle>
           </Column>
         </ButtonSecondaryDropdown>
