@@ -391,7 +391,10 @@ const ManagementRegimes = () => {
   ) : (
     <>
       <ToolbarButtonWrapper>
-        <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/management-regimes/new`}>
+        <LinkLooksLikeButtonSecondary
+          to={`${currentProjectPath}/management-regimes/new`}
+          data-testid="new-management-regime-button"
+        >
           <IconPlus /> {t('buttons.new_mr')}
         </LinkLooksLikeButtonSecondary>
         {isAppOnline ? (

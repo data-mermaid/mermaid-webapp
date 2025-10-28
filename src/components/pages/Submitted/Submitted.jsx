@@ -64,6 +64,7 @@ const Submitted = () => {
   const depthHeader = t('depth_m')
   const sampleDateHeader = t('sample_date')
   const observersHeader = t('observers')
+  const submittedRecordsUnavailableMessage = t('sample_units.errors.submitted_records_unavailable')
 
   const _getSubmittedRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -90,14 +91,19 @@ const Submitted = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(
-                ...getToastArguments(t('sample_units.errors.submitted_records_unavailable')),
-              )
+              toast.error(...getToastArguments(submittedRecordsUnavailableMessage))
             },
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError, t])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isMounted,
+    isAppOnline,
+    handleHttpResponseError,
+    submittedRecordsUnavailableMessage,
+  ])
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
