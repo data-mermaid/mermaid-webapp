@@ -63,18 +63,17 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
 
-  // Extract translated text
-  const nameHeader = t('name')
-  const projectHeader = t('projects.project')
-  const yearEstHeader = t('year_est')
-  const openAccessHeader = t('open_access')
-  const periodicClosureHeader = t('periodic_closure')
-  const sizeLimitsHeader = t('size_limits')
-  const gearRestrictionHeader = t('gear_restriction')
-  const accessRestrictionHeader = t('access_restriction')
-  const speciesRestrictionHeader = t('species_restriction')
-  const noTakeHeader = t('no_take')
-  const submittedRecordsUnavailableText = t('sample_units.errors.submitted_records_unavailable')
+  const nameHeaderText = t('name')
+  const projectHeaderText = t('projects.project')
+  const yearEstHeaderText = t('year_est')
+  const openAccessHeaderText = t('open_access')
+  const periodicClosureHeaderText = t('periodic_closure')
+  const sizeLimitsHeaderText = t('size_limits')
+  const gearRestrictionHeaderText = t('gear_restriction')
+  const accessRestrictionHeaderText = t('access_restriction')
+  const speciesRestrictionHeaderText = t('species_restriction')
+  const noTakeHeaderText = t('no_take')
+  const managementRegimeRecordsUnavailableText = t('toasts.management_regime_records_unavailable')
 
   const [isCopyMRsLoading, setIsCopyMRsLoading] = useState(false)
   const [isModalContentLoading, setIsModalContentLoading] = useState(true)
@@ -100,7 +99,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(submittedRecordsUnavailableText))
+              toast.error(...getToastArguments(managementRegimeRecordsUnavailableText))
             },
           })
         })
@@ -112,7 +111,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     isMounted,
     isOpen,
     handleHttpResponseError,
-    submittedRecordsUnavailableText,
+    managementRegimeRecordsUnavailableText,
   ])
 
   const getIconCheckLabel = (property) => property && <IconCheck />
@@ -131,67 +130,67 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         ),
       },
       {
-        Header: nameHeader,
+        Header: nameHeaderText,
         accessor: 'name',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: projectHeader,
+        Header: projectHeaderText,
         accessor: 'projectName',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: yearEstHeader,
+        Header: yearEstHeaderText,
         accessor: 'estYear',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: openAccessHeader,
+        Header: openAccessHeaderText,
         accessor: 'openAccess',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: periodicClosureHeader,
+        Header: periodicClosureHeaderText,
         accessor: 'periodicClosure',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: sizeLimitsHeader,
+        Header: sizeLimitsHeaderText,
         accessor: 'sizeLimits',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: gearRestrictionHeader,
+        Header: gearRestrictionHeaderText,
         accessor: 'gearRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: accessRestrictionHeader,
+        Header: accessRestrictionHeaderText,
         accessor: 'accessRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: speciesRestrictionHeader,
+        Header: speciesRestrictionHeaderText,
         accessor: 'speciesRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: noTakeHeader,
+        Header: noTakeHeaderText,
         accessor: 'noTake',
         sortType: reactTableNaturalSort,
       },
     ],
     [
-      nameHeader,
-      projectHeader,
-      yearEstHeader,
-      openAccessHeader,
-      periodicClosureHeader,
-      sizeLimitsHeader,
-      gearRestrictionHeader,
-      accessRestrictionHeader,
-      speciesRestrictionHeader,
-      noTakeHeader,
+      nameHeaderText,
+      projectHeaderText,
+      yearEstHeaderText,
+      openAccessHeaderText,
+      periodicClosureHeaderText,
+      sizeLimitsHeaderText,
+      gearRestrictionHeaderText,
+      accessRestrictionHeaderText,
+      speciesRestrictionHeaderText,
+      noTakeHeaderText,
     ],
   )
 
@@ -414,7 +413,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     <CopyModalToolbarWrapper>
       <FilterSearchToolbar
         id="copy-management-regimes-filter"
-        name={t('filter_copy_management_regime')}
+        name={t('filter_copy_management_regimes_table')}
         globalSearchText={globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
         type="copy-mr-modal"
@@ -426,7 +425,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
           checked={isViewSelectedOnly}
           onChange={handleViewSelectedOnlyChange}
         />
-        View Selected Only
+        {t('view_selected_only')}
       </ViewSelectedOnly>
     </CopyModalToolbarWrapper>
   )

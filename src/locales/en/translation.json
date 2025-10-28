@@ -26,7 +26,9 @@
     "submit_for_review": "Send to MERMAID for review"
   },
   "toasts": {
-    "export_error": "There was an error exporting the report."
+    "export_error": "There was an error exporting the report.",
+    "submitted_records_unavailable": "Submitted record data are currently unavailable.",
+    "management_regime_records_unavailable": "Management Regime records data are currently unavailable."
   },
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",
@@ -305,7 +307,7 @@
   "year_est": "Year est.",
   "compliance": "Compliance",
   "open_access": "Open access",
-  "access_restriction": "Access restriction",
+  "access_restriction": "Access restrictions",
   "periodic_closure": "Periodic closure",
   "size_limits": "Size limits",
   "gear_restriction": "Gear restrictions",
@@ -315,10 +317,11 @@
   "estimate_compliance": "Estimate compliance",
   "rules": "Rules",
   "management_regime_name": "Management regime name",
-  "filter_management_regime": "Filter this table by name or year",
-  "filter_copy_management_regime": "Filter management regimes by name, project, or year",
+  "filter_management_regimes_table": "Filter this table by name or year",
+  "filter_copy_management_regimes_table": "Filter management regimes by name, project, or year",
   "no_management_regimes": "This project has no Management Regimes.",
   "management_regimes": "Management Regimes",
   "copy_management_regimes": "Copy Management Regimes",
-  "year_established": "Year established"
+  "year_established": "Year established",
+  "view_selected_only": "View Selected Only"
 }

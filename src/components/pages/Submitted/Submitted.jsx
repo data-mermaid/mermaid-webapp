@@ -54,16 +54,16 @@ const Submitted = () => {
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  const methodHeader = t('method')
   const submittedTableTitle = t('submitted')
-  const siteHeader = t('site')
-  const managementRegimeHeader = t('management_regime')
-  const sampleUnitNumberHeader = t('sample_unit_number')
-  const sizeHeader = t('size')
-  const depthHeader = t('depth_m')
-  const sampleDateHeader = t('sample_date')
-  const observersHeader = t('observers')
-  const submittedRecordsUnavailableMessage = t('sample_units.errors.submitted_records_unavailable')
+  const methodHeaderText = t('method')
+  const siteHeaderText = t('site')
+  const managementRegimeHeaderText = t('management_regime')
+  const sampleUnitNumberHeaderText = t('sample_unit_number')
+  const sizeHeaderText = t('size')
+  const depthHeaderText = t('depth_m')
+  const sampleDateHeaderText = t('sample_date')
+  const observersHeaderText = t('observers')
+  const submittedRecordsUnavailableText = t('toasts.submitted_records_unavailable')
 
   useDocumentTitle(`${submittedTableTitle} - ${t('mermaid')}`)
 
@@ -92,7 +92,7 @@ const Submitted = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(submittedRecordsUnavailableMessage))
+              toast.error(...getToastArguments(submittedRecordsUnavailableText))
             },
           })
         })
@@ -103,65 +103,65 @@ const Submitted = () => {
     isMounted,
     isAppOnline,
     handleHttpResponseError,
-    submittedRecordsUnavailableMessage,
+    submittedRecordsUnavailableText,
   ])
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
     () => [
       {
-        Header: methodHeader,
+        Header: methodHeaderText,
         accessor: 'method',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: siteHeader,
+        Header: siteHeaderText,
         accessor: 'site',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: managementRegimeHeader,
+        Header: managementRegimeHeaderText,
         accessor: 'management',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: sampleUnitNumberHeader,
+        Header: sampleUnitNumberHeaderText,
         accessor: 'sampleUnitNumber',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: sizeHeader,
+        Header: sizeHeaderText,
         accessor: 'size',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: depthHeader,
+        Header: depthHeaderText,
         accessor: 'depth',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: sampleDateHeader,
+        Header: sampleDateHeaderText,
         accessor: 'sampleDate',
         sortType: reactTableNaturalSortDates,
       },
       {
-        Header: observersHeader,
+        Header: observersHeaderText,
         accessor: 'observers',
         sortType: reactTableNaturalSort,
       },
     ],
     [
-      methodHeader,
-      siteHeader,
-      managementRegimeHeader,
-      sampleUnitNumberHeader,
-      sizeHeader,
-      depthHeader,
-      sampleDateHeader,
-      observersHeader,
+      methodHeaderText,
+      siteHeaderText,
+      managementRegimeHeaderText,
+      sampleUnitNumberHeaderText,
+      sizeHeaderText,
+      depthHeaderText,
+      sampleDateHeaderText,
+      observersHeaderText,
     ],
   )
 

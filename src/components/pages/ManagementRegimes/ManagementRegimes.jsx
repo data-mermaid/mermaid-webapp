@@ -75,18 +75,18 @@ const ManagementRegimes = () => {
 
   const managementRegimeTableTitle = t('management_regimes')
   const copyMRButtonText = t('buttons.copy_mrs_from_other_projects')
-  const managementRegimeNameHeader = t('management_regime_name')
-  const secondaryNameHeader = t('secondary_name')
-  const yearEstHeader = t('year_est')
-  const complianceHeader = t('compliance')
-  const openAccessHeader = t('open_access')
-  const accessRestrictionHeader = t('access_restriction')
-  const periodicClosureHeader = t('periodic_closure')
-  const sizeLimitsHeader = t('size_limits')
-  const gearRestrictionHeader = t('gear_restriction')
-  const speciesRestrictionHeader = t('species_restriction')
-  const noTakeHeader = t('no_take')
-  const submittedRecordsUnavailableText = t('sample_units.errors.submitted_records_unavailable')
+  const managementRegimeNameHeaderText = t('management_regime_name')
+  const secondaryNameHeaderText = t('secondary_name')
+  const yearEstHeaderText = t('year_est')
+  const complianceHeaderText = t('compliance')
+  const openAccessHeaderText = t('open_access')
+  const accessRestrictionHeaderText = t('access_restriction')
+  const periodicClosureHeaderText = t('periodic_closure')
+  const sizeLimitsHeaderText = t('size_limits')
+  const gearRestrictionHeaderText = t('gear_restriction')
+  const speciesRestrictionHeaderText = t('species_restriction')
+  const noTakeHeaderText = t('no_take')
+  const managementRegimeRecordsUnavailableText = t('toasts.management_regime_records_unavailable')
 
   useDocumentTitle(`${managementRegimeTableTitle} - ${t('mermaid')}`)
 
@@ -115,7 +115,7 @@ const ManagementRegimes = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(submittedRecordsUnavailableText))
+              toast.error(...getToastArguments(managementRegimeRecordsUnavailableText))
             },
           })
         })
@@ -126,7 +126,7 @@ const ManagementRegimes = () => {
     isSyncInProgress,
     isMounted,
     handleHttpResponseError,
-    submittedRecordsUnavailableText,
+    managementRegimeRecordsUnavailableText,
   ])
 
   const getIconCheckLabel = (property) => property && <IconCheck />
@@ -141,73 +141,73 @@ const ManagementRegimes = () => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: managementRegimeNameHeader,
+        Header: managementRegimeNameHeaderText,
         accessor: 'name',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: secondaryNameHeader,
+        Header: secondaryNameHeaderText,
         accessor: 'secondaryName',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: yearEstHeader,
+        Header: yearEstHeaderText,
         accessor: 'estYear',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: complianceHeader,
+        Header: complianceHeaderText,
         accessor: 'compliance',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: openAccessHeader,
+        Header: openAccessHeaderText,
         accessor: 'openAccess',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: accessRestrictionHeader,
+        Header: accessRestrictionHeaderText,
         accessor: 'accessRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: periodicClosureHeader,
+        Header: periodicClosureHeaderText,
         accessor: 'periodicClosure',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: sizeLimitsHeader,
+        Header: sizeLimitsHeaderText,
         accessor: 'sizeLimits',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: gearRestrictionHeader,
+        Header: gearRestrictionHeaderText,
         accessor: 'gearRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: speciesRestrictionHeader,
+        Header: speciesRestrictionHeaderText,
         accessor: 'speciesRestriction',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: noTakeHeader,
+        Header: noTakeHeaderText,
         accessor: 'noTake',
         sortType: reactTableNaturalSort,
       },
     ],
     [
-      managementRegimeNameHeader,
-      secondaryNameHeader,
-      yearEstHeader,
-      complianceHeader,
-      openAccessHeader,
-      accessRestrictionHeader,
-      periodicClosureHeader,
-      sizeLimitsHeader,
-      gearRestrictionHeader,
-      speciesRestrictionHeader,
-      noTakeHeader,
+      managementRegimeNameHeaderText,
+      secondaryNameHeaderText,
+      yearEstHeaderText,
+      complianceHeaderText,
+      openAccessHeaderText,
+      accessRestrictionHeaderText,
+      periodicClosureHeaderText,
+      sizeLimitsHeaderText,
+      gearRestrictionHeaderText,
+      speciesRestrictionHeaderText,
+      noTakeHeaderText,
     ],
   )
 
@@ -503,7 +503,7 @@ const ManagementRegimes = () => {
           <H2>{managementRegimeTableTitle}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
-              name={t('filter_management_regime')}
+              name={t('filter_management_regimes_table')}
               disabled={managementRegimeRecordsForUiDisplay.length === 0}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
