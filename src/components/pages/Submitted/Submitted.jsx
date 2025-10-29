@@ -54,16 +54,18 @@ const Submitted = () => {
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${t('submitted')} - ${t('mermaid')}`)
+  const submittedTableTitle = t('sample_units.submitted')
+  const methodHeaderText = t('sample_units.method')
+  const siteHeaderText = t('sites.site')
+  const managementRegimeHeaderText = t('management_regimes.management_regime')
+  const sampleUnitNumberHeaderText = t('sample_units.sample_unit_number')
+  const sizeHeaderText = t('sample_units.size')
+  const depthHeaderText = t('sample_units.depth_m')
+  const sampleDateHeaderText = t('sample_units.sample_date')
+  const observersHeaderText = t('sample_units.observers')
+  const submittedRecordsUnavailableText = t('sample_units.errors.submitted_data_unavailable')
 
-  const methodHeader = t('method')
-  const siteHeader = t('site')
-  const managementRegimeHeader = t('management_regime')
-  const sampleUnitNumberHeader = t('sample_unit_number')
-  const sizeHeader = t('size')
-  const depthHeader = t('depth_m')
-  const sampleDateHeader = t('sample_date')
-  const observersHeader = t('observers')
+  useDocumentTitle(`${submittedTableTitle} - ${t('mermaid')}`)
 
   const _getSubmittedRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -90,71 +92,76 @@ const Submitted = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(
-                ...getToastArguments(t('sample_units.errors.submitted_records_unavailable')),
-              )
+              toast.error(...getToastArguments(submittedRecordsUnavailableText))
             },
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError, t])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isMounted,
+    isAppOnline,
+    handleHttpResponseError,
+    submittedRecordsUnavailableText,
+  ])
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
     () => [
       {
-        Header: methodHeader,
+        Header: methodHeaderText,
         accessor: 'method',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: siteHeader,
+        Header: siteHeaderText,
         accessor: 'site',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: managementRegimeHeader,
+        Header: managementRegimeHeaderText,
         accessor: 'management',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: sampleUnitNumberHeader,
+        Header: sampleUnitNumberHeaderText,
         accessor: 'sampleUnitNumber',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: sizeHeader,
+        Header: sizeHeaderText,
         accessor: 'size',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: depthHeader,
+        Header: depthHeaderText,
         accessor: 'depth',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: sampleDateHeader,
+        Header: sampleDateHeaderText,
         accessor: 'sampleDate',
         sortType: reactTableNaturalSortDates,
       },
       {
-        Header: observersHeader,
+        Header: observersHeaderText,
         accessor: 'observers',
         sortType: reactTableNaturalSort,
       },
     ],
     [
-      methodHeader,
-      siteHeader,
-      managementRegimeHeader,
-      sampleUnitNumberHeader,
-      sizeHeader,
-      depthHeader,
-      sampleDateHeader,
-      observersHeader,
+      methodHeaderText,
+      siteHeaderText,
+      managementRegimeHeaderText,
+      sampleUnitNumberHeaderText,
+      sizeHeaderText,
+      depthHeaderText,
+      sampleDateHeaderText,
+      observersHeaderText,
     ],
   )
 
@@ -363,7 +370,7 @@ const Submitted = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageUnavailable mainText={t('submitted_no_data_message')} />
+    <PageUnavailable mainText={t('sample_units.submitted_no_data_message')} />
   )
 
   const content = isAppOnline ? (
@@ -377,7 +384,7 @@ const Submitted = () => {
 
   const toolbar = isAppOnline ? (
     <SubmittedToolbarSection
-      name={t('filter_submitted_table')}
+      name={t('filter_table_site_management_observer')}
       globalSearchText={globalFilter}
       handleGlobalFilterChange={handleGlobalFilterChange}
       searchFilterValue={tableUserPrefs.globalFilter}
@@ -394,7 +401,7 @@ const Submitted = () => {
       submittedRecordsForUiDisplay={submittedRecordsForUiDisplay}
     />
   ) : (
-    <H2>{t('submitted')}</H2>
+    <H2>{submittedTableTitle}</H2>
   )
 
   return idsNotAssociatedWithData.length ? (

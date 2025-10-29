@@ -644,12 +644,6 @@ const pages = {
     title: 'Management Regime',
     nonAdminDelete: 'Only admins can delete a management regime.',
   },
-  managementRegimeTable: {
-    copyManagementRegimeButtonText: 'Copy MRs from other projects',
-    filterToolbarText: 'Filter this table by name or year',
-    noDataMainText: `This project has no Management Regimes.`,
-    title: 'Management Regimes',
-  },
   usersAndTransectsTable: {
     title: 'Sample Units / Observers',
     navTitle: (
@@ -685,11 +679,6 @@ const pages = {
     title: 'Copy Sites',
     filterToolbarText: 'Filter this table by name, project, or country',
     copyButtonText: 'Copy selected sites to project',
-  },
-  copyManagementRegimeTable: {
-    title: 'Copy Management Regimes',
-    filterToolbarText: 'Filter management regimes by name, project, or year',
-    copyButtonText: 'Copy selected MRs to project',
   },
   gfcrTable: {
     filterToolbarText: 'Filter this table by title or date',

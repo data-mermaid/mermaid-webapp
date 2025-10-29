@@ -35,16 +35,16 @@ test('ManagementRegimes component renders with the expected headers', async () =
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[0]).getByText('Management Regime Name'))
-  expect(within(tableRows[0]).getByText('Year Est.'))
-  expect(within(tableRows[0]).getByText('Compliance'))
-  expect(within(tableRows[0]).getByText('Open Access'))
-  expect(within(tableRows[0]).getByText('Access Restrictions'))
-  expect(within(tableRows[0]).getByText('Periodic Closure'))
-  expect(within(tableRows[0]).getByText('Size Limits'))
-  expect(within(tableRows[0]).getByText('Gear Restrictions'))
-  expect(within(tableRows[0]).getByText('Species Restrictions'))
-  expect(within(tableRows[0]).getByText('No Take'))
+  expect(within(tableRows[0]).getByTestId('management-regime-header-name'))
+  expect(within(tableRows[0]).getByTestId('management-regime-header-estYear'))
+  expect(within(tableRows[0]).getByTestId('management-regime-header-compliance'))
+  expect(within(tableRows[0]).getByTestId('management-regime-header-openAccess'))
+  expect(within(tableRows[0]).getByTestId('management-regime-header-accessRestriction'))
+  expect(within(tableRows[0]).getByTestId('management-regime-header-periodicClosure'))
+  expect(within(tableRows[0]).getByTestId('management-regime-header-sizeLimits'))
+  expect(within(tableRows[0]).getByTestId('management-regime-header-gearRestriction'))
+  expect(within(tableRows[0]).getByTestId('management-regime-header-speciesRestriction'))
+  expect(within(tableRows[0]).getByTestId('management-regime-header-noTake'))
 })
 
 test('Management Regime Records table sorts properly by Name column', async () => {
@@ -70,19 +70,19 @@ test('Management Regime Records table sorts properly by Name column', async () =
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  await user.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByTestId('management-regime-header-name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Management Regime Name'))
+  await user.click(within(table).getByTestId('management-regime-header-name'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Management Regime Name'))
+  await user.click(within(table).getByTestId('management-regime-header-name'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -112,12 +112,12 @@ test('Management Regime Records table sorts properly by Year Est. column', async
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  await user.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByTestId('management-regime-header-name'))
 
   expect(within(tableRows[1]).getByText('2021'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Year Est.'))
+  await user.click(within(table).getByTestId('management-regime-header-estYear'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
@@ -125,7 +125,7 @@ test('Management Regime Records table sorts properly by Year Est. column', async
   expect(within(tableRowsAfter[3]).getByText('2021'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Year Est.'))
+  await user.click(within(table).getByTestId('management-regime-header-estYear'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -156,19 +156,19 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
   // we test last row because it will have a non empty value which is easier to query
 
   // click the Management Regime Name column twice to disable default sorting
-  await user.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByTestId('management-regime-header-name'))
 
   expect(within(tableRows[3]).getByText('somewhat'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Compliance'))
+  await user.click(within(table).getByTestId('management-regime-header-compliance'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[3]).getByText('somewhat'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Compliance'))
+  await user.click(within(table).getByTestId('management-regime-header-compliance'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -198,19 +198,19 @@ test('Management Regime Records table sorts properly by Open Access column', asy
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  await user.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByTestId('management-regime-header-name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Open Access'))
+  await user.click(within(table).getByTestId('management-regime-header-openAccess'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Open Access'))
+  await user.click(within(table).getByTestId('management-regime-header-openAccess'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -240,19 +240,19 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  await user.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByTestId('management-regime-header-name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Access Restrictions'))
+  await user.click(within(table).getByTestId('management-regime-header-accessRestriction'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes C'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Access Restrictions'))
+  await user.click(within(table).getByTestId('management-regime-header-accessRestriction'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -282,19 +282,19 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  await user.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByTestId('management-regime-header-name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Periodic Closure'))
+  await user.click(within(table).getByTestId('management-regime-header-periodicClosure'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes C'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Periodic Closure'))
+  await user.click(within(table).getByTestId('management-regime-header-periodicClosure'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -324,19 +324,19 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  await user.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByTestId('management-regime-header-name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Size Limits'))
+  await user.click(within(table).getByTestId('management-regime-header-sizeLimits'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes C'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Size Limits'))
+  await user.click(within(table).getByTestId('management-regime-header-sizeLimits'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -366,19 +366,19 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  await user.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByTestId('management-regime-header-name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Gear Restrictions'))
+  await user.click(within(table).getByTestId('management-regime-header-gearRestriction'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Gear Restrictions'))
+  await user.click(within(table).getByTestId('management-regime-header-gearRestriction'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -408,19 +408,19 @@ test('Management Regime Records table sorts properly by Species Restrictions col
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  await user.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByTestId('management-regime-header-name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Species Restrictions'))
+  await user.click(within(table).getByTestId('management-regime-header-speciesRestriction'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Species Restrictions'))
+  await user.click(within(table).getByTestId('management-regime-header-speciesRestriction'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -450,19 +450,19 @@ test('Management Regime Records table sorts properly by No Take column', async (
   const tableRows = within(table).getAllByRole('row')
 
   // click the Management Regime Name column twice to disable default sorting
-  await user.dblClick(within(table).getByText('Management Regime Name'))
+  await user.dblClick(within(table).getByTestId('management-regime-header-name'))
 
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('No Take'))
+  await user.click(within(table).getByTestId('management-regime-header-noTake'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('No Take'))
+  await user.click(within(table).getByTestId('management-regime-header-noTake'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
