@@ -30,10 +30,6 @@ test('Site component renders with the expected headers', async () => {
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  const table = screen.getByRole('table')
-
-  const tableRows = within(table).getAllByRole('row')
-
   expect(screen.getByTestId('sites-table-header-name')).toHaveTextContent(/name/i)
   expect(screen.getByTestId('sites-table-header-reefType')).toHaveTextContent(/reef.?type/i)
   expect(screen.getByTestId('sites-table-header-reefZone')).toHaveTextContent(/reef.?zone/i)
