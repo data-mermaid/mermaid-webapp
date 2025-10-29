@@ -299,6 +299,8 @@
   "validations": "Validations",
   "filter_table_date_year": "Filter this table by name or year",
   "filter_table_name_project_year": "Filter this table by name, project, or year",
+  "filter_table_name_reeftype_reefzone_exposure": "Filter this table by name, reef type, reef zone, or exposure",
+  "filter_table_name_project_country": "Filter this table by name, project, or country",
   "view_selected_only": "View Selected Only",
   "management_regimes": {
     "management_regime": "Management regime",
@@ -323,6 +325,17 @@
     "export_mrs": "Export MRs"
   },
   "sites": {
-    "site": "Site"
+    "sites": "Sites",
+    "site": "Site",
+    "reef_type": "Reef type",
+    "reef_zone": "Reef zone",
+    "exposure": "Exposure",
+    "copy_sites": "Copy Sites",
+    "new_site": "New site",
+    "copy_sites_from_other_projects": "Copy sites from other projects",
+    "copy_selected_sites_to_project": "Copy selected sites to project",
+    "export_sites": "Export sites",
+    "no_sites": "This project has no sites.",
+    "data_unavailable": "Site record data are currently unavailable."
   }
 }

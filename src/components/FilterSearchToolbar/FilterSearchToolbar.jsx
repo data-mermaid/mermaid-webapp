@@ -46,8 +46,8 @@ const FilterSearchToolbar = ({
     let pixelAdjustLeft = 488
 
     if (type === 'copy-site-modal') {
-      pixelAdjustLeft = 655
-      pixelAdjustTop = 275
+      pixelAdjustLeft = 656
+      pixelAdjustTop = 280
       setMaxWidth('60em')
     }
     if (type === 'copy-mr-modal') {

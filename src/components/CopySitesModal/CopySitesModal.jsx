@@ -3,6 +3,7 @@ import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } fro
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 import {
   Tr,
   Th,
@@ -28,7 +29,6 @@ import { useCurrentUser } from '../../App/CurrentUserContext'
 import LoadingModal from '../LoadingModal/LoadingModal'
 import { getToastArguments } from '../../library/getToastArguments'
 import { pluralize } from '../../library/strings/pluralize'
-import language from '../../language'
 import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import PageSelector from '../generic/Table/PageSelector'
 import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
@@ -57,6 +57,7 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 })
 
 const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { currentUser } = useCurrentUser()
   const { projectId } = useParams()
@@ -68,6 +69,15 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const [siteRecords, setSiteRecords] = useState([])
   const [selectedRowIdsForCopy, setSelectedRowIdsForCopy] = useState([])
   const handleHttpResponseError = useHttpResponseErrorHandler()
+
+  // Extract translated text variables outside hooks
+  const siteRecordsUnavailableText = t('sites.data_unavailable')
+  const nameHeaderText = t('name')
+  const projectHeaderText = t('projects.project')
+  const countryHeaderText = t('projects.country')
+  const reefTypeHeaderText = t('sites.reef_type')
+  const reefZoneHeaderText = t('sites.reef_zone')
+  const exposureHeaderText = t('sites.exposure')
 
   const _getSiteRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -87,7 +97,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
+              toast.error(...getToastArguments(siteRecordsUnavailableText))
             },
           })
         })
@@ -99,6 +109,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     isMounted,
     isOpen,
     projectId,
+    siteRecordsUnavailableText,
   ])
 
   const tableColumns = useMemo(
@@ -115,37 +126,44 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         ),
       },
       {
-        Header: 'Name',
+        Header: nameHeaderText,
         accessor: 'name',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Project',
+        Header: projectHeaderText,
         accessor: 'projectName',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Country',
+        Header: countryHeaderText,
         accessor: 'countryName',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Reef Type',
+        Header: reefTypeHeaderText,
         accessor: 'reefType',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Reef Zone',
+        Header: reefZoneHeaderText,
         accessor: 'reefZone',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Exposure',
+        Header: exposureHeaderText,
         accessor: 'exposure',
         sortType: reactTableNaturalSort,
       },
     ],
-    [],
+    [
+      nameHeaderText,
+      projectHeaderText,
+      countryHeaderText,
+      reefTypeHeaderText,
+      reefZoneHeaderText,
+      exposureHeaderText,
+    ],
   )
 
   const tableCellData = useMemo(
@@ -356,7 +374,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     <CopyModalToolbarWrapper>
       <FilterSearchToolbar
         id="copy-sites-filter"
-        name={language.pages.copySiteTable.filterToolbarText}
+        name={t('filter_table_name_project_country')}
         globalSearchText={globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
         type="copy-site-modal"
@@ -368,17 +386,17 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           checked={isViewSelectedOnly}
           onChange={handleViewSelectedOnlyChange}
         />
-        View Selected Only
+        {t('view_selected_only')}
       </ViewSelectedOnly>
     </CopyModalToolbarWrapper>
   )
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedSites}>
         <IconCopy />
-        {language.pages.copySiteTable.copyButtonText}
+        {t('sites.copy_selected_sites_to_project')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -388,7 +406,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
-        title={language.pages.copySiteTable.title}
+        title={t('sites.copy_sites')}
         mainContent={
           isModalContentLoading ? (
             <ModalLoadingIndicatorWrapper>
