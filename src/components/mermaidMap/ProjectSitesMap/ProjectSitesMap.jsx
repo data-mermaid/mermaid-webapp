@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
-import language from '../../../language'
+import { useTranslation } from 'react-i18next'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import { sitePropType, choicesPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import {
@@ -22,11 +22,14 @@ const defaultCenter = [20, 20]
 const defaultZoom = 2
 
 const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
+  const { t } = useTranslation()
   const mapContainer = useRef(null)
   const map = useRef(null)
   const popUpRef = useRef(new maplibregl.Popup({ offset: 10 }))
   const [displayHelpText, setDisplayHelpText] = useState(false)
   const [isMapInitialized, setIsMapInitialized] = useState(false)
+
+  const mapAttribution = t('map.attribution')
 
   const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
 
@@ -38,7 +41,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       zoom: defaultZoom,
       maxZoom: 17,
       attributionControl: true,
-      customAttribution: language.map.attribution,
+      customAttribution: mapAttribution,
     })
 
     addZoomController(map.current)
@@ -55,7 +58,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       // clean up on unmount
       map.current.remove()
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mapAttribution]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const _updateMapMarkers = useEffect(() => {
     if (!map.current || !isMapInitialized) {
@@ -83,9 +86,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
   return (
     <MapContainer>
       <MapWrapper ref={mapContainer} />
-      {displayHelpText && (
-        <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
-      )}
+      {displayHelpText && <MapZoomHelpMessage>{t('map.zoom_control_text')}</MapZoomHelpMessage>}
       <AtlasLegendDrawer
         updateCoralMosaicLayer={updateCoralMosaicLayer}
         updateGeomorphicLayers={updateGeomorphicLayers}

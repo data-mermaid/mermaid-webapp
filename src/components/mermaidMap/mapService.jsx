@@ -7,27 +7,49 @@ import mapPin from '../../assets/map-pin.png'
 const coralAtlasAppId = import.meta.env.VITE_CORAL_ATLAS_APP_ID
 
 export const benthicColors = {
-  'Coral/Algae': 'rgb(255, 97, 97)',
-  'Benthic Microalgae': 'rgb(155, 204, 79)',
-  Rock: 'rgb(177, 156, 58)',
-  Rubble: 'rgb(224, 208, 94)',
-  Sand: 'rgb(255, 255, 190)',
-  Seagrass: 'rgb(102, 132, 56)',
+  coral_algae: 'rgb(255, 97, 97)',
+  benthic_microalgae: 'rgb(155, 204, 79)',
+  rock: 'rgb(177, 156, 58)',
+  rubble: 'rgb(224, 208, 94)',
+  sand: 'rgb(255, 255, 190)',
+  seagrass: 'rgb(102, 132, 56)',
 }
 
 export const geomorphicColors = {
-  'Back Reef Slope': 'rgb(190, 251, 255)',
-  'Deep Lagoon': 'rgb(44, 162, 249)',
-  'Inner Reef Flat': 'rgb(197, 167, 203)',
-  'Outer Reef Flat': 'rgb(146, 115, 157)',
-  'Patch Reefs': 'rgb(255, 186, 21)',
-  Plateau: 'rgb(205, 104, 18)',
-  'Reef Crest': 'rgb(97, 66, 114)',
-  'Reef Slope': 'rgb(40, 132, 113)',
-  'Shallow Lagoon': 'rgb(119, 208, 252)',
-  'Sheltered Reef Slope': 'rgb(16, 189, 166)',
-  'Small Reef': 'rgb(230, 145, 19)',
-  'Terrestrial Reef Flat': 'rgb(251, 222, 251)',
+  back_reef_slope: 'rgb(190, 251, 255)',
+  deep_lagoon: 'rgb(44, 162, 249)',
+  inner_reef_flat: 'rgb(197, 167, 203)',
+  outer_reef_flat: 'rgb(146, 115, 157)',
+  patch_reefs: 'rgb(255, 186, 21)',
+  plateau: 'rgb(205, 104, 18)',
+  reef_crest: 'rgb(97, 66, 114)',
+  reef_slope: 'rgb(40, 132, 113)',
+  shallow_lagoon: 'rgb(119, 208, 252)',
+  sheltered_reef_slope: 'rgb(16, 189, 166)',
+  small_reef: 'rgb(230, 145, 19)',
+  terrestrial_reef_flat: 'rgb(251, 222, 251)',
+}
+
+// Mapping of legend IDs to display names, not affected by localization, used for map expressions
+export const atlasLegendNames = {
+  coral_algae: 'Coral/Algae',
+  benthic_microalgae: 'Benthic Microalgae',
+  rock: 'Rock',
+  rubble: 'Rubble',
+  sand: 'Sand',
+  seagrass: 'Seagrass',
+  back_reef_slope: 'Back Reef Slope',
+  deep_lagoon: 'Deep Lagoon',
+  inner_reef_flat: 'Inner Reef Flat',
+  outer_reef_flat: 'Outer Reef Flat',
+  patch_reefs: 'Patch Reefs',
+  plateau: 'Plateau',
+  reef_crest: 'Reef Crest',
+  reef_slope: 'Reef Slope',
+  shallow_lagoon: 'Shallow Lagoon',
+  sheltered_reef_slope: 'Sheltered Reef Slope',
+  small_reef: 'Small Reef',
+  terrestrial_reef_flat: 'Terrestrial Reef Flat',
 }
 
 const geomorphicColorExpression = [
@@ -204,13 +226,15 @@ export const setGeomorphicOrBenthicLayerProperty = (map, property, dataLayerFrom
 
 export const loadACALayers = (map) => {
   const coralMosaicLocalStorage = JSON.parse(localStorage.getItem('coral_mosaic'))
+  const geomorphicLocalStorage = JSON.parse(localStorage.getItem('geomorphic_legend'))
+  const benthicLocalStorage = JSON.parse(localStorage.getItem('benthic_legend'))
 
   const fillGeomorphicOpacityValue = applyOpacityExpression(
-    JSON.parse(localStorage.getItem('geomorphic_legend')),
+    geomorphicLocalStorage.map((item) => atlasLegendNames[item]),
   )
 
   const fillBenthicOpacityValue = applyOpacityExpression(
-    JSON.parse(localStorage.getItem('benthic_legend')),
+    benthicLocalStorage.map((item) => atlasLegendNames[item]),
   )
   const isGeomorphicStorageNull = localStorage.getItem('geomorphic_legend') === null
   const isBenthicStorageNull = localStorage.getItem('benthic_legend') === null

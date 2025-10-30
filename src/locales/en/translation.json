@@ -324,5 +324,37 @@
   },
   "sites": {
     "site": "Site"
+  },
+  "map": {
+    "attribution": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href=\"http://www.allencoralatlas.org/\"  style=\"font-size:1.25rem;\">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>",
+    "zoom_control_text": "Use Ctrl + Scroll to zoom the map",
+    "place_marker": "Place Site Marker",
+    "legend": {
+      "allen_coral_atlas": "Allen Coral Atlas",
+      "visit_allen_coral_atlas": "Visit Allan Coral Atlas",
+      "satellite_coral_reef_mosaic": "Satellite Coral Reef Mosaic",
+      "geomorphic_analysis": "Geomorphic Analysis",
+      "benthic_analysis": "Benthic Analysis"
+    }
+  },
+  "atlas_legend_drawer": {
+    "coral_algae": "Coral/Algae",
+    "benthic_microalgae": "Benthic Microalgae",
+    "rock": "Rock",
+    "rubble": "Rubble",
+    "sand": "Sand",
+    "seagrass": "Seagrass",
+    "back_reef_slope": "Back Reef Slope",
+    "deep_lagoon": "Deep Lagoon",
+    "inner_reef_flat": "Inner Reef Flat",
+    "outer_reef_flat": "Outer Reef Flat",
+    "patch_reefs": "Patch Reefs",
+    "plateau": "Plateau",
+    "reef_crest": "Reef Crest",
+    "reef_slope": "Reef Slope",
+    "shallow_lagoon": "Shallow Lagoon",
+    "sheltered_reef_slope": "Sheltered Reef Slope",
+    "small_reef": "Small Reef",
+    "terrestrial_reef_flat": "Terrestrial Reef Flat"
   }
 }
