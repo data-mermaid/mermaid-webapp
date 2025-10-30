@@ -336,7 +336,7 @@
     "copy_selected_sites_to_project": "Copy selected sites to project",
     "export_sites": "Export sites",
     "no_sites": "This project has no sites.",
-    "data_unavailable": "Site record data are currently unavailable.",
-    "testing": "Testing"
+    "data_unavailable": "Site record data are currently unavailable."
   }
 }
+
