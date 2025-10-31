@@ -413,7 +413,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     <CopyModalToolbarWrapper>
       <FilterSearchToolbar
         id="copy-management-regimes-filter"
-        name={t('filter_table_name_project_year')}
+        name={t('filters.by_name_project_year')}
         globalSearchText={globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
         type="copy-mr-modal"
@@ -445,7 +445,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
-        title={t('management_regimes.copy_management_regimes')}
+        title={t('management_regimes.copy')}
         mainContent={
           isModalContentLoading ? (
             <ModalLoadingIndicatorWrapper>

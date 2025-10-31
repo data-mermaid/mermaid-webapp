@@ -374,7 +374,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     <CopyModalToolbarWrapper>
       <FilterSearchToolbar
         id="copy-sites-filter"
-        name={t('filter_table_name_project_country')}
+        name={t('filters.by_name_project_country')}
         globalSearchText={globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
         type="copy-site-modal"
@@ -406,7 +406,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
-        title={t('sites.copy_sites')}
+        title={t('sites.copy')}
         mainContent={
           isModalContentLoading ? (
             <ModalLoadingIndicatorWrapper>

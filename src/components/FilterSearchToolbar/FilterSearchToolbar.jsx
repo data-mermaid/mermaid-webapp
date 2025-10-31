@@ -43,11 +43,11 @@ const FilterSearchToolbar = ({
   useEffect(() => {
     let pixelAdjustTop = 302
 
-    let pixelAdjustLeft = 488
+    let pixelAdjustLeft = 487
 
     if (type === 'copy-site-modal') {
-      pixelAdjustLeft = 656
-      pixelAdjustTop = 280
+      pixelAdjustLeft = 652
+      pixelAdjustTop = 285
       setMaxWidth('60em')
     }
     if (type === 'copy-mr-modal') {
@@ -112,7 +112,7 @@ const FilterSearchToolbar = ({
             left={tooltipPosition.left}
             top={tooltipPosition.top}
             maxWidth={maxWidth}
-            html={t('filter_search_helper_text')}
+            html={t('filters.search_helper_text')}
             ref={tooltipRef}
           />
         ) : null}

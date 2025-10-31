@@ -305,7 +305,7 @@ const Sites = () => {
           filename={siteExportName}
           style={{ margin: 0, textDecoration: 'none' }}
         >
-          <IconDownload /> {t('sites.export_sites')}
+          <IconDownload /> {t('sites.export')}
         </CSVLink>
       </ButtonSecondary>
     </>
@@ -322,7 +322,7 @@ const Sites = () => {
           to={`${currentProjectPath}/sites/new`}
           data-testid="new-site-link"
         >
-          <IconPlus /> {t('sites.new_site')}
+          <IconPlus /> {t('sites.new')}
         </LinkLooksLikeButtonSecondary>
         {isAppOnline ? (
           <ButtonSecondary type="button" onClick={openCopySitesModal}>
@@ -439,7 +439,7 @@ const Sites = () => {
           <H2>{siteTableTitle}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
-              name={t('filter_table_name_reeftype_reefzone_exposure')}
+              name={t('filters.by_name_reeftype_reefzone_exposure')}
               disabled={siteRecordsForUiDisplay.length === 0}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}

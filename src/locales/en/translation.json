@@ -134,7 +134,6 @@
     "data_copy_to_project": "Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.",
     "copy_of_project_name": "Copy of {{projectName}}",
     "notify_user_email": "Notify users by email",
-    "filter_projects": "Filter Projects By Name or Country",
     "sort_by": "Sort By",
     "last_updated_date": "Last Updated Date",
     "project_name": "Project Name",
@@ -201,8 +200,6 @@
   "toggle_table_visibility": "Toggle table visibility",
   "toggle_label_visibility": "Toggle label visibility",
   "user": "User",
-  "filter_table_site_management_observer": "Filter this table by site, management, or observer",
-  "filter_search_helper_text": "<b>Use double quotes to search exact phrases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
   "exports": {
     "success": "Export successful",
     "email_sent": "An email has been sent to <currentUserEmail />. This can sometimes take up to 15 minutes.",
@@ -297,10 +294,15 @@
   "count": "Count",
   "biomass": "Biomass",
   "validations": "Validations",
-  "filter_table_date_year": "Filter this table by name or year",
-  "filter_table_name_project_year": "Filter this table by name, project, or year",
-  "filter_table_name_reeftype_reefzone_exposure": "Filter this table by name, reef type, reef zone, or exposure",
-  "filter_table_name_project_country": "Filter this table by name, project, or country",
+  "filters": {
+    "search_helper_text": "<b>Use double quotes to search exact phrases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
+    "projects_by_name_year": "Filter Projects By Name or Country",
+    "by_name_year": "Filter this table by name or year",
+    "by_name_project_year": "Filter this table by name, project, or year",
+    "by_name_reeftype_reefzone_exposure": "Filter this table by name, reef type, reef zone, or exposure",
+    "by_name_project_country": "Filter this table by name, project, or country",
+    "by_site_management_observer": "Filter this table by site, management, or observer"
+  },
   "view_selected_only": "View Selected Only",
   "management_regimes": {
     "management_regime": "Management regime",
@@ -318,11 +320,11 @@
     "no_take": "No take",
     "data_unavailable": "Management Regime records data are currently unavailable.",
     "no_management_regimes": "This project has no management regimes.",
-    "copy_management_regimes": "Copy Management Regimes",
+    "copy": "Copy Management Regimes",
     "copy_mrs_from_other_projects": "Copy MRs from other projects",
     "copy_selected_mrs_to_project": "Copy selected MRs to project",
-    "new_mr": "New MR",
-    "export_mrs": "Export MRs"
+    "new": "New MR",
+    "export": "Export MRs"
   },
   "sites": {
     "sites": "Sites",
@@ -330,11 +332,11 @@
     "reef_type": "Reef type",
     "reef_zone": "Reef zone",
     "exposure": "Exposure",
-    "copy_sites": "Copy Sites",
-    "new_site": "New site",
+    "copy": "Copy Sites",
+    "new": "New site",
     "copy_sites_from_other_projects": "Copy sites from other projects",
     "copy_selected_sites_to_project": "Copy selected sites to project",
-    "export_sites": "Export sites",
+    "export": "Export sites",
     "no_sites": "This project has no sites.",
     "data_unavailable": "Site record data are currently unavailable."
   }
