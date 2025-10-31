@@ -59,7 +59,7 @@ describe('offline', () => {
       },
     )
 
-    await user.click(await screen.findByRole('link', { name: 'New site' }))
+    await user.click(await screen.findByTestId('new-site-link'))
 
     // ensure the were not in edit mode, but new site mode
     expect(

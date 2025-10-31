@@ -73,7 +73,7 @@ const SubmittedToolbarSection = ({
 
   return (
     <>
-      <H2>{t('submitted')}</H2>
+      <H2>{t('sample_units.submitted')}</H2>
       <ToolBarItemsRow>
         <FilterItems>
           <FilterSearchToolbar

@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
+import { useTranslation } from 'react-i18next'
 
 import { ContentPageLayout } from '../../Layout'
 import CopySitesModal from '../../CopySitesModal'
@@ -15,7 +16,6 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import PageUnavailable from '../PageUnavailable'
@@ -53,6 +53,7 @@ import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const Sites = () => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const currentProjectPath = useCurrentProjectPath()
   const { isSyncInProgress } = useSyncStatus()
@@ -74,7 +75,15 @@ const Sites = () => {
   const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
+  const siteTableTitle = t('sites.sites')
+  const copySitesButtonText = t('sites.copy_sites_from_other_projects')
+  const siteRecordsUnavailableText = t('sites.data_unavailable')
+  const nameHeaderText = t('name')
+  const reefTypeHeaderText = t('sites.reef_type')
+  const reefZoneHeaderText = t('sites.reef_zone')
+  const exposureHeaderText = t('sites.exposure')
+
+  useDocumentTitle(`${siteTableTitle} - ${t('mermaid')}`)
 
   const _getSiteRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -103,12 +112,19 @@ const Sites = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
+              toast.error(...getToastArguments(siteRecordsUnavailableText))
             },
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, handleHttpResponseError])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isSyncInProgress,
+    isMounted,
+    handleHttpResponseError,
+    siteRecordsUnavailableText,
+  ])
 
   const addCopiedSitesToSiteTable = (copiedSites) => {
     setSiteRecordsForUiDisplay([...siteRecordsForUiDisplay, ...copiedSites])
@@ -118,27 +134,27 @@ const Sites = () => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: nameHeaderText,
         accessor: 'name',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Reef Type',
+        Header: reefTypeHeaderText,
         accessor: 'reefType',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Reef Zone',
+        Header: reefZoneHeaderText,
         accessor: 'reefZone',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Exposure',
+        Header: exposureHeaderText,
         accessor: 'exposure',
         sortType: reactTableNaturalSort,
       },
     ],
-    [],
+    [nameHeaderText, reefTypeHeaderText, reefZoneHeaderText, exposureHeaderText],
   )
 
   const tableCellData = useMemo(() => {
@@ -289,7 +305,7 @@ const Sites = () => {
           filename={siteExportName}
           style={{ margin: 0, textDecoration: 'none' }}
         >
-          <IconDownload /> Export sites
+          <IconDownload /> {t('sites.export')}
         </CSVLink>
       </ButtonSecondary>
     </>
@@ -302,12 +318,15 @@ const Sites = () => {
   ) : (
     <>
       <ToolbarButtonWrapper>
-        <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
-          <IconPlus /> New site
+        <LinkLooksLikeButtonSecondary
+          to={`${currentProjectPath}/sites/new`}
+          data-testid="new-site-link"
+        >
+          <IconPlus /> {t('sites.new')}
         </LinkLooksLikeButtonSecondary>
         {isAppOnline ? (
           <ButtonSecondary type="button" onClick={openCopySitesModal}>
-            <IconCopy /> {language.pages.siteTable.copySitesButtonText}
+            <IconCopy /> {copySitesButtonText}
           </ButtonSecondary>
         ) : null}
         {readOnlySitesHeaderContent}
@@ -322,11 +341,11 @@ const Sites = () => {
 
   const noSitesTableContent = (
     <PageUnavailable
-      mainText={language.pages.siteTable.noDataMainText}
+      mainText={t('sites.no_sites')}
       subText={
         isAppOnline ? (
           <ButtonPrimary type="button" onClick={openCopySitesModal}>
-            <IconCopy /> {language.pages.siteTable.copySitesButtonText}
+            <IconCopy /> {copySitesButtonText}
           </ButtonPrimary>
         ) : null
       }
@@ -350,6 +369,7 @@ const Sites = () => {
                     <Th
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       key={column.id}
+                      data-testid={`sites-table-header-${column.id}`}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
@@ -416,10 +436,10 @@ const Sites = () => {
     <ContentPageLayout
       toolbar={
         <>
-          <H2>{language.pages.siteTable.title}</H2>
+          <H2>{siteTableTitle}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
-              name={language.pages.siteTable.filterToolbarText}
+              name={t('filters.by_name_reeftype_reefzone_exposure')}
               disabled={siteRecordsForUiDisplay.length === 0}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}

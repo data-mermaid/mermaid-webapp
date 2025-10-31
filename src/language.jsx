@@ -128,8 +128,6 @@ const error = {
   projectSave: 'The project has not been saved.',
   projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
-  siteRecordsUnavailable: 'Site record data are currently unavailable.',
-  siteRecordUnavailable: 'Site record data are currently unavailable.',
   submittedRecordsUnavailable: 'Submitted record data are currently unavailable.',
   submittedRecordUnavailable: 'Submitted record data are currently unavailable.',
   submittedRecordMoveToCollect: 'The submitted record has not been made editable',
@@ -635,10 +633,6 @@ const pages = {
   },
   siteTable: {
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',
-    copySitesButtonText: 'Copy sites from other projects',
-    filterToolbarText: 'Filter this table by name, reef type, reef zone, or exposure.',
-    noDataMainText: 'This project has no sites.',
-    title: 'Sites',
   },
   managementRegimeForm: {
     title: 'Management Regime',
@@ -674,11 +668,6 @@ const pages = {
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubText:
       'This page will show the Management Regime of submitted sample units by method and site.',
-  },
-  copySiteTable: {
-    title: 'Copy Sites',
-    filterToolbarText: 'Filter this table by name, project, or country',
-    copyButtonText: 'Copy selected sites to project',
   },
   gfcrTable: {
     filterToolbarText: 'Filter this table by title or date',
