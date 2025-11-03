@@ -151,7 +151,7 @@ const ProjectToolBarSection = ({
       </RowWrapper>
       <FilterRowWrapper>
         <FilterLabelWrapper htmlFor="filter_projects" value={projectFilter} onChange={setFilter}>
-          {t('projects.filter_projects')}
+          {t('filters.projects_by_name_year')}
           <Input type="text" id="filter_projects" data-testid="filter-projects" />
         </FilterLabelWrapper>
         <SortByLabelWrapper htmlFor="sort_by">

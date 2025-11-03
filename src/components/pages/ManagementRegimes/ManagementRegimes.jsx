@@ -374,7 +374,7 @@ const ManagementRegimes = () => {
           filename={managementRegimeExportName}
           style={{ margin: 0, textDecoration: 'none' }}
         >
-          <IconDownload /> {t('management_regimes.export_mrs')}
+          <IconDownload /> {t('management_regimes.export')}
         </CSVLink>
       </ButtonSecondary>
     </>
@@ -391,7 +391,7 @@ const ManagementRegimes = () => {
           to={`${currentProjectPath}/management-regimes/new`}
           data-testid="new-management-regime-button"
         >
-          <IconPlus /> {t('management_regimes.new_mr')}
+          <IconPlus /> {t('management_regimes.new')}
         </LinkLooksLikeButtonSecondary>
         {isAppOnline ? (
           <ButtonSecondary type="button" onClick={openCopyManagementRegimesModal}>
@@ -503,7 +503,7 @@ const ManagementRegimes = () => {
           <H2>{managementRegimeTableTitle}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
-              name={t('filter_table_date_year')}
+              name={t('filters.by_name_year')}
               disabled={managementRegimeRecordsForUiDisplay.length === 0}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}

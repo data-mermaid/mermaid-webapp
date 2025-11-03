@@ -384,7 +384,7 @@ const Submitted = () => {
 
   const toolbar = isAppOnline ? (
     <SubmittedToolbarSection
-      name={t('filter_table_site_management_observer')}
+      name={t('filters.by_site_management_observer')}
       globalSearchText={globalFilter}
       handleGlobalFilterChange={handleGlobalFilterChange}
       searchFilterValue={tableUserPrefs.globalFilter}
