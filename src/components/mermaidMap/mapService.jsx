@@ -52,7 +52,7 @@ export const atlasLegendNames = {
   terrestrial_reef_flat: 'Terrestrial Reef Flat',
 }
 
-const geomorphicColorExpression = [
+const geomorphicFillColor = [
   'case',
   ['==', ['get', 'class_name'], 'Back Reef Slope'],
   'rgb(190, 251, 255)',
@@ -81,7 +81,7 @@ const geomorphicColorExpression = [
   'rgb(201, 65, 216)', // Default / other
 ]
 
-const geomorphicOpacityExpression = [
+const geomorphicDefaultOpacityExpression = [
   'case',
   ['==', ['get', 'class_name'], 'Back Reef Slope'],
   1,
@@ -110,7 +110,7 @@ const geomorphicOpacityExpression = [
   0, // Default / other
 ]
 
-const benthicColorExpression = [
+const benthicFillColor = [
   'case',
   ['==', ['get', 'class_name'], 'Coral/Algae'],
   'rgb(255, 97, 97)',
@@ -127,7 +127,7 @@ const benthicColorExpression = [
   'rgb(201, 65, 216)', // Default / other
 ]
 
-const benthicOpacityExpression = [
+const benthicDefaultOpacityExpression = [
   'case',
   ['==', ['get', 'class_name'], 'Sand'],
   1,
@@ -225,29 +225,25 @@ export const setGeomorphicOrBenthicLayerProperty = (map, property, dataLayerFrom
 }
 
 export const loadACALayers = (map) => {
-  const coralMosaicLocalStorage = JSON.parse(localStorage.getItem('coral_mosaic'))
-  const geomorphicLocalStorage = JSON.parse(localStorage.getItem('geomorphic_legend'))
-  const benthicLocalStorage = JSON.parse(localStorage.getItem('benthic_legend'))
+  // Get localStorage values
+  const coralMosaicStorage = JSON.parse(localStorage.getItem('coral_mosaic'))
+  const geomorphicStorage = JSON.parse(localStorage.getItem('geomorphic_legend'))
+  const benthicStorage = JSON.parse(localStorage.getItem('benthic_legend'))
 
-  const fillGeomorphicOpacityValue = applyOpacityExpression(
-    geomorphicLocalStorage.map((item) => atlasLegendNames[item]),
-  )
+  // Calculate opacity values
+  const getOpacityExpression = (storageData) => {
+    return storageData
+      ? applyOpacityExpression(storageData.map((item) => atlasLegendNames[item]))
+      : null
+  }
 
-  const fillBenthicOpacityValue = applyOpacityExpression(
-    benthicLocalStorage.map((item) => atlasLegendNames[item]),
-  )
-  const isGeomorphicStorageNull = localStorage.getItem('geomorphic_legend') === null
-  const isBenthicStorageNull = localStorage.getItem('benthic_legend') === null
+  const geomorphicOpacityExpression = getOpacityExpression(geomorphicStorage)
+  const benthicOpacityExpression = getOpacityExpression(benthicStorage)
 
-  const rasterOpacityExpression = coralMosaicLocalStorage !== null ? coralMosaicLocalStorage : 1
-
-  const fillGeomorphicOpacityExpression = isGeomorphicStorageNull
-    ? geomorphicOpacityExpression
-    : fillGeomorphicOpacityValue
-
-  const fillBenthicOpacityExpression = isBenthicStorageNull
-    ? benthicOpacityExpression
-    : fillBenthicOpacityValue
+  // Set final opacity expressions
+  const coralMosaicRasterOpacity = coralMosaicStorage ?? 1
+  const geomorphicFillOpacity = geomorphicOpacityExpression ?? geomorphicDefaultOpacityExpression
+  const benthicFillOpacity = benthicOpacityExpression ?? benthicDefaultOpacityExpression
 
   // Check if 'clusters' layer exists before adding layers before it
   const beforeLayerId = map.getLayer('clusters') ? 'clusters' : undefined
@@ -280,7 +276,7 @@ export const loadACALayers = (map) => {
       source: 'atlas-planet',
       'source-layer': 'planet',
       paint: {
-        'raster-opacity': rasterOpacityExpression,
+        'raster-opacity': coralMosaicRasterOpacity,
       },
     },
     beforeLayerId,
@@ -293,8 +289,8 @@ export const loadACALayers = (map) => {
       source: 'atlas-geomorphic',
       'source-layer': 'geomorphic',
       paint: {
-        'fill-color': geomorphicColorExpression,
-        'fill-opacity': fillGeomorphicOpacityExpression,
+        'fill-color': geomorphicFillColor,
+        'fill-opacity': geomorphicFillOpacity,
       },
     },
     beforeLayerId,
@@ -307,8 +303,8 @@ export const loadACALayers = (map) => {
       source: 'atlas-benthic',
       'source-layer': 'benthic',
       paint: {
-        'fill-color': benthicColorExpression,
-        'fill-opacity': fillBenthicOpacityExpression,
+        'fill-color': benthicFillColor,
+        'fill-opacity': benthicFillOpacity,
       },
     },
     beforeLayerId,
