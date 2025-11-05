@@ -2,7 +2,6 @@ import i18next from '../../../../i18n'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import axios from '../../../library/axiosRetry'
-import language from '../../../language'
 import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
 
 const SubmittedRecordsMixin = (Base) =>
