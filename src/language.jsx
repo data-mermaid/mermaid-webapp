@@ -620,11 +620,6 @@ const pages = {
     adminEditOnly:
       'Submitted sample units are read-only and can only be moved to Collecting by an admin.',
   },
-  collectTable: {
-    title: 'Collecting',
-    filterToolbarText: 'Filter this table by site, management, or observer',
-    noDataMainText: `You do not have any active sample units`,
-  },
   siteForm: {
     title: 'Site',
     nonAdminDelete: 'Only admins can delete a site.',
