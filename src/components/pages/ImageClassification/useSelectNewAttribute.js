@@ -99,7 +99,9 @@ export const useSelectNewAttribute = ({
       ?.name.toLowerCase()
 
     const annotationToAdd = {
-      ba_gr: `${selectedBenthicAttr}_${selectedGrowthForm || null}`,
+      ba_gr: selectedGrowthForm
+        ? `${selectedBenthicAttr}_${selectedGrowthForm}`
+        : selectedBenthicAttr,
       ba_gr_label: growthFormLabel
         ? `${benthicAttributeLabel} ${growthFormLabel}`
         : benthicAttributeLabel,
