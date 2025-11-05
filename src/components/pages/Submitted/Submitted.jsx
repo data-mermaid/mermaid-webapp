@@ -377,7 +377,7 @@ const Submitted = () => {
     <>{table}</>
   ) : (
     <PageUnavailable
-      mainText={t('offline.page_unavailable_offline')}
+      mainText={t('page.unavailable_offline')}
       testId="submitted-page-offline"
     />
   )

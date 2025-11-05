@@ -1,3 +1,4 @@
+import i18next from '../../../../i18n'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import axios from '../../../library/axiosRetry'
@@ -75,7 +76,7 @@ const SubmittedRecordsMixin = (Base) =>
                 depth: record.depth,
                 management: record.management_name,
                 observers: record.observers?.join(', '),
-                protocol: language.protocolTitles[record.protocol],
+                protocol: i18next.t(`protocol_titles.${record.protocol}`),
                 sampleDate: getSampleDateLabel(record.sample_date),
                 sampleUnitNumber: this.#getSampleUnitLabel(record),
                 site: record.site_name,

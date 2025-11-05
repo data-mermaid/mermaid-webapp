@@ -26,18 +26,10 @@ test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  await user.click(
-    await screen.findByRole('button', {
-      name: /Add Sample Unit/i,
-    }),
-  )
+  await user.click(screen.getByTestId('add-sample-unit-button'))
   const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
 
-  await user.click(
-    within(sampleUnitNav).getByRole('link', {
-      name: /fish belt/i,
-    }),
-  )
+  await user.click(within(sampleUnitNav).getByTestId('fishbelt-link'))
 
   const newFishBeltTitle = await screen.findByText('Fish Belt', {
     selector: 'h2',
@@ -61,24 +53,16 @@ test('Clicking Add Sample Unit then click Benthic Pit link expects to see New Be
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  await user.click(
-    await screen.findByRole('button', {
-      name: /Add Sample Unit/i,
-    }),
-  )
+  await user.click(screen.getByTestId('add-sample-unit-button'))
   const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
 
-  await user.click(
-    within(sampleUnitNav).getByRole('link', {
-      name: 'Benthic PIT',
-    }),
-  )
+  await user.click(within(sampleUnitNav).getByTestId('benthicpit-link'))
 
   const newBenthicPitTitle = await screen.findByText('Benthic PIT', {
     selector: 'h2',
   })
 
-  expect(newBenthicPitTitle)
+  expect(newBenthicPitTitle).toBeInTheDocument()
 })
 
 test('Clicking Add Sample Unit then click Habitat Complexity link expects to see New Habitat Complexity page.', async () => {
@@ -96,24 +80,16 @@ test('Clicking Add Sample Unit then click Habitat Complexity link expects to see
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  await user.click(
-    await screen.findByRole('button', {
-      name: /Add Sample Unit/i,
-    }),
-  )
+  await user.click(screen.getByTestId('add-sample-unit-button'))
   const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
 
-  await user.click(
-    within(sampleUnitNav).getByRole('link', {
-      name: 'Habitat Complexity',
-    }),
-  )
+  await user.click(within(sampleUnitNav).getByTestId('habitatcomplexity-link'))
 
   const newHabitatComplexityTitle = await screen.findByText('Habitat Complexity', {
     selector: 'h2',
   })
 
-  expect(newHabitatComplexityTitle)
+  expect(newHabitatComplexityTitle).toBeInTheDocument()
 })
 
 test('Clicking Add Sample Unit then click Benthic LIT link expects to see New Benthic LIT page.', async () => {
@@ -131,24 +107,16 @@ test('Clicking Add Sample Unit then click Benthic LIT link expects to see New Be
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  await user.click(
-    await screen.findByRole('button', {
-      name: /Add Sample Unit/i,
-    }),
-  )
+  await user.click(screen.getByTestId('add-sample-unit-button'))
   const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
 
-  await user.click(
-    within(sampleUnitNav).getByRole('link', {
-      name: 'Benthic LIT',
-    }),
-  )
+  await user.click(within(sampleUnitNav).getByTestId('benthiclit-link'))
 
   const newBenthicLITTitle = await screen.findByText('Benthic LIT', {
     selector: 'h2',
   })
 
-  expect(newBenthicLITTitle)
+  expect(newBenthicLITTitle).toBeInTheDocument()
 })
 
 test('Clicking Add Sample Unit then click Bleaching link expects to see New Bleaching page.', async () => {
@@ -166,22 +134,14 @@ test('Clicking Add Sample Unit then click Bleaching link expects to see New Blea
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  await user.click(
-    await screen.findByRole('button', {
-      name: /Add Sample Unit/i,
-    }),
-  )
+  await user.click(screen.getByTestId('add-sample-unit-button'))
   const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
 
-  await user.click(
-    within(sampleUnitNav).getByRole('link', {
-      name: 'Bleaching',
-    }),
-  )
+  await user.click(within(sampleUnitNav).getByTestId('bleachingqc-link'))
 
   const newBleachingTitle = await screen.findByText('Bleaching', {
     selector: 'h2',
   })
 
-  expect(newBleachingTitle)
+  expect(newBleachingTitle).toBeInTheDocument()
 })

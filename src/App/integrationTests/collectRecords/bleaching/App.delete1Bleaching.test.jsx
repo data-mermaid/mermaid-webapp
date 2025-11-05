@@ -43,11 +43,7 @@ describe('Offline', () => {
     expect(await screen.findByText('Record deleted.'))
 
     // navigated to collect records table page
-    expect(
-      await screen.findByText('Collecting', {
-        selector: 'h2',
-      }),
-    )
+    expect(await screen.findByTestId('collecting-title'))
 
     const pageSizeSelector = await screen.findByTestId('page-size-selector')
 
