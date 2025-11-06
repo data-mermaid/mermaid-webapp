@@ -1,0 +1,363 @@
+{
+	"benthic_observations": {
+		"add_benthic_attribute": "Add new benthic attribute",
+		"attribute_already_exists": "The proposed attribute {{attribute}} already exists in the list. The observation has been updated with this attribute.",
+		"attribute_proposal_summary": "Your proposed attribute {{attribute}} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.",
+		"benthic_attribute": "Benthic attribute",
+		"errors": {
+			"attribute_proposal_unsaved": "The proposed attribute {{attribute}} has not been saved"
+		},
+		"missing_benthic_attribute": "Missing benthic attribute",
+		"observations": "Observations",
+		"proposed_attribute_saved": "Proposed attribute {{attribute}} saved. The observation has been updated with this attribute."
+	},
+	"biomass": "Biomass",
+	"buttons": {
+		"add_row": "Add row",
+		"back": "Back",
+		"cancel": "Cancel",
+		"close": "Close",
+		"confirm": "Confirm",
+		"delete": "Delete",
+		"done": "Done",
+		"edit": "Edit",
+		"export_to_xlsx": "Export To XLSX",
+		"next_page": "Next",
+		"review": "Review",
+		"save": "Save",
+		"save_changes": "Save changes",
+		"submit": "Submit",
+		"view": "View"
+	},
+	"clear_size_confirmation": "This will clear all the size values for all observations.",
+	"clear_size_values": "Clear size values",
+	"contact_us": "Contact us for help",
+	"count": "Count",
+	"current": "Current",
+	"current_info": "Water speed during the survey.",
+	"delete_observation": "Delete observation",
+	"depth": "Depth",
+	"depth_info": "Depth of sample unit, in meters (e.g. 3).",
+	"depth_m": "Depth (m)",
+	"exports": {
+		"citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners.",
+		"credit_request": "Please credit the data owners",
+		"email_sent": "An email has been sent to <currentUserEmail \/>. This can sometimes take up to 15 minutes.",
+		"included_in_export": "Included in this export",
+		"observation_level_data_one": "Observation level data ({{count}} survey)",
+		"observation_level_data_other": "Observation level data ({{count}} surveys)",
+		"project_metadata": "Metadata for this project",
+		"sample_event_level_data_one": "Sample event level data ({{count}} survey)",
+		"sample_event_level_data_other": "Sample event level data ({{count}} surveys)",
+		"success": "Export successful"
+	},
+	"filter_search_helper_text": "<b>Use double quotes to search exact phrases.<\/b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
+	"filter_submitted_table": "Filter this table by site, management, or observer",
+	"filter_table_date_year": "Filter this table by name or year",
+	"filter_table_name_project_year": "Filter this table by name, project, or year",
+	"filter_table_site_management_observer": "Filter this table by site, management, or observer",
+	"filters": {
+		"by_name_project_country": "Filter this table by name, project, or country",
+		"by_name_project_year": "Filter this table by name, project, or year",
+		"by_name_reeftype_reefzone_exposure": "Filter this table by name, reef type, reef zone, or exposure",
+		"by_name_year": "Filter this table by name or year",
+		"by_site_management_observer": "Filter this table by site, management, or observer",
+		"projects_by_name_year": "Filter projects by name or country",
+		"search_helper_text": "<b>Use double quotes to search exact phrases.<\/b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match)."
+	},
+	"fish_belt_observations": {
+		"errors": {
+			"proposed_species_unsaved": "The proposed fish species {{speciesName}} has not been saved",
+			"species_already_exists": "The proposed fish species {{speciesName}} already exists in the list. The observation has been updated with this species."
+		},
+		"proposed_species_saved": "Proposed fish species {{speciesName}} saved. The observation has been updated with this species."
+	},
+	"fish_count_observed": "Number of fish observed, of the same species\/genus\/family and size.",
+	"fish_name": "Fish name",
+	"fish_name_observed": "Name of the fish species, genus, or family observed. For genus-level observations or an unknown species, enter the genus rather than proposing a new species with 'spp'. All fish names in MERMAID are consistent with <a>fishbase<\/a>.",
+	"fish_size_bin": "Fish size bin (cm)",
+	"fish_size_bin_info": "Name of bin scheme used to estimate fish size for the transect. Choose 1 cm if the fish size recorded does not use bins.",
+	"fish_size_observed": "Size of fish observed, in cm (e.g. 4.5 or 5-10).",
+	"forms": {
+		"required_field": "This field is required",
+		"submit_for_review": "Send to MERMAID for review"
+	},
+	"gfcr": {
+		"add_gfcr_indicators": "GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. If you're a GFCR program, enable the GFCR fund indicators for this project to start your M&E. ",
+		"buttons": {
+			"disable_gfcr": "Disable GFCR fund indicators for this project",
+			"enable_gfcr": "Enable GFCR fund indicators for this project",
+			"go_to_gfcr": "Go to GFCR page"
+		},
+		"disabled_gfcr_info": "Disabling GFCR fund indicators for this project will not delete them, but just hide them from the <a \/>. No data will be lost. You can re-enable them at any time.",
+		"remove_gfcr_Indicators": "Removing GFCR fund indicators from this project will not delete them, but just hide them",
+		"title": "Global Fund for Coral Reefs (GFCR)"
+	},
+	"go_to_explore_projects": "View all your projects on MERMAID Explore",
+	"go_to_explore_sample_event": "View this sample event on MERMAID Explore",
+	"go_to_explore_this_project": "View this project on MERMAID Explore",
+	"image_classification": {
+		"add_attribute": "Add new attribute",
+		"annotation": {
+			"confirm": "Confirm",
+			"confirmed": "Confirmed",
+			"next_unconfirmed_point": "Next unconfirmed point",
+			"status": "Status",
+			"unclassified": "Unclassified",
+			"unclassified_points_one": "{{count}} Unclassified point",
+			"unclassified_points_other": "{{count}} Unclassified points",
+			"unconfirmed": "Unconfirmed"
+		},
+		"attribute_growth_form": "Benthic attribute \/ growth form",
+		"benthic_attribute": "Benthic attribute",
+		"buttons": {
+			"confirm_all": "Confirm all",
+			"upload_photos": "Upload photos",
+			"zoom_to_attribute": "Zoom to attribute"
+		},
+		"classifier_guesses_one": "Classifier guess",
+		"classifier_guesses_other": "Classifier guesses",
+		"confidence": "Confidence",
+		"confirmed_total": "Confirmed \/ total",
+		"errors": {
+			"duplicate_file": "Duplicate file: {{fileName}}",
+			"failed_annotations_fetch": "Failed to fetch image annotations",
+			"failed_annotations_save": "Failed to save image annotations",
+			"failed_deletion": "Failed to delete photo: {{imageName}}. {{errorMessage}}",
+			"file_too_big": "File size exceeds size limit of 30MB",
+			"invalid_file": "File is invalid or corrupt: {{fileName}}",
+			"invalid_file_type": "Invalid file type",
+			"no_classification_enabled": "You aren't currently able to upload new images for classification. You may access and review previously uploaded images.",
+			"no_photo_found": "Failed to delete photo – no photo found",
+			"photo_too_small": "Photos should be a minimum height and width of {{minImageWidthAndHeight}} pixels. This photo is too small: {{fileName}}"
+		},
+		"feature_introduction": {
+			"description": "Through a partnership with <a \/> from the University of California San Diego and Scripps Institution of Oceanography, MERMAID now includes AI-based classification using a pyspacer deep learning model. This integration enables fast, scalable analysis of benthic photos so that you can generate insights quickly and consistently with machine learning and AI.",
+			"title": "MERMAID just got smarter",
+			"use_ai_button": "Classify photos with AI (beta)",
+			"use_manual_observations_button": "Enter observations manually"
+		},
+		"growth_form": "Growth form",
+		"remove_photo": "Remove photo",
+		"remove_photo_confirmation": "Are you sure you want to remove this photo?",
+		"review_this_photo": "Review this photo",
+		"select_attribute": "Select attribute",
+		"select_new_attribute": "Select new attribute",
+		"success": {
+			"annotations_saved": "Successfully saved image annotations",
+			"file_upload_one": "Photo uploaded successfully",
+			"file_upload_other": "Photos uploaded successfully"
+		},
+		"user_message": {
+			"confirm_image_changes": "Are you sure you want to discard the change to this image?"
+		},
+		"warns": {
+			"photo_removed": "Photo removed"
+		}
+	},
+	"label": "Label",
+	"label_info": "Arbitrary text to distinguish sample units that are distinct but should be combined analytically (i.e. all other properties are identical). For example: Long swim. Rarely used.",
+	"loading": "Loading",
+	"loading_item": "Loading {{itemName}}",
+	"management_regime": "Management regime",
+	"management_regimes": {
+		"access_restriction": "Access restrictions",
+		"compliance": "Compliance",
+		"copy": "Copy management regimes",
+		"copy_management_regimes": "Copy management regimes",
+		"copy_mrs_from_other_projects": "Copy MRs from other projects",
+		"copy_selected_mrs_to_project": "Copy selected MRs to project",
+		"data_unavailable": "Management regime records data are currently unavailable",
+		"export": "Export MRs",
+		"export_mrs": "Export MRs",
+		"gear_restriction": "Gear restrictions",
+		"management_regime": "Management regime",
+		"management_regime_name": "Management regime name",
+		"management_regimes": "Management regimes",
+		"new": "New MR",
+		"new_mr": "New MR",
+		"no_management_regimes": "This project has no management regimes",
+		"no_take": "No take",
+		"open_access": "Open access",
+		"periodic_closure": "Periodic closure",
+		"secondary_name": "Secondary name",
+		"size_limits": "Size limits",
+		"species_restriction": "Species restrictions",
+		"year_est": "Year est."
+	},
+	"map_tooling": {
+		"reset_zoom": "Reset zoom",
+		"zoom_in": "Zoom in",
+		"zoom_out": "Zoom out",
+		"zoom_to_point": "Zoom to point"
+	},
+	"media": {
+		"accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
+		"buttons": {
+			"cancel_upload": "Cancel upload"
+		},
+		"errors": {
+			"failed_upload": "Failed to upload {{fileName}}"
+		},
+		"max_file_size": "Maximum file size is 30 MB",
+		"min_image_size": "Photos must be larger than 1500 pixels by 1500 pixels",
+		"put_files_here": "Drop files here <br> or <br>",
+		"req_crop_photos": "Crop photos to size before uploading",
+		"select_local_files": "Select files from your computer",
+		"upload_cancelled": "Upload cancelled",
+		"uploading_files": "<p>Uploading {{processedCount}}\/{{totalCount}} files...<\/p><button>Cancel upload<\/button>",
+		"user_guidance": {
+			"crop_icon": "Cropped transition icon",
+			"cropped_photo_example": "Cropped example",
+			"more_photo_upload_info": "Read more about how to get your photos ready for upload in the <a>documentation<\/a>",
+			"uncropped_photo_example": "Uncropped example"
+		}
+	},
+	"mermaid": "MERMAID",
+	"mermaid_": "MERMAID",
+	"mermaid_explore": "MERMAID Explore",
+	"method": "Method",
+	"must_select_fish_warning": "You must select a fish size bin before adding any observations",
+	"name": "Name",
+	"notes": "Notes",
+	"number_of_quadrats_info": "Total number of quadrats in the transect (e.g. 10).",
+	"observations": "Observations",
+	"observers": "Observers",
+	"observers_info": "Select one or more observers to add",
+	"offline": {
+		"page_unavailable_offline": "This page is unavailable offline",
+		"unavailable_offline": "Unavailable offline"
+	},
+	"points_per_quadrat_info": "Total number of points per quadrat used in a transect (e.g. 100).",
+	"projects": {
+		"admin_for_project": "You will be an admin for this project",
+		"copy_of_project_name": "Copy of {{projectName}}",
+		"copy_project": "Copy project",
+		"country": "Country",
+		"create_or_join_project": "Create a new project or ask an admin to add you to an existing one",
+		"create_project": "Create project",
+		"data_copy_to_project": "Sites, management regimes, data sharing policies, and users and their roles will be copied to the new project",
+		"data_unavailable": "Project data is currently unavailable",
+		"errors": {
+			"data_unavailable": "Project data is currently unavailable",
+			"duplicate_name": "A project with the same name already exists",
+			"project_name_exists": "Project name already exists in MERMAID"
+		},
+		"filter_projects": "Filter projects by name or country",
+		"last_updated_date": "Last updated date",
+		"loading_indicator": "Projects list loading indicator",
+		"name_of_project": "Name of project",
+		"new_project": "New project",
+		"no_offline_projects": "You do not have any offline projects",
+		"no_projects_match": "No projects match the current filter term",
+		"not_your_projects": "You are not part of any projects yet",
+		"notify_user_email": "Notify users by email",
+		"project": "Project",
+		"project_name": "Project name",
+		"projects": "Projects",
+		"sort_by": "Sort by",
+		"success": {
+			"project_copied": "Project copied",
+			"project_created": "Project created"
+		}
+	},
+	"projects_loading_indicator": "Projects list loading indicator",
+	"propose_new_species": "Propose new species",
+	"protocol_titles": {
+		"benthiclit": "Benthic LIT",
+		"benthicpit": "Benthic PIT",
+		"benthicpqt": "Benthic photo quadrat",
+		"bleachingqc": "Bleaching",
+		"fishbelt": "Fish belt",
+		"habitatcomplexity": "Habitat complexity"
+	},
+	"quadrat_number_start_info": "Number of the first quadrat\/photo along the transect (e.g. 1).",
+	"quadrat_size_info": "Quadrat size used per transect, in square meters (e.g. 1).",
+	"reef_slope": "Reef slope",
+	"reef_slope_info": "An indication of coral reef profile of the survey location. See definitions <a>here<\/a>.",
+	"reference": "Reference",
+	"relative_depth": "Relative depth",
+	"relative_depth_info": "Whether the survey is 'deep' or 'shallow' relative to other transects surveyed, regardless of numerical depth in meters.",
+	"remove_as_observer": "Remove as observer",
+	"remove_observer_from_record": "Remove observer from sample unit",
+	"remove_user": "Remove user",
+	"remove_user_confirmation": "Are you sure you want to remove <strong>{{userName}}<\/strong> as an observer?",
+	"removed_from_project_message": "<strong>{{userName}}<\/strong> is an observer on this sample unit but is no longer a part of this project.",
+	"sample_date": "Sample date",
+	"sample_time": "Sample time",
+	"sample_time_info": "Time when data was collected",
+	"sample_unit_number": "Sample unit #",
+	"sample_units": {
+		"depth_m": "Depth (m)",
+		"errors": {
+			"classification_unavailable_offline": "This sample unit is using AI and is unavailable offline",
+			"data_unavailable": "Sample unit data is currently unavailable",
+			"observations_unavailable_offline": "Sample unit observations unavailable offline",
+			"submitted_data_unavailable": "Submitted record data are currently unavailable",
+			"submitted_records_unavailable": "Submitted record data are currently unavailable",
+			"supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable"
+		},
+		"method": "Method",
+		"observers": "Observers",
+		"sample_date": "Sample date",
+		"sample_unit_number": "Sample unit #",
+		"size": "Size",
+		"submitted": "Submitted",
+		"submitted_no_data_message": "This project has no submitted sample units"
+	},
+	"search": {
+		"no_results": "No results found"
+	},
+	"show_fish_count_info": "Show fish count info",
+	"show_fish_name_info": "Show fish name info",
+	"show_fish_size_info": "Show fish size info",
+	"site": "Site",
+	"sites": {
+		"copy": "Copy sites",
+		"copy_selected_sites_to_project": "Copy selected sites to project",
+		"copy_sites_from_other_projects": "Copy sites from other projects",
+		"data_unavailable": "Site record data are currently unavailable",
+		"export": "Export sites",
+		"exposure": "Exposure",
+		"new": "New site",
+		"no_sites": "This project has no sites",
+		"reef_type": "Reef type",
+		"reef_zone": "Reef zone",
+		"site": "Site",
+		"sites": "Sites"
+	},
+	"size": "Size",
+	"size_cm": "Size (cm)",
+	"submitted": "Submitted",
+	"submitted_no_data_message": "This project has no submitted sample units",
+	"taxonomies": {
+		"add_fish_species": "Add new fish species",
+		"genus": "Genus",
+		"genus_not_found": "<p data-testid='noResults'>Parent not found in MERMAID <\/p><a>$t(contact_us)<\/a>",
+		"parent": "Parent",
+		"species": "Species"
+	},
+	"tide": "Tide",
+	"tide_info": "Tide characteristics during the survey (<a>more detail<\/a>).",
+	"toasts": {
+		"export_error": "There was an error exporting the report",
+		"submitted_records_unavailable": "Submitted record data are currently unavailable"
+	},
+	"toggle_label_visibility": "Toggle label visibility",
+	"toggle_table_visibility": "Toggle table visibility",
+	"total_abundance": "Total abundance",
+	"total_biomass": "Total biomass (kg\/ha)",
+	"transect": "Transect",
+	"transect_length_info": "Length of transect for a sample unit, in meters. May include decimal (e.g. 50.0).",
+	"transect_length_surveyed": "Transect length surveyed",
+	"transect_number": "Transect number",
+	"transect_number_info": "Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.",
+	"user": "User",
+	"validations": "Validations",
+	"view_fish_info": "View fish name information",
+	"view_selected_only": "View selected only",
+	"visibility": "Visibility",
+	"visibility_info": "The horizontal distance at which an object underwater can still be identified.",
+	"width": "Width",
+	"width_info": "The total width (NOT width to one side of the tape) of the fish belt transect, in meters."
+}

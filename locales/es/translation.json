@@ -1,0 +1,275 @@
+{
+	"benthic_observations": {
+		"add_benthic_attribute": "Añadir nuevo atributo bentónico",
+		"attribute_already_exists": "El atributo propuesto {{attribute}} ya existe en la lista. La observación se ha actualizado con este atributo.",
+		"attribute_proposal_summary": "El equipo de MERMAID revisará el atributo {{attribute}} que usted propuso. Lo aprobarán para su inclusión en la taxonomía o se pondrán en contacto con usted para realizar un seguimiento.",
+		"benthic_attribute": "atributo bentónico",
+		"errors": {
+			"attribute_proposal_unsaved": "El atributo propuesto {{attribute}} no se ha guardado."
+		},
+		"missing_benthic_attribute": "Atributo bentónico faltante",
+		"observations": "Observaciones",
+		"proposed_attribute_saved": "Se ha guardado el atributo propuesto {{attribute}}. La observación se ha actualizado con este atributo."
+	},
+	"biomass": "Biomasa",
+	"buttons": {
+		"back": "Atrás",
+		"export_to_xlsx": "Exportar a XLSX",
+		"next_page": "Próximo"
+	},
+	"clear_size_confirmation": "Esto borrará todos los valores de tamaño de todas las observaciones.",
+	"clear_size_values": "Borrar valores de tamaño",
+	"contact_us": "Contáctanos para obtener ayuda",
+	"count": "Contar",
+	"current": "Actual",
+	"current_info": "Velocidad del agua durante el estudio.",
+	"delete_observation": "eliminar la observación",
+	"depth": "Profundidad",
+	"depth_info": "Profundidad de la unidad de muestra, en metros (por ejemplo, 3).",
+	"depth_m": "Profundidad (m)",
+	"exports": {
+		"observation_level_data_one": "Datos de nivel de observación (encuesta {{count}} )",
+		"observation_level_data_other": "Datos de nivel de observación ( {{count}} encuestas)",
+		"sample_event_level_data_one": "Datos de muestra a nivel de evento (encuesta {{count}} )",
+		"sample_event_level_data_other": "Datos de muestra a nivel de evento ( {{count}} encuestas)"
+	},
+	"filter_search_helper_text": "Use <b> dobles para buscar frases exactas. Por <\/b><br>, busque \"North Shore\" para encontrar registros con las palabras \"North\" o \"Shore\" (los registros con \"South Shore\" coincidirían). O busque \"North Shore\" para encontrar registros que contengan exactamente las palabras \"North Shore\" (los registros con \"South Shore\" no coincidirían).",
+	"filter_submitted_table": "Filtrar esta tabla por sitio, administración u observador",
+	"filter_table_date_year": "Filtra esta tabla por nombre o año",
+	"filter_table_name_project_year": "Filtra esta tabla por nombre, proyecto o año.",
+	"filter_table_site_management_observer": "Filtre esta tabla por sitio, administración u observador.",
+	"filters": {
+		"by_name_project_country": "Filtra esta tabla por nombre, proyecto o país.",
+		"by_name_project_year": "Filtra esta tabla por nombre, proyecto o año.",
+		"by_name_reeftype_reefzone_exposure": "Filtre esta tabla por nombre, tipo de arrecife, zona de arrecife o exposición.",
+		"by_name_year": "Filtra esta tabla por nombre o año",
+		"by_site_management_observer": "Filtre esta tabla por sitio, administración u observador.",
+		"projects_by_name_year": "Filtrar proyectos por nombre o país",
+		"search_helper_text": "<b> Utilice comillas dobles para buscar frases exactas. <\/b><br> Por ejemplo, busque «North Shore» para encontrar registros con las palabras «North» o «Shore» (los registros con «South Shore» coincidirían). O bien, busque «North Shore» para encontrar registros que contengan exactamente las palabras «North Shore» (los registros con «South Shore» no coincidirían)."
+	},
+	"fish_belt_observations": {
+		"errors": {
+			"proposed_species_unsaved": "La especie de pez propuesta {{speciesName}} no se ha guardado.",
+			"species_already_exists": "La especie de pez propuesta {{speciesName}} ya existe en la lista. La observación se ha actualizado con esta especie."
+		},
+		"proposed_species_saved": "Especie de pez propuesta {{speciesName}} guardada. La observación se ha actualizado con esta especie."
+	},
+	"fish_count_observed": "Número de peces observados, de la misma especie\/género\/familia y tamaño.",
+	"fish_name": "Nombre del pez",
+	"fish_name_observed": "Nombre de la especie, género o familia de peces observados. Para observaciones a nivel de género o especies desconocidas, introduzca el género en lugar de proponer una nueva especie con \"spp\". Todos los nombres de peces en MERMAID son consistentes con <a> fishbase <\/a>.",
+	"fish_size_bin": "Contenedor de tamaño de pez (cm)",
+	"fish_size_bin_info": "Nombre del esquema de bins utilizado para estimar el tamaño de los peces en el transecto. Elija 1 cm si el tamaño de los peces registrado no utiliza bins.",
+	"fish_size_observed": "Tamaño del pez observado, en cm (por ejemplo 4,5 o 5-10).",
+	"forms": {
+		"required_field": "Este campo es obligatorio",
+		"submit_for_review": "Enviar a MERMAID para revisión"
+	},
+	"gfcr": {
+		"add_gfcr_indicators": "GFCR es una asociación global que tiene como objetivo movilizar recursos para apoyar proyectos de conservación y restauración de arrecifes de coral en todo el mundo.",
+		"buttons": {
+			"disable_gfcr": "Desactivar los indicadores GFCR",
+			"enable_gfcr": "Habilitar indicadores GFCR para este proyecto",
+			"go_to_gfcr": "Ir a Indicadores GFCR"
+		},
+		"disabled_gfcr_info": "Deshabilitar los indicadores GFCR para este proyecto no los eliminará, sino que los ocultará de <a \/>. No se perderán datos. Puede reactivarlos en cualquier momento.",
+		"remove_gfcr_Indicators": "Eliminar los indicadores GFCR de este proyecto no los eliminará, sino que los ocultará.",
+		"title": "Fondo Mundial para los Arrecifes de Coral (GFCR)"
+	},
+	"go_to_explore_projects": "Ver todos tus proyectos en MERMAID Explore",
+	"go_to_explore_sample_event": "Vea este evento de muestra en MERMAID Explore",
+	"go_to_explore_this_project": "Ver este proyecto en MERMAID Explore",
+	"image_classification": {
+		"annotation": {
+			"unclassified_points_one": "{{count}} Punto sin clasificar",
+			"unclassified_points_other": "{{count}} Puntos sin clasificar"
+		},
+		"classifier_guesses_one": "Conjetura del clasificador",
+		"classifier_guesses_other": "Conjeturas del clasificador",
+		"errors": {
+			"no_photo_found": "No se pudo eliminar la foto: no se encontró ninguna foto."
+		},
+		"feature_introduction": {
+			"description": "Gracias a una colaboración con <a \/> de la Universidad de California en San Diego y el Instituto Scripps de Oceanografía, MERMAID ahora incluye clasificación basada en IA mediante un modelo de aprendizaje profundo de PySpace. Esta integración permite un análisis rápido y escalable de fotos bentónicas para generar información de forma rápida y consistente con aprendizaje automático e IA."
+		},
+		"success": {
+			"file_upload_one": "Foto cargada exitosamente",
+			"file_upload_other": "Fotos cargadas exitosamente"
+		}
+	},
+	"label": "Etiqueta",
+	"label_info": "Texto arbitrario para distinguir unidades de muestra que son distintas pero que deben combinarse analíticamente (es decir, todas las demás propiedades son idénticas). Por ejemplo: Nado largo. Rara vez se usa.",
+	"loading": "Cargando",
+	"loading_item": "Cargando {{itemName}}",
+	"management_regime": "Régimen de gestión",
+	"management_regimes": {
+		"access_restriction": "Restricciones de acceso",
+		"compliance": "Cumplimiento",
+		"copy": "Regímenes de gestión de copias",
+		"copy_management_regimes": "Regímenes de gestión de copias",
+		"copy_mrs_from_other_projects": "Copiar MR de otros proyectos",
+		"copy_selected_mrs_to_project": "Copiar los registros de modificación seleccionados al proyecto",
+		"data_unavailable": "Actualmente no se dispone de datos sobre el régimen de gestión.",
+		"export": "Exportar MRs",
+		"export_mrs": "Exportar MRs",
+		"gear_restriction": "restricciones de equipo",
+		"management_regime": "Régimen de gestión",
+		"management_regime_name": "Nombre del régimen de gestión",
+		"management_regimes": "Regímenes de gestión",
+		"new": "Nuevo MR",
+		"new_mr": "Nuevo MR",
+		"no_management_regimes": "Este proyecto no tiene regímenes de gestión.",
+		"no_take": "No se aceptan pedidos",
+		"open_access": "Acceso abierto",
+		"periodic_closure": "cierre periódico",
+		"secondary_name": "Nombre secundario",
+		"size_limits": "Límites de tamaño",
+		"species_restriction": "restricciones de especies",
+		"year_est": "Año est."
+	},
+	"map_tooling": {
+		"zoom_in": "Dar un golpe de zoom",
+		"zoom_out": "Alejar"
+	},
+	"mermaid": "SIRENA",
+	"mermaid_": "SIRENA",
+	"mermaid_explore": "SIRENA Explorar",
+	"method": "Método",
+	"must_select_fish_warning": "Debe seleccionar un contenedor de tamaño de pez antes de agregar cualquier observación.",
+	"name": "Nombre",
+	"notes": "Notas",
+	"number_of_quadrats_info": "Número total de cuadrantes en el transecto (por ejemplo, 10).",
+	"observations": "Observaciones",
+	"observers": "Observadores",
+	"observers_info": "Seleccione uno o más observadores para agregar",
+	"offline": {
+		"page_unavailable_offline": "Esta página no está disponible sin conexión."
+	},
+	"points_per_quadrat_info": "Número total de puntos por cuadrante utilizados en un transecto (por ejemplo, 100).",
+	"projects": {
+		"admin_for_project": "Serás administrador de este proyecto.",
+		"copy_of_project_name": "Copia de {{projectName}}",
+		"copy_project": "Copiar proyecto",
+		"country": "País",
+		"create_or_join_project": "Crea un nuevo proyecto o pídele a tu administrador que te agregue a alguno.",
+		"create_project": "Crear proyecto",
+		"data_copy_to_project": "Los sitios, los regímenes de gestión, el uso compartido de datos y los usuarios y sus roles se copiarán al nuevo proyecto.",
+		"data_unavailable": "Los datos del proyecto no están disponibles actualmente.",
+		"errors": {
+			"data_unavailable": "Los datos del proyecto no están disponibles actualmente.",
+			"duplicate_name": "Ya existe un proyecto con el mismo nombre.",
+			"project_name_exists": "El nombre del proyecto ya existe en MERMAID"
+		},
+		"filter_projects": "Filtrar proyectos por nombre o país",
+		"last_updated_date": "Fecha de última actualización",
+		"loading_indicator": "Indicador de carga de la lista de proyectos",
+		"name_of_project": "Nombre del proyecto",
+		"new_project": "Nuevo proyecto",
+		"no_offline_projects": "No tienes ningún proyecto offline",
+		"no_projects_match": "No hay proyectos que coincidan con el término de filtro actual.",
+		"not_your_projects": "Aún no formas parte de ningún proyecto.",
+		"notify_user_email": "Notificar a los usuarios por correo electrónico",
+		"project": "Proyecto",
+		"project_name": "Nombre del proyecto",
+		"projects": "Proyectos",
+		"sort_by": "Ordenar por",
+		"success": {
+			"project_copied": "Proyecto copiado",
+			"project_created": "Proyecto creado"
+		}
+	},
+	"projects_loading_indicator": "Indicador de carga de la lista de proyectos",
+	"propose_new_species": "Proponer nuevas especies...",
+	"protocol_titles": {
+		"benthiclit": "LIT bentónica",
+		"benthicpit": "PIT bentónico",
+		"benthicpqt": "Cuadrante fotográfico bentónico",
+		"bleachingqc": "Blanqueamiento",
+		"fishbelt": "Cinturón de pescado",
+		"habitatcomplexity": "Complejidad del hábitat"
+	},
+	"quadrat_number_start_info": "Número del primer cuadrante\/foto a lo largo del transecto (por ejemplo, 1).",
+	"quadrat_size_info": "Tamaño del cuadrante utilizado por transecto, en metros cuadrados (por ejemplo, 1).",
+	"reef_slope": "Pendiente del arrecife",
+	"reef_slope_info": "Indicación del perfil del arrecife de coral de la zona de estudio. Consulte las definiciones <a> aquí <\/a>.",
+	"reference": "Referencia",
+	"relative_depth": "Profundidad relativa",
+	"relative_depth_info": "Si el estudio es \"profundo\" o \"superficial\" en relación con otros transectos estudiados, independientemente de la profundidad numérica en metros.",
+	"remove_as_observer": "Eliminar como observador",
+	"remove_observer_from_record": "Eliminar observador del registro",
+	"remove_user": "Eliminar usuario",
+	"remove_user_confirmation": "¿Está seguro de que desea eliminar <strong> {{userName}} <\/strong> como observador?",
+	"removed_from_project_message": "<strong> {{userName}} <\/strong> es un observador en esta unidad de muestra, pero ya no es parte de este proyecto.",
+	"sample_date": "Fecha de muestra",
+	"sample_time": "Tiempo de muestra",
+	"sample_time_info": "Hora en que se recopilaron los datos",
+	"sample_unit_number": "Unidad de muestra n.°",
+	"sample_units": {
+		"depth_m": "Profundidad (m)",
+		"errors": {
+			"classification_unavailable_offline": "Esta unidad de muestra utiliza clasificación de imágenes y no está disponible sin conexión.",
+			"data_unavailable": "Los datos de la unidad de muestra no están disponibles actualmente.",
+			"observations_unavailable_offline": "Observaciones de la unidad de muestra no disponibles sin conexión",
+			"submitted_data_unavailable": "Los datos de registro enviados no están disponibles actualmente.",
+			"submitted_records_unavailable": "Los datos de registro enviados no están disponibles actualmente.",
+			"supporting_data_unavailable": "Actualmente no hay datos de apoyo para crear una unidad de muestra disponibles."
+		},
+		"method": "Método",
+		"observers": "Observadores",
+		"sample_date": "Fecha de muestra",
+		"sample_unit_number": "Unidad de muestra n.°",
+		"size": "Tamaño",
+		"submitted": "Enviado",
+		"submitted_no_data_message": "Este proyecto no cuenta con unidades de muestra presentadas."
+	},
+	"show_fish_count_info": "mostrar información del recuento de peces",
+	"show_fish_name_info": "mostrar información del nombre del pez",
+	"show_fish_size_info": "Cómo obtener información sobre el tamaño de los peces",
+	"site": "Sitio",
+	"sites": {
+		"copy": "Copiar sitios",
+		"copy_selected_sites_to_project": "Copiar los sitios seleccionados al proyecto",
+		"copy_sites_from_other_projects": "Copiar sitios de otros proyectos",
+		"data_unavailable": "Los datos de registro del sitio no están disponibles actualmente.",
+		"export": "Sitios de exportación",
+		"exposure": "Exposición",
+		"new": "Nuevo sitio",
+		"no_sites": "Este proyecto no tiene sitios web.",
+		"reef_type": "Tipo de arrecife",
+		"reef_zone": "Zona de arrecifes",
+		"site": "Sitio",
+		"sites": "Sitios"
+	},
+	"size": "Tamaño",
+	"size_cm": "Tamaño (cm)",
+	"submitted": "Enviado",
+	"submitted_no_data_message": "Este proyecto no tiene unidades de muestra enviadas.",
+	"taxonomies": {
+		"add_fish_species": "Añadir nuevas especies de peces",
+		"genus": "Género",
+		"genus_not_found": "<p data-testid='noResults'> Género no encontrado en MERMAID <\/p> <a> $t(contact_us) <\/a>",
+		"parent": "Padre",
+		"species": "Especies"
+	},
+	"tide": "Marea",
+	"tide_info": "Características de las mareas durante el estudio ( <a> más detalle <\/a> ).",
+	"toasts": {
+		"submitted_records_unavailable": "Los datos de registro enviados no están disponibles actualmente."
+	},
+	"toggle_label_visibility": "Activar o desactivar la visibilidad de la etiqueta",
+	"toggle_table_visibility": "Activar o desactivar la visibilidad de la tabla",
+	"total_abundance": "Abundancia total",
+	"total_biomass": "Biomasa total (kg\/ha)",
+	"transect": "Transecto",
+	"transect_length_info": "Longitud del transecto de una unidad de muestra, en metros. Puede incluir decimales (p. ej., 50,0).",
+	"transect_length_surveyed": "Longitud del transecto estudiada",
+	"transect_number": "Número de transecto",
+	"transect_number_info": "Número de unidad de muestra, en forma de entero (p. ej., 1). Normalmente, las unidades de muestra se numeran consecutivamente en cada sitio, con el mismo número por sitio en un proyecto.",
+	"user": "Usuario",
+	"validations": "Validaciones",
+	"view_fish_info": "ver información del nombre del pez",
+	"view_selected_only": "Ver solo los elementos seleccionados",
+	"visibility": "Visibilidad",
+	"visibility_info": "La distancia horizontal a la que aún se puede identificar un objeto bajo el agua.",
+	"width": "Ancho",
+	"width_info": "El ancho total (NO el ancho de un lado de la cinta) del transecto del cinturón de pesca, en metros."
+}
