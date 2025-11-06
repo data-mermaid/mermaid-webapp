@@ -45,6 +45,7 @@ const Footer = () => {
         <OfflineToggle id="offline-toggle-switch" />
         <CssToggle />
         <span
+          /* eslint-disable-next-line react/no-danger */
           dangerouslySetInnerHTML={{
             __html: isAppOnline ? t('online_status') : t('offline_status'),
           }}
