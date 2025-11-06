@@ -1,0 +1,270 @@
+{
+	"benthic_observations": {
+		"add_benthic_attribute": "添加新的底栖属性",
+		"attribute_already_exists": "建议的属性{{attribute}}已存在于列表中。已使用此属性更新观察结果。",
+		"attribute_proposal_summary": "您提议的属性{{attribute}}将由 MERMAID 团队审核。他们将批准将其纳入分类法，或与您联系进行跟进。",
+		"benthic_attribute": "底栖属性",
+		"errors": {
+			"attribute_proposal_unsaved": "建议的属性{{attribute}}尚未保存。"
+		},
+		"missing_benthic_attribute": "缺少底栖属性",
+		"observations": "观察",
+		"proposed_attribute_saved": "建议的属性{{attribute}}已保存。已使用此属性更新观察结果。"
+	},
+	"biomass": "生物质",
+	"buttons": {
+		"back": "后退",
+		"export_to_xlsx": "导出到 XLSX",
+		"next_page": "下一个"
+	},
+	"clear_size_confirmation": "这将清除所有观察的所有尺寸值。",
+	"clear_size_values": "清除尺寸值",
+	"contact_us": "联系我们寻求帮助",
+	"count": "数数",
+	"current": "当前的",
+	"current_info": "勘测期间的水速。",
+	"delete_observation": "删除观察",
+	"depth": "深度",
+	"depth_info": "样本单元的深度，以米为单位（例如 3）。",
+	"depth_m": "深度（米）",
+	"exports": {
+		"observation_level_data_other": "观察级数据（ {{count}}项调查）",
+		"sample_event_level_data_other": "样本事件级别数据（ {{count}}份调查）"
+	},
+	"filter_search_helper_text": "<b>使用双引号搜索精确短语。 <\/b><br>例如，搜索“North Shore”可查找包含单词“North”或“Shore”的记录（包含“South Shore”的记录将匹配）。或者，搜索“North Shore”可查找包含单词“North Shore”的记录（包含“South Shore”的记录将不匹配）。",
+	"filter_submitted_table": "按站点、管理层或观察员过滤此表",
+	"filter_table_date_year": "按名称或年份筛选此表",
+	"filter_table_name_project_year": "按名称、项目或年份筛选此表",
+	"filter_table_site_management_observer": "按地点、管理层或观察员筛选此表",
+	"filters": {
+		"by_name_project_country": "按名称、项目或国家\/地区筛选此表",
+		"by_name_project_year": "按名称、项目或年份筛选此表",
+		"by_name_reeftype_reefzone_exposure": "按名称、珊瑚礁类型、珊瑚礁区域或暴露程度筛选此表",
+		"by_name_year": "按名称或年份筛选此表",
+		"by_site_management_observer": "按地点、管理层或观察员筛选此表",
+		"projects_by_name_year": "按名称或国家\/地区筛选项目",
+		"search_helper_text": "<b>使用双引号搜索精确短语。 <\/b><br>例如，搜索“North Shore”可查找包含“North”或“Shore”的记录（包含“South Shore”的记录也会匹配）。或者搜索“North Shore”可查找包含“North Shore”的记录（包含“South Shore”的记录不会匹配）。<\/br>"
+	},
+	"fish_belt_observations": {
+		"errors": {
+			"proposed_species_unsaved": "建议的鱼类物种{{speciesName}}尚未保存。",
+			"species_already_exists": "建议的鱼类物种{{speciesName}}已存在于列表中。观测结果已更新为该物种。"
+		},
+		"proposed_species_saved": "建议的鱼类物种{{speciesName}}已保存。观测结果已更新为该物种。"
+	},
+	"fish_count_observed": "观察到的相同种类\/属\/科和大小的鱼的数量。",
+	"fish_name": "鱼名",
+	"fish_name_observed": "观察到的鱼类种、属或科的名称。对于属级观察结果或未知物种，请输入属，而不是使用“spp”提出新物种。MERMAID 中的所有鱼类名称均与<a> fishbase <\/a>一致。",
+	"fish_size_bin": "鱼箱尺寸（厘米）",
+	"fish_size_bin_info": "用于估算横断面鱼类尺寸的箱型方案名称。如果记录的鱼类尺寸不使用箱型，请选择 1 cm。",
+	"fish_size_observed": "观察到的鱼的大小，以厘米为单位（例如 4.5 或 5-10）。",
+	"forms": {
+		"required_field": "此字段是必需的",
+		"submit_for_review": "发送至 MERMAID 进行审核"
+	},
+	"gfcr": {
+		"add_gfcr_indicators": "GFCR 是一个全球伙伴关系，旨在调动资源支持世界各地的珊瑚礁保护和修复项目。",
+		"buttons": {
+			"disable_gfcr": "禁用 GFCR 指标",
+			"enable_gfcr": "为该项目启用 GFCR 指标",
+			"go_to_gfcr": "前往 GFCR 指标"
+		},
+		"disabled_gfcr_info": "禁用此项目的 GFCR 指标并不会删除它们，而只是将它们从<a \/>中隐藏。不会丢失任何数据。您可以随时重新启用它们。",
+		"remove_gfcr_Indicators": "从该项目中删除 GFCR 指标并不会删除它们，而只是隐藏它们。",
+		"title": "全球珊瑚礁基金（GFCR）"
+	},
+	"go_to_explore_projects": "在 MERMAID Explore 上查看您的所有项目",
+	"go_to_explore_sample_event": "在 MERMAID Explore 上查看此示例活动",
+	"go_to_explore_this_project": "在 MERMAID Explore 上查看此项目",
+	"image_classification": {
+		"annotation": {
+			"unclassified_points_other": "{{count}}未分类的点"
+		},
+		"classifier_guesses_other": "分类器猜测",
+		"errors": {
+			"no_photo_found": "删除照片失败——未找到照片"
+		},
+		"feature_introduction": {
+			"description": "通过与加州大学圣地亚哥分校和斯克里普斯海洋研究所的<a \/>合作，MERMAID 现已支持使用 pyspacer 深度学习模型进行基于 AI 的分类。此项集成支持对底栖生物照片进行快速、可扩展的分析，让您能够利用机器学习和 AI 快速、一致地生成洞察。"
+		},
+		"success": {
+			"file_upload_other": "照片上传成功"
+		}
+	},
+	"label": "标签",
+	"label_info": "用于区分不同但应通过分析合并的样本单元（即所有其他属性均相同）的任意文本。例如：长距离游泳。很少使用。",
+	"loading": "加载中",
+	"loading_item": "正在加载{{itemName}}",
+	"management_regime": "管理制度",
+	"management_regimes": {
+		"access_restriction": "访问限制",
+		"compliance": "遵守",
+		"copy": "副本管理机制",
+		"copy_management_regimes": "副本管理机制",
+		"copy_mrs_from_other_projects": "从其他项目中复制 MR",
+		"copy_selected_mrs_to_project": "将选定的 MR 复制到项目",
+		"data_unavailable": "目前无法获取管理制度记录数据。",
+		"export": "出口商",
+		"export_mrs": "出口商",
+		"gear_restriction": "装备限制",
+		"management_regime": "管理制度",
+		"management_regime_name": "管理制度名称",
+		"management_regimes": "管理制度",
+		"new": "新MR",
+		"new_mr": "新MR",
+		"no_management_regimes": "该项目没有管理机制。",
+		"no_take": "不接受",
+		"open_access": "开放获取",
+		"periodic_closure": "定期关闭",
+		"secondary_name": "次要名称",
+		"size_limits": "尺寸限制",
+		"species_restriction": "物种限制",
+		"year_est": "年份估计。"
+	},
+	"map_tooling": {
+		"zoom_in": "放大",
+		"zoom_out": "缩小"
+	},
+	"mermaid": "美人鱼",
+	"mermaid_": "美人鱼",
+	"mermaid_explore": "美人鱼探索",
+	"method": "方法",
+	"must_select_fish_warning": "在添加任何观察结果之前，您必须选择鱼的大小箱。",
+	"name": "姓名",
+	"notes": "笔记",
+	"number_of_quadrats_info": "横断面中的方形样方总数（例如 10）。",
+	"observations": "观察",
+	"observers": "观察员",
+	"observers_info": "选择一个或多个要添加的观察员",
+	"offline": {
+		"page_unavailable_offline": "此页面在离线状态下不可用。"
+	},
+	"points_per_quadrat_info": "横断面中使用的每个方格的点总数（例如 100）。",
+	"projects": {
+		"admin_for_project": "您将成为该项目的管理员。",
+		"copy_of_project_name": "{{projectName}}的副本",
+		"copy_project": "复制项目",
+		"country": "国家",
+		"create_or_join_project": "创建一个新项目或让您的管理员将您添加到某个项目中。",
+		"create_project": "创建项目",
+		"data_copy_to_project": "站点、管理制度、数据共享、用户及其角色将被复制到新项目中。",
+		"data_unavailable": "项目数据目前不可用。",
+		"errors": {
+			"data_unavailable": "项目数据目前不可用。",
+			"duplicate_name": "同名的项目已存在。",
+			"project_name_exists": "项目名称在 MERMAID 中已存在"
+		},
+		"filter_projects": "按名称或国家\/地区过滤项目",
+		"last_updated_date": "最后更新日期",
+		"loading_indicator": "项目列表加载指示器",
+		"name_of_project": "项目名称",
+		"new_project": "新项目",
+		"no_offline_projects": "您没有任何离线项目。",
+		"no_projects_match": "没有项目符合当前过滤条件。",
+		"not_your_projects": "您尚未参与任何项目。",
+		"notify_user_email": "通过电子邮件通知用户",
+		"project": "项目",
+		"project_name": "项目名称",
+		"projects": "项目",
+		"sort_by": "排序方式",
+		"success": {
+			"project_copied": "项目已复制",
+			"project_created": "项目已创建"
+		}
+	},
+	"projects_loading_indicator": "项目列表加载指示器",
+	"propose_new_species": "提出新物种...",
+	"protocol_titles": {
+		"benthiclit": "底栖 LIT",
+		"benthicpit": "底栖PIT",
+		"benthicpqt": "底栖照片样方",
+		"bleachingqc": "漂",
+		"fishbelt": "鱼带",
+		"habitatcomplexity": "栖息地复杂性"
+	},
+	"quadrat_number_start_info": "沿横断面第一个样方\/照片的编号（例如 1）。",
+	"quadrat_size_info": "每个横断面使用的样方大小，以平方米为单位（例如 1）。",
+	"reef_slope": "礁坡",
+	"reef_slope_info": "调查地点珊瑚礁概况指示。请参阅<a>此处<\/a>的定义。",
+	"reference": "参考",
+	"relative_depth": "相对深度",
+	"relative_depth_info": "相对于其他已调查的横断面而言，本次调查是“深”还是“浅”，无论深度数值是多少米。",
+	"remove_as_observer": "移除观察员身份",
+	"remove_observer_from_record": "从记录中删除观察员",
+	"remove_user": "删除用户",
+	"remove_user_confirmation": "您确定要删除<strong> {{userName}} <\/strong>作为观察员吗？",
+	"removed_from_project_message": "<strong> {{userName}} <\/strong>是此样本单元的观察员，但不再是此项目的一部分。",
+	"sample_date": "采样日期",
+	"sample_time": "采样时间",
+	"sample_time_info": "数据收集时间",
+	"sample_unit_number": "样品单位#",
+	"sample_units": {
+		"depth_m": "深度（米）",
+		"errors": {
+			"classification_unavailable_offline": "该示例单元正在使用图像分类，无法离线使用。",
+			"data_unavailable": "样本单元数据目前不可用。",
+			"observations_unavailable_offline": "样本单元观测值无法离线获取",
+			"submitted_data_unavailable": "目前无法获取已提交的记录数据。",
+			"submitted_records_unavailable": "已提交的记录数据目前不可用。",
+			"supporting_data_unavailable": "目前无法提供创建样本单元的支持数据。"
+		},
+		"method": "方法",
+		"observers": "观察员",
+		"sample_date": "样品日期",
+		"sample_unit_number": "样品单元#",
+		"size": "尺寸",
+		"submitted": "已提交",
+		"submitted_no_data_message": "该项目没有提交样机。"
+	},
+	"show_fish_count_info": "显示鱼数量信息",
+	"show_fish_name_info": "显示鱼名信息",
+	"show_fish_size_info": "鱼的尺寸信息",
+	"site": "地点",
+	"sites": {
+		"copy": "复制站点",
+		"copy_selected_sites_to_project": "将选定的站点复制到项目中",
+		"copy_sites_from_other_projects": "从其他项目复制网站",
+		"data_unavailable": "目前无法获取网站记录数据。",
+		"export": "出口站点",
+		"exposure": "接触",
+		"new": "新网站",
+		"no_sites": "该项目没有网站。",
+		"reef_type": "礁型",
+		"reef_zone": "礁区",
+		"site": "地点",
+		"sites": "网站"
+	},
+	"size": "尺寸",
+	"size_cm": "尺寸（厘米）",
+	"submitted": "已提交",
+	"submitted_no_data_message": "该项目没有提交样品单位。",
+	"taxonomies": {
+		"add_fish_species": "添加新鱼种",
+		"genus": "属",
+		"genus_not_found": "<p data-testid='noResults'>在 MERMAID 中未找到属<\/p> <a> $t(contact_us) <\/a>",
+		"parent": "父母",
+		"species": "物种"
+	},
+	"tide": "潮",
+	"tide_info": "调查期间的潮汐特征（ <a>更多详细信息<\/a> ）。",
+	"toasts": {
+		"submitted_records_unavailable": "目前无法获取已提交的记录数据。"
+	},
+	"toggle_label_visibility": "切换标签可见性",
+	"toggle_table_visibility": "切换表格可见性",
+	"total_abundance": "总丰度",
+	"total_biomass": "总生物量（千克\/公顷）",
+	"transect": "横断面",
+	"transect_length_info": "样本单元横断面的长度，以米为单位。可包含小数（例如 50.0）。",
+	"transect_length_surveyed": "调查横断面长度",
+	"transect_number": "横断面数量",
+	"transect_number_info": "样本单元编号，整数（例如 1）。通常，每个站点的样本单元都是连续编号的，且同一项目下每个站点的样本单元编号相同。",
+	"user": "用户",
+	"validations": "验证",
+	"view_fish_info": "查看鱼名信息",
+	"view_selected_only": "仅查看所选内容",
+	"visibility": "能见度",
+	"visibility_info": "水下物体仍可识别的水平距离。",
+	"width": "宽度",
+	"width_info": "鱼带横断面的总宽度（不是胶带一侧的宽度），以米为单位。"
+}
