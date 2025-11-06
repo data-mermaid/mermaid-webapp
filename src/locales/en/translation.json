@@ -339,5 +339,14 @@
     "export": "Export sites",
     "no_sites": "This project has no sites.",
     "data_unavailable": "Site record data are currently unavailable."
-  }
+  },
+  "online_status": "You're <strong>ONLINE</strong>",
+  "offline_status": "You're <strong>OFFLINE</strong>. Some contents may be out of date.",
+  "help_dropdown": "Help (PDF) ▲",
+  "help_english": "English",
+  "help_bahasa": "Bahasa Indonesia",
+  "terms": "Terms",
+  "contact": "Contact",
+  "credits": "Credits",
+  "toggle_offline_mode": "Toggle offline mode"
 }
