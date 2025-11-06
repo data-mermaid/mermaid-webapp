@@ -1,0 +1,363 @@
+{
+	"benthic_observations": {
+		"add_benthic_attribute": "Menambahkan atribut bentik baru",
+		"attribute_already_exists": "Atribut yang diusulkan {{attribute}} sudah ada di dalam daftar. Pengamatan telah diperbarui dengan atribut ini.",
+		"attribute_proposal_summary": "Atribut yang Anda usulkan {{attribute}} akan ditinjau oleh tim MERMAID. Mereka akan menyetujuinya untuk dimasukkan ke dalam taksonomi atau menghubungi Anda untuk menindaklanjutinya.",
+		"benthic_attribute": "Atribut bentik",
+		"errors": {
+			"attribute_proposal_unsaved": "Atribut yang diusulkan {{attribute}} belum disimpan."
+		},
+		"missing_benthic_attribute": "Atribut bentik yang hilang",
+		"observations": "Pengamatan",
+		"proposed_attribute_saved": "Atribut yang diusulkan {{attribute}} disimpan. Pengamatan telah diperbarui dengan atribut ini."
+	},
+	"biomass": "Biomassa",
+	"buttons": {
+		"add_row": "Tambahkan baris",
+		"back": "Kembali",
+		"cancel": "Batal",
+		"close": "Tutup",
+		"confirm": "Konfirmasi",
+		"delete": "Menghapus",
+		"done": "Selesai",
+		"edit": "Sunting",
+		"export_to_xlsx": "Ekspor ke XLSX",
+		"next_page": "Berikutnya",
+		"review": "Ulasan",
+		"save": "Simpan",
+		"save_changes": "Menyimpan perubahan",
+		"submit": "Kirim",
+		"view": "Melihat"
+	},
+	"clear_size_confirmation": "Ini akan menghapus semua nilai ukuran untuk semua pengamatan.",
+	"clear_size_values": "Hapus Nilai Ukuran",
+	"contact_us": "Hubungi kami untuk bantuan",
+	"count": "Menghitung",
+	"current": "Saat ini",
+	"current_info": "Kecepatan air selama survei.",
+	"delete_observation": "hapus pengamatan",
+	"depth": "Kedalaman",
+	"depth_info": "Kedalaman unit sampel, dalam meter (mis. 3).",
+	"depth_m": "Kedalaman (m)",
+	"exports": {
+		"citation_description": "Kutipan yang disarankan dapat ditemukan di semua tab file xlsx yang Anda ekspor. Pastikan Anda mengutip data yang telah diekspor dalam publikasi apa pun untuk memberikan kredit yang tepat kepada pemilik data.",
+		"credit_request": "Mohon berikan kredit kepada pemilik data",
+		"email_sent": "Email telah dikirim ke <currentUserEmail \/>. Ini terkadang bisa memakan waktu hingga 15 menit.",
+		"included_in_export": "Termasuk dalam ekspor ini",
+		"observation_level_data_one": "Data tingkat pengamatan ({{count}} survei)",
+		"observation_level_data_other": "Data tingkat observasi ({{count}} survei)",
+		"project_metadata": "Metadata untuk proyek ini",
+		"sample_event_level_data_one": "Contoh data tingkat peristiwa ({{count}} survei)",
+		"sample_event_level_data_other": "Contoh data tingkat peristiwa ({{count}} survei)",
+		"success": "Ekspor berhasil"
+	},
+	"filter_search_helper_text": "<b>Gunakan tanda kutip ganda untuk mencari frasa yang tepat.<\/b><br>Misalnya, cari North Shore untuk mencari catatan dengan kata North atau Shore (catatan dengan South Shore akan cocok). Atau cari \"North Shore\" untuk menemukan rekaman yang memiliki kata North Shore (rekaman dengan South Shore tidak akan cocok).",
+	"filter_submitted_table": "Saring tabel ini berdasarkan lokasi, manajemen, atau pengamat",
+	"filter_table_date_year": "Saring tabel ini berdasarkan nama atau tahun",
+	"filter_table_name_project_year": "Saring tabel ini berdasarkan nama, proyek, atau tahun",
+	"filter_table_site_management_observer": "Saring tabel ini berdasarkan lokasi, manajemen, atau pengamat",
+	"filters": {
+		"by_name_project_country": "Saring tabel ini berdasarkan nama, proyek, atau negara",
+		"by_name_project_year": "Saring tabel ini berdasarkan nama, proyek, atau tahun",
+		"by_name_reeftype_reefzone_exposure": "Saring tabel ini berdasarkan nama, jenis terumbu, zona terumbu, atau eksposur",
+		"by_name_year": "Saring tabel ini berdasarkan nama atau tahun",
+		"by_site_management_observer": "Saring tabel ini berdasarkan lokasi, manajemen, atau pengamat",
+		"projects_by_name_year": "Saring Proyek Berdasarkan Nama atau Negara",
+		"search_helper_text": "<b>Gunakan tanda kutip ganda untuk mencari frasa yang tepat.<\/b><br>Misalnya, cari North Shore untuk mencari catatan dengan kata North atau Shore (catatan dengan South Shore akan cocok). Atau cari \"North Shore\" untuk menemukan rekaman yang memiliki kata North Shore (rekaman dengan South Shore tidak akan cocok)."
+	},
+	"fish_belt_observations": {
+		"errors": {
+			"proposed_species_unsaved": "Spesies ikan yang diusulkan {{speciesName}} belum disimpan.",
+			"species_already_exists": "Spesies ikan yang diusulkan {{speciesName}} sudah ada dalam daftar. Pengamatan telah diperbarui dengan spesies ini."
+		},
+		"proposed_species_saved": "Spesies ikan yang diusulkan {{speciesName}} disimpan. Pengamatan telah diperbarui dengan spesies ini."
+	},
+	"fish_count_observed": "Jumlah ikan yang diamati, dari spesies\/genus\/famili dan ukuran yang sama.",
+	"fish_name": "Nama Ikan",
+	"fish_name_observed": "Nama spesies, genus, atau famili ikan yang diamati. Untuk pengamatan pada tingkat genus atau spesies yang tidak diketahui, masukkan genus daripada mengusulkan spesies baru dengan 'spp'. Semua nama ikan di MERMAID konsisten dengan <a>fishbase<\/a>.",
+	"fish_size_bin": "Tempat Ukuran Ikan (cm)",
+	"fish_size_bin_info": "Nama skema bin yang digunakan untuk memperkirakan ukuran ikan pada transek. Pilih 1 cm jika ukuran ikan yang dicatat tidak menggunakan bin.",
+	"fish_size_observed": "Ukuran ikan yang diamati, dalam cm (misalnya 4,5 atau 5-10).",
+	"forms": {
+		"required_field": "Bidang ini wajib diisi",
+		"submit_for_review": "Kirim ke MERMAID untuk ditinjau"
+	},
+	"gfcr": {
+		"add_gfcr_indicators": "GFCR adalah kemitraan global yang bertujuan untuk memobilisasi sumber daya untuk mendukung proyek konservasi dan restorasi terumbu karang di seluruh dunia.",
+		"buttons": {
+			"disable_gfcr": "Menonaktifkan Indikator GFCR",
+			"enable_gfcr": "Aktifkan Indikator GFCR untuk proyek ini",
+			"go_to_gfcr": "Buka Indikator GFCR"
+		},
+		"disabled_gfcr_info": "Menonaktifkan Indikator GFCR untuk proyek ini tidak akan menghapusnya, tetapi hanya menyembunyikannya dari situs <a \/>. Tidak ada data yang akan hilang. Anda dapat mengaktifkannya kembali kapan saja.",
+		"remove_gfcr_Indicators": "Menghapus indikator GFCR dari proyek ini tidak akan menghapus indikator tersebut, tetapi hanya menyembunyikannya.",
+		"title": "Dana Global untuk Terumbu Karang (Global Fund for Coral Reefs\/GFCR)"
+	},
+	"go_to_explore_projects": "Lihat semua proyek Anda di MERMAID Explore",
+	"go_to_explore_sample_event": "Lihat contoh acara ini di MERMAID Explore",
+	"go_to_explore_this_project": "Lihat proyek ini di MERMAID Explore",
+	"image_classification": {
+		"add_attribute": "Menambahkan atribut baru",
+		"annotation": {
+			"confirm": "Konfirmasi",
+			"confirmed": "Dikonfirmasi",
+			"next_unconfirmed_point": "Poin berikutnya yang belum dikonfirmasi",
+			"status": "Status",
+			"unclassified": "Tidak diklasifikasikan",
+			"unclassified_points_one": "{{count}} Titik yang tidak diklasifikasikan",
+			"unclassified_points_other": "{{count}} Poin yang tidak diklasifikasikan",
+			"unconfirmed": "Belum dikonfirmasi"
+		},
+		"attribute_growth_form": "Atribut bentik \/ bentuk pertumbuhan",
+		"benthic_attribute": "Atribut bentik",
+		"buttons": {
+			"confirm_all": "Konfirmasikan semua",
+			"upload_photos": "Unggah foto",
+			"zoom_to_attribute": "Memperbesar ke atribut"
+		},
+		"classifier_guesses_one": "Tebakan pengklasifikasi",
+		"classifier_guesses_other": "Tebakan pengklasifikasi",
+		"confidence": "Keyakinan",
+		"confirmed_total": "Dikonfirmasi \/ total",
+		"errors": {
+			"duplicate_file": "File duplikat: {{fileName}}",
+			"failed_annotations_fetch": "Gagal mengambil anotasi gambar.",
+			"failed_annotations_save": "Gagal menyimpan anotasi gambar.",
+			"failed_deletion": "Gagal menghapus foto: {{imageName}}. {{errorMessage}}",
+			"file_too_big": "Ukuran file melebihi batas ukuran 30MB",
+			"invalid_file": "File tidak valid atau rusak: {{fileName}}",
+			"invalid_file_type": "Jenis file tidak valid",
+			"no_classification_enabled": "Saat ini Anda tidak dapat mengunggah gambar baru untuk klasifikasi. Anda dapat mengakses dan meninjau gambar yang telah diunggah sebelumnya.",
+			"no_photo_found": "Gagal menghapus foto! Foto tidak ditemukan.",
+			"photo_too_small": "Foto harus memiliki tinggi dan lebar minimum {{minImageWidthAndHeight}} piksel. Foto ini terlalu kecil: {{fileName}}"
+		},
+		"feature_introduction": {
+			"description": "Melalui kemitraan dengan <a \/> dari University of California San Diego dan Scripps Institution of Oceanography, MERMAID kini menyertakan klasifikasi berbasis AI dengan menggunakan model pembelajaran mendalam pyspacer. Integrasi ini memungkinkan analisis foto bentik yang cepat dan terukur sehingga Anda dapat menghasilkan wawasan dengan cepat dan konsisten dengan pembelajaran mesin dan AI.",
+			"title": "MERMAID baru saja menjadi lebih pintar",
+			"use_ai_button": "Mengklasifikasikan foto dengan AI (Beta)",
+			"use_manual_observations_button": "Memasukkan pengamatan secara manual"
+		},
+		"growth_form": "Bentuk pertumbuhan",
+		"remove_photo": "Menghapus foto",
+		"remove_photo_confirmation": "Apakah Anda yakin ingin menghapus foto ini?",
+		"review_this_photo": "Tinjau foto ini",
+		"select_attribute": "Pilih atribut",
+		"select_new_attribute": "Pilih atribut baru",
+		"success": {
+			"annotations_saved": "Anotasi gambar yang berhasil disimpan",
+			"file_upload_one": "Foto berhasil diunggah",
+			"file_upload_other": "Foto berhasil diunggah"
+		},
+		"user_message": {
+			"confirm_image_changes": "Apakah Anda yakin ingin membuang perubahan pada gambar ini?"
+		},
+		"warns": {
+			"photo_removed": "Foto dihapus"
+		}
+	},
+	"label": "Label",
+	"label_info": "Teks arbitrer untuk membedakan unit sampel yang berbeda tetapi harus digabungkan secara analitis (yaitu semua properti lainnya identik). Sebagai contoh: Berenang jauh. Jarang digunakan.",
+	"loading": "Memuat",
+	"loading_item": "Memuat {{itemName}}",
+	"management_regime": "Rezim manajemen",
+	"management_regimes": {
+		"access_restriction": "Pembatasan akses",
+		"compliance": "Kepatuhan",
+		"copy": "Rezim Manajemen Salinan",
+		"copy_management_regimes": "Rezim Manajemen Salinan",
+		"copy_mrs_from_other_projects": "Menyalin MR dari proyek lain",
+		"copy_selected_mrs_to_project": "Menyalin MR yang dipilih ke proyek",
+		"data_unavailable": "Data catatan Rezim Manajemen saat ini tidak tersedia.",
+		"export": "Ekspor MR",
+		"export_mrs": "Ekspor MR",
+		"gear_restriction": "Pembatasan perlengkapan",
+		"management_regime": "Rezim manajemen",
+		"management_regime_name": "Nama rezim manajemen",
+		"management_regimes": "Rezim Manajemen",
+		"new": "MR baru",
+		"new_mr": "MR baru",
+		"no_management_regimes": "Proyek ini tidak memiliki rezim manajemen.",
+		"no_take": "Tidak mengambil",
+		"open_access": "Akses terbuka",
+		"periodic_closure": "Penutupan berkala",
+		"secondary_name": "Nama sekunder",
+		"size_limits": "Batas ukuran",
+		"species_restriction": "Pembatasan spesies",
+		"year_est": "Tahun."
+	},
+	"map_tooling": {
+		"reset_zoom": "Mengatur ulang zoom",
+		"zoom_in": "Memperbesar",
+		"zoom_out": "Perkecil",
+		"zoom_to_point": "Memperbesar ke titik"
+	},
+	"media": {
+		"accepted_photo_types": "Jenis file yang diterima: .jpg, .jpeg, .png, .gif",
+		"buttons": {
+			"cancel_upload": "Membatalkan unggahan"
+		},
+		"errors": {
+			"failed_upload": "Gagal mengunggah {{fileName}}"
+		},
+		"max_file_size": "Ukuran file maksimum adalah 30 MB",
+		"min_image_size": "Foto harus lebih besar dari 1500 piksel kali 1500 piksel",
+		"put_files_here": "Kirimkan file di sini <br> atau <br>",
+		"req_crop_photos": "Pangkas foto sesuai ukuran sebelum mengunggah",
+		"select_local_files": "Memilih file dari komputer Anda...",
+		"upload_cancelled": "Unggahan dibatalkan",
+		"uploading_files": "<p>Mengunggah file {{processedCount}}\/{{totalCount}}...<\/p><button>Batalkan unggahan<\/button>",
+		"user_guidance": {
+			"crop_icon": "Ikon transisi yang dipotong",
+			"cropped_photo_example": "Contoh yang dipotong",
+			"more_photo_upload_info": "Baca lebih lanjut tentang cara menyiapkan foto Anda untuk diunggah di dokumentasi <a><\/a>",
+			"uncropped_photo_example": "Contoh yang tidak dipotong"
+		}
+	},
+	"mermaid": "MERMAID",
+	"mermaid_": "MERMAID",
+	"mermaid_explore": "Jelajah MERMAID",
+	"method": "Metode",
+	"must_select_fish_warning": "Anda harus memilih tempat ukuran ikan sebelum menambahkan pengamatan.",
+	"name": "Nama",
+	"notes": "Catatan",
+	"number_of_quadrats_info": "Jumlah total kuadrat dalam transek (misalnya 10).",
+	"observations": "Pengamatan",
+	"observers": "Pengamat",
+	"observers_info": "Pilih satu atau beberapa pengamat untuk ditambahkan",
+	"offline": {
+		"page_unavailable_offline": "Halaman ini tidak tersedia secara offline.",
+		"unavailable_offline": "Tidak tersedia secara offline."
+	},
+	"points_per_quadrat_info": "Jumlah total titik per kuadrat yang digunakan dalam sebuah transek (misalnya 100).",
+	"projects": {
+		"admin_for_project": "Anda akan menjadi admin untuk proyek ini.",
+		"copy_of_project_name": "Salinan {{projectName}}",
+		"copy_project": "Salin Proyek",
+		"country": "Negara",
+		"create_or_join_project": "Buat proyek baru atau minta admin Anda untuk menambahkan Anda ke beberapa proyek.",
+		"create_project": "Membuat Proyek",
+		"data_copy_to_project": "Situs, Rezim Manajemen, Pembagian Data, dan Pengguna beserta perannya akan disalin ke proyek yang baru.",
+		"data_unavailable": "Data proyek saat ini tidak tersedia.",
+		"errors": {
+			"data_unavailable": "Data proyek saat ini tidak tersedia.",
+			"duplicate_name": "Proyek dengan nama yang sama sudah ada.",
+			"project_name_exists": "Nama proyek sudah ada di MERMAID"
+		},
+		"filter_projects": "Saring Proyek Berdasarkan Nama atau Negara",
+		"last_updated_date": "Tanggal Terakhir Diperbarui",
+		"loading_indicator": "indikator pemuatan daftar proyek",
+		"name_of_project": "Nama proyek",
+		"new_project": "Proyek Baru",
+		"no_offline_projects": "Anda tidak memiliki proyek offline.",
+		"no_projects_match": "Tidak ada proyek yang cocok dengan istilah filter saat ini.",
+		"not_your_projects": "Anda belum menjadi bagian dari proyek apa pun.",
+		"notify_user_email": "Memberi tahu pengguna melalui email",
+		"project": "Proyek",
+		"project_name": "Nama Proyek",
+		"projects": "Proyek",
+		"sort_by": "Urutkan Berdasarkan",
+		"success": {
+			"project_copied": "Proyek disalin",
+			"project_created": "Proyek dibuat"
+		}
+	},
+	"projects_loading_indicator": "indikator pemuatan daftar proyek",
+	"propose_new_species": "Mengusulkan spesies baru...",
+	"protocol_titles": {
+		"benthiclit": "Bentik LIT",
+		"benthicpit": "PIT Bentik",
+		"benthicpqt": "Quadrat Foto Bentik",
+		"bleachingqc": "Pemutihan",
+		"fishbelt": "Sabuk Ikan",
+		"habitatcomplexity": "Kompleksitas Habitat"
+	},
+	"quadrat_number_start_info": "Nomor kuadrat\/foto pertama di sepanjang transek (misal: 1).",
+	"quadrat_size_info": "Ukuran kuadrat yang digunakan per transek, dalam meter persegi (misal: 1).",
+	"reef_slope": "Kemiringan Terumbu",
+	"reef_slope_info": "Indikasi profil terumbu karang di lokasi survei. Lihat definisi <a>di sini<\/a>.",
+	"reference": "Referensi",
+	"relative_depth": "Kedalaman Relatif",
+	"relative_depth_info": "Apakah survei tersebut 'dalam' atau 'dangkal' dibandingkan dengan transek lain yang disurvei, terlepas dari kedalaman numerik dalam meter.",
+	"remove_as_observer": "Hapus sebagai pengamat",
+	"remove_observer_from_record": "Menghapus pengamat dari catatan",
+	"remove_user": "Hapus pengguna",
+	"remove_user_confirmation": "Apakah Anda yakin ingin menghapus <strong>{{userName}}<\/strong> sebagai pengamat?",
+	"removed_from_project_message": "<strong>{{userName}}<\/strong> adalah pengamat pada unit sampel ini tetapi tidak lagi menjadi bagian dari proyek ini.",
+	"sample_date": "Tanggal sampel",
+	"sample_time": "Waktu Sampel",
+	"sample_time_info": "Waktu ketika data dikumpulkan",
+	"sample_unit_number": "Unit sampel #",
+	"sample_units": {
+		"depth_m": "Kedalaman (m)",
+		"errors": {
+			"classification_unavailable_offline": "Unit sampel ini menggunakan klasifikasi gambar dan tidak tersedia secara offline.",
+			"data_unavailable": "Data unit sampel saat ini tidak tersedia.",
+			"observations_unavailable_offline": "Pengamatan unit sampel tidak tersedia secara offline",
+			"submitted_data_unavailable": "Data catatan yang dikirimkan saat ini tidak tersedia.",
+			"submitted_records_unavailable": "Data catatan yang dikirimkan saat ini tidak tersedia.",
+			"supporting_data_unavailable": "Data pendukung untuk membuat unit sampel saat ini tidak tersedia."
+		},
+		"method": "Metode",
+		"observers": "Pengamat",
+		"sample_date": "Tanggal sampel",
+		"sample_unit_number": "Unit sampel #",
+		"size": "Ukuran",
+		"submitted": "Dikirimkan",
+		"submitted_no_data_message": "Proyek ini tidak memiliki unit sampel yang dikirimkan."
+	},
+	"search": {
+		"no_results": "Tidak ada hasil yang ditemukan"
+	},
+	"show_fish_count_info": "tampilkan info jumlah ikan",
+	"show_fish_name_info": "tampilkan info nama ikan",
+	"show_fish_size_info": "bagaimana info ukuran ikan",
+	"site": "Situs",
+	"sites": {
+		"copy": "Salin situs",
+		"copy_selected_sites_to_project": "Menyalin situs yang dipilih ke proyek",
+		"copy_sites_from_other_projects": "Menyalin situs dari proyek lain",
+		"data_unavailable": "Data catatan lokasi saat ini tidak tersedia.",
+		"export": "Situs ekspor",
+		"exposure": "Paparan",
+		"new": "Situs baru",
+		"no_sites": "Proyek ini tidak memiliki lokasi.",
+		"reef_type": "Jenis terumbu",
+		"reef_zone": "Zona terumbu",
+		"site": "Situs",
+		"sites": "Situs"
+	},
+	"size": "Ukuran",
+	"size_cm": "Ukuran (cm)",
+	"submitted": "Dikirimkan",
+	"submitted_no_data_message": "Proyek ini tidak memiliki unit sampel yang dikirimkan.",
+	"taxonomies": {
+		"add_fish_species": "Menambahkan spesies ikan baru",
+		"genus": "Genus",
+		"genus_not_found": "<p data-testid='noResults'>Genus tidak ditemukan di MERMAID <\/p><a>$t(contact_us)<\/a>",
+		"parent": "Orang tua",
+		"species": "Spesies"
+	},
+	"tide": "Pasang",
+	"tide_info": "Karakteristik pasang surut selama survei (<a>lebih detail<\/a>).",
+	"toasts": {
+		"export_error": "Terjadi kesalahan dalam mengekspor laporan.",
+		"submitted_records_unavailable": "Data catatan yang dikirimkan saat ini tidak tersedia."
+	},
+	"toggle_label_visibility": "Alihkan visibilitas label",
+	"toggle_table_visibility": "Alihkan visibilitas tabel",
+	"total_abundance": "Total Kelimpahan",
+	"total_biomass": "Total Biomassa (kg\/ha)",
+	"transect": "Transek",
+	"transect_length_info": "Panjang transek untuk unit sampel, dalam meter. Dapat menyertakan desimal (contoh: 50,0).",
+	"transect_length_surveyed": "Panjang Transek yang Disurvei",
+	"transect_number": "Nomor Transek",
+	"transect_number_info": "Nomor unit sampel, dalam bentuk bilangan bulat (mis. 1). Biasanya, unit sampel diberi nomor secara berurutan di setiap lokasi, dengan nomor yang sama di setiap lokasi dalam suatu proyek.",
+	"user": "Pengguna",
+	"validations": "Validasi",
+	"view_fish_info": "melihat informasi nama ikan",
+	"view_selected_only": "Lihat Hanya Dipilih",
+	"visibility": "Visibilitas",
+	"visibility_info": "Jarak horizontal di mana objek di bawah air masih dapat diidentifikasi.",
+	"width": "Lebar",
+	"width_info": "Lebar total (BUKAN lebar ke satu sisi pita) transek sabuk ikan, dalam meter."
+}
