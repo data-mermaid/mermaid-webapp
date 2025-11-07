@@ -385,14 +385,5 @@
     "sheltered_reef_slope": "Sheltered Reef Slope",
     "small_reef": "Small Reef",
     "terrestrial_reef_flat": "Terrestrial Reef Flat"
-  },
-  "online_status": "You're <strong>ONLINE</strong>",
-  "offline_status": "You're <strong>OFFLINE</strong>. Some contents may be out of date.",
-  "help_dropdown": "Help (PDF) ▲",
-  "help_english": "English",
-  "help_bahasa": "Bahasa Indonesia",
-  "terms": "Terms",
-  "contact": "Contact",
-  "credits": "Credits",
-  "toggle_offline_mode": "Toggle offline mode"
+  }
 }
