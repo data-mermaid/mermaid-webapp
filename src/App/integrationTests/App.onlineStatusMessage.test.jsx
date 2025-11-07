@@ -23,10 +23,10 @@ test('Appropriate online status message shows when navigator is online', async (
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
 
   expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
-    "online_status",
+    'online_status',
   )
   expect(await screen.findByTestId('offline-toggle-switch-label')).not.toHaveTextContent(
-    "offline_status",
+    'offline_status',
   )
 })
 test('Appropriate online status message shows when navigator is offline', async () => {
@@ -40,10 +40,10 @@ test('Appropriate online status message shows when navigator is offline', async 
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
 
   expect(await screen.findByTestId('offline-toggle-switch-label')).not.toHaveTextContent(
-    "online_status",
+    'online_status',
   )
   expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
-    "offline_status",
+    'offline_status',
   )
 })
 
@@ -57,10 +57,10 @@ test('Appropriate online status message shows when server is reachable', async (
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
 
   expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
-    "online_status",
+    'online_status',
   )
   expect(await screen.findByTestId('offline-toggle-switch-label')).not.toHaveTextContent(
-    "offline_status",
+    'offline_status',
   )
 })
 test('Appropriate online status message shows when server is unreachable', async () => {
@@ -79,10 +79,10 @@ test('Appropriate online status message shows when server is unreachable', async
   // timeout is necessary here because the server ping happens every 5 seconds.
 
   expect(await screen.findByTestId('offline-toggle-switch-label')).not.toHaveTextContent(
-    "online_status",
+    'online_status',
   )
 
   expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
-    "offline_status",
+    'offline_status',
   )
 })
