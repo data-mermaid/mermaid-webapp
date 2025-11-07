@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
-import language from '../../../language'
+import { useTranslation } from 'react-i18next'
 import { satelliteBaseMap, addZoomController } from '../mapService'
 import { MapInputRow, MapContainer, MapWrapper } from '../Map.styles'
 
@@ -9,9 +9,12 @@ const defaultCenter = [0, 0]
 const defaultZoom = 13
 
 const ResolveDuplicateSiteMap = ({ formLatitudeValue = 0, formLongitudeValue = 0 }) => {
+  const { t } = useTranslation()
   const mapContainer = useRef(null)
   const map = useRef(null)
   const recordMarker = useRef(null)
+
+  const mapAttribution = t('map.attribution')
 
   const _initializeMap = useEffect(() => {
     const markerElement = document.createElement('div')
@@ -25,7 +28,7 @@ const ResolveDuplicateSiteMap = ({ formLatitudeValue = 0, formLongitudeValue = 0
       zoom: defaultZoom,
       maxZoom: 16,
       attributionControl: true,
-      customAttribution: language.map.attribution,
+      customAttribution: mapAttribution,
     })
 
     addZoomController(map.current)
@@ -37,7 +40,7 @@ const ResolveDuplicateSiteMap = ({ formLatitudeValue = 0, formLongitudeValue = 0
       map.current.remove()
       recordMarker.current.remove()
     }
-  }, [])
+  }, [mapAttribution])
 
   const _handleMapMarker = useEffect(() => {
     if (!map.current) {

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
-import language from '../../../language'
+import { useTranslation } from 'react-i18next'
 import {
   satelliteBaseMap,
   addZoomController,
@@ -18,11 +18,14 @@ const defaultCenter = [20, 20]
 const defaultZoom = 1
 
 const CopySitesMap = ({ sitesForMapMarkers }) => {
+  const { t } = useTranslation()
   const mapContainer = useRef(null)
   const map = useRef(null)
   const previousSitesForMapMarkers = usePrevious(sitesForMapMarkers)
   const [displayHelpText, setDisplayHelpText] = useState(false)
   const [isMapInitialized, setIsMapInitialized] = useState(false)
+
+  const mapAttribution = t('map.attribution')
 
   const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
 
@@ -34,7 +37,7 @@ const CopySitesMap = ({ sitesForMapMarkers }) => {
       zoom: defaultZoom,
       maxZoom: 17,
       attributionControl: true,
-      customAttribution: language.map.attribution,
+      customAttribution: mapAttribution,
     })
 
     addZoomController(map.current)
@@ -49,7 +52,7 @@ const CopySitesMap = ({ sitesForMapMarkers }) => {
     return () => {
       map.current.remove()
     }
-  }, [])
+  }, [mapAttribution])
 
   const _updateMapMarkers = useEffect(() => {
     if (!map.current) {
@@ -89,9 +92,7 @@ const CopySitesMap = ({ sitesForMapMarkers }) => {
           <MiniMap mainMap={map.current} />
         </MiniMapContainer>
       ) : null}
-      {displayHelpText && (
-        <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
-      )}
+      {displayHelpText && <MapZoomHelpMessage>{t('map.zoom_control_text')}</MapZoomHelpMessage>}
     </MapContainer>
   )
 }
