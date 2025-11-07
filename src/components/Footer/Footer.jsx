@@ -63,17 +63,13 @@ const Footer = () => {
           {isDropdownOpen && (
             <HelpLinksWrapper>
               <li>
-                <a
-                  href="https://datamermaid.org/assets/attachments/mermaid-quick-start-guide-1756475523.pdf"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href="/MERMAID-quick-start-guide-EN.pdf" target="_blank" rel="noreferrer">
                   {t('help_english')}
                 </a>
               </li>
 
               <li value="Bahasa Indonesia">
-                <a href="MERMAID-user-docs-ID-min.pdf" target="_blank">
+                <a href="/MERMAID-quick-start-guide-ID.pdf" target="_blank">
                   {t('help_bahasa')}
                 </a>
               </li>
