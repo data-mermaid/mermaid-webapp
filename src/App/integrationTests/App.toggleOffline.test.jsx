@@ -35,7 +35,7 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
   await user.click(offlineToggleSwitchTestIdBeforeFirstClick)
 
   expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
-    "You're OFFLINE. Some contents may be out of date.",
+    'offline_status',
   )
 
   expect(within(sideNav).queryByRole('link', { name: 'Submitted' })).not.toBeInTheDocument()
@@ -50,7 +50,7 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
-    "You're ONLINE",
+    'online_status',
   )
 
   expect(within(sideNav).getByRole('link', { name: 'Submitted' })).toBeInTheDocument()

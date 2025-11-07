@@ -53,7 +53,11 @@ const Footer = () => {
       </StyledToggleLabel>
       <FooterNav>
         <HelpContainer ref={dropdownRef}>
-          <TextLink type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+          <TextLink
+            type="button"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            data-testid="help-dropdown-button"
+          >
             {t('help_dropdown')}
           </TextLink>
           {isDropdownOpen && (
@@ -77,13 +81,28 @@ const Footer = () => {
           )}
         </HelpContainer>
         <OfflineHide>
-          <a href="https://datamermaid.org/terms-of-service" target="_blank" rel="noreferrer">
+          <a
+            href="https://datamermaid.org/terms-of-service"
+            target="_blank"
+            rel="noreferrer"
+            data-testid="terms-link"
+          >
             {t('terms')}
           </a>
-          <a href="https://datamermaid.org/contact-us" target="_blank" rel="noreferrer">
+          <a
+            href="https://datamermaid.org/contact-us"
+            target="_blank"
+            rel="noreferrer"
+            data-testid="contact-link"
+          >
             {t('contact')}
           </a>
-          <a href="https://datamermaid.org/partners-and-teams/" target="_blank" rel="noreferrer">
+          <a
+            href="https://datamermaid.org/partners-and-teams/"
+            target="_blank"
+            rel="noreferrer"
+            data-testid="credits-link"
+          >
             {t('credits')}
           </a>
         </OfflineHide>
