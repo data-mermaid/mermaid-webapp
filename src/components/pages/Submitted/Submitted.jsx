@@ -376,7 +376,10 @@ const Submitted = () => {
   const content = isAppOnline ? (
     <>{table}</>
   ) : (
-    <PageUnavailable mainText={t('page.unavailable_offline')} testId="submitted-page-offline" />
+    <PageUnavailable
+      mainText={t('offline.page_unavailable_offline')}
+      testId="submitted-page-offline"
+    />
   )
 
   const toolbar = isAppOnline ? (

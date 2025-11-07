@@ -118,11 +118,11 @@
   },
   "name": "Name",
   "offline": {
-    "unavailable_offline": "Unavailable offline."
+    "unavailable_offline": "Unavailable offline.",
+    "page_unavailable_offline": "This page is unavailable offline."
   },
   "page": {
-    "read_only": "You cannot access this page because you are a read-only member of this project.",
-    "unavailable_offline": "This page is unavailable offline."
+    "read_only": "You cannot access this page because you are a read-only member of this project."
   },
   "projects": {
     "data_unavailable": "Project data is currently unavailable.",
