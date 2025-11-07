@@ -1,5 +1,6 @@
 import moment from 'moment'
 import axios from '../../../library/axiosRetry'
+import i18next from '../../../../i18n'
 import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { API_NULL_NAME } from '../../../library/constants/constants'
@@ -317,13 +318,11 @@ const ProjectHealthMixin = (Base) =>
             sampleEventUnitRowsCopy.push({
               site_id: siteId,
               site_name:
-                site_name === API_NULL_NAME
-                  ? language.pages.usersAndTransectsTable.missingSiteName
-                  : site_name,
+                site_name === API_NULL_NAME ? i18next.t('sites.missing_site_name') : site_name,
               sample_date: '',
               sample_unit_numbers: [],
               sample_unit_protocol: protocol,
-              sample_unit_method: language.protocolTitles[protocol],
+              sample_unit_method: i18next.t(`protocol_titles.${protocol}`),
               profile_summary: {},
             })
           }

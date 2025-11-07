@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { InlineCell, Table } from '../../generic/Table/table'
@@ -11,10 +12,10 @@ import {
   SampleUnitNumber,
   SampleUnitPopup,
 } from '../SampleUnitPopups.styles'
-import language from '../../../language'
 import { API_NULL_NAME } from '../../../library/constants/constants'
 
 const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
+  const { t } = useTranslation()
   const currentProjectPath = useCurrentProjectPath()
   const { sample_unit_method, sample_unit_protocol, site_name } = rowRecord
   const popupTitle = `${sample_unit_method} ${site_name}`
@@ -23,9 +24,7 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
     const { label: transectNumberLabel, management, sample_date, updated_by, observers, id } = row
 
     const managementName =
-      management.name === API_NULL_NAME
-        ? language.pages.usersAndTransectsTable.missingMRName
-        : management.name
+      management.name === API_NULL_NAME ? t('management_regimes.missing_mr_name') : management.name
 
     const keyName = transectNumberLabel + site_name + managementName + updated_by + sample_date + id
 
@@ -38,15 +37,21 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
           </TooltipText>
           <Table>
             <tbody>
-              <TableRowItem title="Last edited by" value={updated_by} />
-              <TableRowItem title="Observers" value={observers.join(',')} />
-              <TableRowItem title="Site" value={site_name} />
-              <TableRowItem title="Management" value={managementName} />
-              <TableRowItem title="Sample Date" value={getSampleDateLabel(sample_date)} />
+              <TableRowItem title={t('sample_units.last_edited_by')} value={updated_by} />
+              <TableRowItem title={t('sample_units.observers')} value={observers.join(',')} />
+              <TableRowItem title={t('sites.site')} value={site_name} />
+              <TableRowItem
+                title={t('management_regimes.management_regime')}
+                value={managementName}
+              />
+              <TableRowItem
+                title={t('sample_units.sample_date')}
+                value={getSampleDateLabel(sample_date)}
+              />
             </tbody>
           </Table>
           <PopupLink to={`${currentProjectPath}/submitted/${sample_unit_protocol}/${row.id}`}>
-            {language.popoverTexts.viewSubmittedSampleUnit}
+            {t('sample_units.view_submitted')}
           </PopupLink>
         </SampleUnitPopup>
         {index < sampleUnitNumbersRow.length - 1 && ' '}

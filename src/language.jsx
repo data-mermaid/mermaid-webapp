@@ -634,23 +634,7 @@ const pages = {
     nonAdminDelete: 'Only admins can delete a management regime.',
   },
   usersAndTransectsTable: {
-    title: 'Sample Units / Observers',
-    navTitle: (
-      <>
-        Sample Units / <br /> Observers
-      </>
-    ),
     filterToolbarText: 'Filter this table by site',
-    missingSiteName: '(Missing Site Name)',
-    missingMRName: '(Missing MR Name)',
-    missingLabelNumber: 'missing number',
-    noDataMainText: 'This project has no submitted sample units yet.',
-    noDataSubTextTitle: 'This page will show:',
-    noDataSubTexts: [
-      'Who has unsubmited sample units',
-      'Which sample units are missing',
-      'Transect number for submitted and unsubmitted sample units',
-    ],
   },
   managementRegimesOverview: {
     navTitle: (
