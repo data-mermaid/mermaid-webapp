@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import styled from 'styled-components'
-import language from '../../../language'
+import { useTranslation } from 'react-i18next'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import {
   satelliteBaseMap,
@@ -50,6 +50,7 @@ const SingleSiteMap = ({
   handleLongitudeChange = () => {},
   isReadOnlyUser = false,
 }) => {
+  const { t } = useTranslation()
   const mapContainer = useRef(null)
   const map = useRef(null)
   const recordMarker = useRef(null)
@@ -57,6 +58,7 @@ const SingleSiteMap = ({
   const [isMarkerBeingPlaced, setIsMarkerBeingPlaced] = useState(false)
   const [hasLatLngChanged, setHasLatLngChanged] = useState(false)
 
+  const mapAttribution = t('map.attribution')
   const outOfRangeLatitude = formLatitudeValue > 90 || formLatitudeValue < -90
 
   const nullishLatitudeOrLongitude =
@@ -64,6 +66,7 @@ const SingleSiteMap = ({
     (!formLongitudeValue && formLongitudeValue !== 0)
 
   const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
+
   const handleMarkerLocationChange = useCallback(
     (lngLat) => {
       // Adjust lng at international dateline
@@ -90,7 +93,7 @@ const SingleSiteMap = ({
       zoom: defaultZoom,
       maxZoom: 16,
       attributionControl: true,
-      customAttribution: language.map.attribution,
+      customAttribution: mapAttribution,
     })
 
     if (formLatitudeValue && formLongitudeValue) {
@@ -135,6 +138,7 @@ const SingleSiteMap = ({
     handleLongitudeChange,
     handleMarkerLocationChange,
     nullishLatitudeOrLongitude,
+    mapAttribution,
   ])
 
   const handleMapClick = useCallback(
@@ -212,7 +216,7 @@ const SingleSiteMap = ({
   const placeMarkerButton = (
     <StyledPlaceMarkerButton type="button" onClick={handlePlaceMarkerClick}>
       <IconMapMarker />
-      {language.pages.siteForm.placeMarker}
+      {t('map.place_marker')}
     </StyledPlaceMarkerButton>
   )
 
@@ -221,9 +225,7 @@ const SingleSiteMap = ({
       <MapContainer>
         <MapWrapper ref={mapContainer} />
         {!isReadOnlyUser && nullishLatitudeOrLongitude ? placeMarkerButton : null}
-        {displayHelpText && (
-          <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
-        )}
+        {displayHelpText && <MapZoomHelpMessage>{t('map.zoom_control_text')}</MapZoomHelpMessage>}
         <AtlasLegendDrawer
           updateCoralMosaicLayer={updateCoralMosaicLayer}
           updateGeomorphicLayers={updateGeomorphicLayers}
