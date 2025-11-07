@@ -124,6 +124,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
     isAuth0Authenticated,
     isAuth0Loading,
     isAppOnline,
+    navigate,
   ])
 
   const logoutMermaid = useCallback(() => {
