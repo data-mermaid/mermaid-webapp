@@ -28,6 +28,7 @@
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",
   "projects_loading_indicator": "projects list loading indicator",
+  "showing": "Showing",
   "image_classification": {
     "add_attribute": "Add new attribute",
     "attribute_growth_form": "Benthic attribute / growth form",
@@ -120,6 +121,9 @@
     "unavailable_offline": "Unavailable offline.",
     "page_unavailable_offline": "This page is unavailable offline."
   },
+  "page": {
+    "read_only": "You cannot access this page because you are a read-only member of this project."
+  },
   "projects": {
     "data_unavailable": "Project data is currently unavailable.",
     "project": "Project",
@@ -168,13 +172,23 @@
   },
   "sample_units": {
     "submitted": "Submitted",
+    "collecting": "Collecting",
     "method": "Method",
     "sample_unit_number": "Sample unit #",
     "size": "Size",
     "depth_m": "Depth (m)",
     "sample_date": "Sample date",
     "observers": "Observers",
+    "status": "Status",
+    "add": "Add sample unit",
     "submitted_no_data_message": "This project has no submitted sample units.",
+    "no_active_access": "You do not have any active sample units",
+    "validation_status": {
+      "errors": "Errors",
+      "ready_to_submit": "Ready to submit",
+      "saved": "Saved",
+      "warnings": "Warnings"
+    },
     "errors": {
       "data_unavailable": "Sample unit data is currently unavailable.",
       "observations_unavailable_offline": "Sample unit observations unavailable offline",
