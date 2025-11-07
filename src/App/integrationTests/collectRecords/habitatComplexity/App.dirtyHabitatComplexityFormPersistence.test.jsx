@@ -37,18 +37,10 @@ test('Unsaved NEW Habitat Complexity form edits clear when the user navigates aw
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))
   // nav back
-  await user.click(
-    await screen.findByRole('button', {
-      name: /Add Sample Unit/i,
-    }),
-  )
+  await user.click(await screen.findByTestId('add-sample-unit-button'))
   const sampleUnitNav = await screen.findByTestId('new-sample-unit-nav')
 
-  await user.click(
-    within(sampleUnitNav).getByRole('link', {
-      name: 'Habitat Complexity',
-    }),
-  )
+  await user.click(within(sampleUnitNav).getByTestId('habitatcomplexity-link'))
 
   await waitFor(async () =>
     expect(within(await screen.findByRole('form')).getByLabelText('Depth')).not.toHaveValue(),
@@ -88,11 +80,7 @@ test('Unsaved EDIT Habitat Complexity form edits clear when the user navigates a
   // nav back
   const table = await screen.findByRole('table')
 
-  await user.click(
-    within(table).getAllByRole('link', {
-      name: 'Habitat Complexity',
-    })[0],
-  )
+  await user.click(within(table).getAllByText('Habitat Complexity')[0])
 
   // initial unedited depth value
   await waitFor(async () =>

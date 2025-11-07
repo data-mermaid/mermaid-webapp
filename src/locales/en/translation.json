@@ -28,6 +28,7 @@
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",
   "projects_loading_indicator": "projects list loading indicator",
+  "showing": "Showing",
   "image_classification": {
     "add_attribute": "Add new attribute",
     "attribute_growth_form": "Benthic attribute / growth form",
@@ -120,6 +121,9 @@
     "unavailable_offline": "Unavailable offline.",
     "page_unavailable_offline": "This page is unavailable offline."
   },
+  "page": {
+    "read_only": "You cannot access this page because you are a read-only member of this project."
+  },
   "projects": {
     "data_unavailable": "Project data is currently unavailable.",
     "project": "Project",
@@ -168,13 +172,23 @@
   },
   "sample_units": {
     "submitted": "Submitted",
+    "collecting": "Collecting",
     "method": "Method",
     "sample_unit_number": "Sample unit #",
     "size": "Size",
     "depth_m": "Depth (m)",
     "sample_date": "Sample date",
     "observers": "Observers",
+    "status": "Status",
+    "add": "Add sample unit",
     "submitted_no_data_message": "This project has no submitted sample units.",
+    "no_active_access": "You do not have any active sample units",
+    "validation_status": {
+      "errors": "Errors",
+      "ready_to_submit": "Ready to submit",
+      "saved": "Saved",
+      "warnings": "Warnings"
+    },
     "errors": {
       "data_unavailable": "Sample unit data is currently unavailable.",
       "observations_unavailable_offline": "Sample unit observations unavailable offline",
@@ -339,6 +353,38 @@
     "export": "Export sites",
     "no_sites": "This project has no sites.",
     "data_unavailable": "Site record data are currently unavailable."
+  },
+  "map": {
+    "attribution": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href=\"http://www.allencoralatlas.org/\"  style=\"font-size:1.25rem;\">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>",
+    "zoom_control_text": "Use Ctrl + Scroll to zoom the map",
+    "place_marker": "Place Site Marker",
+    "legend": {
+      "allen_coral_atlas": "Allen Coral Atlas",
+      "visit_allen_coral_atlas": "Visit Allen Coral Atlas",
+      "satellite_coral_reef_mosaic": "Satellite Coral Reef Mosaic",
+      "geomorphic_analysis": "Geomorphic Analysis",
+      "benthic_analysis": "Benthic Analysis"
+    }
+  },
+  "atlas_legend_drawer": {
+    "coral_algae": "Coral/Algae",
+    "benthic_microalgae": "Benthic Microalgae",
+    "rock": "Rock",
+    "rubble": "Rubble",
+    "sand": "Sand",
+    "seagrass": "Seagrass",
+    "back_reef_slope": "Back Reef Slope",
+    "deep_lagoon": "Deep Lagoon",
+    "inner_reef_flat": "Inner Reef Flat",
+    "outer_reef_flat": "Outer Reef Flat",
+    "patch_reefs": "Patch Reefs",
+    "plateau": "Plateau",
+    "reef_crest": "Reef Crest",
+    "reef_slope": "Reef Slope",
+    "shallow_lagoon": "Shallow Lagoon",
+    "sheltered_reef_slope": "Sheltered Reef Slope",
+    "small_reef": "Small Reef",
+    "terrestrial_reef_flat": "Terrestrial Reef Flat"
   },
   "online_status": "You're <strong>ONLINE</strong>",
   "offline_status": "You're <strong>OFFLINE</strong>. Some contents may be out of date.",

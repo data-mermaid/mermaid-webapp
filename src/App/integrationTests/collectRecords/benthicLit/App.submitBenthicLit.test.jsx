@@ -79,7 +79,7 @@ test('Submit Benthic LIT success shows toast message and redirects to collect re
   await user.click(await screen.findByText('Submit', { selector: 'button' }))
 
   expect(await screen.findByText('Record submitted.'))
-  expect(await screen.findByText('Collecting', { selector: 'h2' }))
+  expect(await screen.findByTestId('collecting-title'))
 
   // we dont test that the record is removed from dexie becuase that is the responsibility
   // of sync + the api.Post submit pulls updates and deletes.

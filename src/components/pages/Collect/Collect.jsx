@@ -2,6 +2,7 @@ import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Tr,
   Th,
@@ -28,7 +29,6 @@ import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDrop
 import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicatorPill'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -45,11 +45,11 @@ import {
 } from '../../../App/mermaidData/recordProtocolHelpers'
 import { getIsUserReadOnlyForProject } from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
-import { RECORD_STATUS_LABELS } from './collectConstants'
 import { TrCollectRecordStatus } from './Collect.styles'
 import { getIsEmptyStringOrWhitespace } from '../../../library/getIsEmptyStringOrWhitespace'
 
 const Collect = () => {
+  const { t } = useTranslation()
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -65,7 +65,19 @@ const Collect = () => {
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
+  const collectTitle = t('sample_units.collecting')
+  const methodText = t('sample_units.method')
+  const siteText = t('sites.site')
+  const managementRegimeText = t('management_regimes.management_regime')
+  const sampleUnitNumberText = t('sample_units.sample_unit_number')
+  const sizeText = t('sample_units.size')
+  const depthText = t('sample_units.depth_m')
+  const sampleDateText = t('sample_units.sample_date')
+  const observersText = t('sample_units.observers')
+  const statusText = t('sample_units.status')
+  const collectRecordsUnavailableText = t('sample_units.errors.data_unavailable')
+
+  useDocumentTitle(`${collectTitle} - ${t('mermaid')}`)
 
   const _getCollectRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -87,72 +99,89 @@ const Collect = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
+              toast.error(...getToastArguments(collectRecordsUnavailableText))
             },
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, handleHttpResponseError])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isSyncInProgress,
+    isMounted,
+    handleHttpResponseError,
+    collectRecordsUnavailableText,
+  ])
 
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Method',
+        Header: methodText,
         accessor: 'method',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Site',
+        Header: siteText,
         accessor: 'site',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Management Regime',
+        Header: managementRegimeText,
         accessor: 'management',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Sample Unit #',
+        Header: sampleUnitNumberText,
         accessor: 'sampleUnitNumber',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Size',
+        Header: sizeText,
         accessor: 'size',
         align: 'right',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Depth (m)',
+        Header: depthText,
         accessor: 'depth',
         align: 'right',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Sample Date',
+        Header: sampleDateText,
         accessor: 'sampleDate',
         sortType: reactTableNaturalSortDates,
       },
       {
-        Header: 'Observers',
+        Header: observersText,
         accessor: 'observers',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Status',
+        Header: statusText,
         accessor: 'status',
         sortType: reactTableNaturalSort,
       },
     ],
-    [],
+    [
+      methodText,
+      siteText,
+      managementRegimeText,
+      sampleUnitNumberText,
+      sizeText,
+      depthText,
+      sampleDateText,
+      observersText,
+      statusText,
+    ],
   )
 
   const tableCellData = useMemo(
     () =>
-      collectRecordsForUiDisplay.map(({ id, data, uiLabels, validations }) => {
+      collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
         const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
 
         return {
@@ -173,7 +202,7 @@ const Collect = () => {
           depth: uiLabels.depth,
           sampleDate: uiLabels.sampleDate,
           observers: uiLabels.observers,
-          status: RECORD_STATUS_LABELS[validations?.status],
+          status: uiLabels.status,
         }
       }),
     [collectRecordsForUiDisplay, currentProjectPath],
@@ -324,17 +353,20 @@ const Collect = () => {
               const headerProps = headerGroup.getHeaderGroupProps()
               return (
                 <Tr {...headerProps} key={headerProps.key}>
-                  {headerGroup.headers.map((column) => (
-                    <Th
-                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                      key={column.id}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
-                    >
-                      <span>{column.render('Header')}</span>
-                    </Th>
-                  ))}
+                  {headerGroup.headers.map((column) => {
+                    return (
+                      <Th
+                        {...column.getHeaderProps(getTableColumnHeaderProps(column))}
+                        key={column.id}
+                        isSortedDescending={column.isSortedDesc}
+                        sortedIndex={column.sortedIndex}
+                        isMultiSortColumn={isMultiSortColumn}
+                        data-testid={`collecting-header-${column.id}`}
+                      >
+                        <span>{column.render('Header')}</span>
+                      </Th>
+                    )
+                  })}
                 </Tr>
               )
             })}
@@ -393,11 +425,11 @@ const Collect = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageUnavailable mainText={language.pages.collectTable.noDataMainText} />
+    <PageUnavailable mainText={t('sample_units.no_active_access')} />
   )
 
   const contentViewByRole = isReadOnlyUser ? (
-    <PageUnavailable mainText={language.error.pageReadOnly} />
+    <PageUnavailable mainText={t('page.read_only')} />
   ) : (
     table
   )
@@ -411,12 +443,12 @@ const Collect = () => {
     <ContentPageLayout
       toolbar={
         <>
-          <H2>{language.pages.collectTable.title}</H2>
+          <H2 data-testid="collecting-title">{collectTitle}</H2>
           {!isReadOnlyUser && (
             <ToolBarItemsRow>
               <FilterItems>
                 <FilterSearchToolbar
-                  name={language.pages.collectTable.filterToolbarText}
+                  name={t('filters.by_site_management_observer')}
                   disabled={collectRecordsForUiDisplay.length === 0}
                   globalSearchText={globalFilter}
                   handleGlobalFilterChange={handleGlobalFilterChange}
