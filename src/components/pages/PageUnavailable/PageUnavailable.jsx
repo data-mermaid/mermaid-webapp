@@ -16,11 +16,11 @@ const PageUnavailable = ({
   children = undefined,
 }) => {
   if (children) {
-    return <PageUnavailableContainer>{children}</PageUnavailableContainer>
+    return <PageUnavailableContainer data-testid="page-unavailable">{children}</PageUnavailableContainer>
   }
 
   return (
-    <PageUnavailableContainer align={align}>
+    <PageUnavailableContainer data-testid="page-unavailable" align={align}>
       <h3>{mainText}</h3>
       <p>{subText}</p>
     </PageUnavailableContainer>

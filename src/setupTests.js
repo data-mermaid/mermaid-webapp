@@ -77,6 +77,10 @@ jest.mock('react-i18next', () => ({
       options: {},
     },
   }),
+  withTranslation: () => (Component) => {
+    Component.defaultProps = { ...Component.defaultProps, t: (key) => key }
+    return Component
+  },
   initReactI18next: {
     type: '3rdParty',
     init: jest.fn(),
@@ -84,6 +88,58 @@ jest.mock('react-i18next', () => ({
   Trans: ({ children }) => children,
   I18nextProvider: ({ children }) => children,
 }))
+
+jest.mock('i18next', () => ({
+  __esModule: true,
+  default: {
+    t: (key) => key,
+    changeLanguage: jest.fn(() => Promise.resolve()),
+    language: 'en',
+    languages: ['en'],
+    isInitialized: true,
+    exists: jest.fn(() => true),
+    getFixedT: jest.fn(() => (key) => key),
+    hasResourceBundle: jest.fn(() => true),
+    loadNamespaces: jest.fn(() => Promise.resolve()),
+    loadLanguages: jest.fn(() => Promise.resolve()),
+    use: jest.fn(function() { return this }),
+    init: jest.fn(() => Promise.resolve()),
+    off: jest.fn(),
+    on: jest.fn(),
+    emit: jest.fn(),
+    store: {},
+    services: {},
+    options: {},
+  },
+}))
+
+// Create a recursive proxy that returns safe defaults for any property access
+const createLanguageProxy = () => {
+  const handler = {
+    get(target, prop) {
+      if (prop === '__esModule') return true
+      if (prop === 'default') return target
+      if (prop === 'then') return undefined // Prevent promise-like behavior
+      if (typeof prop === 'symbol') return undefined
+
+      // Return existing value if it exists
+      if (prop in target) return target[prop]
+
+      // For function calls (like deleteProject), return a function that returns a string
+      if (prop === 'deleteProject' || prop === 'getValidationMessage' || prop === 'getResolveModalLanguage') {
+        return (...args) => `${prop}(${args.join(', ')})`
+      }
+
+      // For everything else, return a new proxy (for nested access)
+      target[prop] = new Proxy({}, handler)
+      return target[prop]
+    },
+  }
+
+  return new Proxy({}, handler)
+}
+
+jest.mock('./language', () => createLanguageProxy())
 
 configure({ asyncUtilTimeout: 10000 })
 
