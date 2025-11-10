@@ -65,8 +65,6 @@ const Footer = () => {
 
               <li value="Bahasa Indonesia">
                 <a href="/MERMAID-quick-start-guide-ID.pdf" target="_blank" rel="noreferrer">
-                  {t('help_bahasa')}
-                </a>
                   Bahasa Indonesia
                 </a>
               </li>
