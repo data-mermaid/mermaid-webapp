@@ -13,7 +13,6 @@ import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeader
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
-import language from '../../../language'
 import PageUnavailable from '../PageUnavailable'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -111,6 +110,7 @@ const UsersAndTransects = () => {
   const collectingHeaderText = t('sample_units.collecting')
   const siteHeaderText = t('sites.site')
   const methodHeaderText = t('sample_units.method')
+  const summaryRecordDateUnavailableText = t('errors.summary_record_data_unavailable')
 
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
@@ -171,12 +171,19 @@ const UsersAndTransects = () => {
                 setIsLoading(false)
               }
 
-              toast.error(...getToastArguments(t('errors.summary_record_data_unavailable')))
+              toast.error(...getToastArguments(summaryRecordDateUnavailableText))
             },
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isMounted,
+    isAppOnline,
+    handleHttpResponseError,
+    summaryRecordDateUnavailableText,
+  ])
 
   const getUserColumnHeaders = useMemo(() => {
     const collectRecordsByProfileValues = Object.values(collectRecordsByProfile)
