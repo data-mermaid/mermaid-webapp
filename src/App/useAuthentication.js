@@ -22,7 +22,6 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
   const handlePostLoginRedirect = useCallback(() => {
     const validateReturnPath = (path) => {
       if (!path || typeof path !== 'string') return false
-      // Same validation as login: must start with '/' but not '//'
       return path.startsWith('/') && !path.startsWith('//')
     }
     const safeSessionStorageOperation = (operation) => {
@@ -44,7 +43,6 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
       }
     }
 
-    // Always attempt cleanup, regardless of navigation success
     safeSessionStorageOperation(() => sessionStorage.removeItem('auth0_returnTo'))
   }, [navigate])
 
@@ -112,7 +110,6 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
         // Store the current URL to redirect back to after login
         const { pathname, search } = window.location
 
-        // Validate that we're not redirecting to a potentially malicious path
         const returnTo = `${pathname}${search}`
         const isValidReturnPath = pathname.startsWith('/') && !pathname.startsWith('//')
 
