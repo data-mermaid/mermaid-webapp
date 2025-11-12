@@ -13,10 +13,35 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
     localStorage.setItem('hasAuth0Authenticated', 'true')
     setIsMermaidAuthenticated(true)
   }, [])
+
   const setUnauthenticatedStates = useCallback(() => {
     localStorage.removeItem('hasAuth0Authenticated')
     setIsMermaidAuthenticated(false)
   }, [])
+
+  const handlePostLoginRedirect = useCallback(() => {
+    const safeSessionStorageOperation = (operation) => {
+      try {
+        return operation()
+      } catch (error) {
+        console.warn('SessionStorage operation failed:', error)
+        return null
+      }
+    }
+
+    const returnToPath = safeSessionStorageOperation(() => sessionStorage.getItem('auth0_returnTo'))
+
+    if (returnToPath && returnToPath !== '/') {
+      try {
+        navigate(returnToPath)
+      } catch (error) {
+        console.error('Failed to handle post-login redirect:', error)
+      }
+    }
+
+    // Always attempt cleanup, regardless of navigation success
+    safeSessionStorageOperation(() => sessionStorage.removeItem('auth0_returnTo'))
+  }, [navigate])
 
   const {
     isAuthenticated: isAuth0Authenticated,
@@ -82,9 +107,13 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
         // Store the current URL to redirect back to after login
         const { pathname, search } = window.location
 
+        // Validate that we're not redirecting to a potentially malicious path
+        const returnTo = `${pathname}${search}`
+        const isValidReturnPath = pathname.startsWith('/') && !pathname.startsWith('//')
+
         auth0LoginWithRedirect({
           appState: {
-            returnTo: `${pathname}${search}`,
+            returnTo: isValidReturnPath ? returnTo : '/',
           },
         })
       }
@@ -96,13 +125,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
         .then(() => {
           if (isMounted) {
             setAuthenticatedStates()
-
-            // Handle post-login redirect after authentication is fully established
-            const returnToPath = sessionStorage.getItem('auth0_returnTo')
-            if (returnToPath && returnToPath !== '/') {
-              sessionStorage.removeItem('auth0_returnTo')
-              navigate(returnToPath, { replace: true })
-            }
+            handlePostLoginRedirect()
           }
         })
         .catch((err) => {
@@ -124,7 +147,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
     isAuth0Authenticated,
     isAuth0Loading,
     isAppOnline,
-    navigate,
+    handlePostLoginRedirect,
   ])
 
   const logoutMermaid = useCallback(() => {
