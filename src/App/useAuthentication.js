@@ -1,20 +1,53 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
 
 const useAuthentication = ({ dexieCurrentUserInstance }) => {
   const { isAppOnline } = useOnlineStatus()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
+  const navigate = useNavigate()
 
   const setAuthenticatedStates = useCallback(() => {
     localStorage.setItem('hasAuth0Authenticated', 'true')
     setIsMermaidAuthenticated(true)
   }, [])
+
   const setUnauthenticatedStates = useCallback(() => {
     localStorage.removeItem('hasAuth0Authenticated')
     setIsMermaidAuthenticated(false)
   }, [])
+
+  const handlePostLoginRedirect = useCallback(() => {
+    const validateReturnPath = (path) => {
+      if (!path || typeof path !== 'string') {
+        return false
+      }
+
+      return path.startsWith('/') && !path.startsWith('//')
+    }
+    const safeSessionStorageOperation = (operation) => {
+      try {
+        return operation()
+      } catch (error) {
+        console.warn('SessionStorage operation failed:', error)
+        return null
+      }
+    }
+
+    const returnToPath = safeSessionStorageOperation(() => sessionStorage.getItem('auth0_returnTo'))
+
+    if (returnToPath && returnToPath !== '/' && validateReturnPath(returnToPath)) {
+      try {
+        navigate(returnToPath, { replace: true })
+      } catch (error) {
+        console.error('Failed to handle post-login redirect:', error)
+      }
+    }
+
+    safeSessionStorageOperation(() => sessionStorage.removeItem('auth0_returnTo'))
+  }, [navigate])
 
   const {
     isAuthenticated: isAuth0Authenticated,
@@ -77,7 +110,17 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
           )}`
         }
       } else {
-        auth0LoginWithRedirect()
+        // Store the current URL to redirect back to after login
+        const { pathname, search } = window.location
+
+        const returnTo = `${pathname}${search}`
+        const isValidReturnPath = pathname.startsWith('/') && !pathname.startsWith('//')
+
+        auth0LoginWithRedirect({
+          appState: {
+            returnTo: isValidReturnPath ? returnTo : '/',
+          },
+        })
       }
     }
 
@@ -87,6 +130,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
         .then(() => {
           if (isMounted) {
             setAuthenticatedStates()
+            handlePostLoginRedirect()
           }
         })
         .catch((err) => {
@@ -108,10 +152,14 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
     isAuth0Authenticated,
     isAuth0Loading,
     isAppOnline,
+    handlePostLoginRedirect,
   ])
 
   const logoutMermaid = useCallback(() => {
     if (isAppOnline) {
+      // Clean up any stored returnTo path on logout
+      sessionStorage.removeItem('auth0_returnTo')
+
       // this isnt necessary to make logout to work, but is here to make sure users.
       // cant see profile data from the last logged in user if they go searching in dev tools.
       // databaseSwitcboard isnt used because that would create circular dependencies (it depends on the output of this hook)
