@@ -1,7 +1,6 @@
 import moment from 'moment'
 import axios from '../../../library/axiosRetry'
 import i18next from '../../../../i18n'
-import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { API_NULL_NAME } from '../../../library/constants/constants'
 
