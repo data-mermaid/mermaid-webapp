@@ -20,6 +20,11 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
   }, [])
 
   const handlePostLoginRedirect = useCallback(() => {
+    const validateReturnPath = (path) => {
+      if (!path || typeof path !== 'string') return false
+      // Same validation as login: must start with '/' but not '//'
+      return path.startsWith('/') && !path.startsWith('//')
+    }
     const safeSessionStorageOperation = (operation) => {
       try {
         return operation()
@@ -31,9 +36,9 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
 
     const returnToPath = safeSessionStorageOperation(() => sessionStorage.getItem('auth0_returnTo'))
 
-    if (returnToPath && returnToPath !== '/') {
+    if (returnToPath && returnToPath !== '/' && validateReturnPath(returnToPath)) {
       try {
-        navigate(returnToPath)
+        navigate(returnToPath, { replace: true })
       } catch (error) {
         console.error('Failed to handle post-login redirect:', error)
       }
