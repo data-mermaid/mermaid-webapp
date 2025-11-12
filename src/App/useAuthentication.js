@@ -21,7 +21,10 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
 
   const handlePostLoginRedirect = useCallback(() => {
     const validateReturnPath = (path) => {
-      if (!path || typeof path !== 'string') return false
+      if (!path || typeof path !== 'string') {
+        return false
+      }
+
       return path.startsWith('/') && !path.startsWith('//')
     }
     const safeSessionStorageOperation = (operation) => {
