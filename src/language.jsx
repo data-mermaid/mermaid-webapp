@@ -635,6 +635,11 @@ const pages = {
   },
   usersAndTransectsTable: {
     filterToolbarText: 'Filter this table by site',
+    navTitle: (
+      <>
+        Sample Units / <br /> Observers
+      </>
+    ),
   },
   managementRegimesOverview: {
     navTitle: (
@@ -1214,13 +1219,6 @@ const map = {
     'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
 }
 
-const popoverTexts = {
-  noSampleUnitMatch: 'No Sample Units match:',
-  viewSubmittedSampleUnit: 'View submitted Sample Unit',
-  notSubmittedSampleUnit: `This Sample Unit is not submitted`,
-  inCollectingWith: 'In Collecting with:',
-}
-
 const getResolveModalLanguage = (siteOrManagementRegime) => {
   return {
     original: `Original ${siteOrManagementRegime}`,
@@ -1531,7 +1529,6 @@ export default {
   navigateAwayPrompt,
   pages,
   placeholders,
-  popoverTexts,
   protocolTitles,
   success,
   table,

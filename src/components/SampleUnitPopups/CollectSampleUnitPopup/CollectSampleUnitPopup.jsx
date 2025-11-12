@@ -28,7 +28,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
     const managementName =
       management_name === API_NULL_NAME ? t('management_regimes.missing_mr_name') : management_name
 
-    const keyName = transectNumberLabel + site_name + managementName + profile_name + sample_date
+    const keyName = `${transectNumberLabel}-${site_name}-${managementName}-${profile_name}-${sample_date}-${index}`
 
     return (
       <SampleUnitNumber tabIndex="0" id={index} key={keyName}>

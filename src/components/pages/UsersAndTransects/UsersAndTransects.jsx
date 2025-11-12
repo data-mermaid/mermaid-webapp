@@ -171,7 +171,7 @@ const UsersAndTransects = () => {
                 setIsLoading(false)
               }
 
-              toast.error(...getToastArguments(t('errors.project_health_records_unavailable')))
+              toast.error(...getToastArguments(t('errors.summary_record_data_unavailable')))
             },
           })
         })

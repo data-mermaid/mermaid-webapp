@@ -370,7 +370,7 @@
   "sample_units_and_observers": "Sample Units / Observers",
   "in_collecting_with": "In Collecting with:",
   "errors": {
-    "project_health_records_unavailable": "Summary record data are currently unavailable."
+    "summary_record_data_unavailable": "Summary record data are currently unavailable."
   },
   "map": {
     "attribution": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href=\"http://www.allencoralatlas.org/\"  style=\"font-size:1.25rem;\">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>",
@@ -405,3 +405,4 @@
     "terrestrial_reef_flat": "Terrestrial Reef Flat"
   }
 }
+
