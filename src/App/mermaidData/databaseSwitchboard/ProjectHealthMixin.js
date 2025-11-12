@@ -79,7 +79,7 @@ const ProjectHealthMixin = (Base) =>
           site_id: siteId,
           site_name: siteName,
           sample_date: '',
-          sample_unit_method: language.protocolTitles[sampleUnit],
+          sample_unit_method: i18next.t(`protocol_titles.${sampleUnit}`),
           sample_unit_numbers: sampleUnitNumbers,
           sample_unit_protocol: sampleUnit,
         }
@@ -151,8 +151,8 @@ const ProjectHealthMixin = (Base) =>
 
         const collectingSummaryMethods = collectingSummaryWithNameIsNotNull.reduce(
           (accumulator, sampleUnit) => {
-            const sampleUnitMethods = Object.keys(sampleUnit[1].sample_unit_methods).map(
-              (method) => language.protocolTitles[method],
+            const sampleUnitMethods = Object.keys(sampleUnit[1].sample_unit_methods).map((method) =>
+              i18next.t(`protocol_titles.${method}`),
             )
 
             accumulator[sampleUnit[0]] = accumulator[sampleUnit[0]] || []
@@ -169,7 +169,7 @@ const ProjectHealthMixin = (Base) =>
           const siteCollectingMethods = collectingSummaryMethods[siteId]
 
           for (const protocol of availableProtocols) {
-            const protocolLabel = language.protocolTitles[protocol]
+            const protocolLabel = i18next.t(`protocol_titles.${protocol}`)
             const siteAndMethodName = `${siteName} ${protocolLabel}`
             const hasCollectingMethod =
               siteCollectingMethods && siteCollectingMethods.includes(protocolLabel)
@@ -383,7 +383,7 @@ const ProjectHealthMixin = (Base) =>
             const sampleEventUnitRow = {
               site_id: siteId,
               site_name: siteName,
-              sample_unit_method: language.protocolTitles[sampleUnit],
+              sample_unit_method: i18next.t(`protocol_titles.${sampleUnit}`),
               sample_unit_protocol: sampleUnit,
               management_regimes: Object.values(managements),
             }
@@ -418,7 +418,7 @@ const ProjectHealthMixin = (Base) =>
           const siteName = siteInfo.site_name
 
           for (const protocol of availableProtocols) {
-            const protocolLabel = language.protocolTitles[protocol]
+            const protocolLabel = i18next.t(`protocol_titles.${protocol}`)
             const siteAndMethodName = `${siteName} ${protocolLabel}`
 
             if (!siteInfo.site_names.includes(siteAndMethodName)) {
