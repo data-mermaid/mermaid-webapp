@@ -370,7 +370,7 @@ const Submitted = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageUnavailable mainText={t('sample_units.submitted_no_data_message')} />
+    <PageUnavailable mainText={t('sample_units.no_submitted_sample_units')} />
   )
 
   const content = isAppOnline ? (

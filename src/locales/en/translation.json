@@ -184,7 +184,7 @@
     "status": "Status",
     "add": "Add sample unit",
     "last_edited_by": "Last edited by",
-    "submitted_no_data_message": "This project has no submitted sample units.",
+    "no_submitted_sample_units": "This project has no submitted sample units.",
     "missing_label_number": "missing number",
     "no_active_access": "You do not have any active sample units",
     "who_has_unsubmitted": "Who has unsubmitted sample units",
