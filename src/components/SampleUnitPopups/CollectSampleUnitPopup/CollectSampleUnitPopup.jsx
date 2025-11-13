@@ -14,6 +14,10 @@ import {
 import { sortArray } from '../../../library/arrays/sortArray'
 import { API_NULL_NAME } from '../../../library/constants/constants'
 
+const toKebabCase = (str) => {
+  return str.toString().toLowerCase().replace(/\s+/g, '-').trim()
+}
+
 const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
   const { t } = useTranslation()
   const { sample_unit_method, site_name } = rowRecord
@@ -28,7 +32,14 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
     const managementName =
       management_name === API_NULL_NAME ? t('management_regimes.missing_mr_name') : management_name
 
-    const keyName = `${transectNumberLabel}-${site_name}-${managementName}-${profile_name}-${sample_date}-${index}`
+    const keyName = [
+      toKebabCase(transectNumberLabel),
+      toKebabCase(site_name),
+      toKebabCase(managementName),
+      toKebabCase(profile_name),
+      toKebabCase(sample_date),
+      index,
+    ].join('-')
 
     return (
       <SampleUnitNumber tabIndex="0" id={index} key={keyName}>
@@ -40,10 +51,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
               <TableRowItem title={t('sample_units.last_edited_by')} value={profile_name} />
               <TableRowItem title={t('sample_units.observers')} value={observers.join(',')} />
               <TableRowItem title={t('sites.site')} value={site_name} />
-              <TableRowItem
-                title={t('management_regimes.management_regime')}
-                value={managementName}
-              />
+              <TableRowItem title={t('management_regimes.management')} value={managementName} />
               <TableRowItem
                 title={t('sample_units.sample_date')}
                 value={getSampleDateLabel(sample_date)}
