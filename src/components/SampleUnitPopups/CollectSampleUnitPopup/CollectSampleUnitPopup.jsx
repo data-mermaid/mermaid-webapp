@@ -53,7 +53,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
           <Table>
             <tbody>
               <TableRowItem title={t('sample_units.last_edited_by')} value={profile_name} />
-              <TableRowItem title={t('sample_units.observers')} value={observers.join(',')} />
+              <TableRowItem title={t('sample_units.observers')} value={observers?.join(',')} />
               <TableRowItem title={t('sites.site')} value={site_name} />
               <TableRowItem title={t('management_regimes.management')} value={managementName} />
               <TableRowItem
