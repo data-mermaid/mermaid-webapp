@@ -15,6 +15,10 @@ import { sortArray } from '../../../library/arrays/sortArray'
 import { API_NULL_NAME } from '../../../library/constants/constants'
 
 const toKebabCase = (str) => {
+  if (str == null) {
+    return ''
+  }
+  
   return str.toString().toLowerCase().replace(/\s+/g, '-').trim()
 }
 
