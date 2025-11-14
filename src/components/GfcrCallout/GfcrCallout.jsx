@@ -72,7 +72,7 @@ const DisableIndicatorsModal = ({ isOpen = false, disableGfcr, onDismiss }) => {
 
   const mainContent = (
     <Trans
-      i18nKey="gfcr.disabled_gfcr_info"
+      i18nKey="gfcr.disabled_info"
       components={{
         a: (
           <a
@@ -111,7 +111,7 @@ const GfcrCallout = ({ isGfcr = false, isLoading = false, handleUpdateIncludesGf
         <h3>{t('gfcr.title')}</h3>
         {isGfcr ? (
           <>
-            <StyledParagraph>{t('gfcr.remove_gfcr_Indicators')}</StyledParagraph>
+            <StyledParagraph>{t('gfcr.remove_info')}</StyledParagraph>
             <StyledGfcrEnableButtonsContainer>
               <StyledButtonPrimary
                 type="button"
@@ -131,7 +131,7 @@ const GfcrCallout = ({ isGfcr = false, isLoading = false, handleUpdateIncludesGf
           </>
         ) : (
           <>
-            <StyledParagraph>{t('gfcr.add_gfcr_indicators')}</StyledParagraph>
+            <StyledParagraph>{t('gfcr.partnership')}</StyledParagraph>
             <StyledButtonPrimary
               type="button"
               disabled={isLoading}

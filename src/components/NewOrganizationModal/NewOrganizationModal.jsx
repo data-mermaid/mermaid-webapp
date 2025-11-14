@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
@@ -17,6 +18,7 @@ const ModalInputRow = styled(InputRow)`
   border: none;
 `
 const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }) => {
+  const { t } = useTranslation()
   const [newOrganizationSuggestion, setNewOrganizationSuggestion] = useState(initialValue)
   const isSubmitButtonDisabled = newOrganizationSuggestion === ''
   useEffect(
@@ -39,12 +41,12 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
     toast.success(...getToastArguments(language.success.newOrganizationAdd))
   }
 
-  const helperText = language.pages.projectInfo.suggestionOrganizationHelperText
+  const helperText = t('organizations.helper_text')
   const modalContent = (
     <>
       <ModalInputRow>
         <label id="modal-input-for-org-label" htmlFor="modal-input-for-org">
-          New Organization Name
+          {t('organizations.new_organization_name')}
         </label>
         <div>
           <Input
@@ -64,10 +66,10 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={resetAndCloseModal}>Cancel</ButtonSecondary>
+      <ButtonSecondary onClick={resetAndCloseModal}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit} disabled={isSubmitButtonDisabled}>
         <IconSend />
-        Send to MERMAID for review
+        {t('organizations.buttons.send_for_review')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -76,7 +78,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
     <Modal
       isOpen={isOpen}
       onDismiss={resetAndCloseModal}
-      title={language.pages.projectInfo.createOrganizationTitle}
+      title={t('organizations.title')}
       mainContent={modalContent}
       footerContent={footerContent}
     />

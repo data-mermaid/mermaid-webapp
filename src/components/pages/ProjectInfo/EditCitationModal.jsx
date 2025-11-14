@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   CitationDefinitionList,
@@ -14,11 +15,8 @@ import { DisabledText, PNoMargins } from '../../generic/text'
 import { HelpTextWithIcon } from '../../generic/HelpTextWithIcon/HelpTextWithIcon'
 import { IconRefresh } from '../../icons'
 import { Textarea } from '../../generic/form'
-import language from '../../../language'
 import Modal, { RightFooter } from '../../generic/Modal'
 import { PENDING_USER_PROFILE_NAME } from '../../../library/constants/constants'
-
-const modalLanguage = language.pages.projectInfo.editCitationModal
 
 export const EditCitationModal = ({
   citationToUse,
@@ -28,6 +26,7 @@ export const EditCitationModal = ({
   projectProfiles,
   setCitationToUse,
 }) => {
+  const { t } = useTranslation()
   const [editCitationValue, setEditCitationValue] = useState('')
 
   const isEditCitationValueDirty = citationToUse !== editCitationValue
@@ -106,29 +105,29 @@ export const EditCitationModal = ({
   const mainContent = (
     <MainContentWrapper>
       <CitationModalColumn>
-        <HelpTextWithIcon>{modalLanguage.helper}</HelpTextWithIcon>
+        <HelpTextWithIcon>{t('citation.copy_and_paste')}</HelpTextWithIcon>
         <ProjectInfoWrapper>
           <CitationDefinitionList>
-            <dt>{modalLanguage.projectName}</dt>
+            <dt>{t('projects.project_name')}</dt>
             <dd>{name}</dd>
-            <dt>{isAdminsPlural ? modalLanguage.projectAdmins : modalLanguage.projectAdmin}</dt>
+            <dt>{isAdminsPlural ? t('projects.project_admins') : t('projects.project_admin')}</dt>
             <dd>{adminsString}</dd>
             {otherProjectMembers.length ? (
               <>
                 <dt>
                   {isOtherProjectMembersPlural
-                    ? modalLanguage.otherProjectMembers
-                    : modalLanguage.otherProjectMember}
+                    ? t('projects.other_project_members')
+                    : t('projects.other_project_member')}
                 </dt>
                 <dd>{otherProjectMembersString}</dd>
               </>
             ) : null}
 
-            <dt>{modalLanguage.projectLastUpdated}</dt>
+            <dt>{t('projects.project_last_updated')}</dt>
             <dd>{projectLastUpdatedString}</dd>
             {countries.length ? (
               <>
-                <dt>{isCountriesPlural ? modalLanguage.countries : modalLanguage.country}</dt>
+                <dt>{isCountriesPlural ? t('projects.countries') : t('projects.country')}</dt>
                 <dd>{projectCountriesString}</dd>
               </>
             ) : null}
@@ -139,9 +138,9 @@ export const EditCitationModal = ({
       <CitationModalColumn>
         <form>
           <EditCitationLabelWrapper>
-            <CitationLabel htmlFor="editCitation">{modalLanguage.editCitation}</CitationLabel>
+            <CitationLabel htmlFor="editCitation">{t('citation.edit_suggested')}</CitationLabel>
             <ButtonSecondarySmall type="button" onClick={applyDefaultCitation}>
-              <IconRefresh /> {modalLanguage.useDefaultCitation}
+              <IconRefresh /> {t('citation.use_default')}
             </ButtonSecondarySmall>
           </EditCitationLabelWrapper>
 
@@ -152,7 +151,7 @@ export const EditCitationModal = ({
           />
         </form>
 
-        <CitationLabel>{modalLanguage.citationPreview}</CitationLabel>
+        <CitationLabel>{t('citation.citation_preview')}</CitationLabel>
         <PNoMargins>{citationPreview}</PNoMargins>
       </CitationModalColumn>
     </MainContentWrapper>
@@ -161,14 +160,14 @@ export const EditCitationModal = ({
   const footerContent = (
     <RightFooter>
       <ButtonSecondary type="button" onClick={handleCancel}>
-        {modalLanguage.cancel}
+        {t('buttons.cancel')}
       </ButtonSecondary>
       <ButtonPrimary
         type="button"
         disabled={!isEditCitationValueDirty || !isEditCitationValueDefined}
         onClick={handleUpdateCitation}
       >
-        {modalLanguage.updateCitation}
+        {t('citation.update')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -177,7 +176,7 @@ export const EditCitationModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={handleCancel}
-      title={modalLanguage.title}
+      title={t('citation.edit_suggested')}
       mainContent={mainContent}
       footerContent={footerContent}
     />
