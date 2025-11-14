@@ -153,7 +153,16 @@
     "success": {
       "project_copied": "Project copied",
       "project_created": "Project created"
-    }
+    },
+    "project_info": "Project info",
+    "no_notes": "No notes for this Project",
+    "no_organizations": "This Project has no organizations.",
+    "project_admins": "Project Admins",
+    "project_admin": "Project Admin",
+    "other_project_members": "Other Project Members",
+    "other_project_member": "Other Project Member",
+    "project_last_updated": "Project Last Updated",
+    "countries": "Countries"
   },
   "search": {
     "no_results": "No results found"
@@ -234,13 +243,13 @@
   "go_to_explore_this_project": "View this project on MERMAID Explore",
   "gfcr": {
     "title": "Global Fund for Coral Reefs (GFCR)",
-    "add_gfcr_indicators": "GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world.",
-    "remove_gfcr_Indicators": "Removing GFCR indicators from this project will not delete them, but just hide them.",
-    "disabled_gfcr_info": "Disabling GFCR Indicators for this project will not delete them, but just hide them from the <a />. No data will be lost. You can re-enable them at any time.",
+    "partnership": "GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world.",
+    "remove_info": "Removing GFCR indicators from this project will not delete them, but just hide them.",
+    "disabled_info": "Disabling GFCR Indicators for this project will not delete them, but just hide them from the <a />. No data will be lost. You can re-enable them at any time.",
     "buttons": {
       "go_to_gfcr": "Go to GFCR Indicators",
-      "disable_gfcr": "Disable GFCR Indicators",
-      "enable_gfcr": "Enable GFCR Indicators for this project"
+      "enable_gfcr": "Enable GFCR Indicators for this project",
+      "disable_gfcr": "Disable GFCR Indicators"
     }
   },
   "protocol_titles": {
@@ -385,5 +394,27 @@
     "sheltered_reef_slope": "Sheltered Reef Slope",
     "small_reef": "Small Reef",
     "terrestrial_reef_flat": "Terrestrial Reef Flat"
+  },
+  "organizations": {
+    "title": "Suggest a new organization",
+    "new_organization_name": "New organization name",
+    "helper_text": "If your organization is approved, it'll be automatically added to your Project.",
+    "organizations": "Organizations",
+    "organizations_helper_text": "Type to search for an organization.",
+    "no_organization_found": "No organization found.",
+    "suggest_new_organization": "Suggest a new organization to MERMAID...",
+    "remove_organization": "Remove organization from Project",
+    "buttons": {
+      "send_for_review": "Send to MERMAID for review"
+    }
+  },
+  "citation": {
+    "edit_suggested": "Edit Suggested Citation",
+    "copy_and_paste": "Copy and paste project info into your citation",
+    "citation_preview": "Citation Preview",
+    "use_default": "Use Default Citation",
+    "update": "Update Citation",
+    "suggested": "Suggested Citation",
+    "more_info": "Citation to suggest for all uses of your project data. This citation will be displayed on MERMAID Explore and with any other data access method."
   }
 }
