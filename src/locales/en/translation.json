@@ -317,6 +317,7 @@
   "count": "Count",
   "biomass": "Biomass",
   "validations": "Validations",
+  "filter_method": "Filter Method",
   "filters": {
     "search_helper_text": "<b>Use double quotes to search exact phrases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
     "projects_by_name_year": "Filter Projects By Name or Country",

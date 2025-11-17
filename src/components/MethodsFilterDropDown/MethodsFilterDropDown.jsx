@@ -7,6 +7,7 @@ import FormControl from '@mui/material/FormControl'
 import ListItemText from '@mui/material/ListItemText'
 import Select from '@mui/material/Select'
 import Checkbox from '@mui/material/Checkbox'
+import { useTranslation } from 'react-i18next'
 import theme from '../../theme'
 
 const ITEM_HEIGHT = 48
@@ -54,6 +55,8 @@ const MethodsFilterDropDown = ({
   id = 'methods-filter-search',
   disabled = false,
 }) => {
+  const { t } = useTranslation()
+
   const handleChange = (event) => {
     const eventValue = event.target.value
     handleMethodsColumnFilterChange(eventValue)
@@ -95,7 +98,7 @@ const MethodsFilterDropDown = ({
   return (
     <div>
       <FormControl sx={dynamicFormStyle}>
-        <InputLabel id="method-filer-label">Filter Method</InputLabel>
+        <InputLabel id="method-filer-label">{t('filter_method')}</InputLabel>
         <Select
           sx={SelectStyle}
           labelId="method-filter-multiple-checkbox-label"
@@ -103,7 +106,7 @@ const MethodsFilterDropDown = ({
           multiple
           value={value}
           onChange={(e) => handleChange(e)}
-          input={<OutlinedInput label="Filter Method" />}
+          input={<OutlinedInput label={t('filter_method')} />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
           disabled={disabled}
