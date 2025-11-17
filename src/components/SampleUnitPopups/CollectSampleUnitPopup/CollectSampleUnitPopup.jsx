@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { kebabCase } from 'lodash'
 
 import { InlineCell, Table } from '../../generic/Table/table'
 import TableRowItem from '../../generic/Table/TableRowItem'
@@ -13,14 +14,6 @@ import {
 } from '../SampleUnitPopups.styles'
 import { sortArray } from '../../../library/arrays/sortArray'
 import { API_NULL_NAME } from '../../../library/constants/constants'
-
-const toKebabCase = (str) => {
-  if (str == null) {
-    return ''
-  }
-
-  return str.toString().toLowerCase().replace(/\s+/g, '-').trim()
-}
 
 const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
   const { t } = useTranslation()
@@ -37,11 +30,11 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
       management_name === API_NULL_NAME ? t('management_regimes.missing_mr_name') : management_name
 
     const keyName = [
-      toKebabCase(transectNumberLabel),
-      toKebabCase(site_name),
-      toKebabCase(managementName),
-      toKebabCase(profile_name),
-      toKebabCase(sample_date),
+      kebabCase(transectNumberLabel || ''),
+      kebabCase(site_name || ''),
+      kebabCase(managementName || ''),
+      kebabCase(profile_name || ''),
+      kebabCase(sample_date || ''),
       index,
     ].join('-')
 
