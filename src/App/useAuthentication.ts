@@ -4,7 +4,25 @@ import { useNavigate } from 'react-router-dom'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
 
-const useAuthentication = ({ dexieCurrentUserInstance }) => {
+interface DexieCurrentUserInstance {
+  currentUser: {
+    delete: (key: string) => Promise<void>
+  }
+}
+
+interface UseAuthenticationParams {
+  dexieCurrentUserInstance: DexieCurrentUserInstance
+}
+
+interface UseAuthenticationReturn {
+  isMermaidAuthenticated: boolean
+  logoutMermaid: () => void
+  getAccessToken: () => Promise<string>
+}
+
+const useAuthentication = ({
+  dexieCurrentUserInstance,
+}: UseAuthenticationParams): UseAuthenticationReturn => {
   const { isAppOnline } = useOnlineStatus()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
   const navigate = useNavigate()
@@ -20,18 +38,18 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
   }, [])
 
   const handlePostLoginRedirect = useCallback(() => {
-    const validateReturnPath = (path) => {
-      if (!path || typeof path !== 'string') {
+    const validateReturnPath = (path: string | null): boolean => {
+      if (!path) {
         return false
       }
 
       return path.startsWith('/') && !path.startsWith('//')
     }
-    const safeSessionStorageOperation = (operation) => {
+
+    const safeSessionStorageOperation = <T>(operation: () => T): T | null => {
       try {
         return operation()
       } catch (error) {
-        console.warn('SessionStorage operation failed:', error)
         return null
       }
     }
@@ -41,9 +59,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
     if (returnToPath && returnToPath !== '/' && validateReturnPath(returnToPath)) {
       try {
         navigate(returnToPath, { replace: true })
-      } catch (error) {
-        console.error('Failed to handle post-login redirect:', error)
-      }
+      } catch (error) {}
     }
 
     safeSessionStorageOperation(() => sessionStorage.removeItem('auth0_returnTo'))
@@ -62,9 +78,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
       try {
         await getAuth0AccessTokenSilently()
         setAuthenticatedStates()
-      } catch (error) {
-        console.error('Silent authentication error:', error)
-      }
+      } catch (error) {}
     }
     if (isAuth0Authenticated && isAppOnline && !isAuth0Loading) {
       silentAuth()
@@ -110,7 +124,6 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
           )}`
         }
       } else {
-        // Store the current URL to redirect back to after login
         const { pathname, search } = window.location
 
         const returnTo = `${pathname}${search}`
@@ -157,7 +170,6 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
 
   const logoutMermaid = useCallback(() => {
     if (isAppOnline) {
-      // Clean up any stored returnTo path on logout
       sessionStorage.removeItem('auth0_returnTo')
 
       // this isnt necessary to make logout to work, but is here to make sure users.
