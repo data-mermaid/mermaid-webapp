@@ -37,18 +37,10 @@ test('Unsaved NEW benthic pit form edits clear when the user navigates away and 
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))
   // nav back
-  await user.click(
-    await screen.findByRole('button', {
-      name: /Add Sample Unit/i,
-    }),
-  )
+  await user.click(await screen.findByTestId('add-sample-unit-button'))
   const sampleUnitNav = await screen.findByTestId('new-sample-unit-nav')
 
-  await user.click(
-    within(sampleUnitNav).getByRole('link', {
-      name: 'Benthic PIT',
-    }),
-  )
+  await user.click(within(sampleUnitNav).getByTestId('benthicpit-link'))
 
   const formAfterNav = await screen.findByRole('form')
 
@@ -88,11 +80,7 @@ test('Unsaved EDIT benthic pit form edits clear when the user navigates away and
   // nav back
   const table = await screen.findByRole('table')
 
-  await user.click(
-    within(table).getAllByRole('link', {
-      name: 'Benthic PIT',
-    })[0],
-  )
+  await user.click(within(table).getAllByText('Benthic PIT')[0])
 
   const formAfterNav = await screen.findByRole('form')
 

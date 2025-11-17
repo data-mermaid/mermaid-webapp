@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 
 import { ContentPageLayout } from '../../Layout'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
@@ -12,7 +13,6 @@ import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeader
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
-import language from '../../../language'
 import PageUnavailable from '../PageUnavailable'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -103,6 +103,15 @@ const groupCollectSampleUnitsByProfileSummary = (records) => {
 }
 
 const UsersAndTransects = () => {
+  const { t } = useTranslation()
+
+  const usersAndTransectsTitle = t('sample_units_and_observers')
+  const submittedHeaderText = t('sample_units.submitted')
+  const collectingHeaderText = t('sample_units.collecting')
+  const siteHeaderText = t('sites.site')
+  const methodHeaderText = t('sample_units.method')
+  const summaryRecordDateUnavailableText = t('errors.summary_record_data_unavailable')
+
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -119,7 +128,7 @@ const UsersAndTransects = () => {
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
   const [searchFilteredRows, setSearchFilteredRows] = useState([])
 
-  useDocumentTitle(`${language.pages.usersAndTransectsTable.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${usersAndTransectsTitle} - ${t('mermaid')}`)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -162,12 +171,19 @@ const UsersAndTransects = () => {
                 setIsLoading(false)
               }
 
-              toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
+              toast.error(...getToastArguments(summaryRecordDateUnavailableText))
             },
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isMounted,
+    isAppOnline,
+    handleHttpResponseError,
+    summaryRecordDateUnavailableText,
+  ])
 
   const getUserColumnHeaders = useMemo(() => {
     const collectRecordsByProfileValues = Object.values(collectRecordsByProfile)
@@ -196,13 +212,15 @@ const UsersAndTransects = () => {
       {
         Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'site',
-        columns: [{ Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort }],
+        columns: [{ Header: siteHeaderText, accessor: 'site', sortType: reactTableNaturalSort }],
         disableSortBy: true,
       },
       {
         Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'method',
-        columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
+        columns: [
+          { Header: methodHeaderText, accessor: 'method', sortType: reactTableNaturalSort },
+        ],
         disableSortBy: true,
       },
       {
@@ -212,7 +230,7 @@ const UsersAndTransects = () => {
         disableSortBy: true,
       },
       {
-        Header: () => <HeaderCenter>Submitted</HeaderCenter>,
+        Header: () => <HeaderCenter>{submittedHeaderText}</HeaderCenter>,
         id: 'transect-numbers',
         columns: getSubmittedTransectNumberColumnHeaders,
         disableSortBy: true,
@@ -224,7 +242,7 @@ const UsersAndTransects = () => {
         disableSortBy: true,
       },
       {
-        Header: () => <HeaderCenter>Collecting</HeaderCenter>,
+        Header: () => <HeaderCenter>{collectingHeaderText}</HeaderCenter>,
         id: 'user-headers',
         columns: getUserColumnHeaders,
         disableSortBy: true,
@@ -242,7 +260,14 @@ const UsersAndTransects = () => {
     }
 
     return headers
-  }, [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders])
+  }, [
+    getUserColumnHeaders,
+    getSubmittedTransectNumberColumnHeaders,
+    submittedHeaderText,
+    collectingHeaderText,
+    siteHeaderText,
+    methodHeaderText,
+  ])
 
   const populateTransectNumberRow = useCallback(
     (rowRecord) => {
@@ -488,12 +513,12 @@ const UsersAndTransects = () => {
 
   const pageNoDataAvailable = (
     <>
-      <h3>{language.pages.usersAndTransectsTable.noDataMainText}</h3>
-      <p>{language.pages.usersAndTransectsTable.noDataSubTextTitle}</p>
+      <h3>{t('projects.no_submitted_sample_units')}</h3>
+      <p>{t('page.will_show')}</p>
       <ul>
-        {language.pages.usersAndTransectsTable.noDataSubTexts.map((text) => (
-          <li key={text}>{text}</li>
-        ))}
+        <li>{t('sample_units.who_has_unsubmitted')}</li>
+        <li>{t('sample_units.which_are_missing')}</li>
+        <li>{t('sample_units.submitted_and_unsubmitted_transect_number')}</li>
       </ul>
     </>
   )
@@ -667,17 +692,17 @@ const UsersAndTransects = () => {
   const content = isAppOnline ? (
     table
   ) : (
-    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+    <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
   )
 
   const toolbar = (
     <>
-      <H2>{language.pages.usersAndTransectsTable.title}</H2>
+      <H2>{usersAndTransectsTitle}</H2>
       {isAppOnline && (
         <ToolBarItemsRow>
           <FilterItems>
             <FilterSearchToolbar
-              name={language.pages.usersAndTransectsTable.filterToolbarText}
+              name={t('filters.by_site')}
               disabled={submittedRecords.length === 0}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}

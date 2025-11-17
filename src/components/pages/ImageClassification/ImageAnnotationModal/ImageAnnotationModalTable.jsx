@@ -141,8 +141,6 @@ const ImageAnnotationModalTable = ({
                         </ButtonZoom>
                       </MuiTooltipDark>
                     </TdZoom>
-                    {/* All points in a row will have the same ba_gr label */}
-
                     {groupedTableRowId === unclassifiedGuid ? (
                       <Td colSpan={5} align="center" style={{ fontWeight: '700' }}>
                         <span>

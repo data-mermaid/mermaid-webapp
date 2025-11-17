@@ -23,37 +23,6 @@ const MenuProps = {
 
 const fontStyle = { fontFamily: 'Open Sans', fontSize: '1.6rem' }
 
-const FormStyle = {
-  m: 1,
-  width: 230,
-  margin: 0,
-
-  '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-    border: '2px solid #264b7e',
-  },
-  '& .MuiOutlinedInput-notchedOutline': {
-    border: `1px solid ${theme.color.border}`,
-    '& legend': {
-      display: 'none',
-    },
-  },
-  '& .MuiOutlinedInput-root': {
-    fontFamily: 'Open Sans',
-    fontSize: '1.6rem',
-    color: theme.color.textColor,
-    height: '30.5px',
-  },
-  '& .MuiFormLabel-root': {
-    fontSize: '1.6rem',
-    paddingBottom: '0.2em',
-    color: `${theme.color.textColor} !important`,
-    position: 'inherit',
-    fontFamily: 'Open Sans',
-    transition: 'none',
-    transform: 'none',
-  },
-}
-
 const SelectStyle = { borderRadius: 0, height: '36px' }
 
 const CheckboxStyle = { color: theme.color.textColor }
@@ -87,13 +56,45 @@ const MethodsFilterDropDown = ({
 }) => {
   const handleChange = (event) => {
     const eventValue = event.target.value
-
     handleMethodsColumnFilterChange(eventValue)
+  }
+
+  // Dynamic FormStyle with background color applied to notchedOutline
+  const dynamicFormStyle = {
+    width: 230,
+    '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+      border: '2px solid #264b7e',
+      backgroundColor:
+        value.length > 0 ? theme.color.getMessageColorBackground('warning') : 'transparent',
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      border: `1px solid ${theme.color.border}`,
+      backgroundColor:
+        value.length > 0 ? theme.color.getMessageColorBackground('warning') : 'transparent',
+      '& legend': {
+        display: 'none',
+      },
+    },
+    '& .MuiOutlinedInput-root': {
+      fontFamily: 'Open Sans',
+      fontSize: '1.6rem',
+      color: theme.color.textColor,
+      height: '30.5px',
+    },
+    '& .MuiFormLabel-root': {
+      fontSize: '1.6rem',
+      paddingBottom: '0.2em',
+      color: `${theme.color.textColor} !important`,
+      position: 'inherit',
+      fontFamily: 'Open Sans',
+      transition: 'none',
+      transform: 'none',
+    },
   }
 
   return (
     <div>
-      <FormControl sx={FormStyle}>
+      <FormControl sx={dynamicFormStyle}>
         <InputLabel id="method-filer-label">Filter Method</InputLabel>
         <Select
           sx={SelectStyle}

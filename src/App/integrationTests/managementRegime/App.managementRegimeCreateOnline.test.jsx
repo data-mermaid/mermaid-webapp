@@ -47,7 +47,7 @@ describe('Online', () => {
       },
     )
 
-    await user.click(await screen.findByRole('link', { name: 'New MR' }))
+    await user.click(await screen.findByTestId('new-management-regime-button'))
 
     // ensure the were not in edit mode, but new management regime mode
     expect(

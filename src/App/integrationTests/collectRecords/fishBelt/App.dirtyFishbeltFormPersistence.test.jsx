@@ -37,18 +37,10 @@ test('Unsaved NEW fishbelt form edits clear when the user navigates away and bac
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))
   // nav back
-  await user.click(
-    await screen.findByRole('button', {
-      name: /Add Sample Unit/i,
-    }),
-  )
+  await user.click(await screen.findByTestId('add-sample-unit-button'))
   const sampleUnitNav = await screen.findByTestId('new-sample-unit-nav')
 
-  await user.click(
-    within(sampleUnitNav).getByRole('link', {
-      name: /fish belt/i,
-    }),
-  )
+  await user.click(within(sampleUnitNav).getByTestId('fishbelt-link'))
 
   const formAfterNav = await screen.findByRole('form')
 

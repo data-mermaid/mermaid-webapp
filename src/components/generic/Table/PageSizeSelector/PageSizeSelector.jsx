@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Select } from '../../form'
+import { useTranslation } from 'react-i18next'
 
 const PageSizeSelect = styled(Select)`
   width: auto;
@@ -20,6 +21,7 @@ const PageSizeSelector = ({
   isMethodFilterEnabled = false,
   isSearchFilterEnabled = false,
 }) => {
+  const { t } = useTranslation()
   const [pageOptionsToDisplay, setPageOptionsToDisplay] = useState([])
   const [filteredAmountToDisplay, setFilteredAmountToDisplay] = useState(null)
 
@@ -65,7 +67,7 @@ const PageSizeSelector = ({
 
   return (
     <label htmlFor="page-size-selector">
-      Showing{' '}
+      {t('showing')}{' '}
       <PageSizeSelect
         value={pageSize}
         onChange={onChange}

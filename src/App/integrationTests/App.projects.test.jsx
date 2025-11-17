@@ -27,11 +27,7 @@ test('Clicking anywhere on a project card navigates to the project collect page 
 
   await user.click(projectCard)
 
-  expect(
-    await screen.findByText('Collecting', {
-      selector: 'h2',
-    }),
-  ).toBeInTheDocument()
+  expect(await screen.findByTestId('collecting-title')).toBeInTheDocument()
 })
 // commented out for alpha, reactivate post alpha
 // test('Clicking anywhere on a project card navigates to the project health page when online', async () => {

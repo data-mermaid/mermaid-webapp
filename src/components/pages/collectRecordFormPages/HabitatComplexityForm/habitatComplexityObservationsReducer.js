@@ -4,7 +4,7 @@ import { updateObservationReducerValue } from '../updateObservationReducerValue'
 const habitatComplexityObservationReducer = (state, action) => {
   const getObservationsWithRecalculatedIntervals = ({ observations, intervalSize }) => {
     const recalculatedObservations = []
-    const intervalStartToUse = 1
+    const intervalStartToUse = intervalSize ?? 1
 
     if (!intervalSize) {
       return observations.map((observation) => ({ ...observation, interval: '-' }))

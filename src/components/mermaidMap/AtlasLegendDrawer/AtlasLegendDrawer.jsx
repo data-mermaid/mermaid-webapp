@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 import {
   SliderContainer,
   SliderHandler,
@@ -11,10 +12,10 @@ import {
   CheckBoxLabel,
 } from './AtlasLegendDrawer.styles'
 import { IconExternalLink } from '../../icons'
-import { geomorphicColors, benthicColors } from '../mapService'
+import { geomorphicColors, benthicColors, atlasLegendNames } from '../mapService'
 
-const geomorphicKeyNames = Object.keys(geomorphicColors)
-const benthicKeyNames = Object.keys(benthicColors)
+const geomorphicKeys = Object.keys(geomorphicColors)
+const benthicKeys = Object.keys(benthicColors)
 
 const LegendCheckbox = ({
   labelName,
@@ -43,22 +44,22 @@ const AtlasLegendDrawer = ({
   updateGeomorphicLayers,
   updateBenthicLayers,
 }) => {
+  const { t } = useTranslation()
   const [drawerOpen, setDrawerOpen] = useState(true)
   const coralMosaicLocalStorage = JSON.parse(localStorage.getItem('coral_mosaic'))
   const geomorphicLocalStorage = JSON.parse(localStorage.getItem('geomorphic_legend'))
   const benthicLocalStorage = JSON.parse(localStorage.getItem('benthic_legend'))
 
-  const loadLegendArrayLayer = (storageArray, legendKeyNameArray) => {
-    const legendArray = storageArray || legendKeyNameArray
+  const allenCoralAtlasText = t('map.legend.allen_coral_atlas')
 
-    return legendKeyNameArray.map((value) => {
-      const updatedGeomorphic = {
-        name: value,
-        selected: legendArray.includes(value),
-      }
+  const loadLegendArrayLayer = (storageKeys, legendKeys) => {
+    const legends = storageKeys || legendKeys
 
-      return updatedGeomorphic
-    })
+    return legendKeys.map((key) => ({
+      id: key,
+      name: t(`atlas_legend_drawer.${key}`),
+      selected: legends.includes(key),
+    }))
   }
 
   const [coralMosaicLayer, setCoralMosaicLayer] = useState(
@@ -66,16 +67,17 @@ const AtlasLegendDrawer = ({
   )
 
   const [geomorphicLayer, setGeomorphicLayer] = useState(
-    loadLegendArrayLayer(geomorphicLocalStorage, geomorphicKeyNames),
+    loadLegendArrayLayer(geomorphicLocalStorage, geomorphicKeys),
   )
   const [allGeomorphicLayersChecked, setAllGeomorphicLayersChecked] = useState(
-    geomorphicLocalStorage ? geomorphicLocalStorage.length === geomorphicKeyNames.length : true,
+    geomorphicLocalStorage ? geomorphicLocalStorage.length === geomorphicKeys.length : true,
   )
   const [benthicLayer, setBenthicLayer] = useState(
-    loadLegendArrayLayer(benthicLocalStorage, benthicKeyNames),
+    loadLegendArrayLayer(benthicLocalStorage, benthicKeys),
   )
+
   const [allBenthicLayersChecked, setAllBenthicLayersChecked] = useState(
-    benthicLocalStorage ? benthicLocalStorage.length === benthicKeyNames.length : true,
+    benthicLocalStorage ? benthicLocalStorage.length === benthicKeys.length : true,
   )
 
   const handleLegendVisibilityToggle = () => {
@@ -83,17 +85,20 @@ const AtlasLegendDrawer = ({
   }
 
   const getUpdatedLayerOption = (layer, item) => {
-    return layer.map((value) => {
-      if (value.name === item.name) {
-        return { ...value, selected: !item.selected }
+    return layer.map((layerItem) => {
+      if (layerItem.id === item.id) {
+        return { ...layerItem, selected: !item.selected }
       }
 
-      return value
+      return layerItem
     })
   }
 
-  const getFilterSelectedOption = (updatedLayer) =>
-    updatedLayer.filter(({ selected }) => selected).map(({ name }) => name)
+  const getSelectedLayerAtlasNames = (updatedLayer) =>
+    updatedLayer.filter(({ selected }) => selected).map(({ id }) => atlasLegendNames[id])
+
+  const getSelectedLayerIds = (updatedLayer) =>
+    updatedLayer.filter(({ selected }) => selected).map(({ id }) => id)
 
   const handleCoralMosaicLayer = () => {
     const coralMosaicResult = coralMosaicLayer ? 0 : 1
@@ -104,59 +109,60 @@ const AtlasLegendDrawer = ({
   }
 
   const handleGeomorphicOption = (item) => {
-    const legendMaxLength = geomorphicLayer.length
-    const updatedLayerOption = getUpdatedLayerOption(geomorphicLayer, item)
+    const updatedLayers = getUpdatedLayerOption(geomorphicLayer, item)
+    const selectedLayerNames = getSelectedLayerAtlasNames(updatedLayers)
+    const selectedLayerIds = JSON.stringify(getSelectedLayerIds(updatedLayers))
 
-    const filterSelectedLayerOption = getFilterSelectedOption(updatedLayerOption)
-
-    localStorage.setItem('geomorphic_legend', JSON.stringify(filterSelectedLayerOption))
-    setAllGeomorphicLayersChecked(filterSelectedLayerOption.length === legendMaxLength)
-    setGeomorphicLayer(updatedLayerOption)
-    updateGeomorphicLayers(filterSelectedLayerOption)
+    localStorage.setItem('geomorphic_legend', selectedLayerIds)
+    setAllGeomorphicLayersChecked(selectedLayerNames.length === geomorphicLayer.length)
+    setGeomorphicLayer(updatedLayers)
+    updateGeomorphicLayers(selectedLayerNames)
   }
 
   const handleBenthicOption = (item) => {
-    const legendMaxLength = benthicLayer.length
-    const updatedLayerOption = getUpdatedLayerOption(benthicLayer, item)
-    const filterSelectedLayerOption = getFilterSelectedOption(updatedLayerOption)
+    const updatedLayers = getUpdatedLayerOption(benthicLayer, item)
+    const selectedLayerNames = getSelectedLayerAtlasNames(updatedLayers)
+    const selectedLayerIds = JSON.stringify(getSelectedLayerIds(updatedLayers))
 
-    localStorage.setItem('benthic_legend', JSON.stringify(filterSelectedLayerOption))
-    setAllBenthicLayersChecked(filterSelectedLayerOption.length === legendMaxLength)
-    setBenthicLayer(updatedLayerOption)
-    updateBenthicLayers(filterSelectedLayerOption)
+    localStorage.setItem('benthic_legend', selectedLayerIds)
+    setAllBenthicLayersChecked(selectedLayerNames.length === benthicLayer.length)
+    setBenthicLayer(updatedLayers)
+    updateBenthicLayers(selectedLayerNames)
   }
 
   const handleSelectAllGeomorphicLayers = () => {
-    const updatedLayerOption = geomorphicLayer.map((value) => {
-      return { ...value, selected: !allGeomorphicLayersChecked }
+    const updatedLayers = geomorphicLayer.map((layer) => {
+      return { ...layer, selected: !allGeomorphicLayersChecked }
     })
 
-    const filterSelectedLayerOption = getFilterSelectedOption(updatedLayerOption)
+    const selectedLayerNames = getSelectedLayerAtlasNames(updatedLayers)
+    const selectedLayerIds = JSON.stringify(getSelectedLayerIds(updatedLayers))
 
-    localStorage.setItem('geomorphic_legend', JSON.stringify(filterSelectedLayerOption))
+    localStorage.setItem('geomorphic_legend', selectedLayerIds)
     setAllGeomorphicLayersChecked(!allGeomorphicLayersChecked)
-    setGeomorphicLayer(updatedLayerOption)
-    updateGeomorphicLayers(filterSelectedLayerOption)
+    setGeomorphicLayer(updatedLayers)
+    updateGeomorphicLayers(selectedLayerNames)
   }
 
   const handleSelectAllBenthicLayers = () => {
-    const updatedLayerOption = benthicLayer.map((value) => {
-      return { ...value, selected: !allBenthicLayersChecked }
+    const updatedLayers = benthicLayer.map((layer) => {
+      return { ...layer, selected: !allBenthicLayersChecked }
     })
 
-    const filterSelectedLayerOption = getFilterSelectedOption(updatedLayerOption)
+    const selectedLayerNames = getSelectedLayerAtlasNames(updatedLayers)
+    const selectedLayerIds = JSON.stringify(getSelectedLayerIds(updatedLayers))
 
-    localStorage.setItem('benthic_legend', JSON.stringify(filterSelectedLayerOption))
+    localStorage.setItem('benthic_legend', selectedLayerIds)
     setAllBenthicLayersChecked(!allBenthicLayersChecked)
-    setBenthicLayer(updatedLayerOption)
-    updateBenthicLayers(filterSelectedLayerOption)
+    setBenthicLayer(updatedLayers)
+    updateBenthicLayers(selectedLayerNames)
   }
 
   const geomorphicList = geomorphicLayer.map((geomorphicObj) => {
     return (
       <LegendCheckbox
-        key={geomorphicObj.name}
-        bgColor={geomorphicColors[geomorphicObj.name]}
+        key={geomorphicObj.id}
+        bgColor={geomorphicColors[geomorphicObj.id]}
         labelName={geomorphicObj.name}
         checked={geomorphicObj.selected}
         handleCheckboxChange={() => handleGeomorphicOption(geomorphicObj)}
@@ -168,8 +174,8 @@ const AtlasLegendDrawer = ({
   const benthicOptions = benthicLayer.map((benthicObj) => {
     return (
       <LegendCheckbox
-        key={benthicObj.name}
-        bgColor={benthicColors[benthicObj.name]}
+        key={benthicObj.id}
+        bgColor={benthicColors[benthicObj.id]}
         labelName={benthicObj.name}
         checked={benthicObj.selected}
         handleCheckboxChange={() => handleBenthicOption(benthicObj)}
@@ -179,51 +185,53 @@ const AtlasLegendDrawer = ({
   })
 
   return (
-    <SliderContainer isOpen={drawerOpen}>
-      <SliderHandler onClick={handleLegendVisibilityToggle}>
-        <SliderHandlerName>Allen&nbsp;Coral&nbsp;Atlas</SliderHandlerName>
+    <>
+      <SliderHandler isOpen={drawerOpen} onClick={handleLegendVisibilityToggle}>
+        <SliderHandlerName>{allenCoralAtlasText.replace(/\s/g, '\u00A0')}</SliderHandlerName>
       </SliderHandler>
-      <SliderLegendPanel isOpen={drawerOpen}>
-        <LegendHeader>
-          Allen Coral Atlas{' '}
-          <a
-            href="https://allencoralatlas.org/atlas"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Visit Allan Coral Atlas"
-          >
-            <IconExternalLink />
-          </a>
-        </LegendHeader>
-        <LegendBody>
-          <LegendCheckbox
-            labelName="Satellite Coral Reef Mosaic"
-            checked={coralMosaicLayer === 1}
-            handleCheckboxChange={handleCoralMosaicLayer}
-          />
-          <details open>
-            <summary>
-              <LegendCheckbox
-                labelName="Geomorphic Analysis"
-                checked={allGeomorphicLayersChecked}
-                handleCheckboxChange={handleSelectAllGeomorphicLayers}
-              />
-            </summary>
-            {geomorphicList}
-          </details>
-          <details open>
-            <summary>
-              <LegendCheckbox
-                labelName="Benthic Analysis"
-                checked={allBenthicLayersChecked}
-                handleCheckboxChange={handleSelectAllBenthicLayers}
-              />
-            </summary>
-            {benthicOptions}
-          </details>
-        </LegendBody>
-      </SliderLegendPanel>
-    </SliderContainer>
+      <SliderContainer isOpen={drawerOpen}>
+        <SliderLegendPanel isOpen={drawerOpen}>
+          <LegendHeader>
+            {allenCoralAtlasText}{' '}
+            <a
+              href="https://allencoralatlas.org/atlas"
+              target="_blank"
+              rel="noreferrer"
+              aria-label={t('map.legend.visit_allen_coral_atlas')}
+            >
+              <IconExternalLink />
+            </a>
+          </LegendHeader>
+          <LegendBody>
+            <LegendCheckbox
+              labelName={t('map.legend.satellite_coral_reef_mosaic')}
+              checked={coralMosaicLayer === 1}
+              handleCheckboxChange={handleCoralMosaicLayer}
+            />
+            <details open>
+              <summary>
+                <LegendCheckbox
+                  labelName={t('map.legend.geomorphic_analysis')}
+                  checked={allGeomorphicLayersChecked}
+                  handleCheckboxChange={handleSelectAllGeomorphicLayers}
+                />
+              </summary>
+              {geomorphicList}
+            </details>
+            <details open>
+              <summary>
+                <LegendCheckbox
+                  labelName={t('map.legend.benthic_analysis')}
+                  checked={allBenthicLayersChecked}
+                  handleCheckboxChange={handleSelectAllBenthicLayers}
+                />
+              </summary>
+              {benthicOptions}
+            </details>
+          </LegendBody>
+        </SliderLegendPanel>
+      </SliderContainer>
+    </>
   )
 }
 

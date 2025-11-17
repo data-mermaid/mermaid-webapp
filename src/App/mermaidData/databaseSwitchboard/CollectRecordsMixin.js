@@ -1,4 +1,5 @@
 import axios from '../../../library/axiosRetry'
+import i18next from '../../../../i18n'
 import {
   getProtocolTransectType,
   getIsFishBelt,
@@ -11,17 +12,10 @@ import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeader
 import { getObjectById } from '../../../library/getObjectById'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import getObjectProperty from '../../../library/objects/getObjectProperty'
-import language from '../../../language'
 import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 
 const CollectRecordsMixin = (Base) =>
   class extends Base {
-    #validationTypeLabel = {
-      ok: 'Valid',
-      error: 'Errors',
-      warning: 'Warnings',
-    }
-
     #formatFishbeltRecordForPush = function formatFishbeltRecordForPush({
       record,
       projectId,
@@ -93,8 +87,19 @@ const CollectRecordsMixin = (Base) =>
 
     #getStatusLabel = function getStatusLabel(record) {
       const { validations } = record
+      const statusKey = validations?.status
 
-      return this.#validationTypeLabel[validations?.status] ?? 'Saved'
+      // Map status to translation keys and return translated text
+      switch (statusKey) {
+        case 'error':
+          return i18next.t('sample_units.validation_status.errors')
+        case 'warning':
+          return i18next.t('sample_units.validation_status.warnings')
+        case 'ok':
+          return i18next.t('sample_units.validation_status.ready_to_submit')
+        default:
+          return i18next.t('sample_units.validation_status.saved')
+      }
     }
 
     #getSizeLabel = function getSizeLabel(record, choices) {
@@ -688,7 +693,7 @@ const CollectRecordsMixin = (Base) =>
                 management: getObjectById(managementRegimes, record.data.sample_event.management)
                   ?.name,
                 observers: this.#getObserversLabel(record),
-                protocol: language.protocolTitles[record.data.protocol],
+                protocol: i18next.t(`protocol_titles.${record.data.protocol}`),
                 sampleDate: getSampleDateLabel(record.data.sample_event.sample_date),
                 sampleUnitNumber: this.#getSampleUnitLabel(record),
                 site: getObjectById(sites, record.data.sample_event.site)?.name,

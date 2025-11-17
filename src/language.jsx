@@ -128,8 +128,6 @@ const error = {
   projectSave: 'The project has not been saved.',
   projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
-  siteRecordsUnavailable: 'Site record data are currently unavailable.',
-  siteRecordUnavailable: 'Site record data are currently unavailable.',
   submittedRecordsUnavailable: 'Submitted record data are currently unavailable.',
   submittedRecordUnavailable: 'Submitted record data are currently unavailable.',
   submittedRecordMoveToCollect: 'The submitted record has not been made editable',
@@ -622,11 +620,6 @@ const pages = {
     adminEditOnly:
       'Submitted sample units are read-only and can only be moved to Collecting by an admin.',
   },
-  collectTable: {
-    title: 'Collecting',
-    filterToolbarText: 'Filter this table by site, management, or observer',
-    noDataMainText: `You do not have any active sample units`,
-  },
   siteForm: {
     title: 'Site',
     nonAdminDelete: 'Only admins can delete a site.',
@@ -635,39 +628,18 @@ const pages = {
   },
   siteTable: {
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',
-    copySitesButtonText: 'Copy sites from other projects',
-    filterToolbarText: 'Filter this table by name, reef type, reef zone, or exposure.',
-    noDataMainText: 'This project has no sites.',
-    title: 'Sites',
   },
   managementRegimeForm: {
     title: 'Management Regime',
     nonAdminDelete: 'Only admins can delete a management regime.',
   },
-  managementRegimeTable: {
-    copyManagementRegimeButtonText: 'Copy MRs from other projects',
-    filterToolbarText: 'Filter this table by name or year',
-    noDataMainText: `This project has no Management Regimes.`,
-    title: 'Management Regimes',
-  },
   usersAndTransectsTable: {
-    title: 'Sample Units / Observers',
+    filterToolbarText: 'Filter this table by site',
     navTitle: (
       <>
         Sample Units / <br /> Observers
       </>
     ),
-    filterToolbarText: 'Filter this table by site',
-    missingSiteName: '(Missing Site Name)',
-    missingMRName: '(Missing MR Name)',
-    missingLabelNumber: 'missing number',
-    noDataMainText: 'This project has no submitted sample units yet.',
-    noDataSubTextTitle: 'This page will show:',
-    noDataSubTexts: [
-      'Who has unsubmited sample units',
-      'Which sample units are missing',
-      'Transect number for submitted and unsubmitted sample units',
-    ],
   },
   managementRegimesOverview: {
     navTitle: (
@@ -680,16 +652,6 @@ const pages = {
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubText:
       'This page will show the Management Regime of submitted sample units by method and site.',
-  },
-  copySiteTable: {
-    title: 'Copy Sites',
-    filterToolbarText: 'Filter this table by name, project, or country',
-    copyButtonText: 'Copy selected sites to project',
-  },
-  copyManagementRegimeTable: {
-    title: 'Copy Management Regimes',
-    filterToolbarText: 'Filter management regimes by name, project, or year',
-    copyButtonText: 'Copy selected MRs to project',
   },
   gfcrTable: {
     filterToolbarText: 'Filter this table by title or date',
@@ -1257,13 +1219,6 @@ const map = {
     'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
 }
 
-const popoverTexts = {
-  noSampleUnitMatch: 'No Sample Units match:',
-  viewSubmittedSampleUnit: 'View submitted Sample Unit',
-  notSubmittedSampleUnit: `This Sample Unit is not submitted`,
-  inCollectingWith: 'In Collecting with:',
-}
-
 const getResolveModalLanguage = (siteOrManagementRegime) => {
   return {
     original: `Original ${siteOrManagementRegime}`,
@@ -1574,7 +1529,6 @@ export default {
   navigateAwayPrompt,
   pages,
   placeholders,
-  popoverTexts,
   protocolTitles,
   success,
   table,

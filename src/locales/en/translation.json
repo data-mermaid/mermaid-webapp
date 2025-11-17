@@ -13,7 +13,8 @@
     "save": "Save",
     "save_changes": "Save changes",
     "submit": "Submit",
-    "view": "View"
+    "view": "View",
+    "export_to_xlsx": "Export To XLSX"
   },
   "contact_us": "Contact us for help",
   "forms": {
@@ -21,11 +22,13 @@
     "submit_for_review": "Send to MERMAID for review"
   },
   "toasts": {
-    "export_error": "There was an error exporting the report."
+    "export_error": "There was an error exporting the report.",
+    "submitted_records_unavailable": "Submitted record data are currently unavailable."
   },
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",
   "projects_loading_indicator": "projects list loading indicator",
+  "showing": "Showing",
   "image_classification": {
     "add_attribute": "Add new attribute",
     "attribute_growth_form": "Benthic attribute / growth form",
@@ -115,7 +118,12 @@
   },
   "name": "Name",
   "offline": {
-    "unavailable_offline": "Unavailable offline."
+    "unavailable_offline": "Unavailable offline.",
+    "page_unavailable_offline": "This page is unavailable offline."
+  },
+  "page": {
+    "read_only": "You cannot access this page because you are a read-only member of this project.",
+    "will_show": "This page will show:"
   },
   "projects": {
     "data_unavailable": "Project data is currently unavailable.",
@@ -131,7 +139,6 @@
     "data_copy_to_project": "Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.",
     "copy_of_project_name": "Copy of {{projectName}}",
     "notify_user_email": "Notify users by email",
-    "filter_projects": "Filter Projects By Name or Country",
     "sort_by": "Sort By",
     "last_updated_date": "Last Updated Date",
     "project_name": "Project Name",
@@ -139,6 +146,7 @@
     "new_project": "New Project",
     "name_of_project": "Name of project",
     "loading_indicator": "projects list loading indicator",
+    "no_submitted_sample_units": "This project has no submitted sample units yet.",
     "errors": {
       "project_name_exists": "Project name already exists in MERMAID",
       "data_unavailable": "Project data is currently unavailable.",
@@ -151,18 +159,6 @@
   },
   "search": {
     "no_results": "No results found"
-  },
-  "exports": {
-    "success": "Export successful",
-    "email_sent": "An email has been sent to <currentUserEmail />. This can sometimes take up to 15 minutes.",
-    "included_in_export": "Included in this export",
-    "project_metadata": "Metadata for this project",
-    "sample_event_level_data_one": "Sample event level data ({{count}} survey)",
-    "sample_event_level_data_other": "Sample event level data ({{count}} surveys)",
-    "observation_level_data_one": "Observation level data ({{count}} survey)",
-    "observation_level_data_other": "Observation level data ({{count}} surveys)",
-    "credit_request": "Please credit the data owners",
-    "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
   },
   "benthic_observations": {
     "add_benthic_attribute": "Add new benthic attribute",
@@ -177,11 +173,38 @@
     }
   },
   "sample_units": {
+    "submitted": "Submitted",
+    "collecting": "Collecting",
+    "method": "Method",
+    "sample_unit_number": "Sample unit #",
+    "size": "Size",
+    "depth_m": "Depth (m)",
+    "sample_date": "Sample date",
+    "observers": "Observers",
+    "status": "Status",
+    "add": "Add sample unit",
+    "last_edited_by": "Last edited by",
+    "no_submitted_sample_units": "This project has no submitted sample units.",
+    "missing_label_number": "missing number",
+    "no_active_access": "You do not have any active sample units",
+    "who_has_unsubmitted": "Who has unsubmitted sample units",
+    "which_are_missing": "Which sample units are missing",
+    "submitted_and_unsubmitted_transect_number": "Transect number for submitted and unsubmitted sample units",
+    "no_match": "No Sample Units match:",
+    "view_submitted": "View submitted Sample Unit",
+    "not_submitted": "This Sample Unit is not submitted",
+    "validation_status": {
+      "errors": "Errors",
+      "ready_to_submit": "Ready to submit",
+      "saved": "Saved",
+      "warnings": "Warnings"
+    },
     "errors": {
       "data_unavailable": "Sample unit data is currently unavailable.",
       "observations_unavailable_offline": "Sample unit observations unavailable offline",
       "classification_unavailable_offline": "This sample unit is using image classification and is unavailable offline.",
-      "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable."
+      "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable.",
+      "submitted_data_unavailable": "Submitted record data are currently unavailable."
     }
   },
   "fish_belt_observations": {
@@ -201,7 +224,19 @@
   "toggle_table_visibility": "Toggle table visibility",
   "toggle_label_visibility": "Toggle label visibility",
   "user": "User",
-  "mermaid_": "MERMAID",
+  "exports": {
+    "success": "Export successful",
+    "email_sent": "An email has been sent to <currentUserEmail />. This can sometimes take up to 15 minutes.",
+    "included_in_export": "Included in this export",
+    "project_metadata": "Metadata for this project",
+    "sample_event_level_data_one": "Sample event level data ({{count}} survey)",
+    "sample_event_level_data_other": "Sample event level data ({{count}} surveys)",
+    "observation_level_data_one": "Observation level data ({{count}} survey)",
+    "observation_level_data_other": "Observation level data ({{count}} surveys)",
+    "credit_request": "Please credit the data owners",
+    "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
+  },
+  "mermaid": "MERMAID",
   "mermaid_explore": "MERMAID Explore",
   "reference": "Reference",
   "go_to_explore_projects": "View all your projects on MERMAID Explore",
@@ -282,5 +317,92 @@
   "size_cm": "Size (cm)",
   "count": "Count",
   "biomass": "Biomass",
-  "validations": "Validations"
+  "validations": "Validations",
+  "filters": {
+    "search_helper_text": "<b>Use double quotes to search exact phrases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
+    "projects_by_name_year": "Filter Projects By Name or Country",
+    "by_name_year": "Filter this table by name or year",
+    "by_name_project_year": "Filter this table by name, project, or year",
+    "by_name_reeftype_reefzone_exposure": "Filter this table by name, reef type, reef zone, or exposure",
+    "by_name_project_country": "Filter this table by name, project, or country",
+    "by_site_management_observer": "Filter this table by site, management, or observer",
+    "by_site": "Filter this table by site"
+  },
+  "view_selected_only": "View Selected Only",
+  "management_regimes": {
+    "management_regime": "Management regime",
+    "management_regimes": "Management Regimes",
+    "management_regime_name": "Management regime name",
+    "management": "Management",
+    "secondary_name": "Secondary name",
+    "year_est": "Year est.",
+    "compliance": "Compliance",
+    "open_access": "Open access",
+    "access_restriction": "Access restrictions",
+    "periodic_closure": "Periodic closure",
+    "size_limits": "Size limits",
+    "gear_restriction": "Gear restrictions",
+    "species_restriction": "Species restrictions",
+    "no_take": "No take",
+    "data_unavailable": "Management Regime records data are currently unavailable.",
+    "no_management_regimes": "This project has no management regimes.",
+    "copy": "Copy Management Regimes",
+    "copy_mrs_from_other_projects": "Copy MRs from other projects",
+    "copy_selected_mrs_to_project": "Copy selected MRs to project",
+    "new": "New MR",
+    "export": "Export MRs",
+    "missing_mr_name": "(Missing MR Name)"
+  },
+  "sites": {
+    "sites": "Sites",
+    "site": "Site",
+    "reef_type": "Reef type",
+    "reef_zone": "Reef zone",
+    "exposure": "Exposure",
+    "copy": "Copy Sites",
+    "new": "New site",
+    "copy_sites_from_other_projects": "Copy sites from other projects",
+    "copy_selected_sites_to_project": "Copy selected sites to project",
+    "export": "Export sites",
+    "no_sites": "This project has no sites.",
+    "data_unavailable": "Site record data are currently unavailable.",
+    "missing_site_name": "(Missing Site Name)"
+  },
+  "sample_units_and_observers": "Sample Units / Observers",
+  "in_collecting_with": "In Collecting with:",
+  "errors": {
+    "summary_record_data_unavailable": "Summary record data are currently unavailable."
+  },
+  "map": {
+    "attribution": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href=\"http://www.allencoralatlas.org/\"  style=\"font-size:1.25rem;\">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>",
+    "zoom_control_text": "Use Ctrl + Scroll to zoom the map",
+    "place_marker": "Place Site Marker",
+    "legend": {
+      "allen_coral_atlas": "Allen Coral Atlas",
+      "visit_allen_coral_atlas": "Visit Allen Coral Atlas",
+      "satellite_coral_reef_mosaic": "Satellite Coral Reef Mosaic",
+      "geomorphic_analysis": "Geomorphic Analysis",
+      "benthic_analysis": "Benthic Analysis"
+    }
+  },
+  "atlas_legend_drawer": {
+    "coral_algae": "Coral/Algae",
+    "benthic_microalgae": "Benthic Microalgae",
+    "rock": "Rock",
+    "rubble": "Rubble",
+    "sand": "Sand",
+    "seagrass": "Seagrass",
+    "back_reef_slope": "Back Reef Slope",
+    "deep_lagoon": "Deep Lagoon",
+    "inner_reef_flat": "Inner Reef Flat",
+    "outer_reef_flat": "Outer Reef Flat",
+    "patch_reefs": "Patch Reefs",
+    "plateau": "Plateau",
+    "reef_crest": "Reef Crest",
+    "reef_slope": "Reef Slope",
+    "shallow_lagoon": "Shallow Lagoon",
+    "sheltered_reef_slope": "Sheltered Reef Slope",
+    "small_reef": "Small Reef",
+    "terrestrial_reef_flat": "Terrestrial Reef Flat"
+  }
 }

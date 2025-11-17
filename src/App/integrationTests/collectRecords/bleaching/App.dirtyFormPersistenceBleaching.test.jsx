@@ -37,18 +37,10 @@ test('Unsaved NEW bleaching form edits clear when the user navigates away and ba
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))
   // nav back
-  await user.click(
-    await screen.findByRole('button', {
-      name: /Add Sample Unit/i,
-    }),
-  )
+  await user.click(await screen.findByTestId('add-sample-unit-button'))
   const sampleUnitNav = await screen.findByTestId('new-sample-unit-nav')
 
-  await user.click(
-    within(sampleUnitNav).getByRole('link', {
-      name: 'Bleaching',
-    }),
-  )
+  await user.click(within(sampleUnitNav).getByTestId('bleachingqc-link'))
 
   const formAfterNav = await screen.findByRole('form')
 
@@ -88,11 +80,7 @@ test('Unsaved EDIT bleaching form edits clear when the user navigates away and b
   // nav back
   const table = await screen.findByRole('table')
 
-  await user.click(
-    within(table).getAllByRole('link', {
-      name: 'Bleaching',
-    })[0],
-  )
+  await user.click(within(table).getAllByText('Bleaching')[0])
 
   const formAfterNav = await screen.findByRole('form')
 

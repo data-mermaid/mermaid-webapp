@@ -64,6 +64,7 @@ const HideShow = ({ contents, button, closeOnClickWithin = true }) => {
   }, [buttonRef, contentsRef, closeOnClickWithin, isMounted])
 
   const buttonForRender = React.cloneElement(button, {
+    ...button.props,
     ref: buttonRef,
     onClick: toggleShowItems,
   })

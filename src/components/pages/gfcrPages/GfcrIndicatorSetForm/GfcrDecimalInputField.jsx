@@ -38,6 +38,7 @@ const GfcrDecimalInputField = ({
       label={label}
       id={id}
       type="text"
+      textAlign="right"
       inputMode="decimal"
       pattern="[0-9.]*"
       unit={unit}

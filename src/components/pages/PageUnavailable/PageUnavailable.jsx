@@ -14,13 +14,14 @@ const PageUnavailable = ({
   subText = '',
   align = 'start',
   children = undefined,
+  testId = 'page-unavailable-main-text',
 }) => {
   if (children) {
-    return <PageUnavailableContainer>{children}</PageUnavailableContainer>
+    return <PageUnavailableContainer data-testid={testId}>{children}</PageUnavailableContainer>
   }
 
   return (
-    <PageUnavailableContainer align={align}>
+    <PageUnavailableContainer align={align} data-testid={testId}>
       <h3>{mainText}</h3>
       <p>{subText}</p>
     </PageUnavailableContainer>
@@ -32,5 +33,6 @@ PageUnavailable.propTypes = {
   subText: PropTypes.oneOfType([PropTypes.number, PropTypes.node]),
   align: PropTypes.string,
   children: PropTypes.node,
+  testId: PropTypes.string,
 }
 export default PageUnavailable

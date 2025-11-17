@@ -41,19 +41,19 @@ test('Collect Records table sorts properly by method column', async () => {
   await user.selectOptions(pageSizeSelector, '21')
 
   // Double click all of the default sort columns twice to disable default sorting
-  await user.dblClick(within(table).getByText('Site'))
-  await user.dblClick(within(table).getByText('Method'))
-  await user.dblClick(within(table).getByText('Sample Date'))
-  await user.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByTestId('collecting-header-site'))
+  await user.dblClick(within(table).getByTestId('collecting-header-method'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleDate'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleUnitNumber'))
 
   // click twice to change to descending order
-  await user.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByTestId('collecting-header-method'))
 
   const tableRowsAfterDescending = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfterDescending[1]).getByText('Habitat Complexity'))
 
-  await user.dblClick(within(table).getByText('Method'))
+  await user.dblClick(within(table).getByTestId('collecting-header-method'))
 
   const tableRowsAfterAscending = within(table).getAllByRole('row')
 
@@ -85,20 +85,20 @@ test('Collect Records table sorts properly by site column', async () => {
   expect(within(tableRows[1]).getByText('Site C'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  await user.dblClick(within(table).getByText('Site'))
-  await user.dblClick(within(table).getByText('Method'))
-  await user.dblClick(within(table).getByText('Sample Date'))
-  await user.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByTestId('collecting-header-site'))
+  await user.dblClick(within(table).getByTestId('collecting-header-method'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleDate'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleUnitNumber'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Site'))
+  await user.click(within(table).getByTestId('collecting-header-site'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Site C'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Site'))
+  await user.click(within(table).getByTestId('collecting-header-site'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -130,20 +130,20 @@ test('Collect Records table sorts properly by management column', async () => {
   expect(within(tableRows[1]).getByText('Management Regimes C'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  await user.dblClick(within(table).getByText('Site'))
-  await user.dblClick(within(table).getByText('Method'))
-  await user.dblClick(within(table).getByText('Sample Date'))
-  await user.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByTestId('collecting-header-site'))
+  await user.dblClick(within(table).getByTestId('collecting-header-method'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleDate'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleUnitNumber'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Management Regime'))
+  await user.click(within(table).getByTestId('collecting-header-management'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Management Regime'))
+  await user.click(within(table).getByTestId('collecting-header-management'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -175,20 +175,20 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
   expect(within(tableRows[1]).getByText('5 FB-1'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  await user.dblClick(within(table).getByText('Site'))
-  await user.dblClick(within(table).getByText('Method'))
-  await user.dblClick(within(table).getByText('Sample Date'))
-  await user.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByTestId('collecting-header-site'))
+  await user.dblClick(within(table).getByTestId('collecting-header-method'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleDate'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleUnitNumber'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Sample Unit #'))
+  await user.click(within(table).getByTestId('collecting-header-sampleUnitNumber'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('2'))
 
   // // click again to change to descending order
-  await user.click(within(table).getByText('Sample Unit #'))
+  await user.click(within(table).getByTestId('collecting-header-sampleUnitNumber'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -222,20 +222,20 @@ test('Collect Records table sorts properly by size column', async () => {
   expect(within(tableRows[1]).getByText('10m'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  await user.dblClick(within(table).getByText('Site'))
-  await user.dblClick(within(table).getByText('Method'))
-  await user.dblClick(within(table).getByText('Sample Date'))
-  await user.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByTestId('collecting-header-site'))
+  await user.dblClick(within(table).getByTestId('collecting-header-method'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleDate'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleUnitNumber'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Size'))
+  await user.click(within(table).getByTestId('collecting-header-size'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('5m x 2m'))
 
   // // click again to change to descending order
-  await user.click(within(table).getByText('Size'))
+  await user.click(within(table).getByTestId('collecting-header-size'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -267,20 +267,20 @@ test('Collect Records table sorts properly by depth column', async () => {
   expect(within(tableRows[1]).getByText('20'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  await user.dblClick(within(table).getByText('Site'))
-  await user.dblClick(within(table).getByText('Method'))
-  await user.dblClick(within(table).getByText('Sample Date'))
-  await user.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByTestId('collecting-header-site'))
+  await user.dblClick(within(table).getByTestId('collecting-header-method'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleDate'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleUnitNumber'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Depth (m)'))
+  await user.click(within(table).getByTestId('collecting-header-depth'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('10'))
 
   // // click again to change to descending order
-  await user.click(within(table).getByText('Depth (m)'))
+  await user.click(within(table).getByTestId('collecting-header-depth'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -309,20 +309,20 @@ test('Collect Records table sorts properly by sample date column', async () => {
   await user.selectOptions(screen.getByTestId('page-size-selector'), '21')
 
   // Double click all of the default sort columns twice to disable default sorting
-  await user.dblClick(within(table).getByText('Site'))
-  await user.dblClick(within(table).getByText('Method'))
-  await user.dblClick(within(table).getByText('Sample Date'))
-  await user.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByTestId('collecting-header-site'))
+  await user.dblClick(within(table).getByTestId('collecting-header-method'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleDate'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleUnitNumber'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Sample Date'))
+  await user.click(within(table).getByTestId('collecting-header-sampleDate'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('November 22, 2001'))
 
   // // click again to change to descending order
-  await user.click(within(table).getByText('Sample Date'))
+  await user.click(within(table).getByTestId('collecting-header-sampleDate'))
 
   const tableRowsAfterSecondClick = within(table).getAllByRole('row')
 
@@ -355,13 +355,13 @@ test('Collect Records table sorts properly by observers column', async () => {
   expect(within(tableRows[1]).getByText('Al Leonard, Melissa Nunes'))
 
   // Double click all of the default sort columns twice to disable default sorting
-  await user.dblClick(within(table).getByText('Site'))
-  await user.dblClick(within(table).getByText('Method'))
-  await user.dblClick(within(table).getByText('Sample Date'))
-  await user.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByTestId('collecting-header-site'))
+  await user.dblClick(within(table).getByTestId('collecting-header-method'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleDate'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleUnitNumber'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Observers'))
+  await user.click(within(table).getByTestId('collecting-header-observers'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
@@ -370,14 +370,14 @@ test('Collect Records table sorts properly by observers column', async () => {
   expect(within(tableCellsFromTableRowsAfter[7]).getByText('Al Leonard'))
 
   // // click again to change to descending order
-  await user.click(within(table).getByText('Observers'))
+  await user.click(within(table).getByTestId('collecting-header-observers'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfterFirstClick[1]).getByText('Nick Hoang, Kim Fisher, Dustin Sampson'))
 })
 
-test('Collect Records table sorts properly by sample date column', async () => {
+test('Collect Records table sorts properly by sample date column (second test)', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -398,20 +398,20 @@ test('Collect Records table sorts properly by sample date column', async () => {
   const table = screen.getByRole('table')
 
   // Double click all of the default sort columns twice to disable default sorting
-  await user.dblClick(within(table).getByText('Site'))
-  await user.dblClick(within(table).getByText('Method'))
-  await user.dblClick(within(table).getByText('Sample Date'))
-  await user.dblClick(within(table).getByText('Sample Unit #'))
+  await user.dblClick(within(table).getByTestId('collecting-header-site'))
+  await user.dblClick(within(table).getByTestId('collecting-header-method'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleDate'))
+  await user.dblClick(within(table).getByTestId('collecting-header-sampleUnitNumber'))
 
   // click once to change to ascending order
-  await user.click(within(table).getByText('Sample Date'))
+  await user.click(within(table).getByTestId('collecting-header-sampleDate'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('November 22, 2001'))
 
   // click again to change to descending order
-  await user.click(within(table).getByText('Sample Date'))
+  await user.click(within(table).getByTestId('collecting-header-sampleDate'))
 
   const tableRowsAfterSecondClick = within(table).getAllByRole('row')
 
