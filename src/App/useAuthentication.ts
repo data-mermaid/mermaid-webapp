@@ -1,20 +1,69 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
 
-const useAuthentication = ({ dexieCurrentUserInstance }) => {
+interface DexieCurrentUserInstance {
+  currentUser: {
+    delete: (key: string) => Promise<void>
+  }
+}
+
+interface UseAuthenticationParams {
+  dexieCurrentUserInstance: DexieCurrentUserInstance
+}
+
+interface UseAuthenticationReturn {
+  isMermaidAuthenticated: boolean
+  logoutMermaid: () => void
+  getAccessToken: () => Promise<string>
+}
+
+const useAuthentication = ({
+  dexieCurrentUserInstance,
+}: UseAuthenticationParams): UseAuthenticationReturn => {
   const { isAppOnline } = useOnlineStatus()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
+  const navigate = useNavigate()
 
   const setAuthenticatedStates = useCallback(() => {
     localStorage.setItem('hasAuth0Authenticated', 'true')
     setIsMermaidAuthenticated(true)
   }, [])
+
   const setUnauthenticatedStates = useCallback(() => {
     localStorage.removeItem('hasAuth0Authenticated')
     setIsMermaidAuthenticated(false)
   }, [])
+
+  const handlePostLoginRedirect = useCallback(() => {
+    const validateReturnPath = (path: string | null): boolean => {
+      if (!path) {
+        return false
+      }
+
+      return path.startsWith('/') && !path.startsWith('//')
+    }
+
+    const safeSessionStorageOperation = <T>(operation: () => T): T | null => {
+      try {
+        return operation()
+      } catch (error) {
+        return null
+      }
+    }
+
+    const returnToPath = safeSessionStorageOperation(() => sessionStorage.getItem('auth0_returnTo'))
+
+    if (returnToPath && returnToPath !== '/' && validateReturnPath(returnToPath)) {
+      try {
+        navigate(returnToPath, { replace: true })
+      } catch (error) {}
+    }
+
+    safeSessionStorageOperation(() => sessionStorage.removeItem('auth0_returnTo'))
+  }, [navigate])
 
   const {
     isAuthenticated: isAuth0Authenticated,
@@ -29,9 +78,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
       try {
         await getAuth0AccessTokenSilently()
         setAuthenticatedStates()
-      } catch (error) {
-        console.error('Silent authentication error:', error)
-      }
+      } catch (error) {}
     }
     if (isAuth0Authenticated && isAppOnline && !isAuth0Loading) {
       silentAuth()
@@ -77,7 +124,16 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
           )}`
         }
       } else {
-        auth0LoginWithRedirect()
+        const { pathname, search } = window.location
+
+        const returnTo = `${pathname}${search}`
+        const isValidReturnPath = pathname.startsWith('/') && !pathname.startsWith('//')
+
+        auth0LoginWithRedirect({
+          appState: {
+            returnTo: isValidReturnPath ? returnTo : '/',
+          },
+        })
       }
     }
 
@@ -87,6 +143,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
         .then(() => {
           if (isMounted) {
             setAuthenticatedStates()
+            handlePostLoginRedirect()
           }
         })
         .catch((err) => {
@@ -108,10 +165,13 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
     isAuth0Authenticated,
     isAuth0Loading,
     isAppOnline,
+    handlePostLoginRedirect,
   ])
 
   const logoutMermaid = useCallback(() => {
     if (isAppOnline) {
+      sessionStorage.removeItem('auth0_returnTo')
+
       // this isnt necessary to make logout to work, but is here to make sure users.
       // cant see profile data from the last logged in user if they go searching in dev tools.
       // databaseSwitcboard isnt used because that would create circular dependencies (it depends on the output of this hook)
