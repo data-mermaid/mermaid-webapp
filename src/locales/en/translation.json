@@ -122,7 +122,8 @@
     "page_unavailable_offline": "This page is unavailable offline."
   },
   "page": {
-    "read_only": "You cannot access this page because you are a read-only member of this project."
+    "read_only": "You cannot access this page because you are a read-only member of this project.",
+    "will_show": "This page will show:"
   },
   "projects": {
     "data_unavailable": "Project data is currently unavailable.",
@@ -145,6 +146,7 @@
     "new_project": "New Project",
     "name_of_project": "Name of project",
     "loading_indicator": "projects list loading indicator",
+    "no_submitted_sample_units": "This project has no submitted sample units yet.",
     "errors": {
       "project_name_exists": "Project name already exists in MERMAID",
       "data_unavailable": "Project data is currently unavailable.",
@@ -190,8 +192,16 @@
     "observers": "Observers",
     "status": "Status",
     "add": "Add sample unit",
-    "submitted_no_data_message": "This project has no submitted sample units.",
+    "last_edited_by": "Last edited by",
+    "no_submitted_sample_units": "This project has no submitted sample units.",
+    "missing_label_number": "missing number",
     "no_active_access": "You do not have any active sample units",
+    "who_has_unsubmitted": "Who has unsubmitted sample units",
+    "which_are_missing": "Which sample units are missing",
+    "submitted_and_unsubmitted_transect_number": "Transect number for submitted and unsubmitted sample units",
+    "no_match": "No Sample Units match:",
+    "view_submitted": "View submitted Sample Unit",
+    "not_submitted": "This Sample Unit is not submitted",
     "validation_status": {
       "errors": "Errors",
       "ready_to_submit": "Ready to submit",
@@ -325,13 +335,15 @@
     "by_name_project_year": "Filter this table by name, project, or year",
     "by_name_reeftype_reefzone_exposure": "Filter this table by name, reef type, reef zone, or exposure",
     "by_name_project_country": "Filter this table by name, project, or country",
-    "by_site_management_observer": "Filter this table by site, management, or observer"
+    "by_site_management_observer": "Filter this table by site, management, or observer",
+    "by_site": "Filter this table by site"
   },
   "view_selected_only": "View Selected Only",
   "management_regimes": {
     "management_regime": "Management regime",
     "management_regimes": "Management Regimes",
     "management_regime_name": "Management regime name",
+    "management": "Management",
     "secondary_name": "Secondary name",
     "year_est": "Year est.",
     "compliance": "Compliance",
@@ -348,7 +360,8 @@
     "copy_mrs_from_other_projects": "Copy MRs from other projects",
     "copy_selected_mrs_to_project": "Copy selected MRs to project",
     "new": "New MR",
-    "export": "Export MRs"
+    "export": "Export MRs",
+    "missing_mr_name": "(Missing MR Name)"
   },
   "sites": {
     "sites": "Sites",
@@ -362,7 +375,13 @@
     "copy_selected_sites_to_project": "Copy selected sites to project",
     "export": "Export sites",
     "no_sites": "This project has no sites.",
-    "data_unavailable": "Site record data are currently unavailable."
+    "data_unavailable": "Site record data are currently unavailable.",
+    "missing_site_name": "(Missing Site Name)"
+  },
+  "sample_units_and_observers": "Sample Units / Observers",
+  "in_collecting_with": "In Collecting with:",
+  "errors": {
+    "summary_record_data_unavailable": "Summary record data are currently unavailable."
   },
   "map": {
     "attribution": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href=\"http://www.allencoralatlas.org/\"  style=\"font-size:1.25rem;\">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>",

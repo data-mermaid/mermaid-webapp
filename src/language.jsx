@@ -590,23 +590,12 @@ const pages = {
     nonAdminDelete: 'Only admins can delete a management regime.',
   },
   usersAndTransectsTable: {
-    title: 'Sample Units / Observers',
+    filterToolbarText: 'Filter this table by site',
     navTitle: (
       <>
         Sample Units / <br /> Observers
       </>
     ),
-    filterToolbarText: 'Filter this table by site',
-    missingSiteName: '(Missing Site Name)',
-    missingMRName: '(Missing MR Name)',
-    missingLabelNumber: 'missing number',
-    noDataMainText: 'This project has no submitted sample units yet.',
-    noDataSubTextTitle: 'This page will show:',
-    noDataSubTexts: [
-      'Who has unsubmited sample units',
-      'Which sample units are missing',
-      'Transect number for submitted and unsubmitted sample units',
-    ],
   },
   managementRegimesOverview: {
     navTitle: (
@@ -1186,13 +1175,6 @@ const map = {
     'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
 }
 
-const popoverTexts = {
-  noSampleUnitMatch: 'No Sample Units match:',
-  viewSubmittedSampleUnit: 'View submitted Sample Unit',
-  notSubmittedSampleUnit: `This Sample Unit is not submitted`,
-  inCollectingWith: 'In Collecting with:',
-}
-
 const getResolveModalLanguage = (siteOrManagementRegime) => {
   return {
     original: `Original ${siteOrManagementRegime}`,
@@ -1503,7 +1485,6 @@ export default {
   navigateAwayPrompt,
   pages,
   placeholders,
-  popoverTexts,
   protocolTitles,
   success,
   table,
