@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useNavigate, useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonPrimary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
@@ -47,6 +48,7 @@ const getWhichServerCitationToUse = (project) =>
     : project?.default_citation
 
 const ProjectInfo = () => {
+  const { t } = useTranslation()
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false)
   const [isDeletingProject, setIsDeletingProject] = useState(false)
@@ -74,12 +76,18 @@ const ProjectInfo = () => {
   const isSuggestedCitationDirty = citationToUse !== citationFromServerToUse
   const navigate = useNavigate()
 
+  const projectInfoTitle = t('projects.project_info')
+  const notesText = t('notes')
+  const organizationsText = t('organizations.organizations')
+  const noNotesText = t('projects.no_notes')
+  const noOrganizationsText = t('projects.no_organizations')
+
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
   const openEditCitationModal = () => setIsEditCitationModalOpen(true)
   const closeEditCitationModal = () => setIsEditCitationModalOpen(false)
 
-  useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${projectInfoTitle} - ${t('mermaid')}`)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -193,7 +201,7 @@ const ProjectInfo = () => {
   const noOrganizationResult = (
     <>
       <SuggestNewOrganizationButton type="button" onClick={openNewOrganizationNameModal}>
-        {language.pages.projectInfo.newOrganizationNameLink}
+        {t('organizations.suggest_new_organization')}
       </SuggestNewOrganizationButton>
     </>
   )
@@ -277,15 +285,15 @@ const ProjectInfo = () => {
   }
   const citationMarkup = (
     <InputRow>
-      <label htmlFor="suggested-citation">{language.pages.projectInfo.citationLabel}</label>
+      <label htmlFor="suggested-citation">{t('citation.suggested')}</label>
       <div>
         <BlockquoteInForm id="suggested-citation">
           {citationToUse} {projectBeingEdited?.citation_retrieved_text}
         </BlockquoteInForm>
-        <PSmall>{language.pages.projectInfo.citationHelperText}</PSmall>
+        <PSmall>{t('citation.more_info')}</PSmall>
         {isAdminUser ? (
           <ButtonPrimary type="button" onClick={openEditCitationModal}>
-            <IconPen /> {language.pages.projectInfo.editCitation}
+            <IconPen /> {t('citation.edit_suggested')}
           </ButtonPrimary>
         ) : null}
       </div>
@@ -297,7 +305,7 @@ const ProjectInfo = () => {
       <InputWrapper>
         <InputWithLabelAndValidation
           required
-          label="Project Name"
+          label={t('projects.project_name')}
           id="name"
           type="text"
           {...formik.getFieldProps('name')}
@@ -305,16 +313,16 @@ const ProjectInfo = () => {
           validationMessages={checkValidationMessage()}
         />
         <TextareaWithLabelAndValidation
-          label="Notes"
+          label={notesText}
           id="notes"
           {...formik.getFieldProps('notes')}
         />
         <InputAutocompleteWrapper>
-          <label htmlFor="organizations">Organizations</label>
+          <label htmlFor="organizations">{organizationsText}</label>
           <InputAutocomplete
             id="organizations"
             options={projectTagOptions}
-            helperText={language.pages.projectInfo.organizationsHelperText}
+            helperText={t('organizations.organizations_helper_text')}
             onChange={(selectedItem) => {
               const { label: selectedItemLabel } = selectedItem
               const existingOrganizations = [...formik.getFieldProps('tags').value]
@@ -327,7 +335,7 @@ const ProjectInfo = () => {
                 formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
               }
             }}
-            noResultsText={language.pages.projectInfo.noOrganizationFound}
+            noResultsText={t('organizations.no_organization_found')}
             noResultsAction={noOrganizationResult}
             onInputValueChange={setOrganizationAutocompleteSearchText}
           />
@@ -369,9 +377,9 @@ const ProjectInfo = () => {
     <>
       <InputWrapper>
         <H2>{name}</H2>
-        <H3>{language.pages.projectInfo.notes}</H3>
-        <P>{notes.length ? notes : <em>{language.pages.projectInfo.noNotes}</em>}</P>
-        <H3>{language.pages.projectInfo.organizations}</H3>
+        <H3>{notesText}</H3>
+        <P>{notes.length ? notes : <em>{noNotesText}</em>}</P>
+        <H3>{organizationsText}</H3>
         {tags.length ? (
           <ul>
             {tags.map((org) => (
@@ -379,7 +387,7 @@ const ProjectInfo = () => {
             ))}
           </ul>
         ) : (
-          <em>{language.pages.projectInfo.noOrganization}</em>
+          <em>{noOrganizationsText}</em>
         )}
       </InputWrapper>
       {citationMarkup}
@@ -406,7 +414,7 @@ const ProjectInfo = () => {
         }
         toolbar={
           <ContentPageToolbarWrapper>
-            <H2>{language.pages.projectInfo.title}</H2>
+            <H2>{projectInfoTitle}</H2>
             {isAdminUser && (
               <SaveButton
                 formId="project-info-form"
