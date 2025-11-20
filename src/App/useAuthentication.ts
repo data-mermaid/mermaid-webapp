@@ -46,20 +46,12 @@ const useAuthentication = ({
       return path.startsWith('/') && !path.startsWith('//')
     }
 
-    const safeSessionStorageOperation = <T>(operation: () => T): T | null => {
-      try {
-        return operation()
-      } catch (error) {
-        return null
-      }
-    }
+    const safeSessionStorageOperation = <T>(operation: () => T): T => operation()
 
     const returnToPath = safeSessionStorageOperation(() => sessionStorage.getItem('auth0_returnTo'))
 
     if (returnToPath && returnToPath !== '/' && validateReturnPath(returnToPath)) {
-      try {
-        navigate(returnToPath, { replace: true })
-      } catch (error) {}
+      navigate(returnToPath, { replace: true })
     }
 
     safeSessionStorageOperation(() => sessionStorage.removeItem('auth0_returnTo'))
@@ -75,11 +67,10 @@ const useAuthentication = ({
 
   const _silentAuthentication = useEffect(() => {
     const silentAuth = async () => {
-      try {
-        await getAuth0AccessTokenSilently()
-        setAuthenticatedStates()
-      } catch (error) {}
+      await getAuth0AccessTokenSilently()
+      setAuthenticatedStates()
     }
+
     if (isAuth0Authenticated && isAppOnline && !isAuth0Loading) {
       silentAuth()
     }
@@ -113,9 +104,9 @@ const useAuthentication = ({
       const urlParams = new URLSearchParams(window.location.search)
       const error = urlParams.get('error')
       if (error && error === 'access_denied') {
-        let errorDescription = urlParams.get('error_description')
+        const errorDescription = urlParams.get('error_description')
         if (errorDescription && errorDescription === 'email_not_verified') {
-          let returnMsg = 'You must verify your email before you can login.'
+          const returnMsg = 'You must verify your email before you can login.'
           const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID
           window.location.href = `https://${
             import.meta.env.VITE_AUTH0_DOMAIN
