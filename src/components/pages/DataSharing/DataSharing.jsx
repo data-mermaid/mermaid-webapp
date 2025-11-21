@@ -2,7 +2,7 @@ import { toast } from 'react-toastify'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper } from '../../generic/Table/table'
 import { hoverState } from '../../../library/styling/mediaQueries'

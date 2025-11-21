@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { InputWrapper } from '../../../../generic/form'
 import theme from '../../../../../theme'
 import { LeftFooter } from '../../../../generic/Modal'

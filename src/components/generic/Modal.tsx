@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { IconClose } from '../icons'
 import theme from '../../theme'
 import { CloseButton } from './buttons'

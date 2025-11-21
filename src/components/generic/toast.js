@@ -1,5 +1,5 @@
 import { ToastContainer } from 'react-toastify'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import theme from '../../theme'
 
 export const CustomToastContainer = styled(ToastContainer).attrs({

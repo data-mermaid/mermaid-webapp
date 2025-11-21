@@ -11,7 +11,7 @@ import {
   goToManagementOverviewPageLink,
 } from './library/validationMessageHelpers'
 import { HelperTextLink } from './components/generic/links'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import theme from './theme'
 
 const StyledLink = styled.a`

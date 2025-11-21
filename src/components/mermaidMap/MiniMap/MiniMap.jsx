@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import maplibregl from 'maplibre-gl'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { lightBaseMap } from '../mapService'
 
 const MiniMapWrapper = styled.div`

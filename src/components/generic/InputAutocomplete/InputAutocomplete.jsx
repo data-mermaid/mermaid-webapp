@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import Downshift from 'downshift'
 import { matchSorter } from 'match-sorter'
 import { Menu, Item } from './InputAutocomplete.styles'

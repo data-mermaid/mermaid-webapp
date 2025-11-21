@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'

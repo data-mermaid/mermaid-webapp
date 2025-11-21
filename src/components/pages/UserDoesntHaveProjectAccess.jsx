@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Link, useParams } from 'react-router-dom'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import language from '../../language'
 import theme from '../../theme'

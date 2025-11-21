@@ -1,5 +1,5 @@
 import { Chip, MenuItem, Select } from '@mui/material'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import theme from '../../../theme'
 

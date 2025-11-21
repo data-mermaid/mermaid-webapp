@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { Td, Tr } from '../../../generic/Table/table'
 import theme from '../../../../theme'
 import { MessageType } from '../../../../types/constants'

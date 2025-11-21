@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import theme from '../../theme'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { Trans, useTranslation } from 'react-i18next'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import Modal, { RightFooter } from '../generic/Modal'

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { NavLinkThatLooksLikeButtonIcon } from '../generic/links'
 import { IconCollect, IconData, IconInfo, IconProjectOverview } from '../icons'
 import stopEventPropagation from '../../library/stopEventPropagation'

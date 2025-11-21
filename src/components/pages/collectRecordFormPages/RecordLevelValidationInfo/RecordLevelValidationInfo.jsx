@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 
 import { ButtonSecondary, ButtonThatLooksLikeLink } from '../../../generic/buttons'
 import { hoverState } from '../../../../library/styling/mediaQueries'

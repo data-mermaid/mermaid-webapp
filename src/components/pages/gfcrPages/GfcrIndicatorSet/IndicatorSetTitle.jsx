@@ -1,6 +1,6 @@
 // Component borrowed from src/components/RecordFormTitle/RecordFormTitle.js
 import React from 'react'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import PropTypes from 'prop-types'
 import theme from '../../../../theme'
 import { mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'

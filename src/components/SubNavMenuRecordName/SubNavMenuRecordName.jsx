@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { subNavNodePropTypes } from './subNavNodePropTypes'
 import theme from '../../theme'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'

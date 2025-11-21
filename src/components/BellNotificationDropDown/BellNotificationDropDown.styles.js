@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import theme from '../../theme'
 import { ButtonSecondary, CloseButton } from '../generic/buttons'
