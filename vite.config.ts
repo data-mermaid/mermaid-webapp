@@ -1,13 +1,14 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
 import { VitePWA } from 'vite-plugin-pwa'
 import i18nextLoader from 'vite-plugin-i18next-loader'
+import react from '@vitejs/plugin-react-swc'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/',
   plugins: [
-    react({ plugins: [['@swc/plugin-styled-components', { displayName: true }]] }),
+    // @swc/plugin-styled-components is commented out until version compatability can be resolved
+    react(), //{ plugins: [['@swc/plugin-styled-components', { displayName: true }]] }
     VitePWA({
       filename: 'service-worker.js', // match the old CRA service worker name so we avoid stale caches
       registerType: 'autoUpdate',
