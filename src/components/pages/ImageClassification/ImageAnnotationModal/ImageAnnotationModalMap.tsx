@@ -374,7 +374,6 @@ const ImageAnnotationModalMap = ({
 
         map.current?.addImage('label-background', image, {
           // this configuration allows the image to stretch around the label text
-          // @ts-expect-error Doesn't like the config
           stretchX: [[5, 135]],
           stretchY: [[5, 135]],
           content: [5, 5, 135, 135],

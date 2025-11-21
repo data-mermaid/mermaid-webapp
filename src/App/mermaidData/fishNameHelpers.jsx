@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import language from '../../language'
 import { Table, Td, Tr } from '../../components/generic/Table/table'
 import theme from '../../theme'

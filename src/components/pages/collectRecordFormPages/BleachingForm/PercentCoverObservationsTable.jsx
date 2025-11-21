@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useMemo, useState, useEffect } from 'react'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import {
   ObservationTr,

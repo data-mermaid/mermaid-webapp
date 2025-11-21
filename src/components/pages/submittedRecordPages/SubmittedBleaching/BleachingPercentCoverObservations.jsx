@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import { bleachingRecordPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { FormSubTitle, TheadItem, UnderTableRow } from '../SubmittedFormPage.styles'

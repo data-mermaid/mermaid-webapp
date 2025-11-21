@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import theme from '../../theme'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'

@@ -37,6 +37,7 @@ export const MuiTooltip = ({
   tooltipTextColor = theme.color.black,
 }: MuiTooltip) => {
   return (
+    // @ts-expect-error typing issues
     <StyledTooltip
       title={title}
       placement={placement}

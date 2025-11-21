@@ -1,6 +1,6 @@
 import { RECORD_STATUS_LABELS } from './collectConstants'
 import { Tr } from '../../generic/Table/table'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import theme from '../../../theme'
 
 const RECORD_STATUS_COLORS = {

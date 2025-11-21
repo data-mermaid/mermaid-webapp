@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import {
