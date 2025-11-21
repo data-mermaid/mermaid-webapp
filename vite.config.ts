@@ -7,7 +7,7 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   base: '/',
   plugins: [
-    // @swc/plugin-styled-components is commented out until version compatability can be resolved
+    // @swc/plugin-styled-components is commented out until version compatibility can be resolved
     react(), //{ plugins: [['@swc/plugin-styled-components', { displayName: true }]] }
     VitePWA({
       filename: 'service-worker.js', // match the old CRA service worker name so we avoid stale caches
