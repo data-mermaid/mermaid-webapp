@@ -1,0 +1,3 @@
+import RecordLevelInputValidationInfo from './RecordLevelValidationInfo'
+
+export default RecordLevelInputValidationInfo
