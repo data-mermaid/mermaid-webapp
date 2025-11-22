@@ -32,6 +32,7 @@ import {
   StyledTd,
   StyledTr,
   TdWithHoverText,
+  DuplicateBadge,
 } from './ImageClassificationObservationTable.styles'
 import Thumbnail from './Thumbnail'
 import { ImageClassificationImage } from '../../../../types/ImageClassificationTypes'
@@ -42,12 +43,7 @@ import {
   BenthicPhotoQuadratRecord,
   ImageClassificationPointAnnotation,
 } from '../../../../App/mermaidData/mermaidDataTypes'
-
-interface TableHeaderProps {
-  align: 'left' | 'right' | 'center'
-  id: string
-  text: string
-}
+import getDuplicateValidationInfo from '../../collectRecordFormPages/CollectRecordFormPage/getDuplicateValidationInfo'
 
 const tableHeaders: TableHeaderProps[] = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -61,6 +57,19 @@ const tableHeaders: TableHeaderProps[] = [
   { align: 'center', id: 'review', text: '' },
   { align: 'center', id: 'remove', text: '' },
 ]
+interface TableHeaderProps {
+  align: 'left' | 'right' | 'center'
+  id: string
+  text: string
+}
+
+interface ValidationResult {
+  code: string
+  status: string
+  context?: {
+    duplicates?: Record<string, unknown[]>
+  }
+}
 
 interface GrowthForm {
   id: string
@@ -99,7 +108,9 @@ interface DistilledImage {
 }
 
 interface ImageClassificationObservationTableProps {
-  collectRecord?: BenthicPhotoQuadratRecord
+  collectRecord?: BenthicPhotoQuadratRecord & {
+    validations?: { results?: { $record?: ValidationResult[] } }
+  }
   areValidationsShowing: boolean
   ignoreObservationValidations: () => void
   resetObservationValidations: () => void
@@ -449,6 +460,8 @@ const ImageClassificationObservationTable = ({
         {distilledImages?.map((image, imageIndex) => {
           const { file, distilledAnnotationData, numSubRows, totalUnknown } = image
           const imgId = file.id
+          const isDuplicatedImage = getDuplicateValidationInfo(collectRecord, imgId)
+
           if (
             numSubRows === 0 ||
             file.classification_status?.status === IMAGE_CLASSIFICATION_STATUS.failed
@@ -465,6 +478,7 @@ const ImageClassificationObservationTable = ({
                       ? 'pointer'
                       : 'default'
                   }
+                  isDuplicatedImageShowing={isDuplicatedImage}
                 >
                   <ImageWrapper>
                     {file.thumbnail ? (
@@ -534,6 +548,8 @@ const ImageClassificationObservationTable = ({
                   areValidationsShowing,
                   observationsPropertyName: 'obs_benthic_photo_quadrats',
                 })
+
+                const isDuplicatedImageShowing = areValidationsShowing && isDuplicatedImage
                 let trMessageType: MessageType
 
                 if (hasObservationErrorValidation) {
@@ -566,8 +582,10 @@ const ImageClassificationObservationTable = ({
                             ? 'pointer'
                             : 'default'
                         }
+                        isDuplicatedImageShowing={isDuplicatedImageShowing}
                         className={isGroupHovered ? 'hover-highlight' : ''}
                       >
+                        {isDuplicatedImageShowing && <DuplicateBadge>Duplicate</DuplicateBadge>}
                         <ImageWrapper>
                           <Thumbnail imageUrl={file.thumbnail} />
                         </ImageWrapper>

@@ -13,6 +13,7 @@ interface StyledTrProps {
 interface StyledTdProps {
   textAlign?: string
   cursor?: string
+  isDuplicatedImageShowing?: boolean
 }
 
 const StyledColgroup = styled('colgroup')`
@@ -91,6 +92,9 @@ const ImageWrapper = styled('div')`
 
 const TdWithHoverText = styled(StyledTd)<StyledTdProps>`
   cursor: ${(props) => props.cursor};
+  box-shadow: ${(props) =>
+    props.isDuplicatedImageShowing ? `inset 0 0 0 2px ${theme.color.warning}` : 'none'};
+  position: relative;
 
   &.hover-highlight {
     background-color: ${theme.color.tableRowHover};
@@ -107,20 +111,36 @@ const TdWithHoverText = styled(StyledTd)<StyledTdProps>`
     padding: 5px;
     white-space: nowrap;
     font-size: ${theme.typography.smallFontSize};
-    z-index: 10;
+    z-index: 4;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.5s ease, visibility 0.5s ease;
   }
 
   &:hover {
-    outline: 2px solid ${theme.color.primaryColor};
+    box-shadow: inset 0 0 0 2px ${theme.color.primaryColor};
   }
 
   &:hover::after {
     opacity: 1;
     visibility: visible;
   }
+`
+
+const DuplicateBadge = styled('span')`
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: ${theme.color.warning};
+  color: ${theme.color.textColor};
+  padding: 0.3rem 0.8rem;
+  font-size: ${theme.typography.smallFontSize};
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
 `
 
 const LoadingTableBody = styled.tbody`
@@ -158,6 +178,7 @@ export {
   ButtonContainer,
   StyledTd,
   TdWithHoverText,
+  DuplicateBadge,
   ImageWrapper,
   StyledTr,
   LoadingTableBody,

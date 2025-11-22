@@ -1,3 +1,3 @@
-import RecordLevelInputValidationInfo from './RecordLevelValidationInfo'
+import RecordLevelInputValidationInfo from './RecordLevelValidationInfo.tsx'
 
 export default RecordLevelInputValidationInfo

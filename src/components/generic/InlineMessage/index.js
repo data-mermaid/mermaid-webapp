@@ -1,3 +1,3 @@
-import InlineMessage from './InlineMessage'
+import InlineMessage from './InlineMessage.tsx'
 
 export default InlineMessage

@@ -86,6 +86,21 @@
       "description": "Through a partnership with <a /> from the University of California San Diego and Scripps Institution of Oceanography, MERMAID now includes AI-based classification using a pyspacer deep learning model. This integration enables fast, scalable analysis of benthic photos so that you can generate insights quickly and consistently with machine learning and AI.",
       "use_ai_button": "Classify photos with AI (Beta)",
       "use_manual_observations_button": "Enter observations manually"
+    },
+    "validations": {
+      "duplicate_images_one": "{{imageNames}} is a duplicate in {{location}}.",
+      "duplicate_images_other": "{{imageNames}} are duplicates in {{location}}.",
+      "image_name_format": {
+        "one": "{{imgName}}",
+        "two": "{{firstImgName}} and {{secondImgName}}",
+        "three": "{{firstImgName}}, {{secondImgName}}, and {{thirdImgName}}",
+        "more": "{{firstImgName}}, {{secondImgName}}, {{thirdImgName}}, and {{count}} more"
+      },
+      "duplicate_benthicpqt_image": {
+        "submitted": "submitted benthic photo quadrat transects",
+        "this": "this benthic photo quadrat transect",
+        "other": "unsubmitted benthic photo quadrat transects with other users"
+      }
     }
   },
   "map_tooling": {
