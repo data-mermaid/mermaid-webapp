@@ -322,7 +322,7 @@ const ProjectInfo = () => {
           <InputAutocomplete
             id="organizations"
             options={projectTagOptions}
-            helperText={t('organizations.organizations_helper_text')}
+            helperText={t('organizations.type_to_search')}
             onChange={(selectedItem) => {
               const { label: selectedItemLabel } = selectedItem
               const existingOrganizations = [...formik.getFieldProps('tags').value]

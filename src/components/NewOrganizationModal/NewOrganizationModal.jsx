@@ -41,7 +41,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
     toast.success(...getToastArguments(language.success.newOrganizationAdd))
   }
 
-  const helperText = t('organizations.helper_text')
+  const helperText = t('organizations.approved_and_added_to_project')
   const modalContent = (
     <>
       <ModalInputRow>
@@ -69,7 +69,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
       <ButtonSecondary onClick={resetAndCloseModal}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit} disabled={isSubmitButtonDisabled}>
         <IconSend />
-        {t('organizations.buttons.send_for_review')}
+        {t('buttons.suggestion_review_request')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -78,7 +78,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
     <Modal
       isOpen={isOpen}
       onDismiss={resetAndCloseModal}
-      title={t('organizations.title')}
+      title={t('organizations.suggest_new')}
       mainContent={modalContent}
       footerContent={footerContent}
     />

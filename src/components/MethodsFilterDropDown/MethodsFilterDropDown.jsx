@@ -40,13 +40,13 @@ const MenuItemStyle = {
   },
 }
 
-const methods = [
-  'Fish Belt',
-  'Benthic PIT',
-  'Benthic LIT',
-  'Benthic Photo Quadrat',
-  'Bleaching',
-  'Habitat Complexity',
+const methodKeys = [
+  'protocol_titles.fishbelt',
+  'protocol_titles.benthicpit',
+  'protocol_titles.benthiclit',
+  'protocol_titles.benthicpqt',
+  'protocol_titles.bleachingqc',
+  'protocol_titles.habitatcomplexity',
 ]
 
 const MethodsFilterDropDown = ({
@@ -56,6 +56,7 @@ const MethodsFilterDropDown = ({
   disabled = false,
 }) => {
   const { t } = useTranslation()
+  const methods = methodKeys.map((key) => t(key))
 
   const handleChange = (event) => {
     const eventValue = event.target.value

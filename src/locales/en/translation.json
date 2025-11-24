@@ -14,12 +14,12 @@
     "save_changes": "Save changes",
     "submit": "Submit",
     "view": "View",
-    "export_to_xlsx": "Export To XLSX"
+    "export_to_xlsx": "Export To XLSX",
+    "suggestion_review_request": "Send to MERMAID for review"
   },
   "contact_us": "Contact us for help",
   "forms": {
-    "required_field": "This field is required",
-    "submit_for_review": "Send to MERMAID for review"
+    "required_field": "This field is required"
   },
   "toasts": {
     "export_error": "There was an error exporting the report.",
@@ -160,11 +160,14 @@
     "no_notes": "No notes for this Project",
     "no_organizations": "This Project has no organizations.",
     "project_admins": "Project Admins",
-    "project_admin": "Project Admin",
+    "project_admin_one": "Project Admin",
+    "project_admin_other": "Project Admins",
     "other_project_members": "Other Project Members",
-    "other_project_member": "Other Project Member",
+    "other_project_member_one": "Other Project Member",
+    "other_project_member_other": "Other Project Members",
     "project_last_updated": "Project Last Updated",
-    "countries": "Countries"
+    "countries_one": "Country",
+    "countries_other": "Countries"
   },
   "search": {
     "no_results": "No results found"
@@ -416,11 +419,11 @@
     "terrestrial_reef_flat": "Terrestrial Reef Flat"
   },
   "organizations": {
-    "title": "Suggest a new organization",
+    "suggest_new": "Suggest a new organization",
     "new_organization_name": "New organization name",
-    "helper_text": "If your organization is approved, it'll be automatically added to your Project.",
+    "approved_and_added_to_project": "If your organization is approved, it'll be automatically added to your Project.",
     "organizations": "Organizations",
-    "organizations_helper_text": "Type to search for an organization.",
+    "type_to_search": "Type to search for an organization.",
     "no_organization_found": "No organization found.",
     "suggest_new_organization": "Suggest a new organization to MERMAID...",
     "remove_organization": "Remove organization from Project",

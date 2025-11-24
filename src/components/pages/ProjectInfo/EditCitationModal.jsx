@@ -48,13 +48,11 @@ export const EditCitationModal = ({
     .filter((profile) => profile.is_admin)
     .map((profile) => profile.profile_name)
   const adminsString = admins.join(', ')
-  const isAdminsPlural = admins.length > 1
 
   const otherProjectMembers = projectProfiles
     .filter((profile) => !profile.is_admin && profile.profile_name !== PENDING_USER_PROFILE_NAME)
     .map((profile) => profile.profile_name)
   const otherProjectMembersString = otherProjectMembers.join(', ')
-  const isOtherProjectMembersPlural = otherProjectMembers.length > 1
 
   const projectLastUpdatedString = new Date(updated_on).toLocaleDateString(undefined, {
     year: 'numeric',
@@ -63,7 +61,6 @@ export const EditCitationModal = ({
   })
 
   const projectCountriesString = countries.join(', ')
-  const isCountriesPlural = countries.length > 1
 
   useEffect(
     function initializeEditCitationValue() {
@@ -110,15 +107,11 @@ export const EditCitationModal = ({
           <CitationDefinitionList>
             <dt>{t('projects.project_name')}</dt>
             <dd>{name}</dd>
-            <dt>{isAdminsPlural ? t('projects.project_admins') : t('projects.project_admin')}</dt>
+            <dt>{t('projects.project_admin', { count: admins.length })}</dt>
             <dd>{adminsString}</dd>
             {otherProjectMembers.length ? (
               <>
-                <dt>
-                  {isOtherProjectMembersPlural
-                    ? t('projects.other_project_members')
-                    : t('projects.other_project_member')}
-                </dt>
+                <dt>{t('projects.other_project_member', { count: otherProjectMembers.length })}</dt>
                 <dd>{otherProjectMembersString}</dd>
               </>
             ) : null}
@@ -127,7 +120,7 @@ export const EditCitationModal = ({
             <dd>{projectLastUpdatedString}</dd>
             {countries.length ? (
               <>
-                <dt>{isCountriesPlural ? t('projects.countries') : t('projects.country')}</dt>
+                <dt>{t('projects.country', { count: countries.length })}</dt>
                 <dd>{projectCountriesString}</dd>
               </>
             ) : null}
