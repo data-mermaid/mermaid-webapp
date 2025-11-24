@@ -25,30 +25,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-react@npm:^1.2.0":
-  version: 1.12.1
-  resolution: "@auth0/auth0-react@npm:1.12.1"
+"@auth0/auth0-react@npm:^2.9.0":
+  version: 2.9.0
+  resolution: "@auth0/auth0-react@npm:2.9.0"
   dependencies:
-    "@auth0/auth0-spa-js": "npm:^1.22.6"
+    "@auth0/auth0-spa-js": "npm:^2.9.0"
   peerDependencies:
-    react: ^16.11.0 || ^17 || ^18
-    react-dom: ^16.11.0 || ^17 || ^18
-  checksum: 10c0/330169a4f2d05b273936eb971939b271256ed8f6ff1f477843b82ccfc9a63574037839c9d222e78a7135b8b524c4bbc9ce3af0ce50e21cd9d30f372abc908716
+    react: ^16.11.0 || ^17 || ^18 || ^19
+    react-dom: ^16.11.0 || ^17 || ^18 || ^19
+  checksum: 10c0/5f6b432df38a82e87fbf69706b6025201eedb20ae15476b6f3eccaf01d120fa290449295fd366808b70dad1a52b4c1d796496cb3960f7d7364e02bbd6a9fe771
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:^1.22.6":
-  version: 1.22.6
-  resolution: "@auth0/auth0-spa-js@npm:1.22.6"
+"@auth0/auth0-spa-js@npm:^2.9.0":
+  version: 2.9.1
+  resolution: "@auth0/auth0-spa-js@npm:2.9.1"
   dependencies:
-    abortcontroller-polyfill: "npm:^1.7.3"
     browser-tabs-lock: "npm:^1.2.15"
-    core-js: "npm:^3.25.4"
+    dpop: "npm:^2.1.1"
     es-cookie: "npm:~1.3.2"
-    fast-text-encoding: "npm:^1.0.6"
-    promise-polyfill: "npm:^8.2.3"
-    unfetch: "npm:^4.2.0"
-  checksum: 10c0/7f00391a30d1753ca4dee8c88501cd2d26cb064495e9b346b1639608c5135021ffd09f867fb113da561e1e4b7edb767ea031ca376eed467a0f089e76d2a7769c
+  checksum: 10c0/39e1c89454dafe8d793b56f950ce100845d1f9dfda77b877b5d00000b9d76818a07c9ba9ba393c86988e449856d4501e9183edd63f3e381461289a9ff0d0e109
   languageName: node
   linkType: hard
 
@@ -4704,13 +4700,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"abortcontroller-polyfill@npm:^1.7.3":
-  version: 1.7.8
-  resolution: "abortcontroller-polyfill@npm:1.7.8"
-  checksum: 10c0/604f01d78f1749e03b43fbdcbabd16466dee50404eb41920884187f993a1a6d96669424807f1ca1e1a4f3073261d7fd6c3f68452ad3c2d66be5c012d0f9e4eb3
-  languageName: node
-  linkType: hard
-
 "acorn-globals@npm:^7.0.0":
   version: 7.0.1
   resolution: "acorn-globals@npm:7.0.1"
@@ -6252,7 +6241,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.25.4, core-js@npm:^3.38.1, core-js@npm:^3.4":
+"core-js@npm:^3.38.1, core-js@npm:^3.4":
   version: 3.47.0
   resolution: "core-js@npm:3.47.0"
   checksum: 10c0/9b1a7088b7c660c7b8f1d4c90bb1816a8d5352ebdcb7bc742e3a0e4eb803316b5aa17bacb8769522342196351a5430178f46914644f2bfdb94ce0ced3c7fd523
@@ -6837,6 +6826,13 @@ __metadata:
   peerDependencies:
     react: ">=16.12.0"
   checksum: 10c0/e7bd18616fdd61e2e05d68adc66147cef7ee6e17584a7cc4034efab049e7a5af7fb45c7fc9112ec3928b3b990ca00dc8129d361c8a3aedbc44819420a541b4ec
+  languageName: node
+  linkType: hard
+
+"dpop@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "dpop@npm:2.1.1"
+  checksum: 10c0/e46dfd62325dd63372a17492c1867f79cdaf235645d32b87c3be8a09d4c7b03b8b44efec26688ba19e8279c77497a08deb302a9a4704b432795efd1163519611
   languageName: node
   linkType: hard
 
@@ -7803,13 +7799,6 @@ __metadata:
   version: 2.0.6
   resolution: "fast-levenshtein@npm:2.0.6"
   checksum: 10c0/111972b37338bcb88f7d9e2c5907862c280ebf4234433b95bc611e518d192ccb2d38119c4ac86e26b668d75f7f3894f4ff5c4982899afced7ca78633b08287c4
-  languageName: node
-  linkType: hard
-
-"fast-text-encoding@npm:^1.0.6":
-  version: 1.0.6
-  resolution: "fast-text-encoding@npm:1.0.6"
-  checksum: 10c0/e1d0381bda229c92c7906f63308f3b9caca8c78b732768b1ee16f560089ed21bc159bbe1434138ccd3815931ec8d4785bdade1ad1c45accfdf27ac6606ac67d2
   languageName: node
   linkType: hard
 
@@ -10954,7 +10943,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mermaid-webapp@workspace:."
   dependencies:
-    "@auth0/auth0-react": "npm:^1.2.0"
+    "@auth0/auth0-react": "npm:^2.9.0"
     "@babel/core": "npm:^7.23.5"
     "@babel/eslint-parser": "npm:^7.28.5"
     "@babel/plugin-proposal-private-property-in-object": "npm:^7.21.11"
@@ -12334,7 +12323,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"promise-polyfill@npm:^8.1.3, promise-polyfill@npm:^8.2.3":
+"promise-polyfill@npm:^8.1.3":
   version: 8.3.0
   resolution: "promise-polyfill@npm:8.3.0"
   checksum: 10c0/97141f07a31a6be135ec9ed53700a3423a771cabec0ba5e08fcb2bf8cfda855479ff70e444fceb938f560be42b450cd032c14f4a940ed2ad1e5b4dcb78368dce
@@ -14892,13 +14881,6 @@ __metadata:
   version: 7.16.0
   resolution: "undici-types@npm:7.16.0"
   checksum: 10c0/3033e2f2b5c9f1504bdc5934646cb54e37ecaca0f9249c983f7b1fc2e87c6d18399ebb05dc7fd5419e02b2e915f734d872a65da2e3eeed1813951c427d33cc9a
-  languageName: node
-  linkType: hard
-
-"unfetch@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "unfetch@npm:4.2.0"
-  checksum: 10c0/a5c0a896a6f09f278b868075aea65652ad185db30e827cb7df45826fe5ab850124bf9c44c4dafca4bf0c55a0844b17031e8243467fcc38dd7a7d435007151f1b
   languageName: node
   linkType: hard
 
