@@ -97,6 +97,9 @@ const DataSharing = () => {
 
   useDocumentTitle(`${t('data_sharing.data_sharing')} - ${t('mermaid')}`)
 
+  const projectNotAvailableText = t('projects.errors.not_available')
+  const projectNotSavedText = t('projects.errors.not_saved')
+
   const [isDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(false)
   const openDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(true)
   const closeDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(false)
@@ -127,11 +130,18 @@ const DataSharing = () => {
         .catch((error) => {
           handleHttpResponseError({
             error,
-            callback: toast.error(...getToastArguments(t('projects.errors.not_available'))),
+            callback: toast.error(...getToastArguments(projectNotAvailableText)),
           })
         })
     }
-  }, [isAppOnline, databaseSwitchboardInstance, projectId, isMounted, handleHttpResponseError])
+  }, [
+    isAppOnline,
+    databaseSwitchboardInstance,
+    projectId,
+    isMounted,
+    handleHttpResponseError,
+    projectNotAvailableText,
+  ])
 
   const getToastMessageForDataPolicyChange = (property, policy) => {
     const getMessageKey = (methodKey, policyCode) => {
@@ -175,11 +185,18 @@ const DataSharing = () => {
         .catch((error) => {
           handleHttpResponseError({
             error,
-            callback: toast.error(...getToastArguments(t('projects.errors.not_saved'))),
+            callback: toast.error(...getToastArguments(projectNotSavedText)),
           })
         })
     },
-    [databaseSwitchboardInstance, projectId, navigate, location.pathname, handleHttpResponseError],
+    [
+      databaseSwitchboardInstance,
+      projectId,
+      navigate,
+      location.pathname,
+      handleHttpResponseError,
+      projectNotSavedText,
+    ],
   )
 
   const handleDataPolicyChange = (event, propertyToUpdate) => {

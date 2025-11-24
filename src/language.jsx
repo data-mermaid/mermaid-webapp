@@ -1,6 +1,5 @@
 // prettier-ignore
 import React from 'react'
-import { PROJECT_CODES } from './library/constants/constants'
 import {
   getDuplicateValuesValidationMessage,
   getDuplicateSampleUnitLink,
