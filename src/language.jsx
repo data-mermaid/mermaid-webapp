@@ -209,17 +209,6 @@ const success = {
     `The ${mermaidDataTypeLabel} has been deleted from your computer and online.`,
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
   projectStatusSaved: `Test project selection saved.`,
-  getDataSharingPolicyChangeSuccess: (method, policy_code) => {
-    switch (policy_code) {
-      case PROJECT_CODES.policy.private:
-        return `${method} is now set to private`
-      case PROJECT_CODES.policy.publicSummary:
-        return `${method} is now set to public summary`
-      default:
-        // policy code for public is 100
-        return `${method} is now set to public `
-    }
-  },
   userProfileUpdate: 'Profile updated',
 }
 
@@ -576,13 +565,6 @@ const pages = {
       citationPreview: 'Citation Preview',
       useDefaultCitation: 'Use Default Citation',
     },
-  },
-  dataSharing: {
-    introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data are collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
-    isTestProject: 'This is a test project',
-    moreInfoTitle: 'Data sharing',
-    testProjectHelperText: 'Data for a test project will not be included in public reporting.',
-    title: 'Data Sharing',
   },
   submittedTable: {
     title: 'Submitted',

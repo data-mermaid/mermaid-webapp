@@ -150,11 +150,15 @@
     "errors": {
       "project_name_exists": "Project name already exists in MERMAID",
       "data_unavailable": "Project data is currently unavailable.",
-      "duplicate_name": "A project with the same name already exists."
+      "duplicate_name": "A project with the same name already exists.",
+      "not_saved": "Project could not be saved",
+      "not_available": "Projects are currently unavailable."
     },
     "success": {
       "project_copied": "Project copied",
-      "project_created": "Project created"
+      "project_created": "Project created",
+      "project_saved": "Project saved",
+      "test_project_status_saved": "Test project selection saved."
     }
   },
   "search": {
@@ -261,6 +265,7 @@
     "bleachingqc": "Bleaching",
     "benthicpqt": "Benthic Photo Quadrat"
   },
+  "benthic_pit_lit_habitat": "Benthic: PIT, LIT, PQT, and Habitat Complexity",
   "transect": "Transect",
   "transect_number": "Transect Number",
   "transect_number_info": "Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.",
@@ -404,5 +409,43 @@
     "sheltered_reef_slope": "Sheltered Reef Slope",
     "small_reef": "Small Reef",
     "terrestrial_reef_flat": "Terrestrial Reef Flat"
+  },
+  "data_sharing": {
+    "data_sharing": "Data Sharing",
+    "more_powerful": "Data are much more powerful when shared.",
+    "information": "Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data are collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.",
+    "learn_more": "Learn more about how your data are shared...",
+    "is_test_project": "This is a test project",
+    "test_project_data": "Data for a test project will not be included in public reporting.",
+    "private": "Private",
+    "public_summary": "Public Summary",
+    "public": "Public",
+    "project_level_info": "Project-level information",
+    "public_summary_default": "(default)",
+    "contact_info": "Contact info",
+    "metadata": "Metadata",
+    "site_level_averages": "Site-level averages",
+    "transect_level_observations": "Transect-level observations",
+    "organization_admin_names": "Organization and admin names",
+    "project_metadata": "Project name and notes, country, site name and location, survey date, depth, habitat (reef zone, reef type and exposure), management regime name, number of transects",
+    "average_benthic_cover": "Average benthic cover (%)",
+    "average_fish_biomass": "Average total reef fish biomass (kg/ha)",
+    "average_habitat_complexity": "Average habitat complexity scores",
+    "average_colonies_bleached": "Average colonies bleached (%)",
+    "benthic_observations": "Benthic observations and growth forms",
+    "fish_species_info": "Reef fish species, size and abundance, taxonomy and functional group information, biomass coefficients",
+    "individual_habitat_complexity": "Individual habitat complexity scores",
+    "colonies_bleached_percent_cover": "Colonies bleached and benthic percent cover",
+    "success": {
+      "fish_belt_private": "Fish Belt is now set to private",
+      "fish_belt_public_summary": "Fish Belt is now set to public summary",
+      "fish_belt_public": "Fish Belt is now set to public",
+      "benthic_private": "Benthic: PIT, LIT, PQT, and Habitat Complexity is now set to private",
+      "benthic_public_summary": "Benthic: PIT, LIT, PQT, and Habitat Complexity is now set to public summary",
+      "benthic_public": "Benthic: PIT, LIT, PQT, and Habitat Complexity is now set to public",
+      "bleaching_private": "Bleaching is now set to private",
+      "bleaching_public_summary": "Bleaching is now set to public summary",
+      "bleaching_public": "Bleaching is now set to public"
+    }
   }
 }
