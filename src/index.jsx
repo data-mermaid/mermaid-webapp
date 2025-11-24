@@ -29,6 +29,12 @@ const options = {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
 }
 
+const onRedirectCallback = (appState) => {
+  if (appState?.returnTo && appState.returnTo !== '/') {
+    sessionStorage.setItem('auth0_returnTo', appState.returnTo)
+  }
+}
+
 root.render(
   <React.StrictMode>
     <Auth0Provider
@@ -37,6 +43,7 @@ root.render(
       redirectUri={window.location.origin}
       audience={import.meta.env.VITE_AUTH0_AUDIENCE}
       useRefreshTokens={true}
+      onRedirectCallback={onRedirectCallback}
       // Note that while storing tokens in local storage provides persistence
       // across page refreshes and browser tabs, it increases the risk of
       // cross-site scripting (XSS) attacks.
