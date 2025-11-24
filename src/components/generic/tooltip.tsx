@@ -46,7 +46,7 @@ const tooltipCssByPosition = {
     );
   `,
 }
-export const TooltipPopup = styled('span').withConfig<{ $position: 'bottom' | 'right' }>({})`
+export const TooltipPopup = styled('span')<{ $position: 'bottom' | 'right' }>`
   display: none;
   min-width: 26ch;
   width: 100%;

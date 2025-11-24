@@ -94,8 +94,6 @@ const easeToDefaultView = (map: MapRef) =>
     center: DEFAULT_MAP_CENTER,
     zoom: DEFAULT_MAP_ZOOM,
     duration: DEFAULT_MAP_ANIMATION_DURATION,
-    // @ts-expect-error - maplibre-gl types are incomplete
-    linear: true,
   })
 
 // HACK: MapLibre's unproject() (used to get pixel coords) doesn't let you pass zoom as parameter.
@@ -376,7 +374,7 @@ const ImageAnnotationModalMap = ({
 
         map.current?.addImage('label-background', image, {
           // this configuration allows the image to stretch around the label text
-          // @ts-expect-error - maplibre-gl types are incomplete
+          // @ts-expect-error Doesn't like the config
           stretchX: [[5, 135]],
           stretchY: [[5, 135]],
           content: [5, 5, 135, 135],
