@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components'
 import { ButtonThatLooksLikeLink } from '../../../generic/buttons'
 import { hoverState } from '../../../../library/styling/mediaQueries'
 import { ValidationList } from '../../../generic/form'
+import { MessageType } from '../../../../types/constants'
 import InlineMessage from '../../../generic/InlineMessage'
 import language from '../../../../language'
 import theme from '../../../../theme'
@@ -104,20 +105,7 @@ const RecordLevelValidationInfo = ({
         const isError = status === 'error'
         const isIgnored = status === 'ignore'
         const isReset = status === 'reset'
-
-        const statusToMessageType = (status: string): 'warning' | 'error' | undefined => {
-          if (status === 'warning' || status === 'reset') {
-            return 'warning'
-          }
-
-          if (status === 'error') {
-            return 'error'
-          }
-
-          return undefined
-        }
-
-        const messageType = statusToMessageType(status)
+        const statusForStyling = isReset ? 'warning' : status
 
         const validationMessage =
           code === 'duplicate_images' ? (
@@ -132,7 +120,9 @@ const RecordLevelValidationInfo = ({
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
           <InlineValidationItem key={validation_id}>
-            <InlineMessage type={messageType}>{validationMessage}</InlineMessage>
+            <InlineMessage type={statusForStyling as MessageType}>
+              {validationMessage}
+            </InlineMessage>
             {isScrollToViewAvailable && (
               <ScrollToButton onClick={handleScrollToObservation}>
                 Scroll to observations
