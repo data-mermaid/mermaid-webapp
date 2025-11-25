@@ -220,7 +220,6 @@ const success = {
         return `${method} is now set to public `
     }
   },
-  userProfileUpdate: 'Profile updated',
 }
 
 const deleteRecord = (pageName) => {

@@ -224,6 +224,13 @@
   "toggle_table_visibility": "Toggle table visibility",
   "toggle_label_visibility": "Toggle label visibility",
   "user": "User",
+  "profile": {
+    "your_profile": "Your Profile",
+    "email_address": "Email address",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "updated": "Profile updated"
+  },
   "exports": {
     "success": "Export successful",
     "email_sent": "An email has been sent to <currentUserEmail />. This can sometimes take up to 15 minutes.",
