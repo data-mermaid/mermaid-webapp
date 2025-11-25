@@ -34,12 +34,12 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
         <div>{formik.values.email}</div>
       </ModalInputRow>
       <ModalInputRow>
-        <label id="modal-input-for-firstname-label" htmlFor="modal-input-for-firstname">
+        <label id={t('profile.first_name_label_id')} htmlFor={t('profile.first_name_input_id')}>
           {t('profile.first_name')}
         </label>
         <Input
-          aria-labelledby="modal-input-for-firstname-label"
-          id="modal-input-for-firstname"
+          aria-labelledby={t('profile.first_name_label_id')}
+          id={t('profile.first_name_input_id')}
           value={formik.values.first_name}
           // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
@@ -47,12 +47,12 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
         />
       </ModalInputRow>
       <ModalInputRow>
-        <label id="modal-input-for-lastname-label" htmlFor="modal-input-for-lastname">
+        <label id={t('profile.last_name_label_id')} htmlFor={t('profile.last_name_input_id')}>
           {t('profile.last_name')}
         </label>
         <Input
-          aria-labelledby="modal-input-for-lastname-label"
-          id="modal-input-for-lastname"
+          aria-labelledby={t('profile.last_name_label_id')}
+          id={t('profile.last_name_input_id')}
           value={formik.values.last_name}
           onChange={(event) => formik.setFieldValue('last_name', event.target.value)}
         />

@@ -229,7 +229,11 @@
     "email_address": "Email address",
     "first_name": "First Name",
     "last_name": "Last Name",
-    "updated": "Profile updated"
+    "updated": "Profile updated",
+    "first_name_label_id": "modal-input-for-firstname-label",
+    "last_name_label_id": "modal-input-for-lastname-label",
+    "first_name_input_id": "modal-input-for-firstname",
+    "last_name_input_id": "modal-input-for-lastname"
   },
   "exports": {
     "success": "Export successful",
