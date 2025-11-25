@@ -99,8 +99,12 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
-      <UserMenuButton onClick={openProfileModal}>{t('profile.profile')}</UserMenuButton>
-      <UserMenuButton onClick={logout}>{t('buttons.logout')}</UserMenuButton>
+      <UserMenuButton onClick={openProfileModal} data-testid="profile-button">
+        {t('profile.profile')}
+      </UserMenuButton>
+      <UserMenuButton onClick={logout} data-testid="logout-button">
+        {t('buttons.logout')}
+      </UserMenuButton>
     </OfflineHide>
   )
 
