@@ -17,7 +17,6 @@ import {
   DismissButtonSecondary,
 } from './BellNotificationDropDown.styles'
 import { IconClose } from '../icons'
-import language from '../../language'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 import { useTranslation } from 'react-i18next'
@@ -42,7 +41,7 @@ const BellNotificationDropDown = () => {
     return (
       <NotificationCardWrapper>
         <NoNotifications>
-          <em>{language.header.noNotifications}</em>
+          <em>{t('no_notifications')}</em>
         </NoNotifications>
       </NotificationCardWrapper>
     )
@@ -53,7 +52,7 @@ const BellNotificationDropDown = () => {
   return (
     <NotificationCardWrapper>
       <DismissButtonSecondary onClick={(event) => dismissAllNotifications(event)}>
-        {language.header.dismissAllNotifications}
+        {t('buttons.dismiss_all_notifications')}
       </DismissButtonSecondary>
       {sortedNotifications.map((notification) => {
         const dateTime = moment(notification.created_on)

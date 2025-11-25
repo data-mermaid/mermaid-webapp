@@ -14,7 +14,10 @@
     "save_changes": "Save changes",
     "submit": "Submit",
     "view": "View",
-    "export_to_xlsx": "Export To XLSX"
+    "export_to_xlsx": "Export To XLSX",
+    "logout": "Logout",
+    "user_account_dropdown": "User account dropdown",
+    "dismiss_all_notifications": "Dismiss all notifications"
   },
   "contact_us": "Contact us for help",
   "forms": {
@@ -225,6 +228,7 @@
   "toggle_label_visibility": "Toggle label visibility",
   "user": "User",
   "profile": {
+    "profile": "Profile",
     "your_profile": "Your Profile",
     "email_address": "Email address",
     "first_name": "First Name",
@@ -233,7 +237,8 @@
     "first_name_label_id": "modal-input-for-firstname-label",
     "last_name_label_id": "modal-input-for-lastname-label",
     "first_name_input_id": "modal-input-for-firstname",
-    "last_name_input_id": "modal-input-for-lastname"
+    "last_name_input_id": "modal-input-for-lastname",
+    "logged_in_as": "Logged in as"
   },
   "exports": {
     "success": "Export successful",
@@ -247,7 +252,7 @@
     "credit_request": "Please credit the data owners",
     "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
   },
-  "mermaid": "MERMAID",
+  "no_notifications": "There are currently no notifications",
   "mermaid_explore": "MERMAID Explore",
   "reference": "Reference",
   "go_to_explore_projects": "View all your projects on MERMAID Explore",
