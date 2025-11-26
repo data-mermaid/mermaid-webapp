@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   ActiveSampleUnitsIconAlert,
@@ -41,7 +42,6 @@ import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InlineMessage from '../../generic/InlineMessage'
 import InputAndButton from '../../generic/InputAndButton/InputAndButton'
-import language from '../../../language'
 import NewUserModal from '../../NewUserModal'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -75,6 +75,16 @@ const getRoleLabel = (roleCode) => {
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
 
 const Users = () => {
+  const { t } = useTranslation()
+
+  const adminTooltipText = t('users.roles.admin_description')
+  const collectorTooltipText = t('users.roles.collector_description')
+  const readOnlyTooltipText = t('users.roles.read_only_description')
+  const adminHeaderText = t('users.roles.admin')
+  const collectorHeaderText = t('users.roles.collector')
+  const readOnlyHeaderText = t('users.roles.read_only')
+  const userRecordsUnavailableText = t('users.user_records_unavailable')
+
   const [fromUser, setFromUser] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isPageLoading, setIsPageLoading] = useState(true)
@@ -106,7 +116,7 @@ const Users = () => {
 
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
-  useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${t('users.users')} - ${t('mermaid')}`)
 
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
 
@@ -138,7 +148,7 @@ const Users = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+              toast.error(...getToastArguments(userRecordsUnavailableText))
             },
           })
         })
@@ -150,6 +160,7 @@ const Users = () => {
     isMounted,
     isSyncInProgress,
     projectId,
+    userRecordsUnavailableText,
   ])
 
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
@@ -175,14 +186,14 @@ const Users = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+              toast.error(...getToastArguments(userRecordsUnavailableText))
             },
           })
         })
     }
 
     return Promise.reject(new Error('databaseSwitchboardInstance isnt defined'))
-  }, [databaseSwitchboardInstance, projectId, handleHttpResponseError])
+  }, [databaseSwitchboardInstance, projectId, handleHttpResponseError, userRecordsUnavailableText])
 
   const addExistingUser = () => {
     setIsTableUpdating(true)
@@ -194,16 +205,16 @@ const Users = () => {
       .then(() => {
         setNewUserEmail('')
         setIsTableUpdating(false)
-        toast.success(...getToastArguments(language.success.newUserAdd))
+        toast.success(...getToastArguments(t('users.messages.new_user_added')))
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
             if (error.response.status === 400) {
-              toast.error(...getToastArguments(language.error.duplicateNewUserAdd))
+              toast.error(...getToastArguments(t('users.messages.duplicate_user_error')))
             } else {
-              toast.error(...getToastArguments(language.error.generic))
+              toast.error(...getToastArguments(t('users.messages.something_went_wrong')))
             }
             setIsTableUpdating(false)
           },
@@ -213,12 +224,12 @@ const Users = () => {
 
   const notifyUserIfEmailInvalid = () => {
     if (newUserEmail === '') {
-      toast.warning(...getToastArguments(language.error.emptyEmailAdd))
+      toast.warning(...getToastArguments(t('users.messages.enter_email')))
 
       return false
     }
     if (!validateEmail(newUserEmail)) {
-      toast.warning(...getToastArguments(language.error.invalidEmailAdd))
+      toast.warning(...getToastArguments(t('users.messages.invalid_email')))
 
       return false
     }
@@ -258,7 +269,7 @@ const Users = () => {
         setNewUserEmail('')
         closeSendEmailToNewUserPrompt()
         setIsTableUpdating(false)
-        toast.success(...getToastArguments(language.success.newPendingUserAdd))
+        toast.success(...getToastArguments(t('users.messages.pending_user_added')))
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -294,7 +305,14 @@ const Users = () => {
         )
         const numRecordTransferred = transferSampleUnitsResponse.num_collect_records_transferred
 
-        toast.success(...getToastArguments(`${numRecordTransferred} ${sampleUnitMsg} transferred`))
+        toast.success(
+          ...getToastArguments(
+            t('users.messages.sample_units_transferred', {
+              count: numRecordTransferred,
+              units: sampleUnitMsg,
+            }),
+          ),
+        )
 
         setIsSyncInProgress(false) // hack to get collect record count to update, also shows a loader
       })
@@ -303,7 +321,7 @@ const Users = () => {
         handleHttpResponseError({
           error,
           callback: () =>
-            toast.error(...getToastArguments(language.error.transferSampleUnitsUnavailable)),
+            toast.error(...getToastArguments(t('users.messages.failed_sample_units_transfer'))),
         })
       })
   }
@@ -344,7 +362,7 @@ const Users = () => {
       })
       .then(() => {
         setIsTableUpdating(false)
-        toast.success(...getToastArguments(language.success.userRemoved))
+        toast.success(...getToastArguments(t('users.messages.user_removed')))
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -380,12 +398,12 @@ const Users = () => {
 
     return [
       {
-        Header: 'Name',
+        Header: t('name'),
         accessor: 'name',
         sortType: reactTableNaturalSortReactNodesSecondChild,
       },
       {
-        Header: 'Email',
+        Header: t('email'),
         accessor: 'email',
         sortType: reactTableNaturalSort,
       },
@@ -393,16 +411,12 @@ const Users = () => {
         Header: () => (
           <>
             <LabelContainer>
-              Admin
+              {adminHeaderText}
               {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
-                <ColumnHeaderToolTip
-                  helperText={language.tooltipText.admin}
-                  left="-5em"
-                  top="-13.7em"
-                />
+                <ColumnHeaderToolTip helperText={adminTooltipText} left="-5em" top="-13.7em" />
               ) : null}
               <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'admin')}>
-                <IconInfo aria-label="info" />
+                <IconInfo aria-label={t('info')} />
               </IconButton>
             </LabelContainer>
           </>
@@ -414,10 +428,10 @@ const Users = () => {
         Header: () => (
           <>
             <LabelContainer>
-              Collector
+              {collectorHeaderText}
               {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
                 <ColumnHeaderToolTip
-                  helperText={language.tooltipText.collector}
+                  helperText={collectorTooltipText}
                   left="-2.5em"
                   top="-13.7em"
                 />
@@ -426,7 +440,7 @@ const Users = () => {
                 type="button"
                 onClick={(event) => handleInfoIconClick(event, 'collector')}
               >
-                <IconInfo aria-label="info" />
+                <IconInfo aria-label={t('info')} />
               </IconButton>
             </LabelContainer>
           </>
@@ -439,16 +453,12 @@ const Users = () => {
         Header: () => (
           <>
             <LabelContainer>
-              Read-Only
+              {readOnlyHeaderText}
               {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
-                <ColumnHeaderToolTip
-                  helperText={language.tooltipText.readOnly}
-                  left="-2.5em"
-                  top="-7.7em"
-                />
+                <ColumnHeaderToolTip helperText={readOnlyTooltipText} left="-2.5em" top="-7.7em" />
               ) : null}
               <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'readOnly')}>
-                <IconInfo aria-label="info" />
+                <IconInfo aria-label={t('info')} />
               </IconButton>
             </LabelContainer>
           </>
@@ -457,33 +467,43 @@ const Users = () => {
         disableSortBy: true,
       },
       {
-        Header: 'Unsubmitted Sample Units',
+        Header: t('users.unsubmitted_sample_units'),
         accessor: 'unsubmittedSampleUnits',
         disableSortBy: true,
         align: 'right',
       },
       {
-        Header: 'Remove From Project',
+        Header: t('users.remove_from_project'),
         accessor: 'remove',
         disableSortBy: true,
       },
     ]
-  }, [isHelperTextShowing, currentHelperTextLabel])
+  }, [
+    isHelperTextShowing,
+    currentHelperTextLabel,
+    adminTooltipText,
+    collectorTooltipText,
+    readOnlyTooltipText,
+    adminHeaderText,
+    collectorHeaderText,
+    readOnlyHeaderText,
+    t,
+  ])
 
   const tableColumnsForNonAdmin = useMemo(() => {
     return [
       {
-        Header: 'Name',
+        Header: t('name'),
         accessor: 'name',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Role',
+        Header: t('users.role'),
         accessor: 'role',
         sortType: reactTableNaturalSort,
       },
     ]
-  }, [])
+  }, [t])
 
   const handleRoleChange = useCallback(
     ({ event, projectProfileId }) => {
@@ -508,7 +528,7 @@ const Users = () => {
           setObserverProfiles(updatedObserverProfiles)
           toast.success(
             ...getToastArguments(
-              language.success.getUserRoleChangeSuccessMessage({
+              t('users.messages.role_changed_success', {
                 userName: editedUserName,
                 role: editedUserRole,
               }),
@@ -524,7 +544,9 @@ const Users = () => {
 
               toast.error(
                 ...getToastArguments(
-                  language.error.getUserRoleChangeFailureMessage(userToBeEdited.profile_name),
+                  t('users.messages.role_changed_error', {
+                    userName: userToBeEdited.profile_name,
+                  }),
                 ),
               )
             },
@@ -645,11 +667,11 @@ const Users = () => {
                     )
                   }
                 >
-                  <IconAccountConvert /> Transfer
+                  <IconAccountConvert /> {t('users.transfer_button')}
                 </ButtonSecondary>
               </>
             ) : (
-              'No sample units'
+              t('users.no_sample_units')
             )}
           </>
         ),
@@ -872,15 +894,15 @@ const Users = () => {
   const content = isAppOnline ? (
     table
   ) : (
-    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+    <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
   )
   const toolbar = (
     <>
-      <H3>{language.pages.userTable.title}</H3>
+      <H3>{t('users.users')}</H3>
       <InfoParagraph>
-        <P>{language.pages.userTable.introductionParagraph}</P>
+        <P>{t('users.introduction')}</P>
         <ButtonPrimary type="button" onClick={openUserRolesModal}>
-          <IconInfo /> Learn more about User Roles...
+          <IconInfo /> {t('users.learn_more_roles')}
         </ButtonPrimary>
       </InfoParagraph>
       {isAppOnline && (
@@ -888,29 +910,25 @@ const Users = () => {
           {isReadonlyUserWithActiveSampleUnits && isAdminUser && (
             <InlineStyle>
               <InlineMessage type="warning">
-                <p>{language.pages.userTable.warningReadOnlyUser}</p>
+                <p>{t('users.warning_readonly_active_units')}</p>
               </InlineMessage>
             </InlineStyle>
           )}
           <ToolbarRowWrapper>
             <FilterSearchToolbar
-              name={
-                isAdminUser
-                  ? language.pages.userTable.filterToolbarTextForAdmin
-                  : language.pages.userTable.filterToolbarTextForNonAdmin
-              }
+              name={isAdminUser ? t('users.filter_by_name_email') : t('users.filter_by_name_role')}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
             {isAdminUser && (
               <InputAndButton
                 inputId="add-new-user-email"
-                labelText={language.pages.userTable.searchEmailToolbarText}
+                labelText={t('users.add_user_email')}
                 isLoading={isTableUpdating}
                 buttonChildren={
                   <>
                     <IconPlus />
-                    Add User
+                    {t('users.add_user_button')}
                   </>
                 }
                 value={newUserEmail}

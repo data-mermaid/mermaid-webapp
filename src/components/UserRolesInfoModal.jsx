@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonSecondary } from './generic/buttons'
 import { IconCheck, IconClose } from './icons'
 import { Table, Td, Tr, TableOverflowWrapper } from './generic/Table/table'
-import language from '../language'
 import theme from '../theme'
 import Modal, { RightFooter } from './generic/Modal'
 
@@ -41,25 +41,26 @@ const TcellWithIconClose = styled(Tcell)`
   color: ${theme.color.cautionColor};
 `
 const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
+  const { t } = useTranslation()
   const modalContent = (
     <TableOverflowWrapper>
       <Table>
         <thead>
           <Tr>
-            <Thead>{language.pages.admin.accessible_information}</Thead>
-            <Thead>{language.pages.admin.admin}</Thead>
-            <Thead>{language.pages.admin.collector}</Thead>
-            <Thead>{language.pages.admin.readOnly}</Thead>
+            <Thead>{t('users.accessibility.accessible_info')}</Thead>
+            <Thead>{t('users.roles.admin')}</Thead>
+            <Thead>{t('users.roles.collector')}</Thead>
+            <Thead>{t('users.roles.read_only')}</Thead>
           </Tr>
         </thead>
         <tbody>
           <Tr>
             <Td colSpan="4">
-              <strong>{language.pages.admin.projectManagement}</strong>
+              <strong>{t('users.accessibility.project_management')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.projectInfo.edit}</Tcell>
+            <Tcell>{t('users.accessibility.edit_project_info')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -71,7 +72,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.projectInfo.setUpDataSharing}</Tcell>
+            <Tcell>{t('users.accessibility.setup_data_sharing')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -83,7 +84,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.projectInfo.addOrRemoveProjectMembers}</Tcell>
+            <Tcell>{t('users.accessibility.add_remove_members')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -95,7 +96,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.projectInfo.viewMemberEmail}</Tcell>
+            <Tcell>{t('users.accessibility.view_member_emails')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -107,7 +108,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.projectInfo.delete}</Tcell>
+            <Tcell>{t('users.accessibility.delete_project')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -121,11 +122,11 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
 
           <Tr>
             <Td colSpan="4">
-              <strong>{language.pages.admin.dataCollection.title}</strong>
+              <strong>{t('users.accessibility.data_collection_management')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.addUpdateSiteOrRegimes}</Tcell>
+            <Tcell>{t('users.accessibility.add_update_sites_regimes')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -137,7 +138,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.deleteSiteOrRegimes}</Tcell>
+            <Tcell>{t('users.accessibility.delete_sites_regimes')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -149,7 +150,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.downloadSitesAndRegimes}</Tcell>
+            <Tcell>{t('users.accessibility.download_sites_regimes')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -161,7 +162,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.createValidateSubmitSampleUnits}</Tcell>
+            <Tcell>{t('users.accessibility.create_validate_submit_units')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -173,7 +174,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.deleteSampleUnits}</Tcell>
+            <Tcell>{t('users.accessibility.delete_unsubmitted_units')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -185,7 +186,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.editSampleUnits}</Tcell>
+            <Tcell>{t('users.accessibility.edit_submitted_units')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -197,7 +198,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.transferSampleUnits}</Tcell>
+            <Tcell>{t('users.accessibility.transfer_unsubmitted_units')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -209,7 +210,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.downloadSampleUnits}</Tcell>
+            <Tcell>{t('users.accessibility.download_submitted_units')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -221,7 +222,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.viewObserversAndSampleUnits}</Tcell>
+            <Tcell>{t('users.accessibility.view_observers_units_overview')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -233,7 +234,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell>{language.pages.admin.dataCollection.viewRegimesOverview}</Tcell>
+            <Tcell>{t('users.accessibility.view_regimes_overview')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -250,7 +251,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
   )
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>{language.buttons.close}</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.close')}</ButtonSecondary>
     </RightFooter>
   )
 
@@ -258,7 +259,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
     <Modal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      title={language.pages.userTable.moreInfoTitle}
+      title={t('users.user_roles')}
       mainContent={modalContent}
       footerContent={footerContent}
     />
