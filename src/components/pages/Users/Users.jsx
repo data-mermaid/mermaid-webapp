@@ -84,6 +84,8 @@ const Users = () => {
   const collectorHeaderText = t('users.roles.collector')
   const readOnlyHeaderText = t('users.roles.read_only')
   const userRecordsUnavailableText = t('users.user_records_unavailable')
+  const transferUserButtonText = t('users.transfer_button')
+  const noSampleUnitsText = t('users.no_sample_units')
 
   const [fromUser, setFromUser] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -554,7 +556,7 @@ const Users = () => {
           setIsTableUpdating(false)
         })
     },
-    [databaseSwitchboardInstance, observerProfiles, projectId, handleHttpResponseError],
+    [databaseSwitchboardInstance, observerProfiles, projectId, handleHttpResponseError, t],
   )
 
   const tableCellDataForAdmin = useMemo(() => {
@@ -667,11 +669,11 @@ const Users = () => {
                     )
                   }
                 >
-                  <IconAccountConvert /> {t('users.transfer_button')}
+                  <IconAccountConvert /> {transferUserButtonText}
                 </ButtonSecondary>
               </>
             ) : (
-              t('users.no_sample_units')
+              noSampleUnitsText
             )}
           </>
         ),
@@ -686,7 +688,14 @@ const Users = () => {
         ),
       }
     })
-  }, [observerProfiles, currentUser, handleRoleChange, isTableUpdating])
+  }, [
+    observerProfiles,
+    currentUser,
+    handleRoleChange,
+    isTableUpdating,
+    transferUserButtonText,
+    noSampleUnitsText,
+  ])
 
   const tableCellDataForNonAdmin = useMemo(
     () =>
