@@ -117,6 +117,8 @@
     "uploading_files": "<p>Uploading {{processedCount}}/{{totalCount}} files...</p><button>Cancel upload</button>"
   },
   "name": "Name",
+  "title": "Title",
+  "type": "Type",
   "offline": {
     "unavailable_offline": "Unavailable offline.",
     "page_unavailable_offline": "This page is unavailable offline."
@@ -243,10 +245,28 @@
   "go_to_explore_sample_event": "View this sample event on MERMAID Explore",
   "go_to_explore_this_project": "View this project on MERMAID Explore",
   "gfcr": {
-    "title": "Global Fund for Coral Reefs (GFCR)",
+    "gfcr": "GFCR",
+    "gfcr_long": "Global Fund for Coral Reefs (GFCR)",
     "add_gfcr_indicators": "GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world.",
     "remove_gfcr_Indicators": "Removing GFCR indicators from this project will not delete them, but just hide them.",
     "disabled_gfcr_info": "Disabling GFCR Indicators for this project will not delete them, but just hide them from the <a />. No data will be lost. You can re-enable them at any time.",
+    "create_new": "Create new",
+    "exporting": "Exporting...",
+    "report": "Report",
+    "target": "Target",
+    "untitled": "Untitled",
+    "no_indicator_sets": "No indicator sets yet.",
+    "no_indicator_info": "Select 'Create new' to add an indicator set to this project.",
+    "create_indicator_set": "Create Indicator Set",
+    "reporting_date": "Reporting date",
+    "indicator_set_title_info": "Recommended naming conventions: For target reports, use \"Phase 1 Target\", \"Mid-term Target\", or \"Final Target\". For bi-annual progress reports, use \"Mid-year Report\" or \"End-year Report\".",
+    "indicator_set_date_info": "The date for which this indicator set is being reported.",
+    "errors": {
+      "indicator_sets_unavailable": "GFCR indicator sets are currently unavailable."
+    },
+    "success": {
+      "indicator_set_save": "Indicator set saved successfully."
+    },
     "buttons": {
       "go_to_gfcr": "Go to GFCR Indicators",
       "disable_gfcr": "Disable GFCR Indicators",
@@ -326,7 +346,8 @@
     "by_name_reeftype_reefzone_exposure": "Filter this table by name, reef type, reef zone, or exposure",
     "by_name_project_country": "Filter this table by name, project, or country",
     "by_site_management_observer": "Filter this table by site, management, or observer",
-    "by_site": "Filter this table by site"
+    "by_site": "Filter this table by site",
+    "by_title_date": "Filter this table by title or date"
   },
   "view_selected_only": "View Selected Only",
   "management_regimes": {

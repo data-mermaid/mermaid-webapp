@@ -10,6 +10,7 @@ import { getTableFilteredRows } from '../../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
 import { IconPlus, IconDownload } from '../../../icons'
+import { useTranslation } from 'react-i18next'
 import language from '../../../../language'
 import PageUnavailable from '../../PageUnavailable'
 import {
@@ -36,6 +37,7 @@ import GfcrGenericTable from '../GfcrGenericTable'
 import NewIndicatorSetModal from './NewIndicatorSetModal'
 
 const Gfcr = () => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const currentProjectPath = useCurrentProjectPath()
   const { gfcrIndicatorSets, setGfcrIndicatorSets } = useCurrentProject()
@@ -45,6 +47,21 @@ const Gfcr = () => {
   const { currentUser } = useCurrentUser()
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
+  const gfcrTitleText = t('gfcr.gfcr')
+  const filterToolbarText = t('filters.by_title_date')
+  const createNewText = t('gfcr.create_new')
+  const exportingText = t('gfcr.exporting')
+  const exportToXlsxText = t('buttons.export_to_xlsx')
+  const reportText = t('gfcr.report')
+  const targetText = t('gfcr.target')
+  const titleHeaderText = t('title')
+  const typeHeaderText = t('type')
+  const reportingDateHeaderText = t('gfcr.reporting_date')
+  const untitledText = t('gfcr.untitled')
+  const noIndicatorText = t('gfcr.no_indicator_sets')
+  const noIndicatorInfoText = t('gfcr.no_indicator_info')
+  const indicatorSetsUnavailableText = t('gfcr.errors.indicator_sets_unavailable')
+
   const [isLoading, setIsLoading] = useState(true)
   const [isNewIndicatorSetModalOpen, setIsNewIndicatorSetModalOpen] = useState(false)
   const [newIndicatorSetType, setNewIndicatorSetType] = useState()
@@ -52,7 +69,7 @@ const Gfcr = () => {
 
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.gfcrTable.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${gfcrTitleText} - ${t('mermaid')}`)
   const [isExporting, setIsExporting] = useState(false)
 
   const _getIndicatorSets = useEffect(() => {
@@ -73,7 +90,7 @@ const Gfcr = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.gfcrIndicatorSetsUnavailable))
+              toast.error(...getToastArguments(indicatorSetsUnavailableText))
             },
           })
 
@@ -87,27 +104,28 @@ const Gfcr = () => {
     projectId,
     setGfcrIndicatorSets,
     isAppOnline,
+    indicatorSetsUnavailableText,
   ])
 
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Title',
+        Header: titleHeaderText,
         accessor: 'title',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Type',
+        Header: typeHeaderText,
         accessor: 'indicator_set_type',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Reporting Date',
+        Header: reportingDateHeaderText,
         accessor: 'report_date',
         sortType: reactTableNaturalSort,
       },
     ],
-    [],
+    [titleHeaderText, typeHeaderText, reportingDateHeaderText],
   )
 
   const tableCellData = useMemo(() => {
@@ -122,13 +140,15 @@ const Gfcr = () => {
         title: isAdminUser ? (
           <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link>
         ) : (
-          <span>{title || 'Untitled'}</span>
+          <span>{title || untitledText}</span>
         ),
-        indicator_set_type: <span>{indicator_set_type === 'report' ? 'Report' : 'Target'}</span>,
+        indicator_set_type: (
+          <span>{indicator_set_type === 'report' ? reportText : targetText}</span>
+        ),
         report_date: <span>{localizedDate}</span>,
       }
     })
-  }, [gfcrIndicatorSets, isAdminUser, currentProjectPath])
+  }, [gfcrIndicatorSets, isAdminUser, currentProjectPath, untitledText, reportText, targetText])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -235,7 +255,7 @@ const Gfcr = () => {
     databaseSwitchboardInstance
       .exportData(projectId)
       .catch(() => {
-        toast.error('There was an error exporting the report.')
+        toast.error(t('toasts.export_error'))
       })
       .finally(() => {
         setIsExporting(false)
@@ -248,10 +268,10 @@ const Gfcr = () => {
         <ButtonSecondaryDropdown label={createDropdownLabel} disabled={!isAdminUser}>
           <Column as="nav" data-testid="export-to-csv">
             <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('report')}>
-              Report
+              {reportText}
             </DropdownItemStyle>
             <DropdownItemStyle as="button" onClick={() => handleNewIndicatorSet('target')}>
-              Target
+              {targetText}
             </DropdownItemStyle>
           </Column>
         </ButtonSecondaryDropdown>
@@ -260,7 +280,7 @@ const Gfcr = () => {
           disabled={!gfcrIndicatorSets.length || isExporting}
           onClick={handleExportClick}
         >
-          <IconDownload /> {isExporting ? 'Exporting...' : 'Export to XLSX'}
+          <IconDownload /> {isExporting ? exportingText : exportToXlsxText}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
       <NewIndicatorSetModal
@@ -296,21 +316,18 @@ const Gfcr = () => {
       pageCount={pageOptions.length}
     />
   ) : (
-    <PageUnavailable
-      mainText={language.pages.gfcrTable.noDataMainText}
-      subText={language.pages.gfcrTable.noDataSubText}
-    />
+    <PageUnavailable mainText={noIndicatorText} subText={noIndicatorInfoText} />
   )
 
   return (
     <ContentPageLayout
       toolbar={
         <>
-          <H2>{language.pages.gfcrTable.title}</H2>
+          <H2>{gfcrTitleText}</H2>
           {isAppOnline && (
             <ToolBarRow>
               <FilterSearchToolbar
-                name={language.pages.gfcrTable.filterToolbarText}
+                name={filterToolbarText}
                 disabled={gfcrIndicatorSets.length === 0}
                 globalSearchText={globalFilter || ''}
                 handleGlobalFilterChange={handleGlobalFilterChange}
@@ -322,7 +339,7 @@ const Gfcr = () => {
         </>
       }
       content={
-        isAppOnline ? table : <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+        isAppOnline ? table : <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
       }
       isPageContentLoading={isLoading}
     />

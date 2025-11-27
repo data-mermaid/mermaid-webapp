@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useState, useCallback, useEffect } from 'react'
 
+import { useTranslation } from 'react-i18next'
 import language from '../../../../language'
 
 import { useFormik } from 'formik'
@@ -25,9 +26,11 @@ import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import InputNoRowWithLabelAndValidation from '../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 import { displayErrorMessagesGFCR } from '../../../../library/displayErrorMessagesGFCR'
 
-const modalLanguage = language.gfcrNewIndicatorSetModal
-
 const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
+  const { t } = useTranslation()
+
+  const indicatorSetSaveText = t('gfcr.create_indicator_set')
+
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId } = useParams()
@@ -54,7 +57,7 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
         formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
 
         navigate(`${ensureTrailingSlash(currentProjectPath)}gfcr/${response.id}`)
-        toast.success(...getToastArguments(language.success.gfcrIndicatorSetSave))
+        toast.success(...getToastArguments(indicatorSetSaveText))
         setIsLoading(false)
       } catch (error) {
         setIsLoading(false)
@@ -77,6 +80,7 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
       currentProjectPath,
       isAppOnline,
       handleHttpResponseError,
+      indicatorSetSaveText,
     ],
   )
 
@@ -90,11 +94,11 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
       const errors = {}
 
       if (!values.title) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (!values.report_date) {
-        errors.report_date = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.report_date = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       return errors
@@ -107,13 +111,13 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
     <StyledModalFooterWrapper>
       <StyledModalLeftFooter>
         <ButtonSecondary onClick={() => onDismiss(formik.resetForm)} disabled={isLoading}>
-          {modalLanguage.cancel}
+          {t('buttons.cancel')}
         </ButtonSecondary>
       </StyledModalLeftFooter>
       <RightFooter>
         <SaveButton
           formId="new-indicator-set-modal-form"
-          unsavedTitle={modalLanguage.create}
+          unsavedTitle={t('gfcr.create_indicator_set')}
           saveButtonState={saveButtonState}
           formHasErrors={!!Object.keys(formik.errors).length}
           formDirty={isFormDirty}
@@ -130,27 +134,27 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
     <Modal
       isOpen={isOpen}
       onDismiss={() => onDismiss(formik.resetForm)}
-      title={language.pages.gfcrTable.createIndicatorSetTitle}
+      title={t('gfcr.create_indicator_set')}
       mainContent={
         <form id="new-indicator-set-modal-form" onSubmit={formik.handleSubmit}>
           <StyledModalInputRow>
             <InputNoRowWithLabelAndValidation
               required
-              label={language.pages.gfcrIndicatorSet.indicatorSetTitle}
+              label={t('title')}
               id="indicator-set-title-input"
               type="text"
               {...formik.getFieldProps('title')}
-              helperText={language.pages.gfcrIndicatorSet.getIndicatorSetTitleHelperText()}
+              helperText={t('gfcr.indicator_set_title_info')}
             />
           </StyledModalInputRow>
           <StyledModalInputRow>
             <InputNoRowWithLabelAndValidation
               required
-              label={language.pages.gfcrIndicatorSet.indicatorSetReportingDate}
+              label={t('gfcr.reporting_date')}
               id="indicator-set-date-input"
               type="date"
               {...formik.getFieldProps('report_date')}
-              helperText={language.pages.gfcrIndicatorSet.getIndicatorSetReportingDateHelperText()}
+              helperText={t('gfcr.indicator_set_date_info')}
             />
           </StyledModalInputRow>
         </form>
