@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import React, { useState, useCallback, useEffect } from 'react'
 
 import { useTranslation } from 'react-i18next'
-import language from '../../../../language'
 
 import { useFormik } from 'formik'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'

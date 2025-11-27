@@ -125,7 +125,8 @@
   },
   "page": {
     "read_only": "You cannot access this page because you are a read-only member of this project.",
-    "will_show": "This page will show:"
+    "will_show": "This page will show:",
+    "admin_only": "Only admins can access this page."
   },
   "projects": {
     "data_unavailable": "Project data is currently unavailable.",
@@ -257,12 +258,17 @@
     "untitled": "Untitled",
     "no_indicator_sets": "No indicator sets yet.",
     "no_indicator_info": "Select 'Create new' to add an indicator set to this project.",
+    "indicator_set": "Indicator Set",
     "create_indicator_set": "Create Indicator Set",
     "reporting_date": "Reporting date",
+    "reporting_date_year": "Reporting Date Year",
     "indicator_set_title_info": "Recommended naming conventions: For target reports, use \"Phase 1 Target\", \"Mid-term Target\", or \"Final Target\". For bi-annual progress reports, use \"Mid-year Report\" or \"End-year Report\".",
     "indicator_set_date_info": "The date for which this indicator set is being reported.",
+    "hide_help": "Hide Help",
+    "show_help": "Show Help",
     "errors": {
-      "indicator_sets_unavailable": "GFCR indicator sets are currently unavailable."
+      "indicator_sets_unavailable": "GFCR indicator sets are currently unavailable.",
+      "indicator_set_save_failed": "There was an error saving the indicator set."
     },
     "success": {
       "indicator_set_save": "Indicator set saved successfully."

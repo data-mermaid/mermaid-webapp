@@ -106,8 +106,6 @@ const error = {
     `The ${mermaidDataTypeLabel} failed to save both on your computer and online.`,
   getDeleteOfflineErrorTitle: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has failed to delete from your computer or online.`,
-  gfcrIndicatorSetsUnavailable: 'GFCR indicator sets are currently unavailable.',
-  gfcrIndicatorSetSave: 'Indicator set has not been saved.',
   gfcrIndicatorSetDelete: 'Indicator set has not been deleted.',
   gfcrFinanceSolutionSave: 'Finance solution has not been saved.',
   gfcrFinanceSolutionDelete: 'Finance solution has not been removed.',
@@ -186,7 +184,6 @@ const success = {
     `${projectName} has been removed from being offline ready`,
   getUserRoleChangeSuccessMessage: ({ userName, role }) =>
     `${userName}'s role is now set to ${role}.`,
-  gfcrIndicatorSetSave: 'Indicator set saved.',
   gfcrIndicatorSetDelete: 'Indicator set deleted.',
   gfcrFinanceSolutionSave: 'Finance solution row saved.',
   gfcrFinanceSolutionDelete: 'Finance solution row removed.',
@@ -423,14 +420,6 @@ const gfcrRevenueModal = {
   no: 'No',
 }
 
-const gfcrNewIndicatorSetModal = {
-  title: 'Create Indicator Set',
-  create: 'Create Indicator Set',
-  cancel: 'Cancel',
-  titleInput: 'Title',
-  dateInput: 'Date',
-}
-
 const autocomplete = {
   noResultsDefault: 'No results found',
 }
@@ -545,16 +534,6 @@ const pages = {
     organizations: 'Organizations',
     notes: 'Notes',
     noOrganization: 'This Project has no organizations.',
-    gfcrCallout: {
-      calloutHeading: 'Global Fund for Coral Reefs (GFCR)',
-      removeParagraph:
-        'Removing GFCR indicators from this project will not delete them, but just hide them.',
-      addParagraph:
-        'GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. ',
-      disableButton: 'Disable GFCR Indicators',
-      enableButton: 'Enable GFCR Indicators for this project',
-      goToButton: 'Go to GFCR Indicators',
-    },
     citationLabel: 'Suggested Citation',
     citationHelperText:
       'Citation to suggest for all uses of your project data. This citation will be displayed on MERMAID Explore and with any other data access method. ',
@@ -652,13 +631,6 @@ const pages = {
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubText:
       'This page will show the Management Regime of submitted sample units by method and site.',
-  },
-  gfcrTable: {
-    filterToolbarText: 'Filter this table by title or date',
-    createIndicatorSetTitle: 'Create Indicator Set',
-    title: 'GFCR',
-    noDataMainText: 'No indicator sets yet.',
-    noDataSubText: "Select 'Create new' to add an indicator set to this project.",
   },
   gfcrFinanceSolutionsTable: {
     add: 'Add Business / Finance Solution',
@@ -1515,7 +1487,6 @@ export default {
   gfcrFinanceSolutionModal,
   gfcrInvestmentModal,
   gfcrRevenueModal,
-  gfcrNewIndicatorSetModal,
   deleteProject,
   deleteRecord,
   error,

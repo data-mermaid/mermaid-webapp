@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 import { Slide, toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useParams, useNavigate } from 'react-router-dom'
@@ -17,7 +18,6 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
-import language from '../../../../language'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
 import SaveButton from '../../../generic/SaveButton'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
@@ -44,8 +44,19 @@ const HelpButton = styled(ButtonSecondary)`
 `
 
 const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
+  const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
+
+  const indicatorSetTitleText = t('gfcr.indicator_set')
+  const reportText = t('gfcr.report')
+  const targetText = t('gfcr.target')
+  const hideHelpText = t('gfcr.hide_help')
+  const showHelpText = t('gfcr.show_help')
+  const indicatorSetSaveSuccessText = t('gfcr.success.indicator_set_save')
+  const indicatorSetSaveFailedText = t('gfcr.errors.indicator_set_save_failed')
+  const indicatorSetsUnavailableText = t('gfcr.errors.indicator_sets_unavailable')
+
   const { indicatorSetId, projectId } = useParams()
   const navigate = useNavigate()
   const isMounted = useIsMounted()
@@ -64,7 +75,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const [selectedNavItem, setSelectedNavItem] = useState('report-title-and-year')
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new indicator set is saved (and that triggers a navigation to its new page)
   const indicatorSetType = indicatorSetBeingEdited?.indicator_set_type || newIndicatorSetType
-  const indicatorSetTypeName = indicatorSetType === 'report' ? 'Report' : 'Target'
+  const indicatorSetTypeName = indicatorSetType === 'report' ? reportText : targetText
 
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
@@ -98,7 +109,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.gfcrIndicatorSetsUnavailable))
+              toast.error(...getToastArguments(indicatorSetsUnavailableText))
             },
           })
 
@@ -118,6 +129,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     isAppOnline,
     newIndicatorSetType,
     setChoices,
+    indicatorSetsUnavailableText,
   ])
 
   const _setIndicatorSet = useEffect(() => {
@@ -169,7 +181,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         if (newIndicatorSetType) {
           navigate(`${ensureTrailingSlash(currentProjectPath)}gfcr/${response.id}`)
         }
-        toast.success(...getToastArguments(language.success.gfcrIndicatorSetSave))
+        toast.success(...getToastArguments(indicatorSetSaveSuccessText))
       } catch (error) {
         setSaveButtonState(buttonGroupStates.unsaved)
 
@@ -178,7 +190,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
 
           const errorMarkup = (
             <>
-              <P>{language.error.gfcrIndicatorSetSave}</P>
+              <P>{indicatorSetSaveFailedText}</P>
               <Figure>
                 <figcaption>Form errors: </figcaption>
                 <Dl>
@@ -215,6 +227,8 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       currentProjectPath,
       isAppOnline,
       handleHttpResponseError,
+      indicatorSetSaveSuccessText,
+      indicatorSetSaveFailedText,
     ],
   )
 
@@ -226,11 +240,11 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       const errors = {}
 
       if (!values.title) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (!values.report_date) {
-        errors.report_date = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.report_date = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       return errors
@@ -276,7 +290,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     </div>
   ) : (
     <GfcrPageUnavailablePadding>
-      <PageUnavailable mainText={language.error.pageAdminOnly} />
+      <PageUnavailable mainText={t('page.admin_only')} />
     </GfcrPageUnavailablePadding>
   )
 
@@ -293,14 +307,14 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       isToolbarSticky={true}
       subNavNode={{
         name: newIndicatorSetType
-          ? language.pages.gfcrIndicatorSet.title
+          ? indicatorSetTitleText
           : `${formik.values.title} ${formik.values.report_date}`,
       }}
       content={
         isAppOnline ? (
           contentViewByRole
         ) : (
-          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+          <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
         )
       }
       toolbar={
@@ -315,7 +329,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
               />
               <ButtonContainer>
                 <HelpButton to="" onClick={() => setDisplayHelp(!displayHelp)}>
-                  <IconInfo /> {displayHelp ? 'Hide Help' : 'Show Help'}
+                  <IconInfo /> {displayHelp ? hideHelpText : showHelpText}
                 </HelpButton>
                 <SaveButton
                   formId="gfcr-indicator-set-form"
@@ -326,7 +340,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
               </ButtonContainer>
             </>
           ) : (
-            <h2>{language.pages.gfcrIndicatorSet.title}</h2>
+            <h2>{indicatorSetTitleText}</h2>
           )}
         </ContentPageToolbarWrapper>
       }

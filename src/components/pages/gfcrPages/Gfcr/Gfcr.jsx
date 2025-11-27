@@ -11,7 +11,6 @@ import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
 import { IconPlus, IconDownload } from '../../../icons'
 import { useTranslation } from 'react-i18next'
-import language from '../../../../language'
 import PageUnavailable from '../../PageUnavailable'
 import {
   reactTableNaturalSort,
@@ -49,9 +48,6 @@ const Gfcr = () => {
 
   const gfcrTitleText = t('gfcr.gfcr')
   const filterToolbarText = t('filters.by_title_date')
-  const createNewText = t('gfcr.create_new')
-  const exportingText = t('gfcr.exporting')
-  const exportToXlsxText = t('buttons.export_to_xlsx')
   const reportText = t('gfcr.report')
   const targetText = t('gfcr.target')
   const titleHeaderText = t('title')
@@ -240,7 +236,7 @@ const Gfcr = () => {
 
   const createDropdownLabel = (
     <>
-      <IconPlus /> Create new
+      <IconPlus /> {t('gfcr.create_new')}
     </>
   )
 
@@ -280,7 +276,7 @@ const Gfcr = () => {
           disabled={!gfcrIndicatorSets.length || isExporting}
           onClick={handleExportClick}
         >
-          <IconDownload /> {isExporting ? exportingText : exportToXlsxText}
+          <IconDownload /> {isExporting ? t('gfcr.exporting') : t('buttons.export_to_xlsx')}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
       <NewIndicatorSetModal
