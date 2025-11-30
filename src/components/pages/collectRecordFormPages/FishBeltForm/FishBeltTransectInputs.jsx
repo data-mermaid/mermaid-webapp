@@ -546,7 +546,7 @@ const FishBeltTransectInputs = ({
           }
         />
         <TextareaWithLabelAndValidation
-          label={t('notes')}
+          label={t('forms.notes')}
           id="notes"
           testId="notes"
           ignoreNonObservationFieldValidations={() => {

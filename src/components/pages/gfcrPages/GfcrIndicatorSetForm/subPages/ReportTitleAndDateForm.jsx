@@ -5,7 +5,7 @@ import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabe
 import { formikPropType } from '../../../../../library/formik/formikPropType'
 import { StyledGfcrInputWrapper } from './subPages.styles'
 import DeleteRecordButton from '../../../../DeleteRecordButton/DeleteRecordButton'
-import language from '../../../../../language'
+import { useTranslation } from 'react-i18next'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -14,8 +14,12 @@ import { ensureTrailingSlash } from '../../../../../library/strings/ensureTraili
 import useCurrentProjectPath from '../../../../../library/useCurrentProjectPath'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
+import { getDeleteModalText } from '../../../../../library/getDeleteModalText'
 
 const ReportTitleAndDateForm = ({ formik, isNewIndicatorSet, displayHelp }) => {
+  const { t } = useTranslation()
+
+  const deleteModalText = getDeleteModalText(t('gfcr.indicator_set'))
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { indicatorSetId, projectId } = useParams()
   const navigate = useNavigate()
@@ -41,14 +45,14 @@ const ReportTitleAndDateForm = ({ formik, isNewIndicatorSet, displayHelp }) => {
       .then(() => {
         closeDeleteIndicatorSetModal()
         setIsDeletingIndicatorSet(false)
-        toast.success(...getToastArguments(language.success.gfcrIndicatorSetDelete))
+        toast.success(...getToastArguments(t('gfcr.success.indicator_set_save')))
         navigate(`${ensureTrailingSlash(currentProjectPath)}gfcr/`)
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
         })
-        toast.error(...getToastArguments(language.error.gfcrIndicatorSetDelete))
+        toast.error(...getToastArguments(t('gfcr.errors.indicator_set_save_failed')))
         setIsDeletingIndicatorSet(false)
       })
   }
@@ -57,7 +61,7 @@ const ReportTitleAndDateForm = ({ formik, isNewIndicatorSet, displayHelp }) => {
     <StyledGfcrInputWrapper>
       <InputWithLabelAndValidation
         required
-        label={language.pages.gfcrIndicatorSet.indicatorSetTitle}
+        label={t('title')}
         id="gfcr-title"
         type="text"
         textAlign="left"
@@ -65,10 +69,10 @@ const ReportTitleAndDateForm = ({ formik, isNewIndicatorSet, displayHelp }) => {
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}
         showHelperText={displayHelp}
-        helperText={language.pages.gfcrIndicatorSet.getIndicatorSetTitleHelperText()}
+        helperText={t('gfcr.indicator_set_title_info')}
       />
       <InputWithLabelAndValidation
-        label={language.pages.gfcrIndicatorSet.indicatorSetReportingDate}
+        label={t('gfcr.reporting_date')}
         id="gfcr-report_date"
         type="date"
         {...formik.getFieldProps('report_date')}
@@ -76,7 +80,7 @@ const ReportTitleAndDateForm = ({ formik, isNewIndicatorSet, displayHelp }) => {
           resetEmptyFormikFieldToInitialValue({ formik, event, fieldName: 'report_date' })
         }
         showHelperText={displayHelp}
-        helperText={language.pages.gfcrIndicatorSet.getIndicatorSetReportingDateHelperText()}
+        helperText={t('gfcr.indicator_set_date_info')}
       />
       <DeleteRecordButton
         currentPage={1}
@@ -84,7 +88,7 @@ const ReportTitleAndDateForm = ({ formik, isNewIndicatorSet, displayHelp }) => {
         isLoading={isDeletingIndicatorSet}
         isNewRecord={isNewIndicatorSet}
         isOpen={isDeleteIndicatorSetModalOpen}
-        modalText={language.deleteRecord('Indicator Set')}
+        modalText={deleteModalText}
         deleteRecord={deleteIndicatorSet}
         onDismiss={closeDeleteIndicatorSetModal}
         openModal={openDeleteIndicatorSetModal}

@@ -6,25 +6,26 @@ import { H2 } from '../../../../generic/text'
 import { InputRow } from '../../../../generic/form'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../../../language'
+import { useTranslation } from 'react-i18next'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import GfcrIntegerInputField from '../GfcrIntegerInputField'
-
-const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
+import GfcrHelperLinks from './GfcrHelperLinks'
 
 const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) => {
+  const { t } = useTranslation()
+
   return (
     <StyledGfcrInputWrapper>
-      <H2>{gfcrIndicatorSetLanguage.f6Heading}</H2>
+      <H2>{t('gfcr.forms.f6_heading')}</H2>
       <InputRow>
         <label>
-          <strong>F 6.1</strong> {gfcrIndicatorSetLanguage.f6_1}
+          <strong>F 6.1</strong> {t('gfcr.forms.f6_1')}
         </label>
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f6_1a"
-            label={<>{gfcrIndicatorSetLanguage.men}</>}
-            helperText={gfcrIndicatorSetLanguage.getF6_1_men_helper()}
+            label={<>{t('gfcr.forms.common.men')}</>}
+            helperText={<GfcrHelperLinks translationKey="gfcr.forms.f6_1_men_helper" />}
             displayHelp={displayHelp}
             handleInputFocus={handleInputFocus}
             formik={formik}
@@ -33,8 +34,8 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f6_1b"
-            label={<>{gfcrIndicatorSetLanguage.women}</>}
-            helperText={gfcrIndicatorSetLanguage.getF6_1_women_helper()}
+            label={<>{t('gfcr.forms.common.women')}</>}
+            helperText={<GfcrHelperLinks translationKey="gfcr.forms.f6_1_women_helper" />}
             displayHelp={displayHelp}
             handleInputFocus={handleInputFocus}
             formik={formik}
@@ -43,18 +44,18 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
             disabled
-            label={<strong>{gfcrIndicatorSetLanguage.total}</strong>}
+            label={<strong>{t('gfcr.forms.common.total')}</strong>}
             id="f6_1_total"
             type="number"
             value={getFieldValueTotal(formik.values.f6_1a, formik.values.f6_1b)}
           />
         </StyledGfcrSubInputWrapper>
-        <div>{gfcrIndicatorSetLanguage.ofTotalHowMany}</div>
+        <div>{t('gfcr.forms.common.of_total_how_many')}</div>
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f6_1c"
-            label={<>{gfcrIndicatorSetLanguage.youth}</>}
-            helperText={gfcrIndicatorSetLanguage.getF6_1_youth_helper()}
+            label={<>{t('gfcr.forms.common.youth')}</>}
+            helperText={<GfcrHelperLinks translationKey="gfcr.forms.f6_1_youth_helper" />}
             displayHelp={displayHelp}
             handleInputFocus={handleInputFocus}
             formik={formik}
@@ -63,8 +64,8 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f6_1d"
-            label={<>{gfcrIndicatorSetLanguage.indigenous}</>}
-            helperText={gfcrIndicatorSetLanguage.getF6_1_indigenous_helper()}
+            label={<>{t('gfcr.forms.common.indigenous')}</>}
+            helperText={<GfcrHelperLinks translationKey="gfcr.forms.f6_1_indigenous_helper" />}
             displayHelp={displayHelp}
             handleInputFocus={handleInputFocus}
             formik={formik}
@@ -73,7 +74,7 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       </InputRow>
       <TextareaWithLabelAndValidation
         id="f6_notes"
-        label={gfcrIndicatorSetLanguage.notes}
+        label={t('forms.notes')}
         {...formik.getFieldProps('f6_notes')}
       />
     </StyledGfcrInputWrapper>

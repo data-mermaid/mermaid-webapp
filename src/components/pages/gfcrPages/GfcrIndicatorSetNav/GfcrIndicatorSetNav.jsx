@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
+import { useTranslation } from 'react-i18next'
 import theme from '../../../../theme'
 import { hoverState } from '../../../../library/styling/mediaQueries'
-import language from '../../../../language'
 
 const StyledNav = styled.nav`
   width: 26rem;
@@ -66,9 +66,11 @@ const LiText = styled.span`
 `
 
 const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
+  const { t } = useTranslation()
+
   return (
     <StyledNav>
-      <NavHeader>{language.pages.gfcrIndicatorSetNav.fundIndicatorsHeading}</NavHeader>
+      <NavHeader>{t('gfcr.fund_indicators')}</NavHeader>
       <NavSubHeader
         id="report-title-and-year"
         selected={selectedNavItem === 'report-title-and-year'}
@@ -76,7 +78,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           setSelectedNavItem(e.currentTarget.id)
         }}
       >
-        {language.pages.gfcrIndicatorSetNav.reportTitleAndDateHeading}
+        {t('gfcr.report_title_and_date')}
       </NavSubHeader>
       <NavList>
         <NavListItem
@@ -85,7 +87,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F1</FText>
-          <LiText>{language.pages.gfcrIndicatorSetNav.f1}</LiText>
+          <LiText>{t('gfcr.programme_area')}</LiText>
         </NavListItem>
         <NavListItem
           id="f2"
@@ -93,7 +95,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F2</FText>
-          <LiText>{language.pages.gfcrIndicatorSetNav.f2}</LiText>
+          <LiText>{t('gfcr.conservation_and_management')}</LiText>
         </NavListItem>
         <NavListItem
           id="f3"
@@ -101,7 +103,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F3</FText>
-          <LiText>{language.pages.gfcrIndicatorSetNav.f3}</LiText>
+          <LiText>{t('gfcr.restoration')}</LiText>
         </NavListItem>
         <NavListItem
           id="f4"
@@ -109,7 +111,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F4</FText>
-          <LiText>{language.pages.gfcrIndicatorSetNav.f4}</LiText>
+          <LiText>{t('gfcr.coral_reef_health')}</LiText>
         </NavListItem>
         <NavListItem
           id="f5"
@@ -117,7 +119,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F5</FText>
-          <LiText>{language.pages.gfcrIndicatorSetNav.f5}</LiText>
+          <LiText>{t('gfcr.communities')}</LiText>
         </NavListItem>
         <NavListItem
           id="f6"
@@ -125,7 +127,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F6</FText>
-          <LiText>{language.pages.gfcrIndicatorSetNav.f6}</LiText>
+          <LiText>{t('gfcr.people')}</LiText>
         </NavListItem>
         <NavListItem
           id="f7"
@@ -133,10 +135,10 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F7</FText>
-          <LiText>{language.pages.gfcrIndicatorSetNav.f7}</LiText>
+          <LiText>{t('gfcr.climate_response')}</LiText>
         </NavListItem>
       </NavList>
-      <NavHeader>{language.pages.gfcrIndicatorSetNav.f8F9F10Heading}</NavHeader>
+      <NavHeader>F8, F9, F10</NavHeader>
       <NavSubHeader
         id="finance-solutions"
         selected={selectedNavItem === 'finance-solutions'}
@@ -144,7 +146,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           setSelectedNavItem(e.currentTarget.id)
         }}
       >
-        {language.pages.gfcrIndicatorSetNav.financeSolutions}
+        {t('gfcr.businesses_finance_solutions')}
       </NavSubHeader>
       <NavSubHeader
         id="investments"
@@ -153,7 +155,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           setSelectedNavItem(e.currentTarget.id)
         }}
       >
-        {language.pages.gfcrIndicatorSetNav.investments}
+        {t('gfcr.investments')}
       </NavSubHeader>
       <NavSubHeader
         id="revenues"
@@ -162,7 +164,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           setSelectedNavItem(e.currentTarget.id)
         }}
       >
-        {language.pages.gfcrIndicatorSetNav.revenues}
+        {t('gfcr.revenues')}
       </NavSubHeader>
     </StyledNav>
   )

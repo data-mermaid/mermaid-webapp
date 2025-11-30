@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { Checkbox, OutlinedInput } from '@mui/material'
 
-import language from '../../../../../language'
+import { useTranslation } from 'react-i18next'
 import theme from '../../../../../theme'
 import { HelperText, Textarea } from '../../../../generic/form'
 import {
@@ -32,8 +32,7 @@ import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/In
 import { getOptions } from '../../../../../library/getOptions'
 import { IconInfo } from '../../../../icons'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
-
-const modalLanguage = language.gfcrFinanceSolutionModal
+import GfcrHelperLinks from '../subPages/GfcrHelperLinks'
 
 const FinanceSolutionModal = ({
   isOpen,
@@ -44,6 +43,11 @@ const FinanceSolutionModal = ({
   choices,
   displayHelp,
 }) => {
+  const { t } = useTranslation()
+
+  const indicatorSetSaveSuccessText = t('gfcr.success.indicator_set_save')
+  const indicatorSetSaveFailedText = t('gfcr.errors.indicator_set_save_failed')
+
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const handleHttpResponseError = useHttpResponseErrorHandler()
@@ -94,7 +98,7 @@ const FinanceSolutionModal = ({
 
         setIndicatorSet(response)
 
-        toast.success(...getToastArguments(language.success.gfcrFinanceSolutionSave))
+        toast.success(...getToastArguments(indicatorSetSaveSuccessText))
       } catch (error) {
         setSaveButtonState(buttonGroupStates.unsaved)
 
@@ -118,6 +122,7 @@ const FinanceSolutionModal = ({
       onDismiss,
       projectId,
       setIndicatorSet,
+      indicatorSetSaveSuccessText,
     ],
   )
 
@@ -129,25 +134,23 @@ const FinanceSolutionModal = ({
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (!values.sector) {
-        errors.sector = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.sector = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (values.used_an_incubator === '') {
-        errors.used_an_incubator = [
-          { code: language.error.formValidation.required, id: 'Required' },
-        ]
+        errors.used_an_incubator = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (values.local_enterprise === '') {
-        errors.local_enterprise = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.local_enterprise = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (values.gender_smart === '') {
-        errors.gender_smart = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.gender_smart = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       return errors
@@ -171,10 +174,10 @@ const FinanceSolutionModal = ({
 
       setIndicatorSet(response)
 
-      toast.success(...getToastArguments(language.success.gfcrFinanceSolutionDelete))
+      toast.success(...getToastArguments(indicatorSetSaveSuccessText))
     } catch (error) {
       if (error) {
-        toast.error(...getToastArguments(language.error.gfcrFinanceSolutionDelete))
+        toast.error(...getToastArguments(indicatorSetSaveFailedText))
 
         handleHttpResponseError({
           error,
@@ -193,6 +196,8 @@ const FinanceSolutionModal = ({
     onDismiss,
     projectId,
     setIndicatorSet,
+    indicatorSetSaveSuccessText,
+    indicatorSetSaveFailedText,
   ])
 
   const _setSaveButtonUnsaved = useEffect(() => {
@@ -217,7 +222,7 @@ const FinanceSolutionModal = ({
 
   const cancelButton = (
     <ButtonSecondary type="button" onClick={() => onDismiss(formik.resetForm)}>
-      {modalLanguage.cancel}
+      {t('buttons.cancel')}
     </ButtonSecondary>
   )
 
@@ -226,7 +231,7 @@ const FinanceSolutionModal = ({
       <StyledModalLeftFooter>
         {!!financeSolution && (
           <ButtonCaution onClick={handleDelete} disabled={isDeleting}>
-            {modalLanguage.remove}
+            {t('buttons.remove_row')}
           </ButtonCaution>
         )}
       </StyledModalLeftFooter>
@@ -234,7 +239,11 @@ const FinanceSolutionModal = ({
         {cancelButton}
         <SaveButton
           formId="finance-solution-form"
-          unsavedTitle={financeSolution ? modalLanguage.save : modalLanguage.add}
+          unsavedTitle={
+            financeSolution
+              ? t('gfcr.forms.finance_solutions.save')
+              : t('gfcr.forms.finance_solutions.add')
+          }
           saveButtonState={saveButtonState}
           formHasErrors={!!Object.keys(formik.errors).length}
           formDirty={isFormDirty}
@@ -248,64 +257,74 @@ const FinanceSolutionModal = ({
       <form id="finance-solution-form" onSubmit={formik.handleSubmit}>
         <StyledModalInputRow>
           <InputNoRowWithLabelAndValidation
-            label={modalLanguage.name}
+            label={t('gfcr.forms.finance_solutions.name')}
             id="finance-solution-input"
             type="text"
             {...formik.getFieldProps('name')}
-            helperText={modalLanguage.getNameHelper()}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.name_helper" />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.sector}
+            label={t('gfcr.forms.finance_solutions.sector')}
             id="sector-select"
             {...formik.getFieldProps('sector')}
             options={getOptions(choices.sectors.data)}
-            helperText={modalLanguage.getSectorHelper()}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.sector_helper" />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.usedAnIncubator}
+            label={t('gfcr.forms.finance_solutions.used_an_incubator')}
             id="used-an-incubator-select"
             {...formik.getFieldProps('used_an_incubator')}
             options={[
-              { value: 'none', label: modalLanguage.no },
+              { value: 'none', label: t('no') },
               ...getOptions(choices.incubatortypes.data),
             ]}
-            helperText={modalLanguage.getUsedAnIncubatorHelper()}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.used_an_incubator_helper" />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.localEnterprise}
+            label={t('gfcr.forms.finance_solutions.local_enterprise')}
             id="local-enterprise-select"
             {...formik.getFieldProps('local_enterprise')}
             options={[
-              { value: true, label: modalLanguage.yes },
-              { value: false, label: modalLanguage.no },
+              { value: true, label: t('yes') },
+              { value: false, label: t('no') },
             ]}
-            helperText={modalLanguage.getLocalEnterpriseHelper()}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.local_enterprise_helper" />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.genderSmart}
+            label={t('gfcr.forms.finance_solutions.gender_smart')}
             id="gender-smart-select"
             {...formik.getFieldProps('gender_smart')}
             options={[
-              { value: true, label: modalLanguage.yes },
-              { value: false, label: modalLanguage.no },
+              { value: true, label: t('yes') },
+              { value: false, label: t('no') },
             ]}
-            helperText={modalLanguage.getGenderSmartHelper()}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.gender_smart_helper" />
+            }
             showHelperText={displayHelp}
             required={true}
           />
@@ -315,7 +334,7 @@ const FinanceSolutionModal = ({
             id="sustainable-finance-mechanisms-label"
             htmlFor="sustainable-finance-mechanisms-select"
           >
-            {modalLanguage.sustainableFinanceMechanisms}
+            {t('gfcr.forms.finance_solutions.sustainable_finance_mechanisms')}
             <IconButton type="button" onClick={(event) => handleSFMInfoIconClick(event)}>
               <IconInfo aria-label="info" />
             </IconButton>
@@ -329,7 +348,7 @@ const FinanceSolutionModal = ({
             renderValue={(selected) =>
               selected?.length
                 ? getChips(selected, choices.sustainablefinancemechanisms.data)
-                : language.placeholders.select
+                : t('choose')
             }
             displayEmpty={true}
           >
@@ -350,14 +369,14 @@ const FinanceSolutionModal = ({
           </CustomMuiSelect>
           {displayHelp || SFMShowHelperText ? (
             <HelperText id="sfm-helper">
-              {modalLanguage.getSustainableFinanceMechanismsHelper()}
+              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.sustainable_finance_mechanisms_helper" />
             </HelperText>
           ) : null}
         </StyledModalInputRow>
         <hr />
         <StyledModalInputRow>
           <label id="notes-label" htmlFor="notes-input">
-            {modalLanguage.notes}
+            {t('forms.notes')}
           </label>
           <Textarea
             aria-labelledby={'notes-label'}
@@ -374,7 +393,11 @@ const FinanceSolutionModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={() => onDismiss(formik.resetForm)}
-      title={financeSolution ? modalLanguage.titleUpdate : modalLanguage.titleAdd}
+      title={
+        financeSolution
+          ? t('gfcr.forms.finance_solutions.update')
+          : t('gfcr.forms.finance_solutions.add')
+      }
       mainContent={financeSolutionForm()}
       footerContent={footer}
       maxWidth="65rem"

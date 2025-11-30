@@ -5,8 +5,8 @@ import PropTypes from 'prop-types'
 import theme from '../../../../theme'
 import { mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
 import { TooltipWithText, TooltipPopup } from '../../../generic/tooltip'
+import { useTranslation } from 'react-i18next'
 import useDocumentTitle from '../../../../library/useDocumentTitle'
-import language from '../../../../language'
 import { H2 } from '../../../generic/text'
 
 const TitleContainer = styled('div')`
@@ -31,16 +31,18 @@ const ProjectTooltip = styled(TooltipWithText)`
 `
 
 const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingDate, isNew = false }) => {
+  const { t } = useTranslation()
   const reportingYear = reportingDate?.getFullYear()
+  const indicatorSetTitleText = t('gfcr.indicator_set')
 
   useDocumentTitle(
     isNew
-      ? language.pages.gfcrIndicatorSet.title
-      : `${indicatorSetTitle} ${type} ${reportingYear} - ${language.title.mermaid}`,
+      ? indicatorSetTitleText
+      : `${indicatorSetTitle} ${type} ${reportingYear} - ${t('mermaid')}`,
   )
 
   if (isNew) {
-    return <H2>{language.pages.gfcrIndicatorSet.title}</H2>
+    return <H2>{indicatorSetTitleText}</H2>
   }
 
   return (
@@ -48,14 +50,14 @@ const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingDate, isNew = fal
       <ProjectTooltip
         forwardedAs="h2"
         text={indicatorSetTitle}
-        tooltipText="Title"
+        tooltipText={t('title')}
         id="gfcr-title-tooltip"
       />
-      <ProjectTooltip forwardedAs="h2" text={type} tooltipText="Type" id="gfcr-type-tooltip" />
+      <ProjectTooltip forwardedAs="h2" text={type} tooltipText={t('type')} id="gfcr-type-tooltip" />
       <ProjectTooltip
         forwardedAs="h2"
         text={reportingYear}
-        tooltipText="Reporting Date Year"
+        tooltipText={t('gfcr.reporting_date_year')}
         id="gfcr-reporting-year-tooltip"
       />
     </TitleContainer>
