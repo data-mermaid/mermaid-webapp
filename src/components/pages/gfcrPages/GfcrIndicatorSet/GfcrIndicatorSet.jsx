@@ -56,6 +56,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const indicatorSetSaveSuccessText = t('gfcr.success.indicator_set_save')
   const indicatorSetSaveFailedText = t('gfcr.errors.indicator_set_save_failed')
   const indicatorSetsUnavailableText = t('gfcr.errors.indicator_sets_unavailable')
+  const formErrorTitleText = t('gfcr.errors.form_errors')
 
   const { indicatorSetId, projectId } = useParams()
   const navigate = useNavigate()
@@ -192,7 +193,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
             <>
               <P>{indicatorSetSaveFailedText}</P>
               <Figure>
-                <figcaption>Form errors: </figcaption>
+                <figcaption>{formErrorTitleText} </figcaption>
                 <Dl>
                   {questionErrors.map(([key, value]) => (
                     <div key={key}>
@@ -229,6 +230,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       handleHttpResponseError,
       indicatorSetSaveSuccessText,
       indicatorSetSaveFailedText,
+      formErrorTitleText,
     ],
   )
 

@@ -12,9 +12,12 @@ import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table
 import { PAGE_SIZE_DEFAULT } from '../../../../../library/constants/constants'
 import { StyledToolbarButtonWrapper } from '../../Gfcr/Gfcr.styles'
 import { IconPlus } from '../../../../icons'
-import { ButtonSecondary, ToolbarButtonWrapper } from '../../../../generic/buttons'
+import {
+  ButtonSecondary,
+  ButtonThatLooksLikeLinkUnderlined,
+  ToolbarButtonWrapper,
+} from '../../../../generic/buttons'
 import PageUnavailable from '../../../PageUnavailable'
-import language from '../../../../../language'
 import { ToolBarRow } from '../../../../generic/positioning'
 import FilterSearchToolbar from '../../../../FilterSearchToolbar/FilterSearchToolbar'
 import {
@@ -27,10 +30,10 @@ import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
 import RevenueModal from '../modals/RevenueModal'
 import formattedCurrencyAmount from '../../../../../library/formatCurrencyAmount'
-
-const tableLanguage = language.pages.gfcrRevenuesTable
+import { useTranslation, Trans } from 'react-i18next'
 
 const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, displayHelp }) => {
+  const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -219,7 +222,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
           onClick={(event) => handleAddRevenue(event)}
           disabled={!indicatorSet.finance_solutions.length}
         >
-          <IconPlus /> {tableLanguage.add}
+          <IconPlus /> {t('gfcr.forms.revenues.add')}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
     </>
@@ -247,13 +250,23 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
     />
   ) : (
     <PageUnavailable
-      mainText={tableLanguage.noDataMainText}
+      mainText={t('gfcr.forms.revenues.no_revenues')}
       subText={
-        indicatorSet.finance_solutions.length
-          ? tableLanguage.noDataSubText
-          : tableLanguage.getNoFinanceSolutions(() => {
-              setSelectedNavItem('finance-solutions')
-            })
+        indicatorSet.finance_solutions.length ? (
+          t('gfcr.forms.revenues.select_add_revenue')
+        ) : (
+          <Trans
+            i18nKey="gfcr.forms.revenues.add_before_revenues"
+            components={{
+              financeSolutionLink: (
+                <ButtonThatLooksLikeLinkUnderlined
+                  type="button"
+                  onClick={() => setSelectedNavItem('finance-solutions')}
+                />
+              ),
+            }}
+          />
+        )
       }
     />
   )
@@ -263,7 +276,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
       <TableContentToolbar>
         <ToolBarRow>
           <FilterSearchToolbar
-            name={tableLanguage.filterToolbarText}
+            name={t('filters.by_revenue')}
             disabled={revenues.length === 0}
             globalSearchText={globalFilter || ''}
             handleGlobalFilterChange={handleGlobalFilterChange}

@@ -22,11 +22,10 @@ import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErro
 import { useParams } from 'react-router-dom'
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
 import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
-import language from '../../../../../language'
+import { useTranslation } from 'react-i18next'
+import GfcrHelperLinks from '../subPages/GfcrHelperLinks'
 import Modal, { RightFooter } from '../../../../generic/Modal'
 import SaveButton from './SaveButton'
-
-const modalLanguage = language.gfcrRevenueModal
 
 const RevenueModal = ({
   indicatorSet,
@@ -38,6 +37,11 @@ const RevenueModal = ({
   financeSolutions,
   displayHelp,
 }) => {
+  const { t } = useTranslation()
+
+  const indicatorSetSaveSuccessText = t('gfcr.success.indicator_set_save')
+  const indicatorSetSaveFailedText = t('gfcr.errors.indicator_set_save_failed')
+
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const handleHttpResponseError = useHttpResponseErrorHandler()
@@ -100,7 +104,7 @@ const RevenueModal = ({
 
         setIndicatorSet(response)
 
-        toast.success(...getToastArguments(language.success.gfcrRevenueSave))
+        toast.success(...getToastArguments(indicatorSetSaveSuccessText))
       } catch (error) {
         setSaveButtonState(buttonGroupStates.unsaved)
 
@@ -124,6 +128,7 @@ const RevenueModal = ({
       projectId,
       revenue,
       setIndicatorSet,
+      indicatorSetSaveSuccessText,
     ],
   )
 
@@ -135,21 +140,19 @@ const RevenueModal = ({
       const errors = {}
 
       if (!values.finance_solution) {
-        errors.finance_solution = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.finance_solution = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (!values.revenue_type) {
-        errors.revenue_type = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.revenue_type = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (values.sustainable_revenue_stream === '') {
-        errors.sustainable_revenue_stream = [
-          { code: language.error.formValidation.required, id: 'Required' },
-        ]
+        errors.sustainable_revenue_stream = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (values.revenue_amount === '') {
-        errors.revenue_amount = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.revenue_amount = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       return errors
@@ -181,10 +184,10 @@ const RevenueModal = ({
 
       setIndicatorSet(response)
 
-      toast.success(...getToastArguments(language.success.gfcrRevenueDelete))
+      toast.success(...getToastArguments(indicatorSetSaveSuccessText))
     } catch (error) {
       if (error) {
-        toast.error(...getToastArguments(language.error.gfcrRevenueDelete))
+        toast.error(...getToastArguments(indicatorSetSaveFailedText))
 
         handleHttpResponseError({
           error,
@@ -203,6 +206,8 @@ const RevenueModal = ({
     projectId,
     revenue,
     setIndicatorSet,
+    indicatorSetSaveSuccessText,
+    indicatorSetSaveFailedText,
   ])
 
   const _setSaveButtonUnsaved = useEffect(() => {
@@ -215,7 +220,7 @@ const RevenueModal = ({
 
   const cancelButton = (
     <ButtonSecondary type="button" onClick={() => onDismiss(formik.resetForm)}>
-      {modalLanguage.cancel}
+      {t('buttons.cancel')}
     </ButtonSecondary>
   )
 
@@ -224,7 +229,7 @@ const RevenueModal = ({
       <StyledModalLeftFooter>
         {!!revenue && (
           <ButtonCaution onClick={handleDelete} disabled={isDeleting}>
-            {modalLanguage.remove}
+            {t('buttons.remove_row')}
           </ButtonCaution>
         )}
       </StyledModalLeftFooter>
@@ -232,7 +237,7 @@ const RevenueModal = ({
         {cancelButton}
         <SaveButton
           formId="revenue-form"
-          unsavedTitle={revenue ? modalLanguage.save : modalLanguage.add}
+          unsavedTitle={revenue ? t('gfcr.forms.revenues.save') : t('gfcr.forms.revenues.add')}
           saveButtonState={saveButtonState}
           formHasErrors={!!Object.keys(formik.errors).length}
           formDirty={isFormDirty}
@@ -246,49 +251,57 @@ const RevenueModal = ({
       <form id="revenue-form" onSubmit={formik.handleSubmit}>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.financeSolution}
+            label={t('gfcr.forms.finance_solutions.business_finance_solution')}
             id="finance-solution-select"
             {...formik.getFieldProps('finance_solution')}
             options={financeSolutions.map((fs) => ({ value: fs.id, label: fs.name }))}
-            helperText={modalLanguage.getFinanceSolutionHelper()}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.revenues.business_finance_solution_helper" />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.revenueType}
+            label={t('gfcr.forms.revenues.revenue_type')}
             id="revenue-type-select"
             {...formik.getFieldProps('revenue_type')}
             options={getOptions(choices.revenuetypes.data)}
-            helperText={modalLanguage.getRevenueTypeHelper()}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.revenues.revenue_type_helper" />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={modalLanguage.sustainableRevenueStream}
+            label={t('gfcr.forms.revenues.sustainable_revenue_stream')}
             id="sustainable-revenue-stream-select"
             {...formik.getFieldProps('sustainable_revenue_stream')}
             options={[
-              { value: 'true', label: modalLanguage.yes },
-              { value: 'false', label: modalLanguage.no },
+              { value: 'true', label: t('yes') },
+              { value: 'false', label: t('no') },
             ]}
-            helperText={modalLanguage.getSustainableRevenueStreamHelper()}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.revenues.sustainable_revenue_stream_helper" />
+            }
             showHelperText={displayHelp}
             required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowWithLabelAndValidation
-            label={modalLanguage.annualRevenue}
+            label={t('gfcr.forms.revenues.revenue_amount')}
             id="revenue-amount-input"
             type="number"
             unit="USD $"
             alignUnitsLeft={true}
             {...formik.getFieldProps('revenue_amount')}
-            helperText={modalLanguage.getAnnualRevenueHelper()}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.revenues.revenue_amount_helper" />
+            }
             showHelperText={displayHelp}
             required={true}
             onChange={(event) =>
@@ -303,7 +316,7 @@ const RevenueModal = ({
         <hr />
         <StyledModalInputRow>
           <label id="notes-label" htmlFor="notes-input">
-            {modalLanguage.notes}
+            {t('forms.notes')}
           </label>
           <Textarea
             aria-labelledby={'notes-label'}
@@ -320,7 +333,7 @@ const RevenueModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={() => onDismiss(formik.resetForm)}
-      title={revenue ? modalLanguage.titleUpdate : modalLanguage.titleAdd}
+      title={revenue ? t('gfcr.forms.revenues.update') : t('gfcr.forms.revenues.add')}
       mainContent={revenueForm()}
       footerContent={footer}
       maxWidth="65rem"
