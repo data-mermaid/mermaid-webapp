@@ -42,9 +42,15 @@ const Footer = () => {
         <CssToggle />
         <span>
           {isAppOnline ? (
-            <span dangerouslySetInnerHTML={{ __html: t('status_online') }} />
+            <span
+              data-testid="status-online"
+              dangerouslySetInnerHTML={{ __html: t('status_online') }}
+            />
           ) : (
-            <span dangerouslySetInnerHTML={{ __html: t('status_offline') }} />
+            <span
+              data-testid="status-offline"
+              dangerouslySetInnerHTML={{ __html: t('status_offline') }}
+            />
           )}
         </span>
       </StyledToggleLabel>
@@ -54,6 +60,7 @@ const Footer = () => {
             type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             aria-label={t('help_dropdown')}
+            data-testid="help-documents-dropdown"
           >
             {t('help_documents')}
           </TextLink>
@@ -74,13 +81,28 @@ const Footer = () => {
           )}
         </HelpContainer>
         <OfflineHide>
-          <a href="https://datamermaid.org/terms-of-service" target="_blank" rel="noreferrer">
+          <a
+            href="https://datamermaid.org/terms-of-service"
+            target="_blank"
+            rel="noreferrer"
+            data-testid="terms-link"
+          >
             {t('terms')}
           </a>
-          <a href="https://datamermaid.org/contact-us" target="_blank" rel="noreferrer">
+          <a
+            href="https://datamermaid.org/contact-us"
+            target="_blank"
+            rel="noreferrer"
+            data-testid="contact-link"
+          >
             {t('contact')}
           </a>
-          <a href="https://datamermaid.org/partners-and-teams/" target="_blank" rel="noreferrer">
+          <a
+            href="https://datamermaid.org/partners-and-teams/"
+            target="_blank"
+            rel="noreferrer"
+            data-testid="credits-link"
+          >
             {t('credits')}
           </a>
         </OfflineHide>
