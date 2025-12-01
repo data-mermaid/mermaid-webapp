@@ -44,6 +44,9 @@ const FishBeltTransectInputs = ({
   resetNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
   validationsApiData,
+  enableOnBlurValidation = false,
+  handleFieldBlur = () => {},
+  createOnChangeWithValidation = () => {},
 }) => {
   const {
     belttransectwidths,
@@ -55,6 +58,10 @@ const FishBeltTransectInputs = ({
     tides,
   } = choices
   const { t } = useTranslation()
+
+  // Helper to wrap onChange handlers with validation when enabled
+  const wrapOnChange = (handler) =>
+    enableOnBlurValidation ? createOnChangeWithValidation(handler) : handler
   const transectWidthOptions = sortArrayByObjectKey(getOptions(belttransectwidths.data), 'label')
   const fishSizeBinOptions = getOptions(fishsizebins.data)
   const reefSlopeOptions = getOptions(reefslopes.data)
@@ -285,9 +292,9 @@ const FishBeltTransectInputs = ({
             transectNumberValidationProperties,
             'number',
           )}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.number}
-          onChange={handleTransectNumberChange}
+          onChange={wrapOnChange(handleTransectNumberChange)}
           helperText={t('transect_number_info')}
         />
         <InputWithLabelAndValidation
@@ -302,9 +309,9 @@ const FishBeltTransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
           }}
           {...labelValidationProperties}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.label}
-          onChange={handleLabelChange}
+          onChange={wrapOnChange(handleLabelChange)}
           helperText={t('label_info')}
         />
         <InputWithLabelAndValidation
@@ -322,9 +329,9 @@ const FishBeltTransectInputs = ({
             sampleTimeValidationProperties,
             'sample_time',
           )}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.sample_time}
-          onChange={handleSampleTimeChange}
+          onChange={wrapOnChange(handleSampleTimeChange)}
           helperText={t('sample_time_info')}
         />
 
@@ -342,9 +349,13 @@ const FishBeltTransectInputs = ({
           testId="depth"
           type="number"
           {...validationPropertiesWithDirtyResetOnInputChange(depthValidationProperties, 'depth')}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.depth}
-          onChange={handleDepthChange}
+          onChange={
+            enableOnBlurValidation
+              ? createOnChangeWithValidation(handleDepthChange)
+              : handleDepthChange
+          }
           helperText={t('depth_info')}
         />
         <InputWithLabelAndValidation
@@ -366,9 +377,9 @@ const FishBeltTransectInputs = ({
             lengthSurveyedValidationProperties,
             'len_surveyed',
           )}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.len_surveyed}
-          onChange={handleLengthSurveyedChange}
+          onChange={wrapOnChange(handleLengthSurveyedChange)}
           helperText={t('transect_length_info')}
         />
         <InputSelectWithLabelAndValidation
@@ -385,9 +396,9 @@ const FishBeltTransectInputs = ({
           }}
           {...widthValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(widthValidationProperties, 'width')}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.width}
-          onChange={handleWidthChange}
+          onChange={wrapOnChange(handleWidthChange)}
           helperText={t('width_info')}
         />
         <InputSelectWithLabelAndValidation
@@ -407,9 +418,9 @@ const FishBeltTransectInputs = ({
             sizeBinValidationProperties,
             'size_bin',
           )}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.size_bin}
-          onChange={handleSizeBinChange}
+          onChange={wrapOnChange(handleSizeBinChange)}
           helperText={t('fish_size_bin_info')}
         />
         <InputSelectWithLabelAndValidation
@@ -429,9 +440,9 @@ const FishBeltTransectInputs = ({
             reefSlopeValidationProperties,
             'reef_slope',
           )}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.reef_slope}
-          onChange={handleReefSlopeChange}
+          onChange={wrapOnChange(handleReefSlopeChange)}
           helperText={
             <Trans
               i18nKey="reef_slope_info"
@@ -464,9 +475,9 @@ const FishBeltTransectInputs = ({
             visibilityValidationProperties,
             'visibility',
           )}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.visibility}
-          onChange={handleVisibilityChange}
+          onChange={wrapOnChange(handleVisibilityChange)}
           helperText={t('visibility_info')}
         />
         <InputSelectWithLabelAndValidation
@@ -486,9 +497,9 @@ const FishBeltTransectInputs = ({
             currentValidationProperties,
             'current',
           )}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.current}
-          onChange={handleCurrentChange}
+          onChange={wrapOnChange(handleCurrentChange)}
           helperText={t('current_info')}
         />
         <InputSelectWithLabelAndValidation
@@ -508,9 +519,9 @@ const FishBeltTransectInputs = ({
             relativeDepthValidationProperties,
             'relative_depth',
           )}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.relative_depth}
-          onChange={handleRelativeDepthChange}
+          onChange={wrapOnChange(handleRelativeDepthChange)}
           helperText={t('relative_depth_info')}
         />
         <InputSelectWithLabelAndValidation
@@ -527,9 +538,9 @@ const FishBeltTransectInputs = ({
           }}
           {...tideValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(tideValidationProperties, 'tide')}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.tide}
-          onChange={handleTideChange}
+          onChange={wrapOnChange(handleTideChange)}
           helperText={
             <Trans
               i18nKey="tide_info"
@@ -556,9 +567,9 @@ const FishBeltTransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
           }}
           {...notesValidationProperties}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.notes}
-          onChange={handleNotesChange}
+          onChange={wrapOnChange(handleNotesChange)}
         />
       </InputWrapper>
       <ClearSizeValuesModal
@@ -581,6 +592,9 @@ FishBeltTransectInputs.propTypes = {
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: PropTypes.shape({ fishbelt_transect: fishbeltValidationPropType }).isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
+  enableOnBlurValidation: PropTypes.bool,
+  handleFieldBlur: PropTypes.func,
+  createOnChangeWithValidation: PropTypes.func,
 }
 
 export default FishBeltTransectInputs

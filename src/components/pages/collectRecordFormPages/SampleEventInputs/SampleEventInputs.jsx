@@ -30,7 +30,14 @@ const SampleEventInputs = ({
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
+  enableOnBlurValidation = false,
+  handleFieldBlur = () => {},
+  createOnChangeWithValidation = () => {},
 }) => {
+  // Helper to wrap onChange handlers with validation when enabled
+  const wrapOnChange = (handler) =>
+    enableOnBlurValidation ? createOnChangeWithValidation(handler) : handler
+
   const managementRegimeOptions = getManagementRegimeOptions(managementRegimes)
   const siteOptions = getOptions(sites)
   const validationsApiData = collectRecord?.validations?.results?.data
@@ -102,9 +109,9 @@ const SampleEventInputs = ({
           }}
           {...siteValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(siteValidationProperties, 'site')}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.site}
-          onChange={handleSiteChange}
+          onChange={wrapOnChange(handleSiteChange)}
           updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForSite}
           helperText={language.helperText.site}
           displayViewLink={true}
@@ -125,9 +132,9 @@ const SampleEventInputs = ({
             managementValidationProperties,
             'management',
           )}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.management}
-          onChange={handleManagementChange}
+          onChange={wrapOnChange(handleManagementChange)}
           updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForMR}
           helperText={language.helperText.management}
           displayViewLink={true}
@@ -149,9 +156,9 @@ const SampleEventInputs = ({
             sampleDateValidationProperties,
             'sample_date',
           )}
-          onBlur={formik.handleBlur}
+          onBlur={enableOnBlurValidation ? handleFieldBlur : formik.handleBlur}
           value={formik.values.sample_date}
-          onChange={handleSampleDateChange}
+          onChange={wrapOnChange(handleSampleDateChange)}
           helperText={language.helperText.sampleDate}
         />
       </InputWrapper>
@@ -170,6 +177,9 @@ SampleEventInputs.propTypes = {
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
+  enableOnBlurValidation: PropTypes.bool,
+  handleFieldBlur: PropTypes.func,
+  createOnChangeWithValidation: PropTypes.func,
 }
 
 export default SampleEventInputs

@@ -46,6 +46,8 @@ import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCollectRecordValidation from './useCollectRecordValidation'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
+import useOnBlurValidation from './useOnBlurValidation'
+import ValidationSpinner from './ValidationSpinner.jsx'
 
 function loadObservationsFromCollectRecordIntoTableState({
   collectRecordBeingEdited,
@@ -373,6 +375,27 @@ const CollectRecordFormPage = ({
     setIsSubmitWarningVisible,
   })
 
+  // PoC: OnBlur validation hook
+  // Enable this for Fish Belt protocol only as proof of concept
+  const enableOnBlurValidation = sampleUnitName === 'fishbelt' && !isNewRecord
+
+  const { isValidating, handleFieldBlur, createOnChangeWithValidation, triggerValidation } =
+    useOnBlurValidation({
+      databaseSwitchboardInstance,
+      projectId,
+      recordId,
+      profileId: currentUser?.id,
+      protocol: sampleUnitName,
+      handleCollectRecordChange,
+      setAreValidationsShowing,
+      setIsFormDirty,
+      sampleUnitFormatSaveFunction,
+      collectRecordBeingEdited,
+      formik,
+      observationsTable1State,
+      observationsTable2State,
+    })
+
   const handleSave = () => {
     const originalImageClassification = collectRecordBeingEdited?.data?.image_classification
 
@@ -532,6 +555,9 @@ const CollectRecordFormPage = ({
             validationPropertiesWithDirtyResetOnInputChange={
               validationPropertiesWithDirtyResetOnInputChange
             }
+            enableOnBlurValidation={enableOnBlurValidation}
+            handleFieldBlur={handleFieldBlur}
+            createOnChangeWithValidation={createOnChangeWithValidation}
           />
         )}
         {!isBenthicPQTNewRecordWithImageClassificationEnabled && (
@@ -546,6 +572,9 @@ const CollectRecordFormPage = ({
               validationPropertiesWithDirtyResetOnInputChange
             }
             isImageClassificationSelected={collectRecordBeingEdited?.data?.image_classification}
+            enableOnBlurValidation={enableOnBlurValidation}
+            handleFieldBlur={handleFieldBlur}
+            createOnChangeWithValidation={createOnChangeWithValidation}
           />
         )}
         {!isBenthicPQTNewRecordWithImageClassificationEnabled && (
@@ -657,6 +686,7 @@ const CollectRecordFormPage = ({
 
       {displayLoadingModal && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
+      {enableOnBlurValidation && <ValidationSpinner isValidating={isValidating} />}
     </>
   )
 }
