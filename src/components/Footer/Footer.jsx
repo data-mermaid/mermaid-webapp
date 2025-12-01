@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   StyledFooter,
   StyledToggleLabel,
@@ -15,6 +16,7 @@ import OfflineHide from '../generic/OfflineHide'
 import OfflineToggle from '../OfflineToggle'
 
 const Footer = () => {
+  const { t } = useTranslation()
   const { isAppOnline } = useOnlineStatus()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
@@ -36,36 +38,36 @@ const Footer = () => {
   return (
     <StyledFooter>
       <StyledToggleLabel htmlFor="offline-toggle-switch" data-testid="offline-toggle-switch-label">
-        <OfflineToggle id="offline-toggle-switch" />
+        <OfflineToggle id="offline-toggle-switch" aria-label={t('offline_toggle')} />
         <CssToggle />
         <span>
           {isAppOnline ? (
-            <>
-              You&apos;re <strong>ONLINE</strong>
-            </>
+            <span dangerouslySetInnerHTML={{ __html: t('status_online') }} />
           ) : (
-            <>
-              You&apos;re <strong>OFFLINE</strong>. Some contents may be out of date.
-            </>
+            <span dangerouslySetInnerHTML={{ __html: t('status_offline') }} />
           )}
         </span>
       </StyledToggleLabel>
       <FooterNav>
         <HelpContainer ref={dropdownRef}>
-          <TextLink type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-            Help (PDF) ▲
+          <TextLink
+            type="button"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            aria-label={t('help_dropdown')}
+          >
+            {t('help_documents')}
           </TextLink>
           {isDropdownOpen && (
             <HelpLinksWrapper>
               <li>
                 <a href="/MERMAID-quick-start-guide-EN.pdf" target="_blank" rel="noreferrer">
-                  English
+                  {t('languages.english')}
                 </a>
               </li>
 
-              <li value="Bahasa Indonesia">
+              <li>
                 <a href="/MERMAID-quick-start-guide-ID.pdf" target="_blank" rel="noreferrer">
-                  Bahasa Indonesia
+                  {t('languages.bahasa_indonesia')}
                 </a>
               </li>
             </HelpLinksWrapper>
@@ -73,13 +75,13 @@ const Footer = () => {
         </HelpContainer>
         <OfflineHide>
           <a href="https://datamermaid.org/terms-of-service" target="_blank" rel="noreferrer">
-            Terms
+            {t('terms')}
           </a>
           <a href="https://datamermaid.org/contact-us" target="_blank" rel="noreferrer">
-            Contact
+            {t('contact')}
           </a>
           <a href="https://datamermaid.org/partners-and-teams/" target="_blank" rel="noreferrer">
-            Credits
+            {t('credits')}
           </a>
         </OfflineHide>
         <VersionWrapper>{versionNumber}</VersionWrapper>
