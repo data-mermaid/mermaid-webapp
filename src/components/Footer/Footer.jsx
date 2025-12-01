@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 import {
   StyledFooter,
   StyledToggleLabel,
@@ -42,15 +42,13 @@ const Footer = () => {
         <CssToggle />
         <span>
           {isAppOnline ? (
-            <span
-              data-testid="status-online"
-              dangerouslySetInnerHTML={{ __html: t('status_online') }}
-            />
+            <span data-testid="status-online">
+              <Trans i18nKey="status_online" components={{ strong: <strong /> }} />
+            </span>
           ) : (
-            <span
-              data-testid="status-offline"
-              dangerouslySetInnerHTML={{ __html: t('status_offline') }}
-            />
+            <span data-testid="status-offline">
+              <Trans i18nKey="status_offline" components={{ strong: <strong /> }} />
+            </span>
           )}
         </span>
       </StyledToggleLabel>
