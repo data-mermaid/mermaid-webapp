@@ -149,7 +149,7 @@
     "no_submitted_sample_units": "This project has no submitted sample units yet.",
     "errors": {
       "project_name_exists": "Project name already exists in MERMAID",
-      "data_unavailable": "Project data is currently unavailable.",
+      "data_unavailable": "Project data are currently unavailable.",
       "duplicate_name": "A project with the same name already exists."
     },
     "success": {
@@ -200,7 +200,7 @@
       "warnings": "Warnings"
     },
     "errors": {
-      "data_unavailable": "Sample unit data is currently unavailable.",
+      "data_unavailable": "Sample unit data are currently unavailable.",
       "observations_unavailable_offline": "Sample unit observations unavailable offline",
       "classification_unavailable_offline": "This sample unit is using image classification and is unavailable offline.",
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable.",
@@ -224,6 +224,13 @@
   "toggle_table_visibility": "Toggle table visibility",
   "toggle_label_visibility": "Toggle label visibility",
   "user": "User",
+  "data": "Data",
+  "metadata": "Metadata",
+  "overview": "Overview",
+  "admin": "Admin",
+  "project_info": "Project Info",
+  "users": "Users",
+  "data_sharing": "Data Sharing",
   "exports": {
     "success": "Export successful",
     "email_sent": "An email has been sent to <currentUserEmail />. This can sometimes take up to 15 minutes.",
@@ -243,6 +250,7 @@
   "go_to_explore_sample_event": "View this sample event on MERMAID Explore",
   "go_to_explore_this_project": "View this project on MERMAID Explore",
   "gfcr": {
+    "gfcr": "GFCR",
     "title": "Global Fund for Coral Reefs (GFCR)",
     "add_gfcr_indicators": "GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world.",
     "remove_gfcr_Indicators": "Removing GFCR indicators from this project will not delete them, but just hide them.",
@@ -369,6 +377,7 @@
     "missing_site_name": "(Missing Site Name)"
   },
   "sample_units_and_observers": "Sample Units / Observers",
+  "sample_units_and_management_regimes": "Sample Units / Management Regimes",
   "in_collecting_with": "In Collecting with:",
   "errors": {
     "summary_record_data_unavailable": "Summary record data are currently unavailable."

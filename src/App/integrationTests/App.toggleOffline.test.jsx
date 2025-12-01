@@ -38,10 +38,10 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
     "You're OFFLINE. Some contents may be out of date.",
   )
 
-  expect(within(sideNav).queryByRole('link', { name: 'Submitted' })).not.toBeInTheDocument()
-  expect(within(sideNav).queryByRole('link', { name: 'Project Info' })).not.toBeInTheDocument()
-  expect(within(sideNav).queryByRole('link', { name: 'Users' })).not.toBeInTheDocument()
-  expect(within(sideNav).queryByRole('link', { name: 'Data Sharing' })).not.toBeInTheDocument()
+  expect(within(sideNav).queryByTestId('nav-submitted')).not.toBeInTheDocument()
+  expect(within(sideNav).queryByTestId('nav-project-info')).not.toBeInTheDocument()
+  expect(within(sideNav).queryByTestId('nav-users')).not.toBeInTheDocument()
+  expect(within(sideNav).queryByTestId('nav-data-sharing')).not.toBeInTheDocument()
 
   const offlineToggleSwitchTestIdAfterFirstClick = screen.getByTestId('offline-toggle-switch-test')
 
@@ -53,10 +53,10 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
     "You're ONLINE",
   )
 
-  expect(within(sideNav).getByRole('link', { name: 'Submitted' })).toBeInTheDocument()
-  expect(within(sideNav).getByRole('link', { name: 'Project Info' })).toBeInTheDocument()
-  expect(within(sideNav).getByRole('link', { name: 'Users' })).toBeInTheDocument()
-  expect(within(sideNav).getByRole('link', { name: 'Data Sharing' })).toBeInTheDocument()
+  expect(within(sideNav).getByTestId('nav-submitted')).toBeInTheDocument()
+  expect(within(sideNav).getByTestId('nav-project-info')).toBeInTheDocument()
+  expect(within(sideNav).getByTestId('nav-users')).toBeInTheDocument()
+  expect(within(sideNav).getByTestId('nav-data-sharing')).toBeInTheDocument()
 })
 
 test('Navigator online - Toggle switch is not checked, and is enabled', async () => {
