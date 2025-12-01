@@ -113,7 +113,7 @@ describe('Offline', () => {
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
-    await user.click(within(sideNav).getByText('Collecting'))
+    await user.click(within(sideNav).getByTestId('nav-collecting'))
 
     const pageSizeSelector = await screen.findByTestId('page-size-selector')
 

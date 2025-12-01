@@ -133,7 +133,7 @@ describe('Online', () => {
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
-    await user.click(within(sideNav).getByText('Management Regimes'))
+    await user.click(within(sideNav).getByTestId('nav-management-regimes'))
 
     // show all the records
     await user.selectOptions(await screen.findByTestId('page-size-selector'), '4')

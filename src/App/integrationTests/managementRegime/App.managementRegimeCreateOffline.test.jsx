@@ -132,7 +132,7 @@ describe('Offline', () => {
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
-    await user.click(within(sideNav).getByText('Management Regimes'))
+    await user.click(within(sideNav).getByTestId('nav-management-regimes'))
 
     const pageSizeSelector = await screen.findByTestId('page-size-selector')
 

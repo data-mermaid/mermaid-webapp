@@ -143,7 +143,7 @@ describe('Online', () => {
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
-    await user.click(within(sideNav).getByText('Sites'))
+    await user.click(within(sideNav).getByTestId('nav-sites'))
 
     // show all the records
     await user.selectOptions(await screen.findByTestId('page-size-selector'), '5')

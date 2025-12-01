@@ -116,7 +116,7 @@ a page that informs the user that they dont have permisison for a project`, asyn
   )
 
   // click another project-related page to trigger a sync and use the mock api with sync errors
-  const sitesSideNavLink = screen.getByRole('link', { name: 'Sites' })
+  const sitesSideNavLink = screen.getByTestId('nav-sites')
 
   await user.click(sitesSideNavLink)
 
