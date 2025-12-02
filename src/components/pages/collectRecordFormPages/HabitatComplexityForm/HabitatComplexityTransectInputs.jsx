@@ -112,7 +112,7 @@ const HabitatComplexityTransectInputs = ({
   const handleTransectNumberChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'number',
+      // inputName: 'number',
       validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
     })
   }
@@ -120,7 +120,7 @@ const HabitatComplexityTransectInputs = ({
   const handleLabelChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'label',
+      // inputName: 'label',
       validationPath: LABEL_VALIDATION_PATH,
     })
   }
@@ -128,7 +128,7 @@ const HabitatComplexityTransectInputs = ({
   const handleLengthSurveyedChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'len_surveyed',
+      // inputName: 'len_surveyed',
       validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
     })
   }
@@ -136,28 +136,28 @@ const HabitatComplexityTransectInputs = ({
   const handleReefSlopeChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'reef_slope',
+      // inputName: 'reef_slope',
       validationPath: REEF_SLOPE_VALIDATION_PATH,
     })
   }
   const handleRelativeDepthChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'relative_depth',
+      // inputName: 'relative_depth',
       validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
     })
   }
   const handleVisibilityChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'visibility',
+      // inputName: 'visibility',
       validationPath: VISIBILITY_VALIDATION_PATH,
     })
   }
   const handleCurrentChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'current',
+      // inputName: 'current',
       validationPath: CURRENT_VALIDATION_PATH,
     })
   }
@@ -165,14 +165,14 @@ const HabitatComplexityTransectInputs = ({
   const handleNotesChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'notes',
+      // inputName: 'notes',
       validationPath: NOTES_VALIDATION_PATH,
     })
   }
   const handleTideChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'tide',
+      // inputName: 'tide',
       validationPath: TIDE_VALIDATION_PATH,
     })
   }
@@ -180,7 +180,7 @@ const HabitatComplexityTransectInputs = ({
   const handleSampleTimeChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'sample_time',
+      // inputName: 'sample_time',
       validationPath: SAMPLE_TIME_VALIDATION_PATH,
     })
   }
@@ -188,7 +188,7 @@ const HabitatComplexityTransectInputs = ({
   const handleDepthChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'depth',
+      // inputName: 'depth',
       validationPath: DEPTH_VALIDATION_PATH,
     })
   }
@@ -214,7 +214,7 @@ const HabitatComplexityTransectInputs = ({
   const handleIntervalStartChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'interval_size',
+      inputName: 'interval_start',
       validationPath: INTERVAL_START_VALIDATION_PATH,
     })
   }

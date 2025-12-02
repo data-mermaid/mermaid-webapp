@@ -2,20 +2,25 @@ import { createUuid } from '../../../../library/createUuid'
 import { updateObservationReducerValue } from '../updateObservationReducerValue'
 
 const habitatComplexityObservationReducer = (state, action) => {
-  const getObservationsWithRecalculatedIntervals = ({ observations, intervalSize }) => {
+  const getObservationsWithRecalculatedIntervals = ({
+    observations,
+    intervalStart,
+    intervalSize,
+  }) => {
     const recalculatedObservations = []
-    const intervalStartToUse = intervalSize ?? 1
+    const isIntervalStart = intervalStart !== ''
+    const intervalStartToUse = isIntervalStart ? Number(intervalStart) : 0
+    const intervalSizeToUse = Number(intervalSize)
+    const formatInterval = (interval) => {
+      return interval % 1 === 0 ? interval.toFixed(1) : interval.toFixed(2)
+    }
 
     if (!intervalSize) {
       return observations.map((observation) => ({ ...observation, interval: '-' }))
     }
 
     observations.forEach((observation, index) => {
-      const previousObservation = recalculatedObservations[index - 1]
-      const interval = !previousObservation
-        ? intervalStartToUse
-        : previousObservation.interval + intervalSize
-
+      const interval = formatInterval(intervalStartToUse + intervalSizeToUse * index)
       recalculatedObservations.push({ ...observation, interval })
     })
 
@@ -33,16 +38,21 @@ const habitatComplexityObservationReducer = (state, action) => {
     }
 
     case 'recalculateObservationIntervals': {
-      const { intervalSize } = action.payload
+      const { intervalStart, intervalSize } = action.payload
 
       return getObservationsWithRecalculatedIntervals({
         observations: state,
         intervalSize,
+        intervalStart,
       })
     }
 
     case 'deleteObservation': {
-      const { observationId: observationIdToBeRemoved, intervalSize } = action.payload
+      const {
+        observationId: observationIdToBeRemoved,
+        intervalSize,
+        intervalStart,
+      } = action.payload
 
       const observationsWithTheRightOneRemoved = state.filter(
         (observation) => observation.id !== observationIdToBeRemoved,
@@ -51,20 +61,22 @@ const habitatComplexityObservationReducer = (state, action) => {
       return getObservationsWithRecalculatedIntervals({
         observations: observationsWithTheRightOneRemoved,
         intervalSize,
+        intervalStart,
       })
     }
 
     case 'addObservation': {
-      const { intervalSize } = action.payload
+      const { intervalStart, intervalSize } = action.payload
 
       return getObservationsWithRecalculatedIntervals({
         observations: [...state, { id: createUuid(), score: '' }],
         intervalSize,
+        intervalStart,
       })
     }
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
-      const { referenceObservationIndex, intervalSize } = action.payload
+      const { referenceObservationIndex, intervalSize, intervalStart } = action.payload
       const indexToInsertAt = referenceObservationIndex + 1
 
       observationsWithInsertedRow.splice(indexToInsertAt, 0, {
@@ -75,11 +87,12 @@ const habitatComplexityObservationReducer = (state, action) => {
       return getObservationsWithRecalculatedIntervals({
         observations: observationsWithInsertedRow,
         intervalSize,
+        intervalStart,
       })
     }
 
     case 'duplicateLastObservation': {
-      const { intervalSize, referenceObservation } = action.payload
+      const { intervalSize, referenceObservation, intervalStart } = action.payload
       const observationWithNewId = {
         ...referenceObservation,
         id: createUuid(),
@@ -88,6 +101,7 @@ const habitatComplexityObservationReducer = (state, action) => {
       return getObservationsWithRecalculatedIntervals({
         observations: [...state, observationWithNewId],
         intervalSize,
+        intervalStart,
       })
     }
     case 'updateHabitatComplexityScore':

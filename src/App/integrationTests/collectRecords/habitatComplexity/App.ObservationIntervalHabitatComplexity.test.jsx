@@ -11,7 +11,7 @@ import {
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import App from '../../../App'
 
-test('Habitat Complexity observations: intervals are derived from interval size fields', async () => {
+test('Habitat Complexity observations: intervals are derived from interval start and interval size fields', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   const { user } = renderAuthenticatedOnline(
@@ -24,6 +24,10 @@ test('Habitat Complexity observations: intervals are derived from interval size 
   )
 
   const intervalSize = await screen.findByLabelText('Interval Size')
+  const intervalStart = await screen.findByLabelText('Interval Start')
+  await user.clear(intervalStart)
+  // interval start has a default value or 1, so we need to clear it so that our test typing produces 0 instead of 10
+  await user.type(intervalStart, '0')
 
   await user.type(intervalSize, '5')
 
