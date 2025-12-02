@@ -14,6 +14,7 @@ import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAn
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 import language from '../../../../language'
+import { IntervalCheckbox } from '../BenthicPitForm/BenthicPitTransectInputs.jsx'
 
 const CURRENT_VALIDATION_PATH = 'data.benthic_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.benthic_transect.depth'
@@ -27,6 +28,7 @@ const TIDE_VALIDATION_PATH = 'data.benthic_transect.tide'
 const TRANSECT_NUMBER_VALIDATION_PATH = 'data.benthic_transect.number'
 const VISIBILITY_VALIDATION_PATH = 'data.benthic_transect.visibility'
 const INTERVAL_SIZE_VALIDATION_PATH = 'data.interval_size'
+const INTERVAL_START_VALIDATION_PATH = 'data.interval_start'
 
 const HabitatComplexityTransectInputs = ({
   areValidationsShowing,
@@ -45,6 +47,7 @@ const HabitatComplexityTransectInputs = ({
   const currentOptions = getOptions(currents.data)
   const tideOptions = getOptions(tides.data)
   const benthic_transect = validationsApiData?.benthic_transect
+  const isIntervalSizeAsStartChecked = formik.values?.is_interval_size_as_start
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     benthic_transect?.number,
@@ -98,6 +101,11 @@ const HabitatComplexityTransectInputs = ({
 
   const intervalSizeValidationProperties = getValidationPropertiesForInput(
     validationsApiData?.interval_size,
+    areValidationsShowing,
+  )
+
+  const intervalStartValidationProperties = getValidationPropertiesForInput(
+    validationsApiData?.interval_start,
     areValidationsShowing,
   )
 
@@ -186,10 +194,46 @@ const HabitatComplexityTransectInputs = ({
   }
 
   const handleIntervalSizeChange = (event) => {
-    formik.handleChange(event)
+    const newIntervalSizeValue = event.target.value
+    const newValues = {
+      ...formik.values,
+      interval_size: newIntervalSizeValue,
+    }
+
+    if (isIntervalSizeAsStartChecked) {
+      newValues.interval_start = newIntervalSizeValue
+    }
+
+    formik.setValues(newValues)
     resetNonObservationFieldValidations({
       inputName: 'interval_size',
       validationPath: INTERVAL_SIZE_VALIDATION_PATH,
+    })
+  }
+
+  const handleIntervalStartChange = (event) => {
+    formik.handleChange(event)
+    resetNonObservationFieldValidations({
+      inputName: 'interval_size',
+      validationPath: INTERVAL_START_VALIDATION_PATH,
+    })
+  }
+
+  const handleSyncIntervalChange = (checked) => {
+    const currentIntervalSizeValue = formik.values.interval_size
+
+    const newValues = {
+      ...formik.values,
+      is_interval_size_as_start: checked,
+    }
+
+    if (checked && currentIntervalSizeValue) {
+      newValues.interval_start = currentIntervalSizeValue
+    }
+
+    formik.setValues(newValues)
+    resetNonObservationFieldValidations({
+      validationPath: INTERVAL_START_VALIDATION_PATH,
     })
   }
 
@@ -321,6 +365,38 @@ const HabitatComplexityTransectInputs = ({
           onChange={handleIntervalSizeChange}
           unit="m"
           helperText={language.helperText.intervalSize}
+        />
+        <InputWithLabelAndValidation
+          label="Interval Start"
+          required={true}
+          id="interval_start"
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({
+              validationPath: INTERVAL_START_VALIDATION_PATH,
+            })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: INTERVAL_START_VALIDATION_PATH })
+          }}
+          testId="interval_start"
+          type="number"
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            intervalStartValidationProperties,
+            'interval_start',
+          )}
+          onBlur={formik.handleBlur}
+          value={formik.values.interval_start}
+          onChange={handleIntervalStartChange}
+          unit="m"
+          helperText={language.helperText.intervalStart}
+          renderItemAboveInput={
+            <IntervalCheckbox
+              isChecked={isIntervalSizeAsStartChecked}
+              handleChange={handleSyncIntervalChange}
+              checkboxLabel={language.pages.collectRecord.benthicPitSyncCheckbox}
+            />
+          }
+          isInputDisabled={isIntervalSizeAsStartChecked}
         />
         <InputSelectWithLabelAndValidation
           label="Reef Slope"
