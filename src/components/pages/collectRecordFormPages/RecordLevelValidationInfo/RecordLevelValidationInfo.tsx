@@ -103,8 +103,8 @@ const RecordLevelValidationInfo = ({
         const validationMessage =
           code === 'duplicate_images' ? (
             <DuplicateImageValidationContent
-              duplicates={context?.duplicates as Record<string, Image[]>}
-              imgId={recordId}
+              duplicates={(context?.duplicates ?? {}) as Record<string, Image[]>}
+              imgId={recordId ?? ''}
             />
           ) : (
             <p>{language.getValidationMessage(validation, projectId)}</p>
