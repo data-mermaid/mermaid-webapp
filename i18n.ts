@@ -4,14 +4,14 @@ import resourcesToBackend from 'i18next-resources-to-backend'
 import intervalPlural from 'i18next-intervalplural-postprocessor'
 
 i18next
-  .use(initReactI18next)
-  .use(intervalPlural)
   .use(
     resourcesToBackend(
       (language: string, namespace: string) =>
         import(`./src/locales/${language}/${namespace}.json`),
     ),
   )
+  .use(intervalPlural)
+  .use(initReactI18next)
   .init({
     fallbackLng: 'en',
     interpolation: {
