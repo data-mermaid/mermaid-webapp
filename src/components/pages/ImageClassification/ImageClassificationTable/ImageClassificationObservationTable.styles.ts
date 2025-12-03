@@ -111,7 +111,7 @@ const TdWithHoverText = styled(StyledTd)<StyledTdProps>`
     padding: 5px;
     white-space: nowrap;
     font-size: ${theme.typography.smallFontSize};
-    z-index: 4;
+    z-index: 10;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.5s ease, visibility 0.5s ease;

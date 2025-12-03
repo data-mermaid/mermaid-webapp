@@ -43,7 +43,9 @@ import {
   BenthicPhotoQuadratRecord,
   ImageClassificationPointAnnotation,
 } from '../../../../App/mermaidData/mermaidDataTypes'
-import getDuplicateValidationInfo from '../../collectRecordFormPages/CollectRecordFormPage/getDuplicateValidationInfo'
+import getDuplicateValidationInfo, {
+  ValidationResult,
+} from '../../collectRecordFormPages/CollectRecordFormPage/getDuplicateValidationInfo'
 
 const tableHeaders: TableHeaderProps[] = [
   { align: 'right', id: 'number-label', text: '#' },
@@ -61,14 +63,6 @@ interface TableHeaderProps {
   align: 'left' | 'right' | 'center'
   id: string
   text: string
-}
-
-interface ValidationResult {
-  code: string
-  status: string
-  context?: {
-    duplicates?: Record<string, unknown[]>
-  }
 }
 
 interface GrowthForm {

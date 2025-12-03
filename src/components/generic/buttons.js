@@ -212,7 +212,6 @@ export const InputButton = styled('button')`
 export const InlineValidationButton = styled(ButtonSecondary)`
   margin: ${theme.spacing.xxsmall};
   padding: ${theme.spacing.xxsmall} ${theme.spacing.small};
-  font-size: inherit;
   text-align: left;
   text-transform: capitalize;
   font-size: smaller;

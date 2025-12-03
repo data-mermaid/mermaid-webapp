@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 
-interface Image {
+export interface Image {
   image_id: string
   collect_record_id: string
   benthicpqt_id: string
@@ -22,27 +22,13 @@ interface DuplicateCategories {
 }
 
 const formatImageNames = (imgNames: string[], count: number, t: TFunction): string => {
-  if (count === 1) {
-    return t('image_classification.validations.image_name_format.one', { imgName: imgNames[0] })
-  }
-  if (count === 2) {
-    return t('image_classification.validations.image_name_format.two', {
-      firstImgName: imgNames[0],
-      secondImgName: imgNames[1],
-    })
-  }
-  if (count === 3) {
-    return t('image_classification.validations.image_name_format.three', {
-      firstImgName: imgNames[0],
-      secondImgName: imgNames[1],
-      thirdImgName: imgNames[2],
-    })
-  }
-  return t('image_classification.validations.image_name_format.more', {
+  return t('image_classification.validations.image_names_interval', {
+    postProcess: 'interval',
+    count,
     firstImgName: imgNames[0],
     secondImgName: imgNames[1],
     thirdImgName: imgNames[2],
-    count: count - 3,
+    moreCount: count - 3,
   })
 }
 
@@ -92,17 +78,17 @@ const getDuplicateImageValidationContent = (
   return {
     submittedMessage: formatDuplicateImagesMessage(
       submitted,
-      'image_classification.validations.duplicate_benthicpqt_image.submitted',
+      'image_classification.validations.duplicate_submitted_transects',
       t,
     ),
     currentMessage: formatDuplicateImagesMessage(
       current,
-      'image_classification.validations.duplicate_benthicpqt_image.this',
+      'image_classification.validations.duplicate_this_transect',
       t,
     ),
     otherMessage: formatDuplicateImagesMessage(
       other,
-      'image_classification.validations.duplicate_benthicpqt_image.other',
+      'image_classification.validations.duplicate_other_transects',
       t,
     ),
   }

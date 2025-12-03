@@ -10,14 +10,7 @@ import InlineMessage from '../../../generic/InlineMessage'
 import language from '../../../../language'
 import theme from '../../../../theme'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
-import DuplicateImageValidationContent from './DuplicateImageValidationContent'
-
-interface Image {
-  image_id: string
-  collect_record_id: string
-  benthicpqt_id: string
-  original_image_name: string
-}
+import DuplicateImageValidationContent, { Image } from './DuplicateImageValidationContent'
 
 interface RecordValidationInfo {
   status: 'ok' | 'warning' | 'error' | 'ignore' | 'reset'

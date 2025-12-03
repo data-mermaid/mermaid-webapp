@@ -1,4 +1,4 @@
-interface ValidationResult {
+export interface ValidationResult {
   code: string
   status: string
   context?: {
