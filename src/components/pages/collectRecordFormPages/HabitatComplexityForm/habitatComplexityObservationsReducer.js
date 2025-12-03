@@ -11,16 +11,16 @@ const habitatComplexityObservationReducer = (state, action) => {
     const isIntervalStart = intervalStart !== ''
     const intervalStartToUse = isIntervalStart ? Number(intervalStart) : 0
     const intervalSizeToUse = Number(intervalSize)
-    const formatInterval = (interval) => {
-      return interval % 1 === 0 ? interval.toFixed(1) : interval.toFixed(2)
-    }
+    // const formatInterval = (interval) => {
+    //   return interval % 1 === 0 ? interval.toFixed(1) : interval.toFixed(2)
+    // }
 
     if (!intervalSize) {
       return observations.map((observation) => ({ ...observation, interval: '-' }))
     }
 
     observations.forEach((observation, index) => {
-      const interval = formatInterval(intervalStartToUse + intervalSizeToUse * index)
+      const interval = intervalStartToUse + intervalSizeToUse * index
       recalculatedObservations.push({ ...observation, interval })
     })
 

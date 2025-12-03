@@ -128,8 +128,6 @@ const HabitatComplexityObservationsTable = ({
     }
 
     return observationsState.map((observation, index) => {
-      debugger
-
       const rowNumber = index + 1
       const { id: observationId, score: habitatComplexityScore = '', interval } = observation
       const {
