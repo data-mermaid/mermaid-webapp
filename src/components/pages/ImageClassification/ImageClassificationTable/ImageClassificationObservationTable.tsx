@@ -47,6 +47,12 @@ import getDuplicateValidationInfo, {
   ValidationResult,
 } from '../../collectRecordFormPages/CollectRecordFormPage/getDuplicateValidationInfo'
 
+interface TableHeaderProps {
+  align: 'left' | 'right' | 'center'
+  id: string
+  text: string
+}
+
 const tableHeaders: TableHeaderProps[] = [
   { align: 'right', id: 'number-label', text: '#' },
   { align: 'center', id: 'photo-label', text: 'Photo' },
@@ -59,11 +65,6 @@ const tableHeaders: TableHeaderProps[] = [
   { align: 'center', id: 'review', text: '' },
   { align: 'center', id: 'remove', text: '' },
 ]
-interface TableHeaderProps {
-  align: 'left' | 'right' | 'center'
-  id: string
-  text: string
-}
 
 interface GrowthForm {
   id: string
@@ -579,7 +580,9 @@ const ImageClassificationObservationTable = ({
                         isDuplicatedImageShowing={isDuplicatedImageShowing}
                         className={isGroupHovered ? 'hover-highlight' : ''}
                       >
-                        {isDuplicatedImageShowing && <DuplicateBadge>Duplicate</DuplicateBadge>}
+                        {isDuplicatedImageShowing && (
+                          <DuplicateBadge>{t('image_classification.duplicate')}</DuplicateBadge>
+                        )}
                         <ImageWrapper>
                           <Thumbnail imageUrl={file.thumbnail} />
                         </ImageWrapper>
