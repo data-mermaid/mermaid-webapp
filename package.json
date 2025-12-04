@@ -50,7 +50,7 @@
     "react-error-overlay": "^6.0.9",
     "react-i18next": "^15.5.2",
     "react-is": "^18.2.0",
-    "react-router-dom": "6.19.0",
+    "react-router-dom": "7.10.1",
     "react-table": "^7.6.3",
     "react-toastify": "^7.0.3",
     "styled-components": "^5.3.11",
