@@ -234,7 +234,7 @@
   "profile": {
     "profile": "Profile",
     "your_profile": "Your Profile",
-    "email_address": "Email address",
+    "email_address": "Email Address",
     "first_name": "First Name",
     "last_name": "Last Name",
     "updated": "Profile updated",
@@ -252,6 +252,7 @@
     "credit_request": "Please credit the data owners",
     "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
   },
+  "mermaid": "MERMAID",
   "no_notifications": "There are currently no notifications",
   "mermaid_explore": "MERMAID Explore",
   "reference": "Reference",
