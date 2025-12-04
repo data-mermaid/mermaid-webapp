@@ -195,7 +195,6 @@ const HabitatComplexityTransectInputs = ({
 
     formik.setValues(newValues)
     resetNonObservationFieldValidations({
-      inputName: 'interval_size',
       validationPath: INTERVAL_SIZE_VALIDATION_PATH,
     })
   }
@@ -203,7 +202,6 @@ const HabitatComplexityTransectInputs = ({
   const handleIntervalStartChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'interval_start',
       validationPath: INTERVAL_START_VALIDATION_PATH,
     })
   }
