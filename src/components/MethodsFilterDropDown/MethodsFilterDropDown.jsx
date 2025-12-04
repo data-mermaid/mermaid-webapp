@@ -99,7 +99,7 @@ const MethodsFilterDropDown = ({
   return (
     <div>
       <FormControl sx={dynamicFormStyle}>
-        <InputLabel id="method-filer-label">{t('filter_method')}</InputLabel>
+        <InputLabel id="method-filer-label">{t('filters.method')}</InputLabel>
         <Select
           sx={SelectStyle}
           labelId="method-filter-multiple-checkbox-label"
@@ -107,7 +107,7 @@ const MethodsFilterDropDown = ({
           multiple
           value={value}
           onChange={(e) => handleChange(e)}
-          input={<OutlinedInput label={t('filter_method')} />}
+          input={<OutlinedInput label={t('filters.method')} />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
           disabled={disabled}

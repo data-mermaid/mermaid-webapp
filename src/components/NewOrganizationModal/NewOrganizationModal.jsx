@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
 import { Input, InputRow, HelperText } from '../generic/form'
-import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal'
@@ -38,7 +37,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
   const handleOnSubmit = () => {
     onSubmit(newOrganizationSuggestion)
     resetAndCloseModal()
-    toast.success(...getToastArguments(language.success.newOrganizationAdd))
+    toast.success(...getToastArguments(t('organizations.organization_added')))
   }
 
   const helperText = t('organizations.approved_and_added_to_project')

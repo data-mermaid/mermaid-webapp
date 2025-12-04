@@ -142,7 +142,6 @@
     "sort_by": "Sort By",
     "last_updated_date": "Last Updated Date",
     "project_name": "Project Name",
-    "country": "Country",
     "new_project": "New Project",
     "name_of_project": "Name of project",
     "loading_indicator": "projects list loading indicator",
@@ -163,15 +162,13 @@
     "project_info": "Project info",
     "no_notes": "No notes for this Project",
     "no_organizations": "This Project has no organizations.",
-    "project_admins": "Project Admins",
     "project_admin_one": "Project Admin",
     "project_admin_other": "Project Admins",
-    "other_project_members": "Other Project Members",
     "other_project_member_one": "Other Project Member",
     "other_project_member_other": "Other Project Members",
     "project_last_updated": "Project Last Updated",
-    "countries_one": "Country",
-    "countries_other": "Countries"
+    "country_one": "Country",
+    "country_other": "Countries"
   },
   "search": {
     "no_results": "No results found"
@@ -335,8 +332,8 @@
   "count": "Count",
   "biomass": "Biomass",
   "validations": "Validations",
-  "filter_method": "Filter Method",
   "filters": {
+    "method": "Filter Method",
     "search_helper_text": "<b>Use double quotes to search exact phrases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
     "projects_by_name_year": "Filter Projects By Name or Country",
     "by_name_year": "Filter this table by name or year",
@@ -432,9 +429,7 @@
     "no_organization_found": "No organization found.",
     "suggest_new_organization": "Suggest a new organization to MERMAID...",
     "remove_organization": "Remove organization from Project",
-    "buttons": {
-      "send_for_review": "Send to MERMAID for review"
-    }
+    "organization_added": "Organization added."
   },
   "citation": {
     "edit_suggested": "Edit Suggested Citation",

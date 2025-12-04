@@ -179,7 +179,6 @@ const success = {
   collectRecordSubmit: 'Record submitted.',
   collectRecordValidated: 'Record successfully validated.',
   collectRecordDelete: 'Record deleted.',
-  newOrganizationAdd: 'Organization added.',
   getProjectTurnOnOfflineReadySuccess: (projectName) => `${projectName} is now offline ready`,
   getProjectTurnOffOfflineReadySuccess: (projectName) =>
     `${projectName} has been removed from being offline ready`,
