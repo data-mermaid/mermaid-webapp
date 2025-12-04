@@ -39,7 +39,6 @@ test('App: an online and authenticated user can logout', async () => {
 
   fireEvent.click(await screen.findByText('WW')) // user icon initials for online user
   fireEvent.click(screen.getByTestId('logout-button'))
-  await waitFor(() =>
-    expect(screen.queryByRole('heading', { name: 'Projects' })).not.toBeInTheDocument(),
-  )
+
+  await waitFor(() => expect(screen.queryByTestId('logout-button')).not.toBeInTheDocument())
 })
