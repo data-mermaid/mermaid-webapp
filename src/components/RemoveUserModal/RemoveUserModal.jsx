@@ -1,8 +1,7 @@
-/* eslint-disable react/no-danger */
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal'
@@ -52,26 +51,28 @@ const RemoveUserModal = ({
   const mainContentPageOne = (
     <InlineFlex>
       <InlineMessage type="warning">
-        <p
-          dangerouslySetInnerHTML={{
-            __html: t('users.delete_unsynced_warning', {
+        <p>
+          <Trans
+            i18nKey="users.delete_unsynced_warning"
+            values={{
               userName: userNameToBeRemoved,
-            }),
-          }}
-        />
+            }}
+          />
+        </p>
       </InlineMessage>
     </InlineFlex>
   )
 
   const mainContentPageTwo = (
-    <p
-      dangerouslySetInnerHTML={{
-        __html: t('users.remove_user_warning', {
+    <p>
+      <Trans
+        i18nKey="users.remove_user_warning"
+        values={{
           userName: userNameToBeRemoved,
-          projectName: projectName,
-        }),
-      }}
-    />
+          projectName,
+        }}
+      />
+    </p>
   )
 
   const mainContent = (

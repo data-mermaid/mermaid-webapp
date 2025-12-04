@@ -64,18 +64,24 @@ import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 import UserRolesInfoModal from '../../UserRolesInfoModal'
 import { UserIcon } from '../../UserIcon/UserIcon'
 
-const getRoleLabel = (roleCode) => {
-  return {
-    10: 'Read-only',
-    50: 'Collector',
-    90: 'Admin',
-  }[roleCode]
+const useRoleLabels = () => {
+  const { t } = useTranslation()
+
+  return (roleCode) => {
+    const roleLabels = {
+      10: t('users.roles.read_only'),
+      50: t('users.roles.collector'),
+      90: t('users.roles.admin'),
+    }
+    return roleLabels[roleCode]
+  }
 }
 
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
 
 const Users = () => {
   const { t } = useTranslation()
+  const getRoleLabel = useRoleLabels()
 
   const adminTooltipText = t('users.roles.admin_description')
   const collectorTooltipText = t('users.roles.collector_description')
@@ -84,8 +90,8 @@ const Users = () => {
   const collectorHeaderText = t('users.roles.collector')
   const readOnlyHeaderText = t('users.roles.read_only')
   const userRecordsUnavailableText = t('users.user_records_unavailable')
-  const transferUserButtonText = t('users.transfer_button')
-  const noSampleUnitsText = t('users.no_sample_units')
+  const transferUserButtonText = t('buttons.transfer')
+  const noSampleUnitsText = t('sample_units.none')
 
   const [fromUser, setFromUser] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -919,13 +925,13 @@ const Users = () => {
           {isReadonlyUserWithActiveSampleUnits && isAdminUser && (
             <InlineStyle>
               <InlineMessage type="warning">
-                <p>{t('users.warning_readonly_active_units')}</p>
+                <p>{t('sample_units.warning_readonly_active_units')}</p>
               </InlineMessage>
             </InlineStyle>
           )}
           <ToolbarRowWrapper>
             <FilterSearchToolbar
-              name={isAdminUser ? t('users.filter_by_name_email') : t('users.filter_by_name_role')}
+              name={isAdminUser ? t('filters.by_name_email') : t('filters.by_name_role')}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />

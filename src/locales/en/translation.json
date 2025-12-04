@@ -15,7 +15,9 @@
     "submit": "Submit",
     "view": "View",
     "export_to_xlsx": "Export To XLSX",
-    "send_email": "Send Email"
+    "send_email": "Send Email",
+    "select": "Select",
+    "transfer": "Transfer"
   },
   "email": "Email",
   "info": "info",
@@ -28,7 +30,6 @@
     "export_error": "There was an error exporting the report.",
     "submitted_records_unavailable": "Submitted record data are currently unavailable."
   },
-  "select": "Select",
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",
   "projects_loading_indicator": "projects list loading indicator",
@@ -151,6 +152,10 @@
     "name_of_project": "Name of project",
     "loading_indicator": "projects list loading indicator",
     "no_submitted_sample_units": "This project has no submitted sample units yet.",
+    "edit_project_info": "Edit project info",
+    "add_remove_members": "Add or remove project members",
+    "view_member_emails": "View project member email",
+    "delete_project": "Delete a project",
     "errors": {
       "project_name_exists": "Project name already exists in MERMAID",
       "data_unavailable": "Project data is currently unavailable.",
@@ -191,6 +196,7 @@
     "observers": "Observers",
     "status": "Status",
     "add": "Add sample unit",
+    "transfer": "Transfer Sample Units",
     "last_edited_by": "Last edited by",
     "no_submitted_sample_units": "This project has no submitted sample units.",
     "missing_label_number": "missing number",
@@ -201,6 +207,13 @@
     "no_match": "No Sample Units match:",
     "view_submitted": "View submitted Sample Unit",
     "not_submitted": "This Sample Unit is not submitted",
+    "warning_readonly_active_units": "Some Sample Units cannot be submitted because the user is in read-only mode.",
+    "none": "No sample units",
+    "create_validate": "Create, validate, and submit sample units",
+    "delete_unsubmitted": "Delete unsubmitted sample units",
+    "edit_submitted": "Edit submitted sample units",
+    "transfer_unsubmitted": "Transfer unsubmitted sample units",
+    "download_submitted": "Download submitted sample units",
     "validation_status": {
       "errors": "Errors",
       "ready_to_submit": "Ready to submit",
@@ -335,7 +348,9 @@
     "by_name_reeftype_reefzone_exposure": "Filter this table by name, reef type, reef zone, or exposure",
     "by_name_project_country": "Filter this table by name, project, or country",
     "by_site_management_observer": "Filter this table by site, management, or observer",
-    "by_site": "Filter this table by site"
+    "by_site": "Filter this table by site",
+    "by_name_email": "Filter this table by name or email",
+    "by_name_role": "Filter this table by name or role"
   },
   "view_selected_only": "View Selected Only",
   "management_regimes": {
@@ -377,7 +392,12 @@
     "data_unavailable": "Site record data are currently unavailable.",
     "missing_site_name": "(Missing Site Name)"
   },
+  "add_update_sites_regimes": "Add/update site or management regimes",
+  "delete_sites_regimes": "Delete site or management regimes",
+  "download_sites_regimes": "Download sites and management regimes",
   "sample_units_and_observers": "Sample Units / Observers",
+  "view_observers_units_overview": "View observers and sample units overview",
+  "view_regimes_overview": "View management regimes overview",
   "in_collecting_with": "In Collecting with:",
   "errors": {
     "summary_record_data_unavailable": "Summary record data are currently unavailable."
@@ -440,6 +460,7 @@
     "fish_species_info": "Reef fish species, size and abundance, taxonomy and functional group information, biomass coefficients",
     "individual_habitat_complexity": "Individual habitat complexity scores",
     "colonies_bleached_percent_cover": "Colonies bleached and benthic percent cover",
+    "setup_policy": "Set up data sharing policy",
     "success": {
       "fish_belt_private": "Fish Belt is now set to private",
       "fish_belt_public_summary": "Fish Belt is now set to public summary",
@@ -458,13 +479,8 @@
     "role": "Role",
     "user_roles": "User Roles",
     "learn_more_roles": "Learn more about User Roles...",
-    "filter_by_name_email": "Filter this table by name or email",
-    "filter_by_name_role": "Filter this table by name or role",
     "add_user_email": "Enter email address of user to add",
     "add_user_button": "Add User",
-    "warning_readonly_active_units": "Some Sample Units cannot be submitted because the user is in read-only mode.",
-    "no_sample_units": "No sample units",
-    "transfer_button": "Transfer",
     "remove_from_project": "Remove From Project",
     "unsubmitted_sample_units": "Unsubmitted Sample Units",
     "invite_new_user": "Invite new user",
@@ -474,9 +490,9 @@
     "remove_user": "Remove User",
     "remove_user_from_project": "Remove User From Project",
     "remove_user_warning": "Are you sure you want to remove <strong>{{userName}}</strong> from <strong>{{projectName}}</strong>?",
-    "transfer_sample_units": "Transfer Sample Units",
-    "transfer_warning": "You must transfer unsubmitted sample units before you can remove the user from project.",
-    "transfer_unsubmitted_units_from": "Transfer {{count}} unsubmitted {{units}} from",
+    "transfer_before_remove_warning": "You must transfer unsubmitted sample units before you can remove the user from project.",
+    "transfer_unsubmitted_units_from_one": "Transfer {{count}} unsubmitted sample unit from",
+    "transfer_unsubmitted_units_from_other": "Transfer {{count}} unsubmitted sample units from",
     "transfer_sample_units_to": "Transfer sample units to:",
     "user_records_unavailable": "User record data are currently unavailable.",
     "roles": {
@@ -486,26 +502,6 @@
       "admin_description": "User has all Collector privileges, and can additionally change project information and data sharing, add and remove project users, transfer unsubmitted sample units between project users, and un-submit sample units for further editing.",
       "collector_description": "User can view, export, and analyze data, and collect new observations. Once a transect is submitted, the user can no longer edit or delete observations.",
       "read_only_description": "User can only view, export, and analyze data in the analysis tools, but cannot collect new observations."
-    },
-    "accessibility": {
-      "accessible_info": "Accessible Information",
-      "project_management": "Project management",
-      "data_collection_management": "Data collection and management",
-      "edit_project_info": "Edit project info",
-      "setup_data_sharing": "Set up data sharing policy",
-      "add_remove_members": "Add or remove project members",
-      "view_member_emails": "View project member email",
-      "delete_project": "Delete a project",
-      "add_update_sites_regimes": "Add/update site or management regimes",
-      "delete_sites_regimes": "Delete site or management regimes",
-      "download_sites_regimes": "Download sites and management regimes",
-      "create_validate_submit_units": "Create, validate, and submit sample units",
-      "delete_unsubmitted_units": "Delete unsubmitted sample units",
-      "edit_submitted_units": "Edit submitted sample units",
-      "transfer_unsubmitted_units": "Transfer unsubmitted sample units",
-      "download_submitted_units": "Download submitted sample units",
-      "view_observers_units_overview": "View observers and sample units overview",
-      "view_regimes_overview": "View management regimes overview"
     },
     "messages": {
       "new_user_added": "New user added.",
@@ -520,5 +516,8 @@
       "failed_sample_units_transfer": "Sample units failed to transfer.",
       "something_went_wrong": "Something went wrong"
     }
-  }
+  },
+  "accessible_info": "Accessible Information",
+  "project_management": "Project management",
+  "data_collection_management": "Data collection and management"
 }

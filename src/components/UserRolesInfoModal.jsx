@@ -47,7 +47,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
       <Table>
         <thead>
           <Tr>
-            <Thead>{t('users.accessibility.accessible_info')}</Thead>
+            <Thead>{t('accessible_info')}</Thead>
             <Thead>{t('users.roles.admin')}</Thead>
             <Thead>{t('users.roles.collector')}</Thead>
             <Thead>{t('users.roles.read_only')}</Thead>
@@ -56,11 +56,11 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
         <tbody>
           <Tr>
             <Td colSpan="4">
-              <strong>{t('users.accessibility.project_management')}</strong>
+              <strong>{t('project_management')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.edit_project_info')}</Tcell>
+            <Tcell>{t('projects.edit_project_info')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -72,7 +72,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.setup_data_sharing')}</Tcell>
+            <Tcell>{t('data_sharing.setup_policy')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -84,7 +84,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.add_remove_members')}</Tcell>
+            <Tcell>{t('projects.add_remove_members')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -96,7 +96,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.view_member_emails')}</Tcell>
+            <Tcell>{t('projects.view_member_emails')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -108,7 +108,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.delete_project')}</Tcell>
+            <Tcell>{t('projects.delete_project')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -122,11 +122,11 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
 
           <Tr>
             <Td colSpan="4">
-              <strong>{t('users.accessibility.data_collection_management')}</strong>
+              <strong>{t('data_collection_management')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.add_update_sites_regimes')}</Tcell>
+            <Tcell>{t('add_update_sites_regimes')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -138,7 +138,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.delete_sites_regimes')}</Tcell>
+            <Tcell>{t('delete_sites_regimes')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -150,7 +150,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.download_sites_regimes')}</Tcell>
+            <Tcell>{t('download_sites_regimes')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -162,7 +162,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.create_validate_submit_units')}</Tcell>
+            <Tcell>{t('sample_units.create_validate')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -174,7 +174,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.delete_unsubmitted_units')}</Tcell>
+            <Tcell>{t('sample_units.delete_unsubmitted')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -186,7 +186,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.edit_submitted_units')}</Tcell>
+            <Tcell>{t('sample_units.edit_submitted')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -198,7 +198,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.transfer_unsubmitted_units')}</Tcell>
+            <Tcell>{t('sample_units.transfer_unsubmitted')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -210,7 +210,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </TcellWithIconClose>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.download_submitted_units')}</Tcell>
+            <Tcell>{t('sample_units.download_submitted')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -222,7 +222,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.view_observers_units_overview')}</Tcell>
+            <Tcell>{t('view_observers_units_overview')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -234,7 +234,7 @@ const UserRolesInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell>{t('users.accessibility.view_regimes_overview')}</Tcell>
+            <Tcell>{t('view_regimes_overview')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
