@@ -56,16 +56,16 @@ const HabitatComplexityObservationsTable = ({
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
 
-  const { interval_size: intervalSize } = formik.values
+  const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
 
   useEffect(
     function recalculateObservationIntervals() {
       observationsDispatch({
         type: 'recalculateObservationIntervals',
-        payload: { intervalSize },
+        payload: { intervalStart, intervalSize },
       })
     },
-    [intervalSize, observationsDispatch],
+    [intervalSize, intervalStart, observationsDispatch],
   )
 
   const _useOnClickOutsideOfInfoIcon = useEffect(() => {
@@ -91,7 +91,7 @@ const HabitatComplexityObservationsTable = ({
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
 
-    observationsDispatch({ type: 'addObservation', payload: { intervalSize } })
+    observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
   }
 
   const observationsRows = useMemo(() => {
@@ -107,7 +107,7 @@ const HabitatComplexityObservationsTable = ({
         setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
-          payload: { referenceObservation: observation, intervalSize },
+          payload: { referenceObservation: observation, intervalStart, intervalSize },
         })
         setAreObservationsInputsDirty(true)
       }
@@ -120,6 +120,7 @@ const HabitatComplexityObservationsTable = ({
           payload: {
             referenceObservationIndex: index,
             intervalSize,
+            intervalStart,
           },
         })
         setAreObservationsInputsDirty(true)
@@ -129,7 +130,6 @@ const HabitatComplexityObservationsTable = ({
     return observationsState.map((observation, index) => {
       const rowNumber = index + 1
       const { id: observationId, score: habitatComplexityScore = '', interval } = observation
-
       const {
         isObservationValid,
         hasObservationWarningValidation,
@@ -149,7 +149,7 @@ const HabitatComplexityObservationsTable = ({
 
         observationsDispatch({
           type: 'deleteObservation',
-          payload: { observationId, intervalSize },
+          payload: { observationId, intervalSize, intervalStart },
         })
       }
 
@@ -229,6 +229,7 @@ const HabitatComplexityObservationsTable = ({
     collectRecord,
     ignoreObservationValidations,
     intervalSize,
+    intervalStart,
     observationsDispatch,
     observationsState,
     resetObservationValidations,
@@ -301,6 +302,7 @@ HabitatComplexityObservationsTable.propTypes = {
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({
+      interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       interval_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     }),
   }).isRequired,
