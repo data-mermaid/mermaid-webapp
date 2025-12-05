@@ -50,6 +50,7 @@
     "remove_photo": "Remove photo",
     "remove_photo_confirmation": "Are you sure you want to remove this photo?",
     "review_this_photo": "Review this photo",
+    "duplicate": "Duplicate",
     "annotation": {
       "confirm": "Confirm",
       "confirmed": "Confirmed",
@@ -94,6 +95,14 @@
       "description": "Through a partnership with <a /> from the University of California San Diego and Scripps Institution of Oceanography, MERMAID now includes AI-based classification using a pyspacer deep learning model. This integration enables fast, scalable analysis of benthic photos so that you can generate insights quickly and consistently with machine learning and AI.",
       "use_ai_button": "Classify photos with AI (Beta)",
       "use_manual_observations_button": "Enter observations manually"
+    },
+    "validations": {
+      "image_names_interval": "(1)[{{firstImgName}}];(2)[{{firstImgName}} and {{secondImgName}}];(3)[{{firstImgName}}, {{secondImgName}}, and {{thirdImgName}}];(4-inf)[{{firstImgName}}, {{secondImgName}}, {{thirdImgName}}, and {{moreCount}} more]",
+      "duplicate_images_one": "{{imageNames}} is a duplicate in {{location}}.",
+      "duplicate_images_other": "{{imageNames}} are duplicates in {{location}}.",
+      "duplicate_submitted_transects": "Submitted benthic photo quadrat transects",
+      "duplicate_this_transect": "this benthic photo quadrat transect",
+      "duplicate_other_transects": "unsubmitted benthic photo quadrat transects with other users"
     }
   },
   "map_tooling": {
