@@ -21,7 +21,7 @@ test('App renders show page unavailable offline when navigate to Project Info pa
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('This page is unavailable offline.'))
+  expect(await screen.findByTestId('page-unavailable-main-text')).toBeInTheDocument()
 })
 
 test('App renders show page unavailable offline when navigate to Users page while offline.', async () => {
@@ -35,7 +35,7 @@ test('App renders show page unavailable offline when navigate to Users page whil
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('This page is unavailable offline.'))
+  expect(await screen.findByTestId('page-unavailable-main-text')).toBeInTheDocument()
 })
 
 test('App renders show page unavailable offline when navigate to Fish Families page while offline.', async () => {
@@ -49,7 +49,7 @@ test('App renders show page unavailable offline when navigate to Fish Families p
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('This page is unavailable offline.'))
+  expect(await screen.findByTestId('page-unavailable-main-text')).toBeInTheDocument()
 })
 
 test('App renders show page unavailable offline when navigate to Data Sharing page while offline.', async () => {
@@ -64,5 +64,5 @@ test('App renders show page unavailable offline when navigate to Data Sharing pa
     dexieCurrentUserInstance,
   )
 
-  expect(await screen.findByText('This page is unavailable offline.'))
+  expect(await screen.findByTestId('page-unavailable-main-text')).toBeInTheDocument()
 })
