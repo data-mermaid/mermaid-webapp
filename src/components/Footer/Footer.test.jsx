@@ -12,17 +12,10 @@ import Footer from '.'
 test('Footer component shows help, terms, contact, credits links when online', () => {
   renderAuthenticatedOnline(<Footer />)
 
-  const helpButton = screen.getByText(/Help \(PDF\) ▲/i)
-
-  const termsLink = screen.getByRole('link', {
-    name: /terms/i,
-  })
-  const contactLink = screen.getByRole('link', {
-    name: /contact/i,
-  })
-  const creditsLink = screen.getByRole('link', {
-    name: /credits/i,
-  })
+  const helpButton = screen.getByTestId('help-documents-dropdown')
+  const termsLink = screen.getByTestId('terms-link')
+  const contactLink = screen.getByTestId('contact-link')
+  const creditsLink = screen.getByTestId('credits-link')
 
   expect(helpButton).toBeInTheDocument()
   expect(termsLink).toBeInTheDocument()
@@ -32,17 +25,10 @@ test('Footer component shows help, terms, contact, credits links when online', (
 test('Footer component shows help, and hide terms, contact, credits links when offline', async () => {
   renderAuthenticatedOffline(<Footer />)
 
-  const helpButton = screen.getByText(/Help \(PDF\) ▲/i)
-
-  const termsLink = screen.queryByRole('link', {
-    name: /terms/i,
-  })
-  const contactLink = screen.queryByRole('link', {
-    name: /contact/i,
-  })
-  const creditsLink = screen.queryByRole('link', {
-    name: /credits/i,
-  })
+  const helpButton = screen.getByTestId('help-documents-dropdown')
+  const termsLink = screen.queryByTestId('terms-link')
+  const contactLink = screen.queryByTestId('contact-link')
+  const creditsLink = screen.queryByTestId('credits-link')
 
   await waitFor(() => {
     expect(helpButton).toBeInTheDocument()

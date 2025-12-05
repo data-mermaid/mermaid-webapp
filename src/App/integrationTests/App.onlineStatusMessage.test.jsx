@@ -20,14 +20,9 @@ test('Appropriate online status message shows when navigator is online', async (
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
-  // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
 
-  expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
-    "You're ONLINE",
-  )
-  expect(await screen.findByTestId('offline-toggle-switch-label')).not.toHaveTextContent(
-    "You're OFFLINE. Some contents may be out of date.",
-  )
+  expect(await screen.findByTestId('status-online')).toBeInTheDocument()
+  expect(screen.queryByTestId('status-offline')).not.toBeInTheDocument()
 })
 test('Appropriate online status message shows when navigator is offline', async () => {
   jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
@@ -37,14 +32,8 @@ test('Appropriate online status message shows when navigator is offline', async 
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
-  // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
-
-  expect(await screen.findByTestId('offline-toggle-switch-label')).not.toHaveTextContent(
-    "You're ONLINE",
-  )
-  expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
-    "You're OFFLINE. Some contents may be out of date.",
-  )
+  expect(screen.queryByTestId('status-online')).not.toBeInTheDocument()
+  expect(await screen.findByTestId('status-offline')).toBeInTheDocument()
 })
 
 test('Appropriate online status message shows when server is reachable', async () => {
@@ -54,14 +43,9 @@ test('Appropriate online status message shows when server is reachable', async (
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
-  // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
 
-  expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
-    "You're ONLINE",
-  )
-  expect(await screen.findByTestId('offline-toggle-switch-label')).not.toHaveTextContent(
-    "You're OFFLINE. Some contents may be out of date.",
-  )
+  expect(await screen.findByTestId('status-online')).toBeInTheDocument()
+  expect(screen.queryByTestId('status-offline')).not.toBeInTheDocument()
 })
 test('Appropriate online status message shows when server is unreachable', async () => {
   mockMermaidApiAllSuccessful.use(
@@ -75,14 +59,8 @@ test('Appropriate online status message shows when server is unreachable', async
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
-  // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
   // timeout is necessary here because the server ping happens every 5 seconds.
 
-  expect(await screen.findByTestId('offline-toggle-switch-label')).not.toHaveTextContent(
-    "You're ONLINE",
-  )
-
-  expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
-    "You're OFFLINE. Some contents may be out of date.",
-  )
+  expect(await screen.findByTestId('status-offline')).toBeInTheDocument()
+  expect(screen.queryByTestId('status-online')).not.toBeInTheDocument()
 })
