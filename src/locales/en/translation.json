@@ -17,7 +17,10 @@
     "export_to_xlsx": "Export To XLSX",
     "send_email": "Send Email",
     "select": "Select",
-    "transfer": "Transfer"
+    "transfer": "Transfer",
+    "logout": "Logout",
+    "user_account_dropdown": "User account dropdown",
+    "dismiss_all_notifications": "Dismiss all notifications"
   },
   "email": "Email",
   "info": "info",
@@ -245,6 +248,15 @@
   "toggle_table_visibility": "Toggle table visibility",
   "toggle_label_visibility": "Toggle label visibility",
   "user": "User",
+  "profile": {
+    "profile": "Profile",
+    "your_profile": "Your Profile",
+    "email_address": "Email Address",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "updated": "Profile updated",
+    "logged_in_as": "Logged in as"
+  },
   "exports": {
     "success": "Export successful",
     "email_sent": "An email has been sent to <currentUserEmail />. This can sometimes take up to 15 minutes.",
@@ -258,6 +270,7 @@
     "citation_description": "Suggested citations can be found in all tabs of xlsx files you are exporting. Please ensure you cite the data you have exported in any publications to properly credit the data owners."
   },
   "mermaid": "MERMAID",
+  "no_notifications": "There are currently no notifications",
   "mermaid_explore": "MERMAID Explore",
   "reference": "Reference",
   "go_to_explore_projects": "View all your projects on MERMAID Explore",

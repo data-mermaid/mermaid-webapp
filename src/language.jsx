@@ -197,8 +197,6 @@ const success = {
   getMermaidDataDeleteSuccess: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has been deleted from your computer and online.`,
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
-  projectStatusSaved: `Test project selection saved.`,
-  userProfileUpdate: 'Profile updated',
 }
 
 const deleteRecord = (pageName) => {

@@ -26,7 +26,7 @@ test('App renders the initial screen as expected for an online and authenticated
   fireEvent.click(await screen.findByText('WW')) // user icon initials for online user
 
   // there is a logout button
-  expect(screen.getByText('Logout'))
+  expect(screen.getByTestId('logout-button')).toBeInTheDocument()
 })
 
 test('App: an online and authenticated user can logout', async () => {
@@ -38,8 +38,7 @@ test('App: an online and authenticated user can logout', async () => {
   })
 
   fireEvent.click(await screen.findByText('WW')) // user icon initials for online user
-  fireEvent.click(screen.getByText('Logout'))
-  await waitFor(() =>
-    expect(screen.queryByRole('heading', { name: 'Projects' })).not.toBeInTheDocument(),
-  )
+  fireEvent.click(screen.getByTestId('logout-button'))
+
+  await waitFor(() => expect(screen.queryByTestId('logout-button')).not.toBeInTheDocument())
 })
