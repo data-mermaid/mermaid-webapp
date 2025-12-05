@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
@@ -760,6 +761,7 @@ function UsersTableSection({
     adminTooltipText,
     collectorHeaderText,
     collectorTooltipText,
+    infoLabelText,
     currentHelperTextLabel,
     isHelperTextShowing,
     nameHeaderText,
@@ -1090,6 +1092,45 @@ function UsersTableSection({
       </TableNavigation>
     </>
   )
+}
+
+const observerProfilePropType = PropTypes.shape({
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  profile_name: PropTypes.string,
+  email: PropTypes.string,
+  picture: PropTypes.string,
+  num_active_sample_units: PropTypes.number,
+  role: PropTypes.number,
+  profile: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+})
+
+UsersTableSection.propTypes = {
+  observerProfiles: PropTypes.arrayOf(observerProfilePropType).isRequired,
+  currentUser: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  }).isRequired,
+  isAdminUser: PropTypes.bool.isRequired,
+  isTableUpdating: PropTypes.bool.isRequired,
+  transferUserButtonText: PropTypes.string.isRequired,
+  noSampleUnitsText: PropTypes.string.isRequired,
+  handleRoleChange: PropTypes.func.isRequired,
+  openTransferSampleUnitsModal: PropTypes.func.isRequired,
+  openRemoveUserModal: PropTypes.func.isRequired,
+  roleLabels: PropTypes.objectOf(PropTypes.string).isRequired,
+  adminTooltipText: PropTypes.string.isRequired,
+  collectorTooltipText: PropTypes.string.isRequired,
+  readOnlyTooltipText: PropTypes.string.isRequired,
+  adminHeaderText: PropTypes.string.isRequired,
+  collectorHeaderText: PropTypes.string.isRequired,
+  readOnlyHeaderText: PropTypes.string.isRequired,
+  nameHeaderText: PropTypes.string.isRequired,
+  emailHeaderText: PropTypes.string.isRequired,
+  userRoleHeaderText: PropTypes.string.isRequired,
+  unsubmittedSampleUnitsHeaderText: PropTypes.string.isRequired,
+  removeFromProjectHeaderText: PropTypes.string.isRequired,
+  globalFilterValue: PropTypes.string.isRequired,
+  setGlobalFilterValue: PropTypes.func.isRequired,
+  infoLabelText: PropTypes.string.isRequired,
 }
 
 export default Users
