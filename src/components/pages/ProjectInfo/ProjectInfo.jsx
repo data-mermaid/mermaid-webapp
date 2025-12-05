@@ -34,13 +34,13 @@ import DeleteProjectButton from '../../DeleteProjectButton/DeleteProjectButton'
 import GfcrCallout from '../../GfcrCallout'
 import { useCurrentProject } from '../../../App/CurrentProjectContext'
 import { EditCitationModal } from './EditCitationModal'
+import { getDeleteProjectModalText } from '../../../library/getDeleteProjectModalText'
 import {
   BlockquoteInForm,
   InputAutocompleteWrapper,
   SuggestNewOrganizationButton,
 } from './ProjectInfo.styles'
 import { OrganizationList } from './OrganizationsList'
-import language from '../../../language'
 
 const getWhichServerCitationToUse = (project) =>
   project?.user_citation // false if empty string, which is how the server stores undefined
@@ -375,7 +375,7 @@ const ProjectInfo = () => {
           hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
           hasOtherUsers={projectBeingEdited?.members.length > 1}
           isOpen={isDeleteProjectModalOpen}
-          modalText={language.deleteProject(projectBeingEdited?.name)}
+          modalText={getDeleteProjectModalText(projectBeingEdited?.name)}
           deleteProject={deleteProject}
           onDismiss={closeDeleteProjectModal}
           openModal={openDeleteProjectModal}

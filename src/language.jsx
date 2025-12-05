@@ -201,37 +201,9 @@ const deleteRecord = (pageName) => {
   }
 }
 
-const deleteProject = (project) => {
-  return {
-    title: `Delete project`,
-    prompt: `Are you sure you want to delete ${project}?`,
-    yes: `Delete ${project}`,
-    no: 'Cancel',
-    hasSampleUnits: 'You must delete all the sample units in this project to delete this project.',
-    hasOtherUsers: 'Other users must be removed from this project before deletion.',
-    confirmDeleteText1: `You cannot delete this ${project} because it is used in the following sample units:`,
-    confirmDeleteText2: `You have to remove this ${project} from all sample units before you can delete it.`,
-  }
-}
-
 const loadingIndicator = {
   loadingPrimary: 'Loading',
   loadingSecondary: 'Still working...',
-}
-
-const createNewOptionModal = {
-  genus: 'Genus',
-  contactForHelp: 'Contact us for help',
-  species: 'Species',
-  newBenthicAttribute: 'Benthic attribute',
-  benthicAttributeParent: 'Parent',
-  newBenthicAttributeName: 'Name',
-  goToNextPage: 'Next',
-  cancel: 'Cancel',
-  back: 'Back',
-  details: 'Details',
-  project: 'Project',
-  submit: 'Send to MERMAID for review',
 }
 
 const gfcrFinanceSolutionModal = {
@@ -1380,12 +1352,10 @@ export default {
   apiDataTableNames,
   autocomplete,
   buttons,
-  createNewOptionModal,
   gfcrFinanceSolutionModal,
   gfcrInvestmentModal,
   gfcrRevenueModal,
   gfcrNewIndicatorSetModal,
-  deleteProject,
   deleteRecord,
   error,
   getResolveModalLanguage,

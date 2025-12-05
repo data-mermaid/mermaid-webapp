@@ -9,7 +9,6 @@ import {
 } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
 import LoadingModal from '../LoadingModal/LoadingModal'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
-import language from '../../language'
 
 const DeleteProjectButton = ({
   currentPage = 1,
@@ -77,12 +76,8 @@ const DeleteProjectButton = ({
           {modalText.title}
         </ButtonCaution>
       </DeleteProjectButtonCautionWrapper>
-      {hasSampleUnits ? (
-        <WarningText>{language.deleteProject('Project').hasSampleUnits}</WarningText>
-      ) : null}
-      {hasOtherUsers ? (
-        <WarningText>{language.deleteProject('Project').hasOtherUsers}</WarningText>
-      ) : null}
+      {hasSampleUnits ? <WarningText>{modalText.hasSampleUnits}</WarningText> : null}
+      {hasOtherUsers ? <WarningText>{modalText.hasOtherUsers}</WarningText> : null}
       <Modal
         title={modalText.title}
         isOpen={isOpen}
@@ -113,6 +108,8 @@ DeleteProjectButton.propTypes = {
     prompt: PropTypes.string,
     yes: PropTypes.string,
     no: PropTypes.string,
+    hasSampleUnits: PropTypes.string,
+    hasOtherUsers: PropTypes.string,
     confirmDeleteText1: PropTypes.string,
     confirmDeleteText2: PropTypes.string,
   }).isRequired,

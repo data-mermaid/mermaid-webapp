@@ -184,6 +184,15 @@
     "country_one": "Country",
     "country_other": "Countries"
   },
+  "delete_project_modal": {
+    "title": "Delete project",
+    "prompt": "Are you sure you want to delete {{projectName}}?",
+    "yes": "Delete {{projectName}}",
+    "has_sample_units": "You must delete all the sample units in this project to delete this project.",
+    "has_other_users": "Other users must be removed from this project before deletion.",
+    "cannot_delete": "You cannot delete {{projectName}} because it is used in the following sample units:",
+    "remove_before_delete": "You have to remove {{projectName}} from all sample units before you can delete it."
+  },
   "search": {
     "no_results": "No results found"
   },
