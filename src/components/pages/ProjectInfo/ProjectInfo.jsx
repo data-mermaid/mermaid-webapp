@@ -34,7 +34,6 @@ import DeleteProjectButton from '../../DeleteProjectButton/DeleteProjectButton'
 import GfcrCallout from '../../GfcrCallout'
 import { useCurrentProject } from '../../../App/CurrentProjectContext'
 import { EditCitationModal } from './EditCitationModal'
-import { getDeleteProjectModalText } from '../../../library/getDeleteProjectModalText'
 import {
   BlockquoteInForm,
   InputAutocompleteWrapper,
@@ -375,7 +374,7 @@ const ProjectInfo = () => {
           hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
           hasOtherUsers={projectBeingEdited?.members.length > 1}
           isOpen={isDeleteProjectModalOpen}
-          modalText={getDeleteProjectModalText(projectBeingEdited?.name)}
+          projectName={projectBeingEdited?.name}
           deleteProject={deleteProject}
           onDismiss={closeDeleteProjectModal}
           openModal={openDeleteProjectModal}
