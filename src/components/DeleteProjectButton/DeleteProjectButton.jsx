@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal'
@@ -9,7 +10,6 @@ import {
 } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
 import LoadingModal from '../LoadingModal/LoadingModal'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
-import language from '../../language'
 
 const DeleteProjectButton = ({
   currentPage = 1,
@@ -18,16 +18,23 @@ const DeleteProjectButton = ({
   hasSampleUnits,
   hasOtherUsers,
   isOpen,
-  modalText,
+  projectName,
   deleteProject,
   onDismiss,
   openModal,
 }) => {
+  const { t } = useTranslation()
+  const resolvedProjectName = projectName || t('projects.project')
+
   const currentProjectPath = useCurrentProjectPath()
 
   const mainContentPageTwo = (
     <>
-      <p>{modalText.confirmDeleteText1}</p>
+      <p>
+        {t('projects.cannot_delete', {
+          projectName: resolvedProjectName,
+        })}
+      </p>
       <ul>
         {errorData.map((error) => (
           <li key={error.id}>
@@ -37,15 +44,19 @@ const DeleteProjectButton = ({
           </li>
         ))}
       </ul>
-      <p>{modalText.confirmDeleteText2}</p>
+      <p>
+        {t('projects.remove_before_delete', {
+          projectName: resolvedProjectName,
+        })}
+      </p>
     </>
   )
 
   const footerContentPageOne = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>{modalText.no}</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonCaution disabled={isLoading} onClick={deleteProject}>
-        {modalText.yes}
+        {t('projects.confirm_delete', { projectName: resolvedProjectName })}
       </ButtonCaution>
     </RightFooter>
   )
@@ -58,7 +69,9 @@ const DeleteProjectButton = ({
 
   const mainContent = (
     <>
-      {currentPage === 1 ? modalText.prompt : null}
+      {currentPage === 1
+        ? t('projects.user_confirm_delete', { projectName: resolvedProjectName })
+        : null}
       {currentPage === 2 ? mainContentPageTwo : null}
     </>
   )
@@ -74,17 +87,15 @@ const DeleteProjectButton = ({
     <>
       <DeleteProjectButtonCautionWrapper>
         <ButtonCaution type="button" onClick={openModal} disabled={hasSampleUnits || hasOtherUsers}>
-          {modalText.title}
+          {t('projects.delete')}
         </ButtonCaution>
       </DeleteProjectButtonCautionWrapper>
       {hasSampleUnits ? (
-        <WarningText>{language.deleteProject('Project').hasSampleUnits}</WarningText>
+        <WarningText>{t('projects.delete_sample_units_notice')}</WarningText>
       ) : null}
-      {hasOtherUsers ? (
-        <WarningText>{language.deleteProject('Project').hasOtherUsers}</WarningText>
-      ) : null}
+      {hasOtherUsers ? <WarningText>{t('projects.delete_other_users_notice')}</WarningText> : null}
       <Modal
-        title={modalText.title}
+        title={t('projects.delete')}
         isOpen={isOpen}
         onDismiss={onDismiss}
         mainContent={mainContent}
@@ -99,7 +110,8 @@ DeleteProjectButton.propTypes = {
   currentPage: PropTypes.number,
   errorData: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      protocol: PropTypes.string,
       site: PropTypes.string,
       sampleUnitLabel: PropTypes.string,
     }),
@@ -108,14 +120,7 @@ DeleteProjectButton.propTypes = {
   hasSampleUnits: PropTypes.bool.isRequired,
   hasOtherUsers: PropTypes.bool.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  modalText: PropTypes.shape({
-    title: PropTypes.string,
-    prompt: PropTypes.string,
-    yes: PropTypes.string,
-    no: PropTypes.string,
-    confirmDeleteText1: PropTypes.string,
-    confirmDeleteText2: PropTypes.string,
-  }).isRequired,
+  projectName: PropTypes.string,
   deleteProject: PropTypes.func.isRequired,
   onDismiss: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,

@@ -239,7 +239,7 @@ const NewAttributeModal = ({
       <RightFooter>
         {CancelButton}
         <ButtonPrimary type="button" data-testid="submit-proposal-button" onClick={handleOnSubmit}>
-          <IconSend /> {t('forms.submit_for_review')}
+          <IconSend /> {t('buttons.suggestion_review_request')}
         </ButtonPrimary>
       </RightFooter>
     </RowSpaceBetween>

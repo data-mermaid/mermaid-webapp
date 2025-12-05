@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useNavigate, useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonPrimary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
@@ -18,7 +19,6 @@ import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete/InputAutocomplete'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import NewOrganizationModal from '../../NewOrganizationModal'
 import PageUnavailable from '../PageUnavailable'
@@ -47,13 +47,14 @@ const getWhichServerCitationToUse = (project) =>
     : project?.default_citation
 
 const ProjectInfo = () => {
+  const { t } = useTranslation()
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false)
   const [isDeletingProject, setIsDeletingProject] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const [isUpdatingGfcr, setIsUpdatingGfcr] = useState(false)
-  const [projectNameError, setProjectNameError] = useState(false)
+  const [projectNameError, setProjectNameError] = useState('')
   const [projectTagOptions, setProjectTagOptions] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [isEditCitationModalOpen, setIsEditCitationModalOpen] = useState(false)
@@ -74,12 +75,29 @@ const ProjectInfo = () => {
   const isSuggestedCitationDirty = citationToUse !== citationFromServerToUse
   const navigate = useNavigate()
 
+  const projectInfoTitle = t('projects.project_info')
+  const notesText = t('notes')
+  const organizationsText = t('organizations.organizations')
+  const noNotesText = t('projects.no_notes')
+  const noOrganizationsText = t('projects.no_organizations')
+  const projectDataUnavailableToastText = t('projects.errors.data_unavailable')
+  const projectSavedToastText = t('projects.success.project_saved')
+  const duplicateProjectNameToastText = t('projects.errors.duplicate_name')
+  const projectNameExistsErrorText = t('projects.errors.project_name_exists')
+  const requiredFieldErrorText = t('forms.required_field')
+  const projectSaveFailedToastText = t('projects.errors.not_saved')
+  const projectDeletedToastText = t('projects.success.project_deleted')
+  const projectDeleteFailedToastText = t('projects.errors.not_deleted')
+  const gfcrEnabledToastText = t('gfcr.success.indicators_enabled')
+  const gfcrDisabledToastText = t('gfcr.success.indicators_disabled')
+  const gfcrEnableFailedToastText = t('gfcr.errors.indicators_enable_failed')
+  const gfcrDisableFailedToastText = t('gfcr.errors.indicators_disable_failed')
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
   const openEditCitationModal = () => setIsEditCitationModalOpen(true)
   const closeEditCitationModal = () => setIsEditCitationModalOpen(false)
 
-  useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${projectInfoTitle} - ${t('mermaid')}`)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -119,7 +137,7 @@ const ProjectInfo = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.projectsUnavailable))
+              toast.error(...getToastArguments(projectDataUnavailableToastText))
             },
           })
         })
@@ -131,6 +149,7 @@ const ProjectInfo = () => {
     isAppOnline,
     handleHttpResponseError,
     setProjectBeingEdited,
+    projectDataUnavailableToastText,
   ])
 
   const initialFormValues = useMemo(
@@ -146,28 +165,28 @@ const ProjectInfo = () => {
         ? { ...values, user_citation: citationToUse }
         : values
       setSaveButtonState(buttonGroupStates.saving)
-      setProjectNameError(false)
+      setProjectNameError('')
 
       databaseSwitchboardInstance
         .saveProject({ projectId, editedValues: valuesToUse })
         .then((updatedProject) => {
           setProjectBeingEdited(updatedProject) // to ensure isSuggestedCitationDirty is fresh
           setSaveButtonState(buttonGroupStates.saved)
-          toast.success(...getToastArguments(language.success.projectSave))
+          toast.success(...getToastArguments(projectSavedToastText))
           actions.resetForm({ values }) // resets formik's dirty state
         })
         .catch((error) => {
           // validation error is a custom error (doesn't have the same structure as HTTP response error)
           if (error.message === 'Validation Error') {
-            setProjectNameError(language.error.formValidation.projectNameExists)
-            toast.error(...getToastArguments(language.error.projectNameError))
+            setProjectNameError(projectNameExistsErrorText)
+            toast.error(...getToastArguments(duplicateProjectNameToastText))
             setSaveButtonState(buttonGroupStates.unsaved)
           } else {
             setSaveButtonState(buttonGroupStates.unsaved)
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.projectSave))
+                toast.error(...getToastArguments(projectSaveFailedToastText))
               },
             })
           }
@@ -177,7 +196,7 @@ const ProjectInfo = () => {
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: requiredFieldErrorText, id: 'Required' }]
       }
 
       return errors
@@ -193,7 +212,7 @@ const ProjectInfo = () => {
   const noOrganizationResult = (
     <>
       <SuggestNewOrganizationButton type="button" onClick={openNewOrganizationNameModal}>
-        {language.pages.projectInfo.newOrganizationNameLink}
+        {t('organizations.suggest_new_organization')}
       </SuggestNewOrganizationButton>
     </>
   )
@@ -226,7 +245,7 @@ const ProjectInfo = () => {
       .then(() => {
         closeDeleteProjectModal()
         setIsDeletingProject(false)
-        toast.success(...getToastArguments(language.success.projectDeleted))
+        toast.success(...getToastArguments(projectDeletedToastText))
         navigate(`/projects`)
       })
       .catch((error) => {
@@ -234,7 +253,7 @@ const ProjectInfo = () => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.projectDelete))
+            toast.error(...getToastArguments(projectDeleteFailedToastText))
           },
         })
       })
@@ -253,10 +272,10 @@ const ProjectInfo = () => {
         setProjectBeingEdited(updatedProject)
 
         if (includesGfcrValue) {
-          toast.success(...getToastArguments(language.success.projectAddGfcr))
+          toast.success(...getToastArguments(gfcrEnabledToastText))
         }
         if (!includesGfcrValue) {
-          toast.success(...getToastArguments(language.success.projectRemoveGfcr))
+          toast.success(...getToastArguments(gfcrDisabledToastText))
         }
       })
       .catch((error) => {
@@ -266,10 +285,10 @@ const ProjectInfo = () => {
           error,
           callback: () => {
             if (includesGfcrValue) {
-              toast.error(...getToastArguments(language.error.projectAddGfcr))
+              toast.error(...getToastArguments(gfcrEnableFailedToastText))
             }
             if (!includesGfcrValue) {
-              toast.error(...getToastArguments(language.error.projectRemoveGfcr))
+              toast.error(...getToastArguments(gfcrDisableFailedToastText))
             }
           },
         })
@@ -277,15 +296,15 @@ const ProjectInfo = () => {
   }
   const citationMarkup = (
     <InputRow>
-      <label htmlFor="suggested-citation">{language.pages.projectInfo.citationLabel}</label>
+      <label htmlFor="suggested-citation">{t('citation.suggested')}</label>
       <div>
         <BlockquoteInForm id="suggested-citation">
           {citationToUse} {projectBeingEdited?.citation_retrieved_text}
         </BlockquoteInForm>
-        <PSmall>{language.pages.projectInfo.citationHelperText}</PSmall>
+        <PSmall>{t('citation.more_info')}</PSmall>
         {isAdminUser ? (
           <ButtonPrimary type="button" onClick={openEditCitationModal}>
-            <IconPen /> {language.pages.projectInfo.editCitation}
+            <IconPen /> {t('citation.edit_suggested')}
           </ButtonPrimary>
         ) : null}
       </div>
@@ -297,7 +316,7 @@ const ProjectInfo = () => {
       <InputWrapper>
         <InputWithLabelAndValidation
           required
-          label="Project Name"
+          label={t('projects.project_name')}
           id="name"
           type="text"
           {...formik.getFieldProps('name')}
@@ -305,16 +324,16 @@ const ProjectInfo = () => {
           validationMessages={checkValidationMessage()}
         />
         <TextareaWithLabelAndValidation
-          label="Notes"
+          label={notesText}
           id="notes"
           {...formik.getFieldProps('notes')}
         />
         <InputAutocompleteWrapper>
-          <label htmlFor="organizations">Organizations</label>
+          <label htmlFor="organizations">{organizationsText}</label>
           <InputAutocomplete
             id="organizations"
             options={projectTagOptions}
-            helperText={language.pages.projectInfo.organizationsHelperText}
+            helperText={t('organizations.type_to_search')}
             onChange={(selectedItem) => {
               const { label: selectedItemLabel } = selectedItem
               const existingOrganizations = [...formik.getFieldProps('tags').value]
@@ -327,7 +346,7 @@ const ProjectInfo = () => {
                 formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
               }
             }}
-            noResultsText={language.pages.projectInfo.noOrganizationFound}
+            noResultsText={t('organizations.no_organization_found')}
             noResultsAction={noOrganizationResult}
             onInputValueChange={setOrganizationAutocompleteSearchText}
           />
@@ -355,7 +374,7 @@ const ProjectInfo = () => {
           hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
           hasOtherUsers={projectBeingEdited?.members.length > 1}
           isOpen={isDeleteProjectModalOpen}
-          modalText={language.deleteProject(projectBeingEdited?.name)}
+          projectName={projectBeingEdited?.name}
           deleteProject={deleteProject}
           onDismiss={closeDeleteProjectModal}
           openModal={openDeleteProjectModal}
@@ -369,9 +388,9 @@ const ProjectInfo = () => {
     <>
       <InputWrapper>
         <H2>{name}</H2>
-        <H3>{language.pages.projectInfo.notes}</H3>
-        <P>{notes.length ? notes : <em>{language.pages.projectInfo.noNotes}</em>}</P>
-        <H3>{language.pages.projectInfo.organizations}</H3>
+        <H3>{notesText}</H3>
+        <P>{notes.length ? notes : <em>{noNotesText}</em>}</P>
+        <H3>{organizationsText}</H3>
         {tags.length ? (
           <ul>
             {tags.map((org) => (
@@ -379,7 +398,7 @@ const ProjectInfo = () => {
             ))}
           </ul>
         ) : (
-          <em>{language.pages.projectInfo.noOrganization}</em>
+          <em>{noOrganizationsText}</em>
         )}
       </InputWrapper>
       {citationMarkup}
@@ -401,12 +420,12 @@ const ProjectInfo = () => {
           isAppOnline ? (
             contentViewByRole
           ) : (
-            <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+            <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
           )
         }
         toolbar={
           <ContentPageToolbarWrapper>
-            <H2>{language.pages.projectInfo.title}</H2>
+            <H2>{projectInfoTitle}</H2>
             {isAdminUser && (
               <SaveButton
                 formId="project-info-form"

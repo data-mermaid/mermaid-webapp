@@ -118,10 +118,6 @@ const error = {
   notificationsUnavailable: 'Notifications are unavailable.',
   notificationNotDeleted: 'Notification could not be removed.',
   notificationsNotDeleted: 'Notifications could not be removed',
-  projectDelete: 'This project has not been deleted.',
-  projectAddGfcr: 'Could not add GFCR indicators to the project.',
-  projectRemoveGfcr: 'Could not remove GFCR indicators from the project.',
-  projectSave: 'The project has not been saved.',
   projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
   submittedRecordsUnavailable: 'Submitted record data are currently unavailable.',
@@ -174,7 +170,6 @@ const success = {
   collectRecordSubmit: 'Record submitted.',
   collectRecordValidated: 'Record successfully validated.',
   collectRecordDelete: 'Record deleted.',
-  newOrganizationAdd: 'Organization added.',
   getProjectTurnOnOfflineReadySuccess: (projectName) => `${projectName} is now offline ready`,
   getProjectTurnOffOfflineReadySuccess: (projectName) =>
     `${projectName} has been removed from being offline ready`,
@@ -186,10 +181,6 @@ const success = {
   gfcrInvestmentDelete: 'Investment row removed.',
   gfcrRevenueSave: 'Revenue row saved.',
   gfcrRevenueDelete: 'Revenue row removed.',
-  projectSave: 'Project saved',
-  projectAddGfcr: 'Added GFCR indicators to project',
-  projectRemoveGfcr: 'Removed GFCR indicators from project',
-  projectDeleted: 'Project deleted',
   getMermaidDataSaveSuccess: ({ mermaidDataTypeLabel, isAppOnline }) =>
     isAppOnline
       ? `The ${mermaidDataTypeLabel} has been saved on your computer and online.`
@@ -210,37 +201,9 @@ const deleteRecord = (pageName) => {
   }
 }
 
-const deleteProject = (project) => {
-  return {
-    title: `Delete project`,
-    prompt: `Are you sure you want to delete ${project}?`,
-    yes: `Delete ${project}`,
-    no: 'Cancel',
-    hasSampleUnits: 'You must delete all the sample units in this project to delete this project.',
-    hasOtherUsers: 'Other users must be removed from this project before deletion.',
-    confirmDeleteText1: `You cannot delete this ${project} because it is used in the following sample units:`,
-    confirmDeleteText2: `You have to remove this ${project} from all sample units before you can delete it.`,
-  }
-}
-
 const loadingIndicator = {
   loadingPrimary: 'Loading',
   loadingSecondary: 'Still working...',
-}
-
-const createNewOptionModal = {
-  genus: 'Genus',
-  contactForHelp: 'Contact us for help',
-  species: 'Species',
-  newBenthicAttribute: 'Benthic attribute',
-  benthicAttributeParent: 'Parent',
-  newBenthicAttributeName: 'Name',
-  goToNextPage: 'Next',
-  cancel: 'Cancel',
-  back: 'Back',
-  details: 'Details',
-  project: 'Project',
-  submit: 'Send to MERMAID for review',
 }
 
 const gfcrFinanceSolutionModal = {
@@ -480,50 +443,6 @@ const pages = {
       trophicGroup: 'Trophic Group',
     },
     benthicPitSyncCheckbox: 'Use Interval Size as Interval Start',
-  },
-  projectInfo: {
-    createOrganizationTitle: 'Suggest a new organization',
-    newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
-    noNotes: 'No notes for this Project',
-    noOrganizationFound: `No organization found.`,
-    organizationsHelperText: `Type to search for an organization.`,
-    removeOrganization: `Remove organization from Project`,
-    suggestionOrganizationHelperText: `If your organization is approved, it'll be automatically added to your Project.`,
-    title: 'Project Info',
-    organizations: 'Organizations',
-    notes: 'Notes',
-    noOrganization: 'This Project has no organizations.',
-    gfcrCallout: {
-      calloutHeading: 'Global Fund for Coral Reefs (GFCR)',
-      removeParagraph:
-        'Removing GFCR indicators from this project will not delete them, but just hide them.',
-      addParagraph:
-        'GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. ',
-      disableButton: 'Disable GFCR Indicators',
-      enableButton: 'Enable GFCR Indicators for this project',
-      goToButton: 'Go to GFCR Indicators',
-    },
-    citationLabel: 'Suggested Citation',
-    citationHelperText:
-      'Citation to suggest for all uses of your project data. This citation will be displayed on MERMAID Explore and with any other data access method. ',
-    editCitation: 'Edit Citation',
-    editCitationModal: {
-      title: 'Edit Suggested Citation',
-      helper: 'Copy and paste project info into your citation',
-      projectName: 'Project Name',
-      projectAdmins: 'Project Admins',
-      projectAdmin: 'Project Admin',
-      otherProjectMembers: 'Other Project Members',
-      otherProjectMember: 'Other Project Member',
-      projectLastUpdated: 'Project Last Updated',
-      countries: 'Countries',
-      country: 'Country',
-      editCitation: 'Edit Citation',
-      cancel: 'Cancel',
-      updateCitation: 'Update Citation',
-      citationPreview: 'Citation Preview',
-      useDefaultCitation: 'Use Default Citation',
-    },
   },
   submittedTable: {
     title: 'Submitted',
@@ -1433,12 +1352,10 @@ export default {
   apiDataTableNames,
   autocomplete,
   buttons,
-  createNewOptionModal,
   gfcrFinanceSolutionModal,
   gfcrInvestmentModal,
   gfcrRevenueModal,
   gfcrNewIndicatorSetModal,
-  deleteProject,
   deleteRecord,
   error,
   getResolveModalLanguage,

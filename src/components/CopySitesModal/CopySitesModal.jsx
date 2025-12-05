@@ -70,11 +70,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const [selectedRowIdsForCopy, setSelectedRowIdsForCopy] = useState([])
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
-  // Extract translated text variables outside hooks
   const siteRecordsUnavailableText = t('sites.data_unavailable')
   const nameHeaderText = t('name')
   const projectHeaderText = t('projects.project')
-  const countryHeaderText = t('projects.country')
+  const countryHeaderText = t('projects.country', { count: 1 })
   const reefTypeHeaderText = t('sites.reef_type')
   const reefZoneHeaderText = t('sites.reef_zone')
   const exposureHeaderText = t('sites.exposure')
