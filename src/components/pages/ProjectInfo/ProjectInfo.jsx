@@ -19,7 +19,6 @@ import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete/InputAutocomplete'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import NewOrganizationModal from '../../NewOrganizationModal'
 import PageUnavailable from '../PageUnavailable'
@@ -41,6 +40,7 @@ import {
   SuggestNewOrganizationButton,
 } from './ProjectInfo.styles'
 import { OrganizationList } from './OrganizationsList'
+import language from '../../../language'
 
 const getWhichServerCitationToUse = (project) =>
   project?.user_citation // false if empty string, which is how the server stores undefined
@@ -55,7 +55,7 @@ const ProjectInfo = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const [isUpdatingGfcr, setIsUpdatingGfcr] = useState(false)
-  const [projectNameError, setProjectNameError] = useState(false)
+  const [projectNameError, setProjectNameError] = useState('')
   const [projectTagOptions, setProjectTagOptions] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [isEditCitationModalOpen, setIsEditCitationModalOpen] = useState(false)
@@ -81,7 +81,18 @@ const ProjectInfo = () => {
   const organizationsText = t('organizations.organizations')
   const noNotesText = t('projects.no_notes')
   const noOrganizationsText = t('projects.no_organizations')
-
+  const projectDataUnavailableToastText = t('projects.errors.data_unavailable')
+  const projectSavedToastText = t('projects.success.project_saved')
+  const duplicateProjectNameToastText = t('projects.errors.duplicate_name')
+  const projectNameExistsErrorText = t('projects.errors.project_name_exists')
+  const requiredFieldErrorText = t('forms.required_field')
+  const projectSaveFailedToastText = t('projects.errors.not_saved')
+  const projectDeletedToastText = t('projects.success.project_deleted')
+  const projectDeleteFailedToastText = t('projects.errors.not_deleted')
+  const gfcrEnabledToastText = t('gfcr.success.indicators_enabled')
+  const gfcrDisabledToastText = t('gfcr.success.indicators_disabled')
+  const gfcrEnableFailedToastText = t('gfcr.errors.indicators_enable_failed')
+  const gfcrDisableFailedToastText = t('gfcr.errors.indicators_disable_failed')
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
   const openEditCitationModal = () => setIsEditCitationModalOpen(true)
@@ -127,7 +138,7 @@ const ProjectInfo = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.projectsUnavailable))
+              toast.error(...getToastArguments(projectDataUnavailableToastText))
             },
           })
         })
@@ -139,6 +150,7 @@ const ProjectInfo = () => {
     isAppOnline,
     handleHttpResponseError,
     setProjectBeingEdited,
+    projectDataUnavailableToastText,
   ])
 
   const initialFormValues = useMemo(
@@ -154,28 +166,28 @@ const ProjectInfo = () => {
         ? { ...values, user_citation: citationToUse }
         : values
       setSaveButtonState(buttonGroupStates.saving)
-      setProjectNameError(false)
+      setProjectNameError('')
 
       databaseSwitchboardInstance
         .saveProject({ projectId, editedValues: valuesToUse })
         .then((updatedProject) => {
           setProjectBeingEdited(updatedProject) // to ensure isSuggestedCitationDirty is fresh
           setSaveButtonState(buttonGroupStates.saved)
-          toast.success(...getToastArguments(language.success.projectSave))
+          toast.success(...getToastArguments(projectSavedToastText))
           actions.resetForm({ values }) // resets formik's dirty state
         })
         .catch((error) => {
           // validation error is a custom error (doesn't have the same structure as HTTP response error)
           if (error.message === 'Validation Error') {
-            setProjectNameError(language.error.formValidation.projectNameExists)
-            toast.error(...getToastArguments(language.error.projectNameError))
+            setProjectNameError(projectNameExistsErrorText)
+            toast.error(...getToastArguments(duplicateProjectNameToastText))
             setSaveButtonState(buttonGroupStates.unsaved)
           } else {
             setSaveButtonState(buttonGroupStates.unsaved)
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.projectSave))
+                toast.error(...getToastArguments(projectSaveFailedToastText))
               },
             })
           }
@@ -185,7 +197,7 @@ const ProjectInfo = () => {
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: requiredFieldErrorText, id: 'Required' }]
       }
 
       return errors
@@ -234,7 +246,7 @@ const ProjectInfo = () => {
       .then(() => {
         closeDeleteProjectModal()
         setIsDeletingProject(false)
-        toast.success(...getToastArguments(language.success.projectDeleted))
+        toast.success(...getToastArguments(projectDeletedToastText))
         navigate(`/projects`)
       })
       .catch((error) => {
@@ -242,7 +254,7 @@ const ProjectInfo = () => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.projectDelete))
+            toast.error(...getToastArguments(projectDeleteFailedToastText))
           },
         })
       })
@@ -261,10 +273,10 @@ const ProjectInfo = () => {
         setProjectBeingEdited(updatedProject)
 
         if (includesGfcrValue) {
-          toast.success(...getToastArguments(language.success.projectAddGfcr))
+          toast.success(...getToastArguments(gfcrEnabledToastText))
         }
         if (!includesGfcrValue) {
-          toast.success(...getToastArguments(language.success.projectRemoveGfcr))
+          toast.success(...getToastArguments(gfcrDisabledToastText))
         }
       })
       .catch((error) => {
@@ -274,10 +286,10 @@ const ProjectInfo = () => {
           error,
           callback: () => {
             if (includesGfcrValue) {
-              toast.error(...getToastArguments(language.error.projectAddGfcr))
+              toast.error(...getToastArguments(gfcrEnableFailedToastText))
             }
             if (!includesGfcrValue) {
-              toast.error(...getToastArguments(language.error.projectRemoveGfcr))
+              toast.error(...getToastArguments(gfcrDisableFailedToastText))
             }
           },
         })
@@ -409,7 +421,7 @@ const ProjectInfo = () => {
           isAppOnline ? (
             contentViewByRole
           ) : (
-            <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+            <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
           )
         }
         toolbar={

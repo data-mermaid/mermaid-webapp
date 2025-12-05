@@ -151,12 +151,14 @@
       "data_unavailable": "Project data is currently unavailable.",
       "duplicate_name": "A project with the same name already exists.",
       "not_saved": "Project could not be saved",
-      "not_available": "Projects are currently unavailable."
+      "not_available": "Projects are currently unavailable.",
+      "not_deleted": "This project has not been deleted."
     },
     "success": {
       "project_copied": "Project copied",
       "project_created": "Project created",
       "project_saved": "Project saved",
+      "project_deleted": "Project deleted",
       "test_project_status_saved": "Test project selection saved."
     },
     "project_info": "Project info",
@@ -264,6 +266,14 @@
       "go_to_gfcr": "Go to GFCR Indicators",
       "enable_gfcr": "Enable GFCR Indicators for this project",
       "disable_gfcr": "Disable GFCR Indicators"
+    },
+    "success": {
+      "indicators_enabled": "Added GFCR indicators to project",
+      "indicators_disabled": "Removed GFCR indicators from project"
+    },
+    "errors": {
+      "indicators_enable_failed": "Could not add GFCR indicators to the project.",
+      "indicators_disable_failed": "Could not remove GFCR indicators from the project."
     }
   },
   "protocol_titles": {

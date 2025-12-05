@@ -121,10 +121,6 @@ const error = {
   notificationsUnavailable: 'Notifications are unavailable.',
   notificationNotDeleted: 'Notification could not be removed.',
   notificationsNotDeleted: 'Notifications could not be removed',
-  projectDelete: 'This project has not been deleted.',
-  projectAddGfcr: 'Could not add GFCR indicators to the project.',
-  projectRemoveGfcr: 'Could not remove GFCR indicators from the project.',
-  projectSave: 'The project has not been saved.',
   projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
   submittedRecordsUnavailable: 'Submitted record data are currently unavailable.',
@@ -195,10 +191,6 @@ const success = {
   newUserAdd: 'New user added.',
   newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
   userRemoved: 'User removed',
-  projectSave: 'Project saved',
-  projectAddGfcr: 'Added GFCR indicators to project',
-  projectRemoveGfcr: 'Removed GFCR indicators from project',
-  projectDeleted: 'Project deleted',
   getMermaidDataSaveSuccess: ({ mermaidDataTypeLabel, isAppOnline }) =>
     isAppOnline
       ? `The ${mermaidDataTypeLabel} has been saved on your computer and online.`
