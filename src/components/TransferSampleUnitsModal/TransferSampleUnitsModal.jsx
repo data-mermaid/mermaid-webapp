@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
-import language from '../../language'
 import { IconArrowRightCircle } from '../icons'
 import { Select } from '../generic/form'
 import { Column } from '../generic/positioning'
 import InlineMessage from '../generic/InlineMessage'
 import Modal, { RightFooter } from '../generic/Modal'
-import { pluralize } from '../../library/strings/pluralize'
 import { getProfileNameOrEmailForPendingUser } from '../../library/getProfileNameOrEmailForPendingUser'
 import theme from '../../theme'
 import { getIsProjectProfileReadOnly } from '../../App/currentUserProfileHelpers'
@@ -45,8 +44,8 @@ const TransferSampleUnitsModal = ({
   handleTransferSampleUnitChange,
   onSubmit,
 }) => {
+  const { t } = useTranslation()
   const initialToUserIdInTransferModal = fromUser.profile === currentUserId ? '' : currentUserId
-  const sampleUnitMsg = pluralize(fromUser.num_active_sample_units, 'sample unit', 'sample units')
   const [isInitialToUserIdEmpty, setInitialIsToUserIdEmpty] = useState()
 
   const _checkTransferButtonDisabledWhenModalOpen = useEffect(() => {
@@ -86,7 +85,7 @@ const TransferSampleUnitsModal = ({
       {showRemoveUserWithActiveSampleUnitsWarning && (
         <InlineFlex>
           <InlineMessage type="warning">
-            <p>{language.pages.userTable.warningTransferSampleUnits}</p>
+            <p>{t('users.transfer_before_remove_warning')}</p>
           </InlineMessage>
         </InlineFlex>
       )}
@@ -94,14 +93,17 @@ const TransferSampleUnitsModal = ({
         <ModalBodyContainer>
           <ModalBoxItem>
             <p>
-              Transfer {fromUser.num_active_sample_units} unsubmitted {sampleUnitMsg} from{' '}
+              <Trans
+                i18nKey="users.transfer_unsubmitted_units_from"
+                count={fromUser.num_active_sample_units}
+              />{' '}
               <strong>{getProfileNameOrEmailForPendingUser(fromUser)}</strong>
             </p>
           </ModalBoxItem>
           <IconArrowRightCircle />
           <ModalBoxItem>
             <label id="modal-transfer-units-to-label" htmlFor="modal-transfer-units-to">
-              Transfer sample units to:
+              {t('users.transfer_sample_units_to')}
               <Select
                 id="modal-transfer-units-to"
                 defaultValue={initialToUserIdInTransferModal}
@@ -111,7 +113,7 @@ const TransferSampleUnitsModal = ({
                 }}
               >
                 <option value="" disabled>
-                  {language.placeholders.select}
+                  {t('buttons.select')}
                 </option>
                 {optionList}
               </Select>
@@ -124,9 +126,9 @@ const TransferSampleUnitsModal = ({
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit} disabled={isInitialToUserIdEmpty}>
-        Transfer Sample Units
+        {t('sample_units.transfer')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -135,7 +137,7 @@ const TransferSampleUnitsModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      title={language.pages.userTable.transferSampleUnitsModalTitle}
+      title={t('sample_units.transfer')}
       mainContent={modalContent}
       footerContent={footerContent}
     />
