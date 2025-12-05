@@ -83,6 +83,12 @@ const Users = () => {
   const adminHeaderText = t('users.roles.admin')
   const collectorHeaderText = t('users.roles.collector')
   const readOnlyHeaderText = t('users.roles.read_only')
+  const infoLabelText = t('info')
+  const nameHeaderText = t('name')
+  const emailHeaderText = t('email')
+  const userRoleHeaderText = t('users.role')
+  const unsubmittedSampleUnitsHeaderText = t('users.unsubmitted_sample_units')
+  const removeFromProjectHeaderText = t('users.remove_from_project')
   const userRecordsUnavailableText = t('users.user_records_unavailable')
   const transferUserButtonText = t('buttons.transfer')
   const noSampleUnitsText = t('sample_units.none')
@@ -95,9 +101,6 @@ const Users = () => {
     useState(false)
   const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
   const [isSendEmailToNewUserPromptOpen, setIsSendEmailToNewUserPromptOpen] = useState(false)
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
-
   const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
   const [newUserEmail, setNewUserEmail] = useState('')
   const [observerProfiles, setObserverProfiles] = useState([])
@@ -114,11 +117,17 @@ const Users = () => {
   const { setIsSyncInProgress, isSyncInProgress } = useSyncStatus()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const isMounted = useIsMounted()
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
+  const [globalFilterValue, setGlobalFilterValue] = useState('')
 
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
   useDocumentTitle(`${t('users.users')} - ${t('mermaid')}`)
+
+  useEffect(() => {
+    if (!isAppOnline) {
+      setGlobalFilterValue('')
+    }
+  }, [isAppOnline])
 
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
 
@@ -285,6 +294,8 @@ const Users = () => {
 
   const handleNewUserEmailOnChange = (event) => setNewUserEmail(event.target.value)
 
+  const handleGlobalFilterChange = (value) => setGlobalFilterValue(value)
+
   const handleTransferSampleUnitChange = (projectProfileId) => {
     setToUserProfileId(projectProfileId)
   }
@@ -378,135 +389,6 @@ const Users = () => {
     return Promise.resolve()
   }
 
-  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
-    document.body.addEventListener('click', () => {
-      if (isHelperTextShowing === true) {
-        setIsHelperTextShowing(false)
-      }
-    })
-  }, [isHelperTextShowing])
-
-  const tableColumnsForAdmin = useMemo(() => {
-    const handleInfoIconClick = (event, label) => {
-      if (currentHelperTextLabel === label) {
-        setIsHelperTextShowing(!isHelperTextShowing)
-      } else {
-        setIsHelperTextShowing(true)
-        setCurrentHelperTextLabel(label)
-      }
-
-      event.stopPropagation()
-    }
-
-    return [
-      {
-        Header: t('name'),
-        accessor: 'name',
-        sortType: reactTableNaturalSortReactNodesSecondChild,
-      },
-      {
-        Header: t('email'),
-        accessor: 'email',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: () => (
-          <>
-            <LabelContainer>
-              {adminHeaderText}
-              {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
-                <ColumnHeaderToolTip helperText={adminTooltipText} left="-5em" top="-13.7em" />
-              ) : null}
-              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'admin')}>
-                <IconInfo aria-label={t('info')} />
-              </IconButton>
-            </LabelContainer>
-          </>
-        ),
-        accessor: 'admin',
-        disableSortBy: true,
-      },
-      {
-        Header: () => (
-          <>
-            <LabelContainer>
-              {collectorHeaderText}
-              {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
-                <ColumnHeaderToolTip
-                  helperText={collectorTooltipText}
-                  left="-2.5em"
-                  top="-13.7em"
-                />
-              ) : null}
-              <IconButton
-                type="button"
-                onClick={(event) => handleInfoIconClick(event, 'collector')}
-              >
-                <IconInfo aria-label={t('info')} />
-              </IconButton>
-            </LabelContainer>
-          </>
-        ),
-
-        accessor: 'collector',
-        disableSortBy: true,
-      },
-      {
-        Header: () => (
-          <>
-            <LabelContainer>
-              {readOnlyHeaderText}
-              {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
-                <ColumnHeaderToolTip helperText={readOnlyTooltipText} left="-2.5em" top="-7.7em" />
-              ) : null}
-              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'readOnly')}>
-                <IconInfo aria-label={t('info')} />
-              </IconButton>
-            </LabelContainer>
-          </>
-        ),
-        accessor: 'readonly',
-        disableSortBy: true,
-      },
-      {
-        Header: t('users.unsubmitted_sample_units'),
-        accessor: 'unsubmittedSampleUnits',
-        disableSortBy: true,
-        align: 'right',
-      },
-      {
-        Header: t('users.remove_from_project'),
-        accessor: 'remove',
-        disableSortBy: true,
-      },
-    ]
-  }, [
-    isHelperTextShowing,
-    currentHelperTextLabel,
-    adminTooltipText,
-    collectorTooltipText,
-    readOnlyTooltipText,
-    adminHeaderText,
-    collectorHeaderText,
-    readOnlyHeaderText,
-    t,
-  ])
-
-  const tableColumnsForNonAdmin = useMemo(() => {
-    return [
-      {
-        Header: t('name'),
-        accessor: 'name',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: t('users.role'),
-        accessor: 'role',
-        sortType: reactTableNaturalSort,
-      },
-    ]
-  }, [t])
-
   const handleRoleChange = useCallback(
     ({ event, projectProfileId }) => {
       const roleCode = parseInt(event.target.value, 10)
@@ -565,6 +447,343 @@ const Users = () => {
       roleLabels,
     ],
   )
+
+  const content = isAppOnline ? (
+    <UsersTableSection
+      observerProfiles={observerProfiles}
+      currentUser={currentUser}
+      isAdminUser={isAdminUser}
+      isTableUpdating={isTableUpdating}
+      transferUserButtonText={transferUserButtonText}
+      noSampleUnitsText={noSampleUnitsText}
+      handleRoleChange={handleRoleChange}
+      openTransferSampleUnitsModal={openTransferSampleUnitsModal}
+      openRemoveUserModal={openRemoveUserModal}
+      roleLabels={roleLabels}
+      adminTooltipText={adminTooltipText}
+      collectorTooltipText={collectorTooltipText}
+      readOnlyTooltipText={readOnlyTooltipText}
+      adminHeaderText={adminHeaderText}
+      collectorHeaderText={collectorHeaderText}
+      readOnlyHeaderText={readOnlyHeaderText}
+      nameHeaderText={nameHeaderText}
+      emailHeaderText={emailHeaderText}
+      userRoleHeaderText={userRoleHeaderText}
+      unsubmittedSampleUnitsHeaderText={unsubmittedSampleUnitsHeaderText}
+      removeFromProjectHeaderText={removeFromProjectHeaderText}
+      globalFilterValue={globalFilterValue}
+      setGlobalFilterValue={setGlobalFilterValue}
+      infoLabelText={infoLabelText}
+    />
+  ) : (
+    <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
+  )
+  const toolbar = (
+    <>
+      <H3>{t('users.users')}</H3>
+      <InfoParagraph>
+        <P>{t('users.introduction')}</P>
+        <ButtonPrimary type="button" onClick={openUserRolesModal}>
+          <IconInfo /> {t('users.learn_more_roles')}
+        </ButtonPrimary>
+      </InfoParagraph>
+      {isAppOnline && (
+        <>
+          {isReadonlyUserWithActiveSampleUnits && isAdminUser && (
+            <InlineStyle>
+              <InlineMessage type="warning">
+                <p>{t('sample_units.warning_readonly_active_units')}</p>
+              </InlineMessage>
+            </InlineStyle>
+          )}
+          <ToolbarRowWrapper>
+            <FilterSearchToolbar
+              name={isAdminUser ? t('filters.by_name_email') : t('filters.by_name_role')}
+              globalSearchText={globalFilterValue}
+              handleGlobalFilterChange={handleGlobalFilterChange}
+            />
+            {isAdminUser && (
+              <InputAndButton
+                inputId="add-new-user-email"
+                labelText={t('users.add_user_email')}
+                isLoading={isTableUpdating}
+                buttonChildren={
+                  <>
+                    <IconPlus />
+                    {t('users.add_user_button')}
+                  </>
+                }
+                value={newUserEmail}
+                onChange={handleNewUserEmailOnChange}
+                buttonOnClick={addUser}
+              />
+            )}
+          </ToolbarRowWrapper>
+        </>
+      )}
+    </>
+  )
+
+  return (
+    <>
+      {idsNotAssociatedWithData.length ? (
+        <ContentPageLayout
+          isPageContentLoading={isPageLoading}
+          content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+        />
+      ) : (
+        <ContentPageLayout
+          isPageContentLoading={isPageLoading}
+          content={content}
+          toolbar={toolbar}
+        />
+      )}
+      <NewUserModal
+        isLoading={isTableUpdating}
+        isOpen={isSendEmailToNewUserPromptOpen}
+        onDismiss={closeSendEmailToNewUserPrompt}
+        newUser={newUserEmail}
+        onSubmit={addNewUserAndSendEmail}
+      />
+      <TransferSampleUnitsModal
+        isOpen={isTransferSampleUnitsModalOpen}
+        onDismiss={closeTransferSampleUnitsModal}
+        currentUserId={currentUser.id}
+        fromUser={fromUser}
+        userOptions={observerProfiles}
+        showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
+        handleTransferSampleUnitChange={handleTransferSampleUnitChange}
+        onSubmit={transferSampleUnits}
+      />
+      <RemoveUserModal
+        isOpen={isRemoveUserModalOpen}
+        isLoading={isTableUpdating}
+        onDismiss={closeRemoveUserModal}
+        onSubmit={removeUserProfile}
+        userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
+        projectName={projectName}
+      />
+      <UserRolesInfoModal isOpen={isUserRolesModalOpen} onDismiss={closeUserRolesModal} />
+    </>
+  )
+}
+
+function UsersTableSection({
+  observerProfiles,
+  currentUser,
+  isAdminUser,
+  isTableUpdating,
+  transferUserButtonText,
+  noSampleUnitsText,
+  handleRoleChange,
+  openTransferSampleUnitsModal,
+  openRemoveUserModal,
+  roleLabels,
+  adminTooltipText,
+  collectorTooltipText,
+  readOnlyTooltipText,
+  adminHeaderText,
+  collectorHeaderText,
+  readOnlyHeaderText,
+  nameHeaderText,
+  emailHeaderText,
+  userRoleHeaderText,
+  unsubmittedSampleUnitsHeaderText,
+  removeFromProjectHeaderText,
+  globalFilterValue,
+  setGlobalFilterValue,
+  infoLabelText,
+}) {
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
+
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'name',
+          desc: false,
+        },
+      ],
+      globalFilter: '',
+    }
+  }, [])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-usersTable`,
+    defaultValue: tableDefaultPrefs,
+  })
+
+  useEffect(() => {
+    const storedFilter =
+      typeof tableUserPrefs?.globalFilter === 'string' ? tableUserPrefs.globalFilter : ''
+
+    if (storedFilter !== globalFilterValue) {
+      setGlobalFilterValue(storedFilter)
+    }
+  }, [tableUserPrefs?.globalFilter, globalFilterValue, setGlobalFilterValue])
+
+  useEffect(() => {
+    const handleBodyClick = () => {
+      if (isHelperTextShowing) {
+        setIsHelperTextShowing(false)
+      }
+    }
+
+    document.body.addEventListener('click', handleBodyClick)
+
+    return () => {
+      document.body.removeEventListener('click', handleBodyClick)
+    }
+  }, [isHelperTextShowing])
+
+  const tableGlobalFilters = useCallback(
+    (rows, id, query) => {
+      const keys = isAdminUser
+        ? ['values.name.props.children', 'values.email']
+        : ['values.name', 'values.role']
+
+      const queryTerms = splitSearchQueryStrings(query)
+
+      if (!queryTerms || !queryTerms.length) {
+        return rows
+      }
+
+      const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
+      const filteredRowLength = tableFilteredRows.length
+
+      setSearchFilteredRowsLength((previousLength) =>
+        previousLength === filteredRowLength ? previousLength : filteredRowLength,
+      )
+
+      return tableFilteredRows
+    },
+    [isAdminUser],
+  )
+
+  const tableColumnsForAdmin = useMemo(() => {
+    const handleInfoIconClick = (event, label) => {
+      if (currentHelperTextLabel === label) {
+        setIsHelperTextShowing(!isHelperTextShowing)
+      } else {
+        setIsHelperTextShowing(true)
+        setCurrentHelperTextLabel(label)
+      }
+
+      event.stopPropagation()
+    }
+
+    return [
+      {
+        Header: nameHeaderText,
+        accessor: 'name',
+        sortType: reactTableNaturalSortReactNodesSecondChild,
+      },
+      {
+        Header: emailHeaderText,
+        accessor: 'email',
+        sortType: reactTableNaturalSort,
+      },
+      {
+        Header: () => (
+          <>
+            <LabelContainer>
+              {adminHeaderText}
+              {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
+                <ColumnHeaderToolTip helperText={adminTooltipText} left="-5em" top="-13.7em" />
+              ) : null}
+              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'admin')}>
+                <IconInfo aria-label={infoLabelText} />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
+        accessor: 'admin',
+        disableSortBy: true,
+      },
+      {
+        Header: () => (
+          <>
+            <LabelContainer>
+              {collectorHeaderText}
+              {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
+                <ColumnHeaderToolTip
+                  helperText={collectorTooltipText}
+                  left="-2.5em"
+                  top="-13.7em"
+                />
+              ) : null}
+              <IconButton
+                type="button"
+                onClick={(event) => handleInfoIconClick(event, 'collector')}
+              >
+                <IconInfo aria-label={infoLabelText} />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
+        accessor: 'collector',
+        disableSortBy: true,
+      },
+      {
+        Header: () => (
+          <>
+            <LabelContainer>
+              {readOnlyHeaderText}
+              {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
+                <ColumnHeaderToolTip helperText={readOnlyTooltipText} left="-2.5em" top="-7.7em" />
+              ) : null}
+              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'readOnly')}>
+                <IconInfo aria-label={infoLabelText} />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
+        accessor: 'readonly',
+        disableSortBy: true,
+      },
+      {
+        Header: unsubmittedSampleUnitsHeaderText,
+        accessor: 'unsubmittedSampleUnits',
+        disableSortBy: true,
+        align: 'right',
+      },
+      {
+        Header: removeFromProjectHeaderText,
+        accessor: 'remove',
+        disableSortBy: true,
+      },
+    ]
+  }, [
+    adminHeaderText,
+    adminTooltipText,
+    collectorHeaderText,
+    collectorTooltipText,
+    currentHelperTextLabel,
+    isHelperTextShowing,
+    nameHeaderText,
+    emailHeaderText,
+    readOnlyHeaderText,
+    readOnlyTooltipText,
+    removeFromProjectHeaderText,
+    unsubmittedSampleUnitsHeaderText,
+  ])
+
+  const tableColumnsForNonAdmin = useMemo(() => {
+    return [
+      {
+        Header: nameHeaderText,
+        accessor: 'name',
+        sortType: reactTableNaturalSort,
+      },
+      {
+        Header: userRoleHeaderText,
+        accessor: 'role',
+        sortType: reactTableNaturalSort,
+      },
+    ]
+  }, [nameHeaderText, userRoleHeaderText])
 
   const tableCellDataForAdmin = useMemo(() => {
     return observerProfiles.map((profile) => {
@@ -702,6 +921,8 @@ const Users = () => {
     isTableUpdating,
     transferUserButtonText,
     noSampleUnitsText,
+    openTransferSampleUnitsModal,
+    openRemoveUserModal,
   ])
 
   const tableCellDataForNonAdmin = useMemo(
@@ -717,43 +938,21 @@ const Users = () => {
     [observerProfiles, roleLabels],
   )
 
-  const tableDefaultPrefs = useMemo(() => {
+  const activeTableColumns = isAdminUser ? tableColumnsForAdmin : tableColumnsForNonAdmin
+  const activeTableData = isAdminUser ? tableCellDataForAdmin : tableCellDataForNonAdmin
+
+  const tableInitialState = useMemo(() => {
+    const initialPageSize =
+      tableUserPrefs.pageSize && Number.isFinite(tableUserPrefs.pageSize)
+        ? tableUserPrefs.pageSize
+        : PAGE_SIZE_DEFAULT
+
     return {
-      sortBy: [
-        {
-          id: 'name',
-          desc: false,
-        },
-      ],
-      globalFilter: '',
+      pageSize: initialPageSize,
+      sortBy: tableUserPrefs.sortBy,
+      globalFilter: tableUserPrefs.globalFilter,
     }
-  }, [])
-
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-usersTable`,
-    defaultValue: tableDefaultPrefs,
-  })
-
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = isAdminUser
-        ? ['values.name.props.children', 'values.email']
-        : ['values.name', 'values.role']
-
-      const queryTerms = splitSearchQueryStrings(query)
-
-      if (!queryTerms || !queryTerms.length) {
-        return rows
-      }
-
-      const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
-
-      setSearchFilteredRowsLength(tableFilteredRows.length)
-
-      return tableFilteredRows
-    },
-    [isAdminUser],
-  )
+  }, [tableUserPrefs])
 
   const {
     canNextPage,
@@ -772,13 +971,9 @@ const Users = () => {
     setGlobalFilter,
   } = useTable(
     {
-      columns: isAdminUser ? tableColumnsForAdmin : tableColumnsForNonAdmin,
-      data: isAdminUser ? tableCellDataForAdmin : tableCellDataForNonAdmin,
-      initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
-        sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter,
-      },
+      columns: activeTableColumns,
+      data: activeTableData,
+      initialState: tableInitialState,
       autoResetSortBy: false,
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -789,22 +984,37 @@ const Users = () => {
     usePagination,
   )
 
-  const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
-  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+  useEffect(() => {
+    const normalizedValue = globalFilterValue ?? ''
 
-  const _setSortByPrefs = useEffect(() => {
+    if ((globalFilter ?? '') !== normalizedValue) {
+      setGlobalFilter(normalizedValue)
+    }
+  }, [globalFilterValue, globalFilter, setGlobalFilter])
+
+  useEffect(() => {
+    const normalizedFilter = globalFilter ?? ''
+
+    if (normalizedFilter !== (globalFilterValue ?? '')) {
+      setGlobalFilterValue(normalizedFilter)
+    }
+  }, [globalFilter, globalFilterValue, setGlobalFilterValue])
+
+  useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
 
-  const _setFilterPrefs = useEffect(() => {
+  useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
-  const _setPageSizePrefs = useEffect(() => {
+  useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
 
-  const table = (
+  const handleRowsNumberChange = (event) => setPageSize(Number(event.target.value))
+
+  return (
     <>
       <StickyTableOverflowWrapper>
         <GenericStickyTable {...getTableProps()} cursor={isTableUpdating ? 'wait' : 'pointer'}>
@@ -857,7 +1067,6 @@ const Users = () => {
             })}
           </tbody>
         </GenericStickyTable>
-        <UserRolesInfoModal isOpen={isUserRolesModalOpen} onDismiss={closeUserRolesModal} />
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
@@ -879,92 +1088,7 @@ const Users = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
-      <NewUserModal
-        isLoading={isTableUpdating}
-        isOpen={isSendEmailToNewUserPromptOpen}
-        onDismiss={closeSendEmailToNewUserPrompt}
-        newUser={newUserEmail}
-        onSubmit={addNewUserAndSendEmail}
-      />
-      <TransferSampleUnitsModal
-        isOpen={isTransferSampleUnitsModalOpen}
-        onDismiss={closeTransferSampleUnitsModal}
-        currentUserId={currentUser.id}
-        fromUser={fromUser}
-        userOptions={observerProfiles}
-        showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
-        handleTransferSampleUnitChange={handleTransferSampleUnitChange}
-        onSubmit={transferSampleUnits}
-      />
-      <RemoveUserModal
-        isOpen={isRemoveUserModalOpen}
-        isLoading={isTableUpdating}
-        onDismiss={closeRemoveUserModal}
-        onSubmit={removeUserProfile}
-        userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
-        projectName={projectName}
-      />
     </>
-  )
-
-  const content = isAppOnline ? (
-    table
-  ) : (
-    <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
-  )
-  const toolbar = (
-    <>
-      <H3>{t('users.users')}</H3>
-      <InfoParagraph>
-        <P>{t('users.introduction')}</P>
-        <ButtonPrimary type="button" onClick={openUserRolesModal}>
-          <IconInfo /> {t('users.learn_more_roles')}
-        </ButtonPrimary>
-      </InfoParagraph>
-      {isAppOnline && (
-        <>
-          {isReadonlyUserWithActiveSampleUnits && isAdminUser && (
-            <InlineStyle>
-              <InlineMessage type="warning">
-                <p>{t('sample_units.warning_readonly_active_units')}</p>
-              </InlineMessage>
-            </InlineStyle>
-          )}
-          <ToolbarRowWrapper>
-            <FilterSearchToolbar
-              name={isAdminUser ? t('filters.by_name_email') : t('filters.by_name_role')}
-              globalSearchText={globalFilter}
-              handleGlobalFilterChange={handleGlobalFilterChange}
-            />
-            {isAdminUser && (
-              <InputAndButton
-                inputId="add-new-user-email"
-                labelText={t('users.add_user_email')}
-                isLoading={isTableUpdating}
-                buttonChildren={
-                  <>
-                    <IconPlus />
-                    {t('users.add_user_button')}
-                  </>
-                }
-                value={newUserEmail}
-                onChange={handleNewUserEmailOnChange}
-                buttonOnClick={addUser}
-              />
-            )}
-          </ToolbarRowWrapper>
-        </>
-      )}
-    </>
-  )
-
-  return idsNotAssociatedWithData.length ? (
-    <ContentPageLayout
-      isPageContentLoading={isPageLoading}
-      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
-    />
-  ) : (
-    <ContentPageLayout isPageContentLoading={isPageLoading} content={content} toolbar={toolbar} />
   )
 }
 
