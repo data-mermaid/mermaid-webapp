@@ -83,6 +83,7 @@ const GlobalLinks = ({ isAppOnline }) => {
 }
 
 const Header = ({ logout = () => {}, currentUser = undefined }) => {
+  const { t } = useTranslation()
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const openProfileModal = () => setIsProfileModalOpen(true)
   const closeProfileModal = () => setIsProfileModalOpen(false)
@@ -98,13 +99,17 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
-      <UserMenuButton onClick={openProfileModal}>Profile</UserMenuButton>
-      <UserMenuButton onClick={logout}>Logout</UserMenuButton>
+      <UserMenuButton onClick={openProfileModal} data-testid="profile-button">
+        {t('profile.profile')}
+      </UserMenuButton>
+      <UserMenuButton onClick={logout} data-testid="logout-button">
+        {t('buttons.logout')}
+      </UserMenuButton>
     </OfflineHide>
   )
 
   const userIconButton = (
-    <UserButton aria-label="User account dropdown">
+    <UserButton aria-label={t('buttons.user_account_dropdown')}>
       <UserIcon
         firstName={currentUserFirstName}
         lastName={currentUserLastName}
@@ -143,7 +148,11 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
               button={userIconButton}
               contents={
                 <UserMenu>
-                  {currentUser && <LoggedInAs>Logged in as {userDisplayName}</LoggedInAs>}
+                  {currentUser && (
+                    <LoggedInAs>
+                      {t('profile.logged_in_as')} {userDisplayName}
+                    </LoggedInAs>
+                  )}
                   <UserMenuDropDownContent />
                 </UserMenu>
               }
@@ -172,7 +181,11 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
               contents={
                 <UserMenu>
                   <GlobalLinks isAppOnline={isAppOnline} />
-                  {currentUser && <LoggedInAs>Logged in as {userDisplayName}</LoggedInAs>}
+                  {currentUser && (
+                    <LoggedInAs>
+                      {t('profile.logged_in_as')} {userDisplayName}
+                    </LoggedInAs>
+                  )}
                   <UserMenuDropDownContent />
                 </UserMenu>
               }

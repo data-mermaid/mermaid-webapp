@@ -149,7 +149,7 @@ const LoadingIndicator = ({
   const isDisplaySecondary = displaySecondary && secondaryMessage && isDisplaySecondaryTime
 
   return (
-    <LoadingIndicatorContainer {...props}>
+    <LoadingIndicatorContainer data-testid="loading-indicator" {...props}>
       <div className="loadingWrapper">
         <div className="objectWrapper">
           <div className="triangle">&nbsp;</div>

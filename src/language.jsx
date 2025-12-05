@@ -87,8 +87,6 @@ const error = {
   collectRecordsUnavailable: 'Sample unit data are currently unavailable.',
   collectRecordUnavailable: 'Sample unit data are currently unavailable.',
   collectRecordSubmitDisabled: 'Errors or warnings are preventing you from submitting',
-  duplicateNewUserAdd: 'User has already been added to project.',
-  emptyEmailAdd: 'Please enter an email address.',
   formValidation: {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
@@ -115,7 +113,6 @@ const error = {
   gfcrRevenueSave: 'Revenue has not been saved.',
   gfcrRevenueDelete: 'Revenue has not been removed.',
   idNotFoundUserAction: "Please check the URL in your browser's address bar.",
-  invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable: 'Management Regime records data are currently unavailable.',
   managementRegimeRecordUnavailable: 'Management Regime record data are currently unavailable.',
   notificationsUnavailable: 'Notifications are unavailable.',
@@ -145,7 +142,6 @@ const error = {
   ),
   pushSyncErrorMessageUnsavedData: 'The following have not been saved: ',
   pushSyncErrorMessageStatusCode500: 'MERMAID sync error: please contact support@datamermaid.org',
-  getUserRoleChangeFailureMessage: (userName) => `${userName}'s role has not been changed.`,
   pageUnavailableOffline: 'This page is unavailable offline.',
   pageNotFound: 'This page cannot be found.',
   pageNotFoundRecovery: 'Make sure the URL is correct.',
@@ -155,7 +151,6 @@ const error = {
   idNotFoundRecovery:
     'It might have been deleted, you do not have permission to view it, or the URL might be wrong.',
   homePageNavigation: 'Go back to the home page.',
-  transferSampleUnitsUnavailable: 'Sample units failed to transfer.',
   onPageWarningAbove: 'Warning or error',
   onPageWarningBelow: 'Warning or error',
   errorBoundaryPrimary: 'A part of this page did not load correctly.',
@@ -178,8 +173,6 @@ const success = {
   getProjectTurnOnOfflineReadySuccess: (projectName) => `${projectName} is now offline ready`,
   getProjectTurnOffOfflineReadySuccess: (projectName) =>
     `${projectName} has been removed from being offline ready`,
-  getUserRoleChangeSuccessMessage: ({ userName, role }) =>
-    `${userName}'s role is now set to ${role}.`,
   gfcrIndicatorSetSave: 'Indicator set saved.',
   gfcrIndicatorSetDelete: 'Indicator set deleted.',
   gfcrFinanceSolutionSave: 'Finance solution row saved.',
@@ -188,9 +181,6 @@ const success = {
   gfcrInvestmentDelete: 'Investment row removed.',
   gfcrRevenueSave: 'Revenue row saved.',
   gfcrRevenueDelete: 'Revenue row removed.',
-  newUserAdd: 'New user added.',
-  newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
-  userRemoved: 'User removed',
   getMermaidDataSaveSuccess: ({ mermaidDataTypeLabel, isAppOnline }) =>
     isAppOnline
       ? `The ${mermaidDataTypeLabel} has been saved on your computer and online.`
@@ -198,8 +188,6 @@ const success = {
   getMermaidDataDeleteSuccess: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has been deleted from your computer and online.`,
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
-  projectStatusSaved: `Test project selection saved.`,
-  userProfileUpdate: 'Profile updated',
 }
 
 const deleteRecord = (pageName) => {
@@ -242,7 +230,6 @@ const createNewOptionModal = {
   cancel: 'Cancel',
   back: 'Back',
   details: 'Details',
-  user: 'User',
   project: 'Project',
   submit: 'Send to MERMAID for review',
 }
@@ -446,33 +433,6 @@ const protocolTitles = {
 }
 
 const pages = {
-  admin: {
-    accessible_information: 'Accessible Information',
-    admin: 'Admin',
-    collector: 'Collector',
-    readOnly: 'Read-Only',
-    projectManagement: 'Project management',
-    projectInfo: {
-      edit: 'Edit project info',
-      setUpDataSharing: 'Set up data sharing policy',
-      addOrRemoveProjectMembers: 'Add or remove project members',
-      viewMemberEmail: 'View project member email',
-      delete: 'Delete a project',
-    },
-    dataCollection: {
-      title: 'Data collection and management',
-      addUpdateSiteOrRegimes: 'Add/update site or management regimes',
-      deleteSiteOrRegimes: 'Delete site or management regimes',
-      downloadSitesAndRegimes: 'Download sites and management regimes',
-      createValidateSubmitSampleUnits: 'Create, validate, and submit sample units',
-      deleteSampleUnits: 'Delete unsubmitted sample units',
-      editSampleUnits: 'Edit submitted sample units',
-      transferSampleUnits: 'Transfer unsubmitted sample units',
-      downloadSampleUnits: 'Download submitted sample units',
-      viewObserversAndSampleUnits: 'View observers and sample units overview',
-      viewRegimesOverview: 'View management regimes overview',
-    },
-  },
   userDoesntHaveProjectAccess: {
     title: 'You do not have permission to access this project.',
     getSubtitle: (projectName) => {
@@ -522,25 +482,6 @@ const pages = {
         For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search “North Shore” to find records that have exactly the words North Shore (records with South Shore would not match).
       `,
     },
-  },
-  userTable: {
-    title: 'Users',
-    introductionParagraph:
-      'MERMAID gives you the ability to control who can see and access your data.',
-    moreInfoTitle: 'User Roles',
-    filterToolbarTextForAdmin: 'Filter this table by name or email',
-    filterToolbarTextForNonAdmin: 'Filter this table by name or role',
-    searchEmailToolbarText: 'Enter email address of user to add',
-    warningReadOnlyUser: `Some Sample Units cannot be submitted because the user is in read-only mode.`,
-    newUserModalTitle: `Invite new user`,
-    newUserModalText: `will need to sign up because they're not already a MERMAID user.`,
-    transferSampleUnitsModalTitle: `Transfer Sample Units`,
-    warningTransferSampleUnits: `You must transfer unsubmitted sample units before you can remove the user from project.`,
-    deleteUnsyncedModalTitle: 'Delete Unsynced Sample Units',
-    deleteUnsyncedButton: 'Delete Unsynced Sample Units',
-    removeUserModalTitle: 'Remove User From Project',
-    removeUserButton: 'Remove User',
-    cancelButton: 'Cancel',
   },
   submittedForm: {
     sampleUnitsAreReadOnly: 'Submitted sample units are read-only.',
