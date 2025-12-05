@@ -64,24 +64,18 @@ import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 import UserRolesInfoModal from '../../UserRolesInfoModal'
 import { UserIcon } from '../../UserIcon/UserIcon'
 
-const useRoleLabels = () => {
-  const { t } = useTranslation()
-
-  return (roleCode) => {
-    const roleLabels = {
-      10: t('users.roles.read_only'),
-      50: t('users.roles.collector'),
-      90: t('users.roles.admin'),
-    }
-    return roleLabels[roleCode]
-  }
-}
-
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
 
 const Users = () => {
   const { t } = useTranslation()
-  const getRoleLabel = useRoleLabels()
+  const roleLabels = useMemo(
+    () => ({
+      10: t('users.roles.read_only'),
+      50: t('users.roles.collector'),
+      90: t('users.roles.admin'),
+    }),
+    [t],
+  )
 
   const adminTooltipText = t('users.roles.admin_description')
   const collectorTooltipText = t('users.roles.collector_description')
@@ -527,7 +521,7 @@ const Users = () => {
         })
         .then((editedProfile) => {
           const editedUserName = editedProfile.profile_name
-          const editedUserRole = getRoleLabel(editedProfile.role)
+          const editedUserRole = roleLabels[editedProfile.role]
 
           const updatedObserverProfiles = observerProfiles.map((observer) =>
             observer.id === editedProfile.id ? editedProfile : observer,
@@ -562,7 +556,14 @@ const Users = () => {
           setIsTableUpdating(false)
         })
     },
-    [databaseSwitchboardInstance, observerProfiles, projectId, handleHttpResponseError, t],
+    [
+      databaseSwitchboardInstance,
+      observerProfiles,
+      projectId,
+      handleHttpResponseError,
+      t,
+      roleLabels,
+    ],
   )
 
   const tableCellDataForAdmin = useMemo(() => {
@@ -710,10 +711,10 @@ const Users = () => {
 
         return {
           name: profile_name,
-          role: getRoleLabel(role),
+          role: roleLabels[role],
         }
       }),
-    [observerProfiles],
+    [observerProfiles, roleLabels],
   )
 
   const tableDefaultPrefs = useMemo(() => {
