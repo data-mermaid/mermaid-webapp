@@ -78,21 +78,7 @@ const Users = () => {
     [t],
   )
 
-  const adminTooltipText = t('users.roles.admin_description')
-  const collectorTooltipText = t('users.roles.collector_description')
-  const readOnlyTooltipText = t('users.roles.read_only_description')
-  const adminHeaderText = t('users.roles.admin')
-  const collectorHeaderText = t('users.roles.collector')
-  const readOnlyHeaderText = t('users.roles.read_only')
-  const infoLabelText = t('info')
-  const nameHeaderText = t('name')
-  const emailHeaderText = t('email')
-  const userRoleHeaderText = t('users.role')
-  const unsubmittedSampleUnitsHeaderText = t('users.unsubmitted_sample_units')
-  const removeFromProjectHeaderText = t('users.remove_from_project')
   const userRecordsUnavailableText = t('users.user_records_unavailable')
-  const transferUserButtonText = t('buttons.transfer')
-  const noSampleUnitsText = t('sample_units.none')
 
   const [fromUser, setFromUser] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -124,11 +110,11 @@ const Users = () => {
 
   useDocumentTitle(`${t('users.users')} - ${t('mermaid')}`)
 
-  useEffect(() => {
-    if (!isAppOnline) {
-      setGlobalFilterValue('')
-    }
-  }, [isAppOnline])
+  // useEffect(() => {
+  //   if (!isAppOnline) {
+  //     setGlobalFilterValue('')
+  //   }
+  // }, [isAppOnline])
 
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
 
@@ -303,6 +289,7 @@ const Users = () => {
 
   const transferSampleUnits = () => {
     setIsSyncInProgress(true) // hack to get collect record count to update, also shows a loader
+    closeTransferSampleUnitsModal()
 
     const fromUserProfileId = fromUser.profile
 
@@ -455,26 +442,12 @@ const Users = () => {
       currentUser={currentUser}
       isAdminUser={isAdminUser}
       isTableUpdating={isTableUpdating}
-      transferUserButtonText={transferUserButtonText}
-      noSampleUnitsText={noSampleUnitsText}
       handleRoleChange={handleRoleChange}
       openTransferSampleUnitsModal={openTransferSampleUnitsModal}
       openRemoveUserModal={openRemoveUserModal}
       roleLabels={roleLabels}
-      adminTooltipText={adminTooltipText}
-      collectorTooltipText={collectorTooltipText}
-      readOnlyTooltipText={readOnlyTooltipText}
-      adminHeaderText={adminHeaderText}
-      collectorHeaderText={collectorHeaderText}
-      readOnlyHeaderText={readOnlyHeaderText}
-      nameHeaderText={nameHeaderText}
-      emailHeaderText={emailHeaderText}
-      userRoleHeaderText={userRoleHeaderText}
-      unsubmittedSampleUnitsHeaderText={unsubmittedSampleUnitsHeaderText}
-      removeFromProjectHeaderText={removeFromProjectHeaderText}
       globalFilterValue={globalFilterValue}
       setGlobalFilterValue={setGlobalFilterValue}
-      infoLabelText={infoLabelText}
     />
   ) : (
     <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
@@ -574,30 +547,33 @@ function UsersTableSection({
   currentUser,
   isAdminUser,
   isTableUpdating,
-  transferUserButtonText,
-  noSampleUnitsText,
   handleRoleChange,
   openTransferSampleUnitsModal,
   openRemoveUserModal,
   roleLabels,
-  adminTooltipText,
-  collectorTooltipText,
-  readOnlyTooltipText,
-  adminHeaderText,
-  collectorHeaderText,
-  readOnlyHeaderText,
-  nameHeaderText,
-  emailHeaderText,
-  userRoleHeaderText,
-  unsubmittedSampleUnitsHeaderText,
-  removeFromProjectHeaderText,
   globalFilterValue,
   setGlobalFilterValue,
-  infoLabelText,
 }) {
+  const { t } = useTranslation()
+  const adminTooltipText = t('users.roles.admin_description')
+  const collectorTooltipText = t('users.roles.collector_description')
+  const readOnlyTooltipText = t('users.roles.read_only_description')
+  const infoLabelText = t('info')
+  const nameHeaderText = t('name')
+  const emailHeaderText = t('email')
+  const userRoleHeaderText = t('users.role')
+  const unsubmittedSampleUnitsHeaderText = t('users.unsubmitted_sample_units')
+  const removeFromProjectHeaderText = t('users.remove_from_project')
+  const transferUserButtonText = t('buttons.transfer')
+  const noSampleUnitsText = t('sample_units.none')
+  const adminHeaderText = t('users.roles.admin')
+  const collectorHeaderText = t('users.roles.collector')
+  const readOnlyHeaderText = t('users.roles.read_only')
+
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
+  const [hasInitializedStoredFilter, setHasInitializedStoredFilter] = useState(false)
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -611,19 +587,31 @@ function UsersTableSection({
     }
   }, [])
 
+  const tablePrefsKey = useMemo(() => `${currentUser.id}-usersTable`, [currentUser.id])
+
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-usersTable`,
+    key: tablePrefsKey,
     defaultValue: tableDefaultPrefs,
   })
 
+  // Clear the guard when the prefs key flips so a new user can load its saved filter.
   useEffect(() => {
+    setHasInitializedStoredFilter(false)
+  }, [tablePrefsKey])
+
+  // Hydrate once per key to stop the FilterSearchToolbar loop and preserve active edits.
+  useEffect(() => {
+    if (hasInitializedStoredFilter) {
+      return
+    }
+
     const storedFilter =
       typeof tableUserPrefs?.globalFilter === 'string' ? tableUserPrefs.globalFilter : ''
 
-    if (storedFilter !== globalFilterValue) {
-      setGlobalFilterValue(storedFilter)
-    }
-  }, [tableUserPrefs?.globalFilter, globalFilterValue, setGlobalFilterValue])
+    // Avoid overriding in-progress edits by hydrating stored prefs once per table key.
+    setGlobalFilterValue(storedFilter)
+    setHasInitializedStoredFilter(true)
+  }, [tableUserPrefs?.globalFilter, setGlobalFilterValue, hasInitializedStoredFilter])
 
   useEffect(() => {
     const handleBodyClick = () => {
@@ -995,14 +983,6 @@ function UsersTableSection({
   }, [globalFilterValue, globalFilter, setGlobalFilter])
 
   useEffect(() => {
-    const normalizedFilter = globalFilter ?? ''
-
-    if (normalizedFilter !== (globalFilterValue ?? '')) {
-      setGlobalFilterValue(normalizedFilter)
-    }
-  }, [globalFilter, globalFilterValue, setGlobalFilterValue])
-
-  useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
 
@@ -1111,26 +1091,11 @@ UsersTableSection.propTypes = {
   }).isRequired,
   isAdminUser: PropTypes.bool.isRequired,
   isTableUpdating: PropTypes.bool.isRequired,
-  transferUserButtonText: PropTypes.string.isRequired,
-  noSampleUnitsText: PropTypes.string.isRequired,
   handleRoleChange: PropTypes.func.isRequired,
   openTransferSampleUnitsModal: PropTypes.func.isRequired,
   openRemoveUserModal: PropTypes.func.isRequired,
-  roleLabels: PropTypes.objectOf(PropTypes.string).isRequired,
-  adminTooltipText: PropTypes.string.isRequired,
-  collectorTooltipText: PropTypes.string.isRequired,
-  readOnlyTooltipText: PropTypes.string.isRequired,
-  adminHeaderText: PropTypes.string.isRequired,
-  collectorHeaderText: PropTypes.string.isRequired,
-  readOnlyHeaderText: PropTypes.string.isRequired,
-  nameHeaderText: PropTypes.string.isRequired,
-  emailHeaderText: PropTypes.string.isRequired,
-  userRoleHeaderText: PropTypes.string.isRequired,
-  unsubmittedSampleUnitsHeaderText: PropTypes.string.isRequired,
-  removeFromProjectHeaderText: PropTypes.string.isRequired,
   globalFilterValue: PropTypes.string.isRequired,
   setGlobalFilterValue: PropTypes.func.isRequired,
-  infoLabelText: PropTypes.string.isRequired,
 }
 
 export default Users
