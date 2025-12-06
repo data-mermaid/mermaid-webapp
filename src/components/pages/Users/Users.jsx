@@ -1094,6 +1094,7 @@ UsersTableSection.propTypes = {
   handleRoleChange: PropTypes.func.isRequired,
   openTransferSampleUnitsModal: PropTypes.func.isRequired,
   openRemoveUserModal: PropTypes.func.isRequired,
+  roleLabels: PropTypes.objectOf(PropTypes.string).isRequired,
   globalFilterValue: PropTypes.string.isRequired,
   setGlobalFilterValue: PropTypes.func.isRequired,
 }
