@@ -132,6 +132,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
             {isAppOnline && (
               <HideShow
                 closeOnClickWithin={false}
+                id="gtm-bell-notifications"
                 button={
                   <HeaderButtonThatLooksLikeLink>
                     <BiggerIconBell />
