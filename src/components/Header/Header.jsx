@@ -34,7 +34,7 @@ const GlobalLinks = ({ isAppOnline }) => {
   const { t } = useTranslation()
   const handleReferenceMouseOver = (event) => {
     // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
-    // (eg a user has just added a new fish species and it has been approved, but the service worker has cahed the old one)
+    // (eg a user has just added a new fish species and it has been approved, but the service worker has cached the old one)
     // we use a hover event instead of click so devs can confirm the strategy, and the hover behaviour shows the href in the
     // browser bottom left corner that will
     // be followed onClick (instead of a stale one from the last click)
@@ -123,8 +123,8 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
   return (
     <>
       <StyledHeader>
-        <Link to="/projects">
-          <LogoImg src={MermaidCollectLogo} alt="MERMAID Collect Logo" />
+        <Link to="/projects" id="gtm-collect-logo">
+          <LogoImg id="gtm-collect-logo-img" src={MermaidCollectLogo} alt={t('mermaid_logo')} />
         </Link>
         <GlobalNav>
           <div className="desktop">
@@ -132,10 +132,10 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
             {isAppOnline && (
               <HideShow
                 closeOnClickWithin={false}
-                id="gtm-bell-notifications"
+                id="gtm-bell-notifications-hideshow"
                 button={
-                  <HeaderButtonThatLooksLikeLink>
-                    <BiggerIconBell />
+                  <HeaderButtonThatLooksLikeLink id="gtm-bell-notifications">
+                    <BiggerIconBell id="gtm-bell-notifications-icon" />
                     {notifications.length ? (
                       <NotificationIndicator>&bull;</NotificationIndicator>
                     ) : undefined}

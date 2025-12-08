@@ -52,19 +52,33 @@ const Footer = () => {
       </StyledToggleLabel>
       <FooterNav>
         <HelpContainer ref={dropdownRef}>
-          <TextLink type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+          <TextLink
+            id="gtm-help-pdf-dropdown-toggle"
+            type="button"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
             Help (PDF) ▲
           </TextLink>
           {isDropdownOpen && (
             <HelpLinksWrapper>
               <li>
-                <a href="/MERMAID-quick-start-guide-EN.pdf" target="_blank" rel="noreferrer">
+                <a
+                  href="/MERMAID-quick-start-guide-EN.pdf"
+                  target="_blank"
+                  id="gtm-help-pdf-english"
+                  rel="noreferrer"
+                >
                   English
                 </a>
               </li>
 
               <li value="Bahasa Indonesia">
-                <a href="/MERMAID-quick-start-guide-ID.pdf" target="_blank" rel="noreferrer">
+                <a
+                  href="/MERMAID-quick-start-guide-ID.pdf"
+                  target="_blank"
+                  id="gtm-help-pdf-indonesian"
+                  rel="noreferrer"
+                >
                   Bahasa Indonesia
                 </a>
               </li>
