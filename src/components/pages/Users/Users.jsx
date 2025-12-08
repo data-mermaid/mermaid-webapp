@@ -110,12 +110,6 @@ const Users = () => {
 
   useDocumentTitle(`${t('users.users')} - ${t('mermaid')}`)
 
-  // useEffect(() => {
-  //   if (!isAppOnline) {
-  //     setGlobalFilterValue('')
-  //   }
-  // }, [isAppOnline])
-
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
 
   const [isUserRolesModalOpen, setIsUserRolesModalOpen] = useState(false)
