@@ -83,7 +83,7 @@ const InputNoRowWithLabelAndValidation = ({
             type="button"
             onClick={(event) => handleInfoIconClick(event, label)}
           >
-            <IconInfo aria-label="info" />
+            <IconInfo aria-label="info" id={`gtm-help-icon-svg-${id}`} />
           </IconButton>
         ) : null}
       </LabelContainer>
