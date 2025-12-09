@@ -15,6 +15,7 @@
     "submit": "Submit",
     "view": "View",
     "export_to_xlsx": "Export To XLSX",
+    "suggestion_review_request": "Send to MERMAID for review",
     "send_email": "Send Email",
     "select": "Select",
     "transfer": "Transfer",
@@ -27,8 +28,7 @@
   "info": "info",
   "contact_us": "Contact us for help",
   "forms": {
-    "required_field": "This field is required",
-    "submit_for_review": "Send to MERMAID for review"
+    "required_field": "This field is required"
   },
   "toasts": {
     "export_error": "There was an error exporting the report.",
@@ -51,6 +51,7 @@
     "remove_photo": "Remove photo",
     "remove_photo_confirmation": "Are you sure you want to remove this photo?",
     "review_this_photo": "Review this photo",
+    "duplicate": "Duplicate",
     "annotation": {
       "confirm": "Confirm",
       "confirmed": "Confirmed",
@@ -95,6 +96,14 @@
       "description": "Through a partnership with <a /> from the University of California San Diego and Scripps Institution of Oceanography, MERMAID now includes AI-based classification using a pyspacer deep learning model. This integration enables fast, scalable analysis of benthic photos so that you can generate insights quickly and consistently with machine learning and AI.",
       "use_ai_button": "Classify photos with AI (Beta)",
       "use_manual_observations_button": "Enter observations manually"
+    },
+    "validations": {
+      "image_names_interval": "(1)[{{firstImgName}}];(2)[{{firstImgName}} and {{secondImgName}}];(3)[{{firstImgName}}, {{secondImgName}}, and {{thirdImgName}}];(4-inf)[{{firstImgName}}, {{secondImgName}}, {{thirdImgName}}, and {{moreCount}} more]",
+      "duplicate_images_one": "{{imageNames}} is a duplicate in {{location}}.",
+      "duplicate_images_other": "{{imageNames}} are duplicates in {{location}}.",
+      "duplicate_submitted_transects": "Submitted benthic photo quadrat transects",
+      "duplicate_this_transect": "this benthic photo quadrat transect",
+      "duplicate_other_transects": "unsubmitted benthic photo quadrat transects with other users"
     }
   },
   "map_tooling": {
@@ -151,7 +160,6 @@
     "sort_by": "Sort By",
     "last_updated_date": "Last Updated Date",
     "project_name": "Project Name",
-    "country": "Country",
     "new_project": "New Project",
     "name_of_project": "Name of project",
     "loading_indicator": "projects list loading indicator",
@@ -160,19 +168,47 @@
     "add_remove_members": "Add or remove project members",
     "view_member_emails": "View project member email",
     "delete_project": "Delete a project",
+    "delete": "Delete project",
+    "user_confirm_delete": "Are you sure you want to delete {{projectName}}?",
+    "confirm_delete": "Delete {{projectName}}",
+    "delete_sample_units_notice": "You must delete all the sample units in this project to delete this project.",
+    "delete_other_users_notice": "Other users must be removed from this project before deletion.",
+    "cannot_delete": "You cannot delete {{projectName}} because it is used in the following sample units:",
+    "remove_before_delete": "You have to remove {{projectName}} from all sample units before you can delete it.",
     "errors": {
       "project_name_exists": "Project name already exists in MERMAID",
       "data_unavailable": "Project data is currently unavailable.",
       "duplicate_name": "A project with the same name already exists.",
       "not_saved": "Project could not be saved",
-      "not_available": "Projects are currently unavailable."
+      "not_available": "Projects are currently unavailable.",
+      "not_deleted": "This project has not been deleted."
     },
     "success": {
       "project_copied": "Project copied",
       "project_created": "Project created",
       "project_saved": "Project saved",
+      "project_deleted": "Project deleted",
       "test_project_status_saved": "Test project selection saved."
-    }
+    },
+    "project_info": "Project info",
+    "no_notes": "No notes for this Project",
+    "no_organizations": "This Project has no organizations.",
+    "project_admin_one": "Project Admin",
+    "project_admin_other": "Project Admins",
+    "other_project_member_one": "Other Project Member",
+    "other_project_member_other": "Other Project Members",
+    "project_last_updated": "Project Last Updated",
+    "country_one": "Country",
+    "country_other": "Countries"
+  },
+  "delete_project_modal": {
+    "title": "Delete project",
+    "prompt": "Are you sure you want to delete {{projectName}}?",
+    "yes": "Delete {{projectName}}",
+    "has_sample_units": "You must delete all the sample units in this project to delete this project.",
+    "has_other_users": "Other users must be removed from this project before deletion.",
+    "cannot_delete": "You cannot delete {{projectName}} because it is used in the following sample units:",
+    "remove_before_delete": "You have to remove {{projectName}} from all sample units before you can delete it."
   },
   "search": {
     "no_results": "No results found"
@@ -279,13 +315,21 @@
   "go_to_explore_this_project": "View this project on MERMAID Explore",
   "gfcr": {
     "title": "Global Fund for Coral Reefs (GFCR)",
-    "add_gfcr_indicators": "GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world.",
-    "remove_gfcr_Indicators": "Removing GFCR indicators from this project will not delete them, but just hide them.",
-    "disabled_gfcr_info": "Disabling GFCR Indicators for this project will not delete them, but just hide them from the <a />. No data will be lost. You can re-enable them at any time.",
+    "partnership": "GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world.",
+    "remove_info": "Removing GFCR indicators from this project will not delete them, but just hide them.",
+    "disabled_info": "Disabling GFCR Indicators for this project will not delete them, but just hide them from the <a />. No data will be lost. You can re-enable them at any time.",
     "buttons": {
       "go_to_gfcr": "Go to GFCR Indicators",
-      "disable_gfcr": "Disable GFCR Indicators",
-      "enable_gfcr": "Enable GFCR Indicators for this project"
+      "enable_gfcr": "Enable GFCR Indicators for this project",
+      "disable_gfcr": "Disable GFCR Indicators"
+    },
+    "success": {
+      "indicators_enabled": "Added GFCR indicators to project",
+      "indicators_disabled": "Removed GFCR indicators from project"
+    },
+    "errors": {
+      "indicators_enable_failed": "Could not add GFCR indicators to the project.",
+      "indicators_disable_failed": "Could not remove GFCR indicators from the project."
     }
   },
   "protocol_titles": {
@@ -355,6 +399,7 @@
   "biomass": "Biomass",
   "validations": "Validations",
   "filters": {
+    "method": "Filter Method",
     "search_helper_text": "<b>Use double quotes to search exact phrases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
     "projects_by_name_year": "Filter Projects By Name or Country",
     "by_name_year": "Filter this table by name or year",
@@ -447,6 +492,26 @@
     "sheltered_reef_slope": "Sheltered Reef Slope",
     "small_reef": "Small Reef",
     "terrestrial_reef_flat": "Terrestrial Reef Flat"
+  },
+  "organizations": {
+    "suggest_new": "Suggest a new organization",
+    "new_organization_name": "New organization name",
+    "approved_and_added_to_project": "If your organization is approved, it'll be automatically added to your Project.",
+    "organizations": "Organizations",
+    "type_to_search": "Type to search for an organization.",
+    "no_organization_found": "No organization found.",
+    "suggest_new_organization": "Suggest a new organization to MERMAID...",
+    "remove_organization": "Remove organization from Project",
+    "organization_added": "Organization added."
+  },
+  "citation": {
+    "edit_suggested": "Edit Suggested Citation",
+    "copy_and_paste": "Copy and paste project info into your citation",
+    "citation_preview": "Citation Preview",
+    "use_default": "Use Default Citation",
+    "update": "Update Citation",
+    "suggested": "Suggested Citation",
+    "more_info": "Citation to suggest for all uses of your project data. This citation will be displayed on MERMAID Explore and with any other data access method."
   },
   "data_sharing": {
     "data_sharing": "Data Sharing",
