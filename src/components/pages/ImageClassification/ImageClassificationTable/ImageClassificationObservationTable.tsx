@@ -456,6 +456,7 @@ const ImageClassificationObservationTable = ({
           const { file, distilledAnnotationData, numSubRows, totalUnknown } = image
           const imgId = file.id
           const isDuplicatedImage = getDuplicateValidationInfo(collectRecord, imgId)
+          const isDuplicatedImageShowing = areValidationsShowing && isDuplicatedImage
 
           if (
             numSubRows === 0 ||
@@ -473,7 +474,7 @@ const ImageClassificationObservationTable = ({
                       ? 'pointer'
                       : 'default'
                   }
-                  isDuplicatedImageShowing={isDuplicatedImage}
+                  isDuplicatedImageShowing={isDuplicatedImageShowing}
                 >
                   <ImageWrapper>
                     {file.thumbnail ? (
@@ -544,7 +545,6 @@ const ImageClassificationObservationTable = ({
                   observationsPropertyName: 'obs_benthic_photo_quadrats',
                 })
 
-                const isDuplicatedImageShowing = areValidationsShowing && isDuplicatedImage
                 let trMessageType: MessageType
 
                 if (hasObservationErrorValidation) {
