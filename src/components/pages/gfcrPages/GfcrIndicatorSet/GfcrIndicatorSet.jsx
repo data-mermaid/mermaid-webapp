@@ -56,7 +56,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const indicatorSetSaveSuccessText = t('gfcr.success.indicator_set_save')
   const indicatorSetSaveFailedText = t('gfcr.errors.indicator_set_save_failed')
   const indicatorSetsUnavailableText = t('gfcr.errors.indicator_sets_unavailable')
-  const formErrorTitleText = t('gfcr.errors.form_errors')
+  const formErrorTitleText = t('gfcr.form_errors')
 
   const { indicatorSetId, projectId } = useParams()
   const navigate = useNavigate()

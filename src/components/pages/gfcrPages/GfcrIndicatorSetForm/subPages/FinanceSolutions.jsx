@@ -35,7 +35,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
   )
   const sectorHeaderText = t('gfcr.forms.finance_solutions.sector')
   const usedAnIncubatorHeaderText = t('gfcr.forms.finance_solutions.used_an_incubator')
-  const gender2xCriteriaHeaderText = t('gfcr.forms.finance_solutions.gender_2x_criteria')
+  const gender2xCriteriaHeaderText = t('gfcr.forms.finance_solutions.gender_program_criteria')
   const localEnterpriseHeaderText = t('gfcr.forms.finance_solutions.local_enterprise')
   const sustainableFinanceMechanismsHeaderText = t(
     'gfcr.forms.finance_solutions.sustainable_finance_mechanisms',

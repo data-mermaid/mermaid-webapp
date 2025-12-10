@@ -283,10 +283,10 @@
     "businesses_finance_solutions": "Businesses / Finance solutions",
     "investments": "Investments",
     "revenues": "Revenues",
+    "form_errors": "Form errors:",
     "errors": {
       "indicator_sets_unavailable": "GFCR indicator sets are currently unavailable.",
       "indicator_set_save_failed": "There was an error saving the indicator set.",
-      "form_errors": "Form errors:"
     },
     "success": {
       "indicator_set_save": "Indicator set saved successfully."
@@ -400,17 +400,15 @@
         "business_finance_solution_name": "Business / Finance solution name",
         "sector": "Sector",
         "used_an_incubator": "Used an incubator",
-        "gender_2x_criteria": "Gender 2X criteria",
+        "gender_program_criteria": "Gender 2X criteria",
         "local_enterprise": "Local enterprise",
         "sustainable_finance_mechanisms": "Sustainable finance mechanisms",
         "update": "Update Finance Solution",
-        "name": "Business / Finance solution name",
         "name_helper": "Enter the name of each business or financial solution financed by the GFCR Programme separately. You may copy solutions from previous reports. Indicators F8, F9, and F10 will be disaggregated by both solution and sector. New solutions financed by the Programme will be added here progressively.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
         "sector_helper": "Enter the sector of the solution in this GFCR Programme. Refer to the Annex 3 of the GFCR M&E Toolkit for details.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
         "used_an_incubator_helper": "Indicate if the solution utilized an incubator for early-stage support and access to resources. Specify whether the incubator was funded by GFCR.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
         "local_enterprise_helper": "Defined as a small to medium-sized business operating within the specific location of the GFCR Programme. This applies to F9.3 (Amount (and %) of revenue in local enterprises), which measures the revenue that is retained within a local geography, differing from revenue that is transferred overseas.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
-        "gender_smart": "Gender 2X criteria",
-        "gender_smart_helper": "Indicate if the solution qualifies under at least one 2X Challenge Criterion. Refer to the <2xLink>2X Criteria Reference Guide</2xLink> for details. This applies to F10 (Number of gender-smart investments), which measures GFCR support for gender equality through investments meeting 2X Challenge standards.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
+        "gender_program_criteria_helper": "Indicate if the solution qualifies under at least one 2X Challenge Criterion. Refer to the <2xLink>2X Criteria Reference Guide</2xLink> for details. This applies to F10 (Number of gender-smart investments), which measures GFCR support for gender equality through investments meeting 2X Challenge standards.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
         "sustainable_finance_mechanisms_helper": "Financing that generates a significant, recurring revenue stream directed toward conservation or sustainable ecosystem management. This applies to F8.5 (Number and type of sustainable finance mechanisms). Select all applicable options, as one solution may include multiple mechanisms.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
         "save": "Save Business / Finance Solution Row"
       },

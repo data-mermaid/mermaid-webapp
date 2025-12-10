@@ -257,7 +257,7 @@ const FinanceSolutionModal = ({
       <form id="finance-solution-form" onSubmit={formik.handleSubmit}>
         <StyledModalInputRow>
           <InputNoRowWithLabelAndValidation
-            label={t('gfcr.forms.finance_solutions.name')}
+            label={t('gfcr.forms.finance_solutions.business_finance_solution_name')}
             id="finance-solution-input"
             type="text"
             {...formik.getFieldProps('name')}
@@ -315,7 +315,7 @@ const FinanceSolutionModal = ({
         </StyledModalInputRow>
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
-            label={t('gfcr.forms.finance_solutions.gender_smart')}
+            label={t('gfcr.forms.finance_solutions.gender_program_criteria')}
             id="gender-smart-select"
             {...formik.getFieldProps('gender_smart')}
             options={[
@@ -323,7 +323,7 @@ const FinanceSolutionModal = ({
               { value: false, label: t('no') },
             ]}
             helperText={
-              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.gender_smart_helper" />
+              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.gender_program_criteria_helper" />
             }
             showHelperText={displayHelp}
             required={true}
