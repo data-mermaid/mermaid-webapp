@@ -1,7 +1,9 @@
+import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   ActiveSampleUnitsIconAlert,
@@ -41,7 +43,6 @@ import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InlineMessage from '../../generic/InlineMessage'
 import InputAndButton from '../../generic/InputAndButton/InputAndButton'
-import language from '../../../language'
 import NewUserModal from '../../NewUserModal'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -64,17 +65,21 @@ import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 import UserRolesInfoModal from '../../UserRolesInfoModal'
 import { UserIcon } from '../../UserIcon/UserIcon'
 
-const getRoleLabel = (roleCode) => {
-  return {
-    10: 'Read-only',
-    50: 'Collector',
-    90: 'Admin',
-  }[roleCode]
-}
-
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
 
 const Users = () => {
+  const { t } = useTranslation()
+  const roleLabels = useMemo(
+    () => ({
+      10: t('users.roles.read_only'),
+      50: t('users.roles.collector'),
+      90: t('users.roles.admin'),
+    }),
+    [t],
+  )
+
+  const userRecordsUnavailableText = t('users.user_records_unavailable')
+
   const [fromUser, setFromUser] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isPageLoading, setIsPageLoading] = useState(true)
@@ -83,9 +88,6 @@ const Users = () => {
     useState(false)
   const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
   const [isSendEmailToNewUserPromptOpen, setIsSendEmailToNewUserPromptOpen] = useState(false)
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
-
   const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
   const [newUserEmail, setNewUserEmail] = useState('')
   const [observerProfiles, setObserverProfiles] = useState([])
@@ -102,11 +104,11 @@ const Users = () => {
   const { setIsSyncInProgress, isSyncInProgress } = useSyncStatus()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const isMounted = useIsMounted()
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
+  const [globalFilterValue, setGlobalFilterValue] = useState('')
 
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
-  useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
+  useDocumentTitle(`${t('users.users')} - ${t('mermaid')}`)
 
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
 
@@ -138,7 +140,7 @@ const Users = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+              toast.error(...getToastArguments(userRecordsUnavailableText))
             },
           })
         })
@@ -150,6 +152,7 @@ const Users = () => {
     isMounted,
     isSyncInProgress,
     projectId,
+    userRecordsUnavailableText,
   ])
 
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
@@ -175,14 +178,14 @@ const Users = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+              toast.error(...getToastArguments(userRecordsUnavailableText))
             },
           })
         })
     }
 
     return Promise.reject(new Error('databaseSwitchboardInstance isnt defined'))
-  }, [databaseSwitchboardInstance, projectId, handleHttpResponseError])
+  }, [databaseSwitchboardInstance, projectId, handleHttpResponseError, userRecordsUnavailableText])
 
   const addExistingUser = () => {
     setIsTableUpdating(true)
@@ -194,16 +197,16 @@ const Users = () => {
       .then(() => {
         setNewUserEmail('')
         setIsTableUpdating(false)
-        toast.success(...getToastArguments(language.success.newUserAdd))
+        toast.success(...getToastArguments(t('users.messages.new_user_added')))
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
             if (error.response.status === 400) {
-              toast.error(...getToastArguments(language.error.duplicateNewUserAdd))
+              toast.error(...getToastArguments(t('users.messages.duplicate_user_error')))
             } else {
-              toast.error(...getToastArguments(language.error.generic))
+              toast.error(...getToastArguments(t('users.messages.something_went_wrong')))
             }
             setIsTableUpdating(false)
           },
@@ -213,12 +216,12 @@ const Users = () => {
 
   const notifyUserIfEmailInvalid = () => {
     if (newUserEmail === '') {
-      toast.warning(...getToastArguments(language.error.emptyEmailAdd))
+      toast.warning(...getToastArguments(t('users.messages.enter_email')))
 
       return false
     }
     if (!validateEmail(newUserEmail)) {
-      toast.warning(...getToastArguments(language.error.invalidEmailAdd))
+      toast.warning(...getToastArguments(t('users.messages.invalid_email')))
 
       return false
     }
@@ -258,7 +261,7 @@ const Users = () => {
         setNewUserEmail('')
         closeSendEmailToNewUserPrompt()
         setIsTableUpdating(false)
-        toast.success(...getToastArguments(language.success.newPendingUserAdd))
+        toast.success(...getToastArguments(t('users.messages.pending_user_added')))
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -272,12 +275,15 @@ const Users = () => {
 
   const handleNewUserEmailOnChange = (event) => setNewUserEmail(event.target.value)
 
+  const handleGlobalFilterChange = (value) => setGlobalFilterValue(value)
+
   const handleTransferSampleUnitChange = (projectProfileId) => {
     setToUserProfileId(projectProfileId)
   }
 
   const transferSampleUnits = () => {
     setIsSyncInProgress(true) // hack to get collect record count to update, also shows a loader
+    closeTransferSampleUnitsModal()
 
     const fromUserProfileId = fromUser.profile
 
@@ -294,7 +300,14 @@ const Users = () => {
         )
         const numRecordTransferred = transferSampleUnitsResponse.num_collect_records_transferred
 
-        toast.success(...getToastArguments(`${numRecordTransferred} ${sampleUnitMsg} transferred`))
+        toast.success(
+          ...getToastArguments(
+            t('users.messages.sample_units_transferred', {
+              count: numRecordTransferred,
+              units: sampleUnitMsg,
+            }),
+          ),
+        )
 
         setIsSyncInProgress(false) // hack to get collect record count to update, also shows a loader
       })
@@ -303,7 +316,7 @@ const Users = () => {
         handleHttpResponseError({
           error,
           callback: () =>
-            toast.error(...getToastArguments(language.error.transferSampleUnitsUnavailable)),
+            toast.error(...getToastArguments(t('users.messages.failed_sample_units_transfer'))),
         })
       })
   }
@@ -344,7 +357,7 @@ const Users = () => {
       })
       .then(() => {
         setIsTableUpdating(false)
-        toast.success(...getToastArguments(language.success.userRemoved))
+        toast.success(...getToastArguments(t('users.messages.user_removed')))
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -357,133 +370,6 @@ const Users = () => {
 
     return Promise.resolve()
   }
-
-  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
-    document.body.addEventListener('click', () => {
-      if (isHelperTextShowing === true) {
-        setIsHelperTextShowing(false)
-      }
-    })
-  }, [isHelperTextShowing])
-
-  const tableColumnsForAdmin = useMemo(() => {
-    const handleInfoIconClick = (event, label) => {
-      if (currentHelperTextLabel === label) {
-        setIsHelperTextShowing(!isHelperTextShowing)
-      } else {
-        setIsHelperTextShowing(true)
-        setCurrentHelperTextLabel(label)
-      }
-
-      event.stopPropagation()
-    }
-
-    return [
-      {
-        Header: 'Name',
-        accessor: 'name',
-        sortType: reactTableNaturalSortReactNodesSecondChild,
-      },
-      {
-        Header: 'Email',
-        accessor: 'email',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: () => (
-          <>
-            <LabelContainer>
-              Admin
-              {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
-                <ColumnHeaderToolTip
-                  helperText={language.tooltipText.admin}
-                  left="-5em"
-                  top="-13.7em"
-                />
-              ) : null}
-              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'admin')}>
-                <IconInfo aria-label="info" />
-              </IconButton>
-            </LabelContainer>
-          </>
-        ),
-        accessor: 'admin',
-        disableSortBy: true,
-      },
-      {
-        Header: () => (
-          <>
-            <LabelContainer>
-              Collector
-              {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
-                <ColumnHeaderToolTip
-                  helperText={language.tooltipText.collector}
-                  left="-2.5em"
-                  top="-13.7em"
-                />
-              ) : null}
-              <IconButton
-                type="button"
-                onClick={(event) => handleInfoIconClick(event, 'collector')}
-              >
-                <IconInfo aria-label="info" />
-              </IconButton>
-            </LabelContainer>
-          </>
-        ),
-
-        accessor: 'collector',
-        disableSortBy: true,
-      },
-      {
-        Header: () => (
-          <>
-            <LabelContainer>
-              Read-Only
-              {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
-                <ColumnHeaderToolTip
-                  helperText={language.tooltipText.readOnly}
-                  left="-2.5em"
-                  top="-7.7em"
-                />
-              ) : null}
-              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'readOnly')}>
-                <IconInfo aria-label="info" />
-              </IconButton>
-            </LabelContainer>
-          </>
-        ),
-        accessor: 'readonly',
-        disableSortBy: true,
-      },
-      {
-        Header: 'Unsubmitted Sample Units',
-        accessor: 'unsubmittedSampleUnits',
-        disableSortBy: true,
-        align: 'right',
-      },
-      {
-        Header: 'Remove From Project',
-        accessor: 'remove',
-        disableSortBy: true,
-      },
-    ]
-  }, [isHelperTextShowing, currentHelperTextLabel])
-
-  const tableColumnsForNonAdmin = useMemo(() => {
-    return [
-      {
-        Header: 'Name',
-        accessor: 'name',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: 'Role',
-        accessor: 'role',
-        sortType: reactTableNaturalSort,
-      },
-    ]
-  }, [])
 
   const handleRoleChange = useCallback(
     ({ event, projectProfileId }) => {
@@ -499,7 +385,7 @@ const Users = () => {
         })
         .then((editedProfile) => {
           const editedUserName = editedProfile.profile_name
-          const editedUserRole = getRoleLabel(editedProfile.role)
+          const editedUserRole = roleLabels[editedProfile.role]
 
           const updatedObserverProfiles = observerProfiles.map((observer) =>
             observer.id === editedProfile.id ? editedProfile : observer,
@@ -508,7 +394,7 @@ const Users = () => {
           setObserverProfiles(updatedObserverProfiles)
           toast.success(
             ...getToastArguments(
-              language.success.getUserRoleChangeSuccessMessage({
+              t('users.messages.role_changed_success', {
                 userName: editedUserName,
                 role: editedUserRole,
               }),
@@ -524,7 +410,9 @@ const Users = () => {
 
               toast.error(
                 ...getToastArguments(
-                  language.error.getUserRoleChangeFailureMessage(userToBeEdited.profile_name),
+                  t('users.messages.role_changed_error', {
+                    userName: userToBeEdited.profile_name,
+                  }),
                 ),
               )
             },
@@ -532,8 +420,354 @@ const Users = () => {
           setIsTableUpdating(false)
         })
     },
-    [databaseSwitchboardInstance, observerProfiles, projectId, handleHttpResponseError],
+    [
+      databaseSwitchboardInstance,
+      observerProfiles,
+      projectId,
+      handleHttpResponseError,
+      t,
+      roleLabels,
+    ],
   )
+
+  const content = isAppOnline ? (
+    <UsersTableSection
+      observerProfiles={observerProfiles}
+      currentUser={currentUser}
+      isAdminUser={isAdminUser}
+      isTableUpdating={isTableUpdating}
+      handleRoleChange={handleRoleChange}
+      openTransferSampleUnitsModal={openTransferSampleUnitsModal}
+      openRemoveUserModal={openRemoveUserModal}
+      roleLabels={roleLabels}
+      globalFilterValue={globalFilterValue}
+      setGlobalFilterValue={setGlobalFilterValue}
+    />
+  ) : (
+    <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
+  )
+  const toolbar = (
+    <>
+      <H3>{t('users.users')}</H3>
+      <InfoParagraph>
+        <P>{t('users.introduction')}</P>
+        <ButtonPrimary type="button" onClick={openUserRolesModal}>
+          <IconInfo /> {t('users.learn_more_roles')}
+        </ButtonPrimary>
+      </InfoParagraph>
+      {isAppOnline && (
+        <>
+          {isReadonlyUserWithActiveSampleUnits && isAdminUser && (
+            <InlineStyle>
+              <InlineMessage type="warning">
+                <p>{t('sample_units.warning_readonly_active_units')}</p>
+              </InlineMessage>
+            </InlineStyle>
+          )}
+          <ToolbarRowWrapper>
+            <FilterSearchToolbar
+              name={isAdminUser ? t('filters.by_name_email') : t('filters.by_name_role')}
+              globalSearchText={globalFilterValue}
+              handleGlobalFilterChange={handleGlobalFilterChange}
+            />
+            {isAdminUser && (
+              <InputAndButton
+                inputId="add-new-user-email"
+                labelText={t('users.add_user_email')}
+                isLoading={isTableUpdating}
+                buttonChildren={
+                  <>
+                    <IconPlus />
+                    {t('users.add_user_button')}
+                  </>
+                }
+                value={newUserEmail}
+                onChange={handleNewUserEmailOnChange}
+                buttonOnClick={addUser}
+              />
+            )}
+          </ToolbarRowWrapper>
+        </>
+      )}
+    </>
+  )
+
+  return (
+    <>
+      {idsNotAssociatedWithData.length ? (
+        <ContentPageLayout
+          isPageContentLoading={isPageLoading}
+          content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+        />
+      ) : (
+        <ContentPageLayout
+          isPageContentLoading={isPageLoading}
+          content={content}
+          toolbar={toolbar}
+        />
+      )}
+      <NewUserModal
+        isLoading={isTableUpdating}
+        isOpen={isSendEmailToNewUserPromptOpen}
+        onDismiss={closeSendEmailToNewUserPrompt}
+        newUser={newUserEmail}
+        onSubmit={addNewUserAndSendEmail}
+      />
+      <TransferSampleUnitsModal
+        isOpen={isTransferSampleUnitsModalOpen}
+        onDismiss={closeTransferSampleUnitsModal}
+        currentUserId={currentUser.id}
+        fromUser={fromUser}
+        userOptions={observerProfiles}
+        showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
+        handleTransferSampleUnitChange={handleTransferSampleUnitChange}
+        onSubmit={transferSampleUnits}
+      />
+      <RemoveUserModal
+        isOpen={isRemoveUserModalOpen}
+        isLoading={isTableUpdating}
+        onDismiss={closeRemoveUserModal}
+        onSubmit={removeUserProfile}
+        userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
+        projectName={projectName}
+      />
+      <UserRolesInfoModal isOpen={isUserRolesModalOpen} onDismiss={closeUserRolesModal} />
+    </>
+  )
+}
+
+function UsersTableSection({
+  observerProfiles,
+  currentUser,
+  isAdminUser,
+  isTableUpdating,
+  handleRoleChange,
+  openTransferSampleUnitsModal,
+  openRemoveUserModal,
+  roleLabels,
+  globalFilterValue,
+  setGlobalFilterValue,
+}) {
+  const { t } = useTranslation()
+  const adminTooltipText = t('users.roles.admin_description')
+  const collectorTooltipText = t('users.roles.collector_description')
+  const readOnlyTooltipText = t('users.roles.read_only_description')
+  const infoLabelText = t('info')
+  const nameHeaderText = t('name')
+  const emailHeaderText = t('email')
+  const userRoleHeaderText = t('users.role')
+  const unsubmittedSampleUnitsHeaderText = t('users.unsubmitted_sample_units')
+  const removeFromProjectHeaderText = t('users.remove_from_project')
+  const transferUserButtonText = t('buttons.transfer')
+  const noSampleUnitsText = t('sample_units.none')
+  const adminHeaderText = t('users.roles.admin')
+  const collectorHeaderText = t('users.roles.collector')
+  const readOnlyHeaderText = t('users.roles.read_only')
+
+  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
+  const [hasInitializedStoredFilter, setHasInitializedStoredFilter] = useState(false)
+
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'name',
+          desc: false,
+        },
+      ],
+      globalFilter: '',
+    }
+  }, [])
+
+  const tablePrefsKey = useMemo(() => `${currentUser.id}-usersTable`, [currentUser.id])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: tablePrefsKey,
+    defaultValue: tableDefaultPrefs,
+  })
+
+  // Clear the guard when the prefs key flips so a new user can load its saved filter.
+  useEffect(() => {
+    setHasInitializedStoredFilter(false)
+  }, [tablePrefsKey])
+
+  // Hydrate once per key to stop the FilterSearchToolbar loop and preserve active edits.
+  useEffect(() => {
+    if (hasInitializedStoredFilter) {
+      return
+    }
+
+    const storedFilter =
+      typeof tableUserPrefs?.globalFilter === 'string' ? tableUserPrefs.globalFilter : ''
+
+    // Avoid overriding in-progress edits by hydrating stored prefs once per table key.
+    setGlobalFilterValue(storedFilter)
+    setHasInitializedStoredFilter(true)
+  }, [tableUserPrefs?.globalFilter, setGlobalFilterValue, hasInitializedStoredFilter])
+
+  useEffect(() => {
+    const handleBodyClick = () => {
+      if (isHelperTextShowing) {
+        setIsHelperTextShowing(false)
+      }
+    }
+
+    document.body.addEventListener('click', handleBodyClick)
+
+    return () => {
+      document.body.removeEventListener('click', handleBodyClick)
+    }
+  }, [isHelperTextShowing])
+
+  const tableGlobalFilters = useCallback(
+    (rows, id, query) => {
+      const keys = isAdminUser
+        ? ['values.name.props.children', 'values.email']
+        : ['values.name', 'values.role']
+
+      const queryTerms = splitSearchQueryStrings(query)
+
+      if (!queryTerms || !queryTerms.length) {
+        return rows
+      }
+
+      const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
+      const filteredRowLength = tableFilteredRows.length
+
+      setSearchFilteredRowsLength((previousLength) =>
+        previousLength === filteredRowLength ? previousLength : filteredRowLength,
+      )
+
+      return tableFilteredRows
+    },
+    [isAdminUser],
+  )
+
+  const tableColumnsForAdmin = useMemo(() => {
+    const handleInfoIconClick = (event, label) => {
+      if (currentHelperTextLabel === label) {
+        setIsHelperTextShowing(!isHelperTextShowing)
+      } else {
+        setIsHelperTextShowing(true)
+        setCurrentHelperTextLabel(label)
+      }
+
+      event.stopPropagation()
+    }
+
+    return [
+      {
+        Header: nameHeaderText,
+        accessor: 'name',
+        sortType: reactTableNaturalSortReactNodesSecondChild,
+      },
+      {
+        Header: emailHeaderText,
+        accessor: 'email',
+        sortType: reactTableNaturalSort,
+      },
+      {
+        Header: () => (
+          <>
+            <LabelContainer>
+              {adminHeaderText}
+              {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
+                <ColumnHeaderToolTip helperText={adminTooltipText} left="-5em" top="-13.7em" />
+              ) : null}
+              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'admin')}>
+                <IconInfo aria-label={infoLabelText} />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
+        accessor: 'admin',
+        disableSortBy: true,
+      },
+      {
+        Header: () => (
+          <>
+            <LabelContainer>
+              {collectorHeaderText}
+              {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
+                <ColumnHeaderToolTip
+                  helperText={collectorTooltipText}
+                  left="-2.5em"
+                  top="-13.7em"
+                />
+              ) : null}
+              <IconButton
+                type="button"
+                onClick={(event) => handleInfoIconClick(event, 'collector')}
+              >
+                <IconInfo aria-label={infoLabelText} />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
+        accessor: 'collector',
+        disableSortBy: true,
+      },
+      {
+        Header: () => (
+          <>
+            <LabelContainer>
+              {readOnlyHeaderText}
+              {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
+                <ColumnHeaderToolTip helperText={readOnlyTooltipText} left="-2.5em" top="-7.7em" />
+              ) : null}
+              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'readOnly')}>
+                <IconInfo aria-label={infoLabelText} />
+              </IconButton>
+            </LabelContainer>
+          </>
+        ),
+        accessor: 'readonly',
+        disableSortBy: true,
+      },
+      {
+        Header: unsubmittedSampleUnitsHeaderText,
+        accessor: 'unsubmittedSampleUnits',
+        disableSortBy: true,
+        align: 'right',
+      },
+      {
+        Header: removeFromProjectHeaderText,
+        accessor: 'remove',
+        disableSortBy: true,
+      },
+    ]
+  }, [
+    adminHeaderText,
+    adminTooltipText,
+    collectorHeaderText,
+    collectorTooltipText,
+    infoLabelText,
+    currentHelperTextLabel,
+    isHelperTextShowing,
+    nameHeaderText,
+    emailHeaderText,
+    readOnlyHeaderText,
+    readOnlyTooltipText,
+    removeFromProjectHeaderText,
+    unsubmittedSampleUnitsHeaderText,
+  ])
+
+  const tableColumnsForNonAdmin = useMemo(() => {
+    return [
+      {
+        Header: nameHeaderText,
+        accessor: 'name',
+        sortType: reactTableNaturalSort,
+      },
+      {
+        Header: userRoleHeaderText,
+        accessor: 'role',
+        sortType: reactTableNaturalSort,
+      },
+    ]
+  }, [nameHeaderText, userRoleHeaderText])
 
   const tableCellDataForAdmin = useMemo(() => {
     return observerProfiles.map((profile) => {
@@ -645,11 +879,11 @@ const Users = () => {
                     )
                   }
                 >
-                  <IconAccountConvert /> Transfer
+                  <IconAccountConvert /> {transferUserButtonText}
                 </ButtonSecondary>
               </>
             ) : (
-              'No sample units'
+              noSampleUnitsText
             )}
           </>
         ),
@@ -664,7 +898,16 @@ const Users = () => {
         ),
       }
     })
-  }, [observerProfiles, currentUser, handleRoleChange, isTableUpdating])
+  }, [
+    observerProfiles,
+    currentUser,
+    handleRoleChange,
+    isTableUpdating,
+    transferUserButtonText,
+    noSampleUnitsText,
+    openTransferSampleUnitsModal,
+    openRemoveUserModal,
+  ])
 
   const tableCellDataForNonAdmin = useMemo(
     () =>
@@ -673,49 +916,27 @@ const Users = () => {
 
         return {
           name: profile_name,
-          role: getRoleLabel(role),
+          role: roleLabels[role],
         }
       }),
-    [observerProfiles],
+    [observerProfiles, roleLabels],
   )
 
-  const tableDefaultPrefs = useMemo(() => {
+  const activeTableColumns = isAdminUser ? tableColumnsForAdmin : tableColumnsForNonAdmin
+  const activeTableData = isAdminUser ? tableCellDataForAdmin : tableCellDataForNonAdmin
+
+  const tableInitialState = useMemo(() => {
+    const initialPageSize =
+      tableUserPrefs.pageSize && Number.isFinite(tableUserPrefs.pageSize)
+        ? tableUserPrefs.pageSize
+        : PAGE_SIZE_DEFAULT
+
     return {
-      sortBy: [
-        {
-          id: 'name',
-          desc: false,
-        },
-      ],
-      globalFilter: '',
+      pageSize: initialPageSize,
+      sortBy: tableUserPrefs.sortBy,
+      globalFilter: tableUserPrefs.globalFilter,
     }
-  }, [])
-
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-usersTable`,
-    defaultValue: tableDefaultPrefs,
-  })
-
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = isAdminUser
-        ? ['values.name.props.children', 'values.email']
-        : ['values.name', 'values.role']
-
-      const queryTerms = splitSearchQueryStrings(query)
-
-      if (!queryTerms || !queryTerms.length) {
-        return rows
-      }
-
-      const tableFilteredRows = getTableFilteredRows(rows, keys, queryTerms)
-
-      setSearchFilteredRowsLength(tableFilteredRows.length)
-
-      return tableFilteredRows
-    },
-    [isAdminUser],
-  )
+  }, [tableUserPrefs])
 
   const {
     canNextPage,
@@ -734,13 +955,9 @@ const Users = () => {
     setGlobalFilter,
   } = useTable(
     {
-      columns: isAdminUser ? tableColumnsForAdmin : tableColumnsForNonAdmin,
-      data: isAdminUser ? tableCellDataForAdmin : tableCellDataForNonAdmin,
-      initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
-        sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter,
-      },
+      columns: activeTableColumns,
+      data: activeTableData,
+      initialState: tableInitialState,
       autoResetSortBy: false,
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -751,22 +968,29 @@ const Users = () => {
     usePagination,
   )
 
-  const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
-  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+  useEffect(() => {
+    const normalizedValue = globalFilterValue ?? ''
 
-  const _setSortByPrefs = useEffect(() => {
+    if ((globalFilter ?? '') !== normalizedValue) {
+      setGlobalFilter(normalizedValue)
+    }
+  }, [globalFilterValue, globalFilter, setGlobalFilter])
+
+  useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
 
-  const _setFilterPrefs = useEffect(() => {
+  useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
-  const _setPageSizePrefs = useEffect(() => {
+  useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
 
-  const table = (
+  const handleRowsNumberChange = (event) => setPageSize(Number(event.target.value))
+
+  return (
     <>
       <StickyTableOverflowWrapper>
         <GenericStickyTable {...getTableProps()} cursor={isTableUpdating ? 'wait' : 'pointer'}>
@@ -819,7 +1043,6 @@ const Users = () => {
             })}
           </tbody>
         </GenericStickyTable>
-        <UserRolesInfoModal isOpen={isUserRolesModalOpen} onDismiss={closeUserRolesModal} />
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
@@ -841,97 +1064,33 @@ const Users = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
-      <NewUserModal
-        isLoading={isTableUpdating}
-        isOpen={isSendEmailToNewUserPromptOpen}
-        onDismiss={closeSendEmailToNewUserPrompt}
-        newUser={newUserEmail}
-        onSubmit={addNewUserAndSendEmail}
-      />
-      <TransferSampleUnitsModal
-        isOpen={isTransferSampleUnitsModalOpen}
-        onDismiss={closeTransferSampleUnitsModal}
-        currentUserId={currentUser.id}
-        fromUser={fromUser}
-        userOptions={observerProfiles}
-        showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
-        handleTransferSampleUnitChange={handleTransferSampleUnitChange}
-        onSubmit={transferSampleUnits}
-      />
-      <RemoveUserModal
-        isOpen={isRemoveUserModalOpen}
-        isLoading={isTableUpdating}
-        onDismiss={closeRemoveUserModal}
-        onSubmit={removeUserProfile}
-        userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
-        projectName={projectName}
-      />
     </>
   )
+}
 
-  const content = isAppOnline ? (
-    table
-  ) : (
-    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
-  )
-  const toolbar = (
-    <>
-      <H3>{language.pages.userTable.title}</H3>
-      <InfoParagraph>
-        <P>{language.pages.userTable.introductionParagraph}</P>
-        <ButtonPrimary type="button" onClick={openUserRolesModal}>
-          <IconInfo /> Learn more about User Roles...
-        </ButtonPrimary>
-      </InfoParagraph>
-      {isAppOnline && (
-        <>
-          {isReadonlyUserWithActiveSampleUnits && isAdminUser && (
-            <InlineStyle>
-              <InlineMessage type="warning">
-                <p>{language.pages.userTable.warningReadOnlyUser}</p>
-              </InlineMessage>
-            </InlineStyle>
-          )}
-          <ToolbarRowWrapper>
-            <FilterSearchToolbar
-              name={
-                isAdminUser
-                  ? language.pages.userTable.filterToolbarTextForAdmin
-                  : language.pages.userTable.filterToolbarTextForNonAdmin
-              }
-              globalSearchText={globalFilter}
-              handleGlobalFilterChange={handleGlobalFilterChange}
-            />
-            {isAdminUser && (
-              <InputAndButton
-                inputId="add-new-user-email"
-                labelText={language.pages.userTable.searchEmailToolbarText}
-                isLoading={isTableUpdating}
-                buttonChildren={
-                  <>
-                    <IconPlus />
-                    Add User
-                  </>
-                }
-                value={newUserEmail}
-                onChange={handleNewUserEmailOnChange}
-                buttonOnClick={addUser}
-              />
-            )}
-          </ToolbarRowWrapper>
-        </>
-      )}
-    </>
-  )
+const observerProfilePropType = PropTypes.shape({
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  profile_name: PropTypes.string,
+  email: PropTypes.string,
+  picture: PropTypes.string,
+  num_active_sample_units: PropTypes.number,
+  role: PropTypes.number,
+  profile: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+})
 
-  return idsNotAssociatedWithData.length ? (
-    <ContentPageLayout
-      isPageContentLoading={isPageLoading}
-      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
-    />
-  ) : (
-    <ContentPageLayout isPageContentLoading={isPageLoading} content={content} toolbar={toolbar} />
-  )
+UsersTableSection.propTypes = {
+  observerProfiles: PropTypes.arrayOf(observerProfilePropType).isRequired,
+  currentUser: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  }).isRequired,
+  isAdminUser: PropTypes.bool.isRequired,
+  isTableUpdating: PropTypes.bool.isRequired,
+  handleRoleChange: PropTypes.func.isRequired,
+  openTransferSampleUnitsModal: PropTypes.func.isRequired,
+  openRemoveUserModal: PropTypes.func.isRequired,
+  roleLabels: PropTypes.objectOf(PropTypes.string).isRequired,
+  globalFilterValue: PropTypes.string.isRequired,
+  setGlobalFilterValue: PropTypes.func.isRequired,
 }
 
 export default Users

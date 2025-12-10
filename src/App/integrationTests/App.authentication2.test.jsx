@@ -28,7 +28,7 @@ test('App renders the initial screen as expected for an offline user who is auth
   await user.click(await screen.findByText('FF')) // user icon initials for offline user
 
   // there is not a logout button
-  await waitFor(() => expect(screen.queryByText('Logout')).not.toBeInTheDocument())
+  await waitFor(() => expect(screen.queryByTestId('logout-button')).not.toBeInTheDocument())
 })
 
 test('App renders the initial screen as expected for an online but not authenticated user', () => {
@@ -39,7 +39,7 @@ test('App renders the initial screen as expected for an online but not authentic
     dexiePerUserDataInstance,
   })
 
-  expect(screen.queryByRole('heading', { name: 'Projects' })).not.toBeInTheDocument()
+  expect(screen.getByTestId('loading-indicator')).toBeInTheDocument()
 })
 
 test('App renders the initial screen as expected for an offline user who is not authenticated in an online environment', () => {
@@ -50,5 +50,5 @@ test('App renders the initial screen as expected for an offline user who is not 
     dexiePerUserDataInstance,
   })
 
-  expect(screen.queryByRole('heading', { name: 'Projects' })).not.toBeInTheDocument()
+  expect(screen.getByTestId('loading-indicator')).toBeInTheDocument()
 })

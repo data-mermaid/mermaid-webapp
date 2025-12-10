@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
-import language from '../../language'
 import Modal, { RightFooter } from '../generic/Modal'
 import InlineMessage from '../generic/InlineMessage'
 import theme from '../../theme'
@@ -22,6 +22,7 @@ const RemoveUserModal = ({
   projectName,
   isLoading,
 }) => {
+  const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(1)
 
   const goToPageOne = () => {
@@ -43,16 +44,20 @@ const RemoveUserModal = ({
   }
 
   const title = {
-    1: language.pages.userTable.deleteUnsyncedModalTitle,
-    2: language.pages.userTable.removeUserModalTitle,
+    1: t('users.delete_unsynced_sample_units'),
+    2: t('users.remove_user_from_project'),
   }
 
   const mainContentPageOne = (
     <InlineFlex>
       <InlineMessage type="warning">
         <p>
-          If <strong>{userNameToBeRemoved}</strong> has any offline sample units that have not been
-          synced yet, the sample units will be <strong>deleted</strong> when they come back online.
+          <Trans
+            i18nKey="users.delete_unsynced_warning"
+            values={{
+              userName: userNameToBeRemoved,
+            }}
+          />
         </p>
       </InlineMessage>
     </InlineFlex>
@@ -60,8 +65,13 @@ const RemoveUserModal = ({
 
   const mainContentPageTwo = (
     <p>
-      Are you sure you want to remove <strong>{userNameToBeRemoved}</strong> from{' '}
-      <strong>{projectName}</strong>
+      <Trans
+        i18nKey="users.remove_user_warning"
+        values={{
+          userName: userNameToBeRemoved,
+          projectName,
+        }}
+      />
     </p>
   )
 
@@ -72,15 +82,13 @@ const RemoveUserModal = ({
     </>
   )
 
-  const cancelButton = (
-    <ButtonSecondary onClick={closeModal}>{language.pages.userTable.cancelButton}</ButtonSecondary>
-  )
+  const cancelButton = <ButtonSecondary onClick={closeModal}>{t('buttons.cancel')}</ButtonSecondary>
 
   const footerContentPageOne = (
     <RightFooter>
       {cancelButton}
       <ButtonCaution onClick={goToPageTwo} disabled={isLoading}>
-        {language.pages.userTable.deleteUnsyncedButton}
+        {t('users.delete_unsynced_sample_units')}
       </ButtonCaution>
     </RightFooter>
   )
@@ -88,9 +96,7 @@ const RemoveUserModal = ({
   const footerContentPageTwo = (
     <RightFooter>
       {cancelButton}
-      <ButtonCaution onClick={handleOnSubmit}>
-        {language.pages.userTable.removeUserButton}
-      </ButtonCaution>
+      <ButtonCaution onClick={handleOnSubmit}>{t('users.remove_user')}</ButtonCaution>
     </RightFooter>
   )
 

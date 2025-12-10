@@ -111,7 +111,7 @@ const GfcrCallout = ({ isGfcr = false, isLoading = false, handleUpdateIncludesGf
         <h3>{t('gfcr.gfcr', { context: 'long' })}</h3>
         {isGfcr ? (
           <>
-            <StyledParagraph>{t('gfcr.remove_gfcr_Indicators')}</StyledParagraph>
+            <StyledParagraph>{t('gfcr.remove_gfcr_indicators')}</StyledParagraph>
             <StyledGfcrEnableButtonsContainer>
               <StyledButtonPrimary
                 type="button"
