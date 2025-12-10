@@ -286,7 +286,7 @@
     "form_errors": "Form errors:",
     "errors": {
       "indicator_sets_unavailable": "GFCR indicator sets are currently unavailable.",
-      "indicator_set_save_failed": "There was an error saving the indicator set.",
+      "indicator_set_save_failed": "There was an error saving the indicator set."
     },
     "success": {
       "indicator_set_save": "Indicator set saved successfully."
