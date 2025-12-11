@@ -195,13 +195,13 @@ const NavMenu = ({ subNavNode = null }) => {
               <li>
                 <NavLinkSidebar to={`${projectUrl}/users`} data-testid="nav-users">
                   <IconUsers />
-                  <span>{t('users')}</span>
+                  <span>{t('users.users')}</span>
                 </NavLinkSidebar>
               </li>
               <li>
                 <NavLinkSidebar to={`${projectUrl}/data-sharing`} data-testid="nav-data-sharing">
                   <IconSharing />
-                  <span>{t('data_sharing')}</span>
+                  <span>{t('data_sharing.data_sharing')}</span>
                 </NavLinkSidebar>
               </li>
               <OfflineHide>
