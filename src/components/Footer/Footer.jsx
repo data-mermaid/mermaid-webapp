@@ -56,7 +56,6 @@ const Footer = () => {
         <HelpContainer ref={dropdownRef}>
           <TextLink
             id="gtm-help-pdf-dropdown-toggle"
-            type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             aria-label={t('help_dropdown')}
             data-testid="help-documents-dropdown"
