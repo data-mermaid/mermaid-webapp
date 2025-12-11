@@ -1,6 +1,5 @@
 // prettier-ignore
 import React from 'react'
-import { PROJECT_CODES } from './library/constants/constants'
 import {
   getDuplicateValuesValidationMessage,
   getDuplicateSampleUnitLink,
@@ -88,8 +87,6 @@ const error = {
   collectRecordsUnavailable: 'Sample unit data are currently unavailable.',
   collectRecordUnavailable: 'Sample unit data are currently unavailable.',
   collectRecordSubmitDisabled: 'Errors or warnings are preventing you from submitting',
-  duplicateNewUserAdd: 'User has already been added to project.',
-  emptyEmailAdd: 'Please enter an email address.',
   formValidation: {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
@@ -116,16 +113,11 @@ const error = {
   gfcrRevenueSave: 'Revenue has not been saved.',
   gfcrRevenueDelete: 'Revenue has not been removed.',
   idNotFoundUserAction: "Please check the URL in your browser's address bar.",
-  invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable: 'Management Regime records data are currently unavailable.',
   managementRegimeRecordUnavailable: 'Management Regime record data are currently unavailable.',
   notificationsUnavailable: 'Notifications are unavailable.',
   notificationNotDeleted: 'Notification could not be removed.',
   notificationsNotDeleted: 'Notifications could not be removed',
-  projectDelete: 'This project has not been deleted.',
-  projectAddGfcr: 'Could not add GFCR indicators to the project.',
-  projectRemoveGfcr: 'Could not remove GFCR indicators from the project.',
-  projectSave: 'The project has not been saved.',
   projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
   submittedRecordsUnavailable: 'Submitted record data are currently unavailable.',
@@ -150,7 +142,6 @@ const error = {
   ),
   pushSyncErrorMessageUnsavedData: 'The following have not been saved: ',
   pushSyncErrorMessageStatusCode500: 'MERMAID sync error: please contact support@datamermaid.org',
-  getUserRoleChangeFailureMessage: (userName) => `${userName}'s role has not been changed.`,
   pageUnavailableOffline: 'This page is unavailable offline.',
   pageNotFound: 'This page cannot be found.',
   pageNotFoundRecovery: 'Make sure the URL is correct.',
@@ -160,7 +151,6 @@ const error = {
   idNotFoundRecovery:
     'It might have been deleted, you do not have permission to view it, or the URL might be wrong.',
   homePageNavigation: 'Go back to the home page.',
-  transferSampleUnitsUnavailable: 'Sample units failed to transfer.',
   onPageWarningAbove: 'Warning or error',
   onPageWarningBelow: 'Warning or error',
   errorBoundaryPrimary: 'A part of this page did not load correctly.',
@@ -180,12 +170,9 @@ const success = {
   collectRecordSubmit: 'Record submitted.',
   collectRecordValidated: 'Record successfully validated.',
   collectRecordDelete: 'Record deleted.',
-  newOrganizationAdd: 'Organization added.',
   getProjectTurnOnOfflineReadySuccess: (projectName) => `${projectName} is now offline ready`,
   getProjectTurnOffOfflineReadySuccess: (projectName) =>
     `${projectName} has been removed from being offline ready`,
-  getUserRoleChangeSuccessMessage: ({ userName, role }) =>
-    `${userName}'s role is now set to ${role}.`,
   gfcrIndicatorSetSave: 'Indicator set saved.',
   gfcrIndicatorSetDelete: 'Indicator set deleted.',
   gfcrFinanceSolutionSave: 'Finance solution row saved.',
@@ -194,13 +181,6 @@ const success = {
   gfcrInvestmentDelete: 'Investment row removed.',
   gfcrRevenueSave: 'Revenue row saved.',
   gfcrRevenueDelete: 'Revenue row removed.',
-  newUserAdd: 'New user added.',
-  newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
-  userRemoved: 'User removed',
-  projectSave: 'Project saved',
-  projectAddGfcr: 'Added GFCR indicators to project',
-  projectRemoveGfcr: 'Removed GFCR indicators from project',
-  projectDeleted: 'Project deleted',
   getMermaidDataSaveSuccess: ({ mermaidDataTypeLabel, isAppOnline }) =>
     isAppOnline
       ? `The ${mermaidDataTypeLabel} has been saved on your computer and online.`
@@ -208,19 +188,6 @@ const success = {
   getMermaidDataDeleteSuccess: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has been deleted from your computer and online.`,
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
-  projectStatusSaved: `Test project selection saved.`,
-  getDataSharingPolicyChangeSuccess: (method, policy_code) => {
-    switch (policy_code) {
-      case PROJECT_CODES.policy.private:
-        return `${method} is now set to private`
-      case PROJECT_CODES.policy.publicSummary:
-        return `${method} is now set to public summary`
-      default:
-        // policy code for public is 100
-        return `${method} is now set to public `
-    }
-  },
-  userProfileUpdate: 'Profile updated',
 }
 
 const deleteRecord = (pageName) => {
@@ -234,38 +201,9 @@ const deleteRecord = (pageName) => {
   }
 }
 
-const deleteProject = (project) => {
-  return {
-    title: `Delete project`,
-    prompt: `Are you sure you want to delete ${project}?`,
-    yes: `Delete ${project}`,
-    no: 'Cancel',
-    hasSampleUnits: 'You must delete all the sample units in this project to delete this project.',
-    hasOtherUsers: 'Other users must be removed from this project before deletion.',
-    confirmDeleteText1: `You cannot delete this ${project} because it is used in the following sample units:`,
-    confirmDeleteText2: `You have to remove this ${project} from all sample units before you can delete it.`,
-  }
-}
-
 const loadingIndicator = {
   loadingPrimary: 'Loading',
   loadingSecondary: 'Still working...',
-}
-
-const createNewOptionModal = {
-  genus: 'Genus',
-  contactForHelp: 'Contact us for help',
-  species: 'Species',
-  newBenthicAttribute: 'Benthic attribute',
-  benthicAttributeParent: 'Parent',
-  newBenthicAttributeName: 'Name',
-  goToNextPage: 'Next',
-  cancel: 'Cancel',
-  back: 'Back',
-  details: 'Details',
-  user: 'User',
-  project: 'Project',
-  submit: 'Send to MERMAID for review',
 }
 
 const gfcrFinanceSolutionModal = {
@@ -467,33 +405,6 @@ const protocolTitles = {
 }
 
 const pages = {
-  admin: {
-    accessible_information: 'Accessible Information',
-    admin: 'Admin',
-    collector: 'Collector',
-    readOnly: 'Read-Only',
-    projectManagement: 'Project management',
-    projectInfo: {
-      edit: 'Edit project info',
-      setUpDataSharing: 'Set up data sharing policy',
-      addOrRemoveProjectMembers: 'Add or remove project members',
-      viewMemberEmail: 'View project member email',
-      delete: 'Delete a project',
-    },
-    dataCollection: {
-      title: 'Data collection and management',
-      addUpdateSiteOrRegimes: 'Add/update site or management regimes',
-      deleteSiteOrRegimes: 'Delete site or management regimes',
-      downloadSitesAndRegimes: 'Download sites and management regimes',
-      createValidateSubmitSampleUnits: 'Create, validate, and submit sample units',
-      deleteSampleUnits: 'Delete unsubmitted sample units',
-      editSampleUnits: 'Edit submitted sample units',
-      transferSampleUnits: 'Transfer unsubmitted sample units',
-      downloadSampleUnits: 'Download submitted sample units',
-      viewObserversAndSampleUnits: 'View observers and sample units overview',
-      viewRegimesOverview: 'View management regimes overview',
-    },
-  },
   userDoesntHaveProjectAccess: {
     title: 'You do not have permission to access this project.',
     getSubtitle: (projectName) => {
@@ -533,57 +444,6 @@ const pages = {
     },
     benthicPitSyncCheckbox: 'Use Interval Size as Interval Start',
   },
-  projectInfo: {
-    createOrganizationTitle: 'Suggest a new organization',
-    newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
-    noNotes: 'No notes for this Project',
-    noOrganizationFound: `No organization found.`,
-    organizationsHelperText: `Type to search for an organization.`,
-    removeOrganization: `Remove organization from Project`,
-    suggestionOrganizationHelperText: `If your organization is approved, it'll be automatically added to your Project.`,
-    title: 'Project Info',
-    organizations: 'Organizations',
-    notes: 'Notes',
-    noOrganization: 'This Project has no organizations.',
-    gfcrCallout: {
-      calloutHeading: 'Global Fund for Coral Reefs (GFCR)',
-      removeParagraph:
-        'Removing GFCR indicators from this project will not delete them, but just hide them.',
-      addParagraph:
-        'GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. ',
-      disableButton: 'Disable GFCR Indicators',
-      enableButton: 'Enable GFCR Indicators for this project',
-      goToButton: 'Go to GFCR Indicators',
-    },
-    citationLabel: 'Suggested Citation',
-    citationHelperText:
-      'Citation to suggest for all uses of your project data. This citation will be displayed on MERMAID Explore and with any other data access method. ',
-    editCitation: 'Edit Citation',
-    editCitationModal: {
-      title: 'Edit Suggested Citation',
-      helper: 'Copy and paste project info into your citation',
-      projectName: 'Project Name',
-      projectAdmins: 'Project Admins',
-      projectAdmin: 'Project Admin',
-      otherProjectMembers: 'Other Project Members',
-      otherProjectMember: 'Other Project Member',
-      projectLastUpdated: 'Project Last Updated',
-      countries: 'Countries',
-      country: 'Country',
-      editCitation: 'Edit Citation',
-      cancel: 'Cancel',
-      updateCitation: 'Update Citation',
-      citationPreview: 'Citation Preview',
-      useDefaultCitation: 'Use Default Citation',
-    },
-  },
-  dataSharing: {
-    introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data are collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
-    isTestProject: 'This is a test project',
-    moreInfoTitle: 'Data sharing',
-    testProjectHelperText: 'Data for a test project will not be included in public reporting.',
-    title: 'Data Sharing',
-  },
   submittedTable: {
     title: 'Submitted',
     filterToolbarText: 'Filter this table by site, management, or observer',
@@ -594,25 +454,6 @@ const pages = {
         For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search “North Shore” to find records that have exactly the words North Shore (records with South Shore would not match).
       `,
     },
-  },
-  userTable: {
-    title: 'Users',
-    introductionParagraph:
-      'MERMAID gives you the ability to control who can see and access your data.',
-    moreInfoTitle: 'User Roles',
-    filterToolbarTextForAdmin: 'Filter this table by name or email',
-    filterToolbarTextForNonAdmin: 'Filter this table by name or role',
-    searchEmailToolbarText: 'Enter email address of user to add',
-    warningReadOnlyUser: `Some Sample Units cannot be submitted because the user is in read-only mode.`,
-    newUserModalTitle: `Invite new user`,
-    newUserModalText: `will need to sign up because they're not already a MERMAID user.`,
-    transferSampleUnitsModalTitle: `Transfer Sample Units`,
-    warningTransferSampleUnits: `You must transfer unsubmitted sample units before you can remove the user from project.`,
-    deleteUnsyncedModalTitle: 'Delete Unsynced Sample Units',
-    deleteUnsyncedButton: 'Delete Unsynced Sample Units',
-    removeUserModalTitle: 'Remove User From Project',
-    removeUserButton: 'Remove User',
-    cancelButton: 'Cancel',
   },
   submittedForm: {
     sampleUnitsAreReadOnly: 'Submitted sample units are read-only.',
@@ -1511,12 +1352,10 @@ export default {
   apiDataTableNames,
   autocomplete,
   buttons,
-  createNewOptionModal,
   gfcrFinanceSolutionModal,
   gfcrInvestmentModal,
   gfcrRevenueModal,
   gfcrNewIndicatorSetModal,
-  deleteProject,
   deleteRecord,
   error,
   getResolveModalLanguage,

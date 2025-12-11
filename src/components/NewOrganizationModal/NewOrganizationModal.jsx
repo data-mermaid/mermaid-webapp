@@ -2,11 +2,11 @@ import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
 import { Input, InputRow, HelperText } from '../generic/form'
-import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal'
@@ -17,6 +17,7 @@ const ModalInputRow = styled(InputRow)`
   border: none;
 `
 const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }) => {
+  const { t } = useTranslation()
   const [newOrganizationSuggestion, setNewOrganizationSuggestion] = useState(initialValue)
   const isSubmitButtonDisabled = newOrganizationSuggestion === ''
   useEffect(
@@ -36,15 +37,15 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
   const handleOnSubmit = () => {
     onSubmit(newOrganizationSuggestion)
     resetAndCloseModal()
-    toast.success(...getToastArguments(language.success.newOrganizationAdd))
+    toast.success(...getToastArguments(t('organizations.organization_added')))
   }
 
-  const helperText = language.pages.projectInfo.suggestionOrganizationHelperText
+  const helperText = t('organizations.approved_and_added_to_project')
   const modalContent = (
     <>
       <ModalInputRow>
         <label id="modal-input-for-org-label" htmlFor="modal-input-for-org">
-          New Organization Name
+          {t('organizations.new_organization_name')}
         </label>
         <div>
           <Input
@@ -64,10 +65,10 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={resetAndCloseModal}>Cancel</ButtonSecondary>
+      <ButtonSecondary onClick={resetAndCloseModal}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit} disabled={isSubmitButtonDisabled}>
         <IconSend />
-        Send to MERMAID for review
+        {t('buttons.suggestion_review_request')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -76,7 +77,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit, initialValue = '' }
     <Modal
       isOpen={isOpen}
       onDismiss={resetAndCloseModal}
-      title={language.pages.projectInfo.createOrganizationTitle}
+      title={t('organizations.suggest_new')}
       mainContent={modalContent}
       footerContent={footerContent}
     />

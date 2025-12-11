@@ -2,16 +2,17 @@ import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSave } from '../icons'
 import { Input } from '../generic/form'
-import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { RightFooter, ModalInputRow } from '../generic/Modal'
 import { getProfileInitialValues } from './profileFormInitialValues'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 
 const ProfileModal = ({ isOpen, onDismiss }) => {
+  const { t } = useTranslation()
   const { currentUser, saveUserProfile } = useCurrentUser()
   const initialFormValues = useMemo(() => getProfileInitialValues(currentUser), [currentUser])
 
@@ -23,18 +24,18 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
   const handleOnSubmit = () => {
     saveUserProfile(formik.values)
     onDismiss()
-    toast.success(...getToastArguments(language.success.userProfileUpdate))
+    toast.success(...getToastArguments(t('profile.updated')))
   }
 
   const modalContent = (
     <>
       <ModalInputRow>
-        <h4>Email address</h4>
+        <h4>{t('profile.email_address')}</h4>
         <div>{formik.values.email}</div>
       </ModalInputRow>
       <ModalInputRow>
         <label id="modal-input-for-firstname-label" htmlFor="modal-input-for-firstname">
-          First Name
+          {t('profile.first_name')}
         </label>
         <Input
           aria-labelledby="modal-input-for-firstname-label"
@@ -47,7 +48,7 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
       </ModalInputRow>
       <ModalInputRow>
         <label id="modal-input-for-lastname-label" htmlFor="modal-input-for-lastname">
-          Last Name
+          {t('profile.last_name')}
         </label>
         <Input
           aria-labelledby="modal-input-for-lastname-label"
@@ -61,10 +62,10 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit}>
         <IconSave />
-        Save Changes
+        {t('buttons.save_changes')}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -73,7 +74,7 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
     <Modal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      title={language.title.userProfileModal}
+      title={t('profile.your_profile')}
       mainContent={modalContent}
       footerContent={footerContent}
     />
