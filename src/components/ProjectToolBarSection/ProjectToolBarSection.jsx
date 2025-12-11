@@ -14,6 +14,7 @@ import ProjectModal from '../ProjectCard/ProjectModal'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { IconGlobe } from '../icons'
 import { useTranslation } from 'react-i18next'
+import PrimaryButton from '../generic/PrimaryButton/PrimaryButton.tsx'
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -133,20 +134,21 @@ const ProjectToolBarSection = ({
           )}
         </HeaderStyle>
         <OfflineHide>
-          <ButtonCallout
+          <PrimaryButton
             onClick={() => setIsNewProjectModalOpen(true)}
             aria-label={t('projects.new_project')}
             disabled={!isAppOnline}
-            data-testid="new-project"
-          >
-            <span>{t('projects.new_project')}</span>
-          </ButtonCallout>
-          <ProjectModal
-            isOpen={isNewProjectModalOpen}
-            onDismiss={() => setIsNewProjectModalOpen(false)}
-            project={null}
-            addProjectToProjectsPage={addProjectToProjectsPage}
+            data-testid="new-project-button"
+            label={t('projects.new_project')}
           />
+          {isNewProjectModalOpen && (
+            <ProjectModal
+              isOpen={true}
+              onDismiss={() => setIsNewProjectModalOpen(false)}
+              project={null}
+              addProjectToProjectsPage={addProjectToProjectsPage}
+            />
+          )}
         </OfflineHide>
       </RowWrapper>
       <FilterRowWrapper>

@@ -1,0 +1,24 @@
+@use '../../../style/theme.scss';
+
+.button-root__primary {
+  background-color: theme.$white;
+  color: theme.$callout;
+  padding: theme.$spacing-medium theme.$spacing-large;
+  border: solid 1px theme.$callout;
+  border-radius: theme.$border-radius;
+  text-transform: none;
+  font-size: theme.$default-font-size;
+  &:hover,
+  &:focus,
+  &:active:enabled {
+    background-color: theme.$callout-active;
+    border-color: theme.$callout-active;
+  }
+  &:disabled,
+  &:disabled:hover {
+    cursor: not-allowed;
+    background-color: theme.$white;
+    color: theme.$disabled;
+    border-color: theme.$disabled;
+  }
+}

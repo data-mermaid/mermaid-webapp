@@ -31,7 +31,7 @@ test('Projects component renders with the expected UI elements', async () => {
   expect(projectListItems).toHaveLength(6)
 
   // expect filter bar, sort buttons, new project button
-  const newProjectButton = screen.getByTestId('new-project')
+  const newProjectButton = screen.getByTestId('new-project-button')
 
   expect(newProjectButton).toBeInTheDocument()
 
