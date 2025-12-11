@@ -40,16 +40,8 @@ const Footer = () => {
       <StyledToggleLabel htmlFor="offline-toggle-switch" data-testid="offline-toggle-switch-label">
         <OfflineToggle id="offline-toggle-switch" aria-label={t('offline_toggle')} />
         <CssToggle />
-        <span>
-          {isAppOnline ? (
-            <span data-testid="status-online">
-              <Trans i18nKey="status_online" components={{ strong: <strong /> }} />
-            </span>
-          ) : (
-            <span data-testid="status-offline">
-              <Trans i18nKey="status_offline" components={{ strong: <strong /> }} />
-            </span>
-          )}
+        <span data-testid={isAppOnline ? 'status-online' : 'status-offline'}>
+          <Trans i18nKey={isAppOnline ? 'status_online' : 'status_offline'} />
         </span>
       </StyledToggleLabel>
       <FooterNav>
