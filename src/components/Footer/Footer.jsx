@@ -60,7 +60,7 @@ const Footer = () => {
             aria-label={t('help_dropdown')}
             data-testid="help-documents-dropdown"
           >
-            {t('help_documents')}
+            {t('help_documents')} ▲
           </TextLink>
           {isDropdownOpen && (
             <HelpLinksWrapper>
@@ -96,7 +96,7 @@ const Footer = () => {
             {t('contact')}
           </a>
           <a
-            href="https://datamermaid.org/partners-and-teams/"
+            href="https://datamermaid.org/about-mermaid"
             target="_blank"
             rel="noreferrer"
             data-testid="credits-link"
