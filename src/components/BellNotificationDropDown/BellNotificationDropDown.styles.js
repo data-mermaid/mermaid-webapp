@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import theme from '../../theme'
-import { ButtonSecondary, CloseButton } from '../generic/buttons'
 
 export const NotificationCardWrapper = styled('div')`
   background: ${theme.color.grey1};
@@ -12,9 +11,6 @@ export const NotificationCardWrapper = styled('div')`
   position: absolute;
   right: 0;
   padding: ${theme.spacing.medium};
-`
-export const DismissButtonSecondary = styled(ButtonSecondary)`
-  width: 100%;
 `
 export const NotificationCard = styled('div')`
   display: grid;
@@ -43,8 +39,6 @@ export const NotificationDateWrapper = styled('div')`
 export const NotificationActualDate = styled('p')`
   font-size: ${theme.typography.xSmallFontSize};
 `
-export const NotificationTimeAgoDate = styled('p')``
-export const NotificationCloseButton = styled(CloseButton)``
 export const NotificationContent = styled('div')`
   word-wrap: break-word;
   word-break: break-word; /* Ensure words break */
