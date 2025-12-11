@@ -5,7 +5,7 @@
   "private": true,
   "homepage": "",
   "dependencies": {
-    "@auth0/auth0-react": "^1.2.0",
+    "@auth0/auth0-react": "^2.10.0",
     "@babel/core": "^7.23.5",
     "@babel/eslint-parser": "^7.28.5",
     "@babel/plugin-transform-react-jsx": "^7.14.9",
