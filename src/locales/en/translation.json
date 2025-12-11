@@ -23,7 +23,7 @@
   },
   "toasts": {
     "export_error": "There was an error exporting the report.",
-    "submitted_records_unavailable": "Submitted record data are currently unavailable."
+    "submitted_records_unavailable": "Submitted record data is currently unavailable."
   },
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",
@@ -149,7 +149,7 @@
     "no_submitted_sample_units": "This project has no submitted sample units yet.",
     "errors": {
       "project_name_exists": "Project name already exists in MERMAID",
-      "data_unavailable": "Project data are currently unavailable.",
+      "data_unavailable": "Project data is currently unavailable.",
       "duplicate_name": "A project with the same name already exists."
     },
     "success": {
@@ -200,11 +200,11 @@
       "warnings": "Warnings"
     },
     "errors": {
-      "data_unavailable": "Sample unit data are currently unavailable.",
+      "data_unavailable": "Sample unit data is currently unavailable.",
       "observations_unavailable_offline": "Sample unit observations unavailable offline",
       "classification_unavailable_offline": "This sample unit is using image classification and is unavailable offline.",
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable.",
-      "submitted_data_unavailable": "Submitted record data are currently unavailable."
+      "submitted_data_unavailable": "Submitted record data is currently unavailable."
     }
   },
   "fish_belt_observations": {
@@ -352,7 +352,7 @@
     "gear_restriction": "Gear restrictions",
     "species_restriction": "Species restrictions",
     "no_take": "No take",
-    "data_unavailable": "Management Regime records data are currently unavailable.",
+    "data_unavailable": "Management Regime records data is currently unavailable.",
     "no_management_regimes": "This project has no management regimes.",
     "copy": "Copy Management Regimes",
     "copy_mrs_from_other_projects": "Copy MRs from other projects",
@@ -373,14 +373,14 @@
     "copy_selected_sites_to_project": "Copy selected sites to project",
     "export": "Export sites",
     "no_sites": "This project has no sites.",
-    "data_unavailable": "Site record data are currently unavailable.",
+    "data_unavailable": "Site record data is currently unavailable.",
     "missing_site_name": "(Missing Site Name)"
   },
   "sample_units_and_observers": "Sample Units / Observers",
   "sample_units_and_management_regimes": "Sample Units / Management Regimes",
   "in_collecting_with": "In Collecting with:",
   "errors": {
-    "summary_record_data_unavailable": "Summary record data are currently unavailable."
+    "summary_record_data_unavailable": "Summary record data is currently unavailable."
   },
   "map": {
     "attribution": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href=\"http://www.allencoralatlas.org/\"  style=\"font-size:1.25rem;\">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>",
