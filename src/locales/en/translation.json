@@ -324,7 +324,7 @@
     "gfcr": "GFCR",
     "gfcr_long": "Global Fund for Coral Reefs (GFCR)",
     "add_gfcr_indicators": "GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world.",
-    "remove_gfcr_Indicators": "Removing GFCR indicators from this project will not delete them, but just hide them.",
+    "remove_gfcr_indicators": "Removing GFCR indicators from this project will not delete them, but just hide them.",
     "disabled_gfcr_info": "Disabling GFCR Indicators for this project will not delete them, but just hide them from the <a />. No data will be lost. You can re-enable them at any time.",
     "create_new": "Create new",
     "exporting": "Exporting...",

@@ -49,7 +49,7 @@ const F4Form = ({
   const { t } = useTranslation()
   const [isUpdateFromCalc, setIsUpdateFromCalc] = useState(false)
   // Eventually 'annual_report' can be removed if we're sure there are no indicators sets with this value in the DB
-  const isReport = indicatorSetType === 'report' || 'annual_report'
+  const isReport = indicatorSetType === 'report' || indicatorSetType === 'annual_report'
 
   const _indicatorSetChanged = useEffect(() => {
     if (isUpdateFromCalc) {

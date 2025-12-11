@@ -242,7 +242,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       const errors = {}
 
       if (!values.title) {
-        errors.name = [{ code: t('forms.required_field'), id: 'Required' }]
+        errors.title = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (!values.report_date) {
