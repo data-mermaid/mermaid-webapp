@@ -294,7 +294,7 @@ const NewAttributeModal = ({
             >{`${attributeName} ${modalAssets.proposedAttributeValue}`}</Td>
           </Tr>
           <Tr>
-            <Td id="user-label">{t('user')}</Td>
+            <Td id="user-label">{t('users.user')}</Td>
             <Td data-testid="proposed-attribute-user" aria-labelledby="user-label">
               {currentUser.full_name}
             </Td>

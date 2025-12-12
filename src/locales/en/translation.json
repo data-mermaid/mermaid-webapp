@@ -33,7 +33,7 @@
   },
   "toasts": {
     "export_error": "There was an error exporting the report.",
-    "submitted_records_unavailable": "Submitted record data are currently unavailable."
+    "submitted_records_unavailable": "Submitted record data is currently unavailable."
   },
   "loading": "Loading",
   "loading_item": "Loading {{itemName}}",
@@ -272,7 +272,7 @@
       "observations_unavailable_offline": "Sample unit observations unavailable offline",
       "classification_unavailable_offline": "This sample unit is using image classification and is unavailable offline.",
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable.",
-      "submitted_data_unavailable": "Submitted record data are currently unavailable."
+      "submitted_data_unavailable": "Submitted record data is currently unavailable."
     }
   },
   "fish_belt_observations": {
@@ -292,6 +292,11 @@
   "toggle_table_visibility": "Toggle table visibility",
   "toggle_label_visibility": "Toggle label visibility",
   "user": "User",
+  "data": "Data",
+  "metadata": "Metadata",
+  "overview": "Overview",
+  "admin": "Admin",
+  "project_info": "Project Info",
   "profile": {
     "profile": "Profile",
     "your_profile": "Your Profile",
@@ -625,7 +630,7 @@
     "gear_restriction": "Gear restrictions",
     "species_restriction": "Species restrictions",
     "no_take": "No take",
-    "data_unavailable": "Management Regime records data are currently unavailable.",
+    "data_unavailable": "Management Regime records data is currently unavailable.",
     "no_management_regimes": "This project has no management regimes.",
     "copy": "Copy Management Regimes",
     "copy_mrs_from_other_projects": "Copy MRs from other projects",
@@ -646,18 +651,19 @@
     "copy_selected_sites_to_project": "Copy selected sites to project",
     "export": "Export sites",
     "no_sites": "This project has no sites.",
-    "data_unavailable": "Site record data are currently unavailable.",
+    "data_unavailable": "Site record data is currently unavailable.",
     "missing_site_name": "(Missing Site Name)"
   },
   "add_update_sites_regimes": "Add/update site or management regimes",
   "delete_sites_regimes": "Delete site or management regimes",
   "download_sites_regimes": "Download sites and management regimes",
   "sample_units_and_observers": "Sample Units / Observers",
+  "sample_units_and_management_regimes": "Sample Units / Management Regimes",
   "view_observers_units_overview": "View observers and sample units overview",
   "view_regimes_overview": "View management regimes overview",
   "in_collecting_with": "In Collecting with:",
   "errors": {
-    "summary_record_data_unavailable": "Summary record data are currently unavailable."
+    "summary_record_data_unavailable": "Summary record data is currently unavailable."
   },
   "map": {
     "attribution": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href=\"http://www.allencoralatlas.org/\"  style=\"font-size:1.25rem;\">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>",
@@ -713,9 +719,9 @@
   },
   "data_sharing": {
     "data_sharing": "Data Sharing",
-    "more_powerful": "Data are much more powerful when shared.",
-    "information": "Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data are collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.",
-    "learn_more": "Learn more about how your data are shared...",
+    "more_powerful": "data is much more powerful when shared.",
+    "information": "Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.",
+    "learn_more": "Learn more about how your data is shared...",
     "is_test_project": "This is a test project",
     "test_project_data": "Data for a test project will not be included in public reporting.",
     "private": "Private",
@@ -751,6 +757,7 @@
     }
   },
   "users": {
+    "user": "User",
     "users": "Users",
     "introduction": "MERMAID gives you the ability to control who can see and access your data.",
     "role": "Role",
@@ -771,7 +778,7 @@
     "transfer_unsubmitted_units_from_one": "Transfer {{count}} unsubmitted sample unit from",
     "transfer_unsubmitted_units_from_other": "Transfer {{count}} unsubmitted sample units from",
     "transfer_sample_units_to": "Transfer sample units to:",
-    "user_records_unavailable": "User record data are currently unavailable.",
+    "user_records_unavailable": "User record data is currently unavailable.",
     "roles": {
       "admin": "Admin",
       "collector": "Collector",
