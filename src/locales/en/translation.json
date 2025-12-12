@@ -719,9 +719,9 @@
   },
   "data_sharing": {
     "data_sharing": "Data Sharing",
-    "more_powerful": "Data are much more powerful when shared.",
-    "information": "Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data are collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.",
-    "learn_more": "Learn more about how your data are shared...",
+    "more_powerful": "data is much more powerful when shared.",
+    "information": "Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.",
+    "learn_more": "Learn more about how your data is shared...",
     "is_test_project": "This is a test project",
     "test_project_data": "Data for a test project will not be included in public reporting.",
     "private": "Private",
@@ -778,7 +778,7 @@
     "transfer_unsubmitted_units_from_one": "Transfer {{count}} unsubmitted sample unit from",
     "transfer_unsubmitted_units_from_other": "Transfer {{count}} unsubmitted sample units from",
     "transfer_sample_units_to": "Transfer sample units to:",
-    "user_records_unavailable": "User record data are currently unavailable.",
+    "user_records_unavailable": "User record data is currently unavailable.",
     "roles": {
       "admin": "Admin",
       "collector": "Collector",
