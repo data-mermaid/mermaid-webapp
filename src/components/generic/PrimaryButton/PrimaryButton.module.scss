@@ -3,16 +3,17 @@
 .button-root__primary {
   background-color: theme.$white;
   color: theme.$callout;
-  padding: theme.$spacing-medium theme.$spacing-large;
-  border: solid 1px theme.$callout;
+  padding: theme.$spacing-small theme.$spacing-medium;
+  border: 1px solid theme.$callout;
   border-radius: theme.$border-radius;
   text-transform: none;
+  font-family: theme.$font-family;
   font-size: theme.$default-font-size;
   &:hover,
   &:focus,
   &:active:enabled {
     background-color: theme.$callout-active;
-    border-color: theme.$callout-active;
+    border-color: theme.$callout;
   }
   &:disabled,
   &:disabled:hover {
@@ -30,7 +31,6 @@
 .primary-button-dropdown__list {
   position: absolute;
   width: 100%;
-  background-color: hotpink;
   list-style: none;
   padding-inline-start: 0;
   margin-block-start: 0;
@@ -38,9 +38,12 @@
   li {
     list-style: none;
     width: 100%;
+    text-wrap: nowrap;
+    max-width: 100%;
 
     button {
       border-top: none;
+      max-width: 100%;
     }
   }
 }

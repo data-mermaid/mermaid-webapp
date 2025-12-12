@@ -46,7 +46,7 @@ const PrimaryButtonDropdown = ({
         <FontAwesomeIcon
           icon={faCaretDown}
           style={{
-            transform: `rotate(${isDropdownOpen ? '-90deg' : '0'})`,
+            transform: `rotate(${isDropdownOpen ? '180deg' : '0'})`,
           }}
         />
       </IconButton>
