@@ -1,3 +1,4 @@
+import React from 'react'
 import { Button } from '@mui/material'
 import styles from './PrimaryButton.module.scss'
 
@@ -11,7 +12,6 @@ interface PrimaryButtonProps {
 
 const PrimaryButton = ({ onClick, label, disabled, testId }: PrimaryButtonProps) => {
   return (
-    // eslint-disable-next-line react/react-in-jsx-scope
     <Button
       variant="outlined"
       onClick={onClick}

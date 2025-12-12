@@ -25,18 +25,4 @@ export const Disabled: Story = {
   },
 }
 
-export const Dropdown: Story = {
-  args: {
-    onClick: () => {},
-    disabled: true,
-    testId: 'primary-button',
-    label: 'Click me',
-    children: (
-      <ul>
-        <li>Other option</li>
-      </ul>
-    ),
-  },
-}
-
 export default meta

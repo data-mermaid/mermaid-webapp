@@ -160,7 +160,7 @@
     "last_updated_date": "Last Updated Date",
     "project_name": "Project Name",
     "country": "Country",
-    "new_project": "New Project",
+    "new_project": "New project",
     "name_of_project": "Name of project",
     "loading_indicator": "projects list loading indicator",
     "no_submitted_sample_units": "This project has no submitted sample units yet.",
@@ -168,6 +168,9 @@
     "add_remove_members": "Add or remove project members",
     "view_member_emails": "View project member email",
     "delete_project": "Delete a project",
+    "buttons": {
+      "add_demo": "Add demo project"
+    },
     "errors": {
       "project_name_exists": "Project name already exists in MERMAID",
       "data_unavailable": "Project data is currently unavailable.",

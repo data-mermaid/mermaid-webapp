@@ -21,4 +21,26 @@
     color: theme.$disabled;
     border-color: theme.$disabled;
   }
+  &:nth-of-type(2) {
+    padding: theme.$spacing-large;
+    border-left: none;
+  }
+}
+
+.primary-button-dropdown__list {
+  position: absolute;
+  width: 100%;
+  background-color: hotpink;
+  list-style: none;
+  padding-inline-start: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  li {
+    list-style: none;
+    width: 100%;
+
+    button {
+      border-top: none;
+    }
+  }
 }

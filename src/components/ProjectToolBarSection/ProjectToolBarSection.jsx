@@ -7,14 +7,14 @@ import {
   mediaQueryPhoneOnly,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
-import { ButtonCallout, IconButton } from '../generic/buttons'
+import { IconButton } from '../generic/buttons'
 import { Input, inputStyles } from '../generic/form'
 import OfflineHide from '../generic/OfflineHide'
 import ProjectModal from '../ProjectCard/ProjectModal'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { IconGlobe } from '../icons'
 import { useTranslation } from 'react-i18next'
-import PrimaryButton from '../generic/PrimaryButton/PrimaryButton.tsx'
+import PrimaryButtonDropdown from '../generic/PrimaryButton/PrimaryButtonDropdown.tsx'
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -134,7 +134,7 @@ const ProjectToolBarSection = ({
           )}
         </HeaderStyle>
         <OfflineHide>
-          <PrimaryButton
+          <PrimaryButtonDropdown
             onClick={() => setIsNewProjectModalOpen(true)}
             aria-label={t('projects.new_project')}
             disabled={!isAppOnline}

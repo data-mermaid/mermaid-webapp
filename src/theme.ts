@@ -9,7 +9,7 @@ const callout = colorHelper('#DB3B00')
 const caution = colorHelper('#BB1600')
 const warning = colorHelper('#FEDD2F')
 const ignore = colorHelper('#D6DDE6')
-const white = '#fff'
+const white = colorHelper('#fff')
 const black = primary.mix(colorHelper('black'), 0.95)
 const grey0 = colorHelper.hsl(248, 13, 55)
 const grey1 = colorHelper.hsl(248, 13, 88)
@@ -31,7 +31,7 @@ const xlarge = '2rem'
 const color = {
   textColor,
   brandSecondary: '#f2645a',
-  white: '#FFF',
+  white: white.toString(),
   grey0: grey0.toString(),
   grey1: grey1.toString(),
   grey2: grey2.toString(),
@@ -57,7 +57,7 @@ const color = {
   primaryColor: primary.toString(),
   primaryHover: primary.mix(colorHelper(white), 0.1).toString(),
   primaryActive: primary.mix(colorHelper(black), 0.3).toString(),
-  primaryText: '#FFF',
+  primaryText: white.toString(),
   primaryBorder: primary.mix(colorHelper(black), 0.2).toString(),
   primaryDisabledColor: primary.mix(colorHelper('grey'), 0.6).toString(),
   primaryDisabledText: '#9AA8B7',
@@ -72,14 +72,14 @@ const color = {
 
   cautionColor: caution.toString(),
   cautionHover: caution.mix(colorHelper(white), 0.9).toString(),
-  cautionText: '#FFF',
+  cautionText: white.toString(),
   cautionBorder: caution.mix(colorHelper(black), 0.2).toString(),
   cautionActive: caution.mix(colorHelper(white), 0.7).toString(),
   cautionDisabledColor: caution.mix(colorHelper('black'), 0.2).toString(),
   cautionDisabledText: '#C0766C',
   inlineErrorColor: '#F6DCD9',
 
-  calloutColor: '#FFF',
+  calloutColor: white.toString(),
   calloutHover: callout.mix(colorHelper(white), 0.9).toString(),
   calloutText: callout.toString(),
   calloutBorder: callout.toString(),
@@ -97,13 +97,13 @@ const color = {
   tableBorderColor: grey2.toString(),
   sideBarColor: black.mix(colorHelper(white), 0.9).toString(),
   headerColor: primary.toString(),
-  footerColor: '#FFF',
+  footerColor: white.toString(),
   tableRowOdd: '#fdfdfe',
   tableRowEven: '#f8f8fa',
   tableRowHover: '#f1f1f4',
   focusWithin: secondary.toString(),
   unitBackground: white.mix(colorHelper(black), 0.1).toString(),
-  inputBackground: '#FFF',
+  inputBackground: white.toString(),
   outline: `solid 2px ${primary}`,
   headerDropdownMenuBackground: `#174b82ee`,
   getMessageColorBackground: function getMessageColorBackground(messageType: MessageType) {
@@ -199,7 +199,6 @@ const typography = {
   noWordBreak: css`
     overflow-wrap: break-word;
     word-wrap: break-word;
-    word-break: break-all;
     word-break: break-word;
     hyphens: auto;
   `,
