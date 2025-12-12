@@ -580,6 +580,18 @@
   "count": "Count",
   "biomass": "Biomass",
   "validations": "Validations",
+  "status_online": "You're <strong>ONLINE</strong>",
+  "status_offline": "You're <strong>OFFLINE</strong>. Some contents may be out of date.",
+  "help_documents": "Help (PDF)",
+  "languages": {
+    "english": "English",
+    "bahasa_indonesia": "Bahasa Indonesia"
+  },
+  "terms": "Terms",
+  "contact": "Contact",
+  "credits": "Credits",
+  "help_dropdown": "Help documents dropdown",
+  "offline_toggle": "Offline toggle",
   "filters": {
     "method": "Filter Method",
     "search_helper_text": "<b>Use double quotes to search exact phrases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
