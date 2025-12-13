@@ -74,7 +74,7 @@ const Footer = () => {
                   id="gtm-help-pdf-indonesian"
                   rel="noreferrer"
                 >
-                  {t('languages.bahasa_indonesia')}
+                  {t('languages.indonesian')}
                 </a>
               </li>
             </HelpLinksWrapper>

@@ -29,9 +29,28 @@ import MermaidCollectLogo from '../../assets/mermaid-collect-logo.svg'
 import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
 import { useTranslation } from 'react-i18next'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLanguage } from '@fortawesome/free-solid-svg-icons'
+import i18n from '../../../i18n.ts'
 
 const GlobalLinks = ({ isAppOnline }) => {
   const { t } = useTranslation()
+  const isDevelopmentEnvironment = import.meta.env.VITE_ENVIRONMENT !== 'production'
+  const handleLanguageSelect = (lng) => {
+    if (lng === 'break') {
+      i18n.removeResourceBundle('en', 'translation')
+    } else {
+      if (!i18n.hasResourceBundle('en', 'translation')) {
+        i18n.addResourceBundle('en', 'translation', {
+          key: 'value',
+        })
+      }
+    }
+    i18n.changeLanguage(lng).then((t) => {
+      t(($) => $.key)
+    })
+    // i18n.reloadResources(lang)
+  }
   const handleReferenceMouseOver = (event) => {
     // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
     // (eg a user has just added a new fish species and it has been approved, but the service worker has cached the old one)
@@ -78,6 +97,34 @@ const GlobalLinks = ({ isAppOnline }) => {
           {t('mermaid_explore')}
         </StyledNavLink>
       </OfflineHide>
+      {isDevelopmentEnvironment && (
+        <OfflineHide>
+          <HideShow
+            closeOnClickWithin={true}
+            button={
+              <HeaderButtonThatLooksLikeLink>
+                <HeaderIconWrapper>
+                  <FontAwesomeIcon icon={faLanguage} style={{ marginRight: '10px' }} />
+                  {t('languages.language')}
+                </HeaderIconWrapper>
+              </HeaderButtonThatLooksLikeLink>
+            }
+            contents={
+              <UserMenu>
+                <UserMenuButton onClick={() => handleLanguageSelect('break')}>
+                  No language
+                </UserMenuButton>
+                <UserMenuButton onClick={() => handleLanguageSelect('en')}>
+                  {t('languages.english')}
+                </UserMenuButton>
+                <UserMenuButton onClick={() => handleLanguageSelect('id')}>
+                  {t('languages.indonesian')}
+                </UserMenuButton>
+              </UserMenu>
+            }
+          />
+        </OfflineHide>
+      )}
     </>
   )
 }
