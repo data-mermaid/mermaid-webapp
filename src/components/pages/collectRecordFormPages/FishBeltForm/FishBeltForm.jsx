@@ -224,13 +224,21 @@ const FishBeltForm = ({ isNewRecord = true }) => {
           },
         })
         updateFishNameOptionsStateWithOfflineStorageData()
-        toast.success(...getToastArguments(t('fish_belt_observations.proposed_species_saved')))
+        toast.success(
+          ...getToastArguments(
+            t('fish_belt_observations.proposed_species_saved', {
+              genusName: genusName,
+              speciesName: speciesName,
+            }),
+          ),
+        )
       })
       .catch((error) => {
         if (error.message === 'Species already exists') {
           toast.warning(
             ...getToastArguments(
               t('fish_belt_observations.errors.species_already_exists', {
+                genusName: genusName,
                 speciesName: speciesName,
               }),
             ),
@@ -250,6 +258,7 @@ const FishBeltForm = ({ isNewRecord = true }) => {
               toast.error(
                 ...getToastArguments(
                   t('fish_belt_observations.errors.proposed_species_unsaved', {
+                    genusName: genusName,
                     speciesName: speciesName,
                   }),
                 ),
