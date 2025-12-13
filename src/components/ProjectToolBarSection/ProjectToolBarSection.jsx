@@ -14,7 +14,7 @@ import ProjectModal from '../ProjectCard/ProjectModal'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { IconGlobe } from '../icons'
 import { useTranslation } from 'react-i18next'
-import PrimaryButtonDropdown from '../generic/PrimaryButton/PrimaryButtonDropdown.tsx'
+import CalloutButtonDropdown from '../generic/CalloutButton/CalloutButtonDropdown.tsx'
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -134,7 +134,7 @@ const ProjectToolBarSection = ({
           )}
         </HeaderStyle>
         <OfflineHide>
-          <PrimaryButtonDropdown
+          <CalloutButtonDropdown
             onClick={() => setIsNewProjectModalOpen(true)}
             aria-label={t('projects.new_project')}
             disabled={!isAppOnline}

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Button, IconButton } from '@mui/material'
-import styles from './PrimaryButton.module.scss'
+import styles from './CalloutButton.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
 
-interface PrimaryButtonDropdownProps {
+interface CalloutButtonDropdownProps {
   onClick: () => void
   label: string
   disabled: boolean
@@ -13,12 +13,12 @@ interface PrimaryButtonDropdownProps {
   children?: React.ReactNode
 }
 
-const PrimaryButtonDropdown = ({
+const CalloutButtonDropdown = ({
   onClick,
   label,
   disabled,
   testId,
-}: PrimaryButtonDropdownProps) => {
+}: CalloutButtonDropdownProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const { t } = useTranslation()
   const toggleMenu = () => {
@@ -67,4 +67,4 @@ const PrimaryButtonDropdown = ({
     </div>
   )
 }
-export default PrimaryButtonDropdown
+export default CalloutButtonDropdown

@@ -1,6 +1,6 @@
 @use '../../../style/theme.scss';
 
-.button-root__primary {
+.button-root__callout {
   background-color: theme.$white;
   color: theme.$callout;
   padding: theme.$spacing-small theme.$spacing-medium;
@@ -28,7 +28,7 @@
   }
 }
 
-.primary-button-dropdown__list {
+.callout-button-dropdown__list {
   position: absolute;
   width: 100%;
   list-style: none;

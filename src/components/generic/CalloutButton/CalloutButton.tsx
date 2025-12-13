@@ -1,8 +1,8 @@
 import React from 'react'
 import { Button } from '@mui/material'
-import styles from './PrimaryButton.module.scss'
+import styles from './CalloutButton.module.scss'
 
-interface PrimaryButtonProps {
+interface CalloutButtonProps {
   onClick: () => void
   label: string
   disabled: boolean
@@ -10,7 +10,7 @@ interface PrimaryButtonProps {
   children?: React.ReactNode
 }
 
-const PrimaryButton = ({ onClick, label, disabled, testId }: PrimaryButtonProps) => {
+const CalloutButton = ({ onClick, label, disabled, testId }: CalloutButtonProps) => {
   return (
     <Button
       variant="outlined"
@@ -18,11 +18,11 @@ const PrimaryButton = ({ onClick, label, disabled, testId }: PrimaryButtonProps)
       disabled={disabled}
       data-testid={testId}
       classes={{
-        root: styles['button-root__primary'],
+        root: styles['button-root__callout'],
       }}
     >
       {label}
     </Button>
   )
 }
-export default PrimaryButton
+export default CalloutButton
