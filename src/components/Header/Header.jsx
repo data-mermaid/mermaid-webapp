@@ -34,9 +34,7 @@ import { faLanguage } from '@fortawesome/free-solid-svg-icons'
 import i18n from '../../../i18n.ts'
 
 const handleLanguageSelect = (lng) => {
-  i18n.changeLanguage(lng).then((t) => {
-    t(($) => $.key)
-  })
+  i18n.changeLanguage(lng)
 }
 
 const GlobalLinks = ({ isAppOnline }) => {
