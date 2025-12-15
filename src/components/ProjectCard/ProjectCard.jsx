@@ -154,6 +154,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
                 checked={isOfflineReady}
                 onChange={handleProjectOfflineReadyClick}
                 disabled={!isAppOnline}
+                data-testid="offline-ready"
               />
               {t('projects.available_offline')}
             </CheckBoxLabel>
