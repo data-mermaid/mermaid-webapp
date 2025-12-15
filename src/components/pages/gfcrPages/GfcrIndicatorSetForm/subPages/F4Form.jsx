@@ -8,11 +8,12 @@ import { H2 } from '../../../../generic/text'
 import { InputRow } from '../../../../generic/form'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../../../language'
+import { useTranslation } from 'react-i18next'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../../../theme'
 import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
 import GfcrDecimalInputField from '../GfcrDecimalInputField'
+import GfcrHelperLinks from './GfcrHelperLinks'
 
 const StyledButtonPrimary = styled(ButtonPrimary)`
   width: 100%;
@@ -37,8 +38,6 @@ const StyledValueUpdateText = styled.strong`
   font-size: ${theme.typography.smallFontSize};
 `
 
-const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
-
 const F4Form = ({
   formik,
   handleInputFocus,
@@ -47,9 +46,10 @@ const F4Form = ({
   handleFormSubmit,
   displayHelp,
 }) => {
+  const { t } = useTranslation()
   const [isUpdateFromCalc, setIsUpdateFromCalc] = useState(false)
   // Eventually 'annual_report' can be removed if we're sure there are no indicators sets with this value in the DB
-  const isReport = indicatorSetType === 'report' || 'annual_report'
+  const isReport = indicatorSetType === 'report' || indicatorSetType === 'annual_report'
 
   const _indicatorSetChanged = useEffect(() => {
     if (isUpdateFromCalc) {
@@ -82,32 +82,31 @@ const F4Form = ({
     f43ValueUpdateText = null
 
   if (isF41UsingCalcValue) {
-    f41ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+    f41ValueUpdateText = t('gfcr.forms.f4_value_from_mermaid_data')
   } else if (!isF41UsingCalcValue && indicatorSet?.f4_1_calc) {
     f41ValueUpdateText = (
       <>
-        {gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc}{' '}
-        <strong>({indicatorSet.f4_1_calc})</strong>
+        {t('gfcr.forms.f4_value_different_from_calc')} <strong>({indicatorSet.f4_1_calc})</strong>
       </>
     )
   } else if (!isF41UsingCalcValue && !indicatorSet?.f4_1_calc && !formik.values.f4_1) {
-    f41ValueUpdateText = gfcrIndicatorSetLanguage.f4_noValue
+    f41ValueUpdateText = t('gfcr.forms.f4_no_value')
   }
 
   if (isF42UsingCalcValue) {
-    f42ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+    f42ValueUpdateText = t('gfcr.forms.f4_value_from_mermaid_data')
   } else if (!isF42UsingCalcValue && indicatorSet?.f4_2_calc) {
-    f42ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc
+    f42ValueUpdateText = t('gfcr.forms.f4_value_different_from_calc')
   } else if (!isF42UsingCalcValue && !indicatorSet?.f4_2_calc && !formik.values.f4_2) {
-    f42ValueUpdateText = gfcrIndicatorSetLanguage.f4_noValue
+    f42ValueUpdateText = t('gfcr.forms.f4_no_value')
   }
 
   if (isF43UsingCalcValue) {
-    f43ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueFromMermaidData
+    f43ValueUpdateText = t('gfcr.forms.f4_value_from_mermaid_data')
   } else if (!isF43UsingCalcValue && indicatorSet?.f4_3_calc) {
-    f43ValueUpdateText = gfcrIndicatorSetLanguage.f4_valueDifferentFromCalc
+    f43ValueUpdateText = t('gfcr.forms.f4_value_different_from_calc')
   } else if (!isF43UsingCalcValue && !indicatorSet?.f4_3_calc && !formik.values.f4_3) {
-    f43ValueUpdateText = gfcrIndicatorSetLanguage.f4_noValue
+    f43ValueUpdateText = t('gfcr.forms.f4_no_value')
   }
 
   const isF41ValueZeroAndCalcValueNull = formik.values.f4_1 === 0 && !indicatorSet?.f4_1_calc
@@ -129,15 +128,15 @@ const F4Form = ({
 
   return (
     <StyledGfcrInputWrapper>
-      <H2>{gfcrIndicatorSetLanguage.f4Heading}</H2>
+      <H2>{t('gfcr.forms.f4_heading')}</H2>
       {isReport && (
         <StyledInputRowDates>
           <label>
-            <strong>{gfcrIndicatorSetLanguage.f4_reportingDateRange}</strong>
+            <strong>{t('gfcr.forms.f4_reporting_date_range')}</strong>
           </label>
           <StyledGfcrSubInputWrapper>
             <InputWithLabelAndValidation
-              label={gfcrIndicatorSetLanguage.f4_start_date}
+              label={t('gfcr.forms.f4_start_date')}
               id="f4_start_date"
               type="date"
               {...formik.getFieldProps('f4_start_date')}
@@ -146,7 +145,7 @@ const F4Form = ({
               }
             />
             <InputWithLabelAndValidation
-              label={gfcrIndicatorSetLanguage.f4_end_date}
+              label={t('gfcr.forms.f4_end_date')}
               id="f4_end_date"
               type="date"
               {...formik.getFieldProps('f4_end_date')}
@@ -159,7 +158,7 @@ const F4Form = ({
               onClick={handleSaveAndUpdateValues}
               disabled={saveAndUpdateValuesButtonDisabled}
             >
-              {gfcrIndicatorSetLanguage.f4_saveAndUpdateValues}
+              {t('gfcr.forms.f4_save_and_update_values')}
             </StyledButtonPrimary>
           </StyledGfcrSubInputWrapper>
         </StyledInputRowDates>
@@ -169,12 +168,12 @@ const F4Form = ({
           id={'f4_1'}
           label={
             <>
-              <strong>F 4.1</strong> {gfcrIndicatorSetLanguage.f4_1}
+              <strong>F 4.1</strong> {t('gfcr.forms.f4_1')}
             </>
           }
           unit="%"
-          maxNumberOfDecimals={1}
-          helperText={gfcrIndicatorSetLanguage.getF4_1_helper()}
+          maxNumberOfDecimals={2}
+          helperText={<GfcrHelperLinks translationKey="gfcr.forms.f4_1_helper" />}
           displayHelp={displayHelp}
           handleInputFocus={handleInputFocus}
           formik={formik}
@@ -186,12 +185,12 @@ const F4Form = ({
           id={'f4_2'}
           label={
             <>
-              <strong>F 4.2</strong> {gfcrIndicatorSetLanguage.f4_2}
+              <strong>F 4.2</strong> {t('gfcr.forms.f4_2')}
             </>
           }
           unit="%"
           maxNumberOfDecimals={1}
-          helperText={gfcrIndicatorSetLanguage.getF4_2_helper()}
+          helperText={<GfcrHelperLinks translationKey="gfcr.forms.f4_2_helper" />}
           displayHelp={displayHelp}
           handleInputFocus={handleInputFocus}
           formik={formik}
@@ -203,12 +202,12 @@ const F4Form = ({
           id={'f4_3'}
           label={
             <>
-              <strong>F 4.3</strong> {gfcrIndicatorSetLanguage.f4_3}
+              <strong>F 4.3</strong> {t('gfcr.forms.f4_3')}
             </>
           }
           unit="kg/ha"
-          maxNumberOfDecimals={1}
-          helperText={gfcrIndicatorSetLanguage.getF4_3_helper()}
+          maxNumberOfDecimals={2}
+          helperText={<GfcrHelperLinks translationKey="gfcr.forms.f4_3_helper" />}
           displayHelp={displayHelp}
           handleInputFocus={handleInputFocus}
           formik={formik}
@@ -217,7 +216,7 @@ const F4Form = ({
       </StyledInputRowQuestions>
       <TextareaWithLabelAndValidation
         id="f4_notes"
-        label={gfcrIndicatorSetLanguage.notes}
+        label={t('forms.notes')}
         {...formik.getFieldProps('f4_notes')}
       />
     </StyledGfcrInputWrapper>
