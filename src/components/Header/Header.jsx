@@ -33,24 +33,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLanguage } from '@fortawesome/free-solid-svg-icons'
 import i18n from '../../../i18n.ts'
 
+const handleLanguageSelect = (lng) => {
+  i18n.changeLanguage(lng).then((t) => {
+    t(($) => $.key)
+  })
+}
+
 const GlobalLinks = ({ isAppOnline }) => {
   const { t } = useTranslation()
   const isDevelopmentEnvironment = import.meta.env.VITE_ENVIRONMENT !== 'production'
-  const handleLanguageSelect = (lng) => {
-    if (lng === 'break') {
-      i18n.removeResourceBundle('en', 'translation')
-    } else {
-      if (!i18n.hasResourceBundle('en', 'translation')) {
-        i18n.addResourceBundle('en', 'translation', {
-          key: 'value',
-        })
-      }
-    }
-    i18n.changeLanguage(lng).then((t) => {
-      t(($) => $.key)
-    })
-    // i18n.reloadResources(lang)
-  }
+
   const handleReferenceMouseOver = (event) => {
     // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
     // (eg a user has just added a new fish species and it has been approved, but the service worker has cached the old one)
@@ -97,6 +89,7 @@ const GlobalLinks = ({ isAppOnline }) => {
           {t('mermaid_explore')}
         </StyledNavLink>
       </OfflineHide>
+      {/*Language is available in local and dev environment to confirm comprehensive tokenization. */}
       {isDevelopmentEnvironment && (
         <OfflineHide>
           <HideShow
@@ -111,8 +104,8 @@ const GlobalLinks = ({ isAppOnline }) => {
             }
             contents={
               <UserMenu>
-                <UserMenuButton onClick={() => handleLanguageSelect('break')}>
-                  No language
+                <UserMenuButton onClick={() => handleLanguageSelect('cimode')}>
+                  Token QA
                 </UserMenuButton>
                 <UserMenuButton onClick={() => handleLanguageSelect('en')}>
                   {t('languages.english')}
