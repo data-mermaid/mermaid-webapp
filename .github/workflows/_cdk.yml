@@ -13,14 +13,13 @@ permissions:
   id-token: write
 
 env:
-  VITE_ENVIRONMENT: dev
-  # dev and prod
+  VITE_ENVIRONMENT: ${{ vars.VITE_ENVIRONMENT }}
   VITE_AUTH0_DOMAIN: datamermaid.auth0.com
-  VITE_CORAL_ATLAS_APP_ID: v8nkxznp3m
+  VITE_CORAL_ATLAS_APP_ID: ${{ secrets.VITE_CORAL_ATLAS_APP_ID }}
   # dev specific; set prod versions in step below
-  VITE_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
+  VITE_AUTH0_CLIENT_ID: ${{ env.VITE_AUTH0_CLIENT_ID }}
   VITE_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
-  VITE_MAPBOX_ACCESS_TOKEN: pk.eyJ1IjoibWVybWFpZC1hZG1pbiIsImEiOiJjanh1djd1d20wMThoM2ZsaXZvdzZ3NGQxIn0.MrVUTQrUGJaTxjmn3h4udw
+  VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
   VITE_MERMAID_API: https://dev-api.datamermaid.org/v1
   VITE_MERMAID_EXPLORE_LINK: https://dev-explore.datamermaid.org
   VITE_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
@@ -62,8 +61,8 @@ jobs:
           echo "TARGET=prod" >> "$GITHUB_ENV"
           echo "VITE_ENVIRONMENT=production" >> "$GITHUB_ENV"
           echo "VITE_AUTH0_AUDIENCE=https://api.datamermaid.org" >> "$GITHUB_ENV"
-          echo "VITE_AUTH0_CLIENT_ID=Yahf5mGpQDyYOqbvQlaKE1WqBnUeFPj0" >> "$GITHUB_ENV"
-          echo "VITE_MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoibWVybWFpZC1hZG1pbiIsImEiOiJjanh1djd1d20wMThoM2ZsaXZvdzZ3NGQxIn0.MrVUTQrUGJaTxjmn3h4udw"
+          echo "VITE_AUTH0_CLIENT_ID=${{ env.VITE_AUTH0_CLIENT_ID }}" >> "$GITHUB_ENV"
+          echo "VITE_MAPBOX_ACCESS_TOKEN=${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}"
           echo "VITE_MERMAID_API=https://api.datamermaid.org/v1" >> "$GITHUB_ENV"
           echo "VITE_MERMAID_EXPLORE_LINK=https://explore.datamermaid.org" >> "$GITHUB_ENV"
           echo "VITE_MERMAID_REFERENCE_LINK=https://public.datamermaid.org/mermaid_attributes.xlsx" >> "$GITHUB_ENV"
