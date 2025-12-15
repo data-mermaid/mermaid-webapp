@@ -37,6 +37,36 @@ const handleLanguageSelect = (lng) => {
   i18n.changeLanguage(lng)
 }
 
+const LanguageMenuTool = () => {
+  const { t } = useTranslation()
+  return (
+    <OfflineHide>
+      <HideShow
+        closeOnClickWithin={true}
+        button={
+          <HeaderButtonThatLooksLikeLink>
+            <HeaderIconWrapper>
+              <FontAwesomeIcon icon={faLanguage} style={{ marginRight: '10px' }} />
+              {t('languages.language')}
+            </HeaderIconWrapper>
+          </HeaderButtonThatLooksLikeLink>
+        }
+        contents={
+          <UserMenu>
+            <UserMenuButton onClick={() => handleLanguageSelect('cimode')}>Token QA</UserMenuButton>
+            <UserMenuButton onClick={() => handleLanguageSelect('en')}>
+              {t('languages.english')}
+            </UserMenuButton>
+            <UserMenuButton onClick={() => handleLanguageSelect('id')}>
+              {t('languages.indonesian')}
+            </UserMenuButton>
+          </UserMenu>
+        }
+      />
+    </OfflineHide>
+  )
+}
+
 const GlobalLinks = ({ isAppOnline }) => {
   const { t } = useTranslation()
   const isDevelopmentEnvironment = import.meta.env.VITE_ENVIRONMENT !== 'production'
@@ -87,35 +117,9 @@ const GlobalLinks = ({ isAppOnline }) => {
           {t('mermaid_explore')}
         </StyledNavLink>
       </OfflineHide>
-      {/*Language is available in local and dev environment to confirm comprehensive tokenization. */}
-      {isDevelopmentEnvironment && (
-        <OfflineHide>
-          <HideShow
-            closeOnClickWithin={true}
-            button={
-              <HeaderButtonThatLooksLikeLink>
-                <HeaderIconWrapper>
-                  <FontAwesomeIcon icon={faLanguage} style={{ marginRight: '10px' }} />
-                  {t('languages.language')}
-                </HeaderIconWrapper>
-              </HeaderButtonThatLooksLikeLink>
-            }
-            contents={
-              <UserMenu>
-                <UserMenuButton onClick={() => handleLanguageSelect('cimode')}>
-                  Token QA
-                </UserMenuButton>
-                <UserMenuButton onClick={() => handleLanguageSelect('en')}>
-                  {t('languages.english')}
-                </UserMenuButton>
-                <UserMenuButton onClick={() => handleLanguageSelect('id')}>
-                  {t('languages.indonesian')}
-                </UserMenuButton>
-              </UserMenu>
-            }
-          />
-        </OfflineHide>
-      )}
+      {/*Language is available in local and dev environment to confirm comprehensive tokenization.
+      Submenu items do not currently populate mobile.*/}
+      {isDevelopmentEnvironment && <LanguageMenuTool />}
     </>
   )
 }
