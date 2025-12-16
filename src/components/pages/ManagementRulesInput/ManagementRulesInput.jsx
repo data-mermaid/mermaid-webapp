@@ -19,11 +19,13 @@ const ManagementRulesInput = ({
   managementFormValues = {},
   onChange,
   required,
+  testId,
   validationMessages = undefined,
   validationType = undefined,
   ...restOfProps
 }) => {
   const { t } = useTranslation()
+  const inputRowProps = restOfProps
 
   const accessRestrictionLabelText = t('management_regimes.access_restriction')
   const accessRestrictionHelperText = t('management_regimes.access_restriction_info')
@@ -44,26 +46,31 @@ const ManagementRulesInput = ({
         value: 'periodic_closure',
         label: periodicClosureLabelText,
         helperText: periodicClosureHelperText,
+        testLabel: 'periodic-closure',
       },
       {
         value: 'size_limits',
         label: sizeLimitsLabelText,
         helperText: sizeLimitsHelperText,
+        testLabel: 'size-limits',
       },
       {
         value: 'gear_restriction',
         label: gearRestrictionLabelText,
         helperText: gearRestrictionHelperText,
+        testLabel: 'gear-restriction',
       },
       {
         value: 'species_restriction',
         label: speciesRestrictionLabelText,
         helperText: speciesRestrictionHelperText,
+        testLabel: 'species-restriction',
       },
       {
         value: 'access_restriction',
         label: accessRestrictionLabelText,
         helperText: accessRestrictionHelperText,
+        testLabel: 'access-restriction',
       },
     ],
     [
@@ -190,7 +197,7 @@ const ManagementRulesInput = ({
   }
 
   const showPartialRestrictionChoices = isPartialRestrictionsExpanded
-    ? partialRestrictionOptions.map(({ value, label: optionLabel, helperText }) => (
+    ? partialRestrictionOptions.map(({ value, label: optionLabel, helperText, testLabel }) => (
         <div key={value}>
           <PartialRestrictionsCheckboxCheckRadioWrapper>
             <input
@@ -198,6 +205,7 @@ const ManagementRulesInput = ({
               type="checkbox"
               value={value}
               checked={partialRestrictionCheckboxValues[value]}
+              data-testid={`${testId}-${testLabel}-checkbox`}
               onChange={handlePartialRestrictionChoicesChange}
             />
             <CheckRadioLabel htmlFor={value} key={value}>
@@ -210,7 +218,7 @@ const ManagementRulesInput = ({
     : null
 
   return (
-    <InputRow {...restOfProps} validationType={validationType}>
+    <InputRow validationType={validationType} data-testid={testId} {...inputRowProps}>
       <LabelContainer>
         <label id={`${id}-management-rules-input`}>{resolvedLabel}</label>
         <span>{required ? <RequiredIndicator /> : null}</span>
@@ -223,6 +231,7 @@ const ManagementRulesInput = ({
             name="rules"
             value="open_access"
             checked={managementRulesRadioInputValue.open_access}
+            data-testid={`${testId}-open-access-radio`}
             onChange={handleOpenAccessChange}
           />
           <StyledCheckRadioLabel htmlFor="open-access">
@@ -237,6 +246,7 @@ const ManagementRulesInput = ({
             name="rules"
             value="no_take"
             checked={managementRulesRadioInputValue.no_take}
+            data-testid={`${testId}-no-take-radio`}
             onChange={handleNoTakeChange}
           />
           <StyledCheckRadioLabel htmlFor="no-take">
@@ -251,6 +261,7 @@ const ManagementRulesInput = ({
             name="rules"
             value="partial_restrictions"
             checked={managementRulesRadioInputValue.partial_restrictions}
+            data-testid={`${testId}-partial-restrictions-radio`}
             onChange={handlePartialRestrictionChange}
           />
           <StyledCheckRadioLabel htmlFor="partial-restrictions">
@@ -274,6 +285,7 @@ ManagementRulesInput.propTypes = {
   managementFormValues: managementRegimePropType,
   onChange: PropTypes.func.isRequired,
   required: PropTypes.bool.isRequired,
+  testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
 }

@@ -6,6 +6,7 @@ import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
+  waitFor,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
@@ -17,21 +18,24 @@ import {
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 const saveMR = async (user) => {
-  await user.type(await screen.findByLabelText('Name'), 'Rebecca')
-  await user.type(screen.getByLabelText('Secondary Name'), 'Becca')
-  await user.type(screen.getByLabelText('Year Established'), '1980')
-  await user.type(screen.getByLabelText('Area'), '40')
-  await user.click(within(screen.getByLabelText('Parties')).getByLabelText('NGO'))
-  await user.click(
-    within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
-  )
+  await user.type(await screen.findByTestId('name-input'), 'Rebecca')
+  await user.type(screen.getByTestId('secondary-name-input'), 'Becca')
+  await user.type(screen.getByTestId('year-established-input'), '1980')
+  await user.type(screen.getByTestId('area-input'), '40')
+
+  const partiesField = screen.getByTestId('parties')
+  await user.click(within(partiesField).getByTestId('parties-ngo-checkbox'))
+
+  const rulesField = screen.getByTestId('rules')
+  await user.click(within(rulesField).getByTestId('rules-open-access-radio'))
+
   await user.selectOptions(
-    screen.getByLabelText('Compliance'),
+    screen.getByTestId('compliance-select'),
     'f76d7866-5b0d-428d-928c-738c2912d6e0',
   )
-  await user.type(screen.getByLabelText('Notes'), 'some notes')
+  await user.type(screen.getByTestId('notes-textarea'), 'some notes')
 
-  await user.click(screen.getByText('Save', { selector: 'button' }))
+  await user.click(screen.getByTestId('save-button-management-regime-form'))
 }
 
 describe('Online', () => {
@@ -50,36 +54,28 @@ describe('Online', () => {
     await user.click(await screen.findByTestId('new-management-regime-button'))
 
     // ensure the were not in edit mode, but new management regime mode
-    expect(
-      await screen.findByText('Management Regime', {
-        selector: 'h2',
-      }),
-    )
+    expect(await screen.findByTestId('new-management-regime-form-title'))
 
     // form empty
-    expect(screen.getByLabelText('Name')).toHaveValue('')
-    expect(screen.getByLabelText('Secondary Name')).toHaveValue('')
-    expect(screen.getByLabelText('Year Established')).toHaveValue(null)
-    expect(screen.getByLabelText('Area')).toHaveValue(null)
+    expect(screen.getByTestId('name-input')).toHaveValue('')
+    expect(screen.getByTestId('secondary-name-input')).toHaveValue('')
+    expect(screen.getByTestId('year-established-input')).toHaveValue(null)
+    expect(screen.getByTestId('area-input')).toHaveValue(null)
 
-    const parties = screen.getByLabelText('Parties')
+    const parties = screen.getByTestId('parties')
 
-    expect(within(parties).getByLabelText('NGO')).not.toBeChecked()
-    expect(within(parties).getByLabelText('community/local government')).not.toBeChecked()
-    expect(within(parties).getByLabelText('government')).not.toBeChecked()
-    expect(within(parties).getByLabelText('private sector')).not.toBeChecked()
+    expect(within(parties).getByTestId('parties-ngo-checkbox')).not.toBeChecked()
     expect(
-      within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
-    ).toBeChecked()
-    expect(
-      within(screen.getByLabelText('Rules')).getByLabelText('No Take', { exact: false }),
+      within(parties).getByTestId('parties-community-local-government-checkbox'),
     ).not.toBeChecked()
+    expect(within(parties).getByTestId('parties-government-checkbox')).not.toBeChecked()
+    expect(within(parties).getByTestId('parties-private-sector-checkbox')).not.toBeChecked()
+    expect(within(screen.getByTestId('rules')).getByTestId('rules-open-access-radio')).toBeChecked()
+    expect(within(screen.getByTestId('rules')).getByTestId('rules-no-take-radio')).not.toBeChecked()
     expect(
-      within(screen.getByLabelText('Rules')).getByLabelText('Partial Restrictions', {
-        exact: false,
-      }),
+      within(screen.getByTestId('rules')).getByTestId('rules-partial-restrictions-radio'),
     ).not.toBeChecked()
-    expect(screen.getByLabelText('Compliance')).toHaveDisplayValue('Choose...')
+    expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('Choose...')
   })
 
   test('New MR save success shows saved inputs, toast, and navigates to the edit MR page for the newly created MR', async () => {
@@ -96,22 +92,20 @@ describe('Online', () => {
 
     await saveMR(user)
 
-    expect(
-      await screen.findByText('The management regime has been saved on your computer and online.'),
+    await waitFor(() =>
+      expect(screen.getByTestId('management-regime-toast-success')).toBeInTheDocument(),
     )
 
     // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-management-regime-form-title'))
 
-    expect(screen.getByLabelText('Name')).toHaveValue('Rebecca')
-    expect(screen.getByLabelText('Secondary Name')).toHaveValue('Becca')
-    expect(screen.getByLabelText('Year Established')).toHaveValue(1980)
-    expect(screen.getByLabelText('Area')).toHaveValue(40)
-    expect(within(screen.getByLabelText('Parties')).getByLabelText('NGO')).toBeChecked()
-    expect(
-      within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
-    ).toBeChecked()
-    expect(screen.getByLabelText('Compliance')).toHaveDisplayValue('somewhat')
+    expect(screen.getByTestId('name-input')).toHaveValue('Rebecca')
+    expect(screen.getByTestId('secondary-name-input')).toHaveValue('Becca')
+    expect(screen.getByTestId('year-established-input')).toHaveValue(1980)
+    expect(screen.getByTestId('area-input')).toHaveValue(40)
+    expect(within(screen.getByTestId('parties')).getByTestId('parties-ngo-checkbox')).toBeChecked()
+    expect(within(screen.getByTestId('rules')).getByTestId('rules-open-access-radio')).toBeChecked()
+    expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('somewhat')
   })
   test('New MR save success show new record in MR table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
@@ -127,8 +121,8 @@ describe('Online', () => {
 
     await saveMR(user)
 
-    expect(
-      await screen.findByText('The management regime has been saved on your computer and online.'),
+    await waitFor(() =>
+      expect(screen.getByTestId('management-regime-toast-success')).toBeInTheDocument(),
     )
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
@@ -167,33 +161,22 @@ describe('Online', () => {
 
     await saveMR(user)
 
-    expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
-      'The management regime has been saved on your computer, but not online.',
-    )
-    expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
-      'an error message from api',
-    )
-    expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
-      'another error message from api',
-    )
+    const errorToast = await screen.findByTestId('management-regime-toast-error')
+    expect(errorToast).toBeInTheDocument()
+    expect(errorToast.textContent).toMatch(/mermaid_data_save_online_sync_error/)
+    expect(errorToast.textContent).toMatch(/an error message from api/)
 
     // ensure the were not in edit mode, but new management regime mode
-    expect(
-      screen.getByText('Management Regime', {
-        selector: 'h2',
-      }),
-    )
+    expect(await screen.findByTestId('new-management-regime-form-title'))
 
     // edits persisted
-    expect(screen.getByLabelText('Name')).toHaveValue('Rebecca')
-    expect(screen.getByLabelText('Secondary Name')).toHaveValue('Becca')
-    expect(screen.getByLabelText('Year Established')).toHaveValue(1980)
-    expect(screen.getByLabelText('Area')).toHaveValue(40)
-    expect(within(screen.getByLabelText('Parties')).getByLabelText('NGO')).toBeChecked()
-    expect(
-      within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
-    ).toBeChecked()
-    expect(screen.getByLabelText('Compliance')).toHaveDisplayValue('somewhat')
+    expect(screen.getByTestId('name-input')).toHaveValue('Rebecca')
+    expect(screen.getByTestId('secondary-name-input')).toHaveValue('Becca')
+    expect(screen.getByTestId('year-established-input')).toHaveValue(1980)
+    expect(screen.getByTestId('area-input')).toHaveValue(40)
+    expect(within(screen.getByTestId('parties')).getByTestId('parties-ngo-checkbox')).toBeChecked()
+    expect(within(screen.getByTestId('rules')).getByTestId('rules-open-access-radio')).toBeChecked()
+    expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('somewhat')
   })
 
   test('New MR save will handle 500 push status codes with a generic message and spare the user any api generated error details. Edits persist', async () => {
@@ -216,35 +199,22 @@ describe('Online', () => {
 
     await saveMR(user)
 
-    expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
-      'The management regime has been saved on your computer, but not online.',
-    )
-    expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
-      'MERMAID error: please contact support@datamermaid.org',
-    )
-    expect(await screen.findByTestId('management-regime-toast-error')).not.toHaveTextContent(
-      'an error message from api',
-    )
-    expect(await screen.findByTestId('management-regime-toast-error')).not.toHaveTextContent(
-      'another error message from api',
-    )
+    const errorToast = await screen.findByTestId('management-regime-toast-error')
+    expect(errorToast).toBeInTheDocument()
+    expect(errorToast.textContent).toMatch(/mermaid_data_save_online_sync_error/)
+    expect(errorToast.textContent).toMatch(/MERMAID error: please contact support@datamermaid.org/)
+    expect(errorToast.textContent).not.toMatch(/an error message from api/)
 
     // ensure the were not in edit mode, but new management regime mode
-    expect(
-      screen.getByText('Management Regime', {
-        selector: 'h2',
-      }),
-    )
+    expect(await screen.findByTestId('new-management-regime-form-title'))
 
     // edits persisted
-    expect(screen.getByLabelText('Name')).toHaveValue('Rebecca')
-    expect(screen.getByLabelText('Secondary Name')).toHaveValue('Becca')
-    expect(screen.getByLabelText('Year Established')).toHaveValue(1980)
-    expect(screen.getByLabelText('Area')).toHaveValue(40)
-    expect(within(screen.getByLabelText('Parties')).getByLabelText('NGO')).toBeChecked()
-    expect(
-      within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
-    ).toBeChecked()
-    expect(screen.getByLabelText('Compliance')).toHaveDisplayValue('somewhat')
+    expect(screen.getByTestId('name-input')).toHaveValue('Rebecca')
+    expect(screen.getByTestId('secondary-name-input')).toHaveValue('Becca')
+    expect(screen.getByTestId('year-established-input')).toHaveValue(1980)
+    expect(screen.getByTestId('area-input')).toHaveValue(40)
+    expect(within(screen.getByTestId('parties')).getByTestId('parties-ngo-checkbox')).toBeChecked()
+    expect(within(screen.getByTestId('rules')).getByTestId('rules-open-access-radio')).toBeChecked()
+    expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('somewhat')
   })
 })

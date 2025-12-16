@@ -15,6 +15,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
   validationMessages = [],
   validationType = undefined,
   value,
+  testId = undefined,
 }) => {
   const [checkboxItems, setCheckboxItems] = useState([])
   const _loadCheckboxItems = useEffect(() => {
@@ -35,21 +36,33 @@ const InputCheckboxGroupWithLabelAndValidation = ({
     onChange({ selectedItems: updateCheckboxItems, event })
   }
 
-  const checkboxGroup = options.map((item) => (
-    <CheckRadioWrapper key={item.value}>
-      <input
-        id={item.value}
-        type="checkbox"
-        value={item.value}
-        checked={checkboxItems.includes(item.value)}
-        onChange={(event) => handleCheckboxGroupChange({ itemValue: item.value, event })}
-      />
-      <CheckRadioLabel htmlFor={item.value}>{item.label}</CheckRadioLabel>
-    </CheckRadioWrapper>
-  ))
+  const checkboxGroup = options.map((item) => {
+    const labelSegment = String(item.label)
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+    const optionTestId = testId ? `${testId}-${labelSegment}-checkbox` : undefined
+
+    return (
+      <CheckRadioWrapper
+        key={item.value}
+        data-testid={testId ? `${testId}-${labelSegment}-wrapper` : undefined}
+      >
+        <input
+          id={item.value}
+          type="checkbox"
+          value={item.value}
+          checked={checkboxItems.includes(item.value)}
+          data-testid={optionTestId}
+          onChange={(event) => handleCheckboxGroupChange({ itemValue: item.value, event })}
+        />
+        <CheckRadioLabel htmlFor={item.value}>{item.label}</CheckRadioLabel>
+      </CheckRadioWrapper>
+    )
+  })
 
   return (
-    <InputRow validationType={validationType}>
+    <InputRow validationType={validationType} data-testid={testId}>
       <label id={`${id}-checkbox-group-with-label-and-validation`}>
         {label}
         {required ? <RequiredIndicator /> : null}
@@ -89,6 +102,7 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
       }),
     ]),
   ).isRequired,
+  testId: PropTypes.string,
 }
 
 export default InputCheckboxGroupWithLabelAndValidation

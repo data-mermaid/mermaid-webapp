@@ -21,7 +21,12 @@ const SaveButton = ({ formId, saveButtonState, formHasErrors, formDirty }) => {
   }
 
   return (
-    <ButtonCallout type="submit" form={formId} disabled={isSaveButtonDisabled}>
+    <ButtonCallout
+      type="submit"
+      form={formId}
+      disabled={isSaveButtonDisabled}
+      data-testid={`save-button-${formId}`}
+    >
       <IconSave />
       {getSaveButtonText()}
     </ButtonCallout>

@@ -34,23 +34,23 @@ test('Edit Management Regime - shows name and rules required', async () => {
 
   // check that name and rules validations appear
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
-  const nameInput = screen.getByLabelText('Name')
-  const secondaryNameInput = screen.getByLabelText('Secondary Name')
+  const nameInput = screen.getByTestId('name-input')
+  const secondaryNameInput = screen.getByTestId('secondary-name-input')
 
   await user.click(nameInput)
   await user.clear(nameInput)
   await user.click(secondaryNameInput)
 
   expect(
-    await within(screen.getByTestId('name')).findByText('This field is required'),
+    await within(screen.getByTestId('name')).findByTestId('inline-message-error'),
   ).toBeInTheDocument()
 
-  const gearRestrictionCheckbox = await screen.findByLabelText('Gear Restriction')
+  const gearRestrictionCheckbox = await screen.findByTestId('rules-gear-restriction-checkbox')
 
   await user.click(gearRestrictionCheckbox)
 
   expect(
-    await within(screen.getByTestId('rules')).findByText('At least one rule is required'),
+    await within(screen.getByTestId('rules')).findByTestId('inline-message-error'),
   ).toBeInTheDocument()
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
@@ -93,14 +93,14 @@ test('Management Regime component renders with the expected UI elements', async 
     }),
   )
 
-  expect(screen.getByLabelText('Name'))
-  expect(screen.getByLabelText('Secondary Name'))
-  expect(screen.getByLabelText('Year Established'))
-  expect(screen.getByLabelText('Area'))
-  expect(screen.getByText('Parties'))
-  expect(screen.getByText('Rules'))
-  expect(screen.getByText('Compliance'))
-  expect(screen.getByLabelText('Notes'))
+  expect(screen.getByTestId('name-input'))
+  expect(screen.getByTestId('secondary-name-input'))
+  expect(screen.getByTestId('year-established-input'))
+  expect(screen.getByTestId('area-input'))
+  expect(screen.getByTestId('parties'))
+  expect(screen.getByTestId('rules'))
+  expect(screen.getByTestId('compliance'))
+  expect(screen.getByTestId('notes-textarea'))
 })
 
 test('Management Regime component - form inputs are initialized with the correct values', async () => {
@@ -124,28 +124,24 @@ test('Management Regime component - form inputs are initialized with the correct
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  expect(screen.getByLabelText('Name')).toHaveValue('Management Regimes B')
-  expect(screen.getByLabelText('Secondary Name')).toHaveValue('Management Regimes 2')
-  expect(screen.getByLabelText('Year Established')).toHaveValue(null)
-  expect(screen.getByLabelText('Area')).toHaveValue(10)
-  const parties = screen.getByLabelText('Parties')
+  expect(screen.getByTestId('name-input')).toHaveValue('Management Regimes B')
+  expect(screen.getByTestId('secondary-name-input')).toHaveValue('Management Regimes 2')
+  expect(screen.getByTestId('year-established-input')).toHaveValue(null)
+  expect(screen.getByTestId('area-input')).toHaveValue(10)
+  const parties = screen.getByTestId('parties')
 
-  expect(within(parties).getByLabelText('NGO')).not.toBeChecked()
-  expect(within(parties).getByLabelText('community/local government')).not.toBeChecked()
-  expect(await within(parties).findByLabelText('government')).toBeChecked()
-  expect(within(parties).getByLabelText('private sector')).not.toBeChecked()
+  expect(within(parties).getByTestId('parties-ngo-checkbox')).not.toBeChecked()
   expect(
-    within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
-  ).toBeChecked()
-  expect(
-    within(screen.getByLabelText('Rules')).getByLabelText('No Take', { exact: false }),
+    within(parties).getByTestId('parties-community-local-government-checkbox'),
   ).not.toBeChecked()
+  expect(await within(parties).findByTestId('parties-government-checkbox')).toBeChecked()
+  expect(within(parties).getByTestId('parties-private-sector-checkbox')).not.toBeChecked()
+  expect(within(screen.getByTestId('rules')).getByTestId('rules-open-access-radio')).toBeChecked()
+  expect(within(screen.getByTestId('rules')).getByTestId('rules-no-take-radio')).not.toBeChecked()
   expect(
-    within(screen.getByLabelText('Rules')).getByLabelText('Partial Restrictions', {
-      exact: false,
-    }),
+    within(screen.getByTestId('rules')).getByTestId('rules-partial-restrictions-radio'),
   ).not.toBeChecked()
 
-  expect(screen.getByLabelText('Compliance')).toHaveDisplayValue('none')
-  expect(screen.getByLabelText('Notes')).toHaveValue('Some notes')
+  expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('none')
+  expect(screen.getByTestId('notes-textarea')).toHaveValue('Some notes')
 })

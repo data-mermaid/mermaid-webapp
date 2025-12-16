@@ -147,6 +147,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           label={t('management_regimes.secondary_name')}
           id="name_secondary"
           type="text"
+          testId="secondary-name"
           {...formik.getFieldProps('name_secondary')}
           helperText={t('management_regime_forms.secondary_name_info')}
         />
@@ -154,6 +155,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           label={t('management_regimes.year_est')}
           id="est_year"
           type="number"
+          testId="year-established"
           {...formik.getFieldProps('est_year')}
         />
         <InputWithLabelAndValidation
@@ -161,12 +163,14 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           id="size"
           type="number"
           unit="ha"
+          testId="area"
           {...formik.getFieldProps('size')}
         />
         <InputCheckboxGroupWithLabelAndValidation
           required={false}
           label={t('management_regimes.parties')}
           id="parties"
+          testId="parties"
           options={managementPartyOptions}
           value={formik.getFieldProps('parties').value}
           onChange={({ selectedItems }) => {
@@ -198,13 +202,14 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           }}
           validationType={formik.errors.rules ? 'error' : null}
           validationMessages={formik.errors.rules}
-          data-testid="rules"
+          testId="rules"
           required={true}
         />
         <InputSelectWithLabelAndValidation
           label={t('management_regimes.compliance')}
           id="compliance"
           required={false}
+          testId="compliance"
           options={managementComplianceOptions}
           {...formik.getFieldProps('compliance')}
           helperText={t('management_regimes.rules_effectiveness')}
@@ -212,6 +217,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
         <TextareaWithLabelAndValidation
           label={t('notes')}
           id="notes"
+          testId="notes"
           {...formik.getFieldProps('notes')}
         />
       </InputWrapper>
@@ -404,7 +410,16 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       databaseSwitchboardInstance
         .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
         .then((response) => {
-          toast.success(isAppOnline ? saveSuccessOnlineText : saveSuccessOfflineText)
+          const [toastMessage, toastOptions] = getToastArguments(
+            isAppOnline ? saveSuccessOnlineText : saveSuccessOfflineText,
+          )
+          const toastContent = isAppOnline ? (
+            <div data-testid="management-regime-toast-success">{toastMessage}</div>
+          ) : (
+            <div data-testid="management-regime-toast-offline-success">{toastMessage}</div>
+          )
+
+          toast.success(toastContent, toastOptions)
           clearPersistedUnsavedFormikData()
           setSaveButtonState(buttonGroupStates.saved)
           setIsFormDirty(false)
@@ -582,7 +597,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       toolbar={
         <ContentPageToolbarWrapper>
           {isNewManagementRegime ? (
-            <H2>{managementRegimeTitleText}</H2>
+            <H2 data-testid="new-management-regime-form-title">{managementRegimeTitleText}</H2>
           ) : (
             <H2 data-testid="edit-management-regime-form-title">{formik.values.name}</H2>
           )}
