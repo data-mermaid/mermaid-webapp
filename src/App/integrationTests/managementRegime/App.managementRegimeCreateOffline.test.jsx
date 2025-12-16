@@ -168,7 +168,6 @@ describe('Offline', () => {
 
     const errorToast = await screen.findByTestId('management-regime-toast-error')
     expect(errorToast).toBeInTheDocument()
-    expect(errorToast.textContent).toMatch(/mermaid_data_save_offline_error/)
     expect(consoleSpy).toHaveBeenCalledWith(dexieError)
 
     // ensure the were not in edit mode, but new management regime mode

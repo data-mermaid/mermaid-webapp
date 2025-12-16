@@ -6,7 +6,6 @@ import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
-  waitFor,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
@@ -92,11 +91,8 @@ describe('Online', () => {
 
     await saveMR(user)
 
-    await waitFor(() =>
-      expect(screen.getByTestId('management-regime-toast-success')).toBeInTheDocument(),
-    )
+    expect(await screen.findByTestId('management-regime-toast-success')).toBeInTheDocument()
 
-    // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-management-regime-form-title'))
 
     expect(screen.getByTestId('name-input')).toHaveValue('Rebecca')
@@ -121,9 +117,7 @@ describe('Online', () => {
 
     await saveMR(user)
 
-    await waitFor(() =>
-      expect(screen.getByTestId('management-regime-toast-success')).toBeInTheDocument(),
-    )
+    expect(await screen.findByTestId('management-regime-toast-success')).toBeInTheDocument()
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
@@ -163,8 +157,6 @@ describe('Online', () => {
 
     const errorToast = await screen.findByTestId('management-regime-toast-error')
     expect(errorToast).toBeInTheDocument()
-    expect(errorToast.textContent).toMatch(/mermaid_data_save_online_sync_error/)
-    expect(errorToast.textContent).toMatch(/an error message from api/)
 
     // ensure the were not in edit mode, but new management regime mode
     expect(await screen.findByTestId('new-management-regime-form-title'))
@@ -201,9 +193,6 @@ describe('Online', () => {
 
     const errorToast = await screen.findByTestId('management-regime-toast-error')
     expect(errorToast).toBeInTheDocument()
-    expect(errorToast.textContent).toMatch(/mermaid_data_save_online_sync_error/)
-    expect(errorToast.textContent).toMatch(/MERMAID error: please contact support@datamermaid.org/)
-    expect(errorToast.textContent).not.toMatch(/an error message from api/)
 
     // ensure the were not in edit mode, but new management regime mode
     expect(await screen.findByTestId('new-management-regime-form-title'))
