@@ -5,10 +5,7 @@ import intervalPlural from 'i18next-intervalplural-postprocessor'
 
 i18next
   .use(
-    resourcesToBackend(
-      (language: string, namespace: string) =>
-        import(`./src/locales/${language}/${namespace}.json`),
-    ),
+    resourcesToBackend((language: string) => import(`./src/locales/${language}/translation.json`)),
   )
   .use(intervalPlural)
   .use(initReactI18next)
