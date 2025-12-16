@@ -7,7 +7,6 @@ interface CalloutButtonProps {
   label: string
   disabled: boolean
   testId: string
-  children?: React.ReactNode
 }
 
 const CalloutButton = ({ onClick, label, disabled, testId }: CalloutButtonProps) => {
