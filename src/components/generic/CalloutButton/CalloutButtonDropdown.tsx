@@ -32,14 +32,14 @@ const CalloutButtonDropdown = ({
         disabled={disabled}
         data-testid={testId}
         classes={{
-          root: styles['button-root__primary'],
+          root: styles['button-root__callout'],
         }}
       >
         {label}
       </Button>
       <IconButton
         classes={{
-          root: styles['button-root__primary'],
+          root: styles['button-root__callout'],
         }}
         onClick={toggleMenu}
       >
@@ -52,12 +52,12 @@ const CalloutButtonDropdown = ({
       </IconButton>
       <ul
         style={{ display: isDropdownOpen ? 'block' : 'none' }}
-        className={styles['primary-button-dropdown__list']}
+        className={styles['callout-button-dropdown__list']}
       >
         <li>
           <Button
             classes={{
-              root: styles['button-root__primary'],
+              root: styles['button-root__callout'],
             }}
           >
             {t('projects.buttons.add_demo')}
