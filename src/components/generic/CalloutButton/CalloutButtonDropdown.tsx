@@ -10,9 +10,7 @@ interface CalloutButtonDropdownProps {
   label: string
   disabled: boolean
   testId: string
-  children?: React.ReactNode
 }
-
 const CalloutButtonDropdown = ({
   onClick,
   label,
