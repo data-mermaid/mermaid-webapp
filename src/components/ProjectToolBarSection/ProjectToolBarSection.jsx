@@ -138,7 +138,7 @@ const ProjectToolBarSection = ({
             onClick={() => setIsNewProjectModalOpen(true)}
             aria-label={t('projects.new_project')}
             disabled={!isAppOnline}
-            data-testid="new-project-button"
+            testId="new-project-button"
             label={t('projects.new_project')}
           />
           {isNewProjectModalOpen && (
