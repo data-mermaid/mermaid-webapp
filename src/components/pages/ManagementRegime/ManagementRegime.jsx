@@ -149,7 +149,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           type="text"
           testId="secondary-name"
           {...formik.getFieldProps('name_secondary')}
-          helperText={t('management_regime_forms.secondary_name_info')}
+          helperText={t('management_regimes.secondary_name_info')}
         />
         <InputWithLabelAndValidation
           label={t('management_regimes.year_est')}
