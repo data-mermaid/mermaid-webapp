@@ -3173,15 +3173,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@posthog/core@npm:1.7.1":
-  version: 1.7.1
-  resolution: "@posthog/core@npm:1.7.1"
-  dependencies:
-    cross-spawn: "npm:^7.0.6"
-  checksum: 10c0/4c496078b59eb60adbf18257c36d13b91b7f2a58c24c0d0464c826cfb2a8714c8d16c695737e5578495a2854efb7caa5251fc914971bf298e24f4f2eac27e2e8
-  languageName: node
-  linkType: hard
-
 "@remix-run/router@npm:1.12.0":
   version: 1.12.0
   resolution: "@remix-run/router@npm:1.12.0"
@@ -6870,7 +6861,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.25.4, core-js@npm:^3.38.1, core-js@npm:^3.4":
+"core-js@npm:^3.25.4, core-js@npm:^3.4":
   version: 3.47.0
   resolution: "core-js@npm:3.47.0"
   checksum: 10c0/9b1a7088b7c660c7b8f1d4c90bb1816a8d5352ebdcb7bc742e3a0e4eb803316b5aa17bacb8769522342196351a5430178f46914644f2bfdb94ce0ced3c7fd523
@@ -8610,13 +8601,6 @@ __metadata:
     picomatch:
       optional: true
   checksum: 10c0/e345083c4306b3aed6cb8ec551e26c36bab5c511e99ea4576a16750ddc8d3240e63826cc624f5ae17ad4dc82e68a253213b60d556c11bfad064b7607847ed07f
-  languageName: node
-  linkType: hard
-
-"fflate@npm:^0.4.8":
-  version: 0.4.8
-  resolution: "fflate@npm:0.4.8"
-  checksum: 10c0/29d1eddaaa5deab61b1c6b0d21282adacadbc4d2c01e94d8b1ee784398151673b9c563e53f97a801bc410a1ae55e8de5378114a743430e643e7a0644ba8e5a42
   languageName: node
   linkType: hard
 
@@ -11851,7 +11835,6 @@ __metadata:
     msw: "npm:^0.27.0"
     plop: "npm:^2.7.4"
     postcss: "npm:^8.4.32"
-    posthog-js: "npm:^1.249.1"
     prettier: "npm:^2.4.1"
     prop-types: "npm:^15.7.2"
     react: "npm:^18.2.0"
@@ -13097,30 +13080,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"posthog-js@npm:^1.249.1":
-  version: 1.305.0
-  resolution: "posthog-js@npm:1.305.0"
-  dependencies:
-    "@posthog/core": "npm:1.7.1"
-    core-js: "npm:^3.38.1"
-    fflate: "npm:^0.4.8"
-    preact: "npm:^10.19.3"
-    web-vitals: "npm:^4.2.4"
-  checksum: 10c0/86d4683e6875a566a736a49878def97df1ac5562279f7af4e705ed825c1fdc0e07ebe1c5dc993bbc6325c18f8bb3e306aa8465e8bc66f8f4fa63f6bca1558e73
-  languageName: node
-  linkType: hard
-
 "potpack@npm:^1.0.1":
   version: 1.0.2
   resolution: "potpack@npm:1.0.2"
   checksum: 10c0/670c23898a4257130858b960c2e654d3327c0f6a7e7091ff5846f213e65af8f9476320b995b8ad561a47a4d1c359c7ef347de57d22e7b02597051abb52bc85c4
-  languageName: node
-  linkType: hard
-
-"preact@npm:^10.19.3":
-  version: 10.28.0
-  resolution: "preact@npm:10.28.0"
-  checksum: 10c0/039c5077ccce61d6a781d5f63df24c5c7205270abe52464708852b8e8d7fc926cdd07fc4a116af282e5a1e41b62e8a4065a5999e0e2db521faad6a1c033a8b1c
   languageName: node
   linkType: hard
 
@@ -16365,13 +16328,6 @@ __metadata:
   version: 0.2.4
   resolution: "web-vitals@npm:0.2.4"
   checksum: 10c0/811a510dddf4d570aab62b568d08d23dec78eb8bf8f50dc86e88b8333bfcaeeeee4377da9b2668203b1e23586c98f14797b372f4bf5b600200aba4dd21588930
-  languageName: node
-  linkType: hard
-
-"web-vitals@npm:^4.2.4":
-  version: 4.2.4
-  resolution: "web-vitals@npm:4.2.4"
-  checksum: 10c0/383c9281d5b556bcd190fde3c823aeb005bb8cf82e62c75b47beb411014a4ed13fa5c5e0489ed0f1b8d501cd66b0bebcb8624c1a75750bd5df13e2a3b1b2d194
   languageName: node
   linkType: hard
 
