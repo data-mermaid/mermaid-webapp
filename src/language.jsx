@@ -235,7 +235,6 @@ const pages = {
   },
   projectsList: {
     title: 'Projects',
-    offlineReadyCheckboxLabel: 'Offline Ready',
     noDataSubText: `Create a new project or get your admin to add you to some.`,
     readOnlyUserWithActiveSampleUnits:
       'You cannot submit these collect records because you only have read-only access to this project. Please contact the project admin.',

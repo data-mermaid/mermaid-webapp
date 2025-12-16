@@ -5,6 +5,7 @@
     "cancel": "Cancel",
     "close": "Close",
     "confirm": "Confirm",
+    "copy": "Copy",
     "delete": "Delete",
     "done": "Done",
     "edit": "Edit",
@@ -176,6 +177,7 @@
     "view_member_emails": "View project member email",
     "delete_project": "Delete a project",
     "delete": "Delete project",
+    "available_offline": "Offline ready",
     "user_confirm_delete": "Are you sure you want to delete {{projectName}}?",
     "confirm_delete": "Delete {{projectName}}",
     "delete_sample_units_notice": "You must delete all the sample units in this project to delete this project.",
@@ -589,8 +591,9 @@
   "status_offline": "You're <strong>OFFLINE</strong>. Some contents may be out of date.",
   "help_documents": "Help (PDF)",
   "languages": {
+    "language": "Language",
     "english": "English",
-    "bahasa_indonesia": "Bahasa Indonesia"
+    "indonesian": "Bahasa Indonesia"
   },
   "terms": "Terms",
   "contact": "Contact",

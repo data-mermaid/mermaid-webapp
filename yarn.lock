@@ -4285,7 +4285,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*":
+"@types/react@npm:*, @types/react@npm:^19.2.7":
   version: 19.2.7
   resolution: "@types/react@npm:19.2.7"
   dependencies:
@@ -10989,6 +10989,7 @@ __metadata:
     "@types/identity-obj-proxy": "npm:^3"
     "@types/jest": "npm:^30.0.0"
     "@types/node": "npm:^22.15.21"
+    "@types/react": "npm:^19.2.7"
     "@types/react-dom": "npm:^19.0.4"
     "@types/styled-components": "npm:^5.1.34"
     "@vitejs/plugin-react-swc": "npm:^3.8.0"

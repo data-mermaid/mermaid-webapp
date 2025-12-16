@@ -112,7 +112,7 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
 
   const project5OfflineCheckboxBeforeFirstClick = within(
     (await screen.findAllByTestId('project-card'))[4],
-  ).getByRole('checkbox', { name: 'Offline Ready' })
+  ).getByTestId('offline-ready')
 
   await user.click(project5OfflineCheckboxBeforeFirstClick)
 
@@ -120,7 +120,7 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
 
   const project5OfflineCheckboxAfterFirstClick = within(
     (await screen.findAllByTestId('project-card'))[4],
-  ).getByRole('checkbox', { name: 'Offline Ready' })
+  ).getByTestId('offline-ready')
 
   await waitFor(() => expect(project5OfflineCheckboxAfterFirstClick).toBeChecked())
 
