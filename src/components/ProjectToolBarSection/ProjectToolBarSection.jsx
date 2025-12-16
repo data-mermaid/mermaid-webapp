@@ -143,7 +143,7 @@ const ProjectToolBarSection = ({
           />
           {isNewProjectModalOpen && (
             <ProjectModal
-              isOpen={true}
+              isOpen={isNewProjectModalOpen}
               onDismiss={() => setIsNewProjectModalOpen(false)}
               project={null}
               addProjectToProjectsPage={addProjectToProjectsPage}
