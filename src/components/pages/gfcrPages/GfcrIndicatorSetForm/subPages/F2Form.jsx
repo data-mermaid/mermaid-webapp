@@ -135,7 +135,7 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
       />
       <TextareaWithLabelAndValidation
         id="f2_notes"
-        label={t('forms.notes')}
+        label={t('notes')}
         {...formik.getFieldProps('f2_notes')}
       />
     </StyledGfcrInputWrapper>

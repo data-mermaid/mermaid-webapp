@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { ButtonThatLooksLikeLink } from '../../../generic/buttons'
@@ -62,6 +63,7 @@ const RecordLevelValidationInfo = ({
   handleScrollToObservation,
 }: RecordLevelValidationInfoProps) => {
   const { projectId, recordId } = useParams()
+  const { t } = useTranslation()
   const handleIgnoreWarningChange = async (args: {
     event: React.ChangeEvent<HTMLInputElement>
     validationId: string
@@ -118,7 +120,7 @@ const RecordLevelValidationInfo = ({
             </InlineMessage>
             {isScrollToViewAvailable && (
               <ScrollToButton onClick={handleScrollToObservation}>
-                Scroll to observations
+                {t('sample_units.validation.scroll_to_observations')}
               </ScrollToButton>
             )}
             {isWarning || isReset || isIgnored ? (

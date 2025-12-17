@@ -137,7 +137,7 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       />
       <TextareaWithLabelAndValidation
         id="f3_notes"
-        label={t('forms.notes')}
+        label={t('notes')}
         {...formik.getFieldProps('f3_notes')}
       />
     </StyledGfcrInputWrapper>

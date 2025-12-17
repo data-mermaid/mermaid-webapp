@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonCallout } from '../../../generic/buttons'
 import { IconCheck, IconSave, IconUpload } from '../../../icons'
@@ -71,33 +72,37 @@ const SaveValidateSubmitButtonGroup = ({
   submitButtonState,
   validateButtonState,
 }) => {
+  const { t } = useTranslation()
+
   const getSaveButtonText = () => {
     if (saveButtonState === buttonGroupStates.saving) {
-      return 'Saving'
+      return t('buttons.saving')
     }
     if (
       saveButtonState === buttonGroupStates.saved ||
       saveButtonState === buttonGroupStates.validating
     ) {
-      return 'Saved'
+      return t('buttons.saved')
     }
 
-    return 'Save'
+    return t('buttons.save')
   }
 
   const getValidateButtonText = () => {
     if (validateButtonState === buttonGroupStates.validating) {
-      return 'Validating'
+      return t('buttons.validating')
     }
     if (validateButtonState === buttonGroupStates.validated) {
-      return 'Validated'
+      return t('buttons.validated')
     }
 
-    return 'Validate'
+    return t('buttons.validate')
   }
 
   const getSubmitButtonText = () =>
-    submitButtonState === buttonGroupStates.submitting ? 'Submitting' : 'Submit'
+    submitButtonState === buttonGroupStates.submitting
+      ? t('buttons.submitting')
+      : t('buttons.submit')
 
   const isSaveDisabled =
     saveButtonState === buttonGroupStates.untouchedEmptyForm ||

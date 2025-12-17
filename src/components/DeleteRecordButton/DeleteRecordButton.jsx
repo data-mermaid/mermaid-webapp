@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal'
 import { DeleteRecordButtonCautionWrapper } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
@@ -18,6 +19,7 @@ const DeleteRecordButton = ({
   onDismiss,
   openModal,
 }) => {
+  const { t } = useTranslation()
   const currentProjectPath = useCurrentProjectPath()
   const gtmId = modalText.title === 'Delete Record' ? 'gtm-delete-record' : 'gtm-delete'
 
@@ -48,7 +50,7 @@ const DeleteRecordButton = ({
 
   const footerContentPageTwo = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Close</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.close')}</ButtonSecondary>
     </RightFooter>
   )
 

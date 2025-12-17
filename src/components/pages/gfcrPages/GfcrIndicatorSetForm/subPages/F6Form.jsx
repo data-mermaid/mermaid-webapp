@@ -74,7 +74,7 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       </InputRow>
       <TextareaWithLabelAndValidation
         id="f6_notes"
-        label={t('forms.notes')}
+        label={t('notes')}
         {...formik.getFieldProps('f6_notes')}
       />
     </StyledGfcrInputWrapper>

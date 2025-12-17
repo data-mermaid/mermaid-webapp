@@ -23,7 +23,13 @@
     "transfer": "Transfer",
     "logout": "Logout",
     "user_account_dropdown": "User account dropdown",
-    "dismiss_all_notifications": "Dismiss all notifications"
+    "dismiss_all_notifications": "Dismiss all notifications",
+    "saving": "Saving",
+    "saved": "Saved",
+    "validate": "Validate",
+    "validating": "Validating",
+    "validated": "Validated",
+    "submitting": "Submitting"
   },
   "mermaid_logo": "MERMAID logo",
   "email": "Email",
@@ -43,6 +49,7 @@
   "yes": "Yes",
   "no": "No",
   "choose": "Choose...",
+  "scroll_to_observations": "Scroll to observations",
   "image_classification": {
     "add_attribute": "Add new attribute",
     "attribute_growth_form": "Benthic attribute / growth form",
@@ -142,6 +149,7 @@
   "name": "Name",
   "title": "Title",
   "type": "Type",
+  "sample_event": "Sample Event",
   "offline": {
     "unavailable_offline": "Unavailable offline.",
     "page_unavailable_offline": "This page is unavailable offline."
@@ -242,6 +250,8 @@
     "size": "Size",
     "depth_m": "Depth (m)",
     "sample_date": "Sample date",
+    "record": "Record",
+    "sample_date_info": "Date when data was collected",
     "observers": "Observers",
     "status": "Status",
     "add": "Add sample unit",
@@ -267,14 +277,28 @@
       "errors": "Errors",
       "ready_to_submit": "Ready to submit",
       "saved": "Saved",
-      "warnings": "Warnings"
+      "warnings": "Warnings",
+      "warning_or_error": "Warning or error"
     },
     "errors": {
       "data_unavailable": "Sample unit data is currently unavailable.",
       "observations_unavailable_offline": "Sample unit observations unavailable offline",
       "classification_unavailable_offline": "This sample unit is using image classification and is unavailable offline.",
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable.",
-      "submitted_data_unavailable": "Submitted record data is currently unavailable."
+      "submitted_data_unavailable": "Submitted record data is currently unavailable.",
+      "save_failed": "The sample unit has not been saved.",
+      "submit_failed": "The sample unit has not been submitted.",
+      "delete_failed": "The sample unit has not been deleted.",
+      "validation_unavailable": "Validation is currently unavailable for this record.",
+      "validation_ignore": "This validation cannot be ignored.",
+      "validation_reset": "This validation cannot be reset.",
+      "submit_disabled": "Errors or warnings are preventing you from submitting"
+    },
+    "success": {
+      "record_saved": "Record saved.",
+      "record_submitted": "Record submitted.",
+      "record_validated": "Record successfully validated.",
+      "record_deleted": "Record deleted."
     }
   },
   "fish_belt_observations": {
@@ -623,6 +647,7 @@
     "management_regimes": "Management Regimes",
     "management_regime_name": "Management regime name",
     "management": "Management",
+    "management_regime_info": "The management designation at the time of survey, e.g., no-take zone, partial restrictions, or open access.",
     "secondary_name": "Secondary name",
     "year_est": "Year est.",
     "compliance": "Compliance",
@@ -645,6 +670,7 @@
   "sites": {
     "sites": "Sites",
     "site": "Site",
+    "site_info": "A unique name of a site where data was collected.",
     "reef_type": "Reef type",
     "reef_zone": "Reef zone",
     "exposure": "Exposure",

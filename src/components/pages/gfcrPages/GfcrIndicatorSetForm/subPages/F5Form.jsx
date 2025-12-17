@@ -136,7 +136,7 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       />
       <TextareaWithLabelAndValidation
         id="f5_notes"
-        label={t('forms.notes')}
+        label={t('notes')}
         {...formik.getFieldProps('f5_notes')}
       />
     </StyledGfcrInputWrapper>
