@@ -216,7 +216,7 @@ const F4Form = ({
       </StyledInputRowQuestions>
       <TextareaWithLabelAndValidation
         id="f4_notes"
-        label={t('forms.notes')}
+        label={t('notes')}
         {...formik.getFieldProps('f4_notes')}
       />
     </StyledGfcrInputWrapper>
