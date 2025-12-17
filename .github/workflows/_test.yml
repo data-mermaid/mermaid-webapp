@@ -1,12 +1,12 @@
 name: 🧪 Test
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       environment:
         description: 'GitHub environment to pull secrets from'
         required: true
-        type: environment
+        type: string
 
 env:
   VITE_AUTH0_AUDIENCE: ${{ vars.VITE_AUTH0_AUDIENCE }}
