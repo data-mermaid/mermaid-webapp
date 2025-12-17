@@ -31,7 +31,7 @@ const F1Form = ({ formik, displayHelp, handleInputFocus }) => {
       />
       <TextareaWithLabelAndValidation
         id="f1_notes"
-        label={t('forms.notes')}
+        label={t('notes')}
         {...formik.getFieldProps('f1_notes')}
       />
     </StyledGfcrInputWrapper>
