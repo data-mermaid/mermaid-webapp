@@ -52,7 +52,7 @@ jobs:
     needs: [deps-cache, call-lint]
     uses: ./.github/workflows/_test.yml
     with:
-      environment: ${{ github.base_ref == 'develop' && 'dev' || 'production' }}
+      environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
   call-cdk-deploy:
     concurrency:
       group: app-deployment-${{ github.ref }}
