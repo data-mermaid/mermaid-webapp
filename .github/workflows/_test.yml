@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "inputs.environment=${{ inputs.environment }}"
           echo "VITE_AUTH0_CLIENT_ID length=${#VITE_AUTH0_CLIENT_ID}"
-          echo "VITE_AUTH0_AUDIENCE length=${#VITE_AUTH0_AUDIENCE}"            
+          echo "VITE_MAPBOX_ACCESS_TOKEN length=${#VITE_MAPBOX_ACCESS_TOKEN}"
           echo "VITE_AUTH0_DOMAIN=$VITE_AUTH0_DOMAIN"
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.2.0
