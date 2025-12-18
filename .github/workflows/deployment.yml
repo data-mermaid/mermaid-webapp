@@ -23,7 +23,6 @@ jobs:
   deps-cache:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.2.0
@@ -42,6 +41,15 @@ jobs:
         name: Install dependencies
         run: yarn install
 
+  show-env:
+    if: github.event.pull_request.draft == false
+    needs: [deps-cache]
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Show chosen environment"
+        run: |
+          echo "Env from deployment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}"
+
   call-lint:
     if: github.event.pull_request.draft == false
     needs: [deps-cache]
@@ -53,6 +61,9 @@ jobs:
     uses: ./.github/workflows/_test.yml
     with:
       environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
+
+
+
   call-cdk-deploy:
     concurrency:
       group: app-deployment-${{ github.ref }}
