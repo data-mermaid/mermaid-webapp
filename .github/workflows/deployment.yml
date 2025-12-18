@@ -62,8 +62,6 @@ jobs:
     with:
       environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
 
-
-
   call-cdk-deploy:
     concurrency:
       group: app-deployment-${{ github.ref }}
