@@ -61,7 +61,6 @@ jobs:
     needs: [deps-cache, call-lint]
     uses: ./.github/workflows/_test.yml
     with:
-      dummy-secret: ${{ secrets.DUMMY_SECRET }}
       environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
     secrets:
       dummy-secret: ${{ secrets.DUMMY_SECRET }}
