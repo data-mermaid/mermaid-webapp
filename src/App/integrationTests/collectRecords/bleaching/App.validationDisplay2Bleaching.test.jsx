@@ -57,28 +57,10 @@ test('Validating an empty bleaching collect record collect record shows validati
     dexieCurrentUserInstance,
   )
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
   // record level validations
   expect(screen.getByText('record level error 1')).toBeInTheDocument()
   expect(screen.getByText('record level error 2')).toBeInTheDocument()
@@ -91,11 +73,11 @@ test('Validating an empty bleaching collect record collect record shows validati
   expect(within(screen.getByTestId('site')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('management')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_date')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_time')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('quadrat_size')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-date')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-time')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('quadrat-size')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('relative_depth')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('relative-depth')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('current')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('tide')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
@@ -236,28 +218,10 @@ test('bleaching collect record validations will show only the first error when t
     dexieCurrentUserInstance,
   )
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   // regular inputs
 

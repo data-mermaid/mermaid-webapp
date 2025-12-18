@@ -137,7 +137,7 @@ const SampleEventInputs = ({
           label={t('sample_units.sample_date')}
           required={true}
           id="sample_date"
-          testId="sample_date"
+          testId="sample-date"
           type="date"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SAMPLE_DATE_VALIDATION_PATH })

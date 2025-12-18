@@ -102,28 +102,10 @@ test('Bleaching collect record validations will show the all warnings when there
     dexieCurrentUserInstance,
   )
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
   // regular inputs
   expect(within(screen.getByTestId('site')).getByText('firstWarning')).toBeInTheDocument()
   expect(within(screen.getByTestId('site')).getByText('secondWarning')).toBeInTheDocument()
@@ -230,28 +212,10 @@ test('Validating an empty collect record, and then editing an input with errors 
     dexieCurrentUserInstance,
   )
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   expect(await within(screen.getByTestId('depth')).findByText('Required')).toBeInTheDocument()
 
@@ -261,9 +225,9 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(await within(screen.getByTestId('site')).findByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('management')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('depth')).queryByText('Required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_date')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_time')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('quadrat_size')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-date')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-time')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('quadrat-size')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
@@ -278,29 +242,17 @@ test('Validating an empty collect record, and then editing an input with errors 
 
   await user.type(screen.getByLabelText('Depth'), '{backspace}')
 
-  await user.click(
-    await screen.findByRole('button', {
-      name: 'Save',
-    }),
-  )
-  expect(
-    await screen.findByRole('button', {
-      name: 'Saving',
-    }),
-  )
-  expect(
-    await screen.findByRole('button', {
-      name: 'Saved',
-    }),
-  )
+  await user.click(await screen.findByTestId('save-button'))
+  expect(await screen.findByTestId('saving-button'))
+  expect(await screen.findByTestId('saved-button'))
 
   // validations hide
   expect(within(screen.getByTestId('site')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('management')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('depth')).queryByText('Required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_date')).queryByText('Required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_time')).queryByText('Required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('quadrat_size')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-date')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-time')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('quadrat-size')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('label')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).queryByText('Required')).not.toBeInTheDocument()
@@ -313,36 +265,18 @@ test('Validating an empty collect record, and then editing an input with errors 
     within(screen.getByLabelText('Observations - Percent Cover')).queryByText('observation error'),
   ).not.toBeInTheDocument()
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   // validations show again
   expect(within(screen.getByTestId('site')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('management')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_date')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_time')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('quadrat_size')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-date')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-time')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('quadrat-size')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
@@ -396,28 +330,10 @@ test('Bleaching collect record validations will show passed input validations', 
     dexieCurrentUserInstance,
   )
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   // regular inputs (sample)
 

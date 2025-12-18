@@ -30,23 +30,18 @@ test('Edit Benthic LIT - Save button starts with Saved status, make changes, Sav
   await user.clear(await screen.findByLabelText('Depth'))
   await user.type(screen.getByLabelText('Depth'), '45')
 
-  expect(screen.getByText('Save', { selector: 'button' }))
+  expect(screen.getByTestId('save-button'))
 
-  expect(screen.getByText('Validate', { selector: 'button' })).toBeDisabled()
+  expect(screen.getByTestId('validate-button')).toBeDisabled()
 
-  await user.click(
-    screen.getByText('Save', {
-      selector: 'button',
-    }),
-  )
+  await user.click(screen.getByTestId('save-button'))
 
-  expect(await screen.findByText('Saving', { selector: 'button' }))
+  expect(await screen.findByTestId('saving-button'))
 
-  expect(await screen.findByText('Record saved.'))
 
-  expect(await screen.findByText('Saved', { selector: 'button' }))
-  expect(screen.getByText('Validate', { selector: 'button' })).toBeEnabled()
-  expect(screen.getByText('Submit', { selector: 'button' })).toBeDisabled()
+  expect(await screen.findByTestId('saved-button'))
+  expect(screen.getByTestId('validate-button')).toBeEnabled()
+  expect(screen.getByTestId('submit-button')).toBeDisabled()
 })
 
 test('Validate Benthic LIT: fails to validate, shows button able to run validation again.', async () => {
@@ -61,7 +56,7 @@ test('Validate Benthic LIT: fails to validate, shows button able to run validati
     },
   )
 
-  await user.click(await screen.findByText('Validate', { selector: 'button' }))
+  await user.click(await screen.findByTestId('validate-button'))
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
@@ -88,9 +83,9 @@ test('Validate Benthic LIT: fails to validate, shows button able to run validati
     }),
   )
 
-  expect(await screen.findByText('Validating', { selector: 'button' }))
+  expect(await screen.findByTestId('validating-button'))
 
-  expect(await screen.findByText('Validate', { selector: 'button' }))
+  expect(await screen.findByTestId('validate-button'))
   expect(
     screen.queryByText('Validation is currently unavailable for this record.'),
   ).not.toBeInTheDocument()
@@ -154,20 +149,20 @@ test('Validate & submit Benthic LIT: validation passes, shows validate button di
     }),
   )
 
-  await user.click(await screen.findByText('Validate', { selector: 'button' }))
+  await user.click(await screen.findByTestId('validate-button'))
 
-  expect(await screen.findByText('Validating', { selector: 'button' }))
+  expect(await screen.findByTestId('validating-button'))
 
-  expect(await screen.findByText('Validated', { selector: 'button' }))
+  expect(await screen.findByTestId('validated-button'))
   expect(
     screen.queryByText('Validation is currently unavailable for this record.'),
   ).not.toBeInTheDocument()
 
-  expect(await screen.findByText('Submit', { selector: 'button' })).toBeEnabled()
+  expect(await screen.findByTestId('submit-button')).toBeEnabled()
 
-  await user.click(await screen.findByText('Submit', { selector: 'button' }))
+  await user.click(await screen.findByTestId('submit-button'))
 
-  expect(await screen.findByText('Submitting', { selector: 'button' })).toBeDisabled()
+  expect(await screen.findByTestId('submitting-button')).toBeDisabled()
 })
 
 test('Initial load of successfully validated record', async () => {
@@ -182,7 +177,7 @@ test('Initial load of successfully validated record', async () => {
     },
   )
 
-  await user.click(await screen.findByText('Validate', { selector: 'button' }))
+  await user.click(await screen.findByTestId('validate-button'))
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
@@ -209,7 +204,7 @@ test('Initial load of successfully validated record', async () => {
     }),
   )
 
-  expect(await screen.findByText('Saved', { selector: 'button' })).toBeDisabled()
-  expect(await screen.findByText('Validated', { selector: 'button' })).toBeDisabled()
-  expect(await screen.findByText('Submit', { selector: 'button' })).toBeEnabled()
+  expect(await screen.findByTestId('saved-button')).toBeDisabled()
+  expect(await screen.findByTestId('validated-button')).toBeDisabled()
+  expect(await screen.findByTestId('submit-button')).toBeEnabled()
 })

@@ -31,9 +31,7 @@ test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish
 
   await user.click(within(sampleUnitNav).getByTestId('fishbelt-link'))
 
-  const newFishBeltTitle = await screen.findByText('Fish Belt', {
-    selector: 'h2',
-  })
+  const newFishBeltTitle = await screen.findByTestId('fishbelt-page-title')
 
   expect(newFishBeltTitle).toBeInTheDocument()
 })
@@ -58,9 +56,7 @@ test('Clicking Add Sample Unit then click Benthic Pit link expects to see New Be
 
   await user.click(within(sampleUnitNav).getByTestId('benthicpit-link'))
 
-  const newBenthicPitTitle = await screen.findByText('Benthic PIT', {
-    selector: 'h2',
-  })
+  const newBenthicPitTitle = await screen.findByTestId('benthicpit-page-title')
 
   expect(newBenthicPitTitle).toBeInTheDocument()
 })
@@ -85,9 +81,7 @@ test('Clicking Add Sample Unit then click Habitat Complexity link expects to see
 
   await user.click(within(sampleUnitNav).getByTestId('habitatcomplexity-link'))
 
-  const newHabitatComplexityTitle = await screen.findByText('Habitat Complexity', {
-    selector: 'h2',
-  })
+  const newHabitatComplexityTitle = await screen.findByTestId('habitatcomplexity-page-title')
 
   expect(newHabitatComplexityTitle).toBeInTheDocument()
 })
@@ -112,9 +106,7 @@ test('Clicking Add Sample Unit then click Benthic LIT link expects to see New Be
 
   await user.click(within(sampleUnitNav).getByTestId('benthiclit-link'))
 
-  const newBenthicLITTitle = await screen.findByText('Benthic LIT', {
-    selector: 'h2',
-  })
+  const newBenthicLITTitle = await screen.findByTestId('benthiclit-page-title')
 
   expect(newBenthicLITTitle).toBeInTheDocument()
 })
@@ -139,9 +131,7 @@ test('Clicking Add Sample Unit then click Bleaching link expects to see New Blea
 
   await user.click(within(sampleUnitNav).getByTestId('bleachingqc-link'))
 
-  const newBleachingTitle = await screen.findByText('Bleaching', {
-    selector: 'h2',
-  })
+  const newBleachingTitle = await screen.findByTestId('bleachingqc-page-title')
 
   expect(newBleachingTitle).toBeInTheDocument()
 })

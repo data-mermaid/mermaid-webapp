@@ -187,7 +187,7 @@ const BenthicLitTransectInputs = ({
           label="Transect Number"
           required={true}
           id="number"
-          testId="transect_number"
+          testId="transect-number"
           type="number"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({
@@ -226,7 +226,7 @@ const BenthicLitTransectInputs = ({
         <InputWithLabelAndValidation
           label="Sample Time"
           id="sample_time"
-          testId="sample_time"
+          testId="sample-time"
           type="time"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
@@ -266,7 +266,7 @@ const BenthicLitTransectInputs = ({
           label="Transect Length Surveyed"
           required={true}
           id="len_surveyed"
-          testId="len_surveyed"
+          testId="len-surveyed"
           type="number"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({
@@ -290,7 +290,7 @@ const BenthicLitTransectInputs = ({
           label="Reef Slope"
           required={false}
           id="reef_slope"
-          testId="reef_slope"
+          testId="reef-slope"
           options={reefSlopeOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
@@ -356,7 +356,7 @@ const BenthicLitTransectInputs = ({
           label="Relative Depth"
           required={false}
           id="relative_depth"
-          testId="relative_depth"
+          testId="relative-depth"
           options={relativeDepthOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })

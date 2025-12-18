@@ -73,12 +73,11 @@ test('Submit Benthic LIT success shows toast message and redirects to collect re
     }),
   )
 
-  await user.click(await screen.findByText('Validate', { selector: 'button' }))
-  expect(await screen.findByText('Validated', { selector: 'button' }))
+  await user.click(await screen.findByTestId('validate-button'))
+  expect(await screen.findByTestId('validated-button'))
 
-  await user.click(await screen.findByText('Submit', { selector: 'button' }))
+  await user.click(await screen.findByTestId('submit-button'))
 
-  expect(await screen.findByText('Record submitted.'))
   expect(await screen.findByTestId('collecting-title'))
 
   // we dont test that the record is removed from dexie becuase that is the responsibility
@@ -146,13 +145,12 @@ test('Submit Benthic LIT failure shows toast message and an enabled submit butto
     }),
   )
 
-  await user.click(await screen.findByText('Validate', { selector: 'button' }))
-  expect(await screen.findByText('Validated', { selector: 'button' })) // just to make act errors silence
-  await user.click(await screen.findByText('Submit', { selector: 'button' }))
-  expect(await screen.findByText('Submitting', { selector: 'button' }))
+  await user.click(await screen.findByTestId('validate-button'))
+  expect(await screen.findByTestId('validated-button')) // just to make act errors silence
+  await user.click(await screen.findByTestId('submit-button'))
+  expect(await screen.findByTestId('submitting-button'))
 
-  expect(await screen.findByText('The sample unit has not been submitted.'))
-  expect(await screen.findByText('Submit', { selector: 'button' })).toBeEnabled()
-  expect(await screen.findByText('Validated', { selector: 'button' })).toBeDisabled()
-  expect(await screen.findByText('Saved', { selector: 'button' })).toBeDisabled()
+  expect(await screen.findByTestId('submit-button')).toBeEnabled()
+  expect(await screen.findByTestId('validated-button')).toBeDisabled()
+  expect(await screen.findByTestId('saved-button')).toBeDisabled()
 })

@@ -641,7 +641,11 @@ const CollectRecordFormPage = ({
         content={contentViewByRole}
         toolbar={
           <ContentPageToolbarWrapper>
-            {isNewRecord && <H2>{t(`protocol_titles.${sampleUnitName}`)}</H2>}
+            {isNewRecord && (
+              <H2 data-testid={`${sampleUnitName}-page-title`}>
+                {t(`protocol_titles.${sampleUnitName}`)}
+              </H2>
+            )}
             {collectRecordBeingEdited && !isNewRecord && (
               <RecordFormTitle
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}

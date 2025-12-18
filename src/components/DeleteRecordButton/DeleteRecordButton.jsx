@@ -41,8 +41,14 @@ const DeleteRecordButton = ({
 
   const footerContentPageOne = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>{modalText.no}</ButtonSecondary>
-      <ButtonCaution disabled={isLoading} onClick={deleteRecord}>
+      <ButtonSecondary data-testid="delete-record-cancel-button" onClick={onDismiss}>
+        {modalText.no}
+      </ButtonSecondary>
+      <ButtonCaution
+        data-testid="delete-record-confirm-button"
+        disabled={isLoading}
+        onClick={deleteRecord}
+      >
         {modalText.yes}
       </ButtonCaution>
     </RightFooter>
@@ -56,7 +62,7 @@ const DeleteRecordButton = ({
 
   const mainContent = (
     <>
-      {currentPage === 1 && modalText.prompt}
+      {currentPage === 1 && <div data-testid="delete-record-prompt">{modalText.prompt}</div>}
       {currentPage === 2 && mainContentPageTwo}
     </>
   )
@@ -71,11 +77,17 @@ const DeleteRecordButton = ({
   return (
     <>
       <DeleteRecordButtonCautionWrapper>
-        <ButtonCaution id={gtmId} onClick={openModal} disabled={isNewRecord}>
+        <ButtonCaution
+          id={gtmId}
+          data-testid="delete-record-button"
+          onClick={openModal}
+          disabled={isNewRecord}
+        >
           {modalText.title}
         </ButtonCaution>
       </DeleteRecordButtonCautionWrapper>
       <Modal
+        testId="delete-record-modal"
         title={modalText.title}
         isOpen={isOpen}
         onDismiss={onDismiss}

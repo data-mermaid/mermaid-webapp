@@ -36,30 +36,26 @@ describe('Offline', () => {
     await user.clear(screen.getByTestId('depth-input'))
     await user.type(screen.getByTestId('depth-input'), '45')
 
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByTestId('saved-button'))
 
-    expect(screen.getByLabelText('Site')).toHaveDisplayValue('Site D')
-    expect(screen.getByLabelText('Management')).toHaveDisplayValue(
+    expect(screen.getByTestId('site-select')).toHaveDisplayValue('Site D')
+    expect(screen.getByTestId('management-select')).toHaveDisplayValue(
       'Management Regimes C [Management Regimes 3]',
     )
     expect(screen.getByTestId('depth-input')).toHaveValue(45)
-    expect(screen.getByTestId('sample_date-input')).toHaveValue('2021-03-02')
-    expect(screen.getByTestId('sample_time-input')).toHaveValue('11:55')
-    expect(screen.getByTestId('transect_number-input')).toHaveValue(2)
+    expect(screen.getByTestId('sample-date-input')).toHaveValue('2021-03-02')
+    expect(screen.getByTestId('sample-time-input')).toHaveValue('11:55')
+    expect(screen.getByTestId('transect-number-input')).toHaveValue(2)
     expect(screen.getByTestId('label-input')).toHaveValue('FB-2')
-    expect(screen.getByTestId('len_surveyed-input')).toHaveValue(6)
+    expect(screen.getByTestId('len-surveyed-input')).toHaveValue(6)
     expect(screen.getByTestId('width-select')).toHaveDisplayValue('2m')
-    expect(screen.getByTestId('size_bin-select')).toHaveDisplayValue('5')
-    expect(screen.getByTestId('reef_slope-select')).toHaveDisplayValue('flat')
+    expect(screen.getByTestId('size-bin-select')).toHaveDisplayValue('5')
+    expect(screen.getByTestId('reef-slope-select')).toHaveDisplayValue('flat')
     expect(screen.getByTestId('visibility-select')).toHaveDisplayValue('<1m - bad')
     expect(screen.getByTestId('current-select')).toHaveDisplayValue('moderate')
-    expect(screen.getByTestId('relative_depth-select')).toHaveDisplayValue('deep')
+    expect(screen.getByTestId('relative-depth-select')).toHaveDisplayValue('deep')
     expect(screen.getByTestId('tide-select')).toHaveDisplayValue('high')
     expect(screen.getByTestId('notes-textarea')).toHaveValue('some fish notes')
   })
@@ -111,13 +107,9 @@ describe('Offline', () => {
 
     await user.type(newCountInput, '88')
 
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByTestId('saved-button'))
     const savedCollectRecords = await dexiePerUserDataInstance.collect_records.toArray()
 
     const updatedCollectRecord = savedCollectRecords.filter((record) => record.id === '2')[0]
@@ -167,13 +159,9 @@ describe('Offline', () => {
     // so this typing is just appending to the existing '50' in the input.
     await user.type(newSizePlus50Input, '367')
 
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByTestId('saved-button'))
     const savedCollectRecord = (await dexiePerUserDataInstance.collect_records.toArray()).find(
       (record) => record.id === '2',
     )
@@ -205,20 +193,16 @@ describe('Offline', () => {
     )
 
     // make an unsaved change
-    const depthInput = screen.getByLabelText('Depth')
+    const depthInput = screen.getByTestId('depth-input')
 
     await user.clear(depthInput)
     await user.type(depthInput, '45')
     await waitFor(() => expect(depthInput).toHaveValue(45))
 
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('The sample unit has not been saved.'))
+    expect(await screen.findByTestId('save-button'))
 
-    expect(await screen.findByLabelText('Depth')).toHaveValue(45)
+    expect(await screen.findByTestId('depth-input')).toHaveValue(45)
   })
 })

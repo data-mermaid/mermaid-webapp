@@ -19,28 +19,13 @@ import mockSampleEventValidationObject from '../../../../testUtilities/mockColle
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 const validateCollectRecord = async (user) => {
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  const validateButton = await screen.findByTestId('validate-button', { timeout: 10000 })
+  await user.click(validateButton)
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  // Button should transition to validating state
+  expect(await screen.findByTestId('validating-button'))
+  // Then back to validate state
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 }
 
 test('Validate Benthic LIT collect record, get site duplicate warning, show resolve button, keep original site, and merge duplicate site to original site', async () => {

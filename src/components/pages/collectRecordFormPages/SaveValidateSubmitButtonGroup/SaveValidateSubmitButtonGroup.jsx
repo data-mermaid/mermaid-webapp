@@ -124,21 +124,51 @@ const SaveValidateSubmitButtonGroup = ({
     saveButtonState === buttonGroupStates.saving
 
   const saveButton = (
-    <ArrowRightButton id="gtm-record-save" type="button" disabled={isSaveDisabled} onClick={onSave}>
+    <ArrowRightButton
+      id="gtm-record-save"
+      type="button"
+      data-testid={
+        saveButtonState === buttonGroupStates.saving
+          ? 'saving-button'
+          : saveButtonState === buttonGroupStates.saved
+          ? 'saved-button'
+          : 'save-button'
+      }
+      disabled={isSaveDisabled}
+      onClick={onSave}
+    >
       <IconSave />
       {getSaveButtonText()}
     </ArrowRightButton>
   )
 
   const validateButton = (
-    <ArrowRightButton id="gtm-record-validate" onClick={onValidate} disabled={isValidateDisabled}>
+    <ArrowRightButton
+      id="gtm-record-validate"
+      data-testid={
+        validateButtonState === buttonGroupStates.validating
+          ? 'validating-button'
+          : validateButtonState === buttonGroupStates.validated
+          ? 'validated-button'
+          : 'validate-button'
+      }
+      onClick={onValidate}
+      disabled={isValidateDisabled}
+    >
       <IconCheck />
       {getValidateButtonText()}
     </ArrowRightButton>
   )
 
   const submitButton = (
-    <ArrowRightButton id="gtm-record-submit" disabled={isSubmitDisabled} onClick={onSubmit}>
+    <ArrowRightButton
+      id="gtm-record-submit"
+      data-testid={
+        submitButtonState === buttonGroupStates.submitting ? 'submitting-button' : 'submit-button'
+      }
+      disabled={isSubmitDisabled}
+      onClick={onSubmit}
+    >
       <IconUpload />
       {getSubmitButtonText()}
     </ArrowRightButton>
