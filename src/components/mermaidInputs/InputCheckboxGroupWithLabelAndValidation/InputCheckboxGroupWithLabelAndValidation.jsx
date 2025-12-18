@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { kebabCase } from 'lodash'
 import { InputRow, CheckRadioLabel, CheckRadioWrapper, RequiredIndicator } from '../../generic/form'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
@@ -37,10 +38,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
   }
 
   const checkboxGroup = options.map((item) => {
-    const labelSegment = String(item.label)
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
+    const labelSegment = kebabCase(item.label)
     const optionTestId = testId ? `${testId}-${labelSegment}-checkbox` : undefined
 
     return (

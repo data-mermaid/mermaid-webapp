@@ -265,7 +265,7 @@ const ManagementRulesInput = ({
             onChange={handlePartialRestrictionChange}
           />
           <StyledCheckRadioLabel htmlFor="partial-restrictions">
-            {t('management_regimes.partial_restrictions_label')}
+            {t('management_regimes.partial_restrictions')}
           </StyledCheckRadioLabel>
           <RadioHelperText>{t('management_regimes.partial_restrictions_info')}</RadioHelperText>
           {showPartialRestrictionChoices}

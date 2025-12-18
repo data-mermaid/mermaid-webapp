@@ -627,7 +627,6 @@
   "management_regimes": {
     "management_regime": "Management regime",
     "management_regimes": "Management Regimes",
-    "management_regime_low": "management regime",
     "management_regime_name": "Management regime name",
     "management": "Management",
     "secondary_name": "Secondary name",
@@ -638,8 +637,7 @@
     "not_reported": "Not reported",
     "open_access": "Open access",
     "access_restriction": "Access restrictions",
-    "partial_restrictions": "Partial restrictions: {{restrictions}}",
-    "partial_restrictions_label": "Partial restrictions",
+    "partial_restrictions": "Partial restrictions",
     "periodic_closure": "Periodic closure",
     "size_limits": "Size limits",
     "gear_restriction": "Gear restrictions",

@@ -85,9 +85,9 @@ const ReadOnlyManagementRegimeContent = ({
   } else if (open_access) {
     managementRules = t('management_regimes.open_access')
   } else if (partialRestrictionRules.length) {
-    managementRules = t('management_regimes.partial_restrictions', {
-      restrictions: partialRestrictionRules.join(', '),
-    })
+    managementRules = `${t(
+      'management_regimes.partial_restrictions',
+    )}: ${partialRestrictionRules.join(', ')}`
   }
 
   return (
@@ -238,7 +238,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const managementRegimeTitleText = t('management_regimes.management_regime')
-  const managementRegimeToastLabelText = t('management_regimes.management_regime_low')
+  const managementRegimeToastLabelText = t('management_regimes.management_regime').toLowerCase()
   const managementRegimeRecordUnavailableText = t('management_regimes.data_unavailable')
   const notReportedLabelText = t('management_regimes.not_reported')
   const saveSuccessOnlineText = t('toasts.mermaid_data_save_success_online', {
