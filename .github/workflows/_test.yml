@@ -3,6 +3,10 @@ name: 🧪 Test
 on:
   workflow_call:
     inputs:
+      dummy-secret:
+        description: "Testing"
+        required: true
+        type: string
       environment:
         description: 'GitHub environment to pull secrets from'
         required: true
@@ -29,12 +33,7 @@ jobs:
           echo "job.environment=${{ job.environment }}"
       - name: "Check if VITE_AUTH0_CLIENT_ID is set (boolean only)"
         run: |
-          if [ -z "$VITE_AUTH0_CLIENT_ID" ]; then
-            echo "VITE_AUTH0_CLIENT_ID is EMPTY in shell env";
-          else
-            echo "VITE_AUTH0_CLIENT_ID is SET in shell env (value is hidden)";
-          fi
-          echo "VITE_AUTH0_CLIENT_ID length=${#VITE_AUTH0_CLIENT_ID}"
+          echo "DUMMY_SECRET length=${#dummy-secret}"
           echo "VITE_MAPBOX_ACCESS_TOKEN length=${#VITE_MAPBOX_ACCESS_TOKEN}"
           echo "VITE_AUTH0_DOMAIN=$VITE_AUTH0_DOMAIN"
       - uses: actions/checkout@v4.2.2
