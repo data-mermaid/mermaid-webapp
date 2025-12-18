@@ -25,6 +25,15 @@ jobs:
       - name: "Dump context env"
         run: |
           echo "inputs.environment=${{ inputs.environment }}"
+          echo "inputs.environment=${{ github.environment }}"
+          echo "job.environment=${{ job.environment }}"
+      - name: "Check if VITE_AUTH0_CLIENT_ID is set (boolean only)"
+        run: |
+          if [ -z "$VITE_AUTH0_CLIENT_ID" ]; then
+            echo "VITE_AUTH0_CLIENT_ID is EMPTY in shell env";
+          else
+            echo "VITE_AUTH0_CLIENT_ID is SET in shell env (value is hidden)";
+          fi
           echo "VITE_AUTH0_CLIENT_ID length=${#VITE_AUTH0_CLIENT_ID}"
           echo "VITE_MAPBOX_ACCESS_TOKEN length=${#VITE_MAPBOX_ACCESS_TOKEN}"
           echo "VITE_AUTH0_DOMAIN=$VITE_AUTH0_DOMAIN"
