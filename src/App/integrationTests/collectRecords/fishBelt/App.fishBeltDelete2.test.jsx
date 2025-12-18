@@ -4,7 +4,6 @@ import React from 'react'
 import {
   screen,
   renderAuthenticatedOffline,
-  within,
   waitFor,
   waitForElementToBeRemoved,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
@@ -41,7 +40,7 @@ describe('Offline', () => {
 
     expect(screen.getByTestId('delete-record-prompt'))
 
-    const modal = screen.getByTestId('delete-record-modal')
+    expect(screen.getByTestId('delete-record-modal'))
 
     await user.click(screen.getByTestId('delete-record-cancel-button'))
 
