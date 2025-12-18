@@ -38,7 +38,6 @@ test('Edit Benthic LIT - Save button starts with Saved status, make changes, Sav
 
   expect(await screen.findByTestId('saving-button'))
 
-
   expect(await screen.findByTestId('saved-button'))
   expect(screen.getByTestId('validate-button')).toBeEnabled()
   expect(screen.getByTestId('submit-button')).toBeDisabled()

@@ -271,9 +271,9 @@ test('Benthic PIT validation: user can dismiss non-observations input warnings '
     dexieCurrentUserInstance,
   )
 
- await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
-   expect(await screen.findByTestId('validating-button'))
-   await waitFor(() => expect(screen.getByTestId('validate-button')))
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
@@ -531,8 +531,8 @@ test('Benthic PIT validation: user can dismiss record-level warnings ', async ()
   )
 
   await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
-    expect(await screen.findByTestId('validating-button'))
-    await waitFor(() => expect(screen.getByTestId('validate-button')))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
@@ -643,8 +643,8 @@ test('Benthic PIT validation: user can dismiss observation warnings ', async () 
   )
 
   await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
-    expect(await screen.findByTestId('validating-button'))
-    await waitFor(() => expect(screen.getByTestId('validate-button')))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const observationsTable = screen.getByLabelText('Observations')
 
@@ -922,8 +922,8 @@ test('Benthic PIT validation: user can reset dismissed non-observation input war
   )
 
   await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
-    expect(await screen.findByTestId('validating-button'))
-    await waitFor(() => expect(screen.getByTestId('validate-button')))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
