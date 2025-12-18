@@ -15,7 +15,6 @@ permissions:
 
 env:
   VITE_AUTH0_DOMAIN: datamermaid.auth0.com
-  VITE_CORAL_ATLAS_APP_ID: ${{ secrets.VITE_CORAL_ATLAS_APP_ID }}
   CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
   CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
   GITHUB_TOKEN: ${{ github.token }}
@@ -52,7 +51,8 @@ jobs:
     if: github.event.pull_request.draft == false
     needs: [deps-cache, call-lint]
     uses: ./.github/workflows/_test.yml
-
+    with:
+      environment: ${{ github.ref == 'refs/heads/develop' && 'dev' || 'production' }}
   call-cdk-deploy:
     concurrency:
       group: app-deployment-${{ github.ref }}
