@@ -12,6 +12,14 @@ jobs:
   test:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
+    env:
+      VITE_AUTH0_AUDIENCE: ${{ vars.VITE_AUTH0_AUDIENCE }}
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+      VITE_AUTH0_DOMAIN: ${{ vars.VITE_AUTH0_DOMAIN }}
+      VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
+      VITE_MERMAID_API: ${{ vars.VITE_MERMAID_API }}
+      VITE_MERMAID_REFERENCE_LINK: ${{ vars.VITE_MERMAID_REFERENCE_LINK }}
+      VITE_MERMAID_EXPLORE_LINK: ${{ vars.VITE_MERMAID_EXPLORE_LINK }}
     steps:
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.2.0
