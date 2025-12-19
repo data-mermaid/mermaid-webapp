@@ -14,7 +14,6 @@ permissions:
   id-token: write
 
 env:
-  VITE_AUTH0_DOMAIN: datamermaid.auth0.com
   CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
   CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
   GITHUB_TOKEN: ${{ github.token }}
@@ -41,15 +40,6 @@ jobs:
         name: Install dependencies
         run: yarn install
 
-  show-env:
-    if: github.event.pull_request.draft == false
-    needs: [deps-cache]
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Show chosen environment"
-        run: |
-          echo "Env from deployment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}"
-
   call-lint:
     if: github.event.pull_request.draft == false
     needs: [deps-cache]
@@ -59,6 +49,7 @@ jobs:
     if: github.event.pull_request.draft == false
     needs: [deps-cache, call-lint]
     uses: ./.github/workflows/_test.yml
+    secrets: inherit
     with:
       environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
 
