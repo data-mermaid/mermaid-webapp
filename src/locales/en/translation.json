@@ -1,4 +1,7 @@
 {
+  "api_errors": {
+    "demo_project_exists": "You have already created a demo project. Only one demo project is allowed per user."
+  },
   "buttons": {
     "add_row": "Add row",
     "back": "Back",
