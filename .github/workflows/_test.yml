@@ -16,8 +16,8 @@ jobs:
         run: |
           echo "inputs.environment=${{ inputs.environment }}"
           echo "github.environment=${{ github.environment }}"
-          echo "DUMMY_SECRET=${{ inputs.dummy-secret }}"
-          echo "DUMMY_SECRET length=${#inputs.dummy-secret }"
+          echo "DUMMY_SECRET=${{ secrets.DUMMY_SECRET }}"
+          echo "DUMMY_SECRET length=${#secrets.DUMMY_SECRET }"
 
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.2.0
