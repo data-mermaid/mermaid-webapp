@@ -23,7 +23,9 @@
     "transfer": "Transfer",
     "logout": "Logout",
     "user_account_dropdown": "User account dropdown",
-    "dismiss_all_notifications": "Dismiss all notifications"
+    "dismiss_all_notifications": "Dismiss all notifications",
+    "saving": "Saving",
+    "saved": "Saved"
   },
   "mermaid_logo": "MERMAID logo",
   "email": "Email",
