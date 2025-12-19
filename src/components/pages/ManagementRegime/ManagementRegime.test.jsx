@@ -53,7 +53,7 @@ test('Edit Management Regime - shows name and rules required', async () => {
     await within(screen.getByTestId('rules')).findByTestId('inline-message-error'),
   ).toBeInTheDocument()
 
-  expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
+  expect(await screen.findByTestId('save-button-management-regime-form')).toBeDisabled()
 
   // fix name and rules inputs, and make sure save button enables
   await user.type(nameInput, 'fjkdlsfjd')
@@ -63,7 +63,9 @@ test('Edit Management Regime - shows name and rules required', async () => {
 
   await waitFor(() => expect(nameInput).toHaveValue('fjkdlsfjd')) // name input doesnt update in test, so button cant be enabled
 
-  await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled())
+  await waitFor(() =>
+    expect(screen.getByTestId('save-button-management-regime-form')).toBeEnabled(),
+  )
 })
 
 test('Management Regime component renders with the expected UI elements', async () => {
