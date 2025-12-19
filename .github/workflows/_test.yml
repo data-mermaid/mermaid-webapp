@@ -3,6 +3,10 @@ name: 🧪 Test
 on:
   workflow_call:
     inputs:
+      dummy-secret:
+        description: 'Testing'
+        required: true
+        type: string
       environment:
         description: 'GitHub environment to pull secrets from'
         required: true
@@ -10,7 +14,6 @@ on:
 
 jobs:
   test:
-    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: "Dump context env"
@@ -18,7 +21,6 @@ jobs:
           echo "inputs.environment=${{ inputs.environment }}"
           echo "github.environment=${{ github.environment }}"
           echo "DUMMY_SECRET=${{ inputs.dummy-secret }}"
-          echo "DUMMY_SECRET length=${#inputs.dummy-secret }"
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.2.0
         with:

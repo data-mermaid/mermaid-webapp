@@ -17,6 +17,7 @@ env:
   CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
   CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
   GITHUB_TOKEN: ${{ github.token }}
+  DUMMY_SECRET: ${{ secrets.DUMMY_SECRET }}
 
 jobs:
   deps-cache:
@@ -52,6 +53,8 @@ jobs:
     secrets: inherit
     with:
       environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
+    secrets:
+      dummy-secret: ${{ secrets.DUMMY_SECRET }}
 
   call-cdk-deploy:
     concurrency:
