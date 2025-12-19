@@ -13,12 +13,6 @@ jobs:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - name: "Dump context env"
-        run: |
-          echo "inputs.environment=${{ inputs.environment }}"
-          echo "github.environment=${{ github.environment }}"
-          echo "DUMMY_SECRET=${{ inputs.dummy-secret }}"
-          echo "DUMMY_SECRET length=${#inputs.dummy-secret }"
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.2.0
         with:
