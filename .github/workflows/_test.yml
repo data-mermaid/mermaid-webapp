@@ -3,10 +3,6 @@ name: 🧪 Test
 on:
   workflow_call:
     inputs:
-      dummy-secret:
-        description: 'Testing'
-        required: true
-        type: string
       environment:
         description: 'GitHub environment to pull secrets from'
         required: true
@@ -14,6 +10,7 @@ on:
 
 jobs:
   test:
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     env:
       VITE_AUTH0_AUDIENCE: ${{ vars.VITE_AUTH0_AUDIENCE }}
@@ -24,13 +21,6 @@ jobs:
       VITE_MERMAID_REFERENCE_LINK: ${{ vars.VITE_MERMAID_REFERENCE_LINK }}
       VITE_MERMAID_EXPLORE_LINK: ${{ vars.VITE_MERMAID_EXPLORE_LINK }}
     steps:
-      - name: "Dump context env"
-        run: |
-          echo "inputs.environment=${{ inputs.environment }}"
-          echo "github.environment=${{ github.environment }}"
-          echo "DUMMY_SECRET=${{ inputs.dummy-secret }}"
-          echo "DUMMY_SECRET length=${{ inputs.dummy-secret }}"
-          echo "VITE_AUTH0_AUDIENCE length=${#VITE_AUTH0_AUDIENCE}"
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.2.0
         with:
