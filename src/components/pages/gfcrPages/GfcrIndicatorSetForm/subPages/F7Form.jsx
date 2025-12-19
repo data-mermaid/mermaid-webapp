@@ -51,7 +51,7 @@ const F7Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
             value={getFieldValueTotal(formik.values.f7_1a, formik.values.f7_1b)}
           />
         </StyledGfcrSubInputWrapper>
-        <div>{t('gfcr.forms.common.of_total_how_many')}</div>
+        <div>{t('gfcr.forms.common.of_total_following')}</div>
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f7_1c"
@@ -107,7 +107,7 @@ const F7Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
             value={getFieldValueTotal(formik.values.f7_2a, formik.values.f7_2b)}
           />
         </StyledGfcrSubInputWrapper>
-        <div>{t('gfcr.forms.common.of_total_how_many')}</div>
+        <div>{t('gfcr.forms.common.of_total_following')}</div>
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f7_2c"
@@ -155,7 +155,7 @@ const F7Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       />
       <TextareaWithLabelAndValidation
         id="f7_notes"
-        label={t('forms.notes')}
+        label={t('notes')}
         {...formik.getFieldProps('f7_notes')}
       />
     </StyledGfcrInputWrapper>

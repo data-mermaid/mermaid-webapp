@@ -1,21 +1,36 @@
 name: 🧪 Test
 
-on: workflow_call
-
-env:
-  VITE_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
-  VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
-  VITE_AUTH0_DOMAIN: datamermaid.auth0.com
-  VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
-  VITE_MERMAID_API: https://dev-api.datamermaid.org/v1
-  VITE_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
-  VITE_MERMAID_EXPLORE_LINK: https://dev-explore.datamermaid.org
-  VITE_CORAL_ATLAS_APP_ID: ${{ secrets.VITE_CORAL_ATLAS_APP_ID }}
+on:
+  workflow_call:
+    inputs:
+      dummy-secret:
+        description: 'Testing'
+        required: true
+        type: string
+      environment:
+        description: 'GitHub environment to pull secrets from'
+        required: true
+        type: string
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      VITE_AUTH0_AUDIENCE: ${{ vars.VITE_AUTH0_AUDIENCE }}
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+      VITE_AUTH0_DOMAIN: ${{ vars.VITE_AUTH0_DOMAIN }}
+      VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
+      VITE_MERMAID_API: ${{ vars.VITE_MERMAID_API }}
+      VITE_MERMAID_REFERENCE_LINK: ${{ vars.VITE_MERMAID_REFERENCE_LINK }}
+      VITE_MERMAID_EXPLORE_LINK: ${{ vars.VITE_MERMAID_EXPLORE_LINK }}
     steps:
+      - name: "Dump context env"
+        run: |
+          echo "inputs.environment=${{ inputs.environment }}"
+          echo "github.environment=${{ github.environment }}"
+          echo "DUMMY_SECRET=${{ inputs.dummy-secret }}"
+          echo "DUMMY_SECRET length=${{ inputs.dummy-secret }}"
+          echo "VITE_AUTH0_AUDIENCE length=${#VITE_AUTH0_AUDIENCE}"
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.2.0
         with:

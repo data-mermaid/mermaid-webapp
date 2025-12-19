@@ -314,7 +314,7 @@ const InvestmentModal = ({
         <hr />
         <StyledModalInputRow>
           <label id="notes-label" htmlFor="notes-input">
-            {t('forms.notes')}
+            {t('notes')}
           </label>
           <Textarea
             aria-labelledby={'notes-label'}
