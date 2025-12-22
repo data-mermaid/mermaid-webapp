@@ -12,9 +12,13 @@ import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table
 import { PAGE_SIZE_DEFAULT } from '../../../../../library/constants/constants'
 import { StyledToolbarButtonWrapper } from '../../Gfcr/Gfcr.styles'
 import { IconPlus } from '../../../../icons'
-import { ButtonSecondary, ToolbarButtonWrapper } from '../../../../generic/buttons'
+import {
+  ButtonSecondary,
+  ToolbarButtonWrapper,
+  ButtonThatLooksLikeLinkUnderlined,
+} from '../../../../generic/buttons'
 import PageUnavailable from '../../../PageUnavailable'
-import language from '../../../../../language'
+import { useTranslation, Trans } from 'react-i18next'
 import { ToolBarRow } from '../../../../generic/positioning'
 import FilterSearchToolbar from '../../../../FilterSearchToolbar/FilterSearchToolbar'
 import {
@@ -27,8 +31,6 @@ import GfcrGenericTable from '../../GfcrGenericTable'
 import InvestmentModal from '../modals/InvestmentModal'
 import formattedCurrencyAmount from '../../../../../library/formatCurrencyAmount'
 
-const tableLanguage = language.pages.gfcrInvestmentsTable
-
 const Investments = ({
   indicatorSet,
   setIndicatorSet,
@@ -37,6 +39,15 @@ const Investments = ({
   setSelectedNavItem,
   displayHelp,
 }) => {
+  const { t } = useTranslation()
+
+  const businessFinanceSolutionHeaderText = t(
+    'gfcr.forms.finance_solutions.business_finance_solution',
+  )
+  const investmentSourceHeaderText = t('gfcr.forms.investments.investment_source')
+  const investmentTypeHeaderText = t('gfcr.forms.investments.investment_type')
+  const investmentAmountHeaderText = t('gfcr.forms.investments.investment_amount')
+
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -49,28 +60,33 @@ const Investments = ({
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Business / Finance Solution',
+        Header: businessFinanceSolutionHeaderText,
         accessor: 'finance_solution',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Investment Source',
+        Header: investmentSourceHeaderText,
         accessor: 'investment_source',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Investment Type',
+        Header: investmentTypeHeaderText,
         accessor: 'investment_type',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Investment Amount',
+        Header: investmentAmountHeaderText,
         accessor: 'investment_amount',
         sortType: reactTableNaturalSort,
         align: 'right',
       },
     ],
-    [],
+    [
+      businessFinanceSolutionHeaderText,
+      investmentSourceHeaderText,
+      investmentTypeHeaderText,
+      investmentAmountHeaderText,
+    ],
   )
 
   const handleEditInvestment = useCallback(
@@ -227,7 +243,7 @@ const Investments = ({
           onClick={(event) => handleAddInvestment(event)}
           disabled={!indicatorSet.finance_solutions.length}
         >
-          <IconPlus /> {tableLanguage.add}
+          <IconPlus /> {t('gfcr.forms.investments.add')}
         </ButtonSecondary>
       </StyledToolbarButtonWrapper>
     </>
@@ -255,13 +271,23 @@ const Investments = ({
     />
   ) : (
     <PageUnavailable
-      mainText={tableLanguage.noDataMainText}
+      mainText={t('gfcr.forms.investments.no_investments')}
       subText={
-        indicatorSet.finance_solutions.length
-          ? tableLanguage.noDataSubText
-          : tableLanguage.getNoFinanceSolutions(() => {
-              setSelectedNavItem('finance-solutions')
-            })
+        indicatorSet.finance_solutions.length ? (
+          t('gfcr.forms.investments.select_add_investment')
+        ) : (
+          <Trans
+            i18nKey="gfcr.forms.investments.add_before_investments"
+            components={{
+              financeSolutionLink: (
+                <ButtonThatLooksLikeLinkUnderlined
+                  type="button"
+                  onClick={() => setSelectedNavItem('finance-solutions')}
+                />
+              ),
+            }}
+          />
+        )
       }
     />
   )
@@ -271,7 +297,7 @@ const Investments = ({
       <TableContentToolbar>
         <ToolBarRow>
           <FilterSearchToolbar
-            name={tableLanguage.filterToolbarText}
+            name={t('filters.by_investment')}
             disabled={investments.length === 0}
             globalSearchText={globalFilter || ''}
             handleGlobalFilterChange={handleGlobalFilterChange}
