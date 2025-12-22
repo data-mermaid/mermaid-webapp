@@ -28,8 +28,8 @@ describe('Offline', () => {
     )
     // make an unsaved change
 
-    await user.clear(await screen.findByLabelText('Depth'))
-    await user.type(screen.getByLabelText('Depth'), '45')
+    await user.clear(await screen.findByTestId('depth-input'))
+    await user.type(await screen.findByTestId('depth-input'), '45')
 
     const deleteButton = await screen.findByTestId('delete-record-button')
 

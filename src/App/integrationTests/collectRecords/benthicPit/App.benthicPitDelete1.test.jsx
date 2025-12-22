@@ -30,9 +30,9 @@ describe('Offline', () => {
 
     await user.click(deleteButton)
 
-    expect(screen.getByTestId('delete-record-prompt'))
+    expect(await screen.findByTestId('delete-record-prompt')).toBeInTheDocument()
 
-    const modal = screen.getByTestId('delete-record-modal')
+    const modal = await screen.findByTestId('delete-record-modal')
 
     await user.click(within(modal).getByTestId('delete-record-confirm-button'))
 
