@@ -49,7 +49,7 @@ const saveSite = async (user) => {
   await user.type(screen.getByLabelText('Notes'), 'la dee dah')
   expect(screen.getByLabelText('Notes')).toHaveValue('la dee dah')
 
-  const saveButton = screen.getByText('Save', { selector: 'button' })
+  const saveButton = screen.getByTestId('save-button-site-form')
 
   await user.click(saveButton)
 }

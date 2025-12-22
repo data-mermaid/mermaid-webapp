@@ -31,11 +31,7 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(
-    screen.getByText('Save', {
-      selector: 'button',
-    }),
-  )
+  await user.click(screen.getByTestId('save-button-site-form'))
 
   expect(await screen.findByText('The site has been saved on your computer.'))
 
@@ -59,11 +55,7 @@ test('Online: Edit Site shows toast and edited record info', async () => {
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(
-    screen.getByText('Save', {
-      selector: 'button',
-    }),
-  )
+  await user.click(screen.getByTestId('save-button-site-form'))
 
   expect(await screen.findByText('The site has been saved on your computer and online.'))
 
@@ -91,11 +83,7 @@ test('Offline: edit site save stored site in dexie', async () => {
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(
-    screen.getByText('Save', {
-      selector: 'button',
-    }),
-  )
+  await user.click(screen.getByTestId('save-button-site-form'))
 
   expect(await screen.findByText('The site has been saved on your computer.'))
 
@@ -133,11 +121,7 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(
-    screen.getByText('Save', {
-      selector: 'button',
-    }),
-  )
+  await user.click(screen.getByTestId('save-button-site-form'))
 
   expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
     `The site failed to save both on your computer and online.`,

@@ -52,7 +52,9 @@ const InlineMessage = ({
           {language.inlineMessage[type]}
         </MessagePill>
       )}
-      <InlineMessageWrapper className={className}>{children}</InlineMessageWrapper>
+      <InlineMessageWrapper className={className} data-testid={`inline-message-${type}`}>
+        {children}
+      </InlineMessageWrapper>
     </>
   )
 }
