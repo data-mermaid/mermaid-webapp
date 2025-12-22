@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TARGET: ${{ inputs.environment == 'production' && 'prod' || 'dev' }}
-      VITE_ENVIRONMENT: ${{ inputs.environment == 'production' && 'prod' || 'dev' }}
+      VITE_ENVIRONMENT: ${{ inputs.environment == 'production' && 'production' || 'dev' }}
       VITE_MERMAID_API: ${{ vars.VITE_MERMAID_API }}
       VITE_AUTH0_DOMAIN: ${{ vars.VITE_AUTH0_DOMAIN }}
       VITE_MERMAID_REFERENCE_LINK: ${{ vars.VITE_MERMAID_REFERENCE_LINK }}
