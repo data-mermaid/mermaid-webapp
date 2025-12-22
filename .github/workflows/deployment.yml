@@ -61,3 +61,4 @@ jobs:
     secrets: inherit
     with:
       cdk_subcommand: deploy
+      environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
