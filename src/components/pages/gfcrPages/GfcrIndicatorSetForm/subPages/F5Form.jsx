@@ -88,7 +88,7 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
             value={getFieldValueTotal(formik.values.f5_4a, formik.values.f5_4b)}
           />
         </StyledGfcrSubInputWrapper>
-        <div>{t('gfcr.forms.common.of_total_how_many')}</div>
+        <div>{t('gfcr.forms.common.of_total_following')}</div>
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f5_4c"

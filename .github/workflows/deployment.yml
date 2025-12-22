@@ -14,8 +14,6 @@ permissions:
   id-token: write
 
 env:
-  VITE_AUTH0_DOMAIN: datamermaid.auth0.com
-  VITE_CORAL_ATLAS_APP_ID: ${{ secrets.VITE_CORAL_ATLAS_APP_ID }}
   CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
   CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
   GITHUB_TOKEN: ${{ github.token }}
@@ -24,7 +22,6 @@ jobs:
   deps-cache:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.2.0
@@ -52,6 +49,9 @@ jobs:
     if: github.event.pull_request.draft == false
     needs: [deps-cache, call-lint]
     uses: ./.github/workflows/_test.yml
+    secrets: inherit
+    with:
+      environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
 
   call-cdk-deploy:
     concurrency:

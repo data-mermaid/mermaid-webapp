@@ -50,7 +50,7 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
             value={getFieldValueTotal(formik.values.f6_1a, formik.values.f6_1b)}
           />
         </StyledGfcrSubInputWrapper>
-        <div>{t('gfcr.forms.common.of_total_how_many')}</div>
+        <div>{t('gfcr.forms.common.of_total_following')}</div>
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f6_1c"

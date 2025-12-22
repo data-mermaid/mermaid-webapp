@@ -72,7 +72,7 @@
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "test": "TZ=UTC jest --setupFilesAfterEnv=./src/setupTests.js",
+    "test": "TZ=UTC jest --watch --setupFilesAfterEnv=./src/setupTests.js",
     "prettier": "prettier --write ./src",
     "lint": "tsc && eslint './src/**/*'",
     "prepare": "husky",
