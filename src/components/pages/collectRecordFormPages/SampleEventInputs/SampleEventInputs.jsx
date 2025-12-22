@@ -88,7 +88,7 @@ const SampleEventInputs = ({
   return (
     <>
       <InputWrapper>
-        <H2>{t('sample_event')}</H2>
+        <H2>{t('sample_units.sample_event')}</H2>
         <InputSelectWithLabelAndValidation
           label={t('sites.site')}
           required={true}

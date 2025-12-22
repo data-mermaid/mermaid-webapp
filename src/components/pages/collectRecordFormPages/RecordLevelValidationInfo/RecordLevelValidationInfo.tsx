@@ -120,7 +120,7 @@ const RecordLevelValidationInfo = ({
             </InlineMessage>
             {isScrollToViewAvailable && (
               <ScrollToButton onClick={handleScrollToObservation}>
-                {t('sample_units.validation.scroll_to_observations')}
+                {t('sample_units.scroll_to_observations')}
               </ScrollToButton>
             )}
             {isWarning || isReset || isIgnored ? (

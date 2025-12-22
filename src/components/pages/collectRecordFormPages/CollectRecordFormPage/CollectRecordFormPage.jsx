@@ -508,16 +508,8 @@ const CollectRecordFormPage = ({
 
   const errorBoxContent = (
     <ErrorBox>
-      {
-        <ErrorText isErrorShown={isErrorAbove}>
-          {t('sample_units.validation.warning_or_error')}
-        </ErrorText>
-      }
-      {
-        <ErrorText isErrorShown={isErrorBelow}>
-          {t('sample_units.validation.warning_or_error')}
-        </ErrorText>
-      }
+      {<ErrorText isErrorShown={isErrorAbove}>{t('sample_units.warning_or_error')}</ErrorText>}
+      {<ErrorText isErrorShown={isErrorBelow}>{t('sample_units.warning_or_error')}</ErrorText>}
     </ErrorBox>
   )
 

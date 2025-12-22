@@ -283,7 +283,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
-          helperText={t('sample_time_info')}
+          helperText={t('sample_units.sample_time_info')}
         />
         <InputWithLabelAndValidation
           label="Depth"
