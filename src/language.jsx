@@ -10,37 +10,9 @@ import {
   goToManagementOverviewPageLink,
 } from './library/validationMessageHelpers'
 import { HelperTextLink } from './components/generic/links'
-import styled from 'styled-components'
-import theme from './theme'
-
-const StyledLink = styled.a`
-  cursor: pointer;
-`
-
-const StyledHelperLink = styled.a`
-  font-size: ${theme.typography.smallFontSize};
-`
-
-const acaUrl = 'https://allencoralatlas.org/atlas'
-const gfcrPdfUrl = `https://public.datamermaid.org/GFCR-Monitoring-and-Evaluation-Toolkit.pdf?nocache=${Date.now()}`
-
-const AcaLink = () => (
-  <StyledHelperLink href={acaUrl} target="_blank">
-    Allen Coral Atlas
-  </StyledHelperLink>
-)
-const GfcrPdfLink = () => (
-  <>
-    <br />
-    <StyledHelperLink href={gfcrPdfUrl} target="_blank">
-      View M&E Toolkit PDF
-    </StyledHelperLink>
-  </>
-)
 
 const placeholders = {
   select: 'Choose...',
-  selectAttribute: 'Select attribute',
 }
 
 const inlineMessage = {
@@ -103,25 +75,13 @@ const error = {
     `The ${mermaidDataTypeLabel} failed to save both on your computer and online.`,
   getDeleteOfflineErrorTitle: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has failed to delete from your computer or online.`,
-  gfcrIndicatorSetsUnavailable: 'GFCR indicator sets are currently unavailable.',
-  gfcrIndicatorSetSave: 'Indicator set has not been saved.',
-  gfcrIndicatorSetDelete: 'Indicator set has not been deleted.',
-  gfcrFinanceSolutionSave: 'Finance solution has not been saved.',
-  gfcrFinanceSolutionDelete: 'Finance solution has not been removed.',
-  gfcrInvestmentSave: 'Investment has not been saved.',
-  gfcrInvestmentDelete: 'Investment has not been removed.',
-  gfcrRevenueSave: 'Revenue has not been saved.',
-  gfcrRevenueDelete: 'Revenue has not been removed.',
+
   idNotFoundUserAction: "Please check the URL in your browser's address bar.",
   managementRegimeRecordsUnavailable: 'Management Regime records data are currently unavailable.',
   managementRegimeRecordUnavailable: 'Management Regime record data are currently unavailable.',
   notificationsUnavailable: 'Notifications are unavailable.',
   notificationNotDeleted: 'Notification could not be removed.',
   notificationsNotDeleted: 'Notifications could not be removed',
-  projectDelete: 'This project has not been deleted.',
-  projectAddGfcr: 'Could not add GFCR indicators to the project.',
-  projectRemoveGfcr: 'Could not remove GFCR indicators from the project.',
-  projectSave: 'The project has not been saved.',
   projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
   submittedRecordsUnavailable: 'Submitted record data are currently unavailable.',
@@ -174,18 +134,15 @@ const success = {
   collectRecordSubmit: 'Record submitted.',
   collectRecordValidated: 'Record successfully validated.',
   collectRecordDelete: 'Record deleted.',
-  newOrganizationAdd: 'Organization added.',
   getProjectTurnOnOfflineReadySuccess: (projectName) => `${projectName} is now offline ready`,
   getProjectTurnOffOfflineReadySuccess: (projectName) =>
     `${projectName} has been removed from being offline ready`,
-  gfcrIndicatorSetSave: 'Indicator set saved.',
-  gfcrIndicatorSetDelete: 'Indicator set deleted.',
-  gfcrFinanceSolutionSave: 'Finance solution row saved.',
-  gfcrFinanceSolutionDelete: 'Finance solution row removed.',
-  gfcrInvestmentSave: 'Investment row saved.',
-  gfcrInvestmentDelete: 'Investment row removed.',
-  gfcrRevenueSave: 'Revenue row saved.',
-  gfcrRevenueDelete: 'Revenue row removed.',
+  getUserRoleChangeSuccessMessage: ({ userName, role }) =>
+    `${userName}'s role is now set to ${role}.`,
+
+  newUserAdd: 'New user added.',
+  newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
+  userRemoved: 'User removed',
   projectSave: 'Project saved',
   projectAddGfcr: 'Added GFCR indicators to project',
   projectRemoveGfcr: 'Removed GFCR indicators from project',
@@ -210,19 +167,6 @@ const deleteRecord = (pageName) => {
   }
 }
 
-const deleteProject = (project) => {
-  return {
-    title: `Delete project`,
-    prompt: `Are you sure you want to delete ${project}?`,
-    yes: `Delete ${project}`,
-    no: 'Cancel',
-    hasSampleUnits: 'You must delete all the sample units in this project to delete this project.',
-    hasOtherUsers: 'Other users must be removed from this project before deletion.',
-    confirmDeleteText1: `You cannot delete this ${project} because it is used in the following sample units:`,
-    confirmDeleteText2: `You have to remove this ${project} from all sample units before you can delete it.`,
-  }
-}
-
 const loadingIndicator = {
   loadingPrimary: 'Loading',
   loadingSecondary: 'Still working...',
@@ -239,171 +183,9 @@ const createNewOptionModal = {
   cancel: 'Cancel',
   back: 'Back',
   details: 'Details',
+  user: 'User',
   project: 'Project',
   submit: 'Send to MERMAID for review',
-}
-
-const gfcrFinanceSolutionModal = {
-  titleAdd: 'Add Business / Finance Solution',
-  titleUpdate: 'Update Finance Solution',
-  name: 'Business / Finance solution name',
-  getNameHelper: () => (
-    <>
-      Enter the name of each business or financial solution financed by the GFCR Programme
-      separately. You may copy solutions from previous reports. Indicators F8, F9, and F10 will be
-      disaggregated by both solution and sector. New solutions financed by the Programme will be
-      added here progressively. <GfcrPdfLink />
-    </>
-  ),
-  sector: 'Sector',
-  getSectorHelper: () => (
-    <>
-      Enter the sector of the solution in this GFCR Programme. Refer to the Annex 3 of the GFCR M&E
-      Toolkit for details. <GfcrPdfLink />
-    </>
-  ),
-  usedAnIncubator: 'Used an incubator?',
-  getUsedAnIncubatorHelper: () => (
-    <>
-      Indicate if the solution utilized an incubator for early-stage support and access to
-      resources. Specify whether the incubator was funded by GFCR. <GfcrPdfLink />
-    </>
-  ),
-  localEnterprise: 'Local enterprise',
-  getLocalEnterpriseHelper: () => (
-    <>
-      Defined as a small to medium-sized business operating within the specific location of the GFCR
-      Programme. This applies to F9.3 (Amount (and %) of revenue in local enterprises), which
-      measures the revenue that is retained within a local geography, differing from revenue that is
-      transferred overseas. <GfcrPdfLink />
-    </>
-  ),
-  genderSmart: 'Gender 2X Criteria',
-  getGenderSmartHelper: () => (
-    <>
-      Indicate if the solution qualifies under at least one 2X Challenge Criterion. Refer to the{' '}
-      <StyledHelperLink href="https://www.2xchallenge.org/2xcriteria" target="_blank">
-        2X Criteria Reference Guide
-      </StyledHelperLink>{' '}
-      for details. This applies to F10 (Number of gender-smart investments), which measures GFCR
-      support for gender equality through investments meeting 2X Challenge standards.{' '}
-      <GfcrPdfLink />
-    </>
-  ),
-  sustainableFinanceMechanisms: 'Sustainable finance mechanisms',
-  getSustainableFinanceMechanismsHelper: () => (
-    <>
-      Financing that generates a significant, recurring revenue stream directed toward conservation
-      or sustainable ecosystem management. This applies to F8.5 (Number and type of sustainable
-      finance mechanisms). Select all applicable options, as one solution may include multiple
-      mechanisms. <GfcrPdfLink />
-    </>
-  ),
-  notes: 'Notes',
-  add: 'Add Business / Finance Solution Row',
-  save: 'Save Business / Finance Solution Row',
-  cancel: 'Cancel',
-  remove: 'Remove Row',
-  yes: 'Yes',
-  no: 'No',
-}
-
-const gfcrInvestmentModal = {
-  titleAdd: 'Add Investment',
-  titleUpdate: 'Update Investment',
-  financeSolution: 'Business / Finance solution',
-  getFinanceSolutionHelper: () => (
-    <>
-      Select the business or financial solution financed by the GFCR Programme to report investment.
-      Report investment separately for each solution, disaggregated by source and type. This applies
-      to F8 (Amount of public, private, and philanthropic funding mobilized by the GFCR).{' '}
-      <GfcrPdfLink />
-    </>
-  ),
-  investmentSource: 'Investment source',
-  getInvestmentSourceHelper: () => (
-    <>
-      For each solution, enter investment amount separately by source (e.g., GFCR, philanthropy,
-      public, or private). If a solution received investment from multiple sources (e.g., GFCR and
-      private), add a separate entry for each. This applies to F8 (Amount of public, private, and
-      philanthropic funding mobilized by the GFCR). <GfcrPdfLink />
-    </>
-  ),
-  investmentType: 'Investment type',
-  getInvestmentTypeHelper: () => (
-    <>
-      For each solution, enter the investment amount from a single source by type. If a solution
-      received different types of investment from one source (e.g., grant and technical assistance
-      from GFCR), add a separate entry for each type. This applies to F8 (Amount of public, private,
-      and philanthropic funding mobilized by the GFCR). <GfcrPdfLink />
-    </>
-  ),
-  investmentAmount: 'Investment amount',
-  getInvestmentAmountHelper: () => (
-    <>
-      Enter the investment amount in US dollars as cumulative total since the start of the GFCR
-      Programme. This applies to F8 (Amount of public, private, and philanthropic funding mobilized
-      by the GFCR). <GfcrPdfLink />
-    </>
-  ),
-  notes: 'Notes',
-  add: 'Add Investment Row',
-  save: 'Save Investment Row',
-  cancel: 'Cancel',
-  remove: 'Remove Row',
-}
-
-const gfcrRevenueModal = {
-  titleAdd: 'Add Revenue Stream',
-  titleUpdate: 'Update Revenue Stream',
-  financeSolution: 'Business / Finance solution',
-  getFinanceSolutionHelper: () => (
-    <>
-      Select the business or financial solution financed by the GFCR Programme to report revenue.
-      Report revenue separately for each solution, disaggregated by type. This applies to F9 (Amount
-      of revenue and Return on Investment). <GfcrPdfLink />
-    </>
-  ),
-  revenueType: 'Revenue type',
-  getRevenueTypeHelper: () => (
-    <>
-      For each solution, enter revenue amounts by type. If a solution generated multiple revenue
-      types (e.g., blue bonds, biodiversity credits), add a separate entry for each. This applies to
-      F9.1 (Amount of revenue and ROI from business/financial solution returns and sustainable
-      financing by type). <GfcrPdfLink />
-    </>
-  ),
-  sustainableRevenueStream: 'Sustainable revenue stream',
-  getSustainableRevenueStreamHelper: () => (
-    <>
-      Defined as revenue that is consistently and predictably generated over the long term that
-      allows the business to achieve financial stability. Select option for each revenue type per
-      solution. This applies to F9.2 (Number, type, and monetary amount of sustainable revenue
-      streams). <GfcrPdfLink />
-    </>
-  ),
-  annualRevenue: 'Revenue amount',
-  getAnnualRevenueHelper: () => (
-    <>
-      Enter the revenue amount in US dollars as cumulative total since the start of the GFCR
-      Programme. This applies to F9 (Amount of revenue and Return on Investment). <GfcrPdfLink />
-    </>
-  ),
-  notes: 'Notes',
-  add: 'Add Revenue Row',
-  save: 'Save Revenue Row',
-  cancel: 'Cancel',
-  remove: 'Remove Row',
-  yes: 'Yes',
-  no: 'No',
-}
-
-const gfcrNewIndicatorSetModal = {
-  title: 'Create Indicator Set',
-  create: 'Create Indicator Set',
-  cancel: 'Cancel',
-  titleInput: 'Title',
-  dateInput: 'Date',
 }
 
 const autocomplete = {
@@ -453,7 +235,6 @@ const pages = {
   },
   projectsList: {
     title: 'Projects',
-    offlineReadyCheckboxLabel: 'Offline Ready',
     noDataSubText: `Create a new project or get your admin to add you to some.`,
     readOnlyUserWithActiveSampleUnits:
       'You cannot submit these collect records because you only have read-only access to this project. Please contact the project admin.',
@@ -480,50 +261,6 @@ const pages = {
       trophicGroup: 'Trophic Group',
     },
     benthicPitSyncCheckbox: 'Use Interval Size as Interval Start',
-  },
-  projectInfo: {
-    createOrganizationTitle: 'Suggest a new organization',
-    newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
-    noNotes: 'No notes for this Project',
-    noOrganizationFound: `No organization found.`,
-    organizationsHelperText: `Type to search for an organization.`,
-    removeOrganization: `Remove organization from Project`,
-    suggestionOrganizationHelperText: `If your organization is approved, it'll be automatically added to your Project.`,
-    title: 'Project Info',
-    organizations: 'Organizations',
-    notes: 'Notes',
-    noOrganization: 'This Project has no organizations.',
-    gfcrCallout: {
-      calloutHeading: 'Global Fund for Coral Reefs (GFCR)',
-      removeParagraph:
-        'Removing GFCR indicators from this project will not delete them, but just hide them.',
-      addParagraph:
-        'GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world. ',
-      disableButton: 'Disable GFCR Indicators',
-      enableButton: 'Enable GFCR Indicators for this project',
-      goToButton: 'Go to GFCR Indicators',
-    },
-    citationLabel: 'Suggested Citation',
-    citationHelperText:
-      'Citation to suggest for all uses of your project data. This citation will be displayed on MERMAID Explore and with any other data access method. ',
-    editCitation: 'Edit Citation',
-    editCitationModal: {
-      title: 'Edit Suggested Citation',
-      helper: 'Copy and paste project info into your citation',
-      projectName: 'Project Name',
-      projectAdmins: 'Project Admins',
-      projectAdmin: 'Project Admin',
-      otherProjectMembers: 'Other Project Members',
-      otherProjectMember: 'Other Project Member',
-      projectLastUpdated: 'Project Last Updated',
-      countries: 'Countries',
-      country: 'Country',
-      editCitation: 'Edit Citation',
-      cancel: 'Cancel',
-      updateCitation: 'Update Citation',
-      citationPreview: 'Citation Preview',
-      useDefaultCitation: 'Use Default Citation',
-    },
   },
   submittedTable: {
     title: 'Submitted',
@@ -575,558 +312,7 @@ const pages = {
     noDataSubText:
       'This page will show the Management Regime of submitted sample units by method and site.',
   },
-  gfcrTable: {
-    filterToolbarText: 'Filter this table by title or date',
-    createIndicatorSetTitle: 'Create Indicator Set',
-    title: 'GFCR',
-    noDataMainText: 'No indicator sets yet.',
-    noDataSubText: "Select 'Create new' to add an indicator set to this project.",
-  },
-  gfcrFinanceSolutionsTable: {
-    add: 'Add Business / Finance Solution',
-    filterToolbarText: 'Filter this table by finance solution',
-    noDataMainText: 'No Finance Solutions yet.',
-    noDataSubText: "Select 'Add Finance Solution' to add one to this indicator set.",
-  },
-  gfcrInvestmentsTable: {
-    add: 'Add Investment',
-    filterToolbarText: 'Filter this table by investment',
-    noDataMainText: 'No Investments yet.',
-    noDataSubText: "Select 'Add Investment' to add one to this indicator set.",
-    getNoFinanceSolutions: (onClick) => (
-      <>
-        Add a <StyledLink onClick={onClick}>finance solution</StyledLink> before adding investments.
-      </>
-    ),
-  },
-  gfcrRevenuesTable: {
-    add: 'Add Revenue',
-    filterToolbarText: 'Filter this table by revenue',
-    noDataMainText: 'No Revenues yet.',
-    noDataSubText: "Select 'Add Revenue' to add one to this indicator set.",
-    getNoFinanceSolutions: (onClick) => (
-      <>
-        Add a <StyledLink onClick={onClick}>finance solution</StyledLink> before adding revenues.
-      </>
-    ),
-  },
 
-  gfcrIndicatorSet: {
-    title: 'Indicator Set',
-    total: 'Total',
-    ofTotalHowMany: 'Of the total, how many of the following',
-    men: 'Men',
-    women: 'Women',
-    youth: 'Youth',
-    indigenous: 'Indigenous',
-    notes: 'Notes',
-    indicatorSetTitle: 'Title',
-    getIndicatorSetTitleHelperText: () => (
-      <>
-        Recommended naming conventions:
-        <br />
-        For target reports, use &quot;Phase 1 Target&quot;, &quot;Mid-term Target&quot;, or
-        &quot;Final Target&quot;. For bi-annual progress reports, use &quot;Mid-year Report&quot; or
-        &quot;End-year Report&quot;. <GfcrPdfLink />
-      </>
-    ),
-    indicatorSetReportingDate: 'Reporting date',
-    getIndicatorSetReportingDateHelperText: () => (
-      <>
-        End date for the reporting period of the GFCR Programme, e.g., a end-year report may have
-        December 31 as the reporting date. <GfcrPdfLink />
-      </>
-    ),
-    f1Heading: 'Coral reef extent of GFCR Programme',
-    f1_1: 'Total area of coral reefs in GFCR Programme',
-    getF1_1_helper: () => (
-      <>
-        Total area (km2) of coral reefs within the GFCR Programme area, e.g., calculated from the{' '}
-        <AcaLink /> or from another database. Report as cumulative total since the start of the
-        Programme.
-        <GfcrPdfLink />
-      </>
-    ),
-    f2Heading: 'Area of coral reefs under conservation and sustainable management',
-    getF2_1a: () => (
-      <>
-        <strong>Coral reef area</strong> of MPAs and OECMs (as aligned to GBF Target 3)
-      </>
-    ),
-    getF2_1a_helper: () => (
-      <>
-        Total area (km2) of coral reefs exclusively within Marine Protected Areas (MPAs) and Other
-        Effective area-based Conservation Measures (OECMs) as per the Global Biodiversity Framework
-        (GBF) Target 3, within GFCR Programme area, e.g., calculated from the <AcaLink /> or from
-        another database. This is different from the total area in F 2.1b. Report as cumulative
-        total since the start of the Programme. If GFCR Programme activities are not working on MPAs
-        or OECMs, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF2_1b: () => (
-      <>
-        <strong>Total area</strong> of MPAs and OECMs (as aligned to GBF Target 3)
-      </>
-    ),
-    getF2_1b_helper: () => (
-      <>
-        Total area (km2) of MPAs and OECMs, including non-coral reef areas, e.g., mangroves,
-        seagrass or other associated ecosystems, aligned with GBF Target 3, within GFCR Programme
-        area, e.g., calculated from the <AcaLink /> or from another database. Report as cumulative
-        total since the start of the Programme. If GFCR Programme activities are not working on MPAs
-        or OECMs, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF2_2a: () => (
-      <>
-        <strong>Coral reef area</strong> of locally managed areas / co-managed areas
-      </>
-    ),
-    getF2_2a_helper: () => (
-      <>
-        Total area (km2) of coral reefs exclusively under other local management or co-management
-        arrangements (not MPAs or OECMs), where local communities have significant involvement in
-        management decisions, within GFCR Programme area. This is different to the total area in F
-        2.2b. Report as cumulative total since the start of the Programme. If GFCR Programme
-        activities are not working on locally managed areas, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF2_2b: () => (
-      <>
-        <strong>Total area</strong> of locally managed areas / co-managed areas
-      </>
-    ),
-    getF2_2b_helper: () => (
-      <>
-        Total area (km2) of other locally managed areas (not MPAs or OECMs), including non-coral
-        reef areas, e.g., mangroves, seagrass or other associated ecosystems, within GFCR Programme
-        area. Report as cumulative total since the start of the Programme. If GFCR Programme
-        activities are not working on locally managed areas, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF2_3a: () => (
-      <>
-        <strong>Coral reef area</strong> of fisheries management
-      </>
-    ),
-    getF2_3a_helper: () => (
-      <>
-        Total area (km2) of coral reefs in fisheries management areas (not MPAs, OECMs or LMMAs),
-        which have specific fisheries management plans, e.g., gear restrictions, catch quotas,
-        within GFCR Programme area. This is different to the total area in F 2.3b. Report as
-        cumulative total since the start of the Programme. If Programme activities are not working
-        on fisheries management within a fisheries managed area, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    getF2_3b: () => (
-      <>
-        <strong>Total area</strong> of fisheries management
-      </>
-    ),
-    getF2_3b_helper: () => (
-      <>
-        Total area (km2) of fisheries management areas (not MPAs, OECMs or LMMAs), including
-        non-coral reef areas, e.g., mangroves, seagrass or other associated ecosystems, within GFCR
-        Programme area. Report as cumulative total since the start of the Programme. If Programme
-        activities are not working on fisheries management within a fisheries managed area, enter
-        &apos;0&apos;.
-        <GfcrPdfLink />
-      </>
-    ),
-    f2_4: 'Area with pollution mitigation',
-    f2_4_helper: 'F2.4 Helper Text',
-    getF2_4_helper: () => (
-      <>
-        Total area (km2) with active pollution mitigation measures in place to reduce pollution
-        impacts within GFCR Programme area. Report as cumulative total since the start of the
-        Programme. If Programme activities are not working on pollution mitigation, enter
-        &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    f2_5: 'Area of non-coral reef ecosystems, e.g. mangroves, seagrass or other associated ecosystems',
-    getF2_5_helper: () => (
-      <>
-        Total area (km2) of non-coral reef ecosystems within GFCR Programme area, e.g. mangroves,
-        seagrass or other coral reef-associated ecosystems. Report as cumulative total since the
-        start of the Programme. <GfcrPdfLink />
-      </>
-    ),
-    f3Heading: 'Area of coral reefs under effective restoration',
-    f3_1: 'Area of effective coral reef restoration',
-    getF3_1_helper: () => (
-      <>
-        Total area (km2) of effective coral reef restoration within GFCR Programme area. This is a
-        subset of F1.1 and used to measure only the area of coral reef restoration activities in the
-        Programme. Report as cumulative total since the start of the Programme. If there is no
-        restoration planned within Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    f3_2: 'Number of in situ coral reef restoration projects',
-    getF3_2_helper: () => (
-      <>
-        Total number of coral reef restoration projects that are carried out directly in a coral
-        reef environment (in situ). Report as cumulative total since the start of the Programme. If
-        restoration is not supported by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    f3_3: 'Number of coral reef restoration plans, technologies, strategies or guidelines developed',
-    getF3_3_helper: () => (
-      <>
-        Total number of frameworks, protocols or technologies associated to coral reef restoration
-        created in the GFCR Programme that can be applied locally or used by third-parties. Report
-        as cumulative total since the start of the Programme. If restoration is not supported by
-        GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    f3_4: 'Number of coral reef restoration trainings',
-    getF3_4_helper: () => (
-      <>
-        Total number of training sessions conducted to educate and empower individuals and
-        communities in coral reef restoration techniques. Report as cumulative total since the start
-        of the Programme. If restoration is not supported by GFCR Programme, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    f3_5: 'Number of people engaged in coral reef restoration',
-    getF3_5_men_helper: () => (
-      <>
-        Total number of men actively involved on a hiring, volunteering or educational basis in
-        coral reef restoration activities. Report as cumulative total since the start of the
-        Programme. If restoration is not supported by GFCR Programme, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    getF3_5_women_helper: () => (
-      <>
-        Total number of women actively involved on a hiring, volunteering or educational basis in
-        coral reef restoration activities. Report as cumulative total since the start of the
-        Programme. If restoration is not supported by GFCR Programme, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    getF3_5_youth_helper: () => (
-      <>
-        Total number of young people (aged between 15-24, as defined by the United Nations) actively
-        involved on a hiring, volunteering or educational basis in coral reef restoration
-        activities. Report as cumulative total since the start of the Programme. If restoration is
-        not supported by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF3_5_indigenous_helper: () => (
-      <>
-        Total number of Indigenous people actively involved on a hiring, volunteering or educational
-        basis in coral reef restoration activities. Report as cumulative total since the start of
-        the Programme. If restoration is not supported by GFCR Programme, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    f3_6: 'Number of response plans to support coral reef restoration after severe shocks',
-    getF3_6_helper: () => (
-      <>
-        Total number of plans, including financial mechanisms, e.g., insurance, to aid in coral reef
-        restoration efforts following severe environmental shocks, e.g., storms, bleaching. Report
-        as cumulative total since the start of the Programme. If there are no response plans or
-        restoration not supported by Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    f4Heading: 'Change in coral reef health',
-    f4_1: 'Average live hard coral cover',
-    getF4_1_helper: () => (
-      <>
-        This is automatically calculated for all submitted benthic surveys in this GFCR project
-        within the reporting date range. If no surveys are submitted for this GFCR project on
-        MERMAID, you can enter the value manually. If recent surveys are unavailable for this
-        period, enter the previously reported average. <GfcrPdfLink />
-      </>
-    ),
-    f4_2: 'Average macroalgae cover',
-    getF4_2_helper: () => (
-      <>
-        This is automatically calculated for all submitted benthic surveys in this GFCR project
-        within the reporting date range. If no surveys are submitted to this GFCR project on
-        MERMAID, you can enter the value manually. If recent surveys are unavailable for this
-        period, enter the previously reported average. <GfcrPdfLink />
-      </>
-    ),
-    f4_3: 'Average reef fish biomass',
-    getF4_3_helper: () => (
-      <>
-        This is automatically calculated for all submitted fish surveys in this GFCR project within
-        the reporting date range. If no surveys are submitted to this GFCR project on MERMAID, you
-        can enter the value manually. If recent surveys are unavailable for this period, enter the
-        previously reported average. <GfcrPdfLink />
-      </>
-    ),
-    f4_valueFromMermaidData: 'This value is from MERMAID data in this project',
-    f4_valueDifferentFromCalc: 'This value is different from what was calculated in this project',
-    f4_noValue: 'No value for this date range. Updating the value to 0',
-    f4_reportingDateRange: 'Reporting date range',
-    f4_start_date: 'Start Date',
-    f4_end_date: 'End Date',
-    f4_saveAndUpdateValues: 'Save and update values with data from this project',
-    f4_couldNotGetCalcValues: 'Could not get values from project for',
-    f5Heading:
-      'Number of communities engaged in meaningful participation, co-development and capacity strengthening',
-    getF5_1: () => (
-      <>
-        Number of <strong>local communities</strong> engaged in meaningful participation and
-        co-development
-      </>
-    ),
-    getF5_1_helper: () => (
-      <>
-        Total number of communities supported with opportunities to participate and co-develop GFCR
-        Programme/blended finance investments. A community can be defined as groups of people who
-        share common characteristics, interests, or geographical locations and may be the target
-        beneficiaries/stakeholder of Programme. Report as cumulative total since the start of the
-        Programme. If communities are not directly supported by GFCR Programme, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    getF5_2: () => (
-      <>
-        Number of <strong>local organizations</strong> engaged in meaningful participation and
-        co-development
-      </>
-    ),
-    getF5_2_helper: () => (
-      <>
-        Total number of local organizations supported with opportunities to participate in and
-        co-develop GFCR Programme, where a local organization is defined as a community-based entity
-        operating within a specific geographical area, often with a focus on addressing local needs
-        and advancing the well-being of the immediate community. Report as cumulative total since
-        the start of the Programme. If local organizations are not directly supported by GFCR
-        Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    f5_3: 'Number of local scientific/research partners involved in strengthening capacity for participation and co-development',
-    getF5_3_helper: () => (
-      <>
-        Total number of local scientific/research partnerships (including national universities,
-        regional science organizations or other research hubs) supported with opportunities to
-        participate in and co-develop GFCR Programme and support capacity building with local GFCR
-        partners. Report cumulative total since the start of the Programme. If local
-        scientific/research partnerships are not directly supported by GFCR Programme, enter
-        &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    f5_4: 'Number of local practitioners trained / supported in coral reef conservation and management',
-    getF5_4_men_helper: () => (
-      <>
-        Total number of local male practitioners (e.g., community rangers, coastal guardians, MPA
-        managers, etc) trained or supported in coral reef conservation and management by GFCR
-        Programme. Report cumulative total since the start of the Programme. If men are not trained
-        or directly supported by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF5_4_women_helper: () => (
-      <>
-        Total number of local female practitioners (e.g., community rangers, coastal guardians, MPA
-        managers, etc) trained or supported in coral reef conservation and management by GFCR
-        Programme. Report cumulative total since the start of the Programme. If women are not
-        trained or directly supported by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF5_4_youth_helper: () => (
-      <>
-        Total number of local young (aged between 15-24, as defined by the United Nations)
-        practitioners (e.g., community rangers, coastal guardians, MPA managers, etc) trained or
-        supported in coral reef conservation and management by GFCR Programme. Report cumulative
-        total since the start of the Programme. If young people are not trained or directly
-        supported by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF5_4_indigenous_helper: () => (
-      <>
-        Total number of local Indigenous practitioners (e.g., community rangers, coastal guardians,
-        MPA managers, etc) trained or supported in coral reef conservation and management by GFCR
-        Programme. Report cumulative total since the start of the Programme. If Indigenous people
-        are not trained or directly supported by GFCR Programme, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    f5_5: 'Number of agreements with local authorities or fishing cooperatives to manage marine resources',
-    getF5_5_helper: () => (
-      <>
-        Total number of formal agreements with local organizations to support marine management
-        through GFCR program, that may include agreements to support or develop LMMAs, MPAs or
-        OECMs. Agreements are defined as formal documents, serving as a framework for collaboration
-        (e.g., a memorandum of understanding, MOU, or a management plan). Report cumulative total
-        since the start of the Programme. If agreements are not supported by GFCR Programme, enter
-        &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    f5_6: 'Number of national policies linked to GFCR engagement',
-    getF5_6_helper: () => (
-      <>
-        Total number of national policies directly associated with GFCR engagement, e.g., has the
-        GFCR Programme organized a policy workshop directly related to national policy or provided
-        other investments associated with a policy outcome. If Programmes are not planning national
-        policy targets, or policy is underway but not yet finalized, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    f6Heading: 'Number of people supported through livelihoods, direct jobs, income, and nutrition',
-    f6_1: 'Number of direct jobs created',
-    getF6_1_men_helper: () => (
-      <>
-        Total number of local jobs created for men by GFCR businesses or finance solutions. Jobs
-        should be considered for each business activity supported by GFCR Programme. Report as
-        cumulative total since the start of the Programme. If local jobs are not directly created by
-        GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF6_1_women_helper: () => (
-      <>
-        Total number of local jobs created for women by GFCR businesses or finance solutions. Jobs
-        should be considered for each business activity supported by GFCR Programme. Report as
-        cumulative total since the start of the Programme. If local jobs are not directly created by
-        GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF6_1_youth_helper: () => (
-      <>
-        Total number of local jobs created for young people (aged between 15-24, as defined by
-        United Nations) by GFCR businesses or finance solutions. Jobs should be considered for each
-        business activity supported by GFCR Programme. Report as cumulative total since the start of
-        the Programme. If local jobs are not directly created by GFCR Programme, enter
-        &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF6_1_indigenous_helper: () => (
-      <>
-        Total number of local jobs created for Indigenous people by GFCR businesses or finance
-        solutions. Jobs should be considered for each business activity supported by GFCR Programme.
-        Report as cumulative total since the start of the Programme. If local jobs are not directly
-        created by GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    f7Heading:
-      'Number of people supported to better adapt, respond and recover to the effects of climate change and major external shocks as a result of GFCR',
-    getF7_1: () => (
-      <>
-        Total <strong>direct beneficiaries</strong>
-      </>
-    ),
-    getF7_1_men_helper: () => (
-      <>
-        Direct male beneficiaries that can be identified as the number of men receiving direct
-        support from GFCR Programme, e.g., employment, loans, improved incomes or livelihoods, or
-        other targeted benefits that improves their livelihoods and thus their ability to adapt to
-        climate change. Report as cumulative total since the start of the Programme. If there are no
-        direct beneficiaries from GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF7_1_women_helper: () => (
-      <>
-        Direct female beneficiaries that can be identified as the number of women receiving direct
-        support from GFCR Programme, e.g., employment, loans, improved incomes or livelihoods, or
-        other targeted benefits that improves their livelihoods and thus their ability to adapt to
-        climate change. Report as cumulative total since the start of the Programme. If there are no
-        direct beneficiaries from GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF7_1_youth_helper: () => (
-      <>
-        Direct young beneficiaries that can be identified as the number of young people (aged
-        between 15-24, as defined by United Nations) receiving direct support from GFCR Programme,
-        e.g., employment, loans, improved incomes or livelihoods, or other targeted benefits that
-        improves their livelihoods and thus their ability to adapt to climate change. Report as
-        cumulative total since the start of the Programme. If there are no direct beneficiaries from
-        GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF7_1_indigenous_helper: () => (
-      <>
-        Direct indigenous beneficiaries that can be identified as the number of Indigenous people
-        receiving direct support from GFCR Programme, e.g., employment, loans, improved incomes or
-        livelihoods, or other targeted benefits that improves their livelihoods and thus their
-        ability to adapt to climate change. Report as cumulative total since the start of the
-        Programme. If there are no direct beneficiaries from GFCR Programme, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    getF7_2: () => (
-      <>
-        Total <strong>indirect beneficiaries</strong>
-      </>
-    ),
-    getF7_2_men_helper: () => (
-      <>
-        Indirect male beneficiaries refer to men that may live within the area of GFCR Programme
-        (e.g. within 100 km) and may experience positive effects or benefits as a result of a
-        project or programme, though they may not be the primary target audience. Report as
-        cumulative total since the start of the Programme. If there are no indirect beneficiaries
-        from GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF7_2_women_helper: () => (
-      <>
-        Indirect female beneficiaries refer to women that may live within the area of GFCR Programme
-        (e.g. within 100 km) and may experience positive effects or benefits as a result of a
-        project or programme, though they may not be the primary target audience. Report as
-        cumulative total since the start of the Programme. If there are no indirect beneficiaries
-        from GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    getF7_2_youth_helper: () => (
-      <>
-        Indirect young beneficiaries refer to young people (aged between 15-24, as defined by United
-        Nations) that may live within the area of GFCR Programme (e.g. within 100 km) and may
-        experience positive effects or benefits as a result of a project or programme, though they
-        may not be the primary target audience. Report as cumulative total since the start of the
-        Programme. If there are no indirect beneficiaries from GFCR Programme, enter &apos;0&apos;.{' '}
-        <GfcrPdfLink />
-      </>
-    ),
-    getF7_2_indigenous_helper: () => (
-      <>
-        Indirect indigenous beneficiaries refer to Indigenous people that may live within the area
-        of GFCR Programme (e.g. within 100 km) and may experience positive effects or benefits as a
-        result of a project or programme, though they may not be the primary target audience. Report
-        as cumulative total since the start of the Programme. If there are no indirect beneficiaries
-        from GFCR Programme, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    f7_3: 'Number of financial mechanisms/reforms to help coastal communities respond and recover from external shocks',
-    getF7_3_helper: () => (
-      <>
-        Total number of financial mechanisms associated with GFCR Programme that can help coastal
-        communities recover from external shocks associated with climate change and other disasters,
-        e.g., coral reef insurance programmes, coordinated loan programmes, village savings clubs
-        started by the Programme, ecological restoration crisis plans. Report as cumulative total
-        since the start of the Programme. If no mechanisms are intended to be supported by the GFCR
-        Programme or are not yet in place, enter &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-    f7_4: 'Number of governance reforms/policies to support response and recovery to external shocks',
-    getF7_4_helper: () => (
-      <>
-        Total number of governance reforms/policies connected to national or subnational government
-        initiatives and supported by GFCR Programmes, e.g., organizing a policy workshop, providing
-        technical input into policy development, crisis management plans, reforms for temporary
-        alternative employment. Report as cumulative total since the start of the Programme. If no
-        policies are intended to be supported by the GFCR Programme or are not yet in place, enter
-        &apos;0&apos;. <GfcrPdfLink />
-      </>
-    ),
-  },
-  gfcrIndicatorSetNav: {
-    fundIndicatorsHeading: 'FUND INDICATORS',
-    reportTitleAndDateHeading: 'Title and date',
-    f1: 'Programme area',
-    f2: 'Conservation and management',
-    f3: 'Restoration',
-    f4: 'Coral reef health',
-    f5: 'Communities',
-    f6: 'People',
-    f7: 'Climate response',
-    f8F9F10Heading: 'F8, F9, F10',
-    financeSolutions: 'Businesses / Finance solutions',
-    investments: 'Investments',
-    revenues: 'Revenues',
-  },
   goToDashboard: 'View on Dashboard',
   gotoExplore: (viewText) => {
     return `View ${viewText} on MERMAID Explore`
@@ -1290,37 +476,12 @@ const helperText = {
   ),
   management:
     'The management designation at the time of survey, e.g., no-take zone, partial restrictions, or open access.',
-  managementRegimeRules: {
-    accessRestrictions:
-      'Access is restricted, e.g., people outside a community are not allowed to fish here',
-    gearRestrictions: 'Restrictions on what types of fishing gear can be used',
-    noTake: 'Total extraction ban',
-    openAccess: 'Open for fishing and entering',
-    partialRestrictions:
-      'e.g. periodic closures, size limits, gear restrictions, species restrictions',
-    periodicClosure:
-      'The area is open and closed as a fisheries management strategy, e.g., rotating octopus closures',
-    sizeLimits: 'Restrictions on the size of certain target species',
-    speciesRestrictions: 'Restrictions on what types of species can be caught',
-  },
-  getManagementRegimeName: () => (
-    <>
-      Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a
-      governmental or standardized source such as{' '}
-      <HelperTextLink href="http://protectedseas.net/" target="_blank">
-        protectedseas.net
-      </HelperTextLink>
-      ; alternatively, a descriptive local label like &#39;Northeast Point seasonal closure&#39;can
-      be used.
-    </>
-  ),
   name: 'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
   notes: '',
   number:
     'Number is automatically generated by MERMAID as an identifier for a bleaching sample unit, and is not editable.',
   numberOfPointsPerQuadrat: 'Total number of points per quadrat used in a transect (e.g. 100).',
   numberOfQuadrats: 'Total number of quadrats in the transect (e.g. 10).',
-  parties: 'Who is responsible for managing this area.',
   quadratSize: 'Quadrat size used per transect, in square meters (e.g. 1).',
   quadratNumberStart: 'Number of the first quadrat/photo along the transect (e.g. 1).',
   getReefSlope: () => (
@@ -1434,11 +595,6 @@ export default {
   autocomplete,
   buttons,
   createNewOptionModal,
-  gfcrFinanceSolutionModal,
-  gfcrInvestmentModal,
-  gfcrRevenueModal,
-  gfcrNewIndicatorSetModal,
-  deleteProject,
   deleteRecord,
   error,
   getResolveModalLanguage,

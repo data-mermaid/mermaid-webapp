@@ -112,9 +112,7 @@ test('A project card shows relevant data for a project', async () => {
     'Bleaching: Public',
   )
 
-  const offlineCheckbox = within(projectCard).getByRole('checkbox', {
-    name: /offline ready/i,
-  })
+  const offlineCheckbox = within(projectCard).getByTestId('offline-ready')
 
   expect(offlineCheckbox)
 
@@ -153,7 +151,7 @@ test('A project card renders appropriately when offline', async () => {
   expect(within(usersSummaryCard).getByText('Online Only'))
   expect(within(dataSharingSummaryCard).getByText('Online Only'))
 
-  expect(screen.getByLabelText('Offline Ready')).toBeDisabled()
+  expect(screen.getByTestId('offline-ready')).toBeDisabled()
   expect(screen.getByLabelText('Copy')).toBeDisabled()
 })
 
@@ -180,7 +178,7 @@ test('A project card renders appropriately when online', async () => {
   // Talk to AL or Melissa as to why this is commented.
   // expect(within(projectCard).getByLabelText(/data sharing/i)).toBeInTheDocument()
 
-  const offlineReadyCheckboxes = screen.getAllByLabelText('Offline Ready')
+  const offlineReadyCheckboxes = screen.getAllByTestId('offline-ready')
   const copyButtons = screen.getAllByLabelText('Copy')
 
   expect(offlineReadyCheckboxes[0]).toBeEnabled()

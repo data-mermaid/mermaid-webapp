@@ -161,7 +161,7 @@ const ProjectToolBarSection = ({
           <select id="sort_by" onChange={setSortBy} value={projectSortKey} data-testid="sort-by">
             <option value="updated_on">{t('projects.last_updated_date')}</option>
             <option value="name">{t('projects.project_name')}</option>
-            <option value="countries">{t('projects.country')}</option>
+            <option value="countries">{t('projects.country', { count: 1 })}</option>
           </select>
         </SortByLabelWrapper>
       </FilterRowWrapper>

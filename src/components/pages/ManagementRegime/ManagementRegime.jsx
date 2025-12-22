@@ -3,6 +3,7 @@ import { useFormik } from 'formik'
 import { useNavigate, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../Layout'
@@ -34,13 +35,13 @@ import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputCheckboxGroupWithLabelAndValidation from '../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../language'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import ManagementRulesInput from '../ManagementRulesInput'
 import PageUnavailable from '../PageUnavailable'
 import SaveButton from '../../generic/SaveButton'
 import TableRowItem from '../../generic/Table/TableRowItem'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
+import { HelperTextLink } from '../../generic/links'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
@@ -52,6 +53,7 @@ const ReadOnlyManagementRegimeContent = ({
   managementComplianceOptions,
   managementPartyOptions,
 }) => {
+  const { t } = useTranslation()
   const {
     name_secondary,
     est_year,
@@ -68,79 +70,113 @@ const ReadOnlyManagementRegimeContent = ({
     notes,
   } = managementRegimeFormikValues
 
-  const rules = [
-    no_take && 'No Take',
-    open_access && 'Open Access',
-    access_restriction && 'Access Restriction',
-    periodic_closure && 'Periodic Closure',
-    size_limits && 'Size Limits',
-    gear_restriction && 'Gear Restrictions',
-    species_restriction && 'Species Restrictions',
-  ]
-  const filteredRules = rules.filter((rule) => !!rule)
-  const managementRules =
-    no_take || open_access ? filteredRules[0] : `Partial Restrictions: ${filteredRules.join(', ')}`
+  const partialRestrictionRules = [
+    access_restriction && t('management_regimes.access_restriction'),
+    periodic_closure && t('management_regimes.periodic_closure'),
+    size_limits && t('management_regimes.size_limits'),
+    gear_restriction && t('management_regimes.gear_restriction'),
+    species_restriction && t('management_regimes.species_restriction'),
+  ].filter(Boolean)
+
+  let managementRules = ''
+
+  if (no_take) {
+    managementRules = t('management_regimes.no_take')
+  } else if (open_access) {
+    managementRules = t('management_regimes.open_access')
+  } else if (partialRestrictionRules.length) {
+    managementRules = `${t(
+      'management_regimes.partial_restrictions',
+    )}: ${partialRestrictionRules.join(', ')}`
+  }
 
   return (
     <Table>
       <tbody>
-        <TableRowItem title="Secondary Name" value={name_secondary} />
-        <TableRowItem title="Year Established" value={est_year} />
-        <TableRowItem title="Area" value={size} />
-        <TableRowItem title="Parities" options={managementPartyOptions} value={parties} />
-        <TableRowItem title="Compliance" options={managementComplianceOptions} value={compliance} />
-        <TableRowItem title="Rules" value={managementRules} />
-        <TableRowItem title="Notes" value={notes} isAllowNewlines={true} />
+        <TableRowItem title={t('management_regimes.secondary_name')} value={name_secondary} />
+        <TableRowItem title={t('management_regimes.year_est')} value={est_year} />
+        <TableRowItem title={t('management_regimes.area')} value={size} />
+        <TableRowItem
+          title={t('management_regimes.parties')}
+          options={managementPartyOptions}
+          value={parties}
+        />
+        <TableRowItem
+          title={t('management_regimes.compliance')}
+          options={managementComplianceOptions}
+          value={compliance}
+        />
+        <TableRowItem title={t('management_regimes.rules')} value={managementRules} />
+        <TableRowItem title={t('notes')} value={notes} isAllowNewlines={true} />
       </tbody>
     </Table>
   )
 }
 
 const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementPartyOptions }) => {
+  const { t } = useTranslation()
+
   return (
     <form id="management-regime-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
         <InputWithLabelAndValidation
           required
-          label="Name"
+          label={t('name')}
           id="name"
           type="text"
           {...formik.getFieldProps('name')}
           validationType={formik.errors.name && formik.touched.name ? 'error' : null}
           validationMessages={formik.errors.name}
           testId="name"
-          helperText={language.helperText.getManagementRegimeName()}
+          helperText={
+            <Trans
+              i18nKey="management_regimes.name_info"
+              components={{
+                helperTextLink: (
+                  <HelperTextLink
+                    href="http://protectedseas.net/"
+                    target="_blank"
+                    rel="noreferrer"
+                  />
+                ),
+              }}
+            />
+          }
         />
         <InputWithLabelAndValidation
-          label="Secondary Name"
+          label={t('management_regimes.secondary_name')}
           id="name_secondary"
           type="text"
+          testId="secondary-name"
           {...formik.getFieldProps('name_secondary')}
-          helperText={language.helperText.secondaryName}
+          helperText={t('management_regimes.secondary_name_info')}
         />
         <InputWithLabelAndValidation
-          label="Year Established"
+          label={t('management_regimes.year_est')}
           id="est_year"
           type="number"
+          testId="year-established"
           {...formik.getFieldProps('est_year')}
         />
         <InputWithLabelAndValidation
-          label="Area"
+          label={t('management_regimes.area')}
           id="size"
           type="number"
           unit="ha"
+          testId="area"
           {...formik.getFieldProps('size')}
         />
         <InputCheckboxGroupWithLabelAndValidation
           required={false}
-          label="Parties"
+          label={t('management_regimes.parties')}
           id="parties"
+          testId="parties"
           options={managementPartyOptions}
           value={formik.getFieldProps('parties').value}
           onChange={({ selectedItems }) => {
             formik.setFieldValue('parties', selectedItems)
           }}
-          helperText={language.helperText.parties}
+          helperText={t('management_regimes.who_responsible')}
         />
         <ManagementRulesInput
           managementFormValues={formik.values}
@@ -166,20 +202,22 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           }}
           validationType={formik.errors.rules ? 'error' : null}
           validationMessages={formik.errors.rules}
-          data-testid="rules"
+          testId="rules"
           required={true}
         />
         <InputSelectWithLabelAndValidation
-          label="Compliance"
+          label={t('management_regimes.compliance')}
           id="compliance"
           required={false}
+          testId="compliance"
           options={managementComplianceOptions}
           {...formik.getFieldProps('compliance')}
-          helperText={language.helperText.compliance}
+          helperText={t('management_regimes.rules_effectiveness')}
         />
         <TextareaWithLabelAndValidation
-          label="Notes"
+          label={t('notes')}
           id="notes"
+          testId="notes"
           {...formik.getFieldProps('notes')}
         />
       </InputWrapper>
@@ -188,6 +226,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
 }
 
 const ManagementRegime = ({ isNewManagementRegime }) => {
+  const { t } = useTranslation()
   const { isAppOnline } = useOnlineStatus()
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
@@ -197,6 +236,40 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const navigate = useNavigate()
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
+
+  const managementRegimeTitleText = t('management_regimes.management_regime')
+  const managementRegimeToastLabelText = t('management_regimes.management_regime').toLowerCase()
+  const managementRegimeRecordUnavailableText = t('management_regimes.data_unavailable')
+  const notReportedLabelText = t('management_regimes.not_reported')
+  const saveSuccessOnlineText = t('toasts.mermaid_data_save_success_online', {
+    dataType: managementRegimeToastLabelText,
+  })
+  const saveSuccessOfflineText = t('toasts.mermaid_data_save_success_offline', {
+    dataType: managementRegimeToastLabelText,
+  })
+  const saveOnlineSyncErrorTitle = t('toasts.mermaid_data_save_online_sync_error', {
+    dataType: managementRegimeToastLabelText,
+  })
+  const saveOfflineErrorTitle = t('toasts.mermaid_data_save_offline_error', {
+    dataType: managementRegimeToastLabelText,
+  })
+  const deleteSyncErrorTitle = t('toasts.mermaid_data_delete_sync_error', {
+    dataType: managementRegimeToastLabelText,
+  })
+  const deleteSuccessText = t('toasts.mermaid_data_delete_success', {
+    dataType: managementRegimeToastLabelText,
+  })
+  const readOnlyPageText = t('page.read_only')
+  const nonAdminDeleteText = t('management_regimes.only_admin_delete')
+  const deleteModalText = {
+    title: t('management_regimes.delete_management_regime'),
+    prompt: t('management_regimes.confirm_delete'),
+    yes: t('management_regimes.delete_management_regime'),
+    no: t('buttons.cancel'),
+    confirmDeleteText1: t('management_regimes.cannot_delete'),
+    confirmDeleteText2: t('management_regimes.have_to_remove'),
+  }
+  const appTitleText = t('mermaid')
 
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -251,7 +324,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
 
             const sortedManagementComplianceOptions = sortManagementComplianceChoices([
               ...getOptions(choicesResponse.managementcompliances.data),
-              { label: 'not reported', value: '' },
+              { label: notReportedLabelText, value: '' },
             ])
 
             setManagementPartyOptions(getOptions(choicesResponse.managementparties.data))
@@ -264,7 +337,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.managementRegimeRecordUnavailable))
+              toast.error(...getToastArguments(managementRegimeRecordUnavailableText))
             },
           })
         })
@@ -277,6 +350,8 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     managementRegimeId,
     projectId,
     handleHttpResponseError,
+    managementRegimeRecordUnavailableText,
+    notReportedLabelText,
   ])
 
   const {
@@ -335,12 +410,16 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       databaseSwitchboardInstance
         .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
         .then((response) => {
-          toast.success(
-            language.success.getMermaidDataSaveSuccess({
-              mermaidDataTypeLabel: 'management regime',
-              isAppOnline,
-            }),
+          const [toastMessage, toastOptions] = getToastArguments(
+            isAppOnline ? saveSuccessOnlineText : saveSuccessOfflineText,
           )
+          const toastContent = isAppOnline ? (
+            <div data-testid="management-regime-toast-success">{toastMessage}</div>
+          ) : (
+            <div data-testid="management-regime-toast-offline-success">{toastMessage}</div>
+          )
+
+          toast.success(toastContent, toastOptions)
           clearPersistedUnsavedFormikData()
           setSaveButtonState(buttonGroupStates.saved)
           setIsFormDirty(false)
@@ -355,9 +434,11 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           const { isSyncError } = error
 
           if (isSyncError && isAppOnline) {
-            const toastTitle = language.error.getSaveOnlineSyncErrorTitle('management regime')
-
-            showSyncToastError({ toastTitle, error, testId: 'management-regime-toast-error' })
+            showSyncToastError({
+              toastTitle: saveOnlineSyncErrorTitle,
+              error,
+              testId: 'management-regime-toast-error',
+            })
           }
           if (!isSyncError && isAppOnline) {
             handleHttpResponseError({
@@ -369,9 +450,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
             console.error(error)
             toast.error(
               ...getToastArguments(
-                <div data-testid="management-regime-toast-error">
-                  {language.error.getSaveOfflineErrorTitle('management regime')}
-                </div>,
+                <div data-testid="management-regime-toast-error">{saveOfflineErrorTitle}</div>,
               ),
             )
           }
@@ -391,13 +470,13 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         !values.open_access && !values.no_take && isPartialSelectionSelected === false
 
       if (!values.name) {
-        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (noPartialRestrictionRulesSelected) {
         errors.rules = [
           {
-            code: language.error.formValidation.managementPartialRestrictionRequired,
+            code: t('management_regimes.partial_restriction_required'),
             id: 'Partial Restriction Required',
           },
         ]
@@ -407,9 +486,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     },
   })
 
-  useDocumentTitle(
-    `${language.pages.managementRegimeForm.title} - ${formik.values.name} - ${language.title.mermaid}`,
-  )
+  useDocumentTitle(`${managementRegimeTitleText} - ${formik.values.name} - ${appTitleText}`)
 
   const _setSaveButtonUnsaved = useEffect(() => {
     if (isFormDirty) {
@@ -432,18 +509,18 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         clearPersistedUnsavedFormikData()
         closeDeleteRecordModal()
         setIsDeletingRecord(false)
-        toast.success(
-          ...getToastArguments(language.success.getMermaidDataDeleteSuccess('management regime')),
-        )
+        toast.success(...getToastArguments(deleteSuccessText))
         navigate(`${ensureTrailingSlash(currentProjectPath)}management-regimes/`)
       })
       .catch((error) => {
         const { isSyncError, isDeleteRejectedError } = error
 
         if (isSyncError && !isDeleteRejectedError) {
-          const toastTitle = language.error.getDeleteOnlineSyncErrorTitle('management regime')
-
-          showSyncToastError({ toastTitle, error, testId: 'management-regime-toast-error' })
+          showSyncToastError({
+            toastTitle: deleteSyncErrorTitle,
+            error,
+            testId: 'management-regime-toast-error',
+          })
           setIsDeletingRecord(false)
           closeDeleteRecordModal()
         }
@@ -465,7 +542,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewManagementRegime
 
   const contentViewByReadOnlyRole = isNewManagementRegime ? (
-    <PageUnavailable mainText={language.error.pageReadOnly} />
+    <PageUnavailable mainText={readOnlyPageText} />
   ) : (
     <ReadOnlyManagementRegimeContent
       managementRegimeFormikValues={formik.values}
@@ -490,7 +567,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           isLoading={isDeletingRecord}
           isNewRecord={isNewManagementRegime}
           isOpen={isDeleteRecordModalOpen}
-          modalText={language.deleteRecord('Management Regime')}
+          modalText={deleteModalText}
           deleteRecord={deleteRecord}
           onDismiss={closeDeleteRecordModal}
           openModal={openDeleteRecordModal}
@@ -498,7 +575,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       ) : null}
       {!isAdminUser && isAppOnline ? (
         <DeleteRecordButtonCautionWrapper>
-          <ItalicizedInfo>{language.pages.managementRegimeForm.nonAdminDelete}</ItalicizedInfo>
+          <ItalicizedInfo>{nonAdminDeleteText}</ItalicizedInfo>
         </DeleteRecordButtonCautionWrapper>
       ) : null}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
@@ -520,7 +597,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       toolbar={
         <ContentPageToolbarWrapper>
           {isNewManagementRegime ? (
-            <H2>{language.pages.managementRegimeForm.title}</H2>
+            <H2 data-testid="new-management-regime-form-title">{managementRegimeTitleText}</H2>
           ) : (
             <H2 data-testid="edit-management-regime-form-title">{formik.values.name}</H2>
           )}

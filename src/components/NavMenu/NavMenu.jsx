@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 
 import {
   CollectionAvatar,
@@ -37,10 +38,13 @@ import { useOnlineStatus } from '../../library/onlineStatusContext'
 import useIsMounted from '../../library/useIsMounted'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { getToastArguments } from '../../library/getToastArguments'
-import language from '../../language'
 import { useCurrentProject } from '../../App/CurrentProjectContext'
 
 const NavMenu = ({ subNavNode = null }) => {
+  const { t } = useTranslation()
+
+  const projectsUnavailableText = t('projects.errors.data_unavailable')
+
   const projectUrl = useCurrentProjectPath()
   const { recordId, submittedRecordId, siteId, managementRegimeId, projectId, indicatorSetId } =
     useParams()
@@ -79,7 +83,7 @@ const NavMenu = ({ subNavNode = null }) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.projectsUnavailable))
+              toast.error(...getToastArguments(projectsUnavailableText))
             },
           })
         })
@@ -92,17 +96,18 @@ const NavMenu = ({ subNavNode = null }) => {
     handleHttpResponseError,
     setCurrentProject,
     currentProject,
+    projectsUnavailableText,
   ])
 
   return (
     <NavWrapper data-testid="content-page-side-nav">
       <NavList>
         <LiNavPrimary>
-          <NavHeader>Data</NavHeader>
+          <NavHeader data-testid="nav-header-data">{t('data')}</NavHeader>
           <ul>
             {!isReadOnlyUser && (
               <LiCollecting>
-                <NavLinkSidebar end to={`${projectUrl}/collecting`}>
+                <NavLinkSidebar end to={`${projectUrl}/collecting`} data-testid="nav-collecting">
                   {currentUserImageUrl || currentUserFirstName || currentUserLastName ? (
                     <CollectionAvatar
                       userImageUrl={currentUserImageUrl}
@@ -112,7 +117,7 @@ const NavMenu = ({ subNavNode = null }) => {
                     />
                   ) : null}
                   <IconCollect />
-                  <span>Collecting</span>
+                  <span>{t('sample_units.collecting')}</span>
                   <CollectRecordsCount />
                 </NavLinkSidebar>
               </LiCollecting>
@@ -120,9 +125,9 @@ const NavMenu = ({ subNavNode = null }) => {
             {isCollectingSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             <OfflineHide>
               <li>
-                <NavLinkSidebar end to={`${projectUrl}/submitted`}>
+                <NavLinkSidebar end to={`${projectUrl}/submitted`} data-testid="nav-submitted">
                   <IconData />
-                  <span>Submitted</span>
+                  <span>{t('sample_units.submitted')}</span>
                 </NavLinkSidebar>
               </li>
               {submittedRecordId && <SubNavMenuRecordName subNavNode={subNavNode} />}
@@ -130,19 +135,23 @@ const NavMenu = ({ subNavNode = null }) => {
           </ul>
         </LiNavPrimary>
         <LiNavSecondary>
-          <NavHeaderSecondary>Metadata</NavHeaderSecondary>
+          <NavHeaderSecondary data-testid="nav-header-metadata">{t('metadata')}</NavHeaderSecondary>
           <ul>
             <li>
-              <NavLinkSidebar end to={`${projectUrl}/sites`}>
+              <NavLinkSidebar end to={`${projectUrl}/sites`} data-testid="nav-sites">
                 <IconSites />
-                <span>Sites</span>
+                <span>{t('sites.sites')}</span>
               </NavLinkSidebar>
             </li>
             {isSiteSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             <li>
-              <NavLinkSidebar end to={`${projectUrl}/management-regimes`}>
+              <NavLinkSidebar
+                end
+                to={`${projectUrl}/management-regimes`}
+                data-testid="nav-management-regimes"
+              >
                 <IconMgmt />
-                <span>Management Regimes</span>
+                <span>{t('management_regimes.management_regimes')}</span>
               </NavLinkSidebar>
             </li>
             {isManagementRegimeSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
@@ -150,49 +159,57 @@ const NavMenu = ({ subNavNode = null }) => {
         </LiNavSecondary>
         <OfflineHide>
           <LiNavSecondary>
-            <NavHeaderSecondary>Overview</NavHeaderSecondary>
+            <NavHeaderSecondary data-testid="nav-header-overview">
+              {t('overview')}
+            </NavHeaderSecondary>
             <ul>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/observers-and-transects`}>
+                <NavLinkSidebar
+                  to={`${projectUrl}/observers-and-transects`}
+                  data-testid="nav-observers-transects"
+                >
                   <IconUsersAndTransects />
-                  <span>{language.pages.usersAndTransectsTable.navTitle}</span>
+                  <span>{t('sample_units_and_observers')}</span>
                 </NavLinkSidebar>
               </li>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/management-regimes-overview`}>
+                <NavLinkSidebar
+                  to={`${projectUrl}/management-regimes-overview`}
+                  data-testid="nav-management-regimes-overview"
+                >
                   <IconManagementRegimesOverview />
-                  <span>{language.pages.managementRegimesOverview.navTitle}</span>
+                  <span>{t('sample_units_and_management_regimes')}</span>
                 </NavLinkSidebar>
               </li>
             </ul>
           </LiNavSecondary>
           <LiNavSecondary>
-            <NavHeaderSecondary>Admin</NavHeaderSecondary>
+            <NavHeaderSecondary data-testid="nav-header-admin">{t('admin')}</NavHeaderSecondary>
             <ul>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/project-info`}>
+                <NavLinkSidebar to={`${projectUrl}/project-info`} data-testid="nav-project-info">
                   <IconInfo />
-                  <span>Project Info</span>
+                  <span>{t('project_info')}</span>
                 </NavLinkSidebar>
               </li>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/users`}>
+                <NavLinkSidebar to={`${projectUrl}/users`} data-testid="nav-users">
                   <IconUsers />
-                  <span>Users</span>
+                  <span>{t('users.users')}</span>
                 </NavLinkSidebar>
               </li>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/data-sharing`}>
+                <NavLinkSidebar to={`${projectUrl}/data-sharing`} data-testid="nav-data-sharing">
                   <IconSharing />
-                  <span>Data Sharing</span>
+                  <span>{t('data_sharing.data_sharing')}</span>
                 </NavLinkSidebar>
               </li>
               <OfflineHide>
                 <li>
                   {currentProject?.includes_gfcr && (
-                    <NavLinkSidebar to={`${projectUrl}/gfcr`}>
+                    <NavLinkSidebar to={`${projectUrl}/gfcr`} data-testid="nav-gfcr">
                       <IconGfcr />
-                      <span>GFCR</span>
+                      <span>{t('gfcr.gfcr')}</span>
                     </NavLinkSidebar>
                   )}
                 </li>

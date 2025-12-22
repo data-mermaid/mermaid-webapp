@@ -144,7 +144,7 @@ project managements, project sites, and project profiles`, async () => {
   )
 
   // click another project-related page to trigger a sync and use the mock api with sync errors
-  const sitesSideNavLink = screen.getByRole('link', { name: 'Sites' })
+  const sitesSideNavLink = screen.getByTestId('nav-sites')
 
   await user.click(sitesSideNavLink)
 

@@ -239,7 +239,7 @@ const NewAttributeModal = ({
       <RightFooter>
         {CancelButton}
         <ButtonPrimary type="button" data-testid="submit-proposal-button" onClick={handleOnSubmit}>
-          <IconSend /> {t('forms.submit_for_review')}
+          <IconSend /> {t('buttons.suggestion_review_request')}
         </ButtonPrimary>
       </RightFooter>
     </RowSpaceBetween>
@@ -294,7 +294,7 @@ const NewAttributeModal = ({
             >{`${attributeName} ${modalAssets.proposedAttributeValue}`}</Td>
           </Tr>
           <Tr>
-            <Td id="user-label">{t('user')}</Td>
+            <Td id="user-label">{t('users.user')}</Td>
             <Td data-testid="proposed-attribute-user" aria-labelledby="user-label">
               {currentUser.full_name}
             </Td>

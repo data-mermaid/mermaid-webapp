@@ -38,7 +38,7 @@ const saveSite = async (user) => {
   )
 
   await user.type(screen.getByLabelText('Notes'), 'la dee dah')
-  const saveButton = screen.getByText('Save', { selector: 'button' })
+  const saveButton = screen.getByTestId('save-button-site-form')
 
   await waitFor(() => expect(saveButton).toBeEnabled())
   await user.click(saveButton)
@@ -133,7 +133,7 @@ describe('offline', () => {
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
-    await user.click(within(sideNav).getByText('Sites'))
+    await user.click(within(sideNav).getByTestId('nav-sites'))
 
     // show all the records
     await user.selectOptions(await screen.findByTestId('page-size-selector'), '5')

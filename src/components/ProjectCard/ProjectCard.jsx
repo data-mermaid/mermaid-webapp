@@ -31,6 +31,7 @@ import {
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useTranslation } from 'react-i18next'
 
 const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...restOfProps }) => {
   const { currentUser } = useCurrentUser()
@@ -41,6 +42,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, id)
   const navigate = useNavigate()
   const projectUrl = `/projects/${id}`
+  const { t } = useTranslation()
 
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
@@ -132,7 +134,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
               disabled={!isAppOnline}
             >
               <IconCopy />
-              <span>Copy</span>
+              <span>{t('buttons.copy')}</span>
             </ButtonSecondary>
 
             <ProjectModal
@@ -152,8 +154,9 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
                 checked={isOfflineReady}
                 onChange={handleProjectOfflineReadyClick}
                 disabled={!isAppOnline}
+                data-testid="offline-ready"
               />
-              {language.pages.projectsList.offlineReadyCheckboxLabel}
+              {t('projects.available_offline')}
             </CheckBoxLabel>
           </ProjectCardHeaderButtonWrapper>
           <DateAndCountryLabel>{removeTimeZoneFromDate(updated_on)}</DateAndCountryLabel>
