@@ -2,11 +2,31 @@
 
 **Note:** This is a living document and will be updated as we learn more about best practices for translation tokens.
 
-## 1. Hierarchical Structure Using Dot Notation
+## 1. Casing
 
-Organize tokens hierarchically to reflect the application's structure and context. This approach enhances readability and maintainability.
+Use lower-case snake casing for all tokens.
 
-**Format:** `namespace.section.key`
+- **snake_case:** `classifier_guess`
+
+## 2. Avoid numbers and special characters
+
+Similar to variable names, do not use numbers or special characters in key names.
+
+**Poor Examples:**
+
+- `text1`
+- `label`
+- `@aria-label`
+
+## 3. Incorporate contextual information and hierarchy
+
+When a term might have multiple meanings, include additional context to clarify its usage.
+More broadly scoped context and naming will provide better reusability and flexibility of the tokens.
+Providing good context in naming will provide translators more accurate understanding of what words would be most appropriate for the translation, without screenshots for every line.
+**Example:**
+Organize tokens hierarchically to reflect the contextual structure. This approach enhances readability and maintainability.
+
+**Code implementation:** `section.section.key`
 
 **Example:**
 
@@ -21,53 +41,10 @@ Organize tokens hierarchically to reflect the application's structure and contex
 }
 ```
 
-In this example, `user_profile.buttons.submit` clearly indicates the token's context within the user profile form.
-
-## 2. Use Descriptive and Purposeful Names
-
-Token names should convey their purpose without relying on the actual text content. Avoid vague or overly generic names.
-
 **Good Examples:**
 
 - `navigation.menu.home`
 - `error_messages.network.timeout`
-
-**Poor Examples:**
-
-- `text1`
-- `label`
-
-## 3. Naming Conventions
-
-- **snake_case:** `classifier_guess`
-
-## 4. Avoid Embedding Actual Text in Keys
-
-Do not use the actual display text as the token key. This practice hinders flexibility and can complicate future text changes.
-
-**Instead of:**
-
-```json
-{
-  "Cancel": "Cancel"
-}
-```
-
-**Use:**
-
-```json
-{
-  "buttons": {
-    "cancel": "Cancel"
-  }
-}
-```
-
-## 5. Incorporate Contextual Information
-
-When a term might have multiple meanings, include additional context to clarify its usage.
-
-**Example:**
 
 ```json
 {
@@ -80,12 +57,47 @@ When a term might have multiple meanings, include additional context to clarify 
 }
 ```
 
-## 6. Plan for Plurals and Gender Variations
+In this example, `user_profile.buttons.submit` indicates the token's context within the user profile form.
+If a token is used in multiple locations, it can have a more generic context.
 
-Different languages have different ways of grouping numbers. These variations can be handled by adding plural forms to our tokens. Plural forms are utilized by a token base value (such as ‘click_message’) appended with a plural form suffix (‘click_message_one’, 'click_message_other').
+**Example:**
 
-Structure your tokens to accommodate pluralization and gender variations, which are common in localization.
+```json
+{
+  "user_profile": {
+    "buttons": {
+      "update_permissions": "Update user permissions",
+      "mark_user_obsolete": "Mark user as obsolete"
+    }
+  }
+}
+```
 
+## 4. Avoid embedding actual text in keys
+
+Do not use the actual display text as the token key. This practice hinders flexibility and can complicate future text changes. Tokens should relay the context of the original text without relying on the actual text content.
+
+**Instead of:**
+
+```json
+{
+  "bleaching_is_now_set_public_summary": "Bleaching is now set to public summary"
+}
+```
+
+**Use:**
+
+```json
+{
+  "bleaching_public_summary": "Bleaching is now set to public summary"
+}
+```
+
+## 5. Plurals
+
+Different languages have different ways of grouping numbers. These variations can be handled by adding plural forms to our tokens. Plural forms consist of a token base value appended with a plural form suffix.
+Plural suffixes are designed by CLDR to provide standardization across different language needs.
+Adding a reserved suffix will indicate a plural to the translation management program, and cause UI breaks if used incorrectly on non-plurals.
 **Example:**
 
 ```json
@@ -97,31 +109,14 @@ Structure your tokens to accommodate pluralization and gender variations, which 
 }
 ```
 
-## 7. Namespace Organization
+Reserved suffix values: `zero`, `one`, `two`, `few`, `many`, `other`
 
-Organize translation files by namespaces corresponding to application modules or features. This modular approach
-simplifies management and scalability.
+(CLDR Plural rules)[https://cldr.unicode.org/index/cldr-spec/plural-rules]
+(CLDR - Language-specific plural rules)[https://www.unicode.org/cldr/charts/47/supplemental/language_plural_rules.html]
 
-**File Structure:**
+## 6. Prevent duplicates
 
-```
-locales/
-├── en/
-│   ├── user_profile.json
-│   └── dashboard.json
-├── es/
-│   ├── user_profile.json
-│   └── dashboard.json
-```
-
-# Best Practices
-
-Tokens should relay the context of the original text without being overly specific. More broadly scoped context and naming will provide better reusability and flexibility of the tokens.
-
-Providing good context in naming will provide translators more accurate understanding of what words would be most
-appropriate for the translation, without screenshots for every line.
-
-Prevent duplicates - Check existing tokens in the language files before adding a new one.
+Check existing tokens in the language files before adding a new one.
 
 Avoid nesting namespaces more than 2 levels deep to help keep the translation files clean and easy to navigate.
 
@@ -137,8 +132,10 @@ Translations of this highly depends on the context, as 'Add' can be synonymous w
 - ✅add_record: 'Add Record'
 - ✅add_record: 'Add'
 
-# Namespaces
+## 7. Adding HTML
 
-The location of specificity for your translations. Commonly, the file name for your translations.
+Integrate HTML using the (`Trans` component)[https://react.i18next.com/latest/trans-component]
 
-Example: Keeping our user messages in one translation file called ‘user_messages.json’, and our menu options in a file named ‘menu_options.json’
+## 8. QAing tokens
+
+## 9. Unit testing
