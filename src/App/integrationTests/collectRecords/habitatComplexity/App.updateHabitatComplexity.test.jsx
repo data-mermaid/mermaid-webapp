@@ -33,7 +33,7 @@ describe('Offline', () => {
 
     await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByTestId('saved-button'))
+    expect(await screen.findByTestId('saved-button')).toBeInTheDocument()
 
     expect(screen.getByTestId('site-select')).toHaveDisplayValue('Site C')
     expect(screen.getByTestId('management-select')).toHaveDisplayValue(
@@ -91,7 +91,7 @@ describe('Offline', () => {
 
     await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByTestId('saved-button'))
+    expect(await screen.findByTestId('saved-button')).toBeInTheDocument()
     const savedCollectRecords = await dexiePerUserDataInstance.collect_records.toArray()
 
     const updatedCollectRecord = savedCollectRecords.filter((record) => record.id === '80')[0]
@@ -127,7 +127,7 @@ describe('Offline', () => {
     await user.type(depthInput, '45')
     await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByTestId('save-button'))
+    expect(await screen.findByTestId('save-button')).toBeInTheDocument()
 
     expect(await screen.findByTestId('depth-input')).toHaveValue(45)
   })
