@@ -486,6 +486,7 @@
     "language": "Bahasa"
   },
   "loading": "Memuat",
+  "loading_indicator": "Indikator pemuatan daftar proyek",
   "loading_item": "Memuat {{itemName}}",
   "management_regime": "Manajemen",
   "management_regimes": {
@@ -684,7 +685,6 @@
     "user_confirm_delete": "Apakah Anda yakin ingin menghapus {{projectName}}?",
     "view_member_emails": "Melihat email anggota proyek"
   },
-  "projects_loading_indicator": "Indikator pemuatan daftar proyek",
   "propose_new_species": "Usulkan spesies baru",
   "protocol_titles": {
     "benthiclit": "Bentik LIT",

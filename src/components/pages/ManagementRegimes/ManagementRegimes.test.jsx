@@ -29,7 +29,7 @@ test('ManagementRegimes component renders with the expected headers', async () =
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -63,7 +63,7 @@ test('Management Regime Records table sorts properly by Name column', async () =
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -105,7 +105,7 @@ test('Management Regime Records table sorts properly by Year Est. column', async
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -148,7 +148,7 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -191,7 +191,7 @@ test('Management Regime Records table sorts properly by Open Access column', asy
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -233,7 +233,7 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -275,7 +275,7 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -317,7 +317,7 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -359,7 +359,7 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -401,7 +401,7 @@ test('Management Regime Records table sorts properly by Species Restrictions col
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -443,7 +443,7 @@ test('Management Regime Records table sorts properly by No Take column', async (
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 

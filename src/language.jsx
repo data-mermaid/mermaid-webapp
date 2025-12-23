@@ -462,30 +462,6 @@ const helperText = {
       </HelperTextLink>
     </>
   ),
-  managementRegimeRules: {
-    accessRestrictions:
-      'Access is restricted, e.g., people outside a community are not allowed to fish here',
-    gearRestrictions: 'Restrictions on what types of fishing gear can be used',
-    noTake: 'Total extraction ban',
-    openAccess: 'Open for fishing and entering',
-    partialRestrictions:
-      'e.g. periodic closures, size limits, gear restrictions, species restrictions',
-    periodicClosure:
-      'The area is open and closed as a fisheries management strategy, e.g., rotating octopus closures',
-    sizeLimits: 'Restrictions on the size of certain target species',
-    speciesRestrictions: 'Restrictions on what types of species can be caught',
-  },
-  getManagementRegimeName: () => (
-    <>
-      Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a
-      governmental or standardized source such as{' '}
-      <HelperTextLink href="http://protectedseas.net/" target="_blank">
-        protectedseas.net
-      </HelperTextLink>
-      ; alternatively, a descriptive local label like &#39;Northeast Point seasonal closure&#39;can
-      be used.
-    </>
-  ),
   name: 'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
   notes: '',
   number:

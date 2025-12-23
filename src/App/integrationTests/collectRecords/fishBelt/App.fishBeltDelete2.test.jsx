@@ -27,10 +27,8 @@ describe('Offline', () => {
       },
     )
 
-    await screen.findByLabelText('project pages loading indicator')
-    await waitForElementToBeRemoved(() =>
-      screen.queryByLabelText('project pages loading indicator'),
-    )
+    await screen.findByTestId('loading-indicator')
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
     // make an unsaved change
 
     await user.clear(screen.getByTestId('depth-input'))

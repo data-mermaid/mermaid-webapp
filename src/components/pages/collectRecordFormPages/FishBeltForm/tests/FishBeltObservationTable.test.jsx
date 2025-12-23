@@ -39,7 +39,7 @@ test('FishBelt observations size shows a numeric pattern when fish size bin is 1
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   // Fish size bin select on 1
@@ -74,7 +74,7 @@ test('FishBelt observations size shows a select input when fish size bin is 5', 
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   // Fish size bin select on 5
@@ -111,7 +111,7 @@ test('FishBelt observations size shows a select input when fish size bin is 10',
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   // Fish size bin select on 10
@@ -148,7 +148,7 @@ test('FishBelt observations size shows a select input when fish size bin is AGRR
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   // Fish size bin select on AGRRA
@@ -185,7 +185,7 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   // Fish size bin select on AGRRA

@@ -472,6 +472,7 @@
     "language": "Language"
   },
   "loading": "Loading",
+  "loading_indicator": "Loading Indicator",
   "loading_item": "Loading {{itemName}}",
   "management_regimes": {
     "access_restriction": "Access restrictions",
@@ -644,7 +645,6 @@
     "user_confirm_delete": "Are you sure you want to delete {{projectName}}?",
     "view_member_emails": "View project member email"
   },
-  "projects_loading_indicator": "projects list loading indicator",
   "propose_new_species": "Propose new species...",
   "protocol_titles": {
     "benthiclit": "Benthic LIT",
@@ -755,6 +755,7 @@
   "size_cm": "Size (cm)",
   "status_offline": "You're <strong>OFFLINE</strong>. Some contents may be out of date.",
   "status_online": "You're <strong>ONLINE</strong>",
+  "still_working": "Still working...",
   "taxonomies": {
     "add_fish_species": "Add new fish species",
     "genus": "Genus",

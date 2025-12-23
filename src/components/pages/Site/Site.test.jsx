@@ -84,7 +84,7 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   // Clear latitude input field => "Required" in validation message showed, Save button disabled
   const latitudeInput = screen.getByLabelText('Latitude')
@@ -138,7 +138,7 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const latitudeInput = screen.getByLabelText('Latitude')
   const countryInput = screen.getByLabelText('Country')
@@ -180,7 +180,7 @@ test('Edit Site page - enter invalid inputs to longitude shows inline error vali
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const longitudeInput = screen.getByLabelText('Longitude')
   const countryInput = screen.getByLabelText('Country')

@@ -33,7 +33,7 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
@@ -76,7 +76,7 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   expect(screen.getByTestId('site')).toBeInTheDocument()
   expect(screen.getByTestId('management')).toBeInTheDocument()
@@ -116,7 +116,7 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   expect(screen.getByTestId('site-select')).toHaveDisplayValue('Site D')
   expect(screen.getByTestId('management-select')).toHaveDisplayValue(
@@ -172,7 +172,7 @@ test('FishBelt component in EDIT mode - button group shows save, validate and su
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const collectButtonGroups = screen.getByTestId('collect-record-form-buttons')
   const saveButton = within(collectButtonGroups).getByTestId('saved-button')
@@ -205,7 +205,7 @@ test('FishBelt component in EDIT mode - button group shows only save button when
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const collectButtonGroups = screen.getByTestId('collect-record-form-buttons')
   const saveButton = within(collectButtonGroups).getByTestId('saved-button')
@@ -237,7 +237,7 @@ test('Fishbelt observations: add row button adds a row', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const observationsBeforeAdd = screen.getAllByRole('table')[0]
 
@@ -269,7 +269,7 @@ test('Fishbelt observations: delete observation button deleted observation', asy
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const formBeforeDelete = screen.getByRole('form')
   const observationsTableBeforeDelete = within(formBeforeDelete).getAllByRole('table')[0]

@@ -238,7 +238,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
 
   await user.click(editOriginalSiteButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const siteCPage = await screen.findByText('Site C', {
     selector: 'h2',
   })
@@ -302,7 +302,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
 
   await user.click(editDuplicateSiteButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const siteCPage = await screen.findByText('Site D', {
     selector: 'h2',
   })
@@ -600,7 +600,7 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
 
   await user.click(editOriginalManagementButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const managementRegimeCPage = await screen.findByText('Management Regimes C', {
     selector: 'h2',
   })
@@ -668,7 +668,7 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
 
   await user.click(editDuplicateManagementButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const managementRegimeAPage = await screen.findByText('Management Regimes A', {
     selector: 'h2',
   })

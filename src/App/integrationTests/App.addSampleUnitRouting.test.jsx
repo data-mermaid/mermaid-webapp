@@ -23,8 +23,8 @@ test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish
     },
   )
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   await user.click(screen.getByTestId('add-sample-unit-button'))
   const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
@@ -48,8 +48,8 @@ test('Clicking Add Sample Unit then click Benthic Pit link expects to see New Be
     },
   )
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   await user.click(screen.getByTestId('add-sample-unit-button'))
   const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
@@ -73,8 +73,8 @@ test('Clicking Add Sample Unit then click Habitat Complexity link expects to see
     },
   )
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   await user.click(screen.getByTestId('add-sample-unit-button'))
   const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
@@ -98,8 +98,8 @@ test('Clicking Add Sample Unit then click Benthic LIT link expects to see New Be
     },
   )
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   await user.click(screen.getByTestId('add-sample-unit-button'))
   const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
@@ -123,8 +123,8 @@ test('Clicking Add Sample Unit then click Bleaching link expects to see New Blea
     },
   )
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   await user.click(screen.getByTestId('add-sample-unit-button'))
   const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')

@@ -65,10 +65,8 @@ describe('Online', () => {
       dexieCurrentUserInstance,
     )
 
-    await screen.findByLabelText('project pages loading indicator')
-    await waitForElementToBeRemoved(() =>
-      screen.queryByLabelText('project pages loading indicator'),
-    )
+    await screen.findByTestId('loading-indicator')
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
     await saveFishbeltRecord(user)
 
@@ -149,10 +147,8 @@ describe('Online', () => {
       },
     )
 
-    await screen.findByLabelText('project pages loading indicator')
-    await waitForElementToBeRemoved(() =>
-      screen.queryByLabelText('project pages loading indicator'),
-    )
+    await screen.findByTestId('loading-indicator')
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
     await saveFishbeltRecord(user)
 
