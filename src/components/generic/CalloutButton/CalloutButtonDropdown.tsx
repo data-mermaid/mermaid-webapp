@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import LoadingModal from '../../LoadingModal/LoadingModal'
+import handleHttpResponseError from '../../../library/handleHttpResponseError'
 
 interface CalloutButtonDropdownProps {
   onClick: () => void
@@ -36,31 +37,26 @@ const CalloutButtonDropdown = ({
   const handleSuccessResponse = (response, languageSuccessMessage) => {
     refreshCurrentUser() // this ensures the user has the right privileges to the newly created project
     toast.success(...getToastArguments(languageSuccessMessage))
-    // addProjectToProjectsPage(response) //todo: implement drilldown..
     setIsLoading(false)
     navigate(`/projects/${response.id}/sites`)
   }
 
   const handleResponseError = (error) => {
-    // handleHttpResponseError({
-    //   error,
-    //   callback: () => {
-    //     const isDuplicateError =
-    //       error.response.status === 400 ||
-    //       (error.response.status === 500 &&
-    //         error.response.data?.new_project_name === 'Project name already exists') //TODO: update error to match api
-    //
-    //     if (isDuplicateError) {
-    //       // setNameAlreadyExists(true)
-    //       toast.error(...getToastArguments(t('api_errors.demo_project_exists'))) //todo: new error message
-    //     }
-    //   },
-    // })
-
+    const isDuplicateError = error.response.status === 400
     setIsLoading(false)
+
+    handleHttpResponseError({
+      error,
+      callback: () => {
+        if (isDuplicateError) {
+          toast.error(...getToastArguments(t('api_errors.demo_project_exists')))
+        }
+      },
+    })
   }
 
   const createDemoProject = () => {
+    setIsDropdownOpen(false)
     setIsLoading(true)
     databaseSwitchboardInstance
       .addDemoProject()

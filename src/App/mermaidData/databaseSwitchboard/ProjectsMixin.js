@@ -274,12 +274,11 @@ const ProjectsMixin = (Base) =>
           .catch((error) => {
             // debugger
 
-            // todo: notify user
-            return Promise.reject(
-              new Error(
-                'You have already created a demo project. Only one demo project is allowed per user.',
-              ),
-            )
+            return Promise.reject(error)
+            // new Error(
+            //   'You have already created a demo project. Only one demo project is allowed per user.',
+            // ),
+            // )
           })
       }
 
