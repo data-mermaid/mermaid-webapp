@@ -30,7 +30,7 @@ const VISIBILITY_VALIDATION_PATH = 'data.benthic_transect.visibility'
 const INTERVAL_SIZE_VALIDATION_PATH = 'data.interval_size'
 const INTERVAL_START_VALIDATION_PATH = 'data.interval_start'
 
-const IntervalCheckbox = ({ isChecked, handleChange, checkboxLabel }) => {
+export const IntervalCheckbox = ({ isChecked, handleChange, checkboxLabel }) => {
   return (
     <CheckBoxContainer>
       <input

@@ -14,6 +14,7 @@ import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAn
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 import language from '../../../../language'
+import { IntervalCheckbox } from '../BenthicPitForm/BenthicPitTransectInputs.jsx'
 
 const CURRENT_VALIDATION_PATH = 'data.benthic_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.benthic_transect.depth'
@@ -27,6 +28,7 @@ const TIDE_VALIDATION_PATH = 'data.benthic_transect.tide'
 const TRANSECT_NUMBER_VALIDATION_PATH = 'data.benthic_transect.number'
 const VISIBILITY_VALIDATION_PATH = 'data.benthic_transect.visibility'
 const INTERVAL_SIZE_VALIDATION_PATH = 'data.interval_size'
+const INTERVAL_START_VALIDATION_PATH = 'data.interval_start'
 
 const HabitatComplexityTransectInputs = ({
   areValidationsShowing,
@@ -45,6 +47,7 @@ const HabitatComplexityTransectInputs = ({
   const currentOptions = getOptions(currents.data)
   const tideOptions = getOptions(tides.data)
   const benthic_transect = validationsApiData?.benthic_transect
+  const isIntervalSizeAsStartChecked = formik.values?.is_interval_size_as_start
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     benthic_transect?.number,
@@ -101,10 +104,14 @@ const HabitatComplexityTransectInputs = ({
     areValidationsShowing,
   )
 
+  const intervalStartValidationProperties = getValidationPropertiesForInput(
+    validationsApiData?.interval_start,
+    areValidationsShowing,
+  )
+
   const handleTransectNumberChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'number',
       validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
     })
   }
@@ -112,7 +119,6 @@ const HabitatComplexityTransectInputs = ({
   const handleLabelChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'label',
       validationPath: LABEL_VALIDATION_PATH,
     })
   }
@@ -120,7 +126,6 @@ const HabitatComplexityTransectInputs = ({
   const handleLengthSurveyedChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'len_surveyed',
       validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
     })
   }
@@ -128,28 +133,24 @@ const HabitatComplexityTransectInputs = ({
   const handleReefSlopeChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'reef_slope',
       validationPath: REEF_SLOPE_VALIDATION_PATH,
     })
   }
   const handleRelativeDepthChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'relative_depth',
       validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
     })
   }
   const handleVisibilityChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'visibility',
       validationPath: VISIBILITY_VALIDATION_PATH,
     })
   }
   const handleCurrentChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'current',
       validationPath: CURRENT_VALIDATION_PATH,
     })
   }
@@ -157,14 +158,12 @@ const HabitatComplexityTransectInputs = ({
   const handleNotesChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'notes',
       validationPath: NOTES_VALIDATION_PATH,
     })
   }
   const handleTideChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'tide',
       validationPath: TIDE_VALIDATION_PATH,
     })
   }
@@ -172,7 +171,6 @@ const HabitatComplexityTransectInputs = ({
   const handleSampleTimeChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'sample_time',
       validationPath: SAMPLE_TIME_VALIDATION_PATH,
     })
   }
@@ -180,16 +178,49 @@ const HabitatComplexityTransectInputs = ({
   const handleDepthChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'depth',
       validationPath: DEPTH_VALIDATION_PATH,
     })
   }
 
   const handleIntervalSizeChange = (event) => {
+    const newIntervalSizeValue = event.target.value
+    const newValues = {
+      ...formik.values,
+      interval_size: newIntervalSizeValue,
+    }
+
+    if (isIntervalSizeAsStartChecked) {
+      newValues.interval_start = newIntervalSizeValue
+    }
+
+    formik.setValues(newValues)
+    resetNonObservationFieldValidations({
+      validationPath: INTERVAL_SIZE_VALIDATION_PATH,
+    })
+  }
+
+  const handleIntervalStartChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
-      inputName: 'interval_size',
-      validationPath: INTERVAL_SIZE_VALIDATION_PATH,
+      validationPath: INTERVAL_START_VALIDATION_PATH,
+    })
+  }
+
+  const handleSyncIntervalChange = (checked) => {
+    const currentIntervalSizeValue = formik.values.interval_size
+
+    const newValues = {
+      ...formik.values,
+      is_interval_size_as_start: checked,
+    }
+
+    if (checked && currentIntervalSizeValue) {
+      newValues.interval_start = currentIntervalSizeValue
+    }
+
+    formik.setValues(newValues)
+    resetNonObservationFieldValidations({
+      validationPath: INTERVAL_START_VALIDATION_PATH,
     })
   }
 
@@ -321,6 +352,38 @@ const HabitatComplexityTransectInputs = ({
           onChange={handleIntervalSizeChange}
           unit="m"
           helperText={language.helperText.intervalSize}
+        />
+        <InputWithLabelAndValidation
+          label="Interval Start"
+          required={true}
+          id="interval_start"
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({
+              validationPath: INTERVAL_START_VALIDATION_PATH,
+            })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: INTERVAL_START_VALIDATION_PATH })
+          }}
+          testId="interval_start"
+          type="number"
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            intervalStartValidationProperties,
+            'interval_start',
+          )}
+          onBlur={formik.handleBlur}
+          value={formik.values.interval_start}
+          onChange={handleIntervalStartChange}
+          unit="m"
+          helperText={language.helperText.intervalStart}
+          renderItemAboveInput={
+            <IntervalCheckbox
+              isChecked={isIntervalSizeAsStartChecked}
+              handleChange={handleSyncIntervalChange}
+              checkboxLabel={language.pages.collectRecord.benthicPitSyncCheckbox}
+            />
+          }
+          isInputDisabled={isIntervalSizeAsStartChecked}
         />
         <InputSelectWithLabelAndValidation
           label="Reef Slope"
