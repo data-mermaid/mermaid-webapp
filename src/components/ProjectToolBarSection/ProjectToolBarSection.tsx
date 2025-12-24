@@ -133,7 +133,7 @@ const ProjectToolBarSection = ({
         <HeaderStyle>
           {t('projects.projects')}
           {isAppOnline && (
-            <MuiTooltip title={t('go_to_explore_projects')} placement="top" arrow>
+            <MuiTooltip title={t('go_to_explore_projects')} placement="top">
               <IconButton
                 type="button"
                 aria-label={t('go_to_explore_projects')}
@@ -158,7 +158,7 @@ const ProjectToolBarSection = ({
               onClick={() => setIsNewProjectModalOpen(true)}
               aria-label={t('projects.new_project')}
               disabled={!isAppOnline}
-              testId="new-project-button"
+              testId="new-project-button-dropdown"
               label={t('projects.new_project')}
             />
           )}
@@ -174,7 +174,7 @@ const ProjectToolBarSection = ({
         </OfflineHide>
       </RowWrapper>
       <FilterRowWrapper>
-        <FilterLabelWrapper htmlFor="filter_projects" value={projectFilter} onChange={setFilter}>
+        <FilterLabelWrapper htmlFor="filter_projects" onChange={setFilter}>
           {t('filters.projects_by_name_year')}
           <Input type="text" id="filter_projects" data-testid="filter-projects" />
         </FilterLabelWrapper>

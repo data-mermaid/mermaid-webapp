@@ -85,7 +85,7 @@ test('Clicking Add Sample Unit then click Habitat Complexity link expects to see
 
   await user.click(within(sampleUnitNav).getByTestId('habitatcomplexity-link'))
 
-  const newHabitatComplexityTitle = await screen.findByText('Habitat Complexity', {
+  const newHabitatComplexityTitle = await screen.findByText('Habitat complexity', {
     selector: 'h2',
   })
 

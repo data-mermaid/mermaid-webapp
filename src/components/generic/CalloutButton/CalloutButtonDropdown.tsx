@@ -100,10 +100,12 @@ const CalloutButtonDropdown = ({
         </IconButton>
         <div
           style={{ display: isDropdownOpen ? 'block' : 'none' }}
+          data-testid="dropdown-icon-button"
           className={styles['callout-button-dropdown__list']}
         >
           <Button
             onClick={createDemoProject}
+            data-testid="add-demo-project-button"
             classes={{
               root: styles['button-root__callout'],
             }}

@@ -110,7 +110,7 @@ describe('Online', () => {
     const table = await screen.findByRole('table')
 
     const linksToHabitatComplexityRecords = within(table).getAllByRole('link', {
-      name: 'Habitat Complexity',
+      name: 'Habitat complexity',
     })
 
     expect(linksToHabitatComplexityRecords).toHaveLength(2)
@@ -138,7 +138,7 @@ describe('Online', () => {
 
     // ensure the were not in edit mode, but new fish belt mode
     expect(
-      screen.getByText('Habitat Complexity', {
+      screen.getByText('Habitat complexity', {
         selector: 'h2',
       }),
     )

@@ -260,7 +260,6 @@ const ProjectsMixin = (Base) =>
             await getAuthorizationHeaders(this._getAccessToken),
           )
           .then((response) => {
-            debugger
             const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
 
             if (isApiResponseSuccessful) {
@@ -272,13 +271,7 @@ const ProjectsMixin = (Base) =>
             return Promise.reject(new Error('The API status is unsuccessful'))
           })
           .catch((error) => {
-            // debugger
-
             return Promise.reject(error)
-            // new Error(
-            //   'You have already created a demo project. Only one demo project is allowed per user.',
-            // ),
-            // )
           })
       }
 
