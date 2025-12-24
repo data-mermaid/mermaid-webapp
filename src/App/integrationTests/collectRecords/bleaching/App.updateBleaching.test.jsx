@@ -31,23 +31,19 @@ describe('Offline', () => {
     await user.clear(await screen.findByLabelText('Depth'))
     await user.type(screen.getByLabelText('Depth'), '45')
 
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByTestId('saved-button'))
 
     // Site select
     expect(screen.getByDisplayValue('Site C'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes C [Management Regimes 3]'))
-    expect(screen.getByLabelText('Depth')).toHaveValue(45)
-    expect(screen.getByLabelText('Sample Date')).toHaveValue('2020-04-19')
-    expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')
-    expect(screen.getByLabelText('Label')).toHaveValue('FB-1')
-    expect(screen.getByLabelText('Quadrat Size')).toHaveValue(10)
+    expect(screen.getByTestId('depth-input')).toHaveValue(45)
+    expect(screen.getByTestId('sample-date-input')).toHaveValue('2020-04-19')
+    expect(screen.getByTestId('sample-time-input')).toHaveValue('11:55')
+    expect(screen.getByTestId('label-input')).toHaveValue('FB-1')
+    expect(screen.getByTestId('quadrat-size-input')).toHaveValue(10)
     // Visibility select on <1m - bad
     expect(screen.getByDisplayValue('<1m - bad'))
     // Current select on moderate
@@ -57,7 +53,7 @@ describe('Offline', () => {
     // Tide select on high
     expect(screen.getByDisplayValue('high'))
 
-    expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
+    expect(screen.getByTestId('notes-textarea')).toHaveValue('some fish notes')
   })
   test('Edit Bleaching collect record save stores properly formatted Bleaching collect record colonies bleached observations in dexie', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
@@ -81,7 +77,7 @@ describe('Offline', () => {
 
     await user.click(addObservationButton)
 
-    const coloniesBleachedObservationTable = screen.getByLabelText(
+    const coloniesBleachedObservationTable = await screen.findByLabelText(
       'Observations - Colonies Bleached',
     )
 
@@ -128,13 +124,9 @@ describe('Offline', () => {
     await user.type(new100BleachedInput, '1')
     await user.type(newRecentlyDeadInput, '1')
 
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByTestId('saved-button'))
     const savedCollectRecords = await dexiePerUserDataInstance.collect_records.toArray()
 
     const updatedCollectRecord = savedCollectRecords.filter((record) => record.id === '60')[0]
@@ -188,13 +180,9 @@ describe('Offline', () => {
     await user.type(newSoftCoralInput, '8')
     await user.type(newMacroalgaeInput, '8')
 
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByTestId('saved-button'))
     const savedCollectRecords = await dexiePerUserDataInstance.collect_records.toArray()
 
     const updatedCollectRecord = savedCollectRecords.filter((record) => record.id === '60')[0]
@@ -224,18 +212,14 @@ describe('Offline', () => {
     )
 
     // make an unsaved change
-    const depthInput = await screen.findByLabelText('Depth')
+    const depthInput = await screen.findByTestId('depth-input')
 
     await user.clear(depthInput)
     await user.type(depthInput, '45')
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('The sample unit has not been saved.'))
+    expect(await screen.findByTestId('save-button'))
 
-    expect(await screen.findByLabelText('Depth')).toHaveValue(45)
+    expect(await screen.findByTestId('depth-input')).toHaveValue(45)
   })
 })

@@ -229,7 +229,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           label="Transect Number"
           required={true}
           id="number"
-          testId="transect_number"
+          testId="transect-number"
           type="number"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({
@@ -268,7 +268,7 @@ const BenthicPhotoQuadratTransectInputs = ({
         <InputWithLabelAndValidation
           label="Sample Time"
           id="sample_time"
-          testId="sample_time"
+          testId="sample-time"
           type="time"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
@@ -283,7 +283,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
-          helperText={t('sample_time_info')}
+          helperText={t('sample_units.sample_time_info')}
         />
         <InputWithLabelAndValidation
           label="Depth"
@@ -308,7 +308,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           label="Transect Length Surveyed"
           required={true}
           id="len_surveyed"
-          testId="len_surveyed"
+          testId="len-surveyed"
           type="number"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({
@@ -332,7 +332,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           label="Quadrat Number Start"
           required={true}
           id="quadrat_number_start"
-          testId="quadrat_number_start"
+          testId="quadrat-number-start"
           type="number"
           step="any"
           ignoreNonObservationFieldValidations={() => {
@@ -355,7 +355,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           label="Quadrat Size"
           required={true}
           id="quadrat_size"
-          testId="quadrat_size"
+          testId="quadrat-size"
           type="number"
           unit="m²"
           step="any"
@@ -375,7 +375,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           label="Number of Quadrats"
           required={true}
           id="num_quadrats"
-          testId="num_quadrats"
+          testId="num-quadrats"
           type="number"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: NUM_QUADRATS_VALIDATION_PATH })
@@ -393,7 +393,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           label="Number of Points per Quadrat"
           required={true}
           id="num_points_per_quadrat"
-          testId="num_points_per_quadrat"
+          testId="num-points-per-quadrat"
           type="number"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({
@@ -416,7 +416,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           label={t('reef_slope')}
           required={false}
           id="reef_slope"
-          testId="reef_slope"
+          testId="reef-slope"
           options={reefSlopeOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
@@ -495,7 +495,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           label="Relative Depth"
           required={false}
           id="relative_depth"
-          testId="relative_depth"
+          testId="relative-depth"
           options={relativeDepthOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })

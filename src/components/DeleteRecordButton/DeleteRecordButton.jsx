@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal'
 import { DeleteRecordButtonCautionWrapper } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
@@ -18,6 +19,7 @@ const DeleteRecordButton = ({
   onDismiss,
   openModal,
 }) => {
+  const { t } = useTranslation()
   const currentProjectPath = useCurrentProjectPath()
   const gtmId = modalText.title === 'Delete Record' ? 'gtm-delete-record' : 'gtm-delete'
 
@@ -39,8 +41,14 @@ const DeleteRecordButton = ({
 
   const footerContentPageOne = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>{modalText.no}</ButtonSecondary>
-      <ButtonCaution disabled={isLoading} onClick={deleteRecord}>
+      <ButtonSecondary data-testid="delete-record-cancel-button" onClick={onDismiss}>
+        {modalText.no}
+      </ButtonSecondary>
+      <ButtonCaution
+        data-testid="delete-record-confirm-button"
+        disabled={isLoading}
+        onClick={deleteRecord}
+      >
         {modalText.yes}
       </ButtonCaution>
     </RightFooter>
@@ -48,13 +56,13 @@ const DeleteRecordButton = ({
 
   const footerContentPageTwo = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Close</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.close')}</ButtonSecondary>
     </RightFooter>
   )
 
   const mainContent = (
     <>
-      {currentPage === 1 && modalText.prompt}
+      {currentPage === 1 && <div data-testid="delete-record-prompt">{modalText.prompt}</div>}
       {currentPage === 2 && mainContentPageTwo}
     </>
   )
@@ -69,11 +77,17 @@ const DeleteRecordButton = ({
   return (
     <>
       <DeleteRecordButtonCautionWrapper>
-        <ButtonCaution id={gtmId} onClick={openModal} disabled={isNewRecord}>
+        <ButtonCaution
+          id={gtmId}
+          data-testid="delete-record-button"
+          onClick={openModal}
+          disabled={isNewRecord}
+        >
           {modalText.title}
         </ButtonCaution>
       </DeleteRecordButtonCautionWrapper>
       <Modal
+        testId="delete-record-modal"
         title={modalText.title}
         isOpen={isOpen}
         onDismiss={onDismiss}

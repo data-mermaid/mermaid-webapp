@@ -30,8 +30,8 @@ project managements, project sites, and project profiles`, async () => {
     },
   )
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const benthicAttributesBeforeSyncError =
     await dexiePerUserDataInstance.benthic_attributes.toArray()
@@ -148,8 +148,8 @@ project managements, project sites, and project profiles`, async () => {
 
   await user.click(sitesSideNavLink)
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const benthicAttributesAfterSyncError =
     await dexiePerUserDataInstance.benthic_attributes.toArray()

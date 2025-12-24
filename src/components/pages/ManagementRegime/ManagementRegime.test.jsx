@@ -33,7 +33,7 @@ test('Edit Management Regime - shows name and rules required', async () => {
   )
 
   // check that name and rules validations appear
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const nameInput = screen.getByTestId('name-input')
   const secondaryNameInput = screen.getByTestId('secondary-name-input')
 
@@ -87,7 +87,7 @@ test('Management Regime component renders with the expected UI elements', async 
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   expect(
     screen.getByText('Management Regimes B', {
@@ -124,7 +124,7 @@ test('Management Regime component - form inputs are initialized with the correct
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   expect(screen.getByTestId('name-input')).toHaveValue('Management Regimes B')
   expect(screen.getByTestId('secondary-name-input')).toHaveValue('Management Regimes 2')

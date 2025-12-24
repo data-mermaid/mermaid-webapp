@@ -271,28 +271,22 @@ test('Benthic PIT validation: user can dismiss non-observations input warnings '
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
   const depthRow = screen.getByTestId('depth')
-  const sampleDateRow = screen.getByTestId('sample_date')
-  const sampleTimeRow = screen.getByTestId('sample_time')
-  const transectNumberRow = screen.getByTestId('transect_number')
+  const sampleDateRow = screen.getByTestId('sample-date')
+  const sampleTimeRow = screen.getByTestId('sample-time')
+  const transectNumberRow = screen.getByTestId('transect-number')
   const labelRow = screen.getByTestId('label')
-  const lengthSurveyedRow = screen.getByTestId('len_surveyed')
-  const intervalSizeRow = screen.getByTestId('interval_size')
-  const intervalStartRow = screen.getByTestId('interval_start')
-  const reefSlopeRow = screen.getByTestId('reef_slope')
-  const relativeDepthRow = screen.getByTestId('relative_depth')
+  const lengthSurveyedRow = screen.getByTestId('len-surveyed')
+  const intervalSizeRow = screen.getByTestId('interval-size')
+  const intervalStartRow = screen.getByTestId('interval-start')
+  const reefSlopeRow = screen.getByTestId('reef-slope')
+  const relativeDepthRow = screen.getByTestId('relative-depth')
   const visibilityRow = screen.getByTestId('visibility')
   const currentRow = screen.getByTestId('current')
   const tideRow = screen.getByTestId('tide')
@@ -343,7 +337,7 @@ test('Benthic PIT validation: user can dismiss non-observations input warnings '
   expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
-  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterIgnore)
   await user.click(within(managementRow).getByRole('checkbox', { name: 'Ignore warning' }))
@@ -536,15 +530,9 @@ test('Benthic PIT validation: user can dismiss record-level warnings ', async ()
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
@@ -567,7 +555,7 @@ test('Benthic PIT validation: user can dismiss record-level warnings ', async ()
     expect(within(recordLevelValidationsSection).queryByText('ignored')).not.toBeInTheDocument(),
   )
 
-  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterIgnore)
 }, 50000)
@@ -654,15 +642,9 @@ test('Benthic PIT validation: user can dismiss observation warnings ', async () 
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const observationsTable = screen.getByLabelText('Observations')
 
@@ -679,7 +661,7 @@ test('Benthic PIT validation: user can dismiss observation warnings ', async () 
   expect(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' })).toBeChecked()
   expect(within(observationsTable).getByText('Ignored'))
 
-  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterIgnore)
 }, 60000)
@@ -939,28 +921,22 @@ test('Benthic PIT validation: user can reset dismissed non-observation input war
     dexiePerUserDataInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
   const depthRow = screen.getByTestId('depth')
-  const sampleDateRow = screen.getByTestId('sample_date')
-  const sampleTimeRow = screen.getByTestId('sample_time')
-  const transectNumberRow = screen.getByTestId('transect_number')
+  const sampleDateRow = screen.getByTestId('sample-date')
+  const sampleTimeRow = screen.getByTestId('sample-time')
+  const transectNumberRow = screen.getByTestId('transect-number')
   const labelRow = screen.getByTestId('label')
-  const lengthSurveyedRow = screen.getByTestId('len_surveyed')
-  const intervalSizeRow = screen.getByTestId('interval_size')
-  const intervalStartRow = screen.getByTestId('interval_start')
-  const reefSlopeRow = screen.getByTestId('reef_slope')
-  const relativeDepthRow = screen.getByTestId('relative_depth')
+  const lengthSurveyedRow = screen.getByTestId('len-surveyed')
+  const intervalSizeRow = screen.getByTestId('interval-size')
+  const intervalStartRow = screen.getByTestId('interval-start')
+  const reefSlopeRow = screen.getByTestId('reef-slope')
+  const relativeDepthRow = screen.getByTestId('relative-depth')
   const visibilityRow = screen.getByTestId('visibility')
   const currentRow = screen.getByTestId('current')
   const tideRow = screen.getByTestId('tide')
@@ -1008,7 +984,7 @@ test('Benthic PIT validation: user can reset dismissed non-observation input war
     }),
   )
 
-  const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 

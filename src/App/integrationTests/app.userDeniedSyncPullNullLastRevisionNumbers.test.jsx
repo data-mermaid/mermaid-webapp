@@ -184,8 +184,8 @@ and project profiles to ensure the user can pull fresh data if they are given pe
 
   await user.click(linkToCollectingPageForProjectWithId1)
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const lastRevisionProject1BenthicAttributesAfterSyncError =
     await dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled

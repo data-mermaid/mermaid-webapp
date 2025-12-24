@@ -45,7 +45,7 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
 
   await user.click(offlineToggleSwitchTestIdAfterFirstClick)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   expect(await screen.findByTestId('status-online')).toBeInTheDocument()
 

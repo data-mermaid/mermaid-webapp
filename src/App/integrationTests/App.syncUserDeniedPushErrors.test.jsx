@@ -32,8 +32,8 @@ test('User being denied push sync shows toasts on project-related page', async (
     dexieCurrentUserInstance,
   })
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const project5ToastContent = await screen.findByTestId('sync-error-for-project-5')
   const project500ToastContent = screen.queryByTestId('sync-error-for-project-500')
@@ -94,8 +94,8 @@ test('User being denied push sync toast doesnt show duplicate unsaved data types
     initialEntries: ['/projects/5/collecting'],
   })
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const project5ToastContent = await screen.findByTestId('sync-error-for-project-5')
 

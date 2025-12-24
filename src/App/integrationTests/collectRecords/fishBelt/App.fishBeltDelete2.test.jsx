@@ -4,7 +4,6 @@ import React from 'react'
 import {
   screen,
   renderAuthenticatedOffline,
-  within,
   waitFor,
   waitForElementToBeRemoved,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
@@ -28,30 +27,22 @@ describe('Offline', () => {
       },
     )
 
-    await screen.findByLabelText('project pages loading indicator')
-    await waitForElementToBeRemoved(() =>
-      screen.queryByLabelText('project pages loading indicator'),
-    )
+    await screen.findByTestId('loading-indicator')
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
     // make an unsaved change
 
     await user.clear(screen.getByTestId('depth-input'))
     await user.type(screen.getByTestId('depth-input'), '45')
 
-    await user.click(screen.getByText('Delete Record'))
+    await user.click(screen.getByTestId('delete-record-button'))
 
-    expect(screen.getByText('Are you sure you want to delete this record?'))
+    expect(screen.getByTestId('delete-record-prompt'))
 
-    const modal = screen.getByLabelText('Delete Record')
+    expect(screen.getByTestId('delete-record-modal'))
 
-    await user.click(
-      within(modal).getByText('Cancel', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('delete-record-cancel-button'))
 
-    expect(
-      screen.queryByText('Are you sure you want to delete this record?'),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByTestId('delete-record-prompt')).not.toBeInTheDocument()
 
     await waitFor(async () => expect(screen.getByTestId('depth-input')).toHaveValue(45))
   })
