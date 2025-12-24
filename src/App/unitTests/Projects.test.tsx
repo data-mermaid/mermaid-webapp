@@ -32,7 +32,7 @@ describe('Projects dashboard', () => {
     expect(projectListItems).toHaveLength(6)
 
     // expect filter bar, sort buttons, new project button
-    const newProjectButton = screen.getByTestId('new-project-button')
+    const newProjectButton = screen.getByTestId('new-project-button-dropdown')
 
     expect(newProjectButton).toBeInTheDocument()
 
@@ -117,7 +117,7 @@ describe('Projects dashboard', () => {
 
     expect(offlineCheckbox)
 
-    expect(within(projectCard).getByText('Thu Jan 21 2021 08:00:00'))
+    expect(within(projectCard).getByText('Thu Jan 21 2021 00:00:00'))
   })
 
   test('A project card renders appropriately when offline', async () => {
@@ -259,7 +259,7 @@ describe('Projects dashboard', () => {
     const topProjectCard = screen.getAllByRole('listitem')[0]
 
     expect(within(topProjectCard).getByText('Project II'))
-    expect(within(topProjectCard).getByText('Thu Jan 21 2021 08:00:00'))
+    expect(within(topProjectCard).getByText('Thu Jan 21 2021 00:00:00'))
   })
 
   test('Project filter filters by name and country', async () => {

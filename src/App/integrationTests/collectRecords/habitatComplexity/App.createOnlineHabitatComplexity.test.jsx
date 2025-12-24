@@ -138,7 +138,7 @@ describe('Online', () => {
 
     // ensure the were not in edit mode, but new fish belt mode
     expect(
-      screen.getByText('Habitat complexity', {
+      screen.getByText('Habitat Complexity', {
         selector: 'h2',
       }),
     )
