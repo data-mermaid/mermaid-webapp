@@ -145,7 +145,7 @@ const LoadingIndicator = ({
     }
   })
 
-  const shouldDisplaySecondary = displaySecondary && t('still_working') && isDisplaySecondaryTime
+  const shouldDisplaySecondary = displaySecondary && isDisplaySecondaryTime
 
   return (
     <LoadingIndicatorContainer
