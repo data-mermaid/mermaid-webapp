@@ -74,7 +74,6 @@
     "test": "TZ=UTC jest --setupFilesAfterEnv=./src/setupTests.js",
     "prettier": "prettier --write ./src",
     "lint": "tsc && eslint './src/**/*'",
-    "storybook": "storybook dev -p 6006",
     "prepare": "husky",
     "preview": "vite preview"
   },

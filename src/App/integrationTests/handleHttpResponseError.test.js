@@ -1,6 +1,9 @@
 import { toast, Slide } from 'react-toastify'
 import handleHttpResponseError from '../../library/handleHttpResponseError'
 describe('handleHttpResponseError', () => {
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
   test('handleHttpResponseError produces the appropriate toast message if the status is 401', () => {
     const callback = jest.fn()
     const logoutMermaid = jest.fn()

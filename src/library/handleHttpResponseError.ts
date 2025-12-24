@@ -5,7 +5,7 @@ import { AxiosError } from 'axios'
 
 interface HandleHttpResponseErrorProps {
   error: Partial<AxiosError>
-  callback: () => unknown
+  callback?: () => unknown
   logoutMermaid?: () => void
   shouldShowServerNonResponseMessage?: boolean
   setServerNotReachable?: () => void
