@@ -1,3 +1,3 @@
-import ProjectToolBarSection from './ProjectToolBarSection.tsx'
+import ProjectToolBarSection from './ProjectToolBarSection'
 
 export default ProjectToolBarSection

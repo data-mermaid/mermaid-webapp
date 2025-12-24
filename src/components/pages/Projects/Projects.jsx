@@ -173,7 +173,6 @@ const Projects = () => {
     <HomePageLayout
       topRow={
         <ProjectToolBarSection
-          projectFilter={projectFilter}
           setProjectFilter={setProjectFilter}
           projectSortKey={projectSortKey}
           setProjectSortKey={setProjectSortKey}

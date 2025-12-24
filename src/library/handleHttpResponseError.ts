@@ -3,14 +3,6 @@ import { getToastArguments } from './getToastArguments'
 import i18n from '../../i18n'
 import { AxiosError } from 'axios'
 
-export interface ApiError extends Error {
-  request?: string
-  response?: {
-    status?: number
-    data?: Record<string, unknown>
-  }
-}
-
 interface HandleHttpResponseErrorProps {
   error: Partial<AxiosError>
   callback: () => unknown
@@ -36,7 +28,7 @@ const handleHttpResponseError = ({
       toast.error(...getToastArguments(i18n.t('api_errors.no_server_response')))
     }
 
-    setServerNotReachable()
+    setServerNotReachable?.()
     callback?.()
 
     return

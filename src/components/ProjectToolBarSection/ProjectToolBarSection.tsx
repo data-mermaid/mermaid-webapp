@@ -85,18 +85,16 @@ const BiggerIconGlobe = styled(IconGlobe)`
   height: ${theme.typography.mediumIconSize};
 `
 interface ProjectToolBarSectionProps {
-  projectFilter: string
   setProjectFilter: (filter: string) => void
   projectSortKey: string
   setProjectSortKey: (sortKey: string) => void
   setIsProjectSortAsc: (val: boolean) => void
-  addProjectToProjectsPage: () => void
+  addProjectToProjectsPage: (project: object) => void
   handleExploreButtonClick: () => void
   userHasDemoProject: boolean
 }
 
 const ProjectToolBarSection = ({
-  projectFilter,
   setProjectFilter,
   projectSortKey,
   setProjectSortKey,
@@ -174,9 +172,14 @@ const ProjectToolBarSection = ({
         </OfflineHide>
       </RowWrapper>
       <FilterRowWrapper>
-        <FilterLabelWrapper htmlFor="filter_projects" onChange={setFilter}>
+        <FilterLabelWrapper htmlFor="filter_projects">
           {t('filters.projects_by_name_year')}
-          <Input type="text" id="filter_projects" data-testid="filter-projects" />
+          <Input
+            type="text"
+            id="filter_projects"
+            data-testid="filter-projects"
+            onChange={setFilter}
+          />
         </FilterLabelWrapper>
         <SortByLabelWrapper htmlFor="sort_by">
           {t('projects.sort_by')}

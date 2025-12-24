@@ -14,7 +14,6 @@ describe('ProjectToolBarSection', () => {
 
       renderAuthenticatedOnline(
         <ProjectToolBarSection
-          projectFilter=""
           setProjectFilter={jest.fn()}
           projectSortKey=""
           setProjectSortKey={jest.fn()}
@@ -31,9 +30,9 @@ describe('ProjectToolBarSection', () => {
 
       const dropdownButton = screen.getByTestId('dropdown-icon-button')
       expect(dropdownButton).toBeInTheDocument()
-      userEvent.click(dropdownButton)
+      await userEvent.click(dropdownButton)
 
-      const addDemoButton = await screen.getByTestId('add-demo-project-button')
+      const addDemoButton = screen.getByTestId('add-demo-project-button')
       expect(addDemoButton).toBeInTheDocument()
 
       // todo: mock out handling XMLHTTPRequest
@@ -54,7 +53,6 @@ describe('ProjectToolBarSection', () => {
 
       renderAuthenticatedOnline(
         <ProjectToolBarSection
-          projectFilter=""
           setProjectFilter={jest.fn()}
           projectSortKey=""
           setProjectSortKey={jest.fn()}

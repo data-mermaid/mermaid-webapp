@@ -44,7 +44,7 @@ const CalloutButtonDropdown = ({
   }
 
   const handleResponseError = (error: AxiosError) => {
-    const isDuplicateError = error.response.status === 400
+    const isDuplicateError = error.response?.status === 400
     setIsLoading(false)
 
     handleHttpResponseError({
@@ -71,7 +71,7 @@ const CalloutButtonDropdown = ({
   }
 
   return (
-    <ClickAwayListener onClickAway={toggleMenu}>
+    <ClickAwayListener onClickAway={isDropdownOpen ? () => setIsDropdownOpen(false) : () => {}}>
       <div style={{ position: 'relative' }}>
         {isLoading && <LoadingModal />}
         <Button
