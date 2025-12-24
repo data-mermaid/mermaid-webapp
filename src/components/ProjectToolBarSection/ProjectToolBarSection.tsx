@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import theme from '../../theme'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
@@ -14,7 +13,8 @@ import ProjectModal from '../ProjectCard/ProjectModal'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { IconGlobe } from '../icons'
 import { useTranslation } from 'react-i18next'
-import CalloutButtonDropdown from '../generic/CalloutButton/CalloutButtonDropdown.tsx'
+import CalloutButtonDropdown from '../generic/CalloutButton/CalloutButtonDropdown'
+import CalloutButton from '../generic/CalloutButton/CalloutButton'
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -84,6 +84,16 @@ const BiggerIconGlobe = styled(IconGlobe)`
   width: ${theme.typography.mediumIconSize};
   height: ${theme.typography.mediumIconSize};
 `
+interface ProjectToolBarSectionProps {
+  projectFilter: string
+  setProjectFilter: (filter: string) => void
+  projectSortKey: string
+  setProjectSortKey: (sortKey: string) => void
+  setIsProjectSortAsc: (val: boolean) => void
+  addProjectToProjectsPage: () => void
+  handleExploreButtonClick: () => void
+  userHasDemoProject: boolean
+}
 
 const ProjectToolBarSection = ({
   projectFilter,
@@ -93,7 +103,8 @@ const ProjectToolBarSection = ({
   setIsProjectSortAsc,
   addProjectToProjectsPage,
   handleExploreButtonClick,
-}) => {
+  userHasDemoProject,
+}: ProjectToolBarSectionProps) => {
   const { isAppOnline } = useOnlineStatus()
   const { t } = useTranslation()
 
@@ -134,13 +145,24 @@ const ProjectToolBarSection = ({
           )}
         </HeaderStyle>
         <OfflineHide>
-          <CalloutButtonDropdown
-            onClick={() => setIsNewProjectModalOpen(true)}
-            aria-label={t('projects.new_project')}
-            disabled={!isAppOnline}
-            testId="new-project-button"
-            label={t('projects.new_project')}
-          />
+          {userHasDemoProject ? (
+            <CalloutButton
+              onClick={() => setIsNewProjectModalOpen(true)}
+              aria-label={t('projects.new_project')}
+              disabled={!isAppOnline}
+              testId="new-project-button"
+              label={t('projects.new_project')}
+            />
+          ) : (
+            <CalloutButtonDropdown
+              onClick={() => setIsNewProjectModalOpen(true)}
+              aria-label={t('projects.new_project')}
+              disabled={!isAppOnline}
+              testId="new-project-button"
+              label={t('projects.new_project')}
+            />
+          )}
+
           {isNewProjectModalOpen && (
             <ProjectModal
               isOpen={isNewProjectModalOpen}
@@ -170,13 +192,3 @@ const ProjectToolBarSection = ({
 }
 
 export default ProjectToolBarSection
-
-ProjectToolBarSection.propTypes = {
-  projectFilter: PropTypes.string.isRequired,
-  setProjectFilter: PropTypes.func.isRequired,
-  projectSortKey: PropTypes.string.isRequired,
-  setProjectSortKey: PropTypes.func.isRequired,
-  setIsProjectSortAsc: PropTypes.func.isRequired,
-  addProjectToProjectsPage: PropTypes.func.isRequired,
-  handleExploreButtonClick: PropTypes.func.isRequired,
-}

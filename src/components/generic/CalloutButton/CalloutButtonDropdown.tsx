@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, IconButton } from '@mui/material'
+import { Button, ClickAwayListener, IconButton } from '@mui/material'
 import styles from './CalloutButton.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
@@ -11,6 +11,7 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import handleHttpResponseError from '../../../library/handleHttpResponseError'
+import { AxiosError } from 'axios'
 
 interface CalloutButtonDropdownProps {
   onClick: () => void
@@ -35,13 +36,14 @@ const CalloutButtonDropdown = ({
   const { refreshCurrentUser } = useCurrentUser()
 
   const handleSuccessResponse = (response, languageSuccessMessage) => {
-    refreshCurrentUser() // this ensures the user has the right privileges to the newly created project
+    setIsDropdownOpen(false)
+    refreshCurrentUser() // ensures correct user privileges
     toast.success(...getToastArguments(languageSuccessMessage))
     setIsLoading(false)
     navigate(`/projects/${response.id}/sites`)
   }
 
-  const handleResponseError = (error) => {
+  const handleResponseError = (error: AxiosError) => {
     const isDuplicateError = error.response.status === 400
     setIsLoading(false)
 
@@ -69,37 +71,37 @@ const CalloutButtonDropdown = ({
   }
 
   return (
-    <div style={{ position: 'relative' }}>
-      {isLoading && <LoadingModal />}
-      <Button
-        variant="outlined"
-        onClick={onClick}
-        disabled={disabled}
-        data-testid={testId}
-        classes={{
-          root: styles['button-root__callout'],
-        }}
-      >
-        {label}
-      </Button>
-      <IconButton
-        classes={{
-          root: styles['button-root__callout'],
-        }}
-        onClick={toggleMenu}
-      >
-        <FontAwesomeIcon
-          icon={faCaretDown}
-          style={{
-            transform: `rotate(${isDropdownOpen ? '180deg' : '0'})`,
+    <ClickAwayListener onClickAway={toggleMenu}>
+      <div style={{ position: 'relative' }}>
+        {isLoading && <LoadingModal />}
+        <Button
+          variant="outlined"
+          onClick={onClick}
+          disabled={disabled}
+          data-testid={testId}
+          classes={{
+            root: styles['button-root__callout'],
           }}
-        />
-      </IconButton>
-      <ul
-        style={{ display: isDropdownOpen ? 'block' : 'none' }}
-        className={styles['callout-button-dropdown__list']}
-      >
-        <li>
+        >
+          {label}
+        </Button>
+        <IconButton
+          classes={{
+            root: styles['button-root__callout'],
+          }}
+          onClick={toggleMenu}
+        >
+          <FontAwesomeIcon
+            icon={faCaretDown}
+            style={{
+              transform: `rotate(${isDropdownOpen ? '180deg' : '0'})`,
+            }}
+          />
+        </IconButton>
+        <div
+          style={{ display: isDropdownOpen ? 'block' : 'none' }}
+          className={styles['callout-button-dropdown__list']}
+        >
           <Button
             onClick={createDemoProject}
             classes={{
@@ -108,9 +110,9 @@ const CalloutButtonDropdown = ({
           >
             {t('projects.buttons.add_demo')}
           </Button>
-        </li>
-      </ul>
-    </div>
+        </div>
+      </div>
+    </ClickAwayListener>
   )
 }
 export default CalloutButtonDropdown
