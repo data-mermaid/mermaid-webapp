@@ -177,7 +177,7 @@ const BleachingTransectInputs = ({
         <InputWithLabelAndValidation
           label="Sample Time"
           id="sample_time"
-          testId="sample_time"
+          testId="sample-time"
           type="time"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
@@ -217,7 +217,7 @@ const BleachingTransectInputs = ({
           label="Quadrat Size"
           required={true}
           id="quadrat_size"
-          testId="quadrat_size"
+          testId="quadrat-size"
           type="number"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({
@@ -285,7 +285,7 @@ const BleachingTransectInputs = ({
           label="Relative Depth"
           required={false}
           id="relative_depth"
-          testId="relative_depth"
+          testId="relative-depth"
           options={relativeDepthOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })

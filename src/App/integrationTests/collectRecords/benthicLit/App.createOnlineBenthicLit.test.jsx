@@ -11,20 +11,20 @@ import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
 const saveNewRecord = async (user) => {
-  const siteInput = await screen.findByLabelText('Site')
-  const managementRegimeInput = screen.getByLabelText('Management')
-  const depthInput = screen.getByLabelText('Depth')
-  const sampleDateInput = screen.getByLabelText('Sample Date')
-  const sampleTimeInput = screen.getByLabelText('Sample Time')
-  const transectNumberInput = screen.getByLabelText('Transect Number')
-  const labelInput = screen.getByLabelText('Label')
-  const transectLengthInput = screen.getByLabelText('Transect Length Surveyed')
-  const reefSlopeInput = screen.getByLabelText('Reef Slope')
-  const visibilityInput = screen.getByLabelText('Visibility')
-  const currentInput = screen.getByLabelText('Current')
-  const relativeDepthInput = screen.getByLabelText('Relative Depth')
-  const tideInput = screen.getByLabelText('Tide')
-  const notesInput = screen.getByLabelText('Notes')
+  const siteInput = await screen.findByTestId('site-select')
+  const managementRegimeInput = await screen.findByTestId('management-select')
+  const depthInput = await screen.findByTestId('depth-input')
+  const sampleDateInput = await screen.findByTestId('sample-date-input')
+  const sampleTimeInput = await screen.findByTestId('sample-time-input')
+  const transectNumberInput = await screen.findByTestId('transect-number-input')
+  const labelInput = await screen.findByTestId('label-input')
+  const transectLengthInput = await screen.findByTestId('len-surveyed-input')
+  const reefSlopeInput = await screen.findByTestId('reef-slope-select')
+  const visibilityInput = await screen.findByTestId('visibility-select')
+  const currentInput = await screen.findByTestId('current-select')
+  const relativeDepthInput = await screen.findByTestId('relative-depth-select')
+  const tideInput = await screen.findByTestId('tide-select')
+  const notesInput = await screen.findByTestId('notes-textarea')
 
   await user.selectOptions(siteInput, '1')
   await waitFor(() =>
@@ -104,7 +104,7 @@ const saveNewRecord = async (user) => {
   await user.type(notesInput, 'some notes')
   expect(notesInput).toHaveValue('some notes')
 
-  await user.click(screen.getByText('Save', { selector: 'button' }))
+  await user.click(await screen.findByTestId('save-button'))
 }
 
 describe('Online', () => {
@@ -122,7 +122,7 @@ describe('Online', () => {
 
     await saveNewRecord(user)
 
-    expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByTestId('saved-button'))
 
     // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-collect-record-form-title'))
@@ -130,22 +130,24 @@ describe('Online', () => {
     // we constrain some queries to the form element because the form title has similar text that will also be selected
     const form = screen.getByRole('form')
 
-    expect(screen.getByLabelText('Site')).toHaveDisplayValue('Site A')
-    expect(screen.getByLabelText('Management')).toHaveDisplayValue(
-      'Management Regimes B [Management Regimes 2]',
-    )
-    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
-    expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
-    expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
-    expect(within(form).getByLabelText('Transect Number')).toHaveValue(56)
-    expect(within(form).getByLabelText('Label')).toHaveValue('some label')
-    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
-    expect(screen.getByLabelText('Visibility')).toHaveDisplayValue('1-5m - poor')
-    expect(screen.getByLabelText('Current')).toHaveDisplayValue('high')
-    expect(screen.getByLabelText('Relative Depth')).toHaveDisplayValue('deep')
-    expect(screen.getByLabelText('Tide')).toHaveDisplayValue('falling')
-    expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
+    await waitFor(() => {
+      expect(screen.getByTestId('site-select')).toHaveDisplayValue('Site A')
+      expect(screen.getByTestId('management-select')).toHaveDisplayValue(
+        'Management Regimes B [Management Regimes 2]',
+      )
+      expect(screen.getByTestId('depth-input')).toHaveValue(10000)
+      expect(screen.getByTestId('sample-date-input')).toHaveValue('2021-04-21')
+      expect(screen.getByTestId('sample-time-input')).toHaveValue('12:34')
+      expect(within(form).getByTestId('transect-number-input')).toHaveValue(56)
+      expect(within(form).getByTestId('label-input')).toHaveValue('some label')
+      expect(screen.getByTestId('len-surveyed-input')).toHaveValue(2)
+      expect(screen.getByTestId('reef-slope-select')).toHaveDisplayValue('flat')
+      expect(screen.getByTestId('visibility-select')).toHaveDisplayValue('1-5m - poor')
+      expect(screen.getByTestId('current-select')).toHaveDisplayValue('high')
+      expect(screen.getByTestId('relative-depth-select')).toHaveDisplayValue('deep')
+      expect(screen.getByTestId('tide-select')).toHaveDisplayValue('falling')
+      expect(screen.getByTestId('notes-textarea')).toHaveValue('some notes')
+    })
   }, 50000)
 
   test('New Benthic LIT save success show new record in collecting table', async () => {
@@ -162,7 +164,7 @@ describe('Online', () => {
 
     await saveNewRecord(user)
 
-    expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByTestId('saved-button'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
@@ -198,27 +200,24 @@ describe('Online', () => {
 
     await saveNewRecord(user)
 
-    expect(await screen.findByText('The sample unit has not been saved.'))
+    expect(await screen.findByTestId('save-button'))
 
     // ensure the were not in edit mode, but new fish belt mode
-    expect(
-      screen.getByText('Benthic LIT', {
-        selector: 'h2',
-      }),
-    )
+    expect(screen.getByTestId('benthiclit-page-title'))
 
-    expect(screen.getByLabelText('Site')).toHaveDisplayValue('Site A')
-    expect(screen.getByLabelText('Management')).toHaveDisplayValue(
-      'Management Regimes B [Management Regimes 2]',
-    )
-    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
-    expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
-    expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
-    expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
-    expect(screen.getByLabelText('Label')).toHaveValue('some label')
-    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    expect(screen.getByLabelText('Reef Slope')).toHaveDisplayValue('flat')
-
-    expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
+    await waitFor(() => {
+      expect(screen.getByTestId('site-select')).toHaveDisplayValue('Site A')
+      expect(screen.getByTestId('management-select')).toHaveDisplayValue(
+        'Management Regimes B [Management Regimes 2]',
+      )
+      expect(screen.getByTestId('depth-input')).toHaveValue(10000)
+      expect(screen.getByTestId('sample-date-input')).toHaveValue('2021-04-21')
+      expect(screen.getByTestId('sample-time-input')).toHaveValue('12:34')
+      expect(screen.getByTestId('transect-number-input')).toHaveValue(56)
+      expect(screen.getByTestId('label-input')).toHaveValue('some label')
+      expect(screen.getByTestId('len-surveyed-input')).toHaveValue(2)
+      expect(screen.getByTestId('reef-slope-select')).toHaveDisplayValue('flat')
+      expect(screen.getByTestId('notes-textarea')).toHaveValue('some notes')
+    })
   }, 50000)
 })

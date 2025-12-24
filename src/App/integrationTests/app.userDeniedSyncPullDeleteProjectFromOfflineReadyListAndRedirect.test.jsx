@@ -31,8 +31,8 @@ a page that informs the user that they dont have permisison for a project`, asyn
     },
   )
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const isProject5OfflineReadyBeforePullNested403 =
     !!(await dexiePerUserDataInstance.uiState_offlineReadyProjects.get('5'))

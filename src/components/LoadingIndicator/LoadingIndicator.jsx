@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import language from '../../language'
 import theme from '../../theme'
+import { useTranslation } from 'react-i18next'
 
 const size = '3.5rem'
 const speed = '40s'
@@ -128,12 +128,11 @@ const LoadingIndicatorContainer = styled.div`
 `
 
 const LoadingIndicator = ({
-  primaryMessage = language.loadingIndicator.loadingPrimary,
-  secondaryMessage = language.loadingIndicator.loadingSecondary,
   displaySecondary = true,
   displaySecondaryTimingSeconds = 10,
   ...props
 }) => {
+  const { t } = useTranslation()
   const [isDisplaySecondaryTime, setIsDisplaySecondaryTime] = useState(false)
 
   useEffect(() => {
@@ -146,10 +145,14 @@ const LoadingIndicator = ({
     }
   })
 
-  const isDisplaySecondary = displaySecondary && secondaryMessage && isDisplaySecondaryTime
+  const shouldDisplaySecondary = displaySecondary && isDisplaySecondaryTime
 
   return (
-    <LoadingIndicatorContainer data-testid="loading-indicator" {...props}>
+    <LoadingIndicatorContainer
+      aria-label={t('loading_indicator')}
+      data-testid="loading-indicator"
+      {...props}
+    >
       <div className="loadingWrapper">
         <div className="objectWrapper">
           <div className="triangle">&nbsp;</div>
@@ -159,16 +162,14 @@ const LoadingIndicator = ({
           <div className="plus">&nbsp;</div>
           <div className="x">&nbsp;</div>
         </div>
-        <p className="loadingPrimary">{primaryMessage}</p>
-        {isDisplaySecondary && <p className="loadingSecondary">{secondaryMessage}</p>}
+        <p className="loadingPrimary">{t('loading')}</p>
+        {shouldDisplaySecondary && <p className="loadingSecondary">{t('still_working')}</p>}
       </div>
     </LoadingIndicatorContainer>
   )
 }
 
 LoadingIndicator.propTypes = {
-  primaryMessage: PropTypes.string,
-  secondaryMessage: PropTypes.string,
   displaySecondary: PropTypes.bool,
   displaySecondaryTimingSeconds: PropTypes.number,
 }

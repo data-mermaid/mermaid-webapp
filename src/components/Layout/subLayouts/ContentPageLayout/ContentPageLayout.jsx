@@ -90,7 +90,7 @@ const ContentPageLayout = ({
               <ErrorBoundary>
                 <ContentWrapper>
                   {isPageContentLoading || isSyncInProgress ? (
-                    <LoadingIndicator aria-label="project pages loading indicator" />
+                    <LoadingIndicator />
                   ) : (
                     <>
                       {toolbar && (

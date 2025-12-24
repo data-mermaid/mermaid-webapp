@@ -50,15 +50,7 @@ const error = {
     'MERMAID did not load correctly. Try logging out and then logging back in.',
   collectRecordSupportingDataUnavailable:
     'Supporting data for creating a sample unit is currently unavailable.',
-  collectRecordDelete: 'The sample unit has not been deleted.',
-  collectRecordValidation: 'Validation is currently unavailable for this record.',
-  collectRecordValidationIgnore: 'This validation cannot be ignored.',
-  collectRecordValidationReset: 'This validation cannot be reset.',
-  collectRecordSave: 'The sample unit has not been saved.',
-  collectRecordSubmit: 'The sample unit has not been submitted.',
-  collectRecordsUnavailable: 'Sample unit data are currently unavailable.',
   collectRecordUnavailable: 'Sample unit data are currently unavailable.',
-  collectRecordSubmitDisabled: 'Errors or warnings are preventing you from submitting',
   formValidation: {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
@@ -130,10 +122,6 @@ const error = {
 }
 
 const success = {
-  collectRecordSave: 'Record saved.',
-  collectRecordSubmit: 'Record submitted.',
-  collectRecordValidated: 'Record successfully validated.',
-  collectRecordDelete: 'Record deleted.',
   getProjectTurnOnOfflineReadySuccess: (projectName) => `${projectName} is now offline ready`,
   getProjectTurnOffOfflineReadySuccess: (projectName) =>
     `${projectName} has been removed from being offline ready`,
@@ -474,8 +462,6 @@ const helperText = {
       </HelperTextLink>
     </>
   ),
-  management:
-    'The management designation at the time of survey, e.g., no-take zone, partial restrictions, or open access.',
   name: 'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
   notes: '',
   number:
@@ -523,10 +509,8 @@ const helperText = {
       surveyed, regardless of numerical depth in meters.
     </>
   ),
-  sampleDate: 'Date when data was collected',
   sampleTime: 'Time when data was collected',
   secondaryName: 'Optional secondary name, e.g., Nusa Penida Fisheries Zone',
-  site: 'A unique name of a site where data was collected.',
   siteName:
     'Name or ID used to refer to this site. A name can be any label useful to the project; often, projects will use a systematic naming scheme that includes indication of reef zone/type and a numbering system. Using the same name consistently across projects and years will facilitate temporal analyses.',
   getTide: () => (

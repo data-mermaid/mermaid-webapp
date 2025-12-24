@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
-import language from '../../../../language'
+import { useTranslation } from 'react-i18next'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
@@ -20,6 +20,9 @@ const useCollectRecordValidation = ({
   setIsSubmitWarningVisible,
 }) => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const { t } = useTranslation()
+  const validationIgnoreText = t('sample_units.errors.validation_ignore')
+  const validationResetText = t('sample_units.errors.validation_reset')
   const getValidationButtonStatus = useCallback((collectRecord) => {
     return collectRecord?.validations?.status === 'ok'
       ? buttonGroupStates.validated
@@ -55,7 +58,7 @@ const useCollectRecordValidation = ({
         setIsSubmitWarningVisible(isErrorOrWarning)
 
         if (validatedRecordResponse.validations.status === 'ok') {
-          toast.success(...getToastArguments(language.success.collectRecordValidated))
+          toast.success(...getToastArguments(t('sample_units.success.record_validated')))
         }
       })
       .catch((error) => {
@@ -63,7 +66,7 @@ const useCollectRecordValidation = ({
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.collectRecordValidation))
+            toast.error(...getToastArguments(t('sample_units.errors.validation_unavailable')))
           },
         })
       })
@@ -103,7 +106,7 @@ const useCollectRecordValidation = ({
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+              toast.error(...getToastArguments(validationIgnoreText))
             },
           })
         })
@@ -114,6 +117,7 @@ const useCollectRecordValidation = ({
       handleCollectRecordChange,
       handleHttpResponseError,
       setIsFormDirty,
+      validationIgnoreText,
     ],
   )
 
@@ -133,7 +137,7 @@ const useCollectRecordValidation = ({
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+                toast.error(...getToastArguments(validationIgnoreText))
               },
             })
           })
@@ -145,6 +149,7 @@ const useCollectRecordValidation = ({
       handleCollectRecordChange,
       handleHttpResponseError,
       setIsFormDirty,
+      validationIgnoreText,
     ],
   )
 
@@ -162,7 +167,7 @@ const useCollectRecordValidation = ({
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+                toast.error(...getToastArguments(validationResetText))
               },
             })
           })
@@ -174,6 +179,7 @@ const useCollectRecordValidation = ({
       handleCollectRecordChange,
       handleHttpResponseError,
       setIsFormDirty,
+      validationResetText,
     ],
   )
 
@@ -192,7 +198,7 @@ const useCollectRecordValidation = ({
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+              toast.error(...getToastArguments(validationResetText))
             },
           })
         })
@@ -203,6 +209,7 @@ const useCollectRecordValidation = ({
       handleCollectRecordChange,
       handleHttpResponseError,
       setIsFormDirty,
+      validationResetText,
     ],
   )
 
@@ -222,7 +229,7 @@ const useCollectRecordValidation = ({
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+                toast.error(...getToastArguments(validationResetText))
               },
             })
           })
@@ -234,6 +241,7 @@ const useCollectRecordValidation = ({
       handleCollectRecordChange,
       handleHttpResponseError,
       setIsFormDirty,
+      validationResetText,
     ],
   )
 
@@ -252,7 +260,7 @@ const useCollectRecordValidation = ({
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+              toast.error(...getToastArguments(validationIgnoreText))
             },
           })
         })
@@ -263,6 +271,7 @@ const useCollectRecordValidation = ({
       handleCollectRecordChange,
       handleHttpResponseError,
       setIsFormDirty,
+      validationIgnoreText,
     ],
   )
 

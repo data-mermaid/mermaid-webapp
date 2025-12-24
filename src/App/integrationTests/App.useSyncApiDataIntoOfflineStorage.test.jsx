@@ -103,8 +103,8 @@ test('Sync: initial page load on project page', async () => {
     initialEntries: ['/projects/5/collecting/fishbelt/'],
   })
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(
     mockMermaidData.benthic_attributes.length,

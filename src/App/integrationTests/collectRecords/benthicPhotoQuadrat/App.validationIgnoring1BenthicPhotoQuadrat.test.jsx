@@ -295,35 +295,29 @@ test('Benthic Photo Quadrat validation: user can dismiss non-observations input 
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const currentRow = screen.getByTestId('current')
   const depthRow = screen.getByTestId('depth')
   const labelRow = screen.getByTestId('label')
-  const lengthSurveyedRow = screen.getByTestId('len_surveyed')
+  const lengthSurveyedRow = screen.getByTestId('len-surveyed')
   const managementRow = screen.getByTestId('management')
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
-  const relativeDepthRow = screen.getByTestId('relative_depth')
-  const sampleDateRow = screen.getByTestId('sample_date')
-  const sampleTimeRow = screen.getByTestId('sample_time')
+  const relativeDepthRow = screen.getByTestId('relative-depth')
+  const sampleDateRow = screen.getByTestId('sample-date')
+  const sampleTimeRow = screen.getByTestId('sample-time')
   const siteRow = screen.getByTestId('site')
   const tideRow = screen.getByTestId('tide')
-  const transectNumberRow = screen.getByTestId('transect_number')
+  const transectNumberRow = screen.getByTestId('transect-number')
   const visibilityRow = screen.getByTestId('visibility')
-  const quadratNumberStartRow = screen.getByTestId('quadrat_number_start')
-  const quadratSizeRow = screen.getByTestId('quadrat_size')
-  const numberOfQuadratsRow = screen.getByTestId('num_quadrats')
-  const numberOfPointsPerQuadratRow = screen.getByTestId('num_points_per_quadrat')
-  const reefSlopeRow = screen.getByTestId('reef_slope')
+  const quadratNumberStartRow = screen.getByTestId('quadrat-number-start')
+  const quadratSizeRow = screen.getByTestId('quadrat-size')
+  const numberOfQuadratsRow = screen.getByTestId('num-quadrats')
+  const numberOfPointsPerQuadratRow = screen.getByTestId('num-points-per-quadrat')
+  const reefSlopeRow = screen.getByTestId('reef-slope')
 
   expect(within(siteRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(siteRow).getByText('secondWarning')).toBeInTheDocument()
@@ -373,7 +367,7 @@ test('Benthic Photo Quadrat validation: user can dismiss non-observations input 
   expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
-  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterIgnore)
   await user.click(within(managementRow).getByRole('checkbox', { name: 'Ignore warning' }))
@@ -585,15 +579,9 @@ test('Benthic Photo Quadrat validation: user can dismiss record-level warnings '
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
@@ -616,7 +604,7 @@ test('Benthic Photo Quadrat validation: user can dismiss record-level warnings '
     expect(within(recordLevelValidationsSection).queryByText('ignored')).not.toBeInTheDocument(),
   )
 
-  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterIgnore)
 }, 50000)
@@ -703,15 +691,9 @@ test('Benthic Photo Quadrat validation: user can dismiss observation warnings ',
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const observationsTable = screen.getByLabelText('Observations')
 
@@ -735,7 +717,7 @@ test('Benthic Photo Quadrat validation: user can dismiss observation warnings ',
   ).toBeChecked()
   expect(within(observationsTableAfterIgnore).getByText('Ignored'))
 
-  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterIgnore)
 }, 60000)
@@ -1019,35 +1001,29 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
     dexiePerUserDataInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
   const depthRow = screen.getByTestId('depth')
-  const sampleDateRow = screen.getByTestId('sample_date')
-  const sampleTimeRow = screen.getByTestId('sample_time')
-  const transectNumberRow = screen.getByTestId('transect_number')
+  const sampleDateRow = screen.getByTestId('sample-date')
+  const sampleTimeRow = screen.getByTestId('sample-time')
+  const transectNumberRow = screen.getByTestId('transect-number')
   const labelRow = screen.getByTestId('label')
-  const lengthSurveyedRow = screen.getByTestId('len_surveyed')
-  const relativeDepthRow = screen.getByTestId('relative_depth')
+  const lengthSurveyedRow = screen.getByTestId('len-surveyed')
+  const relativeDepthRow = screen.getByTestId('relative-depth')
   const visibilityRow = screen.getByTestId('visibility')
   const currentRow = screen.getByTestId('current')
   const tideRow = screen.getByTestId('tide')
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
-  const quadratNumberStartRow = screen.getByTestId('quadrat_number_start')
-  const quadratSizeRow = screen.getByTestId('quadrat_size')
-  const numberOfQuadratsRow = screen.getByTestId('num_quadrats')
-  const numberOfPointsPerQuadratRow = screen.getByTestId('num_points_per_quadrat')
-  const reefSlopeRow = screen.getByTestId('reef_slope')
+  const quadratNumberStartRow = screen.getByTestId('quadrat-number-start')
+  const quadratSizeRow = screen.getByTestId('quadrat-size')
+  const numberOfQuadratsRow = screen.getByTestId('num-quadrats')
+  const numberOfPointsPerQuadratRow = screen.getByTestId('num-points-per-quadrat')
+  const reefSlopeRow = screen.getByTestId('reef-slope')
 
   expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
@@ -1094,7 +1070,7 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
     }),
   )
 
-  const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 

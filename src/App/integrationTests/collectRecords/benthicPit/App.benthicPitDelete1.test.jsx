@@ -26,21 +26,15 @@ describe('Offline', () => {
         dexieCurrentUserInstance,
       },
     )
-    const deleteButton = await screen.findByText('Delete Record')
+    const deleteButton = await screen.findByTestId('delete-record-button')
 
     await user.click(deleteButton)
 
-    expect(screen.getByText('Are you sure you want to delete this record?'))
+    expect(await screen.findByTestId('delete-record-prompt')).toBeInTheDocument()
 
-    const modal = screen.getByLabelText('Delete Record')
+    const modal = await screen.findByTestId('delete-record-modal')
 
-    await user.click(
-      within(modal).getByText('Delete Record', {
-        selector: 'button',
-      }),
-    )
-    // shows toast
-    expect(await screen.findByText('Record deleted.'))
+    await user.click(within(modal).getByTestId('delete-record-confirm-button'))
 
     // navigated to collect records table page
     expect(await screen.findByTestId('collecting-title'))

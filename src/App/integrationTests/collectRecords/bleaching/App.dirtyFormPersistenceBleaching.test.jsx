@@ -110,12 +110,12 @@ test('Unsaved NEW bleaching form edits persist through change in online/offline 
   await user.type(depthInput, '45')
 
   expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
-  expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
+  expect(screen.getByTestId('save-button')).toBeEnabled()
 
   await user.click(screen.getByTestId('offline-toggle-switch-label'))
 
   expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
-  expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
+  expect(await screen.findByTestId('save-button')).toBeEnabled()
 })
 
 test('Unsaved EDIT bleaching form edits persist through change in online/offline status', async () => {
@@ -142,10 +142,10 @@ test('Unsaved EDIT bleaching form edits persist through change in online/offline
   await user.type(depthInput, '45')
 
   expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
-  expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
+  expect(screen.getByTestId('save-button')).toBeEnabled()
 
   await user.click(screen.getByTestId('offline-toggle-switch-label'))
 
   expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
-  expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
+  expect(await screen.findByTestId('save-button')).toBeEnabled()
 })
