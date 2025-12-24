@@ -128,15 +128,11 @@ const LoadingIndicatorContainer = styled.div`
 `
 
 const LoadingIndicator = ({
-  primaryMessage,
-  secondaryMessage,
   displaySecondary = true,
   displaySecondaryTimingSeconds = 10,
   ...props
 }) => {
   const { t } = useTranslation()
-  const resolvedPrimaryMessage = primaryMessage ?? t('loading')
-  const resolvedSecondaryMessage = secondaryMessage ?? t('still_working')
   const [isDisplaySecondaryTime, setIsDisplaySecondaryTime] = useState(false)
 
   useEffect(() => {
@@ -149,8 +145,7 @@ const LoadingIndicator = ({
     }
   })
 
-  const shouldDisplaySecondary =
-    displaySecondary && resolvedSecondaryMessage && isDisplaySecondaryTime
+  const shouldDisplaySecondary = displaySecondary && t('still_working') && isDisplaySecondaryTime
 
   return (
     <LoadingIndicatorContainer
@@ -167,16 +162,14 @@ const LoadingIndicator = ({
           <div className="plus">&nbsp;</div>
           <div className="x">&nbsp;</div>
         </div>
-        <p className="loadingPrimary">{resolvedPrimaryMessage}</p>
-        {shouldDisplaySecondary && <p className="loadingSecondary">{resolvedSecondaryMessage}</p>}
+        <p className="loadingPrimary">{t('loading')}</p>
+        {shouldDisplaySecondary && <p className="loadingSecondary">{t('still_working')}</p>}
       </div>
     </LoadingIndicatorContainer>
   )
 }
 
 LoadingIndicator.propTypes = {
-  primaryMessage: PropTypes.string,
-  secondaryMessage: PropTypes.string,
   displaySecondary: PropTypes.bool,
   displaySecondaryTimingSeconds: PropTypes.number,
 }
