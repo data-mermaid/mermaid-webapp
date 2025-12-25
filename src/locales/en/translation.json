@@ -139,15 +139,6 @@
     "yes": "Delete {{entityName}}"
   },
   "delete_observation": "Delete observation",
-  "delete_project_modal": {
-    "cannot_delete": "You cannot delete {{projectName}} because it is used in the following sample units:",
-    "has_other_users": "Other users must be removed from this project before deletion.",
-    "has_sample_units": "To delete this project, first delete all sample units, including those from other users",
-    "prompt": "Are you sure you want to delete {{projectName}}?",
-    "remove_before_delete": "You have to remove {{projectName}} from all sample units before you can delete it",
-    "title": "Delete project",
-    "yes": "Delete {{projectName}}"
-  },
   "delete_sites_regimes": "Delete sites or management regimes",
   "depth": "Depth",
   "depth_info": "Depth of sample unit, in meters (e.g. 3)",
@@ -169,11 +160,6 @@
     "sample_event_level_data_other": "Sample event level data ({{count}} surveys)",
     "success": "Export successful"
   },
-  "filter_search_helper_text": "<b>Use double quotes to search exact phrases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match).",
-  "filter_submitted_table": "Filter by site, management, or observer",
-  "filter_table_date_year": "Filter by name or year",
-  "filter_table_name_project_year": "Filter by name, project, or year",
-  "filter_table_site_management_observer": "Filter by site, management, or observer",
   "filters": {
     "by_finance_solution": "Filter by finance solution",
     "by_investment": "Filter by investment",
@@ -407,7 +393,6 @@
       "indicators_enabled": "Added GFCR fund indicators to this project"
     },
     "target": "Target",
-    "title": "Global Fund for Coral Reefs (GFCR)",
     "untitled": "Untitled"
   },
   "go_to_explore_projects": "View all your projects on MERMAID Explore",
@@ -792,7 +777,6 @@
   "show_fish_name_info": "Show fish name info",
   "show_fish_size_info": "Show fish size info",
   "showing": "Showing",
-  "site": "Site",
   "sites": {
     "copy": "Copy sites",
     "copy_selected_sites_to_project": "Copy selected sites to project",
@@ -808,7 +792,6 @@
     "site": "Site",
     "sites": "Sites"
   },
-  "size": "Size",
   "size_cm": "Size (cm)",
   "status_offline": "You're <strong>OFFLINE</strong>. Some contents may be out of date.",
   "status_online": "You're <strong>ONLINE</strong>",
@@ -846,7 +829,6 @@
   "transect_number": "Transect number",
   "transect_number_info": "Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.",
   "type": "Type",
-  "user": "User",
   "users": {
     "add_user_button": "Add user",
     "add_user_email": "Enter email address of user to add",
