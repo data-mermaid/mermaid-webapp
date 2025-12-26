@@ -29,9 +29,19 @@ $small-font-size: 12px;
 $medium-font-size: 14px;
 $default-font-size: 16px;
 
-/** Padding **/
-$spacing-x-small: 3px;
-$spacing-small: 8px;
-$spacing-medium: 10px;
-$spacing-large: 14px;
-$spacing-x-large: 24px;
+/** Spacing **/
+$spacing-x-small: 3px; //0.2rem
+$spacing-small: 8px; //0.5rem
+$spacing-medium: 10px; //1rem
+$spacing-large: 14px; //1.5rem
+$spacing-x-large: 24px; //2rem
+
+/** Widths **/
+$default-width: 90vw;
+$max-width: 1200px;
+
+/** Borders **/
+$border-small: 1px;
+$border-medium: 2px;
+$border-large: 4px;
+$border-x-large: 8px;

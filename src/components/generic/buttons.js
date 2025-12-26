@@ -9,9 +9,7 @@ const buttonActive = css`
 `
 
 export const CloseButton = styled.button`
-  background-color: ${theme.color.secondaryColor};
   color: ${theme.color.secondaryText};
-  border-color: ${theme.color.secondaryBorder};
   border-radius: 100%;
   background: transparent;
   border: none;

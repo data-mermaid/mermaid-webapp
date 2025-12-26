@@ -20,6 +20,41 @@ import ErrorBoundary from '../../ErrorBoundary'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { openExploreLinkWithBbox } from '../../../library/openExploreLinkWithBbox'
 import { useTranslation } from 'react-i18next'
+import CalloutButton from '../../generic/CalloutButton/CalloutButton'
+import { CloseButton } from '../../generic/buttons'
+import { Box } from '@mui/material'
+import { IconClose } from '../../icons'
+import cardStyles from '../../ProjectCard/ProjectCard.module.scss'
+
+const DemoProjectCallout = () => {
+  const { t } = useTranslation()
+
+  const handleDemoTryoutDismiss = () => {
+    //todo: set val in DB
+    //setHasUserDismissedDemo(true)
+  }
+
+  return (
+    <Box id="demo-project-callout" className={cardStyles['demo-callout']}>
+      <div>
+        <h2>{t('projects.demo_tryout')}</h2>
+        <p>{t('projects.demo_teaser')}</p>
+      </div>
+      <div>
+        <CalloutButton
+          onClick={() => {}}
+          aria-label={t('projects.new_project')}
+          disabled={false}
+          testId="demo-project-button"
+          label={t('projects.buttons.add_demo')}
+        />
+        <CloseButton type="button" onClick={handleDemoTryoutDismiss}>
+          <IconClose aria-label={t('buttons.close')} />
+        </CloseButton>
+      </div>
+    </Box>
+  )
+}
 
 /**
  * All Projects page (lists projects)
@@ -107,9 +142,7 @@ const Projects = () => {
   const getFilteredSortedProjects = () => {
     const availableProjects = getAvailableProjects()
     const filteredProjects = getFilteredProjects(availableProjects)
-    const sortedProjects = getSortedProjects(filteredProjects)
-
-    return sortedProjects
+    return getSortedProjects(filteredProjects)
   }
 
   const filteredSortedProjects = getFilteredSortedProjects()
@@ -182,7 +215,12 @@ const Projects = () => {
           userHasDemoProject={userHasDemoProject}
         />
       }
-      bottomRow={<div role="list">{projectCardsList}</div>}
+      bottomRow={
+        <div role="list">
+          {!userHasDemoProject && isAppOnline && <DemoProjectCallout handleDemoClick={() => {}} />}
+          {projectCardsList}
+        </div>
+      }
     />
   )
 }
