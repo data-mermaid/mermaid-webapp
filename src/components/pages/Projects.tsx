@@ -1,30 +1,30 @@
 import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 
-import { HomePageLayout } from '../../Layout'
-import { getToastArguments } from '../../../library/getToastArguments'
-import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
-import ProjectCard from '../../ProjectCard'
-import ProjectToolBarSection from '../../ProjectToolBarSection'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import useIsMounted from '../../../library/useIsMounted'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { getObjectById } from '../../../library/getObjectById'
-import PageUnavailable from '../PageUnavailable'
-import useDocumentTitle from '../../../library/useDocumentTitle'
-import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
-import ErrorBoundary from '../../ErrorBoundary'
-import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
-import { openExploreLinkWithBbox } from '../../../library/openExploreLinkWithBbox'
-import { useTranslation } from 'react-i18next'
-import CalloutButton from '../../generic/CalloutButton/CalloutButton'
-import { CloseButton } from '../../generic/buttons'
+import { HomePageLayout } from '../Layout'
+import { getToastArguments } from '../../library/getToastArguments'
+import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
+import ProjectCard from '../ProjectCard'
+import ProjectToolBarSection from '../ProjectToolBarSection'
+import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import useIsMounted from '../../library/useIsMounted'
+import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { useCurrentUser } from '../../App/CurrentUserContext'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
+import { getObjectById } from '../../library/getObjectById'
+import PageUnavailable from './PageUnavailable'
+import useDocumentTitle from '../../library/useDocumentTitle'
+import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
+import ErrorBoundary from '../ErrorBoundary'
+import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
+import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
+import { Trans, useTranslation } from 'react-i18next'
+import CalloutButton from '../generic/CalloutButton/CalloutButton'
+import { CloseButton } from '../generic/buttons'
 import { Box } from '@mui/material'
-import { IconClose } from '../../icons'
-import cardStyles from '../../ProjectCard/ProjectCard.module.scss'
+import { IconClose } from '../icons'
+import cardStyles from '../ProjectCard/ProjectCard.module.scss'
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 
@@ -40,16 +40,22 @@ const DemoProjectCallout = ({
   const [isCalloutDismissed, setIsCalloutDismissed] = useState(false)
 
   const handleDemoTryoutDismiss = () => {
-    //todo: set val in DB
+    //todo: set val in DB to prevent re-population after session end
     setIsCalloutDismissed(true)
-    //todo: set timeout?
     setHasUserDismissedDemo(true)
   }
 
   return (
     <Box id="demo-project-callout" className={cardStyles['demo-callout']}>
       {isCalloutDismissed ? (
-        <p>{t('projects.demo_dismissed')}</p>
+        <p>
+          <Trans
+            i18nKey="projects.demo_dismissed"
+            components={{
+              1: <span style={{ fontWeight: 700 }} />,
+            }}
+          />
+        </p>
       ) : (
         <>
           <div>
@@ -130,7 +136,7 @@ const Projects = () => {
     unavailableProjectsErrorText,
   ])
 
-  const handleSuccessResponse = (response, languageSuccessMessage) => {
+  const handleSuccessResponse = (response, languageSuccessMessage: string) => {
     refreshCurrentUser() // ensures correct user privileges
     toast.success(...getToastArguments(languageSuccessMessage))
     setIsLoading(false)

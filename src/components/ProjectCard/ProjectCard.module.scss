@@ -1,7 +1,7 @@
 @use '../../style/theme.scss';
 
 .demo-callout {
-  padding: theme.$spacing-medium;
+  padding: theme.$spacing-large;
   margin: theme.$spacing-x-large auto 0 auto;
   width: theme.$default-width;
   max-width: theme.$max-width;
@@ -11,9 +11,9 @@
   align-items: center;
   h2 {
     margin-block-start: 0;
-    margin-block-end: 0;
   }
   p {
+    margin-block-start: 0;
     margin-block-end: 0;
   }
 }
@@ -48,6 +48,7 @@
   background: theme.$primary;
   color: theme.$white;
   gap: theme.$spacing-large;
+
   //theme.typography.noWordBreak;
   @media (min-width) {
     font-size: theme.$default-font-size;
