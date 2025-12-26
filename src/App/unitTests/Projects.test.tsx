@@ -10,7 +10,7 @@ import {
   waitFor,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers.jsx'
-import Projects from '../../components/pages/Projects/Projects.jsx'
+import Projects from '../../components/pages/Projects/Projects.js'
 
 describe('Projects dashboard', () => {
   test('Projects component renders with the expected UI elements', async () => {
