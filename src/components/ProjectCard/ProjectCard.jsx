@@ -30,6 +30,7 @@ import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useTranslation } from 'react-i18next'
+import labelStyles from '../../style/labels.module.scss'
 import styles from './ProjectCard.module.scss'
 
 const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...restOfProps }) => {
@@ -120,17 +121,22 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
     >
       <ProjectCardHeader>
         <div>
-          <ProjectTitleContainer>
+          <div className={styles['title-container']}>
             <h2>{name}</h2>
-            {isAdminUser && (
-              <div className={[styles.pill, styles.pill__admin].join(' ')}>
-                {t('users.roles.admin')}
-              </div>
-            )}
-            {isDemoProject && (
-              <div className={[styles.pill, styles.pill__demo].join(' ')}>{t('projects.demo')}</div>
-            )}
-          </ProjectTitleContainer>
+            {/*Mobile update: todo: add to CSS*/}
+            <div className={styles['pill-container']}>
+              {isAdminUser && (
+                <div className={[labelStyles.pill, labelStyles.pill__admin].join(' ')}>
+                  {t('users.roles.admin')}
+                </div>
+              )}
+              {isDemoProject && (
+                <div className={[labelStyles.pill, labelStyles.pill__demo].join(' ')}>
+                  {t('projects.demo')}
+                </div>
+              )}
+            </div>
+          </div>
           <DateAndCountryLabel>{countries.join(', ')}</DateAndCountryLabel>
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
@@ -146,7 +152,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
 
             {isProjectModalOpen && (
               <ProjectModal
-                isOpen={true}
+                isOpen
                 onDismiss={() => setIsProjectModalOpen(false)}
                 project={project}
                 addProjectToProjectsPage={addProjectToProjectsPage}

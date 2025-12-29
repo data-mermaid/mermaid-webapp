@@ -641,6 +641,7 @@
     "delete_project": "Delete a project",
     "delete_sample_units_notice": "You must delete all the sample units in this project to delete this project.",
     "demo": "Demo project",
+    "demo_explore_unavailable": "Demo projects are unavailable to view in MERMAID Explore",
     "edit_project_info": "Edit project info",
     "errors": {
       "data_unavailable": "Project data is currently unavailable.",

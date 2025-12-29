@@ -1,23 +1,16 @@
-@use '../../style/theme.scss';
-
-.pill {
+@use '../../style/theme.scss' as *;
+.title-container {
   display: flex;
-  align-items: center;
-  height: theme.$pill-height;
-  margin-left: theme.$spacing-large;
-  margin-top: theme.$spacing-x-small;
-  padding: theme.$spacing-x-small theme.$spacing-medium;
-  border: solid 1px #ffffff8c;
-  border-radius: theme.$border-radius__pill;
-  text-transform: uppercase;
-  white-space: nowrap;
-  font-size: theme.$small-font-size;
-  cursor: text;
+  @media (max-width: $mobile-break) {
+    justify-content: space-between;
+  }
 }
-.pill__admin {
-  color: theme.$white;
-}
-.pill__demo {
-  color: theme.$white;
-  background-color: theme.$callout;
+.pill-container {
+  @media (max-width: $mobile-break) {
+    display: block;
+    max-width: 30%;
+    div {
+      float: right;
+    }
+  }
 }
