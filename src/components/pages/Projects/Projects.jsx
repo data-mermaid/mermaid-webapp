@@ -147,7 +147,7 @@ const Projects = () => {
         : t('projects.create_or_join_project')
     }
 
-    return <PageUnavailable mainText={mainText} subText={subText} align="center" />
+    return <PageUnavailable mainText={mainText} subText={subText} $align="center" />
   }
 
   const projectCardsList = filteredSortedProjects.length

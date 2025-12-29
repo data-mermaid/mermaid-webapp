@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import theme from '../../theme'
-import { styled } from '@mui/material/styles'
-import Tooltip, { type TooltipProps } from '@mui/material/Tooltip'
+import Tooltip from '@mui/material/Tooltip'
+import styles from './MuiTooltip.module.scss'
 
 type Placement = 'bottom' | 'left' | 'right' | 'top' | 'bottom-end' | 'bottom-start' | undefined
 
@@ -13,22 +13,6 @@ interface MuiTooltip {
   tooltipTextColor?: string
 }
 
-const StyledTooltip = styled(Tooltip, {
-  shouldForwardProp: (prop) => prop !== 'bgColor' && prop !== 'tooltipTextColor',
-})<TooltipProps & { bgColor?: string; tooltipTextColor?: string }>(
-  ({ bgColor, tooltipTextColor }) => ({
-    '& .MuiTooltip-tooltip': {
-      backgroundColor: bgColor,
-      color: tooltipTextColor,
-      fontSize: theme.typography.smallFontSize,
-      boxShadow: '3px 3px 6px rgba(0, 0, 0, 0.1)',
-    },
-    '& .MuiTooltip-arrow': {
-      color: bgColor,
-    },
-  }),
-)
-
 export const MuiTooltip = ({
   children,
   title,
@@ -37,11 +21,14 @@ export const MuiTooltip = ({
   tooltipTextColor = theme.color.black,
 }: MuiTooltip) => {
   return (
-    <StyledTooltip
+    <Tooltip
       title={title}
       placement={placement}
-      bgColor={bgColor}
-      tooltipTextColor={tooltipTextColor}
+      style={{ backgroundColor: bgColor, color: tooltipTextColor }}
+      classes={{
+        tooltipArrow: styles['MuiTooltip-tooltipArrow'],
+        tooltip: styles['MuiTooltip-tooltip'],
+      }}
       slotProps={{
         popper: {
           modifiers: [
@@ -57,7 +44,7 @@ export const MuiTooltip = ({
       arrow
     >
       {children}
-    </StyledTooltip>
+    </Tooltip>
   )
 }
 export const MuiTooltipDark = ({

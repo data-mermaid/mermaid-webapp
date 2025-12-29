@@ -1,0 +1,11 @@
+@use '../../style/theme.scss';
+
+.MuiTooltip-tooltip {
+  color: theme.$black;
+  background-color: theme.$white;
+  font-size: theme.$medium-font-size;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+}
+.MuiTooltip-tooltipArrow {
+  background-color: theme.$white;
+}

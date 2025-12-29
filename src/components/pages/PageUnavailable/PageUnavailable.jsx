@@ -6,13 +6,13 @@ import theme from '../../../theme'
 
 const PageUnavailableContainer = styled(Column)`
   padding-left: ${theme.spacing.large};
-  text-align: ${(props) => props.align};
+  text-align: ${(props) => props.$align};
 `
 
 const PageUnavailable = ({
   mainText = 'No Data',
   subText = '',
-  align = 'start',
+  $align = 'start',
   children = undefined,
   testId = 'page-unavailable-main-text',
 }) => {
@@ -21,7 +21,7 @@ const PageUnavailable = ({
   }
 
   return (
-    <PageUnavailableContainer align={align} data-testid={testId}>
+    <PageUnavailableContainer $align={$align} data-testid={testId}>
       <h3>{mainText}</h3>
       <p>{subText}</p>
     </PageUnavailableContainer>
@@ -31,7 +31,7 @@ const PageUnavailable = ({
 PageUnavailable.propTypes = {
   mainText: PropTypes.string,
   subText: PropTypes.oneOfType([PropTypes.number, PropTypes.node]),
-  align: PropTypes.string,
+  $align: PropTypes.string,
   children: PropTypes.node,
   testId: PropTypes.string,
 }

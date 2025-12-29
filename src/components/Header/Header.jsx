@@ -3,23 +3,23 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
 import {
-  UserButton,
+  BiggerIconBell,
+  BiggerIconMenu,
   GlobalNav,
   HeaderButtonThatLooksLikeLink,
-  StyledHeader,
-  LogoImg,
-  StyledNavLink,
-  NotificationIndicator,
-  UserMenuButton,
-  UserMenu,
-  BiggerIconBell,
-  MediumIconExcel,
-  BiggerIconMenu,
-  LoggedInAs,
   HeaderIconWrapper,
+  LoggedInAs,
+  LogoImg,
+  MediumIconExcel,
+  NotificationIndicator,
+  StyledHeader,
+  StyledNavLink,
+  UserButton,
+  UserMenu,
+  UserMenuButton,
 } from './Header.styles'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { IconGlobe, IconLibraryBooks } from '../icons'
+import { IconGlobe, IconLanguage, IconLibraryBooks } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { UserIcon } from '../UserIcon/UserIcon'
@@ -29,8 +29,6 @@ import MermaidCollectLogo from '../../assets/mermaid-collect-logo.svg'
 import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
 import { useTranslation } from 'react-i18next'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLanguage } from '@fortawesome/free-solid-svg-icons'
 import i18n from '../../../i18n.ts'
 
 const handleLanguageSelect = (lng) => {
@@ -46,7 +44,7 @@ const LanguageMenuTool = () => {
         button={
           <HeaderButtonThatLooksLikeLink>
             <HeaderIconWrapper>
-              <FontAwesomeIcon icon={faLanguage} style={{ marginRight: '10px' }} />
+              <IconLanguage style={{ marginRight: '10px' }} />
               {t('languages.language')}
             </HeaderIconWrapper>
           </HeaderButtonThatLooksLikeLink>

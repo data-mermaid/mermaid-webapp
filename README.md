@@ -21,8 +21,8 @@
    1. clone this repo
    1. obtain values for `.env` and `.env.test` files. (see `.env.sample` and `env.test.sample`. (Contact repo admins for access to environment variables)
    1. optional: `nvm use` (this will make sure you are using the right node version if you have NVM installed)
-   1. yarn install
-   1. yarn start
+   1. `yarn install`
+   1. `yarn start` -- builds to http://localhost:3000
 
 ## Dev Notes
 
