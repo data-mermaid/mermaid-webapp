@@ -58,10 +58,6 @@ export const ProjectCardHeaderButtonsAndDate = styled('div')`
   `)}
 `
 
-export const ProjectCardHeaderButtonWrapper = styled('div')`
-  white-space: nowrap;
-`
-
 export const CheckBoxLabel = styled.label`
   display: inline-block;
   background: ${theme.color.secondaryColor};

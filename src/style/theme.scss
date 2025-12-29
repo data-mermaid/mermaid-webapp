@@ -16,6 +16,7 @@ $tableRowEven: #f8f8fa;
 $tableRowHover: #f1f1f4;
 
 $border-radius: 0px; //update to 4px when enabled globally
+$border-radius__pill: 5px;
 
 /** Media Query Break Points **/
 $mobile-break: 599px;
@@ -35,3 +36,6 @@ $spacing-small: 8px;
 $spacing-medium: 10px;
 $spacing-large: 14px;
 $spacing-x-large: 24px;
+
+/** Sizing **/
+$pill-height: 26px;

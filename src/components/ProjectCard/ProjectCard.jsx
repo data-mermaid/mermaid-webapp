@@ -4,13 +4,11 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
 import {
-  AdminPill,
   CardWrapper,
   CheckBoxLabel,
-  ProjectCardHeader,
   DateAndCountryLabel,
+  ProjectCardHeader,
   ProjectCardHeaderButtonsAndDate,
-  ProjectCardHeaderButtonWrapper,
   ProjectTitleContainer,
 } from './ProjectCard.styles'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
@@ -25,13 +23,14 @@ import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
 import ProjectModal from './ProjectModal'
 import {
-  getIsUserReadOnlyForProject,
   getIsUserAdminForProject,
+  getIsUserReadOnlyForProject,
 } from '../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useTranslation } from 'react-i18next'
+import styles from './ProjectCard.module.scss'
 
 const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...restOfProps }) => {
   const { currentUser } = useCurrentUser()
@@ -47,6 +46,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const isAdminUser = getIsUserAdminForProject(currentUser, id)
+  const isDemoProject = project.is_demo
 
   const handleProjectOfflineReadyClick = (event) => {
     const isChecked = event.target.checked
@@ -122,27 +122,36 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
         <div>
           <ProjectTitleContainer>
             <h2>{name}</h2>
-            {isAdminUser ? <AdminPill>admin</AdminPill> : null}
+            {isAdminUser && (
+              <div className={[styles.pill, styles.pill__admin].join(' ')}>
+                {t('users.roles.admin')}
+              </div>
+            )}
+            {isDemoProject && (
+              <div className={[styles.pill, styles.pill__demo].join(' ')}>{t('projects.demo')}</div>
+            )}
           </ProjectTitleContainer>
           <DateAndCountryLabel>{countries.join(', ')}</DateAndCountryLabel>
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
-          <ProjectCardHeaderButtonWrapper>
+          <div style={{ whiteSpace: 'nowrap' }}>
             <ButtonSecondary
               onClick={() => setIsProjectModalOpen(true)}
-              aria-label="Copy"
+              aria-label={t('buttons.copy')}
               disabled={!isAppOnline}
             >
               <IconCopy />
               <span>{t('buttons.copy')}</span>
             </ButtonSecondary>
 
-            <ProjectModal
-              isOpen={isProjectModalOpen}
-              onDismiss={() => setIsProjectModalOpen(false)}
-              project={project}
-              addProjectToProjectsPage={addProjectToProjectsPage}
-            />
+            {isProjectModalOpen && (
+              <ProjectModal
+                isOpen={true}
+                onDismiss={() => setIsProjectModalOpen(false)}
+                project={project}
+                addProjectToProjectsPage={addProjectToProjectsPage}
+              />
+            )}
             <CheckBoxLabel
               htmlFor={project.id}
               onClick={stopEventPropagation}
@@ -158,8 +167,11 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
               />
               {t('projects.available_offline')}
             </CheckBoxLabel>
-          </ProjectCardHeaderButtonWrapper>
-          <DateAndCountryLabel>{removeTimeZoneFromDate(updated_on)}</DateAndCountryLabel>
+          </div>
+          {/*Matching H2 end block margin*/}
+          <DateAndCountryLabel style={{ marginTop: '1rem' }}>
+            {removeTimeZoneFromDate(updated_on)}
+          </DateAndCountryLabel>
         </ProjectCardHeaderButtonsAndDate>
       </ProjectCardHeader>
       <ProjectCardSummary project={project} isAppOnline={isAppOnline} />

@@ -1,0 +1,23 @@
+@use '../../style/theme.scss';
+
+.pill {
+  display: flex;
+  align-items: center;
+  height: theme.$pill-height;
+  margin-left: theme.$spacing-large;
+  margin-top: theme.$spacing-x-small;
+  padding: theme.$spacing-x-small theme.$spacing-medium;
+  border: solid 1px #ffffff8c;
+  border-radius: theme.$border-radius__pill;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-size: theme.$small-font-size;
+  cursor: text;
+}
+.pill__admin {
+  color: theme.$white;
+}
+.pill__demo {
+  color: theme.$white;
+  background-color: theme.$callout;
+}
