@@ -1,11 +1,11 @@
-@use '../../style/theme.scss';
+@use '../../style/theme.scss' as *;
 
 .demo-callout {
-  padding: theme.$spacing-large;
-  margin: theme.$spacing-x-large auto 0 auto;
-  width: theme.$default-width;
-  max-width: theme.$max-width;
-  background: theme.$white;
+  padding: $spacing-large;
+  margin: $spacing-x-large auto 0 auto;
+  width: $default-width;
+  max-width: $max-width;
+  background: $white;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,16 +16,34 @@
     margin-block-start: 0;
     margin-block-end: 0;
   }
+  &.demo-callout--centered {
+    text-align: center;
+    display: block;
+
+    p {
+      display: block;
+      margin-block-end: $spacing-large;
+    }
+    div {
+      display: block;
+      width: 100%;
+    }
+
+    div.buttons-container {
+      display: block;
+      margin: 0 auto;
+    }
+  }
 }
 .card-wrapper {
-  margin: theme.$spacing-x-large auto 0 auto;
-  width: theme.$default-width;
-  max-width: theme.$max-width;
-  background: theme.$white;
+  margin: $spacing-x-large auto 0 auto;
+  width: $default-width;
+  max-width: $max-width;
+  background: $white;
 
   @media (hover: hover) {
     &:hover:not([disabled]) {
-      outline: solid 2px theme.$primary;
+      outline: solid 2px $primary;
     }
   }
   @media (min-width) {
@@ -38,28 +56,28 @@
 
 .date-country-label {
   opacity: 0.8;
-  font-size: theme.$small-font-size;
+  font-size: $small-font-size;
 }
 
 .project-card-header {
   display: flex;
-  padding: theme.$spacing-medium;
+  padding: $spacing-medium;
   justify-content: space-between;
-  background: theme.$primary;
-  color: theme.$white;
-  gap: theme.$spacing-large;
+  background: $primary;
+  color: $white;
+  gap: $spacing-large;
 
   //theme.typography.noWordBreak;
   @media (min-width) {
-    font-size: theme.$default-font-size;
-    padding: theme.$spacing-small;
+    font-size: $default-font-size;
+    padding: $spacing-small;
     flex-direction: column;
   }
   h2 {
-    margin: 0 0 theme.$spacing-medium 0;
+    margin: 0 0 $spacing-medium 0;
     line-height: 1.2;
   }
   label {
-    margin-left: theme.$spacing-medium;
+    margin-left: $spacing-medium;
   }
 }

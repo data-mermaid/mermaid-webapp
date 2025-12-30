@@ -29,15 +29,20 @@ import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 interface DemoProjectCalloutProps {
-  setHasUserDismissedDemo: (boolean) => void
   handleDemoClick: () => void
+  setHasUserDismissedDemo: (arg: boolean) => void
+  userHasProjects: boolean
 }
 const DemoProjectCallout = ({
-  setHasUserDismissedDemo,
   handleDemoClick,
+  setHasUserDismissedDemo,
+  userHasProjects,
 }: DemoProjectCalloutProps) => {
   const { t } = useTranslation()
   const [isCalloutDismissed, setIsCalloutDismissed] = useState(false)
+  const calloutStyleClasses = userHasProjects
+    ? cardStyles['demo-callout']
+    : [cardStyles['demo-callout'], cardStyles['demo-callout--centered']].join(' ')
 
   const handleDemoTryoutDismiss = () => {
     //todo: set val in DB to prevent re-population after session end
@@ -46,7 +51,7 @@ const DemoProjectCallout = ({
   }
 
   return (
-    <Box id="demo-project-callout" className={cardStyles['demo-callout']}>
+    <Box id="demo-project-callout" className={calloutStyleClasses}>
       {isCalloutDismissed ? (
         <p>
           <Trans
@@ -62,17 +67,20 @@ const DemoProjectCallout = ({
             <h2>{t('projects.demo_tryout')}</h2>
             <p>{t('projects.demo_teaser')}</p>
           </div>
-          <div>
+          <div className={'buttons-container'}>
             <CalloutButton
               onClick={handleDemoClick}
               aria-label={t('projects.new_project')}
               disabled={false}
               testId="demo-project-button"
               label={t('projects.buttons.add_demo')}
+              className={'demo-btn'}
             />
-            <CloseButton type="button" onClick={handleDemoTryoutDismiss}>
-              <IconClose aria-label={t('buttons.close')} />
-            </CloseButton>
+            {userHasProjects && (
+              <CloseButton type="button" onClick={handleDemoTryoutDismiss}>
+                <IconClose aria-label={t('buttons.close')} />
+              </CloseButton>
+            )}
           </div>
         </>
       )}
@@ -105,6 +113,7 @@ const Projects = () => {
 
   useDocumentTitle(`${t('projects.projects')} - ${t('mermaid')}`)
   const userHasDemoProject = projects.some((proj) => proj.is_demo === true)
+  const userHasProjects = projects.length > 0
 
   useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -221,24 +230,29 @@ const Projects = () => {
   }
 
   const renderPageNoData = () => {
+    // setUserHasProjects(false)
     const isProjectFilter = projectFilter !== ''
 
-    let mainText
-    let subText
+    let mainText = isProjectFilter ? t('search.no_results') : t('projects.no_offline_projects')
+    let subText = isProjectFilter
+      ? t('projects.no_projects_match')
+      : t('projects.create_or_join_project')
 
     if (isAppOnline) {
-      mainText = isProjectFilter ? t('search.no_results') : t('projects.no_projects')
-      subText = isProjectFilter
-        ? t('projects.no_projects_match')
-        : t('projects.create_or_join_project')
-    } else {
-      mainText = isProjectFilter ? t('search.no_results') : t('projects.no_offline_projects')
-      subText = isProjectFilter
-        ? t('projects.no_projects_match')
-        : t('projects.create_or_join_project')
+      if (!userHasDemoProject) {
+        mainText = isProjectFilter ? t('search.no_results') : ''
+        subText = isProjectFilter
+          ? t('projects.no_projects_match')
+          : `${t('projects.no_projects')} ${t('projects.create_or_join_project')}`
+      } else {
+        mainText = isProjectFilter ? t('search.no_results') : t('projects.no_projects')
+        subText = isProjectFilter
+          ? t('projects.no_projects_match')
+          : t('projects.create_or_join_project')
+      }
     }
 
-    return <PageUnavailable mainText={mainText} subText={subText} align="center" />
+    return <PageUnavailable mainText={mainText} subText={subText} /**$align="center"**/ />
   }
 
   const projectCardsList = filteredSortedProjects.length
@@ -278,6 +292,7 @@ const Projects = () => {
             <DemoProjectCallout
               setHasUserDismissedDemo={setHasUserDismissedDemo}
               handleDemoClick={createDemoProject}
+              userHasProjects={userHasProjects}
             />
           )}
           {projectCardsList}
