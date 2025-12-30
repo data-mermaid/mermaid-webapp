@@ -1,17 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Column } from '../generic/positioning'
-import theme from '../../theme'
-
-const PageUnavailableContainer = styled(Column)`
-  padding-left: ${theme.spacing.large};
-`
-// text-align: ${(props) => props.$align};
+import styles from './PageUnavailable.module.scss'
 
 interface PageUnavailableProps {
   mainText?: string
   subText?: string
-  // $align?: 'start' | 'end' | 'center' | 'justify'
+  align?: 'start' | 'end' | 'center' | 'justify'
   children?: React.ReactNode
   testId?: string
 }
@@ -19,19 +12,23 @@ interface PageUnavailableProps {
 const PageUnavailable = ({
   mainText = 'No Data',
   subText,
-  // $align = 'start',
+  align = 'start',
   children,
   testId = 'page-unavailable-main-text',
 }: PageUnavailableProps) => {
   if (children) {
-    return <PageUnavailableContainer data-testid={testId}>{children}</PageUnavailableContainer>
+    return (
+      <div className={styles['unavailable-cntnr']} data-testid={testId}>
+        {children}
+      </div>
+    )
   }
 
   return (
-    <PageUnavailableContainer /**$align={$align}**/ data-testid={testId}>
+    <div className={styles[`unavailable-cntnr--${align}`]} data-testid={testId}>
       {mainText && <h3>{mainText}</h3>}
       {subText && <p>{subText}</p>}
-    </PageUnavailableContainer>
+    </div>
   )
 }
 

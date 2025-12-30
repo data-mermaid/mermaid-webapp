@@ -1,0 +1,20 @@
+@use '../../style/theme.scss' as *;
+@use '../../style/_mixins.scss' as *;
+
+.unavailable-cntnr {
+  padding-left: $spacing-large;
+  @include column();
+  &--center {
+    text-wrap: pretty;
+    @include column(center);
+  }
+  &--start {
+    @include column(start);
+  }
+  &--end {
+    @include column(end);
+  }
+  &--justify {
+    @include column(justify);
+  }
+}

@@ -230,7 +230,6 @@ const Projects = () => {
   }
 
   const renderPageNoData = () => {
-    // setUserHasProjects(false)
     const isProjectFilter = projectFilter !== ''
 
     let mainText = isProjectFilter ? t('search.no_results') : t('projects.no_offline_projects')
@@ -252,7 +251,7 @@ const Projects = () => {
       }
     }
 
-    return <PageUnavailable mainText={mainText} subText={subText} /**$align="center"**/ />
+    return <PageUnavailable mainText={mainText} subText={subText} align="center" />
   }
 
   const projectCardsList = filteredSortedProjects.length
