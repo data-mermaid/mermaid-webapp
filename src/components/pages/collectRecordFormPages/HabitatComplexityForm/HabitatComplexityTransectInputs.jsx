@@ -16,7 +16,7 @@ import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
-import { IntervalCheckbox } from '../BenthicPitForm/BenthicPitTransectInputs.jsx'
+import IntervalCheckbox from '../../../mermaidInputs/IntervalCheckbox'
 
 const CURRENT_VALIDATION_PATH = 'data.benthic_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.benthic_transect.depth'
@@ -368,7 +368,7 @@ const HabitatComplexityTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: INTERVAL_START_VALIDATION_PATH })
           }}
-          testId="interval_start"
+          testId="interval-start"
           type="number"
           {...validationPropertiesWithDirtyResetOnInputChange(
             intervalStartValidationProperties,
@@ -383,7 +383,6 @@ const HabitatComplexityTransectInputs = ({
             <IntervalCheckbox
               isChecked={isIntervalSizeAsStartChecked}
               handleChange={handleSyncIntervalChange}
-              checkboxLabel={t('use_interval_size_as_start')}
             />
           }
           isInputDisabled={isIntervalSizeAsStartChecked}

@@ -23,8 +23,8 @@ test('Habitat Complexity observations: tab in count input on last row duplicates
   // loading indicator is weird in integration tests, so we wait for the page title
   await screen.findByTestId('edit-collect-record-form-title')
 
-  const formBeforeTab = screen.getByRole('form')
-  const observationsTableBeforeTabKey = within(formBeforeTab).getByLabelText('Observations')
+  const observationsSectionBeforeTabKey = screen.getByTestId('observations-section')
+  const observationsTableBeforeTabKey = within(observationsSectionBeforeTabKey).getByRole('table')
 
   // one header row and three observations
   expect(within(observationsTableBeforeTabKey).getAllByRole('row').length).toEqual(4)
@@ -36,8 +36,8 @@ test('Habitat Complexity observations: tab in count input on last row duplicates
   // userEvent doesnt work as expected for tab
   fireEvent.keyDown(lastGrowthFormInput, { key: 'Tab', code: 'Tab' })
 
-  const formAfterTab = screen.getByRole('form')
-  const observationsTableAfterTab = within(formAfterTab).getByLabelText('Observations')
+  const observationsSectionAfterTab = screen.getByTestId('observations-section')
+  const observationsTableAfterTab = within(observationsSectionAfterTab).getByRole('table')
 
   expect(within(observationsTableAfterTab).getAllByRole('row').length).toEqual(5)
 
@@ -51,8 +51,8 @@ test('Habitat Complexity observations: tab in count input on last row duplicates
     ).length,
   ).toEqual(2)
 
-  const newHabitatComplexityScoreInput = within(observationsTableAfterTab).getAllByLabelText(
-    'Habitat Complexity Score',
+  const newHabitatComplexityScoreInput = within(observationsTableAfterTab).getAllByTestId(
+    'habitat-complexity-score-select',
   )[3]
 
   expect(newHabitatComplexityScoreInput).toHaveFocus()
@@ -70,21 +70,23 @@ test('Habitat Complexity observations: enter key adds a new empty row below row 
   // loading indicator is weird in integration tests, so we wait for the page title
   await screen.findByTestId('edit-collect-record-form-title')
 
-  const formBeforeEnterKey = screen.getByRole('form')
-  const observationsTableBeforeEnterKey = within(formBeforeEnterKey).getByLabelText('Observations')
+  const observationsSectionBeforeEnterKey = screen.getByTestId('observations-section')
+  const observationsTableBeforeEnterKey = within(observationsSectionBeforeEnterKey).getByRole(
+    'table',
+  )
 
   // one header row and three observations
   expect(within(observationsTableBeforeEnterKey).getAllByRole('row').length).toEqual(4)
 
-  const firstGrowthFormInput = within(observationsTableBeforeEnterKey).getAllByLabelText(
-    'Habitat Complexity Score',
+  const firstGrowthFormInput = within(observationsTableBeforeEnterKey).getAllByTestId(
+    'habitat-complexity-score-select',
   )[0]
 
   // userEvent doesnt work as expected for Enter
   fireEvent.keyDown(firstGrowthFormInput, { key: 'Enter', code: 'Enter' })
 
-  const formAfterEnterKey = screen.getByRole('form')
-  const observationsTableAfterEnterKey = within(formAfterEnterKey).getByLabelText('Observations')
+  const observationsSectionAfterEnterKey = screen.getByTestId('observations-section')
+  const observationsTableAfterEnterKey = within(observationsSectionAfterEnterKey).getByRole('table')
 
   expect(within(observationsTableAfterEnterKey).getAllByRole('row').length).toEqual(5)
 

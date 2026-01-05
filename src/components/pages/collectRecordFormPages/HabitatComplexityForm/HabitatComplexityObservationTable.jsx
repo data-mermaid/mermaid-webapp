@@ -174,12 +174,13 @@ const HabitatComplexityObservationsTable = ({
       return (
         <ObservationTr key={observationId} messageType={observationValidationType}>
           <Td align="center">{rowNumber}</Td>
-          <Td align="right" aria-labelledby="interval-label">
+          <Td align="right" aria-labelledby="interval-label" data-testid="interval-cell">
             {interval}m
           </Td>
 
           <Td align="center">
             <Select
+              data-testid="habitat-complexity-score-select"
               onChange={handleHabitatComplexityScoreChange}
               onKeyDown={(event) => {
                 handleKeyDown({ event, index, observation, isLastCell: true })
@@ -217,6 +218,7 @@ const HabitatComplexityObservationsTable = ({
               type="button"
               onClick={handleDeleteObservation}
               aria-label={deleteObservationText}
+              data-testid="delete-observation-button"
             >
               <IconClose />
             </ButtonRemoveRow>
@@ -285,7 +287,11 @@ const HabitatComplexityObservationsTable = ({
             </StickyObservationTable>
           </StyledOverflowWrapper>
           <UnderTableRow>
-            <ButtonPrimary type="button" onClick={handleAddObservation}>
+            <ButtonPrimary
+              type="button"
+              onClick={handleAddObservation}
+              data-testid="add-observation-row"
+            >
               <IconPlus /> {t('buttons.add_row')}
             </ButtonPrimary>
           </UnderTableRow>

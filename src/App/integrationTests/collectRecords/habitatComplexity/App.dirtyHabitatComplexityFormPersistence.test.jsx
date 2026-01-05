@@ -25,12 +25,12 @@ test('Unsaved NEW Habitat Complexity form edits clear when the user navigates aw
 
   const form = await screen.findByRole('form')
 
-  expect(within(form).getByLabelText('Depth')).not.toHaveValue()
+  expect(within(form).getByTestId('depth-input')).not.toHaveValue()
 
   // enter a depth
-  await user.type(await within(form).findByLabelText('Depth'), '45')
+  await user.type(await within(form).findByTestId('depth-input'), '45')
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
 
   // nav away
   const sideNav = await screen.findByTestId('content-page-side-nav')
@@ -43,7 +43,7 @@ test('Unsaved NEW Habitat Complexity form edits clear when the user navigates aw
   await user.click(within(sampleUnitNav).getByTestId('habitatcomplexity-link'))
 
   await waitFor(async () =>
-    expect(within(await screen.findByRole('form')).getByLabelText('Depth')).not.toHaveValue(),
+    expect(within(await screen.findByRole('form')).getByTestId('depth-input')).not.toHaveValue(),
   )
 })
 
@@ -62,15 +62,15 @@ test('Unsaved EDIT Habitat Complexity form edits clear when the user navigates a
   const form = await screen.findByRole('form')
 
   // initial unedited depth value
-  expect(within(form).getByLabelText('Depth')).toHaveValue(20)
+  expect(within(form).getByTestId('depth-input')).toHaveValue(20)
 
   // enter a depth
-  const depthInput = await within(form).findByLabelText('Depth')
+  const depthInput = await within(form).findByTestId('depth-input')
 
   await user.clear(depthInput)
   await user.type(depthInput, '45')
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
 
   // nav away
   const sideNav = screen.getByTestId('content-page-side-nav')
@@ -84,7 +84,7 @@ test('Unsaved EDIT Habitat Complexity form edits clear when the user navigates a
 
   // initial unedited depth value
   await waitFor(async () =>
-    expect(within(await screen.findByRole('form')).getByLabelText('Depth')).toHaveValue(20),
+    expect(within(await screen.findByRole('form')).getByTestId('depth-input')).toHaveValue(20),
   )
 })
 test('Unsaved NEW Habitat Complexity form edits persist through change in online/offline status', async () => {
@@ -101,20 +101,20 @@ test('Unsaved NEW Habitat Complexity form edits persist through change in online
 
   const form = await screen.findByRole('form')
 
-  expect(within(form).getByLabelText('Depth')).not.toHaveValue()
+  expect(within(form).getByTestId('depth-input')).not.toHaveValue()
 
   // enter a depth
-  const depthInput = await within(form).findByLabelText('Depth')
+  const depthInput = await within(form).findByTestId('depth-input')
 
   await user.clear(depthInput)
   await user.type(depthInput, '45')
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
   expect(screen.getByTestId('save-button')).toBeEnabled()
 
   await user.click(screen.getByTestId('offline-toggle-switch-label'))
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
   expect(await screen.findByTestId('save-button')).toBeEnabled()
 })
 
@@ -133,19 +133,19 @@ test('Unsaved EDIT Habitat Complexity form edits persist through change in onlin
   const form = await screen.findByRole('form')
 
   // initial unedited depth value
-  expect(within(form).getByLabelText('Depth')).toHaveValue(20)
+  expect(within(form).getByTestId('depth-input')).toHaveValue(20)
 
   // enter a depth
-  const depthInput = await within(form).findByLabelText('Depth')
+  const depthInput = await within(form).findByTestId('depth-input')
 
   await user.clear(depthInput)
   await user.type(depthInput, '45')
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
   expect(screen.getByTestId('save-button')).toBeEnabled()
 
   await user.click(screen.getByTestId('offline-toggle-switch-label'))
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
   expect(await screen.findByTestId('save-button')).toBeEnabled()
 })

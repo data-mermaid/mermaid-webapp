@@ -102,7 +102,8 @@ test('Habitat Complexity validation: user can reset ignored observation warnings
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsSection = screen.getByTestId('observations-section')
+  const observationsTable = within(observationsSection).getByRole('table')
 
   // only one observation will have warnings
 

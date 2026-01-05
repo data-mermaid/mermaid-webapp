@@ -248,7 +248,6 @@ const pages = {
       functionalGroup: 'Functional Group',
       trophicGroup: 'Trophic Group',
     },
-    benthicPitSyncCheckbox: 'Use Interval Size as Interval Start',
   },
   submittedTable: {
     title: 'Submitted',
