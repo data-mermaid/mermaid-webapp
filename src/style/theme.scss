@@ -1,3 +1,6 @@
+/**
+ * Comments annotate matching values from theme.ts style migration
+ */
 /** Theme colors **/
 $primary: #174b82;
 $secondary: #dddce4;
@@ -11,6 +14,7 @@ $warning: #efda70;
 $white: #ffffff;
 $black: #000000;
 $disabled: #969696;
+$secondary-disabled: #6b6b6b;
 
 $tableRowOdd: #fdfdfe;
 $tableRowEven: #f8f8fa;
@@ -25,6 +29,7 @@ $smallSpacing: 0.5rem;
 $mediumSpacing: 1rem;
 $largeSpacing: 1.5rem;
 $xLargeSpacing: 2rem;
+
 /** Media Query Break Points **/
 $mobile-break: 599px;
 $tablet-portrait-break: 600px;
@@ -45,6 +50,9 @@ $spacing-small: 5px;
 $spacing-medium: 10px; //1rem
 $spacing-large: 14px; //1.5rem
 $spacing-x-large: 24px; //2rem
+
+/** Heights **/
+$header-height: 80px; //4.9rem = 78.4, rounding up
 
 /** Widths **/
 $default-width: 90vw;

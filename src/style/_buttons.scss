@@ -1,0 +1,20 @@
+@use './theme.scss' as *;
+
+@mixin button-padding {
+  padding: $spacing-small $spacing-medium;
+}
+@mixin button-link {
+  @include button-padding;
+  font-size: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:disabled {
+    color: $secondary-disabled;
+  }
+}
+
+.button__link {
+  @include button-link;
+}
