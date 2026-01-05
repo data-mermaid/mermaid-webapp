@@ -102,6 +102,15 @@ Since this app can exist in multiple states (online, offline, various states of 
 
 If you would like to suppress missing act warnings in your test console, you can add `VITE_IGNORE_TESTING_ACT_WARNINGS=true` to `.env`
 
+#### Code style
+
+- React components are PascalCased according to React best practices.
+- React components are created as a result of unique functionality
+- CSS/SCSS Class names are created with BEM methodology for design intentions
+- Avoid using `!important` in CSS/SCSS
+- Event-handling functions begin with `handle`
+  - ie - handleClose, handleClick
+
 ## Deploying
 
 ### Pull Request Previews
