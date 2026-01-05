@@ -14,7 +14,7 @@ import dexieCurrentUserInstance from './App/dexieCurrentUserInstance'
 import { DexiePerUserDataInstanceProvider } from './App/dexiePerUserDataInstanceContext'
 import { ClearPersistedFormDataHackProvider } from './App/ClearDirtyFormDataHackContext'
 import '../i18n'
-import { PostHogProvider } from 'posthog-js/react'
+import { StyledEngineProvider } from '@mui/material'
 
 // Upgrading to react router v6 because of dependabot issues and data routers (createBrowserRouter) which is necessary for many functions we use(eg: useNavigate).
 // We keep the jsx routes as defined in app.js instead of having ALL routes defined here because we were not able to have conditional rendering of the loader otherwise
@@ -25,9 +25,6 @@ const router = createBrowserRouter(
 
 const container = document.getElementById('root')
 const root = createRoot(container)
-const options = {
-  api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-}
 
 const onRedirectCallback = (appState) => {
   if (appState?.returnTo && appState.returnTo !== '/') {
@@ -53,15 +50,15 @@ root.render(
       scope="read:current_user update:current_user_metadata"
     >
       <OnlineStatusProvider>
-        <PostHogProvider apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY} options={options}>
-          <SyncStatusProvider>
-            <DexiePerUserDataInstanceProvider>
-              <ClearPersistedFormDataHackProvider value={router}>
+        <SyncStatusProvider>
+          <DexiePerUserDataInstanceProvider>
+            <ClearPersistedFormDataHackProvider value={router}>
+              <StyledEngineProvider injectFirst>
                 <RouterProvider router={router} />
-              </ClearPersistedFormDataHackProvider>
-            </DexiePerUserDataInstanceProvider>
-          </SyncStatusProvider>
-        </PostHogProvider>
+              </StyledEngineProvider>
+            </ClearPersistedFormDataHackProvider>
+          </DexiePerUserDataInstanceProvider>
+        </SyncStatusProvider>
       </OnlineStatusProvider>
     </Auth0Provider>
   </React.StrictMode>,

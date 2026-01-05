@@ -147,7 +147,7 @@
   "download_sites_regimes": "Unduh situs dan rezim manajemen",
   "email": "Email",
   "errors": {
-    "summary_record_data_unavailable": "Data catatan ringkasan saat ini tidak tersedia"
+    "summary_data_unavailable": "Data catatan ringkasan saat ini tidak tersedia"
   },
   "exports": {
     "citation_description": "Kutipan yang disarankan dapat ditemukan di semua tab pada file yang Anda ekspor. Pastikan Anda mengutip data yang telah diekspor dalam publikasi apa pun untuk memberikan kredit yang tepat kepada pemilik data.",
@@ -869,7 +869,6 @@
   "view_selected_only": "Lihat hanya yang dipilih",
   "visibility": "Visibilitas",
   "visibility_info": "Jarak horizontal di mana objek di bawah air masih dapat diidentifikasi",
-  "welcome_header": "Halo dunia!",
   "width": "Lebar",
   "width_info": "Lebar total (BUKAN lebar ke satu sisi pita) transek sabuk ikan, dalam meter",
   "yes": "Ya"

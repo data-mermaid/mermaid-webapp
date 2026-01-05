@@ -85,7 +85,7 @@ const ProjectModal = ({
   }
 
   const handleSuccessResponse = (response, languageSuccessMessage) => {
-    refreshCurrentUser() // this ensures the user has the right privaleges to the newly created project
+    refreshCurrentUser() // this ensures the user has the right privileges to the newly created project
     toast.success(...getToastArguments(languageSuccessMessage))
     formik.resetForm()
     addProjectToProjectsPage(response)

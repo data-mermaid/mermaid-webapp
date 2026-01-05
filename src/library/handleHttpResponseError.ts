@@ -1,6 +1,15 @@
 import { toast } from 'react-toastify'
-import language from '../language'
 import { getToastArguments } from './getToastArguments'
+import i18n from '../../i18n'
+import { AxiosError } from 'axios'
+
+interface HandleHttpResponseErrorProps {
+  error: Partial<AxiosError>
+  callback?: () => unknown
+  logoutMermaid?: () => void
+  shouldShowServerNonResponseMessage?: boolean
+  setServerNotReachable?: () => void
+}
 
 const handleHttpResponseError = ({
   error,
@@ -8,7 +17,7 @@ const handleHttpResponseError = ({
   logoutMermaid,
   shouldShowServerNonResponseMessage = true,
   setServerNotReachable,
-}) => {
+}: HandleHttpResponseErrorProps) => {
   if (error) {
     console.error(error)
   }
@@ -16,10 +25,10 @@ const handleHttpResponseError = ({
 
   if (requestWasMadeWithNoResponse) {
     if (shouldShowServerNonResponseMessage) {
-      toast.error(...getToastArguments(language.error.noServerResponse))
+      toast.error(...getToastArguments(i18n.t('api_errors.no_server_response')))
     }
 
-    setServerNotReachable()
+    setServerNotReachable?.()
     callback?.()
 
     return
@@ -28,7 +37,7 @@ const handleHttpResponseError = ({
   const errorStatus = error?.response?.status
 
   if (errorStatus === 401) {
-    // User is unauthorized so logout and redirect to login screen
+    // User is unauthorized --> logout and redirect to login screen
     if (logoutMermaid) {
       // Log an error to make it clear why redirect has occurred
       console.error('A 401 error occurred. The user is unauthorized.')
@@ -46,7 +55,11 @@ const handleHttpResponseError = ({
 
   // Make sure to only include status codes that need a custom message for a given context
   if (otherErrorStatusesToRespondTo.includes(errorStatus)) {
-    toast.error(...getToastArguments(language.error[errorStatus]))
+    let errorMessage = i18n.t('api_errors.unspecified_error')
+    if (errorStatus === 403) {
+      errorMessage = i18n.t('api_errors.unauthorized_user')
+    }
+    toast.error(...getToastArguments(errorMessage))
 
     return
   }

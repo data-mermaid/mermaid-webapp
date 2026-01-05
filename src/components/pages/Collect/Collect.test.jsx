@@ -51,7 +51,7 @@ test('Collect Records table sorts properly by method column', async () => {
 
   const tableRowsAfterDescending = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterDescending[1]).getByText('Habitat Complexity'))
+  expect(within(tableRowsAfterDescending[1]).getByText('Habitat complexity'))
 
   await user.dblClick(within(table).getByTestId('collecting-header-method'))
 

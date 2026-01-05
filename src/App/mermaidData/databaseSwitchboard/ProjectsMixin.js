@@ -251,6 +251,33 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    addDemoProject = async function addDemoProject() {
+      if (this._isAuthenticatedAndReady) {
+        return axios
+          .post(
+            `${this._apiBaseUrl}/projects/create_demo/`,
+            {},
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
+          .then((response) => {
+            const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
+
+            if (isApiResponseSuccessful) {
+              return this._apiSyncInstance.pullAllProjects().then((pullResponse) => {
+                return pullResponse.data.projects.updates[0]
+              })
+            }
+
+            return Promise.reject(new Error('The API status is unsuccessful'))
+          })
+          .catch((error) => {
+            return Promise.reject(error)
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     deleteProject = async function deleteProject(project, projectId) {
       const hasCorrespondingProjectInTheApi = !!project._last_revision_num
 
