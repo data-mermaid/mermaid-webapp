@@ -103,7 +103,7 @@
     "data_sharing": "Data sharing",
     "fish_species_info": "Reef fish species, size and abundance, taxonomy and functional group information, biomass coefficients",
     "individual_habitat_complexity": "Individual habitat complexity scores",
-    "information": "Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data are collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.",
+    "information": "Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.",
     "is_test_project": "This is a test project",
     "learn_more": "Learn more about how your data is shared",
     "metadata": "Metadata",
@@ -146,7 +146,7 @@
   "download_sites_regimes": "Export sites and management regimes",
   "email": "Email",
   "errors": {
-    "summary_record_data_unavailable": "Summary record data is currently unavailable"
+    "summary_data_unavailable": "Summary data is currently unavailable"
   },
   "exports": {
     "citation_description": "Suggested citations can be found in all tabs of the export file. Please ensure you cite the data you have exported in any publications to properly credit the data owners.",
@@ -492,7 +492,7 @@
     "copy_management_regimes": "Copy management regime",
     "copy_mrs_from_other_projects": "Copy management from other projects",
     "copy_selected_mrs_to_project": "Copy selected management to project",
-    "data_unavailable": "Management record data are currently unavailable",
+    "data_unavailable": "Management record data is currently unavailable",
     "delete_management_regime": "Delete Management Regime",
     "export": "Export MRs",
     "export_mrs": "Export management",
@@ -719,7 +719,7 @@
       "classification_unavailable_offline": "This sample unit uses AI and is unavailable offline",
       "data_unavailable": "Sample unit data is currently unavailable",
       "observations_unavailable_offline": "Sample unit observations unavailable offline",
-      "submitted_data_unavailable": "Submitted record data are currently unavailable",
+      "submitted_data_unavailable": "Submitted record data is currently unavailable",
       "submitted_records_unavailable": "Submitted record data is currently unavailable",
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable",
       "submit_disabled": "Errors or warnings are preventing you from submitting",
@@ -817,7 +817,7 @@
     "mermaid_data_save_online_sync_error": "The {{dataType}} has been saved on your computer, but not online.",
     "mermaid_data_save_success_offline": "The {{dataType}} has been saved on your computer.",
     "mermaid_data_save_success_online": "The {{dataType}} has been saved on your computer and online.",
-    "submitted_records_unavailable": "Submitted record data are currently unavailable"
+    "submitted_records_unavailable": "Submitted record data is currently unavailable"
   },
   "toggle_label_visibility": "Toggle label visibility",
   "toggle_table_visibility": "Toggle table visibility",
