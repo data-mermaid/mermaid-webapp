@@ -147,7 +147,7 @@
   "download_sites_regimes": "Unduh situs dan rezim manajemen",
   "email": "Email",
   "errors": {
-    "summary_record_data_unavailable": "Data catatan ringkasan saat ini tidak tersedia"
+    "summary_data_unavailable": "Data catatan ringkasan saat ini tidak tersedia"
   },
   "exports": {
     "citation_description": "Kutipan yang disarankan dapat ditemukan di semua tab pada file yang Anda ekspor. Pastikan Anda mengutip data yang telah diekspor dalam publikasi apa pun untuk memberikan kredit yang tepat kepada pemilik data.",

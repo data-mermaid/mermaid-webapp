@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { Button, ClickAwayListener, IconButton } from '@mui/material'
 import styles from './CalloutButton.module.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useNavigate } from 'react-router-dom'
@@ -12,6 +10,7 @@ import { useCurrentUser } from '../../../App/CurrentUserContext'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import handleHttpResponseError from '../../../library/handleHttpResponseError'
 import { AxiosError } from 'axios'
+import { IconDown } from '../../icons'
 
 interface CalloutButtonDropdownProps {
   onClick: () => void
@@ -91,8 +90,7 @@ const CalloutButtonDropdown = ({
           }}
           onClick={toggleMenu}
         >
-          <FontAwesomeIcon
-            icon={faCaretDown}
+          <IconDown
             style={{
               transform: `rotate(${isDropdownOpen ? '180deg' : '0'})`,
             }}
