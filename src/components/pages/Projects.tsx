@@ -30,12 +30,12 @@ import { useNavigate } from 'react-router-dom'
 
 interface DemoProjectCalloutProps {
   handleDemoClick: () => void
-  setHasUserDismissedDemo: (arg: boolean) => void
+  // setHasUserDismissedDemo: (arg: boolean) => void
   userHasProjects: boolean
 }
 const DemoProjectCallout = ({
   handleDemoClick,
-  setHasUserDismissedDemo,
+  // setHasUserDismissedDemo,
   userHasProjects,
 }: DemoProjectCalloutProps) => {
   const { t } = useTranslation()
@@ -45,9 +45,8 @@ const DemoProjectCallout = ({
     : [cardStyles['demo-callout'], cardStyles['demo-callout--centered']].join(' ')
 
   const handleDemoTryoutDismiss = () => {
-    //todo: set val in DB to prevent re-population after session end
     setIsCalloutDismissed(true)
-    setHasUserDismissedDemo(true)
+    // setHasUserDismissedDemo(true) //set after navigation to create API call for saving value
   }
 
   return (
@@ -98,7 +97,7 @@ const Projects = () => {
   const [projectFilter, setProjectFilter] = useState('')
   const [projects, setProjects] = useState([])
   const [projectSortKey, setProjectSortKey] = useState('updated_on')
-  const [hasUserDismissedDemo, setHasUserDismissedDemo] = useState(false)
+  const [hasUserDismissedDemo] = useState(false) //setHasUserDismissedDemo
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
@@ -289,7 +288,7 @@ const Projects = () => {
         <div role="list">
           {!userHasDemoProject && isAppOnline && !hasUserDismissedDemo && (
             <DemoProjectCallout
-              setHasUserDismissedDemo={setHasUserDismissedDemo}
+              // setHasUserDismissedDemo={setHasUserDismissedDemo}
               handleDemoClick={createDemoProject}
               userHasProjects={userHasProjects}
             />
