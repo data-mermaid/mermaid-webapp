@@ -47,7 +47,7 @@ describe('Offline', () => {
     const table = screen.getByRole('table')
 
     const linkToHabitatComplexityRecord = within(table).queryByRole('link', {
-      name: 'Habitat Complexity',
+      name: 'Habitat complexity',
     })
 
     expect(linkToHabitatComplexityRecord).not.toBeInTheDocument()

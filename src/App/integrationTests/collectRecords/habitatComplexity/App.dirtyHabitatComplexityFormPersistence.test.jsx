@@ -80,7 +80,7 @@ test('Unsaved EDIT Habitat Complexity form edits clear when the user navigates a
   // nav back
   const table = await screen.findByRole('table')
 
-  await user.click(within(table).getAllByText('Habitat Complexity')[0])
+  await user.click(within(table).getAllByText('Habitat complexity')[0])
 
   // initial unedited depth value
   await waitFor(async () =>

@@ -41,8 +41,9 @@ const Projects = () => {
   const unavailableProjectsErrorText = t('projects.errors.data_unavailable')
 
   useDocumentTitle(`${t('projects.projects')} - ${t('mermaid')}`)
+  const userHasDemoProject = projects.some((proj) => proj.is_demo === true)
 
-  const _getProjectsInfo = useEffect(() => {
+  useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
       Promise.all([
         databaseSwitchboardInstance.getProjects(),
@@ -172,13 +173,13 @@ const Projects = () => {
     <HomePageLayout
       topRow={
         <ProjectToolBarSection
-          projectFilter={projectFilter}
           setProjectFilter={setProjectFilter}
           projectSortKey={projectSortKey}
           setProjectSortKey={setProjectSortKey}
           setIsProjectSortAsc={setIsProjectSortAsc}
           addProjectToProjectsPage={addProjectToProjectsPage}
           handleExploreButtonClick={handleExploreButtonClick}
+          userHasDemoProject={userHasDemoProject}
         />
       }
       bottomRow={<div role="list">{projectCardsList}</div>}
