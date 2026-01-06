@@ -52,14 +52,19 @@ const DemoProjectCallout = ({
   return (
     <Box id="demo-project-callout" className={calloutStyleClasses}>
       {isCalloutDismissed ? (
-        <p>
-          <Trans
-            i18nKey="projects.demo_dismissed"
-            components={{
-              1: <span style={{ fontWeight: 700 }} />,
-            }}
-          />
-        </p>
+        <>
+          <p>
+            <Trans
+              i18nKey="projects.demo_dismissed"
+              components={{
+                1: <span style={{ fontWeight: 700 }} />,
+              }}
+            />
+          </p>
+          <CloseButton type="button" onClick={handleDemoTryoutDismiss}>
+            <IconClose aria-label={t('buttons.dismiss')} />
+          </CloseButton>
+        </>
       ) : (
         <>
           <div>
