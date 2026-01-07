@@ -76,7 +76,7 @@ const ProjectName = () => {
             <button
               className={buttonStyles['icon-button']}
               type="button"
-              aria-label={t('go_to_explore_this_project')}
+              aria-label={tooltipText}
               onClick={handleExploreButtonClick}
               disabled={isDemoProject}
             >
