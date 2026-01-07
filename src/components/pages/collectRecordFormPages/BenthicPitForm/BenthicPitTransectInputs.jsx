@@ -14,7 +14,7 @@ import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAn
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 import language from '../../../../language'
-import { CheckBoxContainer } from '../../../generic/buttons'
+import IntervalCheckbox from '../../../mermaidInputs/IntervalCheckbox'
 
 const CURRENT_VALIDATION_PATH = 'data.benthic_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.benthic_transect.depth'
@@ -29,21 +29,6 @@ const TRANSECT_NUMBER_VALIDATION_PATH = 'data.benthic_transect.number'
 const VISIBILITY_VALIDATION_PATH = 'data.benthic_transect.visibility'
 const INTERVAL_SIZE_VALIDATION_PATH = 'data.interval_size'
 const INTERVAL_START_VALIDATION_PATH = 'data.interval_start'
-
-export const IntervalCheckbox = ({ isChecked, handleChange, checkboxLabel }) => {
-  return (
-    <CheckBoxContainer>
-      <input
-        id="checkbox-sync"
-        type="checkbox"
-        checked={isChecked}
-        onChange={(event) => handleChange(event.target.checked)}
-      />
-
-      {checkboxLabel}
-    </CheckBoxContainer>
-  )
-}
 
 const BenthicPitTransectInputs = ({
   areValidationsShowing,
@@ -396,7 +381,6 @@ const BenthicPitTransectInputs = ({
             <IntervalCheckbox
               isChecked={isIntervalSizeAsStartChecked}
               handleChange={handleSyncIntervalChange}
-              checkboxLabel={language.pages.collectRecord.benthicPitSyncCheckbox}
             />
           }
           isInputDisabled={isIntervalSizeAsStartChecked}
@@ -537,12 +521,6 @@ BenthicPitTransectInputs.propTypes = {
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
-}
-
-IntervalCheckbox.propTypes = {
-  isChecked: PropTypes.bool.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  checkboxLabel: PropTypes.string.isRequired,
 }
 
 export default BenthicPitTransectInputs

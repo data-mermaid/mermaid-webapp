@@ -625,7 +625,8 @@ test('Habitat Complexity validation: user can dismiss observation warnings ', as
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsSection = screen.getByTestId('observations-section')
+  const observationsTable = within(observationsSection).getByRole('table')
 
   expect(within(observationsTable).getByText('firstWarning')).toBeInTheDocument()
   expect(within(observationsTable).getByText('secondWarning')).toBeInTheDocument()

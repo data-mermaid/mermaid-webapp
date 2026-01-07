@@ -37,7 +37,6 @@
       "attribute_proposal_unsaved": "The proposed attribute {{attribute}} has not been saved"
     },
     "missing_benthic_attribute": "Missing benthic attribute",
-    "observations": "Observations",
     "proposed_attribute_saved": "Proposed attribute {{attribute}} saved. Observation has been updated with this attribute."
   },
   "benthic_pit_lit_habitat": "Benthic: PIT, LIT, PQT, and habitat complexity",
@@ -398,6 +397,8 @@
   "go_to_explore_projects": "View all your projects on MERMAID Explore",
   "go_to_explore_sample_event": "View this sample event on MERMAID Explore",
   "go_to_explore_this_project": "View this project on MERMAID Explore",
+  "habitat_complexity_score": "Habitat Complexity Score",
+  "habitat_complexity_score_info": "Benthic complexity score (0 - 5) for transect interval, as integer (e.g. 3). The categories are 0 no vertical reef, flat or rubbly areas; 1 low (<30 cm high) and sparse relief; 2 low but widespread relief; 3 widespread moderately complex (30-60 cm high) relief; 4 widespread very complex (60 -100 cm high) relief with numerous fissures and caves; 5 exceptionally complex (>1 m high) relief with numerous caves and overhangs).",
   "help_documents": "Help (PDF)",
   "help_dropdown": "Help documents dropdown",
   "image_classification": {
@@ -550,6 +551,9 @@
     "zoom_out": "Zoom out",
     "zoom_to_point": "Zoom to point"
   },
+  "measurements": {
+    "meters_short": "m"
+  },
   "media": {
     "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
     "buttons": {
@@ -583,7 +587,14 @@
   "no_notifications": "There are currently no notifications",
   "notes": "Notes",
   "number_of_quadrats_info": "Total number of quadrats in the transect (e.g. 10)",
-  "observations": "Observations",
+  "observations": {
+    "interval": "Interval",
+    "interval_size": "Interval Size",
+    "interval_size_info": "Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).",
+    "interval_start": "Interval Start",
+    "interval_start_info": "Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5).",
+    "observations": "Observations"
+  },
   "observers": "Observers",
   "observers_info": "Select one or more observers to add",
   "offline": {
@@ -829,6 +840,7 @@
   "transect_number": "Transect number",
   "transect_number_info": "Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.",
   "type": "Type",
+  "use_interval_size_as_start": "Use Interval Size as Interval Start",
   "users": {
     "add_user_button": "Add user",
     "add_user_email": "Enter email address of user to add",
