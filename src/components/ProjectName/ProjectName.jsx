@@ -65,7 +65,7 @@ const ProjectName = () => {
   }
 
   const renderExploreButton = () => {
-    if (isAppOnline || (isAppOnline && isDemoProject)) {
+    if (isAppOnline) {
       const tooltipText = isDemoProject
         ? 'projects.demo_explore_unavailable'
         : 'go_to_explore_this_project'

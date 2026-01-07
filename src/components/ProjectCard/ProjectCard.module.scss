@@ -14,3 +14,11 @@
     }
   }
 }
+.no-wrap-wrapper {
+  white-space: nowrap;
+}
+
+.country-date-label {
+  opacity: 0.8;
+  font-size: $small-font-size;
+}

@@ -1,8 +1,6 @@
 @use './theme.scss';
 
 .pill {
-  //display: flex;
-  //align-items: center;
   display: inline-block;
   height: theme.$pill-height;
   margin-left: theme.$spacing-large;

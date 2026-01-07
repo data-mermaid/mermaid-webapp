@@ -9,6 +9,6 @@
   border-style: none;
   &:disabled {
     cursor: not-allowed;
-    color: gray;
+    color: $disabled;
   }
 }

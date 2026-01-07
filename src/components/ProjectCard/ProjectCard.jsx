@@ -6,7 +6,6 @@ import React, { useState } from 'react'
 import {
   CardWrapper,
   CheckBoxLabel,
-  DateAndCountryLabel,
   ProjectCardHeader,
   ProjectCardHeaderButtonsAndDate,
 } from './ProjectCard.styles'
@@ -122,7 +121,6 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
         <div>
           <div className={styles['title-container']}>
             <h2>{name}</h2>
-            {/*Mobile update: todo: add to CSS*/}
             <div className={styles['pill-container']}>
               {isAdminUser && (
                 <div className={[labelStyles.pill, labelStyles.pill__admin].join(' ')}>
@@ -136,10 +134,10 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
               )}
             </div>
           </div>
-          <DateAndCountryLabel>{countries.join(', ')}</DateAndCountryLabel>
+          <span className={styles['country-date-label']}>{countries.join(', ')}</span>
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
-          <div style={{ whiteSpace: 'nowrap' }}>
+          <div className={styles['no-wrap-wrapper']}>
             {!isDemoProject && (
               <ButtonSecondary
                 onClick={() => setIsProjectModalOpen(true)}
@@ -176,9 +174,9 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
               {t('projects.available_offline')}
             </CheckBoxLabel>
           </div>
-          <DateAndCountryLabel style={{ marginTop: '1rem' }}>
+          <span className={styles['country-date-label']} style={{ marginTop: '1rem' }}>
             {removeTimeZoneFromDate(updated_on)}
-          </DateAndCountryLabel>
+          </span>
         </ProjectCardHeaderButtonsAndDate>
       </ProjectCardHeader>
       <ProjectCardSummary project={project} isAppOnline={isAppOnline} />

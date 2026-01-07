@@ -23,10 +23,7 @@ export const CardWrapper = styled('div')`
     grid-template-rows: auto auto auto;
   `)}
 `
-export const DateAndCountryLabel = styled('span')`
-  opacity: 0.8;
-  font-size: ${theme.typography.smallFontSize};
-`
+
 export const ProjectCardHeader = styled('div')`
   display: flex;
   padding: ${theme.spacing.medium};
