@@ -9,7 +9,6 @@ import {
   DateAndCountryLabel,
   ProjectCardHeader,
   ProjectCardHeaderButtonsAndDate,
-  ProjectTitleContainer,
 } from './ProjectCard.styles'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
@@ -141,14 +140,17 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <div style={{ whiteSpace: 'nowrap' }}>
-            <ButtonSecondary
-              onClick={() => setIsProjectModalOpen(true)}
-              aria-label={t('buttons.copy')}
-              disabled={!isAppOnline}
-            >
-              <IconCopy />
-              <span>{t('buttons.copy')}</span>
-            </ButtonSecondary>
+            {!isDemoProject && (
+              <ButtonSecondary
+                onClick={() => setIsProjectModalOpen(true)}
+                aria-label={t('buttons.copy')}
+                disabled={!isAppOnline}
+                data-testid="copy-project-button"
+              >
+                <IconCopy />
+                <span>{t('buttons.copy')}</span>
+              </ButtonSecondary>
+            )}
 
             {isProjectModalOpen && (
               <ProjectModal
@@ -174,7 +176,6 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
               {t('projects.available_offline')}
             </CheckBoxLabel>
           </div>
-          {/*Matching H2 end block margin*/}
           <DateAndCountryLabel style={{ marginTop: '1rem' }}>
             {removeTimeZoneFromDate(updated_on)}
           </DateAndCountryLabel>
