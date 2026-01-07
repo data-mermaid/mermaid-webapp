@@ -335,7 +335,7 @@ const HabitatComplexityTransectInputs = ({
           helperText={t('transect_length_info')}
         />
         <InputWithLabelAndValidation
-          label={t('interval_size')}
+          label={t('observations.interval_size')}
           required={true}
           id="interval_size"
           ignoreNonObservationFieldValidations={() => {
@@ -354,10 +354,10 @@ const HabitatComplexityTransectInputs = ({
           value={formik.values.interval_size}
           onChange={handleIntervalSizeChange}
           unit="m"
-          helperText={t('interval_size_info')}
+          helperText={t('observations.interval_size_info')}
         />
         <InputWithLabelAndValidation
-          label={t('interval_start')}
+          label={t('observations.interval_start')}
           required={true}
           id="interval_start"
           ignoreNonObservationFieldValidations={() => {
@@ -378,7 +378,7 @@ const HabitatComplexityTransectInputs = ({
           value={formik.values.interval_start}
           onChange={handleIntervalStartChange}
           unit="m"
-          helperText={t('interval_start_info')}
+          helperText={t('observations.interval_start_info')}
           renderItemAboveInput={
             <IntervalCheckbox
               isChecked={isIntervalSizeAsStartChecked}

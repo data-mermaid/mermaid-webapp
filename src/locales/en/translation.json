@@ -37,7 +37,6 @@
       "attribute_proposal_unsaved": "The proposed attribute {{attribute}} has not been saved"
     },
     "missing_benthic_attribute": "Missing benthic attribute",
-    "observations": "Observations",
     "proposed_attribute_saved": "Proposed attribute {{attribute}} saved. Observation has been updated with this attribute."
   },
   "benthic_pit_lit_habitat": "Benthic: PIT, LIT, PQT, and habitat complexity",
@@ -472,11 +471,6 @@
   },
   "in_collecting_with": "In Collecting with:",
   "info": "info",
-  "interval": "Interval",
-  "interval_size": "Interval Size",
-  "interval_size_info": "Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).",
-  "interval_start": "Interval Start",
-  "interval_start_info": "Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5).",
   "label": "Label",
   "label_info": "Arbitrary text to distinguish sample units that are distinct but should be combined analytically (i.e. all other properties are identical). For example: Long swim. Rarely used.",
   "languages": {
@@ -557,6 +551,9 @@
     "zoom_out": "Zoom out",
     "zoom_to_point": "Zoom to point"
   },
+  "measurements": {
+    "meters_short": "m"
+  },
   "media": {
     "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
     "buttons": {
@@ -590,7 +587,14 @@
   "no_notifications": "There are currently no notifications",
   "notes": "Notes",
   "number_of_quadrats_info": "Total number of quadrats in the transect (e.g. 10)",
-  "observations": "Observations",
+  "observations": {
+    "interval": "Interval",
+    "interval_size": "Interval Size",
+    "interval_size_info": "Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).",
+    "interval_start": "Interval Start",
+    "interval_start_info": "Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5).",
+    "observations": "Observations"
+  },
   "observers": "Observers",
   "observers_info": "Select one or more observers to add",
   "offline": {
