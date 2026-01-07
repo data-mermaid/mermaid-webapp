@@ -72,15 +72,17 @@ const ProjectName = () => {
 
       return (
         <MuiTooltip title={t(tooltipText)} placement="top" arrow>
-          <button
-            className={buttonStyles['icon-button']}
-            type="button"
-            aria-label={t('go_to_explore_this_project')}
-            onClick={handleExploreButtonClick}
-            disabled={isDemoProject}
-          >
-            <BiggerIconGlobe />
-          </button>
+          <span>
+            <button
+              className={buttonStyles['icon-button']}
+              type="button"
+              aria-label={t('go_to_explore_this_project')}
+              onClick={handleExploreButtonClick}
+              disabled={isDemoProject}
+            >
+              <BiggerIconGlobe />
+            </button>
+          </span>
         </MuiTooltip>
       )
     } else {
