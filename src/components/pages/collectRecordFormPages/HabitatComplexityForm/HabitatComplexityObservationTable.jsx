@@ -52,6 +52,8 @@ const HabitatComplexityObservationsTable = ({
   testId,
 }) => {
   const { t } = useTranslation()
+
+  const metersShort = t('measurements.meters_short')
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
@@ -176,7 +178,7 @@ const HabitatComplexityObservationsTable = ({
           <Td align="center">{rowNumber}</Td>
           <Td align="right" aria-labelledby="interval-label" data-testid="interval-cell">
             {interval}
-            {t('measurements.meters_short')}
+            {metersShort}
           </Td>
 
           <Td align="center">
@@ -240,6 +242,7 @@ const HabitatComplexityObservationsTable = ({
     resetObservationValidations,
     setAreObservationsInputsDirty,
     deleteObservationText,
+    metersShort,
   ])
 
   return (
