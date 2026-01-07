@@ -7,7 +7,6 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 import useIsMounted from '../../library/useIsMounted'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
-import { PROJECT_CODES } from '../../library/constants/constants'
 import { IconGlobe } from '../icons'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { useTranslation } from 'react-i18next'
@@ -51,7 +50,6 @@ const ProjectName = () => {
   }, [databaseSwitchboardInstance, isMounted, projectId])
 
   const isDemoProject = project?.is_demo
-  const isTestProject = project?.status === PROJECT_CODES.status.test
 
   const handleExploreButtonClick = () => {
     if (!project) {
@@ -67,26 +65,27 @@ const ProjectName = () => {
   }
 
   const renderExploreButton = () => {
-    if (!isAppOnline || !(isTestProject && isDemoProject) || (isTestProject && !isDemoProject)) {
+    if (isAppOnline || (isAppOnline && isDemoProject)) {
+      const tooltipText = isDemoProject
+        ? 'projects.demo_explore_unavailable'
+        : 'go_to_explore_this_project'
+
+      return (
+        <MuiTooltip title={t(tooltipText)} placement="top" arrow>
+          <button
+            className={buttonStyles['icon-button']}
+            type="button"
+            aria-label={t('go_to_explore_this_project')}
+            onClick={handleExploreButtonClick}
+            disabled={isDemoProject}
+          >
+            <BiggerIconGlobe />
+          </button>
+        </MuiTooltip>
+      )
+    } else {
       return null
     }
-    const tooltipText = isDemoProject
-      ? 'projects.demo_explore_unavailable'
-      : 'go_to_explore_this_project'
-
-    return (
-      <MuiTooltip title={t(tooltipText)} placement="top" arrow>
-        <button
-          className={buttonStyles['icon-button']}
-          type="button"
-          aria-label={t('go_to_explore_this_project')}
-          onClick={handleExploreButtonClick}
-          disabled={isDemoProject}
-        >
-          <BiggerIconGlobe />
-        </button>
-      </MuiTooltip>
-    )
   }
 
   return (
