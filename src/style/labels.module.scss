@@ -1,22 +1,22 @@
-@use './theme.scss';
+@use './theme.scss' as *;
 
 .pill {
   display: inline-block;
-  height: theme.$pill-height;
-  margin-left: theme.$spacing-large;
-  margin-top: theme.$spacing-x-small;
-  padding: theme.$spacing-x-small theme.$spacing-medium;
+  height: $pill-height;
+  margin-left: $spacing-large;
+  margin-top: $spacing-x-small;
+  padding: $spacing-x-small $spacing-medium;
   border: solid 1px #ffffff8c;
-  border-radius: theme.$border-radius__pill;
+  border-radius: $border-radius__pill;
   text-transform: uppercase;
   white-space: nowrap;
-  font-size: theme.$small-font-size;
+  font-size: $small-font-size;
   cursor: text;
 }
 .pill__admin {
-  color: theme.$white;
+  color: $white;
 }
 .pill__demo {
-  color: theme.$white;
-  background-color: theme.$callout;
+  color: $white;
+  background-color: $callout;
 }
