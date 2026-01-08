@@ -4,14 +4,10 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
 import {
-  AdminPill,
   CardWrapper,
   CheckBoxLabel,
   ProjectCardHeader,
-  DateAndCountryLabel,
   ProjectCardHeaderButtonsAndDate,
-  ProjectCardHeaderButtonWrapper,
-  ProjectTitleContainer,
 } from './ProjectCard.styles'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
@@ -25,13 +21,15 @@ import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
 import ProjectModal from './ProjectModal'
 import {
-  getIsUserReadOnlyForProject,
   getIsUserAdminForProject,
+  getIsUserReadOnlyForProject,
 } from '../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useTranslation } from 'react-i18next'
+import labelStyles from '../../style/labels.module.scss'
+import styles from './ProjectCard.module.scss'
 
 const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...restOfProps }) => {
   const { currentUser } = useCurrentUser()
@@ -47,6 +45,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const isAdminUser = getIsUserAdminForProject(currentUser, id)
+  const isDemoProject = project.is_demo
 
   const handleProjectOfflineReadyClick = (event) => {
     const isChecked = event.target.checked
@@ -120,29 +119,45 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
     >
       <ProjectCardHeader>
         <div>
-          <ProjectTitleContainer>
+          <div className={styles['title-container']}>
             <h2>{name}</h2>
-            {isAdminUser ? <AdminPill>admin</AdminPill> : null}
-          </ProjectTitleContainer>
-          <DateAndCountryLabel>{countries.join(', ')}</DateAndCountryLabel>
+            <div className={styles['pill-container']}>
+              {isAdminUser && (
+                <div className={[labelStyles.pill, labelStyles.pill__admin].join(' ')}>
+                  {t('users.roles.admin')}
+                </div>
+              )}
+              {isDemoProject && (
+                <div className={[labelStyles.pill, labelStyles.pill__demo].join(' ')}>
+                  {t('projects.demo')}
+                </div>
+              )}
+            </div>
+          </div>
+          <span className={styles['country-date-label']}>{countries.join(', ')}</span>
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
-          <ProjectCardHeaderButtonWrapper>
-            <ButtonSecondary
-              onClick={() => setIsProjectModalOpen(true)}
-              aria-label="Copy"
-              disabled={!isAppOnline}
-            >
-              <IconCopy />
-              <span>{t('buttons.copy')}</span>
-            </ButtonSecondary>
+          <div className={styles['no-wrap-wrapper']}>
+            {!isDemoProject && (
+              <ButtonSecondary
+                onClick={() => setIsProjectModalOpen(true)}
+                aria-label={t('buttons.copy')}
+                disabled={!isAppOnline}
+                data-testid="copy-project-button"
+              >
+                <IconCopy />
+                <span>{t('buttons.copy')}</span>
+              </ButtonSecondary>
+            )}
 
-            <ProjectModal
-              isOpen={isProjectModalOpen}
-              onDismiss={() => setIsProjectModalOpen(false)}
-              project={project}
-              addProjectToProjectsPage={addProjectToProjectsPage}
-            />
+            {isProjectModalOpen && (
+              <ProjectModal
+                isOpen
+                onDismiss={() => setIsProjectModalOpen(false)}
+                project={project}
+                addProjectToProjectsPage={addProjectToProjectsPage}
+              />
+            )}
             <CheckBoxLabel
               htmlFor={project.id}
               onClick={stopEventPropagation}
@@ -158,8 +173,10 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
               />
               {t('projects.available_offline')}
             </CheckBoxLabel>
-          </ProjectCardHeaderButtonWrapper>
-          <DateAndCountryLabel>{removeTimeZoneFromDate(updated_on)}</DateAndCountryLabel>
+          </div>
+          <span className={styles['country-date-label']} style={{ marginTop: '1rem' }}>
+            {removeTimeZoneFromDate(updated_on)}
+          </span>
         </ProjectCardHeaderButtonsAndDate>
       </ProjectCardHeader>
       <ProjectCardSummary project={project} isAppOnline={isAppOnline} />

@@ -1,0 +1,24 @@
+@use '../../style/theme.scss' as *;
+.title-container {
+  display: flex;
+  @media (max-width: $mobile-break) {
+    justify-content: space-between;
+  }
+}
+.pill-container {
+  @media (max-width: $mobile-break) {
+    display: block;
+    max-width: 30%;
+    div {
+      float: right;
+    }
+  }
+}
+.no-wrap-wrapper {
+  white-space: nowrap;
+}
+
+.country-date-label {
+  opacity: 0.8;
+  font-size: $small-font-size;
+}
