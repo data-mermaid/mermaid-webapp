@@ -221,7 +221,7 @@ const BenthicPitObservationsTable = ({
       return (
         <ObservationTr key={observationId} messageType={observationValidationType}>
           <Td align="center">{rowNumber}</Td>
-          <Td align="right" aria-labelledby="interval-label">
+          <Td align="right" aria-labelledby="interval-label" data-testid="interval-cell">
             {interval}m
           </Td>
           <Td align="left">
@@ -229,6 +229,7 @@ const BenthicPitObservationsTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
+                  data-testid="observation-benthic-attribute-input"
                   // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus={autoFocusAllowed} // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
                   isLastRow={observationsState.length === rowNumber}
@@ -238,7 +239,11 @@ const BenthicPitObservationsTable = ({
                   value={attribute}
                   noResultsText={noResultsText}
                   noResultsAction={
-                    <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
+                    <NewOptionButton
+                      type="button"
+                      onClick={proposeNewBenthicAttributeClick}
+                      data-testid="propose-new-benthic-attribute-button"
+                    >
                       {proposeNewBenthicAttributeText}
                     </NewOptionButton>
                   }
@@ -248,6 +253,7 @@ const BenthicPitObservationsTable = ({
           </Td>
           <Td align="right">
             <Select
+              data-testid="growth-form-select"
               onChange={handleGrowthFormChange}
               onKeyDown={(event) => {
                 handleKeyDown({ event, index, observation, isGrowthForm: true })
@@ -283,6 +289,7 @@ const BenthicPitObservationsTable = ({
               type="button"
               onClick={handleDeleteObservation}
               aria-label={deleteObservationLabelText}
+              data-testid="delete-observation-button"
             >
               <IconClose />
             </ButtonRemoveRow>
@@ -388,7 +395,11 @@ const BenthicPitObservationsTable = ({
             </StickyObservationTable>
           </StyledOverflowWrapper>
           <UnderTableRow>
-            <ButtonPrimary type="button" onClick={handleAddObservation}>
+            <ButtonPrimary
+              type="button"
+              onClick={handleAddObservation}
+              data-testid="add-observation-row"
+            >
               <IconPlus /> {t('buttons.add_row')}
             </ButtonPrimary>
             <BenthicPitLitObservationSummaryStats

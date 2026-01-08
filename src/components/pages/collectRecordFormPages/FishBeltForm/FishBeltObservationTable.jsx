@@ -587,6 +587,7 @@ const FishBeltObservationTable = ({
             type="button"
             onClick={handleAddObservation}
             disabled={!fishBinSelectedLabel}
+            data-testid="add-observation-row"
           >
             <IconPlus /> {t('buttons.add_row')}
           </ButtonPrimary>
