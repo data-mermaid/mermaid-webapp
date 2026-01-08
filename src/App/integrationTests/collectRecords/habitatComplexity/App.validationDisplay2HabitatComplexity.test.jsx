@@ -88,7 +88,8 @@ test('Validating an empty Habitat Complexity collect record shows validations (p
 
   // observations table (has one empty observation)
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsSection = screen.getByTestId('observations-section')
+  const observationsTable = within(observationsSection).getByRole('table')
 
   expect(within(observationsTable).getByText('observation error')).toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation warning')).not.toBeInTheDocument()
@@ -215,7 +216,8 @@ test('Habitat Complexity validations will show only the first error when there a
 
   // observations table (has one empty observation)
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsSection = screen.getByTestId('observations-section')
+  const observationsTable = within(observationsSection).getByRole('table')
 
   expect(within(observationsTable).getByText('observation error 1')).toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation error 2')).not.toBeInTheDocument()

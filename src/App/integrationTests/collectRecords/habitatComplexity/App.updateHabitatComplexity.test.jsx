@@ -69,20 +69,21 @@ describe('Offline', () => {
     )
 
     // test all observers format too
-    const addObservationButton = await screen.findByRole('button', {
-      name: 'Add Row',
-    })
+    const addObservationButton = await screen.findByTestId('add-observation-row')
 
     await user.click(addObservationButton)
 
-    const observationsTable = await screen.findByLabelText('Observations')
+    const observationsSection = await screen.findByTestId('observations-section')
+    const observationsTable = within(observationsSection).getByRole('table')
 
     const observationRows = await within(observationsTable).findAllByRole('row')
 
     // 4 observations + 1 header row
     expect(observationRows.length).toEqual(5)
 
-    const newHabitatComplexityScoreInput = screen.getAllByLabelText('Habitat Complexity Score')[3]
+    const newHabitatComplexityScoreInput = screen.getAllByTestId(
+      'habitat-complexity-score-select',
+    )[3]
 
     await user.selectOptions(
       newHabitatComplexityScoreInput,

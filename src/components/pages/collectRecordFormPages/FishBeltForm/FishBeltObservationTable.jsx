@@ -476,7 +476,7 @@ const FishBeltObservationTable = ({
 
   return (
     <InputWrapper data-testid={testId}>
-      <H2 id="table-label">{t('observations')}</H2>
+      <H2 id="table-label">{t('observations.observations')}</H2>
       <StyledOverflowWrapper>
         <StickyObservationTable
           data-testid="fish-observations-table"
