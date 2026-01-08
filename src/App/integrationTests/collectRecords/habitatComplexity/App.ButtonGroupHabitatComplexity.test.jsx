@@ -27,8 +27,8 @@ test('Edit Habitat Complexity - Save button starts with Saved status, make chang
     },
   )
 
-  await user.clear(await screen.findByLabelText('Depth'))
-  await user.type(screen.getByLabelText('Depth'), '45')
+  await user.clear(await screen.findByTestId('depth-input'))
+  await user.type(screen.getByTestId('depth-input'), '45')
 
   expect(screen.getByTestId('save-button'))
 

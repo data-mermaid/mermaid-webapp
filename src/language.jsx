@@ -248,7 +248,6 @@ const pages = {
       functionalGroup: 'Functional Group',
       trophicGroup: 'Trophic Group',
     },
-    benthicPitSyncCheckbox: 'Use Interval Size as Interval Start',
   },
   submittedTable: {
     title: 'Submitted',
@@ -562,8 +561,6 @@ const tooltipText = {
   fishCount: 'Number of fish observed, of the same species/genus/family and size.',
   growthForm:
     'Growth form of the observed benthic attribute. Only choose a growth form if it is relevant to the benthic attribute (e.g. Acropora branching).',
-  habitatComplexityScore:
-    'Benthic complexity score (0 - 5) for transect interval, as integer (e.g. 3). The categories are 0 no vertical reef, flat or rubbly areas; 1 low (<30 cm high) and sparse relief; 2 low but widespread relief; 3 widespread moderately complex (30-60 cm high) relief; 4 widespread very complex (60 -100 cm high) relief with numerous fissures and caves; 5 exceptionally complex (>1 m high) relief with numerous caves and overhangs).',
   hardCoralPercentage: 'Hard coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
   macroalgaePercentage: 'Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).',
   numberOfPoints:
