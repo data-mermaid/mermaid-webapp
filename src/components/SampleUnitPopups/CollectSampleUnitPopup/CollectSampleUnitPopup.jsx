@@ -49,10 +49,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
               <TableRowItem title={t('sample_units.observers')} value={observers?.join(',')} />
               <TableRowItem title={t('sites.site')} value={site_name} />
               <TableRowItem title={t('management_regimes.management')} value={managementName} />
-              <TableRowItem
-                title={t('sample_units.sample_date')}
-                value={getSampleDateLabel(sample_date)}
-              />
+              <TableRowItem title={t('sample_date')} value={getSampleDateLabel(sample_date)} />
             </tbody>
           </Table>
           <TooltipSampleUnitStatus>{t('sample_units.not_submitted')}</TooltipSampleUnitStatus>

@@ -58,10 +58,10 @@ const Submitted = () => {
   const methodHeaderText = t('sample_units.method')
   const siteHeaderText = t('sites.site')
   const managementRegimeHeaderText = t('management_regimes.management_regime')
-  const sampleUnitNumberHeaderText = t('sample_units.sample_unit_number')
+  const sampleUnitNumberHeaderText = t('sample_unit_number')
   const sizeHeaderText = t('sample_units.size')
   const depthHeaderText = t('sample_units.depth_m')
-  const sampleDateHeaderText = t('sample_units.sample_date')
+  const sampleDateHeaderText = t('sample_date')
   const observersHeaderText = t('sample_units.observers')
   const submittedRecordsUnavailableText = t('sample_units.errors.submitted_data_unavailable')
 
