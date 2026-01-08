@@ -1,0 +1,14 @@
+@use './theme.scss' as *;
+
+.icon-button {
+  margin-left: $spacing-small;
+  margin-right: $spacing-x-small;
+  cursor: pointer;
+  padding: 0;
+  background-color: transparent;
+  border-style: none;
+  &:disabled {
+    cursor: not-allowed;
+    color: $disabled;
+  }
+}

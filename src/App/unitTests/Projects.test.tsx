@@ -153,7 +153,7 @@ describe('Projects dashboard', () => {
     expect(within(dataSharingSummaryCard).getByText('Online Only'))
 
     expect(screen.getByTestId('offline-ready')).toBeDisabled()
-    expect(screen.getByLabelText('Copy')).toBeDisabled()
+    expect(screen.getByTestId('copy-project-button')).toBeDisabled()
   })
 
   test('A project card renders appropriately when online', async () => {
@@ -180,7 +180,7 @@ describe('Projects dashboard', () => {
     // expect(within(projectCard).getByLabelText(/data sharing/i)).toBeInTheDocument()
 
     const offlineReadyCheckboxes = screen.getAllByTestId('offline-ready')
-    const copyButtons = screen.getAllByLabelText('Copy')
+    const copyButtons = screen.getAllByTestId('copy-project-button')
 
     expect(offlineReadyCheckboxes[0]).toBeEnabled()
     expect(offlineReadyCheckboxes[1]).toBeEnabled()
