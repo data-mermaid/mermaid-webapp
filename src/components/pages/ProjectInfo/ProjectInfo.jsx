@@ -72,6 +72,8 @@ const ProjectInfo = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const isMounted = useIsMounted()
+  const { currentProject } = useCurrentProject()
+  const isDemoProject = currentProject?.is_demo
   const isSuggestedCitationDirty = citationToUse !== citationFromServerToUse
   const navigate = useNavigate()
 
@@ -99,7 +101,8 @@ const ProjectInfo = () => {
 
   useDocumentTitle(`${projectInfoTitle} - ${t('mermaid')}`)
 
-  const _getSupportingData = useEffect(() => {
+  // _getSupportingData
+  useEffect(() => {
     if (!isAppOnline) {
       setIsLoading(false)
     }
@@ -203,7 +206,8 @@ const ProjectInfo = () => {
     },
   })
 
-  const _setSaveButtonUnsaved = useEffect(() => {
+  //_setSaveButtonUnsaved
+  useEffect(() => {
     if (formik.dirty || isSuggestedCitationDirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
@@ -321,6 +325,9 @@ const ProjectInfo = () => {
           type="text"
           {...formik.getFieldProps('name')}
           validationType={formik.errors.name || projectNameError ? 'error' : null}
+          helperText={isDemoProject ? t('projects.demo.name_restrictions') : null}
+          showHelperText={isDemoProject}
+          disabled={isDemoProject}
           validationMessages={checkValidationMessage()}
         />
         <TextareaWithLabelAndValidation

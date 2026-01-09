@@ -67,7 +67,7 @@ const ProjectName = () => {
   const renderExploreButton = () => {
     if (isAppOnline) {
       const tooltipText = isDemoProject
-        ? 'projects.demo_explore_unavailable'
+        ? 'projects.demo.explore_unavailable'
         : 'go_to_explore_this_project'
 
       return (
@@ -96,7 +96,7 @@ const ProjectName = () => {
       {renderExploreButton()}
       {isDemoProject && (
         <div className={[labelStyles.pill, labelStyles.pill__demo].join(' ')}>
-          {t('projects.demo')}
+          {t('projects.demo.demo')}
         </div>
       )}
     </ProjectNameWrapper>
