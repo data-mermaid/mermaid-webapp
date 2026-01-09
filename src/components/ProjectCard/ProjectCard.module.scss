@@ -19,7 +19,8 @@
   width: $max-screen-width;
   max-width: $max-width;
   background: $white;
-  &:hover {
+  &:hover,
+  &:focus {
     outline: 2px solid $primary;
   }
 

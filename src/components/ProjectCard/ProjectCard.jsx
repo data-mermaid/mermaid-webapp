@@ -40,9 +40,8 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
   const navigate = useNavigate()
   const projectUrl = `/projects/${id}`
   const { t } = useTranslation()
-
+  const isDisabled = !isAppOnline && isReadOnlyUser
   const handleHttpResponseError = useHttpResponseErrorHandler()
-
   const isAdminUser = getIsUserAdminForProject(currentUser, id)
   const isDemoProject = project.is_demo
 
@@ -108,7 +107,8 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
   }
 
   const handleCardKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === 'Space') {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
       handleCardClick()
     }
   }
@@ -117,12 +117,14 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
 
   return (
     <div
+      {...restOfProps}
       className={styles['project-card__wrapper']}
       onClick={handleCardClick}
       onKeyDown={handleCardKeyDown}
       role="button"
-      tabIndex={0}
-      {...restOfProps}
+      tabIndex={isDisabled ? -1 : 0}
+      aria-label={name}
+      aria-disabled={isDisabled}
       data-testid="project-card"
     >
       <ProjectCardHeader>
