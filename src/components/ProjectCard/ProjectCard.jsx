@@ -108,7 +108,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
   }
 
   const handleCardKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' || e.key === 'Space') {
       handleCardClick()
     }
   }

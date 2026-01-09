@@ -20,7 +20,7 @@
   max-width: $max-width;
   background: $white;
   &:hover {
-    outline: 2px solid 2 $primary;
+    outline: 2px solid $primary;
   }
 
   @media (max-width: $tablet-landscape-break) {
