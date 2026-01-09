@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
 import {
-  CardWrapper,
   CheckBoxLabel,
   ProjectCardHeader,
   ProjectCardHeaderButtonsAndDate,
@@ -108,13 +107,22 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
     navigate(destinationUrl)
   }
 
+  const handleCardKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleCardClick()
+    }
+  }
+
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
 
   return (
-    <CardWrapper
+    <div
+      className={styles['project-card__wrapper']}
       onClick={handleCardClick}
+      onKeyDown={handleCardKeyDown}
+      role="button"
+      tabIndex={0}
       {...restOfProps}
-      disabled={isReadOnlyUser && !isAppOnline}
       data-testid="project-card"
     >
       <ProjectCardHeader>
@@ -180,7 +188,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
         </ProjectCardHeaderButtonsAndDate>
       </ProjectCardHeader>
       <ProjectCardSummary project={project} isAppOnline={isAppOnline} />
-    </CardWrapper>
+    </div>
   )
 }
 

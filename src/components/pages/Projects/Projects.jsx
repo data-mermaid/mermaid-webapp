@@ -106,10 +106,17 @@ const Projects = () => {
 
   const getFilteredSortedProjects = () => {
     const availableProjects = getAvailableProjects()
-    const filteredProjects = getFilteredProjects(availableProjects)
-    const sortedProjects = getSortedProjects(filteredProjects)
+    if (userHasDemoProject) {
+      const demoProjIndex = availableProjects.findIndex((project) => project.is_demo === true)
 
-    return sortedProjects
+      if (demoProjIndex > -1) {
+        const demoProject = availableProjects.splice(demoProjIndex, 1)[0]
+        availableProjects.splice(0, 0, demoProject)
+      }
+    }
+
+    const filteredProjects = getFilteredProjects(availableProjects)
+    return getSortedProjects(filteredProjects)
   }
 
   const filteredSortedProjects = getFilteredSortedProjects()
