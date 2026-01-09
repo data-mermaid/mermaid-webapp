@@ -134,7 +134,7 @@ const SampleEventInputs = ({
           displayViewLink={true}
         />
         <InputWithLabelAndValidation
-          label={t('sample_date')}
+          label={t('sample_units.sample_date')}
           required={true}
           id="sample_date"
           testId="sample-date"
@@ -153,7 +153,7 @@ const SampleEventInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_date}
           onChange={handleSampleDateChange}
-          helperText={t('sample_date_info')}
+          helperText={t('sample_units.sample_date_info')}
         />
       </InputWrapper>
     </>

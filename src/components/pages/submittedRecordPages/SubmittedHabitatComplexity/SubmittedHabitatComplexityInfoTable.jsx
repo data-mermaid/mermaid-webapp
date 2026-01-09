@@ -47,7 +47,7 @@ const SubmittedHabitatComplexityInfoTable = ({
           value={management}
           isLink={true}
         />
-        <TableRowItem title={t('sample_date_time')} value={`${sample_date} ${sample_time || ''}`} />
+        <TableRowItem title={t('sample_units.sample_date_time')} value={`${sample_date} ${sample_time || ''}`} />
         <TableRowItem title={t('depth_m')} value={depth} />
         <TableRowItem title={t('transect_number')} value={number} />
         <TableRowItem title={t('label')} value={label} />

@@ -308,7 +308,7 @@ const FishBeltTransectInputs = ({
           helperText={t('label_info')}
         />
         <InputWithLabelAndValidation
-          label={t('sample_time')}
+          label={t('sample_units.sample_time')}
           id="sample_time"
           testId="sample-time"
           type="time"
@@ -325,7 +325,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
-          helperText={t('sample_time_info')}
+          helperText={t('sample_units.sample_time_info')}
         />
 
         <InputWithLabelAndValidation
