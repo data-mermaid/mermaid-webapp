@@ -662,7 +662,8 @@
     "demo": {
       "demo": "Demo project",
       "explore_unavailable": "Demo projects are unavailable to view in MERMAID Explore",
-      "name_restrictions": "Demo project name cannot be changed."
+      "name_restrictions": "Demo project name cannot be changed.",
+      "sample_explore_unavailable": "Demo sample events are unavailable to view in MERMAID Explore"
     },
     "edit_project_info": "Edit project info",
     "errors": {
@@ -761,6 +762,7 @@
     "no_submitted_sample_units": "This project has no submitted sample units",
     "none": "No sample units",
     "not_submitted": "This sample unit is not submitted",
+    "protocol": "Protocol",
     "observers": "Observers",
     "record": "Record",
     "sample_date": "Sample date",
@@ -782,6 +784,7 @@
       "record_submitted": "Record submitted.",
       "record_validated": "Record successfully validated."
     },
+    "transect_number": "Transect number",
     "transfer": "Transfer sample units",
     "transfer_unsubmitted": "Transfer unsubmitted sample units",
     "validation_status": {
@@ -818,6 +821,7 @@
     "reef_type": "Reef type",
     "reef_zone": "Reef zone",
     "site": "Site",
+    "site_name": "Site name",
     "sites": "Sites"
   },
   "size_cm": "Size (cm)",

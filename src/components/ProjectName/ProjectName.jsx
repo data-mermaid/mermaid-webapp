@@ -7,7 +7,7 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 import useIsMounted from '../../library/useIsMounted'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
-import { IconGlobe } from '../icons'
+import { BiggerIconGlobe } from '../icons'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { useTranslation } from 'react-i18next'
 import buttonStyles from '../../style/buttons.module.scss'
@@ -23,11 +23,6 @@ const ProjectNameWrapper = styled('div')`
 const ProjectNameHeader = styled('h2')`
   display: inline;
   margin: 0 ${theme.spacing.small} 0 0;
-`
-
-const BiggerIconGlobe = styled(IconGlobe)`
-  width: ${theme.typography.mediumIconSize};
-  height: ${theme.typography.mediumIconSize};
 `
 
 const ProjectName = () => {
@@ -76,7 +71,7 @@ const ProjectName = () => {
             <button
               className={buttonStyles['icon-button']}
               type="button"
-              aria-label={tooltipText}
+              aria-label={t(tooltipText)}
               onClick={handleExploreButtonClick}
               disabled={isDemoProject}
             >

@@ -21,7 +21,7 @@ test('Bleaching percent cover observations: tab in count input on last row dupli
   })
 
   // loading indicator is weird in integration tests, so we wait for the page title
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   const formBeforeTab = screen.getByRole('form')
   // percent cover observations are in the second table
@@ -66,7 +66,7 @@ test('Bleaching percent cover observations: enter key adds a new empty row below
   })
 
   // loading indicator is weird in integration tests, so we wait for the page title
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   const formBeforeEnterKey = screen.getByRole('form')
   // percent cover observations are in the second table

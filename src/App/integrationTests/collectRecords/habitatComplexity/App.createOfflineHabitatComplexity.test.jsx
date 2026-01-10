@@ -132,7 +132,7 @@ describe('Offline', () => {
     expect(await screen.findByTestId('saved-button'))
 
     // ensure the new form is now the edit form
-    expect(await screen.findByTestId('edit-collect-record-form-title'))
+    expect(await screen.findByTestId('record-form-title'))
     // we constrain some queries to the form element because the form title has similar text that will also be selected
     const form = screen.getByRole('form')
 

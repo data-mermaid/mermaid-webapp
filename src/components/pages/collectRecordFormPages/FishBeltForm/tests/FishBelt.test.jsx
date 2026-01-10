@@ -35,7 +35,7 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
 
   await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
-  const formTitle = screen.getByTestId('edit-collect-record-form-title')
+  const formTitle = screen.getByTestId('record-form-title')
 
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))

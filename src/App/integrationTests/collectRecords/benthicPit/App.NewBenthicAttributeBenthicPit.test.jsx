@@ -27,7 +27,7 @@ test('Benthic PIT observations add new benthic attribute - filling out new attri
   )
 
   // loading indicator is weird in integration tests, so we wait for the page title
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   mockMermaidApiAllSuccessful.use(
     rest.post(
@@ -130,7 +130,7 @@ test('Benthic PIT observations add new benthic attribute - proposing new attribu
 
   // loading indicator is weird in integration tests, so we wait for the page title
 
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   const form = screen.getByRole('form')
   const observationsTable = (await within(form).findAllByRole('table'))[0]

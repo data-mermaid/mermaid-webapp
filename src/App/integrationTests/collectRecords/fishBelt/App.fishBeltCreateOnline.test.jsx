@@ -73,7 +73,7 @@ describe('Online', () => {
     expect(await screen.findByTestId('saved-button'))
 
     // ensure the new form is now the edit form
-    expect(await screen.findByTestId('edit-collect-record-form-title'))
+    expect(await screen.findByTestId('record-form-title'))
 
     await waitFor(() => {
       // Site select
