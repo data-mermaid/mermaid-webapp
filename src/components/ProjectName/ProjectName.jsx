@@ -15,6 +15,8 @@ import labelStyles from '../../style/labels.module.scss'
 
 const ProjectNameWrapper = styled('div')`
   background: ${theme.color.white};
+  display: flex;
+  align-items: anchor-center;
   padding: ${theme.spacing.medium};
   ${mediaQueryPhoneOnly(css`
     padding: ${theme.spacing.small};
@@ -64,13 +66,14 @@ const ProjectName = () => {
     openExploreLinkWithBbox(queryParamObject)
   }
 
-  const renderExploreButton = () => {
-    if (isAppOnline) {
-      const tooltipText = isDemoProject
-        ? 'projects.demo_explore_unavailable'
-        : 'go_to_explore_this_project'
+  const tooltipText = isDemoProject
+    ? 'projects.demo_explore_unavailable'
+    : 'go_to_explore_this_project'
 
-      return (
+  return (
+    <ProjectNameWrapper>
+      <ProjectNameHeader>{project?.name}</ProjectNameHeader>
+      {isAppOnline && (
         <MuiTooltip title={t(tooltipText)} placement="top" arrow>
           <span>
             <button
@@ -84,16 +87,7 @@ const ProjectName = () => {
             </button>
           </span>
         </MuiTooltip>
-      )
-    } else {
-      return null
-    }
-  }
-
-  return (
-    <ProjectNameWrapper>
-      <ProjectNameHeader>{project?.name}</ProjectNameHeader>
-      {renderExploreButton()}
+      )}
       {isDemoProject && (
         <div className={[labelStyles.pill, labelStyles.pill__demo].join(' ')}>
           {t('projects.demo')}
