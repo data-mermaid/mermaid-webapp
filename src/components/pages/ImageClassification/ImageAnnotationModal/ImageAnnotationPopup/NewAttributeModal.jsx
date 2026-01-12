@@ -45,7 +45,7 @@ const NewAttributeModal = ({
           </label>
 
           <label htmlFor="growth-forms">
-            {t('image_classification.growth_form')}
+            {t('observations.growth_form')}
             <Select id="growth-forms" onChange={(e) => setSelectedGrowthForm(e.target.value)}>
               <option value=""></option>
               {growthFormSelectOptions.map((growthForm) => (
