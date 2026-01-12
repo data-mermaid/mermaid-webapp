@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
 import {
-  CardWrapper,
   CheckBoxLabel,
   ProjectCardHeader,
   ProjectCardHeaderButtonsAndDate,
@@ -41,9 +40,8 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
   const navigate = useNavigate()
   const projectUrl = `/projects/${id}`
   const { t } = useTranslation()
-
+  const isDisabled = !isAppOnline && isReadOnlyUser
   const handleHttpResponseError = useHttpResponseErrorHandler()
-
   const isAdminUser = getIsUserAdminForProject(currentUser, id)
   const isDemoProject = project.is_demo
 
@@ -108,13 +106,28 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
     navigate(destinationUrl)
   }
 
+  const handleCardKeyDown = (e) => {
+    if (e.target !== e.currentTarget) {
+      return
+    }
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleCardClick()
+    }
+  }
+
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
 
   return (
-    <CardWrapper
-      onClick={handleCardClick}
+    <div
       {...restOfProps}
-      disabled={isReadOnlyUser && !isAppOnline}
+      className={styles['project-card__wrapper']}
+      onClick={handleCardClick}
+      onKeyDown={handleCardKeyDown}
+      role="button"
+      tabIndex={isDisabled ? -1 : 0}
+      aria-label={name}
+      aria-disabled={isDisabled}
       data-testid="project-card"
     >
       <ProjectCardHeader>
@@ -180,7 +193,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
         </ProjectCardHeaderButtonsAndDate>
       </ProjectCardHeader>
       <ProjectCardSummary project={project} isAppOnline={isAppOnline} />
-    </CardWrapper>
+    </div>
   )
 }
 

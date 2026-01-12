@@ -105,11 +105,17 @@ const Projects = () => {
   }
 
   const getFilteredSortedProjects = () => {
-    const availableProjects = getAvailableProjects()
-    const filteredProjects = getFilteredProjects(availableProjects)
-    const sortedProjects = getSortedProjects(filteredProjects)
+    let availableProjects = getAvailableProjects()
+    if (userHasDemoProject) {
+      const demoProj = availableProjects.find((project) => project.is_demo === true)
 
-    return sortedProjects
+      if (demoProj) {
+        availableProjects = [demoProj, ...availableProjects.filter((project) => !project.is_demo)]
+      }
+    }
+
+    const filteredProjects = getFilteredProjects(availableProjects)
+    return getSortedProjects(filteredProjects)
   }
 
   const filteredSortedProjects = getFilteredSortedProjects()
