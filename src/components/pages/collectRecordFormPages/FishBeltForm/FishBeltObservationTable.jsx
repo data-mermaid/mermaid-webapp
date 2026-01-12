@@ -123,7 +123,7 @@ const FishBeltObservationTable = ({
     useState()
   const [fishNamePopoverContent, setFishNamePopoverContent] = useState()
 
-  const searchNoResultsText = t('search.no_results')
+  const noResultsText = t('search.no_results')
   const proposeNewSpeciesText = t('propose_new_species')
   const viewFishInfoText = t('view_fish_info')
   const deleteObservationText = t('delete_observation')
@@ -378,7 +378,7 @@ const FishBeltObservationTable = ({
                   options={fishNameOptions}
                   onChange={handleFishNameChange}
                   value={fishNameId}
-                  noResultsText={searchNoResultsText}
+                  noResultsText={noResultsText}
                   noResultsAction={
                     <NewOptionButton
                       type="button"
@@ -469,7 +469,7 @@ const FishBeltObservationTable = ({
     setIsNewBenthicAttributeModalOpen,
     setObservationIdToAddNewBenthicAttributeTo,
     proposeNewSpeciesText,
-    searchNoResultsText,
+    noResultsText,
     viewFishInfoText,
     deleteObservationText,
   ])
@@ -587,8 +587,9 @@ const FishBeltObservationTable = ({
             type="button"
             onClick={handleAddObservation}
             disabled={!fishBinSelectedLabel}
+            data-testid="add-observation-row"
           >
-            <IconPlus /> Add Row
+            <IconPlus /> {t('buttons.add_row')}
           </ButtonPrimary>
           {!fishBinSelectedLabel ? <p>{t('must_select_fish_warning')}</p> : null}
         </UnderTableRowButtonArea>

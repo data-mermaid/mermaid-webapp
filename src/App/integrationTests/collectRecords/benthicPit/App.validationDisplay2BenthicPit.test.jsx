@@ -89,7 +89,7 @@ test('Validating an empty benthic PIT collect record shows validations (proof of
 
   // observations table (has one empty observation)
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('observation error')).toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation warning')).not.toBeInTheDocument()
@@ -216,7 +216,7 @@ test('Benthic PIT validations will show only the first error when there are mult
 
   // observations table (has one empty observation)
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('observation error 1')).toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation error 2')).not.toBeInTheDocument()
