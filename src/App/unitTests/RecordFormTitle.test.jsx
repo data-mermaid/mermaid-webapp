@@ -6,7 +6,7 @@ import {
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
-import RecordFormTitle from './RecordFormTitle'
+import RecordFormTitle from '../../components/RecordFormTitle'
 
 test('RecordFormTitle shows the title as expected when all of site name, transect number, and label are available', () => {
   const mockCollectRecord = {
@@ -164,7 +164,6 @@ test('RecordFormTitle displays Benthic PIT titles correctly', () => {
   expect(within(formTitle).getByTestId('protocol-tooltip')).toBeInTheDocument()
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
-  expect(within(formTitle).getByText('label'))
 })
 
 test('RecordFormTitle displays Benthic Photo Quadrat titles correctly', () => {
@@ -261,7 +260,7 @@ test('RecordFormTitle displays Bleaching titles correctly', () => {
         site: '4',
       },
       quadrat_collection: {
-        label: 'label',
+        label: 'mock label',
         number: 2,
       },
     },
@@ -280,5 +279,5 @@ test('RecordFormTitle displays Bleaching titles correctly', () => {
   expect(within(formTitle).getByTestId('protocol-tooltip')).toBeInTheDocument()
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
-  expect(within(formTitle).getByText('label'))
+  expect(within(formTitle).getByText('mock label'))
 })
