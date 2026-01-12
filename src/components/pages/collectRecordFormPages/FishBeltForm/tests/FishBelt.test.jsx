@@ -243,7 +243,7 @@ test('Fishbelt observations: add row button adds a row', async () => {
 
   expect(within(observationsBeforeAdd).getAllByRole('row').length).toEqual(4)
 
-  await user.click(screen.getByRole('button', { name: 'Add Row' }))
+  await user.click(screen.getByTestId('add-observation-row'))
 
   const observationsAfterAdd = screen.getAllByRole('table')[0]
 
