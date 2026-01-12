@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react'
-import theme from '../../theme'
 import Tooltip from '@mui/material/Tooltip'
 import tooltipStyles from '../../style/MuiComponents.module.scss'
 
@@ -9,8 +8,6 @@ interface MuiTooltip {
   children: ReactElement
   title: string
   placement?: Placement
-  bgColor?: string
-  tooltipTextColor?: string
 }
 
 export const MuiTooltip = ({ children, title, placement = 'bottom' }: MuiTooltip) => {
@@ -50,14 +47,16 @@ export const MuiTooltipDark = ({
   placement?: Placement
 }) => {
   return (
-    <MuiTooltip
+    <Tooltip
+      classes={{
+        tooltip: tooltipStyles['MuiTooltip-tooltip--dark'],
+        arrow: tooltipStyles['MuiTooltip-arrow'],
+      }}
       title={title}
-      bgColor={theme.color.primaryColor}
-      tooltipTextColor={theme.color.white}
       placement={placement}
     >
       {children}
-    </MuiTooltip>
+    </Tooltip>
   )
 }
 export const MuiTooltipDarkRight = ({

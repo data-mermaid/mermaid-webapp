@@ -16,7 +16,7 @@ import labelStyles from '../../style/labels.module.scss'
 const ProjectNameWrapper = styled('div')`
   background: ${theme.color.white};
   display: flex;
-  align-items: anchor-center;
+  align-items: center;
   padding: ${theme.spacing.medium};
   ${mediaQueryPhoneOnly(css`
     padding: ${theme.spacing.small};
