@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useReducer, useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   getCollectRecordDataInitialValues,
@@ -23,10 +24,10 @@ import ErrorBoundary from '../../../ErrorBoundary'
 import habitatComplexityObservationsReducer from './habitatComplexityObservationsReducer'
 import HabitatComplexityObservationsTable from './HabitatComplexityObservationTable'
 import HabitatComplexityTransectInputs from './HabitatComplexityTransectInputs'
-import language from '../../../../language'
 import useIsMounted from '../../../../library/useIsMounted'
 
 const HabitatComplexityForm = ({ isNewRecord = true }) => {
+  const { t } = useTranslation()
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -41,6 +42,9 @@ const HabitatComplexityForm = ({ isNewRecord = true }) => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
   const observationsReducer = useReducer(habitatComplexityObservationsReducer, [])
+  const errorMessage = isNewRecord
+    ? t('sample_units.errors.supporting_data_unavailable')
+    : t('sample_units.errors.data_unavailable')
 
   useEffect(
     function loadSupportingData() {
@@ -80,10 +84,6 @@ const HabitatComplexityForm = ({ isNewRecord = true }) => {
             handleHttpResponseError({
               error,
               callback: () => {
-                const errorMessage = isNewRecord
-                  ? language.error.collectRecordSupportingDataUnavailable
-                  : language.error.collectRecordUnavailable
-
                 toast.error(...getToastArguments(errorMessage))
               },
             })
@@ -98,6 +98,7 @@ const HabitatComplexityForm = ({ isNewRecord = true }) => {
       projectId,
       handleHttpResponseError,
       isSyncInProgress,
+      errorMessage,
     ],
   )
 

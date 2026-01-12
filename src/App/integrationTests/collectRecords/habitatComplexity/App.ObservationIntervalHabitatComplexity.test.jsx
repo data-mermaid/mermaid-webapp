@@ -24,62 +24,67 @@ describe('Habitat Complexity Observations', () => {
       },
     )
 
-    const intervalSize = await screen.findByLabelText('Interval Size')
-    const intervalStart = await screen.findByLabelText('Interval Start')
-    await user.clear(intervalStart)
+    const intervalSizeInput = await screen.findByTestId('interval-size-input')
+    const intervalStartInput = await screen.findByTestId('interval-start-input')
+    await user.clear(intervalStartInput)
     // interval start has a default value or 1, so we need to clear it so that our test typing produces 0 instead of 10
-    await user.type(intervalStart, '0')
+    await user.type(intervalStartInput, '0')
 
-    await user.type(intervalSize, '5')
+    await user.type(intervalSizeInput, '5')
 
     const observationsSection = await screen.findByTestId('observations-section')
-    const addRowButton = within(observationsSection).getByRole('button', { name: 'Add Row' })
+    const addRowButton = within(observationsSection).getByTestId('add-observation-row')
+    const getIntervalCells = () => within(observationsSection).getAllByTestId('interval-cell')
 
     await user.click(addRowButton)
     await user.click(addRowButton)
     await user.click(addRowButton)
     await user.click(addRowButton)
-
-    const observationIntervalLabelsAfterFourRowsAdded =
-      within(observationsSection).getAllByLabelText('Interval')
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('0m')
+      const intervalCells = getIntervalCells()
+      expect(intervalCells[0]).toHaveTextContent('0m')
     })
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('5m')
+      const intervalCells = getIntervalCells()
+      expect(intervalCells[1]).toHaveTextContent('5m')
     })
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('10m')
+      const intervalCells = getIntervalCells()
+      expect(intervalCells[2]).toHaveTextContent('10m')
     })
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('15m')
+      const intervalCells = getIntervalCells()
+      expect(intervalCells[3]).toHaveTextContent('15m')
     })
 
     // user changes interval size value
-    await user.clear(intervalSize)
-    await user.type(intervalSize, '100')
-    const observationIntervalLabelsAfterIntervalSizeChange =
-      within(observationsSection).getAllByLabelText('Interval')
+    await user.clear(intervalSizeInput)
+    await user.type(intervalSizeInput, '100')
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterIntervalSizeChange[0]).toHaveTextContent('0m')
+      const intervalCells = getIntervalCells()
+      expect(intervalCells[0]).toHaveTextContent('0m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterIntervalSizeChange[1]).toHaveTextContent('100m')
+      const intervalCells = getIntervalCells()
+      expect(intervalCells[1]).toHaveTextContent('100m')
     })
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterIntervalSizeChange[2]).toHaveTextContent('200m')
+      const intervalCells = getIntervalCells()
+      expect(intervalCells[2]).toHaveTextContent('200m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterIntervalSizeChange[3]).toHaveTextContent('300m')
+      const intervalCells = getIntervalCells()
+      expect(intervalCells[3]).toHaveTextContent('300m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterIntervalSizeChange[4]).toHaveTextContent('400m')
+      const intervalCells = getIntervalCells()
+      expect(intervalCells[4]).toHaveTextContent('400m')
     })
   })
 
@@ -94,41 +99,38 @@ describe('Habitat Complexity Observations', () => {
       },
     )
 
-    const intervalSize = await screen.findByLabelText('Interval Size')
-    const intervalStart = await screen.findByLabelText('Interval Start')
-    const intervalStartCheckbox = await screen.findByLabelText(
-      'Use Interval Size as Interval Start',
-    )
+    const intervalSizeInput = await screen.findByTestId('interval-size-input')
+    const intervalStartInput = await screen.findByTestId('interval-start-input')
+    const intervalStartCheckbox = await screen.findByTestId('interval-start-sync-checkbox')
 
-    await user.clear(intervalStart)
-    await user.type(intervalSize, '5')
+    await user.clear(intervalStartInput)
+    await user.type(intervalSizeInput, '5')
     await user.click(intervalStartCheckbox)
 
     const observationsSection = await screen.findByTestId('observations-section')
 
-    const addRowButton = within(observationsSection).getByRole('button', { name: 'Add Row' })
+    const addRowButton = within(observationsSection).getByTestId('add-observation-row')
     await user.click(addRowButton)
     await user.click(addRowButton)
     await user.click(addRowButton)
     await user.click(addRowButton)
 
-    const observationIntervalLabelsAfterFourRowsAdded =
-      within(observationsSection).getAllByLabelText('Interval')
+    const getIntervalCells = () => within(observationsSection).getAllByTestId('interval-cell')
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('5m')
+      expect(getIntervalCells()[0]).toHaveTextContent('5m')
     })
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('10m')
+      expect(getIntervalCells()[1]).toHaveTextContent('10m')
     })
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('15m')
+      expect(getIntervalCells()[2]).toHaveTextContent('15m')
     })
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('20m')
+      expect(getIntervalCells()[3]).toHaveTextContent('20m')
     })
   })
 
@@ -144,59 +146,57 @@ describe('Habitat Complexity Observations', () => {
       },
     )
 
-    const intervalSize = await screen.findByLabelText('Interval Size')
-    const intervalStartCheckbox = await screen.findByLabelText(
-      'Use Interval Size as Interval Start',
-    )
+    const intervalSizeInput = await screen.findByTestId('interval-size-input')
+    const intervalStartCheckbox = await screen.findByTestId('interval-start-sync-checkbox')
 
-    await user.type(intervalSize, '5')
+    await user.type(intervalSizeInput, '5')
 
     const observationsSection = await screen.findByTestId('observations-section')
-    const observationIntervalLabels = within(observationsSection).getAllByLabelText('Interval')
+    const getIntervalCells = () => within(observationsSection).getAllByTestId('interval-cell')
 
     await waitFor(() => {
-      expect(observationIntervalLabels[0]).toHaveTextContent('0m')
+      expect(getIntervalCells()[0]).toHaveTextContent('0m')
     })
 
     await user.click(intervalStartCheckbox)
 
     await waitFor(() => {
-      expect(observationIntervalLabels[0]).toHaveTextContent('5m')
+      expect(getIntervalCells()[0]).toHaveTextContent('5m')
     })
 
-    const addRowButton = within(observationsSection).getByRole('button', { name: 'Add Row' })
+    const addRowButton = within(observationsSection).getByTestId('add-observation-row')
 
     await user.click(addRowButton)
     await user.click(addRowButton)
     await user.click(addRowButton)
 
-    const observationIntervalLabelsAfterFourRowsAdded =
-      within(observationsSection).getAllByLabelText('Interval')
-    expect(observationIntervalLabelsAfterFourRowsAdded).toHaveLength(4)
+    const getIntervalCellsAfterAdds = () =>
+      within(observationsSection).getAllByTestId('interval-cell')
+    expect(getIntervalCellsAfterAdds()).toHaveLength(4)
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('5m')
+      expect(getIntervalCellsAfterAdds()[0]).toHaveTextContent('5m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('10m')
+      expect(getIntervalCellsAfterAdds()[1]).toHaveTextContent('10m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('15m')
+      expect(getIntervalCellsAfterAdds()[2]).toHaveTextContent('15m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('20m')
+      expect(getIntervalCellsAfterAdds()[3]).toHaveTextContent('20m')
     })
 
     // delete the first observation, the intervals should recalculate
 
-    const observationRows = within(screen.getByLabelText('Observations')).getAllByRole('row')
+    const observationRows = within(observationsSection).getAllByRole('row')
 
     // first row is table headers, second is observation row
     await user.hover(observationRows[1])
-    await user.click(within(observationRows[1]).getByLabelText('Delete Observation'))
+    await user.click(within(observationRows[1]).getByTestId('delete-observation-button'))
 
     const observationIntervalLabelsAfterObservationDelete =
-      within(observationsSection).getAllByLabelText('Interval')
+      within(observationsSection).getAllByTestId('interval-cell')
 
     expect(observationIntervalLabelsAfterObservationDelete[0]).toHaveTextContent('5m')
     expect(observationIntervalLabelsAfterObservationDelete[1]).toHaveTextContent('10m')
@@ -216,18 +216,18 @@ describe('Habitat Complexity Observations', () => {
       },
     )
 
-    const intervalSize = await screen.findByLabelText('Interval Size')
+    const intervalSizeInput = await screen.findByTestId('interval-size-input')
 
-    await user.type(intervalSize, '5')
+    await user.type(intervalSizeInput, '5')
 
     const observationsSection = await screen.findByTestId('observations-section')
-    const addRowButton = within(observationsSection).getByRole('button', { name: 'Add Row' })
+    const addRowButton = within(observationsSection).getByTestId('add-observation-row')
 
     await user.click(addRowButton)
     await user.click(addRowButton)
     await user.click(addRowButton)
     const observationIntervalLabelsAfterFourRowsAdded =
-      within(observationsSection).getAllByLabelText('Interval')
+      within(observationsSection).getAllByTestId('interval-cell')
 
     await waitFor(() => {
       expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('0m')
@@ -246,14 +246,14 @@ describe('Habitat Complexity Observations', () => {
     })
 
     // hit enter key to duplicate first observation into second place below first
-    const firstGrowthFormInput = within(observationsSection).getAllByLabelText(
-      'Habitat Complexity Score',
+    const firstGrowthFormInput = within(observationsSection).getAllByTestId(
+      'habitat-complexity-score-select',
     )[0]
 
     // userEvent doesnt work as expected for Enter
     fireEvent.keyDown(firstGrowthFormInput, { key: 'Enter', code: 'Enter' })
     const observationIntervalLabelsAfterEnterKey =
-      within(observationsSection).getAllByLabelText('Interval')
+      within(observationsSection).getAllByTestId('interval-cell')
 
     await waitFor(() => {
       expect(observationIntervalLabelsAfterEnterKey[0]).toHaveTextContent('0m')

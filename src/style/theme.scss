@@ -21,6 +21,7 @@ $tableRowEven: #f8f8fa;
 $tableRowHover: #f1f1f4;
 
 $border-radius: 0px; //update to 4px when enabled globally
+$border-radius__pill: 5px;
 
 /** Spacing **/
 $xxSmallSpacing: 0.1rem;
@@ -47,6 +48,7 @@ $bold: 700;
 /** Spacing **/
 $spacing-x-small: 3px; //0.2rem
 $spacing-small: 5px;
+<<<<<<< HEAD
 $spacing-medium: 10px; //1rem
 $spacing-large: 14px; //1.5rem
 $spacing-x-large: 24px; //2rem
@@ -63,3 +65,11 @@ $border-small: 1px;
 $border-medium: 2px;
 $border-large: 4px;
 $border-x-large: 8px;
+=======
+$spacing-medium: 10px;
+$spacing-large: 14px;
+$spacing-x-large: 24px;
+
+/** Sizing **/
+$pill-height: 26px;
+>>>>>>> develop

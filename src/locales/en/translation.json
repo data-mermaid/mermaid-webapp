@@ -33,11 +33,11 @@
     "attribute_already_exists": "Proposed attribute {{attribute}} already exists in the list. Observation has been updated with this attribute.",
     "attribute_proposal_summary": "Your proposed attribute {{attribute}} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.",
     "benthic_attribute": "Benthic attribute",
+    "benthic_attribute_info": "Benthic attribute observed. A benthic attribute can be a taxonomic name for a coral or other sessile organism, or an abiotic classification. MERMAID benthic attributes are organized hierarchically and are consistent with <helperTextLink>WoRMS.</helperTextLink>",
     "errors": {
       "attribute_proposal_unsaved": "The proposed attribute {{attribute}} has not been saved"
     },
     "missing_benthic_attribute": "Missing benthic attribute",
-    "observations": "Observations",
     "proposed_attribute_saved": "Proposed attribute {{attribute}} saved. Observation has been updated with this attribute."
   },
   "benthic_pit_lit_habitat": "Benthic: PIT, LIT, PQT, and habitat complexity",
@@ -55,6 +55,7 @@
     "edit": "Edit",
     "export_to_xlsx": "Export data",
     "logout": "Logout",
+    "move_to_collecting": "Edit Sample Unit — move to Collecting",
     "next_page": "Next",
     "remove_row": "Remove row",
     "review": "Review",
@@ -398,6 +399,8 @@
   "go_to_explore_projects": "View all your projects on MERMAID Explore",
   "go_to_explore_sample_event": "View this sample event on MERMAID Explore",
   "go_to_explore_this_project": "View this project on MERMAID Explore",
+  "habitat_complexity_score": "Habitat complexity score",
+  "habitat_complexity_score_info": "Benthic complexity score (0 - 5) for transect interval, as integer (e.g. 3). The categories are 0 no vertical reef, flat or rubbly areas; 1 low (<30 cm high) and sparse relief; 2 low but widespread relief; 3 widespread moderately complex (30-60 cm high) relief; 4 widespread very complex (60 -100 cm high) relief with numerous fissures and caves; 5 exceptionally complex (>1 m high) relief with numerous caves and overhangs).",
   "help_documents": "Help (PDF)",
   "help_dropdown": "Help documents dropdown",
   "image_classification": {
@@ -442,7 +445,6 @@
       "use_ai_button": "Classify photos with AI (Beta)",
       "use_manual_observations_button": "Enter observations manually"
     },
-    "growth_form": "Growth form",
     "remove_photo": "Remove photo",
     "remove_photo_confirmation": "Are you sure you want to remove this photo?",
     "review_this_photo": "Review this photo",
@@ -550,6 +552,9 @@
     "zoom_out": "Zoom out",
     "zoom_to_point": "Zoom to point"
   },
+  "measurements": {
+    "meters_short": "m"
+  },
   "media": {
     "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
     "buttons": {
@@ -583,7 +588,16 @@
   "no_notifications": "There are currently no notifications",
   "notes": "Notes",
   "number_of_quadrats_info": "Total number of quadrats in the transect (e.g. 10)",
-  "observations": "Observations",
+  "observations": {
+    "growth_form": "Growth form",
+    "growth_form_info": "Growth form of the observed benthic attribute. Only choose a growth form if it is relevant to the benthic attribute (e.g. Acropora branching).",
+    "interval": "Interval",
+    "interval_size": "Interval size",
+    "interval_size_info": "Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).",
+    "interval_start": "Interval start",
+    "interval_start_info": "Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5).",
+    "observations": "Observations"
+  },
   "observers": "Observers",
   "observers_info": "Select one or more observers to add",
   "offline": {
@@ -640,6 +654,8 @@
     "delete_other_users_notice": "To delete this project, first remove all other users",
     "delete_project": "Delete a project",
     "delete_sample_units_notice": "You must delete all the sample units in this project to delete this project.",
+    "demo": "Demo project",
+    "demo_explore_unavailable": "Demo projects are unavailable to view in MERMAID Explore",
     "edit_project_info": "Edit project info",
     "errors": {
       "data_unavailable": "Project data is currently unavailable.",
@@ -703,10 +719,6 @@
   "remove_user": "Remove user",
   "remove_user_confirmation": "Are you sure you want to remove <strong>{{userName}}</strong> as an observer?",
   "removed_from_project_message": "<strong>{{userName}}</strong> is an observer on this sample unit but is no longer a part of this project",
-  "sample_date": "Sample date",
-  "sample_time": "Sample time",
-  "sample_time_info": "Time when data was collected",
-  "sample_unit_number": "Sample unit #",
   "sample_units": {
     "add": "Add sample unit",
     "collecting": "Collecting",
@@ -720,7 +732,8 @@
       "data_unavailable": "Sample unit data is currently unavailable",
       "observations_unavailable_offline": "Sample unit observations unavailable offline",
       "submitted_data_unavailable": "Submitted record data is currently unavailable",
-      "submitted_records_unavailable": "Submitted record data is currently unavailable",
+      "submitted_moved_to_collecting": "The submitted record has been moved to collecting.",
+      "submitted_not_editable": "The submitted record has not been made editable",
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable",
       "submit_disabled": "Errors or warnings are preventing you from submitting",
       "validation_ignore": "This validation cannot be ignored.",
@@ -737,17 +750,21 @@
     "not_submitted": "This sample unit is not submitted",
     "observers": "Observers",
     "record": "Record",
-    "sample_date": "Sample date",
     "sample_event": "Sample Event",
-    "sample_time": "Sample Time",
-    "sample_time_info": "Time when data was collected.",
-    "scroll_to_observations": "Scroll to observations",
+    "sample_date": "Sample date",
+    "sample_date_info": "Date when data was collected",
+    "sample_date_time": "Sample Date Time",
+    "sample_time": "Sample time",
+    "sample_time_info": "Time when data was collected",
     "sample_unit_number": "Sample unit #",
+    "scroll_to_observations": "Scroll to observations",
     "size": "Size",
     "status": "Status",
     "submitted": "Submitted",
+    "submitted_readonly_and_movable_by_admin": "Submitted sample units are read-only and can only be moved to Collecting by an admin.",
     "submitted_and_unsubmitted_transect_number": "Transect number for submitted and unsubmitted sample units",
     "submitted_no_data_message": "This project has no submitted sample units",
+    "submitted_readonly": "Submitted sample units are read-only.",
     "success": {
       "record_deleted": "Record deleted.",
       "record_saved": "Record saved.",
@@ -816,8 +833,7 @@
     "mermaid_data_save_offline_error": "The {{dataType}} failed to save both on your computer and online.",
     "mermaid_data_save_online_sync_error": "The {{dataType}} has been saved on your computer, but not online.",
     "mermaid_data_save_success_offline": "The {{dataType}} has been saved on your computer.",
-    "mermaid_data_save_success_online": "The {{dataType}} has been saved on your computer and online.",
-    "submitted_records_unavailable": "Submitted record data is currently unavailable"
+    "mermaid_data_save_success_online": "The {{dataType}} has been saved on your computer and online."
   },
   "toggle_label_visibility": "Toggle label visibility",
   "toggle_table_visibility": "Toggle table visibility",
@@ -826,9 +842,11 @@
   "transect": "Transect",
   "transect_length_info": "Length of transect for a sample unit, in meters. May include decimal (e.g. 50.0)",
   "transect_length_surveyed": "Transect length surveyed",
+  "transect_length_surveyed_m": "Transect Length Surveyed (m)",
   "transect_number": "Transect number",
   "transect_number_info": "Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.",
   "type": "Type",
+  "use_interval_size_as_start": "Use Interval Size as Interval Start",
   "users": {
     "add_user_button": "Add user",
     "add_user_email": "Enter email address of user to add",
