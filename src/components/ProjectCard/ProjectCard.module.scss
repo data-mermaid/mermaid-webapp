@@ -14,6 +14,23 @@
     }
   }
 }
+.project-card__wrapper {
+  margin: $spacing-x-large auto 0 auto;
+  width: $max-screen-width;
+  max-width: $max-width;
+  background: $white;
+  &:hover,
+  &:focus {
+    outline: 2px solid $primary;
+  }
+
+  @media (max-width: $tablet-landscape-break) {
+    width: 98%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+}
 .no-wrap-wrapper {
   white-space: nowrap;
 }
