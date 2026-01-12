@@ -21,19 +21,22 @@
    1. clone this repo
    1. obtain values for `.env` and `.env.test` files. (see `.env.sample` and `env.test.sample`. (Contact repo admins for access to environment variables)
    1. optional: `nvm use` (this will make sure you are using the right node version if you have NVM installed)
-   1. yarn install
-   1. yarn start
+   1. `yarn install`
+   1. `yarn start` -- builds to http://localhost:3000
 
 ## Dev Notes
+
+- Current efforts include migrating code:
+- From using `prop-types` to TypeScript, using interfaces when necessary
+- `styled-components` to modular SASS/SCSS
+- tokenizing any hard-coded text to allow space for translation and manageable verbiage updates
 
 - `plop <filename>` scaffolds component files inside the `src/components` directory
 - `src/components/generic` are for reusable components that may be useful for other projects. They should be developed to be completely unaware of their context. If a reusable component is MERMAID-specific, it can go elsewhere.
 - `src/components/pages` are for pages or page-like components
-- Styles use Styled Components for easy scoping, speed, and maintainability.
-- Focus on user-focused integration tests, and testing complex pieces of code. 100% test coverage is not a goal for this project.
 - Although there is no comprehensive list, tech debt tickets are tracked in Trello with a label, or the title prefix 'Tech debt:'. Most are in the 'Someday' column.
 - Collect Record form pages use two different approaches to managing form state. Formik had its limitations, so for the observations tables we opted to store form state with a reducer. This inconsistency has led to some tech debt and complexity that was determined to be acceptable, but its worth knowing when handling things like dirty form state, that there are two states to consider.
-- Hot reloading happens inconsistently, notably, changes to DatabaseSwitchboard code seem to require a manual browser refresh.
+- Hot reloading happens inconsistently - changes to DatabaseSwitchboard can require a manual refresh
 - To reset the API and its database, run `make freshinstall`
 - This app was initialized with Create React App, and then migrated to vite. To avoid refactoring tests, we opted to use Jest to run tests instead of Vitest. If a package is installed that creates issues in tests, a possible solution might be to ensure it gets processed with babel in `jest.config.ts`'s `transformIgnorePatterns` configuration.
 
@@ -46,9 +49,9 @@ The general approach to this code has been to avoid premature performance optimi
 Initialize navigation and auto sync with the `useInitializeSyncApiDataIntoOfflineStorage` hook, get sync status state from the `useSyncStatus()` hook. Both hooks depend on `SyncStatusProvider`
 These auto syncs are triggered when navigating to the projects list page, and any time a user navigates to a project-related page. Note that not all syncs pull the same things. These hooks take care of nagivation and reload based syncs.
 
-There is also an `apiSyncInstance` available in the app for manualy controled syncs. Typically, in the databaseSwitchboard, creating, editing, or deleting MERMAID data will involve pushing the changes to IDB first, then pushing to the API, and then using the `pushThenPullAllProjectDataExceptChoices` to make sure a sync happens with all the data (beyond what was just pushed). Component code handling sync, IDB, or API operations should generally be avoided. Whenever triggering a manual sync, make sure to set the sync status appropriately via `setIsSyncInProgress`
+There is also an `apiSyncInstance` available in the app for manually controlled syncs. Typically, in the databaseSwitchboard, creating, editing, or deleting MERMAID data will involve pushing the changes to IDB first, then pushing to the API, and then using the `pushThenPullAllProjectDataExceptChoices` to make sure a sync happens with all the data (beyond what was just pushed). Component code handling sync, IDB, or API operations should generally be avoided. Whenever triggering a manual sync, make sure to set the sync status appropriately via `setIsSyncInProgress`
 
-Syncs also _should_ be triggered on many create/update/delete operations within the databaseSwitchboard (its enforced through code review, so its always good to check that a sync is happening before relying on it. Look for various functions being used from syncApiDataIntoOfflineStorage names starting with 'pushThenPullEverything')
+Syncs also _should_ be triggered on many create/update/delete operations within the databaseSwitchboard (It's enforced through code review, so it's always good to check that a sync is happening before relying on it. Look for various functions being used from syncApiDataIntoOfflineStorage names starting with 'pushThenPullEverything')
 
 ##### Sync errors
 
@@ -85,7 +88,13 @@ There are currently two ways the application warns the user about navigating awa
 
 #### Testing
 
-The goal of testing is not 100% test coverage. Its to test critical path features or any complex code. Currently we are focusing test effort on offline functionality, and ignoring online-only functionality.
+The goal of testing is not 100% test coverage, but focused to test
+
+- offline functionality
+- critical path features
+- user-focused integration tests
+- unit tests where helpful
+- any complex code
 
 Since this app can exist in multiple states (online, offline, various states of data), test helpers were created to abstract much of this set up. The main ones are:
 
@@ -93,12 +102,21 @@ Since this app can exist in multiple states (online, offline, various states of 
 
 If you would like to suppress missing act warnings in your test console, you can add `VITE_IGNORE_TESTING_ACT_WARNINGS=true` to `.env`
 
+#### Code style
+
+- React components are PascalCased according to React best practices.
+- React components are created as a result of unique functionality
+- CSS/SCSS Class names are created with BEM methodology for design intentions
+- Avoid using `!important` in CSS/SCSS
+- Event-handling functions begin with `handle`
+  - ie - handleClose, handleClick
+
 ## Deploying
 
 ### Pull Request Previews
 
 - Available at `preview.app2.datamermaid.org/<pull-request-number-here>/index.html`
-- A preview of the application is created when a pull request is opened, sychronized (commit is made), or re-opened.
+- A preview of the application is created when a pull request is opened, synchronized (commit is made), or re-opened.
 - A bot will add a PR comment with the link to the preview, once it is ready.
 - Once a pull request is merged or closed, the respective preview will be deleted.
 - Please use merge to update the develop branch when merging via GitHub (not rebase and not squash + merge)

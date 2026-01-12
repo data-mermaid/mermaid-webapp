@@ -65,6 +65,7 @@ import user from '@iconify-icons/mdi/user'
 import usersAndTransects from '@iconify-icons/mdi/account-box-multiple-outline'
 import zoomIn from '@iconify-icons/mdi/zoom-in'
 import zoomOut from '@iconify-icons/mdi/zoom-out'
+import language from '@iconify-icons/mdi/language'
 
 const WarningIcon = styled(InlineIcon)`
   color: ${theme.color.warningColor};
@@ -115,6 +116,7 @@ export const IconHeart = (props: IconProps) => <InlineIcon {...props} icon={hear
 export const IconHome = (props: IconProps) => <InlineIcon {...props} icon={homeOutline} />
 export const IconInfo = (props: IconProps) => <InlineIcon {...props} icon={informationIcon} />
 export const IconLabel = (props: IconProps) => <InlineIcon {...props} icon={label} />
+export const IconLanguage = (props: IconProps) => <InlineIcon {...props} icon={language} />
 export const IconLibraryBooks = (props: IconProps) => <InlineIcon {...props} icon={libraryBooks} />
 export const IconManagementRegimes = (props: IconProps) => (
   <InlineIcon {...props} icon={fileTable} />

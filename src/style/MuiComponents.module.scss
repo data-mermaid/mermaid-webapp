@@ -1,0 +1,21 @@
+@use './theme.scss' as *;
+
+//Tooltip
+@mixin MuiTooltip--base {
+  font-size: $small-font-size;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.MuiTooltip-tooltip {
+  @include MuiTooltip--base;
+  color: $white;
+  background-color: $primary;
+}
+.MuiTooltip-arrow {
+  color: $primary;
+}
+.MuiTooltip-tooltip--dark {
+  @include MuiTooltip--base;
+  color: $primary;
+  background-color: $white;
+}

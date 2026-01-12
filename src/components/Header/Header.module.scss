@@ -1,0 +1,62 @@
+@use '../../style/theme.scss' as *;
+@use '../../style/_buttons.scss' as btn;
+
+@mixin nav-link {
+  color: $white;
+  cursor: pointer;
+  white-space: nowrap;
+  height: $header-height;
+  border-bottom: $border-large solid transparent;
+  text-decoration: none;
+  position: relative;
+  margin: 0 $spacing-small;
+  display: block;
+  padding: 0;
+  line-height: $header-height;
+
+  &:hover,
+  &:focus {
+    border-bottom: 3px solid $callout;
+  }
+}
+
+.header__button {
+  @include btn.button-link;
+  @include nav-link;
+}
+
+.user-nav {
+  position: absolute;
+  top: $header-height;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: $spacing-medium;
+  background-color: $primary;
+  color: $white;
+}
+.user-nav--link {
+  @include nav-link;
+  display: inline-block;
+  border-width: 0 0 $border-large 0;
+  background: none;
+}
+
+.icon-wrapper {
+  display: inline-block;
+  margin-right: $spacing-x-small;
+}
+
+.desktop-global-nav {
+  display: flex;
+  @media (max-width: $tablet-landscape-break) {
+    display: none;
+  }
+}
+.mobile-global-nav {
+  display: none;
+  @media (max-width: $tablet-landscape-break) {
+    display: flex;
+  }
+}
