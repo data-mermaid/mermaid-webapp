@@ -11,7 +11,7 @@ import { ButtonSecondary } from '../../../generic/buttons'
 import { TableOverflowWrapper, Td, Th, thStyles, Tr } from '../../../generic/Table/table'
 import { imageClassificationPointPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { IconZoomIn } from '../../../icons'
-import { MuiTooltipDark } from '../../../generic/MuiTooltip'
+import { MuiTooltip } from '../../../generic/MuiTooltip'
 import { unclassifiedGuid } from '../../../../library/constants/constants'
 import { useTranslation } from 'react-i18next'
 
@@ -103,9 +103,9 @@ const ImageAnnotationModalTable = ({
               <Th style={{ maxWidth: '200px' /**force text wrapping**/ }}>
                 {t('image_classification.attribute_growth_form')}
               </Th>
-              <MuiTooltipDark title={t('image_classification.confirmed_total')}>
+              <MuiTooltip variant="dark" title={t('image_classification.confirmed_total')}>
                 <Th>{t('image_classification.annotation.confirmed')}</Th>
-              </MuiTooltipDark>
+              </MuiTooltip>
               <Th style={{ textAlign: 'center' }}>{t('image_classification.annotation.status')}</Th>
             </Tr>
           </thead>
@@ -126,7 +126,10 @@ const ImageAnnotationModalTable = ({
                     $isAnyRowSelected={selectedAttributeId !== undefined}
                   >
                     <TdZoom>
-                      <MuiTooltipDark title={t('image_classification.buttons.zoom_to_attribute')}>
+                      <MuiTooltip
+                        variant="dark"
+                        title={t('image_classification.buttons.zoom_to_attribute')}
+                      >
                         <ButtonZoom
                           onClick={(event) =>
                             handleZoomClick({
@@ -139,7 +142,7 @@ const ImageAnnotationModalTable = ({
                         >
                           <IconZoomIn />
                         </ButtonZoom>
-                      </MuiTooltipDark>
+                      </MuiTooltip>
                     </TdZoom>
                     {groupedTableRowId === unclassifiedGuid ? (
                       <Td colSpan={5} align="center" style={{ fontWeight: '700' }}>
