@@ -92,12 +92,12 @@ const ImageAnnotationPopup = ({
 
       <PopupBottomRow>
         <PopupZoomButtonContainer>
-          <MuiTooltipDark title={t('map_tooling.reset_zoom')}>
+          <MuiTooltip variant="dark" title={t('map_tooling.reset_zoom')}>
             <PopupIconButton type="button" onClick={resetZoom}>
               <IconZoomOut />
             </PopupIconButton>
           </MuiTooltipDark>
-          <MuiTooltipDark title={t('map_tooling.zoom_to_point')}>
+          <MuiTooltip variant="dark" title={t('map_tooling.zoom_to_point')}>
             <PopupIconButton type="button" onClick={zoomToSelectedPoint}>
               <IconZoomIn />
             </PopupIconButton>
@@ -115,7 +115,7 @@ const ImageAnnotationPopup = ({
         </PopupConfirmButton>
 
         <PopupZoomButtonContainer>
-          <MuiTooltipDark title={t('image_classification.annotation.next_unconfirmed_point')}>
+          <MuiTooltip variant="dark" title={t('image_classification.annotation.next_unconfirmed_point')}>
             <PopupIconButton
               type="button"
               onClick={selectNextUnconfirmedPoint}

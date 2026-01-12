@@ -8,15 +8,24 @@ interface MuiTooltip {
   children: ReactElement
   title: string
   placement?: Placement
+  variant?: 'default' | 'dark'
 }
 
-export const MuiTooltip = ({ children, title, placement = 'bottom' }: MuiTooltip) => {
+export const MuiTooltip = ({
+  children,
+  title,
+  placement = 'bottom',
+  variant = 'default',
+}: MuiTooltip) => {
   return (
     <Tooltip
       title={title}
       placement={placement}
       classes={{
-        tooltip: tooltipStyles['MuiTooltip-tooltip'],
+        tooltip:
+          variant === 'dark'
+            ? tooltipStyles['MuiTooltip-tooltip--dark']
+            : tooltipStyles['MuiTooltip-tooltip'],
         arrow: tooltipStyles['MuiTooltip-arrow'],
       }}
       slotProps={{
@@ -67,8 +76,8 @@ export const MuiTooltipDarkRight = ({
   children: ReactElement
 }) => {
   return (
-    <MuiTooltipDark title={title} placement="right">
+    <MuiTooltip variant="dark" title={title} placement="right">
       {children}
-    </MuiTooltipDark>
+    </MuiTooltip>
   )
 }

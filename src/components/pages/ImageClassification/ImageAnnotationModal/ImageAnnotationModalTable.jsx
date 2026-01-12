@@ -103,7 +103,7 @@ const ImageAnnotationModalTable = ({
               <Th style={{ maxWidth: '200px' /**force text wrapping**/ }}>
                 {t('image_classification.attribute_growth_form')}
               </Th>
-              <MuiTooltipDark title={t('image_classification.confirmed_total')}>
+              <MuiTooltip variant="dark" title={t('image_classification.confirmed_total')}>
                 <Th>{t('image_classification.annotation.confirmed')}</Th>
               </MuiTooltipDark>
               <Th style={{ textAlign: 'center' }}>{t('image_classification.annotation.status')}</Th>
@@ -126,7 +126,7 @@ const ImageAnnotationModalTable = ({
                     $isAnyRowSelected={selectedAttributeId !== undefined}
                   >
                     <TdZoom>
-                      <MuiTooltipDark title={t('image_classification.buttons.zoom_to_attribute')}>
+                      <MuiTooltip variant="dark" title={t('image_classification.buttons.zoom_to_attribute')}>
                         <ButtonZoom
                           onClick={(event) =>
                             handleZoomClick({
