@@ -79,7 +79,7 @@ const ProjectName = () => {
             <button
               className={buttonStyles['icon-button']}
               type="button"
-              aria-label={tooltipText}
+              aria-label={t(tooltipText)}
               onClick={handleExploreButtonClick}
               disabled={isDemoProject}
             >
