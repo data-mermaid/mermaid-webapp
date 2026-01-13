@@ -1,5 +1,20 @@
 @use './theme.scss' as *;
 
+@mixin button {
+  transition: $default-transition;
+  padding: $spacing-small $spacing-medium;
+  border-width: 0;
+  display: inline-block;
+  cursor: pointer;
+  &:disabled {
+    color: $black;
+    cursor: not-allowed;
+  }
+  &:active:enabled {
+    transition: $default-transition;
+  }
+}
+
 .icon-button {
   margin-left: $spacing-small;
   margin-right: $spacing-x-small;
@@ -11,4 +26,13 @@
     cursor: not-allowed;
     color: $disabled;
   }
+}
+
+.button--caution {
+  @include button;
+}
+.button--caution__wrapper {
+  display: flex;
+  padding: $spacing-medium;
+  margin: $spacing-large 0;
 }

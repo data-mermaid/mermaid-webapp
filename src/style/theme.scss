@@ -8,7 +8,9 @@ $callout-active: #f8d8cc;
 $error: #7b0a0a;
 $success: #43a841;
 $warning: #efda70;
+
 $white: #ffffff;
+$black: #000000;
 $disabled: #969696;
 
 $tableRowOdd: #fdfdfe;
@@ -41,3 +43,6 @@ $spacing-x-large: 24px;
 $pill-height: 26px;
 $max-screen-width: 90vw;
 $max-width: 1200px;
+
+/** Transitions **/
+$default-transition: 0.25s;

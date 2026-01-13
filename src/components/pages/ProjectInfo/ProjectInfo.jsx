@@ -30,7 +30,7 @@ import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { getIsUserAdminForProject } from '../../../App/currentUserProfileHelpers'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
-import DeleteProjectButton from '../../DeleteProjectButton/DeleteProjectButton'
+import DeleteProjectButton from '../../buttons/DeleteProjectButton'
 import GfcrCallout from '../../GfcrCallout'
 import { useCurrentProject } from '../../../App/CurrentProjectContext'
 import { EditCitationModal } from './EditCitationModal'
@@ -205,7 +205,7 @@ const ProjectInfo = () => {
   })
 
   //setSaveButtonUnsaved
-    useEffect(() => {
+  useEffect(() => {
     if (formik.dirty || isSuggestedCitationDirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
@@ -373,6 +373,7 @@ const ProjectInfo = () => {
         />
         <DeleteProjectButton
           isLoading={isDeletingProject}
+          // isDemoProject={isDemoProject}
           hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
           hasOtherUsers={projectBeingEdited?.members.length > 1}
           isOpen={isDeleteProjectModalOpen}
