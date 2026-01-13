@@ -17,13 +17,10 @@ import buttonStyles from '../style/buttons.module.scss'
 const TitleContainer = styled('div')`
   display: flex;
   flex-wrap: wrap;
+  align-items: baseline;
   line-height: 1;
   white-space: nowrap;
   gap: 0 1rem;
-
-  button {
-    margin-top: 20px;
-  }
 
   ${mediaQueryTabletLandscapeOnly(css`
     font-size: ${theme.typography.smallFontSize};
@@ -72,7 +69,7 @@ const RecordFormTitle = ({
 
     window.open(`${import.meta.env.VITE_MERMAID_EXPLORE_LINK}/?${queryParams.toString()}`, '_blank')
   }
-  const tooltipText = isDemoProject
+  const exploreTooltipText = isDemoProject
     ? 'projects.demo.sample_explore_unavailable'
     : 'go_to_explore_sample_event'
 
@@ -107,12 +104,12 @@ const RecordFormTitle = ({
         <ProjectTooltip forwardedAs="h2" text={label} tooltipText={t('label')} id="label-tooltip" />
       )}
       {sampleEventId && (
-        <MuiTooltip title={t('go_to_explore_sample_event')} placement="top" arrow>
+        <MuiTooltip title={t(exploreTooltipText)} placement="top" arrow>
           <span>
             <button
               className={buttonStyles['icon-button']}
               type="button"
-              aria-label={t(tooltipText)}
+              aria-label={t(exploreTooltipText)}
               onClick={handleExploreButtonClick}
               disabled={isDemoProject}
             >

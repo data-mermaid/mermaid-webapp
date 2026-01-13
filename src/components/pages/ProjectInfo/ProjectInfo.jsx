@@ -72,8 +72,7 @@ const ProjectInfo = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const isMounted = useIsMounted()
-  const { currentProject } = useCurrentProject()
-  const isDemoProject = currentProject?.is_demo
+  const isDemoProject = projectBeingEdited?.is_demo
   const isSuggestedCitationDirty = citationToUse !== citationFromServerToUse
   const navigate = useNavigate()
 
