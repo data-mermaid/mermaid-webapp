@@ -63,7 +63,7 @@ const DeleteProjectButton = ({
 
   const footerContentPageTwo = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>Close</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>{t('buttons.close')}</ButtonSecondary>
     </RightFooter>
   )
 
@@ -87,7 +87,7 @@ const DeleteProjectButton = ({
     <>
       <DeleteProjectButtonCautionWrapper>
         <ButtonCaution type="button" onClick={openModal} disabled={hasSampleUnits || hasOtherUsers}>
-          {t('projects.delete')}
+          {t('projects.buttons.delete')}
         </ButtonCaution>
       </DeleteProjectButtonCautionWrapper>
       {hasSampleUnits ? (
@@ -95,7 +95,7 @@ const DeleteProjectButton = ({
       ) : null}
       {hasOtherUsers ? <WarningText>{t('projects.delete_other_users_notice')}</WarningText> : null}
       <Modal
-        title={t('projects.delete')}
+        title={t('projects.buttons.delete')}
         isOpen={isOpen}
         onDismiss={onDismiss}
         mainContent={mainContent}

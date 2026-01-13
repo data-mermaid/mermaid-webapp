@@ -99,7 +99,8 @@ const ProjectInfo = () => {
 
   useDocumentTitle(`${projectInfoTitle} - ${t('mermaid')}`)
 
-  const _getSupportingData = useEffect(() => {
+  // getSupportingData
+  useEffect(() => {
     if (!isAppOnline) {
       setIsLoading(false)
     }
@@ -203,7 +204,8 @@ const ProjectInfo = () => {
     },
   })
 
-  const _setSaveButtonUnsaved = useEffect(() => {
+  //setSaveButtonUnsaved
+    useEffect(() => {
     if (formik.dirty || isSuggestedCitationDirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
