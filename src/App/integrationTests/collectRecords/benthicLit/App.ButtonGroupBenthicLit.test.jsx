@@ -27,8 +27,10 @@ test('Edit Benthic LIT - Save button starts with Saved status, make changes, Sav
     },
   )
 
-  await user.clear(await screen.findByLabelText('Depth'))
-  await user.type(screen.getByLabelText('Depth'), '45')
+  const depthInput = await screen.findByTestId('depth-input')
+
+  await user.clear(depthInput)
+  await user.type(depthInput, '45')
 
   expect(screen.getByTestId('save-button'))
 
