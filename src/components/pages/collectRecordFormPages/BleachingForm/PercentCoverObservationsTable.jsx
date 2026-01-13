@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import {
   ObservationTr,
@@ -24,7 +25,6 @@ import { getObservationsPropertyNames } from '../../../../App/mermaidData/record
 import BleachingPercentCoverSummaryStats from '../../../BleachingPercentCoverSummaryStats/BleachingPercentCoverSummaryStats'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
-import language from '../../../../language'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -56,6 +56,10 @@ const PercentCoverObservationTable = ({
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+  const { t } = useTranslation()
+
+  const infoLabelText = t('info')
+  const deleteObservationText = t('delete_observation')
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -230,7 +234,7 @@ const PercentCoverObservationTable = ({
               tabIndex="-1"
               type="button"
               onClick={handleDeleteObservation}
-              aria-label="Delete Observation"
+              aria-label={deleteObservationText}
             >
               <IconClose />
             </ButtonRemoveRow>
@@ -242,6 +246,8 @@ const PercentCoverObservationTable = ({
     areValidationsShowing,
     autoFocusAllowed,
     collectRecord,
+    deleteObservationText,
+    infoLabelText,
     ignoreObservationValidations,
     observationsDispatch,
     observationsState,
@@ -252,7 +258,7 @@ const PercentCoverObservationTable = ({
   return (
     <>
       <InputWrapper data-testid={testId}>
-        <H2 id="percent-cover-label">Observations - Percent Cover</H2>
+        <H2 id="percent-cover-label">{t('observations.percent_cover')}</H2>
         <>
           <StyledOverflowWrapper>
             <StickyObservationTable aria-labelledby="percent-cover-label">
@@ -270,10 +276,10 @@ const PercentCoverObservationTable = ({
                   <Th />
                   <Th align="right" id="quadrat-number-label">
                     <LabelContainer>
-                      Quadrat <RequiredIndicator />
+                      {t('observations.quadrat')} <RequiredIndicator />
                       {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.quadrat}
+                          helperText={t('observations.quadrat_info')}
                           left="-3em"
                           top="-6.1em"
                         />
@@ -282,18 +288,18 @@ const PercentCoverObservationTable = ({
                         type="button"
                         onClick={(event) => handleInfoIconClick(event, 'quadrat')}
                       >
-                        <IconInfo aria-label="info" />
+                        <IconInfo aria-label={infoLabelText} />
                       </IconButton>
                     </LabelContainer>
                   </Th>
                   <Th align="center" id="hard-coral-percent-cover-label">
                     <LabelContainer>
                       <div>
-                        Hard coral % cover <RequiredIndicator />
+                        {t('observations.hard_coral_cover')} <RequiredIndicator />
                       </div>
                       {isHelperTextShowing && currentHelperTextLabel === 'hardCoralPercentage' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.hardCoralPercentage}
+                          helperText={t('observations.hard_coral_cover_info')}
                           left="4.2em"
                           top="-7.5em"
                         />
@@ -302,18 +308,18 @@ const PercentCoverObservationTable = ({
                         type="button"
                         onClick={(event) => handleInfoIconClick(event, 'hardCoralPercentage')}
                       >
-                        <IconInfo aria-label="info" />
+                        <IconInfo aria-label={infoLabelText} />
                       </IconButton>
                     </LabelContainer>
                   </Th>
                   <Th align="center" id="soft-coral-percent-cover-label">
                     <LabelContainer>
                       <div>
-                        Soft coral % cover <RequiredIndicator />
+                        {t('observations.soft_coral_cover')} <RequiredIndicator />
                       </div>
                       {isHelperTextShowing && currentHelperTextLabel === 'softCoralPercentage' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.softCoralPercentage}
+                          helperText={t('observations.soft_coral_info')}
                           left="3.6em"
                           top="-7.5em"
                         />
@@ -322,18 +328,18 @@ const PercentCoverObservationTable = ({
                         type="button"
                         onClick={(event) => handleInfoIconClick(event, 'softCoralPercentage')}
                       >
-                        <IconInfo aria-label="info" />
+                        <IconInfo aria-label={infoLabelText} />
                       </IconButton>
                     </LabelContainer>
                   </Th>
                   <Th align="center" id="microalgae-percent-cover-label">
                     <LabelContainer>
                       <div>
-                        Macroalgae % cover <RequiredIndicator />
+                        {t('observations.macroalgae_cover')} <RequiredIndicator />
                       </div>
                       {isHelperTextShowing && currentHelperTextLabel === 'macroalgaePercentage' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.macroalgaePercentage}
+                          helperText={t('observations.macroalgae_cover_info')}
                           left="5em"
                           top="-7.5em"
                         />
@@ -342,11 +348,11 @@ const PercentCoverObservationTable = ({
                         type="button"
                         onClick={(event) => handleInfoIconClick(event, 'macroalgaePercentage')}
                       >
-                        <IconInfo aria-label="info" />
+                        <IconInfo aria-label={infoLabelText} />
                       </IconButton>
                     </LabelContainer>
                   </Th>
-                  {areValidationsShowing ? <Th align="center">Validations</Th> : null}
+                  {areValidationsShowing ? <Th align="center">{t('validations')}</Th> : null}
                   <Th />
                 </Tr>
               </thead>
@@ -355,7 +361,7 @@ const PercentCoverObservationTable = ({
           </StyledOverflowWrapper>
           <UnderTableRow>
             <ButtonPrimary type="button" onClick={handleAddObservation}>
-              <IconPlus /> Add Row
+              <IconPlus /> {t('buttons.add_row')}
             </ButtonPrimary>
             <BleachingPercentCoverSummaryStats observations={observationsState} />
           </UnderTableRow>
