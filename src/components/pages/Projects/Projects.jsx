@@ -161,7 +161,6 @@ const Projects = () => {
     ? getFilteredSortedProjects().map((project) => (
         <ErrorBoundary key={project.id}>
           <ProjectCard
-            role="listitem"
             project={{ ...project }}
             isOfflineReady={getIsProjectOffline(project.id)}
             addProjectToProjectsPage={addProjectToProjectsPage}
