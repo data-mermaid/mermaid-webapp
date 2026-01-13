@@ -468,7 +468,11 @@ const BenthicPhotoQuadratObservationTable = ({
         </StickyObservationTable>
       </StyledOverflowWrapper>
       <UnderTableRow>
-        <ButtonPrimary type="button" onClick={handleAddObservation}>
+        <ButtonPrimary
+          type="button"
+          onClick={handleAddObservation}
+          data-testid="add-observation-row"
+        >
           <IconPlus /> Add Row
         </ButtonPrimary>
         <ObservationsSummaryStats>

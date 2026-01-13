@@ -181,6 +181,7 @@ const PercentCoverObservationTable = ({
               value={percent_hard}
               min="0"
               step="any"
+              data-testid="percent-hard-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateHardCoralPercent' })
               }}
@@ -195,6 +196,7 @@ const PercentCoverObservationTable = ({
               value={percent_soft}
               min="0"
               step="any"
+              data-testid="percent-soft-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateSoftCoralPercent' })
               }}
@@ -207,6 +209,7 @@ const PercentCoverObservationTable = ({
               value={percent_algae}
               min="0"
               step="any"
+              data-testid="percent-algae-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateAlgaePercent' })
               }}
@@ -247,7 +250,6 @@ const PercentCoverObservationTable = ({
     autoFocusAllowed,
     collectRecord,
     deleteObservationText,
-    infoLabelText,
     ignoreObservationValidations,
     observationsDispatch,
     observationsState,
@@ -261,7 +263,10 @@ const PercentCoverObservationTable = ({
         <H2 id="percent-cover-label">{t('observations.percent_cover')}</H2>
         <>
           <StyledOverflowWrapper>
-            <StickyObservationTable aria-labelledby="percent-cover-label">
+            <StickyObservationTable
+              aria-labelledby="percent-cover-label"
+              data-testid={`${testId}-table`}
+            >
               <StyledColgroup>
                 <col className="number" />
                 <col className="quadratNumber" />
@@ -360,7 +365,11 @@ const PercentCoverObservationTable = ({
             </StickyObservationTable>
           </StyledOverflowWrapper>
           <UnderTableRow>
-            <ButtonPrimary type="button" onClick={handleAddObservation}>
+            <ButtonPrimary
+              type="button"
+              onClick={handleAddObservation}
+              data-testid="add-observation-row"
+            >
               <IconPlus /> {t('buttons.add_row')}
             </ButtonPrimary>
             <BleachingPercentCoverSummaryStats observations={observationsState} />

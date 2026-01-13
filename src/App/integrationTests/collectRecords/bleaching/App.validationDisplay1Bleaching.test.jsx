@@ -110,10 +110,8 @@ test('Bleaching collect record validations will show the all warnings when there
   expect(within(screen.getByTestId('site')).getByText('firstWarning')).toBeInTheDocument()
   expect(within(screen.getByTestId('site')).getByText('secondWarning')).toBeInTheDocument()
 
-  const coloniesBleachedObservationsTable = screen.getByLabelText(
-    'Observations - Colonies Bleached',
-  )
-  const percentCoverObservationsTable = screen.getByLabelText('Observations - Percent Cover')
+  const coloniesBleachedObservationsTable = screen.getByTestId('observations-section-table')
+  const percentCoverObservationsTable = screen.getByTestId('observations2-section-table')
 
   expect(
     within(coloniesBleachedObservationsTable).getByText('observation warning 1'),
@@ -219,7 +217,7 @@ test('Validating an empty collect record, and then editing an input with errors 
 
   expect(await within(screen.getByTestId('depth')).findByText('Required')).toBeInTheDocument()
 
-  await user.type(screen.getByLabelText('Depth'), '1')
+  await user.type(screen.getByTestId('depth-input'), '1')
 
   // validations remain showing, except Depth is changed
   expect(await within(screen.getByTestId('site')).findByText('Required')).toBeInTheDocument()
@@ -232,15 +230,13 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations - Colonies Bleached')).getByText(
-      'observation error',
-    ),
+    within(screen.getByTestId('observations-section-table')).getByText('observation error'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations - Percent Cover')).getByText('observation error'),
+    within(screen.getByTestId('observations2-section-table')).getByText('observation error'),
   ).toBeInTheDocument()
 
-  await user.type(screen.getByLabelText('Depth'), '{backspace}')
+  await user.type(screen.getByTestId('depth-input'), '{backspace}')
 
   await user.click(await screen.findByTestId('save-button'))
   expect(await screen.findByTestId('saving-button'))
@@ -257,12 +253,10 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('notes')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).queryByText('Required')).not.toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations - Colonies Bleached')).queryByText(
-      'observation error',
-    ),
+    within(screen.getByTestId('observations-section-table')).queryByText('observation error'),
   ).not.toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations - Percent Cover')).queryByText('observation error'),
+    within(screen.getByTestId('observations2-section-table')).queryByText('observation error'),
   ).not.toBeInTheDocument()
 
   await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
@@ -281,12 +275,10 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations - Colonies Bleached')).getByText(
-      'observation error',
-    ),
+    within(screen.getByTestId('observations-section-table')).getByText('observation error'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations - Percent Cover')).getByText('observation error'),
+    within(screen.getByTestId('observations2-section-table')).getByText('observation error'),
   ).toBeInTheDocument()
 }, 60000)
 
@@ -341,14 +333,12 @@ test('Bleaching collect record validations will show passed input validations', 
 
   // observations table (has three empty observations)
   expect(
-    within(screen.getByLabelText('Observations - Colonies Bleached')).getAllByLabelText(
-      'Passed Validation',
-    ).length,
+    within(screen.getByTestId('observations-section-table')).getAllByLabelText('Passed Validation')
+      .length,
   ).toEqual(3)
 
   expect(
-    within(screen.getByLabelText('Observations - Percent Cover')).getAllByLabelText(
-      'Passed Validation',
-    ).length,
+    within(screen.getByTestId('observations2-section-table')).getAllByLabelText('Passed Validation')
+      .length,
   ).toEqual(3)
 }, 50000)

@@ -214,12 +214,17 @@ const ColoniesBleachedObservationTable = ({
                   // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus={autoFocusAllowed} // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
                   aria-labelledby="benthic-attribute-label"
+                  data-testid="benthic-attribute-input"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
                   value={attribute}
                   noResultsText={noResultsText}
                   noResultsAction={
-                    <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
+                    <NewOptionButton
+                      type="button"
+                      onClick={proposeNewBenthicAttributeClick}
+                      data-testid="propose-new-benthic-attribute-button"
+                    >
                       {proposeNewBenthicAttributeText}
                     </NewOptionButton>
                   }
@@ -232,6 +237,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={handleGrowthFormChange}
               value={growth_form}
               aria-labelledby="growth-form-label"
+              data-testid="growth-form-select"
               onKeyDown={handleObservationKeyDown}
             >
               <option value=""> </option>
@@ -248,6 +254,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_normal}
               min="0"
               step="any"
+              data-testid="count-normal-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateNormal' })
               }}
@@ -260,6 +267,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_pale}
               min="0"
               step="any"
+              data-testid="count-pale-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updatePale' })
               }}
@@ -272,6 +280,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_20}
               min="0"
               step="any"
+              data-testid="count-20-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update20Bleached' })
               }}
@@ -284,6 +293,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_50}
               min="0"
               step="any"
+              data-testid="count-50-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update50Bleached' })
               }}
@@ -296,6 +306,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_80}
               min="0"
               step="any"
+              data-testid="count-80-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update80Bleached' })
               }}
@@ -308,6 +319,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_100}
               min="0"
               step="any"
+              data-testid="count-100-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update100Bleached' })
               }}
@@ -320,6 +332,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_dead}
               min="0"
               step="any"
+              data-testid="count-recently-dead-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateRecentlyDead' })
               }}
@@ -379,7 +392,10 @@ const ColoniesBleachedObservationTable = ({
         <H2 id="colonies-bleached-label">{t('observations.colonies_bleached')}</H2>
         <>
           <StyledOverflowWrapper>
-            <StickyObservationTableWrapTh aria-labelledby="colonies-bleached-label">
+            <StickyObservationTableWrapTh
+              aria-labelledby="colonies-bleached-label"
+              data-testid={`${testId}-table`}
+            >
               <StyledColgroup>
                 <col className="number" />
                 <col className="autoWidth" />
@@ -439,7 +455,11 @@ const ColoniesBleachedObservationTable = ({
             </StickyObservationTableWrapTh>
           </StyledOverflowWrapper>
           <UnderTableRow>
-            <ButtonPrimary type="button" onClick={handleAddObservation}>
+            <ButtonPrimary
+              type="button"
+              onClick={handleAddObservation}
+              data-testid="add-observation-row"
+            >
               <IconPlus /> {t('buttons.add_row')}
             </ButtonPrimary>
             <BleachincColoniesBleachedSummaryStats

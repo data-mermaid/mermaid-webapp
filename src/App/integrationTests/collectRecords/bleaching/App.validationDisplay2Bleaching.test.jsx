@@ -85,9 +85,7 @@ test('Validating an empty bleaching collect record collect record shows validati
 
   // observations tables (have one observation error each)
 
-  const observationsColoniesBleachedTable = screen.getByLabelText(
-    'Observations - Colonies Bleached',
-  )
+  const observationsColoniesBleachedTable = screen.getByTestId('observations-section-table')
 
   expect(
     within(observationsColoniesBleachedTable).getByText('observation error'),
@@ -101,7 +99,7 @@ test('Validating an empty bleaching collect record collect record shows validati
     ),
   ).not.toBeInTheDocument()
 
-  const observationsPercentCover = screen.getByLabelText('Observations - Percent Cover')
+  const observationsPercentCover = screen.getByTestId('observations2-section-table')
 
   expect(within(observationsPercentCover).getByText('observation error')).toBeInTheDocument()
   expect(
@@ -232,9 +230,7 @@ test('bleaching collect record validations will show only the first error when t
 
   // observations tables (have one observation error each)
 
-  const coloniesBleachedObservationsTable = screen.getByLabelText(
-    'Observations - Colonies Bleached',
-  )
+  const coloniesBleachedObservationsTable = screen.getByTestId('observations-section-table')
 
   expect(
     within(coloniesBleachedObservationsTable).getByText('observation error 1'),
