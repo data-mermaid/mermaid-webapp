@@ -21,7 +21,7 @@ test('Clicking anywhere on a project card navigates to the project collect page 
 
   expect(screen.getByTestId('projects-link')).toBeInTheDocument()
 
-  const projectCards = await screen.findAllByRole('listitem')
+  const projectCards = await screen.findAllByTestId('project-card')
 
   const projectCard = projectCards[0]
 
@@ -63,7 +63,7 @@ test('Offline projects page only shows offline ready projects', async () => {
     dexieCurrentUserInstance,
   })
 
-  const projects = await screen.findAllByRole('listitem')
+  const projects = await screen.findAllByTestId('project-card')
 
   // if all were shown, there would be 5, not 1
   expect(projects.length).toEqual(1)

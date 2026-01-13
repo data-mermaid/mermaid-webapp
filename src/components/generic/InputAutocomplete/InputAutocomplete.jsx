@@ -51,6 +51,7 @@ const InputAutocomplete = ({
   options,
   value = '',
   onInputValueChange = undefined,
+  menuTestId = undefined,
   ...restOfProps
 }) => {
   const optionMatchingValueProp = useMemo(
@@ -171,7 +172,12 @@ const InputAutocomplete = ({
               {...restOfProps}
             />
             {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
-            <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
+            <Menu
+              {...getMenuProps({
+                isOpen: isMenuOpen,
+                'data-testid': menuTestId,
+              })}
+            >
               {isMenuOpen && getMenuContents(downshiftObject)}
             </Menu>
             {isMenuOpen && !menuItems.length && (
@@ -199,6 +205,7 @@ InputAutocomplete.propTypes = {
   options: inputOptionsPropTypes.isRequired,
   value: PropTypes.string,
   onInputValueChange: PropTypes.func,
+  menuTestId: PropTypes.string,
 }
 
 export default InputAutocomplete

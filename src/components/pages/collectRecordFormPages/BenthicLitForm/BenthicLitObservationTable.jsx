@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { useTranslation, Trans } from 'react-i18next'
 
 import {
   InputAutocompleteContainer,
@@ -27,10 +28,10 @@ import { Tr, Td, Th } from '../../../generic/Table/table'
 import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
-import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import { HelperTextLink } from '../../../generic/links'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -43,6 +44,8 @@ const StyledColgroup = styled('colgroup')`
     }
   }
 `
+
+const WORMS_LINK = 'https://www.marinespecies.org/'
 
 const BenthicLitObservationsTable = ({
   areValidationsShowing,
@@ -57,10 +60,15 @@ const BenthicLitObservationsTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
+  const { t } = useTranslation()
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+
+  const noResultsText = t('search.no_results')
+  const proposeNewBenthicAttributeText = `${t('benthic_observations.add_benthic_attribute')}...`
+  const deleteObservationAriaLabel = t('delete_observation')
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -213,6 +221,7 @@ const BenthicLitObservationsTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
+                  data-testid="observation-benthic-attribute-input"
                   // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus={autoFocusAllowed} // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
                   isLastRow={observationsState.length === rowNumber}
@@ -220,10 +229,15 @@ const BenthicLitObservationsTable = ({
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
                   value={attribute}
-                  noResultsText={language.autocomplete.noResultsDefault}
+                  noResultsText={noResultsText}
+                  menuTestId="observation-benthic-attribute-menu"
                   noResultsAction={
-                    <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
-                      {language.pages.collectRecord.newBenthicAttributeLink}
+                    <NewOptionButton
+                      type="button"
+                      onClick={proposeNewBenthicAttributeClick}
+                      data-testid="propose-new-benthic-attribute-button"
+                    >
+                      {proposeNewBenthicAttributeText}
                     </NewOptionButton>
                   }
                 />
@@ -232,6 +246,7 @@ const BenthicLitObservationsTable = ({
           </Td>
           <Td align="right">
             <Select
+              data-testid="growth-form-select"
               onChange={handleGrowthFormChange}
               value={growth_form}
               aria-labelledby="growth-form-label"
@@ -251,6 +266,7 @@ const BenthicLitObservationsTable = ({
               aria-labelledby="length-label"
               onChange={handleLengthChange}
               onKeyDown={(event) => handleKeyDown({ event, index, observation, isLastCell: true })}
+              data-testid="observation-length-input"
             />
           </Td>
 
@@ -272,7 +288,7 @@ const BenthicLitObservationsTable = ({
               tabIndex="-1"
               type="button"
               onClick={handleDeleteObservation}
-              aria-label="Delete Observation"
+              aria-label={deleteObservationAriaLabel}
             >
               <IconClose />
             </ButtonRemoveRow>
@@ -285,10 +301,13 @@ const BenthicLitObservationsTable = ({
     autoFocusAllowed,
     benthicAttributeSelectOptions,
     choices,
+    deleteObservationAriaLabel,
     collectRecord,
     ignoreObservationValidations,
+    noResultsText,
     observationsDispatch,
     observationsState,
+    proposeNewBenthicAttributeText,
     resetObservationValidations,
     setAreObservationsInputsDirty,
     setIsNewBenthicAttributeModalOpen,
@@ -298,7 +317,7 @@ const BenthicLitObservationsTable = ({
   return (
     <>
       <InputWrapper data-testid={testId}>
-        <H2 id="observations-label">Observations</H2>
+        <H2 id="observations-label">{t('observations.observations')}</H2>
         <>
           <StyledOverflowWrapper>
             <StickyObservationTable aria-labelledby="observations-label">
@@ -317,11 +336,25 @@ const BenthicLitObservationsTable = ({
                   <Th align="left" id="benthic-attribute-label">
                     <LabelContainer>
                       <div>
-                        Benthic Attribute <RequiredIndicator />
+                        {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
                       </div>
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.getBenthicAttribute()}
+                          helperText={
+                            <Trans
+                              i18nKey="benthic_observations.benthic_attribute_info"
+                              components={{
+                                helperTextLink: (
+                                  <HelperTextLink
+                                    href={WORMS_LINK}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    color="#fff"
+                                  />
+                                ),
+                              }}
+                            />
+                          }
                           left="3.3em"
                           top="-13.5em"
                         />
@@ -330,16 +363,16 @@ const BenthicLitObservationsTable = ({
                         type="button"
                         onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
                       >
-                        <IconInfo aria-label="info" />
+                        <IconInfo aria-label={t('info')} />
                       </IconButton>
                     </LabelContainer>
                   </Th>
                   <Th align="right" id="growth-form-label">
                     <LabelContainer>
-                      <div>Growth Form</div>
+                      <div>{t('observations.growth_form')}</div>
                       {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.growthForm}
+                          helperText={t('observations.growth_form_info')}
                           left="-0.5em"
                           top="-9em"
                         />
@@ -348,15 +381,15 @@ const BenthicLitObservationsTable = ({
                         type="button"
                         onClick={(event) => handleInfoIconClick(event, 'growthForm')}
                       >
-                        <IconInfo aria-label="info" />
+                        <IconInfo aria-label={t('info')} />
                       </IconButton>
                     </LabelContainer>
                   </Th>
                   <Th align="right" id="length-label">
-                    Length (cm)
+                    {t('measurements.length_cm')}
                     <RequiredIndicator />
                   </Th>
-                  {areValidationsShowing ? <Th align="center">Validations</Th> : null}
+                  {areValidationsShowing ? <Th align="center">{t('validations')}</Th> : null}
                   <Th> </Th>
                 </Tr>
               </thead>
@@ -364,8 +397,12 @@ const BenthicLitObservationsTable = ({
             </StickyObservationTable>
           </StyledOverflowWrapper>
           <UnderTableRow>
-            <ButtonPrimary type="button" onClick={handleAddObservation}>
-              <IconPlus /> Add Row
+            <ButtonPrimary
+              type="button"
+              onClick={handleAddObservation}
+              data-testid="add-observation-row"
+            >
+              <IconPlus /> {t('buttons.add_row')}
             </ButtonPrimary>
             <BenthicPitLitObservationSummaryStats
               benthicAttributeSelectOptions={benthicAttributeSelectOptions}
