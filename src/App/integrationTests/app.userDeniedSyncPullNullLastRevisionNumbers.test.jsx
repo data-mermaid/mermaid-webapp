@@ -175,7 +175,7 @@ and project profiles to ensure the user can pull fresh data if they are given pe
     }),
   )
 
-  const projectCards = await screen.findAllByRole('listitem')
+  const projectCards = await screen.findAllByTestId('project-card')
   const projectCardForProjectWithId1 = projectCards[0]
   const linkToCollectingPageForProjectWithId1 = within(projectCardForProjectWithId1).getByRole(
     'link',
