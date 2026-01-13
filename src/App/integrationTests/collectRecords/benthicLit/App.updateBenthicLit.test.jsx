@@ -66,26 +66,24 @@ describe('Offline', () => {
     )
 
     // test all observers format too
-    const addObservationButton = await screen.findByRole('button', {
-      name: 'Add Row',
-    })
+    const addObservationButton = await screen.findByTestId('add-observation-row')
 
     await user.click(addObservationButton)
 
-    const observationsTable = await screen.findByLabelText('Observations')
+    const observationsTable = (await screen.findAllByRole('table'))[0]
 
     const observationRows = await within(observationsTable).findAllByRole('row')
 
     // 4 observations + 1 header row
     expect(observationRows.length).toEqual(5)
 
-    const newBenthicAttributeInput = screen.getAllByLabelText('Benthic Attribute')[3]
-    const newGrowthFromInput = screen.getAllByLabelText('Growth Form')[3]
-    const newLengthInput = screen.getAllByLabelText('Length (cm)')[3]
+    const newBenthicAttributeInput = screen.getAllByTestId('observation-benthic-attribute-input')[3]
+    const newGrowthFromInput = screen.getAllByTestId('growth-form-select')[3]
+    const newLengthInput = screen.getAllByTestId('observation-length-input')[3]
 
     await user.type(newBenthicAttributeInput, 'dead')
 
-    const benthicAttributeList = screen.getAllByRole('listbox')[3]
+    const benthicAttributeList = screen.getAllByTestId('observation-benthic-attribute-menu')[3]
 
     const deadCoralOption = screen.getByRole('option', {
       name: 'Dead Coral with Algae',

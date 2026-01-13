@@ -553,6 +553,7 @@
     "zoom_to_point": "Zoom to point"
   },
   "measurements": {
+    "length_cm": "Length (cm)",
     "meters_short": "m"
   },
   "media": {
