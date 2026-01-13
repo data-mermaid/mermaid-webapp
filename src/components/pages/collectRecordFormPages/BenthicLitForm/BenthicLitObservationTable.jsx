@@ -386,7 +386,7 @@ const BenthicLitObservationsTable = ({
                     </LabelContainer>
                   </Th>
                   <Th align="right" id="length-label">
-                    {t('length_cm')}
+                    {t('measurements.length_cm')}
                     <RequiredIndicator />
                   </Th>
                   {areValidationsShowing ? <Th align="center">{t('validations')}</Th> : null}
