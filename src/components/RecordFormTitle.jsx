@@ -105,7 +105,7 @@ const RecordFormTitle = ({
       )}
       {sampleEventId && (
         <MuiTooltip title={t(exploreTooltipText)} placement="top" arrow>
-          <span>
+          <span role="presentation">
             <button
               className={buttonStyles['icon-button']}
               type="button"

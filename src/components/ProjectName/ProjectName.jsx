@@ -70,7 +70,7 @@ const ProjectName = () => {
       <ProjectNameHeader>{project?.name}</ProjectNameHeader>
       {isAppOnline && (
         <MuiTooltip title={t(tooltipText)} placement="top" arrow>
-          <span>
+          <span role="presentation">
             <button
               className={buttonStyles['icon-button']}
               type="button"
