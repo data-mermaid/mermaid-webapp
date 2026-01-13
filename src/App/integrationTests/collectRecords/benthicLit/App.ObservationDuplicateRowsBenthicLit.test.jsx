@@ -21,7 +21,7 @@ test('Benthic LIT observations: tab in count input on last row duplicates row', 
   })
 
   // loading indicator is weird in integration tests, so we wait for the page title
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   const formBeforeTab = screen.getByRole('form')
   const observationsTableBeforeTabKey = within(formBeforeTab).getAllByRole('table')[0]
@@ -62,7 +62,7 @@ test('Benthic LIT observations: enter key adds a new empty row below row where k
   })
 
   // loading indicator is weird in integration tests, so we wait for the page title
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   const formBeforeEnterKey = screen.getByRole('form')
   const observationsTableBeforeEnterKey = within(formBeforeEnterKey).getAllByRole('table')[0]

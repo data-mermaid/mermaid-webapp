@@ -29,6 +29,7 @@ import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { getIsUserAdminForProject } from '../../../App/currentUserProfileHelpers'
 import { PROJECT_CODES } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+import { useCurrentProject } from '../../../App/CurrentProjectContext'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -94,6 +95,8 @@ const DataSharing = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const navigate = useNavigate()
   const location = useLocation()
+  const { currentProject } = useCurrentProject()
+  const isDemoProject = currentProject?.is_demo
 
   useDocumentTitle(`${t('data_sharing.data_sharing')} - ${t('mermaid')}`)
 
@@ -104,7 +107,8 @@ const DataSharing = () => {
   const openDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(true)
   const closeDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(false)
 
-  const _getSupportingData = useEffect(() => {
+  // _getSupportingData
+  useEffect(() => {
     if (!isAppOnline) {
       setIsLoading(false)
     }
@@ -340,7 +344,7 @@ const DataSharing = () => {
       ) : (
         <ReadOnlyDataSharingContent project={projectBeingEdited} />
       )}
-      {isAdminUser ? (
+      {isAdminUser && !isDemoProject && (
         <>
           <CheckBoxLabel cursor={isDataUpdating ? 'wait' : 'auto'}>
             <Input
@@ -355,8 +359,11 @@ const DataSharing = () => {
           </CheckBoxLabel>
           <P>{t('data_sharing.test_project_data')}</P>
         </>
-      ) : null}
-      {!isAdminUser && isTestProject ? <p>{t('data_sharing.is_test_project')}</p> : null}
+      )}
+      {!isAdminUser && isTestProject && !isDemoProject && (
+        <p>{t('data_sharing.is_test_project')}</p>
+      )}
+      {isDemoProject && <p>{t('data_sharing.demo_project_reporting')}</p>}
       <DataSharingInfoModal
         isOpen={isDataSharingInfoModalOpen}
         onDismiss={closeDataSharingInfoModal}

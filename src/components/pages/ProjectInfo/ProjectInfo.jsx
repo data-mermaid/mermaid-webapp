@@ -72,6 +72,7 @@ const ProjectInfo = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const isMounted = useIsMounted()
+  const isDemoProject = projectBeingEdited?.is_demo
   const isSuggestedCitationDirty = citationToUse !== citationFromServerToUse
   const navigate = useNavigate()
 
@@ -323,6 +324,9 @@ const ProjectInfo = () => {
           type="text"
           {...formik.getFieldProps('name')}
           validationType={formik.errors.name || projectNameError ? 'error' : null}
+          helperText={isDemoProject ? t('projects.demo.name_restrictions') : null}
+          showHelperText={isDemoProject}
+          disabled={isDemoProject}
           validationMessages={checkValidationMessage()}
         />
         <TextareaWithLabelAndValidation
