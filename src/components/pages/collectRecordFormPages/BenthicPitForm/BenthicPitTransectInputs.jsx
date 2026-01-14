@@ -416,6 +416,7 @@ const BenthicPitTransectInputs = ({
                   <HelperTextLink
                     href="https://reefresilience.org/wp-content/uploads/REEF-COVER-CLASS-DEFINITIONS.pdf"
                     target="_blank"
+                    rel="noopener noreferrer"
                   />
                 ),
               }}
