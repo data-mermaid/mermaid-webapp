@@ -548,9 +548,7 @@ test('Bleaching collect record validation: user can dismiss colonies bleached ob
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const coloniesBleachedObservationsTable = screen.getByLabelText(
-    'Observations - Colonies Bleached',
-  )
+  const coloniesBleachedObservationsTable = screen.getByTestId('observations-section-table')
 
   expect(within(coloniesBleachedObservationsTable).getByText('firstWarning')).toBeInTheDocument()
   expect(within(coloniesBleachedObservationsTable).getByText('secondWarning')).toBeInTheDocument()
@@ -664,7 +662,7 @@ test('Bleaching collect record validation: user can dismiss percent cover observ
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const percentCoverObservationTable = screen.getByLabelText('Observations - Percent Cover')
+  const percentCoverObservationTable = screen.getByTestId('observations2-section-table')
 
   expect(within(percentCoverObservationTable).getByText('firstWarning')).toBeInTheDocument()
   expect(within(percentCoverObservationTable).getByText('secondWarning')).toBeInTheDocument()

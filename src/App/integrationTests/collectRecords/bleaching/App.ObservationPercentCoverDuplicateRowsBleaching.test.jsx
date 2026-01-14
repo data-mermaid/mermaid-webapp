@@ -25,8 +25,8 @@ test('Bleaching percent cover observations: tab in count input on last row dupli
 
   const formBeforeTab = screen.getByRole('form')
   // percent cover observations are in the second table
-  const observationsTableBeforeTabKey = within(formBeforeTab).getByLabelText(
-    'Observations - Percent Cover',
+  const observationsTableBeforeTabKey = within(formBeforeTab).getByTestId(
+    'observations2-section-table',
   )
 
   // one and three observations
@@ -40,9 +40,7 @@ test('Bleaching percent cover observations: tab in count input on last row dupli
   fireEvent.keyDown(lastMicroalgaePercentCoverInput, { key: 'Tab', code: 'Tab' })
 
   const formAfterTab = screen.getByRole('form')
-  const observationsTableAfterTab = within(formAfterTab).getByLabelText(
-    'Observations - Percent Cover',
-  )
+  const observationsTableAfterTab = within(formAfterTab).getByTestId('observations2-section-table')
 
   expect(within(observationsTableAfterTab).getAllByRole('row').length).toEqual(5)
 
@@ -70,8 +68,8 @@ test('Bleaching percent cover observations: enter key adds a new empty row below
 
   const formBeforeEnterKey = screen.getByRole('form')
   // percent cover observations are in the second table
-  const observationsTableBeforeEnterKey = within(formBeforeEnterKey).getByLabelText(
-    'Observations - Percent Cover',
+  const observationsTableBeforeEnterKey = within(formBeforeEnterKey).getByTestId(
+    'observations2-section-table',
   )
 
   // one header row and three observations
@@ -85,8 +83,8 @@ test('Bleaching percent cover observations: enter key adds a new empty row below
   fireEvent.keyDown(firstMicroalgaePercentcoverInput, { key: 'Enter', code: 'Enter' })
 
   const formAfterEnterKey = screen.getByRole('form')
-  const observationsTableAfterEnterKey = within(formAfterEnterKey).getByLabelText(
-    'Observations - Percent Cover',
+  const observationsTableAfterEnterKey = within(formAfterEnterKey).getByTestId(
+    'observations2-section-table',
   )
 
   expect(within(observationsTableAfterEnterKey).getAllByRole('row').length).toEqual(5)
