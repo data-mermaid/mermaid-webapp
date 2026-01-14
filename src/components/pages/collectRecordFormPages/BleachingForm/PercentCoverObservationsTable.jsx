@@ -324,7 +324,7 @@ const PercentCoverObservationTable = ({
                       </div>
                       {isHelperTextShowing && currentHelperTextLabel === 'softCoralPercentage' ? (
                         <ColumnHeaderToolTip
-                          helperText={t('observations.soft_coral_info')}
+                          helperText={t('observations.soft_coral_cover_info')}
                           left="3.6em"
                           top="-7.5em"
                         />
