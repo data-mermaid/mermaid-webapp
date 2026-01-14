@@ -112,7 +112,6 @@ const ProjectToolBarSection = ({
     currentUser,
     'demo_project',
   )
-  console.log(isDemoProjectEnabledForUser, userHasDemoProject)
   const setFilter = (event) => {
     setProjectFilter(event.target.value)
   }
