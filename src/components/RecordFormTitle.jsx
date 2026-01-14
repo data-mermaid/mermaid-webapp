@@ -1,29 +1,26 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
-import theme from '../../theme'
-import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
-import { getObjectById } from '../../library/getObjectById'
-import { TooltipWithText, TooltipPopup } from '../generic/tooltip'
-import { fishBeltPropType, sitePropType } from '../../App/mermaidData/mermaidDataProptypes'
-import useDocumentTitle from '../../library/useDocumentTitle'
-import { getProtocolTransectType } from '../../App/mermaidData/recordProtocolHelpers'
-import { MuiTooltip } from '../generic/MuiTooltip'
-import { IconButton } from '../generic/buttons'
-import { IconGlobe } from '../icons'
+import theme from '../theme'
+import { mediaQueryTabletLandscapeOnly } from '../library/styling/mediaQueries'
+import { getObjectById } from '../library/getObjectById'
+import { TooltipWithText, TooltipPopup } from './generic/tooltip'
+import { fishBeltPropType, sitePropType } from '../App/mermaidData/mermaidDataProptypes'
+import useDocumentTitle from '../library/useDocumentTitle'
+import { getProtocolTransectType } from '../App/mermaidData/recordProtocolHelpers'
+import { MuiTooltip } from './generic/MuiTooltip'
+import { BiggerIconGlobe } from './icons'
 import { useTranslation } from 'react-i18next'
+import { useCurrentProject } from '../App/CurrentProjectContext'
+import buttonStyles from '../style/buttons.module.scss'
 
 const TitleContainer = styled('div')`
   display: flex;
   flex-wrap: wrap;
+  align-items: baseline;
   line-height: 1;
   white-space: nowrap;
   gap: 0 1rem;
-
-  button {
-    margin: 0;
-    margin-top: 0.5rem;
-  }
 
   ${mediaQueryTabletLandscapeOnly(css`
     font-size: ${theme.typography.smallFontSize};
@@ -41,11 +38,6 @@ const ProjectTooltip = styled(TooltipWithText)`
   }
 `
 
-const BiggerIconGlobe = styled(IconGlobe)`
-  width: ${theme.typography.mediumIconSize};
-  height: ${theme.typography.mediumIconSize};
-`
-
 const RecordFormTitle = ({
   submittedRecordOrCollectRecordDataProperty = undefined,
   sites,
@@ -60,6 +52,8 @@ const RecordFormTitle = ({
   const transectNumber = submittedRecordOrCollectRecordDataProperty[transectType]?.number ?? ''
   const label = submittedRecordOrCollectRecordDataProperty[transectType]?.label ?? ''
   const sampleEventId = submittedRecordOrCollectRecordDataProperty.sample_event?.id ?? ''
+  const { currentProject } = useCurrentProject()
+  const isDemoProject = currentProject?.is_demo
 
   useDocumentTitle(`${protocolTitle} ${siteName} ${transectNumber} - ${t('mermaid')}`)
 
@@ -75,14 +69,17 @@ const RecordFormTitle = ({
 
     window.open(`${import.meta.env.VITE_MERMAID_EXPLORE_LINK}/?${queryParams.toString()}`, '_blank')
   }
+  const exploreTooltipText = isDemoProject
+    ? 'projects.demo.sample_explore_unavailable'
+    : 'go_to_explore_sample_event'
 
   return (
-    <TitleContainer id="collect-form-title" data-testid="edit-collect-record-form-title">
+    <TitleContainer id="collect-form-title" data-testid="record-form-title">
       {protocolTitle && (
         <ProjectTooltip
           forwardedAs="h2"
           text={protocolTitle}
-          tooltipText="Protocol"
+          tooltipText={t('sample_units.protocol')}
           id="protocol-tooltip"
           data-testid="protocol-tooltip"
         />
@@ -91,7 +88,7 @@ const RecordFormTitle = ({
         <ProjectTooltip
           forwardedAs="h2"
           text={siteName}
-          tooltipText="Site Name"
+          tooltipText={t('sites.site_name')}
           id="site-name-tooltip"
         />
       )}
@@ -99,22 +96,26 @@ const RecordFormTitle = ({
         <ProjectTooltip
           forwardedAs="h2"
           text={transectNumber}
-          tooltipText="Transect Number"
+          tooltipText={t('sample_units.transect_number')}
           id="transect-number-tooltip"
         />
       )}
       {label && (
-        <ProjectTooltip forwardedAs="h2" text={label} tooltipText="Label" id="label-tooltip" />
+        <ProjectTooltip forwardedAs="h2" text={label} tooltipText={t('label')} id="label-tooltip" />
       )}
       {sampleEventId && (
-        <MuiTooltip title={t('go_to_explore_sample_event')} placement="top" arrow>
-          <IconButton
-            type="button"
-            aria-label={t('go_to_explore_sample_event')}
-            onClick={handleExploreButtonClick}
-          >
-            <BiggerIconGlobe />
-          </IconButton>
+        <MuiTooltip title={t(exploreTooltipText)} placement="top" arrow>
+          <span role="presentation">
+            <button
+              className={buttonStyles['icon-button']}
+              type="button"
+              aria-label={t(exploreTooltipText)}
+              onClick={handleExploreButtonClick}
+              disabled={isDemoProject}
+            >
+              <BiggerIconGlobe />
+            </button>
+          </span>
         </MuiTooltip>
       )}
     </TitleContainer>

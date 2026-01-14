@@ -7,7 +7,7 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 import useIsMounted from '../../library/useIsMounted'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
-import { IconGlobe } from '../icons'
+import { BiggerIconGlobe } from '../icons'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { useTranslation } from 'react-i18next'
 import buttonStyles from '../../style/buttons.module.scss'
@@ -25,11 +25,6 @@ const ProjectNameWrapper = styled('div')`
 const ProjectNameHeader = styled('h2')`
   display: inline;
   margin: 0 ${theme.spacing.small} 0 0;
-`
-
-const BiggerIconGlobe = styled(IconGlobe)`
-  width: ${theme.typography.mediumIconSize};
-  height: ${theme.typography.mediumIconSize};
 `
 
 const ProjectName = () => {
@@ -67,7 +62,7 @@ const ProjectName = () => {
   }
 
   const tooltipText = isDemoProject
-    ? 'projects.demo_explore_unavailable'
+    ? 'projects.demo.explore_unavailable'
     : 'go_to_explore_this_project'
 
   return (
@@ -75,7 +70,7 @@ const ProjectName = () => {
       <ProjectNameHeader>{project?.name}</ProjectNameHeader>
       {isAppOnline && (
         <MuiTooltip title={t(tooltipText)} placement="top" arrow>
-          <span>
+          <span role="presentation">
             <button
               className={buttonStyles['icon-button']}
               type="button"
@@ -90,7 +85,7 @@ const ProjectName = () => {
       )}
       {isDemoProject && (
         <div className={[labelStyles.pill, labelStyles.pill__demo].join(' ')}>
-          {t('projects.demo')}
+          {t('projects.demo.demo')}
         </div>
       )}
     </ProjectNameWrapper>

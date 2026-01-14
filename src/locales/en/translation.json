@@ -685,8 +685,13 @@
     "delete_other_users_notice": "To delete this project, first remove all other users",
     "delete_project": "Delete a project",
     "delete_sample_units_notice": "You must delete all the sample units in this project to delete this project.",
-    "demo": "Demo project",
-    "demo_explore_unavailable": "Demo projects are unavailable to view in MERMAID Explore",
+    "demo": {
+      "demo": "Demo project",
+      "demo_project_reporting": "Data for this demo project is not included in public reporting.",
+      "explore_unavailable": "Demo projects are unavailable to view in MERMAID Explore",
+      "name_restrictions": "Demo project name cannot be changed.",
+      "sample_explore_unavailable": "Demo sample events are unavailable to view in MERMAID Explore"
+    },
     "edit_project_info": "Edit project info",
     "errors": {
       "data_unavailable": "Project data is currently unavailable.",
@@ -781,6 +786,7 @@
     "no_submitted_sample_units": "This project has no submitted sample units",
     "none": "No sample units",
     "not_submitted": "This sample unit is not submitted",
+    "protocol": "Protocol",
     "observers": "Observers",
     "record": "Record",
     "sample_event": "Sample Event",
@@ -804,6 +810,7 @@
       "record_submitted": "Record submitted.",
       "record_validated": "Record successfully validated."
     },
+    "transect_number": "Transect number",
     "transfer": "Transfer sample units",
     "transfer_unsubmitted": "Transfer unsubmitted sample units",
     "validation_status": {
@@ -840,6 +847,7 @@
     "reef_type": "Reef type",
     "reef_zone": "Reef zone",
     "site": "Site",
+    "site_name": "Site name",
     "sites": "Sites"
   },
   "size_cm": "Size (cm)",

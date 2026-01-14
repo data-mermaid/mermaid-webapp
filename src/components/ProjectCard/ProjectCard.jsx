@@ -142,7 +142,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
               )}
               {isDemoProject && (
                 <div className={[labelStyles.pill, labelStyles.pill__demo].join(' ')}>
-                  {t('projects.demo')}
+                  {t('projects.demo.demo')}
                 </div>
               )}
             </div>

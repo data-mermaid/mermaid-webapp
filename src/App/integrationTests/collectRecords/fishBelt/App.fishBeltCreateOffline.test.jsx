@@ -71,7 +71,7 @@ describe('Offline', () => {
     expect(await screen.findByTestId('saved-button'))
 
     // ensure the new form is now the edit form
-    expect(await screen.findByTestId('edit-collect-record-form-title'))
+    expect(await screen.findByTestId('record-form-title'))
 
     await waitFor(() => {
       expect(screen.getByTestId('site-select')).toHaveDisplayValue('Site A')
