@@ -350,7 +350,6 @@ const BleachingTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
-          helperText=""
         />
       </InputWrapper>
     </>
