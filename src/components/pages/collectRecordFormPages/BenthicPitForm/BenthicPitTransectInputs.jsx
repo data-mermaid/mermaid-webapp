@@ -514,6 +514,7 @@ const BenthicPitTransectInputs = ({
                   <HelperTextLink
                     href="https://oceanservice.noaa.gov/education/tutorial_tides/tides01_intro.html"
                     target="_blank"
+                    rel="noopener noreferrer"
                   />
                 ),
               }}
