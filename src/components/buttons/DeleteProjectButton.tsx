@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
+import { ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal'
 import { WarningText } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
 import LoadingModal from '../LoadingModal/LoadingModal'
@@ -19,7 +19,7 @@ interface DeleteProjectButtonProps {
   currentPage: number
   isLoading: boolean
   isOpen: boolean
-  // isDemoProject: boolean
+  isDemoProject: boolean
   errorData?: ErrorDataProps[]
   hasSampleUnits: boolean
   hasOtherUsers: boolean
@@ -33,7 +33,7 @@ const DeleteProjectButton = ({
   currentPage = 1,
   errorData = [],
   isLoading,
-  // isDemoProject = false,
+  isDemoProject = false,
   hasSampleUnits,
   hasOtherUsers,
   isOpen,
@@ -74,9 +74,13 @@ const DeleteProjectButton = ({
   const footerContentPageOne = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
-      <ButtonCaution disabled={isLoading} onClick={deleteProject}>
+      <button
+        className={buttonStyles['button--caution']}
+        disabled={isLoading}
+        onClick={deleteProject}
+      >
         {t('projects.confirm_delete', { projectName: resolvedProjectName })}
-      </ButtonCaution>
+      </button>
     </RightFooter>
   )
 
@@ -86,12 +90,21 @@ const DeleteProjectButton = ({
     </RightFooter>
   )
 
-  return (
+  return isDemoProject ? (
+    <button className={buttonStyles['button--caution']} type="button" onClick={deleteProject}>
+      {t('projects.buttons.delete')}
+    </button>
+  ) : (
     <>
       <div className={buttonStyles['button--caution__wrapper']}>
-        <ButtonCaution type="button" onClick={openModal} disabled={hasSampleUnits || hasOtherUsers}>
+        <button
+          className={buttonStyles['button--caution']}
+          type="button"
+          onClick={openModal}
+          disabled={hasSampleUnits || hasOtherUsers}
+        >
           {t('projects.buttons.delete')}
-        </ButtonCaution>
+        </button>
       </div>
       {hasSampleUnits && <WarningText>{t('projects.delete_sample_units_notice')}</WarningText>}
       {hasOtherUsers && <WarningText>{t('projects.delete_other_users_notice')}</WarningText>}

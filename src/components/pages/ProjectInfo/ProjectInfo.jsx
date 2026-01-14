@@ -377,7 +377,7 @@ const ProjectInfo = () => {
         />
         <DeleteProjectButton
           isLoading={isDeletingProject}
-          // isDemoProject={isDemoProject}
+          isDemoProject={isDemoProject}
           hasSampleUnits={!!projectBeingEdited?.num_active_sample_units}
           hasOtherUsers={projectBeingEdited?.members.length > 1}
           isOpen={isDeleteProjectModalOpen}

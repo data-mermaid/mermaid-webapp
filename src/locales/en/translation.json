@@ -642,6 +642,7 @@
     "available_offline": "Offline ready",
     "buttons": {
       "add_demo": "Add demo project",
+      "delete_demo": "Delete demo project",
       "delete": "Delete project"
     },
     "cannot_delete": "You cannot delete {{projectName}} because it is used in the following sample units:",

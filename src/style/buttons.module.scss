@@ -30,6 +30,20 @@
 
 .button--caution {
   @include button;
+  color: $white;
+  background-color: $caution;
+  border: 1px solid $caution;
+  &:hover,
+  &:focus {
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+  }
+  &:disabled {
+    color: $black;
+    background-color: $disabled;
+  }
+  &:active {
+    background-color: $primary;
+  }
 }
 .button--caution__wrapper {
   display: flex;
