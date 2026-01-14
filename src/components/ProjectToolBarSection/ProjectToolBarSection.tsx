@@ -15,6 +15,8 @@ import { IconGlobe } from '../icons'
 import { useTranslation } from 'react-i18next'
 import CalloutButtonDropdown from '../generic/CalloutButton/CalloutButtonDropdown'
 import CalloutButton from '../generic/CalloutButton/CalloutButton'
+import { getCurrentUserOptionalFeature } from '../../library/getCurrentUserOptionalFeature'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -105,7 +107,12 @@ const ProjectToolBarSection = ({
 }: ProjectToolBarSectionProps) => {
   const { isAppOnline } = useOnlineStatus()
   const { t } = useTranslation()
-
+  const { currentUser } = useCurrentUser()
+  const { enabled: isDemoProjectEnabledForUser = false } = getCurrentUserOptionalFeature(
+    currentUser,
+    'demo_project',
+  )
+  console.log(isDemoProjectEnabledForUser, userHasDemoProject)
   const setFilter = (event) => {
     setProjectFilter(event.target.value)
   }
@@ -143,20 +150,20 @@ const ProjectToolBarSection = ({
           )}
         </HeaderStyle>
         <OfflineHide>
-          {userHasDemoProject ? (
-            <CalloutButton
-              onClick={() => setIsNewProjectModalOpen(true)}
-              aria-label={t('projects.new_project')}
-              disabled={!isAppOnline}
-              testId="new-project-button"
-              label={t('projects.new_project')}
-            />
-          ) : (
+          {!userHasDemoProject && isDemoProjectEnabledForUser ? (
             <CalloutButtonDropdown
               onClick={() => setIsNewProjectModalOpen(true)}
               aria-label={t('projects.new_project')}
               disabled={!isAppOnline}
               testId="new-project-button-dropdown"
+              label={t('projects.new_project')}
+            />
+          ) : (
+            <CalloutButton
+              onClick={() => setIsNewProjectModalOpen(true)}
+              aria-label={t('projects.new_project')}
+              disabled={!isAppOnline}
+              testId="new-project-button"
               label={t('projects.new_project')}
             />
           )}
