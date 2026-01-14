@@ -532,45 +532,6 @@ const helperText = {
     'The total width (NOT width to one side of the tape) of the fish belt transect, in meters.',
 }
 
-const tooltipText = {
-  admin:
-    'User has all Collector privileges, and can additionally change project information and data sharing, add and remove project users, transfer unsubmitted sample units between project users, and un-submit sample units for further editing.',
-  getBenthicAttribute: () => (
-    <>
-      Benthic attribute observed. A benthic attribute can be a taxonomic name for a coral or other
-      sessile organism, or an abiotic classification. MERMAID benthic attributes are organized
-      hierarchically and are consistent with{' '}
-      <HelperTextLink href="https://www.marinespecies.org/" target="_blank" color="#fff">
-        WoRMS.
-      </HelperTextLink>
-    </>
-  ),
-  collector:
-    'User can view, export, and analyze data, and collect new observations. Once a transect is submitted, the user can no longer edit or delete observations.',
-  getFishName: () => (
-    <>
-      Name of the fish species, genus, or family observed. For genus-level observations or an
-      unknown species, enter the genus rather than proposing a new species with &lsquo;spp&lsquo;.
-      All fish names in MERMAID are consistent with{' '}
-      <HelperTextLink href="https://fishbase.mnhn.fr/search.php" target="_blank" color="#fff">
-        fishbase.
-      </HelperTextLink>
-    </>
-  ),
-  fishSize: 'Size of fish observed, in cm (e.g. 4.5 or 5-10).',
-  fishCount: 'Number of fish observed, of the same species/genus/family and size.',
-  growthForm:
-    'Growth form of the observed benthic attribute. Only choose a growth form if it is relevant to the benthic attribute (e.g. Acropora branching).',
-  hardCoralPercentage: 'Hard coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
-  macroalgaePercentage: 'Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).',
-  numberOfPoints:
-    'Number of points with unique benthic attribute (/growth form) for the quadrat. The sum of points for all benthic attributes in a quadrat must equal the value set above.',
-  quadrat: 'Number of quadrat/photo in transect (e.g. 1).',
-  readOnly:
-    'User can only view, export, and analyze data in the analysis tools, but cannot collect new observations.',
-  softCoralPercentage: 'Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
-}
-
 export default {
   apiDataTableNames,
   autocomplete,
@@ -592,5 +553,4 @@ export default {
   success,
   table,
   title,
-  tooltipText,
 }
