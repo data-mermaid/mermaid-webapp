@@ -21,7 +21,7 @@ test('Habitat Complexity observations: tab in count input on last row duplicates
   })
 
   // loading indicator is weird in integration tests, so we wait for the page title
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   const observationsSectionBeforeTabKey = screen.getByTestId('observations-section')
   const observationsTableBeforeTabKey = within(observationsSectionBeforeTabKey).getByRole('table')
@@ -68,7 +68,7 @@ test('Habitat Complexity observations: enter key adds a new empty row below row 
   })
 
   // loading indicator is weird in integration tests, so we wait for the page title
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   const observationsSectionBeforeEnterKey = screen.getByTestId('observations-section')
   const observationsTableBeforeEnterKey = within(observationsSectionBeforeEnterKey).getByRole(

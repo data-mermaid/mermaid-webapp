@@ -25,7 +25,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
   )
 
   // loading indicator is weird in integration tests, so we wait for the page title
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   mockMermaidApiAllSuccessful.use(
     rest.post(
@@ -127,7 +127,7 @@ test('Fishbelt observations add new species - proposing new species that already
 
   // loading indicator is weird in integration tests, so we wait for the page title
 
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   const fishbeltForm = screen.getByRole('form')
   const observationsTable = (await within(fishbeltForm).findAllByRole('table'))[0]

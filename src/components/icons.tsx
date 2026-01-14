@@ -158,3 +158,8 @@ export const IconUsersAndTransects = (props: IconProps) => (
 )
 export const IconZoomIn = (props: IconProps) => <InlineIcon {...props} icon={zoomIn} />
 export const IconZoomOut = (props: IconProps) => <InlineIcon {...props} icon={zoomOut} />
+
+export const BiggerIconGlobe = styled(IconGlobe)`
+  width: ${theme.typography.mediumIconSize};
+  height: ${theme.typography.mediumIconSize};
+`
