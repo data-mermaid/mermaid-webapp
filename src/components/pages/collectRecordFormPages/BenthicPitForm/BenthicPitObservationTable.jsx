@@ -351,6 +351,7 @@ const BenthicPitObservationsTable = ({
                                   <HelperTextLink
                                     href="https://www.marinespecies.org/"
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                     color="#fff"
                                   />
                                 ),

@@ -58,9 +58,7 @@ test('Bleaching collect record observations add new benthic attribute - filling 
 
   await user.type(firstBenthicAttributeInput, 'supercalifragilistic')
 
-  const noResultsButton = await screen.findByRole('button', {
-    name: 'Propose New Benthic Attribute...',
-  })
+  const noResultsButton = await screen.findByTestId('propose-new-benthic-attribute-button')
 
   await user.click(noResultsButton)
 
@@ -147,9 +145,7 @@ test('Bleaching collect record observations add new benthic attribute - proposin
 
   await user.type(firstBenthicAttributeInput, 'supercalifragilistic')
 
-  const noResultsButton = await screen.findByRole('button', {
-    name: 'Propose New Benthic Attribute...',
-  })
+  const noResultsButton = await screen.findByTestId('propose-new-benthic-attribute-button')
 
   await user.click(noResultsButton)
 
