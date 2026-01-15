@@ -1,13 +1,20 @@
+@use './functions.module.scss' as *;
+
 /** Theme colors **/
 $primary: #174b82;
 $secondary: #dddce4;
 
 $callout: #f2645a;
+$callout-hover: #f8d8cc;
 $callout-active: #f8d8cc;
 
 $error: #7b0a0a;
 $success: #43a841;
+
 $caution: #bb1600;
+$caution-hover: lighten($caution);
+$caution-active: darken($caution);
+
 $warning: #efda70;
 
 $white: #ffffff;

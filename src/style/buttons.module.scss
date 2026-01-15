@@ -35,14 +35,18 @@
   border: 1px solid $caution;
   &:hover,
   &:focus {
+    background-color: $caution-hover;
+    border-color: $caution-hover;
     box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
   }
   &:disabled {
     color: $black;
     background-color: $disabled;
+    border-color: $disabled;
   }
   &:active {
-    background-color: $primary;
+    border-color: $caution-active;
+    background-color: $caution-active;
   }
 }
 .button--caution__wrapper {
