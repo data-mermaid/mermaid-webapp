@@ -366,7 +366,7 @@ const DataSharing = () => {
       )}
       {isDemoProject && (
         <Trans
-          i18nKey={'data_sharing.demo_project_reporting'}
+          i18nKey={'projects.demo.demo_project_reporting'}
           components={{
             span: <span className={textStyles['italic']} />,
           }}

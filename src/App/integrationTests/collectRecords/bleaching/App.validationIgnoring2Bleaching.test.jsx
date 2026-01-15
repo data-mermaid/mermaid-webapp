@@ -104,7 +104,7 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const coloniesBleachedObservationTable = screen.getByLabelText('Observations - Colonies Bleached')
+  const coloniesBleachedObservationTable = screen.getByTestId('observations-section-table')
 
   // only one observation will have warnings
 
@@ -233,7 +233,7 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const percentCoverObservationTable = screen.getByLabelText('Observations - Percent Cover')
+  const percentCoverObservationTable = screen.getByTestId('observations2-section-table')
 
   // only one observation will have warnings
 
