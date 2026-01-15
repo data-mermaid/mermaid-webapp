@@ -32,9 +32,9 @@ describe('Projects dashboard', () => {
     expect(projectListItems).toHaveLength(6)
 
     // expect filter bar, sort buttons, new project button
-    const newProjectButton = screen.getByTestId('new-project-button-dropdown')
-
-    expect(newProjectButton).toBeInTheDocument()
+    // enable when project_demo feature is enabled
+    // const newProjectButton = screen.getByTestId('new-project-button-dropdown')
+    // expect(newProjectButton).toBeInTheDocument()
 
     const filterProjectsSearchBar = screen.getByTestId('filter-projects')
 
