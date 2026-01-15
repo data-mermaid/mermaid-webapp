@@ -151,17 +151,15 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <div className={styles['no-wrap-wrapper']}>
-            {!isDemoProject && (
-              <ButtonSecondary
-                onClick={() => setIsProjectModalOpen(true)}
-                aria-label={t('buttons.copy')}
-                disabled={!isAppOnline}
-                data-testid="copy-project-button"
-              >
-                <IconCopy />
-                <span>{t('buttons.copy')}</span>
-              </ButtonSecondary>
-            )}
+            <ButtonSecondary
+              onClick={() => setIsProjectModalOpen(true)}
+              aria-label={t('buttons.copy')}
+              disabled={!isAppOnline || isDemoProject}
+              data-testid="copy-project-button"
+            >
+              <IconCopy />
+              <span>{t('buttons.copy')}</span>
+            </ButtonSecondary>
 
             {isProjectModalOpen && (
               <ProjectModal
