@@ -329,7 +329,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('transect_length_info')}
         />
         <InputWithLabelAndValidation
-          label={t('quadrat_number_start')}
+          label={t('observations.quadrat_number_start')}
           required={true}
           id="quadrat_number_start"
           testId="quadrat-number-start"
@@ -349,7 +349,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_number_start}
           onChange={handleQuadratNumberStartChange}
-          helperText={t('quadrat_number_start_info')}
+          helperText={t('observations.quadrat_number_start_info')}
         />
         <InputWithLabelAndValidation
           label={t('quadrat_size')}
@@ -372,7 +372,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('quadrat_size_info')}
         />
         <InputWithLabelAndValidation
-          label={t('number_of_quadrats')}
+          label={t('observations.number_of_quadrats')}
           required={true}
           id="num_quadrats"
           testId="num-quadrats"
@@ -387,7 +387,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.num_quadrats}
           onChange={handleNumberOfQuadratsChange}
-          helperText={t('number_of_quadrats_info')}
+          helperText={t('observations.number_of_quadrats_info')}
         />
         <InputWithLabelAndValidation
           label={t('number_of_points_per_quadrat')}
