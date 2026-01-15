@@ -12,8 +12,8 @@ $error: #7b0a0a;
 $success: #43a841;
 
 $caution: #bb1600;
-$caution-hover: lighten($caution);
-$caution-active: darken($caution);
+$caution-hover: lighten($caution, 20%);
+$caution-active: darken($caution, 20%);
 
 $warning: #efda70;
 

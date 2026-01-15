@@ -68,6 +68,7 @@ const DeleteProjectButton = ({
               <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
               <button
                 className={buttonStyles['button--caution']}
+                type="button"
                 disabled={isLoading}
                 onClick={deleteProject}
               >
