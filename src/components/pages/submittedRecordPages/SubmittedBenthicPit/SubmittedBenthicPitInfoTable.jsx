@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   choicesPropType,
   managementRegimePropType,
@@ -15,6 +16,7 @@ const SubmittedBenthicPitInfoTable = ({
   managementRegimes,
   submittedRecord = undefined,
 }) => {
+  const { t } = useTranslation()
   const { site, management, sample_date } = submittedRecord.sample_event
 
   const {
@@ -38,26 +40,39 @@ const SubmittedBenthicPitInfoTable = ({
   return (
     <Table>
       <tbody>
-        <TableRowItem title="Site" options={sites} value={site} isLink={true} />
+        <TableRowItem title={t('sites.site')} options={sites} value={site} isLink={true} />
         <TableRowItem
-          title="Management"
+          title={t('management_regimes.management')}
           options={managementRegimes}
           value={management}
           isLink={true}
         />
-        <TableRowItem title="Sample Date Time" value={`${sample_date} ${sample_time || ''}`} />
-        <TableRowItem title="Depth (m)" value={depth} />
-        <TableRowItem title="Transect Number" value={number} />
-        <TableRowItem title="Label" value={label} />
-        <TableRowItem title="Transect Length Surveyed (m)" value={len_surveyed} />
-        <TableRowItem title="Interval Size (m)" value={interval_size} />
-        <TableRowItem title="Interval Start (m)" value={interval_start} />
-        <TableRowItem title="Reef Slope" options={reefslopes.data} value={reef_slope} />
-        <TableRowItem title="Visibility" options={visibilities.data} value={visibility} />
-        <TableRowItem title="Current" options={currents.data} value={current} />
-        <TableRowItem title="Relative Depth" options={relativedepths.data} value={relative_depth} />
-        <TableRowItem title="Tide" options={tides.data} value={tide} />
-        <TableRowItem title="Notes" value={notes} isAllowNewlines={true} />
+        <TableRowItem
+          title={t('sample_units.sample_date_time')}
+          value={`${sample_date} ${sample_time || ''}`}
+        />
+        <TableRowItem title={t('depth_m')} value={depth} />
+        <TableRowItem title={t('transect_number')} value={number} />
+        <TableRowItem title={t('label')} value={label} />
+        <TableRowItem title={t('transect_length_surveyed_m')} value={len_surveyed} />
+        <TableRowItem
+          title={`${t('observations.interval_size')} (${t('measurements.meters_short')})`}
+          value={interval_size}
+        />
+        <TableRowItem
+          title={`${t('observations.interval_start')} (${t('measurements.meters_short')})`}
+          value={interval_start}
+        />
+        <TableRowItem title={t('reef_slope')} options={reefslopes.data} value={reef_slope} />
+        <TableRowItem title={t('visibility')} options={visibilities.data} value={visibility} />
+        <TableRowItem title={t('current')} options={currents.data} value={current} />
+        <TableRowItem
+          title={t('relative_depth')}
+          options={relativedepths.data}
+          value={relative_depth}
+        />
+        <TableRowItem title={t('tide')} options={tides.data} value={tide} />
+        <TableRowItem title={t('notes')} value={notes} isAllowNewlines={true} />
       </tbody>
     </Table>
   )
