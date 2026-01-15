@@ -39,7 +39,7 @@ const DeleteProjectButton = ({
       onClick={deleteProject}
       disabled={isLoading}
     >
-      {t('projects.buttons.delete')}
+      {t('projects.buttons.delete_demo')}
     </button>
   ) : (
     <>
