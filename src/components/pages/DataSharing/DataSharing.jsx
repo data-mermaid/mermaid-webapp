@@ -363,7 +363,7 @@ const DataSharing = () => {
       {!isAdminUser && isTestProject && !isDemoProject && (
         <p>{t('data_sharing.is_test_project')}</p>
       )}
-      {isDemoProject && <p>{t('data_sharing.demo_project_reporting')}</p>}
+      {isDemoProject && <p>{t('projects.demo.demo_project_reporting')}</p>}
       <DataSharingInfoModal
         isOpen={isDataSharingInfoModalOpen}
         onDismiss={closeDataSharingInfoModal}
