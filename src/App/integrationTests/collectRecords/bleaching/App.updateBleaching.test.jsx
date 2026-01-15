@@ -28,8 +28,8 @@ describe('Offline', () => {
 
     // make a change
 
-    await user.clear(await screen.findByLabelText('Depth'))
-    await user.type(screen.getByLabelText('Depth'), '45')
+    await user.clear(await screen.findByTestId('depth-input'))
+    await user.type(screen.getByTestId('depth-input'), '45')
 
     await user.click(screen.getByTestId('save-button'))
 
@@ -69,32 +69,26 @@ describe('Offline', () => {
       },
     )
 
-    const addObservationButton = (
-      await screen.findAllByRole('button', {
-        name: 'Add Row',
-      })
-    )[0]
+    const addObservationButton = (await screen.findAllByTestId('add-observation-row'))[0]
 
     await user.click(addObservationButton)
 
-    const coloniesBleachedObservationTable = await screen.findByLabelText(
-      'Observations - Colonies Bleached',
-    )
+    const coloniesBleachedObservationTable = await screen.findByTestId('observations-section-table')
 
     const observationRows = await within(coloniesBleachedObservationTable).findAllByRole('row')
 
     // 4 observations + 2 header rows
     expect(observationRows.length).toEqual(6)
 
-    const newBenthicAttributeInput = screen.getAllByLabelText('Benthic Attribute')[3]
-    const newGrowthFromInput = screen.getAllByLabelText('Growth Form')[3]
-    const newNormalInput = screen.getAllByLabelText('Normal')[3]
-    const newPaleInput = screen.getAllByLabelText('Pale')[3]
-    const new20BleachedInput = screen.getAllByLabelText('0-20% bleached')[3]
-    const new50BleachedInput = screen.getAllByLabelText('20-50% bleached')[3]
-    const new80BleachedInput = screen.getAllByLabelText('50-80% bleached')[3]
-    const new100BleachedInput = screen.getAllByLabelText('80-100% bleached')[3]
-    const newRecentlyDeadInput = screen.getAllByLabelText('Recently dead')[3]
+    const newBenthicAttributeInput = screen.getAllByTestId('benthic-attribute-input')[3]
+    const newGrowthFromInput = screen.getAllByTestId('growth-form-select')[3]
+    const newNormalInput = screen.getAllByTestId('count-normal-input')[3]
+    const newPaleInput = screen.getAllByTestId('count-pale-input')[3]
+    const new20BleachedInput = screen.getAllByTestId('count-20-input')[3]
+    const new50BleachedInput = screen.getAllByTestId('count-50-input')[3]
+    const new80BleachedInput = screen.getAllByTestId('count-80-input')[3]
+    const new100BleachedInput = screen.getAllByTestId('count-100-input')[3]
+    const newRecentlyDeadInput = screen.getAllByTestId('count-recently-dead-input')[3]
 
     await user.type(newBenthicAttributeInput, 'dead')
 
@@ -157,24 +151,20 @@ describe('Offline', () => {
       },
     )
 
-    const addObservationButton = (
-      await screen.findAllByRole('button', {
-        name: 'Add Row',
-      })
-    )[1]
+    const addObservationButton = (await screen.findAllByTestId('add-observation-row'))[1]
 
     await user.click(addObservationButton)
 
-    const percentCoverObservationsTable = (await screen.findAllByRole('table'))[1]
+    const percentCoverObservationsTable = await screen.findByTestId('observations2-section-table')
 
     const observationRows = await within(percentCoverObservationsTable).findAllByRole('row')
 
     // 4 observations + 1 header row
     expect(observationRows.length).toEqual(5)
 
-    const newHardCoralInput = screen.getAllByLabelText('Hard coral % cover')[3]
-    const newSoftCoralInput = screen.getAllByLabelText('Soft coral % cover')[3]
-    const newMacroalgaeInput = screen.getAllByLabelText('Macroalgae % cover')[3]
+    const newHardCoralInput = screen.getAllByTestId('percent-hard-input')[3]
+    const newSoftCoralInput = screen.getAllByTestId('percent-soft-input')[3]
+    const newMacroalgaeInput = screen.getAllByTestId('percent-algae-input')[3]
 
     await user.type(newHardCoralInput, '8')
     await user.type(newSoftCoralInput, '8')
