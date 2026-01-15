@@ -1,6 +1,5 @@
 import React from 'react'
 import { screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import ProjectToolBarSection from '../../components/ProjectToolBarSection/ProjectToolBarSection'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
