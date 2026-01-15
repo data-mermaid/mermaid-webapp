@@ -87,8 +87,6 @@ const ProjectInfo = () => {
   const projectNameExistsErrorText = t('projects.errors.project_name_exists')
   const requiredFieldErrorText = t('forms.required_field')
   const projectSaveFailedToastText = t('projects.errors.not_saved')
-  const projectDeletedToastText = t('projects.success.project_deleted')
-  const projectDeleteFailedToastText = t('projects.errors.not_deleted')
   const gfcrEnabledToastText = t('gfcr.success.indicators_enabled')
   const gfcrDisabledToastText = t('gfcr.success.indicators_disabled')
   const gfcrEnableFailedToastText = t('gfcr.errors.indicators_enable_failed')
@@ -243,12 +241,16 @@ const ProjectInfo = () => {
   const deleteProject = () => {
     setIsDeletingProject(true)
 
+    const projectDeletedToastText = isDemoProject
+      ? 'projects.demo.success_deleted'
+      : 'projects.success.project_deleted'
+
     databaseSwitchboardInstance
       .deleteProject(projectBeingEdited, projectId)
       .then(() => {
         closeDeleteProjectModal()
         setIsDeletingProject(false)
-        toast.success(...getToastArguments(projectDeletedToastText))
+        toast.success(...getToastArguments(t(projectDeletedToastText)))
         navigate(`/projects`)
       })
       .catch((error) => {
@@ -256,7 +258,7 @@ const ProjectInfo = () => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(projectDeleteFailedToastText))
+            toast.error(...getToastArguments(t('projects.errors.not_deleted')))
           },
         })
       })

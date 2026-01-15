@@ -661,7 +661,8 @@
       "demo": "Demo project",
       "explore_unavailable": "Demo projects are unavailable to view in MERMAID Explore",
       "name_restrictions": "Demo project name cannot be changed.",
-      "sample_explore_unavailable": "Demo sample events are unavailable to view in MERMAID Explore"
+      "sample_explore_unavailable": "Demo sample events are unavailable to view in MERMAID Explore",
+      "success_deleted": "The demo project has been deleted. A demo project can be added again from the Projects dashboard."
     },
     "edit_project_info": "Edit project info",
     "errors": {
