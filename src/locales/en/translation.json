@@ -455,6 +455,7 @@
       "file_upload_one": "Photo uploaded successfully",
       "file_upload_other": "Photos uploaded successfully"
     },
+    "thumbnail": "Thumbnail",
     "user_message": {
       "confirm_image_changes": "Are you sure you want to discard the change to this image?"
     },
@@ -621,6 +622,7 @@
     "percent_20_50": "20-50% bleached",
     "percent_50_80": "50-80% bleached",
     "percent_80_100": "80-100% bleached",
+    "percent_attribute": "% {{attribute}}",
     "percent_bleached_colonies": "% Bleached colonies",
     "percent_cover": "Observations - Percent Cover",
     "percent_normal_colonies": "% Normal colonies",
