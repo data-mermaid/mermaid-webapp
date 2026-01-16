@@ -796,7 +796,7 @@
     "sample_event": "Sample Event",
     "sample_date": "Sample date",
     "sample_date_info": "Date when data was collected",
-    "sample_date_time": "Sample Date Time",
+    "sample_date_time": "Sample date time",
     "sample_time": "Sample time",
     "sample_time_info": "Time when data was collected",
     "sample_unit_number": "Sample unit #",
@@ -830,7 +830,7 @@
     "who_has_unsubmitted": "Who has unsubmitted sample units"
   },
   "sample_units_and_management_regimes": "Sample units / Management regimes",
-  "sample_units_and_observers": "Sample units / observers",
+  "sample_units_and_observers": "Sample units / Observers",
   "search": {
     "no_results": "No results found"
   },
@@ -887,7 +887,7 @@
   "transect": "Transect",
   "transect_length_info": "Length of transect for a sample unit, in meters. May include decimal (e.g. 50.0)",
   "transect_length_surveyed": "Transect length surveyed",
-  "transect_length_surveyed_m": "Transect Length Surveyed (m)",
+  "transect_length_surveyed_m": "Transect length surveyed (m)",
   "transect_number": "Transect number",
   "transect_number_info": "Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.",
   "type": "Type",
