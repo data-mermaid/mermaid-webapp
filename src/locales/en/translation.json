@@ -66,10 +66,12 @@
     "select": "Select",
     "send_email": "Send email",
     "submit": "Submit",
+    "submitting": "Submitting",
     "suggestion_review_request": "Send to MERMAID for review",
     "transfer": "Transfer",
     "user_account_dropdown": "User account dropdown",
     "validate": "Validate",
+    "validated": "Validated",
     "validating": "Validating",
     "view": "View"
   },

@@ -337,6 +337,16 @@ const getValidationMessage = (validation, projectId = '') => {
     diff_num_images: () => 'Defined number of quadrats does not match count of images uploaded',
     diff_num_quadrats: () =>
       'Defined number of quadrats does not match count of quadrats in observations',
+    different_num_points_per_quadrat_se: () =>
+      'Other sample units with the same sample event have a different number of points per quadrat',
+    different_num_quadrats_se: () =>
+      'Other sample units with the same sample event have a different number of quadrats',
+    different_transect_length_se: () =>
+      'Other sample units with the same sample event have a different transect length',
+    different_transect_width_se: () =>
+      'Other sample units with the same sample event have a different transect width',
+    different_quadrat_size_se: () =>
+      'Other sample units with the same sample event have a different quadrat size',
     duplicate_benthic_transect: () =>
       getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
     duplicate_fishbelt_transect: () =>
@@ -351,6 +361,7 @@ const getValidationMessage = (validation, projectId = '') => {
         ? getDuplicateValuesValidationMessage(fields[0], context?.duplicates)
         : 'Duplicate',
     invalid_count: () => getInvalidBleachingObsMessage(context, 'colony count'),
+    invalid_intervals: () => 'Invalid intervals',
     invalid_percent_value: () => getInvalidBleachingObsMessage(context, 'percent cover'),
     invalid_total: () => getInvalidBleachingObsTotalMessage(context),
     exceed_total_colonies: () => 'Maximum number of colonies exceeded',
@@ -391,6 +402,7 @@ const getValidationMessage = (validation, projectId = '') => {
     max_fish_size: () => 'Fish size is larger than maximum observed size',
     minimum_total_fish_count: () => `Total fish count less than ${context?.minimum_fish_count}`,
     missing_quadrat_numbers: () => `Missing quadrat numbers ${context?.missing_quadrat_numbers}`,
+    missing_intervals: () => `Missing intervals: ${context?.missing_intervals}`,
     no_region_match: () => 'Coral or fish not previously observed in site region',
     not_part_of_fish_family_subset: () => `Fish is not part of project-defined fish families`,
     not_positive_integer: () => 'Value is not an integer greater or equal to zero',
@@ -406,6 +418,8 @@ const getValidationMessage = (validation, projectId = '') => {
     sample_time_out_of_range: () =>
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
     similar_name: () => 'Another Management Regime is similar to this one.',
+    similar_date_sample_unit: () =>
+      'Other sample units with the same sample event have a different sample date (+/- 30 days).',
     site_not_found: () => 'Site record not available for similarity validation',
     too_many_observations: () =>
       getObservationsCountMessage(fields, 'Greater', context?.observation_count_range[1]),
