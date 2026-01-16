@@ -226,7 +226,7 @@ const BenthicPhotoQuadratTransectInputs = ({
       <InputWrapper>
         <H2>{t('transect')}</H2>
         <InputWithLabelAndValidation
-          label="Transect Number"
+          label={t('transect_number')}
           required={true}
           id="number"
           testId="transect-number"
@@ -249,7 +249,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('transect_number_info')}
         />
         <InputWithLabelAndValidation
-          label="Label"
+          label={t('label')}
           id="label"
           testId="label"
           type="text"
@@ -266,7 +266,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('label_info')}
         />
         <InputWithLabelAndValidation
-          label="Sample Time"
+          label={t('sample_units.sample_time')}
           id="sample_time"
           testId="sample-time"
           type="time"
@@ -286,7 +286,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('sample_units.sample_time_info')}
         />
         <InputWithLabelAndValidation
-          label="Depth"
+          label={t('depth')}
           required={true}
           id="depth"
           ignoreNonObservationFieldValidations={() => {
@@ -305,7 +305,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('depth_info')}
         />
         <InputWithLabelAndValidation
-          label="Transect Length Surveyed"
+          label={t('transect_length_surveyed')}
           required={true}
           id="len_surveyed"
           testId="len-surveyed"
@@ -329,7 +329,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('transect_length_info')}
         />
         <InputWithLabelAndValidation
-          label="Quadrat Number Start"
+          label={t('observations.quadrat_number_start')}
           required={true}
           id="quadrat_number_start"
           testId="quadrat-number-start"
@@ -349,10 +349,10 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_number_start}
           onChange={handleQuadratNumberStartChange}
-          helperText={t('quadrat_number_start_info')}
+          helperText={t('observations.quadrat_number_start_info')}
         />
         <InputWithLabelAndValidation
-          label="Quadrat Size"
+          label={t('quadrat_size')}
           required={true}
           id="quadrat_size"
           testId="quadrat-size"
@@ -372,7 +372,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('quadrat_size_info')}
         />
         <InputWithLabelAndValidation
-          label="Number of Quadrats"
+          label={t('observations.number_of_quadrats')}
           required={true}
           id="num_quadrats"
           testId="num-quadrats"
@@ -387,10 +387,10 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.num_quadrats}
           onChange={handleNumberOfQuadratsChange}
-          helperText={t('number_of_quadrats_info')}
+          helperText={t('observations.number_of_quadrats_info')}
         />
         <InputWithLabelAndValidation
-          label="Number of Points per Quadrat"
+          label={t('observations.number_of_points_per_quadrat')}
           required={true}
           id="num_points_per_quadrat"
           testId="num-points-per-quadrat"
@@ -409,7 +409,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.num_points_per_quadrat}
           onChange={handleNumberOfPointsPerQuadratChange}
-          helperText={t('points_per_quadrat_info')}
+          helperText={t('observations.number_of_points_per_quadrat_info')}
           disabled={isImageClassificationSelected}
         />
         <InputSelectWithLabelAndValidation
@@ -448,7 +448,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           }
         />
         <InputSelectWithLabelAndValidation
-          label="Visibility"
+          label={t('visibility')}
           required={false}
           id="visibility"
           testId="visibility"
@@ -470,7 +470,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('visibility_info')}
         />
         <InputSelectWithLabelAndValidation
-          label="Current"
+          label={t('current')}
           required={false}
           id="current"
           testId="current"
@@ -492,7 +492,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('current_info')}
         />
         <InputSelectWithLabelAndValidation
-          label="Relative Depth"
+          label={t('relative_depth')}
           required={false}
           id="relative_depth"
           testId="relative-depth"
@@ -514,7 +514,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('relative_depth_info')}
         />
         <InputSelectWithLabelAndValidation
-          label="Tide"
+          label={t('tide')}
           required={false}
           id="tide"
           testId="tide"
@@ -546,7 +546,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           }
         />
         <TextareaWithLabelAndValidation
-          label="Notes"
+          label={t('notes')}
           id="notes"
           testId="notes"
           ignoreNonObservationFieldValidations={() => {

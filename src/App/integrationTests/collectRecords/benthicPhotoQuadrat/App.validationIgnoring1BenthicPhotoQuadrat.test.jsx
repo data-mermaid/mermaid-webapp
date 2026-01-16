@@ -695,7 +695,7 @@ test('Benthic Photo Quadrat validation: user can dismiss observation warnings ',
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   await waitFor(() =>
     expect(within(observationsTable).getByText('firstWarning')).toBeInTheDocument(),
@@ -708,7 +708,7 @@ test('Benthic Photo Quadrat validation: user can dismiss observation warnings ',
     expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
 
-  const observationsTableAfterIgnore = screen.getByLabelText('Observations')
+  const observationsTableAfterIgnore = screen.getByTestId('observations-section')
 
   expect(within(observationsTableAfterIgnore).queryByText('secondWarning')).not.toBeInTheDocument()
 
