@@ -390,7 +390,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           helperText={t('observations.number_of_quadrats_info')}
         />
         <InputWithLabelAndValidation
-          label={t('number_of_points_per_quadrat')}
+          label={t('observations.number_of_points_per_quadrat')}
           required={true}
           id="num_points_per_quadrat"
           testId="num-points-per-quadrat"
@@ -409,7 +409,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.num_points_per_quadrat}
           onChange={handleNumberOfPointsPerQuadratChange}
-          helperText={t('points_per_quadrat_info')}
+          helperText={t('observations.number_of_points_per_quadrat_info')}
           disabled={isImageClassificationSelected}
         />
         <InputSelectWithLabelAndValidation
