@@ -56,7 +56,7 @@ const SubmittedBenthicPhotoQuadratInfoTable = ({
         <TableRowItem title={t('transect_number')} value={number} />
         <TableRowItem title={t('label')} value={label} />
         <TableRowItem title={t('transect_length_surveyed_m')} value={len_surveyed} />
-        <TableRowItem title={t('quadrat_number_start')} value={quadrat_number_start} />
+        <TableRowItem title={t('observations.quadrat_number_start')} value={quadrat_number_start} />
         <TableRowItem
           title={`${t('quadrat_size')} (${t('measurements.meters_short')}²)`}
           value={quadrat_size}
