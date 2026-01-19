@@ -425,6 +425,7 @@ const getValidationMessage = (validation, projectId = '') => {
       getObservationsCountMessage(fields, 'Greater', context?.observation_count_range[1]),
     too_few_observations: () =>
       getObservationsCountMessage(fields, 'Fewer', context?.observation_count_range[0]),
+    unknown_protocol: () => 'Unknown protocol',
     unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
     value_not_set: () => 'Value is not set',
     default: () => code || name,
