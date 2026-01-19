@@ -30,7 +30,7 @@ const Projects = () => {
   const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
   const [projectFilter, setProjectFilter] = useState('')
   const [projects, setProjects] = useState([])
-  const [projectSortKey, setProjectSortKey] = useState('') //updated_on
+  const [projectSortKey, setProjectSortKey] = useState('') //unset to allow demo project to show first
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
@@ -103,9 +103,9 @@ const Projects = () => {
   const getSortedProjects = (projectsToSort) => {
     if (projectSortKey === '' && userHasDemoProject) {
       let sortedProjects = sortArrayByObjectKey(projectsToSort, 'updated_on', isProjectSortAsc)
-      const demoProj = projectsToSort.find((project) => project.is_demo === true)
+      const demoProj = sortedProjects.find((project) => project.is_demo === true)
       if (demoProj) {
-        sortedProjects = [demoProj, ...projectsToSort.filter((project) => !project.is_demo)]
+        sortedProjects = [demoProj, ...sortedProjects.filter((project) => !project.is_demo)]
       }
       return sortedProjects
     } else {

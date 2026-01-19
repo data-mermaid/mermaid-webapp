@@ -125,11 +125,11 @@ describe('Offline integration tests', () => {
 
     //uncheck
     await user.click(projectOfflineCheckboxAfterFirstClick)
-    await waitFor(() => expect(screen.getByText('Project III is now offline ready'))) //shouldn't the text be 'Project Z has an apostrophe foo's has been removed from being offline ready'?
-    //commenting out temporarily..
-    // const project5 = within((await screen.findAllByTestId('project-card'))[4])
-    // const project5OfflineCheckbox = project5.getByTestId('offline-ready')
-    // expect(project5OfflineCheckbox).not.toBeChecked()
+    await waitFor(() => expect(screen.getByText('Project III is now offline ready')))
+
+    const project5 = within((await screen.findAllByTestId('project-card'))[4])
+    const project5OfflineCheckbox = project5.getByTestId('offline-ready')
+    expect(project5OfflineCheckbox).not.toBeChecked()
 
     expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(
       mockMermaidData.collect_records.filter((record) => record.project !== '6').length,

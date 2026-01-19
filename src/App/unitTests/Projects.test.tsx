@@ -188,7 +188,7 @@ describe('Projects dashboard', () => {
     expect(offlineReadyCheckboxes[3]).toBeEnabled()
     expect(offlineReadyCheckboxes[4]).toBeEnabled()
 
-    expect(copyButtons[0]).toBeEnabled()
+    expect(copyButtons[0]).toBeDisabled() //demo project - disabled copy button
     expect(copyButtons[1]).toBeEnabled()
     expect(copyButtons[2]).toBeEnabled()
     expect(copyButtons[3]).toBeEnabled()
