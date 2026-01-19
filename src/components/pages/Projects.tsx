@@ -55,7 +55,7 @@ const DemoProjectCallout = ({
         <>
           <p>
             <Trans
-              i18nKey="projects.demo_dismissed"
+              i18nKey="projects.demo.dismissed"
               components={{
                 1: <span style={{ fontWeight: 700 }} />,
               }}
@@ -68,8 +68,8 @@ const DemoProjectCallout = ({
       ) : (
         <>
           <div>
-            <h2>{t('projects.demo_tryout')}</h2>
-            <p>{t('projects.demo_teaser')}</p>
+            <h2>{t('projects.demo.tryout')}</h2>
+            <p>{t('projects.demo.teaser')}</p>
           </div>
           <div className={'buttons-container'}>
             <CalloutButton
