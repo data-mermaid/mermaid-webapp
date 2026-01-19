@@ -102,7 +102,7 @@ test('Benthic photo quadrat validation: user can reset ignored observation warni
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   // only one observation will have warnings
 
