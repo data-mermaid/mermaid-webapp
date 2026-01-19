@@ -1,16 +1,16 @@
 import '@testing-library/jest-dom'
 import React from 'react'
 
-import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData.js'
-import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie.js'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   renderAuthenticatedOffline,
   screen,
   waitFor,
   within,
-} from '../../testUtilities/testingLibraryWithHelpers.jsx'
-import Projects from '../../components/pages/Projects/Projects.jsx'
+} from '../../testUtilities/testingLibraryWithHelpers'
+import Projects from '../../components/pages/Projects'
 
 describe('Projects dashboard', () => {
   test('Projects component renders with the expected UI elements', async () => {
