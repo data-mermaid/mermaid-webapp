@@ -457,6 +457,7 @@
       "file_upload_one": "Photo uploaded successfully",
       "file_upload_other": "Photos uploaded successfully"
     },
+    "thumbnail": "Thumbnail",
     "user_message": {
       "confirm_image_changes": "Are you sure you want to discard the change to this image?"
     },
@@ -623,6 +624,7 @@
     "percent_20_50": "20-50% bleached",
     "percent_50_80": "50-80% bleached",
     "percent_80_100": "80-100% bleached",
+    "percent_attribute": "% {{attribute}}",
     "percent_bleached_colonies": "% Bleached colonies",
     "percent_cover": "Observations - Percent Cover",
     "percent_normal_colonies": "% Normal colonies",
@@ -677,7 +679,9 @@
     "admin_for_project": "You will be an admin for this project",
     "available_offline": "Offline ready",
     "buttons": {
-      "add_demo": "Add demo project"
+      "add_demo": "Add demo project",
+      "delete_demo": "Delete demo project",
+      "delete": "Delete project"
     },
     "cannot_delete": "You cannot delete {{projectName}} because it is used in the following sample units:",
     "confirm_delete": "Delete {{projectName}}",
@@ -688,16 +692,16 @@
     "create_project": "Create project",
     "data_copy_to_project": "Sites, management regimes, data sharing policies, and users and their roles will be copied to new project.",
     "data_unavailable": "Project data is currently unavailable.",
-    "delete": "Delete project",
     "delete_other_users_notice": "To delete this project, first remove all other users",
     "delete_project": "Delete a project",
     "delete_sample_units_notice": "You must delete all the sample units in this project to delete this project.",
     "demo": {
       "demo": "Demo project",
-      "demo_project_reporting": "Data for this demo project is not included in public reporting.",
+      "demo_project_reporting": "Data from this demo project will not be available in MERMAID Explore, and will be filtered by default by the R package <span>mermaidr</span>.",
       "explore_unavailable": "Demo projects are unavailable to view in MERMAID Explore",
       "name_restrictions": "Demo project name cannot be changed.",
-      "sample_explore_unavailable": "Demo sample events are unavailable to view in MERMAID Explore"
+      "sample_explore_unavailable": "Demo sample events are unavailable to view in MERMAID Explore",
+      "success_deleted": "The demo project has been deleted. A demo project can be added again from the Projects dashboard."
     },
     "edit_project_info": "Edit project info",
     "errors": {

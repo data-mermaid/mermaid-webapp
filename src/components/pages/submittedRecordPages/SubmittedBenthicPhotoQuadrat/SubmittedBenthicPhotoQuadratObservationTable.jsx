@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import {
   choicesPropType,
@@ -21,6 +22,7 @@ const SubmittedBenthicPhotoQuadratObservationTable = ({
   benthicAttributeOptions,
   submittedRecord = undefined,
 }) => {
+  const { t } = useTranslation()
   const { obs_benthic_photo_quadrats, images, image_classification } = submittedRecord
   const growthFormOptions = getOptions(choices.growthforms.data)
 
@@ -111,16 +113,16 @@ const SubmittedBenthicPhotoQuadratObservationTable = ({
 
   return (
     <>
-      <FormSubTitle id="table-label">Observations</FormSubTitle>
+      <FormSubTitle id="table-label">{t('observations.observations')}</FormSubTitle>
       <Table>
         <thead>
           <Tr>
-            {image_classification && <TheadItem>Thumbnail</TheadItem>}
+            {image_classification && <TheadItem>{t('image_classification.thumbnail')}</TheadItem>}
             <TheadItem> </TheadItem>
-            <TheadItem align="right">Quadrat</TheadItem>
-            <TheadItem align="right">Benthic Attribute</TheadItem>
-            <TheadItem align="right">Growth Form</TheadItem>
-            <TheadItem align="right">Number of Points</TheadItem>
+            <TheadItem align="right">{t('observations.quadrat')}</TheadItem>
+            <TheadItem align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
+            <TheadItem align="right">{t('observations.growth_form')}</TheadItem>
+            <TheadItem align="right">{t('observations.number_of_points')}</TheadItem>
           </Tr>
         </thead>
         <tbody>{observationBeltFish}</tbody>
@@ -136,7 +138,11 @@ const SubmittedBenthicPhotoQuadratObservationTable = ({
               return (
                 isPercentageAvailable && (
                   <Tr key={obs.benthicAttribute}>
-                    <Th>{`% ${obs.benthicAttribute}`}</Th>
+                    <Th>
+                      {t('observations.percent_attribute', {
+                        attribute: obs.benthicAttribute,
+                      })}
+                    </Th>
                     <Td>{obs.benthicAttributePercentage}</Td>
                   </Tr>
                 )
