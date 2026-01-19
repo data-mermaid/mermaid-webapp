@@ -7,26 +7,6 @@ import {
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
 
-export const CardWrapper = styled('div')`
-  margin: ${theme.spacing.xlarge} auto 0 auto;
-  width: ${theme.spacing.width};
-  max-width: ${theme.spacing.maxWidth};
-  background: ${theme.color.white};
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
-  ${hoverState(css`
-    outline: ${(props) => props.disabled && `solid 2px ${theme.color.primaryBorder}`};
-  `)}
-  ${mediaQueryTabletLandscapeOnly(css`
-    width: 98%;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-  `)}
-`
-export const DateAndCountryLabel = styled('span')`
-  opacity: 0.8;
-  font-size: ${theme.typography.smallFontSize};
-`
 export const ProjectCardHeader = styled('div')`
   display: flex;
   padding: ${theme.spacing.medium};
@@ -56,10 +36,6 @@ export const ProjectCardHeaderButtonsAndDate = styled('div')`
   ${mediaQueryPhoneOnly(css`
     align-items: flex-start;
   `)}
-`
-
-export const ProjectCardHeaderButtonWrapper = styled('div')`
-  white-space: nowrap;
 `
 
 export const CheckBoxLabel = styled.label`
@@ -191,24 +167,4 @@ export const OfflineOrReadOnlyContent = styled('span')`
     props.smallFont ? theme.typography.smallFontSize : theme.typography.mediumFontSize};
   text-align: center;
   padding: 1rem;
-`
-
-export const ProjectTitleContainer = styled('div')`
-  display: flex;
-`
-
-export const AdminPill = styled('div')`
-  margin-left: 1em;
-  margin-top: 0.2em;
-  display: flex;
-  align-items: center;
-  border: solid 1px #ffffff8c;
-  text-transform: uppercase;
-  background: ${(props) => theme.color.getMessageColorBackground(props.type)};
-  color: #ffffffde;
-  padding: ${theme.spacing.xxsmall} ${theme.spacing.medium};
-  border-radius: 5px;
-  white-space: nowrap;
-  font-size: smaller;
-  height: 2em;
 `

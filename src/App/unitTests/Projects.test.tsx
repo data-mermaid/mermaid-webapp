@@ -32,9 +32,9 @@ describe('Projects dashboard', () => {
     expect(projectListItems).toHaveLength(6)
 
     // expect filter bar, sort buttons, new project button
-    const newProjectButton = screen.getByTestId('new-project-button-dropdown')
-
-    expect(newProjectButton).toBeInTheDocument()
+    // enable when project_demo feature is enabled
+    // const newProjectButton = screen.getByTestId('new-project-button-dropdown')
+    // expect(newProjectButton).toBeInTheDocument()
 
     const filterProjectsSearchBar = screen.getByTestId('filter-projects')
 
@@ -59,7 +59,7 @@ describe('Projects dashboard', () => {
       expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
     )
 
-    const projectCard = screen.getAllByRole('listitem')[0]
+    const projectCard = screen.getAllByTestId('project-card')[0]
     const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
     const submitSummaryCard = within(projectCard).getByLabelText(/submitted/i)
     const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
@@ -89,7 +89,7 @@ describe('Projects dashboard', () => {
       expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
     )
 
-    const projectCard = screen.getAllByRole('listitem')[0]
+    const projectCard = screen.getAllByTestId('project-card')[0]
 
     const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
     const submittedSummaryCard = within(projectCard).getByLabelText(/submitted/i)
@@ -134,7 +134,7 @@ describe('Projects dashboard', () => {
       expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
     )
 
-    const projectCard = screen.getAllByRole('listitem')[0]
+    const projectCard = screen.getAllByTestId('project-card')[0]
     const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
     const submittedSummaryCard = within(projectCard).getByLabelText(/submitted/i)
     const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
@@ -153,7 +153,7 @@ describe('Projects dashboard', () => {
     expect(within(dataSharingSummaryCard).getByText('Online Only'))
 
     expect(screen.getByTestId('offline-ready')).toBeDisabled()
-    expect(screen.getByLabelText('Copy')).toBeDisabled()
+    expect(screen.getByTestId('copy-project-button')).toBeDisabled()
   })
 
   test('A project card renders appropriately when online', async () => {
@@ -170,7 +170,7 @@ describe('Projects dashboard', () => {
       expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
     )
 
-    const projectCard = screen.getAllByRole('listitem')[0]
+    const projectCard = screen.getAllByTestId('project-card')[0]
 
     expect(within(projectCard).getByLabelText(/collect/i)).toBeInTheDocument()
     expect(within(projectCard).getByLabelText(/submitted/i)).toBeInTheDocument()
@@ -180,7 +180,7 @@ describe('Projects dashboard', () => {
     // expect(within(projectCard).getByLabelText(/data sharing/i)).toBeInTheDocument()
 
     const offlineReadyCheckboxes = screen.getAllByTestId('offline-ready')
-    const copyButtons = screen.getAllByLabelText('Copy')
+    const copyButtons = screen.getAllByTestId('copy-project-button')
 
     expect(offlineReadyCheckboxes[0]).toBeEnabled()
     expect(offlineReadyCheckboxes[1]).toBeEnabled()
@@ -232,7 +232,7 @@ describe('Projects dashboard', () => {
 
     await user.selectOptions(selectMenu, ['countries'])
 
-    const topProjectCard = screen.getAllByRole('listitem')[0]
+    const topProjectCard = screen.getAllByTestId('project-card')[0]
 
     expect(within(topProjectCard).getByText('Project II'))
     expect(within(topProjectCard).getByText('America'))
@@ -256,7 +256,7 @@ describe('Projects dashboard', () => {
 
     await user.selectOptions(selectMenu, ['updated_on'])
 
-    const topProjectCard = screen.getAllByRole('listitem')[0]
+    const topProjectCard = screen.getAllByTestId('project-card')[0]
 
     expect(within(topProjectCard).getByText('Project II'))
     // commented out due to inconsistent data loading between local and GH actions

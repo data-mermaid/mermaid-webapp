@@ -35,7 +35,7 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
 
   await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
-  const formTitle = screen.getByTestId('edit-collect-record-form-title')
+  const formTitle = screen.getByTestId('record-form-title')
 
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
@@ -243,7 +243,7 @@ test('Fishbelt observations: add row button adds a row', async () => {
 
   expect(within(observationsBeforeAdd).getAllByRole('row').length).toEqual(4)
 
-  await user.click(screen.getByRole('button', { name: 'Add Row' }))
+  await user.click(screen.getByTestId('add-observation-row'))
 
   const observationsAfterAdd = screen.getAllByRole('table')[0]
 

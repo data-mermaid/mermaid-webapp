@@ -1,14 +1,24 @@
+@use './functions.module.scss' as *;
+
 /** Theme colors **/
 $primary: #174b82;
 $secondary: #dddce4;
 
 $callout: #f2645a;
+$callout-hover: #f8d8cc;
 $callout-active: #f8d8cc;
 
 $error: #7b0a0a;
 $success: #43a841;
+
+$caution: #bb1600;
+$caution-hover: lighten($caution, 20%);
+$caution-active: darken($caution, 20%);
+
 $warning: #efda70;
+
 $white: #ffffff;
+$black: #000000;
 $disabled: #969696;
 
 $tableRowOdd: #fdfdfe;
@@ -16,6 +26,7 @@ $tableRowEven: #f8f8fa;
 $tableRowHover: #f1f1f4;
 
 $border-radius: 0px; //update to 4px when enabled globally
+$border-radius__pill: 5px;
 
 /** Media Query Break Points **/
 $mobile-break: 599px;
@@ -47,3 +58,11 @@ $border-small: 1px;
 $border-medium: 2px;
 $border-large: 4px;
 $border-x-large: 8px;
+
+/** Sizing **/
+$pill-height: 26px;
+$max-screen-width: 90vw;
+$max-width: 1200px;
+
+/** Transitions **/
+$default-transition: 0.25s;

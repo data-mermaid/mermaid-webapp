@@ -1,12 +1,18 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
 
-import { ButtonCallout } from '../buttons'
-import { IconSave } from '../../icons'
-import { buttonGroupStates } from '../../../library/buttonGroupStates'
+import { ButtonCallout } from './buttons'
+import { IconSave } from '../icons'
+import { buttonGroupStates } from '../../library/buttonGroupStates'
 
-const SaveButton = ({ formId, saveButtonState, formHasErrors, formDirty }) => {
+interface SaveButtonProps {
+  formId: string
+  saveButtonState: string
+  formHasErrors: boolean
+  formDirty: boolean
+}
+
+const SaveButton = ({ formId, saveButtonState, formHasErrors, formDirty }: SaveButtonProps) => {
   const { t } = useTranslation()
 
   const isSaveButtonDisabled =
@@ -34,13 +40,6 @@ const SaveButton = ({ formId, saveButtonState, formHasErrors, formDirty }) => {
       {getSaveButtonText()}
     </ButtonCallout>
   )
-}
-
-SaveButton.propTypes = {
-  formHasErrors: PropTypes.bool.isRequired,
-  formDirty: PropTypes.bool.isRequired,
-  formId: PropTypes.string.isRequired,
-  saveButtonState: PropTypes.string.isRequired,
 }
 
 export default SaveButton

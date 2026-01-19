@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   choicesPropType,
   submittedHabitatComplexityPropType,
@@ -11,6 +12,7 @@ import { getObjectById } from '../../../../library/getObjectById'
 import { getOptions } from '../../../../library/getOptions'
 
 const SubmittedHabitatComplexityObservationTable = ({ choices, submittedRecord = undefined }) => {
+  const { t } = useTranslation()
   const { obs_habitat_complexities } = submittedRecord
   const habitatComplexityFormOptions = getOptions(choices.habitatcomplexityscores.data)
 
@@ -24,14 +26,14 @@ const SubmittedHabitatComplexityObservationTable = ({ choices, submittedRecord =
 
   return (
     <InputWrapper>
-      <FormSubTitle id="table-label">Observations</FormSubTitle>
+      <FormSubTitle id="table-label">{t('observations')}</FormSubTitle>
       <StyledOverflowWrapper>
         <SubmittedObservationStickyTable>
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem align="left">Interval</TheadItem>
-              <TheadItem align="right">Habitat Complexity Score</TheadItem>
+              <TheadItem align="left">{t('interval')}</TheadItem>
+              <TheadItem align="right">{t('habitat_complexity_score')}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationsHabitatComplexity}</tbody>

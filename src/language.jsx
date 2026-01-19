@@ -248,7 +248,6 @@ const pages = {
       functionalGroup: 'Functional Group',
       trophicGroup: 'Trophic Group',
     },
-    benthicPitSyncCheckbox: 'Use Interval Size as Interval Start',
   },
   submittedTable: {
     title: 'Submitted',
@@ -533,47 +532,6 @@ const helperText = {
     'The total width (NOT width to one side of the tape) of the fish belt transect, in meters.',
 }
 
-const tooltipText = {
-  admin:
-    'User has all Collector privileges, and can additionally change project information and data sharing, add and remove project users, transfer unsubmitted sample units between project users, and un-submit sample units for further editing.',
-  getBenthicAttribute: () => (
-    <>
-      Benthic attribute observed. A benthic attribute can be a taxonomic name for a coral or other
-      sessile organism, or an abiotic classification. MERMAID benthic attributes are organized
-      hierarchically and are consistent with{' '}
-      <HelperTextLink href="https://www.marinespecies.org/" target="_blank" color="#fff">
-        WoRMS.
-      </HelperTextLink>
-    </>
-  ),
-  collector:
-    'User can view, export, and analyze data, and collect new observations. Once a transect is submitted, the user can no longer edit or delete observations.',
-  getFishName: () => (
-    <>
-      Name of the fish species, genus, or family observed. For genus-level observations or an
-      unknown species, enter the genus rather than proposing a new species with &lsquo;spp&lsquo;.
-      All fish names in MERMAID are consistent with{' '}
-      <HelperTextLink href="https://fishbase.mnhn.fr/search.php" target="_blank" color="#fff">
-        fishbase.
-      </HelperTextLink>
-    </>
-  ),
-  fishSize: 'Size of fish observed, in cm (e.g. 4.5 or 5-10).',
-  fishCount: 'Number of fish observed, of the same species/genus/family and size.',
-  growthForm:
-    'Growth form of the observed benthic attribute. Only choose a growth form if it is relevant to the benthic attribute (e.g. Acropora branching).',
-  habitatComplexityScore:
-    'Benthic complexity score (0 - 5) for transect interval, as integer (e.g. 3). The categories are 0 no vertical reef, flat or rubbly areas; 1 low (<30 cm high) and sparse relief; 2 low but widespread relief; 3 widespread moderately complex (30-60 cm high) relief; 4 widespread very complex (60 -100 cm high) relief with numerous fissures and caves; 5 exceptionally complex (>1 m high) relief with numerous caves and overhangs).',
-  hardCoralPercentage: 'Hard coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
-  macroalgaePercentage: 'Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).',
-  numberOfPoints:
-    'Number of points with unique benthic attribute (/growth form) for the quadrat. The sum of points for all benthic attributes in a quadrat must equal the value set above.',
-  quadrat: 'Number of quadrat/photo in transect (e.g. 1).',
-  readOnly:
-    'User can only view, export, and analyze data in the analysis tools, but cannot collect new observations.',
-  softCoralPercentage: 'Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
-}
-
 export default {
   apiDataTableNames,
   autocomplete,
@@ -595,5 +553,4 @@ export default {
   success,
   table,
   title,
-  tooltipText,
 }

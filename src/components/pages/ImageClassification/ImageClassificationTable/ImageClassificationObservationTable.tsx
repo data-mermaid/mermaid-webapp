@@ -698,7 +698,7 @@ const ImageClassificationObservationTable = ({
   return (
     <>
       <InputWrapper>
-        <H2 id="table-label">{t('benthic_observations.observations')}</H2>
+        <H2 id="table-label">{t('observations.observations')}</H2>
         <StyledOverflowWrapper>
           <StickyObservationTable aria-labelledby="table-label">
             <thead>

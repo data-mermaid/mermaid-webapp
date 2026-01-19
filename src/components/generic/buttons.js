@@ -143,7 +143,6 @@ export const ButtonThatLooksLikeLinkUnderlined = styled(ButtonThatLooksLikeLink)
 `
 
 export const ToolbarButtonWrapper = styled('div')`
-  // button,
   a {
     margin: 0 -1px;
   }

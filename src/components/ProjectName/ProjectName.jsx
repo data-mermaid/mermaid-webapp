@@ -7,14 +7,16 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 import useIsMounted from '../../library/useIsMounted'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
-import { PROJECT_CODES } from '../../library/constants/constants'
-import { IconGlobe } from '../icons'
+import { BiggerIconGlobe } from '../icons'
 import { MuiTooltip } from '../generic/MuiTooltip'
-import { IconButton } from '../generic/buttons'
 import { useTranslation } from 'react-i18next'
+import buttonStyles from '../../style/buttons.module.scss'
+import labelStyles from '../../style/labels.module.scss'
 
 const ProjectNameWrapper = styled('div')`
   background: ${theme.color.white};
+  display: flex;
+  align-items: center;
   padding: ${theme.spacing.medium};
   ${mediaQueryPhoneOnly(css`
     padding: ${theme.spacing.small};
@@ -25,11 +27,6 @@ const ProjectNameHeader = styled('h2')`
   margin: 0 ${theme.spacing.small} 0 0;
 `
 
-const BiggerIconGlobe = styled(IconGlobe)`
-  width: ${theme.typography.mediumIconSize};
-  height: ${theme.typography.mediumIconSize};
-`
-
 const ProjectName = () => {
   const isMounted = useIsMounted()
   const { projectId } = useParams()
@@ -38,7 +35,8 @@ const ProjectName = () => {
   const { t } = useTranslation()
   const [project, setProject] = useState({})
 
-  const _getProjectName = useEffect(() => {
+  // getProjectName
+  useEffect(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance.getProject(projectId).then((projectResponse) => {
         if (isMounted.current) {
@@ -47,6 +45,8 @@ const ProjectName = () => {
       })
     }
   }, [databaseSwitchboardInstance, isMounted, projectId])
+
+  const isDemoProject = project?.is_demo
 
   const handleExploreButtonClick = () => {
     if (!project) {
@@ -61,30 +61,33 @@ const ProjectName = () => {
     openExploreLinkWithBbox(queryParamObject)
   }
 
-  const renderExploreButton = () => {
-    const isTestProject = project?.status === PROJECT_CODES.status.test
-
-    if (!isAppOnline || isTestProject) {
-      return null
-    }
-
-    return (
-      <MuiTooltip title={t('go_to_explore_this_project')} placement="top" arrow>
-        <IconButton
-          type="button"
-          aria-label={t('go_to_explore_this_project')}
-          onClick={handleExploreButtonClick}
-        >
-          <BiggerIconGlobe />
-        </IconButton>
-      </MuiTooltip>
-    )
-  }
+  const tooltipText = isDemoProject
+    ? 'projects.demo.explore_unavailable'
+    : 'go_to_explore_this_project'
 
   return (
     <ProjectNameWrapper>
       <ProjectNameHeader>{project?.name}</ProjectNameHeader>
-      {renderExploreButton()}
+      {isAppOnline && (
+        <MuiTooltip title={t(tooltipText)} placement="top" arrow>
+          <span role="presentation">
+            <button
+              className={buttonStyles['icon-button']}
+              type="button"
+              aria-label={t(tooltipText)}
+              onClick={handleExploreButtonClick}
+              disabled={isDemoProject}
+            >
+              <BiggerIconGlobe />
+            </button>
+          </span>
+        </MuiTooltip>
+      )}
+      {isDemoProject && (
+        <div className={[labelStyles.pill, labelStyles.pill__demo].join(' ')}>
+          {t('projects.demo.demo')}
+        </div>
+      )}
     </ProjectNameWrapper>
   )
 }
