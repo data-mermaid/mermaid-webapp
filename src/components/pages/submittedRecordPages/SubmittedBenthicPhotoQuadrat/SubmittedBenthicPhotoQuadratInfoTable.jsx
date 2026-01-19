@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   managementRegimePropType,
   sitePropType,
@@ -15,6 +16,7 @@ const SubmittedBenthicPhotoQuadratInfoTable = ({
   choices,
   submittedRecord = undefined,
 }) => {
+  const { t } = useTranslation()
   const { site, management, sample_date } = submittedRecord.sample_event
 
   const {
@@ -39,27 +41,40 @@ const SubmittedBenthicPhotoQuadratInfoTable = ({
   return (
     <Table>
       <tbody>
-        <TableRowItem title="Site" options={sites} value={site} isLink={true} />
+        <TableRowItem title={t('sites.site')} options={sites} value={site} isLink={true} />
         <TableRowItem
-          title="Management"
+          title={t('management_regimes.management')}
           options={managementRegimes}
           value={management}
           isLink={true}
         />
-        <TableRowItem title="Sample Date Time" value={`${sample_date} ${sample_time || ''}`} />
-        <TableRowItem title="Depth (m)" value={depth} />
-        <TableRowItem title="Transect Number" value={number} />
-        <TableRowItem title="Label" value={label} />
-        <TableRowItem title="Transect Length Surveyed (m)" value={len_surveyed} />
-        <TableRowItem title="Quadrat Number Start" value={quadrat_number_start} />
-        <TableRowItem title="Quadrat Size (m²)" value={quadrat_size} />
-        <TableRowItem title="Number of Quadrats" value={num_quadrats} />
-        <TableRowItem title="Number of Points per Quadrat" value={num_points_per_quadrat} />
-        <TableRowItem title="Visibility" options={visibilities.data} value={visibility} />
-        <TableRowItem title="Current" options={currents.data} value={current} />
-        <TableRowItem title="Relative Depth" options={relativedepths.data} value={relative_depth} />
-        <TableRowItem title="Tide" options={tides.data} value={tide} />
-        <TableRowItem title="Notes" value={notes} isAllowNewlines={true} />
+        <TableRowItem
+          title={t('sample_units.sample_date_time')}
+          value={`${sample_date} ${sample_time || ''}`}
+        />
+        <TableRowItem title={t('depth_m')} value={depth} />
+        <TableRowItem title={t('transect_number')} value={number} />
+        <TableRowItem title={t('label')} value={label} />
+        <TableRowItem title={t('transect_length_surveyed_m')} value={len_surveyed} />
+        <TableRowItem title={t('observations.quadrat_number_start')} value={quadrat_number_start} />
+        <TableRowItem
+          title={`${t('quadrat_size')} (${t('measurements.meters_short')}²)`}
+          value={quadrat_size}
+        />
+        <TableRowItem title={t('observations.number_of_quadrats')} value={num_quadrats} />
+        <TableRowItem
+          title={t('observations.number_of_points_per_quadrat')}
+          value={num_points_per_quadrat}
+        />
+        <TableRowItem title={t('visibility')} options={visibilities.data} value={visibility} />
+        <TableRowItem title={t('current')} options={currents.data} value={current} />
+        <TableRowItem
+          title={t('relative_depth')}
+          options={relativedepths.data}
+          value={relative_depth}
+        />
+        <TableRowItem title={t('tide')} options={tides.data} value={tide} />
+        <TableRowItem title={t('notes')} value={notes} isAllowNewlines={true} />
       </tbody>
     </Table>
   )
