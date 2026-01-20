@@ -1,24 +1,24 @@
 import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 
-import { HomePageLayout } from '../../Layout'
-import { getToastArguments } from '../../../library/getToastArguments'
-import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
-import ProjectCard from '../../ProjectCard'
-import ProjectToolBarSection from '../../ProjectToolBarSection'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import useIsMounted from '../../../library/useIsMounted'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { getObjectById } from '../../../library/getObjectById'
-import PageUnavailable from '../PageUnavailable'
-import useDocumentTitle from '../../../library/useDocumentTitle'
-import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
-import ErrorBoundary from '../../ErrorBoundary'
-import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
-import { openExploreLinkWithBbox } from '../../../library/openExploreLinkWithBbox'
+import { HomePageLayout } from '../Layout'
+import { getToastArguments } from '../../library/getToastArguments'
+import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
+import ProjectCard from '../ProjectCard'
+import ProjectToolBarSection from '../ProjectToolBarSection'
+import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import useIsMounted from '../../library/useIsMounted'
+import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { useCurrentUser } from '../../App/CurrentUserContext'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
+import { getObjectById } from '../../library/getObjectById'
+import PageUnavailable from './PageUnavailable'
+import useDocumentTitle from '../../library/useDocumentTitle'
+import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
+import ErrorBoundary from '../ErrorBoundary'
+import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
+import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
 import { useTranslation } from 'react-i18next'
 
 /**
@@ -30,7 +30,7 @@ const Projects = () => {
   const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
   const [projectFilter, setProjectFilter] = useState('')
   const [projects, setProjects] = useState([])
-  const [projectSortKey, setProjectSortKey] = useState('updated_on')
+  const [projectSortKey, setProjectSortKey] = useState('') //unset to allow demo project to show first
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
@@ -101,19 +101,20 @@ const Projects = () => {
   }
 
   const getSortedProjects = (projectsToSort) => {
-    return sortArrayByObjectKey(projectsToSort, projectSortKey, isProjectSortAsc)
+    if (projectSortKey === '' && userHasDemoProject) {
+      let sortedProjects = sortArrayByObjectKey(projectsToSort, 'updated_on', isProjectSortAsc)
+      const demoProj = sortedProjects.find((project) => project.is_demo === true)
+      if (demoProj) {
+        sortedProjects = [demoProj, ...sortedProjects.filter((project) => !project.is_demo)]
+      }
+      return sortedProjects
+    } else {
+      return sortArrayByObjectKey(projectsToSort, projectSortKey, isProjectSortAsc)
+    }
   }
 
   const getFilteredSortedProjects = () => {
-    let availableProjects = getAvailableProjects()
-    if (userHasDemoProject) {
-      const demoProj = availableProjects.find((project) => project.is_demo === true)
-
-      if (demoProj) {
-        availableProjects = [demoProj, ...availableProjects.filter((project) => !project.is_demo)]
-      }
-    }
-
+    const availableProjects = getAvailableProjects()
     const filteredProjects = getFilteredProjects(availableProjects)
     return getSortedProjects(filteredProjects)
   }
