@@ -19,7 +19,7 @@ export const getSystemValidationErrorMessage = (drySubmitContext) => {
   return (
     <>
       <SystemValidationMessageBlock>
-        {i18n.t('system_validation_error')}
+        {i18n.t('validation_messages.system_validation_error')}
       </SystemValidationMessageBlock>
       <SystemValidationMessageBlock>{errorMap}</SystemValidationMessageBlock>
     </>

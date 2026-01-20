@@ -1012,6 +1012,7 @@
     "similar_date_sample_unit": "Other sample units with the same sample event have a different sample date (+/- 30 days).",
     "similar_name": "Another Management Regime is similar to this one.",
     "site_not_found": "Site record not available for similarity validation",
+    "system_validation_error": "System validation error:",
     "unconfirmed_annotation": "Wrong number of confirmed annotations",
     "unknown_protocol": "Unknown protocol",
     "value_not_set": "Value is not set"
