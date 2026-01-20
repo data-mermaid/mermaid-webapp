@@ -19,7 +19,7 @@ import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 import ErrorBoundary from '../ErrorBoundary'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import CalloutButton from '../generic/CalloutButton/CalloutButton'
 import { CloseButton } from '../generic/buttons'
 import { Box } from '@mui/material'
@@ -30,64 +30,45 @@ import { useNavigate } from 'react-router-dom'
 
 interface DemoProjectCalloutProps {
   handleDemoClick: () => void
-  // setHasUserDismissedDemo: (arg: boolean) => void
+  updateUserSettings: (setting: string, val: boolean) => void
   userHasProjects: boolean
 }
 const DemoProjectCallout = ({
   handleDemoClick,
-  // setHasUserDismissedDemo,
+  updateUserSettings,
   userHasProjects,
 }: DemoProjectCalloutProps) => {
   const { t } = useTranslation()
-  const [isCalloutDismissed, setIsCalloutDismissed] = useState(false)
   const calloutStyleClasses = userHasProjects
     ? cardStyles['demo-callout']
     : [cardStyles['demo-callout'], cardStyles['demo-callout--centered']].join(' ')
 
   const handleDemoTryoutDismiss = () => {
-    setIsCalloutDismissed(true)
-    // setHasUserDismissedDemo(true) //set after navigation to create API call for saving value
+    updateUserSettings('userHasDismissedDemo', false)
+    toast.info(t('projects.demo.success_deleted'))
   }
 
   return (
     <Box id="demo-project-callout" className={calloutStyleClasses}>
-      {isCalloutDismissed ? (
-        <>
-          <p>
-            <Trans
-              i18nKey="projects.demo.dismissed"
-              components={{
-                1: <span style={{ fontWeight: 700 }} />,
-              }}
-            />
-          </p>
+      <div>
+        <h2>{t('projects.demo.tryout')}</h2>
+        <p>{t('projects.demo.teaser')}</p>
+      </div>
+      <div className={'buttons-container'}>
+        <CalloutButton
+          onClick={handleDemoClick}
+          aria-label={t('projects.new_project')}
+          disabled={false}
+          testId="demo-project-button"
+          label={t('projects.buttons.add_demo')}
+          className={'demo-btn'}
+        />
+        {userHasProjects && (
           <CloseButton type="button" onClick={handleDemoTryoutDismiss}>
-            <IconClose aria-label={t('buttons.dismiss')} />
+            <IconClose aria-label={t('buttons.close')} />
           </CloseButton>
-        </>
-      ) : (
-        <>
-          <div>
-            <h2>{t('projects.demo.tryout')}</h2>
-            <p>{t('projects.demo.teaser')}</p>
-          </div>
-          <div className={'buttons-container'}>
-            <CalloutButton
-              onClick={handleDemoClick}
-              aria-label={t('projects.new_project')}
-              disabled={false}
-              testId="demo-project-button"
-              label={t('projects.buttons.add_demo')}
-              className={'demo-btn'}
-            />
-            {userHasProjects && (
-              <CloseButton type="button" onClick={handleDemoTryoutDismiss}>
-                <IconClose aria-label={t('buttons.close')} />
-              </CloseButton>
-            )}
-          </div>
-        </>
-      )}
+        )}
+      </div>
     </Box>
   )
 }
@@ -102,14 +83,14 @@ const Projects = () => {
   const [projectFilter, setProjectFilter] = useState('')
   const [projects, setProjects] = useState([])
   const [projectSortKey, setProjectSortKey] = useState('updated_on')
-  const [hasUserDismissedDemo] = useState(false) //setHasUserDismissedDemo
-
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
-  const { currentUser, refreshCurrentUser } = useCurrentUser()
+  const { currentUser, refreshCurrentUser, saveUserProfile } = useCurrentUser()
+  const hasUserDismissedDemo = currentUser.collect_state.hasUserDismissedDemo || false
   const navigate = useNavigate()
 
   const { t } = useTranslation()
@@ -148,6 +129,11 @@ const Projects = () => {
     handleHttpResponseError,
     unavailableProjectsErrorText,
   ])
+
+  const updateUserSettings = (setting: string, val: boolean) => {
+    const updatedProfileSettings = { setting: val }
+    saveUserProfile({ ...currentUser, collect_state: updatedProfileSettings })
+  }
 
   const handleSuccessResponse = (response, languageSuccessMessage: string) => {
     refreshCurrentUser() // ensures correct user privileges
@@ -293,7 +279,7 @@ const Projects = () => {
         <div role="list">
           {!userHasDemoProject && isAppOnline && !hasUserDismissedDemo && (
             <DemoProjectCallout
-              // setHasUserDismissedDemo={setHasUserDismissedDemo}
+              updateUserSettings={updateUserSettings}
               handleDemoClick={createDemoProject}
               userHasProjects={userHasProjects}
             />
