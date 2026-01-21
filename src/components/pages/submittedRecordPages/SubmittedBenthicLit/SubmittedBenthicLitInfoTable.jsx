@@ -49,11 +49,11 @@ const SubmittedBenthicLitInfoTable = ({
           title={t('sample_units.sample_date_time')}
           value={`${sample_date} ${sample_time || ''}`}
         />
-        <TableRowItem title={`${t('depth')} (${t('measurements.meter')})`} value={depth} />
+        <TableRowItem title={`${t('sample_units.depth')} (${t('measurements.meter')})`} value={depth} />
         <TableRowItem title={t('transect_number')} value={number} />
         <TableRowItem title={t('label')} value={label} />
         <TableRowItem
-          title={`${t('transect_length_surveyed')} (${t('measurements.meter')})`}
+          title={`${t('sample_units.transect_length_surveyed')} (${t('measurements.meter')})`}
           value={len_surveyed}
         />
         <TableRowItem title={t('reef_slope')} options={reefslopes.data} value={reef_slope} />

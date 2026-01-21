@@ -146,8 +146,6 @@
   },
   "delete_observation": "Delete observation",
   "delete_sites_regimes": "Delete sites or management regimes",
-  "depth": "Depth",
-  "depth_info": "Depth of sample unit, in meters (e.g. 3)",
   "download_sites_regimes": "Export sites and management regimes",
   "email": "Email",
   "errors": {
@@ -617,6 +615,7 @@
     "interval_size_info": "Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).",
     "interval_start": "Interval start",
     "interval_start_info": "Interval counted as the first observation on a transect, in meters. May include decimal (e.g. 0.5).",
+    "length": "Length",
     "macroalgae_cover": "Macroalgae % cover",
     "macroalgae_cover_info": "Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).",
     "normal": "Normal",
@@ -782,6 +781,8 @@
     "collecting": "Collecting",
     "create_validate": "Create, validate, and submit sample units",
     "delete_unsubmitted": "Delete unsubmitted sample units",
+    "depth": "Depth",
+    "depth_info": "Depth of sample unit, in meters (e.g. 3)",
     "download_submitted": "Export submitted sample units",
     "edit_submitted": "Edit submitted sample units",
     "errors": {
@@ -829,6 +830,8 @@
       "record_submitted": "Record submitted.",
       "record_validated": "Record successfully validated."
     },
+    "transect_length_surveyed": "Transect length surveyed",
+    "transect_length_surveyed_info": "Length of transect for a sample unit, in meters. May include decimal (e.g. 50.0)",
     "transect_number": "Transect number",
     "transfer": "Transfer sample units",
     "transfer_unsubmitted": "Transfer unsubmitted sample units",
@@ -901,8 +904,6 @@
   "total_abundance": "Total abundance",
   "total_biomass": "Total biomass (kg/ha)",
   "transect": "Transect",
-  "transect_length_info": "Length of transect for a sample unit, in meters. May include decimal (e.g. 50.0)",
-  "transect_length_surveyed": "Transect length surveyed",
   "transect_number": "Transect number",
   "transect_number_info": "Sample unit number, as integer (e.g. 1). Typically, sample units are numbered consecutively at each site, with the same number per site in a project.",
   "type": "Type",
