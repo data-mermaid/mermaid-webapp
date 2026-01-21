@@ -190,7 +190,7 @@ export const getValidationMessage = (validation, projectId = '') => {
       }),
     excessive_precision: () =>
       i18n.t('validation_messages.excessive_precision', {
-        digits: context?.decimal_places ?? '',
+        count: context?.decimal_places ?? '',
       }),
     invalid_fish_count: () => i18n.t('validation_messages.invalid_fish_count'),
     invalid_fish_size: () => i18n.t('validation_messages.invalid_fish_size'),
