@@ -89,7 +89,7 @@ describe('Projects dashboard', () => {
       expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
     )
 
-    const projectCard = screen.getAllByTestId('project-card')[1]
+    const projectCard = screen.getAllByTestId('project-card')[0]
 
     const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
     const submittedSummaryCard = within(projectCard).getByLabelText(/submitted/i)
@@ -188,11 +188,11 @@ describe('Projects dashboard', () => {
     expect(offlineReadyCheckboxes[3]).toBeEnabled()
     expect(offlineReadyCheckboxes[4]).toBeEnabled()
 
-    expect(copyButtons[0]).toBeDisabled() //demo project - disabled copy button
+    expect(copyButtons[0]).toBeEnabled()
     expect(copyButtons[1]).toBeEnabled()
     expect(copyButtons[2]).toBeEnabled()
     expect(copyButtons[3]).toBeEnabled()
-    expect(copyButtons[4]).toBeEnabled()
+    expect(copyButtons[4]).toBeDisabled() //demo project
   })
 
   test('Hide new project button in project toolbar when offline', async () => {
@@ -318,24 +318,5 @@ describe('Projects dashboard', () => {
 
     expect(projectCards.length).toEqual(1)
     expect(within(projectCards[0]).getByText("Project Z has an apostrophe foo's"))
-  })
-  test('A demo project will only populate at the top of the page before other project cards on initial load', async () => {
-    const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-    const { user } = renderAuthenticatedOnline(<Projects />, {
-      dexiePerUserDataInstance,
-      isSyncInProgressOverride: true,
-    })
-
-    await waitFor(() =>
-      expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
-    )
-    const topProjectCard = screen.getAllByTestId('project-card')[0]
-    expect(within(topProjectCard).getByText("Project Z has an apostrophe foo's"))
-
-    const selectMenu = screen.getAllByRole('combobox')[0]
-    await user.selectOptions(selectMenu, ['updated_on'])
-    const sortedTopProjectCard = screen.getAllByTestId('project-card')[0]
-    expect(within(sortedTopProjectCard).getByText('Project II'))
   })
 })
