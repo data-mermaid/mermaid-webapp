@@ -51,16 +51,19 @@ const SubmittedBenthicPitInfoTable = ({
           title={t('sample_units.sample_date_time')}
           value={`${sample_date} ${sample_time || ''}`}
         />
-        <TableRowItem title={t('depth_m')} value={depth} />
+        <TableRowItem title={`${t('depth')} (${t('measurements.meter')})`} value={depth} />
         <TableRowItem title={t('transect_number')} value={number} />
         <TableRowItem title={t('label')} value={label} />
-        <TableRowItem title={t('transect_length_surveyed_m')} value={len_surveyed} />
         <TableRowItem
-          title={`${t('observations.interval_size')} (${t('measurements.meters_short')})`}
+          title={`${t('transect_length_surveyed')} (${t('measurements.meter')})`}
+          value={len_surveyed}
+        />
+        <TableRowItem
+          title={`${t('observations.interval_size')} (${t('measurements.meter')})`}
           value={interval_size}
         />
         <TableRowItem
-          title={`${t('observations.interval_start')} (${t('measurements.meters_short')})`}
+          title={`${t('observations.interval_start')} (${t('measurements.meter')})`}
           value={interval_start}
         />
         <TableRowItem title={t('reef_slope')} options={reefslopes.data} value={reef_slope} />

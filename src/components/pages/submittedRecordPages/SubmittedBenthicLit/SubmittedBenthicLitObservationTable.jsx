@@ -41,7 +41,7 @@ const SubmittedBenthicLitObservationTable = ({
               <TheadItem> </TheadItem>
               <TheadItem align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
               <TheadItem align="right">{t('observations.growth_form')}</TheadItem>
-              <TheadItem align="left">{t('measurements.length_cm')}</TheadItem>
+              <TheadItem align="left">{`${t('length')} (${t('centimeter')})`}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationsBenthicLit}</tbody>
