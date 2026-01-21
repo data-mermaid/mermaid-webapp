@@ -81,7 +81,7 @@ describe('Offline integration tests', () => {
 
     await user.click(projectOfflineCheckboxBeforeFirstClick)
 
-    expect(await screen.findByText('Project V is now offline ready'))
+    expect(await screen.findByText("Project Z has an apostrophe foo's is now offline ready"))
 
     const projectOfflineCheckboxAfterProjectSetOffline = within(
       (await screen.findAllByTestId('project-card'))[4],
