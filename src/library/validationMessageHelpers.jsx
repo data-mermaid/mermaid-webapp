@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Trans } from 'react-i18next'
 import i18n from '../../i18n'
+import { HelperTextLink } from '../components/generic/links'
 
 const SystemValidationMessageBlock = styled.span`
   display: block;
@@ -33,7 +34,7 @@ export const getDuplicateSampleUnitLink = (duplicateTransectMethodContext, proje
     <Trans
       i18nKey="validation_messages.duplicate_sample_unit"
       values={{ method: duplicateTransectMethodContext }}
-      components={{ a: <a href={linkToSampleUnit} /> }}
+      components={{ a: <HelperTextLink href={linkToSampleUnit} /> }}
     />
   )
 }
@@ -45,7 +46,7 @@ export const goToManagementOverviewPageLink = (projectId) => {
     <Trans
       i18nKey="go_to_management_overview_page"
       components={{
-        a: <a href={linkToMROverviewPage} />,
+        a: <HelperTextLink href={linkToMROverviewPage} />,
       }}
     />
   )
