@@ -562,7 +562,8 @@
     "greater": "Greater",
     "centimeter": "cm",
     "meter": "m",
-    "square_meter": "m²"
+    "square_meter": "m²",
+    "kilogram_per_hectare": "kg/ha"
   },
   "media": {
     "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
@@ -647,7 +648,6 @@
     "total_colonies": "Total number of colonies",
     "total_coral_genera": "Total number of coral genera"
   },
-  "observers": "Observers",
   "observers_info": "Select one or more observers to add",
   "offline": {
     "page_unavailable_offline": "This page is unavailable offline",

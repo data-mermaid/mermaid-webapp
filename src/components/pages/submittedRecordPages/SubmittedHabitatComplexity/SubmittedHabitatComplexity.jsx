@@ -164,7 +164,7 @@ const SubmittedHabitatComplexity = () => {
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
             />
-            <FormSubTitle>{t('observers')}</FormSubTitle>
+            <FormSubTitle>{t('sample_units.observers')}</FormSubTitle>
             <ul>
               {observers.map((observer) => (
                 <li key={observer.id}>{observer.profile_name}</li>

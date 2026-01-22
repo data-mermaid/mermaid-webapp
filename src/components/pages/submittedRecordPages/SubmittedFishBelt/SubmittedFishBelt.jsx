@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify'
 import { useParams, useNavigate } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonSecondary } from '../../../generic/buttons'
 import { ContentPageLayout } from '../../../Layout'
@@ -15,7 +16,6 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
-import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import PageUnavailable from '../../PageUnavailable'
 import RecordFormTitle from '../../../RecordFormTitle'
@@ -47,10 +47,16 @@ const SubmittedFishBelt = () => {
   const currentProjectPath = useCurrentProjectPath()
   const navigate = useNavigate()
   const isMounted = useIsMounted()
+  const { t } = useTranslation()
   const observers = submittedRecord?.observers ?? []
   const { currentUser } = useCurrentUser()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
+  const submittedRecordUnavailableErrorMessage = t('sample_units.errors.submitted_data_unavailable')
+  const submittedRecordMovedToCollectingMessage = t(
+    'sample_units.errors.submitted_moved_to_collecting',
+  )
+  const submittedRecordMoveToCollectErrorMessage = t('sample_units.errors.submitted_not_editable')
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -119,7 +125,7 @@ const SubmittedFishBelt = () => {
                 setIdsNotAssociatedWithData([projectId, submittedRecordId])
                 setIsLoading(false)
               }
-              toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+              toast.error(...getToastArguments(submittedRecordUnavailableErrorMessage))
             },
           })
         })
@@ -133,6 +139,7 @@ const SubmittedFishBelt = () => {
     isSyncInProgress,
     projectId,
     submittedRecordId,
+    submittedRecordUnavailableErrorMessage,
   ])
 
   const handleMoveToCollect = () => {
@@ -140,14 +147,14 @@ const SubmittedFishBelt = () => {
     databaseSwitchboardInstance
       .moveToCollect({ projectId, submittedRecordId, sampleUnitMethod: 'beltfishtransectmethods' })
       .then(({ id }) => {
-        toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
+        toast.success(...getToastArguments(submittedRecordMovedToCollectingMessage))
         navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${id}`)
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
+            toast.error(...getToastArguments(submittedRecordMoveToCollectErrorMessage))
             setIsMoveToButtonDisabled(false)
           },
         })
@@ -173,7 +180,7 @@ const SubmittedFishBelt = () => {
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
             />
-            <FormSubTitle>Observers</FormSubTitle>
+            <FormSubTitle>{t('sample_units.observers')}</FormSubTitle>
             <ul>
               {observers.map((observer) => (
                 <li key={observer.id}>{observer.profile_name}</li>
@@ -188,7 +195,7 @@ const SubmittedFishBelt = () => {
             />
           </>
         ) : (
-          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+          <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
         )
       }
       toolbar={
@@ -203,15 +210,15 @@ const SubmittedFishBelt = () => {
               <>
                 <p>
                   {isAdminUser
-                    ? language.pages.submittedForm.sampleUnitsAreReadOnly
-                    : language.pages.submittedForm.adminEditOnly}
+                    ? t('sample_units.submitted_readonly')
+                    : t('sample_units.submitted_readonly_and_movable_by_admin')}
                 </p>
                 <ButtonSecondary
                   onClick={handleMoveToCollect}
                   disabled={!isAdminUser || isMoveToButtonDisabled}
                 >
                   <IconPen />
-                  {language.pages.submittedForm.moveSampleUnitButton}
+                  {t('buttons.move_to_collecting')}
                 </ButtonSecondary>
               </>
             </RowSpaceBetween>

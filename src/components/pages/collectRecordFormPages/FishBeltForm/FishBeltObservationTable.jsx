@@ -530,7 +530,8 @@ const FishBeltObservationTable = ({
               </Th>
               <Th align="right" id="fish-size-label">
                 <LabelContainer>
-                  {t('size_cm')} <RequiredIndicator />
+                  {`${t('sample_units.size')} (${t('measurements.centimeter')})`}{' '}
+                  <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishSize' ? (
                     <ColumnHeaderToolTip
                       helperText={t('fish_size_observed')}
