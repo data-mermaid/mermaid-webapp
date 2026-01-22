@@ -53,19 +53,6 @@ interface TableHeaderProps {
   text: string
 }
 
-const tableHeaders: TableHeaderProps[] = [
-  { align: 'right', id: 'number-label', text: '#' },
-  { align: 'center', id: 'photo-label', text: 'Photo' },
-  { align: 'right', id: 'quadrat-number-label', text: 'Quadrat' },
-  { align: 'left', id: 'benthic-attribute-label', text: 'Benthic Attribute' },
-  { align: 'left', id: 'growth-form-label', text: 'Growth Form' },
-  { align: 'right', id: 'confirmed-points', text: 'Confirmed Points' },
-  { align: 'right', id: 'unconfirmed-points', text: 'Unconfirmed Points' },
-  { align: 'left', id: 'validations', text: 'Validations' },
-  { align: 'center', id: 'review', text: '' },
-  { align: 'center', id: 'remove', text: '' },
-]
-
 interface GrowthForm {
   id: string
   name: string
@@ -119,6 +106,37 @@ const sortAlphabetically = (a, b) => a.benthicAttributeLabel.localeCompare(b.ben
 const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
 const TableHeaderRow = ({ areValidationsShowing }: { areValidationsShowing: boolean }) => {
+  const { t } = useTranslation()
+
+  const tableHeaders: TableHeaderProps[] = [
+    {
+      align: 'right',
+      id: 'number-label',
+      text: '#',
+    },
+    { align: 'center', id: 'photo-label', text: t('observations.photo') },
+    { align: 'right', id: 'quadrat-number-label', text: t('observations.quadrat') },
+    {
+      align: 'left',
+      id: 'benthic-attribute-label',
+      text: t('benthic_observations.benthic_attribute'),
+    },
+    { align: 'left', id: 'growth-form-label', text: t('observations.growth_form') },
+    {
+      align: 'right',
+      id: 'confirmed-points',
+      text: t('observations.confirmed_points'),
+    },
+    {
+      align: 'right',
+      id: 'unconfirmed-points',
+      text: t('observations.unconfirmed_points'),
+    },
+    { align: 'left', id: 'validations', text: t('validations') },
+    { align: 'center', id: 'review', text: '' },
+    { align: 'center', id: 'remove', text: '' },
+  ]
+
   const filteredHeaders = tableHeaders.filter(
     (header) => header.id !== 'validations' || areValidationsShowing,
   )

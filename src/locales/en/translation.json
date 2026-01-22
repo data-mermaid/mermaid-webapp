@@ -573,6 +573,7 @@
     "errors": {
       "failed_upload": "Failed to upload {{fileName}}"
     },
+    "image_upload_thumbnail": "Image upload thumbnail",
     "max_file_size": "Maximum file size is {{fileSize}} MB",
     "min_image_size": "Photos must be larger than {{imgWidthHeight}} x {{imgWidthHeight}} pixels",
     "put_files_here": "Drop files here <br> or <br>",
@@ -605,6 +606,7 @@
     "avg_soft_coral_cover": "Avg Soft Coral Cover %",
     "bleaching_severity": "Bleaching severity",
     "colonies_bleached": "Observations - Colonies Bleached",
+    "confirmed_points": "Confirmed points",
     "growth_form": "Growth form",
     "growth_form_info": "Growth form of the observed benthic attribute. Only choose a growth form if it is relevant to the benthic attribute (e.g. Acropora branching).",
     "hard_coral_cover": "Hard coral % cover",
@@ -635,6 +637,7 @@
     "percent_cover": "Observations - Percent Cover",
     "percent_normal_colonies": "% Normal colonies",
     "percent_pale_colonies": "% Pale colonies",
+    "photo": "Photo",
     "quadrat": "Quadrat",
     "quadrat_info": "Number of quadrat/photo in transect (e.g. 1).",
     "quadrat_number_start": "Quadrat number start",
@@ -643,10 +646,9 @@
     "soft_coral_cover": "Soft coral % cover",
     "soft_coral_cover_info": "Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).",
     "total_colonies": "Total number of colonies",
-    "total_coral_genera": "Total number of coral genera"
+    "total_coral_genera": "Total number of coral genera",
+    "unconfirmed_points": "Unconfirmed points"
   },
-  "observers": "Observers",
-  "observers_info": "Select one or more observers to add",
   "offline": {
     "page_unavailable_offline": "This page is unavailable offline",
     "unavailable_offline": "Unavailable offline"
@@ -804,6 +806,7 @@
     "none": "No sample units",
     "not_submitted": "This sample unit is not submitted",
     "observers": "Observers",
+    "observers_info": "Select one or more observers to add",
     "protocol": "Protocol",
     "record": "Record",
     "sample_date": "Sample date",
