@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom'
 import React from 'react'
 
-import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData.js'
-import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie.js'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   renderAuthenticatedOffline,
@@ -59,7 +59,7 @@ describe('Projects dashboard', () => {
       expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
     )
 
-    const projectCard = screen.getAllByTestId('project-card')[0]
+    const projectCard = screen.getAllByTestId('project-card')[1]
     const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
     const submitSummaryCard = within(projectCard).getByLabelText(/submitted/i)
     const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
@@ -192,7 +192,7 @@ describe('Projects dashboard', () => {
     expect(copyButtons[1]).toBeEnabled()
     expect(copyButtons[2]).toBeEnabled()
     expect(copyButtons[3]).toBeEnabled()
-    expect(copyButtons[4]).toBeEnabled()
+    expect(copyButtons[4]).toBeDisabled() //demo project
   })
 
   test('Hide new project button in project toolbar when offline', async () => {

@@ -8,7 +8,7 @@ import { hoverState } from '../../../../library/styling/mediaQueries'
 import { ValidationList } from '../../../generic/form'
 import { MessageType } from '../../../../types/constants'
 import InlineMessage from '../../../generic/InlineMessage'
-import language from '../../../../language'
+import { getValidationMessage } from '../../../../library/validationMessageHelpers'
 import theme from '../../../../theme'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
 import DuplicateImageValidationContent, { Image } from './DuplicateImageValidationContent'
@@ -109,7 +109,7 @@ const RecordLevelValidationInfo = ({
               imgId={recordId ?? ''}
             />
           ) : (
-            <p>{language.getValidationMessage(validation, projectId)}</p>
+            <p>{getValidationMessage(validation, projectId)}</p>
           )
         const isScrollToViewAvailable = checkScrollToObservation(validation)
 
