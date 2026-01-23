@@ -5,99 +5,8 @@
     justify-content: space-between;
   }
 }
-.pill-container {
-  @media (max-width: $mobile-break) {
-    display: block;
-    max-width: 30%;
-    div {
-      float: right;
-    }
-  }
-}
-.project-card__wrapper {
-  margin: $spacing-x-large auto 0 auto;
-  width: $max-screen-width;
-  max-width: $max-width;
-  background: $white;
-  cursor: pointer;
-  &:hover,
-  &:focus {
-    outline: 2px solid $primary;
-  }
-
-  @media (max-width: $tablet-landscape-break) {
-    width: 98%;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-  }
-}
-.demo-callout {
-  padding: $spacing-large;
-  margin: $spacing-x-large auto 0 auto;
-  width: $default-width;
-  max-width: $max-width;
-  background: $white;
+.project-card__header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  h2 {
-    margin-block-start: 0;
-  }
-  p {
-    margin-block-start: 0;
-    margin-block-end: 0;
-  }
-  &.demo-callout--centered {
-    text-align: center;
-    display: block;
-
-    p {
-      display: block;
-      margin-block-end: $spacing-large;
-    }
-    div {
-      display: block;
-      width: 100%;
-    }
-
-    div.buttons-container {
-      display: block;
-      margin: 0 auto;
-    }
-  }
-}
-.card-wrapper {
-  margin: $spacing-x-large auto 0 auto;
-  width: $default-width;
-  max-width: $max-width;
-  background: $white;
-
-  @media (hover: hover) {
-    &:hover:not([disabled]) {
-      outline: solid 2px $primary;
-    }
-  }
-  @media (min-width) {
-    width: 98%;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-  }
-}
-
-.no-wrap-wrapper {
-  white-space: nowrap;
-}
-
-.date-country-label {
-  opacity: 0.8;
-  font-size: $small-font-size;
-}
-
-.project-card-header {
-  display: flex;
-  padding: $spacing-medium;
   justify-content: space-between;
   background: $primary;
   color: $white;
@@ -115,4 +24,78 @@
   label {
     margin-left: $spacing-medium;
   }
+}
+.pill-container {
+  @media (max-width: $mobile-break) {
+    display: block;
+    max-width: 30%;
+    div {
+      float: right;
+    }
+  }
+}
+.project-card__wrapper {
+  margin: $spacing-x-large auto 0 auto;
+  width: $max-screen-width;
+  max-width: $max-width;
+  background: $white;
+  cursor: pointer;
+
+  &:hover:not([disabled]),
+  &:focus {
+    outline: 2px solid $primary;
+  }
+
+  @media (max-width: $tablet-landscape-break) {
+    width: 98%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+}
+
+/** Demo project card & callout styling **/
+@mixin demo-callout {
+  padding: $spacing-large;
+  margin: $spacing-x-large auto 0 auto;
+  width: $default-width;
+  max-width: $max-width;
+  background: $white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  h2 {
+    margin-block-start: 0;
+  }
+  p {
+    margin-block-start: 0;
+    margin-block-end: 0;
+  }
+}
+
+.demo-callout {
+  @include demo-callout;
+}
+.demo-callout--centered {
+  @include demo-callout;
+  text-align: center;
+  display: block;
+
+  p {
+    display: block;
+    margin-block-end: $spacing-large;
+  }
+  div {
+    display: block;
+    width: 100%;
+  }
+}
+
+.no-wrap-wrapper {
+  white-space: nowrap;
+}
+
+.date-country-label {
+  opacity: 0.8;
+  font-size: $small-font-size;
 }

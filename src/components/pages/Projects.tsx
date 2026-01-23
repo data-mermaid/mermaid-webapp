@@ -41,7 +41,7 @@ const DemoProjectCallout = ({
   const { t } = useTranslation()
   const calloutStyleClasses = userHasProjects
     ? cardStyles['demo-callout']
-    : [cardStyles['demo-callout'], cardStyles['demo-callout--centered']].join(' ')
+    : cardStyles['demo-callout--centered']
 
   const handleDemoTryoutDismiss = () => {
     updateUserSettings('hasUserDismissedDemo', true)
@@ -54,14 +54,13 @@ const DemoProjectCallout = ({
         <h2>{t('projects.demo.tryout')}</h2>
         <p>{t('projects.demo.teaser')}</p>
       </div>
-      <div className={'buttons-container'}>
+      <div>
         <CalloutButton
           onClick={handleDemoClick}
           aria-label={t('projects.new_project')}
           disabled={false}
           testId="demo-project-button"
           label={t('projects.buttons.add_demo')}
-          className={'demo-btn'}
         />
         {userHasProjects && (
           <CloseButton type="button" onClick={handleDemoTryoutDismiss}>

@@ -1,4 +1,5 @@
 @use './theme.scss' as *;
+@use './functions.module.scss' as *;
 
 @mixin button {
   transition: $default-transition;
@@ -22,14 +23,14 @@
   background-color: $primary;
   color: $white;
   &:hover {
-    background-color: lighten($primary, 10%);
+    background-color: lightenColor($primary, 10%);
   }
   &:disabled {
-    background-color: lighten($primary, 60%);
+    background-color: lightenColor($primary, 60%);
     color: #9aa8b7;
   }
   &:active:enabled {
-    background-color: darken($primary, 30%);
+    background-color: darkenColor($primary, 30%);
   }
 }
 
@@ -40,14 +41,14 @@
   color: $primary;
   border: solid 1px $secondary;
   &:hover {
-    background-color: lighten($secondary, 20%);
+    background-color: lightenColor($secondary, 20%);
   }
   &:disabled {
-    background-color: lighten($white, 20%);
+    background-color: lightenColor($white, 20%);
     color: $disabled;
   }
   &:active:enabled {
-    background-color: darken($secondary, 20%);
+    background-color: darkenColor($secondary, 20%);
   }
 }
 
@@ -122,6 +123,6 @@
   cursor: pointer;
   transition: 0.25s;
   &:hover {
-    background: lighten($secondary, 20%);
+    background: lightenColor($secondary, 20%);
   }
 }
