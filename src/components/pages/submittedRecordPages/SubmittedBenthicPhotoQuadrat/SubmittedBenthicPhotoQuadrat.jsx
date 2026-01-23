@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify'
 import { useParams, useNavigate } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonSecondary } from '../../../generic/buttons'
 import { ContentPageLayout } from '../../../Layout'
@@ -11,7 +12,6 @@ import { getBenthicOptions } from '../../../../library/getOptions'
 import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
 import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import language from '../../../../language'
 import PageUnavailable from '../../PageUnavailable'
 import SubmittedBenthicPhotoQuadratInfoTable from './SubmittedBenthicPhotoQuadratInfoTable'
 import SubmittedBenthicPhotoQuadratObservationTable from './SubmittedBenthicPhotoQuadratObservationTable'
@@ -27,6 +27,9 @@ import { FormSubTitle } from '../SubmittedFormPage.styles'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
 const SubmittedBenthicPhotoQuadrat = () => {
+  const { t } = useTranslation()
+
+  const submittedRecordsUnavailableText = t('sample_units.errors.submitted_data_unavailable')
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
 
@@ -103,7 +106,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
                 setIdsNotAssociatedWithData([projectId, submittedRecordId])
                 setIsLoading(false)
               }
-              toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+              toast.error(...getToastArguments(submittedRecordsUnavailableText))
             },
           })
         })
@@ -116,6 +119,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
     isSyncInProgress,
     projectId,
     submittedRecordId,
+    submittedRecordsUnavailableText,
   ])
 
   const handleMoveToCollect = () => {
@@ -127,14 +131,14 @@ const SubmittedBenthicPhotoQuadrat = () => {
         sampleUnitMethod: 'benthicphotoquadrattransectmethods',
       })
       .then(({ id }) => {
-        toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
+        toast.success(...getToastArguments(t('sample_units.errors.submitted_moved_to_collecting')))
         navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/benthicpqt/${id}`)
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
+            toast.error(...getToastArguments(t('sample_units.errors.submitted_not_editable')))
             setIsMoveToButtonDisabled(false)
           },
         })
@@ -160,7 +164,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
             />
-            <FormSubTitle>Observers</FormSubTitle>
+            <FormSubTitle>{t('sample_units.observers')}</FormSubTitle>
             <ul>
               {observers.map((observer) => (
                 <li key={observer.id}>{observer.profile_name}</li>
@@ -174,7 +178,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
             />
           </>
         ) : (
-          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+          <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
         )
       }
       toolbar={
@@ -189,15 +193,15 @@ const SubmittedBenthicPhotoQuadrat = () => {
               <>
                 <p>
                   {isAdminUser
-                    ? language.pages.submittedForm.sampleUnitsAreReadOnly
-                    : language.pages.submittedForm.adminEditOnly}
+                    ? t('sample_units.submitted_readonly')
+                    : t('sample_units.submitted_readonly_and_movable_by_admin')}
                 </p>
                 <ButtonSecondary
                   onClick={handleMoveToCollect}
                   disabled={!isAdminUser || isMoveToButtonDisabled}
                 >
                   <IconPen />
-                  {language.pages.submittedForm.moveSampleUnitButton}
+                  {t('buttons.move_to_collecting')}
                 </ButtonSecondary>
               </>
             </RowSpaceBetween>

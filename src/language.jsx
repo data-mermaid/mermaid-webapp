@@ -1,14 +1,5 @@
 // prettier-ignore
 import React from 'react'
-import {
-  getDuplicateValuesValidationMessage,
-  getDuplicateSampleUnitLink,
-  getInvalidBleachingObsMessage,
-  getInvalidBleachingObsTotalMessage,
-  getObservationsCountMessage,
-  getSystemValidationErrorMessage,
-  goToManagementOverviewPageLink,
-} from './library/validationMessageHelpers'
 import { HelperTextLink } from './components/generic/links'
 
 const placeholders = {
@@ -328,98 +319,6 @@ const getResolveModalLanguage = (siteOrManagementRegime) => {
   }
 }
 
-const getValidationMessage = (validation, projectId = '') => {
-  const { code, context, fields, name } = validation
-
-  const validationMessages = {
-    all_attributes_same_category: () => `All benthic attributes are ${context?.category}`,
-    all_equal: () => 'All observations are the same',
-    diff_num_images: () => 'Defined number of quadrats does not match count of images uploaded',
-    diff_num_quadrats: () =>
-      'Defined number of quadrats does not match count of quadrats in observations',
-    duplicate_benthic_transect: () =>
-      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
-    duplicate_fishbelt_transect: () =>
-      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
-    duplicate_quadrat_collection: () =>
-      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
-    duplicate_quadrat_transect: () =>
-      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
-    duplicate_transect: () => 'Transect already exists',
-    duplicate_values: () =>
-      fields?.length
-        ? getDuplicateValuesValidationMessage(fields[0], context?.duplicates)
-        : 'Duplicate',
-    invalid_count: () => getInvalidBleachingObsMessage(context, 'colony count'),
-    invalid_percent_value: () => getInvalidBleachingObsMessage(context, 'percent cover'),
-    invalid_total: () => getInvalidBleachingObsTotalMessage(context),
-    exceed_total_colonies: () => 'Maximum number of colonies exceeded',
-    implausibly_old_date: () => 'Sample date is before 1900',
-    future_sample_date: () => 'Sample date is in the future',
-    high_density: () => `Fish biomass greater than ${context?.biomass_range[1]} kg/ha`,
-    incorrect_observation_count: () =>
-      `Incorrect number of observations; expected ${context?.expected_count}`,
-    invalid_interval_size: () => 'Interval size must be a positive number',
-    max_interval_size: () => `Interval size greater than ${context?.interval_size_range[1]} m`,
-    max_interval_start: () => `Interval start greater than ${context?.interval_start_range[1]} m`,
-    invalid_benthic_transect: () =>
-      'One or more invalid fields: site, management, sample date, transect number, width, depth',
-    invalid_depth: () => `Depth invalid or not greater than ${context?.depth_range[0]} m`,
-    excessive_precision: () =>
-      `Depth precision to right of decimal point greater than ${context?.decimal_places} digit(s)`,
-    invalid_fish_count: () => 'Fish count must be a non-negative integer',
-    invalid_fish_size: () => `Invalid fish size`,
-    invalid_fishbelt_transect: () =>
-      'One or more invalid fields: site, management, sample date, transect number, width, depth',
-    invalid_number_of_points: () =>
-      `Total number of points entered for quadrats: ${context?.invalid_quadrat_numbers} does not match defined number of points per quadrat`,
-    invalid_quadrat_collection: () =>
-      'One or more invalid transect fields: site, management, date, depth',
-    invalid_quadrat_size: () => 'Quadrat size must be a positive number',
-    max_quadrat_size: () => `Quadrat size greater than ${context?.quadrat_size_range[1]} m2`,
-    invalid_quadrat_transect: () =>
-      'One or more invalid fields: site, management, sample date, transect number, depth',
-    invalid_sample_date: () => 'Invalid date',
-    invalid_score: () => `Invalid score`,
-    large_num_quadrats: () => 'Number of quadrats is too large',
-    len_surveyed_not_positive: () => 'Transect length must be a non-negative number',
-    len_surveyed_out_of_range: () =>
-      `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`,
-    low_density: () => `Fish biomass less than ${context?.biomass_range[0]} kg/ha`,
-    management_not_found: () => 'Management Regime not available for similarity validation.',
-    max_depth: () => `Depth exceeds ${context?.depth_range[1]} m`,
-    max_fish_size: () => 'Fish size is larger than maximum observed size',
-    minimum_total_fish_count: () => `Total fish count less than ${context?.minimum_fish_count}`,
-    missing_quadrat_numbers: () => `Missing quadrat numbers ${context?.missing_quadrat_numbers}`,
-    no_region_match: () => 'Coral or fish not previously observed in site region',
-    not_part_of_fish_family_subset: () => `Fish is not part of project-defined fish families`,
-    not_positive_integer: () => 'Value is not an integer greater or equal to zero',
-    not_unique_site: () => 'Site: Similar records detected',
-    not_unique_management: () => goToManagementOverviewPageLink(projectId),
-    obs_total_length_toolarge: () =>
-      `Total length of observations (${context?.total_obs_length} cm) is greater than the transect length (${context?.len_surveyed} m) + 50%`,
-    obs_total_length_toosmall: () =>
-      `Total length of observations (${context?.total_obs_length} cm) is less than 50% of the transect length (${context?.len_surveyed} m)`,
-    required: () => `Required`,
-    required_management_rules: () =>
-      'At least one rule must be specified for this Management Regime.',
-    sample_time_out_of_range: () =>
-      `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
-    similar_name: () => 'Another Management Regime is similar to this one.',
-    site_not_found: () => 'Site record not available for similarity validation',
-    too_many_observations: () =>
-      getObservationsCountMessage(fields, 'Greater', context?.observation_count_range[1]),
-    too_few_observations: () =>
-      getObservationsCountMessage(fields, 'Fewer', context?.observation_count_range[0]),
-    unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
-    value_not_set: () => 'Value is not set',
-    default: () => code || name,
-    unconfirmed_annotation: () => 'Wrong number of confirmed annotations',
-  }
-
-  return (validationMessages[code] || validationMessages.default)()
-}
-
 const helperText = {
   compliance: 'Effectiveness of the rules in the managed area - low compliance to high compliance',
   current: 'Water speed during the survey.',
@@ -532,45 +431,6 @@ const helperText = {
     'The total width (NOT width to one side of the tape) of the fish belt transect, in meters.',
 }
 
-const tooltipText = {
-  admin:
-    'User has all Collector privileges, and can additionally change project information and data sharing, add and remove project users, transfer unsubmitted sample units between project users, and un-submit sample units for further editing.',
-  getBenthicAttribute: () => (
-    <>
-      Benthic attribute observed. A benthic attribute can be a taxonomic name for a coral or other
-      sessile organism, or an abiotic classification. MERMAID benthic attributes are organized
-      hierarchically and are consistent with{' '}
-      <HelperTextLink href="https://www.marinespecies.org/" target="_blank" color="#fff">
-        WoRMS.
-      </HelperTextLink>
-    </>
-  ),
-  collector:
-    'User can view, export, and analyze data, and collect new observations. Once a transect is submitted, the user can no longer edit or delete observations.',
-  getFishName: () => (
-    <>
-      Name of the fish species, genus, or family observed. For genus-level observations or an
-      unknown species, enter the genus rather than proposing a new species with &lsquo;spp&lsquo;.
-      All fish names in MERMAID are consistent with{' '}
-      <HelperTextLink href="https://fishbase.mnhn.fr/search.php" target="_blank" color="#fff">
-        fishbase.
-      </HelperTextLink>
-    </>
-  ),
-  fishSize: 'Size of fish observed, in cm (e.g. 4.5 or 5-10).',
-  fishCount: 'Number of fish observed, of the same species/genus/family and size.',
-  growthForm:
-    'Growth form of the observed benthic attribute. Only choose a growth form if it is relevant to the benthic attribute (e.g. Acropora branching).',
-  hardCoralPercentage: 'Hard coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
-  macroalgaePercentage: 'Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).',
-  numberOfPoints:
-    'Number of points with unique benthic attribute (/growth form) for the quadrat. The sum of points for all benthic attributes in a quadrat must equal the value set above.',
-  quadrat: 'Number of quadrat/photo in transect (e.g. 1).',
-  readOnly:
-    'User can only view, export, and analyze data in the analysis tools, but cannot collect new observations.',
-  softCoralPercentage: 'Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).',
-}
-
 export default {
   apiDataTableNames,
   autocomplete,
@@ -579,7 +439,6 @@ export default {
   deleteRecord,
   error,
   getResolveModalLanguage,
-  getValidationMessage,
   header,
   helperText,
   inlineMessage,
@@ -592,5 +451,4 @@ export default {
   success,
   table,
   title,
-  tooltipText,
 }

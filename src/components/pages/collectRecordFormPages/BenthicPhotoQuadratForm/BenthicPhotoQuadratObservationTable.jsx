@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { Trans, useTranslation } from 'react-i18next'
 
 import {
   ButtonRemoveRow,
@@ -28,11 +29,11 @@ import { summarizeArrayObjectValuesByProperty } from '../../../../library/summar
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
+import { HelperTextLink } from '../../../generic/links'
 
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
-import language from '../../../../language'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -79,9 +80,12 @@ const BenthicPhotoQuadratObservationTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
+  const { t } = useTranslation()
   const [observationsState, observationsDispatch] = observationsReducer
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+
+  const missingBenthicAttributeText = t('benthic_observations.missing_benthic_attribute')
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -119,7 +123,7 @@ const BenthicPhotoQuadratObservationTable = ({
 
     const categoryGroups = addTopCategoryInfoToObservation.reduce((accumulator, obs) => {
       const benthicAttributeName =
-        getCategory(obs.top_level_category)?.label ?? 'Missing benthic attribute'
+        getCategory(obs.top_level_category)?.label ?? missingBenthicAttributeText
 
       accumulator[benthicAttributeName] = accumulator[benthicAttributeName] || []
       accumulator[benthicAttributeName].push(obs)
@@ -145,7 +149,7 @@ const BenthicPhotoQuadratObservationTable = ({
     })
 
     return categoryPercentages
-  }, [observationsState, benthicAttributeSelectOptions])
+  }, [observationsState, benthicAttributeSelectOptions, missingBenthicAttributeText])
 
   const observationsRows = useMemo(() => {
     const growthFormOptions = getOptions(choices.growthforms.data)
@@ -292,13 +296,13 @@ const BenthicPhotoQuadratObservationTable = ({
                   id={`observation-${observationId}`}
                   aria-labelledby="benthic-attribute-label"
                   isLastRow={observationsState.length === rowNumber}
-                  noResultsText={language.autocomplete.noResultsDefault}
+                  noResultsText={t('search.no_results')}
                   onChange={handleBenthicAttributeChange}
                   options={benthicAttributeSelectOptions}
                   value={attribute}
                   noResultsAction={
                     <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
-                      {language.pages.collectRecord.newBenthicAttributeLink}
+                      {t('benthic_observations.add_benthic_attribute')}
                     </NewOptionButton>
                   }
                 />
@@ -349,7 +353,7 @@ const BenthicPhotoQuadratObservationTable = ({
               tabIndex="-1"
               type="button"
               onClick={handleDeleteObservation}
-              aria-label="Delete Observation"
+              aria-label={t('delete_observation')}
             >
               <IconClose />
             </ButtonRemoveRow>
@@ -369,11 +373,12 @@ const BenthicPhotoQuadratObservationTable = ({
     setAreObservationsInputsDirty,
     setIsNewBenthicAttributeModalOpen,
     setObservationIdToAddNewBenthicAttributeTo,
+    t,
   ])
 
   return (
     <InputWrapper data-testid={testId}>
-      <H2 id="table-label">Observations</H2>
+      <H2 id="table-label">{t('observations.observations')}</H2>
       <StyledOverflowWrapper>
         <StickyObservationTable aria-labelledby="table-label">
           <StyledColgroup>
@@ -390,10 +395,10 @@ const BenthicPhotoQuadratObservationTable = ({
               <Th> </Th>
               <Th align="right" id="quadrat-number-label">
                 <LabelContainer>
-                  Quadrat <RequiredIndicator />
+                  {t('observations.quadrat')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.quadrat}
+                      helperText={t('observations.quadrat_info')}
                       left="-3em"
                       top="-6.5em"
                     />
@@ -402,16 +407,30 @@ const BenthicPhotoQuadratObservationTable = ({
                     type="button"
                     onClick={(event) => handleInfoIconClick(event, 'quadrat')}
                   >
-                    <IconInfo aria-label="info" />
+                    <IconInfo aria-label={t('info')} />
                   </IconButton>
                 </LabelContainer>
               </Th>
               <Th align="left" id="benthic-attribute-label">
                 <LabelContainer>
-                  Benthic Attribute <RequiredIndicator />
+                  {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.getBenthicAttribute()}
+                      helperText={
+                        <Trans
+                          i18nKey="benthic_observations.benthic_attribute_info"
+                          components={{
+                            helperTextLink: (
+                              <HelperTextLink
+                                href="https://www.marinespecies.org/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                color="#fff"
+                              />
+                            ),
+                          }}
+                        />
+                      }
                       left="3em"
                       top="-13.5em"
                     />
@@ -420,16 +439,16 @@ const BenthicPhotoQuadratObservationTable = ({
                     type="button"
                     onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
                   >
-                    <IconInfo aria-label="info" />
+                    <IconInfo aria-label={t('info')} />
                   </IconButton>
                 </LabelContainer>
               </Th>
               <Th align="right" id="growth-form-label">
                 <LabelContainer>
-                  <div>Growth Form</div>
+                  <div>{t('observations.growth_form')}</div>
                   {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.growthForm}
+                      helperText={t('observations.growth_form_info')}
                       left="-0.5em"
                       top="-9em"
                     />
@@ -438,16 +457,16 @@ const BenthicPhotoQuadratObservationTable = ({
                     type="button"
                     onClick={(event) => handleInfoIconClick(event, 'growthForm')}
                   >
-                    <IconInfo aria-label="info" />
+                    <IconInfo aria-label={t('info')} />
                   </IconButton>
                 </LabelContainer>
               </Th>
               <Th align="right" id="number-of-points-label">
                 <LabelContainer>
-                  Number of Points <RequiredIndicator />
+                  {t('observations.number_of_points')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'numberOfPoints' ? (
                     <ColumnHeaderToolTip
-                      helperText={language.tooltipText.numberOfPoints}
+                      helperText={t('observations.number_of_points_info')}
                       left="-1em"
                       top="-11em"
                     />
@@ -456,11 +475,11 @@ const BenthicPhotoQuadratObservationTable = ({
                     type="button"
                     onClick={(event) => handleInfoIconClick(event, 'numberOfPoints')}
                   >
-                    <IconInfo aria-label="info" />
+                    <IconInfo aria-label={t('info')} />
                   </IconButton>
                 </LabelContainer>
               </Th>
-              {areValidationsShowing ? <Th align="center">Validations</Th> : null}
+              {areValidationsShowing ? <Th align="center">{t('validations')}</Th> : null}
               <Th> </Th>
             </Tr>
           </thead>
@@ -468,12 +487,8 @@ const BenthicPhotoQuadratObservationTable = ({
         </StickyObservationTable>
       </StyledOverflowWrapper>
       <UnderTableRow>
-        <ButtonPrimary
-          type="button"
-          onClick={handleAddObservation}
-          data-testid="add-observation-row"
-        >
-          <IconPlus /> Add Row
+        <ButtonPrimary type="button" onClick={handleAddObservation}>
+          <IconPlus /> {t('buttons.add_row')}
         </ButtonPrimary>
         <ObservationsSummaryStats>
           <tbody>

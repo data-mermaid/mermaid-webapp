@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   choicesPropType,
   benthicPitRecordPropType,
@@ -17,6 +18,7 @@ const SubmittedBenthicPitObservationTable = ({
   choices,
   submittedRecord = undefined,
 }) => {
+  const { t } = useTranslation()
   const { obs_benthic_pits } = submittedRecord
   const growthFormOptions = getOptions(choices.growthforms.data)
 
@@ -31,15 +33,15 @@ const SubmittedBenthicPitObservationTable = ({
 
   return (
     <InputWrapper>
-      <FormSubTitle id="table-label">Observations</FormSubTitle>
+      <FormSubTitle id="table-label">{t('observations.observations')}</FormSubTitle>
       <StyledOverflowWrapper>
         <SubmittedObservationStickyTable>
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem align="left">Interval</TheadItem>
-              <TheadItem align="right">Benthic Attribute</TheadItem>
-              <TheadItem align="right">Growth Form</TheadItem>
+              <TheadItem align="left">{t('observations.interval')}</TheadItem>
+              <TheadItem align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
+              <TheadItem align="right">{t('observations.growth_form')}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationsBenthicPit}</tbody>

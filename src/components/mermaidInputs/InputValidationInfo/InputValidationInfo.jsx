@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import theme from '../../../theme'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InlineMessage from '../../generic/InlineMessage/InlineMessage'
-import language from '../../../language'
+import { getValidationMessage } from '../../../library/validationMessageHelpers'
 import ResolveDuplicateSiteButtonAndModal from '../../ResolveDuplicateSiteButtonAndModal/ResolveDuplicateSiteButtonAndModal'
 import ResolveDuplicateMRButtonAndModal from '../../ResolveDuplicateMRButtonAndModal/ResolveDuplicateMRButtonAndModal'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../InputIgnoreValidationWarningCheckboxWithLabel'
@@ -89,7 +89,7 @@ const InputValidationInfo = ({
               key={validation.id}
               className={`${validationType}-indicator`}
             >
-              <p>{language.getValidationMessage(validation, projectId)}</p>
+              <p>{getValidationMessage(validation, projectId)}</p>
             </InlineMessage>
           ))}
         </>
