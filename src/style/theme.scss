@@ -5,15 +5,15 @@ $primary: #174b82;
 $secondary: #dddce4;
 
 $callout: #f2645a;
-$callout-hover: #f8d8cc;
-$callout-active: #f8d8cc;
+$callout-hover: lightenColor($callout, 20%);
+$callout-active: darkenColor($callout, 20%);
 
 $error: #7b0a0a;
 $success: #43a841;
 
 $caution: #bb1600;
-$caution-hover: lighten($caution, 20%);
-$caution-active: darken($caution, 20%);
+$caution-hover: lightenColor($caution, 20%);
+$caution-active: darkenColor($caution, 20%);
 
 $warning: #efda70;
 
