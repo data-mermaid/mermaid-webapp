@@ -563,6 +563,7 @@ function UsersTableSection({
   const adminHeaderText = t('users.roles.admin')
   const collectorHeaderText = t('users.roles.collector')
   const readOnlyHeaderText = t('users.roles.read_only')
+  const pendingUser = t('users.pending_user')
 
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
@@ -781,11 +782,10 @@ function UsersTableSection({
         profile: userId,
       } = profile
       const nameParts = (profile_name ?? '')
-        .replace(PENDING_USER_PROFILE_NAME, 'pending user')
+        .replace(PENDING_USER_PROFILE_NAME, pendingUser)
         .split(' ')
-      const firstName = nameParts[0]
-      const lastNameIndex = nameParts.length - 1
-      const lastName = lastNameIndex === 0 ? undefined : nameParts[lastNameIndex]
+      const [firstName] = nameParts
+      const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : undefined
 
       const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
       const isUserRoleReadOnly = getIsProjectProfileReadOnly(profile)
@@ -803,6 +803,22 @@ function UsersTableSection({
         return 'pointer'
       }
 
+      const createRoleRadio = (roleValue, prefix) => (
+        <TableRadioLabel htmlFor={`${prefix}-${projectProfileId}`} cursor={getCursorType()}>
+          <input
+            type="radio"
+            value={roleValue}
+            name={projectProfileId}
+            id={`${prefix}-${projectProfileId}`}
+            checked={role === roleValue}
+            onChange={(event) => {
+              handleRoleChange({ event, projectProfileId })
+            }}
+            disabled={isCurrentUser || isTableUpdating}
+          />
+        </TableRadioLabel>
+      )
+
       return {
         name: (
           <NameCellStyle>
@@ -816,51 +832,9 @@ function UsersTableSection({
           </NameCellStyle>
         ),
         email,
-        admin: (
-          <TableRadioLabel htmlFor={`admin-${projectProfileId}`} cursor={getCursorType()}>
-            <input
-              type="radio"
-              value={userRole.admin}
-              name={projectProfileId}
-              id={`admin-${projectProfileId}`}
-              checked={role === userRole.admin}
-              onChange={(event) => {
-                handleRoleChange({ event, projectProfileId })
-              }}
-              disabled={isCurrentUser || isTableUpdating}
-            />
-          </TableRadioLabel>
-        ),
-        collector: (
-          <TableRadioLabel htmlFor={`collector-${projectProfileId}`} cursor={getCursorType()}>
-            <input
-              type="radio"
-              value={userRole.collector}
-              name={projectProfileId}
-              id={`collector-${projectProfileId}`}
-              checked={role === userRole.collector}
-              onChange={(event) => {
-                handleRoleChange({ event, projectProfileId })
-              }}
-              disabled={isCurrentUser || isTableUpdating}
-            />
-          </TableRadioLabel>
-        ),
-        readonly: (
-          <TableRadioLabel htmlFor={`readonly-${projectProfileId}`} cursor={getCursorType()}>
-            <input
-              type="radio"
-              value={userRole.read_only}
-              name={projectProfileId}
-              id={`readonly-${projectProfileId}`}
-              checked={role === userRole.read_only}
-              onChange={(event) => {
-                handleRoleChange({ event, projectProfileId })
-              }}
-              disabled={isCurrentUser || isTableUpdating}
-            />
-          </TableRadioLabel>
-        ),
+        admin: createRoleRadio(userRole.admin, 'admin'),
+        collector: createRoleRadio(userRole.collector, 'collector'),
+        readonly: createRoleRadio(userRole.read_only, 'readonly'),
         unsubmittedSampleUnits: (
           <>
             {isActiveSampleUnitsWarningShowing ? <ActiveSampleUnitsIconAlert /> : null}
@@ -907,6 +881,7 @@ function UsersTableSection({
     noSampleUnitsText,
     openTransferSampleUnitsModal,
     openRemoveUserModal,
+    pendingUser,
   ])
 
   const tableCellDataForNonAdmin = useMemo(

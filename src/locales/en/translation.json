@@ -928,6 +928,7 @@
       "user_removed": "User removed"
     },
     "not_signed_up": "will need to sign up because they're not already a MERMAID user",
+    "pending_user": "pending user",
     "remove_from_project": "Remove from project",
     "remove_user": "Remove user",
     "remove_user_from_project": "Remove user from project",
