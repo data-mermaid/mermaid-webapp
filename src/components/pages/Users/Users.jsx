@@ -563,7 +563,6 @@ function UsersTableSection({
   const adminHeaderText = t('users.roles.admin')
   const collectorHeaderText = t('users.roles.collector')
   const readOnlyHeaderText = t('users.roles.read_only')
-  const pendingUser = t('users.pending_user')
 
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
@@ -781,9 +780,11 @@ function UsersTableSection({
         role,
         profile: userId,
       } = profile
-      const nameParts = (profile_name ?? '')
-        .replace(PENDING_USER_PROFILE_NAME, pendingUser)
-        .split(' ')
+      const displayName =
+        profile_name === PENDING_USER_PROFILE_NAME
+          ? PENDING_USER_PROFILE_NAME.replace(/[()]/g, '').trim()
+          : profile_name ?? ''
+      const nameParts = displayName.split(' ')
       const [firstName] = nameParts
       const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : undefined
 
@@ -881,7 +882,6 @@ function UsersTableSection({
     noSampleUnitsText,
     openTransferSampleUnitsModal,
     openRemoveUserModal,
-    pendingUser,
   ])
 
   const tableCellDataForNonAdmin = useMemo(
