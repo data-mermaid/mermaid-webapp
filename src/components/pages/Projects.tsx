@@ -92,9 +92,7 @@ const Projects = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
   const { currentUser, refreshCurrentUser, saveUserProfile } = useCurrentUser()
-  const hasUserDismissedDemo = currentUser.collect_state
-    ? currentUser.collect_state.hasUserDismissedDemo
-    : false
+  const hasUserDismissedDemo = currentUser.collect_state?.hasUserDismissedDemo ?? false
   const navigate = useNavigate()
   const { t } = useTranslation()
 
