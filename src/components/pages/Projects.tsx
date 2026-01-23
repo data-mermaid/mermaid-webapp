@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 import { HomePageLayout } from '../Layout'
 import { getToastArguments } from '../../library/getToastArguments'
@@ -32,11 +32,13 @@ interface DemoProjectCalloutProps {
   handleDemoClick: () => void
   updateUserSettings: (setting: string, val: boolean) => void
   userHasProjects: boolean
+  setIsDemoCalloutVisible: Dispatch<SetStateAction<boolean>>
 }
 const DemoProjectCallout = ({
   handleDemoClick,
   updateUserSettings,
   userHasProjects,
+  setIsDemoCalloutVisible,
 }: DemoProjectCalloutProps) => {
   const { t } = useTranslation()
   const calloutStyleClasses = userHasProjects
@@ -44,6 +46,7 @@ const DemoProjectCallout = ({
     : cardStyles['demo-callout--centered']
 
   const handleDemoTryoutDismiss = () => {
+    setIsDemoCalloutVisible(false)
     updateUserSettings('hasUserDismissedDemo', true)
     toast.info(t('projects.demo.dismissed'))
   }
@@ -89,15 +92,20 @@ const Projects = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
   const { currentUser, refreshCurrentUser, saveUserProfile } = useCurrentUser()
-  const hasUserDismissedDemo = currentUser.collect_state.hasUserDismissedDemo || false
+  const hasUserDismissedDemo = currentUser.collect_state
+    ? currentUser.collect_state.hasUserDismissedDemo
+    : false
   const navigate = useNavigate()
-
   const { t } = useTranslation()
-  const unavailableProjectsErrorText = t('projects.errors.data_unavailable')
 
+  const unavailableProjectsErrorText = t('projects.errors.data_unavailable')
   useDocumentTitle(`${t('projects.projects')} - ${t('mermaid')}`)
+
   const userHasDemoProject = projects.some((proj) => proj.is_demo === true)
   const userHasProjects = projects.length > 0
+  const [isDemoCalloutVisible, setIsDemoCalloutVisible] = useState(
+    !userHasDemoProject && isAppOnline && !hasUserDismissedDemo,
+  )
 
   useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -278,11 +286,12 @@ const Projects = () => {
       }
       bottomRow={
         <div role="list">
-          {!userHasDemoProject && isAppOnline && !hasUserDismissedDemo && (
+          {isDemoCalloutVisible && (
             <DemoProjectCallout
               updateUserSettings={updateUserSettings}
               handleDemoClick={createDemoProject}
               userHasProjects={userHasProjects}
+              setIsDemoCalloutVisible={setIsDemoCalloutVisible}
             />
           )}
           {projectCardsList}
