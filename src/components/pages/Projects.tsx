@@ -44,8 +44,8 @@ const DemoProjectCallout = ({
     : [cardStyles['demo-callout'], cardStyles['demo-callout--centered']].join(' ')
 
   const handleDemoTryoutDismiss = () => {
-    updateUserSettings('userHasDismissedDemo', false)
-    toast.info(t('projects.demo.success_deleted'))
+    updateUserSettings('hasUserDismissedDemo', true)
+    toast.info(t('projects.demo.dismissed'))
   }
 
   return (
@@ -131,8 +131,11 @@ const Projects = () => {
   ])
 
   const updateUserSettings = (setting: string, val: boolean) => {
-    const updatedProfileSettings = { setting: val }
-    saveUserProfile({ ...currentUser, collect_state: updatedProfileSettings })
+    const updatedProfileSettings = { [setting]: val }
+    saveUserProfile({
+      ...currentUser,
+      collect_state: { ...currentUser.collect_state, ...updatedProfileSettings },
+    })
   }
 
   const handleSuccessResponse = (response, languageSuccessMessage: string) => {
