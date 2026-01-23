@@ -3,7 +3,7 @@
   "add_update_sites_regimes": "Add/update sites or management regimes",
   "admin": "Admin",
   "api_errors": {
-    "demo_project_exists": "You have already created a demo project. Only one demo project is allowed per user.",
+    "demo_project_exists": "You can only have one demo project at a time.",
     "no_server_response": "Unable to communicate with server. Changes are saved on your computer, but not online.",
     "unauthorized_user": "The current user does not have permission to do that.",
     "unspecified_error": "MERMAID error: please contact support@datamermaid.org"
@@ -706,13 +706,13 @@
     "demo": {
       "demo": "Demo project",
       "dismissed": "Add the demo project any time from the New project dropdown",
-      "explore_unavailable": "Demo projects are unavailable to view in MERMAID Explore",
+      "explore_unavailable": "The demo project is unavailable in MERMAID Explore",
       "name_restrictions": "Demo project name cannot be changed.",
-      "project_reporting": "Data from this demo project will not be available in MERMAID Explore, and will be filtered by default by the R package <span>mermaidr</span>.",
-      "sample_explore_unavailable": "Demo sample events are unavailable to view in MERMAID Explore",
-      "success_deleted": "The demo project has been deleted. A demo project can be added again from the Projects dashboard.",
-      "teaser": "Learn the MERMAID platform with a demo project and optional tour guide",
-      "tryout": "Try a demo project"
+      "project_reporting": "The demo project is unavailable in MERMAID Explore and filtered by default in <span>mermaidr</span>.",
+      "sample_explore_unavailable": "Sample events from the demo project are unavailable in MERMAID Explore",
+      "success_deleted": "Demo project deleted. You can add it again from the Projects page.",
+      "teaser": "Explore how it works before creating your own and collecting real data.",
+      "tryout": "Try the demo project"
     },
     "edit_project_info": "Edit project info",
     "errors": {
