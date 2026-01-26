@@ -1,4 +1,5 @@
 import theme from '../../theme'
+import i18n from '../../../i18n'
 
 export const PAGE_SIZE_DEFAULT = 15
 export const DEFAULT_RECORDS_PER_PAGE = 1000
@@ -35,7 +36,7 @@ export const IMAGE_CLASSIFICATION_COLORS = {
 
 export const unclassifiedGuid = '00000000-0000-0000-0000-000000000000'
 
-export const PENDING_USER_PROFILE_NAME = '(pending user)'
+export const PENDING_USER_PROFILE_NAME = i18n.t('users.pending_user')
 
 export const VALID_IMAGE_TYPES = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
 export const MAX_IMAGE_UPLOAD_SIZE = 30 * 1024 * 1024 // 30 MB

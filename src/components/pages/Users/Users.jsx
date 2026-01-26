@@ -67,6 +67,20 @@ import { UserIcon } from '../../UserIcon/UserIcon'
 
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
 
+// Helper to normalize pending user name and extract parts
+const getDisplayNameParts = (profileName) => {
+  const displayName =
+    profileName === PENDING_USER_PROFILE_NAME
+      ? PENDING_USER_PROFILE_NAME.replace(/[()]/g, '').trim()
+      : profileName
+
+  const parts = displayName.split(' ')
+  const firstName = parts[0]
+  const lastName = parts.length > 1 ? parts[parts.length - 1] : undefined
+
+  return { displayName, firstName, lastName }
+}
+
 const Users = () => {
   const { t } = useTranslation()
   const roleLabels = useMemo(
@@ -293,18 +307,12 @@ const Users = () => {
         return fetchProjectProfiles().then(() => transferSampleUnitsResponse)
       })
       .then((transferSampleUnitsResponse) => {
-        const sampleUnitMsg = pluralize(
-          fromUser.num_active_sample_units,
-          'sample unit',
-          'sample units',
-        )
         const numRecordTransferred = transferSampleUnitsResponse.num_collect_records_transferred
 
         toast.success(
           ...getToastArguments(
             t('users.messages.sample_units_transferred', {
               count: numRecordTransferred,
-              units: sampleUnitMsg,
             }),
           ),
         )
@@ -780,14 +788,7 @@ function UsersTableSection({
         role,
         profile: userId,
       } = profile
-      const displayName =
-        profile_name === PENDING_USER_PROFILE_NAME
-          ? PENDING_USER_PROFILE_NAME.replace(/[()]/g, '').trim()
-          : profile_name ?? ''
-      const nameParts = displayName.split(' ')
-      const [firstName] = nameParts
-      const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : undefined
-
+      const { displayName, firstName, lastName } = getDisplayNameParts(profile_name)
       const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
       const isUserRoleReadOnly = getIsProjectProfileReadOnly(profile)
       const isCurrentUser = userId === currentUser.id
@@ -829,7 +830,7 @@ function UsersTableSection({
               lastName={lastName}
               dark={true}
             />{' '}
-            {profile_name}
+            {displayName}
           </NameCellStyle>
         ),
         email,

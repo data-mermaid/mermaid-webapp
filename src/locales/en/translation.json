@@ -920,6 +920,7 @@
     "introduction": "MERMAID gives you the ability to control who can see and access your data",
     "invite_new_user": "Invite new user",
     "learn_more_roles": "Learn more about user roles...",
+    "pending_user": "(pending user)",
     "messages": {
       "duplicate_user_error": "User has already been added to project",
       "enter_email": "Please enter an email address",
@@ -929,7 +930,8 @@
       "pending_user_added": "Sign-up email sent. New user added as pending user.",
       "role_changed_error": "{{userName}}'s role has not been changed",
       "role_changed_success": "{{userName}}'s role is now set to {{role}}",
-      "sample_units_transferred": "{{count}} {{units}} transferred",
+      "sample_units_transferred_one": "{{count}} sample unit transferred",
+      "sample_units_transferred_other": "{{count}} sample units transferred",
       "something_went_wrong": "Something went wrong",
       "user_removed": "User removed"
     },
