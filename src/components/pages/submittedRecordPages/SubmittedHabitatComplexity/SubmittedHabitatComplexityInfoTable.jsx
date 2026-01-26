@@ -51,10 +51,16 @@ const SubmittedHabitatComplexityInfoTable = ({
           title={t('sample_units.sample_date_time')}
           value={`${sample_date} ${sample_time || ''}`}
         />
-        <TableRowItem title={t('depth_m')} value={depth} />
+        <TableRowItem
+          title={`${t('sample_units.depth')} (${t('measurements.meter_short')})`}
+          value={depth}
+        />
         <TableRowItem title={t('transect_number')} value={number} />
         <TableRowItem title={t('label')} value={label} />
-        <TableRowItem title={t('transect_length_surveyed_m')} value={len_surveyed} />
+        <TableRowItem
+          title={`${t('sample_units.transect_length_surveyed')} (${t('measurements.meter_short')})`}
+          value={len_surveyed}
+        />
         <TableRowItem title={t('interval_size_m')} value={interval_size} />
         <TableRowItem title={t('reef_slope')} options={reefslopes.data} value={reef_slope} />
         <TableRowItem title={t('visibility')} options={visibilities.data} value={visibility} />

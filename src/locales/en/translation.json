@@ -428,6 +428,7 @@
     "classifier_guesses_one": "Model prediction",
     "classifier_guesses_other": "Model predictions",
     "confidence": "Confidence",
+    "confirmed_points": "Confirmed points",
     "confirmed_total": "Confirmed / total",
     "duplicate": "Duplicate",
     "errors": {
@@ -448,6 +449,8 @@
       "use_ai_button": "Classify photos with AI (Beta)",
       "use_manual_observations_button": "Enter observations manually"
     },
+    "image_upload_thumbnail": "Image upload thumbnail",
+    "photo": "Photo",
     "remove_photo": "Remove photo",
     "remove_photo_confirmation": "Are you sure you want to remove this photo?",
     "review_this_photo": "Review this photo",
@@ -459,6 +462,7 @@
       "file_upload_other": "Photos uploaded successfully"
     },
     "thumbnail": "Thumbnail",
+    "unconfirmed_points": "Unconfirmed points",
     "user_message": {
       "confirm_image_changes": "Are you sure you want to discard the change to this image?"
     },
@@ -558,12 +562,12 @@
     "zoom_to_point": "Zoom to point"
   },
   "measurements": {
+    "centimeter_short": "cm",
     "fewer": "Fewer",
     "greater": "Greater",
-    "centimeter": "cm",
-    "meter": "m",
-    "square_meter": "m²",
-    "kilogram_per_hectare": "kg/ha"
+    "kilogram_per_hectare_short": "kg/ha",
+    "meter_short": "m",
+    "square_meter_short": "m²"
   },
   "media": {
     "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
@@ -648,7 +652,6 @@
     "total_colonies": "Total number of colonies",
     "total_coral_genera": "Total number of coral genera"
   },
-  "observers_info": "Select one or more observers to add",
   "offline": {
     "page_unavailable_offline": "This page is unavailable offline",
     "unavailable_offline": "Unavailable offline"
@@ -705,12 +708,13 @@
     "delete_project": "Delete a project",
     "delete_sample_units_notice": "You must delete all the sample units in this project to delete this project.",
     "demo": {
+      "delete_notice": "You can add the demo project again from the Projects page.",
       "demo": "Demo project",
       "demo_project_reporting": "Data from this demo project will not be available in MERMAID Explore, and will be filtered by default by the R package <span>mermaidr</span>.",
       "explore_unavailable": "Demo projects are unavailable to view in MERMAID Explore",
       "name_restrictions": "Demo project name cannot be changed.",
       "sample_explore_unavailable": "Demo sample events are unavailable to view in MERMAID Explore",
-      "success_deleted": "The demo project has been deleted. A demo project can be added again from the Projects dashboard."
+      "success_deleted": "Demo project deleted. You can add it again from the Projects page."
     },
     "edit_project_info": "Edit project info",
     "errors": {
@@ -807,6 +811,7 @@
     "none": "No sample units",
     "not_submitted": "This sample unit is not submitted",
     "observers": "Observers",
+    "observers_info": "Select one or more observers to add",
     "protocol": "Protocol",
     "record": "Record",
     "sample_date": "Sample date",

@@ -83,7 +83,7 @@ const SubmittedFishBeltObservationTable = ({
               )})`}</TheadItem>
               <TheadItem align="right">{t('count')}</TheadItem>
               <TheadItem align="right">{`${t('biomass')} (${t(
-                'measurements.kilogram_per_hectare',
+                'measurements.kilogram_per_hectare_short',
               )})`}</TheadItem>
             </Tr>
           </thead>
