@@ -18,14 +18,14 @@ const PageUnavailable = ({
 }: PageUnavailableProps) => {
   if (children) {
     return (
-      <div className={styles['unavailable-cntnr']} data-testid={testId}>
+      <div className={styles['unavailable-container']} data-testid={testId}>
         {children}
       </div>
     )
   }
 
   return (
-    <div className={styles[`unavailable-cntnr--${align}`]} data-testid={testId}>
+    <div className={styles[`unavailable-container--${align}`]} data-testid={testId}>
       {mainText && <h3>{mainText}</h3>}
       {subText && <p>{subText}</p>}
     </div>

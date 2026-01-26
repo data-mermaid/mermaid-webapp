@@ -1,9 +1,9 @@
 @use '../../style/theme.scss' as *;
 @use '../../style/_mixins.scss' as *;
 
-.unavailable-cntnr {
+.unavailable-container {
+  @include column(start);
   padding-left: $spacing-large;
-  @include column();
   &--center {
     text-wrap: pretty;
     @include column(center);
