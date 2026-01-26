@@ -16,7 +16,7 @@ import { HelpTextWithIcon } from '../../generic/HelpTextWithIcon/HelpTextWithIco
 import { IconRefresh } from '../../icons'
 import { Textarea } from '../../generic/form'
 import Modal, { RightFooter } from '../../generic/Modal'
-import { PENDING_USER_PROFILE_NAME } from '../../../library/constants/constants'
+import { getPendingUserProfileName } from '../../../App/currentUserProfileHelpers'
 
 export const EditCitationModal = ({
   citationToUse,
@@ -50,7 +50,7 @@ export const EditCitationModal = ({
   const adminsString = admins.join(', ')
 
   const otherProjectMembers = projectProfiles
-    .filter((profile) => !profile.is_admin && profile.profile_name !== PENDING_USER_PROFILE_NAME)
+    .filter((profile) => !profile.is_admin && profile.profile_name !== getPendingUserProfileName())
     .map((profile) => profile.profile_name)
   const otherProjectMembersString = otherProjectMembers.join(', ')
 

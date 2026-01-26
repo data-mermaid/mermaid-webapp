@@ -2,6 +2,7 @@ import axios from '../library/axiosRetry'
 import language from '../language'
 import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
 import { userRole } from './mermaidData/userRole'
+import i18n from '../../i18n'
 
 const getUserName = (user) => {
   const { first_name, last_name, email } = user
@@ -132,3 +133,5 @@ export const getIsProjectProfileReadOnly = (profile) => profile.role === userRol
 export const getIsUserAdminForProject = (userProfile, projectId) => {
   return getProjectRole(userProfile, projectId) === userRole.admin
 }
+
+export const getPendingUserProfileName = () => i18n.t('users.pending_user')

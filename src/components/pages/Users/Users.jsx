@@ -58,7 +58,8 @@ import {
   getIsUserAdminForProject,
   getIsProjectProfileReadOnly,
 } from '../../../App/currentUserProfileHelpers'
-import { PENDING_USER_PROFILE_NAME, PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import { getPendingUserProfileName } from '../../../App/currentUserProfileHelpers'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { LabelContainer } from '../../generic/form'
 import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
@@ -70,9 +71,10 @@ const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_
 // Helper to normalize pending user name and extract parts
 const getDisplayNameParts = (profileName) => {
   const normalizedProfileName = profileName ?? ''
+  const pendingUserName = getPendingUserProfileName()
   const displayName =
-    normalizedProfileName === PENDING_USER_PROFILE_NAME
-      ? PENDING_USER_PROFILE_NAME.replace(/[()]/g, '').trim()
+    normalizedProfileName === pendingUserName
+      ? pendingUserName.replace(/[()]/g, '').trim()
       : normalizedProfileName
 
   const parts = displayName.split(' ')
