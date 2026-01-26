@@ -69,10 +69,11 @@ const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_
 
 // Helper to normalize pending user name and extract parts
 const getDisplayNameParts = (profileName) => {
+  const normalizedProfileName = profileName ?? ''
   const displayName =
-    profileName === PENDING_USER_PROFILE_NAME
+    normalizedProfileName === PENDING_USER_PROFILE_NAME
       ? PENDING_USER_PROFILE_NAME.replace(/[()]/g, '').trim()
-      : profileName
+      : normalizedProfileName
 
   const parts = displayName.split(' ')
   const firstName = parts[0]
