@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 const ThumbnailWrapper = styled.div`
   width: 150px;
@@ -15,9 +16,11 @@ const ThumbnailImage = styled.img`
 `
 
 const Thumbnail = ({ imageUrl }) => {
+  const { t } = useTranslation()
+
   return (
     <ThumbnailWrapper>
-      <ThumbnailImage src={imageUrl} alt="image-upload-thumbnail" />
+      <ThumbnailImage src={imageUrl} alt={t('image_classification.image_upload_thumbnail')} />
     </ThumbnailWrapper>
   )
 }

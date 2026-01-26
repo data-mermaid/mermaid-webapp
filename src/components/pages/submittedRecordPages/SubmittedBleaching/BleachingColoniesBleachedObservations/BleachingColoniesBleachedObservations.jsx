@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   choicesPropType,
   observationsColoniesBleachedPropType,
@@ -17,6 +18,7 @@ const BleachingColoniesBleachedObservations = ({
   choices,
   observationsColoniesBleached = [],
 }) => {
+  const { t } = useTranslation()
   const growthFormOptions = getOptions(choices.growthforms.data)
 
   const observationsBleaching = observationsColoniesBleached.map((item, index) => (
@@ -36,21 +38,21 @@ const BleachingColoniesBleachedObservations = ({
 
   return (
     <InputWrapper>
-      <FormSubTitle id="table-label">Observations</FormSubTitle>
+      <FormSubTitle id="table-label">{t('observations.observations')}</FormSubTitle>
       <StyledOverflowWrapper>
         <SubmittedObservationStickyTable>
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem align="right">Benthic Attribute</TheadItem>
-              <TheadItem align="right">Growth Form</TheadItem>
-              <TheadItem align="right">Normal</TheadItem>
-              <TheadItem align="right">Pale</TheadItem>
-              <TheadItem align="right">0-20% Bleached</TheadItem>
-              <TheadItem align="right">20-50% Bleached</TheadItem>
-              <TheadItem align="right">50-80% Bleached</TheadItem>
-              <TheadItem align="right">80-100% Bleached</TheadItem>
-              <TheadItem align="right">Recently dead</TheadItem>
+              <TheadItem align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
+              <TheadItem align="right">{t('observations.growth_form')}</TheadItem>
+              <TheadItem align="right">{t('observations.normal')}</TheadItem>
+              <TheadItem align="right">{t('observations.pale')}</TheadItem>
+              <TheadItem align="right">{t('observations.percent_0_20')}</TheadItem>
+              <TheadItem align="right">{t('observations.percent_20_50')}</TheadItem>
+              <TheadItem align="right">{t('observations.percent_50_80')}</TheadItem>
+              <TheadItem align="right">{t('observations.percent_80_100')}</TheadItem>
+              <TheadItem align="right">{t('observations.recently_dead')}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationsBleaching}</tbody>

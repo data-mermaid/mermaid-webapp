@@ -329,7 +329,7 @@ const FishBeltTransectInputs = ({
         />
 
         <InputWithLabelAndValidation
-          label={t('depth')}
+          label={t('sample_units.depth')}
           required={true}
           id="depth"
           unit="m"
@@ -345,10 +345,10 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.depth}
           onChange={handleDepthChange}
-          helperText={t('depth_info')}
+          helperText={t('sample_units.depth_info')}
         />
         <InputWithLabelAndValidation
-          label={t('transect_length_surveyed')}
+          label={t('sample_units.transect_length_surveyed')}
           required={true}
           id="len_surveyed"
           testId="len-surveyed"
@@ -369,7 +369,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
-          helperText={t('transect_length_info')}
+          helperText={t('sample_units.transect_length_surveyed_info')}
         />
         <InputSelectWithLabelAndValidation
           label={t('width')}

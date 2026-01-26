@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { bleachingRecordPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
@@ -20,6 +21,7 @@ const StyledColgroup = styled('colgroup')`
 `
 
 const BleachingPercentCoverObservations = ({ record = [] }) => {
+  const { t } = useTranslation()
   const observationRows = record?.obs_quadrat_benthic_percent.map(
     ({ id, percent_hard, percent_soft, percent_algae, quadrat_number }, index) => (
       <Tr key={id}>
@@ -34,7 +36,7 @@ const BleachingPercentCoverObservations = ({ record = [] }) => {
 
   return (
     <InputWrapper>
-      <FormSubTitle id="table-label">Summary of Observations</FormSubTitle>
+      <FormSubTitle id="table-label">{t('observations.summary_of_observations')}</FormSubTitle>
       <StyledOverflowWrapper>
         <SubmittedObservationStickyTable>
           <StyledColgroup>
@@ -47,10 +49,10 @@ const BleachingPercentCoverObservations = ({ record = [] }) => {
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem align="center">Quadrat</TheadItem>
-              <TheadItem align="right">Hard coral % cover</TheadItem>
-              <TheadItem align="right">Soft coral % cover</TheadItem>
-              <TheadItem align="right">Macroalgae % cover</TheadItem>
+              <TheadItem align="center">{t('observations.quadrat')}</TheadItem>
+              <TheadItem align="right">{t('observations.hard_coral_cover')}</TheadItem>
+              <TheadItem align="right">{t('observations.soft_coral_cover')}</TheadItem>
+              <TheadItem align="right">{t('observations.macroalgae_cover')}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationRows}</tbody>
@@ -62,7 +64,7 @@ const BleachingPercentCoverObservations = ({ record = [] }) => {
             <BleachingPercentCoverSummaryStats observations={record?.obs_quadrat_benthic_percent} />
           </>
         ) : (
-          'No observations listed'
+          t('observations.no_observations_listed')
         )}
       </UnderTableRow>
     </InputWrapper>
