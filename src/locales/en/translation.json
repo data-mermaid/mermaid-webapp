@@ -428,6 +428,7 @@
     "classifier_guesses_one": "Model prediction",
     "classifier_guesses_other": "Model predictions",
     "confidence": "Confidence",
+    "confirmed_points": "Confirmed points",
     "confirmed_total": "Confirmed / total",
     "duplicate": "Duplicate",
     "errors": {
@@ -448,6 +449,8 @@
       "use_ai_button": "Classify photos with AI (Beta)",
       "use_manual_observations_button": "Enter observations manually"
     },
+    "image_upload_thumbnail": "Image upload thumbnail",
+    "photo": "Photo",
     "remove_photo": "Remove photo",
     "remove_photo_confirmation": "Are you sure you want to remove this photo?",
     "review_this_photo": "Review this photo",
@@ -459,6 +462,7 @@
       "file_upload_other": "Photos uploaded successfully"
     },
     "thumbnail": "Thumbnail",
+    "unconfirmed_points": "Unconfirmed points",
     "user_message": {
       "confirm_image_changes": "Are you sure you want to discard the change to this image?"
     },
@@ -647,8 +651,6 @@
     "total_colonies": "Total number of colonies",
     "total_coral_genera": "Total number of coral genera"
   },
-  "observers": "Observers",
-  "observers_info": "Select one or more observers to add",
   "offline": {
     "page_unavailable_offline": "This page is unavailable offline",
     "unavailable_offline": "Unavailable offline"
@@ -808,6 +810,7 @@
     "none": "No sample units",
     "not_submitted": "This sample unit is not submitted",
     "observers": "Observers",
+    "observers_info": "Select one or more observers to add",
     "protocol": "Protocol",
     "record": "Record",
     "sample_date": "Sample date",
