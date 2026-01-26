@@ -92,15 +92,15 @@ const Projects = () => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
   const { currentUser, refreshCurrentUser, saveUserProfile } = useCurrentUser()
-  const hasUserDismissedDemo = currentUser.collect_state?.hasUserDismissedDemo ?? false
   const navigate = useNavigate()
   const { t } = useTranslation()
-
   const unavailableProjectsErrorText = t('projects.errors.data_unavailable')
-  useDocumentTitle(`${t('projects.projects')} - ${t('mermaid')}`)
 
-  const userHasDemoProject = projects.some((proj) => proj.is_demo === true)
+  useDocumentTitle(`${t('projects.projects')} - ${t('mermaid')}`)
   const userHasProjects = projects.length > 0
+
+  const hasUserDismissedDemo = currentUser.collect_state?.hasUserDismissedDemo ?? false
+  const userHasDemoProject = projects.some((proj) => proj.is_demo === true)
   const [isDemoCalloutVisible, setIsDemoCalloutVisible] = useState(
     !userHasDemoProject && isAppOnline && !hasUserDismissedDemo,
   )
