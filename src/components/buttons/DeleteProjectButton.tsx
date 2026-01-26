@@ -33,14 +33,17 @@ const DeleteProjectButton = ({
   const resolvedProjectName = projectName || t('projects.project')
 
   return isDemoProject ? (
-    <button
-      className={buttonStyles['button--caution']}
-      type="button"
-      onClick={deleteProject}
-      disabled={isLoading}
-    >
-      {t('projects.buttons.delete_demo')}
-    </button>
+    <>
+      <button
+        className={buttonStyles['button--caution']}
+        type="button"
+        onClick={deleteProject}
+        disabled={isLoading}
+      >
+        {t('projects.buttons.delete_demo')}
+      </button>
+      <p>{t('projects.demo.delete_notice')}</p>
+    </>
   ) : (
     <>
       <div className={buttonStyles['button--caution__wrapper']}>
