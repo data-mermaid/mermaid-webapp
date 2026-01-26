@@ -197,7 +197,7 @@ const BleachingTransectInputs = ({
           helperText={t('sample_units.sample_time_info')}
         />
         <InputWithLabelAndValidation
-          label={t('depth')}
+          label={t('sample_units.depth')}
           required={true}
           id="depth"
           ignoreNonObservationFieldValidations={() => {
@@ -213,7 +213,7 @@ const BleachingTransectInputs = ({
           value={formik.values.depth}
           onChange={handleDepthChange}
           unit="m"
-          helperText={t('depth_info')}
+          helperText={t('sample_units.depth_info')}
         />
         <InputWithLabelAndValidation
           label={t('quadrat_size')}

@@ -71,7 +71,7 @@ const Collect = () => {
   const managementRegimeText = t('management_regimes.management_regime')
   const sampleUnitNumberText = t('sample_units.sample_unit_number')
   const sizeText = t('sample_units.size')
-  const depthText = t('sample_units.depth_m')
+  const depthText = `${t('sample_units.depth')} (${t('measurements.meter_short')})`
   const sampleDateText = t('sample_units.sample_date')
   const observersText = t('sample_units.observers')
   const statusText = t('sample_units.status')

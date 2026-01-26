@@ -293,7 +293,7 @@ const BenthicPitTransectInputs = ({
           helperText={t('sample_units.sample_time_info')}
         />
         <InputWithLabelAndValidation
-          label={t('depth')}
+          label={t('sample_units.depth')}
           required={true}
           id="depth"
           ignoreNonObservationFieldValidations={() => {
@@ -309,10 +309,10 @@ const BenthicPitTransectInputs = ({
           value={formik.values.depth}
           onChange={handleDepthChange}
           unit="m"
-          helperText={t('depth_info')}
+          helperText={t('sample_units.depth_info')}
         />
         <InputWithLabelAndValidation
-          label={t('transect_length_surveyed')}
+          label={t('sample_units.transect_length_surveyed')}
           required={true}
           id="len_surveyed"
           testId="len-surveyed"
@@ -333,7 +333,7 @@ const BenthicPitTransectInputs = ({
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
           unit="m"
-          helperText={t('transect_length_info')}
+          helperText={t('sample_units.transect_length_surveyed_info')}
         />
         <InputWithLabelAndValidation
           label={t('observations.interval_size')}

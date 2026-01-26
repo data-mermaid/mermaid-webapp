@@ -60,7 +60,7 @@ const Submitted = () => {
   const managementRegimeHeaderText = t('management_regimes.management_regime')
   const sampleUnitNumberHeaderText = t('sample_units.sample_unit_number')
   const sizeHeaderText = t('sample_units.size')
-  const depthHeaderText = t('sample_units.depth_m')
+  const depthHeaderText = `${t('sample_units.depth')} (${t('measurements.meter_short')})`
   const sampleDateHeaderText = t('sample_units.sample_date')
   const observersHeaderText = t('sample_units.observers')
   const submittedRecordsUnavailableText = t('sample_units.errors.submitted_data_unavailable')
