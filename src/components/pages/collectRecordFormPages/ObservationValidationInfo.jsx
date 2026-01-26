@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { CellValidation, TableValidationList } from './CollectingFormPage.Styles'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
-import language from '../../../language'
+import { getValidationMessage } from '../../../library/validationMessageHelpers'
 
 const ObservationValidationInfo = ({
   ignoreObservationValidations,
@@ -38,7 +38,7 @@ const ObservationValidationInfo = ({
         <TableValidationList>
           {observationValidationMessages.map((validation) => (
             <li className={`${observationValidationType}-indicator`} key={validation.id}>
-              {language.getValidationMessage(validation)}
+              {getValidationMessage(validation)}
             </li>
           ))}
         </TableValidationList>
