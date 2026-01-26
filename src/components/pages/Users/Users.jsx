@@ -56,9 +56,8 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 import {
   getIsUserAdminForProject,
   getIsProjectProfileReadOnly,
-  getPendingUserProfileName,
 } from '../../../App/currentUserProfileHelpers'
-import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import { PAGE_SIZE_DEFAULT, PENDING_USER_PROFILE_NAME } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { LabelContainer } from '../../generic/form'
 import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
@@ -66,22 +65,6 @@ import UserRolesInfoModal from '../../UserRolesInfoModal'
 import { UserIcon } from '../../UserIcon/UserIcon'
 
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
-
-// Helper to normalize pending user name and extract parts
-const getDisplayNameParts = (profileName) => {
-  const normalizedProfileName = profileName ?? ''
-  const pendingUserName = getPendingUserProfileName()
-  const displayName =
-    normalizedProfileName === pendingUserName
-      ? pendingUserName.replace(/[()]/g, '').trim()
-      : normalizedProfileName
-
-  const parts = displayName.split(' ')
-  const firstName = parts[0]
-  const lastName = parts.length > 1 ? parts[parts.length - 1] : undefined
-
-  return { displayName, firstName, lastName }
-}
 
 const Users = () => {
   const { t } = useTranslation()
@@ -573,6 +556,7 @@ function UsersTableSection({
   const adminHeaderText = t('users.roles.admin')
   const collectorHeaderText = t('users.roles.collector')
   const readOnlyHeaderText = t('users.roles.read_only')
+  const pendingUserName = t('users.pending_user')
 
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
@@ -780,6 +764,16 @@ function UsersTableSection({
   }, [nameHeaderText, userRoleHeaderText])
 
   const tableCellDataForAdmin = useMemo(() => {
+    const getDisplayNameParts = (profileName) => {
+      const displayName = profileName === PENDING_USER_PROFILE_NAME ? pendingUserName : profileName
+
+      const parts = displayName.split(' ')
+      const firstName = parts[0]
+      const lastName = parts.length > 1 ? parts[parts.length - 1] : undefined
+
+      return { displayName, firstName, lastName }
+    }
+
     return observerProfiles.map((profile) => {
       const {
         id: projectProfileId,
@@ -885,6 +879,7 @@ function UsersTableSection({
     noSampleUnitsText,
     openTransferSampleUnitsModal,
     openRemoveUserModal,
+    pendingUserName,
   ])
 
   const tableCellDataForNonAdmin = useMemo(
