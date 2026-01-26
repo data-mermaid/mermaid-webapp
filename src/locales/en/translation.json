@@ -45,6 +45,7 @@
   "biomass": "Biomass",
   "buttons": {
     "add_row": "Add observation",
+    "add_user": "Add user",
     "back": "Back",
     "cancel": "Cancel",
     "close": "Close",
@@ -913,7 +914,6 @@
   "type": "Type",
   "use_interval_size_as_start": "Use Interval Size as Interval Start",
   "users": {
-    "add_user_button": "Add user",
     "add_user_email": "Enter email address of user to add",
     "delete_unsynced_sample_units": "Delete unsynced sample units",
     "delete_unsynced_warning": "If <strong>{{userName}}</strong> has any offline sample units that have not synced, they will be <strong>deleted</strong> once back online",

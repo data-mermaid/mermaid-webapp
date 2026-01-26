@@ -39,7 +39,7 @@ const CalloutButtonDropdown = ({
     refreshCurrentUser() // ensures correct user privileges
     toast.success(...getToastArguments(languageSuccessMessage))
     setIsLoading(false)
-    navigate(`/projects/${response.id}/sites`)
+    navigate(`/projects/${response.id}/project-info`)
   }
 
   const handleResponseError = (error: AxiosError) => {
