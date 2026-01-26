@@ -48,12 +48,12 @@ const SubmittedBleachingInfoTable = ({
           value={`${sample_date} ${sample_time || ''}`}
         />
         <TableRowItem
-          title={`${t('sample_units.depth')} (${t('measurements.meter')})`}
+          title={`${t('sample_units.depth')} (${t('measurements.meter_short')})`}
           value={depth}
         />
         <TableRowItem title={t('label')} value={label} />
         <TableRowItem
-          title={`${t('quadrat_size')} (${t('measurements.square_meter')})`}
+          title={`${t('quadrat_size')} (${t('measurements.square_meter_short')})`}
           value={quadrat_size}
         />
         <TableRowItem title={t('visibility')} options={visibilities.data} value={visibility} />

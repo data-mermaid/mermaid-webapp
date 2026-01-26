@@ -53,7 +53,7 @@ const HabitatComplexityObservationsTable = ({
 }) => {
   const { t } = useTranslation()
 
-  const metersShort = t('measurements.meter')
+  const metersShort = t('measurements.meter_short')
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)

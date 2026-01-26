@@ -53,18 +53,18 @@ const SubmittedBenthicPhotoQuadratInfoTable = ({
           value={`${sample_date} ${sample_time || ''}`}
         />
         <TableRowItem
-          title={`${t('sample_units.depth')} (${t('measurements.meter')})`}
+          title={`${t('sample_units.depth')} (${t('measurements.meter_short')})`}
           value={depth}
         />
         <TableRowItem title={t('transect_number')} value={number} />
         <TableRowItem title={t('label')} value={label} />
         <TableRowItem
-          title={`${t('sample_units.transect_length_surveyed')} (${t('measurements.meter')})`}
+          title={`${t('sample_units.transect_length_surveyed')} (${t('measurements.meter_short')})`}
           value={len_surveyed}
         />
         <TableRowItem title={t('observations.quadrat_number_start')} value={quadrat_number_start} />
         <TableRowItem
-          title={`${t('quadrat_size')} (${t('measurements.meter')}²)`}
+          title={`${t('quadrat_size')} (${t('measurements.meter_short')}²)`}
           value={quadrat_size}
         />
         <TableRowItem title={t('observations.number_of_quadrats')} value={num_quadrats} />

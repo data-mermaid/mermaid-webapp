@@ -560,9 +560,9 @@
   "measurements": {
     "fewer": "Fewer",
     "greater": "Greater",
-    "centimeter": "cm",
-    "meter": "m",
-    "square_meter": "m²"
+    "centimeter_short": "cm",
+    "meter_short": "m",
+    "square_meter_short": "m²"
   },
   "media": {
     "accepted_photo_types": "Accepted file types: .jpg, .jpeg, .png, .gif",
