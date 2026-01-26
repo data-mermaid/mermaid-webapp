@@ -36,7 +36,7 @@
   background: $white;
   cursor: pointer;
 
-  &:hover:not([disabled]),
+  &:hover,
   &:focus {
     outline: 2px solid $primary;
   }
@@ -56,9 +56,35 @@
   width: $default-width;
   max-width: $max-width;
   background: $white;
-  display: flex;
+  display: block;
+  position: relative;
   justify-content: space-between;
   align-items: center;
+
+  & button {
+    display: block;
+    margin: $spacing-medium auto 0;
+
+    @media (min-width: $tablet-landscape-break) {
+      display: inline-block;
+      margin: 0;
+    }
+  }
+  & button:nth-child(2) {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: $spacing-medium;
+    @media (min-width: $tablet-landscape-break) {
+      position: relative;
+      display: inline-block;
+      right: 0;
+    }
+  }
+
+  @media (min-width: $tablet-landscape-break) {
+    display: flex;
+  }
   h2 {
     margin-block-start: 0;
   }

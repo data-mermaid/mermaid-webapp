@@ -1,20 +1,31 @@
 @use '../../style/theme.scss' as *;
 @use '../../style/_mixins.scss' as *;
 
+@mixin unavailable-container {
+  padding-left: $spacing-large;
+  @media (max-width: $tablet-landscape-break) {
+    padding: 0 $spacing-large;
+  }
+}
 .unavailable-container {
   @include column(start);
-  padding-left: $spacing-large;
+  @include unavailable-container;
+
   &--center {
-    text-wrap: pretty;
     @include column(center);
+    @include unavailable-container;
+    text-wrap: pretty;
   }
   &--start {
     @include column(start);
+    @include unavailable-container;
   }
   &--end {
     @include column(end);
+    @include unavailable-container;
   }
   &--justify {
     @include column(justify);
+    @include unavailable-container;
   }
 }
