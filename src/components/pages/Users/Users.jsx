@@ -25,7 +25,6 @@ import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodesSecondChild,
 } from '../../generic/Table/reactTableNaturalSort'
-import { pluralize } from '../../../library/strings/pluralize'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
   Tr,
@@ -57,8 +56,8 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 import {
   getIsUserAdminForProject,
   getIsProjectProfileReadOnly,
+  getPendingUserProfileName,
 } from '../../../App/currentUserProfileHelpers'
-import { getPendingUserProfileName } from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { LabelContainer } from '../../generic/form'

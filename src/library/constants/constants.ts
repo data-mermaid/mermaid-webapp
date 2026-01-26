@@ -1,5 +1,4 @@
 import theme from '../../theme'
-import i18n from '../../../i18n'
 
 export const PAGE_SIZE_DEFAULT = 15
 export const DEFAULT_RECORDS_PER_PAGE = 1000
