@@ -20,7 +20,7 @@ const Thumbnail = ({ imageUrl }) => {
 
   return (
     <ThumbnailWrapper>
-      <ThumbnailImage src={imageUrl} alt={t('media.image_upload_thumbnail')} />
+      <ThumbnailImage src={imageUrl} alt={t('image_classification.image_upload_thumbnail')} />
     </ThumbnailWrapper>
   )
 }

@@ -114,7 +114,7 @@ const TableHeaderRow = ({ areValidationsShowing }: { areValidationsShowing: bool
       id: 'number-label',
       text: '#',
     },
-    { align: 'center', id: 'photo-label', text: t('observations.photo') },
+    { align: 'center', id: 'photo-label', text: t('image_classification.photo') },
     { align: 'right', id: 'quadrat-number-label', text: t('observations.quadrat') },
     {
       align: 'left',
@@ -125,12 +125,12 @@ const TableHeaderRow = ({ areValidationsShowing }: { areValidationsShowing: bool
     {
       align: 'right',
       id: 'confirmed-points',
-      text: t('observations.confirmed_points'),
+      text: t('image_classification.confirmed_points'),
     },
     {
       align: 'right',
       id: 'unconfirmed-points',
-      text: t('observations.unconfirmed_points'),
+      text: t('image_classification.unconfirmed_points'),
     },
     { align: 'left', id: 'validations', text: t('validations') },
     { align: 'center', id: 'review', text: '' },

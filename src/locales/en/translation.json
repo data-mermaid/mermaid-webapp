@@ -431,6 +431,7 @@
     "classifier_guesses_one": "Model prediction",
     "classifier_guesses_other": "Model predictions",
     "confidence": "Confidence",
+    "confirmed_points": "Confirmed points",
     "confirmed_total": "Confirmed / total",
     "duplicate": "Duplicate",
     "errors": {
@@ -451,6 +452,8 @@
       "use_ai_button": "Classify photos with AI (Beta)",
       "use_manual_observations_button": "Enter observations manually"
     },
+    "image_upload_thumbnail": "Image upload thumbnail",
+    "photo": "Photo",
     "remove_photo": "Remove photo",
     "remove_photo_confirmation": "Are you sure you want to remove this photo?",
     "review_this_photo": "Review this photo",
@@ -462,6 +465,7 @@
       "file_upload_other": "Photos uploaded successfully"
     },
     "thumbnail": "Thumbnail",
+    "unconfirmed_points": "Unconfirmed points",
     "user_message": {
       "confirm_image_changes": "Are you sure you want to discard the change to this image?"
     },
@@ -573,7 +577,6 @@
     "errors": {
       "failed_upload": "Failed to upload {{fileName}}"
     },
-    "image_upload_thumbnail": "Image upload thumbnail",
     "max_file_size": "Maximum file size is {{fileSize}} MB",
     "min_image_size": "Photos must be larger than {{imgWidthHeight}} x {{imgWidthHeight}} pixels",
     "put_files_here": "Drop files here <br> or <br>",
@@ -606,7 +609,6 @@
     "avg_soft_coral_cover": "Avg Soft Coral Cover %",
     "bleaching_severity": "Bleaching severity",
     "colonies_bleached": "Observations - Colonies Bleached",
-    "confirmed_points": "Confirmed points",
     "growth_form": "Growth form",
     "growth_form_info": "Growth form of the observed benthic attribute. Only choose a growth form if it is relevant to the benthic attribute (e.g. Acropora branching).",
     "hard_coral_cover": "Hard coral % cover",
@@ -637,7 +639,6 @@
     "percent_cover": "Observations - Percent Cover",
     "percent_normal_colonies": "% Normal colonies",
     "percent_pale_colonies": "% Pale colonies",
-    "photo": "Photo",
     "quadrat": "Quadrat",
     "quadrat_info": "Number of quadrat/photo in transect (e.g. 1).",
     "quadrat_number_start": "Quadrat number start",
@@ -646,8 +647,7 @@
     "soft_coral_cover": "Soft coral % cover",
     "soft_coral_cover_info": "Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).",
     "total_colonies": "Total number of colonies",
-    "total_coral_genera": "Total number of coral genera",
-    "unconfirmed_points": "Unconfirmed points"
+    "total_coral_genera": "Total number of coral genera"
   },
   "offline": {
     "page_unavailable_offline": "This page is unavailable offline",
