@@ -151,6 +151,7 @@ const SiteForm = ({
           <InputAutocomplete
             id="country"
             aria-labelledby="country-label"
+            data-testid="country-input"
             options={countryOptions}
             value={formik.values.country}
             noResultsText={t('search.no_results')}
@@ -162,6 +163,7 @@ const SiteForm = ({
           <InputValidationInfo
             validationType={formik.errors.country && formik.touched.country ? 'error' : null}
             validationMessages={formik.errors.country}
+            testId="country-validation"
           />
         </InputRow>
         <InputWithLabelAndValidation
@@ -245,6 +247,7 @@ const SiteForm = ({
           id="exposure"
           required={true}
           options={exposureOptions}
+          testId="exposure"
           {...formik.getFieldProps('exposure')}
           validationType={formik.errors.exposure && formik.touched.exposure ? 'error' : null}
           validationMessages={formik.errors.exposure}
@@ -254,6 +257,7 @@ const SiteForm = ({
           id="reef_type"
           required={true}
           options={reefTypeOptions}
+          testId="reef-type"
           {...formik.getFieldProps('reef_type')}
           validationType={formik.errors.reef_type && formik.touched.reef_type ? 'error' : null}
           validationMessages={formik.errors.reef_type}
@@ -277,6 +281,7 @@ const SiteForm = ({
           id="reef_zone"
           required={true}
           options={reefZoneOptions}
+          testId="reef-zone"
           {...formik.getFieldProps('reef_zone')}
           validationType={formik.errors.reef_zone && formik.touched.reef_zone ? 'error' : null}
           validationMessages={formik.errors.reef_zone}
@@ -298,6 +303,7 @@ const SiteForm = ({
         <TextareaWithLabelAndValidation
           label={t('notes')}
           id="notes"
+          testId="notes"
           {...formik.getFieldProps('notes')}
         />
       </InputWrapper>
@@ -437,15 +443,22 @@ const Site = ({ isNewSite }) => {
       databaseSwitchboardInstance
         .saveSite({ site: formattedSiteForApi, projectId })
         .then((response) => {
-          toast.success(
-            ...getToastArguments(
-              isAppOnline
-                ? t('toasts.mermaid_data_save_success_online', { dataType: mermaidDataTypeLabel })
-                : t('toasts.mermaid_data_save_success_offline', {
-                    dataType: mermaidDataTypeLabel,
-                  }),
-            ),
+          const [toastMessage, toastOptions] = getToastArguments(
+            isAppOnline
+              ? t('toasts.mermaid_data_save_success_online', {
+                  dataType: mermaidDataTypeLabel,
+                })
+              : t('toasts.mermaid_data_save_success_offline', {
+                  dataType: mermaidDataTypeLabel,
+                }),
           )
+          const toastContent = isAppOnline ? (
+            <div data-testid="site-toast-success">{toastMessage}</div>
+          ) : (
+            <div data-testid="site-toast-offline-success">{toastMessage}</div>
+          )
+
+          toast.success(toastContent, toastOptions)
           clearPersistedUnsavedFormikData()
           setSaveButtonState(buttonGroupStates.saved)
           setIsFormDirty(false)
@@ -667,7 +680,11 @@ const Site = ({ isNewSite }) => {
       content={contentViewByRole}
       toolbar={
         <ContentPageToolbarWrapper>
-          {isNewSite ? <H2>{siteTitleText}</H2> : <H2>{formik.values.name}</H2>}
+          {isNewSite ? (
+            <H2 data-testid="new-site-form-title">{siteTitleText}</H2>
+          ) : (
+            <H2 data-testid="edit-site-form-title">{formik.values.name}</H2>
+          )}
           {!isReadOnlyUser && (
             <SaveButton
               formId="site-form"
