@@ -65,9 +65,6 @@
     "view": "Lihat"
   },
   "choose": "Pilih...",
-  "inputs": {
-    "select_placeholder": "Pilih..."
-  },
   "citation": {
     "citation_preview": "Pratinjau Kutipan",
     "copy_and_paste": "Salin dan tempelkan info proyek ke dalam kutipan Anda",
