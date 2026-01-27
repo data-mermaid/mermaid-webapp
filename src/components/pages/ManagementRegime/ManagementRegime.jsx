@@ -17,6 +17,7 @@ import {
 import { getManagementRegimeInitialValues } from './managementRegimeFormInitialValues'
 import { getOptions } from '../../../library/getOptions'
 import { getToastArguments } from '../../../library/getToastArguments'
+import { getDeleteModalText } from '../../../library/getDeleteModalText'
 import { H2, ItalicizedInfo } from '../../generic/text'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import { InputWrapper } from '../../generic/form'
@@ -238,38 +239,10 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const managementRegimeTitleText = t('management_regimes.management_regime')
-  const managementRegimeToastLabelText = t('management_regimes.management_regime').toLowerCase()
+  const managementRegimeTitleLowerCaseText = managementRegimeTitleText.toLowerCase()
   const managementRegimeRecordUnavailableText = t('management_regimes.data_unavailable')
-  const notReportedLabelText = t('management_regimes.not_reported')
-  const saveSuccessOnlineText = t('toasts.mermaid_data_save_success_online', {
-    dataType: managementRegimeToastLabelText,
-  })
-  const saveSuccessOfflineText = t('toasts.mermaid_data_save_success_offline', {
-    dataType: managementRegimeToastLabelText,
-  })
-  const saveOnlineSyncErrorTitle = t('toasts.mermaid_data_save_online_sync_error', {
-    dataType: managementRegimeToastLabelText,
-  })
-  const saveOfflineErrorTitle = t('toasts.mermaid_data_save_offline_error', {
-    dataType: managementRegimeToastLabelText,
-  })
-  const deleteSyncErrorTitle = t('toasts.mermaid_data_delete_sync_error', {
-    dataType: managementRegimeToastLabelText,
-  })
-  const deleteSuccessText = t('toasts.mermaid_data_delete_success', {
-    dataType: managementRegimeToastLabelText,
-  })
-  const readOnlyPageText = t('page.read_only')
-  const nonAdminDeleteText = t('management_regimes.only_admin_delete')
-  const deleteModalText = {
-    title: t('management_regimes.delete_management_regime'),
-    prompt: t('management_regimes.confirm_delete'),
-    yes: t('management_regimes.delete_management_regime'),
-    no: t('buttons.cancel'),
-    confirmDeleteText1: t('management_regimes.cannot_delete'),
-    confirmDeleteText2: t('management_regimes.have_to_remove'),
-  }
-  const appTitleText = t('mermaid')
+  const notReportedCompliance = t('management_regimes.not_reported_compliance')
+  const deleteModalText = getDeleteModalText(managementRegimeTitleText)
 
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -324,7 +297,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
 
             const sortedManagementComplianceOptions = sortManagementComplianceChoices([
               ...getOptions(choicesResponse.managementcompliances.data),
-              { label: notReportedLabelText, value: '' },
+              { label: notReportedCompliance, value: '' },
             ])
 
             setManagementPartyOptions(getOptions(choicesResponse.managementparties.data))
@@ -351,7 +324,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     projectId,
     handleHttpResponseError,
     managementRegimeRecordUnavailableText,
-    notReportedLabelText,
+    notReportedCompliance,
   ])
 
   const {
@@ -411,7 +384,13 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
         .then((response) => {
           const [toastMessage, toastOptions] = getToastArguments(
-            isAppOnline ? saveSuccessOnlineText : saveSuccessOfflineText,
+            isAppOnline
+              ? t('toasts.mermaid_data_save_success_online', {
+                  dataType: managementRegimeTitleLowerCaseText,
+                })
+              : t('toasts.mermaid_data_save_success_offline', {
+                  dataType: managementRegimeTitleLowerCaseText,
+                }),
           )
           const toastContent = isAppOnline ? (
             <div data-testid="management-regime-toast-success">{toastMessage}</div>
@@ -435,7 +414,9 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
 
           if (isSyncError && isAppOnline) {
             showSyncToastError({
-              toastTitle: saveOnlineSyncErrorTitle,
+              toastTitle: t('toasts.mermaid_data_save_online_sync_error', {
+                dataType: managementRegimeTitleLowerCaseText,
+              }),
               error,
               testId: 'management-regime-toast-error',
             })
@@ -450,7 +431,11 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
             console.error(error)
             toast.error(
               ...getToastArguments(
-                <div data-testid="management-regime-toast-error">{saveOfflineErrorTitle}</div>,
+                <div data-testid="management-regime-toast-error">
+                  {t('toasts.mermaid_data_save_offline_error', {
+                    dataType: managementRegimeTitleLowerCaseText,
+                  })}
+                </div>,
               ),
             )
           }
@@ -486,7 +471,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     },
   })
 
-  useDocumentTitle(`${managementRegimeTitleText} - ${formik.values.name} - ${appTitleText}`)
+  useDocumentTitle(`${managementRegimeTitleText} - ${formik.values.name} - ${t('mermaid')}`)
 
   const _setSaveButtonUnsaved = useEffect(() => {
     if (isFormDirty) {
@@ -509,7 +494,13 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         clearPersistedUnsavedFormikData()
         closeDeleteRecordModal()
         setIsDeletingRecord(false)
-        toast.success(...getToastArguments(deleteSuccessText))
+        toast.success(
+          ...getToastArguments(
+            t('toasts.mermaid_data_delete_success', {
+              dataType: managementRegimeTitleLowerCaseText,
+            }),
+          ),
+        )
         navigate(`${ensureTrailingSlash(currentProjectPath)}management-regimes/`)
       })
       .catch((error) => {
@@ -517,7 +508,9 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
 
         if (isSyncError && !isDeleteRejectedError) {
           showSyncToastError({
-            toastTitle: deleteSyncErrorTitle,
+            toastTitle: t('toasts.mermaid_data_delete_sync_error', {
+              dataType: managementRegimeTitleLowerCaseText,
+            }),
             error,
             testId: 'management-regime-toast-error',
           })
@@ -542,7 +535,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewManagementRegime
 
   const contentViewByReadOnlyRole = isNewManagementRegime ? (
-    <PageUnavailable mainText={readOnlyPageText} />
+    <PageUnavailable mainText={t('page.read_only')} />
   ) : (
     <ReadOnlyManagementRegimeContent
       managementRegimeFormikValues={formik.values}
@@ -575,7 +568,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       ) : null}
       {!isAdminUser && isAppOnline ? (
         <DeleteRecordButtonCautionWrapper>
-          <ItalicizedInfo>{nonAdminDeleteText}</ItalicizedInfo>
+          <ItalicizedInfo>{t('management_regimes.only_admin_delete')}</ItalicizedInfo>
         </DeleteRecordButtonCautionWrapper>
       ) : null}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
