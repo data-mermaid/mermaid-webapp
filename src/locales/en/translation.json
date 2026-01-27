@@ -77,6 +77,9 @@
     "view": "View"
   },
   "choose": "Choose",
+  "inputs": {
+    "select_placeholder": "Choose..."
+  },
   "citation": {
     "citation_preview": "Citation preview",
     "copy_and_paste": "Copy and paste project info into your citation",

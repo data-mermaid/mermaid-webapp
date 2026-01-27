@@ -2,10 +2,6 @@
 import React from 'react'
 import { HelperTextLink } from './components/generic/links'
 
-const placeholders = {
-  select: 'Choose...',
-}
-
 const inlineMessage = {
   ignore: 'ignored',
   warning: 'warning',
@@ -446,7 +442,6 @@ export default {
   map,
   navigateAwayPrompt,
   pages,
-  placeholders,
   protocolTitles,
   success,
   table,
