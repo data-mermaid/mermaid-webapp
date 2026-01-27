@@ -130,7 +130,6 @@ InputNoRowWithLabelAndValidation.propTypes = {
   validationType: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func,
-  testId: PropTypes.string,
 }
 
 export default InputNoRowWithLabelAndValidation
