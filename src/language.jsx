@@ -2,12 +2,6 @@
 import React from 'react'
 import { HelperTextLink } from './components/generic/links'
 
-const inlineMessage = {
-  ignore: 'ignored',
-  warning: 'warning',
-  error: 'error',
-}
-
 const apiDataTableNames = {
   benthic_attributes: 'benthic attributes',
   collect_records: 'unsubmitted sample units',
@@ -437,7 +431,6 @@ export default {
   getResolveModalLanguage,
   header,
   helperText,
-  inlineMessage,
   loadingIndicator,
   map,
   navigateAwayPrompt,

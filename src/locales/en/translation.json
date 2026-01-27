@@ -77,9 +77,6 @@
     "view": "View"
   },
   "choose": "Choose",
-  "inputs": {
-    "select_placeholder": "Choose..."
-  },
   "citation": {
     "citation_preview": "Citation preview",
     "copy_and_paste": "Copy and paste project info into your citation",
@@ -151,6 +148,7 @@
   "delete_sites_regimes": "Delete sites or management regimes",
   "download_sites_regimes": "Export sites and management regimes",
   "email": "Email",
+  "error": "error",
   "errors": {
     "summary_data_unavailable": "Summary data is currently unavailable"
   },
@@ -483,6 +481,7 @@
   },
   "in_collecting_with": "In Collecting with:",
   "info": "info",
+  "ignore": "ignored",
   "label": "Label",
   "label_info": "Arbitrary text to distinguish sample units that are distinct but should be combined analytically (i.e. all other properties are identical). For example: Long swim. Rarely used.",
   "languages": {
@@ -1035,6 +1034,7 @@
   "view_selected_only": "View selected only",
   "visibility": "Visibility",
   "visibility_info": "The horizontal distance at which an object underwater can still be identified",
+  "warning": "warning",
   "width": "Width",
   "width_info": "The total width (NOT width to one side of the tape) of the fish belt transect, in meters",
   "yes": "Yes"

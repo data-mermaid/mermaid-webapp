@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import language from '../../../language'
+import { useTranslation } from 'react-i18next'
 import theme from '../../../theme'
 import { MessageType } from '../../../types/constants'
 
@@ -45,11 +45,13 @@ const InlineMessage = ({
   children,
   className = undefined,
 }: InlineMessageProps) => {
+  const { t } = useTranslation()
+
   return (
     <>
       {type && (
         <MessagePill type={type} className={className}>
-          {language.inlineMessage[type]}
+          {t(`${type}`)}
         </MessagePill>
       )}
       <InlineMessageWrapper className={className} data-testid={`inline-message-${type}`}>
