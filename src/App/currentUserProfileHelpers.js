@@ -2,6 +2,8 @@ import axios from '../library/axiosRetry'
 import language from '../language'
 import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
 import { userRole } from './mermaidData/userRole'
+import i18next from '../../i18n'
+import { PENDING_USER_PROFILE_NAME } from '../library/constants/constants'
 
 const getUserName = (user) => {
   const { first_name, last_name, email } = user
@@ -131,4 +133,16 @@ export const getIsProjectProfileReadOnly = (profile) => profile.role === userRol
 
 export const getIsUserAdminForProject = (userProfile, projectId) => {
   return getProjectRole(userProfile, projectId) === userRole.admin
+}
+
+export const getDisplayNameParts = (profileName) => {
+  const displayName =
+    profileName === PENDING_USER_PROFILE_NAME ? i18next.t('users.pending_user') : profileName
+
+  const sanitizedDisplayName = displayName.replace(/[()]/g, '').trim() // Remove parentheses for (pending user) when displaying first and last name in User Icon
+  const parts = sanitizedDisplayName.split(' ')
+  const firstName = parts[0]
+  const lastName = parts.length > 1 ? parts[parts.length - 1] : undefined
+
+  return { displayName, firstName, lastName }
 }

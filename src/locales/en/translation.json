@@ -920,7 +920,7 @@
     "introduction": "MERMAID gives you the ability to control who can see and access your data",
     "invite_new_user": "Invite new user",
     "learn_more_roles": "Learn more about user roles...",
-    "pending_user": "pending user",
+    "pending_user": "(pending user)",
     "messages": {
       "duplicate_user_error": "User has already been added to project",
       "enter_email": "Please enter an email address",

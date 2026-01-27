@@ -56,6 +56,7 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 import {
   getIsUserAdminForProject,
   getIsProjectProfileReadOnly,
+  getDisplayNameParts,
 } from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT, PENDING_USER_PROFILE_NAME } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
@@ -556,7 +557,6 @@ function UsersTableSection({
   const adminHeaderText = t('users.roles.admin')
   const collectorHeaderText = t('users.roles.collector')
   const readOnlyHeaderText = t('users.roles.read_only')
-  const pendingUserName = t('users.pending_user')
 
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
@@ -764,16 +764,6 @@ function UsersTableSection({
   }, [nameHeaderText, userRoleHeaderText])
 
   const tableCellDataForAdmin = useMemo(() => {
-    const getDisplayNameParts = (profileName) => {
-      const displayName = profileName === PENDING_USER_PROFILE_NAME ? pendingUserName : profileName
-
-      const parts = displayName.split(' ')
-      const firstName = parts[0]
-      const lastName = parts.length > 1 ? parts[parts.length - 1] : undefined
-
-      return { displayName, firstName, lastName }
-    }
-
     return observerProfiles.map((profile) => {
       const {
         id: projectProfileId,
@@ -879,7 +869,6 @@ function UsersTableSection({
     noSampleUnitsText,
     openTransferSampleUnitsModal,
     openRemoveUserModal,
-    pendingUserName,
   ])
 
   const tableCellDataForNonAdmin = useMemo(
