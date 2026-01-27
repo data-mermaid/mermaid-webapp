@@ -58,7 +58,7 @@ import {
   getIsProjectProfileReadOnly,
   getDisplayNameParts,
 } from '../../../App/currentUserProfileHelpers'
-import { PAGE_SIZE_DEFAULT, PENDING_USER_PROFILE_NAME } from '../../../library/constants/constants'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { LabelContainer } from '../../generic/form'
 import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
