@@ -60,13 +60,13 @@ const SubmittedFishBeltInfoTable = ({
           value={`${sample_date} ${sample_time || ''}`}
         />
         <TableRowItem
-          title={`${t('sample_units.depth')} (${t('measurements.meter')})`}
+          title={`${t('sample_units.depth')} (${t('measurements.meter_short')})`}
           value={depth}
         />
         <TableRowItem title={t('sample_units.transect_number')} value={number} />
         <TableRowItem title={t('label')} value={label} />
         <TableRowItem
-          title={`${t('sample_units.transect_length_surveyed')} (${t('measurements.meter')})`}
+          title={`${t('sample_units.transect_length_surveyed')} (${t('measurements.meter_short')})`}
           value={len_surveyed}
         />
         <TableRowItem title={t('width')} options={belttransectwidths.data} value={width} />
