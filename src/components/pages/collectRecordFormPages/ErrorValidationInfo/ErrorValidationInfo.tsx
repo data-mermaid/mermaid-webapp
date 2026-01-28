@@ -29,7 +29,7 @@ const ValidationTable = styled.table`
 
 const ValidationTableRow = styled.tr`
   border-bottom: 1px solid ${theme.color.border};
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -38,7 +38,7 @@ const ValidationTableRow = styled.tr`
 const ValidationTableCell = styled.td`
   padding: ${theme.spacing.small} ${theme.spacing.medium};
   vertical-align: middle;
-  
+
   &:first-child {
     width: 30px;
   }
@@ -51,7 +51,7 @@ const IconCell = styled(ValidationTableCell)`
 
 const MessageCell = styled(ValidationTableCell)`
   flex: 1;
-  
+
   p {
     margin: 0;
     font-size: inherit;
@@ -69,10 +69,7 @@ const checkScrollToObservation = (validationInfo: RecordValidationInfo): boolean
   return validationStatusNotOkay && observationTableValidationMessages
 }
 
-const ErrorValidationInfo = ({
-  areValidationsShowing,
-  validations,
-}: ErrorValidationInfoProps) => {
+const ErrorValidationInfo = ({ areValidationsShowing, validations }: ErrorValidationInfoProps) => {
   const { projectId } = useParams()
 
   // Filter to only error-level validations that are not observation-related

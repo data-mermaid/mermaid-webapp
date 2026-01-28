@@ -19,5 +19,6 @@ const RECORD_STATUS_BACKGROUND_COLORS = {
 
 export const TrCollectRecordStatus = styled(Tr)`
   border-left: 4px solid ${({ $recordStatusLabel }) => RECORD_STATUS_COLORS[$recordStatusLabel]};
-  background-color: ${({ $recordStatusLabel }) => RECORD_STATUS_BACKGROUND_COLORS[$recordStatusLabel]};
+  background-color: ${({ $recordStatusLabel }) =>
+    RECORD_STATUS_BACKGROUND_COLORS[$recordStatusLabel]};
 `

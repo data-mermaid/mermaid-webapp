@@ -199,7 +199,7 @@ export const ErrorTextSubmit = styled(ErrorText)`
   display: flex;
   gap: ${theme.spacing.xsmall};
   align-items: center;
-  
+
   &:after {
     display: none;
   }
@@ -229,7 +229,9 @@ export const ErrorBox = styled.div`
 `
 export const ErrorBoxSubmit = styled(ErrorBox)`
   position: fixed;
-  top: calc(${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + ${theme.spacing.small});
+  top: calc(
+    ${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + ${theme.spacing.small}
+  );
   left: 50%;
   transform: translateX(-50%);
   right: auto;

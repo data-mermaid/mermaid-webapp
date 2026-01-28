@@ -11,7 +11,7 @@ import {
   observersValidationPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputMuiChipSelectWithLabelAndValidation from '../../../mermaidInputs/InputMuiChipSelectWithLabelAndValidation/InputMuiChipSelectWithLabelAndValidation'
+import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation/InputSelectWithLabelAndValidation'
 import { ButtonThatLooksLikeLinkUnderlined } from '../../../generic/buttons'
 
 import theme from '../../../../theme'
@@ -55,8 +55,9 @@ const ObserversInput = ({
 
   useEffect(
     function updateObserversNoLongerOnProject() {
+      const currentObservers = formik?.values?.observers ?? []
       setIncludedObserversNoLongerOnProject(
-        formik?.values?.observers.filter((observer) => {
+        currentObservers.filter((observer) => {
           const doesUserBelongToProject = !!usersBelongingToProject.find(
             (belongingUser) => belongingUser.profile === observer.profile,
           )
@@ -74,17 +75,18 @@ const ObserversInput = ({
     areValidationsShowing,
   )
   const observerNameOptions = getObserverNameOptions(usersBelongingToProject)
-  const observerNameValues = formik.values.observers?.map(({ profile }) => profile) ?? []
+  const observerNameValue = formik.values.observers?.[0]?.profile ?? ''
 
-  const getSelectedObservers = (observerIds) =>
-    usersBelongingToProject.filter(({ profile }) =>
-      !observerIds ? undefined : observerIds.includes(profile),
-    )
-
-  const handleObserversChange = (selectedItems) => {
-    const selectedObservers = getSelectedObservers(selectedItems)
-
-    formik.setFieldValue('observers', [...selectedObservers, ...includedObserversNoLongerOnProject])
+  const handleObserversChange = (event) => {
+    const selectedProfile = event.target.value
+    if (selectedProfile) {
+      const selectedObserver = usersBelongingToProject.find(
+        ({ profile }) => profile === selectedProfile,
+      )
+      formik.setFieldValue('observers', [selectedObserver])
+    } else {
+      formik.setFieldValue('observers', [])
+    }
     resetNonObservationFieldValidations({
       validationPath,
     })
@@ -101,12 +103,7 @@ const ObserversInput = ({
   }
 
   const handleRemoveObserverWhoIsNoLongerOnProject = () => {
-    const observersWithOneRemoved = formik.values.observers.filter(
-      (observer) =>
-        observer.profile !== observerRemovedFromProjectToRemoveFromCollectRecord.profile,
-    )
-
-    formik.setFieldValue('observers', observersWithOneRemoved)
+    formik.setFieldValue('observers', [])
     resetNonObservationFieldValidations({
       validationPath,
     })
@@ -117,12 +114,12 @@ const ObserversInput = ({
     <>
       <InputWrapper {...restOfProps}>
         <H2>{t('observers')}</H2>
-        <InputMuiChipSelectWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label={t('observers')}
           required={true}
           id="observers"
           options={observerNameOptions}
-          value={observerNameValues}
+          value={observerNameValue}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath })
           }}
@@ -130,31 +127,31 @@ const ObserversInput = ({
             resetNonObservationFieldValidations({ validationPath })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(validationProperties, 'observers')}
-          onChange={({ selectedItems }) => handleObserversChange(selectedItems)}
-          additionalInputContent={
-            <AdditionalInputContentWrapper data-testid="removed-observer-warning">
-              <label htmlFor="Observers">{t('observers_info')}</label>
-              <ul>
-                {includedObserversNoLongerOnProject.map((removedObserver) => (
-                  <li key={removedObserver.id}>
-                    <>
-                      {t('removed_from_project_message', {
-                        userName: getObserverNameToUse(removedObserver),
-                      })}{' '}
-                      <ButtonThatLooksLikeLinkUnderlined
-                        type="button"
-                        data-testid="remove-observer-button"
-                        onClick={() => handleOpenObserversModal(removedObserver)}
-                      >
-                        {t('remove_as_observer')}
-                      </ButtonThatLooksLikeLinkUnderlined>
-                    </>
-                  </li>
-                ))}
-              </ul>
-            </AdditionalInputContentWrapper>
-          }
+          onChange={handleObserversChange}
         />
+        {includedObserversNoLongerOnProject.length > 0 && (
+          <AdditionalInputContentWrapper data-testid="removed-observer-warning">
+            <label htmlFor="Observers">{t('observers_info')}</label>
+            <ul>
+              {includedObserversNoLongerOnProject.map((removedObserver) => (
+                <li key={removedObserver.id}>
+                  <>
+                    {t('removed_from_project_message', {
+                      userName: getObserverNameToUse(removedObserver),
+                    })}{' '}
+                    <ButtonThatLooksLikeLinkUnderlined
+                      type="button"
+                      data-testid="remove-observer-button"
+                      onClick={() => handleOpenObserversModal(removedObserver)}
+                    >
+                      {t('remove_as_observer')}
+                    </ButtonThatLooksLikeLinkUnderlined>
+                  </>
+                </li>
+              ))}
+            </ul>
+          </AdditionalInputContentWrapper>
+        )}
       </InputWrapper>
       <RemoveObserverModal
         isOpen={isRemoveObserverModalOpen}

@@ -32,7 +32,7 @@ const ValidationTable = styled.table`
 
 const ValidationTableRow = styled.tr`
   border-bottom: 1px solid ${theme.color.border};
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -41,11 +41,11 @@ const ValidationTableRow = styled.tr`
 const ValidationTableCell = styled.td`
   padding: ${theme.spacing.small} ${theme.spacing.medium};
   vertical-align: middle;
-  
+
   &:first-child {
     width: 30px;
   }
-  
+
   &:last-child {
     text-align: right;
     width: auto;
@@ -63,7 +63,7 @@ const IconCell = styled(ValidationTableCell)`
 
 const MessageCell = styled(ValidationTableCell)`
   flex: 1;
-  
+
   p {
     margin: 0;
     font-size: inherit;
@@ -125,7 +125,7 @@ const ObservationLevelValidationInfo = ({
 
           const validationMessage = getValidationMessage(validation, projectId)
 
-          return (isError || isWarning || isIgnored || isReset) ? (
+          return isError || isWarning || isIgnored || isReset ? (
             <ValidationTableRow key={validation_id}>
               <IconCell $status={status}>
                 <IconAlert />

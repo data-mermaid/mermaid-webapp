@@ -180,30 +180,35 @@ const CollectRecordFormPage = ({
 
   // Count record-level validations
   const recordLevelErrorCount = recordLevelValidations.filter((v) => v.status === 'error').length
-  const recordLevelWarningCount = recordLevelValidations.filter((v) => v.status === 'warning').length
+  const recordLevelWarningCount = recordLevelValidations.filter(
+    (v) => v.status === 'warning',
+  ).length
 
   // Count field-level validations
-  const fieldLevelErrorCount = Object.values(validationsApiData).reduce((count, fieldValidations) => {
-    if (fieldValidations && typeof fieldValidations === 'object') {
-      return (
-        count +
-        Object.values(fieldValidations).filter((v) => v.status === 'error').length
-      )
-    }
-    return count
-  }, 0)
+  const fieldLevelErrorCount = Object.values(validationsApiData).reduce(
+    (count, fieldValidations) => {
+      if (fieldValidations && typeof fieldValidations === 'object') {
+        return count + Object.values(fieldValidations).filter((v) => v.status === 'error').length
+      }
+      return count
+    },
+    0,
+  )
 
-  const fieldLevelWarningCount = Object.values(validationsApiData).reduce((count, fieldValidations) => {
-    if (fieldValidations && typeof fieldValidations === 'object') {
-      return (
-        count +
-        Object.values(fieldValidations).filter(
-          (v) => v.status === 'warning' || v.status === 'ignore' || v.status === 'reset',
-        ).length
-      )
-    }
-    return count
-  }, 0)
+  const fieldLevelWarningCount = Object.values(validationsApiData).reduce(
+    (count, fieldValidations) => {
+      if (fieldValidations && typeof fieldValidations === 'object') {
+        return (
+          count +
+          Object.values(fieldValidations).filter(
+            (v) => v.status === 'warning' || v.status === 'ignore' || v.status === 'reset',
+          ).length
+        )
+      }
+      return count
+    },
+    0,
+  )
 
   const validationErrorCount = recordLevelErrorCount + fieldLevelErrorCount
   const validationWarningCount = recordLevelWarningCount + fieldLevelWarningCount

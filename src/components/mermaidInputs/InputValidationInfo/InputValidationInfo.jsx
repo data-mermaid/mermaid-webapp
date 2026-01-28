@@ -11,11 +11,11 @@ import ResolveDuplicateMRButtonAndModal from '../../ResolveDuplicateMRButtonAndM
 import InputIgnoreValidationWarningCheckboxWithLabel from '../InputIgnoreValidationWarningCheckboxWithLabel'
 
 const ValidationWrapper = styled('div')`
-  padding-left: ${theme.spacing.small};
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: ${theme.spacing.small};
+  grid-column: 1 / -1;
 `
 
 const ValidationMessageContainer = styled('div')`
@@ -28,7 +28,7 @@ const ValidationMessageContainer = styled('div')`
 const ValidationMessageWithIcon = styled('div')`
   display: flex;
   gap: ${theme.spacing.medium};
-  align-items: flex-start;
+  align-items: baseline;
 `
 
 const CheckboxContainer = styled('div')`
@@ -104,10 +104,7 @@ const InputValidationInfo = ({
         <ValidationMessageContainer>
           {validationMessages.map((validation) => (
             <ValidationMessageWithIcon key={validation.id}>
-              <InlineMessage
-                type={validationType}
-                className={`${validationType}-indicator`}
-              >
+              <InlineMessage type={validationType} className={`${validationType}-indicator`}>
                 <p>{getValidationMessage(validation, projectId)}</p>
               </InlineMessage>
             </ValidationMessageWithIcon>

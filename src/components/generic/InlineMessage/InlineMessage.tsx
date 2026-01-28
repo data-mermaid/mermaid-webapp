@@ -15,7 +15,7 @@ interface InlineMessageProps {
 const MessagePill = styled.span<{ type: MessageType }>`
   text-transform: uppercase;
   color: ${theme.color.textColor};
-  padding: ${theme.spacing.xxsmall} ${theme.spacing.medium};
+  padding: 0;
   border-radius: 5px;
   white-space: nowrap;
   height: fit-content;
@@ -23,25 +23,26 @@ const MessagePill = styled.span<{ type: MessageType }>`
   align-items: center;
   gap: ${theme.spacing.xsmall};
   flex-shrink: 0;
-  
+
   svg {
     color: inherit;
   }
 `
 
 const InlineMessageWrapper = styled.div`
-  padding: calc(${theme.spacing.xsmall} + 1px);
+  padding: 0;
   border: none;
   width: 100%;
   max-width: ${theme.spacing.maxWidth};
-  font-size: smaller;
+  font-size: ${theme.typography.smallFontSize};
   margin: 0;
   display: flex;
   gap: ${theme.spacing.medium};
-  align-items: flex-start;
+  align-items: baseline;
   p {
     display: inline-block;
     margin: 0;
+    font-size: ${theme.typography.smallFontSize};
   }
   a,
   span {

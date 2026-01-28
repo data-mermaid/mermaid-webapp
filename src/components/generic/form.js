@@ -94,7 +94,7 @@ export const InputRow = styled.div.attrs({
   border-width: 0 0 0 ${theme.spacing.borderLarge};
   border-style: solid;
   border-color: ${(props) => theme.color.getBorderColor(props.validationType)};
-  background-color: ${(props) => theme.color.getMessageColorBackground(props.validationType)};
+  background-color: transparent;
   align-items: baseline;
   > label {
     align-self: start;
@@ -118,8 +118,7 @@ export const InputRow = styled.div.attrs({
       grid-row: 1 / 2;
       grid-column: 2 / 3;
     }
-  `)}
-`
+  `)}`
 
 export const Select = styled.select`
   ${inputTextareaSelectStyles}
