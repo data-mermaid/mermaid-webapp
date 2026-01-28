@@ -228,25 +228,18 @@ const Projects = () => {
   }
 
   const renderPageNoData = () => {
-    const isProjectFilter = projectFilter !== ''
+    const isProjectFilterApplied = projectFilter !== ''
+    let mainText, subText
 
-    let mainText = isProjectFilter ? t('search.no_results') : t('projects.no_offline_projects')
-    let subText = isProjectFilter
-      ? t('projects.no_projects_match')
-      : t('projects.create_or_join_project')
-
-    if (isAppOnline) {
-      if (!userHasDemoProject) {
-        mainText = isProjectFilter ? t('search.no_results') : ''
-        subText = isProjectFilter
-          ? t('projects.no_projects_match')
-          : `${t('projects.no_projects')} ${t('projects.create_or_join_project')}`
-      } else {
-        mainText = isProjectFilter ? t('search.no_results') : t('projects.no_projects')
-        subText = isProjectFilter
-          ? t('projects.no_projects_match')
-          : t('projects.create_or_join_project')
-      }
+    if (isProjectFilterApplied) {
+      mainText = t('search.no_results')
+      subText = t('projects.no_projects_match')
+    } else if (isAppOnline) {
+      mainText = t('projects.no_projects')
+      subText = t('projects.create_or_join_project')
+    } else {
+      mainText = t('projects.no_offline_projects')
+      subText = ''
     }
 
     return <PageUnavailable mainText={mainText} subText={subText} align="center" />
