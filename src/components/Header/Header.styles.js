@@ -31,8 +31,7 @@ export const HeaderIconWrapper = styled('div')`
 `
 export const LogoImg = styled('img')`
   height: calc(${theme.spacing.headerHeight} - 10px);
-  padding: 0 ${theme.spacing.small};
-  margin-top: 5px;
+  margin: ${theme.spacing.small};
   ${mediaQueryTabletLandscapeOnly(css`
     height: calc(${theme.spacing.headerHeight} - 15px);
     margin-top: 7px;

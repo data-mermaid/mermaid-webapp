@@ -28,6 +28,7 @@ export const RowBottom = styled(Row)`
 export const Column = styled.div`
   display: flex;
   flex-direction: column;
+  text-align: ${(props) => props.$align};
 `
 export const ToolBarRow = styled(Row)`
   flex-wrap: wrap;
