@@ -107,7 +107,7 @@ const RecordFormTitle = ({
         <MuiTooltip title={t(exploreTooltipText)} placement="top" arrow>
           <span role="presentation">
             <button
-              className={buttonStyles['icon-button']}
+              className={buttonStyles['button--icon']}
               type="button"
               aria-label={t(exploreTooltipText)}
               onClick={handleExploreButtonClick}
