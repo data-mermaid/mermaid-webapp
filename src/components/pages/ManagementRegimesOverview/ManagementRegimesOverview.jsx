@@ -486,7 +486,7 @@ const ManagementRegimesOverview = () => {
   ) : (
     <PageUnavailable
       mainText={t('projects.no_submitted_sample_units')}
-      subText={t('page.show_mr_by_method_site')}
+      subText={t('management_regimes.no_data_info')}
     />
   )
 
