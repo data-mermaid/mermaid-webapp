@@ -79,7 +79,7 @@ const SubmittedFishBeltObservationTable = ({
               <TheadItem> </TheadItem>
               <TheadItem align="left">{t('fish_name')}</TheadItem>
               <TheadItem align="right">{`${t('sample_units.size')} (${t(
-                'measurements.centimeter',
+                'measurements.centimeter_short',
               )})`}</TheadItem>
               <TheadItem align="right">{t('count')}</TheadItem>
               <TheadItem align="right">{`${t('biomass')} (${t(
