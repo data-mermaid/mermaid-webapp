@@ -519,6 +519,7 @@
     "name_info": "Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a governmental or standardized source such as <helperTextLink>protectedseas.net</helperTextLink>; alternatively, a descriptive local label like 'Northeast Point seasonal closure' can be used.",
     "new": "New management regime",
     "new_mr": "New management regime",
+    "no_data_info": "This page will show the Management Regime of submitted sample units by method and site.",
     "no_management_regimes": "This project has no management regimes.",
     "no_take": "No take",
     "no_take_info": "Total extraction ban",
