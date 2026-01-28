@@ -68,7 +68,7 @@ const ReadOnlySiteContent = ({
     <>
       <Table>
         <tbody>
-          <TableRowItem title={t('sites.country')} options={countryOptions} value={country} />
+          <TableRowItem title={t('projects.country')} options={countryOptions} value={country} />
           <TableRowItem title={t('sites.latitude')} value={latitude} />
           <TableRowItem title={t('sites.longitude')} value={longitude} />
           <TableRowItem title={t('sites.exposure')} options={exposureOptions} value={exposure} />
