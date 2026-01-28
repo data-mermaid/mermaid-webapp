@@ -116,12 +116,6 @@ const table = {
   addExistingRow: 'Add to existing row',
 }
 
-const title = {
-  mermaid: 'MERMAID',
-  mermaidDescription: 'Marine Ecological Research Management Aid',
-  userProfileModal: 'Your Profile',
-}
-
 // property names are protocol types and derived from api data values
 const protocolTitles = {
   fishbelt: 'Fish Belt',
@@ -371,5 +365,4 @@ export default {
   protocolTitles,
   success,
   table,
-  title,
 }
