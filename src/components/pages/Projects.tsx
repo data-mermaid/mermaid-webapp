@@ -60,7 +60,7 @@ const DemoProjectCallout = ({
       <div>
         <CalloutButton
           onClick={handleDemoClick}
-          aria-label={t('projects.new_project')}
+          aria-label={t('projects.buttons.add_demo')}
           disabled={false}
           testId="demo-project-button"
           label={t('projects.buttons.add_demo')}
