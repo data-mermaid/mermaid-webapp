@@ -106,22 +106,6 @@ const success = {
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
 }
 
-const createNewOptionModal = {
-  genus: 'Genus',
-  contactForHelp: 'Contact us for help',
-  species: 'Species',
-  newBenthicAttribute: 'Benthic attribute',
-  benthicAttributeParent: 'Parent',
-  newBenthicAttributeName: 'Name',
-  goToNextPage: 'Next',
-  cancel: 'Cancel',
-  back: 'Back',
-  details: 'Details',
-  user: 'User',
-  project: 'Project',
-  submit: 'Send to MERMAID for review',
-}
-
 const autocomplete = {
   noResultsDefault: 'No results found',
 }
@@ -388,7 +372,6 @@ const helperText = {
 
 export default {
   autocomplete,
-  createNewOptionModal,
   error,
   getResolveModalLanguage,
   header,
