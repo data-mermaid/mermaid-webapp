@@ -1,4 +1,5 @@
 @use './theme.scss' as *;
+@use './functions.module.scss' as *;
 
 @mixin button {
   transition: $default-transition;
@@ -10,22 +11,51 @@
     color: $black;
     cursor: not-allowed;
   }
-  &:active:enabled {
+  &:active:enabled,
+  &--active {
     transition: $default-transition;
   }
 }
 
-.icon-button {
-  margin-left: $spacing-small;
-  margin-right: $spacing-x-small;
-  cursor: pointer;
-  padding: 0;
-  background-color: transparent;
-  border-style: none;
+//Currently unused - confirm styles before use, then remove comment
+.button--primary {
+  @include button;
+  background-color: $primary;
+  color: $white;
+  &:hover {
+    background-color: lightenColor($primary, 10%);
+  }
   &:disabled {
-    cursor: not-allowed;
+    background-color: lightenColor($primary, 60%);
+    color: #9aa8b7;
+  }
+  &:active:enabled {
+    background-color: darkenColor($primary, 30%);
+  }
+}
+
+//Currently unused - confirm styles before use, then remove comment
+.button--secondary {
+  @include button;
+  background-color: $white;
+  color: $primary;
+  border: solid 1px $secondary;
+  &:hover {
+    background-color: lightenColor($secondary, 20%);
+  }
+  &:disabled {
+    background-color: lightenColor($white, 20%);
     color: $disabled;
   }
+  &:active:enabled {
+    background-color: darkenColor($secondary, 20%);
+  }
+}
+
+//Currently unused - confirm styles before use, then remove comment
+.button--secondary-small {
+  @extend .button--secondary;
+  line-height: 1;
 }
 
 .button--caution {
@@ -53,4 +83,46 @@
   display: flex;
   padding: $spacing-medium;
   margin: $spacing-large 0;
+}
+
+//Currently unused - confirm styles before use, then remove comment
+.button--link {
+  font-size: inherit;
+  padding: $spacing-small $spacing-medium;
+  background: none;
+  border: none;
+  cursor: pointer;
+  &:disabled {
+    color: $disabled;
+  }
+}
+
+.button--icon {
+  margin-left: $spacing-small;
+  margin-right: $spacing-x-small;
+  cursor: pointer;
+  padding: 0;
+  background-color: transparent;
+  border-style: none;
+  &:disabled {
+    cursor: not-allowed;
+    color: $disabled;
+  }
+}
+
+//Currently unused - confirm styles before use, then remove comment
+.button--close {
+  color: $primary;
+  border-radius: 100%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  line-height: 0;
+  width: 4rem;
+  height: 4rem;
+  cursor: pointer;
+  transition: 0.25s;
+  &:hover {
+    background: lightenColor($secondary, 20%);
+  }
 }
