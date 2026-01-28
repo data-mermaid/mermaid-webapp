@@ -476,6 +476,7 @@ const Collect = () => {
       }
       content={contentViewByRole}
       isPageContentLoading={isLoading}
+      maxWidth="960px"
     />
   )
 }

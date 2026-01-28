@@ -187,11 +187,21 @@ export const ErrorText = styled.div`
 `
 export const ErrorTextSubmit = styled(ErrorText)`
   text-transform: inherit;
-  position: absolute;
-  margin-top: 1em;
-  margin-right: 3em;
+  position: static;
+  margin: 0;
+  border: none;
+  background-color: ${theme.color.white};
+  color: ${theme.color.textColor};
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
+  font-size: inherit;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: ${theme.spacing.xsmall};
+  align-items: center;
+  
   &:after {
-    left: calc(90% - 5px);
+    display: none;
   }
 `
 
@@ -218,9 +228,16 @@ export const ErrorBox = styled.div`
   }
 `
 export const ErrorBoxSubmit = styled(ErrorBox)`
-  position: absolute;
-  top: 3.5em;
-  right: 0;
+  position: fixed;
+  top: calc(${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + ${theme.spacing.small});
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
+  bottom: auto;
+  pointer-events: auto;
+  opacity: ${(props) => (props.isVisible ? 1 : 0)};
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: ${(props) => (props.isVisible ? 'auto' : 'none')};
 `
 export const ErrorTextButton = styled('button')`
   cursor: pointer;
@@ -233,4 +250,17 @@ export const ErrorTextButton = styled('button')`
 
 export const WarningText = styled('p')`
   margin-left: 0.8em;
+`
+
+export const ObservationTableWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const ObservationValidationWrapper = styled.div`
+  order: 2;
+`
+
+export const ObservationTableContent = styled.div`
+  order: 3;
 `

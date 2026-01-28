@@ -45,11 +45,25 @@ const ContentToolbar = styled('div')`
       position: sticky;
       top: ${theme.spacing.headerHeight};
     `}
+  ${(props) =>
+    props.$maxWidth &&
+    css`
+      max-width: ${props.$maxWidth};
+      margin-left: auto;
+      margin-right: auto;
+    `}
 `
 
 const Content = styled('div')`
   ${contentStyles};
   margin-top: 0px;
+  ${(props) =>
+    props.$maxWidth &&
+    css`
+      max-width: ${props.$maxWidth};
+      margin-left: auto;
+      margin-right: auto;
+    `}
 `
 
 const ContentPageToolbarWrapper = styled('div')`
@@ -72,6 +86,7 @@ const ContentPageLayout = ({
   isPageContentLoading = false,
   isToolbarSticky = false,
   subNavNode = null,
+  maxWidth = undefined,
 }) => {
   const { isSyncInProgress } = useSyncStatus()
 
@@ -94,10 +109,12 @@ const ContentPageLayout = ({
                   ) : (
                     <>
                       {toolbar && (
-                        <ContentToolbar isToolbarSticky={isToolbarSticky}>{toolbar}</ContentToolbar>
+                        <ContentToolbar isToolbarSticky={isToolbarSticky} $maxWidth={maxWidth}>
+                          {toolbar}
+                        </ContentToolbar>
                       )}
                       <ErrorBoundary>
-                        <Content>{content}</Content>
+                        <Content $maxWidth={maxWidth}>{content}</Content>
                       </ErrorBoundary>
                     </>
                   )}
@@ -117,6 +134,7 @@ ContentPageLayout.propTypes = {
   toolbar: PropTypes.node,
   isToolbarSticky: PropTypes.bool,
   subNavNode: subNavNodePropTypes,
+  maxWidth: PropTypes.string,
 }
 
 export default ContentPageLayout

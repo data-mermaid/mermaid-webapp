@@ -92,9 +92,14 @@ const RecordLevelValidationInfo = ({
     return true
   })
 
+  // Separate observation-related validations from others
+  const nonObservationValidations = filteredValidations.filter(
+    (validation) => !checkScrollToObservation(validation) && validation.status !== 'error',
+  )
+
   return (
     <ValidationList data-testid="record-level-validations">
-      {filteredValidations.map((validation) => {
+      {nonObservationValidations.map((validation) => {
         const { status, validation_id, code, context } = validation
         const isWarning = status === 'warning'
         const isError = status === 'error'
@@ -111,18 +116,12 @@ const RecordLevelValidationInfo = ({
           ) : (
             <p>{getValidationMessage(validation, projectId)}</p>
           )
-        const isScrollToViewAvailable = checkScrollToObservation(validation)
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
           <InlineValidationItem key={validation_id}>
             <InlineMessage type={statusForStyling as MessageType}>
               {validationMessage}
             </InlineMessage>
-            {isScrollToViewAvailable && (
-              <ScrollToButton onClick={handleScrollToObservation}>
-                {t('sample_units.scroll_to_observations')}
-              </ScrollToButton>
-            )}
             {isWarning || isReset || isIgnored ? (
               <InputIgnoreValidationWarningCheckboxWithLabel
                 onChange={(event) => {

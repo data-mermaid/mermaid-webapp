@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import language from '../../../language'
 import theme from '../../../theme'
 import { MessageType } from '../../../types/constants'
+import { IconAlert, IconCloseCircle } from '../../icons'
 
 interface InlineMessageProps {
   type?: MessageType
@@ -12,14 +13,20 @@ interface InlineMessageProps {
 }
 
 const MessagePill = styled.span<{ type: MessageType }>`
-  border: solid 1px ${theme.color.border};
   text-transform: uppercase;
-  background: ${(props) => theme.color.getMessageColorBackground(props.type)};
   color: ${theme.color.textColor};
   padding: ${theme.spacing.xxsmall} ${theme.spacing.medium};
   border-radius: 5px;
   white-space: nowrap;
   height: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: ${theme.spacing.xsmall};
+  flex-shrink: 0;
+  
+  svg {
+    color: inherit;
+  }
 `
 
 const InlineMessageWrapper = styled.div`
@@ -28,7 +35,10 @@ const InlineMessageWrapper = styled.div`
   width: 100%;
   max-width: ${theme.spacing.maxWidth};
   font-size: smaller;
-  margin: 0 0 0 ${theme.spacing.small};
+  margin: 0;
+  display: flex;
+  gap: ${theme.spacing.medium};
+  align-items: flex-start;
   p {
     display: inline-block;
     margin: 0;
@@ -45,17 +55,25 @@ const InlineMessage = ({
   children,
   className = undefined,
 }: InlineMessageProps) => {
+  const getIcon = () => {
+    if (type === 'error') {
+      return <IconCloseCircle />
+    }
+    if (type === 'warning') {
+      return <IconAlert />
+    }
+    return null
+  }
+
   return (
-    <>
+    <InlineMessageWrapper className={className} data-testid={`inline-message-${type}`}>
       {type && (
         <MessagePill type={type} className={className}>
-          {language.inlineMessage[type]}
+          {getIcon()}
         </MessagePill>
       )}
-      <InlineMessageWrapper className={className} data-testid={`inline-message-${type}`}>
-        {children}
-      </InlineMessageWrapper>
-    </>
+      {children}
+    </InlineMessageWrapper>
   )
 }
 

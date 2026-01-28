@@ -21,7 +21,11 @@ import {
   ErrorTextButton,
   ErrorTextSubmit,
   ErrorBoxSubmit,
+  ObservationTableWrapper,
+  ObservationValidationWrapper,
+  ObservationTableContent,
 } from '../CollectingFormPage.Styles'
+import { IconCloseCircle, IconAlert } from '../../../icons'
 import { getIsUserReadOnlyForProject } from '../../../../App/currentUserProfileHelpers'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getToastArguments } from '../../../../library/getToastArguments'
@@ -42,6 +46,8 @@ import ObserversInput from '../ObserversInput'
 import PageUnavailable from '../../PageUnavailable'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo'
+import ErrorValidationInfo from '../ErrorValidationInfo'
+import ObservationLevelValidationInfo from '../ObservationLevelValidationInfo'
 import SampleEventInputs from '../SampleEventInputs'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCollectRecordValidation from './useCollectRecordValidation'
@@ -145,6 +151,7 @@ const CollectRecordFormPage = ({
   const [sites, setSites] = useState([])
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
+  const [isPageScrolled, setIsPageScrolled] = useState(false)
   const displayLoadingModal =
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating ||
@@ -170,6 +177,37 @@ const CollectRecordFormPage = ({
     isImageClassificationEnabledForUser && isNewRecord && sampleUnitName === 'benthicpqt'
 
   const { t } = useTranslation()
+
+  // Count record-level validations
+  const recordLevelErrorCount = recordLevelValidations.filter((v) => v.status === 'error').length
+  const recordLevelWarningCount = recordLevelValidations.filter((v) => v.status === 'warning').length
+
+  // Count field-level validations
+  const fieldLevelErrorCount = Object.values(validationsApiData).reduce((count, fieldValidations) => {
+    if (fieldValidations && typeof fieldValidations === 'object') {
+      return (
+        count +
+        Object.values(fieldValidations).filter((v) => v.status === 'error').length
+      )
+    }
+    return count
+  }, 0)
+
+  const fieldLevelWarningCount = Object.values(validationsApiData).reduce((count, fieldValidations) => {
+    if (fieldValidations && typeof fieldValidations === 'object') {
+      return (
+        count +
+        Object.values(fieldValidations).filter(
+          (v) => v.status === 'warning' || v.status === 'ignore' || v.status === 'reset',
+        ).length
+      )
+    }
+    return count
+  }, 0)
+
+  const validationErrorCount = recordLevelErrorCount + fieldLevelErrorCount
+  const validationWarningCount = recordLevelWarningCount + fieldLevelWarningCount
+  const totalValidationCount = validationErrorCount + validationWarningCount
 
   const supportingDataUnavailableText = t('sample_units.errors.supporting_data_unavailable')
   const dataUnavailableText = t('sample_units.errors.data_unavailable')
@@ -284,6 +322,15 @@ const CollectRecordFormPage = ({
   )
 
   const { isErrorAbove, isErrorBelow } = useScrollCheckError()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsPageScrolled(window.scrollY > 0)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const formik = useFormik({
     initialValues: initialFormikFormValues,
@@ -515,6 +562,10 @@ const CollectRecordFormPage = ({
 
   const contentViewByRole = !isReadOnlyUser ? (
     <>
+      <ErrorValidationInfo
+        validations={recordLevelValidations}
+        areValidationsShowing={areValidationsShowing}
+      />
       <RecordLevelInputValidationInfo
         validations={recordLevelValidations}
         areValidationsShowing={areValidationsShowing}
@@ -584,6 +635,9 @@ const CollectRecordFormPage = ({
             setAreObservationsInputsDirty={setAreObservationsInputsDirty}
             setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
             setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
+            recordLevelValidations={recordLevelValidations}
+            resetRecordLevelValidation={resetRecordLevelValidation}
+            ignoreRecordLevelValidation={ignoreRecordLevelValidation}
           />
         </div>
         {ObservationTable2 ? (
@@ -631,6 +685,7 @@ const CollectRecordFormPage = ({
         isToolbarSticky={true}
         subNavNode={subNavNode}
         content={contentViewByRole}
+        maxWidth="960px"
         toolbar={
           <ContentPageToolbarWrapper>
             {isNewRecord && (
@@ -656,12 +711,20 @@ const CollectRecordFormPage = ({
                 onSubmit={handleSubmit}
               />
             )}
-            <ErrorBoxSubmit>
+            <ErrorBoxSubmit isVisible={isPageScrolled && totalValidationCount > 0}>
               <ErrorTextSubmit isErrorShown={isSubmitWarningVisible}>
-                {t('sample_units.errors.submit_disabled')}
-                <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
-                  x
-                </ErrorTextButton>
+                {validationErrorCount > 0 && (
+                  <>
+                    <IconCloseCircle />
+                    {validationErrorCount} error{validationErrorCount !== 1 ? 's' : ''}
+                  </>
+                )}
+                {validationWarningCount > 0 && (
+                  <>
+                    <IconAlert />
+                    {validationWarningCount} warning{validationWarningCount !== 1 ? 's' : ''}
+                  </>
+                )}
               </ErrorTextSubmit>
             </ErrorBoxSubmit>
           </ContentPageToolbarWrapper>

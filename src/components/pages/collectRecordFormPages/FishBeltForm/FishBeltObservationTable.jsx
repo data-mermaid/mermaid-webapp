@@ -47,6 +47,7 @@ import { getFishNameTable } from '../../../../App/mermaidData/fishNameHelpers'
 import { useTranslation, Trans } from 'react-i18next'
 import { HelperTextLink } from '../../../generic/links'
 import { links } from '../../../../link_constants'
+import ObservationLevelValidationInfo from '../ObservationLevelValidationInfo'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -109,6 +110,9 @@ const FishBeltObservationTable = ({
   fishGroupings,
   fishGenera,
   fishSpecies,
+  recordLevelValidations,
+  resetRecordLevelValidation,
+  ignoreRecordLevelValidation,
 }) => {
   const { t } = useTranslation()
   const fishBinSelected = formik?.values?.size_bin
@@ -477,6 +481,14 @@ const FishBeltObservationTable = ({
   return (
     <InputWrapper data-testid={testId}>
       <H2 id="table-label">{t('observations.observations')}</H2>
+      {recordLevelValidations && (
+        <ObservationLevelValidationInfo
+          validations={recordLevelValidations}
+          areValidationsShowing={areValidationsShowing}
+          resetRecordLevelValidation={resetRecordLevelValidation}
+          ignoreRecordLevelValidation={ignoreRecordLevelValidation}
+        />
+      )}
       <StyledOverflowWrapper>
         <StickyObservationTable
           data-testid="fish-observations-table"
@@ -637,6 +649,9 @@ FishBeltObservationTable.propTypes = {
   fishGroupings: fishGroupingsPropType.isRequired,
   fishGenera: fishGeneraPropType.isRequired,
   fishSpecies: fishSpeciesPropType.isRequired,
+  recordLevelValidations: PropTypes.array,
+  resetRecordLevelValidation: PropTypes.func,
+  ignoreRecordLevelValidation: PropTypes.func,
 }
 
 export default FishBeltObservationTable

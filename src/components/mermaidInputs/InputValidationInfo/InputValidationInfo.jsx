@@ -13,7 +13,26 @@ import InputIgnoreValidationWarningCheckboxWithLabel from '../InputIgnoreValidat
 const ValidationWrapper = styled('div')`
   padding-left: ${theme.spacing.small};
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
+  gap: ${theme.spacing.small};
+`
+
+const ValidationMessageContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.small};
+  width: 100%;
+`
+
+const ValidationMessageWithIcon = styled('div')`
+  display: flex;
+  gap: ${theme.spacing.medium};
+  align-items: flex-start;
+`
+
+const CheckboxContainer = styled('div')`
+  margin-top: ${theme.spacing.xsmall};
 `
 
 const InputValidationInfo = ({
@@ -82,20 +101,23 @@ const InputValidationInfo = ({
     <ValidationWrapper>
       {areThereValidationMessages &&
       (isErrorValidation || isWarningValidation || isIgnoredWarningValidation) ? (
-        <>
+        <ValidationMessageContainer>
           {validationMessages.map((validation) => (
-            <InlineMessage
-              type={validationType}
-              key={validation.id}
-              className={`${validationType}-indicator`}
-            >
-              <p>{getValidationMessage(validation, projectId)}</p>
-            </InlineMessage>
+            <ValidationMessageWithIcon key={validation.id}>
+              <InlineMessage
+                type={validationType}
+                className={`${validationType}-indicator`}
+              >
+                <p>{getValidationMessage(validation, projectId)}</p>
+              </InlineMessage>
+            </ValidationMessageWithIcon>
           ))}
-        </>
+          {(isWarningValidation || isIgnoredWarningValidation) && (
+            <CheckboxContainer>{getWarningValidationButtons()}</CheckboxContainer>
+          )}
+        </ValidationMessageContainer>
       ) : null}
       {additionalText}
-      {isWarningValidation || isIgnoredWarningValidation ? getWarningValidationButtons() : null}
       {isValidationPassing ? <span aria-label="Passed Validation">&nbsp;</span> : null}
     </ValidationWrapper>
   )
