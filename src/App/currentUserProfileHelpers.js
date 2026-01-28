@@ -136,13 +136,13 @@ export const getIsUserAdminForProject = (userProfile, projectId) => {
 }
 
 export const getDisplayNameParts = (profileName) => {
-  const displayName =
-    profileName === PENDING_USER_PROFILE_NAME ? i18next.t('users.pending_user') : profileName
+  const isPendingUser = profileName === PENDING_USER_PROFILE_NAME
+  const resolvedName = isPendingUser ? i18next.t('users.pending_user') : profileName
+  const parts = resolvedName.split(' ')
 
-  const sanitizedDisplayName = displayName.replace(/[()]/g, '').trim() // Remove parentheses for (pending user) when displaying first and last name in User Icon
-  const parts = sanitizedDisplayName.split(' ')
-  const firstName = parts[0]
-  const lastName = parts.length > 1 ? parts[parts.length - 1] : undefined
-
-  return { displayName, firstName, lastName }
+  return {
+    displayName: isPendingUser ? `(${resolvedName})` : resolvedName,
+    firstName: parts[0],
+    lastName: parts.length > 1 ? parts[parts.length - 1] : undefined,
+  }
 }
