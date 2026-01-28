@@ -3,7 +3,7 @@
   "add_update_sites_regimes": "Add/update sites or management regimes",
   "admin": "Admin",
   "api_errors": {
-    "demo_project_exists": "You have already created a demo project. Only one demo project is allowed per user.",
+    "demo_project_exists": "You can only have one demo project at a time.",
     "no_server_response": "Unable to communicate with server. Changes are saved on your computer, but not online.",
     "unauthorized_user": "The current user does not have permission to do that.",
     "unspecified_error": "MERMAID error: please contact support@datamermaid.org"
@@ -51,12 +51,12 @@
     "confirm": "Confirm",
     "copy": "Copy",
     "delete": "Delete",
+    "dismiss": "Dismiss",
     "dismiss_all_notifications": "Dismiss all notifications",
     "done": "Done",
     "edit": "Edit",
     "export_to_xlsx": "Export data",
     "logout": "Logout",
-    "move_to_collecting": "Edit Sample Unit — move to Collecting",
     "next_page": "Next",
     "remove_row": "Remove row",
     "review": "Review",
@@ -521,6 +521,7 @@
     "name_info": "Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a governmental or standardized source such as <helperTextLink>protectedseas.net</helperTextLink>; alternatively, a descriptive local label like 'Northeast Point seasonal closure' can be used.",
     "new": "New management regime",
     "new_mr": "New management regime",
+    "no_data_info": "This page will show the Management Regime of submitted sample units by method and site.",
     "no_management_regimes": "This project has no management regimes.",
     "no_take": "No take",
     "no_take_info": "Total extraction ban",
@@ -564,9 +565,10 @@
     "zoom_to_point": "Zoom to point"
   },
   "measurements": {
+    "centimeter_short": "cm",
     "fewer": "Fewer",
     "greater": "Greater",
-    "centimeter_short": "cm",
+    "kilogram_per_hectare_short": "kg/ha",
     "meter_short": "m",
     "square_meter_short": "m²"
   },
@@ -711,11 +713,14 @@
     "demo": {
       "delete_notice": "You can add the demo project again from the Projects page.",
       "demo": "Demo project",
-      "demo_project_reporting": "Data from this demo project will not be available in MERMAID Explore, and will be filtered by default by the R package <span>mermaidr</span>.",
-      "explore_unavailable": "Demo projects are unavailable to view in MERMAID Explore",
+      "dismissed": "Add the demo project any time from the New project dropdown",
+      "explore_unavailable": "The demo project is unavailable in MERMAID Explore",
       "name_restrictions": "Demo project name cannot be changed.",
-      "sample_explore_unavailable": "Demo sample events are unavailable to view in MERMAID Explore",
-      "success_deleted": "Demo project deleted. You can add it again from the Projects page."
+      "project_reporting": "The demo project is unavailable in MERMAID Explore and filtered by default in <span>mermaidr</span>.",
+      "sample_explore_unavailable": "Sample events from the demo project are unavailable in MERMAID Explore",
+      "success_deleted": "Demo project deleted. You can add it again from the Projects page.",
+      "teaser": "Explore how it works before creating your own and collecting real data.",
+      "tryout": "Try the demo project"
     },
     "edit_project_info": "Edit project info",
     "errors": {
@@ -726,7 +731,6 @@
       "not_saved": "Project could not be saved",
       "project_name_exists": "Project name already exists in MERMAID"
     },
-    "filter_projects": "Filter by project name or country",
     "last_updated_date": "Last updated date",
     "loading_indicator": "Loading indicator",
     "name_of_project": "Name of project",
@@ -734,9 +738,9 @@
     "no_notes": "No notes for this project",
     "no_offline_projects": "You do not have any offline projects.",
     "no_organizations": "This project has no organizations.",
+    "no_projects": "You are not part of any projects yet.",
     "no_projects_match": "No projects match the current filter.",
     "no_submitted_sample_units": "This project has no submitted sample units yet.",
-    "not_your_projects": "You are not part of any projects yet.",
     "notify_user_email": "Notify users by email",
     "other_project_member_one": "Other project member",
     "other_project_member_other": "Other project members",
@@ -805,6 +809,7 @@
     },
     "last_edited_by": "Last edited by",
     "method": "Method",
+    "move_to_collecting": "Edit Sample Unit — move to Collecting",
     "missing_label_number": "Missing number",
     "no_active_access": "You do not have any unsubmitted sample units",
     "no_match": "No sample units match:",
@@ -922,6 +927,7 @@
     "introduction": "MERMAID gives you the ability to control who can see and access your data",
     "invite_new_user": "Invite new user",
     "learn_more_roles": "Learn more about user roles...",
+    "pending_user": "pending user",
     "messages": {
       "duplicate_user_error": "User has already been added to project",
       "enter_email": "Please enter an email address",
@@ -931,7 +937,8 @@
       "pending_user_added": "Sign-up email sent. New user added as pending user.",
       "role_changed_error": "{{userName}}'s role has not been changed",
       "role_changed_success": "{{userName}}'s role is now set to {{role}}",
-      "sample_units_transferred": "{{count}} {{units}} transferred",
+      "sample_units_transferred_one": "{{count}} sample unit transferred",
+      "sample_units_transferred_other": "{{count}} sample units transferred",
       "something_went_wrong": "Something went wrong",
       "user_removed": "User removed"
     },
