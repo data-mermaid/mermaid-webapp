@@ -782,6 +782,7 @@
   "relative_depth_info": "Whether the survey is 'deep' or 'shallow' relative to other transects surveyed, regardless of numerical depth in meters",
   "remove_as_observer": "Remove as observer",
   "remove_observer_from_record": "Remove observer from record",
+  "remove_sort": "Remove sort",
   "remove_user": "Remove user",
   "remove_user_confirmation": "Are you sure you want to remove <strong>{{userName}}</strong> as an observer?",
   "removed_from_project_message": "<strong>{{userName}}</strong> is an observer on this sample unit but is no longer a part of this project",
@@ -884,6 +885,8 @@
     "sites": "Sites"
   },
   "size_cm": "Size (cm)",
+  "sort_ascending": "Sort ascending",
+  "sort_descending": "Sort descending",
   "status_offline": "You're <strong>OFFLINE</strong>. Some contents may be out of date.",
   "status_online": "You're <strong>ONLINE</strong>",
   "still_working": "Still working...",

@@ -106,16 +106,6 @@ const success = {
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
 }
 
-const table = {
-  sortAscendingTitle: 'Sort ascending',
-  sortDescendingTitle: 'Sort descending',
-  sortRemoveTitle: 'Remove sort',
-  noFilterResults: 'No results',
-  noFilterResultsSubText: 'No records match the current filter term.',
-  addNewRow: 'Add new row',
-  addExistingRow: 'Add to existing row',
-}
-
 // property names are protocol types and derived from api data values
 const protocolTitles = {
   fishbelt: 'Fish Belt',
@@ -364,5 +354,4 @@ export default {
   pages,
   protocolTitles,
   success,
-  table,
 }
