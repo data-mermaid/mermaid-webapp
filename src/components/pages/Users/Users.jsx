@@ -91,7 +91,7 @@ const Users = () => {
   const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
   const [newUserEmail, setNewUserEmail] = useState('')
   const [observerProfiles, setObserverProfiles] = useState([])
-  const [projectName, setProjectName] = useState('')
+  const [project, setProject] = useState({})
   const [
     showRemoveUserWithActiveSampleUnitsWarning,
     setShowRemoveUserWithActiveSampleUnitsWarning,
@@ -116,7 +116,8 @@ const Users = () => {
   const openUserRolesModal = () => setIsUserRolesModalOpen(true)
   const closeUserRolesModal = () => setIsUserRolesModalOpen(false)
 
-  const _getSupportingData = useEffect(() => {
+  // _getSupportingData
+  useEffect(() => {
     if (!isAppOnline) {
       setIsPageLoading(false)
     }
@@ -130,8 +131,7 @@ const Users = () => {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
-
-            setProjectName(projectResponse?.name)
+            setProject(projectResponse)
             setObserverProfiles(projectProfilesResponse)
             setIsPageLoading(false)
           }
@@ -155,7 +155,8 @@ const Users = () => {
     userRecordsUnavailableText,
   ])
 
-  const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
+  // _setIsReadonlyUserWithActiveSampleUnits
+  useEffect(() => {
     setIsReadonlyUserWithActiveSampleUnits(false)
     observerProfiles.forEach((profile) => {
       const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
@@ -166,6 +167,8 @@ const Users = () => {
       }
     })
   }, [observerProfiles])
+
+  const isDemoProject = project?.is_demo
 
   const fetchProjectProfiles = useCallback(() => {
     if (databaseSwitchboardInstance) {
@@ -430,22 +433,6 @@ const Users = () => {
     ],
   )
 
-  const content = isAppOnline ? (
-    <UsersTableSection
-      observerProfiles={observerProfiles}
-      currentUser={currentUser}
-      isAdminUser={isAdminUser}
-      isTableUpdating={isTableUpdating}
-      handleRoleChange={handleRoleChange}
-      openTransferSampleUnitsModal={openTransferSampleUnitsModal}
-      openRemoveUserModal={openRemoveUserModal}
-      roleLabels={roleLabels}
-      globalFilterValue={globalFilterValue}
-      setGlobalFilterValue={setGlobalFilterValue}
-    />
-  ) : (
-    <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
-  )
   const toolbar = (
     <>
       <H3>{t('users.users')}</H3>
@@ -475,10 +462,11 @@ const Users = () => {
                 inputId="add-new-user-email"
                 labelText={t('users.add_user_email')}
                 isLoading={isTableUpdating}
+                disabled={isDemoProject}
                 buttonChildren={
                   <>
                     <IconPlus />
-                    {t('users.add_user_button')}
+                    {t('buttons.add_user')}
                   </>
                 }
                 value={newUserEmail}
@@ -502,7 +490,25 @@ const Users = () => {
       ) : (
         <ContentPageLayout
           isPageContentLoading={isPageLoading}
-          content={content}
+          content={
+            isAppOnline ? (
+              <UsersTableSection
+                observerProfiles={observerProfiles}
+                currentUser={currentUser}
+                isAdminUser={isAdminUser}
+                isTableUpdating={isTableUpdating}
+                handleRoleChange={handleRoleChange}
+                openTransferSampleUnitsModal={openTransferSampleUnitsModal}
+                openRemoveUserModal={openRemoveUserModal}
+                roleLabels={roleLabels}
+                globalFilterValue={globalFilterValue}
+                setGlobalFilterValue={setGlobalFilterValue}
+                isDemoProject={isDemoProject}
+              />
+            ) : (
+              <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
+            )
+          }
           toolbar={toolbar}
         />
       )}
@@ -513,24 +519,28 @@ const Users = () => {
         newUser={newUserEmail}
         onSubmit={addNewUserAndSendEmail}
       />
-      <TransferSampleUnitsModal
-        isOpen={isTransferSampleUnitsModalOpen}
-        onDismiss={closeTransferSampleUnitsModal}
-        currentUserId={currentUser.id}
-        fromUser={fromUser}
-        userOptions={observerProfiles}
-        showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
-        handleTransferSampleUnitChange={handleTransferSampleUnitChange}
-        onSubmit={transferSampleUnits}
-      />
-      <RemoveUserModal
-        isOpen={isRemoveUserModalOpen}
-        isLoading={isTableUpdating}
-        onDismiss={closeRemoveUserModal}
-        onSubmit={removeUserProfile}
-        userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
-        projectName={projectName}
-      />
+      {isTransferSampleUnitsModalOpen && (
+        <TransferSampleUnitsModal
+          isOpen={true}
+          onDismiss={closeTransferSampleUnitsModal}
+          currentUserId={currentUser.id}
+          fromUser={fromUser}
+          userOptions={observerProfiles}
+          showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
+          handleTransferSampleUnitChange={handleTransferSampleUnitChange}
+          onSubmit={transferSampleUnits}
+        />
+      )}
+      {isRemoveUserModalOpen && (
+        <RemoveUserModal
+          isOpen={true}
+          isLoading={isTableUpdating}
+          onDismiss={closeRemoveUserModal}
+          onSubmit={removeUserProfile}
+          userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
+          projectName={project.name}
+        />
+      )}
       <UserRolesInfoModal isOpen={isUserRolesModalOpen} onDismiss={closeUserRolesModal} />
     </>
   )
@@ -547,8 +557,10 @@ function UsersTableSection({
   roleLabels,
   globalFilterValue,
   setGlobalFilterValue,
+  isDemoProject,
 }) {
   const { t } = useTranslation()
+
   const adminTooltipText = t('users.roles.admin_description')
   const collectorTooltipText = t('users.roles.collector_description')
   const readOnlyTooltipText = t('users.roles.read_only_description')
@@ -890,7 +902,7 @@ function UsersTableSection({
         remove: (
           <ButtonCaution
             type="button"
-            disabled={isCurrentUser || isTableUpdating}
+            disabled={isCurrentUser || isTableUpdating || isDemoProject}
             onClick={() => openRemoveUserModal(profile)}
           >
             <IconAccountRemove />
