@@ -106,11 +106,6 @@ const success = {
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
 }
 
-const loadingIndicator = {
-  loadingPrimary: 'Loading',
-  loadingSecondary: 'Still working...',
-}
-
 const createNewOptionModal = {
   genus: 'Genus',
   contactForHelp: 'Contact us for help',
@@ -398,7 +393,6 @@ export default {
   getResolveModalLanguage,
   header,
   helperText,
-  loadingIndicator,
   map,
   navigateAwayPrompt,
   pages,
