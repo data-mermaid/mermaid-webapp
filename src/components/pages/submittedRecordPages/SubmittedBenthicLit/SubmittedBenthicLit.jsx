@@ -201,7 +201,7 @@ const SubmittedBenthicLit = () => {
                   disabled={!isAdminUser || isMoveToButtonDisabled}
                 >
                   <IconPen />
-                  {t('buttons.move_to_collecting')}
+                  {t('sample_units.move_to_collecting')}
                 </ButtonSecondary>
               </>
             </RowSpaceBetween>

@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 import { HomePageLayout } from '../Layout'
 import { getToastArguments } from '../../library/getToastArguments'
@@ -20,6 +20,60 @@ import ErrorBoundary from '../ErrorBoundary'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
 import { useTranslation } from 'react-i18next'
+import CalloutButton from '../generic/CalloutButton/CalloutButton'
+import { CloseButton } from '../generic/buttons'
+import { Box } from '@mui/material'
+import { IconClose } from '../icons'
+import cardStyles from '../ProjectCard/ProjectCard.module.scss'
+import { AxiosError } from 'axios'
+import { useNavigate } from 'react-router-dom'
+
+interface DemoProjectCalloutProps {
+  handleDemoClick: () => void
+  updateUserSettings: (setting: string, val: boolean) => void
+  userHasProjects: boolean
+  setIsDemoCalloutVisible: Dispatch<SetStateAction<boolean>>
+}
+const DemoProjectCallout = ({
+  handleDemoClick,
+  updateUserSettings,
+  userHasProjects,
+  setIsDemoCalloutVisible,
+}: DemoProjectCalloutProps) => {
+  const { t } = useTranslation()
+  const calloutStyleClasses = userHasProjects
+    ? cardStyles['demo-callout']
+    : cardStyles['demo-callout--centered']
+
+  const handleDemoTryoutDismiss = () => {
+    setIsDemoCalloutVisible(false)
+    updateUserSettings('hasUserDismissedDemo', true)
+    toast.info(t('projects.demo.dismissed'))
+  }
+
+  return (
+    <Box id="demo-project-callout" className={calloutStyleClasses}>
+      <div>
+        <h2>{t('projects.demo.tryout')}</h2>
+        <p>{t('projects.demo.teaser')}</p>
+      </div>
+      <div>
+        <CalloutButton
+          onClick={handleDemoClick}
+          aria-label={t('projects.buttons.add_demo')}
+          disabled={false}
+          testId="demo-project-button"
+          label={t('projects.buttons.add_demo')}
+        />
+        {userHasProjects && (
+          <CloseButton type="button" onClick={handleDemoTryoutDismiss}>
+            <IconClose aria-label={t('buttons.close')} />
+          </CloseButton>
+        )}
+      </div>
+    </Box>
+  )
+}
 
 /**
  * All Projects page (lists projects)
@@ -32,16 +86,24 @@ const Projects = () => {
   const [projects, setProjects] = useState([])
   const [projectSortKey, setProjectSortKey] = useState('updated_on')
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
-  const { currentUser } = useCurrentUser()
+  const { currentUser, refreshCurrentUser, saveUserProfile } = useCurrentUser()
+  const navigate = useNavigate()
   const { t } = useTranslation()
   const unavailableProjectsErrorText = t('projects.errors.data_unavailable')
 
   useDocumentTitle(`${t('projects.projects')} - ${t('mermaid')}`)
+  const userHasProjects = projects.length > 0
+
+  const hasUserDismissedDemo = currentUser.collect_state?.hasUserDismissedDemo ?? false
   const userHasDemoProject = projects.some((proj) => proj.is_demo === true)
+  const [isDemoCalloutVisible, setIsDemoCalloutVisible] = useState(
+    !userHasDemoProject && isAppOnline && !hasUserDismissedDemo,
+  )
 
   useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -72,6 +134,46 @@ const Projects = () => {
     handleHttpResponseError,
     unavailableProjectsErrorText,
   ])
+
+  const updateUserSettings = (setting: string, val: boolean) => {
+    const updatedProfileSettings = { [setting]: val }
+    saveUserProfile({
+      ...currentUser,
+      collect_state: { ...currentUser.collect_state, ...updatedProfileSettings },
+    })
+  }
+
+  const handleSuccessResponse = (response, languageSuccessMessage: string) => {
+    refreshCurrentUser() // ensures correct user privileges
+    toast.success(...getToastArguments(languageSuccessMessage))
+    setIsLoading(false)
+    navigate(`/projects/${response.id}/sites`)
+  }
+
+  const handleResponseError = (error: AxiosError) => {
+    const isDuplicateError = error.response?.status === 400
+    setIsLoading(false)
+
+    handleHttpResponseError({
+      error,
+      callback: () => {
+        if (isDuplicateError) {
+          toast.error(...getToastArguments(t('api_errors.demo_project_exists')))
+        }
+      },
+    })
+  }
+  const createDemoProject = () => {
+    setIsLoading(true)
+    databaseSwitchboardInstance
+      .addDemoProject()
+      .then((response) => {
+        handleSuccessResponse(response, t('projects.success.project_created'))
+      })
+      .catch((error) => {
+        handleResponseError(error)
+      })
+  }
 
   const getIsProjectOffline = (projectId) =>
     !!offlineReadyProjectIds.find((offlineProject) => offlineProject.id === projectId)
@@ -126,24 +228,18 @@ const Projects = () => {
   }
 
   const renderPageNoData = () => {
-    const isProjectFilter = projectFilter !== ''
+    const isProjectFilterApplied = projectFilter !== ''
+    let mainText, subText
 
-    let mainText
-
-    let subText
-
-    if (isAppOnline) {
-      mainText = isProjectFilter ? t('search.no_results') : t('projects.not_your_projects')
-      subText = isProjectFilter
-        ? t('projects.no_projects_match')
-        : t('projects.create_or_join_project')
-    }
-
-    if (!isAppOnline) {
-      mainText = isProjectFilter ? t('search.no_results') : t('projects.no_offline_projects')
-      subText = isProjectFilter
-        ? t('projects.no_projects_match')
-        : t('projects.create_or_join_project')
+    if (isProjectFilterApplied) {
+      mainText = t('search.no_results')
+      subText = t('projects.no_projects_match')
+    } else if (isAppOnline) {
+      mainText = t('projects.no_projects')
+      subText = t('projects.create_or_join_project')
+    } else {
+      mainText = t('projects.no_offline_projects')
+      subText = ''
     }
 
     return <PageUnavailable mainText={mainText} subText={subText} align="center" />
@@ -179,7 +275,19 @@ const Projects = () => {
           userHasDemoProject={userHasDemoProject}
         />
       }
-      bottomRow={<div role="list">{projectCardsList}</div>}
+      bottomRow={
+        <div role="list">
+          {isDemoCalloutVisible && (
+            <DemoProjectCallout
+              updateUserSettings={updateUserSettings}
+              handleDemoClick={createDemoProject}
+              userHasProjects={userHasProjects}
+              setIsDemoCalloutVisible={setIsDemoCalloutVisible}
+            />
+          )}
+          {projectCardsList}
+        </div>
+      }
     />
   )
 }
