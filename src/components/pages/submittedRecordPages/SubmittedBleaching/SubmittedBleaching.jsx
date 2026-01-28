@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 
 import { ContentPageLayout } from '../../../Layout'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
@@ -11,7 +12,6 @@ import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflin
 import useIsMounted from '../../../../library/useIsMounted'
 import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import language from '../../../../language'
 import { FormSubTitle } from '../SubmittedFormPage.styles'
 import RecordFormTitle from '../../../RecordFormTitle'
 import { RowSpaceBetween } from '../../../generic/positioning'
@@ -30,6 +30,7 @@ import BleachingColoniesBleachedObservations from './BleachingColoniesBleachedOb
 const SubmittedBleaching = () => {
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
+  const { t } = useTranslation()
 
   const { isAppOnline } = useOnlineStatus()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -51,6 +52,8 @@ const SubmittedBleaching = () => {
 
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const observers = submittedRecord?.observers ?? []
+
+  const submittedRecordUnavailableText = t('sample_units.errors.submitted_data_unavailable')
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -104,7 +107,7 @@ const SubmittedBleaching = () => {
                 setIdsNotAssociatedWithData([projectId, submittedRecordId])
                 setIsLoading(false)
               }
-              toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+              toast.error(...getToastArguments(submittedRecordUnavailableText))
             },
           })
         })
@@ -117,6 +120,7 @@ const SubmittedBleaching = () => {
     isAppOnline,
     isSyncInProgress,
     handleHttpResponseError,
+    submittedRecordUnavailableText,
   ])
 
   const handleMoveToCollect = () => {
@@ -128,14 +132,14 @@ const SubmittedBleaching = () => {
         sampleUnitMethod: 'bleachingquadratcollectionmethods',
       })
       .then(({ id }) => {
-        toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
+        toast.success(...getToastArguments(t('sample_units.errors.submitted_moved_to_collecting')))
         navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/bleachingqc/${id}`)
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
+            toast.error(...getToastArguments(t('sample_units.errors.submitted_not_editable')))
             setIsMoveToButtonDisabled(false)
           },
         })
@@ -161,7 +165,7 @@ const SubmittedBleaching = () => {
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
             />
-            <FormSubTitle>Observers</FormSubTitle>
+            <FormSubTitle>{t('sample_units.observers')}</FormSubTitle>
             <ul>
               {observers.map((observer) => (
                 <li key={observer.id}>{observer.profile_name}</li>
@@ -177,7 +181,7 @@ const SubmittedBleaching = () => {
             <BleachingPercentCoverObservations record={submittedRecord} />
           </>
         ) : (
-          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+          <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
         )
       }
       toolbar={
@@ -192,15 +196,15 @@ const SubmittedBleaching = () => {
               <>
                 <p>
                   {isAdminUser
-                    ? language.pages.submittedForm.sampleUnitsAreReadOnly
-                    : language.pages.submittedForm.adminEditOnly}
+                    ? t('sample_units.submitted_readonly')
+                    : t('sample_units.submitted_readonly_and_movable_by_admin')}
                 </p>
                 <ButtonSecondary
                   onClick={handleMoveToCollect}
                   disabled={!isAdminUser || isMoveToButtonDisabled}
                 >
                   <IconPen />
-                  {language.pages.submittedForm.moveSampleUnitButton}
+                  {t('buttons.move_to_collecting')}
                 </ButtonSecondary>
               </>
             </RowSpaceBetween>
