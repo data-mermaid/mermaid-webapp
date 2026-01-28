@@ -106,11 +106,6 @@ const success = {
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
 }
 
-const header = {
-  noNotifications: 'There are currently no notifications',
-  dismissAllNotifications: 'Dismiss all notifications',
-}
-
 const table = {
   sortAscendingTitle: 'Sort ascending',
   sortDescendingTitle: 'Sort descending',
@@ -369,7 +364,6 @@ const helperText = {
 export default {
   error,
   getResolveModalLanguage,
-  header,
   helperText,
   map,
   navigateAwayPrompt,
