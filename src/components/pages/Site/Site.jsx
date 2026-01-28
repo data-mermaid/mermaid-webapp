@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
+import { links } from '../../../link_constants'
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
@@ -17,7 +18,6 @@ import {
 import { getOptions } from '../../../library/getOptions'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { getToastArguments } from '../../../library/getToastArguments'
-import { getDeleteModalText } from '../../../library/getDeleteModalText'
 import { H2, ItalicizedInfo } from '../../generic/text'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import { InputRow, InputWrapper, RequiredIndicator } from '../../generic/form'
@@ -108,7 +108,7 @@ const SiteForm = ({
   handleLongitudeChange,
 }) => {
   const { t } = useTranslation()
-  const swapButtonText = t('buttons.swap')
+  const swapButtonText = t('sites.swap_coordinates')
 
   const handleLngLatSwap = () => {
     const currentLatitude = formik.getFieldProps('latitude').value
@@ -182,7 +182,7 @@ const SiteForm = ({
               components={{
                 helperTextLink: (
                   <HelperTextLink
-                    href="https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees"
+                    href={links.latLongDecimalDegrees}
                     target="_blank"
                     rel="noreferrer"
                   />
@@ -216,7 +216,7 @@ const SiteForm = ({
               components={{
                 helperTextLink: (
                   <HelperTextLink
-                    href="https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees"
+                    href={links.latLongDecimalDegrees}
                     target="_blank"
                     rel="noreferrer"
                   />
@@ -266,11 +266,7 @@ const SiteForm = ({
               i18nKey="sites.reef_type_info"
               components={{
                 helperTextLink: (
-                  <HelperTextLink
-                    href="https://www.livingoceansfoundation.org/wp-content/uploads/2015/04/U10-Reef-Types-complete-teacher.pdf"
-                    target="_blank"
-                    rel="noreferrer"
-                  />
+                  <HelperTextLink href={links.reefTypes} target="_blank" rel="noreferrer" />
                 ),
               }}
             />
@@ -290,11 +286,7 @@ const SiteForm = ({
               i18nKey="sites.reef_zone_info"
               components={{
                 helperTextLink: (
-                  <HelperTextLink
-                    href="https://www.livingoceansfoundation.org/wp-content/uploads/2015/04/U11-Reef-Zonation-Background.pdf"
-                    target="_blank"
-                    rel="noreferrer"
-                  />
+                  <HelperTextLink href={links.reefZonation} target="_blank" rel="noreferrer" />
                 ),
               }}
             />
@@ -325,7 +317,14 @@ const Site = ({ isNewSite }) => {
   const siteTitleText = t('sites.site')
   const mermaidDataTypeLabel = siteTitleText.toLowerCase()
   const siteRecordUnavailableText = t('sites.data_unavailable')
-  const deleteModalText = getDeleteModalText(siteTitleText)
+  const deleteModalText = {
+    title: t('sites.delete_site'),
+    prompt: t('sites.confirm_delete'),
+    yes: t('sites.delete_site'),
+    no: t('buttons.cancel'),
+    confirmDeleteText1: t('sites.cannot_delete'),
+    confirmDeleteText2: t('sites.have_to_remove'),
+  }
   const requiredFieldMessage = t('forms.required_field')
 
   const [countryOptions, setCountryOptions] = useState([])

@@ -17,7 +17,6 @@ import {
 import { getManagementRegimeInitialValues } from './managementRegimeFormInitialValues'
 import { getOptions } from '../../../library/getOptions'
 import { getToastArguments } from '../../../library/getToastArguments'
-import { getDeleteModalText } from '../../../library/getDeleteModalText'
 import { H2, ItalicizedInfo } from '../../generic/text'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import { InputWrapper } from '../../generic/form'
@@ -242,7 +241,14 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const managementRegimeTitleLowerCaseText = managementRegimeTitleText.toLowerCase()
   const managementRegimeRecordUnavailableText = t('management_regimes.data_unavailable')
   const notReportedCompliance = t('management_regimes.not_reported_compliance')
-  const deleteModalText = getDeleteModalText(managementRegimeTitleText)
+  const deleteModalText = {
+    title: t('management_regimes.delete_management_regime'),
+    prompt: t('management_regimes.confirm_delete'),
+    yes: t('management_regimes.delete_management_regime'),
+    no: t('buttons.cancel'),
+    confirmDeleteText1: t('management_regimes.cannot_delete'),
+    confirmDeleteText2: t('management_regimes.have_to_remove'),
+  }
 
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
