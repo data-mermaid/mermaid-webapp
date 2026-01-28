@@ -2,16 +2,6 @@
 import React from 'react'
 import { HelperTextLink } from './components/generic/links'
 
-const apiDataTableNames = {
-  benthic_attributes: 'benthic attributes',
-  collect_records: 'unsubmitted sample units',
-  fish_species: 'fish species',
-  project_managements: 'management regimes',
-  project_profiles: 'project users',
-  project_sites: 'sites',
-  projects: 'project info',
-}
-
 const buttons = {
   addRow: 'Add row',
   cancel: 'Cancel',
@@ -422,7 +412,6 @@ const helperText = {
 }
 
 export default {
-  apiDataTableNames,
   autocomplete,
   buttons,
   createNewOptionModal,

@@ -34,6 +34,7 @@ import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
 import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 import { routes } from './routes'
+import { API_DATA_TABLE_NAMES } from '../library/constants/constants'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline, setServerNotReachable } = useOnlineStatus()
@@ -88,9 +89,7 @@ function App({ dexieCurrentUserInstance }) {
               {language.error.pushSyncErrorMessageUnsavedData}
               <ul>
                 {apiDataTablesThatRejectedSyncing?.map((rejectedDataTableName) => (
-                  <li key={rejectedDataTableName}>
-                    {language.apiDataTableNames[rejectedDataTableName]}
-                  </li>
+                  <li key={rejectedDataTableName}>{API_DATA_TABLE_NAMES[rejectedDataTableName]}</li>
                 ))}
               </ul>
             </div>
