@@ -57,7 +57,6 @@
     "edit": "Edit",
     "export_to_xlsx": "Export data",
     "logout": "Logout",
-    "move_to_collecting": "Edit Sample Unit — move to Collecting",
     "next_page": "Next",
     "remove_row": "Remove row",
     "review": "Review",
@@ -563,9 +562,10 @@
     "zoom_to_point": "Zoom to point"
   },
   "measurements": {
+    "centimeter_short": "cm",
     "fewer": "Fewer",
     "greater": "Greater",
-    "centimeter_short": "cm",
+    "kilogram_per_hectare_short": "kg/ha",
     "meter_short": "m",
     "square_meter_short": "m²"
   },
@@ -806,6 +806,7 @@
     },
     "last_edited_by": "Last edited by",
     "method": "Method",
+    "move_to_collecting": "Edit Sample Unit — move to Collecting",
     "missing_label_number": "Missing number",
     "no_active_access": "You do not have any unsubmitted sample units",
     "no_match": "No sample units match:",
