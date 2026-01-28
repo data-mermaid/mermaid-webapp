@@ -2,15 +2,6 @@
 import React from 'react'
 import { HelperTextLink } from './components/generic/links'
 
-const buttons = {
-  addRow: 'Add row',
-  cancel: 'Cancel',
-  close: 'Close',
-  confirm: 'Confirm',
-  confirmAll: 'Confirm all',
-  saveChanges: 'Save Changes',
-}
-
 const error = {
   403: 'The current user does not have permission to do that.',
   500: 'MERMAID error: please contact support@datamermaid.org',
@@ -113,17 +104,6 @@ const success = {
   getMermaidDataDeleteSuccess: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has been deleted from your computer and online.`,
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
-}
-
-const deleteRecord = (pageName) => {
-  return {
-    title: `Delete ${pageName}`,
-    prompt: `Are you sure you want to delete this ${pageName.toLowerCase()}?`,
-    yes: `Delete ${pageName}`,
-    no: 'Cancel',
-    confirmDeleteText1: `You cannot delete this ${pageName.toLowerCase()} because it is used in the following sample units:`,
-    confirmDeleteText2: `You have to remove this ${pageName.toLowerCase()} from all sample units before you can delete it.`,
-  }
 }
 
 const loadingIndicator = {
@@ -413,9 +393,7 @@ const helperText = {
 
 export default {
   autocomplete,
-  buttons,
   createNewOptionModal,
-  deleteRecord,
   error,
   getResolveModalLanguage,
   header,
