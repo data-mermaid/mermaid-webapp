@@ -106,10 +106,6 @@ const success = {
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
 }
 
-const autocomplete = {
-  noResultsDefault: 'No results found',
-}
-
 const header = {
   noNotifications: 'There are currently no notifications',
   dismissAllNotifications: 'Dismiss all notifications',
@@ -371,7 +367,6 @@ const helperText = {
 }
 
 export default {
-  autocomplete,
   error,
   getResolveModalLanguage,
   header,
