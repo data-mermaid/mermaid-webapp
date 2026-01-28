@@ -80,7 +80,7 @@ const InputValidationInfo = ({
   }
 
   return (
-    <ValidationWrapper data-testid={areThereValidationMessages ? testId : undefined}>
+    <ValidationWrapper data-testid={testId}>
       {areThereValidationMessages &&
       (isErrorValidation || isWarningValidation || isIgnoredWarningValidation) ? (
         <>
