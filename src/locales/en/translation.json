@@ -671,6 +671,7 @@
   "page": {
     "admin_only": "Only admins can access this page.",
     "read_only": "You cannot access this page because you are a read-only member of this project.",
+    "show_mr_by_method_site": "This page will show the Management Regime of submitted sample units by method and site.",
     "will_show": "This page will show:"
   },
   "percent_cover": "Percent Cover",

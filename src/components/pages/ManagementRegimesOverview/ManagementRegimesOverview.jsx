@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
@@ -7,7 +8,6 @@ import { ContentPageLayout } from '../../Layout'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { H2 } from '../../generic/text'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
 import PageUnavailable from '../PageUnavailable'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -60,6 +60,7 @@ const groupManagementRegimes = (records) => {
 }
 
 const ManagementRegimesOverview = () => {
+  const { t } = useTranslation()
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -76,7 +77,15 @@ const ManagementRegimesOverview = () => {
   const isMethodFilterInitializedWithPersistedTablePreferences = useRef(false)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
-  useDocumentTitle(`${language.pages.managementRegimesOverview.title} - ${language.title.mermaid}`)
+  const sampleUnitsAndManagementRegimesTitle = t('sample_units_and_management_regimes')
+  const submittedAndManagementRegimeHeaderText = `${t('sample_units.submitted')} / ${t(
+    'management_regimes.management_regime',
+  )}`
+  const siteHeaderText = t('sites.site')
+  const methodHeaderText = t('sample_units.method')
+  const summaryDataUnavailableText = t('errors.summary_data_unavailable')
+
+  useDocumentTitle(`${sampleUnitsAndManagementRegimesTitle} - ${t('mermaid')}`)
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -110,12 +119,19 @@ const ManagementRegimesOverview = () => {
                 setIsLoading(false)
               }
 
-              toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
+              toast.error(...getToastArguments(summaryDataUnavailableText))
             },
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isMounted,
+    isAppOnline,
+    handleHttpResponseError,
+    summaryDataUnavailableText,
+  ])
 
   const getManagementRegimeTransectNumberColumnHeaders = useMemo(() => {
     return managementRegimeRecordNames.map((mr) => {
@@ -132,13 +148,15 @@ const ManagementRegimesOverview = () => {
       {
         Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'site',
-        columns: [{ Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort }],
+        columns: [{ Header: siteHeaderText, accessor: 'site', sortType: reactTableNaturalSort }],
         disableSortBy: true,
       },
       {
         Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'method',
-        columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
+        columns: [
+          { Header: methodHeaderText, accessor: 'method', sortType: reactTableNaturalSort },
+        ],
         disableSortBy: true,
       },
       {
@@ -148,17 +166,18 @@ const ManagementRegimesOverview = () => {
         disableSortBy: true,
       },
       {
-        Header: () => (
-          <HeaderCenter>
-            {language.pages.managementRegimesOverview.tableSubSectionTitle}
-          </HeaderCenter>
-        ),
+        Header: () => <HeaderCenter>{submittedAndManagementRegimeHeaderText}</HeaderCenter>,
         id: 'management-regime-numbers',
         columns: getManagementRegimeTransectNumberColumnHeaders,
         disableSortBy: true,
       },
     ],
-    [getManagementRegimeTransectNumberColumnHeaders],
+    [
+      getManagementRegimeTransectNumberColumnHeaders,
+      methodHeaderText,
+      siteHeaderText,
+      submittedAndManagementRegimeHeaderText,
+    ],
   )
 
   const populateSampleUnitNumbersByManagementRegimeRow = useCallback(
@@ -466,24 +485,24 @@ const ManagementRegimesOverview = () => {
     </>
   ) : (
     <PageUnavailable
-      mainText={language.pages.managementRegimesOverview.noDataMainText}
-      subText={language.pages.managementRegimesOverview.noDataSubText}
+      mainText={t('projects.no_submitted_sample_units')}
+      subText={t('page.show_mr_by_method_site')}
     />
   )
 
   const content = isAppOnline ? (
     table
   ) : (
-    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+    <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
   )
   const toolbar = (
     <>
-      <H2>{language.pages.managementRegimesOverview.title}</H2>
+      <H2>{sampleUnitsAndManagementRegimesTitle}</H2>
       {isAppOnline && (
         <ToolBarItemsRow>
           <FilterItems>
             <FilterSearchToolbar
-              name={language.pages.usersAndTransectsTable.filterToolbarText}
+              name={t('filters.by_site')}
               disabled={sampleUnitWithManagementRegimeRecords.length === 0}
               globalSearchText={globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
