@@ -201,23 +201,8 @@ const pages = {
   },
 }
 
-const getResolveModalLanguage = (siteOrManagementRegime) => {
-  return {
-    original: `Original ${siteOrManagementRegime}`,
-    duplicate: `Duplicate ${siteOrManagementRegime}`,
-    keepEither: `Keep ${siteOrManagementRegime}`,
-    editEither: `Edit ${siteOrManagementRegime}`,
-    keepBoth: 'Keep both',
-    cancel: 'Cancel',
-    merge: 'Merge',
-    getConfirmMergeMessage: (anotherSite) =>
-      `All instances of this site will be replaced with ${anotherSite}`,
-  }
-}
-
 export default {
   error,
-  getResolveModalLanguage,
   pages,
   success,
 }
