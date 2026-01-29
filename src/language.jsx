@@ -106,16 +106,6 @@ const success = {
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
 }
 
-// property names are protocol types and derived from api data values
-const protocolTitles = {
-  fishbelt: 'Fish Belt',
-  benthiclit: 'Benthic LIT',
-  benthicpit: 'Benthic PIT',
-  habitatcomplexity: 'Habitat Complexity',
-  bleachingqc: 'Bleaching',
-  benthicpqt: 'Benthic Photo Quadrat',
-}
-
 const pages = {
   userDoesntHaveProjectAccess: {
     title: 'You do not have permission to access this project.',

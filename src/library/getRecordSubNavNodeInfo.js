@@ -1,5 +1,5 @@
+import i18next from '../../i18n'
 import { getObjectById } from './getObjectById'
-import language from '../language'
 import { getProtocolTransectType } from '../App/mermaidData/recordProtocolHelpers'
 
 /**
@@ -16,7 +16,7 @@ export const getRecordSubNavNodeInfo = (sampleUnitRecordData, sites, protocol) =
   } = sampleUnitRecordData
   const protocolTransectType = getProtocolTransectType(protocol)
 
-  const siteName = getObjectById(sites, siteId)?.name ?? language.protocolTitles[protocol]
+  const siteName = getObjectById(sites, siteId)?.name ?? i18next.t(`protocol_titles.${protocol}`)
   const transectNumber = sampleUnitRecordData[protocolTransectType]?.number ?? ''
   const label = sampleUnitRecordData[protocolTransectType]?.label ?? ''
 

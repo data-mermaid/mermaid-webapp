@@ -1,4 +1,4 @@
-import i18next from 'i18next'
+import i18next from '../../i18n'
 
 export const getTableColumnHeaderProps = (column) => {
   let sortByTitle = i18next.t('sort_ascending')
