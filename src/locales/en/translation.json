@@ -601,6 +601,7 @@
   "method": "Method",
   "must_select_fish_warning": "You must select a fish size bin before adding any observations",
   "name": "Name",
+  "navigate_away_prompt": "Are you sure you want to leave this page? You have some unsaved changes.",
   "no": "No",
   "no_notifications": "There are currently no notifications",
   "notes": "Notes",
