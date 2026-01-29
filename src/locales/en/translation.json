@@ -110,6 +110,7 @@
     "colonies_bleached_percent_cover": "Colonies bleached and benthic percent cover",
     "contact_info": "Contact info",
     "data_sharing": "Data sharing",
+    "data_sharing_offline": "Data sharing offline",
     "fish_species_info": "Reef fish species, size and abundance, taxonomy and functional group information, biomass coefficients",
     "individual_habitat_complexity": "Individual habitat complexity scores",
     "information": "Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.",
@@ -402,6 +403,7 @@
     "target": "Target",
     "untitled": "Untitled"
   },
+  "go_back_to_homepage": "Go back to the home page",
   "go_to_explore_projects": "View all your projects on MERMAID Explore",
   "go_to_explore_sample_event": "View this sample event on MERMAID Explore",
   "go_to_explore_this_project": "View this project on MERMAID Explore",
@@ -627,8 +629,12 @@
     "avg_hard_coral_cover": "Avg Hard Coral Cover %",
     "avg_macroalgae_cover": "Avg Macroalgae Cover %",
     "avg_soft_coral_cover": "Avg Soft Coral Cover %",
+    "biomass_constants": "Biomass Constants",
     "bleaching_severity": "Bleaching severity",
     "colonies_bleached": "Observations - Colonies Bleached",
+    "family": "Family",
+    "functional_group": "Functional Group",
+    "group_size": "Group Size",
     "growth_form": "Growth form",
     "growth_form_info": "Growth form of the observed benthic attribute. Only choose a growth form if it is relevant to the benthic attribute (e.g. Acropora branching).",
     "hard_coral_cover": "Hard coral % cover",
@@ -641,6 +647,8 @@
     "length": "Length",
     "macroalgae_cover": "Macroalgae % cover",
     "macroalgae_cover_info": "Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).",
+    "max_length": "Max Length",
+    "max_type": "Max Type",
     "normal": "Normal",
     "number_of_colonies": "Number of colonies",
     "number_of_points": "Number of points",
@@ -665,10 +673,12 @@
     "quadrat_number_start": "Quadrat number start",
     "quadrat_number_start_info": "Number of the first quadrat/photo along the transect (e.g. 1)",
     "recently_dead": "Recently dead",
+    "see_references_link": "See References (xlsx download)",
     "soft_coral_cover": "Soft coral % cover",
     "soft_coral_cover_info": "Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).",
     "total_colonies": "Total number of colonies",
-    "total_coral_genera": "Total number of coral genera"
+    "total_coral_genera": "Total number of coral genera",
+    "trophic_group": "Trophic Group"
   },
   "offline": {
     "page_unavailable_offline": "This page is unavailable offline",
@@ -746,10 +756,12 @@
       "not_saved": "Project could not be saved",
       "project_name_exists": "Project name already exists in MERMAID"
     },
+    "known_project_access": "The admin of {{projectName}} can add you to this project.",
     "last_updated_date": "Last updated date",
     "loading_indicator": "Loading indicator",
     "name_of_project": "Name of project",
     "new_project": "New project",
+    "no_access_permission": "You do not have permission to access this project.",
     "no_notes": "No notes for this project",
     "no_offline_projects": "You do not have any offline projects.",
     "no_organizations": "This project has no organizations.",
@@ -757,6 +769,7 @@
     "no_projects_match": "No projects match the current filter.",
     "no_submitted_sample_units": "This project has no submitted sample units yet.",
     "notify_user_email": "Notify users by email",
+    "online_only": "Online only",
     "other_project_member_one": "Other project member",
     "other_project_member_other": "Other project members",
     "project": "Project",
@@ -766,6 +779,7 @@
     "project_last_updated": "Project last updated",
     "project_name": "Project name",
     "projects": "Projects",
+    "read_only": "Read only",
     "remove_before_delete": "You have to remove {{projectName}} from all sample units before you can delete it.",
     "sort_by": "Sort by",
     "success": {
@@ -775,8 +789,10 @@
       "project_saved": "Project saved",
       "test_project_status_saved": "Test project selection saved"
     },
+    "unknown_project_access": "The admin of <code>unknown project name</code> can add you to this project.",
     "user_confirm_delete": "Are you sure you want to delete {{projectName}}?",
-    "view_member_emails": "View project member email"
+    "view_member_emails": "View project member email",
+    "warning_readonly_active_units": "You cannot submit these collect records because you only have read-only access to this project. Please contact the project admin."
   },
   "propose_new_species": "Propose new species",
   "protocol_titles": {
@@ -803,6 +819,7 @@
   "removed_from_project_message": "<strong>{{userName}}</strong> is an observer on this sample unit but is no longer a part of this project",
   "sample_units": {
     "add": "Add sample unit",
+    "collect": "Collect",
     "collecting": "Collecting",
     "create_validate": "Create, validate, and submit sample units",
     "delete_unsubmitted": "Delete unsubmitted sample units",
@@ -849,6 +866,7 @@
     "submitted": "Submitted",
     "submitted_and_unsubmitted_transect_number": "Transect number for submitted and unsubmitted sample units",
     "submitted_no_data_message": "This project has no submitted sample units",
+    "submitted_offline": "Submitted offline",
     "submitted_readonly": "Submitted sample units are read-only.",
     "submitted_readonly_and_movable_by_admin": "Submitted sample units are read-only and can only be moved to Collecting by an admin.",
     "success": {
@@ -908,7 +926,8 @@
     "site": "Site",
     "site_name": "Site name",
     "resolve_duplicate_site": "Resolve duplicate site",
-    "sites": "Sites"
+    "sites": "Sites",
+    "sites_offline": "Sites offline"
   },
   "size_cm": "Size (cm)",
   "sort_ascending": "Sort ascending",
@@ -993,7 +1012,8 @@
     "user": "User",
     "user_records_unavailable": "User record data is currently unavailable",
     "user_roles": "User roles",
-    "users": "Users"
+    "users": "Users",
+    "users_offline": "Users offline"
   },
   "validation_messages": {
     "all_attributes_same_category": "All benthic attributes are {{category}}",

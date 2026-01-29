@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import language from '../../language'
+import { useTranslation } from 'react-i18next'
 import { Table, Td, Tr } from '../../components/generic/Table/table'
 import theme from '../../theme'
 import { TextLink, LinkContainer } from '../../components/generic/links'
@@ -16,6 +16,36 @@ export const fishReferenceEndpoint = {
   species: 'species',
   grouping: 'groupings',
 }
+
+const TableContainer = styled('div')`
+  outline: ${theme.color.outline};
+
+  & label {
+    padding: ${theme.spacing.medium};
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+  }
+
+  && th {
+    position: unset;
+  }
+  && td {
+    padding: ${theme.spacing.medium};
+  }
+
+  & tr {
+    border-width: ${theme.spacing.borderSmall};
+    border-color: ${theme.color.tableBorderColor};
+    border-style: solid;
+  }
+
+  & ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+  }
+`
 
 export const getFishNameConstants = ({ species, genera, families, groupings = [] }) => {
   const fishNameMergedObject = [...species, ...genera, ...families, ...groupings]
@@ -57,7 +87,7 @@ export const getFishNameOptions = ({ species, genera, families, groupings = [] }
   return [...speciesOptions, ...generaAndFamiliesOptions]
 }
 
-export const getFishNameTable = ({
+const FishNameTableContent = ({
   fishFamilies,
   fishGroupings,
   choices,
@@ -65,41 +95,21 @@ export const getFishNameTable = ({
   fishSpecies,
   fishNameId,
 }) => {
+  const { t } = useTranslation()
   const fishNameInfo = [...fishSpecies, ...fishGenera, ...fishFamilies, ...fishGroupings].find(
     (item) => item.id === fishNameId,
   )
 
-  const tableLanguage = language.pages.collectRecord.fishNamePopover
-
-  const TableContainer = styled('div')`
-    outline: ${theme.color.outline};
-
-    & label {
-      padding: ${theme.spacing.medium};
-      display: flex;
-      justify-content: center;
-      font-weight: bold;
-    }
-
-    && th {
-      position: unset;
-    }
-    && td {
-      padding: ${theme.spacing.medium};
-    }
-
-    & tr {
-      border-width: ${theme.spacing.borderSmall};
-      border-color: ${theme.color.tableBorderColor};
-      border-style: solid;
-    }
-
-    & ul {
-      padding: 0;
-      margin: 0;
-      list-style-type: none;
-    }
-  `
+  const tableLanguage = {
+    family: t('observations.family'),
+    biomassConstants: t('observations.biomass_constants'),
+    maxLength: `${t('observations.max_length')} (${t('measurements.centimeter_short')})`,
+    groupSize: t('observations.group_size'),
+    maxType: t('observations.max_type'),
+    functionalGroup: t('observations.functional_group'),
+    trophicGroup: t('observations.trophic_group'),
+    seeReferencesLink: t('observations.see_references_link'),
+  }
   const trophicGroupName = choices.fishgrouptrophics.data?.find(
     (item) => item.id === fishNameInfo?.trophic_group,
   )?.name
@@ -129,7 +139,7 @@ export const getFishNameTable = ({
         rel="noreferrer"
         download
       >
-        See References (xlsx download)
+        {tableLanguage.seeReferencesLink}
       </TextLink>
     </LinkContainer>
   )
@@ -150,7 +160,7 @@ export const getFishNameTable = ({
                 </Tr>
               ) : null}
               <Tr>
-                <Td as="th">{tableLanguage.biomasConstants}</Td>
+                <Td as="th">{tableLanguage.biomassConstants}</Td>
                 <Td>
                   <ul>
                     <li>A - {fishNameInfo?.biomass_constant_a}</li>
@@ -162,7 +172,7 @@ export const getFishNameTable = ({
 
               {fishNameInfo?.max_length ? (
                 <Tr>
-                  <Td as="th">Max Length (cm)</Td>
+                  <Td as="th">{tableLanguage.maxLength}</Td>
                   <Td>{maxLength}</Td>
                 </Tr>
               ) : null}
@@ -197,3 +207,5 @@ export const getFishNameTable = ({
     </TableContainer>
   )
 }
+
+export const getFishNameTable = (props) => <FishNameTableContent {...props} />
