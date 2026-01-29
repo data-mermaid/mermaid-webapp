@@ -201,11 +201,6 @@ const pages = {
   },
 }
 
-const map = {
-  attribution:
-    'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
-}
-
 const getResolveModalLanguage = (siteOrManagementRegime) => {
   return {
     original: `Original ${siteOrManagementRegime}`,
@@ -336,8 +331,6 @@ export default {
   error,
   getResolveModalLanguage,
   helperText,
-  map,
   pages,
-  protocolTitles,
   success,
 }
