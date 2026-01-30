@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import i18next from '../../../i18ni18n'
+import i18next from '../../../i18n'
 import { Table, Td, Tr } from '../../components/generic/Table/table'
 import theme from '../../theme'
 import { TextLink, LinkContainer } from '../../components/generic/links'

@@ -1,6 +1,5 @@
 // prettier-ignore
 import React from 'react'
-import { HelperTextLink } from './components/generic/links'
 
 const error = {
   403: 'The current user does not have permission to do that.',
