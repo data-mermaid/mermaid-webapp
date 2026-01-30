@@ -25,7 +25,6 @@ import { CloseButton } from '../generic/buttons'
 import { Box } from '@mui/material'
 import { IconClose } from '../icons'
 import cardStyles from '../ProjectCard/ProjectCard.module.scss'
-import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 interface DemoProjectCalloutProps {
@@ -52,7 +51,7 @@ const DemoProjectCallout = ({
   }
 
   return (
-    <Box id="demo-project-callout" className={calloutStyleClasses}>
+    <Box data-testid="demo-project-callout" className={calloutStyleClasses}>
       <div>
         <h2>{t('projects.demo.tryout')}</h2>
         <p>{t('projects.demo.teaser')}</p>
@@ -66,7 +65,11 @@ const DemoProjectCallout = ({
           label={t('projects.buttons.add_demo')}
         />
         {userHasProjects && (
-          <CloseButton type="button" onClick={handleDemoTryoutDismiss}>
+          <CloseButton
+            type="button"
+            onClick={handleDemoTryoutDismiss}
+            data-testid="callout-close-button"
+          >
             <IconClose aria-label={t('buttons.close')} />
           </CloseButton>
         )}
@@ -102,7 +105,7 @@ const Projects = () => {
   const hasUserDismissedDemo = currentUser.collect_state?.hasUserDismissedDemo ?? false
   const userHasDemoProject = projects.some((proj) => proj.is_demo === true)
   const [isDemoCalloutVisible, setIsDemoCalloutVisible] = useState(
-    !userHasDemoProject && isAppOnline && !hasUserDismissedDemo,
+    !userHasDemoProject && !hasUserDismissedDemo && isAppOnline,
   )
 
   useEffect(() => {
@@ -143,35 +146,29 @@ const Projects = () => {
     })
   }
 
-  const handleSuccessResponse = (response, languageSuccessMessage: string) => {
-    refreshCurrentUser() // ensures correct user privileges
-    toast.success(...getToastArguments(languageSuccessMessage))
-    setIsLoading(false)
-    navigate(`/projects/${response.id}/sites`)
-  }
-
-  const handleResponseError = (error: AxiosError) => {
-    const isDuplicateError = error.response?.status === 400
-    setIsLoading(false)
-
-    handleHttpResponseError({
-      error,
-      callback: () => {
-        if (isDuplicateError) {
-          toast.error(...getToastArguments(t('api_errors.demo_project_exists')))
-        }
-      },
-    })
-  }
   const createDemoProject = () => {
     setIsLoading(true)
     databaseSwitchboardInstance
       .addDemoProject()
       .then((response) => {
-        handleSuccessResponse(response, t('projects.success.project_created'))
+        updateUserSettings('hasUserDismissedDemo', true)
+        refreshCurrentUser() // ensures correct user privileges
+        toast.success(...getToastArguments(t('projects.demo.created')))
+        setIsLoading(false)
+        navigate(`/projects/${response.id}/sites`)
       })
       .catch((error) => {
-        handleResponseError(error)
+        const isDuplicateError = error.response?.status === 400
+        setIsLoading(false)
+
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            if (isDuplicateError) {
+              toast.error(...getToastArguments(t('api_errors.demo_project_exists')))
+            }
+          },
+        })
       })
   }
 
