@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components'
 import { IconBell, IconOpenInNew, IconExcel, IconMenu } from '../icons'
 import theme from '../../theme'
-import { ButtonThatLooksLikeLink } from '../generic/buttons'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 
 export const StyledHeader = styled('header')`
@@ -26,12 +25,11 @@ export const UserButton = styled('button')`
   background: none;
   border: none;
 `
-export const HeaderIconWrapper = styled('div')`
-  margin-right: 0.3em;
-`
+
 export const LogoImg = styled('img')`
   height: calc(${theme.spacing.headerHeight} - 10px);
-  margin: ${theme.spacing.small};
+  padding: 0 ${theme.spacing.small};
+  margin-top: 5px;
   ${mediaQueryTabletLandscapeOnly(css`
     height: calc(${theme.spacing.headerHeight} - 15px);
     margin-top: 7px;
@@ -46,7 +44,7 @@ const linkStyles = css`
   text-decoration: none;
   position: relative;
   margin: 0 ${theme.spacing.small};
-  display: inline-block;
+  display: block;
   padding: 0;
   line-height: ${theme.spacing.headerHeight};
   ${hoverState(
@@ -56,10 +54,6 @@ const linkStyles = css`
   )}
 `
 
-export const HeaderButtonThatLooksLikeLink = styled(ButtonThatLooksLikeLink)`
-  ${linkStyles}
-`
-
 export const StyledNavLink = styled('a')`
   ${linkStyles}
   ${(props) =>
@@ -67,21 +61,9 @@ export const StyledNavLink = styled('a')`
     css`
       color: ${theme.color.disabledText};
       pointer-events: none;
-    `} 
-  }
-  display: flex;
-`
-
-export const UserMenu = styled('div')`
-  position: absolute;
-  top: ${theme.spacing.headerHeight};
-  right: 0;
-  background-color: ${theme.color.headerDropdownMenuBackground};
-  color: ${theme.color.white};
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  padding: ${theme.spacing.medium};
+    `}
+}
+display: flex;
 `
 
 export const LoggedInAs = styled('p')`
@@ -89,29 +71,7 @@ export const LoggedInAs = styled('p')`
   white-space: nowrap;
   opacity: 0.7;
 `
-export const GlobalNav = styled('nav')`
-  .desktop {
-    display: flex;
-  }
-  .mobile {
-    display: none;
-  }
-  ${mediaQueryTabletLandscapeOnly(css`
-    .desktop {
-      display: none;
-    }
-    .mobile {
-      display: flex;
-    }
-  `)}
-`
 
-export const UserMenuButton = styled.button`
-  ${linkStyles}
-  border-width: 0 0 3px 0;
-  background: none;
-  display: inline-block;
-`
 const biggerIcons = css`
   width: ${theme.typography.largeIconSize};
   height: ${theme.typography.largeIconSize};

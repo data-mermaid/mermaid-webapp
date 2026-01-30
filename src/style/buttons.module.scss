@@ -86,14 +86,15 @@
 }
 
 //Currently unused - confirm styles before use, then remove comment
-.button--link {
+@mixin button--link {
   font-size: inherit;
   padding: $spacing-small $spacing-medium;
   background: none;
   border: none;
   cursor: pointer;
+
   &:disabled {
-    color: $disabled;
+    color: $secondary-disabled;
   }
 }
 

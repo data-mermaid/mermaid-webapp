@@ -3,23 +3,18 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
 import {
-  UserButton,
-  GlobalNav,
-  HeaderButtonThatLooksLikeLink,
-  StyledHeader,
-  LogoImg,
-  StyledNavLink,
-  NotificationIndicator,
-  UserMenuButton,
-  UserMenu,
   BiggerIconBell,
-  MediumIconExcel,
   BiggerIconMenu,
   LoggedInAs,
-  HeaderIconWrapper,
+  LogoImg,
+  MediumIconExcel,
+  NotificationIndicator,
+  StyledHeader,
+  StyledNavLink,
+  UserButton,
 } from './Header.styles'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { IconGlobe, IconLibraryBooks } from '../icons'
+import { IconGlobe, IconLanguage, IconLibraryBooks } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { UserIcon } from '../UserIcon/UserIcon'
@@ -29,9 +24,8 @@ import MermaidCollectLogo from '../../assets/mermaid-collect-logo.svg'
 import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
 import { useTranslation } from 'react-i18next'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLanguage } from '@fortawesome/free-solid-svg-icons'
 import i18n from '../../../i18n.ts'
+import styles from './Header.module.scss'
 
 const handleLanguageSelect = (lng) => {
   i18n.changeLanguage(lng)
@@ -40,30 +34,33 @@ const handleLanguageSelect = (lng) => {
 const LanguageMenuTool = () => {
   const { t } = useTranslation()
   return (
-    <OfflineHide>
-      <HideShow
-        closeOnClickWithin={true}
-        button={
-          <HeaderButtonThatLooksLikeLink>
-            <HeaderIconWrapper>
-              <FontAwesomeIcon icon={faLanguage} style={{ marginRight: '10px' }} />
-              {t('languages.language')}
-            </HeaderIconWrapper>
-          </HeaderButtonThatLooksLikeLink>
-        }
-        contents={
-          <UserMenu>
-            <UserMenuButton onClick={() => handleLanguageSelect('cimode')}>Token QA</UserMenuButton>
-            <UserMenuButton onClick={() => handleLanguageSelect('en')}>
-              {t('languages.english')}
-            </UserMenuButton>
-            <UserMenuButton onClick={() => handleLanguageSelect('id')}>
-              {t('languages.indonesian')}
-            </UserMenuButton>
-          </UserMenu>
-        }
-      />
-    </OfflineHide>
+    <HideShow
+      closeOnClickWithin={true}
+      button={
+        <button className={styles['header__button']}>
+          <div className={styles['icon-wrapper']}>
+            <IconLanguage />
+            {t('languages.language')}
+          </div>
+        </button>
+      }
+      contents={
+        <div className={styles['user-nav']}>
+          <button
+            className={styles['user-nav--link']}
+            onClick={() => handleLanguageSelect('cimode')}
+          >
+            Token QA
+          </button>
+          <button className={styles['user-nav--link']} onClick={() => handleLanguageSelect('en')}>
+            {t('languages.english')}
+          </button>
+          <button className={styles['user-nav--link']} onClick={() => handleLanguageSelect('id')}>
+            {t('languages.indonesian')}
+          </button>
+        </div>
+      }
+    />
   )
 }
 
@@ -84,11 +81,11 @@ const GlobalLinks = ({ isAppOnline }) => {
   }
 
   return (
-    <>
+    <div className={'nav__wrapper'}>
       <StyledNavLink as={Link} to="/projects" data-testid="projects-link">
-        <HeaderIconWrapper>
+        <div className={styles['icon-wrapper']}>
           <IconLibraryBooks />
-        </HeaderIconWrapper>
+        </div>
         {t('projects.projects')}
       </StyledNavLink>
       <StyledNavLink
@@ -99,9 +96,9 @@ const GlobalLinks = ({ isAppOnline }) => {
         onMouseOver={handleReferenceMouseOver}
         data-testid="reference-link"
       >
-        <HeaderIconWrapper>
+        <div className={styles['icon-wrapper']}>
           <MediumIconExcel />
-        </HeaderIconWrapper>
+        </div>
         {t('reference')}
       </StyledNavLink>
       <OfflineHide>
@@ -111,16 +108,16 @@ const GlobalLinks = ({ isAppOnline }) => {
           rel="noreferrer"
           data-testid="mermaid-explore-link"
         >
-          <HeaderIconWrapper>
+          <div className={styles['icon-wrapper']}>
             <IconGlobe />
-          </HeaderIconWrapper>
+          </div>
           {t('mermaid_explore')}
         </StyledNavLink>
       </OfflineHide>
       {/*Language is available in local and dev environment to confirm comprehensive tokenization.
       Submenu items do not currently populate mobile.*/}
-      {isDevelopmentEnvironment && <LanguageMenuTool />}
-    </>
+      {isDevelopmentEnvironment && isAppOnline && <LanguageMenuTool />}
+    </div>
   )
 }
 
@@ -141,12 +138,16 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
-      <UserMenuButton onClick={openProfileModal} data-testid="profile-button">
+      <button
+        className={styles['user-nav--link']}
+        onClick={openProfileModal}
+        data-testid="profile-button"
+      >
         {t('profile.profile')}
-      </UserMenuButton>
-      <UserMenuButton onClick={logout} data-testid="logout-button">
+      </button>
+      <button className={styles['user-nav--link']} onClick={logout} data-testid="logout-button">
         {t('buttons.logout')}
-      </UserMenuButton>
+      </button>
     </OfflineHide>
   )
 
@@ -168,20 +169,18 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
         <Link to="/projects" id="gtm-collect-logo">
           <LogoImg id="gtm-collect-logo-img" src={MermaidCollectLogo} alt={t('mermaid_logo')} />
         </Link>
-        <GlobalNav>
-          <div className="desktop">
+        <nav>
+          <div className={styles['desktop-global-nav']}>
             <GlobalLinks isAppOnline={isAppOnline} />
             {isAppOnline && (
               <HideShow
                 closeOnClickWithin={false}
                 id="gtm-bell-notifications-hideshow"
                 button={
-                  <HeaderButtonThatLooksLikeLink id="gtm-bell-notifications">
+                  <button className={styles['header__button']} id="gtm-bell-notifications">
                     <BiggerIconBell id="gtm-bell-notifications-icon" />
-                    {notifications.length ? (
-                      <NotificationIndicator>&bull;</NotificationIndicator>
-                    ) : undefined}
-                  </HeaderButtonThatLooksLikeLink>
+                    {notifications.length && <NotificationIndicator>&bull;</NotificationIndicator>}
+                  </button>
                 }
                 contents={<BellNotificationDropDown />}
               />
@@ -190,39 +189,37 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
               closeOnClickWithin={true}
               button={userIconButton}
               contents={
-                <UserMenu>
+                <div className={styles['user-nav']}>
                   {currentUser && (
                     <LoggedInAs>
                       {t('profile.logged_in_as')} {userDisplayName}
                     </LoggedInAs>
                   )}
                   <UserMenuDropDownContent />
-                </UserMenu>
+                </div>
               }
             />
           </div>
-          <div className="mobile">
+          <div className={styles['mobile-global-nav']}>
             {isAppOnline && (
               <HideShow
                 button={
-                  <HeaderButtonThatLooksLikeLink>
+                  <button className={styles['header__button']}>
                     <BiggerIconBell />
-                    {notifications.length ? (
-                      <NotificationIndicator>&bull;</NotificationIndicator>
-                    ) : undefined}
-                  </HeaderButtonThatLooksLikeLink>
+                    {notifications.length && <NotificationIndicator>&bull;</NotificationIndicator>}
+                  </button>
                 }
                 contents={<BellNotificationDropDown />}
               />
             )}
             <HideShow
               button={
-                <HeaderButtonThatLooksLikeLink>
+                <button className={styles['header__button']}>
                   <BiggerIconMenu />
-                </HeaderButtonThatLooksLikeLink>
+                </button>
               }
               contents={
-                <UserMenu>
+                <div className={styles['user-nav']}>
                   <GlobalLinks isAppOnline={isAppOnline} />
                   {currentUser && (
                     <LoggedInAs>
@@ -230,11 +227,11 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
                     </LoggedInAs>
                   )}
                   <UserMenuDropDownContent />
-                </UserMenu>
+                </div>
               }
             />
           </div>
-        </GlobalNav>
+        </nav>
       </StyledHeader>
       <ProfileModal isOpen={isProfileModalOpen} onDismiss={closeProfileModal} />
     </>

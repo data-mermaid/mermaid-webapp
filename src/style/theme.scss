@@ -20,6 +20,7 @@ $warning: #efda70;
 $white: #ffffff;
 $black: #000000;
 $disabled: #969696;
+$secondary-disabled: #6b6b6b;
 
 $tableRowOdd: #fdfdfe;
 $tableRowEven: #f8f8fa;
@@ -33,6 +34,8 @@ $mobile-break: 599px;
 $tablet-portrait-break: 600px;
 $tablet-landscape-break: 960px;
 $desktop-break: 1300px;
+$max-screen-width: 90vw;
+$max-width: 1200px;
 
 /** Typography **/
 $font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
@@ -59,10 +62,10 @@ $border-medium: 2px;
 $border-large: 4px;
 $border-x-large: 8px;
 
-/** Sizing **/
+/** Heights **/
+$header-height: 80px; //4.9rem = 78.4, rounding up
 $pill-height: 26px;
-$max-screen-width: 90vw;
-$max-width: 1200px;
+$pill-height: 26px;
 
 /** Transitions **/
 $default-transition: 0.25s;

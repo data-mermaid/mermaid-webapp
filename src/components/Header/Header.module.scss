@@ -1,0 +1,76 @@
+@use '../../style/theme.scss' as *;
+@use '../../style/buttons.module.scss' as btn;
+
+@mixin nav-link {
+  color: $white;
+  cursor: pointer;
+  white-space: nowrap;
+  //height: $header-height;
+  border-bottom: $border-large solid transparent;
+  text-decoration: none;
+  position: relative;
+  margin: 0 $spacing-small;
+  display: block;
+  padding: 0;
+  //line-height: $header-height;
+  line-height: 1.5em;
+
+  &:hover,
+  &:focus {
+    border-bottom: 3px solid $callout;
+  }
+}
+
+.header__button {
+  @include btn.button--link;
+  @include nav-link;
+  @media (max-width: $tablet-portrait-break) {
+    line-height: 25px;
+  }
+}
+
+.user-nav {
+  position: absolute;
+  top: 36px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: $spacing-medium;
+  background-color: $primary;
+  color: $white;
+}
+.user-nav--link {
+  @include nav-link;
+  background: none;
+  border-width: 0 0 $border-large 0;
+  line-height: 35px;
+  margin: 0;
+  @media (min-width: $tablet-portrait-break) {
+    display: inline-block;
+  }
+}
+
+.icon-wrapper {
+  display: inline-block;
+  margin-right: $spacing-x-small;
+}
+
+.nav__wrapper {
+  @media (min-width: $tablet-portrait-break) {
+    display: flex;
+    align-items: baseline;
+  }
+}
+.desktop-global-nav {
+  display: flex;
+  @media (max-width: $tablet-landscape-break) {
+    display: none;
+  }
+}
+.mobile-global-nav {
+  display: none;
+  @media (max-width: $tablet-landscape-break) {
+    display: flex;
+  }
+}
