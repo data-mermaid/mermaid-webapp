@@ -83,30 +83,6 @@ const error = {
   noProjectMermaidExplore: 'No project found in MERMAID Explore.',
 }
 
-const success = {
-  getProjectTurnOnOfflineReadySuccess: (projectName) => `${projectName} is now offline ready`,
-  getProjectTurnOffOfflineReadySuccess: (projectName) =>
-    `${projectName} has been removed from being offline ready`,
-  getUserRoleChangeSuccessMessage: ({ userName, role }) =>
-    `${userName}'s role is now set to ${role}.`,
-
-  newUserAdd: 'New user added.',
-  newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
-  userRemoved: 'User removed',
-  projectSave: 'Project saved',
-  projectAddGfcr: 'Added GFCR indicators to project',
-  projectRemoveGfcr: 'Removed GFCR indicators from project',
-  projectDeleted: 'Project deleted',
-  getMermaidDataSaveSuccess: ({ mermaidDataTypeLabel, isAppOnline }) =>
-    isAppOnline
-      ? `The ${mermaidDataTypeLabel} has been saved on your computer and online.`
-      : `The ${mermaidDataTypeLabel} has been saved on your computer.`,
-  getMermaidDataDeleteSuccess: (mermaidDataTypeLabel) =>
-    `The ${mermaidDataTypeLabel} has been deleted from your computer and online.`,
-  submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
-}
-
 export default {
   error,
-  success,
 }

@@ -754,7 +754,9 @@
       "not_available": "Projects are currently unavailable.",
       "not_deleted": "This project has not been deleted.",
       "not_saved": "Project could not be saved",
-      "project_name_exists": "Project name already exists in MERMAID"
+      "project_name_exists": "Project name already exists in MERMAID",
+      "offline_ready_on_failed": "The project {{projectName}} may not be ready to be used offline.",
+      "offline_ready_off_failed": "The project {{projectName}}, has not been removed from being offline-ready."
     },
     "known_project_access": "The admin of {{projectName}} can add you to this project.",
     "last_updated_date": "Last updated date",
@@ -787,7 +789,9 @@
       "project_created": "Project created",
       "project_deleted": "Project deleted",
       "project_saved": "Project saved",
-      "test_project_status_saved": "Test project selection saved"
+      "test_project_status_saved": "Test project selection saved",
+      "offline_ready_on": "{{projectName}} is now offline ready",
+      "offline_ready_off": "{{projectName}} has been removed from being offline ready"
     },
     "unknown_project_access": "The admin of <code>unknown project name</code> can add you to this project.",
     "user_confirm_delete": "Are you sure you want to delete {{projectName}}?",

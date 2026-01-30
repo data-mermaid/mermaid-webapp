@@ -10,7 +10,6 @@ import {
 } from './ProjectCard.styles'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
-import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -56,7 +55,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            ...getToastArguments(language.success.getProjectTurnOnOfflineReadySuccess(name)),
+            ...getToastArguments(t('projects.success.offline_ready_on', { projectName: name })),
           )
         })
         .catch((error) => {
@@ -64,7 +63,9 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             error,
             callback: () => {
               toast.error(
-                ...getToastArguments(language.error.getProjectTurnOnOfflineReadyFailure(name)),
+                ...getToastArguments(
+                  t('projects.errors.offline_ready_on_failed', { projectName: name }),
+                ),
               )
             },
           })
@@ -78,7 +79,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            ...getToastArguments(language.success.getProjectTurnOffOfflineReadySuccess(name)),
+            ...getToastArguments(t('projects.success.offline_ready_off', { projectName: name })),
           )
         })
         .catch((error) => {
@@ -86,7 +87,9 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             error,
             callback: () => {
               toast.error(
-                ...getToastArguments(language.error.getProjectTurnOffOfflineReadyFailure(name)),
+                ...getToastArguments(
+                  t('projects.errors.offline_ready_off_failed', { projectName: name }),
+                ),
               )
             },
           })
