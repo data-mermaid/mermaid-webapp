@@ -303,7 +303,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
 
             const sortedManagementComplianceOptions = sortManagementComplianceChoices([
               ...getOptions(choicesResponse.managementcompliances.data),
-              { label: notReportedCompliance, value: '' },
+              { label: notReportedCompliance.toLowerCase(), value: '' },
             ])
 
             setManagementPartyOptions(getOptions(choicesResponse.managementparties.data))
