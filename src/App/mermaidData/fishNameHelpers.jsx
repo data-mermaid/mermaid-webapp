@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useTranslation } from 'react-i18next'
+import language from '../../language'
 import { Table, Td, Tr } from '../../components/generic/Table/table'
 import theme from '../../theme'
 import { TextLink, LinkContainer } from '../../components/generic/links'
+import { useTranslation } from 'react-i18next'
 
 const FAMILY_RANK = 'family'
 const GENUS_RANK = 'genus'
@@ -16,36 +17,6 @@ export const fishReferenceEndpoint = {
   species: 'species',
   grouping: 'groupings',
 }
-
-const TableContainer = styled('div')`
-  outline: ${theme.color.outline};
-
-  & label {
-    padding: ${theme.spacing.medium};
-    display: flex;
-    justify-content: center;
-    font-weight: bold;
-  }
-
-  && th {
-    position: unset;
-  }
-  && td {
-    padding: ${theme.spacing.medium};
-  }
-
-  & tr {
-    border-width: ${theme.spacing.borderSmall};
-    border-color: ${theme.color.tableBorderColor};
-    border-style: solid;
-  }
-
-  & ul {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-  }
-`
 
 export const getFishNameConstants = ({ species, genera, families, groupings = [] }) => {
   const fishNameMergedObject = [...species, ...genera, ...families, ...groupings]
@@ -87,7 +58,7 @@ export const getFishNameOptions = ({ species, genera, families, groupings = [] }
   return [...speciesOptions, ...generaAndFamiliesOptions]
 }
 
-const FishNameTableContent = ({
+export const getFishNameTable = ({
   fishFamilies,
   fishGroupings,
   choices,
@@ -95,7 +66,7 @@ const FishNameTableContent = ({
   fishSpecies,
   fishNameId,
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation
   const fishNameInfo = [...fishSpecies, ...fishGenera, ...fishFamilies, ...fishGroupings].find(
     (item) => item.id === fishNameId,
   )
@@ -110,6 +81,36 @@ const FishNameTableContent = ({
     trophicGroup: t('observations.trophic_group'),
     seeReferencesLink: t('observations.see_references_link'),
   }
+
+  const TableContainer = styled('div')`
+    outline: ${theme.color.outline};
+
+    & label {
+      padding: ${theme.spacing.medium};
+      display: flex;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    && th {
+      position: unset;
+    }
+    && td {
+      padding: ${theme.spacing.medium};
+    }
+
+    & tr {
+      border-width: ${theme.spacing.borderSmall};
+      border-color: ${theme.color.tableBorderColor};
+      border-style: solid;
+    }
+
+    & ul {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+    }
+  `
   const trophicGroupName = choices.fishgrouptrophics.data?.find(
     (item) => item.id === fishNameInfo?.trophic_group,
   )?.name
@@ -207,5 +208,3 @@ const FishNameTableContent = ({
     </TableContainer>
   )
 }
-
-export const getFishNameTable = (props) => <FishNameTableContent {...props} />
