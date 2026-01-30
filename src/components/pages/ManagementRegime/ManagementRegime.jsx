@@ -240,7 +240,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const managementRegimeTitleText = t('management_regimes.management_regime')
   const managementRegimeTitleLowerCaseText = managementRegimeTitleText.toLowerCase()
   const managementRegimeRecordUnavailableText = t('management_regimes.data_unavailable')
-  const notReportedCompliance = t('management_regimes.not_reported_compliance')
+  const notReportedCompliance = t('management_regimes.not_reported_compliance').toLowerCase()
   const deleteModalText = {
     title: t('management_regimes.delete_management_regime'),
     prompt: t('management_regimes.confirm_delete'),
@@ -303,7 +303,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
 
             const sortedManagementComplianceOptions = sortManagementComplianceChoices([
               ...getOptions(choicesResponse.managementcompliances.data),
-              { label: notReportedCompliance.toLowerCase(), value: '' },
+              { label: notReportedCompliance, value: '' },
             ])
 
             setManagementPartyOptions(getOptions(choicesResponse.managementparties.data))
