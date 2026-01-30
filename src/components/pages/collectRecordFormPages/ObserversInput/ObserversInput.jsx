@@ -141,7 +141,7 @@ const ObserversInput = ({
                       <Trans
                         i18nKey="removed_from_project_message"
                         values={{ userName: getObserverNameToUse(removedObserver) }}
-                      />{' '}
+                      />
                       <ButtonThatLooksLikeLinkUnderlined
                         type="button"
                         data-testid="remove-observer-button"
