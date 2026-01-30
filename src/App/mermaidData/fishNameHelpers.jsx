@@ -1,10 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import language from '../../language'
+import i18next from '../../../i18ni18n'
 import { Table, Td, Tr } from '../../components/generic/Table/table'
 import theme from '../../theme'
 import { TextLink, LinkContainer } from '../../components/generic/links'
-import { useTranslation } from 'react-i18next'
 
 const FAMILY_RANK = 'family'
 const GENUS_RANK = 'genus'
@@ -66,20 +65,21 @@ export const getFishNameTable = ({
   fishSpecies,
   fishNameId,
 }) => {
-  const { t } = useTranslation
   const fishNameInfo = [...fishSpecies, ...fishGenera, ...fishFamilies, ...fishGroupings].find(
     (item) => item.id === fishNameId,
   )
 
   const tableLanguage = {
-    family: t('observations.family'),
-    biomassConstants: t('observations.biomass_constants'),
-    maxLength: `${t('observations.max_length')} (${t('measurements.centimeter_short')})`,
-    groupSize: t('observations.group_size'),
-    maxType: t('observations.max_type'),
-    functionalGroup: t('observations.functional_group'),
-    trophicGroup: t('observations.trophic_group'),
-    seeReferencesLink: t('observations.see_references_link'),
+    family: i18next.t('observations.family'),
+    biomassConstants: i18next.t('observations.biomass_constants'),
+    maxLength: `${i18next.t('observations.max_length')} (${i18next.t(
+      'measurements.centimeter_short',
+    )})`,
+    groupSize: i18next.t('observations.group_size'),
+    maxType: i18next.t('observations.max_type'),
+    functionalGroup: i18next.t('observations.functional_group'),
+    trophicGroup: i18next.t('observations.trophic_group'),
+    seeReferencesLink: i18next.t('observations.see_references_link'),
   }
 
   const TableContainer = styled('div')`
