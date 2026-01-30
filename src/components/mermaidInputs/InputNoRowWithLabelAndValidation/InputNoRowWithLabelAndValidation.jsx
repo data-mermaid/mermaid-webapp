@@ -49,12 +49,14 @@ const InputNoRowWithLabelAndValidation = ({
     event.stopPropagation()
   }
 
+  const inputTestId = testId ? `${testId}-input` : undefined
+
   const inputType = unit ? (
     <InputNumberNoScrollWithUnit
       aria-labelledby={`aria-label${id}`}
       aria-describedby={`aria-descp${id}`}
       id={id}
-      data-testid={`${testId}-input`}
+      data-testid={inputTestId}
       unit={unit}
       disabled={isInputDisabled}
       {...restOfProps}
@@ -64,7 +66,7 @@ const InputNoRowWithLabelAndValidation = ({
       aria-labelledby={`aria-label${id}`}
       aria-describedby={`aria-descp${id}`}
       id={id}
-      data-testid={`${testId}-input`}
+      data-testid={inputTestId}
       {...restOfProps}
       ref={textFieldRef}
     />
@@ -105,6 +107,7 @@ const InputNoRowWithLabelAndValidation = ({
         validationMessages={validationMessages}
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+        testId={testId ? `${testId}-validation` : undefined}
       />
     </>
   )

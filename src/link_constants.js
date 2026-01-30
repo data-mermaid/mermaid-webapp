@@ -13,4 +13,9 @@ export const links = {
   allenCoralAtlas: 'https://allencoralatlas.org/atlas',
   gfcrToolkitPdf: `https://public.datamermaid.org/GFCR-Monitoring-and-Evaluation-Toolkit.pdf?nocache=${Date.now()}`,
   twoXChallengeCriteria: 'https://www.2xchallenge.org/2xcriteria',
+  latLongDecimalDegrees: 'https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees',
+  reefTypes:
+    'https://www.livingoceansfoundation.org/wp-content/uploads/2015/04/U10-Reef-Types-complete-teacher.pdf',
+  reefZonation:
+    'https://www.livingoceansfoundation.org/wp-content/uploads/2015/04/U11-Reef-Zonation-Background.pdf',
 }
