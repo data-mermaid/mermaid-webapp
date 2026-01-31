@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { formikPropType } from '../../../../library/formik/formikPropType'
@@ -16,7 +17,6 @@ import { ButtonThatLooksLikeLinkUnderlined } from '../../../generic/buttons'
 
 import theme from '../../../../theme'
 import RemoveObserverModal from '../../../RemoveObserverModal/RemoveObserverModal'
-import { useTranslation } from 'react-i18next'
 
 const AdditionalInputContentWrapper = styled.div`
   font-size: ${theme.typography.smallFontSize};
@@ -116,9 +116,9 @@ const ObserversInput = ({
   return (
     <>
       <InputWrapper {...restOfProps}>
-        <H2>{t('observers')}</H2>
+        <H2>{t('sample_units.observers')}</H2>
         <InputMuiChipSelectWithLabelAndValidation
-          label={t('observers')}
+          label={t('sample_units.observers')}
           required={true}
           id="observers"
           options={observerNameOptions}
@@ -133,14 +133,15 @@ const ObserversInput = ({
           onChange={({ selectedItems }) => handleObserversChange(selectedItems)}
           additionalInputContent={
             <AdditionalInputContentWrapper data-testid="removed-observer-warning">
-              <label htmlFor="Observers">{t('observers_info')}</label>
+              <label htmlFor="Observers">{t('sample_units.observers_info')}</label>
               <ul>
                 {includedObserversNoLongerOnProject.map((removedObserver) => (
                   <li key={removedObserver.id}>
                     <>
-                      {t('removed_from_project_message', {
-                        userName: getObserverNameToUse(removedObserver),
-                      })}{' '}
+                      <Trans
+                        i18nKey="removed_from_project_message"
+                        values={{ userName: getObserverNameToUse(removedObserver) }}
+                      />
                       <ButtonThatLooksLikeLinkUnderlined
                         type="button"
                         data-testid="remove-observer-button"

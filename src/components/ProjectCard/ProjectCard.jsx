@@ -132,7 +132,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
     >
       <ProjectCardHeader>
         <div>
-          <div className={styles['title-container']}>
+          <div className={styles['project-card__header']}>
             <h2>{name}</h2>
             <div className={styles['pill-container']}>
               {isAdminUser && (
@@ -147,7 +147,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
               )}
             </div>
           </div>
-          <span className={styles['country-date-label']}>{countries.join(', ')}</span>
+          <span className={styles['date-country-label']}>{countries.join(', ')}</span>
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <div className={styles['no-wrap-wrapper']}>
@@ -185,7 +185,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
               {t('projects.available_offline')}
             </CheckBoxLabel>
           </div>
-          <span className={styles['country-date-label']} style={{ marginTop: '1rem' }}>
+          <span className={styles['date-country-label']} style={{ marginTop: '1rem' }}>
             {removeTimeZoneFromDate(updated_on)}
           </span>
         </ProjectCardHeaderButtonsAndDate>
