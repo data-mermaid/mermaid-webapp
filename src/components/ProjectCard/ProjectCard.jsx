@@ -29,6 +29,8 @@ import { useTranslation } from 'react-i18next'
 import labelStyles from '../../style/labels.module.scss'
 import styles from './ProjectCard.module.scss'
 
+const OFFLINE_READY_TOAST_ID = 'offline-ready-toast'
+
 const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...restOfProps }) => {
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -55,7 +57,10 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            ...getToastArguments(t('projects.success.offline_ready_on', { projectName: name })),
+            ...getToastArguments(
+              t('projects.success.offline_ready_on', { projectName: name }),
+              OFFLINE_READY_TOAST_ID,
+            ),
           )
         })
         .catch((error) => {
@@ -65,6 +70,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
               toast.error(
                 ...getToastArguments(
                   t('projects.errors.offline_ready_on_failed', { projectName: name }),
+                  OFFLINE_READY_TOAST_ID,
                 ),
               )
             },
@@ -79,7 +85,10 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            ...getToastArguments(t('projects.success.offline_ready_off', { projectName: name })),
+            ...getToastArguments(
+              t('projects.success.offline_ready_off', { projectName: name }),
+              OFFLINE_READY_TOAST_ID,
+            ),
           )
         })
         .catch((error) => {
@@ -89,6 +98,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
               toast.error(
                 ...getToastArguments(
                   t('projects.errors.offline_ready_off_failed', { projectName: name }),
+                  OFFLINE_READY_TOAST_ID,
                 ),
               )
             },
