@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import theme from '../../../theme'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InlineMessage from '../../generic/InlineMessage/InlineMessage'
-import language from '../../../language'
+import { getValidationMessage } from '../../../library/validationMessageHelpers'
 import ResolveDuplicateSiteButtonAndModal from '../../ResolveDuplicateSiteButtonAndModal/ResolveDuplicateSiteButtonAndModal'
 import ResolveDuplicateMRButtonAndModal from '../../ResolveDuplicateMRButtonAndModal/ResolveDuplicateMRButtonAndModal'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../InputIgnoreValidationWarningCheckboxWithLabel'
@@ -24,6 +24,7 @@ const InputValidationInfo = ({
   currentSelectValue = undefined,
   updateValueAndResetValidationForDuplicateWarning = () => {},
   additionalText = null,
+  testId = undefined,
 }) => {
   const { projectId } = useParams()
   const areThereValidationMessages = validationMessages.length
@@ -79,7 +80,7 @@ const InputValidationInfo = ({
   }
 
   return (
-    <ValidationWrapper>
+    <ValidationWrapper data-testid={testId}>
       {areThereValidationMessages &&
       (isErrorValidation || isWarningValidation || isIgnoredWarningValidation) ? (
         <>
@@ -89,7 +90,7 @@ const InputValidationInfo = ({
               key={validation.id}
               className={`${validationType}-indicator`}
             >
-              <p>{language.getValidationMessage(validation, projectId)}</p>
+              <p>{getValidationMessage(validation, projectId)}</p>
             </InlineMessage>
           ))}
         </>
@@ -109,6 +110,7 @@ InputValidationInfo.propTypes = {
   currentSelectValue: PropTypes.string,
   updateValueAndResetValidationForDuplicateWarning: PropTypes.func,
   additionalText: PropTypes.node,
+  testId: PropTypes.string,
 }
 
 export default InputValidationInfo

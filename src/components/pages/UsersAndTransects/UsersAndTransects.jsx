@@ -110,7 +110,7 @@ const UsersAndTransects = () => {
   const collectingHeaderText = t('sample_units.collecting')
   const siteHeaderText = t('sites.site')
   const methodHeaderText = t('sample_units.method')
-  const summaryRecordDateUnavailableText = t('errors.summary_record_data_unavailable')
+  const summaryRecordDateUnavailableText = t('errors.summary_data_unavailable')
 
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)

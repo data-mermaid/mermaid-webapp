@@ -1,11 +1,17 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components'
 
 import language from '../../../language'
 import theme from '../../../theme'
+import { MessageType } from '../../../types/constants'
 
-const MessagePill = styled.span`
+interface InlineMessageProps {
+  type?: MessageType
+  children: React.ReactNode
+  className?: string
+}
+
+const MessagePill = styled.span<{ type: MessageType }>`
   border: solid 1px ${theme.color.border};
   text-transform: uppercase;
   background: ${(props) => theme.color.getMessageColorBackground(props.type)};
@@ -13,7 +19,9 @@ const MessagePill = styled.span`
   padding: ${theme.spacing.xxsmall} ${theme.spacing.medium};
   border-radius: 5px;
   white-space: nowrap;
+  height: fit-content;
 `
+
 const InlineMessageWrapper = styled.div`
   padding: calc(${theme.spacing.xsmall} + 1px);
   border: none;
@@ -32,7 +40,11 @@ const InlineMessageWrapper = styled.div`
   }
 `
 
-const InlineMessage = ({ type = 'warning', children, className = undefined }) => {
+const InlineMessage = ({
+  type = 'warning',
+  children,
+  className = undefined,
+}: InlineMessageProps) => {
   return (
     <>
       {type && (
@@ -40,15 +52,11 @@ const InlineMessage = ({ type = 'warning', children, className = undefined }) =>
           {language.inlineMessage[type]}
         </MessagePill>
       )}
-      <InlineMessageWrapper className={className}>{children}</InlineMessageWrapper>
+      <InlineMessageWrapper className={className} data-testid={`inline-message-${type}`}>
+        {children}
+      </InlineMessageWrapper>
     </>
   )
-}
-
-InlineMessage.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
-  type: PropTypes.string,
-  className: PropTypes.string,
 }
 
 export default InlineMessage

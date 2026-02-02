@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import {
@@ -23,7 +24,6 @@ import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../.
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import ObservationValidationInfo from '../ObservationValidationInfo'
-import language from '../../../../language'
 import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 
 const StyledColgroup = styled('colgroup')`
@@ -51,21 +51,25 @@ const HabitatComplexityObservationsTable = ({
   setAreObservationsInputsDirty,
   testId,
 }) => {
+  const { t } = useTranslation()
+
+  const metersShort = t('measurements.meter_short')
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
   const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+  const deleteObservationText = t('delete_observation')
 
-  const { interval_size: intervalSize } = formik.values
+  const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
 
   useEffect(
     function recalculateObservationIntervals() {
       observationsDispatch({
         type: 'recalculateObservationIntervals',
-        payload: { intervalSize },
+        payload: { intervalStart, intervalSize },
       })
     },
-    [intervalSize, observationsDispatch],
+    [intervalSize, intervalStart, observationsDispatch],
   )
 
   const _useOnClickOutsideOfInfoIcon = useEffect(() => {
@@ -91,7 +95,7 @@ const HabitatComplexityObservationsTable = ({
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
 
-    observationsDispatch({ type: 'addObservation', payload: { intervalSize } })
+    observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
   }
 
   const observationsRows = useMemo(() => {
@@ -107,7 +111,7 @@ const HabitatComplexityObservationsTable = ({
         setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
-          payload: { referenceObservation: observation, intervalSize },
+          payload: { referenceObservation: observation, intervalStart, intervalSize },
         })
         setAreObservationsInputsDirty(true)
       }
@@ -120,6 +124,7 @@ const HabitatComplexityObservationsTable = ({
           payload: {
             referenceObservationIndex: index,
             intervalSize,
+            intervalStart,
           },
         })
         setAreObservationsInputsDirty(true)
@@ -129,7 +134,6 @@ const HabitatComplexityObservationsTable = ({
     return observationsState.map((observation, index) => {
       const rowNumber = index + 1
       const { id: observationId, score: habitatComplexityScore = '', interval } = observation
-
       const {
         isObservationValid,
         hasObservationWarningValidation,
@@ -149,7 +153,7 @@ const HabitatComplexityObservationsTable = ({
 
         observationsDispatch({
           type: 'deleteObservation',
-          payload: { observationId, intervalSize },
+          payload: { observationId, intervalSize, intervalStart },
         })
       }
 
@@ -172,12 +176,14 @@ const HabitatComplexityObservationsTable = ({
       return (
         <ObservationTr key={observationId} messageType={observationValidationType}>
           <Td align="center">{rowNumber}</Td>
-          <Td align="right" aria-labelledby="interval-label">
-            {interval}m
+          <Td align="right" aria-labelledby="interval-label" data-testid="interval-cell">
+            {interval}
+            {metersShort}
           </Td>
 
           <Td align="center">
             <Select
+              data-testid="habitat-complexity-score-select"
               onChange={handleHabitatComplexityScoreChange}
               onKeyDown={(event) => {
                 handleKeyDown({ event, index, observation, isLastCell: true })
@@ -214,7 +220,8 @@ const HabitatComplexityObservationsTable = ({
               tabIndex="-1"
               type="button"
               onClick={handleDeleteObservation}
-              aria-label="Delete Observation"
+              aria-label={deleteObservationText}
+              data-testid="delete-observation-button"
             >
               <IconClose />
             </ButtonRemoveRow>
@@ -229,16 +236,19 @@ const HabitatComplexityObservationsTable = ({
     collectRecord,
     ignoreObservationValidations,
     intervalSize,
+    intervalStart,
     observationsDispatch,
     observationsState,
     resetObservationValidations,
     setAreObservationsInputsDirty,
+    deleteObservationText,
+    metersShort,
   ])
 
   return (
     <>
       <InputWrapper data-testid={testId}>
-        <H2 id="table-label">Observations</H2>
+        <H2 id="table-label">{t('observations.observations')}</H2>
         <>
           <StyledOverflowWrapper>
             <StickyObservationTable aria-labelledby="table-label">
@@ -253,14 +263,14 @@ const HabitatComplexityObservationsTable = ({
                 <Tr>
                   <Th> </Th>
                   <Th align="right" id="interval-label">
-                    Interval
+                    {t('observations.interval')}
                   </Th>
                   <Th align="center" id="habitat-complexity-score-label">
                     <LabelContainer>
-                      Habitat Complexity Score <RequiredIndicator />
+                      {t('habitat_complexity_score')} <RequiredIndicator />
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
                         <ColumnHeaderToolTip
-                          helperText={language.tooltipText.habitatComplexityScore}
+                          helperText={t('habitat_complexity_score_info')}
                           left="8.3em"
                           top="-21em"
                         />
@@ -269,11 +279,11 @@ const HabitatComplexityObservationsTable = ({
                         type="button"
                         onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
                       >
-                        <IconInfo aria-label="info" />
+                        <IconInfo aria-label={t('info')} />
                       </IconButton>
                     </LabelContainer>
                   </Th>
-                  {areValidationsShowing ? <Th align="center">Validations</Th> : null}
+                  {areValidationsShowing ? <Th align="center">{t('validations')}</Th> : null}
                   <Th> </Th>
                 </Tr>
               </thead>
@@ -281,8 +291,12 @@ const HabitatComplexityObservationsTable = ({
             </StickyObservationTable>
           </StyledOverflowWrapper>
           <UnderTableRow>
-            <ButtonPrimary type="button" onClick={handleAddObservation}>
-              <IconPlus /> Add Row
+            <ButtonPrimary
+              type="button"
+              onClick={handleAddObservation}
+              data-testid="add-observation-row"
+            >
+              <IconPlus /> {t('buttons.add_row')}
             </ButtonPrimary>
           </UnderTableRow>
         </>
@@ -301,6 +315,7 @@ HabitatComplexityObservationsTable.propTypes = {
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({
+      interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       interval_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     }),
   }).isRequired,

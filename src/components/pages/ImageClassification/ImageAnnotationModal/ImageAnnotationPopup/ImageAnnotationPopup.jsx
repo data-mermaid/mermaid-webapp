@@ -13,7 +13,7 @@ import {
 } from '../ImageAnnotationModal.styles'
 import './ImageAnnotationPopup.css'
 import { IconArrowRight, IconZoomIn, IconZoomOut } from '../../../../icons'
-import { MuiTooltipDark } from '../../../../generic/MuiTooltip'
+import { MuiTooltip } from '../../../../generic/MuiTooltip'
 import { unclassifiedGuid } from '../../../../../library/constants/constants'
 import { useTranslation } from 'react-i18next'
 
@@ -92,16 +92,16 @@ const ImageAnnotationPopup = ({
 
       <PopupBottomRow>
         <PopupZoomButtonContainer>
-          <MuiTooltipDark title={t('map_tooling.reset_zoom')}>
+          <MuiTooltip variant="dark" title={t('map_tooling.reset_zoom')}>
             <PopupIconButton type="button" onClick={resetZoom}>
               <IconZoomOut />
             </PopupIconButton>
-          </MuiTooltipDark>
-          <MuiTooltipDark title={t('map_tooling.zoom_to_point')}>
+          </MuiTooltip>
+          <MuiTooltip variant="dark" title={t('map_tooling.zoom_to_point')}>
             <PopupIconButton type="button" onClick={zoomToSelectedPoint}>
               <IconZoomIn />
             </PopupIconButton>
-          </MuiTooltipDark>
+          </MuiTooltip>
         </PopupZoomButtonContainer>
 
         <PopupConfirmButton
@@ -115,7 +115,10 @@ const ImageAnnotationPopup = ({
         </PopupConfirmButton>
 
         <PopupZoomButtonContainer>
-          <MuiTooltipDark title={t('image_classification.annotation.next_unconfirmed_point')}>
+          <MuiTooltip
+            variant="dark"
+            title={t('image_classification.annotation.next_unconfirmed_point')}
+          >
             <PopupIconButton
               type="button"
               onClick={selectNextUnconfirmedPoint}
@@ -123,7 +126,7 @@ const ImageAnnotationPopup = ({
             >
               <IconArrowRight />
             </PopupIconButton>
-          </MuiTooltipDark>
+          </MuiTooltip>
         </PopupZoomButtonContainer>
       </PopupBottomRow>
     </>

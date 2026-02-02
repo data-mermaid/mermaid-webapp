@@ -3,6 +3,7 @@ import { useFormik } from 'formik'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   subNavNodePropTypes,
@@ -24,6 +25,7 @@ import {
 import { getIsUserReadOnlyForProject } from '../../../../App/currentUserProfileHelpers'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getToastArguments } from '../../../../library/getToastArguments'
+import { getDeleteModalText } from '../../../../library/getDeleteModalText'
 import { H2 } from '../../../generic/text'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
@@ -35,12 +37,11 @@ import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsaved
 import DeleteRecordButton from '../../../DeleteRecordButton'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
-import language from '../../../../language'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
 import ObserversInput from '../ObserversInput'
 import PageUnavailable from '../../PageUnavailable'
 import RecordFormTitle from '../../../RecordFormTitle'
-import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
+import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo'
 import SampleEventInputs from '../SampleEventInputs'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCollectRecordValidation from './useCollectRecordValidation'
@@ -168,6 +169,12 @@ const CollectRecordFormPage = ({
   const isBenthicPQTNewRecordWithImageClassificationEnabled =
     isImageClassificationEnabledForUser && isNewRecord && sampleUnitName === 'benthicpqt'
 
+  const { t } = useTranslation()
+
+  const supportingDataUnavailableText = t('sample_units.errors.supporting_data_unavailable')
+  const dataUnavailableText = t('sample_units.errors.data_unavailable')
+  const deleteModalText = getDeleteModalText(t('sample_units.record'))
+
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
   const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
     setManagementRegimes(updatedManagementRegimeRecords)
@@ -229,8 +236,8 @@ const CollectRecordFormPage = ({
               error,
               callback: () => {
                 const errorMessage = isNewRecord
-                  ? language.error.collectRecordSupportingDataUnavailable
-                  : language.error.collectRecordUnavailable
+                  ? supportingDataUnavailableText
+                  : dataUnavailableText
 
                 toast.error(...getToastArguments(errorMessage))
               },
@@ -246,6 +253,8 @@ const CollectRecordFormPage = ({
       isNewRecord,
       isMounted,
       setIdsNotAssociatedWithData,
+      supportingDataUnavailableText,
+      dataUnavailableText,
     ],
   )
 
@@ -405,7 +414,7 @@ const CollectRecordFormPage = ({
       .then((collectRecordResponse) => {
         setIsFormDirty(false)
         formik.resetForm({ values: formik.values }) // this resets formik's dirty state
-        toast.success(...getToastArguments(language.success.collectRecordSave))
+        toast.success(...getToastArguments(t('sample_units.success.record_saved')))
         clearPersistedUnsavedFormikData()
         clearPersistedUnsavedObservationsTable1Data()
         clearPersistedUnsavedObservationsTable2Data()
@@ -423,7 +432,7 @@ const CollectRecordFormPage = ({
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.collectRecordSave))
+            toast.error(...getToastArguments(t('sample_units.errors.save_failed')))
           },
         })
       })
@@ -435,7 +444,7 @@ const CollectRecordFormPage = ({
     databaseSwitchboardInstance
       .submitSampleUnit({ recordId, projectId })
       .then(() => {
-        toast.success(...getToastArguments(language.success.collectRecordSubmit))
+        toast.success(...getToastArguments(t('sample_units.success.record_submitted')))
         navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
       })
       .catch((error) => {
@@ -443,7 +452,7 @@ const CollectRecordFormPage = ({
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.collectRecordSubmit))
+            toast.error(...getToastArguments(t('sample_units.errors.submit_failed')))
           },
         })
       })
@@ -479,7 +488,7 @@ const CollectRecordFormPage = ({
         clearPersistedUnsavedObservationsTable2Data()
         closeDeleteRecordModal()
         setIsDeletingRecord(false)
-        toast.success(...getToastArguments(language.success.collectRecordDelete))
+        toast.success(...getToastArguments(t('sample_units.success.record_deleted')))
         navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
       })
       .catch((error) => {
@@ -487,7 +496,7 @@ const CollectRecordFormPage = ({
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments(language.error.collectRecordDelete))
+            toast.error(...getToastArguments(t('sample_units.errors.delete_failed')))
           },
         })
       })
@@ -499,8 +508,8 @@ const CollectRecordFormPage = ({
 
   const errorBoxContent = (
     <ErrorBox>
-      {<ErrorText isErrorShown={isErrorAbove}>{language.error.onPageWarningAbove}</ErrorText>}
-      {<ErrorText isErrorShown={isErrorBelow}>{language.error.onPageWarningBelow}</ErrorText>}
+      {<ErrorText isErrorShown={isErrorAbove}>{t('sample_units.warning_or_error')}</ErrorText>}
+      {<ErrorText isErrorShown={isErrorBelow}>{t('sample_units.warning_or_error')}</ErrorText>}
     </ErrorBox>
   )
 
@@ -598,7 +607,7 @@ const CollectRecordFormPage = ({
           isLoading={isDeletingRecord}
           isNewRecord={isNewRecord}
           isOpen={isDeleteRecordModalOpen}
-          modalText={language.deleteRecord('Record')}
+          modalText={deleteModalText}
           deleteRecord={deleteRecord}
           onDismiss={closeDeleteRecordModal}
           openModal={openDeleteRecordModal}
@@ -607,7 +616,7 @@ const CollectRecordFormPage = ({
       {!isSubmitWarningVisible ? errorBoxContent : null}
     </>
   ) : (
-    <PageUnavailable mainText={language.error.pageReadOnly} />
+    <PageUnavailable mainText={t('page.read_only')} />
   )
 
   return idsNotAssociatedWithData.length ? (
@@ -624,7 +633,11 @@ const CollectRecordFormPage = ({
         content={contentViewByRole}
         toolbar={
           <ContentPageToolbarWrapper>
-            {isNewRecord && <H2>{language.protocolTitles[sampleUnitName]}</H2>}
+            {isNewRecord && (
+              <H2 data-testid={`${sampleUnitName}-page-title`}>
+                {t(`protocol_titles.${sampleUnitName}`)}
+              </H2>
+            )}
             {collectRecordBeingEdited && !isNewRecord && (
               <RecordFormTitle
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
@@ -645,7 +658,7 @@ const CollectRecordFormPage = ({
             )}
             <ErrorBoxSubmit>
               <ErrorTextSubmit isErrorShown={isSubmitWarningVisible}>
-                {language.error.collectRecordSubmitDisabled}
+                {t('sample_units.errors.submit_disabled')}
                 <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
                   x
                 </ErrorTextButton>

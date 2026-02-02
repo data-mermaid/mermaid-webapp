@@ -27,19 +27,13 @@ describe('Offline', () => {
       },
     )
 
-    await user.click(await screen.findByText('Delete Record'))
+    await user.click(await screen.findByTestId('delete-record-button'))
 
-    expect(screen.getByText('Are you sure you want to delete this record?'))
+    expect(screen.getByTestId('delete-record-prompt'))
 
-    const modal = screen.getByLabelText('Delete Record')
+    const modal = screen.getByTestId('delete-record-modal')
 
-    await user.click(
-      within(modal).getByText('Delete Record', {
-        selector: 'button',
-      }),
-    )
-    // shows toast
-    expect(await screen.findByText('Record deleted.'))
+    await user.click(within(modal).getByTestId('delete-record-confirm-button'))
 
     // navigated to collect records table page
     expect(await screen.findByTestId('collecting-title'))
@@ -51,7 +45,7 @@ describe('Offline', () => {
 
     const table = await screen.findByRole('table')
 
-    const linksToFishbeltRecords = within(table).getAllByRole('link', { name: 'Fish Belt' })
+    const linksToFishbeltRecords = within(table).getAllByRole('link', { name: 'Fish belt' })
 
     // row length = 15 because 16 mock records, now minus 1
     expect(linksToFishbeltRecords).toHaveLength(15)

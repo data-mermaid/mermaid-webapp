@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import theme from '../../theme'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
@@ -7,13 +6,17 @@ import {
   mediaQueryPhoneOnly,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
-import { ButtonCallout, IconButton } from '../generic/buttons'
+import { IconButton } from '../generic/buttons'
 import { Input, inputStyles } from '../generic/form'
 import OfflineHide from '../generic/OfflineHide'
 import ProjectModal from '../ProjectCard/ProjectModal'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { IconGlobe } from '../icons'
 import { useTranslation } from 'react-i18next'
+import CalloutButtonDropdown from '../generic/CalloutButton/CalloutButtonDropdown'
+import CalloutButton from '../generic/CalloutButton/CalloutButton'
+import { getCurrentUserOptionalFeature } from '../../library/getCurrentUserOptionalFeature'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -83,19 +86,32 @@ const BiggerIconGlobe = styled(IconGlobe)`
   width: ${theme.typography.mediumIconSize};
   height: ${theme.typography.mediumIconSize};
 `
+interface ProjectToolBarSectionProps {
+  setProjectFilter: (filter: string) => void
+  projectSortKey: string
+  setProjectSortKey: (sortKey: string) => void
+  setIsProjectSortAsc: (val: boolean) => void
+  addProjectToProjectsPage: (project: object) => void
+  handleExploreButtonClick: () => void
+  userHasDemoProject: boolean
+}
 
 const ProjectToolBarSection = ({
-  projectFilter,
   setProjectFilter,
   projectSortKey,
   setProjectSortKey,
   setIsProjectSortAsc,
   addProjectToProjectsPage,
   handleExploreButtonClick,
-}) => {
+  userHasDemoProject,
+}: ProjectToolBarSectionProps) => {
   const { isAppOnline } = useOnlineStatus()
   const { t } = useTranslation()
-
+  const { currentUser } = useCurrentUser()
+  const { enabled: isDemoProjectEnabledForUser = false } = getCurrentUserOptionalFeature(
+    currentUser,
+    'demo_project',
+  )
   const setFilter = (event) => {
     setProjectFilter(event.target.value)
   }
@@ -121,7 +137,7 @@ const ProjectToolBarSection = ({
         <HeaderStyle>
           {t('projects.projects')}
           {isAppOnline && (
-            <MuiTooltip title={t('go_to_explore_projects')} placement="top" arrow>
+            <MuiTooltip title={t('go_to_explore_projects')} placement="top">
               <IconButton
                 type="button"
                 aria-label={t('go_to_explore_projects')}
@@ -133,33 +149,50 @@ const ProjectToolBarSection = ({
           )}
         </HeaderStyle>
         <OfflineHide>
-          <ButtonCallout
-            onClick={() => setIsNewProjectModalOpen(true)}
-            aria-label={t('projects.new_project')}
-            disabled={!isAppOnline}
-            data-testid="new-project"
-          >
-            <span>{t('projects.new_project')}</span>
-          </ButtonCallout>
-          <ProjectModal
-            isOpen={isNewProjectModalOpen}
-            onDismiss={() => setIsNewProjectModalOpen(false)}
-            project={null}
-            addProjectToProjectsPage={addProjectToProjectsPage}
-          />
+          {!userHasDemoProject && isDemoProjectEnabledForUser ? (
+            <CalloutButtonDropdown
+              onClick={() => setIsNewProjectModalOpen(true)}
+              aria-label={t('projects.new_project')}
+              disabled={!isAppOnline}
+              testId="new-project-button-dropdown"
+              label={t('projects.new_project')}
+            />
+          ) : (
+            <CalloutButton
+              onClick={() => setIsNewProjectModalOpen(true)}
+              aria-label={t('projects.new_project')}
+              disabled={!isAppOnline}
+              testId="new-project-button"
+              label={t('projects.new_project')}
+            />
+          )}
+
+          {isNewProjectModalOpen && (
+            <ProjectModal
+              isOpen={isNewProjectModalOpen}
+              onDismiss={() => setIsNewProjectModalOpen(false)}
+              project={null}
+              addProjectToProjectsPage={addProjectToProjectsPage}
+            />
+          )}
         </OfflineHide>
       </RowWrapper>
       <FilterRowWrapper>
-        <FilterLabelWrapper htmlFor="filter_projects" value={projectFilter} onChange={setFilter}>
+        <FilterLabelWrapper htmlFor="filter_projects">
           {t('filters.projects_by_name_year')}
-          <Input type="text" id="filter_projects" data-testid="filter-projects" />
+          <Input
+            type="text"
+            id="filter_projects"
+            data-testid="filter-projects"
+            onChange={setFilter}
+          />
         </FilterLabelWrapper>
         <SortByLabelWrapper htmlFor="sort_by">
           {t('projects.sort_by')}
           <select id="sort_by" onChange={setSortBy} value={projectSortKey} data-testid="sort-by">
             <option value="updated_on">{t('projects.last_updated_date')}</option>
             <option value="name">{t('projects.project_name')}</option>
-            <option value="countries">{t('projects.country')}</option>
+            <option value="countries">{t('projects.country', { count: 1 })}</option>
           </select>
         </SortByLabelWrapper>
       </FilterRowWrapper>
@@ -168,13 +201,3 @@ const ProjectToolBarSection = ({
 }
 
 export default ProjectToolBarSection
-
-ProjectToolBarSection.propTypes = {
-  projectFilter: PropTypes.string.isRequired,
-  setProjectFilter: PropTypes.func.isRequired,
-  projectSortKey: PropTypes.string.isRequired,
-  setProjectSortKey: PropTypes.func.isRequired,
-  setIsProjectSortAsc: PropTypes.func.isRequired,
-  addProjectToProjectsPage: PropTypes.func.isRequired,
-  handleExploreButtonClick: PropTypes.func.isRequired,
-}

@@ -6,24 +6,26 @@ import { H2 } from '../../../../generic/text'
 import { InputRow } from '../../../../generic/form'
 import { StyledGfcrInputWrapper, StyledGfcrSubInputWrapper } from './subPages.styles'
 import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../../../language'
+import { useTranslation, Trans } from 'react-i18next'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import GfcrIntegerInputField from '../GfcrIntegerInputField'
-
-const { gfcrIndicatorSet: gfcrIndicatorSetLanguage } = language.pages
+import GfcrHelperLinks from './GfcrHelperLinks'
 
 const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) => {
+  const { t } = useTranslation()
+
   return (
     <StyledGfcrInputWrapper>
-      <H2>{gfcrIndicatorSetLanguage.f5Heading}</H2>
+      <H2>{t('gfcr.forms.f5_heading')}</H2>
       <GfcrIntegerInputField
         id="f5_1"
         label={
           <>
-            <strong>F 5.1</strong> {gfcrIndicatorSetLanguage.getF5_1()}
+            <strong>F 5.1</strong>{' '}
+            <Trans i18nKey="gfcr.forms.f5_1" components={{ strong: <strong /> }} />
           </>
         }
-        helperText={gfcrIndicatorSetLanguage.getF5_1_helper()}
+        helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_1_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
         formik={formik}
@@ -32,10 +34,11 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         id="f5_2"
         label={
           <>
-            <strong>F 5.2</strong> {gfcrIndicatorSetLanguage.getF5_2()}
+            <strong>F 5.2</strong>{' '}
+            <Trans i18nKey="gfcr.forms.f5_2" components={{ strong: <strong /> }} />
           </>
         }
-        helperText={gfcrIndicatorSetLanguage.getF5_2_helper()}
+        helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_2_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
         formik={formik}
@@ -44,23 +47,23 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         id="f5_3"
         label={
           <>
-            <strong>F 5.3</strong> {gfcrIndicatorSetLanguage.f5_3}
+            <strong>F 5.3</strong> {t('gfcr.forms.f5_3')}
           </>
         }
-        helperText={gfcrIndicatorSetLanguage.getF5_3_helper()}
+        helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_3_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
         formik={formik}
       />
       <InputRow>
         <label>
-          <strong>F 5.4</strong> {gfcrIndicatorSetLanguage.f5_4}
+          <strong>F 5.4</strong> {t('gfcr.forms.f5_4')}
         </label>
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f5_4a"
-            label={<>{gfcrIndicatorSetLanguage.men}</>}
-            helperText={gfcrIndicatorSetLanguage.getF5_4_men_helper()}
+            label={<>{t('gfcr.forms.common.men')}</>}
+            helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_4_men_helper" />}
             displayHelp={displayHelp}
             handleInputFocus={handleInputFocus}
             formik={formik}
@@ -69,8 +72,8 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f5_4b"
-            label={<>{gfcrIndicatorSetLanguage.women}</>}
-            helperText={gfcrIndicatorSetLanguage.getF5_4_women_helper()}
+            label={<>{t('gfcr.forms.common.women')}</>}
+            helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_4_women_helper" />}
             displayHelp={displayHelp}
             handleInputFocus={handleInputFocus}
             formik={formik}
@@ -79,18 +82,18 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <InputWithLabelAndValidation
             disabled
-            label={<strong>{gfcrIndicatorSetLanguage.total}</strong>}
+            label={<strong>{t('gfcr.forms.common.total')}</strong>}
             id="f5_4_total"
             type="number"
             value={getFieldValueTotal(formik.values.f5_4a, formik.values.f5_4b)}
           />
         </StyledGfcrSubInputWrapper>
-        <div>{gfcrIndicatorSetLanguage.ofTotalHowMany}</div>
+        <div>{t('gfcr.forms.common.of_total_following')}</div>
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f5_4c"
-            label={<>{gfcrIndicatorSetLanguage.youth}</>}
-            helperText={gfcrIndicatorSetLanguage.getF5_4_youth_helper()}
+            label={<>{t('gfcr.forms.common.youth')}</>}
+            helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_4_youth_helper" />}
             displayHelp={displayHelp}
             handleInputFocus={handleInputFocus}
             formik={formik}
@@ -99,8 +102,8 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f5_4d"
-            label={<>{gfcrIndicatorSetLanguage.indigenous}</>}
-            helperText={gfcrIndicatorSetLanguage.getF5_4_indigenous_helper()}
+            label={<>{t('gfcr.forms.common.indigenous')}</>}
+            helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_4_indigenous_helper" />}
             displayHelp={displayHelp}
             handleInputFocus={handleInputFocus}
             formik={formik}
@@ -111,10 +114,10 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         id="f5_5"
         label={
           <>
-            <strong>F 5.5</strong> {gfcrIndicatorSetLanguage.f5_5}
+            <strong>F 5.5</strong> {t('gfcr.forms.f5_5')}
           </>
         }
-        helperText={gfcrIndicatorSetLanguage.getF5_5_helper()}
+        helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_5_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
         formik={formik}
@@ -123,17 +126,17 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         id="f5_6"
         label={
           <>
-            <strong>F 5.6</strong> {gfcrIndicatorSetLanguage.f5_6}
+            <strong>F 5.6</strong> {t('gfcr.forms.f5_6')}
           </>
         }
-        helperText={gfcrIndicatorSetLanguage.getF5_6_helper()}
+        helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_6_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
         formik={formik}
       />
       <TextareaWithLabelAndValidation
         id="f5_notes"
-        label={gfcrIndicatorSetLanguage.notes}
+        label={t('notes')}
         {...formik.getFieldProps('f5_notes')}
       />
     </StyledGfcrInputWrapper>

@@ -4,7 +4,6 @@ import React from 'react'
 import {
   screen,
   renderAuthenticatedOffline,
-  within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -27,25 +26,19 @@ describe('Offline', () => {
 
     // make an unsaved change
 
-    await user.clear(await screen.findByLabelText('Depth'))
-    await user.type(screen.getByLabelText('Depth'), '45')
+    await user.clear(await screen.findByTestId('depth-input'))
+    await user.type(screen.getByTestId('depth-input'), '45')
 
-    await user.click(screen.getByText('Delete Record'))
+    await user.click(screen.getByTestId('delete-record-button'))
 
-    expect(screen.getByText('Are you sure you want to delete this record?'))
+    expect(screen.getByTestId('delete-record-prompt'))
 
-    const modal = screen.getByLabelText('Delete Record')
+    expect(screen.getByTestId('delete-record-modal'))
 
-    await user.click(
-      within(modal).getByText('Cancel', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('delete-record-cancel-button'))
 
-    expect(
-      screen.queryByText('Are you sure you want to delete this record?'),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByTestId('delete-record-prompt')).not.toBeInTheDocument()
 
-    expect(await screen.findByLabelText('Depth')).toHaveValue(45)
+    expect(await screen.findByTestId('depth-input')).toHaveValue(45)
   })
 })

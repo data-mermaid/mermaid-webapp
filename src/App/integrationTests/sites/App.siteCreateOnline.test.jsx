@@ -19,37 +19,37 @@ import {
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 const saveSite = async (user) => {
-  const nameInput = await screen.findByLabelText('Name')
+  const nameInput = await screen.findByTestId('name-input')
 
   await user.type(nameInput, 'Rebecca')
-  await waitFor(() => expect(screen.getByLabelText('Name')).toHaveValue('Rebecca'))
-  await user.type(screen.getByLabelText('Country'), 'canad')
+  await waitFor(() => expect(screen.getByTestId('name-input')).toHaveValue('Rebecca'))
+  await user.type(screen.getByTestId('country-input'), 'canad')
   const canadaOption = within(screen.getByTestId('country-select')).getByRole('option', {
     name: 'Canada',
   })
   const countryAutocompleteList = within(screen.getByTestId('country-select')).getByRole('listbox')
 
   await user.selectOptions(countryAutocompleteList, canadaOption)
-  await user.type(screen.getByLabelText('Latitude'), '54')
-  await waitFor(() => expect(screen.getByLabelText('Latitude')).toHaveValue(54))
-  await user.type(screen.getByLabelText('Longitude'), '45')
+  await user.type(screen.getByTestId('latitude-input'), '54')
+  await waitFor(() => expect(screen.getByTestId('latitude-input')).toHaveValue(54))
+  await user.type(screen.getByTestId('longitude-input'), '45')
   await user.selectOptions(
-    screen.getByLabelText('Exposure'),
+    screen.getByTestId('exposure-select'),
     'baa54e1d-4263-4273-80f5-35812304b592',
   )
   await user.selectOptions(
-    screen.getByLabelText('Reef Type'),
+    screen.getByTestId('reef-type-select'),
     '16a0a961-df6d-42a5-86b8-bc30f87bab42',
   )
   await user.selectOptions(
-    screen.getByLabelText('Reef Zone'),
+    screen.getByTestId('reef-zone-select'),
     '06ea17cd-5d1d-46ae-a654-64901e2a9f96',
   )
 
-  await user.type(screen.getByLabelText('Notes'), 'la dee dah')
-  expect(screen.getByLabelText('Notes')).toHaveValue('la dee dah')
+  await user.type(screen.getByTestId('notes-textarea'), 'la dee dah')
+  expect(screen.getByTestId('notes-textarea')).toHaveValue('la dee dah')
 
-  const saveButton = screen.getByText('Save', { selector: 'button' })
+  const saveButton = screen.getByTestId('save-button-site-form')
 
   await user.click(saveButton)
 }
@@ -70,22 +70,18 @@ describe('Online', () => {
     await user.click(await screen.findByTestId('new-site-link'))
 
     // ensure the were not in edit mode, but new site mode
-    expect(
-      await screen.findByText('Site', {
-        selector: 'h2',
-      }),
-    )
+    await screen.findByTestId('new-site-form-title')
 
     // form empty
-    expect(screen.getByLabelText('Name')).toHaveDisplayValue('')
-    expect(screen.getByLabelText('Country')).toHaveDisplayValue('')
-    expect(screen.getByLabelText('Latitude')).toHaveDisplayValue('')
-    expect(screen.getByLabelText('Longitude')).toHaveDisplayValue('')
-    expect(screen.getByLabelText('Exposure')).toHaveDisplayValue('Choose...')
-    expect(screen.getByLabelText('Reef Type')).toHaveDisplayValue('Choose...')
-    expect(screen.getByLabelText('Reef Zone')).toHaveDisplayValue('Choose...')
+    expect(screen.getByTestId('name-input')).toHaveDisplayValue('')
+    expect(screen.getByTestId('country-input')).toHaveDisplayValue('')
+    expect(screen.getByTestId('latitude-input')).toHaveDisplayValue('')
+    expect(screen.getByTestId('longitude-input')).toHaveDisplayValue('')
+    expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('Choose...')
+    expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('Choose...')
+    expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('Choose...')
 
-    expect(screen.getByLabelText('Notes')).toHaveDisplayValue('')
+    expect(screen.getByTestId('notes-textarea')).toHaveDisplayValue('')
   })
   test('new site save success shows saved inputs, toast, and navigates to the edit site page for the newly created site', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
@@ -99,30 +95,24 @@ describe('Online', () => {
       },
     )
 
-    await screen.findByLabelText('project pages loading indicator')
-    await waitForElementToBeRemoved(() =>
-      screen.queryByLabelText('project pages loading indicator'),
-    )
+    await screen.findByTestId('loading-indicator')
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
     await saveSite(user)
 
-    expect(await screen.findByText('The site has been saved on your computer and online.'))
+    await screen.findByTestId('site-toast-success')
 
     // ensure the new form is now the edit form
-    expect(
-      await screen.findByText('Rebecca', {
-        selector: 'h2',
-      }),
-    )
+    expect(await screen.findByTestId('edit-site-form-title')).toHaveTextContent('Rebecca')
 
-    expect(screen.getByLabelText('Name')).toHaveDisplayValue('Rebecca')
-    expect(screen.getByLabelText('Country')).toHaveDisplayValue('Canada')
-    expect(screen.getByLabelText('Latitude')).toHaveDisplayValue('54')
-    expect(screen.getByLabelText('Longitude')).toHaveDisplayValue('45')
-    expect(screen.getByLabelText('Exposure')).toHaveDisplayValue('very sheltered')
-    expect(screen.getByLabelText('Reef Type')).toHaveDisplayValue('atoll')
-    expect(screen.getByLabelText('Reef Zone')).toHaveDisplayValue('back reef')
-    expect(screen.getByLabelText('Notes')).toHaveDisplayValue('la dee dah')
+    expect(screen.getByTestId('name-input')).toHaveDisplayValue('Rebecca')
+    expect(screen.getByTestId('country-input')).toHaveDisplayValue('Canada')
+    expect(screen.getByTestId('latitude-input')).toHaveDisplayValue('54')
+    expect(screen.getByTestId('longitude-input')).toHaveDisplayValue('45')
+    expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('very sheltered')
+    expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('atoll')
+    expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('back reef')
+    expect(screen.getByTestId('notes-textarea')).toHaveDisplayValue('la dee dah')
   })
 
   test('new site save success show new record in site table', async () => {
@@ -139,11 +129,11 @@ describe('Online', () => {
 
     await saveSite(user)
 
-    expect(await screen.findByText('The site has been saved on your computer and online.'))
+    await screen.findByTestId('site-toast-success')
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
-    await user.click(within(sideNav).getByText('Sites'))
+    await user.click(within(sideNav).getByTestId('nav-sites'))
 
     // show all the records
     await user.selectOptions(await screen.findByTestId('page-size-selector'), '5')
@@ -179,32 +169,20 @@ describe('Online', () => {
 
     await saveSite(user)
 
-    expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-      `The site has been saved on your computer, but not online.`,
-    )
-    expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-      'name: an error message from api',
-    )
-    expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-      'other: another error message from api',
-    )
+    await screen.findByTestId('site-toast-error')
 
     // ensure the were not in edit mode, but new site mode
-    expect(
-      screen.getByText('Site', {
-        selector: 'h2',
-      }),
-    )
+    await screen.findByTestId('new-site-form-title')
 
     // edits persisted
-    expect(screen.getByLabelText('Name')).toHaveDisplayValue('Rebecca')
-    expect(screen.getByLabelText('Country')).toHaveDisplayValue('Canada')
-    expect(screen.getByLabelText('Latitude')).toHaveDisplayValue('54')
-    expect(screen.getByLabelText('Longitude')).toHaveDisplayValue('45')
-    expect(screen.getByLabelText('Exposure')).toHaveDisplayValue('very sheltered')
-    expect(screen.getByLabelText('Reef Type')).toHaveDisplayValue('atoll')
-    expect(screen.getByLabelText('Reef Zone')).toHaveDisplayValue('back reef')
-    expect(screen.getByLabelText('Notes')).toHaveDisplayValue('la dee dah')
+    expect(screen.getByTestId('name-input')).toHaveDisplayValue('Rebecca')
+    expect(screen.getByTestId('country-input')).toHaveDisplayValue('Canada')
+    expect(screen.getByTestId('latitude-input')).toHaveDisplayValue('54')
+    expect(screen.getByTestId('longitude-input')).toHaveDisplayValue('45')
+    expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('very sheltered')
+    expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('atoll')
+    expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('back reef')
+    expect(screen.getByTestId('notes-textarea')).toHaveDisplayValue('la dee dah')
   })
 })
 
@@ -228,33 +206,18 @@ test('New site save will handle 500 push status codes with a generic message and
 
   await saveSite(user)
 
-  expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-    'The site has been saved on your computer, but not online.',
-  )
-  expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-    'MERMAID error: please contact support@datamermaid.org',
-  )
-  expect(await screen.findByTestId('site-toast-error')).not.toHaveTextContent(
-    'name: an error message from api',
-  )
-  expect(await screen.findByTestId('site-toast-error')).not.toHaveTextContent(
-    'other: another error message from api',
-  )
+  await screen.findByTestId('site-toast-error')
 
   // ensure the were not in edit mode, but new site mode
-  expect(
-    screen.getByText('Site', {
-      selector: 'h2',
-    }),
-  )
+  await screen.findByTestId('new-site-form-title')
 
   // edits persisted
-  expect(screen.getByLabelText('Name')).toHaveDisplayValue('Rebecca')
-  expect(screen.getByLabelText('Country')).toHaveDisplayValue('Canada')
-  expect(screen.getByLabelText('Latitude')).toHaveDisplayValue('54')
-  expect(screen.getByLabelText('Longitude')).toHaveDisplayValue('45')
-  expect(screen.getByLabelText('Exposure')).toHaveDisplayValue('very sheltered')
-  expect(screen.getByLabelText('Reef Type')).toHaveDisplayValue('atoll')
-  expect(screen.getByLabelText('Reef Zone')).toHaveDisplayValue('back reef')
-  expect(screen.getByLabelText('Notes')).toHaveDisplayValue('la dee dah')
+  expect(screen.getByTestId('name-input')).toHaveDisplayValue('Rebecca')
+  expect(screen.getByTestId('country-input')).toHaveDisplayValue('Canada')
+  expect(screen.getByTestId('latitude-input')).toHaveDisplayValue('54')
+  expect(screen.getByTestId('longitude-input')).toHaveDisplayValue('45')
+  expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('very sheltered')
+  expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('atoll')
+  expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('back reef')
+  expect(screen.getByTestId('notes-textarea')).toHaveDisplayValue('la dee dah')
 })

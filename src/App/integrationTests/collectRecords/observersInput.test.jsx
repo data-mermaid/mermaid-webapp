@@ -35,9 +35,9 @@ test.skip('(TODO - TEST TECH DEBT) Observers input shows users that have been re
 
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
 
-  fireEvent.click(screen.getByRole('button', { name: 'Save' }))
+  fireEvent.click(screen.getByTestId('save-button'))
 
-  expect(await screen.findByText('Record saved.'))
+  expect(await screen.findByTestId('saved-button'))
 
   // TODO: Verify observer removal is properly implemented
   // await waitFor(() =>

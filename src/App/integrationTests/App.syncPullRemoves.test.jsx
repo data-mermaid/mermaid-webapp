@@ -104,8 +104,8 @@ the items in the removes array are deleted from browser storage`, async () => {
     initialEntries: ['/projects/5/collecting/'],
   })
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const benthicAttributesAfterRemoves = await dexiePerUserDataInstance.benthic_attributes.get(
     'myCatIsCute',

@@ -61,7 +61,9 @@ const getBenthicPitAdditionalValues = (collectRecord) => {
 
 const getHabitatComplexityAdditionalValues = (collectRecord) => {
   return {
+    is_interval_size_as_start: collectRecord?.data?.is_interval_size_as_start ?? false,
     interval_size: collectRecord?.data?.interval_size ?? '',
+    interval_start: collectRecord?.data?.interval_start ?? '',
   }
 }
 

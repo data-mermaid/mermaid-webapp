@@ -30,6 +30,7 @@ const fakeCurrentUser = {
   last_name: 'FakeLastNameOffline',
   full_name: 'FakeFirstNameOffline FakeLastNameOffline',
   projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
+  collect_state: {},
 }
 
 const AuthenticatedProviders = ({ children, isSyncInProgressOverride = false }) => (
@@ -93,7 +94,7 @@ UnauthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-const renderAuthenticated = (
+export const renderAuthenticated = (
   ui,
   { renderOptions, initialEntries, dexiePerUserDataInstance, isSyncInProgressOverride } = {},
 ) => {
@@ -136,7 +137,7 @@ const renderAuthenticated = (
   }
 }
 
-const renderAuthenticatedOnline = (
+export const renderAuthenticatedOnline = (
   ui,
   { renderOptions, initialEntries, dexiePerUserDataInstance, isSyncInProgressOverride } = {},
 ) => {
@@ -187,7 +188,7 @@ const renderAuthenticatedOnline = (
   }
 }
 
-const renderUnauthenticatedOnline = (
+export const renderUnauthenticatedOnline = (
   ui,
   { renderOptions, initialEntries, dexiePerUserDataInstance } = {},
 ) => {
@@ -224,7 +225,7 @@ const renderUnauthenticatedOnline = (
   }
 }
 
-const renderAuthenticatedOffline = (
+export const renderAuthenticatedOffline = (
   ui,
   { renderOptions, initialEntries, dexiePerUserDataInstance, isSyncInProgressOverride } = {},
 ) => {
@@ -268,7 +269,7 @@ const renderAuthenticatedOffline = (
   }
 }
 
-const renderUnauthenticatedOffline = (
+export const renderUnauthenticatedOffline = (
   ui,
   { renderOptions, initialEntries, dexiePerUserDataInstance } = {},
 ) => {
@@ -320,9 +321,4 @@ export { waitFor, waitForElementToBeRemoved } from '@testing-library/react' // h
 export {
   // eslint-disable-next-line import/export
   renderOverride as render,
-  renderAuthenticated,
-  renderAuthenticatedOffline,
-  renderAuthenticatedOnline,
-  renderUnauthenticatedOffline,
-  renderUnauthenticatedOnline,
 }

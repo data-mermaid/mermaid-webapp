@@ -19,28 +19,13 @@ import mockSampleEventValidationObject from '../../../../testUtilities/mockColle
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 const validateCollectRecord = async (user) => {
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  const validateButton = await screen.findByTestId('validate-button', { timeout: 10000 })
+  await user.click(validateButton)
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  // Button should transition to validating state
+  expect(await screen.findByTestId('validating-button'))
+  // Then back to validate state
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 }
 
 test('Validate Benthic PIT collect record, get site duplicate warning, show resolve button, keep original site, and merge duplicate site to original site', async () => {
@@ -253,7 +238,7 @@ test('Validate Benthic PIT collect record, get site duplicate warning, show reso
 
   await user.click(editOriginalSiteButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const siteCPage = await screen.findByText('Site C', {
     selector: 'h2',
   })
@@ -317,7 +302,7 @@ test('Validate Benthic PIT collect record, get site duplicate warning, show reso
 
   await user.click(editDuplicateSiteButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const siteCPage = await screen.findByText('Site D', {
     selector: 'h2',
   })
@@ -615,7 +600,7 @@ test('Validate Benthic PIT collect record, get management duplicate warning, sho
 
   await user.click(editOriginalManagementButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const managementRegimeCPage = await screen.findByText('Management Regimes C', {
     selector: 'h2',
   })
@@ -683,7 +668,7 @@ test('Validate Benthic PIT collect record, get management duplicate warning, sho
 
   await user.click(editDuplicateManagementButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const managementRegimeAPage = await screen.findByText('Management Regimes A', {
     selector: 'h2',
   })

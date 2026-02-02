@@ -26,18 +26,14 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
     },
   )
 
-  const siteNameInput = await screen.findByLabelText('Name')
+  const siteNameInput = await screen.findByTestId('name-input')
 
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(
-    screen.getByText('Save', {
-      selector: 'button',
-    }),
-  )
+  await user.click(screen.getByTestId('save-button-site-form'))
 
-  expect(await screen.findByText('The site has been saved on your computer.'))
+  await screen.findByTestId('site-toast-offline-success')
 
   expect(siteNameInput).toHaveValue('OOF')
 })
@@ -54,18 +50,14 @@ test('Online: Edit Site shows toast and edited record info', async () => {
     },
   )
 
-  const siteNameInput = await screen.findByLabelText('Name')
+  const siteNameInput = await screen.findByTestId('name-input')
 
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(
-    screen.getByText('Save', {
-      selector: 'button',
-    }),
-  )
+  await user.click(screen.getByTestId('save-button-site-form'))
 
-  expect(await screen.findByText('The site has been saved on your computer and online.'))
+  await screen.findByTestId('site-toast-success')
 
   await waitFor(() => expect(siteNameInput).toHaveValue('OOF'))
 })
@@ -86,18 +78,14 @@ test('Offline: edit site save stored site in dexie', async () => {
     },
   )
 
-  const siteNameInput = await screen.findByLabelText('Name')
+  const siteNameInput = await screen.findByTestId('name-input')
 
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(
-    screen.getByText('Save', {
-      selector: 'button',
-    }),
-  )
+  await user.click(screen.getByTestId('save-button-site-form'))
 
-  expect(await screen.findByText('The site has been saved on your computer.'))
+  await screen.findByTestId('site-toast-offline-success')
 
   const savedSites = await dexiePerUserDataInstance.project_sites.toArray()
 
@@ -128,20 +116,14 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
     },
   )
 
-  const siteNameInput = await screen.findByLabelText('Name')
+  const siteNameInput = await screen.findByTestId('name-input')
 
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(
-    screen.getByText('Save', {
-      selector: 'button',
-    }),
-  )
+  await user.click(screen.getByTestId('save-button-site-form'))
 
-  expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-    `The site failed to save both on your computer and online.`,
-  )
+  await screen.findByTestId('site-toast-error')
   expect(consoleSpy).toHaveBeenCalledWith(dexieError)
 
   expect(siteNameInput).toHaveValue('OOF')

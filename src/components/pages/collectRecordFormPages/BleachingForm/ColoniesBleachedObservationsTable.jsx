@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 
 import {
   InputAutocompleteContainer,
@@ -27,7 +28,6 @@ import { Tr, Td, Th } from '../../../generic/Table/table'
 import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBleachedSummaryStats/BleachingColoniesBleachedSummaryStats'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
-import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 
@@ -63,6 +63,11 @@ const ColoniesBleachedObservationTable = ({
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
+  const { t } = useTranslation()
+
+  const deleteObservationText = t('delete_observation')
+  const proposeNewBenthicAttributeText = t('benthic_observations.add_benthic_attribute')
+  const noResultsText = t('search.no_results')
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -209,13 +214,18 @@ const ColoniesBleachedObservationTable = ({
                   // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus={autoFocusAllowed} // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
                   aria-labelledby="benthic-attribute-label"
+                  data-testid="benthic-attribute-input"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
                   value={attribute}
-                  noResultsText={language.autocomplete.noResultsDefault}
+                  noResultsText={noResultsText}
                   noResultsAction={
-                    <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
-                      {language.pages.collectRecord.newBenthicAttributeLink}
+                    <NewOptionButton
+                      type="button"
+                      onClick={proposeNewBenthicAttributeClick}
+                      data-testid="propose-new-benthic-attribute-button"
+                    >
+                      {proposeNewBenthicAttributeText}
                     </NewOptionButton>
                   }
                 />
@@ -227,6 +237,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={handleGrowthFormChange}
               value={growth_form}
               aria-labelledby="growth-form-label"
+              data-testid="growth-form-select"
               onKeyDown={handleObservationKeyDown}
             >
               <option value=""> </option>
@@ -243,6 +254,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_normal}
               min="0"
               step="any"
+              data-testid="count-normal-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateNormal' })
               }}
@@ -255,6 +267,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_pale}
               min="0"
               step="any"
+              data-testid="count-pale-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updatePale' })
               }}
@@ -267,6 +280,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_20}
               min="0"
               step="any"
+              data-testid="count-20-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update20Bleached' })
               }}
@@ -279,6 +293,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_50}
               min="0"
               step="any"
+              data-testid="count-50-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update50Bleached' })
               }}
@@ -291,6 +306,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_80}
               min="0"
               step="any"
+              data-testid="count-80-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update80Bleached' })
               }}
@@ -303,6 +319,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_100}
               min="0"
               step="any"
+              data-testid="count-100-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update100Bleached' })
               }}
@@ -315,6 +332,7 @@ const ColoniesBleachedObservationTable = ({
               value={count_dead}
               min="0"
               step="any"
+              data-testid="count-recently-dead-input"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateRecentlyDead' })
               }}
@@ -342,7 +360,7 @@ const ColoniesBleachedObservationTable = ({
               tabIndex="-1"
               type="button"
               onClick={handleDeleteObservation}
-              aria-label="Delete Observation"
+              aria-label={deleteObservationText}
             >
               <IconClose />
             </ButtonRemoveRow>
@@ -357,6 +375,9 @@ const ColoniesBleachedObservationTable = ({
     choices,
     collectRecord,
     ignoreObservationValidations,
+    deleteObservationText,
+    proposeNewBenthicAttributeText,
+    noResultsText,
     observationsDispatch,
     observationsState,
     resetObservationValidations,
@@ -368,10 +389,13 @@ const ColoniesBleachedObservationTable = ({
   return (
     <>
       <InputWrapper data-testid={testId}>
-        <H2 id="colonies-bleached-label">Observations - Colonies Bleached</H2>
+        <H2 id="colonies-bleached-label">{t('observations.colonies_bleached')}</H2>
         <>
           <StyledOverflowWrapper>
-            <StickyObservationTableWrapTh aria-labelledby="colonies-bleached-label">
+            <StickyObservationTableWrapTh
+              aria-labelledby="colonies-bleached-label"
+              data-testid={`${testId}-table`}
+            >
               <StyledColgroup>
                 <col className="number" />
                 <col className="autoWidth" />
@@ -390,40 +414,40 @@ const ColoniesBleachedObservationTable = ({
                 <Tr>
                   <Th colSpan="3" />
                   <Th colSpan="7" align="center">
-                    Number of Colonies
+                    {t('observations.bleaching_severity')}
                   </Th>
                   <Th colSpan="1" />
                 </Tr>
                 <Tr>
                   <Th />
                   <Th align="center" id="benthic-attribute-label">
-                    Benthic Attribute <RequiredIndicator />
+                    {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
                   </Th>
                   <Th align="center" id="growth-form-label">
-                    Growth Form
+                    {t('observations.growth_form')}
                   </Th>
                   <Th align="center" id="normal-label">
-                    Normal
+                    {t('observations.normal')}
                   </Th>
                   <Th align="center" id="pale-label">
-                    Pale
+                    {t('observations.pale')}
                   </Th>
                   <Th align="center" id="20-bleached-label">
-                    0-20% bleached
+                    {t('observations.percent_0_20')}
                   </Th>
                   <Th align="center" id="50-bleached-label">
-                    20-50% bleached
+                    {t('observations.percent_20_50')}
                   </Th>
                   <Th align="center" id="80-bleached-label">
-                    50-80% bleached
+                    {t('observations.percent_50_80')}
                   </Th>
                   <Th align="center" id="100-bleached-label">
-                    80-100% bleached
+                    {t('observations.percent_80_100')}
                   </Th>
                   <Th align="center" id="recently-dead-label">
-                    Recently dead
+                    {t('observations.recently_dead')}
                   </Th>
-                  {areValidationsShowing ? <Th align="center">Validations</Th> : null}
+                  {areValidationsShowing ? <Th align="center">{t('validations')}</Th> : null}
                   <Th />
                 </Tr>
               </thead>
@@ -431,8 +455,12 @@ const ColoniesBleachedObservationTable = ({
             </StickyObservationTableWrapTh>
           </StyledOverflowWrapper>
           <UnderTableRow>
-            <ButtonPrimary type="button" onClick={handleAddObservation}>
-              <IconPlus /> Add Row
+            <ButtonPrimary
+              type="button"
+              onClick={handleAddObservation}
+              data-testid="add-observation-row"
+            >
+              <IconPlus /> {t('buttons.add_row')}
             </ButtonPrimary>
             <BleachincColoniesBleachedSummaryStats
               observationsColoniesBleached={observationsState}

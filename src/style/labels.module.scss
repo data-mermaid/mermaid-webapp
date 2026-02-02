@@ -1,0 +1,20 @@
+@use './theme.scss' as *;
+
+.pill {
+  display: inline-block;
+  margin-left: $spacing-large;
+  padding: $spacing-x-small $spacing-medium;
+  border: solid 1px #ffffff8c;
+  border-radius: $border-radius__pill;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-size: $small-font-size;
+  cursor: text;
+}
+.pill__admin {
+  color: $white;
+}
+.pill__demo {
+  color: $white;
+  background-color: $callout;
+}

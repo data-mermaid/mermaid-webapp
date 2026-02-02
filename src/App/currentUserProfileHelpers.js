@@ -2,6 +2,8 @@ import axios from '../library/axiosRetry'
 import language from '../language'
 import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
 import { userRole } from './mermaidData/userRole'
+import i18next from '../../i18n'
+import { PENDING_USER_PROFILE_NAME } from '../library/constants/constants'
 
 const getUserName = (user) => {
   const { first_name, last_name, email } = user
@@ -131,4 +133,16 @@ export const getIsProjectProfileReadOnly = (profile) => profile.role === userRol
 
 export const getIsUserAdminForProject = (userProfile, projectId) => {
   return getProjectRole(userProfile, projectId) === userRole.admin
+}
+
+export const getDisplayNameParts = (profileName) => {
+  const isPendingUser = profileName === PENDING_USER_PROFILE_NAME
+  const resolvedName = isPendingUser ? i18next.t('users.pending_user') : profileName
+  const parts = resolvedName.split(' ')
+
+  return {
+    displayName: isPendingUser ? `(${resolvedName})` : resolvedName,
+    firstName: parts[0],
+    lastName: parts.length > 1 ? parts[parts.length - 1] : undefined,
+  }
 }

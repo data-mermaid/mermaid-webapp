@@ -27,7 +27,7 @@ test('Bleaching collect record observations add new benthic attribute - filling 
   )
 
   // loading indicator is weird in integration tests, so we wait for the page title
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   mockMermaidApiAllSuccessful.use(
     rest.post(
@@ -58,9 +58,7 @@ test('Bleaching collect record observations add new benthic attribute - filling 
 
   await user.type(firstBenthicAttributeInput, 'supercalifragilistic')
 
-  const noResultsButton = await screen.findByRole('button', {
-    name: 'Propose New Benthic Attribute...',
-  })
+  const noResultsButton = await screen.findByTestId('propose-new-benthic-attribute-button')
 
   await user.click(noResultsButton)
 
@@ -130,7 +128,7 @@ test('Bleaching collect record observations add new benthic attribute - proposin
 
   // loading indicator is weird in integration tests, so we wait for the page title
 
-  await screen.findByTestId('edit-collect-record-form-title')
+  await screen.findByTestId('record-form-title')
 
   const form = screen.getByRole('form')
   const observationsTable = (await within(form).findAllByRole('table'))[0]
@@ -147,9 +145,7 @@ test('Bleaching collect record observations add new benthic attribute - proposin
 
   await user.type(firstBenthicAttributeInput, 'supercalifragilistic')
 
-  const noResultsButton = await screen.findByRole('button', {
-    name: 'Propose New Benthic Attribute...',
-  })
+  const noResultsButton = await screen.findByTestId('propose-new-benthic-attribute-button')
 
   await user.click(noResultsButton)
 

@@ -99,33 +99,15 @@ test('Benthic PIT validations will show the all warnings when there are multiple
     dexieCurrentUserInstance,
   )
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
   // regular inputs
   expect(within(screen.getByTestId('site')).getByText('firstWarning')).toBeInTheDocument()
   expect(within(screen.getByTestId('site')).getByText('secondWarning')).toBeInTheDocument()
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('observation warning 1')).toBeInTheDocument()
   expect(within(observationsTable).getByText('observation warning 2')).toBeInTheDocument()
@@ -196,124 +178,76 @@ test('Validating an empty collect record, and then editing an input with errors 
     dexieCurrentUserInstance,
   )
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
 
-  await user.type(screen.getByLabelText('Depth'), '1')
+  await user.type(screen.getByTestId('depth-input'), '1')
 
   // validations remain showing, except Depth is changed
   expect(await within(screen.getByTestId('site')).findByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('management')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('depth')).queryByText('Required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_date')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_time')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect_number')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-date')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-time')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('transect-number')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('len_surveyed')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('interval_size')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('interval_start')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('reef_slope')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('len-surveyed')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('interval-size')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('interval-start')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('reef-slope')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations')).getByText('observation error'),
+    within(screen.getByTestId('observations-section')).getByText('observation error'),
   ).toBeInTheDocument()
 
-  await user.type(screen.getByLabelText('Depth'), '{backspace}')
+  await user.type(screen.getByTestId('depth-input'), '{backspace}')
 
-  await user.click(
-    await screen.findByRole('button', {
-      name: 'Save',
-    }),
-  )
-  expect(
-    await screen.findByRole('button', {
-      name: 'Saving',
-    }),
-  )
-  expect(
-    await screen.findByRole('button', {
-      name: 'Saved',
-    }),
-  )
+  await user.click(await screen.findByTestId('save-button'))
+  expect(await screen.findByTestId('saving-button'))
+  expect(await screen.findByTestId('saved-button'))
 
   // validations hide
   expect(within(screen.getByTestId('site')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('management')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('depth')).queryByText('Required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_date')).queryByText('Required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_time')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-date')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-time')).queryByText('Required')).not.toBeInTheDocument()
   expect(
-    within(screen.getByTestId('transect_number')).queryByText('Required'),
+    within(screen.getByTestId('transect-number')).queryByText('Required'),
   ).not.toBeInTheDocument()
   expect(within(screen.getByTestId('label')).queryByText('Required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('len_surveyed')).queryByText('Required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('reef_slope')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('len-surveyed')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('reef-slope')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).queryByText('Required')).not.toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations')).queryByText('observation error'),
+    within(screen.getByTestId('observations-section')).queryByText('observation error'),
   ).not.toBeInTheDocument()
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   // validations show again
   expect(within(screen.getByTestId('site')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('management')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_date')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_time')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect_number')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-date')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-time')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('transect-number')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('len_surveyed')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('reef_slope')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('len-surveyed')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('reef-slope')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
   expect(
-    within(screen.getByLabelText('Observations')).getByText('observation error'),
+    within(screen.getByTestId('observations-section')).getByText('observation error'),
   ).toBeInTheDocument()
 }, 60000)
 
@@ -357,28 +291,10 @@ test('Benthic PIT validations will show passed input validations', async () => {
     dexieCurrentUserInstance,
   )
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   // regular inputs
 
@@ -386,6 +302,7 @@ test('Benthic PIT validations will show passed input validations', async () => {
 
   // observations table (has three empty observation)
   expect(
-    within(screen.getByLabelText('Observations')).getAllByLabelText('Passed Validation').length,
+    within(screen.getByTestId('observations-section')).getAllByLabelText('Passed Validation')
+      .length,
   ).toEqual(3)
 }, 50000)

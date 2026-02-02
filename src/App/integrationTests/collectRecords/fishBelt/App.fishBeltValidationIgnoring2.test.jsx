@@ -97,15 +97,9 @@ test('Validation: user can reset ignored observation warnings ', async () => {
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const observationsTable = await screen.findByTestId('observations-section')
 
@@ -122,7 +116,7 @@ test('Validation: user can reset ignored observation warnings ', async () => {
 
   await user.click(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 
@@ -185,15 +179,9 @@ test('user can reset dismissed record-level warnings', async () => {
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
@@ -208,7 +196,7 @@ test('user can reset dismissed record-level warnings', async () => {
   )
   expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
 
-  const isFormDirtyAfterReset = screen.getByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = screen.getByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 })
@@ -419,27 +407,21 @@ test('Validation: user edits non-observation input with ignored validation reset
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
   const depthRow = screen.getByTestId('depth')
-  const sampleDateRow = screen.getByTestId('sample_date')
-  const sampleTimeRow = screen.getByTestId('sample_time')
-  const transectNumberRow = screen.getByTestId('transect_number')
+  const sampleDateRow = screen.getByTestId('sample-date')
+  const sampleTimeRow = screen.getByTestId('sample-time')
+  const transectNumberRow = screen.getByTestId('transect-number')
   const labelRow = screen.getByTestId('label')
-  const lengthSurveyedRow = screen.getByTestId('len_surveyed')
+  const lengthSurveyedRow = screen.getByTestId('len-surveyed')
   const widthRow = screen.getByTestId('width')
-  const sizeBinRow = screen.getByTestId('size_bin')
-  const reefSlopeRow = screen.getByTestId('reef_slope')
+  const sizeBinRow = screen.getByTestId('size-bin')
+  const reefSlopeRow = screen.getByTestId('reef-slope')
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
 
@@ -470,22 +452,22 @@ test('Validation: user edits non-observation input with ignored validation reset
   expect(within(observersRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(observersRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
-  await user.selectOptions(within(siteRow).getByLabelText('Site'), '1')
+  await user.selectOptions(within(siteRow).getByTestId('site-select'), '1')
   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.selectOptions(within(managementRow).getByLabelText('Management'), '1')
+  await user.selectOptions(within(managementRow).getByTestId('management-select'), '1')
   await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   await user.type(screen.getByTestId('depth-input'), '1')
   await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(screen.getByTestId('sample_date-input'), '2021-11-09')
+  await user.type(screen.getByTestId('sample-date-input'), '2021-11-09')
   await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(screen.getByTestId('sample_time-input'), '02:39 PM')
+  await user.type(screen.getByTestId('sample-time-input'), '02:39 PM')
   await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(screen.getByTestId('transect_number-input'), '12')
+  await user.type(screen.getByTestId('transect-number-input'), '12')
   await waitFor(() =>
     expect(within(transectNumberRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
@@ -493,7 +475,7 @@ test('Validation: user edits non-observation input with ignored validation reset
   await user.type(screen.getByTestId('label-input'), '1')
   await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(screen.getByTestId('len_surveyed-input'), '1')
+  await user.type(screen.getByTestId('len-surveyed-input'), '1')
   await waitFor(() =>
     expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
@@ -507,14 +489,14 @@ test('Validation: user edits non-observation input with ignored validation reset
 
   // Fish Size Bin selection AGRRA
   await user.selectOptions(
-    screen.getByTestId('size_bin-select'),
+    screen.getByTestId('size-bin-select'),
     'ccef720a-a1c9-4956-906d-09ed56f16249',
   )
   await waitFor(() => expect(within(sizeBinRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   // Reef Slope select on crest
   await user.selectOptions(
-    screen.getByTestId('reef_slope-select'),
+    screen.getByTestId('reef-slope-select'),
     '12dc11ae-3a4b-4309-8fae-66f51398d96f',
   )
   await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
@@ -529,6 +511,6 @@ test('Validation: user edits non-observation input with ignored validation reset
 
   // make act error go away
   expect(
-    await within(screen.getByTestId('collect-record-form-buttons')).findByText('Save'),
+    await within(screen.getByTestId('collect-record-form-buttons')).findByTestId('save-button'),
   ).toBeEnabled()
 })
