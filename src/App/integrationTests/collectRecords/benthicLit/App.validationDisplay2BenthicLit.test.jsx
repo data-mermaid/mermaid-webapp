@@ -57,28 +57,10 @@ test('Validating an empty benthic LIT collect record shows validations (proof of
     dexieCurrentUserInstance,
   )
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
   // record level validations
   expect(screen.getByText('record level error 1')).toBeInTheDocument()
   expect(screen.getByText('record level error 2')).toBeInTheDocument()
@@ -91,13 +73,13 @@ test('Validating an empty benthic LIT collect record shows validations (proof of
   expect(within(screen.getByTestId('site')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('management')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_date')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_time')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect_number')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-date')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample-time')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('transect-number')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('len_surveyed')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('reef_slope')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('relative_depth')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('len-surveyed')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('reef-slope')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('relative-depth')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('current')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('tide')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
@@ -105,7 +87,7 @@ test('Validating an empty benthic LIT collect record shows validations (proof of
 
   // observations table (has one empty observation)
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('observation error')).toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation warning')).not.toBeInTheDocument()
@@ -218,28 +200,10 @@ test('benthic LIT validations will show only the first error when there are mult
     dexieCurrentUserInstance,
   )
 
-  await user.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   // regular inputs
 
@@ -250,7 +214,7 @@ test('benthic LIT validations will show only the first error when there are mult
 
   // observations table (has one empty observation)
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('observation error 1')).toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation error 2')).not.toBeInTheDocument()

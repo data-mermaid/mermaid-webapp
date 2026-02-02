@@ -29,12 +29,51 @@ import MermaidCollectLogo from '../../assets/mermaid-collect-logo.svg'
 import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
 import { useTranslation } from 'react-i18next'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLanguage } from '@fortawesome/free-solid-svg-icons'
+import i18n from '../../../i18n.ts'
+
+const handleLanguageSelect = (lng) => {
+  i18n.changeLanguage(lng)
+}
+
+const LanguageMenuTool = () => {
+  const { t } = useTranslation()
+  return (
+    <OfflineHide>
+      <HideShow
+        closeOnClickWithin={true}
+        button={
+          <HeaderButtonThatLooksLikeLink>
+            <HeaderIconWrapper>
+              <FontAwesomeIcon icon={faLanguage} style={{ marginRight: '10px' }} />
+              {t('languages.language')}
+            </HeaderIconWrapper>
+          </HeaderButtonThatLooksLikeLink>
+        }
+        contents={
+          <UserMenu>
+            <UserMenuButton onClick={() => handleLanguageSelect('cimode')}>Token QA</UserMenuButton>
+            <UserMenuButton onClick={() => handleLanguageSelect('en')}>
+              {t('languages.english')}
+            </UserMenuButton>
+            <UserMenuButton onClick={() => handleLanguageSelect('id')}>
+              {t('languages.indonesian')}
+            </UserMenuButton>
+          </UserMenu>
+        }
+      />
+    </OfflineHide>
+  )
+}
 
 const GlobalLinks = ({ isAppOnline }) => {
   const { t } = useTranslation()
+  const isDevelopmentEnvironment = import.meta.env.VITE_ENVIRONMENT !== 'production'
+
   const handleReferenceMouseOver = (event) => {
     // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
-    // (eg a user has just added a new fish species and it has been approved, but the service worker has cahed the old one)
+    // (eg a user has just added a new fish species and it has been approved, but the service worker has cached the old one)
     // we use a hover event instead of click so devs can confirm the strategy, and the hover behaviour shows the href in the
     // browser bottom left corner that will
     // be followed onClick (instead of a stale one from the last click)
@@ -78,11 +117,15 @@ const GlobalLinks = ({ isAppOnline }) => {
           {t('mermaid_explore')}
         </StyledNavLink>
       </OfflineHide>
+      {/*Language is available in local and dev environment to confirm comprehensive tokenization.
+      Submenu items do not currently populate mobile.*/}
+      {isDevelopmentEnvironment && <LanguageMenuTool />}
     </>
   )
 }
 
 const Header = ({ logout = () => {}, currentUser = undefined }) => {
+  const { t } = useTranslation()
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const openProfileModal = () => setIsProfileModalOpen(true)
   const closeProfileModal = () => setIsProfileModalOpen(false)
@@ -98,13 +141,17 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
-      <UserMenuButton onClick={openProfileModal}>Profile</UserMenuButton>
-      <UserMenuButton onClick={logout}>Logout</UserMenuButton>
+      <UserMenuButton onClick={openProfileModal} data-testid="profile-button">
+        {t('profile.profile')}
+      </UserMenuButton>
+      <UserMenuButton onClick={logout} data-testid="logout-button">
+        {t('buttons.logout')}
+      </UserMenuButton>
     </OfflineHide>
   )
 
   const userIconButton = (
-    <UserButton aria-label="User account dropdown">
+    <UserButton aria-label={t('buttons.user_account_dropdown')}>
       <UserIcon
         firstName={currentUserFirstName}
         lastName={currentUserLastName}
@@ -118,8 +165,8 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
   return (
     <>
       <StyledHeader>
-        <Link to="/projects">
-          <LogoImg src={MermaidCollectLogo} alt="MERMAID Collect Logo" />
+        <Link to="/projects" id="gtm-collect-logo">
+          <LogoImg id="gtm-collect-logo-img" src={MermaidCollectLogo} alt={t('mermaid_logo')} />
         </Link>
         <GlobalNav>
           <div className="desktop">
@@ -127,9 +174,10 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
             {isAppOnline && (
               <HideShow
                 closeOnClickWithin={false}
+                id="gtm-bell-notifications-hideshow"
                 button={
-                  <HeaderButtonThatLooksLikeLink>
-                    <BiggerIconBell />
+                  <HeaderButtonThatLooksLikeLink id="gtm-bell-notifications">
+                    <BiggerIconBell id="gtm-bell-notifications-icon" />
                     {notifications.length ? (
                       <NotificationIndicator>&bull;</NotificationIndicator>
                     ) : undefined}
@@ -143,7 +191,11 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
               button={userIconButton}
               contents={
                 <UserMenu>
-                  {currentUser && <LoggedInAs>Logged in as {userDisplayName}</LoggedInAs>}
+                  {currentUser && (
+                    <LoggedInAs>
+                      {t('profile.logged_in_as')} {userDisplayName}
+                    </LoggedInAs>
+                  )}
                   <UserMenuDropDownContent />
                 </UserMenu>
               }
@@ -172,7 +224,11 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
               contents={
                 <UserMenu>
                   <GlobalLinks isAppOnline={isAppOnline} />
-                  {currentUser && <LoggedInAs>Logged in as {userDisplayName}</LoggedInAs>}
+                  {currentUser && (
+                    <LoggedInAs>
+                      {t('profile.logged_in_as')} {userDisplayName}
+                    </LoggedInAs>
+                  )}
                   <UserMenuDropDownContent />
                 </UserMenu>
               }

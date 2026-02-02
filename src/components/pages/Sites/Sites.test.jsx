@@ -28,7 +28,7 @@ test('Site component renders with the expected headers', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   expect(screen.getByTestId('sites-table-header-name')).toHaveTextContent(/name/i)
   expect(screen.getByTestId('sites-table-header-reefType')).toHaveTextContent(/reef.?type/i)
@@ -52,7 +52,7 @@ test('Site Records table sorts properly by Name column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -96,7 +96,7 @@ test('Site Records table sorts properly by Reef Type column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -140,7 +140,7 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 
@@ -184,7 +184,7 @@ test('Site Records table sorts properly by Exposure column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const table = screen.getByRole('table')
 

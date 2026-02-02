@@ -98,17 +98,11 @@ test('Benthic PIT validation: user can reset ignored observation warnings ', asy
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsTable = screen.getByTestId('observations-section')
 
   // only one observation will have warnings
 
@@ -123,7 +117,7 @@ test('Benthic PIT validation: user can reset ignored observation warnings ', asy
 
   await user.click(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 
@@ -186,15 +180,9 @@ test('user can reset dismissed record-level warnings', async () => {
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
@@ -209,7 +197,7 @@ test('user can reset dismissed record-level warnings', async () => {
   )
   expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
 
-  const isFormDirtyAfterReset = screen.getByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = screen.getByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 })
@@ -420,27 +408,21 @@ test('Benthic PIT validation: user edits non-observation input with ignored vali
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
   const depthRow = screen.getByTestId('depth')
-  const sampleDateRow = screen.getByTestId('sample_date')
-  const sampleTimeRow = screen.getByTestId('sample_time')
-  const transectNumberRow = screen.getByTestId('transect_number')
+  const sampleDateRow = screen.getByTestId('sample-date')
+  const sampleTimeRow = screen.getByTestId('sample-time')
+  const transectNumberRow = screen.getByTestId('transect-number')
   const labelRow = screen.getByTestId('label')
-  const lengthSurveyedRow = screen.getByTestId('len_surveyed')
-  const intervalSizeRow = screen.getByTestId('interval_size')
-  const intervalStartRow = screen.getByTestId('interval_start')
-  const reefSlopeRow = screen.getByTestId('reef_slope')
+  const lengthSurveyedRow = screen.getByTestId('len-surveyed')
+  const intervalSizeRow = screen.getByTestId('interval-size')
+  const intervalStartRow = screen.getByTestId('interval-start')
+  const reefSlopeRow = screen.getByTestId('reef-slope')
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
 
@@ -471,52 +453,52 @@ test('Benthic PIT validation: user edits non-observation input with ignored vali
   expect(within(observersRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(observersRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
-  await user.selectOptions(within(siteRow).getByLabelText('Site'), '1')
+  await user.selectOptions(within(siteRow).getByTestId('site-select'), '1')
   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.selectOptions(within(managementRow).getByLabelText('Management'), '1')
+  await user.selectOptions(within(managementRow).getByTestId('management-select'), '1')
   await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(depthRow).getByLabelText('Depth'), '1')
+  await user.type(within(depthRow).getByTestId('depth-input'), '1')
   await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(sampleDateRow).getByLabelText('Sample Date'), '2021-11-09')
+  await user.type(within(sampleDateRow).getByTestId('sample-date-input'), '2021-11-09')
   await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(sampleTimeRow).getByLabelText('Sample Time'), '02:39 PM')
+  await user.type(within(sampleTimeRow).getByTestId('sample-time-input'), '02:39 PM')
   await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(transectNumberRow).getByLabelText('Transect Number'), '12')
+  await user.type(within(transectNumberRow).getByTestId('transect-number-input'), '12')
   await waitFor(() =>
     expect(within(transectNumberRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  await user.type(within(labelRow).getByLabelText('Label'), '1')
+  await user.type(within(labelRow).getByTestId('label-input'), '1')
   await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(lengthSurveyedRow).getByLabelText('Transect Length Surveyed'), '1')
+  await user.type(within(lengthSurveyedRow).getByTestId('len-surveyed-input'), '1')
   await waitFor(() =>
     expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  await user.type(within(intervalSizeRow).getByLabelText('Interval Size'), '10')
+  await user.type(within(intervalSizeRow).getByTestId('interval-size-input'), '10')
   await waitFor(() =>
     expect(within(intervalSizeRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  await user.type(within(intervalStartRow).getByLabelText('Interval Start'), '10')
+  await user.type(within(intervalStartRow).getByTestId('interval-start-input'), '10')
   await waitFor(() =>
     expect(within(intervalStartRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
   // Reef Slope select on crest
   await user.selectOptions(
-    within(reefSlopeRow).getByLabelText('Reef Slope'),
+    within(reefSlopeRow).getByTestId('reef-slope-select'),
     '12dc11ae-3a4b-4309-8fae-66f51398d96f',
   )
   await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(notesRow).getByLabelText('Notes'), '1')
+  await user.type(within(notesRow).getByTestId('notes-textarea'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   const observerSelect = within(observersRow).getByTestId('observers-select')
@@ -526,6 +508,6 @@ test('Benthic PIT validation: user edits non-observation input with ignored vali
 
   // make act error go away
   expect(
-    await within(screen.getByTestId('collect-record-form-buttons')).findByText('Save'),
+    await within(screen.getByTestId('collect-record-form-buttons')).findByTestId('save-button'),
   ).toBeEnabled()
 })

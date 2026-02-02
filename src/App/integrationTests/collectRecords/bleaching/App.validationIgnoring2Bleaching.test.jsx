@@ -100,17 +100,11 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const coloniesBleachedObservationTable = screen.getByLabelText('Observations - Colonies Bleached')
+  const coloniesBleachedObservationTable = screen.getByTestId('observations-section-table')
 
   // only one observation will have warnings
 
@@ -133,7 +127,7 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
     within(coloniesBleachedObservationTable).getByRole('checkbox', { name: 'Ignore warning' }),
   )
 
-  const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 
@@ -235,17 +229,11 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const percentCoverObservationTable = screen.getByLabelText('Observations - Percent Cover')
+  const percentCoverObservationTable = screen.getByTestId('observations2-section-table')
 
   // only one observation will have warnings
 
@@ -266,7 +254,7 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
     within(percentCoverObservationTable).getByRole('checkbox', { name: 'Ignore warning' }),
   )
 
-  const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 
@@ -331,15 +319,9 @@ test('user can reset dismissed record-level warnings', async () => {
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
@@ -354,7 +336,7 @@ test('user can reset dismissed record-level warnings', async () => {
   )
   expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
 
-  const isFormDirtyAfterReset = screen.getByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = screen.getByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 })
@@ -529,23 +511,17 @@ test('Bleaching validation: user edits non-observation input with ignored valida
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
   const depthRow = screen.getByTestId('depth')
-  const sampleDateRow = screen.getByTestId('sample_date')
-  const sampleTimeRow = screen.getByTestId('sample_time')
+  const sampleDateRow = screen.getByTestId('sample-date')
+  const sampleTimeRow = screen.getByTestId('sample-time')
   const labelRow = screen.getByTestId('label')
-  const quadratSizeRow = screen.getByTestId('quadrat_size')
+  const quadratSizeRow = screen.getByTestId('quadrat-size')
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
 
@@ -568,28 +544,28 @@ test('Bleaching validation: user edits non-observation input with ignored valida
   expect(within(observersRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(observersRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
-  await user.selectOptions(within(siteRow).getByLabelText('Site'), '1')
+  await user.selectOptions(within(siteRow).getByTestId('site-select'), '1')
   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.selectOptions(within(managementRow).getByLabelText('Management'), '1')
+  await user.selectOptions(within(managementRow).getByTestId('management-select'), '1')
   await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(depthRow).getByLabelText('Depth'), '1')
+  await user.type(within(depthRow).getByTestId('depth-input'), '1')
   await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(sampleDateRow).getByLabelText('Sample Date'), '2021-11-09')
+  await user.type(within(sampleDateRow).getByTestId('sample-date-input'), '2021-11-09')
   await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(sampleTimeRow).getByLabelText('Sample Time'), '02:39 PM')
+  await user.type(within(sampleTimeRow).getByTestId('sample-time-input'), '02:39 PM')
   await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(labelRow).getByLabelText('Label'), '1')
+  await user.type(within(labelRow).getByTestId('label-input'), '1')
   await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(quadratSizeRow).getByLabelText('Quadrat Size'), '1')
+  await user.type(within(quadratSizeRow).getByTestId('quadrat-size-input'), '1')
   await waitFor(() => expect(within(quadratSizeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  await user.type(within(notesRow).getByLabelText('Notes'), '1')
+  await user.type(within(notesRow).getByTestId('notes-textarea'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   const observerSelect = within(observersRow).getByTestId('observers-select')
@@ -599,6 +575,6 @@ test('Bleaching validation: user edits non-observation input with ignored valida
 
   // make act error go away
   expect(
-    await within(screen.getByTestId('collect-record-form-buttons')).findByText('Save'),
+    await within(screen.getByTestId('collect-record-form-buttons')).findByTestId('save-button'),
   ).toBeEnabled()
 })

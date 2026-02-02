@@ -1,13 +1,68 @@
+@use './functions.module.scss' as *;
+
 /** Theme colors **/
 $primary: #174b82;
 $secondary: #dddce4;
 
+$callout: #f2645a; //theme const callout: #DB3B00
+$callout-active: lightenColor($callout, 90%);
+$callout-hover: lightenColor($callout, 98%);
+
+$error: #7b0a0a;
+$success: #43a841;
+
+$caution: #bb1600;
+$caution-hover: lightenColor($caution, 90%);
+$caution-active: lightenColor($caution, 98%);
+
+$warning: #efda70;
+
+$white: #ffffff;
+$black: #000000;
+$disabled: #969696;
+
 $tableRowOdd: #fdfdfe;
 $tableRowEven: #f8f8fa;
 $tableRowHover: #f1f1f4;
+
+$border-radius: 0px; //update to 4px when enabled globally
+$border-radius__pill: 5px;
 
 /** Media Query Break Points **/
 $mobile-break: 599px;
 $tablet-portrait-break: 600px;
 $tablet-landscape-break: 960px;
 $desktop-break: 1300px;
+
+/** Typography **/
+$font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
+$small-font-size: 12px;
+$medium-font-size: 14px;
+$default-font-size: 16px;
+
+$bold: 700;
+
+/** Spacing **/
+$spacing-x-small: 3px; //0.2rem
+$spacing-small: 5px;
+$spacing-medium: 10px; //1rem
+$spacing-large: 14px; //1.5rem
+$spacing-x-large: 24px; //2rem
+
+/** Widths **/
+$default-width: 90vw;
+$max-width: 1200px;
+
+/** Borders **/
+$border-small: 1px;
+$border-medium: 2px;
+$border-large: 4px;
+$border-x-large: 8px;
+
+/** Sizing **/
+$pill-height: 26px;
+$max-screen-width: 90vw;
+$max-width: 1200px;
+
+/** Transitions **/
+$default-transition: 0.25s;

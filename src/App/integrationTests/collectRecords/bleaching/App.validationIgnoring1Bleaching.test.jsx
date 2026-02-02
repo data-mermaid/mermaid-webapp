@@ -225,24 +225,18 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
   const depthRow = screen.getByTestId('depth')
-  const sampleDateRow = screen.getByTestId('sample_date')
-  const sampleTimeRow = screen.getByTestId('sample_time')
-  const quadratSizeRow = screen.getByTestId('quadrat_size')
+  const sampleDateRow = screen.getByTestId('sample-date')
+  const sampleTimeRow = screen.getByTestId('sample-time')
+  const quadratSizeRow = screen.getByTestId('quadrat-size')
   const labelRow = screen.getByTestId('label')
-  const relativeDepthRow = screen.getByTestId('relative_depth')
+  const relativeDepthRow = screen.getByTestId('relative-depth')
   const visibilityRow = screen.getByTestId('visibility')
   const currentRow = screen.getByTestId('current')
   const tideRow = screen.getByTestId('tide')
@@ -285,7 +279,7 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
   expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
-  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterIgnore)
   await user.click(within(managementRow).getByRole('checkbox', { name: 'Ignore warning' }))
@@ -438,15 +432,9 @@ test('Bleaching collect record validation: user can dismiss record-level warning
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
@@ -469,7 +457,7 @@ test('Bleaching collect record validation: user can dismiss record-level warning
     expect(within(recordLevelValidationsSection).queryByText('ignored')).not.toBeInTheDocument(),
   )
 
-  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterIgnore)
 }, 50000)
@@ -556,19 +544,11 @@ test('Bleaching collect record validation: user can dismiss colonies bleached ob
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const coloniesBleachedObservationsTable = screen.getByLabelText(
-    'Observations - Colonies Bleached',
-  )
+  const coloniesBleachedObservationsTable = screen.getByTestId('observations-section-table')
 
   expect(within(coloniesBleachedObservationsTable).getByText('firstWarning')).toBeInTheDocument()
   expect(within(coloniesBleachedObservationsTable).getByText('secondWarning')).toBeInTheDocument()
@@ -591,7 +571,7 @@ test('Bleaching collect record validation: user can dismiss colonies bleached ob
   ).toBeChecked()
   expect(within(coloniesBleachedObservationsTable).getByText('Ignored'))
 
-  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterIgnore)
 }, 60000)
@@ -678,17 +658,11 @@ test('Bleaching collect record validation: user can dismiss percent cover observ
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const percentCoverObservationTable = screen.getByLabelText('Observations - Percent Cover')
+  const percentCoverObservationTable = screen.getByTestId('observations2-section-table')
 
   expect(within(percentCoverObservationTable).getByText('firstWarning')).toBeInTheDocument()
   expect(within(percentCoverObservationTable).getByText('secondWarning')).toBeInTheDocument()
@@ -709,7 +683,7 @@ test('Bleaching collect record validation: user can dismiss percent cover observ
   ).toBeChecked()
   expect(within(percentCoverObservationTable).getByText('Ignored'))
 
-  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterIgnore)
 }, 60000)
@@ -957,24 +931,18 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
     dexiePerUserDataInstance,
   )
 
-  await user.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
-  expect(await screen.findByRole('button', { name: 'Validating' }))
-  await waitFor(() =>
-    expect(
-      screen.getByRole('button', {
-        name: 'Validate',
-      }),
-    ),
-  )
+  await user.click(await screen.findByTestId('validate-button', { timeout: 10000 }))
+  expect(await screen.findByTestId('validating-button'))
+  await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   const siteRow = screen.getByTestId('site')
   const managementRow = screen.getByTestId('management')
   const depthRow = screen.getByTestId('depth')
-  const sampleDateRow = screen.getByTestId('sample_date')
-  const sampleTimeRow = screen.getByTestId('sample_time')
-  const quadratSizeRow = screen.getByTestId('quadrat_size')
+  const sampleDateRow = screen.getByTestId('sample-date')
+  const sampleTimeRow = screen.getByTestId('sample-time')
+  const quadratSizeRow = screen.getByTestId('quadrat-size')
   const labelRow = screen.getByTestId('label')
-  const relativeDepthRow = screen.getByTestId('relative_depth')
+  const relativeDepthRow = screen.getByTestId('relative-depth')
   const visibilityRow = screen.getByTestId('visibility')
   const currentRow = screen.getByTestId('current')
   const tideRow = screen.getByTestId('tide')
@@ -1014,7 +982,7 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
     }),
   )
 
-  const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 

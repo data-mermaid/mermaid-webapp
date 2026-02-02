@@ -9,9 +9,7 @@ const buttonActive = css`
 `
 
 export const CloseButton = styled.button`
-  background-color: ${theme.color.secondaryColor};
   color: ${theme.color.secondaryText};
-  border-color: ${theme.color.secondaryBorder};
   border-radius: 100%;
   background: transparent;
   border: none;
@@ -145,7 +143,6 @@ export const ButtonThatLooksLikeLinkUnderlined = styled(ButtonThatLooksLikeLink)
 `
 
 export const ToolbarButtonWrapper = styled('div')`
-  // button,
   a {
     margin: 0 -1px;
   }
@@ -207,4 +204,14 @@ export const InputButton = styled('button')`
     background-color: ${theme.color.secondaryDisabledColor};
     cursor: not-allowed;
   }
+`
+
+export const InlineValidationButton = styled(ButtonSecondary)`
+  margin: ${theme.spacing.xxsmall};
+  padding: ${theme.spacing.xxsmall} ${theme.spacing.small};
+  text-align: left;
+  text-transform: capitalize;
+  font-size: smaller;
+  white-space: nowrap;
+  color: ${theme.color.textColor};
 `

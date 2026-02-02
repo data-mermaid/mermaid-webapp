@@ -39,12 +39,12 @@ test('FishBelt observations size shows a numeric pattern when fish size bin is 1
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   // Fish size bin select on 1
   await user.selectOptions(
-    within(screen.getByTestId('size_bin')).getByRole('combobox'),
+    within(screen.getByTestId('size-bin')).getByRole('combobox'),
     '67c1356f-e0a7-4383-8034-77b2f36e1a49',
   )
 
@@ -74,12 +74,12 @@ test('FishBelt observations size shows a select input when fish size bin is 5', 
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   // Fish size bin select on 5
   await user.selectOptions(
-    within(screen.getByTestId('size_bin')).getByRole('combobox'),
+    within(screen.getByTestId('size-bin')).getByRole('combobox'),
     'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
   )
 
@@ -111,12 +111,12 @@ test('FishBelt observations size shows a select input when fish size bin is 10',
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   // Fish size bin select on 10
   await user.selectOptions(
-    within(screen.getByTestId('size_bin')).getByRole('combobox'),
+    within(screen.getByTestId('size-bin')).getByRole('combobox'),
     '3232100a-a9b2-462c-955c-0dae7b72514f',
   )
 
@@ -148,12 +148,12 @@ test('FishBelt observations size shows a select input when fish size bin is AGRR
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   // Fish size bin select on AGRRA
   await user.selectOptions(
-    within(screen.getByTestId('size_bin')).getByRole('combobox'),
+    within(screen.getByTestId('size-bin')).getByRole('combobox'),
     'ccef720a-a1c9-4956-906d-09ed56f16249',
   )
 
@@ -185,12 +185,12 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   // Fish size bin select on AGRRA
   await user.selectOptions(
-    within(screen.getByTestId('size_bin')).getByRole('combobox'),
+    within(screen.getByTestId('size-bin')).getByRole('combobox'),
     'ccef720a-a1c9-4956-906d-09ed56f16249',
   )
 

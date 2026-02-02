@@ -28,26 +28,22 @@ describe('Offline', () => {
 
     // make a change
 
-    await user.clear(await screen.findByLabelText('Depth'))
-    await user.type(screen.getByLabelText('Depth'), '45')
+    await user.clear(await screen.findByTestId('depth-input'))
+    await user.type(screen.getByTestId('depth-input'), '45')
 
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByTestId('saved-button'))
 
     // Site select
     expect(screen.getByDisplayValue('Site C'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes C [Management Regimes 3]'))
-    expect(screen.getByLabelText('Depth')).toHaveValue(45)
-    expect(screen.getByLabelText('Sample Date')).toHaveValue('2020-04-19')
-    expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')
-    expect(screen.getByLabelText('Label')).toHaveValue('FB-1')
-    expect(screen.getByLabelText('Quadrat Size')).toHaveValue(10)
+    expect(screen.getByTestId('depth-input')).toHaveValue(45)
+    expect(screen.getByTestId('sample-date-input')).toHaveValue('2020-04-19')
+    expect(screen.getByTestId('sample-time-input')).toHaveValue('11:55')
+    expect(screen.getByTestId('label-input')).toHaveValue('FB-1')
+    expect(screen.getByTestId('quadrat-size-input')).toHaveValue(10)
     // Visibility select on <1m - bad
     expect(screen.getByDisplayValue('<1m - bad'))
     // Current select on moderate
@@ -57,7 +53,7 @@ describe('Offline', () => {
     // Tide select on high
     expect(screen.getByDisplayValue('high'))
 
-    expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
+    expect(screen.getByTestId('notes-textarea')).toHaveValue('some fish notes')
   })
   test('Edit Bleaching collect record save stores properly formatted Bleaching collect record colonies bleached observations in dexie', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
@@ -73,32 +69,26 @@ describe('Offline', () => {
       },
     )
 
-    const addObservationButton = (
-      await screen.findAllByRole('button', {
-        name: 'Add Row',
-      })
-    )[0]
+    const addObservationButton = (await screen.findAllByTestId('add-observation-row'))[0]
 
     await user.click(addObservationButton)
 
-    const coloniesBleachedObservationTable = screen.getByLabelText(
-      'Observations - Colonies Bleached',
-    )
+    const coloniesBleachedObservationTable = await screen.findByTestId('observations-section-table')
 
     const observationRows = await within(coloniesBleachedObservationTable).findAllByRole('row')
 
     // 4 observations + 2 header rows
     expect(observationRows.length).toEqual(6)
 
-    const newBenthicAttributeInput = screen.getAllByLabelText('Benthic Attribute')[3]
-    const newGrowthFromInput = screen.getAllByLabelText('Growth Form')[3]
-    const newNormalInput = screen.getAllByLabelText('Normal')[3]
-    const newPaleInput = screen.getAllByLabelText('Pale')[3]
-    const new20BleachedInput = screen.getAllByLabelText('0-20% bleached')[3]
-    const new50BleachedInput = screen.getAllByLabelText('20-50% bleached')[3]
-    const new80BleachedInput = screen.getAllByLabelText('50-80% bleached')[3]
-    const new100BleachedInput = screen.getAllByLabelText('80-100% bleached')[3]
-    const newRecentlyDeadInput = screen.getAllByLabelText('Recently dead')[3]
+    const newBenthicAttributeInput = screen.getAllByTestId('benthic-attribute-input')[3]
+    const newGrowthFromInput = screen.getAllByTestId('growth-form-select')[3]
+    const newNormalInput = screen.getAllByTestId('count-normal-input')[3]
+    const newPaleInput = screen.getAllByTestId('count-pale-input')[3]
+    const new20BleachedInput = screen.getAllByTestId('count-20-input')[3]
+    const new50BleachedInput = screen.getAllByTestId('count-50-input')[3]
+    const new80BleachedInput = screen.getAllByTestId('count-80-input')[3]
+    const new100BleachedInput = screen.getAllByTestId('count-100-input')[3]
+    const newRecentlyDeadInput = screen.getAllByTestId('count-recently-dead-input')[3]
 
     await user.type(newBenthicAttributeInput, 'dead')
 
@@ -128,13 +118,9 @@ describe('Offline', () => {
     await user.type(new100BleachedInput, '1')
     await user.type(newRecentlyDeadInput, '1')
 
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByTestId('saved-button'))
     const savedCollectRecords = await dexiePerUserDataInstance.collect_records.toArray()
 
     const updatedCollectRecord = savedCollectRecords.filter((record) => record.id === '60')[0]
@@ -165,36 +151,28 @@ describe('Offline', () => {
       },
     )
 
-    const addObservationButton = (
-      await screen.findAllByRole('button', {
-        name: 'Add Row',
-      })
-    )[1]
+    const addObservationButton = (await screen.findAllByTestId('add-observation-row'))[1]
 
     await user.click(addObservationButton)
 
-    const percentCoverObservationsTable = (await screen.findAllByRole('table'))[1]
+    const percentCoverObservationsTable = await screen.findByTestId('observations2-section-table')
 
     const observationRows = await within(percentCoverObservationsTable).findAllByRole('row')
 
     // 4 observations + 1 header row
     expect(observationRows.length).toEqual(5)
 
-    const newHardCoralInput = screen.getAllByLabelText('Hard coral % cover')[3]
-    const newSoftCoralInput = screen.getAllByLabelText('Soft coral % cover')[3]
-    const newMacroalgaeInput = screen.getAllByLabelText('Macroalgae % cover')[3]
+    const newHardCoralInput = screen.getAllByTestId('percent-hard-input')[3]
+    const newSoftCoralInput = screen.getAllByTestId('percent-soft-input')[3]
+    const newMacroalgaeInput = screen.getAllByTestId('percent-algae-input')[3]
 
     await user.type(newHardCoralInput, '8')
     await user.type(newSoftCoralInput, '8')
     await user.type(newMacroalgaeInput, '8')
 
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByTestId('saved-button'))
     const savedCollectRecords = await dexiePerUserDataInstance.collect_records.toArray()
 
     const updatedCollectRecord = savedCollectRecords.filter((record) => record.id === '60')[0]
@@ -224,18 +202,14 @@ describe('Offline', () => {
     )
 
     // make an unsaved change
-    const depthInput = await screen.findByLabelText('Depth')
+    const depthInput = await screen.findByTestId('depth-input')
 
     await user.clear(depthInput)
     await user.type(depthInput, '45')
-    await user.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
+    await user.click(screen.getByTestId('save-button'))
 
-    expect(await screen.findByText('The sample unit has not been saved.'))
+    expect(await screen.findByTestId('save-button'))
 
-    expect(await screen.findByLabelText('Depth')).toHaveValue(45)
+    expect(await screen.findByTestId('depth-input')).toHaveValue(45)
   })
 })

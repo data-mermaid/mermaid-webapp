@@ -30,8 +30,8 @@ project managements, project sites, and project profiles`, async () => {
     },
   )
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const benthicAttributesBeforeSyncError =
     await dexiePerUserDataInstance.benthic_attributes.toArray()
@@ -144,12 +144,12 @@ project managements, project sites, and project profiles`, async () => {
   )
 
   // click another project-related page to trigger a sync and use the mock api with sync errors
-  const sitesSideNavLink = screen.getByRole('link', { name: 'Sites' })
+  const sitesSideNavLink = screen.getByTestId('nav-sites')
 
   await user.click(sitesSideNavLink)
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   const benthicAttributesAfterSyncError =
     await dexiePerUserDataInstance.benthic_attributes.toArray()

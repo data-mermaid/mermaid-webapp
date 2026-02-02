@@ -176,6 +176,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
         toast.success(
           ...getToastArguments(
             t('benthic_observations.proposed_attribute_saved', {
+              parent: benthicAttributeParentName,
               attribute: newBenthicAttributeName,
             }),
           ),
@@ -189,6 +190,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
               toast.error(
                 ...getToastArguments(
                   t('benthic_observations.attribute_already_exists', {
+                    parent: benthicAttributeParentName,
                     attribute: newBenthicAttributeName,
                   }),
                 ),
@@ -205,6 +207,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
               toast.error(
                 ...getToastArguments(
                   t('benthic_observations.errors.attribute_proposal_unsaved', {
+                    parent: benthicAttributeParentName,
                     attribute: newBenthicAttributeName,
                   }),
                 ),

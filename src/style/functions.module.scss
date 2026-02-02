@@ -1,0 +1,9 @@
+@function lightenColor($color, $percent) {
+  $result: color-mix(in srgb, $color 40%, white $percent);
+  @return $result;
+}
+
+@function darkenColor($color, $percent) {
+  $result: color-mix(in srgb, $color 40%, black $percent);
+  @return $result;
+}

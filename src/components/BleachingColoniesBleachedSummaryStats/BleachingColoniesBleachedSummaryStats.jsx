@@ -1,8 +1,10 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { observationsColoniesBleachedPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { ObservationsSummaryStats, Td, Th, Tr } from '../generic/Table/table'
 
 const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached = [] }) => {
+  const { t } = useTranslation()
   const getTotalOfColonies = () => {
     const totals = observationsColoniesBleached.map((item) => {
       return (
@@ -57,23 +59,23 @@ const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached = 
     <ObservationsSummaryStats>
       <tbody>
         <Tr>
-          <Th>Total number of colonies</Th>
+          <Th>{t('observations.total_colonies')}</Th>
           <Td>{getTotalOfColonies()}</Td>
         </Tr>
         <Tr>
-          <Th>Total number of coral genera</Th>
+          <Th>{t('observations.total_coral_genera')}</Th>
           <Td>{getTotalOfCoralGenera()}</Td>
         </Tr>
         <Tr>
-          <Th>% Normal colonies</Th>
+          <Th>{t('observations.percent_normal_colonies')}</Th>
           <Td>{getPercentageOfColonies('count_normal')}</Td>
         </Tr>
         <Tr>
-          <Th>% Pale colonies</Th>
+          <Th>{t('observations.percent_pale_colonies')}</Th>
           <Td>{getPercentageOfColonies('count_pale')}</Td>
         </Tr>
         <Tr>
-          <Th>% Bleached colonies</Th>
+          <Th>{t('observations.percent_bleached_colonies')}</Th>
           <Td>{getPercentageOfColonies('bleached')}</Td>
         </Tr>
       </tbody>

@@ -271,7 +271,7 @@ const FishBeltTransectInputs = ({
           label={t('transect_number')}
           required={true}
           id="number"
-          testId="transect_number"
+          testId="transect-number"
           type="number"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({
@@ -308,9 +308,9 @@ const FishBeltTransectInputs = ({
           helperText={t('label_info')}
         />
         <InputWithLabelAndValidation
-          label={t('sample_time')}
+          label={t('sample_units.sample_time')}
           id="sample_time"
-          testId="sample_time"
+          testId="sample-time"
           type="time"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
@@ -325,11 +325,11 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
-          helperText={t('sample_time_info')}
+          helperText={t('sample_units.sample_time_info')}
         />
 
         <InputWithLabelAndValidation
-          label={t('depth')}
+          label={t('sample_units.depth')}
           required={true}
           id="depth"
           unit="m"
@@ -345,13 +345,13 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.depth}
           onChange={handleDepthChange}
-          helperText={t('depth_info')}
+          helperText={t('sample_units.depth_info')}
         />
         <InputWithLabelAndValidation
-          label={t('transect_length_surveyed')}
+          label={t('sample_units.transect_length_surveyed')}
           required={true}
           id="len_surveyed"
-          testId="len_surveyed"
+          testId="len-surveyed"
           type="number"
           unit="m"
           ignoreNonObservationFieldValidations={() => {
@@ -369,7 +369,7 @@ const FishBeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
-          helperText={t('transect_length_info')}
+          helperText={t('sample_units.transect_length_surveyed_info')}
         />
         <InputSelectWithLabelAndValidation
           label={t('width')}
@@ -394,7 +394,7 @@ const FishBeltTransectInputs = ({
           label={t('fish_size_bin')}
           required={true}
           id="size_bin"
-          testId="size_bin"
+          testId="size-bin"
           options={fishSizeBinOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
@@ -416,7 +416,7 @@ const FishBeltTransectInputs = ({
           label={t('reef_slope')}
           required={false}
           id="reef_slope"
-          testId="reef_slope"
+          testId="reef-slope"
           options={reefSlopeOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
@@ -495,7 +495,7 @@ const FishBeltTransectInputs = ({
           label={t('relative_depth')}
           required={false}
           id="relative_depth"
-          testId="relative_depth"
+          testId="relative-depth"
           options={relativeDepthOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
