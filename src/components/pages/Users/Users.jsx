@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
-import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
+import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -14,13 +14,13 @@ import {
   ToolbarRowWrapper,
   UserTableTd,
 } from './Users.styles'
-import { ButtonSecondary, ButtonCaution, IconButton, ButtonPrimary } from '../../generic/buttons'
+import { ButtonCaution, ButtonPrimary, ButtonSecondary, IconButton } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
-import { IconAccountConvert, IconPlus, IconInfo, IconAccountRemove } from '../../icons'
+import { IconAccountConvert, IconAccountRemove, IconInfo, IconPlus } from '../../icons'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodesSecondChild,
@@ -28,13 +28,13 @@ import {
 import { pluralize } from '../../../library/strings/pluralize'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
-  Tr,
-  Th,
-  TableNavigation,
-  StickyTableOverflowWrapper,
   GenericStickyTable,
+  StickyTableOverflowWrapper,
+  TableNavigation,
+  Th,
+  Tr,
 } from '../../generic/Table/table'
-import { P, H3 } from '../../generic/text'
+import { H3, P } from '../../generic/text'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
@@ -55,15 +55,16 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import {
-  getIsUserAdminForProject,
   getIsProjectProfileReadOnly,
+  getIsUserAdminForProject,
 } from '../../../App/currentUserProfileHelpers'
-import { PENDING_USER_PROFILE_NAME, PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import { PAGE_SIZE_DEFAULT, PENDING_USER_PROFILE_NAME } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { LabelContainer } from '../../generic/form'
 import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 import UserRolesInfoModal from '../../UserRolesInfoModal'
 import { UserIcon } from '../../UserIcon/UserIcon'
+import { MuiTooltip } from '../../generic/MuiTooltip'
 
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
 
@@ -464,10 +465,19 @@ const Users = () => {
                 isLoading={isTableUpdating}
                 disabled={isDemoProject}
                 buttonChildren={
-                  <>
-                    <IconPlus />
-                    {t('buttons.add_user')}
-                  </>
+                  isDemoProject ? (
+                    <>
+                      <MuiTooltip title={t('projects.demo.add_users_unavailable')}>
+                        <IconPlus />
+                        {t('buttons.add_user')}
+                      </MuiTooltip>
+                    </>
+                  ) : (
+                    <>
+                      <IconPlus />
+                      {t('buttons.add_user')}
+                    </>
+                  )
                 }
                 value={newUserEmail}
                 onChange={handleNewUserEmailOnChange}
@@ -570,8 +580,6 @@ function UsersTableSection({
   const userRoleHeaderText = t('users.role')
   const unsubmittedSampleUnitsHeaderText = t('users.unsubmitted_sample_units')
   const removeFromProjectHeaderText = t('users.remove_from_project')
-  const transferUserButtonText = t('buttons.transfer')
-  const noSampleUnitsText = t('sample_units.none')
   const adminHeaderText = t('users.roles.admin')
   const collectorHeaderText = t('users.roles.collector')
   const readOnlyHeaderText = t('users.roles.read_only')
@@ -891,11 +899,11 @@ function UsersTableSection({
                     )
                   }
                 >
-                  <IconAccountConvert /> {transferUserButtonText}
+                  <IconAccountConvert /> {t('buttons.transfer')}
                 </ButtonSecondary>
               </>
             ) : (
-              noSampleUnitsText
+              t('sample_units.none')
             )}
           </>
         ),
@@ -905,18 +913,24 @@ function UsersTableSection({
             disabled={isCurrentUser || isTableUpdating || isDemoProject}
             onClick={() => openRemoveUserModal(profile)}
           >
-            <IconAccountRemove />
+            {isDemoProject ? (
+              <MuiTooltip title={t('projects.demo.delete_users_unavailable')}>
+                <IconAccountRemove />
+              </MuiTooltip>
+            ) : (
+              <IconAccountRemove />
+            )}
           </ButtonCaution>
         ),
       }
     })
   }, [
+    t,
+    isDemoProject,
     observerProfiles,
     currentUser,
     handleRoleChange,
     isTableUpdating,
-    transferUserButtonText,
-    noSampleUnitsText,
     openTransferSampleUnitsModal,
     openRemoveUserModal,
   ])
@@ -1096,6 +1110,7 @@ UsersTableSection.propTypes = {
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   }).isRequired,
   isAdminUser: PropTypes.bool.isRequired,
+  isDemoProject: PropTypes.bool.isRequired,
   isTableUpdating: PropTypes.bool.isRequired,
   handleRoleChange: PropTypes.func.isRequired,
   openTransferSampleUnitsModal: PropTypes.func.isRequired,

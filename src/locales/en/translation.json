@@ -709,6 +709,8 @@
     "delete_project": "Delete a project",
     "delete_sample_units_notice": "You must delete all the sample units in this project to delete this project.",
     "demo": {
+      "add_users_unavailable": "Users cannot be added to the demo project",
+      "delete_users_unavailable": "Users cannot be removed from the demo project",
       "delete_notice": "You can add the demo project again from the Projects page.",
       "demo": "Demo project",
       "dismissed": "Add the demo project any time from the New project dropdown",

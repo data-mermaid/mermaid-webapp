@@ -1,6 +1,6 @@
 @use './functions.module.scss' as *;
 
-/** Theme colors **/
+/** Theme/Base colors **/
 $primary: #174b82;
 $secondary: #dddce4;
 
@@ -21,6 +21,10 @@ $white: #ffffff;
 $black: #000000;
 $disabled: #969696;
 
+/** Forms **/
+$disabled-input-background: #e4e4e4;
+$form-input-border: #808183;
+$warning-input: rgba(254, 221, 47, 0.15);
 $tableRowOdd: #fdfdfe;
 $tableRowEven: #f8f8fa;
 $tableRowHover: #f1f1f4;

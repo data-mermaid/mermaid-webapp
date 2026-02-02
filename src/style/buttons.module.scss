@@ -110,6 +110,17 @@
   }
 }
 
+.button--input {
+  @extend .button--secondary;
+  white-space: nowrap;
+  border-color: darkenColor($white, 50%);
+  border-left: 0;
+  padding: $spacing-x-small;
+  @media (min-width: $tablet-portrait-break) {
+    padding: $spacing-small;
+  }
+}
+
 //Currently unused - confirm styles before use, then remove comment
 .button--close {
   color: $primary;
