@@ -24,6 +24,7 @@ const InputValidationInfo = ({
   currentSelectValue = undefined,
   updateValueAndResetValidationForDuplicateWarning = () => {},
   additionalText = null,
+  testId = undefined,
 }) => {
   const { projectId } = useParams()
   const areThereValidationMessages = validationMessages.length
@@ -79,7 +80,7 @@ const InputValidationInfo = ({
   }
 
   return (
-    <ValidationWrapper>
+    <ValidationWrapper data-testid={testId}>
       {areThereValidationMessages &&
       (isErrorValidation || isWarningValidation || isIgnoredWarningValidation) ? (
         <>
@@ -109,6 +110,7 @@ InputValidationInfo.propTypes = {
   currentSelectValue: PropTypes.string,
   updateValueAndResetValidationForDuplicateWarning: PropTypes.func,
   additionalText: PropTypes.node,
+  testId: PropTypes.string,
 }
 
 export default InputValidationInfo
