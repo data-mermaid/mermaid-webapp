@@ -96,14 +96,16 @@ describe('offline', () => {
     // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-site-form-title')).toHaveTextContent('Rebecca')
 
-    expect(screen.getByTestId('name-input')).toHaveDisplayValue('Rebecca')
-    expect(screen.getByTestId('country-input')).toHaveDisplayValue('Canada')
-    expect(screen.getByTestId('latitude-input')).toHaveDisplayValue('54')
-    expect(screen.getByTestId('longitude-input')).toHaveDisplayValue('45')
-    expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('very sheltered')
-    expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('atoll')
-    expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('back reef')
-    expect(screen.getByTestId('notes-textarea')).toHaveDisplayValue('la dee dah')
+    await waitFor(() => {
+      expect(screen.getByTestId('name-input')).toHaveDisplayValue('Rebecca')
+      expect(screen.getByTestId('country-input')).toHaveDisplayValue('Canada')
+      expect(screen.getByTestId('latitude-input')).toHaveDisplayValue('54')
+      expect(screen.getByTestId('longitude-input')).toHaveDisplayValue('45')
+      expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('very sheltered')
+      expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('atoll')
+      expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('back reef')
+      expect(screen.getByTestId('notes-textarea')).toHaveDisplayValue('la dee dah')
+    })
   })
   test('new site save success show new record in site table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()

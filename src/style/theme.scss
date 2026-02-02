@@ -4,16 +4,16 @@
 $primary: #174b82;
 $secondary: #dddce4;
 
-$callout: #f2645a;
-$callout-hover: lightenColor($callout, 20%);
-$callout-active: darkenColor($callout, 20%);
+$callout: #f2645a; //theme const callout: #DB3B00
+$callout-active: lightenColor($callout, 90%);
+$callout-hover: lightenColor($callout, 98%);
 
 $error: #7b0a0a;
 $success: #43a841;
 
 $caution: #bb1600;
-$caution-hover: lightenColor($caution, 20%);
-$caution-active: darkenColor($caution, 20%);
+$caution-hover: lightenColor($caution, 90%);
+$caution-active: lightenColor($caution, 98%);
 
 $warning: #efda70;
 

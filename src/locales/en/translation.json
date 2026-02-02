@@ -736,6 +736,7 @@
     "delete_project": "Delete a project",
     "delete_sample_units_notice": "You must delete all the sample units in this project to delete this project.",
     "demo": {
+      "created": "Demo project created",
       "delete_notice": "You can add the demo project again from the Projects page.",
       "demo": "Demo project",
       "dismissed": "Add the demo project any time from the New project dropdown",
