@@ -77,7 +77,7 @@ test('Validate Benthic LIT collect record, get site duplicate warning, show reso
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
   await user.click(resolveButton)
 
-  const resolveModal = screen.getByTestId('resolve-duplicate-site-modal')
+  const resolveModal = await screen.findByTestId('resolve-duplicate-site-modal')
   const originalSite = await within(resolveModal).findByTestId('resolve-duplicate-original-site')
   const keepOriginalSiteButton = await within(originalSite).findByTestId(
     'resolve-duplicate-keep-original-site',
