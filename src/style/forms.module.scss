@@ -1,5 +1,14 @@
 @use './theme.scss' as *;
 
+//from form.inputStyles
+@mixin input-base {
+  padding: $spacing-x-small;
+
+  @media (min-width: $tablet-portrait-break) {
+    padding: $spacing-small;
+  }
+}
+
 //from form.inputTextareaSelectStyles
 @mixin form-base {
   padding: $spacing-small;
@@ -39,22 +48,12 @@
   }
 }
 
-//from form.inputStyles
-@mixin input-base {
-  padding: $spacing-x-small;
-
-  @media (min-width: $tablet-portrait-break) {
-    padding: $spacing-small;
-  }
-}
-
-//formerly InputAndButtonWrapper
+//formerly InputAndButton.InputAndButtonWrapper
 .form__input_button_wrapper {
   display: flex;
   > input {
     @include input-base;
     width: 100%;
-    border-color: $secondary;
     background-color: transparent;
     &:focus {
       outline-offset: -3px;
@@ -64,5 +63,7 @@
 
 .form__input_button_wrapper--warning {
   @extend .form__input_button_wrapper;
-  background-color: $warning-input;
+  > input {
+    background-color: $warning-input;
+  }
 }

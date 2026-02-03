@@ -39,7 +39,7 @@
 .button--secondary {
   @include button;
   background-color: $white;
-  color: $primary;
+  color: $font-color;
   border: solid 1px $secondary;
   &:hover {
     background-color: lightenColor($secondary, 20%);

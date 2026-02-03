@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ChangeEventHandler, ReactNode } from 'react'
 import buttonStyles from '../../../style/buttons.module.scss'
 import formStyles from '../../../style/forms.module.scss'
 
@@ -10,6 +10,7 @@ interface InputAndButtonProps {
   inputId: string
   labelText: string
   isLoading: boolean
+  onChange: ChangeEventHandler<HTMLInputElement>
   formValue?: string
 }
 
@@ -20,6 +21,7 @@ const InputAndButton = ({
   disabled = false,
   inputId,
   isLoading,
+  onChange,
   labelText,
   formValue,
 }: InputAndButtonProps) => {
@@ -33,7 +35,13 @@ const InputAndButton = ({
             : formStyles['form__input_button_wrapper']
         }
       >
-        <input disabled={disabled} className={formStyles['form__input']} id={inputId} type="text" />
+        <input
+          disabled={disabled}
+          className={formStyles['form__input']}
+          id={inputId}
+          type="text"
+          onChange={onChange}
+        />
         <button
           className={buttonStyles['button--input']}
           type={buttonType}

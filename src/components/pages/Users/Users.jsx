@@ -463,18 +463,18 @@ const Users = () => {
                   isDemoProject ? (
                     <>
                       <MuiTooltip title={t('projects.demo.add_users_unavailable')}>
-                        <IconPlus />
+                        <IconPlus aria-label={t('buttons.add_user')} />
                         {t('buttons.add_user')}
                       </MuiTooltip>
                     </>
                   ) : (
                     <>
-                      <IconPlus />
+                      <IconPlus aria-label={t('buttons.add_user')} />
                       {t('buttons.add_user')}
                     </>
                   )
                 }
-                value={newUserEmail}
+                formValue={newUserEmail}
                 onChange={handleNewUserEmailOnChange}
                 buttonOnClick={addUser}
               />
