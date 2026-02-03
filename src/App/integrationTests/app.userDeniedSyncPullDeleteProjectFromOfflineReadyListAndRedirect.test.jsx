@@ -120,12 +120,8 @@ a page that informs the user that they dont have permisison for a project`, asyn
 
   await user.click(sitesSideNavLink)
 
-  expect(
-    await screen.findByText('You do not have permission to access this project.'),
-  ).toBeInTheDocument()
-  expect(
-    await screen.findByText('The admin of Project V can add you to this project.'),
-  ).toBeInTheDocument()
+  expect(await screen.findByTestId('no-project-access-permission')).toBeInTheDocument()
+  expect(await screen.findByTestId('no-known-project-access')).toBeInTheDocument()
 
   await waitFor(async () =>
     expect(!!(await dexiePerUserDataInstance.uiState_offlineReadyProjects.get('5'))).toBeFalsy(),

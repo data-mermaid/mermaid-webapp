@@ -245,12 +245,19 @@ const ResolveDuplicateMRButtonAndModal = ({
     closeResolveDuplicateModal()
   }
 
-  const confirmationModalMainContent = <>{confirmationModalContent}</>
+  const confirmationModalMainContent = (
+    <p data-testid="resolve-duplicate-management-confirmation-message">
+      {confirmationModalContent}
+    </p>
+  )
 
   const confirmationModalFooterContent = (
     <RightFooter>
       <ButtonSecondary onClick={closeConfirmationModalOpen}>{t('buttons.cancel')}</ButtonSecondary>
-      <ButtonCaution onClick={handleMergeManagementRegime}>
+      <ButtonCaution
+        onClick={handleMergeManagementRegime}
+        data-testid="resolve-duplicate-management-confirm-merge"
+      >
         <IconClose /> {t('buttons.merge')}
       </ButtonCaution>
     </RightFooter>
@@ -262,26 +269,40 @@ const ResolveDuplicateMRButtonAndModal = ({
         <thead>
           <Tr>
             <Thead />
-            <Thead aria-label={t('management_regimes.original_management')}>
+            <Thead
+              aria-label={t('management_regimes.original_management')}
+              data-testid="resolve-duplicate-management-original"
+            >
               {originalManagementRegime}{' '}
-              <ButtonCaution onClick={handleKeepOriginalManagementRegime}>
+              <ButtonCaution
+                onClick={handleKeepOriginalManagementRegime}
+                data-testid="resolve-duplicate-management-keep-original"
+              >
                 <IconCheck />
                 {t('management_regimes.keep_mr')}
               </ButtonCaution>{' '}
               <ButtonCaution
                 onClick={() => handleEditManagementRegime(currentManagementRegimeData?.id)}
+                data-testid="resolve-duplicate-management-edit-original"
               >
                 <IconPen /> {t('management_regimes.edit_mr')}
               </ButtonCaution>
             </Thead>
-            <Thead aria-label={t('management_regimes.duplicate_management')}>
+            <Thead
+              aria-label={t('management_regimes.duplicate_management')}
+              data-testid="resolve-duplicate-management-duplicate"
+            >
               {duplicateManagementRegime}{' '}
-              <ButtonCaution onClick={handleKeepDuplicateManagementRegime}>
+              <ButtonCaution
+                onClick={handleKeepDuplicateManagementRegime}
+                data-testid="resolve-duplicate-management-keep-duplicate"
+              >
                 <IconCheck />
                 {t('management_regimes.keep_mr')}
               </ButtonCaution>{' '}
               <ButtonCaution
                 onClick={() => handleEditManagementRegime(duplicateManagementRegimeData?.id)}
+                data-testid="resolve-duplicate-management-edit-duplicate"
               >
                 <IconPen /> {t('management_regimes.edit_mr')}
               </ButtonCaution>
@@ -351,6 +372,7 @@ const ResolveDuplicateMRButtonAndModal = ({
       </Table>
       <Modal
         title={t('management_regimes.confirm_merge_management')}
+        testId="resolve-duplicate-management-confirmation-modal"
         isOpen={isConfirmationModalOpen}
         onDismiss={closeConfirmationModalOpen}
         mainContent={confirmationModalMainContent}
@@ -363,7 +385,10 @@ const ResolveDuplicateMRButtonAndModal = ({
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={handleCloseModal}>{t('buttons.cancel')}</ButtonSecondary>
-      <ButtonCaution onClick={handleKeepBoth}>
+      <ButtonCaution
+        onClick={handleKeepBoth}
+        data-testid="resolve-duplicate-management-keep-both"
+      >
         <IconCheckAll />
         {t('buttons.keep_both')}
       </ButtonCaution>
@@ -372,11 +397,16 @@ const ResolveDuplicateMRButtonAndModal = ({
 
   return (
     <>
-      <InlineValidationButton type="button" onClick={openResolveDuplicateModal}>
+      <InlineValidationButton
+        type="button"
+        onClick={openResolveDuplicateModal}
+        data-testid="resolve-management-button"
+      >
         {t('buttons.resolve')}
       </InlineValidationButton>
       <Modal
         title={t('management_regimes.resolve_duplicate_management')}
+        testId="resolve-duplicate-management-modal"
         isOpen={isResolveDuplicateModalOpen}
         onDismiss={closeResolveDuplicateModal}
         mainContent={

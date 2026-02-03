@@ -125,7 +125,7 @@ describe('Offline integration tests', () => {
 
     //uncheck
     await user.click(projectOfflineCheckboxAfterFirstClick)
-    await waitFor(() => expect(screen.queryByTestId('offline-ready-toast')).toBeInTheDocument())
+    expect(await screen.findByTestId('offline-ready-toast')).toBeInTheDocument()
 
     const project5 = within((await screen.findAllByTestId('project-card'))[4])
     const project5OfflineCheckbox = project5.getByTestId('offline-ready')

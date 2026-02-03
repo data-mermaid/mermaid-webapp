@@ -50,7 +50,7 @@ const InlineMessage = ({
   return (
     <>
       {type && (
-        <MessagePill type={type} className={className}>
+        <MessagePill type={type} className={className} data-testid={`message-pill-${type}`}>
           {t(`${type}`)}
         </MessagePill>
       )}

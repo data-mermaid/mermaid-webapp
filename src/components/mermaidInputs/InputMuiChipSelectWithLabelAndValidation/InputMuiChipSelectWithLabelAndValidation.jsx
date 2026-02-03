@@ -64,6 +64,7 @@ const InputMuiChipSelectWithLabelAndValidation = ({
             <CustomMenuItem
               key={option.value}
               value={option.value}
+              data-testid={`${id}-option-${option.value}`}
               sx={{ fontSize: theme.typography.defaultFontSize }}
             >
               {option.label}

@@ -189,12 +189,14 @@ const ResolveDuplicateSiteButtonAndModal = ({
     closeResolveDuplicateModal()
   }
 
-  const confirmationModalMainContent = <>{confirmationModalContent}</>
+  const confirmationModalMainContent = (
+    <p data-testid="resolve-duplicate-confirmation-message">{confirmationModalContent}</p>
+  )
 
   const confirmationModalFooterContent = (
     <RightFooter>
       <ButtonSecondary onClick={closeConfirmationModalOpen}>{t('buttons.cancel')}</ButtonSecondary>
-      <ButtonCaution onClick={handleMergeSite}>
+      <ButtonCaution onClick={handleMergeSite} data-testid="resolve-duplicate-merge">
         <IconClose /> {t('buttons.merge')}
       </ButtonCaution>
     </RightFooter>
@@ -206,23 +208,41 @@ const ResolveDuplicateSiteButtonAndModal = ({
         <thead>
           <Tr>
             <Thead />
-            <Thead aria-label={t('sites.original_site')}>
+            <Thead
+              aria-label={t('sites.original_site')}
+              data-testid="resolve-duplicate-original-site"
+            >
               {originalSite}{' '}
-              <ButtonCaution onClick={handleKeepOriginalSite}>
+              <ButtonCaution
+                onClick={handleKeepOriginalSite}
+                data-testid="resolve-duplicate-keep-original-site"
+              >
                 <IconCheck />
                 {t('sites.keep_site')}
               </ButtonCaution>{' '}
-              <ButtonCaution onClick={() => handleEditSite(currentSiteData?.id)}>
+              <ButtonCaution
+                onClick={() => handleEditSite(currentSiteData?.id)}
+                data-testid="resolve-duplicate-edit-original-site"
+              >
                 <IconPen /> {t('sites.edit_site')}
               </ButtonCaution>
             </Thead>
-            <Thead aria-label={t('sites.duplicate_site')}>
+            <Thead
+              aria-label={t('sites.duplicate_site')}
+              data-testid="resolve-duplicate-duplicate-site"
+            >
               {duplicateSite}{' '}
-              <ButtonCaution onClick={handleKeepDuplicateSite}>
+              <ButtonCaution
+                onClick={handleKeepDuplicateSite}
+                data-testid="resolve-duplicate-keep-duplicate-site"
+              >
                 <IconCheck />
                 {t('sites.keep_site')}
               </ButtonCaution>{' '}
-              <ButtonCaution onClick={() => handleEditSite(duplicateSiteData?.id)}>
+              <ButtonCaution
+                onClick={() => handleEditSite(duplicateSiteData?.id)}
+                data-testid="resolve-duplicate-edit-duplicate-site"
+              >
                 <IconPen /> {t('sites.edit_site')}
               </ButtonCaution>
             </Thead>
@@ -308,6 +328,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
       </Table>
       <Modal
         title={t('sites.confirm_merge_site')}
+        testId="resolve-duplicate-confirmation-modal"
         isOpen={isConfirmationModalOpen}
         onDismiss={closeConfirmationModalOpen}
         mainContent={confirmationModalMainContent}
@@ -320,7 +341,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={handleCloseModal}>{t('buttons.cancel')}</ButtonSecondary>
-      <ButtonCaution onClick={handleKeepBoth}>
+      <ButtonCaution onClick={handleKeepBoth} data-testid="resolve-duplicate-keep-both">
         <IconCheckAll />
         {t('buttons.keep_both')}
       </ButtonCaution>
@@ -329,11 +350,16 @@ const ResolveDuplicateSiteButtonAndModal = ({
 
   return (
     <>
-      <InlineValidationButton type="button" onClick={openResolveDuplicateModal}>
+      <InlineValidationButton
+        type="button"
+        onClick={openResolveDuplicateModal}
+        data-testid="resolve-site-button"
+      >
         {t('buttons.resolve')}
       </InlineValidationButton>
       <Modal
         title={t('sites.resolve_duplicate_site')}
+        testId="resolve-duplicate-site-modal"
         isOpen={isResolveDuplicateModalOpen}
         onDismiss={closeResolveDuplicateModal}
         mainContent={

@@ -21,7 +21,13 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 403 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('api_errors.unauthorized_user', {
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+
+    expect(toastContent.props).toEqual({
+      message: 'api_errors.unauthorized_user',
+      testId: 'toast',
+    })
+    expect(toastOptions).toEqual({
       toastId: 'api_errors.unauthorized_user',
       transition: Slide,
     })
@@ -36,7 +42,13 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 500 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('api_errors.unspecified_error', {
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+
+    expect(toastContent.props).toEqual({
+      message: 'api_errors.unspecified_error',
+      testId: 'toast',
+    })
+    expect(toastOptions).toEqual({
       toastId: 'api_errors.unspecified_error',
       transition: Slide,
     })
@@ -51,7 +63,13 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 502 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('api_errors.unspecified_error', {
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+
+    expect(toastContent.props).toEqual({
+      message: 'api_errors.unspecified_error',
+      testId: 'toast',
+    })
+    expect(toastOptions).toEqual({
       toastId: 'api_errors.unspecified_error',
       transition: Slide,
     })
@@ -66,7 +84,13 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 503 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('api_errors.unspecified_error', {
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+
+    expect(toastContent.props).toEqual({
+      message: 'api_errors.unspecified_error',
+      testId: 'toast',
+    })
+    expect(toastOptions).toEqual({
       toastId: 'api_errors.unspecified_error',
       transition: Slide,
     })

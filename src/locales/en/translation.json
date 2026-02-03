@@ -413,6 +413,7 @@
   "help_documents": "Help (PDF)",
   "help_dropdown": "Help documents dropdown",
   "ignore": "ignored",
+  "ignore_warning": "Ignore warning",
   "image_classification": {
     "add_attribute": "Add new attribute",
     "annotation": {
@@ -702,6 +703,7 @@
     "read_only": "You cannot access this page because you are a read-only member of this project.",
     "will_show": "This page will show:"
   },
+  "passed_validation": "Passed Validation",
   "percent_cover": "Percent Cover",
   "profile": {
     "email_address": "Email address",

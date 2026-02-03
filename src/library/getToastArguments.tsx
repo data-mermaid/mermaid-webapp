@@ -1,7 +1,7 @@
-import type { ReactElement } from 'react'
+import React, { type ReactElement } from 'react'
 import { Slide, type ToastOptions } from 'react-toastify'
 
-type ToastContentProps = {
+interface ToastContentProps {
   message: string
   testId: string
 }
@@ -20,7 +20,7 @@ type ToastArguments = [ReactElement, ToastOptions]
  */
 export const getToastArguments = (toastMessage: string, testId = 'toast'): ToastArguments => {
   return [
-    <ToastContent message={toastMessage} testId={testId} />,
+    <ToastContent key={toastMessage} message={toastMessage} testId={testId} />,
     {
       toastId: toastMessage,
       transition: Slide,
