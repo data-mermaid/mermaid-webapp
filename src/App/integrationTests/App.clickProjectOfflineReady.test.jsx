@@ -81,7 +81,7 @@ describe('Offline integration tests', () => {
 
     await user.click(projectOfflineCheckboxBeforeFirstClick)
 
-    expect(await screen.findByTestId('offline-ready-toast'))
+    expect(await screen.findByTestId('offline-ready-toast')).toBeInTheDocument()
 
     const projectOfflineCheckboxAfterProjectSetOffline = within(
       (await screen.findAllByTestId('project-card'))[4],
@@ -117,7 +117,7 @@ describe('Offline integration tests', () => {
 
     //check offline ready
     await user.click(projectOfflineCheckboxBeforeFirstClick)
-    expect(await screen.findByTestId('offline-ready-toast'))
+    expect(await screen.findByTestId('offline-ready-toast')).toBeInTheDocument()
     const projectOfflineCheckboxAfterFirstClick = within(
       (await screen.findAllByTestId('project-card'))[5],
     ).getByTestId('offline-ready')
