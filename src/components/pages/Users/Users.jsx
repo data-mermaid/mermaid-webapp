@@ -14,7 +14,7 @@ import {
   ToolbarRowWrapper,
   UserTableTd,
 } from './Users.styles'
-import { ButtonCaution, ButtonPrimary, ButtonSecondary, IconButton } from '../../generic/buttons'
+import { ButtonPrimary, ButtonSecondary, IconButton } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
