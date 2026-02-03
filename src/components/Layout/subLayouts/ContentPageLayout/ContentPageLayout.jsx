@@ -19,7 +19,6 @@ const MainContentPageLayout = styled('div')`
   display: grid;
   grid-template-rows: auto 1fr;
   height: calc(100% - ${theme.spacing.headerHeight});
-  margin-top: ${theme.spacing.headerHeight};
 `
 const ContentWrapper = styled('div')`
   padding: ${contentPadding} 0 0 ${contentPadding};

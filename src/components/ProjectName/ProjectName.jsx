@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import styled, { css } from 'styled-components'
-import theme from '../../theme'
-import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../library/useIsMounted'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
@@ -10,22 +7,9 @@ import { openExploreLinkWithBbox } from '../../library/openExploreLinkWithBbox'
 import { BiggerIconGlobe } from '../icons'
 import { MuiTooltip } from '../generic/MuiTooltip'
 import { useTranslation } from 'react-i18next'
+import styles from '../../style/ProjectName.module.scss'
 import buttonStyles from '../../style/buttons.module.scss'
 import labelStyles from '../../style/labels.module.scss'
-
-const ProjectNameWrapper = styled('div')`
-  background: ${theme.color.white};
-  display: flex;
-  align-items: center;
-  padding: ${theme.spacing.medium};
-  ${mediaQueryPhoneOnly(css`
-    padding: ${theme.spacing.small};
-  `)}
-`
-const ProjectNameHeader = styled('h2')`
-  display: inline;
-  margin: 0 ${theme.spacing.small} 0 0;
-`
 
 const ProjectName = () => {
   const isMounted = useIsMounted()
@@ -61,13 +45,15 @@ const ProjectName = () => {
     openExploreLinkWithBbox(queryParamObject)
   }
 
+  const handleStartTourClick = () => {}
+
   const tooltipText = isDemoProject
     ? 'projects.demo.explore_unavailable'
     : 'go_to_explore_this_project'
 
   return (
-    <ProjectNameWrapper>
-      <ProjectNameHeader>{project?.name}</ProjectNameHeader>
+    <div className={styles['project-name-wrapper']}>
+      <h2 className={styles['project-name-header']}>{project?.name}</h2>
       {isAppOnline && (
         <MuiTooltip title={t(tooltipText)} placement="top" arrow>
           <span role="presentation">
@@ -84,11 +70,19 @@ const ProjectName = () => {
         </MuiTooltip>
       )}
       {isDemoProject && (
-        <div className={[labelStyles.pill, labelStyles.pill__demo].join(' ')}>
-          {t('projects.demo.demo')}
+        <div className={styles['project-meta-info-wrapper']}>
+          <span className={labelStyles['pill--demo']}>{t('projects.demo.demo')}</span>
+          <button
+            className={[buttonStyles['button--callout'], buttonStyles['button--small']].join(' ')}
+            type="button"
+            aria-label={t('projects.demo.start_tour')}
+            onClick={handleStartTourClick}
+          >
+            {t('projects.demo.start_tour')}
+          </button>
         </div>
       )}
-    </ProjectNameWrapper>
+    </div>
   )
 }
 

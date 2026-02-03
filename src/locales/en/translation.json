@@ -719,6 +719,7 @@
       "sample_explore_unavailable": "Sample events from the demo project are unavailable in MERMAID Explore",
       "success_deleted": "Demo project deleted. You can add it again from the Projects page.",
       "teaser": "Explore how it works before creating your own and collecting real data.",
+      "start_tour": "Start tour",
       "tryout": "Try the demo project"
     },
     "edit_project_info": "Edit project info",
