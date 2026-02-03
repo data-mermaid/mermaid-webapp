@@ -65,6 +65,7 @@ import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
 import UserRolesInfoModal from '../../UserRolesInfoModal'
 import { UserIcon } from '../../UserIcon/UserIcon'
 import { MuiTooltip } from '../../generic/MuiTooltip'
+import buttonStyles from '../../../style/buttons.module.scss'
 
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
 
@@ -908,19 +909,22 @@ function UsersTableSection({
           </>
         ),
         remove: (
-          <ButtonCaution
+          <button
+            className={buttonStyles['button--caution']}
             type="button"
             disabled={isCurrentUser || isTableUpdating || isDemoProject}
             onClick={() => openRemoveUserModal(profile)}
           >
             {isDemoProject ? (
               <MuiTooltip title={t('projects.demo.delete_users_unavailable')}>
+                {' '}
+                {/*' ' is a hack to make the tooltip populate on disabled state*/}
                 <IconAccountRemove />
               </MuiTooltip>
             ) : (
               <IconAccountRemove />
             )}
-          </ButtonCaution>
+          </button>
         ),
       }
     })

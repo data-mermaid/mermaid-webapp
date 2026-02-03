@@ -1,6 +1,7 @@
 @use './theme.scss' as *;
 @use './functions.module.scss' as *;
 
+//from buttons.buttonCss
 @mixin button {
   transition: $default-transition;
   padding: $spacing-small $spacing-medium;
@@ -58,6 +59,7 @@
   line-height: 1;
 }
 
+//from buttons.ButtonCaution
 .button--caution {
   @include button;
   color: $white;
