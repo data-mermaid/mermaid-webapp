@@ -87,6 +87,40 @@
   margin: $spacing-large 0;
 }
 
+.button--callout {
+  @include button;
+  background-color: $white;
+  color: $callout;
+  padding: $spacing-small $spacing-medium;
+  border: 1px solid $callout;
+  border-radius: $border-radius;
+  text-transform: none;
+  font-family: $font-family;
+  font-size: $default-font-size;
+  &:hover {
+    background-color: $callout-hover;
+    border-color: $callout;
+  }
+  &:focus,
+  &:active:enabled {
+    background-color: $callout-active;
+    border-color: $callout;
+  }
+  &:disabled,
+  &:disabled:hover {
+    cursor: not-allowed;
+    background-color: $white;
+    color: $disabled;
+    border-color: $disabled;
+  }
+
+  //Dropdown specific
+  &:nth-of-type(2) {
+    padding: 7px $spacing-medium; //spacing exception for vertical alignment
+    border-left: none;
+  }
+}
+
 //Currently unused - confirm styles before use, then remove comment
 .button--link {
   font-size: inherit;

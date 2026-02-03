@@ -25,7 +25,6 @@ import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodesSecondChild,
 } from '../../generic/Table/reactTableNaturalSort'
-import { pluralize } from '../../../library/strings/pluralize'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
   GenericStickyTable,
@@ -55,10 +54,11 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import {
+  getDisplayNameParts,
   getIsProjectProfileReadOnly,
   getIsUserAdminForProject,
 } from '../../../App/currentUserProfileHelpers'
-import { PAGE_SIZE_DEFAULT, PENDING_USER_PROFILE_NAME } from '../../../library/constants/constants'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { LabelContainer } from '../../generic/form'
 import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
@@ -298,18 +298,12 @@ const Users = () => {
         return fetchProjectProfiles().then(() => transferSampleUnitsResponse)
       })
       .then((transferSampleUnitsResponse) => {
-        const sampleUnitMsg = pluralize(
-          fromUser.num_active_sample_units,
-          'sample unit',
-          'sample units',
-        )
         const numRecordTransferred = transferSampleUnitsResponse.num_collect_records_transferred
 
         toast.success(
           ...getToastArguments(
             t('users.messages.sample_units_transferred', {
               count: numRecordTransferred,
-              units: sampleUnitMsg,
             }),
           ),
         )
@@ -801,13 +795,7 @@ function UsersTableSection({
         role,
         profile: userId,
       } = profile
-      const nameParts = (profile_name ?? '')
-        .replace(PENDING_USER_PROFILE_NAME, 'pending user')
-        .split(' ')
-      const firstName = nameParts[0]
-      const lastNameIndex = nameParts.length - 1
-      const lastName = lastNameIndex === 0 ? undefined : nameParts[lastNameIndex]
-
+      const { displayName, firstName, lastName } = getDisplayNameParts(profile_name)
       const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
       const isUserRoleReadOnly = getIsProjectProfileReadOnly(profile)
       const isCurrentUser = userId === currentUser.id
@@ -824,6 +812,22 @@ function UsersTableSection({
         return 'pointer'
       }
 
+      const createRoleRadio = (roleValue, prefix) => (
+        <TableRadioLabel htmlFor={`${prefix}-${projectProfileId}`} cursor={getCursorType()}>
+          <input
+            type="radio"
+            value={roleValue}
+            name={projectProfileId}
+            id={`${prefix}-${projectProfileId}`}
+            checked={role === roleValue}
+            onChange={(event) => {
+              handleRoleChange({ event, projectProfileId })
+            }}
+            disabled={isCurrentUser || isTableUpdating}
+          />
+        </TableRadioLabel>
+      )
+
       return {
         name: (
           <NameCellStyle>
@@ -833,55 +837,13 @@ function UsersTableSection({
               lastName={lastName}
               dark={true}
             />{' '}
-            {profile_name}
+            {displayName}
           </NameCellStyle>
         ),
         email,
-        admin: (
-          <TableRadioLabel htmlFor={`admin-${projectProfileId}`} cursor={getCursorType()}>
-            <input
-              type="radio"
-              value={userRole.admin}
-              name={projectProfileId}
-              id={`admin-${projectProfileId}`}
-              checked={role === userRole.admin}
-              onChange={(event) => {
-                handleRoleChange({ event, projectProfileId })
-              }}
-              disabled={isCurrentUser || isTableUpdating}
-            />
-          </TableRadioLabel>
-        ),
-        collector: (
-          <TableRadioLabel htmlFor={`collector-${projectProfileId}`} cursor={getCursorType()}>
-            <input
-              type="radio"
-              value={userRole.collector}
-              name={projectProfileId}
-              id={`collector-${projectProfileId}`}
-              checked={role === userRole.collector}
-              onChange={(event) => {
-                handleRoleChange({ event, projectProfileId })
-              }}
-              disabled={isCurrentUser || isTableUpdating}
-            />
-          </TableRadioLabel>
-        ),
-        readonly: (
-          <TableRadioLabel htmlFor={`readonly-${projectProfileId}`} cursor={getCursorType()}>
-            <input
-              type="radio"
-              value={userRole.read_only}
-              name={projectProfileId}
-              id={`readonly-${projectProfileId}`}
-              checked={role === userRole.read_only}
-              onChange={(event) => {
-                handleRoleChange({ event, projectProfileId })
-              }}
-              disabled={isCurrentUser || isTableUpdating}
-            />
-          </TableRadioLabel>
-        ),
+        admin: createRoleRadio(userRole.admin, 'admin'),
+        collector: createRoleRadio(userRole.collector, 'collector'),
+        readonly: createRoleRadio(userRole.read_only, 'readonly'),
         unsubmittedSampleUnits: (
           <>
             {isActiveSampleUnitsWarningShowing ? <ActiveSampleUnitsIconAlert /> : null}

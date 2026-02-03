@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '@mui/material'
-import styles from './CalloutButton.module.scss'
+import buttonStyles from '../../../style/buttons.module.scss'
 
 interface CalloutButtonProps {
   onClick: () => void
@@ -19,7 +19,7 @@ const CalloutButton = ({ onClick, label, disabled, testId, className }: CalloutB
       className={className}
       data-testid={testId}
       classes={{
-        root: styles['button-root__callout'],
+        root: buttonStyles['button--callout'],
       }}
     >
       {label}

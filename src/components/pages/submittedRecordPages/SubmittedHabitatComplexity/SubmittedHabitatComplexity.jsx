@@ -164,7 +164,7 @@ const SubmittedHabitatComplexity = () => {
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
             />
-            <FormSubTitle>{t('observers')}</FormSubTitle>
+            <FormSubTitle>{t('sample_units.observers')}</FormSubTitle>
             <ul>
               {observers.map((observer) => (
                 <li key={observer.id}>{observer.profile_name}</li>
@@ -201,7 +201,7 @@ const SubmittedHabitatComplexity = () => {
                   disabled={!isAdminUser || isMoveToButtonDisabled}
                 >
                   <IconPen />
-                  {t('buttons.move_to_collecting')}
+                  {t('sample_units.move_to_collecting')}
                 </ButtonSecondary>
               </>
             </RowSpaceBetween>
