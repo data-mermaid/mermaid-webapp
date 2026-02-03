@@ -385,10 +385,7 @@ const ResolveDuplicateMRButtonAndModal = ({
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={handleCloseModal}>{t('buttons.cancel')}</ButtonSecondary>
-      <ButtonCaution
-        onClick={handleKeepBoth}
-        data-testid="resolve-duplicate-management-keep-both"
-      >
+      <ButtonCaution onClick={handleKeepBoth} data-testid="resolve-duplicate-management-keep-both">
         <IconCheckAll />
         {t('buttons.keep_both')}
       </ButtonCaution>
