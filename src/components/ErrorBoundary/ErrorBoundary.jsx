@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useTranslation } from 'react-i18next'
+import i18n from '../../../i18n'
 
 import theme from '../../theme'
 import { ButtonPrimary } from '../generic/buttons'
@@ -64,7 +64,6 @@ class ErrorBoundary extends React.Component {
   render() {
     const { errorMessage, attemptedRerender } = this.state
     const { children } = this.props
-    const { t } = useTranslation()
 
     if (errorMessage) {
       // Render a fallback UI
@@ -76,12 +75,12 @@ class ErrorBoundary extends React.Component {
           </ErrorBoundaryStatusContainer>
           <ErrorBoundaryContentContainer>
             <ErrorBoundaryPrimaryText data-testid="error-boundary-message">
-              {t('page.not_loaded')}
+              {i18n.t('page.not_loaded')}
             </ErrorBoundaryPrimaryText>
             <p>
-              {t('page.try_reloading')}{' '}
+              {i18n.t('page.try_reloading')}{' '}
               <a target="_blank" href="https://datamermaid.org/contact-us" rel="noreferrer">
-                {t('contact_us')}
+                {i18n.t('contact_us')}
               </a>
               .
             </p>
@@ -98,7 +97,7 @@ class ErrorBoundary extends React.Component {
                 }}
               >
                 <IconSync />
-                <span> {t('try_again')}</span>
+                <span> {i18n.t('try_again')}</span>
               </ErrorButton>
             )}
           </ErrorButtonContainer>
