@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
-import { capitalize } from 'lodash'
 
 import { CellValidation, TableValidationList } from './CollectingFormPage.Styles'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
@@ -52,7 +51,7 @@ const ObservationValidationInfo = ({
         </TableValidationList>
       ) : null}
       {hasObservationIgnoredValidation ? (
-        <span data-testid="ignore-warning-label">{capitalize(t('message_type.ignore'))}</span>
+        <span data-testid="ignore-warning-label">{t('validations.ignored')}</span>
       ) : null}
       {hasObservationWarningValidation || hasObservationIgnoredValidation ? (
         <InputIgnoreValidationWarningCheckboxWithLabel

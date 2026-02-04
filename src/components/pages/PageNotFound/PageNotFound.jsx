@@ -17,9 +17,9 @@ const PageNotFound = () => {
   return (
     <PageNotFoundContainer>
       <div data-testid="page-not-found">
-        <h1>{t('page.not_found')}</h1>
-        <p>{t('confirm_correct_url')}</p>
-        <Link to="/">{t('go_back_to_homepage')}</Link>
+        <h1>{t('errors.not_found')}</h1>
+        <p>{t('errors.confirm_correct_url')}</p>
+        <Link to="/">{t('links.go_back_to_homepage')}</Link>
       </div>
     </PageNotFoundContainer>
   )

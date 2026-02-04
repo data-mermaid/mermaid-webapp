@@ -97,7 +97,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             callback: () => {
               toast.error(
                 ...getToastArguments(
-                  t('projects.errors.offline_ready_off_failed', { projectName: name }),
+                  t('projects.errors.offline_ready_removal_failure', { projectName: name }),
                   OFFLINE_READY_TOAST_ID,
                 ),
               )

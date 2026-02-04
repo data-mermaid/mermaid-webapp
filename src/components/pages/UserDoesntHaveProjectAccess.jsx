@@ -29,10 +29,10 @@ const UserDoesntHaveProjectAccess = () => {
     <CenterCenter>
       <div>
         <H2 data-testid="no-project-access-permission">{t('projects.no_access_permission')}</H2>
-        <P data-testid={projectName ? 'no-known-project-access' : 'no-unknown-project-access'}>
+        <P data-testid={projectName ? 'known-project-no-access' : 'unknown-project-no-access'}>
           {subtitleContent}
         </P>
-        <Link to="/projects">{t('go_back_to_homepage')}</Link>
+        <Link to="/projects">{t('links.go_back_to_homepage')}</Link>
       </div>
     </CenterCenter>
   )

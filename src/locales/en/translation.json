@@ -100,7 +100,6 @@
   "colony_count": "Colony Count",
   "contact": "Contact",
   "contact_us": "Contact us",
-  "confirm_correct_url": "Make sure the URL is correct.",
   "count": "Count",
   "credits": "Credits",
   "current": "Current",
@@ -159,6 +158,8 @@
   "download_sites_regimes": "Export sites and management regimes",
   "email": "Email",
   "errors": {
+    "confirm_correct_url": "Make sure the URL is correct.",
+    "not_found": "This page cannot be found.",
     "summary_data_unavailable": "Summary data is currently unavailable",
     "user_profile_unavailable": "The user profile is unavailable."
   },
@@ -409,7 +410,6 @@
     "target": "Target",
     "untitled": "Untitled"
   },
-  "go_back_to_homepage": "Go back to the home page",
   "go_to_explore_projects": "View all your projects on MERMAID Explore",
   "go_to_explore_sample_event": "View this sample event on MERMAID Explore",
   "go_to_explore_this_project": "View this project on MERMAID Explore",
@@ -482,7 +482,7 @@
     "validations": {
       "duplicate_images_one": "{{imageNames}} is a duplicate in {{location}}.",
       "duplicate_images_other": "{{imageNames}} are duplicates in {{location}}.",
-      "duplicate_other_transects": "unsubmitted benthic photo quadrat transects with other users",
+      "duplicate_other_transects": "unsubmitted benthic photo quadrat transects",
       "duplicate_submitted_transects": "Submitted benthic photo quadrat transects",
       "duplicate_this_transect": "this benthic photo quadrat transect",
       "image_names_interval": "(1)[{{firstImgName}}];(2)[{{firstImgName}} and {{secondImgName}}];(3)[{{firstImgName}}, {{secondImgName}}, and {{thirdImgName}}];(4-inf)[{{firstImgName}}, {{secondImgName}}, {{thirdImgName}}, and {{moreCount}} more]"
@@ -505,6 +505,9 @@
     "language": "Language"
   },
   "length": "Length",
+  "links": {
+    "go_back_to_homepage": "Go back to the home page"
+  },
   "loading": "Loading",
   "loading_indicator": "Loading Indicator",
   "loading_item": "Loading {{itemName}}",
@@ -716,7 +719,6 @@
   "overview": "Overview",
   "page": {
     "admin_only": "Only admins can access this page.",
-    "not_found": "This page cannot be found.",
     "not_loaded": "A part of this page did not load correctly.",
     "read_only": "You cannot access this page because you are a read-only member of this project.",
     "try_reloading": "If you keep seeing this error, try reloading this page, or you can",
@@ -775,7 +777,7 @@
       "not_available": "Projects are currently unavailable.",
       "not_deleted": "This project has not been deleted.",
       "not_saved": "Project could not be saved",
-      "offline_ready_off_failed": "The project {{projectName}}, has not been removed from being offline-ready.",
+      "offline_ready_removal_failure": "The project {{projectName}}, has not been removed from being offline-ready.",
       "offline_ready_on_failed": "The project {{projectName}} may not be ready to be used offline.",
       "project_name_exists": "Project name already exists in MERMAID"
     },
@@ -1125,8 +1127,9 @@
     "value_not_set": "Value is not set"
   },
   "validations": {
-    "validations": "Validations",
-    "passed": "Passed Validation"
+    "ignored": "Ignored",
+    "passed": "Passed Validation",
+    "validations": "Validations"
   },
   "view_fish_info": "View fish name information",
   "view_observers_units_overview": "View overview of sample units by observer",
