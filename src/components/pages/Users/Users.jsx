@@ -546,7 +546,7 @@ function UsersTableSection({
   const adminTooltipText = t('users.roles.admin_description')
   const collectorTooltipText = t('users.roles.collector_description')
   const readOnlyTooltipText = t('users.roles.read_only_description')
-  const infoLabelText = t('info')
+  const infoLabelText = t('message_type.info')
   const nameHeaderText = t('name')
   const emailHeaderText = t('email')
   const userRoleHeaderText = t('users.role')

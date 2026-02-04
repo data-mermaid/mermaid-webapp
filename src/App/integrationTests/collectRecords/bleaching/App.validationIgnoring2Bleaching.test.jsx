@@ -116,23 +116,25 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
   expect(
     within(coloniesBleachedObservationTable).queryByText('secondWarning'),
   ).not.toBeInTheDocument()
-  expect(within(coloniesBleachedObservationTable).getByText('Ignored')).toBeInTheDocument()
+  expect(
+    within(coloniesBleachedObservationTable).getByTestId('ignore-warning-label'),
+  ).toBeInTheDocument()
 
   // other two passing
   expect(
-    within(coloniesBleachedObservationTable).queryAllByLabelText('Passed Validation').length,
+    within(coloniesBleachedObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
 
-  await user.click(
-    within(coloniesBleachedObservationTable).getByRole('checkbox', { name: 'Ignore warning' }),
-  )
+  await user.click(within(coloniesBleachedObservationTable).getByTestId('ignore-warning-checkbox'))
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 
   await waitFor(() =>
-    expect(within(coloniesBleachedObservationTable).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(
+      within(coloniesBleachedObservationTable).queryByTestId('ignore-warning-label'),
+    ).not.toBeInTheDocument(),
   )
   expect(
     within(coloniesBleachedObservationTable).queryByText('firstWarning'),
@@ -141,7 +143,7 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
     within(coloniesBleachedObservationTable).queryByText('secondWarning'),
   ).not.toBeInTheDocument()
   expect(
-    within(coloniesBleachedObservationTable).queryAllByLabelText('Passed Validation').length,
+    within(coloniesBleachedObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
 })
 
@@ -243,28 +245,30 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
     ).not.toBeInTheDocument(),
   )
   expect(within(percentCoverObservationTable).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(percentCoverObservationTable).getByText('Ignored')).toBeInTheDocument()
+  expect(
+    within(percentCoverObservationTable).getByTestId('ignore-warning-label'),
+  ).toBeInTheDocument()
 
   // other two passing
   expect(
-    within(percentCoverObservationTable).queryAllByLabelText('Passed Validation').length,
+    within(percentCoverObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
 
-  await user.click(
-    within(percentCoverObservationTable).getByRole('checkbox', { name: 'Ignore warning' }),
-  )
+  await user.click(within(percentCoverObservationTable).getByTestId('ignore-warning-checkbox'))
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 
   await waitFor(() =>
-    expect(within(percentCoverObservationTable).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(
+      within(percentCoverObservationTable).queryByTestId('ignore-warning-label'),
+    ).not.toBeInTheDocument(),
   )
   expect(within(percentCoverObservationTable).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(percentCoverObservationTable).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(
-    within(percentCoverObservationTable).queryAllByLabelText('Passed Validation').length,
+    within(percentCoverObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
 })
 
@@ -325,16 +329,22 @@ test('user can reset dismissed record-level warnings', async () => {
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
-  expect(within(recordLevelValidationsSection).getByText('ignored')).toBeInTheDocument()
+  expect(
+    within(recordLevelValidationsSection).getByTestId('message-pill-ignore'),
+  ).toBeInTheDocument()
 
   await user.click(
-    await within(recordLevelValidationsSection).findByRole('checkbox', { name: 'Ignore warning' }),
+    await within(recordLevelValidationsSection).findByTestId('ignore-warning-checkbox'),
   )
 
   await waitFor(() =>
-    expect(within(recordLevelValidationsSection).queryByText('ignored')).not.toBeInTheDocument(),
+    expect(
+      within(recordLevelValidationsSection).queryByTestId('message-pill-ignore'),
+    ).not.toBeInTheDocument(),
   )
-  expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
+  expect(
+    within(recordLevelValidationsSection).getByTestId('message-pill-warning'),
+  ).toBeInTheDocument()
 
   const isFormDirtyAfterReset = screen.getByTestId('save-button')
 
@@ -525,24 +535,15 @@ test('Bleaching validation: user edits non-observation input with ignored valida
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
 
-  expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(managementRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(managementRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(depthRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(depthRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(sampleDateRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(sampleDateRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(sampleTimeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(sampleTimeRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(labelRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(labelRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(quadratSizeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(quadratSizeRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(notesRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(notesRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(observersRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(observersRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(siteRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(managementRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(depthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(sampleDateRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(sampleTimeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(labelRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(quadratSizeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(notesRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
   await user.selectOptions(within(siteRow).getByTestId('site-select'), '1')
   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())

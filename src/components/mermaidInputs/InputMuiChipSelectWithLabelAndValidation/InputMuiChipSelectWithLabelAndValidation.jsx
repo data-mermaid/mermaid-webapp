@@ -1,6 +1,7 @@
 import { Box, OutlinedInput } from '@mui/material'
 import PropTypes from 'prop-types'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   CustomMenuItem,
@@ -11,7 +12,6 @@ import { InputRow, RequiredIndicator } from '../../generic/form'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import theme from '../../../theme'
-import language from '../../../language'
 
 const InputMuiChipSelectWithLabelAndValidation = ({
   id,
@@ -26,6 +26,8 @@ const InputMuiChipSelectWithLabelAndValidation = ({
   value,
   additionalInputContent = undefined,
 }) => {
+  const { t } = useTranslation()
+
   const handleCheckboxGroupChange = (event) => {
     onChange({ selectedItems: event.target.value, event })
   }
@@ -53,7 +55,7 @@ const InputMuiChipSelectWithLabelAndValidation = ({
           value={value}
           onChange={handleCheckboxGroupChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-          renderValue={(selected) => (selected.length ? chips : language.placeholders.select)}
+          renderValue={(selected) => (selected.length ? chips : `${t('choose')}...`)}
           label=""
           displayEmpty={true}
           data-testid={`${id}-select`}
@@ -62,6 +64,7 @@ const InputMuiChipSelectWithLabelAndValidation = ({
             <CustomMenuItem
               key={option.value}
               value={option.value}
+              data-testid={`${id}-option-${option.value}`}
               sx={{ fontSize: theme.typography.defaultFontSize }}
             >
               {option.label}

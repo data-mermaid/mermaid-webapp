@@ -9,7 +9,7 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import useIsMounted from '../../library/useIsMounted'
 
-import language from '../../language'
+import { useTranslation } from 'react-i18next'
 import { getOptions } from '../../library/getOptions'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
@@ -37,16 +37,12 @@ const ResolveDuplicateSiteButtonAndModal = ({
   updateValueAndResetValidationForDuplicateWarning,
   ignoreNonObservationFieldValidations,
 }) => {
-  const {
-    original,
-    duplicate,
-    keepEither,
-    editEither,
-    keepBoth,
-    cancel,
-    merge,
-    getConfirmMergeMessage,
-  } = language.getResolveModalLanguage('site')
+  const { t } = useTranslation()
+
+  const siteDataUnavailableText = t('sites.data_unavailable')
+  const originalSite = t('sites.original_site')
+  const duplicateSite = t('sites.duplicate_site')
+
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId } = useParams()
@@ -97,7 +93,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.siteRecordUnavailable))
+                toast.error(...getToastArguments(siteDataUnavailableText))
               },
             })
           })
@@ -109,6 +105,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
       currentSelectValue,
       validationMessages,
       handleHttpResponseError,
+      siteDataUnavailableText,
     ],
   )
 
@@ -152,14 +149,16 @@ const ResolveDuplicateSiteButtonAndModal = ({
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments('Failing find and replace site'))
+            toast.error(...getToastArguments(t('sites.merge_failed')))
           },
         })
       })
   }
 
   const handleKeepOriginalSite = () => {
-    const confirmationText = getConfirmMergeMessage(original.toLowerCase())
+    const confirmationText = t('sites.confirm_replace_site', {
+      anotherSite: originalSite.toLowerCase(),
+    })
 
     openConfirmationModalOpen()
     setConfirmationModalContent(confirmationText)
@@ -167,7 +166,9 @@ const ResolveDuplicateSiteButtonAndModal = ({
   }
 
   const handleKeepDuplicateSite = () => {
-    const confirmationText = getConfirmMergeMessage(duplicate.toLowerCase())
+    const confirmationText = t('sites.confirm_replace_site', {
+      anotherSite: duplicateSite.toLowerCase(),
+    })
 
     openConfirmationModalOpen()
     setConfirmationModalContent(confirmationText)
@@ -188,13 +189,15 @@ const ResolveDuplicateSiteButtonAndModal = ({
     closeResolveDuplicateModal()
   }
 
-  const confirmationModalMainContent = <>{confirmationModalContent}</>
+  const confirmationModalMainContent = (
+    <p data-testid="resolve-duplicate-confirmation-message">{confirmationModalContent}</p>
+  )
 
   const confirmationModalFooterContent = (
     <RightFooter>
-      <ButtonSecondary onClick={closeConfirmationModalOpen}>{cancel}</ButtonSecondary>
-      <ButtonCaution onClick={handleMergeSite}>
-        <IconClose /> {merge}
+      <ButtonSecondary onClick={closeConfirmationModalOpen}>{t('buttons.cancel')}</ButtonSecondary>
+      <ButtonCaution onClick={handleMergeSite} data-testid="resolve-duplicate-merge">
+        <IconClose /> {t('buttons.merge')}
       </ButtonCaution>
     </RightFooter>
   )
@@ -205,38 +208,56 @@ const ResolveDuplicateSiteButtonAndModal = ({
         <thead>
           <Tr>
             <Thead />
-            <Thead aria-label="Original Site">
-              {original}{' '}
-              <ButtonCaution onClick={handleKeepOriginalSite}>
+            <Thead
+              aria-label={t('sites.original_site')}
+              data-testid="resolve-duplicate-original-site"
+            >
+              {originalSite}{' '}
+              <ButtonCaution
+                onClick={handleKeepOriginalSite}
+                data-testid="resolve-duplicate-keep-original-site"
+              >
                 <IconCheck />
-                {keepEither}
+                {t('sites.keep_site')}
               </ButtonCaution>{' '}
-              <ButtonCaution onClick={() => handleEditSite(currentSiteData?.id)}>
-                <IconPen /> {editEither}
+              <ButtonCaution
+                onClick={() => handleEditSite(currentSiteData?.id)}
+                data-testid="resolve-duplicate-edit-original-site"
+              >
+                <IconPen /> {t('sites.edit_site')}
               </ButtonCaution>
             </Thead>
-            <Thead aria-label="Duplicate Site">
-              {duplicate}{' '}
-              <ButtonCaution onClick={handleKeepDuplicateSite}>
+            <Thead
+              aria-label={t('sites.duplicate_site')}
+              data-testid="resolve-duplicate-duplicate-site"
+            >
+              {duplicateSite}{' '}
+              <ButtonCaution
+                onClick={handleKeepDuplicateSite}
+                data-testid="resolve-duplicate-keep-duplicate-site"
+              >
                 <IconCheck />
-                {keepEither}
+                {t('sites.keep_site')}
               </ButtonCaution>{' '}
-              <ButtonCaution onClick={() => handleEditSite(duplicateSiteData?.id)}>
-                <IconPen /> {editEither}
+              <ButtonCaution
+                onClick={() => handleEditSite(duplicateSiteData?.id)}
+                data-testid="resolve-duplicate-edit-duplicate-site"
+              >
+                <IconPen /> {t('sites.edit_site')}
               </ButtonCaution>
             </Thead>
           </Tr>
         </thead>
         <tbody>
           <TableRowItem
-            title="Name"
+            title={t('name')}
             value={currentSiteData?.name}
             extraValue={duplicateSiteData?.name}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Country"
+            title={t('projects.country')}
             options={countryOptions}
             value={currentSiteData?.country}
             extraValue={duplicateSiteData?.country}
@@ -244,21 +265,21 @@ const ResolveDuplicateSiteButtonAndModal = ({
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Latitude"
+            title={t('sites.latitude')}
             value={currentSiteData?.location?.coordinates[1]}
             extraValue={duplicateSiteData?.location?.coordinates[1]}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Longitude"
+            title={t('sites.longitude')}
             value={currentSiteData?.location?.coordinates[0]}
             extraValue={duplicateSiteData?.location?.coordinates[0]}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <Tr>
-            <TableRowTdKey>Map</TableRowTdKey>
+            <TableRowTdKey>{t('map.map')}</TableRowTdKey>
             <Td className={isDuplicateSelected ? 'highlighted' : undefined}>
               <ResolveDuplicateSiteMap
                 formLatitudeValue={currentSiteData?.location?.coordinates[1]}
@@ -273,7 +294,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
             </Td>
           </Tr>
           <TableRowItem
-            title="Exposure"
+            title={t('sites.exposure')}
             options={exposureOptions}
             value={currentSiteData?.exposure}
             extraValue={duplicateSiteData?.exposure}
@@ -281,7 +302,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Reef Type"
+            title={t('sites.reef_type')}
             options={reefTypeOptions}
             value={currentSiteData?.reef_type}
             extraValue={duplicateSiteData?.reef_type}
@@ -289,7 +310,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Reef Zone"
+            title={t('sites.reef_zone')}
             options={reefZoneOptions}
             value={currentSiteData?.reef_zone}
             extraValue={duplicateSiteData?.reef_zone}
@@ -297,7 +318,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Notes"
+            title={t('notes')}
             value={currentSiteData?.notes}
             extraValue={duplicateSiteData?.notes}
             isOriginalSelected={isOriginalSelected}
@@ -306,7 +327,8 @@ const ResolveDuplicateSiteButtonAndModal = ({
         </tbody>
       </Table>
       <Modal
-        title="Confirm Merge Site"
+        title={t('sites.confirm_merge_site')}
+        testId="resolve-duplicate-confirmation-modal"
         isOpen={isConfirmationModalOpen}
         onDismiss={closeConfirmationModalOpen}
         mainContent={confirmationModalMainContent}
@@ -318,21 +340,26 @@ const ResolveDuplicateSiteButtonAndModal = ({
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={handleCloseModal}>{cancel}</ButtonSecondary>
-      <ButtonCaution onClick={handleKeepBoth}>
+      <ButtonSecondary onClick={handleCloseModal}>{t('buttons.cancel')}</ButtonSecondary>
+      <ButtonCaution onClick={handleKeepBoth} data-testid="resolve-duplicate-keep-both">
         <IconCheckAll />
-        {keepBoth}
+        {t('buttons.keep_both')}
       </ButtonCaution>
     </RightFooter>
   )
 
   return (
     <>
-      <InlineValidationButton type="button" onClick={openResolveDuplicateModal}>
-        Resolve
+      <InlineValidationButton
+        type="button"
+        onClick={openResolveDuplicateModal}
+        data-testid="resolve-site-button"
+      >
+        {t('buttons.resolve')}
       </InlineValidationButton>
       <Modal
-        title="Resolve Duplicate Site"
+        title={t('sites.resolve_duplicate_site')}
+        testId="resolve-duplicate-site-modal"
         isOpen={isResolveDuplicateModalOpen}
         onDismiss={closeResolveDuplicateModal}
         mainContent={

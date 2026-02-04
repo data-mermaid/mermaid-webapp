@@ -81,7 +81,7 @@ describe('Offline integration tests', () => {
 
     await user.click(projectOfflineCheckboxBeforeFirstClick)
 
-    expect(await screen.findByText("Project Z has an apostrophe foo's is now offline ready"))
+    expect(await screen.findByTestId('offline-ready-toast')).toBeInTheDocument()
 
     const projectOfflineCheckboxAfterProjectSetOffline = within(
       (await screen.findAllByTestId('project-card'))[4],
@@ -117,7 +117,7 @@ describe('Offline integration tests', () => {
 
     //check offline ready
     await user.click(projectOfflineCheckboxBeforeFirstClick)
-    expect(await screen.findByText('Project III is now offline ready'))
+    expect(await screen.findByTestId('offline-ready-toast')).toBeInTheDocument()
     const projectOfflineCheckboxAfterFirstClick = within(
       (await screen.findAllByTestId('project-card'))[5],
     ).getByTestId('offline-ready')
@@ -125,7 +125,7 @@ describe('Offline integration tests', () => {
 
     //uncheck
     await user.click(projectOfflineCheckboxAfterFirstClick)
-    await waitFor(() => expect(screen.getByText('Project III is now offline ready')))
+    expect(await screen.findByTestId('offline-ready-toast')).toBeInTheDocument()
 
     const project5 = within((await screen.findAllByTestId('project-card'))[4])
     const project5OfflineCheckbox = project5.getByTestId('offline-ready')
