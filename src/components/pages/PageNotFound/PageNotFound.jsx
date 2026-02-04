@@ -16,7 +16,7 @@ const PageNotFound = () => {
 
   return (
     <PageNotFoundContainer>
-      <div>
+      <div data-testid="page-not-found">
         <h1>{t('page.not_found')}</h1>
         <p>{t('confirm_correct_url')}</p>
         <Link to="/">{t('go_back_to_homepage')}</Link>

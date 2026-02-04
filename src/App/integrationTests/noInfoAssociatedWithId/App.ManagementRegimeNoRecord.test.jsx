@@ -20,7 +20,7 @@ test('Offline management regime shows no info associated with MANAGEMENT REGIME 
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantMrId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Online management regime shows no info associated with MANAGEMENT REGIME id view ', async () => {
@@ -32,7 +32,7 @@ test('Online management regime shows no info associated with MANAGEMENT REGIME i
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantMrId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Offline management regime shows no info associated with PROJECT id view ', async () => {
@@ -46,7 +46,7 @@ test('Offline management regime shows no info associated with PROJECT id view ',
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Online management regime shows no info associated with PROJECT id view ', async () => {
@@ -58,7 +58,7 @@ test('Online management regime shows no info associated with PROJECT id view ', 
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Offline management regime shows no info associated with PROJECT or MANAGEMENT REGIME id view ', async () => {
@@ -72,11 +72,7 @@ test('Offline management regime shows no info associated with PROJECT or MANAGEM
     dexieCurrentUserInstance,
   })
 
-  expect(
-    await screen.findByText(
-      'The items with the ids nonExistantMrId,nonExistantProjectId cannot be found.',
-    ),
-  )
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Online management regime shows no info associated with PROJECT or MANAGEMENT REGIME id view ', async () => {
@@ -87,9 +83,5 @@ test('Online management regime shows no info associated with PROJECT or MANAGEME
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
-  expect(
-    await screen.findByText(
-      'The items with the ids nonExistantMrId,nonExistantProjectId cannot be found.',
-    ),
-  )
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })

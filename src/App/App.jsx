@@ -44,6 +44,7 @@ function App({ dexieCurrentUserInstance }) {
   const isMounted = useIsMounted()
   const location = useLocation()
   const { t } = useTranslation()
+  const pushSyncErrorStatusCode500Text = t('api_errors.unspecified_error')
   const pushSyncErrorUnsavedDataText = t('api_errors.unsaved_sync_data')
 
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
@@ -63,7 +64,9 @@ function App({ dexieCurrentUserInstance }) {
   )
 
   const handleNested500SyncError = () => {
-    toast.error(...getToastArguments(t('api_errors.unspecified_error')))
+    toast.error(
+      ...getToastArguments(t('api_errors.unspecified_error'), 'sync-error-unspecified-error-toast'),
+    )
   }
 
   const handleUserDeniedSyncPull = useCallback(
@@ -87,7 +90,7 @@ function App({ dexieCurrentUserInstance }) {
         if (isErrorSpecificToProject) {
           const syncErrorUserMessaging = (
             <div data-testid={`sync-error-for-project-${projectId}`}>
-              <P>
+              <P data-testid={`sync-error-message-${projectId}`}>
                 <Trans
                   i18nKey="api_errors.no_sync_data_permission"
                   values={{ projectName }}

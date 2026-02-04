@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import theme from '../../theme'
 import { ButtonPrimary } from '../generic/buttons'
@@ -63,7 +63,8 @@ class ErrorBoundary extends React.Component {
 
   render() {
     const { errorMessage, attemptedRerender } = this.state
-    const { children, t } = this.props
+    const { children } = this.props
+    const { t } = useTranslation()
 
     if (errorMessage) {
       // Render a fallback UI
@@ -74,7 +75,9 @@ class ErrorBoundary extends React.Component {
             <ErrorBoundaryStatus />
           </ErrorBoundaryStatusContainer>
           <ErrorBoundaryContentContainer>
-            <ErrorBoundaryPrimaryText>{t('page.not_loaded')}</ErrorBoundaryPrimaryText>
+            <ErrorBoundaryPrimaryText data-testid="error-boundary-message">
+              {t('page.not_loaded')}
+            </ErrorBoundaryPrimaryText>
             <p>
               {t('page.try_reloading')}{' '}
               <a target="_blank" href="https://datamermaid.org/contact-us" rel="noreferrer">
@@ -86,6 +89,7 @@ class ErrorBoundary extends React.Component {
           <ErrorButtonContainer>
             {!attemptedRerender && (
               <ErrorButton
+                data-testid="error-boundary-try-again"
                 onClick={() => {
                   this.setState({
                     errorMessage: '',
@@ -108,7 +112,6 @@ class ErrorBoundary extends React.Component {
 
 ErrorBoundary.propTypes = {
   children: PropTypes.node.isRequired,
-  t: PropTypes.func.isRequired,
 }
 
-export default withTranslation()(ErrorBoundary)
+export default ErrorBoundary

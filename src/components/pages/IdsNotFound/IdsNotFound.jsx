@@ -22,7 +22,7 @@ const IdsNotFound = ({ ids }) => {
       <p>{t('item_not_accessible')}</p>
       <Link to="/">{t('go_back_to_homepage')}</Link>
       <p>
-        <small>{idsNotFoundDetails}</small>
+        <small data-testid="ids-not-found">{idsNotFoundDetails}</small>
       </p>
     </IdNotFoundWrapper>
   )
