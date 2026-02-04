@@ -425,7 +425,9 @@ test('Bleaching collect record validation: user can dismiss record-level warning
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
-  expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
+  expect(
+    within(recordLevelValidationsSection).getByTestId('message-pill-warning'),
+  ).toBeInTheDocument()
 
   await user.click(within(recordLevelValidationsSection).getByTestId('ignore-warning-checkbox'))
 
@@ -437,7 +439,9 @@ test('Bleaching collect record validation: user can dismiss record-level warning
   ).toBeInTheDocument()
 
   await user.click(within(recordLevelValidationsSection).getByTestId('ignore-warning-checkbox'))
-  expect(await within(recordLevelValidationsSection).findByText('warning')).toBeInTheDocument()
+  expect(
+    await within(recordLevelValidationsSection).findByTestId('message-pill-warning'),
+  ).toBeInTheDocument()
   await waitFor(() =>
     expect(
       within(recordLevelValidationsSection).queryByTestId('message-pill-ignore'),
