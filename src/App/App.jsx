@@ -2,6 +2,7 @@ import { Route, useLocation, Routes, Navigate, useNavigate } from 'react-router-
 import { ThemeProvider } from 'styled-components'
 import { toast } from 'react-toastify'
 import React, { useCallback, useMemo } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { BellNotificationProvider } from './BellNotificationContext'
 import { CurrentUserProvider } from './CurrentUserContext'
@@ -24,7 +25,6 @@ import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
 import handleHttpResponseError from '../library/handleHttpResponseError'
 import Header from '../components/Header'
-import language from '../language'
 import Layout from '../components/Layout'
 import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 import PageNotFound from '../components/pages/PageNotFound'
@@ -43,6 +43,8 @@ function App({ dexieCurrentUserInstance }) {
   const navigate = useNavigate()
   const isMounted = useIsMounted()
   const location = useLocation()
+  const { t } = useTranslation()
+  const pushSyncErrorUnsavedDataText = t('api_errors.unsaved_sync_data')
 
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieCurrentUserInstance,
@@ -61,7 +63,7 @@ function App({ dexieCurrentUserInstance }) {
   )
 
   const handleNested500SyncError = () => {
-    toast.error(...getToastArguments(language.error.pushSyncErrorMessageStatusCode500))
+    toast.error(...getToastArguments(t('api_errors.unspecified_error')))
   }
 
   const handleUserDeniedSyncPull = useCallback(
@@ -85,8 +87,14 @@ function App({ dexieCurrentUserInstance }) {
         if (isErrorSpecificToProject) {
           const syncErrorUserMessaging = (
             <div data-testid={`sync-error-for-project-${projectId}`}>
-              <P>{language.error.getPushSyncErrorMessage(projectName)}</P>
-              {language.error.pushSyncErrorMessageUnsavedData}
+              <P>
+                <Trans
+                  i18nKey="api_errors.no_sync_data_permission"
+                  values={{ projectName }}
+                  components={{ strong: <strong /> }}
+                />
+              </P>
+              {pushSyncErrorUnsavedDataText}
               <ul>
                 {apiDataTablesThatRejectedSyncing?.map((rejectedDataTableName) => (
                   <li key={rejectedDataTableName}>{API_DATA_TABLE_NAMES[rejectedDataTableName]}</li>
@@ -99,7 +107,7 @@ function App({ dexieCurrentUserInstance }) {
         }
       })
     },
-    [location],
+    [location, pushSyncErrorUnsavedDataText],
   )
 
   const { currentUser, saveUserProfile, refreshCurrentUser } = useInitializeCurrentUser({

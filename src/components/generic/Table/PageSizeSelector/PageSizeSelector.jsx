@@ -67,7 +67,7 @@ const PageSizeSelector = ({
 
   return (
     <label htmlFor="page-size-selector">
-      {t('showing')}{' '}
+      {t('showing')}
       <PageSizeSelect
         value={pageSize}
         onChange={onChange}
