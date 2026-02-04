@@ -1,5 +1,5 @@
 import { Route, useLocation, Routes, Navigate, useNavigate } from 'react-router-dom'
-import { ThemeProvider } from 'styled-components'
+import { StyleSheetManager, ThemeProvider } from 'styled-components'
 import { toast } from 'react-toastify'
 import React, { useCallback, useMemo } from 'react'
 
@@ -202,65 +202,71 @@ function App({ dexieCurrentUserInstance }) {
     (isOfflineStorageHydrated || !!syncErrors.length) // we use isOfflineStrorageHydrated here instead of isSyncInProgress to make sure the app level layout doesnt rerender (flash) on sync
 
   return (
-    <ThemeProvider theme={theme}>
-      <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
-        <CurrentUserProvider value={{ currentUser, saveUserProfile, refreshCurrentUser }}>
-          <CurrentProjectProvider>
-            <HttpResponseErrorHandlerProvider
-              value={handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied}
-            >
-              <BellNotificationProvider
-                value={{ notifications, deleteNotification, deleteAllNotifications }}
+    <StyleSheetManager enableVendorPrefixes>
+      <ThemeProvider theme={theme}>
+        <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
+          <CurrentUserProvider value={{ currentUser, saveUserProfile, refreshCurrentUser }}>
+            <CurrentProjectProvider>
+              <HttpResponseErrorHandlerProvider
+                value={handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied}
               >
-                <GlobalStyle />
-                <CustomToastContainer limit={5} />
-                <ErrorBoundary>
-                  <Layout {...layoutProps}>
-                    {
-                      /** The isMermaidAuthenticated is needed here to prevent an
-                       * infinite log in loop with authentication.
-                       *
-                       * The projects list route and project workflow pages will trigger
-                       * a sync when they are routed to, making isOfflineStorageHydrated = true
-                       */
-                      isMermaidAuthenticated ? (
-                        <ErrorBoundary>
-                          <Routes>
-                            {routes.map(({ path, Component }) => (
-                              <Route
-                                exact
-                                path={path}
-                                key={path}
-                                element={
-                                  isMermaidAuthenticatedAndReady ? (
-                                    <Component />
-                                  ) : (
-                                    <LoadingIndicator />
-                                  )
-                                }
-                              />
-                            ))}
-                            <Route exact path="/" element={<Navigate to="/projects" replace />} />
+                <BellNotificationProvider
+                  value={{ notifications, deleteNotification, deleteAllNotifications }}
+                >
+                  <GlobalStyle />
+                  <CustomToastContainer limit={5} />
+                  <ErrorBoundary>
+                    <Layout {...layoutProps}>
+                      {
+                        /** The isMermaidAuthenticated is needed here to prevent an
+                         * infinite log in loop with authentication.
+                         *
+                         * The projects list route and project workflow pages will trigger
+                         * a sync when they are routed to, making isOfflineStorageHydrated = true
+                         */
+                        isMermaidAuthenticated ? (
+                          <ErrorBoundary>
+                            <Routes>
+                              {routes.map(({ path, Component }) => (
+                                <Route
+                                  exact
+                                  path={path}
+                                  key={path}
+                                  element={
+                                    isMermaidAuthenticatedAndReady ? (
+                                      <Component />
+                                    ) : (
+                                      <LoadingIndicator />
+                                    )
+                                  }
+                                />
+                              ))}
+                              <Route exact path="/" element={<Navigate to="/projects" replace />} />
 
-                            {/* The following route is required b/c of how Cloudfront handles root paths. This is
+                              {/* The following route is required b/c of how Cloudfront handles root paths. This is
                               required for preview urls. When viewing a preview, you will need to append /index.html
                               like so: https://preview.app2.datamermaid.org/123/index.html */}
-                            <Route exact path="/index.html" element={<Navigate to="/projects" />} />
-                            <Route path="/*" element={<PageNotFound />} />
-                          </Routes>
-                        </ErrorBoundary>
-                      ) : (
-                        <LoadingIndicator />
-                      )
-                    }
-                  </Layout>
-                </ErrorBoundary>
-              </BellNotificationProvider>
-            </HttpResponseErrorHandlerProvider>
-          </CurrentProjectProvider>
-        </CurrentUserProvider>
-      </DatabaseSwitchboardInstanceProvider>
-    </ThemeProvider>
+                              <Route
+                                exact
+                                path="/index.html"
+                                element={<Navigate to="/projects" />}
+                              />
+                              <Route path="/*" element={<PageNotFound />} />
+                            </Routes>
+                          </ErrorBoundary>
+                        ) : (
+                          <LoadingIndicator />
+                        )
+                      }
+                    </Layout>
+                  </ErrorBoundary>
+                </BellNotificationProvider>
+              </HttpResponseErrorHandlerProvider>
+            </CurrentProjectProvider>
+          </CurrentUserProvider>
+        </DatabaseSwitchboardInstanceProvider>
+      </ThemeProvider>
+    </StyleSheetManager>
   )
 }
 
