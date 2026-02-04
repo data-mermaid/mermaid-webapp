@@ -63,7 +63,9 @@ const categorizeDuplicateImages = (
 ): DuplicateCategories => ({
   submitted: uniqueDuplicates.filter((image) => image.benthicpqt_id !== ''),
   current: uniqueDuplicates.filter((image) => image.collect_record_id === imgId),
-  other: uniqueDuplicates.filter((image) => image.collect_record_id !== imgId),
+  other: uniqueDuplicates.filter(
+    (image) => image.collect_record_id !== imgId && image.benthicpqt_id === '',
+  ),
 })
 
 const getDuplicateImageValidationContent = (
