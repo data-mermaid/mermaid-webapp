@@ -18,8 +18,6 @@ export const useInitializeBellNotifications = ({
   handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
 }) => {
   const { t } = useTranslation()
-  const notificationsUnavailableText = t('notifications_unavailable')
-  const notificationNotDeletedText = t('notification_not_removed')
 
   const location = useLocation() // Changes when the route changes. Useful for fetching notifications again
 
@@ -44,7 +42,7 @@ export const useInitializeBellNotifications = ({
           handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () => {
-              toast.error(...getToastArguments(notificationsUnavailableText))
+              toast.error(...getToastArguments(t('notifications_unavailable')))
             },
             shouldShowServerNonResponseMessage: false,
           })
@@ -58,14 +56,7 @@ export const useInitializeBellNotifications = ({
 
   const _initializeNotifications = useEffect(() => {
     updateNotifications()
-  }, [
-    apiBaseUrl,
-    getAccessToken,
-    isMermaidAuthenticated,
-    isAppOnline,
-    location,
-    notificationsUnavailableText,
-  ]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [apiBaseUrl, getAccessToken, isMermaidAuthenticated, isAppOnline, location]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const deleteNotification = (notificationId) => {
     if (isMermaidAuthenticated && apiBaseUrl) {
@@ -82,7 +73,7 @@ export const useInitializeBellNotifications = ({
           handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () => {
-              toast.error(...getToastArguments(notificationNotDeletedText))
+              toast.error(...getToastArguments(t('notification_not_removed')))
             },
           })
         })
@@ -104,7 +95,7 @@ export const useInitializeBellNotifications = ({
           handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () => {
-              toast.error(...getToastArguments(notificationNotDeletedText))
+              toast.error(...getToastArguments(t('notification_not_removed')))
             },
           })
         })

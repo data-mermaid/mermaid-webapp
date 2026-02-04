@@ -44,8 +44,8 @@ function App({ dexieCurrentUserInstance }) {
   const isMounted = useIsMounted()
   const location = useLocation()
   const { t } = useTranslation()
-  const pushSyncErrorStatusCode500Text = t('api_errors.unspecified_error')
   const pushSyncErrorUnsavedDataText = t('api_errors.unsaved_sync_data')
+  const pushSyncErrorMessageStatusCode500 = t('api_errors.unspecified_error')
 
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieCurrentUserInstance,
@@ -63,11 +63,11 @@ function App({ dexieCurrentUserInstance }) {
     [logoutMermaid, setServerNotReachable],
   )
 
-  const handleNested500SyncError = () => {
+  const handleNested500SyncError = useCallback(() => {
     toast.error(
-      ...getToastArguments(t('api_errors.unspecified_error'), 'sync-error-unspecified-error-toast'),
+      ...getToastArguments(pushSyncErrorMessageStatusCode500, 'sync-error-unspecified-error-toast'),
     )
-  }
+  }, [pushSyncErrorMessageStatusCode500])
 
   const handleUserDeniedSyncPull = useCallback(
     (projectName) => {
@@ -145,6 +145,7 @@ function App({ dexieCurrentUserInstance }) {
     getAccessToken,
     handleUserDeniedSyncPull,
     handleUserDeniedSyncPush,
+    handleNested500SyncError,
   ])
 
   useInitializeSyncApiDataIntoOfflineStorage({
