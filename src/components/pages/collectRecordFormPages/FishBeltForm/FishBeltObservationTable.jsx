@@ -572,7 +572,7 @@ const FishBeltObservationTable = ({
               </Th>
               {areValidationsShowing ? (
                 <Th align="center" id="fish-validations-label">
-                  {t('validations')}
+                  {t('validations.validations')}
                 </Th>
               ) : null}
               <Th> </Th>

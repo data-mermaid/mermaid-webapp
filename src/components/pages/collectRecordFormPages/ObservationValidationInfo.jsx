@@ -38,7 +38,7 @@ const ObservationValidationInfo = ({
   return (
     <CellValidation>
       {isObservationValid ? (
-        <span aria-label={t('passed_validation')} data-testid="passed-validation-indicator">
+        <span aria-label={t('validations.passed')} data-testid="passed-validation-indicator">
           &nbsp;
         </span>
       ) : null}
@@ -52,7 +52,7 @@ const ObservationValidationInfo = ({
         </TableValidationList>
       ) : null}
       {hasObservationIgnoredValidation ? (
-        <span data-testid="ignore-warning-label">{capitalize(t('ignore'))}</span>
+        <span data-testid="ignore-warning-label">{capitalize(t('message_type.ignore'))}</span>
       ) : null}
       {hasObservationWarningValidation || hasObservationIgnoredValidation ? (
         <InputIgnoreValidationWarningCheckboxWithLabel

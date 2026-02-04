@@ -51,7 +51,7 @@ const InlineMessage = ({
     <>
       {type && (
         <MessagePill type={type} className={className} data-testid={`message-pill-${type}`}>
-          {t(`${type}`)}
+          {t(`message_type.${type}`)}
         </MessagePill>
       )}
       <InlineMessageWrapper className={className} data-testid={`inline-message-${type}`}>

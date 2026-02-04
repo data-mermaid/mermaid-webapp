@@ -100,7 +100,7 @@ const InputValidationInfo = ({
       {additionalText}
       {isWarningValidation || isIgnoredWarningValidation ? getWarningValidationButtons() : null}
       {isValidationPassing ? (
-        <span aria-label={t('passed_validation')} data-testid="passed-validation-indicator">
+        <span aria-label={t('validations.passed')} data-testid="passed-validation-indicator">
           &nbsp;
         </span>
       ) : null}

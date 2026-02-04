@@ -53,11 +53,7 @@ const DatabaseSwitchboardState = class {
     // Their values are just borrowing meaning from HTTP)
     // project synonyms for push status code errors are 'nested errors', or 'push sub-node errors'
     if (statusCode === 500) {
-      const statusCodeKey = `api_errors.unspecified_error`
-      const translatedMessage = i18n.t(statusCodeKey)
-      const errorMessage =
-        translatedMessage === statusCodeKey ? i18n.t('api_errors.mermaid_error') : translatedMessage
-      const error = new Error(errorMessage)
+      const error = new Error(i18n.t('api_errors.unspecified_error'))
 
       error.isSyncError = true
 

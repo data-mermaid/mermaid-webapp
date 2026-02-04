@@ -158,7 +158,6 @@
   "delete_sites_regimes": "Delete sites or management regimes",
   "download_sites_regimes": "Export sites and management regimes",
   "email": "Email",
-  "error": "error",
   "errors": {
     "summary_data_unavailable": "Summary data is currently unavailable",
     "user_profile_unavailable": "The user profile is unavailable."
@@ -419,7 +418,6 @@
   "habitat_complexity_score_info": "Benthic complexity score (0 - 5) for transect interval, as integer (e.g. 3). The categories are 0 no vertical reef, flat or rubbly areas; 1 low (<30 cm high) and sparse relief; 2 low but widespread relief; 3 widespread moderately complex (30-60 cm high) relief; 4 widespread very complex (60 -100 cm high) relief with numerous fissures and caves; 5 exceptionally complex (>1 m high) relief with numerous caves and overhangs).",
   "help_documents": "Help (PDF)",
   "help_dropdown": "Help documents dropdown",
-  "ignore": "ignored",
   "ignore_warning": "Ignore warning",
   "image_classification": {
     "add_attribute": "Add new attribute",
@@ -622,6 +620,12 @@
       "uncropped_photo_example": "Uncropped example"
     }
   },
+  "message_type": {
+    "error": "error",
+    "info": "info",
+    "warning": "warning",
+    "ignore": "ignored"
+  },
   "mermaid": "MERMAID",
   "mermaid_explore": "MERMAID Explore",
   "mermaid_logo": "MERMAID logo",
@@ -629,7 +633,6 @@
   "method": "Method",
   "must_select_fish_warning": "You must select a fish size bin before adding any observations",
   "name": "Name",
-  "navigate_away_prompt": "Are you sure you want to leave this page? You have some unsaved changes.",
   "no": "No",
   "no_notifications": "There are currently no notifications",
   "notes": "Notes",
@@ -719,7 +722,6 @@
     "try_reloading": "If you keep seeing this error, try reloading this page, or you can",
     "will_show": "This page will show:"
   },
-  "passed_validation": "Passed Validation",
   "percent_cover": "Percent Cover",
   "profile": {
     "email_address": "Email address",
@@ -948,7 +950,6 @@
     "latitude_info": "Latitude in decimal degrees. Should be a number between -90 and 90, representing the north-south position on the Earth's surface. A positive value indicates a location north of the equator, while a negative value indicates a location south of the equator. If you need to convert from degrees-minutes-seconds, an online calculator is <helperTextLink>here.</helperTextLink>",
     "longitude": "Longitude",
     "longitude_info": "Longitude in decimal degrees. Should be a number between -180 and 180, representing the east-west position on the Earth's surface. A positive value indicates a location to the east of the Prime Meridian, while a negative value indicates a location to the west of the Prime Meridian. If you need to convert from degrees-minutes-seconds, an online calculator is <helperTextLink>here.</helperTextLink>",
-    "map": "Map",
     "merge_failed": "Failed to find and replace site",
     "missing_site_name": "(Missing site name)",
     "new": "New site",
@@ -994,7 +995,8 @@
     "mermaid_data_save_offline_error": "The {{dataType}} failed to save both on your computer and online.",
     "mermaid_data_save_online_sync_error": "The {{dataType}} has been saved on your computer, but not online.",
     "mermaid_data_save_success_offline": "The {{dataType}} has been saved on your computer.",
-    "mermaid_data_save_success_online": "The {{dataType}} has been saved on your computer and online."
+    "mermaid_data_save_success_online": "The {{dataType}} has been saved on your computer and online.",
+    "unsaved_work_confirmation": "Are you sure you want to leave this page? You have some unsaved changes."
   },
   "toggle_label_visibility": "Toggle label visibility",
   "toggle_table_visibility": "Toggle table visibility",
@@ -1122,14 +1124,16 @@
     "unknown_protocol": "Unknown protocol",
     "value_not_set": "Value is not set"
   },
-  "validations": "Validations",
+  "validations": {
+    "validations": "Validations",
+    "passed": "Passed Validation"
+  },
   "view_fish_info": "View fish name information",
   "view_observers_units_overview": "View overview of sample units by observer",
   "view_regimes_overview": "View overview of sample units by management regime",
   "view_selected_only": "View selected only",
   "visibility": "Visibility",
   "visibility_info": "The horizontal distance at which an object underwater can still be identified",
-  "warning": "warning",
   "width": "Width",
   "width_info": "The total width (NOT width to one side of the tape) of the fish belt transect, in meters",
   "yes": "Yes"

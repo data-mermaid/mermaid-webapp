@@ -26,7 +26,12 @@ const EnhancedPrompt = ({ shouldPromptTrigger = false }) => {
   useBeforeUnloadPrompt({ shouldPromptTrigger })
 
   // Display prompt for fornt end/react router routing
-  return <Prompt shouldPromptTrigger={shouldPromptTrigger} message={t('navigate_away_prompt')} />
+  return (
+    <Prompt
+      shouldPromptTrigger={shouldPromptTrigger}
+      message={t('toasts.unsaved_work_confirmation')}
+    />
+  )
 }
 
 EnhancedPrompt.propTypes = {
