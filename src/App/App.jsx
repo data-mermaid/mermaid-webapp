@@ -34,6 +34,7 @@ import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
 import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 import { routes } from './routes'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline, setServerNotReachable } = useOnlineStatus()
