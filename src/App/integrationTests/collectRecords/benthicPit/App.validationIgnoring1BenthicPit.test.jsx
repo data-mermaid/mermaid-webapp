@@ -328,155 +328,138 @@ test('Benthic PIT validation: user can dismiss non-observations input warnings '
   expect(within(observersRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(observersRow).getByText('secondWarning')).toBeInTheDocument()
 
-  await user.click(within(siteRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(siteRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(siteRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(siteRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(siteRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(siteRow).getByRole('checkbox', { name: 'Ignore warning' }))
-  expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(siteRow).getByTestId('ignore-warning-checkbox'))
+  expect(within(siteRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
   const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterIgnore)
-  await user.click(within(managementRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(managementRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(managementRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(managementRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(managementRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(managementRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(managementRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(managementRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(depthRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(depthRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(depthRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(depthRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(depthRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(depthRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(depthRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(depthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(sampleDateRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(sampleDateRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(sampleDateRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(sampleDateRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(sampleDateRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(sampleDateRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(sampleDateRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(sampleDateRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(sampleTimeRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(sampleTimeRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(sampleTimeRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(sampleTimeRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(sampleTimeRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(sampleTimeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(sampleTimeRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(sampleTimeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(transectNumberRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(transectNumberRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() =>
     expect(within(transectNumberRow).queryByText('warning')).not.toBeInTheDocument(),
   )
   expect(within(transectNumberRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(transectNumberRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(transectNumberRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(transectNumberRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(transectNumberRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(labelRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(labelRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(labelRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(labelRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(labelRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(labelRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(labelRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(labelRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(lengthSurveyedRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(lengthSurveyedRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() =>
     expect(within(lengthSurveyedRow).queryByText('warning')).not.toBeInTheDocument(),
   )
   expect(within(lengthSurveyedRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(lengthSurveyedRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(lengthSurveyedRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(lengthSurveyedRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(lengthSurveyedRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(intervalSizeRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(intervalSizeRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() =>
     expect(within(intervalSizeRow).queryByText('warning')).not.toBeInTheDocument(),
   )
   expect(within(intervalSizeRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(intervalSizeRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(intervalSizeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(intervalSizeRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(intervalSizeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(intervalStartRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(intervalStartRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() =>
     expect(within(intervalStartRow).queryByText('warning')).not.toBeInTheDocument(),
   )
   expect(within(intervalStartRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(intervalStartRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(intervalStartRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(intervalStartRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(intervalStartRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(reefSlopeRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(reefSlopeRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(reefSlopeRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(reefSlopeRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(reefSlopeRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(reefSlopeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(reefSlopeRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(relativeDepthRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(relativeDepthRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() =>
     expect(within(relativeDepthRow).queryByText('warning')).not.toBeInTheDocument(),
   )
   expect(within(relativeDepthRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(relativeDepthRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(relativeDepthRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(relativeDepthRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(relativeDepthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(visibilityRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(visibilityRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(visibilityRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(visibilityRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(visibilityRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(visibilityRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(visibilityRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(visibilityRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(currentRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(currentRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(currentRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(currentRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(currentRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(currentRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(currentRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(currentRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(tideRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(tideRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(tideRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(tideRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(tideRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(tideRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(tideRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(tideRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(notesRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(notesRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(notesRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(notesRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(notesRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(notesRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(notesRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(notesRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(within(observersRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(observersRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() => expect(within(observersRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(observersRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(observersRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(observersRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(observersRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 }, 50000)
 
 test('Benthic PIT validation: user can dismiss record-level warnings ', async () => {
@@ -538,21 +521,25 @@ test('Benthic PIT validation: user can dismiss record-level warnings ', async ()
 
   expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
 
-  await user.click(
-    within(recordLevelValidationsSection).getByRole('checkbox', { name: 'Ignore warning' }),
-  )
+  await user.click(within(recordLevelValidationsSection).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() =>
-    expect(within(recordLevelValidationsSection).queryByText('warning')).not.toBeInTheDocument(),
+    expect(
+      within(recordLevelValidationsSection).queryByTestId('message-pill-warning'),
+    ).not.toBeInTheDocument(),
   )
-  expect(within(recordLevelValidationsSection).getByText('ignored')).toBeInTheDocument()
+  expect(
+    await within(recordLevelValidationsSection).findByTestId('message-pill-ignore'),
+  ).toBeInTheDocument()
 
-  await user.click(
-    within(recordLevelValidationsSection).getByRole('checkbox', { name: 'Ignore warning' }),
-  )
-  expect(await within(recordLevelValidationsSection).findByText('warning')).toBeInTheDocument()
+  await user.click(within(recordLevelValidationsSection).getByTestId('ignore-warning-checkbox'))
+  expect(
+    await within(recordLevelValidationsSection).findByTestId('message-pill-warning'),
+  ).toBeInTheDocument()
   await waitFor(() =>
-    expect(within(recordLevelValidationsSection).queryByText('ignored')).not.toBeInTheDocument(),
+    expect(
+      within(recordLevelValidationsSection).queryByTestId('message-pill-ignore'),
+    ).not.toBeInTheDocument(),
   )
 
   const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
@@ -651,15 +638,15 @@ test('Benthic PIT validation: user can dismiss observation warnings ', async () 
   expect(within(observationsTable).getByText('firstWarning')).toBeInTheDocument()
   expect(within(observationsTable).getByText('secondWarning')).toBeInTheDocument()
 
-  await user.click(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(observationsTable).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() =>
     expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
   expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
 
-  expect(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' })).toBeChecked()
-  expect(within(observationsTable).getByText('Ignored'))
+  expect(within(observationsTable).getByTestId('ignore-warning-checkbox')).toBeChecked()
+  expect(within(observationsTable).getByTestId('ignore-warning-label'))
 
   const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
@@ -943,240 +930,179 @@ test('Benthic PIT validation: user can reset dismissed non-observation input war
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
 
-  expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(managementRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(managementRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(depthRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(depthRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(sampleDateRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(sampleDateRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(sampleTimeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(sampleTimeRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(transectNumberRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(transectNumberRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(labelRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(labelRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(lengthSurveyedRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(lengthSurveyedRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(intervalSizeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(intervalSizeRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(intervalStartRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(intervalStartRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(reefSlopeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(reefSlopeRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(relativeDepthRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(relativeDepthRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(visibilityRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(visibilityRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(currentRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(currentRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(tideRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(tideRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(notesRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(notesRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(observersRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(observersRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(siteRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(managementRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(depthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(sampleDateRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(sampleTimeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(transectNumberRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(labelRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(lengthSurveyedRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(intervalSizeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(intervalStartRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(reefSlopeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(relativeDepthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(visibilityRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(currentRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(tideRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(notesRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
-  await user.click(
-    await within(siteRow).findByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
-  )
+  await user.click(await within(siteRow).findByTestId('ignore-warning-checkbox'))
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 
-  await waitFor(() => expect(within(siteRow).queryByText('ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(siteRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
+  )
   expect(within(siteRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(siteRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(siteRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(within(siteRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
-  await user.click(
-    within(managementRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
-  )
-
-  await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
-
-  expect(within(managementRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(managementRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(managementRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
-
-  await user.click(
-    within(depthRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
-  )
-
-  await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(depthRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(depthRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(depthRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
-
-  await user.click(
-    within(sampleDateRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
-  )
-
-  await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(sampleDateRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(sampleDateRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(sampleDateRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
-
-  await user.click(
-    within(sampleTimeRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
-  )
-
-  await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(sampleTimeRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(sampleTimeRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(sampleTimeRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
-
-  await user.click(
-    within(transectNumberRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
-  )
+  await user.click(within(managementRow).getByTestId('ignore-warning-checkbox'))
 
   await waitFor(() =>
-    expect(within(transectNumberRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(managementRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
+  )
+  expect(within(managementRow).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(managementRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(managementRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
+
+  await user.click(within(depthRow).getByTestId('ignore-warning-checkbox'))
+
+  await waitFor(() =>
+    expect(within(depthRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
+  )
+  expect(within(depthRow).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(depthRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(depthRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
+
+  await user.click(within(sampleDateRow).getByTestId('ignore-warning-checkbox'))
+
+  await waitFor(() =>
+    expect(within(sampleDateRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
+  )
+  expect(within(sampleDateRow).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(sampleDateRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(sampleDateRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
+
+  await user.click(within(sampleTimeRow).getByTestId('ignore-warning-checkbox'))
+
+  await waitFor(() =>
+    expect(within(sampleTimeRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
+  )
+  expect(within(sampleTimeRow).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(sampleTimeRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(sampleTimeRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
+
+  await user.click(within(transectNumberRow).getByTestId('ignore-warning-checkbox'))
+
+  await waitFor(() =>
+    expect(within(transectNumberRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
   expect(within(transectNumberRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(transectNumberRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(transectNumberRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(
+    within(transectNumberRow).queryByTestId('passed-validation-indicator'),
+  ).not.toBeInTheDocument()
 
-  await user.click(
-    within(labelRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
+  await user.click(within(labelRow).getByTestId('ignore-warning-checkbox'))
+  await waitFor(() =>
+    expect(within(labelRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-
-  await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
   expect(within(labelRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(labelRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(labelRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(within(labelRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
-  await user.click(
-    within(lengthSurveyedRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
-  )
-
+  await user.click(within(lengthSurveyedRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() =>
-    expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(lengthSurveyedRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
   expect(within(lengthSurveyedRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(lengthSurveyedRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(lengthSurveyedRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(
+    within(lengthSurveyedRow).queryByTestId('passed-validation-indicator'),
+  ).not.toBeInTheDocument()
 
-  await user.click(
-    within(intervalSizeRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
-  )
-
+  await user.click(within(intervalSizeRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() =>
-    expect(within(intervalSizeRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(intervalSizeRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
   expect(within(intervalSizeRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(intervalSizeRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(intervalSizeRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(
+    within(intervalSizeRow).queryByTestId('passed-validation-indicator'),
+  ).not.toBeInTheDocument()
 
-  await user.click(
-    within(intervalStartRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
-  )
-
+  await user.click(within(intervalStartRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() =>
-    expect(within(intervalStartRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(intervalStartRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
   expect(within(intervalStartRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(intervalStartRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(intervalStartRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(
+    within(intervalStartRow).queryByTestId('passed-validation-indicator'),
+  ).not.toBeInTheDocument()
 
-  await user.click(
-    within(reefSlopeRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
+  await user.click(within(reefSlopeRow).getByTestId('ignore-warning-checkbox'))
+  await waitFor(() =>
+    expect(within(reefSlopeRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-
-  await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
   expect(within(reefSlopeRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(reefSlopeRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(reefSlopeRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(within(reefSlopeRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
-  await user.click(
-    within(relativeDepthRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
-  )
-
+  await user.click(within(relativeDepthRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() =>
-    expect(within(relativeDepthRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(relativeDepthRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
   expect(within(relativeDepthRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(relativeDepthRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(relativeDepthRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(
+    within(relativeDepthRow).queryByTestId('passed-validation-indicator'),
+  ).not.toBeInTheDocument()
 
-  await user.click(
-    within(visibilityRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
+  await user.click(within(visibilityRow).getByTestId('ignore-warning-checkbox'))
+  await waitFor(() =>
+    expect(within(visibilityRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-
-  await waitFor(() => expect(within(visibilityRow).queryByText('Ignored')).not.toBeInTheDocument())
   expect(within(visibilityRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(visibilityRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(visibilityRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(within(visibilityRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
-  await user.click(
-    within(currentRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
+  await user.click(within(currentRow).getByTestId('ignore-warning-checkbox'))
+
+  await waitFor(() =>
+    expect(within(currentRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-
-  await waitFor(() => expect(within(currentRow).queryByText('Ignored')).not.toBeInTheDocument())
   expect(within(currentRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(currentRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(currentRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(within(currentRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
-  await user.click(
-    within(tideRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
+  await user.click(within(tideRow).getByTestId('ignore-warning-checkbox'))
+  await waitFor(() =>
+    expect(within(tideRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-
-  await waitFor(() => expect(within(tideRow).queryByText('Ignored')).not.toBeInTheDocument())
   expect(within(tideRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(tideRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(tideRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(within(tideRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
-  await user.click(
-    within(notesRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
+  await user.click(within(notesRow).getByTestId('ignore-warning-checkbox'))
+
+  await waitFor(() =>
+    expect(within(notesRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-
-  await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
   expect(within(notesRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(notesRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(notesRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(within(notesRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
-  await user.click(
-    within(observersRow).getByRole('checkbox', {
-      name: 'Ignore warning',
-    }),
+  await user.click(within(observersRow).getByTestId('ignore-warning-checkbox'))
+  await waitFor(() =>
+    expect(within(observersRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-
-  await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
   expect(within(observersRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(observersRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  expect(within(observersRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 }, 50000)

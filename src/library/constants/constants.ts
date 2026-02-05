@@ -19,6 +19,16 @@ export const apiDataTypes = {
   projectProfiles: 'project_profiles',
   projectSites: 'project_sites',
 }
+
+export const API_DATA_TABLE_NAMES = {
+  benthic_attributes: 'benthic attributes',
+  collect_records: 'unsubmitted sample units',
+  fish_species: 'fish species',
+  project_managements: 'management regimes',
+  project_profiles: 'project users',
+  project_sites: 'sites',
+  projects: 'project info',
+}
 export const IMAGE_CLASSIFICATION_COLORS = {
   // leaving these redundant for now until colors are finalized
   confirmedPoint: theme.color.brandSecondary,
@@ -46,3 +56,4 @@ export const MAX_IMAGE_WIDTH_HEIGHT = 8000
 Object.freeze(PROJECT_CODES)
 Object.freeze(apiDataTypes)
 Object.freeze(IMAGE_CLASSIFICATION_COLORS)
+Object.freeze(API_DATA_TABLE_NAMES)

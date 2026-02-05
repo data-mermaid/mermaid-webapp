@@ -20,7 +20,7 @@ test('Offline site shows no info associated with SITE id view ', async () => {
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantSiteId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Online site shows no info associated with SITE id view ', async () => {
@@ -32,7 +32,7 @@ test('Online site shows no info associated with SITE id view ', async () => {
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantSiteId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Offline site shows no info associated with PROJECT id view ', async () => {
@@ -46,7 +46,7 @@ test('Offline site shows no info associated with PROJECT id view ', async () => 
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Online site shows no info associated with PROJECT id view ', async () => {
@@ -58,7 +58,7 @@ test('Online site shows no info associated with PROJECT id view ', async () => {
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Offline site shows no info associated with PROJECT or SITE id view ', async () => {
@@ -72,11 +72,7 @@ test('Offline site shows no info associated with PROJECT or SITE id view ', asyn
     dexieCurrentUserInstance,
   })
 
-  expect(
-    await screen.findByText(
-      'The items with the ids nonExistantSiteId,nonExistantProjectId cannot be found.',
-    ),
-  )
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Online site shows no info associated with PROJECT or SITE id view ', async () => {
@@ -88,9 +84,5 @@ test('Online site shows no info associated with PROJECT or SITE id view ', async
     dexieCurrentUserInstance,
   })
 
-  expect(
-    await screen.findByText(
-      'The items with the ids nonExistantSiteId,nonExistantProjectId cannot be found.',
-    ),
-  )
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
