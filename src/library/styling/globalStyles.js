@@ -4,8 +4,6 @@ import { hoverState } from './mediaQueries'
 import '@fontsource/open-sans'
 import '@fontsource/open-sans/700.css'
 
-// eslint-disable-next-line import/no-unresolved
-
 const GlobalStyle = createGlobalStyle`
     :root {
         font-size: 62.5%;
