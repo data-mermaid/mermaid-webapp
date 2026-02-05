@@ -279,11 +279,13 @@ const HabitatComplexityObservationsTable = ({
                         type="button"
                         onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
                       >
-                        <IconInfo aria-label={t('info')} />
+                        <IconInfo aria-label={t('message_type.info')} />
                       </IconButton>
                     </LabelContainer>
                   </Th>
-                  {areValidationsShowing ? <Th align="center">{t('validations')}</Th> : null}
+                  {areValidationsShowing ? (
+                    <Th align="center">{t('validations.validations')}</Th>
+                  ) : null}
                   <Th> </Th>
                 </Tr>
               </thead>

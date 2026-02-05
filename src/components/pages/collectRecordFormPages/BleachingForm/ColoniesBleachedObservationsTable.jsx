@@ -447,7 +447,9 @@ const ColoniesBleachedObservationTable = ({
                   <Th align="center" id="recently-dead-label">
                     {t('observations.recently_dead')}
                   </Th>
-                  {areValidationsShowing ? <Th align="center">{t('validations')}</Th> : null}
+                  {areValidationsShowing ? (
+                    <Th align="center">{t('validations.validations')}</Th>
+                  ) : null}
                   <Th />
                 </Tr>
               </thead>

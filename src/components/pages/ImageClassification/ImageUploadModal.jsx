@@ -6,7 +6,7 @@ import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../generic/but
 import { toast } from 'react-toastify'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext.jsx'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext.jsx'
-import { getToastArguments } from '../../../library/getToastArguments.js'
+import { getToastArguments } from '../../../library/getToastArguments'
 import { Trans, useTranslation } from 'react-i18next'
 import preCropPhoto from '../../../assets/negative-photo-upload-cropping.png'
 import postCropPhoto from '../../../assets/positive-user-photo-cropping.png'

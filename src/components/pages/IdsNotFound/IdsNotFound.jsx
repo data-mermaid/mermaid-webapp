@@ -2,20 +2,27 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import theme from '../../../theme'
-import language from '../../../language'
 
 const IdNotFoundWrapper = styled('div')`
   padding: ${theme.spacing.medium};
 `
 const IdsNotFound = ({ ids }) => {
+  const { t } = useTranslation()
+  const idList = Array.isArray(ids) ? ids.join(', ') : ids
+  const idsNotFoundDetails = t('item_details_not_found', {
+    count: Array.isArray(ids) ? ids.length : 1,
+    ids: idList,
+  })
+
   return (
     <IdNotFoundWrapper>
-      <h2>{language.error.idNotFound}</h2>
-      <p>{language.error.idNotFoundRecovery}</p>
-      <Link to="/">{language.error.homePageNavigation}</Link>
+      <h2>{t('item_not_found')}</h2>
+      <p>{t('item_not_accessible')}</p>
+      <Link to="/">{t('links.go_back_to_homepage')}</Link>
       <p>
-        <small>{language.error.getIdsNotFoundDetails(ids)}</small>
+        <small data-testid="ids-not-found">{idsNotFoundDetails}</small>
       </p>
     </IdNotFoundWrapper>
   )
