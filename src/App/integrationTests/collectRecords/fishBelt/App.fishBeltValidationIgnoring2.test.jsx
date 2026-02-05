@@ -200,7 +200,9 @@ test('user can reset dismissed record-level warnings', async () => {
   await waitFor(() =>
     expect(within(recordLevelValidationsSection).queryByText('ignored')).not.toBeInTheDocument(),
   )
-  expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
+  expect(
+    within(recordLevelValidationsSection).getByTestId('message-pill-warning'),
+  ).toBeInTheDocument()
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 

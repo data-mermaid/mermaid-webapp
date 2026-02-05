@@ -512,7 +512,9 @@ test('Fishbelt Validation: user can dismiss record-level warnings ', async () =>
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
-  expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
+  expect(
+    within(recordLevelValidationsSection).getByTestId('message-pill-warning'),
+  ).toBeInTheDocument()
 
   await user.click(within(recordLevelValidationsSection).getByTestId('ignore-warning-checkbox'))
 
