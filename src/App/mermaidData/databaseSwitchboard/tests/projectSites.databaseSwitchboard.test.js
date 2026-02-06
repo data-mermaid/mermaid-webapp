@@ -1,3 +1,4 @@
+import { expect, test } from "vitest";
 import { getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess } from './testHelpers.DatabseSwitchboard'
 
 test('getSites only returns profiles for a given project', async () => {

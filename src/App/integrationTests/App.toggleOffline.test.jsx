@@ -1,3 +1,4 @@
+import { expect, test, vi } from "vitest";
 import '@testing-library/jest-dom'
 import { http, HttpResponse } from 'msw'
 import React from 'react'
@@ -56,7 +57,7 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
 })
 
 test('Navigator online - Toggle switch is not checked, and is enabled', async () => {
-  jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(true)
+  vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(true)
 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -72,7 +73,7 @@ test('Navigator online - Toggle switch is not checked, and is enabled', async ()
 })
 
 test('Navigator offline - Toggle switch is checked and disabled', async () => {
-  jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+  vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

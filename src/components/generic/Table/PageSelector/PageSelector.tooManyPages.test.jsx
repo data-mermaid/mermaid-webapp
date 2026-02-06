@@ -73,7 +73,7 @@ test('PageSelector with more than 8 pages shows the next and previous buttons as
   expect(screen.getByRole('button', { name: /next/i })).toBeDisabled()
 })
 test('PageSelector with more than 8 pages calls onGoToPage with the correct page when a page button is clicked', async () => {
-  const mockFunction = vi.fn()()
+  const mockFunction = vi.fn()
 
   const { user } = renderAuthenticatedOnline(
     <PageSelector
@@ -96,7 +96,7 @@ test('PageSelector with more than 8 pages calls onGoToPage with the correct page
   expect(mockFunction).toHaveBeenCalledWith(8)
 })
 test('PageSelector with more than 8 pages calls onNextClick when the next button is clicked', async () => {
-  const mockFunction = vi.fn()()
+  const mockFunction = vi.fn()
 
   const { user } = renderAuthenticatedOnline(
     <PageSelector
@@ -118,7 +118,7 @@ test('PageSelector with more than 8 pages calls onNextClick when the next button
 })
 
 test('PageSelector with more than 8 pages calls onPreviousClick when the next button is clicked', async () => {
-  const mockFunction = vi.fn()()
+  const mockFunction = vi.fn()
 
   const { user } = renderAuthenticatedOnline(
     <PageSelector

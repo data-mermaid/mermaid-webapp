@@ -1,3 +1,4 @@
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -100,7 +101,7 @@ test('Offline: edit site save stored site in dexie', async () => {
   await waitFor(() => expect(updatedSite.name).toEqual('OOF'))
 })
 test('Offline: Edit site  save failure shows toast message with new edits persisting', async () => {
-  const consoleSpy = jest.spyOn(console, 'error')
+  const consoleSpy = vi.spyOn(console, 'error')
 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -108,7 +109,7 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   const dexieError = new Error('this is a dexie error')
 
   // make sure the next save will fail
-  dexiePerUserDataInstance.project_sites.put = vi.fn()().mockRejectedValueOnce(dexieError)
+  dexiePerUserDataInstance.project_sites.put = vi.fn().mockRejectedValueOnce(dexieError)
 
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)

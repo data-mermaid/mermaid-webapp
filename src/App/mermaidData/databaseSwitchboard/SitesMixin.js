@@ -5,7 +5,7 @@ import language from '../../../language'
 import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
 
 const SitesMixin = (Base) =>
-  class extends Base {
+  (class extends Base {
     #getSiteReadyForPush = function getSiteReadyForPush({ site, projectId }) {
       const idToSubmit = site.id ?? createUuid()
       const projectIdToSubmit = site.project ?? projectId
@@ -289,6 +289,6 @@ const SitesMixin = (Base) =>
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
-  }
+  })
 
 export default SitesMixin

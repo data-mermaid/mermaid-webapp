@@ -1,3 +1,4 @@
+import { expect, test, vi } from "vitest";
 import '@testing-library/jest-dom'
 import { http, HttpResponse } from 'msw'
 import React from 'react'
@@ -12,7 +13,7 @@ import App from '../App'
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 test('Appropriate online status message shows when navigator is online', async () => {
-  jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(true)
+  vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(true)
 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -25,7 +26,7 @@ test('Appropriate online status message shows when navigator is online', async (
   expect(screen.queryByTestId('status-offline')).not.toBeInTheDocument()
 })
 test('Appropriate online status message shows when navigator is offline', async () => {
-  jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+  vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {

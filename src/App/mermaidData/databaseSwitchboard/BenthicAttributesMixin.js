@@ -1,7 +1,7 @@
 import { createUuid } from '../../../library/createUuid'
 
 const BenthicAttributesMixin = (Base) =>
-  class extends Base {
+  (class extends Base {
     getBenthicAttributes = function getBenthicAttributes() {
       if (this._isAuthenticatedAndReady) {
         return this._dexiePerUserDataInstance.benthic_attributes.toArray()
@@ -63,6 +63,6 @@ const BenthicAttributesMixin = (Base) =>
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
-  }
+  })
 
 export default BenthicAttributesMixin

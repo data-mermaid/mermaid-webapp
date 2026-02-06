@@ -1,3 +1,4 @@
+import { describe, expect, test, vi } from "vitest";
 import React from 'react'
 
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -145,7 +146,7 @@ describe('Offline', () => {
   })
 
   test('New MR save failure shows toast message with edits persisting', async () => {
-    const consoleSpy = jest.spyOn(console, 'error')
+    const consoleSpy = vi.spyOn(console, 'error')
 
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

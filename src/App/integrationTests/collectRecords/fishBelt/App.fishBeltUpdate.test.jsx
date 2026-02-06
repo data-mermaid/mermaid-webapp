@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -174,7 +175,7 @@ describe('Offline', () => {
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     // make sure the next save will fail
-    dexiePerUserDataInstance.collect_records.put = vi.fn()().mockRejectedValueOnce()
+    dexiePerUserDataInstance.collect_records.put = vi.fn().mockRejectedValueOnce()
 
     const { user } = renderAuthenticatedOffline(
       <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,

@@ -3,7 +3,7 @@ import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeader
 import { getPaginatedMermaidData } from '../getPaginatedMermaidData'
 
 const ProjectsMixin = (Base) =>
-  class extends Base {
+  (class extends Base {
     getOfflineReadyProjectIds = function getOfflineReadyProjectIds() {
       return this._dexiePerUserDataInstance.uiState_offlineReadyProjects.toArray()
     }
@@ -429,6 +429,6 @@ const ProjectsMixin = (Base) =>
 
       return this._apiSyncInstance.pushThenRemoveProjectFromOfflineStorage(projectId)
     }
-  }
+  })
 
 export default ProjectsMixin

@@ -1,7 +1,7 @@
 import { createUuid } from '../../../library/createUuid'
 
 const FishNameMixin = (Base) =>
-  class extends Base {
+  (class extends Base {
     getFishSpecies = function getFishSpecies() {
       if (this._isAuthenticatedAndReady) {
         return this._dexiePerUserDataInstance.fish_species.toArray()
@@ -79,6 +79,6 @@ const FishNameMixin = (Base) =>
         ? this._dexiePerUserDataInstance.fish_groupings.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
-  }
+  })
 
 export default FishNameMixin

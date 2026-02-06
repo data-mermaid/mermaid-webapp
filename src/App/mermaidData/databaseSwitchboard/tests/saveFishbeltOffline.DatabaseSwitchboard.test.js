@@ -1,3 +1,4 @@
+import { expect, test } from "vitest";
 import { validate as validateUuid } from 'uuid'
 import {
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess,

@@ -1,3 +1,4 @@
+import { expect, test } from "vitest";
 import '@testing-library/jest-dom'
 import { Route, Routes } from 'react-router-dom'
 import React from 'react'

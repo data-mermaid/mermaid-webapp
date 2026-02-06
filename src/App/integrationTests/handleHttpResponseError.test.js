@@ -1,12 +1,13 @@
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import { toast, Slide } from 'react-toastify'
 import handleHttpResponseError from '../../library/handleHttpResponseError'
 describe('handleHttpResponseError', () => {
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 401', () => {
-    const callback = vi.fn()()
-    const logoutMermaid = vi.fn()()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 401 } }, callback, logoutMermaid })
 
@@ -14,10 +15,10 @@ describe('handleHttpResponseError', () => {
     expect(callback).not.toHaveBeenCalled()
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 403', () => {
-    const toastSpy = jest.spyOn(toast, 'error')
+    const toastSpy = vi.spyOn(toast, 'error')
 
-    const callback = vi.fn()()
-    const logoutMermaid = vi.fn()()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 403 } }, callback, logoutMermaid })
 
@@ -29,10 +30,10 @@ describe('handleHttpResponseError', () => {
     expect(callback).not.toHaveBeenCalled()
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 500', () => {
-    const toastSpy = jest.spyOn(toast, 'error')
+    const toastSpy = vi.spyOn(toast, 'error')
 
-    const callback = vi.fn()()
-    const logoutMermaid = vi.fn()()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 500 } }, callback, logoutMermaid })
 
@@ -44,10 +45,10 @@ describe('handleHttpResponseError', () => {
     expect(callback).not.toHaveBeenCalled()
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 502', () => {
-    const toastSpy = jest.spyOn(toast, 'error')
+    const toastSpy = vi.spyOn(toast, 'error')
 
-    const callback = vi.fn()()
-    const logoutMermaid = vi.fn()()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 502 } }, callback, logoutMermaid })
 
@@ -59,10 +60,10 @@ describe('handleHttpResponseError', () => {
     expect(callback).not.toHaveBeenCalled()
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 503', () => {
-    const toastSpy = jest.spyOn(toast, 'error')
+    const toastSpy = vi.spyOn(toast, 'error')
 
-    const callback = vi.fn()()
-    const logoutMermaid = vi.fn()()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 503 } }, callback, logoutMermaid })
 
@@ -74,8 +75,8 @@ describe('handleHttpResponseError', () => {
     expect(callback).not.toHaveBeenCalled()
   })
   test('handleHttpResponseError can be extended with a callback function', () => {
-    const callback = vi.fn()()
-    const logoutMermaid = vi.fn()()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({
       error: { response: { status: 'something that wont be handled in util function logic' } },
@@ -86,9 +87,9 @@ describe('handleHttpResponseError', () => {
     expect(callback).toHaveBeenCalled()
   })
   test('if there is an error, it will be logged to console.error', () => {
-    const consoleSpy = jest.spyOn(console, 'error')
+    const consoleSpy = vi.spyOn(console, 'error')
 
-    const logoutMermaid = vi.fn()()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({
       error: 'the provided error',
@@ -99,10 +100,10 @@ describe('handleHttpResponseError', () => {
   })
 
   test('If a callback is provided, handleHttpResponseError will not produce a generic user message for status 400', () => {
-    const toastSpy = jest.spyOn(toast, 'error')
+    const toastSpy = vi.spyOn(toast, 'error')
 
-    const callback = vi.fn()()
-    const logoutMermaid = vi.fn()()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 400 } }, callback, logoutMermaid })
 

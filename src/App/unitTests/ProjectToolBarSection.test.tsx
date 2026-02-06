@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest'
 import React from 'react'
 import { screen } from '@testing-library/react'
 import ProjectToolBarSection from '../../components/ProjectToolBarSection/ProjectToolBarSection'
@@ -15,12 +16,12 @@ describe('ProjectToolBarSection', () => {
   //
   //     renderAuthenticatedOnline(
   //       <ProjectToolBarSection
-  //         setProjectFilter={vi.fn()()}
+  //         setProjectFilter={vi.fn()}
   //         projectSortKey=""
-  //         setProjectSortKey={vi.fn()()}
-  //         setIsProjectSortAsc={vi.fn()()}
-  //         addProjectToProjectsPage={vi.fn()()}
-  //         handleExploreButtonClick={vi.fn()()}
+  //         setProjectSortKey={vi.fn()}
+  //         setIsProjectSortAsc={vi.fn()}
+  //         addProjectToProjectsPage={vi.fn()}
+  //         handleExploreButtonClick={vi.fn()}
   //         userHasDemoProject={false}
   //       />,
   //       {
@@ -54,12 +55,12 @@ describe('ProjectToolBarSection', () => {
 
       renderAuthenticatedOnline(
         <ProjectToolBarSection
-          setProjectFilter={vi.fn()()}
+          setProjectFilter={vi.fn()}
           projectSortKey=""
-          setProjectSortKey={vi.fn()()}
-          setIsProjectSortAsc={vi.fn()()}
-          addProjectToProjectsPage={vi.fn()()}
-          handleExploreButtonClick={vi.fn()()}
+          setProjectSortKey={vi.fn()}
+          setIsProjectSortAsc={vi.fn()}
+          addProjectToProjectsPage={vi.fn()}
+          handleExploreButtonClick={vi.fn()}
           userHasDemoProject={true}
         />,
         {

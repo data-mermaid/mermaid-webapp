@@ -3,7 +3,7 @@ import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeader
 import { getPaginatedMermaidData } from '../getPaginatedMermaidData'
 
 const GfcrMixin = (Base) =>
-  class extends Base {
+  (class extends Base {
     getIndicatorSets = async function getIndicatorSets(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
@@ -103,6 +103,6 @@ const GfcrMixin = (Base) =>
             .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
-  }
+  })
 
 export default GfcrMixin

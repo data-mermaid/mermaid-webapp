@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest'
 import { http, HttpResponse } from 'msw'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -829,7 +830,7 @@ test('pushChanges includes the expected modified data', async () => {
 
 test('All of the push functions handle sync errors with the handleUserDeniedSyncPush callback function', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-  const pushSyncErrorCallback = vi.fn()()
+  const pushSyncErrorCallback = vi.fn()
 
   mockMermaidApiAllSuccessful.use(
     http.post(
