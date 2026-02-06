@@ -72,7 +72,7 @@ test('PageSelector with 8 or less pages shows the next and previous buttons as b
   expect(screen.getByRole('button', { name: /next/i })).toBeDisabled()
 })
 test('PageSelector with 8 or less pages calls onGoToPage with the correct page when a page button is clicked', () => {
-  const mockFunction = jest.fn()
+  const mockFunction = vi.fn()()
 
   renderAuthenticatedOnline(
     <PageSelector
@@ -98,7 +98,7 @@ test('PageSelector with 8 or less pages calls onGoToPage with the correct page w
   expect(mockFunction).toHaveBeenCalledWith(7)
 })
 test('PageSelector with 8 or less pages calls onNextClick when the next button is clicked', async () => {
-  const mockFunction = jest.fn()
+  const mockFunction = vi.fn()()
 
   renderAuthenticatedOnline(
     <PageSelector
@@ -119,7 +119,7 @@ test('PageSelector with 8 or less pages calls onNextClick when the next button i
 })
 
 test('PageSelector with 8 or less pages calls onPreviousClick when the next button is clicked', () => {
-  const mockFunction = jest.fn()
+  const mockFunction = vi.fn()()
 
   renderAuthenticatedOnline(
     <PageSelector

@@ -108,7 +108,7 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   const dexieError = new Error('this is a dexie error')
 
   // make sure the next save will fail
-  dexiePerUserDataInstance.project_sites.put = jest.fn().mockRejectedValueOnce(dexieError)
+  dexiePerUserDataInstance.project_sites.put = vi.fn()().mockRejectedValueOnce(dexieError)
 
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)

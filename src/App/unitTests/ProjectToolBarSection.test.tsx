@@ -15,12 +15,12 @@ describe('ProjectToolBarSection', () => {
   //
   //     renderAuthenticatedOnline(
   //       <ProjectToolBarSection
-  //         setProjectFilter={jest.fn()}
+  //         setProjectFilter={vi.fn()()}
   //         projectSortKey=""
-  //         setProjectSortKey={jest.fn()}
-  //         setIsProjectSortAsc={jest.fn()}
-  //         addProjectToProjectsPage={jest.fn()}
-  //         handleExploreButtonClick={jest.fn()}
+  //         setProjectSortKey={vi.fn()()}
+  //         setIsProjectSortAsc={vi.fn()()}
+  //         addProjectToProjectsPage={vi.fn()()}
+  //         handleExploreButtonClick={vi.fn()()}
   //         userHasDemoProject={false}
   //       />,
   //       {
@@ -54,12 +54,12 @@ describe('ProjectToolBarSection', () => {
 
       renderAuthenticatedOnline(
         <ProjectToolBarSection
-          setProjectFilter={jest.fn()}
+          setProjectFilter={vi.fn()()}
           projectSortKey=""
-          setProjectSortKey={jest.fn()}
-          setIsProjectSortAsc={jest.fn()}
-          addProjectToProjectsPage={jest.fn()}
-          handleExploreButtonClick={jest.fn()}
+          setProjectSortKey={vi.fn()()}
+          setIsProjectSortAsc={vi.fn()()}
+          addProjectToProjectsPage={vi.fn()()}
+          handleExploreButtonClick={vi.fn()()}
           userHasDemoProject={true}
         />,
         {

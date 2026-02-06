@@ -829,7 +829,7 @@ test('pushChanges includes the expected modified data', async () => {
 
 test('All of the push functions handle sync errors with the handleUserDeniedSyncPush callback function', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-  const pushSyncErrorCallback = jest.fn()
+  const pushSyncErrorCallback = vi.fn()()
 
   mockMermaidApiAllSuccessful.use(
     http.post(

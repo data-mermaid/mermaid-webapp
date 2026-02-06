@@ -190,7 +190,7 @@ describe('Offline', () => {
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     // make sure the next save will fail
-    dexiePerUserDataInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
+    dexiePerUserDataInstance.collect_records.put = vi.fn()().mockRejectedValueOnce()
 
     const { user } = renderAuthenticatedOffline(
       <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,

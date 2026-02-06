@@ -79,7 +79,7 @@ export default [
   },
   { languageOptions: { globals: { ...globals.browser } } },
   {
-    files: ['**/*.test.js', '**/*.test.jsx', 'src/setupTests.js'],
-    languageOptions: { globals: { ...globals.jest, ...globals.node } },
+    files: ['**/*.test.js', '**/*.test.jsx', '**/*.test.ts', '**/*.test.tsx', 'src/setupTests.js'],
+    languageOptions: { globals: { ...globals.vitest, ...globals.node } },
   },
 ]
