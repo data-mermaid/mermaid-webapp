@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -103,8 +103,8 @@ test('Server is reachable - Toggle switch is not checked, and is enabled', async
 
 test('Server is unreachable - Toggle switch is not checked, and is enabled', async () => {
   mockMermaidApiAllSuccessful.use(
-    rest.get(`${apiBaseUrl}/health`, (req, res) => {
-      return res.networkError('Custom network error message')
+    http.get(`${apiBaseUrl}/health`, () => {
+      return HttpResponse.error()
     }),
   )
 

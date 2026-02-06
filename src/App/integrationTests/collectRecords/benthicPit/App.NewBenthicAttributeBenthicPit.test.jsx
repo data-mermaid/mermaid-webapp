@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import {
@@ -30,12 +30,12 @@ test('Benthic PIT observations add new benthic attribute - filling out new attri
   await screen.findByTestId('record-form-title')
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
-      (req, res, ctx) => {
-        return res(
-          ctx.json({
+      () => {
+        return 
+          HttpResponse.json({
             benthic_attributes: {
               updates: [
                 {

@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import {
@@ -29,7 +29,7 @@ test('Submit Benthic PIT success shows toast message and redirects to collect re
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationFailing = {
         ...mockBenthicPitCollectRecords[0],
         validations: mockBenthicPitValidationsObject, // fails validation
@@ -48,9 +48,9 @@ test('Submit Benthic PIT success shows toast message and redirects to collect re
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(firstPullResponse))
+      return HttpResponse.json(firstPullResponse)
     }),
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationOk = {
         ...mockBenthicPitCollectRecords[0],
         validations: { status: 'ok' },
@@ -69,7 +69,7 @@ test('Submit Benthic PIT success shows toast message and redirects to collect re
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(secondPullResponse))
+      return HttpResponse.json(secondPullResponse)
     }),
   )
 
@@ -98,7 +98,7 @@ test('Submit Benthic PIT failure shows toast message and an enabled submit butto
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationFailing = {
         ...mockBenthicPitCollectRecords[0],
         validations: mockBenthicPitValidationsObject, // fails validation
@@ -117,9 +117,9 @@ test('Submit Benthic PIT failure shows toast message and an enabled submit butto
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(firstPullResponse))
+      return HttpResponse.json(firstPullResponse)
     }),
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationOk = {
         ...mockBenthicPitCollectRecords[0],
         validations: { status: 'ok' },
@@ -138,10 +138,10 @@ test('Submit Benthic PIT failure shows toast message and an enabled submit butto
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(secondPullResponse))
+      return HttpResponse.json(secondPullResponse)
     }),
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, (req, res, ctx) => {
-      return res(ctx.status(400))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, () => {
+      return HttpResponse.json({}, { status: 400 })
     }),
   )
 

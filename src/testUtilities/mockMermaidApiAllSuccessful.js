@@ -1,39 +1,29 @@
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import mockMermaidData from './mockMermaidData'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 const mockMermaidApiAllSuccessful = setupServer(
-  rest.get(`${apiBaseUrl}/me`, (req, res, ctx) => {
-    return res(
-      ctx.json({
-        id: 'fake-id',
-        first_name: 'W-FakeFirstNameOnline', // W is to differentiate online user icon initials from offline initials
-        last_name: 'W-FakeLastNameOnline', // W is to differentiate online user icon initials from offline initials
-        full_name: 'W-FakeFirstNameOnline W-FakeLastNameOnline',
-      }),
-    )
+  http.get(`${apiBaseUrl}/me`, () => {
+    return HttpResponse.json({
+      id: 'fake-id',
+      first_name: 'W-FakeFirstNameOnline', // W is to differentiate online user icon initials from offline initials
+      last_name: 'W-FakeLastNameOnline', // W is to differentiate online user icon initials from offline initials
+      full_name: 'W-FakeFirstNameOnline W-FakeLastNameOnline',
+    })
   }),
-  rest.get(`${apiBaseUrl}/health`, (req, res, ctx) => {
-    return res(ctx.status(200))
+  http.get(`${apiBaseUrl}/health`, () => {
+    return new HttpResponse(null, { status: 200 })
   }),
-  rest.get(`${apiBaseUrl}/notifications`, (req, res, ctx) => {
-    return res(
-      // TODO: Including an object here breaks findByTestId('page-size-selector') in tests
-      // ctx.json({
-      //   ...mockMermaidData.notifications,
-      // }),
-      // A string allows the tests to pass but is not useful for writing tests for bell notifications
-      ctx.json('a string'),
-    )
-    // Returning status allows tests to pass but there an error is thrown from getBellNotifications because apiResults.data is undefined
-    // return res(ctx.status(200))
+  http.get(`${apiBaseUrl}/notifications`, () => {
+    return HttpResponse.json('a string')
   }),
-  rest.post(`${apiBaseUrl}/push/`, (req, res, ctx) => {
-    const reqCollectRecords = req.body.collect_records ?? []
-    const reqSites = req.body.project_sites ?? []
-    const reqProjectManagements = req.body.project_managements ?? []
+  http.post(`${apiBaseUrl}/push/`, async ({ request }) => {
+    const body = await request.json()
+    const reqCollectRecords = body.collect_records ?? []
+    const reqSites = body.project_sites ?? []
+    const reqProjectManagements = body.project_managements ?? []
     const collectRecordsWithStatusCodes = reqCollectRecords.map((record) => ({
       data: { ...record, _last_revision_num: 1000 },
       status_code: 200,
@@ -53,18 +43,14 @@ const mockMermaidApiAllSuccessful = setupServer(
       project_managements: projectManagementsWithStatusCode,
     }
 
-    return res(ctx.json(response))
+    return HttpResponse.json(response)
   }),
 
-  rest.get(`${apiBaseUrl}/projects/`, (req, res, ctx) => {
-    const response = {
-      ...mockMermaidData.projectsEndpoint,
-    }
-
-    return res(ctx.json(response))
+  http.get(`${apiBaseUrl}/projects/`, () => {
+    return HttpResponse.json(mockMermaidData.projectsEndpoint)
   }),
 
-  rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+  http.post(`${apiBaseUrl}/pull/`, () => {
     const response = {
       benthic_attributes: {
         updates: mockMermaidData.benthic_attributes,
@@ -87,49 +73,41 @@ const mockMermaidApiAllSuccessful = setupServer(
       projects: { updates: mockMermaidData.projects, last_revision_num: 'initial' },
     }
 
-    return res(ctx.json(response))
+    return HttpResponse.json(response)
   }),
 
-  rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-    return res(ctx.status(200))
+  http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+    return new HttpResponse(null, { status: 200 })
   }),
-  rest.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, (req, res, ctx) => {
-    return res(ctx.status(200))
+  http.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, () => {
+    return new HttpResponse(null, { status: 200 })
   }),
-  rest.get(`${apiBaseUrl}/projects/5/summary/`, (req, res, ctx) => {
-    return res(ctx.status(200))
+  http.get(`${apiBaseUrl}/projects/5/summary/`, () => {
+    return new HttpResponse(null, { status: 200 })
   }),
-  rest.get(`${apiBaseUrl}/sites/`, (req, res, ctx) => {
-    const response = {
-      ...mockMermaidData.sitesEndpoint,
-    }
-
-    return res(ctx.json(response))
+  http.get(`${apiBaseUrl}/sites/`, () => {
+    return HttpResponse.json(mockMermaidData.sitesEndpoint)
   }),
-  rest.get(`${apiBaseUrl}/managementRegimes/`, (req, res, ctx) => {
-    const response = {
-      ...mockMermaidData.managementRegimesEndpoint,
-    }
-
-    return res(ctx.json(response))
+  http.get(`${apiBaseUrl}/managementRegimes/`, () => {
+    return HttpResponse.json(mockMermaidData.managementRegimesEndpoint)
   }),
-  rest.put(`${apiBaseUrl}/projects/5/find_and_replace_sites`, (req, res, ctx) => {
+  http.put(`${apiBaseUrl}/projects/5/find_and_replace_sites`, () => {
     const response = {
       num_collect_records_updated: 3,
       num_sample_events_updated: 2,
       num_sites_removed: 1,
     }
 
-    return res(ctx.json(response))
+    return HttpResponse.json(response)
   }),
-  rest.put(`${apiBaseUrl}/projects/5/find_and_replace_managements`, (req, res, ctx) => {
+  http.put(`${apiBaseUrl}/projects/5/find_and_replace_managements`, () => {
     const response = {
       num_collect_records_updated: 3,
       num_sample_events_updated: 2,
       num_managements_removed: 1,
     }
 
-    return res(ctx.json(response))
+    return HttpResponse.json(response)
   }),
 )
 

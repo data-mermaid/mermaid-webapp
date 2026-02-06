@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import { getFakeAccessToken } from '../../testUtilities/getFakeAccessToken'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../../testUtilities/mockMermaidApiAllSuccessful'
@@ -24,53 +24,57 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
-      const response = {
-        benthic_attributes: {
-          updates: [
-            {
-              ...mockMermaidData.benthic_attributes[0],
-              uiState_pushToApi: true,
-            },
-          ],
-        },
-        // choices is weird
-        choices: {
-          updates: { ...mockMermaidData.choices[0], uiState_pushToApi: true },
-        },
-        collect_records: {
-          updates: [{ ...mockMermaidData.collect_records[0], uiState_pushToApi: true }],
-        },
-        fish_families: {
-          updates: [{ ...mockMermaidData.fish_families[0], uiState_pushToApi: true }],
-        },
-        fish_genera: {
-          updates: [{ ...mockMermaidData.fish_genera[0], uiState_pushToApi: true }],
-        },
-        fish_species: {
-          updates: [{ ...mockMermaidData.fish_species[0], uiState_pushToApi: true }],
-        },
-        project_managements: {
-          updates: [
-            {
-              ...mockMermaidData.project_managements[0],
-              uiState_pushToApi: true,
-            },
-          ],
-        },
-        project_profiles: {
-          updates: [{ ...mockMermaidData.project_profiles[0], uiState_pushToApi: true }],
-        },
-        project_sites: {
-          updates: [{ ...mockMermaidData.project_sites[0], uiState_pushToApi: true }],
-        },
-        projects: {
-          updates: [{ ...mockMermaidData.projects[0], uiState_pushToApi: true }],
-        },
-      }
+    http.post(
+      `${import.meta.env.VITE_MERMAID_API}/pull/`,
+      () => {
+        const response = {
+          benthic_attributes: {
+            updates: [
+              {
+                ...mockMermaidData.benthic_attributes[0],
+                uiState_pushToApi: true,
+              },
+            ],
+          },
+          // choices is weird
+          choices: {
+            updates: { ...mockMermaidData.choices[0], uiState_pushToApi: true },
+          },
+          collect_records: {
+            updates: [{ ...mockMermaidData.collect_records[0], uiState_pushToApi: true }],
+          },
+          fish_families: {
+            updates: [{ ...mockMermaidData.fish_families[0], uiState_pushToApi: true }],
+          },
+          fish_genera: {
+            updates: [{ ...mockMermaidData.fish_genera[0], uiState_pushToApi: true }],
+          },
+          fish_species: {
+            updates: [{ ...mockMermaidData.fish_species[0], uiState_pushToApi: true }],
+          },
+          project_managements: {
+            updates: [
+              {
+                ...mockMermaidData.project_managements[0],
+                uiState_pushToApi: true,
+              },
+            ],
+          },
+          project_profiles: {
+            updates: [{ ...mockMermaidData.project_profiles[0], uiState_pushToApi: true }],
+          },
+          project_sites: {
+            updates: [{ ...mockMermaidData.project_sites[0], uiState_pushToApi: true }],
+          },
+          projects: {
+            updates: [{ ...mockMermaidData.projects[0], uiState_pushToApi: true }],
+          },
+        }
 
-      return res(ctx.json(response))
-    }),
+        return HttpResponse.json(response)
+      },
+      { once: true },
+    ),
   )
 
   await pullApiData({

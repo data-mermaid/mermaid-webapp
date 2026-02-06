@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import {
@@ -29,7 +29,7 @@ test('Submit Habitat Complexity success shows toast message and redirects to col
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationFailing = {
         ...mockHabitatComplexityCollectRecords[0],
         validations: mockHabitatComplexityValidationsObject, // fails validation
@@ -48,9 +48,9 @@ test('Submit Habitat Complexity success shows toast message and redirects to col
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(firstPullResponse))
+      return HttpResponse.json(firstPullResponse)
     }),
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationOk = {
         ...mockHabitatComplexityCollectRecords[0],
         validations: { status: 'ok' },
@@ -69,7 +69,7 @@ test('Submit Habitat Complexity success shows toast message and redirects to col
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(secondPullResponse))
+      return HttpResponse.json(secondPullResponse)
     }),
   )
 
@@ -98,7 +98,7 @@ test('Submit Habitat Complexity failure shows toast message and an enabled submi
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationFailing = {
         ...mockHabitatComplexityCollectRecords[0],
         validations: mockHabitatComplexityValidationsObject, // fails validation
@@ -117,9 +117,9 @@ test('Submit Habitat Complexity failure shows toast message and an enabled submi
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(firstPullResponse))
+      return HttpResponse.json(firstPullResponse)
     }),
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationOk = {
         ...mockHabitatComplexityCollectRecords[0],
         validations: { status: 'ok' },
@@ -138,10 +138,10 @@ test('Submit Habitat Complexity failure shows toast message and an enabled submi
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(secondPullResponse))
+      return HttpResponse.json(secondPullResponse)
     }),
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, (req, res, ctx) => {
-      return res(ctx.status(400))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, () => {
+      return HttpResponse.json({}, { status: 400 })
     }),
   )
 

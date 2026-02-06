@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import {
@@ -49,8 +49,8 @@ test('Appropriate online status message shows when server is reachable', async (
 })
 test('Appropriate online status message shows when server is unreachable', async () => {
   mockMermaidApiAllSuccessful.use(
-    rest.get(`${apiBaseUrl}/health`, (req, res) => {
-      return res.networkError('Custom network error message')
+    http.get(`${apiBaseUrl}/health`, () => {
+      return HttpResponse.error()
     }),
   )
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()

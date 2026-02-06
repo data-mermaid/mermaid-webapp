@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import {
@@ -28,7 +28,7 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationFailing = {
         ...mockMermaidData.collect_records[0],
         validations: mockFishbeltValidationsObject, // fails validation
@@ -47,9 +47,9 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(firstPullResponse))
+      return HttpResponse.json(firstPullResponse)
     }),
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationOk = {
         ...mockMermaidData.collect_records[0],
         validations: { status: 'ok' },
@@ -68,7 +68,7 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(secondPullResponse))
+      return HttpResponse.json(secondPullResponse)
     }),
   )
 
@@ -97,7 +97,7 @@ test('Submit fishbelt failure shows toast message and an enabled submit button',
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationFailing = {
         ...mockMermaidData.collect_records[0],
         validations: mockFishbeltValidationsObject, // fails validation
@@ -116,9 +116,9 @@ test('Submit fishbelt failure shows toast message and an enabled submit button',
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(firstPullResponse))
+      return HttpResponse.json(firstPullResponse)
     }),
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationOk = {
         ...mockMermaidData.collect_records[0],
         validations: { status: 'ok' },
@@ -137,10 +137,10 @@ test('Submit fishbelt failure shows toast message and an enabled submit button',
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(secondPullResponse))
+      return HttpResponse.json(secondPullResponse)
     }),
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, (req, res, ctx) => {
-      return res(ctx.status(400))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, () => {
+      return HttpResponse.json({}, { status: 400 })
     }),
   )
 
