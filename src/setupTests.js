@@ -4,74 +4,83 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
 import { configure } from '@testing-library/react'
-import { enableFetchMocks } from 'jest-fetch-mock'
+// import { enableFetchMocks } from 'jest-fetch-mock'
+
+// Vitest uses "vi" instead of "jest"
+import { vi } from 'vitest'
 
 import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSuccessful'
 import { mockDocumentCookie } from './testUtilities/mockDocumentCookie'
 
-enableFetchMocks() // avoids ReferenceError: Request is not defined errors in tests
+// enableFetchMocks() // avoids ReferenceError: Request is not defined errors in tests
 
-jest.setTimeout(300000)
+// Moved timeout to vitest.config.ts: testTimeout
+// vi.setConfig({ testTimeout: 300000 })
+
+// jsdom shims (safe to keep)
 window.URL.createObjectURL = () => {}
 window.confirm = () => true // simulates user clicking OK
 window.scrollTo = () => {}
 
-jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
+// jest.mock → vi.mock, and return full export objects
+vi.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
   return {
     Map: function () {
       return {
-        addControl: jest.fn(() => ({})),
-        dragRotate: { disable: jest.fn() },
-        getLayer: jest.fn(),
-        jumpTo: jest.fn(),
-        on: jest.fn(),
-        off: jest.fn(),
-        remove: jest.fn(),
-        touchZoomRotate: { disableRotation: jest.fn() },
-        getSource: jest.fn(() => ({ setData: jest.fn() })),
-        fitBounds: jest.fn(),
-        getZoom: jest.fn(),
-        getCanvas: jest.fn(() => ({ style: {} })),
+        addControl: vi.fn(() => ({})),
+        dragRotate: { disable: vi.fn() },
+        getLayer: vi.fn(),
+        jumpTo: vi.fn(),
+        on: vi.fn(),
+        off: vi.fn(),
+        remove: vi.fn(),
+        touchZoomRotate: { disableRotation: vi.fn() },
+        getSource: vi.fn(() => ({ setData: vi.fn() })),
+        fitBounds: vi.fn(),
+        getZoom: vi.fn(),
+        getCanvas: vi.fn(() => ({ style: {} })),
       }
     },
     Marker: function () {
       return {
-        setLngLat: jest.fn(() => ({ addTo: jest.fn() })),
-        on: jest.fn(),
-        remove: jest.fn(),
-        getElement: jest.fn(() => ({})),
+        setLngLat: vi.fn(() => ({ addTo: vi.fn() })),
+        on: vi.fn(),
+        remove: vi.fn(),
+        getElement: vi.fn(() => ({})),
       }
     },
     Popup: function () {
       return {
-        setLngLat: jest.fn(() => ({ setDOMContent: jest.fn(() => ({ addTo: jest.fn() })) })),
+        setLngLat: vi.fn(() => ({ setDOMContent: vi.fn(() => ({ addTo: vi.fn() })) })),
       }
     },
     LngLatBounds: function () {
       return {
-        extend: jest.fn,
+        extend: vi.fn,
       }
     },
-    NavigationControl: jest.fn(),
+    NavigationControl: vi.fn(),
   }
 })
 
-jest.mock('react-i18next', () => ({
+// Update react-i18next mock to vi.mock return signature
+vi.mock('react-i18next', () => ({
+  default: {},
   useTranslation: () => ({
     t: (key) => key,
     i18n: {
-      changeLanguage: jest.fn(() => Promise.resolve()),
+      changeLanguage: vi.fn(() => Promise.resolve()),
       language: 'en',
       languages: ['en'],
       isInitialized: true,
-      exists: jest.fn(() => true),
-      getFixedT: jest.fn(() => (key) => key),
-      hasResourceBundle: jest.fn(() => true),
-      loadNamespaces: jest.fn(() => Promise.resolve()),
-      loadLanguages: jest.fn(() => Promise.resolve()),
-      off: jest.fn(),
-      on: jest.fn(),
-      emit: jest.fn(),
+      exists: vi.fn(() => true),
+      getFixedT: vi.fn(() => (key) => key),
+      hasResourceBundle: vi.fn(() => true),
+      loadNamespaces: vi.fn(() => Promise.resolve()),
+      loadLanguages: vi.fn(() => Promise.resolve()),
+      off: vi.fn(),
+      on: vi.fn(),
+      emit: vi.fn(),
       store: {},
       services: {},
       options: {},
@@ -79,7 +88,7 @@ jest.mock('react-i18next', () => ({
   }),
   initReactI18next: {
     type: '3rdParty',
-    init: jest.fn(),
+    init: vi.fn(),
   },
   Trans: ({ children }) => children,
   I18nextProvider: ({ children }) => children,
@@ -89,6 +98,7 @@ configure({ asyncUtilTimeout: 10000 })
 
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen()
+  // import.meta.env works in Vitest via Vite
   global.IS_REACT_ACT_ENVIRONMENT = !!import.meta.env.VITE_IGNORE_TESTING_ACT_WARNINGS // suppress missing act warnings or not, defaults to false
 })
 beforeEach(() => {
