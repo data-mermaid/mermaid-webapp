@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 import {
   screen,
@@ -60,7 +60,7 @@ test('Validate fishbelt: fails to validate, shows button able to run validation 
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockMermaidData.collect_records[0],
         validations: mockFishbeltValidationsObject, // fails validation
@@ -79,7 +79,7 @@ test('Validate fishbelt: fails to validate, shows button able to run validation 
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -105,7 +105,7 @@ test('Validate & submit fishbelt: validation passes, shows validate button disab
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationFailing = {
         ...mockMermaidData.collect_records[0],
         validations: mockFishbeltValidationsObject, // fails validation
@@ -124,9 +124,9 @@ test('Validate & submit fishbelt: validation passes, shows validate button disab
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(firstPullResponse))
+      return HttpResponse.json(firstPullResponse)
     }),
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationOk = {
         ...mockMermaidData.collect_records[0],
         validations: { status: 'ok' },
@@ -145,7 +145,7 @@ test('Validate & submit fishbelt: validation passes, shows validate button disab
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(secondPullResponse))
+      return HttpResponse.json(secondPullResponse)
     }),
   )
 
@@ -181,7 +181,7 @@ test('Initial load of successfully validated record', async () => {
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockMermaidData.collect_records[0],
         validations: { status: 'ok' },
@@ -200,7 +200,7 @@ test('Initial load of successfully validated record', async () => {
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 

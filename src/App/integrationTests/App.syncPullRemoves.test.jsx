@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import {
@@ -13,7 +13,7 @@ import App from '../App'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test(`When a sync pull responds with removes arrays, 
+test(`When a sync pull responds with removes arrays,
 the items in the removes array are deleted from browser storage`, async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -63,39 +63,43 @@ the items in the removes array are deleted from browser storage`, async () => {
   expect(didFakeDataHydrateSuccessfully).toBeTruthy()
 
   const _mockedApiWithRemovesArrayItemsForPullRequest = mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
-      const responseWithSyncErrors = {
-        choices: {
-          // choices is weird. There will be no removes
-        },
-        fish_species: {
-          removes: [{ id: 'myCatIsCute' }],
-        },
-        fish_genera: {
-          removes: [{ id: 'myCatIsCute' }],
-        },
-        fish_families: {
-          removes: [{ id: 'myCatIsCute' }],
-        },
-        benthic_attributes: {
-          removes: [{ id: 'myCatIsCute' }],
-        },
-        collect_records: {
-          removes: [{ id: 'myCatIsCute' }],
-        },
-        project_managements: {
-          removes: [{ id: 'myCatIsCute' }],
-        },
-        project_profiles: {
-          removes: [{ id: 'myCatIsCute' }],
-        },
-        project_sites: {
-          removes: [{ id: 'myCatIsCute' }],
-        },
-      }
+    http.post(
+      `${apiBaseUrl}/pull/`,
+      () => {
+        const responseWithSyncErrors = {
+          choices: {
+            // choices is weird. There will be no removes
+          },
+          fish_species: {
+            removes: [{ id: 'myCatIsCute' }],
+          },
+          fish_genera: {
+            removes: [{ id: 'myCatIsCute' }],
+          },
+          fish_families: {
+            removes: [{ id: 'myCatIsCute' }],
+          },
+          benthic_attributes: {
+            removes: [{ id: 'myCatIsCute' }],
+          },
+          collect_records: {
+            removes: [{ id: 'myCatIsCute' }],
+          },
+          project_managements: {
+            removes: [{ id: 'myCatIsCute' }],
+          },
+          project_profiles: {
+            removes: [{ id: 'myCatIsCute' }],
+          },
+          project_sites: {
+            removes: [{ id: 'myCatIsCute' }],
+          },
+        }
 
-      return res.once(ctx.json(responseWithSyncErrors))
-    }),
+        return HttpResponse.json(responseWithSyncErrors)
+      },
+      { once: true },
+    ),
   )
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {

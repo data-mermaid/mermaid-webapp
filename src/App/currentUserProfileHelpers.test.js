@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+import { http , HttpResponse} from "msw"
 import {
   getMockDexieInstancesAllSuccess,
   getMockDexieInstanceThatProducesErrors,
@@ -30,8 +30,10 @@ test('getCurrentUserProfile online returns error message upon API error', async 
   const { dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.get(`${apiBaseUrl}/me`, (req, res, ctx) => {
-      return res(ctx.status(500))
+    http.get(`${apiBaseUrl}/me`, () => {
+      return HttpResponse.text(
+{status: 500,
+})
     }),
   )
 

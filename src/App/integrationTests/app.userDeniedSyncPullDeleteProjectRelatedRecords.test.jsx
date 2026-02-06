@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import {
@@ -14,7 +14,7 @@ import App from '../App'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test(`When a sync pull responds with sync errors for 403 (user denied pulling data), 
+test(`When a sync pull responds with sync errors for 403 (user denied pulling data),
 the app will delete project-related records from collect records,
 project managements, project sites, and project profiles`, async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
@@ -72,75 +72,79 @@ project managements, project sites, and project profiles`, async () => {
   // then we navigate the user to trigger a sync
 
   const _mockedApiWithNestedSyncErrorsInPullRequest = mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
-      const responseWithSyncErrors = {
-        choices: {
-          last_revision_num: 'server',
-          error: {
-            code: 403,
-            record_ids: [],
+    http.post(
+      `${apiBaseUrl}/pull/`,
+      () => {
+        const responseWithSyncErrors = {
+          choices: {
+            last_revision_num: 'server',
+            error: {
+              code: 403,
+              record_ids: [],
+            },
           },
-        },
-        fish_species: {
-          last_revision_num: 'server',
-          error: {
-            code: 403,
-            record_ids: [],
+          fish_species: {
+            last_revision_num: 'server',
+            error: {
+              code: 403,
+              record_ids: [],
+            },
           },
-        },
-        fish_genera: {
-          last_revision_num: 'server',
-          error: {
-            code: 403,
-            record_ids: [],
+          fish_genera: {
+            last_revision_num: 'server',
+            error: {
+              code: 403,
+              record_ids: [],
+            },
           },
-        },
-        fish_families: {
-          last_revision_num: 'server',
-          error: {
-            code: 403,
-            record_ids: [],
+          fish_families: {
+            last_revision_num: 'server',
+            error: {
+              code: 403,
+              record_ids: [],
+            },
           },
-        },
-        benthic_attributes: {
-          last_revision_num: 'server',
-          error: {
-            code: 403,
-            record_ids: [],
+          benthic_attributes: {
+            last_revision_num: 'server',
+            error: {
+              code: 403,
+              record_ids: [],
+            },
           },
-        },
-        collect_records: {
-          last_revision_num: 'server',
-          error: {
-            code: 403,
-            record_ids: [],
+          collect_records: {
+            last_revision_num: 'server',
+            error: {
+              code: 403,
+              record_ids: [],
+            },
           },
-        },
-        project_managements: {
-          last_revision_num: 'server',
-          error: {
-            code: 403,
-            record_ids: [],
+          project_managements: {
+            last_revision_num: 'server',
+            error: {
+              code: 403,
+              record_ids: [],
+            },
           },
-        },
-        project_profiles: {
-          last_revision_num: 'server',
-          error: {
-            code: 403,
-            record_ids: [],
+          project_profiles: {
+            last_revision_num: 'server',
+            error: {
+              code: 403,
+              record_ids: [],
+            },
           },
-        },
-        project_sites: {
-          last_revision_num: 'server',
-          error: {
-            code: 403,
-            record_ids: [],
+          project_sites: {
+            last_revision_num: 'server',
+            error: {
+              code: 403,
+              record_ids: [],
+            },
           },
-        },
-      }
+        }
 
-      return res.once(ctx.json(responseWithSyncErrors))
-    }),
+        return HttpResponse.json(responseWithSyncErrors)
+      },
+      { once: true },
+    ),
   )
 
   // click another project-related page to trigger a sync and use the mock api with sync errors

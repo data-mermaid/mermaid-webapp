@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import {
@@ -59,7 +59,7 @@ test('Validate Bleaching collect record: fails to validate, shows button able to
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockBleachingValidationsObject, // fails validation
@@ -78,7 +78,7 @@ test('Validate Bleaching collect record: fails to validate, shows button able to
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -104,7 +104,7 @@ test('Validate & submit Bleaching collect record: validation passes, shows valid
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationFailing = {
         ...mockBleachingCollectRecords[0],
         validations: mockBleachingValidationsObject, // fails validation
@@ -123,9 +123,9 @@ test('Validate & submit Bleaching collect record: validation passes, shows valid
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(firstPullResponse))
+      return HttpResponse.json(firstPullResponse)
     }),
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidationOk = {
         ...mockBleachingCollectRecords[0],
         validations: { status: 'ok' },
@@ -144,7 +144,7 @@ test('Validate & submit Bleaching collect record: validation passes, shows valid
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res.once(ctx.json(secondPullResponse))
+      return HttpResponse.json(secondPullResponse)
     }),
   )
 
@@ -180,7 +180,7 @@ test('Initial load of successfully validated record', async () => {
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: { status: 'ok' },
@@ -199,7 +199,7 @@ test('Initial load of successfully validated record', async () => {
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 

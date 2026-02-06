@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 import {
   mockMermaidApiAllSuccessful,
@@ -15,11 +15,11 @@ test('Push sync status code of 500 shows toasts on project-related page', async 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
 
-      (req, res, ctx) => {
-        return res(ctx.json(mock500StatusCodeForAllDataTypesPush))
+      () => {
+        return HttpResponse.json(mock500StatusCodeForAllDataTypesPush)
       },
     ),
   )
@@ -40,11 +40,11 @@ test('Push sync status code of 500 shows toasts on project list page', async () 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
 
-      (req, res, ctx) => {
-        return res(ctx.json(mock500StatusCodeForAllDataTypesPush))
+      () => {
+        return HttpResponse.json(mock500StatusCodeForAllDataTypesPush)
       },
     ),
   )
