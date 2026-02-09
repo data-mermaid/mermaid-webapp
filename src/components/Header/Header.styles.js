@@ -10,6 +10,7 @@ export const StyledHeader = styled('header')`
   justify-content: space-between;
   align-items: stretch;
   color: ${theme.color.white};
+  position: fixed;
   width: 100%;
   top: 0;
   z-index: ${theme.zIndex.header};

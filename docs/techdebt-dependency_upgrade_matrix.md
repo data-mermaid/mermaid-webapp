@@ -42,73 +42,73 @@ Phase 4: Remaining
 
 ### Tier 1: Foundational (Must fix first)
 
-| Package | Current | Target | Blocks | Difficulty | Priority |
-|---------|---------|--------|--------|------------|----------|
-| styled-components | ^5 (forced) | ^6 | React 19 | Medium | CRITICAL |
-| MSW | 0.27.0 | 2.x | All testing | High | CRITICAL |
-| Node | v24.10.0? | v20.x LTS | All deps | Low | HIGH |
+| Package           | Current     | Target    | Blocks      | Difficulty | Priority |
+| ----------------- | ----------- | --------- | ----------- | ---------- | -------- |
+| styled-components | ^5 (forced) | ^6        | React 19    | Medium     | CRITICAL |
+| MSW               | 0.27.0      | 2.x       | All testing | High       | CRITICAL |
+| Node              | v24.10.0?   | v20.x LTS | All deps    | Low        | HIGH     |
 
 ### Tier 2: Core Framework
 
-| Package | Current | Target | Depends On | Difficulty | Priority |
-|---------|---------|--------|------------|------------|----------|
-| react | 18.2.0 | 19.0.0 | styled-components v6 | Medium | HIGH |
-| react-dom | 18.2.0 | 19.0.0 | styled-components v6 | Medium | HIGH |
-| react-router-dom | 6.19.0 | 7.9.6 | - | Low | MEDIUM |
-| typescript | 5.3.2 | 5.7.x  | - | Low | MEDIUM |
+| Package          | Current | Target | Depends On           | Difficulty | Priority |
+| ---------------- | ------- | ------ | -------------------- | ---------- | -------- |
+| react            | 18.2.0  | 19.0.0 | styled-components v6 | Medium     | HIGH     |
+| react-dom        | 18.2.0  | 19.0.0 | styled-components v6 | Medium     | HIGH     |
+| react-router-dom | 6.19.0  | 7.9.6  | -                    | Low        | MEDIUM   |
+| typescript       | 5.3.2   | 5.7.x  | -                    | Low        | MEDIUM   |
 
 ### Tier 3: Forms & Validation
 
 | Package | Current | Target | Depends On | Difficulty | Priority |
-|---------|---------|--------|------------|------------|----------|
-| formik | 2.2.9 | 2.4.x | - | Low | HIGH |
-| yup | 0.32.9 | 1.x.x | - | Medium | HIGH |
+| ------- | ------- | ------ | ---------- | ---------- | -------- |
+| formik  | 2.2.9   | 2.4.x  | -          | Low        | HIGH     |
+| yup     | 0.32.9  | 1.x.x  | -          | Medium     | HIGH     |
 
 ### Tier 4: Data & Storage
 
-| Package        | Current | Target | Depends On | Difficulty | Priority |
-|----------------|---------|--------|------------|------------|----------|
-| dexie          | 3.0.3   | 4.x.x  | fake-indexeddb | Medium     | HIGH |
-| fake-indexeddb | 3.1.2   | 6.x.x  | - | Low        | MEDIUM |
-| axios          | 1.12.2  | 1.7.x  | - | Low        | LOW |
-| vite-plugin-pwa  | 0.21.1  | 1.2.x  | - | ?          | LOW |
+| Package         | Current | Target | Depends On     | Difficulty | Priority |
+| --------------- | ------- | ------ | -------------- | ---------- | -------- |
+| dexie           | 3.0.3   | 4.x.x  | fake-indexeddb | Medium     | HIGH     |
+| fake-indexeddb  | 3.1.2   | 6.x.x  | -              | Low        | MEDIUM   |
+| axios           | 1.12.2  | 1.7.x  | -              | Low        | LOW      |
+| vite-plugin-pwa | 0.21.1  | 1.2.x  | -              | ?          | LOW      |
 
 ### Tier 5: UI & Styling
 
 | Package | Current | Target | Depends On | Difficulty | Priority |
-|---------|---------|--------|------------|------------|----------|
+| ------- | ------- | ------ | ---------- | ---------- | -------- |
 
 ### Tier 6: Maps
 
-| Package | Current | Target | Depends On | Difficulty | Priority |
-|---------|---------|--------|------------|------------|----------|
-| maplibre-gl | 1.14.0 | 5.x.x | - | Very High | MEDIUM |
-| mapbox-gl | 1.0.0 | 3.x.x | - | High | LOW |
+| Package     | Current | Target | Depends On | Difficulty | Priority |
+| ----------- | ------- | ------ | ---------- | ---------- | -------- |
+| maplibre-gl | 1.14.0  | 5.x.x  | -          | Very High  | MEDIUM   |
+| mapbox-gl   | 1.0.0   | 3.x.x  | -          | High       | LOW      |
 
 ### Tier 7: i18n
 
 ### Tier 8: Authentication
 
-| Package | Current | Target | Depends On | Difficulty | Priority |
-|---------|---------|--------|------------|------------|----------|
-| @auth0/auth0-react | 1.2.0 | 2.11.0 | - | Medium | MEDIUM |
+| Package            | Current | Target | Depends On | Difficulty | Priority |
+| ------------------ | ------- | ------ | ---------- | ---------- | -------- |
+| @auth0/auth0-react | 1.2.0   | 2.11.0 | -          | Medium     | MEDIUM   |
 
 ### Tier 9: Utilities & Misc
 
 | Package | Current | Target            | Depends On | Difficulty | Priority |
-|---------|--------|-------------------|------------|------------|----------|
-| moment | 2.29.3 | REMOVE → date-fns | - | Medium     | MEDIUM |
+| ------- | ------- | ----------------- | ---------- | ---------- | -------- |
+| moment  | 2.29.3  | REMOVE → date-fns | -          | Medium     | MEDIUM   |
 
-| uuid | 8.3.2  | 10.x.x            | - | Low        | LOW |
-| jest-environment-jsdom | 29.7.0 | 30.2.0 | - | Low        | LOW |
+| uuid | 8.3.2 | 10.x.x | - | Low | LOW |
+| jest-environment-jsdom | 29.7.0 | 30.2.0 | - | Low | LOW |
 
 ### Tier 10: Build Tools
 
-| Package | Current | Target | Depends On | Difficulty | Priority |
-|---------|---------|--------|------------|------------|----------|
-| vite | 7.1.11 | Latest 7.x | - | Low | LOW |
-| @vitejs/plugin-react-swc | 3.8.0 | Latest 3.x | - | Low | LOW |
-| @swc/core | 1.11.9 | Latest 1.x | - | Low | LOW |
+| Package                  | Current | Target     | Depends On | Difficulty | Priority |
+| ------------------------ | ------- | ---------- | ---------- | ---------- | -------- |
+| vite                     | 7.1.11  | Latest 7.x | -          | Low        | LOW      |
+| @vitejs/plugin-react-swc | 3.8.0   | Latest 3.x | -          | Low        | LOW      |
+| @swc/core                | 1.11.9  | Latest 1.x | -          | Low        | LOW      |
 
 ---
 
@@ -117,16 +117,19 @@ Phase 4: Remaining
 These upgrades can be done simultaneously (in separate branches):
 
 ### Parallel Group A (After Phase 1 & 2)
+
 - React 19
 - Formik + Yup
 - Dexie 4.x
 - date-fns (moment replacement)
 
 ### Parallel Group B (Lower priority)
+
 - @auth0/auth0-react
 - axios
 
 ### Parallel Group C (Defer if needed)
+
 - MapLibre (very risky)
 - ~~react-table v8 (complete API rewrite)~~
 - ~~@mui/material v6~~
@@ -137,47 +140,48 @@ These upgrades can be done simultaneously (in separate branches):
 
 ### 🔴 Critical Breaking Changes
 
-| Package | Version Jump | Breaking Changes | Impact |
-|---------|--------------|------------------|--------|
-| MSW | 0.27 → 2.x | Complete API redesign | ALL tests |
-| yup | 0.32 → 1.x | Validation behavior changes | ALL forms |
-| React | 18 → 19 | JSX, hooks, batching | Entire app |
-| Dexie | 3 → 4 | TypeScript, array mutability | Offline storage |
-| maplibre-gl | 1.14 → 5.x | 4 major versions! | Maps |
+| Package     | Version Jump | Breaking Changes             | Impact          |
+| ----------- | ------------ | ---------------------------- | --------------- |
+| MSW         | 0.27 → 2.x   | Complete API redesign        | ALL tests       |
+| yup         | 0.32 → 1.x   | Validation behavior changes  | ALL forms       |
+| React       | 18 → 19      | JSX, hooks, batching         | Entire app      |
+| Dexie       | 3 → 4        | TypeScript, array mutability | Offline storage |
+| maplibre-gl | 1.14 → 5.x   | 4 major versions!            | Maps            |
 
 ### 🟡 Moderate Breaking Changes
 
-| Package | Version Jump | Breaking Changes | Impact |
-|---------|--------------|------------------|--------|
-| styled-components | 5 → 6        | css prop, attrs, theme | Styling |
-| @auth0/auth0-react | 1 → 2        | Provider API | Authentication |
-| moment → date-fns | N/A          | Entire API different | Date handling |
+| Package            | Version Jump | Breaking Changes       | Impact         |
+| ------------------ | ------------ | ---------------------- | -------------- |
+| styled-components  | 5 → 6        | css prop, attrs, theme | Styling        |
+| @auth0/auth0-react | 1 → 2        | Provider API           | Authentication |
+| moment → date-fns  | N/A          | Entire API different   | Date handling  |
 
 ### 🟢 Minor Breaking Changes
 
-| Package | Version Jump | Breaking Changes | Impact |
-|---------|--------------|------------------|--------|
-| formik | 2.2 → 2.4 | Minor improvements | Forms |
-| react-router-dom | 6.19 → 6.28 | Mostly additive | Routing |
-| TypeScript | 5.3 → 5.7 | Type improvements | Build |
+| Package          | Version Jump | Breaking Changes   | Impact  |
+| ---------------- | ------------ | ------------------ | ------- |
+| formik           | 2.2 → 2.4    | Minor improvements | Forms   |
+| react-router-dom | 6.19 → 6.28  | Mostly additive    | Routing |
+| TypeScript       | 5.3 → 5.7    | Type improvements  | Build   |
 
 ---
 
 ## Risk Matrix
 
-| Package | Business Impact | Technical Risk | Upgrade Effort | Overall Risk |
-|---------|----------------|----------------|----------------|--------------|
-| MSW | Low (dev only) | High | High           | MEDIUM |
-| React | Critical | Medium | Medium         | HIGH |
-| styled-components | Critical | Low | Low            | MEDIUM |
-| Dexie | Critical | Medium | Medium         | HIGH |
-| yup | Critical | Medium | Medium         | HIGH |
-| formik | Critical | Low | Low            | MEDIUM |
-| maplibre-gl | High | Very High | Very High      | VERY HIGH |
-| @auth0/auth0-react | Critical | Medium | Medium         | HIGH |
-| moment → date-fns | Medium | Low | Medium         | LOW |
+| Package            | Business Impact | Technical Risk | Upgrade Effort | Overall Risk |
+| ------------------ | --------------- | -------------- | -------------- | ------------ |
+| MSW                | Low (dev only)  | High           | High           | MEDIUM       |
+| React              | Critical        | Medium         | Medium         | HIGH         |
+| styled-components  | Critical        | Low            | Low            | MEDIUM       |
+| Dexie              | Critical        | Medium         | Medium         | HIGH         |
+| yup                | Critical        | Medium         | Medium         | HIGH         |
+| formik             | Critical        | Low            | Low            | MEDIUM       |
+| maplibre-gl        | High            | Very High      | Very High      | VERY HIGH    |
+| @auth0/auth0-react | Critical        | Medium         | Medium         | HIGH         |
+| moment → date-fns  | Medium          | Low            | Medium         | LOW          |
 
 **Legend:**
+
 - **Business Impact:** How critical is this to core functionality?
 - **Technical Risk:** How likely is it to break things?
 - **Upgrade Effort:** How much work is required?
@@ -190,25 +194,29 @@ These upgrades can be done simultaneously (in separate branches):
 Based on dependencies and risk:
 
 ### 1
+
 1. ✅ Fix styled-components (Phase 1)
-	- Migrate globalStyles.js to a SCSS file in styles/
+   - Migrate globalStyles.js to a SCSS file in styles/
 2. ✅ Verify Node version (Phase 1)
 3. ✅ Remove Webpack if unused (Phase 1)
 4. ✅ Upgrade MSW (Phase 2)
 5. ✅ Fix all tests (Phase 2)
 
 ### 2
+
 6. ✅ Upgrade React 19 (Phase 3a)
 7. ✅ Upgrade Formik + Yup (Phase 3b) - can parallel with #6
 8. ✅ Upgrade Dexie (Phase 3c) - can parallel with #6
 
 ### 3
+
 9. ✅ Replace moment with date-fns (Phase 4)
-11. ✅ Upgrade @auth0/auth0-react (Phase 4)
-12. ✅ Update remaining low-risk packages (Phase 4)
-13. ✅ Full regression testing
+10. ✅ Upgrade @auth0/auth0-react (Phase 4)
+11. ✅ Update remaining low-risk packages (Phase 4)
+12. ✅ Full regression testing
 
 ### Future / Separate Initiative
+
 - MapLibre 1.14 → 5.x (requires dedicated effort)
 
 ---
@@ -218,29 +226,29 @@ Based on dependencies and risk:
 ### React Ecosystem
 
 | React | TypeScript | styled-components | react-router |
-|-------|------------|-------------------|--------------|
+| ----- | ---------- | ----------------- | ------------ |
 | 19.x  | 5.3+       | 6.x+              | 6.x+         |
 | 18.x  | 5.x+       | 5.x+              | 6.x+         |
 
 ### Testing Ecosystem
 
-| MSW  | Jest | @testing-library/react | fake-indexeddb |
-|------|------|------------------------|----------------|
-| 2.x  | 29.x | 16.x                   | 6.x            |
-| 1.x  | 29.x | 14.x                   | 4.x            |
-| 0.x  | 27.x | 12.x                   | 3.x            |
+| MSW | Jest | @testing-library/react | fake-indexeddb |
+| --- | ---- | ---------------------- | -------------- |
+| 2.x | 29.x | 16.x                   | 6.x            |
+| 1.x | 29.x | 14.x                   | 4.x            |
+| 0.x | 27.x | 12.x                   | 3.x            |
 
 ### Forms Ecosystem
 
 | formik | yup  | React |
-|--------|------|-------|
+| ------ | ---- | ----- |
 | 2.4.x  | 1.x  | 16.8+ |
 | 2.2.x  | 0.32 | 16.8+ |
 
 ### Data Ecosystem
 
 | Dexie | fake-indexeddb | TypeScript |
-|-------|----------------|------------|
+| ----- | -------------- | ---------- |
 | 4.x   | 6.x            | 5.x        |
 | 3.x   | 3-4.x          | 4.x        |
 
@@ -254,17 +262,18 @@ Based on dependencies and risk:
 **Latest:** 4.x.x (Yarn Berry)
 
 **Recommendation:** STAY on Yarn 1.x for this upgrade
+
 - Yarn Berry introduces significant changes
 - PnP mode would require extensive testing
 - Defer Yarn upgrade to separate initiative
 
 ### Node Version Compatibility
 
-| Node LTS | Support Until | Recommended |
-|----------|---------------|-------------|
-| 20.x     | April 2026    | ✅ YES      |
-| 22.x     | April 2027    | ✅ YES      |
-| 18.x     | April 2025    | ⚠️ EOL soon |
+| Node LTS | Support Until | Recommended      |
+| -------- | ------------- | ---------------- |
+| 20.x     | April 2026    | ✅ YES           |
+| 22.x     | April 2027    | ✅ YES           |
+| 18.x     | April 2025    | ⚠️ EOL soon      |
 | 24.x     | N/A           | ❌ Doesn't exist |
 
 **Current:** v24.10.0 (likely typo in .nvmrc)
@@ -274,15 +283,15 @@ Based on dependencies and risk:
 
 ## Test Coverage Impact
 
-| Upgrade | Tests Affected | Estimated Fixes |
-|---------|----------------|-----------------|
-| MSW | ~145 test files | 100+ files |
-| React 19 | All component tests | 20-30 files |
-| Formik + Yup | Form tests | 30-40 files |
-| Dexie | Offline/storage tests | 20-30 files |
-| styled-components | Minimal | 0-5 files |
-| date-fns | Date display/calc tests | 10-20 files |
-| Others | Minimal | 5-10 files |
+| Upgrade           | Tests Affected          | Estimated Fixes |
+| ----------------- | ----------------------- | --------------- |
+| MSW               | ~145 test files         | 100+ files      |
+| React 19          | All component tests     | 20-30 files     |
+| Formik + Yup      | Form tests              | 30-40 files     |
+| Dexie             | Offline/storage tests   | 20-30 files     |
+| styled-components | Minimal                 | 0-5 files       |
+| date-fns          | Date display/calc tests | 10-20 files     |
+| Others            | Minimal                 | 5-10 files      |
 
 **Total Estimated Test Updates:** 185-240 files (out of ~145 test files, many will need multiple changes)
 
@@ -346,20 +355,22 @@ yarn install
 
 Track these metrics before and after each phase:
 
-| Metric | Baseline | Target | Current |
-|--------|----------|--------|---------|
-| Test Pass Rate | ____% | 100% | ____% |
-| Build Time | ____s | < +20% | ____s |
-| Bundle Size | ____MB | < +15% | ____MB |
-| Test Suite Time | ____s | < +30% | ____s |
-| Lighthouse Score | ____ | ≥ baseline | ____ |
-| Security Vulns | ____ | 0 critical | ____ |
-| TypeScript Errors | ____ | ≤ baseline | ____ |
+| Metric            | Baseline   | Target     | Current    |
+| ----------------- | ---------- | ---------- | ---------- |
+| Test Pass Rate    | \_\_\_\_%  | 100%       | \_\_\_\_%  |
+| Build Time        | \_\_\_\_s  | < +20%     | \_\_\_\_s  |
+| Bundle Size       | \_\_\_\_MB | < +15%     | \_\_\_\_MB |
+| Test Suite Time   | \_\_\_\_s  | < +30%     | \_\_\_\_s  |
+| Lighthouse Score  | \_\_\_\_   | ≥ baseline | \_\_\_\_   |
+| Security Vulns    | \_\_\_\_   | 0 critical | \_\_\_\_   |
+| TypeScript Errors | \_\_\_\_   | ≤ baseline | \_\_\_\_   |
 
 ---
 
 ## Contact & Resources
+
 **External Resources:**
+
 - [React 19 Docs](https://react.dev/)
 - [MSW v2 Docs](https://mswjs.io/)
 - [Dexie Docs](https://dexie.org/)
