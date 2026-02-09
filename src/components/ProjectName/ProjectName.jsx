@@ -75,10 +75,10 @@ const ProjectName = () => {
           <button
             className={[buttonStyles['button--callout'], buttonStyles['button--small']].join(' ')}
             type="button"
-            aria-label={t('projects.demo.start_tour')}
+            aria-label={t('projects.demo.project_tour_start')}
             onClick={handleStartTourClick}
           >
-            {t('projects.demo.start_tour')}
+            {t('projects.demo.project_tour_start')}
           </button>
         </div>
       )}
