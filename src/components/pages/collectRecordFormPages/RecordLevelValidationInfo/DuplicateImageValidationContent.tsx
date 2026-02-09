@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
+import _ from 'lodash'
 
 export interface Image {
   image_id: string
@@ -43,7 +44,7 @@ const formatDuplicateImagesMessage = (
 
   const imgNames = images.slice(0, 3).map((img) => img.original_image_name)
   const count = images.length
-  const location = t(locationKey)
+  const location = _.lowerFirst(t(locationKey))
 
   return t('image_classification.validations.duplicate_images', {
     count,
