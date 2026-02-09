@@ -482,9 +482,9 @@
     "validations": {
       "duplicate_images_one": "{{imageNames}} is a duplicate in {{location}}.",
       "duplicate_images_other": "{{imageNames}} are duplicates in {{location}}.",
-      "duplicate_other_transects": "unsubmitted benthic photo quadrat transects",
+      "duplicate_other_transects": "Unsubmitted benthic photo quadrat transects",
       "duplicate_submitted_transects": "Submitted benthic photo quadrat transects",
-      "duplicate_this_transect": "this benthic photo quadrat transect",
+      "duplicate_this_transect": "This benthic photo quadrat transect",
       "image_names_interval": "(1)[{{firstImgName}}];(2)[{{firstImgName}} and {{secondImgName}}];(3)[{{firstImgName}}, {{secondImgName}}, and {{thirdImgName}}];(4-inf)[{{firstImgName}}, {{secondImgName}}, {{thirdImgName}}, and {{moreCount}} more]"
     },
     "warns": {
