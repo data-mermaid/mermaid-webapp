@@ -348,7 +348,7 @@ const FinanceSolutionModal = ({
             renderValue={(selected) =>
               selected?.length
                 ? getChips(selected, choices.sustainablefinancemechanisms.data)
-                : t('choose')
+                : `${t('choose')}...`
             }
             displayEmpty={true}
           >
