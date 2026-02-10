@@ -68,7 +68,8 @@ const NavMenu = ({ subNavNode = null }) => {
     picture: currentUserImageUrl,
   } = currentUser ?? {}
 
-  const _getProjectData = useEffect(() => {
+  // const _getProjectData =
+  useEffect(() => {
     if (!currentProject && isAppOnline && databaseSwitchboardInstance && projectId) {
       const promises = [databaseSwitchboardInstance.getProject(projectId)]
 
@@ -107,7 +108,12 @@ const NavMenu = ({ subNavNode = null }) => {
           <ul>
             {!isReadOnlyUser && (
               <LiCollecting>
-                <NavLinkSidebar end to={`${projectUrl}/collecting`} data-testid="nav-collecting">
+                <NavLinkSidebar
+                  id="nav-collecting"
+                  end
+                  to={`${projectUrl}/collecting`}
+                  data-testid="nav-collecting"
+                >
                   {currentUserImageUrl || currentUserFirstName || currentUserLastName ? (
                     <CollectionAvatar
                       userImageUrl={currentUserImageUrl}
@@ -125,7 +131,12 @@ const NavMenu = ({ subNavNode = null }) => {
             {isCollectingSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             <OfflineHide>
               <li>
-                <NavLinkSidebar end to={`${projectUrl}/submitted`} data-testid="nav-submitted">
+                <NavLinkSidebar
+                  id="nav-submitted"
+                  end
+                  to={`${projectUrl}/submitted`}
+                  data-testid="nav-submitted"
+                >
                   <IconData />
                   <span>{t('sample_units.submitted')}</span>
                 </NavLinkSidebar>
@@ -138,7 +149,7 @@ const NavMenu = ({ subNavNode = null }) => {
           <NavHeaderSecondary data-testid="nav-header-metadata">{t('metadata')}</NavHeaderSecondary>
           <ul>
             <li>
-              <NavLinkSidebar end to={`${projectUrl}/sites`} data-testid="nav-sites">
+              <NavLinkSidebar end id="nav-sites" to={`${projectUrl}/sites`} data-testid="nav-sites">
                 <IconSites />
                 <span>{t('sites.sites')}</span>
               </NavLinkSidebar>
@@ -147,6 +158,7 @@ const NavMenu = ({ subNavNode = null }) => {
             <li>
               <NavLinkSidebar
                 end
+                id="nav-management-regimes"
                 to={`${projectUrl}/management-regimes`}
                 data-testid="nav-management-regimes"
               >
@@ -165,6 +177,7 @@ const NavMenu = ({ subNavNode = null }) => {
             <ul>
               <li>
                 <NavLinkSidebar
+                  id="nav-observers-overview"
                   to={`${projectUrl}/observers-and-transects`}
                   data-testid="nav-observers-transects"
                 >
@@ -174,6 +187,7 @@ const NavMenu = ({ subNavNode = null }) => {
               </li>
               <li>
                 <NavLinkSidebar
+                  id="nav-samples-mr-overview"
                   to={`${projectUrl}/management-regimes-overview`}
                   data-testid="nav-management-regimes-overview"
                 >
@@ -187,19 +201,27 @@ const NavMenu = ({ subNavNode = null }) => {
             <NavHeaderSecondary data-testid="nav-header-admin">{t('admin')}</NavHeaderSecondary>
             <ul>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/project-info`} data-testid="nav-project-info">
+                <NavLinkSidebar
+                  id="nav-project-info"
+                  to={`${projectUrl}/project-info`}
+                  data-testid="nav-project-info"
+                >
                   <IconInfo />
                   <span>{t('project_info')}</span>
                 </NavLinkSidebar>
               </li>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/users`} data-testid="nav-users">
+                <NavLinkSidebar id="nav-users" to={`${projectUrl}/users`} data-testid="nav-users">
                   <IconUsers />
                   <span>{t('users.users')}</span>
                 </NavLinkSidebar>
               </li>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/data-sharing`} data-testid="nav-data-sharing">
+                <NavLinkSidebar
+                  id="nav-data-sharing"
+                  to={`${projectUrl}/data-sharing`}
+                  data-testid="nav-data-sharing"
+                >
                   <IconSharing />
                   <span>{t('data_sharing.data_sharing')}</span>
                 </NavLinkSidebar>
@@ -207,7 +229,11 @@ const NavMenu = ({ subNavNode = null }) => {
               <OfflineHide>
                 <li>
                   {currentProject?.includes_gfcr && (
-                    <NavLinkSidebar to={`${projectUrl}/gfcr`} data-testid="nav-gfcr">
+                    <NavLinkSidebar
+                      id="nav-project-info"
+                      to={`${projectUrl}/gfcr`}
+                      data-testid="nav-gfcr"
+                    >
                       <IconGfcr />
                       <span>{t('gfcr.gfcr')}</span>
                     </NavLinkSidebar>

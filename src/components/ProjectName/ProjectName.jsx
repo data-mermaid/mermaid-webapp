@@ -10,6 +10,9 @@ import { useTranslation } from 'react-i18next'
 import styles from '../../style/ProjectName.module.scss'
 import buttonStyles from '../../style/buttons.module.scss'
 import labelStyles from '../../style/labels.module.scss'
+import { driver } from 'driver.js'
+import { projectTourSteps } from '../../library/demoProjectTour'
+import 'driver.js/dist/driver.css'
 
 const ProjectName = () => {
   const isMounted = useIsMounted()
@@ -45,7 +48,18 @@ const ProjectName = () => {
     openExploreLinkWithBbox(queryParamObject)
   }
 
-  const handleStartTourClick = () => {}
+  const driverTourObj = driver({
+    allowClose: false,
+    showProgress: true,
+    nextBtnText: '→',
+    prevBtnText: '←',
+    progressText: `Step {{current}} of {{total}}`, //todo: localization
+    steps: projectTourSteps,
+  })
+
+  const handleStartTourClick = () => {
+    driverTourObj.drive()
+  }
 
   const tooltipText = isDemoProject
     ? 'projects.demo.explore_unavailable'
