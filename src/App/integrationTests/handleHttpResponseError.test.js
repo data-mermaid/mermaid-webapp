@@ -22,8 +22,8 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 403 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('api_errors.unauthorized_user', {
-      toastId: 'api_errors.unauthorized_user',
+    expect(toastSpy).toHaveBeenCalledWith('The current user does not have permission to do that.', {
+      toastId: 'The current user does not have permission to do that.',
       transition: Slide,
     })
 
@@ -37,8 +37,8 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 500 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('api_errors.unspecified_error', {
-      toastId: 'api_errors.unspecified_error',
+    expect(toastSpy).toHaveBeenCalledWith('MERMAID error: please contact support@datamermaid.org', {
+      toastId: 'MERMAID error: please contact support@datamermaid.org',
       transition: Slide,
     })
 
@@ -52,8 +52,8 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 502 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('api_errors.unspecified_error', {
-      toastId: 'api_errors.unspecified_error',
+    expect(toastSpy).toHaveBeenCalledWith('MERMAID error: please contact support@datamermaid.org', {
+      toastId: 'MERMAID error: please contact support@datamermaid.org',
       transition: Slide,
     })
 
@@ -67,8 +67,8 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 503 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('api_errors.unspecified_error', {
-      toastId: 'api_errors.unspecified_error',
+    expect(toastSpy).toHaveBeenCalledWith('MERMAID error: please contact support@datamermaid.org', {
+      toastId: 'MERMAID error: please contact support@datamermaid.org',
       transition: Slide,
     })
 
