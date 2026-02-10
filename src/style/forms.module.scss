@@ -1,0 +1,69 @@
+@use './theme.scss' as *;
+
+//from form.inputStyles
+@mixin input-base {
+  padding: $spacing-x-small;
+
+  @media (min-width: $tablet-portrait-break) {
+    padding: $spacing-small;
+  }
+}
+
+//from form.inputTextareaSelectStyles
+@mixin form-base {
+  padding: $spacing-small;
+  border: $border-small solid $form-input-border;
+  background-color: $white;
+  text-align: inherit;
+  width: 100%;
+  &:focus {
+    outline: $border-medium solid $primary;
+    outline-offset: -3px;
+  }
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: auto;
+    -moz-appearance: textfield;
+  }
+  &:disabled {
+    background: $disabled-input-background;
+    cursor: not-allowed;
+    color: $black;
+  }
+}
+
+//from form.Input
+.form__input {
+  @include form-base;
+  &[type='number'] {
+    text-align: right;
+  }
+  &[type='text'] {
+    text-align: left;
+  }
+  &:disabled {
+    background: $disabled-input-background;
+    cursor: not-allowed;
+    color: $black;
+  }
+}
+
+//formerly InputAndButton.InputAndButtonWrapper
+.form__input_button_wrapper {
+  display: flex;
+  > input {
+    @include input-base;
+    width: 100%;
+    background-color: transparent;
+    &:focus {
+      outline-offset: -3px;
+    }
+  }
+}
+
+.form__input_button_wrapper--warning {
+  @extend .form__input_button_wrapper;
+  > input {
+    background-color: $warning-input;
+  }
+}
