@@ -1,12 +1,12 @@
-import language from '../language'
+import i18next from '../../i18n'
 
 export const getTableColumnHeaderProps = (column) => {
-  let sortByTitle = language.table.sortAscendingTitle
+  let sortByTitle = i18next.t('sort_ascending')
 
   if (column.isSortedDesc === true) {
-    sortByTitle = language.table.sortRemoveTitle
+    sortByTitle = i18next.t('remove_sort')
   } else if (column.isSortedDesc === false) {
-    sortByTitle = language.table.sortDescendingTitle
+    sortByTitle = i18next.t('sort_descending')
   }
 
   return column.getSortByToggleProps({ title: sortByTitle })

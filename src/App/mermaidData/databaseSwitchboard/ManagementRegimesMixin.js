@@ -1,8 +1,8 @@
-import language from '../../../language'
 import axios from '../../../library/axiosRetry'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
+import i18n from '../../../../i18n'
 
 const ManagementRegimesMixin = (Base) =>
   class extends Base {
@@ -193,7 +193,7 @@ const ManagementRegimesMixin = (Base) =>
               )
             }
 
-            return Promise.reject(new Error(language.error.generic))
+            return Promise.reject(new Error(i18n.t('api_errors.mermaid_error')))
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
@@ -272,7 +272,7 @@ const ManagementRegimesMixin = (Base) =>
               return Promise.reject(syncError)
             }
 
-            return Promise.reject(new Error(language.error.generic))
+            return Promise.reject(new Error(i18n.t('api_errors.mermaid_error')))
           })
       }
 

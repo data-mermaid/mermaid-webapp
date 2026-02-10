@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   ActiveCollectRecordsCount,
   OfflineSummaryCard,
@@ -17,10 +18,10 @@ import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { getIsUserReadOnlyForProject } from '../../App/currentUserProfileHelpers'
-import language from '../../language'
 
 const ProjectCardSummary = ({ project, isAppOnline }) => {
   const { currentUser } = useCurrentUser()
+  const { t } = useTranslation()
   const {
     num_active_sample_units,
     num_sites,
@@ -51,24 +52,29 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
     ) : (
       <>{num_active_sample_units} </>
     )
-  const offlineMessage = <OfflineOrReadOnlyContent>Online Only</OfflineOrReadOnlyContent>
+  const offlineMessage = (
+    <OfflineOrReadOnlyContent data-testid="offline-message">
+      {t('projects.online_only')}
+    </OfflineOrReadOnlyContent>
+  )
 
   const readOnlyUserCollectCardContent =
     userCollectCount > 0 ? (
       <OfflineOrReadOnlyContent smallFont>
-        {language.pages.projectsList.readOnlyUserWithActiveSampleUnits}
+        {t('projects.warning_readonly_active_units')}
       </OfflineOrReadOnlyContent>
     ) : (
-      <OfflineOrReadOnlyContent>Read Only</OfflineOrReadOnlyContent>
+      <OfflineOrReadOnlyContent>{t('projects.read_only')}</OfflineOrReadOnlyContent>
     )
 
   const collectingCard = (
     <SummaryCard
       to={`${projectUrl}/collecting`}
-      aria-label="Collect"
+      aria-label={t('sample_units.collect')}
       onClick={stopEventPropagation}
+      data-testid="collect-summary-card"
     >
-      <SubCardTitle>Collecting</SubCardTitle>
+      <SubCardTitle>{t('sample_units.collecting')}</SubCardTitle>
       <SubCardIconAndCount data-testid="collect-counts">
         <IconCollect />
         <>{collectCardContent}</>
@@ -77,8 +83,12 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
   )
 
   const readOnlyCollectingCard = (
-    <OfflineSummaryCard aria-label="Collect" onClick={stopEventPropagation}>
-      <SubCardTitle>Collecting</SubCardTitle>
+    <OfflineSummaryCard
+      aria-label={t('sample_units.collect')}
+      onClick={stopEventPropagation}
+      data-testid="collect-summary-card"
+    >
+      <SubCardTitle>{t('sample_units.collecting')}</SubCardTitle>
       {readOnlyUserCollectCardContent}
     </OfflineSummaryCard>
   )
@@ -86,10 +96,11 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
   const submittedCardOnline = (
     <SummaryCard
       to={`${projectUrl}/submitted`}
-      aria-label="Submitted"
+      aria-label={t('sample_units.submitted')}
       onClick={stopEventPropagation}
+      data-testid="submitted-summary-card-online"
     >
-      <SubCardTitle>Submitted</SubCardTitle>
+      <SubCardTitle>{t('sample_units.submitted')}</SubCardTitle>
       <SubCardIconAndCount>
         <IconData />
         <span>{num_sample_units}</span>
@@ -98,8 +109,13 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
   )
 
   const sitesCardOnline = (
-    <SummaryCard to={`${projectUrl}/sites`} aria-label="Sites" onClick={stopEventPropagation}>
-      <SubCardTitle>Sites</SubCardTitle>
+    <SummaryCard
+      to={`${projectUrl}/sites`}
+      aria-label={t('sites.sites')}
+      onClick={stopEventPropagation}
+      data-testid="sites-summary-card"
+    >
+      <SubCardTitle>{t('sites.sites')}</SubCardTitle>
       <SubCardIconAndCount>
         <IconSites />
         <span>{num_sites}</span>
@@ -108,8 +124,13 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
   )
 
   const usersCardOnline = (
-    <SummaryCard to={`${projectUrl}/users`} aria-label="Users" onClick={stopEventPropagation}>
-      <SubCardTitle>Users</SubCardTitle>
+    <SummaryCard
+      to={`${projectUrl}/users`}
+      aria-label={t('users.users')}
+      onClick={stopEventPropagation}
+      data-testid="users-summary-card"
+    >
+      <SubCardTitle>{t('users.users')}</SubCardTitle>
       <SubCardIconAndCount>
         <IconUsers />
         <span>{members?.length || 0}</span>
@@ -120,20 +141,24 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
   const dataSharingCardOnline = (
     <DataSharingSummaryCard
       to={`${projectUrl}/data-sharing`}
-      aria-label="Data-Sharing"
+      aria-label={t('data_sharing.data_sharing')}
       onClick={stopEventPropagation}
+      data-testid="data-sharing-summary-card"
     >
       <div>
-        <SubCardTitle>Data sharing</SubCardTitle>
+        <SubCardTitle>{t('data_sharing.data_sharing')}</SubCardTitle>
         <DataSharingList>
           <li data-testid="fishbelt-policy">
-            Fish belt: <strong>{getDataSharingPolicyLabel(data_policy_beltfish)}</strong>
+            {t('protocol_titles.fishbelt')}:{' '}
+            <strong>{getDataSharingPolicyLabel(data_policy_beltfish)}</strong>
           </li>
           <li data-testid="benthic-policy">
-            Benthic: <strong>{getDataSharingPolicyLabel(data_policy_benthiclit)}</strong>
+            {t('protocol_titles.benthiclit')}:{' '}
+            <strong>{getDataSharingPolicyLabel(data_policy_benthiclit)}</strong>
           </li>
           <li data-testid="bleaching-policy">
-            Bleaching: <strong>{getDataSharingPolicyLabel(data_policy_bleachingqc)}</strong>
+            {t('protocol_titles.bleachingqc')}:{' '}
+            <strong>{getDataSharingPolicyLabel(data_policy_bleachingqc)}</strong>
           </li>
         </DataSharingList>
       </div>
@@ -141,29 +166,45 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
   )
 
   const submittedCardOffline = (
-    <OfflineSummaryCard aria-label="Submitted Offline" onClick={stopEventPropagation}>
-      <SubCardTitle>Submitted</SubCardTitle>
+    <OfflineSummaryCard
+      aria-label={t('sample_units.submitted_offline')}
+      onClick={stopEventPropagation}
+      data-testid="submitted-summary-card-offline"
+    >
+      <SubCardTitle>{t('sample_units.submitted')}</SubCardTitle>
       {offlineMessage}
     </OfflineSummaryCard>
   )
 
   const sitesCardOffline = (
-    <OfflineSummaryCard aria-label="Sites Offline" onClick={stopEventPropagation}>
-      <SubCardTitle>Sites</SubCardTitle>
+    <OfflineSummaryCard
+      aria-label={t('sites.sites_offline')}
+      onClick={stopEventPropagation}
+      data-testid="sites-summary-card"
+    >
+      <SubCardTitle>{t('sites.sites')}</SubCardTitle>
       {offlineMessage}
     </OfflineSummaryCard>
   )
 
   const usersCardOffline = (
-    <OfflineSummaryCard aria-label="Users Offline" onClick={stopEventPropagation}>
-      <SubCardTitle>Users</SubCardTitle>
+    <OfflineSummaryCard
+      aria-label={t('users.users_offline')}
+      onClick={stopEventPropagation}
+      data-testid="users-summary-card"
+    >
+      <SubCardTitle>{t('users.users')}</SubCardTitle>
       {offlineMessage}
     </OfflineSummaryCard>
   )
 
   const dataSharingCardOffline = (
-    <OfflineSummaryCard aria-label="Data-sharing Offline" onClick={stopEventPropagation}>
-      <SubCardTitle>Data Sharing</SubCardTitle>
+    <OfflineSummaryCard
+      aria-label={t('data_sharing.data_sharing_offline')}
+      onClick={stopEventPropagation}
+      data-testid="data-sharing-summary-card"
+    >
+      <SubCardTitle>{t('data_sharing.data_sharing')}</SubCardTitle>
       {offlineMessage}
     </OfflineSummaryCard>
   )

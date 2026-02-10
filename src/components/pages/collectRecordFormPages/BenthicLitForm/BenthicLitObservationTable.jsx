@@ -363,7 +363,7 @@ const BenthicLitObservationsTable = ({
                         type="button"
                         onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
                       >
-                        <IconInfo aria-label={t('info')} />
+                        <IconInfo aria-label={t('message_type.info')} />
                       </IconButton>
                     </LabelContainer>
                   </Th>
@@ -381,7 +381,7 @@ const BenthicLitObservationsTable = ({
                         type="button"
                         onClick={(event) => handleInfoIconClick(event, 'growthForm')}
                       >
-                        <IconInfo aria-label={t('info')} />
+                        <IconInfo aria-label={t('message_type.info')} />
                       </IconButton>
                     </LabelContainer>
                   </Th>
@@ -389,7 +389,9 @@ const BenthicLitObservationsTable = ({
                     {t('observations.length')} ({t('measurements.centimeter_short')})
                     <RequiredIndicator />
                   </Th>
-                  {areValidationsShowing ? <Th align="center">{t('validations')}</Th> : null}
+                  {areValidationsShowing ? (
+                    <Th align="center">{t('validations.validations')}</Th>
+                  ) : null}
                   <Th> </Th>
                 </Tr>
               </thead>

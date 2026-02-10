@@ -21,12 +21,12 @@ jobs:
       VITE_MERMAID_REFERENCE_LINK: ${{ vars.VITE_MERMAID_REFERENCE_LINK }}
       VITE_MERMAID_EXPLORE_LINK: ${{ vars.VITE_MERMAID_EXPLORE_LINK }}
     steps:
-      - uses: actions/checkout@v4.2.2
-      - uses: actions/setup-node@v4.2.0
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-node@v6.2.0
         with:
           node-version-file: '.nvmrc'
 
-      - uses: actions/cache@v4.2.2
+      - uses: actions/cache@v5.0.3
         id: yarn-cache
         with:
           path: node_modules

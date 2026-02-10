@@ -569,7 +569,7 @@ function UsersTableSection({
   const adminTooltipText = t('users.roles.admin_description')
   const collectorTooltipText = t('users.roles.collector_description')
   const readOnlyTooltipText = t('users.roles.read_only_description')
-  const infoLabelText = t('info')
+  const infoLabelText = t('message_type.info')
   const nameHeaderText = t('name')
   const emailHeaderText = t('email')
   const userRoleHeaderText = t('users.role')
@@ -829,6 +829,7 @@ function UsersTableSection({
       )
 
       return {
+        projectProfileId,
         name: (
           <NameCellStyle>
             <UserIcon
@@ -904,9 +905,10 @@ function UsersTableSection({
   const tableCellDataForNonAdmin = useMemo(
     () =>
       observerProfiles.map((profile) => {
-        const { profile_name, role } = profile
+        const { profile_name, role, id } = profile
 
         return {
+          projectProfileId: id,
           name: profile_name,
           role: roleLabels[role],
         }
@@ -1020,10 +1022,10 @@ function UsersTableSection({
               prepareRow(row)
               const { key: _, ...restRowProps } = row.getRowProps()
               return (
-                <Tr key={row.id} {...restRowProps}>
+                <Tr key={row.original.projectProfileId ?? row.id} {...restRowProps}>
                   {row.cells.map((cell) => {
                     const { key: _, ...restCellProps } = cell.getCellProps()
-                    const uniqueKey = `${row.id}-${cell.column.id}`
+                    const uniqueKey = `${row.original.projectProfileId ?? row.id}-${cell.column.id}`
                     return (
                       <UserTableTd {...restCellProps} align={cell.column.align} key={uniqueKey}>
                         {cell.render('Cell')}
