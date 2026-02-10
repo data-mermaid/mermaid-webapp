@@ -26,6 +26,7 @@ import { Box } from '@mui/material'
 import { IconClose } from '../icons'
 import cardStyles from '../ProjectCard/ProjectCard.module.scss'
 import { useNavigate } from 'react-router-dom'
+import { getCurrentUserOptionalFeature } from '../../library/getCurrentUserOptionalFeature'
 
 interface DemoProjectCalloutProps {
   handleDemoClick: () => void
@@ -104,8 +105,12 @@ const Projects = () => {
 
   const hasUserDismissedDemo = currentUser.collect_state?.hasUserDismissedDemo ?? false
   const userHasDemoProject = projects.some((proj) => proj.is_demo === true)
+  const { enabled: isDemoProjectEnabledForUser = false } = getCurrentUserOptionalFeature(
+    currentUser,
+    'demo_project',
+  )
   const [isDemoCalloutVisible, setIsDemoCalloutVisible] = useState(
-    !userHasDemoProject && !hasUserDismissedDemo && isAppOnline,
+    !userHasDemoProject && !hasUserDismissedDemo && isAppOnline && isDemoProjectEnabledForUser,
   )
 
   useEffect(() => {
