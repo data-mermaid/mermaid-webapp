@@ -93,6 +93,26 @@ vi.mock('react-i18next', () => ({
   I18nextProvider: ({ children }) => children,
 }))
 
+// Mock the i18n instance so direct i18n.t() calls return the key (same as useTranslation mock)
+vi.mock('../i18n', () => ({
+  default: {
+    t: (key) => key,
+    changeLanguage: vi.fn(() => Promise.resolve()),
+    language: 'en',
+    languages: ['en'],
+    isInitialized: true,
+    use: vi.fn(() => ({
+      use: vi.fn(() => ({
+        use: vi.fn(() => ({
+          init: vi.fn(),
+        })),
+        init: vi.fn(),
+      })),
+      init: vi.fn(),
+    })),
+  },
+}))
+
 configure({ asyncUtilTimeout: 10000 })
 
 beforeAll(() => {
