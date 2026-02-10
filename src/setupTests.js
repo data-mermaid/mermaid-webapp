@@ -18,8 +18,8 @@ axiosInstance.defaults['axios-retry'] = {
 }
 
 // jest.mock → vi.mock, and return full export objects
-vi.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
-  return {
+vi.mock('maplibre-gl', function mapLibreMock() {
+  const mockMaplibre = {
     Map: function () {
       return {
         addControl: vi.fn(() => ({})),
@@ -55,6 +55,10 @@ vi.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
       }
     },
     NavigationControl: vi.fn(),
+  }
+  return {
+    default: mockMaplibre,
+    ...mockMaplibre,
   }
 })
 
