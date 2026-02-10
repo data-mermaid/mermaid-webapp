@@ -1,8 +1,7 @@
 import axios from '../library/axiosRetry'
-import language from '../language'
 import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
 import { userRole } from './mermaidData/userRole'
-import i18next from '../../i18n'
+import i18n from '../../i18n'
 import { PENDING_USER_PROFILE_NAME } from '../library/constants/constants'
 
 const getUserName = (user) => {
@@ -74,7 +73,7 @@ export const getCurrentUserProfile = async ({
     })
   }
 
-  return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
+  return Promise.reject(new Error(i18n.t('api_errors.app_not_authenticated_or_ready')))
 }
 
 export const setCurrentUserProfile = async ({
@@ -118,7 +117,7 @@ export const setCurrentUserProfile = async ({
       })
   }
 
-  return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
+  return Promise.reject(new Error(i18n.t('api_errors.app_not_authenticated_or_ready')))
 }
 
 export const getProjectRole = (userProfile, projectId) => {
@@ -137,7 +136,7 @@ export const getIsUserAdminForProject = (userProfile, projectId) => {
 
 export const getDisplayNameParts = (profileName) => {
   const isPendingUser = profileName === PENDING_USER_PROFILE_NAME
-  const resolvedName = isPendingUser ? i18next.t('users.pending_user') : profileName
+  const resolvedName = isPendingUser ? i18n.t('users.pending_user') : profileName
   const parts = resolvedName.split(' ')
 
   return {

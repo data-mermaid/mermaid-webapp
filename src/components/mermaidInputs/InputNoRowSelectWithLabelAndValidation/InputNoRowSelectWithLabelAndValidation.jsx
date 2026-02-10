@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 import { getProjectIdFromLocation } from '../../../library/getProjectIdFromLocation'
 import {
   IconContainer,
@@ -16,7 +17,6 @@ import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import { IconButton } from '../../generic/buttons'
 import { ViewLink } from '../../generic/links'
 import { IconInfo, IconSites, IconMgmt } from '../../icons'
-import language from '../../../language'
 
 const InputNoRowSelectWithLabelAndValidation = ({
   label,
@@ -36,6 +36,7 @@ const InputNoRowSelectWithLabelAndValidation = ({
   ...restOfProps
 }) => {
   const [internalShowHelperText, setInternalShowHelperText] = useState()
+  const { t } = useTranslation()
 
   useEffect(() => {
     setInternalShowHelperText(showHelperText)
@@ -85,14 +86,14 @@ const InputNoRowSelectWithLabelAndValidation = ({
             value={value}
             {...restOfProps}
           >
-            <option value="">{language.placeholders.select}</option>
+            <option value="">{`${t('choose')}...`}</option>
             {optionList}
           </Select>
 
           {displayViewLink ? (
             <ViewLink disabled={!value} href={linkToSiteOrMR}>
               <IconContainer>{label === 'Site' ? <IconSites /> : <IconMgmt />}</IconContainer>
-              {language.pages.collectRecord.viewLink}
+              {t('buttons.view')}
             </ViewLink>
           ) : null}
         </InputContainer>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Button, ClickAwayListener, IconButton } from '@mui/material'
 import styles from './CalloutButton.module.scss'
+import buttonStyles from '../../../style/buttons.module.scss'
 import { useTranslation } from 'react-i18next'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useNavigate } from 'react-router-dom'
@@ -39,7 +40,7 @@ const CalloutButtonDropdown = ({
     refreshCurrentUser() // ensures correct user privileges
     toast.success(...getToastArguments(languageSuccessMessage))
     setIsLoading(false)
-    navigate(`/projects/${response.id}/sites`)
+    navigate(`/projects/${response.id}/project-info`)
   }
 
   const handleResponseError = (error: AxiosError) => {
@@ -79,14 +80,14 @@ const CalloutButtonDropdown = ({
           disabled={disabled}
           data-testid={testId}
           classes={{
-            root: styles['button-root__callout'],
+            root: buttonStyles['button--callout'],
           }}
         >
           {label}
         </Button>
         <IconButton
           classes={{
-            root: styles['button-root__callout'],
+            root: buttonStyles['button--callout'],
           }}
           onClick={toggleMenu}
         >
@@ -105,7 +106,7 @@ const CalloutButtonDropdown = ({
             onClick={createDemoProject}
             data-testid="add-demo-project-button"
             classes={{
-              root: styles['button-root__callout'],
+              root: buttonStyles['button--callout'],
             }}
           >
             {t('projects.buttons.add_demo')}
