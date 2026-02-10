@@ -20,7 +20,7 @@ export default defineConfig({
     setupFiles: [
       // dotenv/config in Jest → here we can load env via vite, but to emulate Jest:
       'dotenv/config',
-      '/Users/jb/repos/mermaid-webapp/src/setupTests.js',
+      'src/setupTests.js',
     ],
     // Replace jest.setTimeout with a per-project default:
     testTimeout: 300000, // 5 minutes to match your jest.setTimeout

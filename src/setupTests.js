@@ -2,27 +2,20 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import { afterAll, afterEach, beforeAll, beforeEach } from "vitest";
-
-import '@testing-library/jest-dom';
+import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest'
+import '@testing-library/jest-dom'
 import { configure } from '@testing-library/react'
-// import { enableFetchMocks } from 'jest-fetch-mock'
-
-// Vitest uses "vi" instead of "jest"
-import { vi } from 'vitest'
+import axiosInstance from './library/axiosRetry'
 
 import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSuccessful'
 import { mockDocumentCookie } from './testUtilities/mockDocumentCookie'
 
-// enableFetchMocks() // avoids ReferenceError: Request is not defined errors in tests
-
-// Moved timeout to vitest.config.ts: testTimeout
-// vi.setConfig({ testTimeout: 300000 })
-
-// jsdom shims (safe to keep)
-window.URL.createObjectURL = () => {}
-window.confirm = () => true // simulates user clicking OK
-window.scrollTo = () => {}
+// Disable axios-retry globally in tests to avoid masking failures
+axiosInstance.defaults['axios-retry'] = {
+  retries: 0,
+  retryCondition: () => false,
+  retryDelay: () => 0,
+}
 
 // jest.mock → vi.mock, and return full export objects
 vi.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {

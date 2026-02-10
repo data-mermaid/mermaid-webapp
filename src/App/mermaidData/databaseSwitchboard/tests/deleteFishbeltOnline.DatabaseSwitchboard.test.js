@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test } from 'vitest'
 import { http, HttpResponse } from 'msw'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import {
@@ -170,7 +170,7 @@ test('deleteSampleUnit online marks a record in indexedDB with _deleted in the c
     http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
       () => {
-        return HttpResponse.error()
+        return HttpResponse.error('Network Error')
       },
       { once: true },
     ),
@@ -188,16 +188,16 @@ test('deleteSampleUnit online marks a record in indexedDB with _deleted in the c
   // save a record in IDB so we can delete it
   await dbInstance.dexiePerUserDataInstance.collect_records.put(fishBeltToBeDeleted)
 
-  await dbInstance
-    .deleteSampleUnit({
+  await expect(
+    dbInstance.deleteSampleUnit({
       record: {
         id: 'foo',
         _last_revision_num: 1,
       },
       profileId: '1',
       projectId: '1',
-    })
-    .catch((error) => expect(error.message).toEqual('Network Error'))
+    }),
+  ).rejects.toMatchObject({ message: 'Network Error' })
 
   expect(
     (await dbInstance.dexiePerUserDataInstance.collect_records.get('foo'))._deleted,
