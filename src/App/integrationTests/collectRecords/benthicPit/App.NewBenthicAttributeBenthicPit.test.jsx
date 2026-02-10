@@ -34,18 +34,16 @@ test('Benthic PIT observations add new benthic attribute - filling out new attri
       `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
       () => {
-        return 
-          HttpResponse.json({
-            benthic_attributes: {
-              updates: [
-                {
-                  id: 'whatever',
-                  name: 'unicorn',
-                },
-              ],
-            },
-          }),
-        )
+        return HttpResponse.json({
+          benthic_attributes: {
+            updates: [
+              {
+                id: 'whatever',
+                name: 'unicorn',
+              },
+            ],
+          },
+        })
       },
     ),
   )

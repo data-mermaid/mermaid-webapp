@@ -12,7 +12,7 @@ test('pushThenPullAllProjectDataExceptChoices keeps track of returned last_revis
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
-    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async (request) => {
+    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async ({ request }) => {
       const areLastRevisionNumbersNull =
         (await request.clone().json()).benthic_attributes.last_revision === null &&
         (await request.clone().json()).collect_records.last_revision === null &&
@@ -66,7 +66,7 @@ test('pushThenPullAllProjectData keeps track of returned last_revision_nums and 
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
-    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async (request) => {
+    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async ({ request }) => {
       const areLastRevisionNumbersNull =
         (await request.clone().json()).benthic_attributes.last_revision === null &&
         (await request.clone().json()).choices.last_revision === null &&
@@ -121,7 +121,7 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
-    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async (request) => {
+    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async ({ request }) => {
       const areLastRevisionNumbersNull =
         (await request.clone().json()).benthic_attributes.last_revision === null &&
         (await request.clone().json()).choices.last_revision === null &&
@@ -584,7 +584,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
   )
 
   mockMermaidApiAllSuccessful.use(
-    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async () => {
+    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async ({ request }) => {
       const response = {
         benthic_attributes: {
           updates: [mockMermaidData.benthic_attributes[1]],
@@ -619,7 +619,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
         },
       }
 
-      const isOfflineReadyProjectsPull = !!(await request.clone().json().collect_records)
+      const isOfflineReadyProjectsPull = !!(await request.clone().json()).collect_records
 
       if (isOfflineReadyProjectsPull) {
         response.collect_records = {
@@ -795,7 +795,7 @@ test('pushChanges includes the expected modified data', async () => {
     http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
 
-      async () => {
+      async ({ request }) => {
         const {
           benthic_attributes,
           collect_records,

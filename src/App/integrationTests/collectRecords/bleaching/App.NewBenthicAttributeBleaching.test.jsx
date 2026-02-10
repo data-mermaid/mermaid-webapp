@@ -34,18 +34,16 @@ test('Bleaching collect record observations add new benthic attribute - filling 
       `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
       () => {
-        return 
-          HttpResponse.json({
-            benthic_attributes: {
-              updates: [
-                {
-                  id: 'whatever',
-                  name: 'unicorn',
-                },
-              ],
-            },
-          }),
-        )
+        return HttpResponse.json({
+          benthic_attributes: {
+            updates: [
+              {
+                id: 'whatever',
+                name: 'unicorn',
+              },
+            ],
+          },
+        })
       },
     ),
   )

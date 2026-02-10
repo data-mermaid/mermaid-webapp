@@ -96,7 +96,7 @@ vi.mock('react-i18next', () => ({
 configure({ asyncUtilTimeout: 10000 })
 
 beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
+  mockMermaidApiAllSuccessful.listen({ onUnhandledRequest: 'warn' })
   // import.meta.env works in Vitest via Vite
   global.IS_REACT_ACT_ENVIRONMENT = !!import.meta.env.VITE_IGNORE_TESTING_ACT_WARNINGS // suppress missing act warnings or not, defaults to false
 })

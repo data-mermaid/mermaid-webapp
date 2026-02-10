@@ -32,18 +32,16 @@ test('Fishbelt observations add new species - filling out new species form adds 
       `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
       () => {
-        return 
-          HttpResponse.json({
-            fish_species: {
-              updates: [
-                {
-                  id: 'whatever',
-                  display_name: 'Nebrius ridens',
-                },
-              ],
-            },
-          }),
-        )
+        return HttpResponse.json({
+          fish_species: {
+            updates: [
+              {
+                id: 'whatever',
+                display_name: 'Nebrius ridens',
+              },
+            ],
+          },
+        })
       },
     ),
   )

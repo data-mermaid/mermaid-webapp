@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 
 import { http, HttpResponse } from 'msw'
@@ -34,8 +34,8 @@ beforeEach(() => {
     http.post(
       `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
-      () => {
-        const requestedDataNames = Object.keys(req.body)
+      async ({ request }) => {
+        const requestedDataNames = Object.keys(await request.json())
 
         const onlyRequestedItems = requestedDataNames.reduce(
           (accumulator, dataName) => ({
