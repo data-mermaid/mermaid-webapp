@@ -313,21 +313,22 @@ describe('Projects dashboard', () => {
     expect(projectCards.length).toEqual(1)
     expect(within(projectCards[0]).getByText("Project Z has an apostrophe foo's"))
   })
-  test('Online - Demo callout will show if the user does not have a demo project', async () => {
-    const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-
-    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-
-    renderAuthenticatedOnline(<Projects />, {
-      dexiePerUserDataInstance,
-      isSyncInProgressOverride: true,
-    })
-
-    await waitFor(() =>
-      expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
-    )
-
-    expect(screen.getByTestId('demo-project-callout')).toBeInTheDocument()
-    expect(screen.getByTestId('callout-close-button')).toBeInTheDocument()
-  })
+  // Commented out until demo project is released and enabled in the production environment
+  // test('Online - Demo callout will show if the user does not have a demo project', async () => {
+  //   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+  //
+  //   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+  //
+  //   renderAuthenticatedOnline(<Projects />, {
+  //     dexiePerUserDataInstance,
+  //     isSyncInProgressOverride: true,
+  //   })
+  //
+  //   await waitFor(() =>
+  //     expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
+  //   )
+  //
+  //   expect(screen.getByTestId('demo-project-callout')).toBeInTheDocument()
+  //   expect(screen.getByTestId('callout-close-button')).toBeInTheDocument()
+  // })
 })
