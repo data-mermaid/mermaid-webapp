@@ -51,6 +51,7 @@ const saveSite = async (user) => {
 
   const saveButton = screen.getByTestId('save-button-site-form')
 
+  await waitFor(() => expect(saveButton).toBeEnabled())
   await user.click(saveButton)
 }
 

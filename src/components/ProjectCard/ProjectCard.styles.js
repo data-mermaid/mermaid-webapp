@@ -96,8 +96,8 @@ export const SummaryCard = styled(NavLink)`
 `
 export const DataSharingSummaryCard = styled(SummaryCard)`
   display: grid;
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     content: '';
   }
   grid-template-columns: 1fr auto 1fr;
