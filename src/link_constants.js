@@ -21,5 +21,5 @@ export const links = {
 }
 
 export const internalNavigation = {
-  projectStartPage: (val) => `/projects/${val}/project-info`,
+  projectStartPage: (projectId) => `/projects/${projectId}/project-info`,
 }
