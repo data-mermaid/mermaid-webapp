@@ -1,4 +1,4 @@
-import { expect, test, vi } from "vitest";
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { http, HttpResponse } from 'msw'
 import React from 'react'
@@ -50,7 +50,7 @@ test('Appropriate online status message shows when server is reachable', async (
 })
 test('Appropriate online status message shows when server is unreachable', async () => {
   mockMermaidApiAllSuccessful.use(
-    http.get(`${apiBaseUrl}/health`, () => {
+    http.get(`${apiBaseUrl}/health/`, () => {
       return HttpResponse.error()
     }),
   )

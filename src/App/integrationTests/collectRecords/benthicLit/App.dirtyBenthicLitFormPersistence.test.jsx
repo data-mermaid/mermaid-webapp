@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -33,7 +33,8 @@ test('Unsaved NEW benthic LIT form edits clear when the user navigates away and 
 
   expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
 
-  // nav away
+  // nav away (confirm the unsaved changes prompt)
+  vi.spyOn(window, 'confirm').mockReturnValueOnce(true)
   const sideNav = await screen.findByTestId('content-page-side-nav')
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))
@@ -73,7 +74,8 @@ test('Unsaved EDIT benthic LIT form edits clear when the user navigates away and
 
   expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
 
-  // nav away
+  // nav away (confirm the unsaved changes prompt)
+  vi.spyOn(window, 'confirm').mockReturnValueOnce(true)
   const sideNav = screen.getByTestId('content-page-side-nav')
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))

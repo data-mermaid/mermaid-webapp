@@ -13,7 +13,7 @@ const mockMermaidApiAllSuccessful = setupServer(
       full_name: 'W-FakeFirstNameOnline W-FakeLastNameOnline',
     })
   }),
-  http.get(`${apiBaseUrl}/health`, () => {
+  http.get(`${apiBaseUrl}/health/`, () => {
     return new HttpResponse(null, { status: 200 })
   }),
   http.get(`${apiBaseUrl}/notifications`, () => {

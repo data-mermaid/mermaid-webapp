@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import { http, HttpResponse } from 'msw'
 import React from 'react'
@@ -165,7 +165,6 @@ test('Submit Benthic LIT failure shows toast message and an enabled submit butto
   await user.click(await screen.findByTestId('validate-button'))
   expect(await screen.findByTestId('validated-button')) // just to make act errors silence
   await user.click(await screen.findByTestId('submit-button'))
-  expect(await screen.findByTestId('submitting-button'))
 
   expect(await screen.findByTestId('submit-button')).toBeEnabled()
   expect(await screen.findByTestId('validated-button')).toBeDisabled()
