@@ -5,10 +5,18 @@
 import '@testing-library/jest-dom'
 import { configure } from '@testing-library/react'
 import { enableFetchMocks } from 'jest-fetch-mock'
+import { TextEncoder, TextDecoder } from 'node:util'
 
 import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSuccessful'
 import { mockDocumentCookie } from './testUtilities/mockDocumentCookie'
 
+if (!global.TextEncoder) {
+  global.TextEncoder = TextEncoder
+}
+
+if (!global.TextDecoder) {
+  global.TextDecoder = TextDecoder
+}
 enableFetchMocks() // avoids ReferenceError: Request is not defined errors in tests
 
 jest.setTimeout(300000)
