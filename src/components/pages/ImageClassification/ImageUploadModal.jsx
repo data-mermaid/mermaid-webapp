@@ -208,6 +208,8 @@ const ImageUploadModal = ({
           autoClose: true,
         })
       }
+    } else if (toastId.current) {
+      toast.dismiss(toastId.current)
     }
 
     toastId.current = null
