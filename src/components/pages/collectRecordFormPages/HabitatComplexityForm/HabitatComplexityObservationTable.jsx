@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import {
   ObservationTr,

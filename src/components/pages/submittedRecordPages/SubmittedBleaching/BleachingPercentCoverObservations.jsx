@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import { bleachingRecordPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { FormSubTitle, TheadItem, UnderTableRow } from '../SubmittedFormPage.styles'

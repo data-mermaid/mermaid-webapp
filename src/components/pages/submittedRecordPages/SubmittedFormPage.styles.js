@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 
 import { mediaQueryTabletLandscapeOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'

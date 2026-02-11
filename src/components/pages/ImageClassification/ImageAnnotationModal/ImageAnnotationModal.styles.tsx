@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/constants/constants'
 import theme from '../../../../theme'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'

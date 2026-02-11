@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import PropTypes from 'prop-types'
 import { IconClose } from '../../icons'
 import theme from '../../../theme'

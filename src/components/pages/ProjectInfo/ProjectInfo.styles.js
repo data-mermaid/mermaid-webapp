@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 
 import { ButtonThatLooksLikeLink, CloseButton } from '../../generic/buttons'
 import { hoverState } from '../../../library/styling/mediaQueries'

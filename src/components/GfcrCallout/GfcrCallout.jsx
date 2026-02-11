@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconCloseCircle, IconGfcr } from '../icons'
