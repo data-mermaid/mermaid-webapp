@@ -12,6 +12,7 @@ import LoadingModal from '../../LoadingModal/LoadingModal'
 import handleHttpResponseError from '../../../library/handleHttpResponseError'
 import { AxiosError } from 'axios'
 import { IconDown } from '../../icons'
+import { internalNavigation } from '../../../link_constants'
 
 interface CalloutButtonDropdownProps {
   onClick: () => void
@@ -40,7 +41,7 @@ const CalloutButtonDropdown = ({
     refreshCurrentUser() // ensures correct user privileges
     toast.success(...getToastArguments(languageSuccessMessage))
     setIsLoading(false)
-    navigate(`/projects/${response.id}/project-info`)
+    navigate(internalNavigation.projectStartPage(response.id))
   }
 
   const handleResponseError = (error: AxiosError) => {
@@ -90,6 +91,7 @@ const CalloutButtonDropdown = ({
             root: buttonStyles['button--callout'],
           }}
           onClick={toggleMenu}
+          sx={{ marginLeft: 0 }} //override default nth button margin
         >
           <IconDown
             style={{
