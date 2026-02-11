@@ -149,14 +149,10 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             <h2>{name}</h2>
             <div className={styles['pill-container']}>
               {isAdminUser && (
-                <div className={[labelStyles.pill, labelStyles.pill__admin].join(' ')}>
-                  {t('users.roles.admin')}
-                </div>
+                <span className={labelStyles['pill--admin']}>{t('users.roles.admin')}</span>
               )}
               {isDemoProject && (
-                <div className={[labelStyles.pill, labelStyles.pill__demo].join(' ')}>
-                  {t('projects.demo.demo')}
-                </div>
+                <span className={labelStyles['pill--demo']}>{t('projects.demo.demo')}</span>
               )}
             </div>
           </div>

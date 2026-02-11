@@ -1,0 +1,32 @@
+@use './theme.scss' as *;
+
+.project-name-wrapper {
+  background-color: $white;
+  display: flex;
+  align-items: center;
+  padding: $spacing-medium;
+  @media (max-width: $mobile-break) {
+    align-items: flex-start;
+    padding: $spacing-small;
+  }
+}
+.project-name-header {
+  display: inline;
+  margin: 0 $spacing-small 0 0;
+}
+
+.project-meta-info-wrapper {
+  display: flex;
+  flex-direction: row;
+  row-gap: $spacing-small;
+  align-content: baseline;
+  @media (max-width: $mobile-break) {
+    column-gap: $spacing-medium;
+    flex-direction: column;
+  }
+  button {
+    @media (min-width: $tablet-portrait-break) {
+      margin-left: $spacing-medium;
+    }
+  }
+}
