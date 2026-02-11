@@ -50,6 +50,7 @@
   "biomass": "Biomass",
   "buttons": {
     "add_row": "Add observation",
+    "add_user": "Add user",
     "back": "Back",
     "cancel": "Cancel",
     "close": "Close",
@@ -758,7 +759,9 @@
     "delete_project": "Delete a project",
     "delete_sample_units_notice": "You must delete all the sample units in this project to delete this project.",
     "demo": {
+      "add_users_unavailable": "Users cannot be added to the demo project",
       "created": "Demo project created",
+      "delete_users_unavailable": "Users cannot be removed from the demo project",
       "delete_notice": "You can add the demo project again from the Projects page.",
       "demo": "Demo project",
       "dismissed": "Add the demo project any time from the New project dropdown",
@@ -1012,13 +1015,13 @@
   "type": "Type",
   "use_interval_size_as_start": "Use Interval Size as Interval Start",
   "users": {
-    "add_user_button": "Add user",
     "add_user_email": "Enter email address of user to add",
     "delete_unsynced_sample_units": "Delete unsynced sample units",
     "delete_unsynced_warning": "If <strong>{{userName}}</strong> has any offline sample units that have not synced, they will be <strong>deleted</strong> once back online",
     "introduction": "MERMAID gives you the ability to control who can see and access your data",
     "invite_new_user": "Invite new user",
     "learn_more_roles": "Learn more about user roles...",
+    "pending_user": "Pending user",
     "messages": {
       "duplicate_user_error": "User has already been added to project",
       "enter_email": "Please enter an email address",
@@ -1034,7 +1037,6 @@
       "user_removed": "User removed"
     },
     "not_signed_up": "will need to sign up because they're not already a MERMAID user",
-    "pending_user": "pending user",
     "remove_from_project": "Remove from project",
     "remove_user": "Remove user",
     "remove_user_from_project": "Remove user from project",
