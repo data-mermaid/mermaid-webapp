@@ -16,6 +16,9 @@
   &--active {
     transition: $default-transition;
   }
+  &:not(:first-of-type) {
+    margin-left: $spacing-medium;
+  }
 }
 
 //Currently unused - confirm styles before use, then remove comment
@@ -171,5 +174,13 @@
   transition: 0.25s;
   &:hover {
     background: lightenColor($secondary, 20%);
+  }
+}
+
+.button--small {
+  padding: $spacing-small;
+  @media (min-width: $tablet-portrait-break) {
+    height: $pill-height;
+    padding: 0 $spacing-medium;
   }
 }
