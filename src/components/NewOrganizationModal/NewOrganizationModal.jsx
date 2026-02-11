@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'

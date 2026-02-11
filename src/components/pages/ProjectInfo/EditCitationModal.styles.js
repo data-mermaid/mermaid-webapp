@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 
 import { MODAL_CONTENT_HEIGHT } from '../../generic/Modal'
 import theme from '../../../theme'

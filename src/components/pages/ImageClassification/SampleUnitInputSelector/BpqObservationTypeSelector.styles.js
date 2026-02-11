@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import theme from '../../../../theme'
 
 const ButtonText = styled.span`

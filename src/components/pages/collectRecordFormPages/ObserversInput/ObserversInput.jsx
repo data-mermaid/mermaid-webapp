@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import { formikPropType } from '../../../../library/formik/formikPropType'
 import { getObserverNameOptions, getObserverNameToUse } from '../../../../library/observerHelpers'

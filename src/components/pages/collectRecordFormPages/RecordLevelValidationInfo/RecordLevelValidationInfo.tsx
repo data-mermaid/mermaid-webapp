@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 
 import { ButtonThatLooksLikeLink } from '../../../generic/buttons'
 import { hoverState } from '../../../../library/styling/mediaQueries'

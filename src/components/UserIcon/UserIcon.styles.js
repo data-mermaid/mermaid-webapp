@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 import { IconUser } from '../icons'
