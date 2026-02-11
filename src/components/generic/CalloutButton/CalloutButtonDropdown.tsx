@@ -91,6 +91,7 @@ const CalloutButtonDropdown = ({
             root: buttonStyles['button--callout'],
           }}
           onClick={toggleMenu}
+          style={{ marginLeft: '0' }} //override
         >
           <IconDown
             style={{
