@@ -132,7 +132,7 @@ const TableHeaderRow = ({ areValidationsShowing }: { areValidationsShowing: bool
       id: 'unconfirmed-points',
       text: t('image_classification.unconfirmed_points'),
     },
-    { align: 'left', id: 'validations', text: t('validations') },
+    { align: 'left', id: 'validations', text: t('validations.validations') },
     { align: 'center', id: 'review', text: '' },
     { align: 'center', id: 'remove', text: '' },
   ]

@@ -125,7 +125,7 @@ Prevent duplicates - Check existing tokens in the language files before adding a
 
 Avoid nesting namespaces more than 2 levels deep to help keep the translation files clean and easy to navigate.
 
-** Examples: **
+**Examples:**
 
 - ❌imageClassification.button2: ‘Save now’
 - ✅buttons.save_now: ‘Save now’
@@ -142,3 +142,24 @@ Translations of this highly depends on the context, as 'Add' can be synonymous w
 The location of specificity for your translations. Commonly, the file name for your translations.
 
 Example: Keeping our user messages in one translation file called ‘user_messages.json’, and our menu options in a file named ‘menu_options.json’
+
+# Translation Token Value Best Practices
+
+Token key values should default to using sentence casing with regards to the MERMAID Writing Style Guide. If verbiage needs to be capitalized or lower cased, use text functions in appropriate locations. Avoid implementing special casing within the token verbiage. While translations can default to sentence casing, it should not be assumed.
+
+**Examples:**
+
+- MERMAID when implemented = `_.toUpper(t('mermaid'))`
+- A string inserted into another string (also avoid when possible due to loss of important context)
+
+```
+// translation.json
+main_text_string: This takes in {{otherString}} to handle different cases
+inserted_text_string: A variety of other strings
+
+// *.(js|jsx|ts|tsx)
+t('main_text_string', {otherString: _.lowerFirst(t('inserted_text_string'))})
+
+// Output
+This takes in a variety of other strings to handle different cases
+```
