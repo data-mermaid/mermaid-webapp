@@ -34,13 +34,13 @@ export const CssToggle = styled('span')`
   display: block;
   width: calc(${offlineToggleSize} * 2);
   position: relative;
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     content: '';
     transition: 0.3s;
     position: absolute;
   }
-  &:before {
+  &::before {
     // container
     width: calc(${offlineToggleSize} * 2);
     height: ${offlineToggleSize};
@@ -49,7 +49,7 @@ export const CssToggle = styled('span')`
     border-radius: 25% / 50%;
     background: green;
   }
-  &:after {
+  &::after {
     // toggle
     width: calc(${offlineToggleSize} - 2px);
     height: calc(${offlineToggleSize} - 2px);
@@ -73,22 +73,22 @@ export const StyledToggleLabel = styled('label')`
     display: none;
   }
   input:checked {
-    ~ span:after {
+    ~ span::after {
       background: ${theme.color.cautionColor};
       left: calc(${offlineToggleSize} - 1px);
     }
-    ~ span:before {
+    ~ span::before {
       background: ${theme.color.cautionColor};
       opacity: 0.5;
     }
   }
   input:disabled {
-    ~ span:before {
+    ~ span::before {
       background: ${theme.color.disabledColor};
       opacity: 0.5;
       cursor: not-allowed;
     }
-    ~ span:after {
+    ~ span::after {
       background: ${theme.color.disabledColor};
       cursor: not-allowed;
     }

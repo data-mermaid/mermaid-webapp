@@ -36,7 +36,7 @@ const ArrowRightButton = styled(ButtonCallout)`
   position: relative;
   background: ${theme.color.calloutBorder};
 
-  &:before {
+  &::before {
     clip-path: ${clipPath};
     z-index: -1;
     background: ${theme.color.white};
@@ -53,7 +53,7 @@ const ArrowRightButton = styled(ButtonCallout)`
     cursor: pointer;
     background: ${theme.color.calloutBorder};
 
-    &:before {
+    &::before {
       background: ${theme.color.calloutHover};
     }
   }
