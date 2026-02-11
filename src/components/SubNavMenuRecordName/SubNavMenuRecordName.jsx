@@ -26,14 +26,14 @@ const NavListSubItem = styled('span')`
 const NavListSubItemWrapper = styled('div')`
   justify-content: space-around;
   flex-wrap: wrap;
-  &:before {
+  &::before {
     content: '↳';
   }
   span {
     margin: 0 0.25rem;
   }
   ${mediaQueryPhoneOnly(css`
-    &:before {
+    &::before {
       content: '';
     }
     flex-direction: column;

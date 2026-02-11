@@ -31,7 +31,9 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(screen.getByTestId('save-button-site-form'))
+  const saveButton = screen.getByTestId('save-button-site-form')
+  await waitFor(() => expect(saveButton).toBeEnabled())
+  await user.click(saveButton)
 
   await screen.findByTestId('site-toast-offline-success')
 
@@ -55,7 +57,9 @@ test('Online: Edit Site shows toast and edited record info', async () => {
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(screen.getByTestId('save-button-site-form'))
+  const saveButton = screen.getByTestId('save-button-site-form')
+  await waitFor(() => expect(saveButton).toBeEnabled())
+  await user.click(saveButton)
 
   await screen.findByTestId('site-toast-success')
 
@@ -83,7 +87,9 @@ test('Offline: edit site save stored site in dexie', async () => {
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(screen.getByTestId('save-button-site-form'))
+  const saveButton = screen.getByTestId('save-button-site-form')
+  await waitFor(() => expect(saveButton).toBeEnabled())
+  await user.click(saveButton)
 
   await screen.findByTestId('site-toast-offline-success')
 
@@ -121,7 +127,9 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(screen.getByTestId('save-button-site-form'))
+  const saveButton = screen.getByTestId('save-button-site-form')
+  await waitFor(() => expect(saveButton).toBeEnabled())
+  await user.click(saveButton)
 
   await screen.findByTestId('site-toast-error')
   expect(consoleSpy).toHaveBeenCalledWith(dexieError)

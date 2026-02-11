@@ -79,7 +79,7 @@ export const inputTextareaSelectStyles = css`
 `
 export const RequiredIndicator = styled.span`
   color: ${theme.color.callout};
-  &:after {
+  &::after {
     content: ' *';
   }
 `

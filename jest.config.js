@@ -5,7 +5,8 @@ export default {
   ],
   moduleNameMapper: {
     '^.+\\.svg$': 'jest-svg-transformer',
-    '^.+\\.(css|less|scss|png)$': 'identity-obj-proxy',
+    '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
+    '^.+\\.(png|jpg|jpeg|gif|webp|bmp)$': '<rootDir>/src/testUtilities/mockFile.js',
     '@fontsource/open-sans': 'identity-obj-proxy',
     'react-toastify/dist/ReactToastify.css': 'identity-obj-proxy',
   },
