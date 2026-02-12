@@ -111,12 +111,14 @@ test('Benthic photo quadrat validation: user can reset ignored observation warni
     expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
   expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(observationsTable).getByText('Ignored')).toBeInTheDocument()
+  expect(within(observationsTable).getByTestId('ignore-warning-label')).toBeInTheDocument()
 
   // other two passing
-  expect(within(observationsTable).queryAllByLabelText('Passed Validation').length).toEqual(2)
+  expect(within(observationsTable).queryAllByTestId('passed-validation-indicator').length).toEqual(
+    2,
+  )
 
-  await user.click(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' }))
+  await user.click(within(observationsTable).getByTestId('ignore-warning-checkbox'))
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
@@ -127,7 +129,9 @@ test('Benthic photo quadrat validation: user can reset ignored observation warni
   )
   expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryAllByLabelText('Passed Validation').length).toEqual(2)
+  expect(within(observationsTable).queryAllByTestId('passed-validation-indicator').length).toEqual(
+    2,
+  )
 })
 
 test('user can reset dismissed record-level warnings', async () => {
@@ -187,16 +191,22 @@ test('user can reset dismissed record-level warnings', async () => {
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
-  expect(within(recordLevelValidationsSection).getByText('ignored')).toBeInTheDocument()
+  expect(
+    within(recordLevelValidationsSection).getByTestId('message-pill-ignore'),
+  ).toBeInTheDocument()
 
   await user.click(
-    await within(recordLevelValidationsSection).findByRole('checkbox', { name: 'Ignore warning' }),
+    await within(recordLevelValidationsSection).findByTestId('ignore-warning-checkbox'),
   )
 
   await waitFor(() =>
-    expect(within(recordLevelValidationsSection).queryByText('ignored')).not.toBeInTheDocument(),
+    expect(
+      within(recordLevelValidationsSection).queryByTestId('message-pill-ignore'),
+    ).not.toBeInTheDocument(),
   )
-  expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
+  expect(
+    within(recordLevelValidationsSection).getByTestId('message-pill-warning'),
+  ).toBeInTheDocument()
 
   const isFormDirtyAfterReset = screen.getByTestId('save-button')
 
@@ -505,44 +515,25 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
   const numberOfPointsPerQuadratRow = screen.getByTestId('num-points-per-quadrat')
   const reefSlopeRow = screen.getByTestId('reef-slope')
 
-  expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(managementRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(managementRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(depthRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(depthRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(sampleDateRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(sampleDateRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(sampleTimeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(sampleTimeRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(transectNumberRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(transectNumberRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(labelRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(labelRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(lengthSurveyedRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(lengthSurveyedRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(relativeDepthRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(relativeDepthRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(visibilityRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(visibilityRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(currentRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(currentRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(tideRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(tideRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(notesRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(notesRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(observersRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(observersRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(quadratNumberStartRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(quadratNumberStartRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(quadratSizeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(quadratSizeRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(numberOfQuadratsRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(numberOfQuadratsRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(numberOfPointsPerQuadratRow).getAllByText('ignored')[1]).toBeInTheDocument()
-  expect(within(reefSlopeRow).getAllByText('ignored')[0]).toBeInTheDocument()
-  expect(within(reefSlopeRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(siteRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(managementRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(depthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(sampleDateRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(sampleTimeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(transectNumberRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(labelRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(lengthSurveyedRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(relativeDepthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(visibilityRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(currentRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(tideRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(notesRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(quadratNumberStartRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(quadratSizeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(numberOfQuadratsRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(numberOfPointsPerQuadratRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
+  expect(within(reefSlopeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
   await user.selectOptions(within(siteRow).getByTestId('site-select'), '1')
   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())

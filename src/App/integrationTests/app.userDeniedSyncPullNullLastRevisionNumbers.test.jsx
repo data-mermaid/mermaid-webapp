@@ -7,7 +7,6 @@ import {
   screen,
   renderAuthenticatedOnline,
   mockMermaidApiAllSuccessful,
-  within,
   waitForElementToBeRemoved,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
@@ -182,12 +181,8 @@ and project profiles to ensure the user can pull fresh data if they are given pe
 
   const projectCards = await screen.findAllByTestId('project-card')
   const projectCardForProjectWithId1 = projectCards[0]
-  const linkToCollectingPageForProjectWithId1 = within(projectCardForProjectWithId1).getByRole(
-    'link',
-    { name: 'Collect' },
-  )
 
-  await user.click(linkToCollectingPageForProjectWithId1)
+  await user.click(projectCardForProjectWithId1)
 
   await screen.findByTestId('loading-indicator')
   await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))

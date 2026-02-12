@@ -1,6 +1,6 @@
 import React from 'react'
-import styled from 'styled-components'
-import language from '../../language'
+import { styled } from 'styled-components'
+import i18next from '../../../i18n'
 import { Table, Td, Tr } from '../../components/generic/Table/table'
 import theme from '../../theme'
 import { TextLink, LinkContainer } from '../../components/generic/links'
@@ -69,7 +69,18 @@ export const getFishNameTable = ({
     (item) => item.id === fishNameId,
   )
 
-  const tableLanguage = language.pages.collectRecord.fishNamePopover
+  const tableLanguage = {
+    family: i18next.t('observations.family'),
+    biomassConstants: i18next.t('observations.biomass_constants'),
+    maxLength: `${i18next.t('observations.max_length')} (${i18next.t(
+      'measurements.centimeter_short',
+    )})`,
+    groupSize: i18next.t('observations.group_size'),
+    maxType: i18next.t('observations.max_type'),
+    functionalGroup: i18next.t('observations.functional_group'),
+    trophicGroup: i18next.t('observations.trophic_group'),
+    seeReferencesLink: i18next.t('observations.see_references_link'),
+  }
 
   const TableContainer = styled('div')`
     outline: ${theme.color.outline};
@@ -129,7 +140,7 @@ export const getFishNameTable = ({
         rel="noreferrer"
         download
       >
-        See References (xlsx download)
+        {tableLanguage.seeReferencesLink}
       </TextLink>
     </LinkContainer>
   )
@@ -150,7 +161,7 @@ export const getFishNameTable = ({
                 </Tr>
               ) : null}
               <Tr>
-                <Td as="th">{tableLanguage.biomasConstants}</Td>
+                <Td as="th">{tableLanguage.biomassConstants}</Td>
                 <Td>
                   <ul>
                     <li>A - {fishNameInfo?.biomass_constant_a}</li>
@@ -162,7 +173,7 @@ export const getFishNameTable = ({
 
               {fishNameInfo?.max_length ? (
                 <Tr>
-                  <Td as="th">Max Length (cm)</Td>
+                  <Td as="th">{tableLanguage.maxLength}</Td>
                   <Td>{maxLength}</Td>
                 </Tr>
               ) : null}

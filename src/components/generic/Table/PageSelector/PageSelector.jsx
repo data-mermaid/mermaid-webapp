@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
+import { useTranslation } from 'react-i18next'
+import { styled, css } from 'styled-components'
 import { hoverState } from '../../../../library/styling/mediaQueries'
 import { ButtonThatLooksLikeLink } from '../../buttons'
 import theme from '../../../../theme'
@@ -64,6 +65,7 @@ const PageSelector = ({
   pageCount,
   previousDisabled,
 }) => {
+  const { t } = useTranslation()
   const [pageButtons, setPageButtons] = useState([])
 
   useEffect(() => {
@@ -154,11 +156,11 @@ const PageSelector = ({
   return (
     <div data-testid="page-control">
       <PaginationLinkButton onClick={onPreviousClick} disabled={previousDisabled}>
-        Back
+        {t('buttons.back')}
       </PaginationLinkButton>
       {pageButtons}
       <PaginationLinkButton onClick={onNextClick} disabled={nextDisabled}>
-        Next
+        {t('buttons.next_page')}
       </PaginationLinkButton>
     </div>
   )

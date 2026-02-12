@@ -21,7 +21,7 @@ test('Offline management regimes (plural) shows no info associated with project 
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Online management regimes (plural) shows no info associated with project id view ', async () => {
@@ -33,5 +33,5 @@ test('Online management regimes (plural) shows no info associated with project i
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })

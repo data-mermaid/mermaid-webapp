@@ -21,7 +21,7 @@ test('Offline fish belt collect shows no info associated with RECORD id view ', 
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantRecordId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Online fish belt collect shows no info associated with RECORD id view ', async () => {
@@ -33,7 +33,7 @@ test('Online fish belt collect shows no info associated with RECORD id view ', a
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantRecordId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Offline fish belt collect shows no info associated with PROJECT id view ', async () => {
@@ -47,7 +47,7 @@ test('Offline fish belt collect shows no info associated with PROJECT id view ',
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })
 
 test('Online fish belt collect shows no info associated with PROJECT id view ', async () => {
@@ -59,5 +59,5 @@ test('Online fish belt collect shows no info associated with PROJECT id view ', 
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
+  expect(await screen.findByTestId('ids-not-found')).toBeInTheDocument()
 })

@@ -304,11 +304,13 @@ test('Habitat Complexity validations will show passed input validations', async 
 
   // regular inputs
 
-  expect(within(screen.getByTestId('site')).getByLabelText('Passed Validation')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('site')).getByTestId('passed-validation-indicator'),
+  ).toBeInTheDocument()
 
   // observations table (has three empty observation)
   expect(
-    within(screen.getByTestId('observations-section')).getAllByLabelText('Passed Validation')
+    within(screen.getByTestId('observations-section')).getAllByTestId('passed-validation-indicator')
       .length,
   ).toEqual(3)
 }, 50000)

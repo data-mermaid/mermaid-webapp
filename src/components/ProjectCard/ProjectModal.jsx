@@ -3,7 +3,7 @@ import { useFormik } from 'formik'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
 import { getToastArguments } from '../../library/getToastArguments'
@@ -16,6 +16,7 @@ import InputWithLabelAndValidation from '../mermaidInputs/InputWithLabelAndValid
 import LoadingModal from '../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useTranslation } from 'react-i18next'
+import { internalNavigation } from '../../link_constants'
 
 const CheckBoxLabel = styled.label`
   display: inline-block;
@@ -93,7 +94,7 @@ const ProjectModal = ({
     setNameAlreadyExists(false)
     setExistingName('')
     onDismiss()
-    navigate(`/projects/${response.id}/sites`)
+    navigate(internalNavigation.projectStartPage(response.id))
   }
 
   const copyExistingProject = () => {

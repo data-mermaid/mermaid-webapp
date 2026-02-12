@@ -71,7 +71,7 @@ describe('Offline', () => {
     expect(within(rules).getByTestId('rules-open-access-radio')).toBeChecked()
     expect(within(rules).getByTestId('rules-no-take-radio')).not.toBeChecked()
     expect(within(rules).getByTestId('rules-partial-restrictions-radio')).not.toBeChecked()
-    expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('Choose...')
+    expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('choose...')
   })
 
   test('New MR save success shows saved inputs, toast, and navigates to the edit MR page for the newly created MR', async () => {

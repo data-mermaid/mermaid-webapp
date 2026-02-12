@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'

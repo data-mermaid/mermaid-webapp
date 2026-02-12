@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { hoverState } from '../../../library/styling/mediaQueries'
 import { DropdownContainer } from '../HideShow'
 import theme from '../../../theme'

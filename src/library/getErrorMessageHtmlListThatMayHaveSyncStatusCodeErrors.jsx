@@ -1,6 +1,5 @@
 import React from 'react'
-
-import language from '../language'
+import i18n from '../../i18n'
 
 export const getErrorMessageHtmlListThatMayHaveSyncStatusCodeErrors = (error) => {
   // we want to handle actual error objects as that is useful and conventional
@@ -24,7 +23,7 @@ export const getErrorMessageHtmlListThatMayHaveSyncStatusCodeErrors = (error) =>
   } catch {
     return (
       <ul>
-        <li>{language.error.generic}</li>
+        <li>{i18n.t('api_errors.mermaid_error')}</li>
       </ul>
     )
   }

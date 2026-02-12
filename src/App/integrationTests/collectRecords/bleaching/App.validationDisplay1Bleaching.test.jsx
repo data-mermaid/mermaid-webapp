@@ -330,16 +330,20 @@ test('Bleaching collect record validations will show passed input validations', 
 
   // regular inputs (sample)
 
-  expect(within(screen.getByTestId('site')).getByLabelText('Passed Validation')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('site')).getByTestId('passed-validation-indicator'),
+  ).toBeInTheDocument()
 
   // observations table (has three empty observations)
   expect(
-    within(screen.getByTestId('observations-section-table')).getAllByLabelText('Passed Validation')
-      .length,
+    within(screen.getByTestId('observations-section-table')).getAllByTestId(
+      'passed-validation-indicator',
+    ).length,
   ).toEqual(3)
 
   expect(
-    within(screen.getByTestId('observations2-section-table')).getAllByLabelText('Passed Validation')
-      .length,
+    within(screen.getByTestId('observations2-section-table')).getAllByTestId(
+      'passed-validation-indicator',
+    ).length,
   ).toEqual(3)
 }, 50000)

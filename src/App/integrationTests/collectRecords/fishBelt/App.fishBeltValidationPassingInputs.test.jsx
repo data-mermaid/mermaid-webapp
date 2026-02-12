@@ -76,51 +76,55 @@ test('Fishbelt validations show check for valid inputs', async () => {
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  expect(within(screen.getByTestId('site')).getByLabelText('Passed Validation')).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('management')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('site')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('depth')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('management')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('sample-date')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('depth')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('sample-time')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('sample-date')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('transect-number')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('sample-time')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('label')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('transect-number')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('len-surveyed')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('label')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('width')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('len-surveyed')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('size-bin')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('width')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('reef-slope')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('size-bin')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('relative-depth')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('reef-slope')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('visibility')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('relative-depth')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('current')).getByLabelText('Passed Validation'),
-  ).toBeInTheDocument()
-  expect(within(screen.getByTestId('tide')).getByLabelText('Passed Validation')).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('notes')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('visibility')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('observers')).getByLabelText('Passed Validation'),
+    within(screen.getByTestId('current')).getByTestId('passed-validation-indicator'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('tide')).getByTestId('passed-validation-indicator'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('notes')).getByTestId('passed-validation-indicator'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('observers')).getByTestId('passed-validation-indicator'),
   ).toBeInTheDocument()
 })

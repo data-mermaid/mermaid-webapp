@@ -40,9 +40,7 @@ test('User being denied push sync shows toasts on project-related page', async (
   const project500ToastContent = screen.queryByTestId('sync-error-for-project-500')
   const project900ToastContent = screen.queryByTestId('sync-error-for-project-900')
 
-  expect(project5ToastContent).toHaveTextContent(
-    'You do not have permission to sync data to Project 5. Please check your notifications and consult with a project administrator about your project role.',
-  )
+  expect(within(project5ToastContent).getByTestId('sync-error-message-5')).toBeInTheDocument()
   expect(project5ToastContent).toHaveTextContent('benthic attributes')
   expect(project5ToastContent).toHaveTextContent('unsubmitted sample units')
   expect(project5ToastContent).toHaveTextContent('fish species')

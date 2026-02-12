@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import {
   choicesPropType,
@@ -572,7 +572,7 @@ const FishBeltObservationTable = ({
               </Th>
               {areValidationsShowing ? (
                 <Th align="center" id="fish-validations-label">
-                  {t('validations')}
+                  {t('validations.validations')}
                 </Th>
               ) : null}
               <Th> </Th>

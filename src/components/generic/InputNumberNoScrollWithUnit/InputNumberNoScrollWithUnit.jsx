@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import { inputTextareaSelectStyles } from '../form'
 import theme from '../../../theme'

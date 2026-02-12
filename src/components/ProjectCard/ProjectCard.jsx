@@ -10,7 +10,6 @@ import {
 } from './ProjectCard.styles'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
-import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -29,6 +28,8 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 import { useTranslation } from 'react-i18next'
 import labelStyles from '../../style/labels.module.scss'
 import styles from './ProjectCard.module.scss'
+
+const OFFLINE_READY_TOAST_ID = 'offline-ready-toast'
 
 const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...restOfProps }) => {
   const { currentUser } = useCurrentUser()
@@ -56,7 +57,10 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            ...getToastArguments(language.success.getProjectTurnOnOfflineReadySuccess(name)),
+            ...getToastArguments(
+              t('projects.success.offline_ready_on', { projectName: name }),
+              OFFLINE_READY_TOAST_ID,
+            ),
           )
         })
         .catch((error) => {
@@ -64,7 +68,10 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             error,
             callback: () => {
               toast.error(
-                ...getToastArguments(language.error.getProjectTurnOnOfflineReadyFailure(name)),
+                ...getToastArguments(
+                  t('projects.errors.offline_ready_on_failed', { projectName: name }),
+                  OFFLINE_READY_TOAST_ID,
+                ),
               )
             },
           })
@@ -78,7 +85,10 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            ...getToastArguments(language.success.getProjectTurnOffOfflineReadySuccess(name)),
+            ...getToastArguments(
+              t('projects.success.offline_ready_off', { projectName: name }),
+              OFFLINE_READY_TOAST_ID,
+            ),
           )
         })
         .catch((error) => {
@@ -86,7 +96,10 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             error,
             callback: () => {
               toast.error(
-                ...getToastArguments(language.error.getProjectTurnOffOfflineReadyFailure(name)),
+                ...getToastArguments(
+                  t('projects.errors.offline_ready_removal_failure', { projectName: name }),
+                  OFFLINE_READY_TOAST_ID,
+                ),
               )
             },
           })
@@ -136,14 +149,10 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             <h2>{name}</h2>
             <div className={styles['pill-container']}>
               {isAdminUser && (
-                <div className={[labelStyles.pill, labelStyles.pill__admin].join(' ')}>
-                  {t('users.roles.admin')}
-                </div>
+                <span className={labelStyles['pill--admin']}>{t('users.roles.admin')}</span>
               )}
               {isDemoProject && (
-                <div className={[labelStyles.pill, labelStyles.pill__demo].join(' ')}>
-                  {t('projects.demo.demo')}
-                </div>
+                <span className={labelStyles['pill--demo']}>{t('projects.demo.demo')}</span>
               )}
             </div>
           </div>

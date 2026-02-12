@@ -22,7 +22,13 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 403 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('The current user does not have permission to do that.', {
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+
+    expect(toastContent.props).toEqual({
+      message: 'The current user does not have permission to do that.',
+      testId: 'toast',
+    })
+    expect(toastOptions).toEqual({
       toastId: 'The current user does not have permission to do that.',
       transition: Slide,
     })
@@ -37,7 +43,13 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 500 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('MERMAID error: please contact support@datamermaid.org', {
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+
+    expect(toastContent.props).toEqual({
+      message: 'MERMAID error: please contact support@datamermaid.org',
+      testId: 'toast',
+    })
+    expect(toastOptions).toEqual({
       toastId: 'MERMAID error: please contact support@datamermaid.org',
       transition: Slide,
     })
@@ -52,7 +64,13 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 502 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('MERMAID error: please contact support@datamermaid.org', {
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+
+    expect(toastContent.props).toEqual({
+      message: 'MERMAID error: please contact support@datamermaid.org',
+      testId: 'toast',
+    })
+    expect(toastOptions).toEqual({
       toastId: 'MERMAID error: please contact support@datamermaid.org',
       transition: Slide,
     })
@@ -67,7 +85,13 @@ describe('handleHttpResponseError', () => {
 
     handleHttpResponseError({ error: { response: { status: 503 } }, callback, logoutMermaid })
 
-    expect(toastSpy).toHaveBeenCalledWith('MERMAID error: please contact support@datamermaid.org', {
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+
+    expect(toastContent.props).toEqual({
+      message: 'MERMAID error: please contact support@datamermaid.org',
+      testId: 'toast',
+    })
+    expect(toastOptions).toEqual({
       toastId: 'MERMAID error: please contact support@datamermaid.org',
       transition: Slide,
     })

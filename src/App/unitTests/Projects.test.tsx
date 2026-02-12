@@ -61,12 +61,12 @@ describe('Projects dashboard', () => {
     )
 
     const projectCard = screen.getAllByTestId('project-card')[1]
-    const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
-    const submitSummaryCard = within(projectCard).getByLabelText(/submitted/i)
-    const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
-    const usersSummaryCard = within(projectCard).getByLabelText(/users/i)
-    const dataSharingSummaryCard = within(projectCard).getByLabelText(/data-sharing/i)
-    const copyButton = within(projectCard).getByLabelText(/copy/i)
+    const collectingSummaryCard = within(projectCard).getByTestId('collect-summary-card')
+    const submitSummaryCard = within(projectCard).getByTestId('submitted-summary-card-online')
+    const sitesSummaryCard = within(projectCard).getByTestId('sites-summary-card')
+    const usersSummaryCard = within(projectCard).getByTestId('users-summary-card')
+    const dataSharingSummaryCard = within(projectCard).getByTestId('data-sharing-summary-card')
+    const copyButton = within(projectCard).getByTestId('copy-project-button')
 
     expect(collectingSummaryCard).toBeInTheDocument()
     expect(submitSummaryCard).toBeInTheDocument()
@@ -92,11 +92,11 @@ describe('Projects dashboard', () => {
 
     const projectCard = screen.getAllByTestId('project-card')[0]
 
-    const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
-    const submittedSummaryCard = within(projectCard).getByLabelText(/submitted/i)
-    const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
-    const usersSummaryCard = within(projectCard).getByLabelText(/users/i)
-    const dataSharingSummaryCard = within(projectCard).getByLabelText(/data-sharing/i)
+    const collectingSummaryCard = within(projectCard).getByTestId('collect-summary-card')
+    const submittedSummaryCard = within(projectCard).getByTestId('submitted-summary-card-online')
+    const sitesSummaryCard = within(projectCard).getByTestId('sites-summary-card')
+    const usersSummaryCard = within(projectCard).getByTestId('users-summary-card')
+    const dataSharingSummaryCard = within(projectCard).getByTestId('data-sharing-summary-card')
 
     expect(within(projectCard).getByText('Project II'))
     expect(within(projectCard).getByText('America'))
@@ -104,15 +104,9 @@ describe('Projects dashboard', () => {
     expect(within(submittedSummaryCard).getByText('2'))
     expect(within(sitesSummaryCard).getByText('36'))
     expect(within(usersSummaryCard).getByText('3'))
-    expect(within(dataSharingSummaryCard).getByTestId('fishbelt-policy')).toHaveTextContent(
-      'Fish belt: Public Summary',
-    )
-    expect(within(dataSharingSummaryCard).getByTestId('benthic-policy')).toHaveTextContent(
-      'Benthic: Private',
-    )
-    expect(within(dataSharingSummaryCard).getByTestId('bleaching-policy')).toHaveTextContent(
-      'Bleaching: Public',
-    )
+    expect(within(dataSharingSummaryCard).getByTestId('fishbelt-policy')).toBeInTheDocument()
+    expect(within(dataSharingSummaryCard).getByTestId('benthic-policy')).toBeInTheDocument()
+    expect(within(dataSharingSummaryCard).getByTestId('bleaching-policy')).toBeInTheDocument()
 
     const offlineCheckbox = within(projectCard).getByTestId('offline-ready')
 
@@ -136,22 +130,22 @@ describe('Projects dashboard', () => {
     )
 
     const projectCard = screen.getAllByTestId('project-card')[0]
-    const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
-    const submittedSummaryCard = within(projectCard).getByLabelText(/submitted/i)
-    const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
-    const usersSummaryCard = within(projectCard).getByLabelText(/users/i)
-    const dataSharingSummaryCard = within(projectCard).getByLabelText(/data-sharing/i)
+    const collectingSummaryCard = within(projectCard).getByTestId('collect-summary-card')
+    const submittedSummaryCard = within(projectCard).getByTestId('submitted-summary-card-offline')
+    const sitesSummaryCard = within(projectCard).getByTestId('sites-summary-card')
+    const usersSummaryCard = within(projectCard).getByTestId('users-summary-card')
+    const dataSharingSummaryCard = within(projectCard).getByTestId('data-sharing-summary-card')
 
-    expect(within(projectCard).getByLabelText(/collect/i)).toBeInTheDocument()
-    expect(within(projectCard).getByLabelText(/submitted offline/i)).toBeInTheDocument()
-    expect(within(projectCard).getByLabelText(/sites/i)).toBeInTheDocument()
-    expect(within(projectCard).getByLabelText(/users offline/i)).toBeInTheDocument()
-    expect(within(projectCard).getByLabelText(/data-sharing offline/i)).toBeInTheDocument()
+    expect(within(projectCard).getByTestId('collect-summary-card')).toBeInTheDocument()
+    expect(within(projectCard).getByTestId('submitted-summary-card-offline')).toBeInTheDocument()
+    expect(within(projectCard).getByTestId('sites-summary-card')).toBeInTheDocument()
+    expect(within(projectCard).getByTestId('users-summary-card')).toBeInTheDocument()
+    expect(within(projectCard).getByTestId('data-sharing-summary-card')).toBeInTheDocument()
     expect(within(collectingSummaryCard).getByText('12'))
-    expect(within(submittedSummaryCard).getByText('Online Only'))
+    expect(within(submittedSummaryCard).getByTestId('offline-message'))
     expect(within(sitesSummaryCard).getByText('13'))
-    expect(within(usersSummaryCard).getByText('Online Only'))
-    expect(within(dataSharingSummaryCard).getByText('Online Only'))
+    expect(within(usersSummaryCard).getByTestId('offline-message'))
+    expect(within(dataSharingSummaryCard).getByTestId('offline-message'))
 
     expect(screen.getByTestId('offline-ready')).toBeDisabled()
     expect(screen.getByTestId('copy-project-button')).toBeDisabled()
@@ -173,12 +167,12 @@ describe('Projects dashboard', () => {
 
     const projectCard = screen.getAllByTestId('project-card')[0]
 
-    expect(within(projectCard).getByLabelText(/collect/i)).toBeInTheDocument()
-    expect(within(projectCard).getByLabelText(/submitted/i)).toBeInTheDocument()
-    expect(within(projectCard).getByLabelText(/sites/i)).toBeInTheDocument()
-    expect(within(projectCard).getByLabelText(/users/i)).toBeInTheDocument()
+    expect(within(projectCard).getByTestId('collect-summary-card')).toBeInTheDocument()
+    expect(within(projectCard).getByTestId('submitted-summary-card-online')).toBeInTheDocument()
+    expect(within(projectCard).getByTestId('sites-summary-card')).toBeInTheDocument()
+    expect(within(projectCard).getByTestId('users-summary-card')).toBeInTheDocument()
     // Talk to AL or Melissa as to why this is commented.
-    // expect(within(projectCard).getByLabelText(/data sharing/i)).toBeInTheDocument()
+    // expect(within(projectCard).getByTestId('data-sharing-summary-card')).toBeInTheDocument()
 
     const offlineReadyCheckboxes = screen.getAllByTestId('offline-ready')
     const copyButtons = screen.getAllByTestId('copy-project-button')

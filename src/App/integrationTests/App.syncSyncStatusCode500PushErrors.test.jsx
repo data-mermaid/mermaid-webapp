@@ -34,7 +34,7 @@ test('Push sync status code of 500 shows toasts on project-related page', async 
   await screen.findByTestId('loading-indicator')
   await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
-  expect(await screen.findByText('MERMAID sync error: please contact support@datamermaid.org'))
+  expect(await screen.findByTestId('sync-error-unspecified-error-toast'))
 })
 
 test('Push sync status code of 500 shows toasts on project list page', async () => {
@@ -59,5 +59,5 @@ test('Push sync status code of 500 shows toasts on project list page', async () 
   await screen.findByTestId('projects-loading-indicator')
   await waitForElementToBeRemoved(() => screen.queryByTestId('projects-loading-indicator'))
 
-  expect(await screen.findByText('MERMAID sync error: please contact support@datamermaid.org'))
+  expect(await screen.findByTestId('sync-error-unspecified-error-toast'))
 })

@@ -75,29 +75,28 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
     within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
   ).toBeInTheDocument()
 
-  await user.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+  const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
+  await user.click(resolveButton)
 
-  const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
-  const originalSite = await within(resolveModal).findByLabelText('Original Site')
-  const keepOriginalSiteButton = await within(originalSite).findByRole('button', {
-    name: 'Keep site',
-  })
+  const resolveModal = await screen.findByTestId('resolve-duplicate-site-modal')
+  const originalSite = await within(resolveModal).findByTestId('resolve-duplicate-original-site')
+  const keepOriginalSiteButton = await within(originalSite).findByTestId(
+    'resolve-duplicate-keep-original-site',
+  )
 
   await user.click(keepOriginalSiteButton)
 
-  const confirmationModal = screen.getByLabelText('Confirm Merge Site Modal')
+  const confirmationModal = await screen.findByTestId('resolve-duplicate-confirmation-modal')
 
   expect(
-    await within(confirmationModal).findByText(
-      'All instances of this site will be replaced with original site',
-    ),
+    await within(confirmationModal).findByTestId('resolve-duplicate-confirmation-message'),
   ).toBeInTheDocument()
 
-  const mergeButton = await within(confirmationModal).findByRole('button', { name: 'Merge' })
+  const mergeButton = await within(confirmationModal).findByTestId('resolve-duplicate-merge')
 
   await user.click(mergeButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('Resolve Duplicate Site Modal'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-site-modal'))
 
   await waitFor(() =>
     expect(
@@ -152,29 +151,28 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
     within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
   ).toBeInTheDocument()
 
-  await user.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+  const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
+  await user.click(resolveButton)
 
-  const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
-  const duplicateSite = await within(resolveModal).findByLabelText('Duplicate Site')
-  const keepDuplicateSiteButton = await within(duplicateSite).findByRole('button', {
-    name: 'Keep site',
-  })
+  const resolveModal = await screen.findByTestId('resolve-duplicate-site-modal')
+  const duplicateSite = await within(resolveModal).findByTestId('resolve-duplicate-duplicate-site')
+  const keepDuplicateSiteButton = await within(duplicateSite).findByTestId(
+    'resolve-duplicate-keep-duplicate-site',
+  )
 
-  await user.click(keepDuplicateSiteButton, { id: '4' })
+  await user.click(keepDuplicateSiteButton)
 
-  const confirmationModal = screen.getByLabelText('Confirm Merge Site Modal')
+  const confirmationModal = await screen.findByTestId('resolve-duplicate-confirmation-modal')
 
   expect(
-    await within(confirmationModal).findByText(
-      'All instances of this site will be replaced with duplicate site',
-    ),
+    await within(confirmationModal).findByTestId('resolve-duplicate-confirmation-message'),
   ).toBeInTheDocument()
 
-  const mergeButton = await within(confirmationModal).findByRole('button', { name: 'Merge' })
+  const mergeButton = await within(confirmationModal).findByTestId('resolve-duplicate-merge')
 
   await user.click(mergeButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('Resolve Duplicate Site Modal'))
+  await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-site-modal'))
 
   await waitFor(() =>
     expect(
@@ -229,13 +227,14 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
     within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
   ).toBeInTheDocument()
 
-  await user.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+  const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
+  await user.click(resolveButton)
 
-  const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
-  const originalSite = await within(resolveModal).findByLabelText('Original Site')
-  const editOriginalSiteButton = await within(originalSite).findByRole('button', {
-    name: 'Edit site',
-  })
+  const resolveModal = await screen.findByTestId('resolve-duplicate-site-modal')
+  const originalSite = await within(resolveModal).findByTestId('resolve-duplicate-original-site')
+  const editOriginalSiteButton = await within(originalSite).findByTestId(
+    'resolve-duplicate-edit-original-site',
+  )
 
   await user.click(editOriginalSiteButton)
 
@@ -293,13 +292,14 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
     within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
   ).toBeInTheDocument()
 
-  await user.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+  const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
+  await user.click(resolveButton)
 
-  const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
-  const duplicateSite = await within(resolveModal).findByLabelText('Duplicate Site')
-  const editDuplicateSiteButton = await within(duplicateSite).findByRole('button', {
-    name: 'Edit site',
-  })
+  const resolveModal = await screen.findByTestId('resolve-duplicate-site-modal')
+  const duplicateSite = await within(resolveModal).findByTestId('resolve-duplicate-duplicate-site')
+  const editDuplicateSiteButton = await within(duplicateSite).findByTestId(
+    'resolve-duplicate-edit-duplicate-site',
+  )
 
   await user.click(editDuplicateSiteButton)
 
@@ -357,18 +357,25 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
     within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
   ).toBeInTheDocument()
 
-  await user.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+  const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
+  await user.click(resolveButton)
 
-  const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
-  const keepBothSiteButton = await within(resolveModal).findByRole('button', { name: 'Keep both' })
+  const resolveModal = await screen.findByTestId('resolve-duplicate-site-modal')
+  const keepBothSiteButton = await within(resolveModal).findByTestId('resolve-duplicate-keep-both')
 
   await user.click(keepBothSiteButton)
 
   await waitFor(() =>
-    expect(within(screen.getByTestId('site')).queryByText('warning')).not.toBeInTheDocument(),
+    expect(
+      within(screen.getByTestId('site')).queryByTestId('input-validation-warning'),
+    ).not.toBeInTheDocument(),
   )
 
-  expect(within(screen.getByTestId('site')).getByText('ignored')).toBeInTheDocument()
+  const ignoredSiteValidation = await within(screen.getByTestId('site')).findByTestId(
+    'message-pill-ignore',
+  )
+
+  expect(ignoredSiteValidation).toBeInTheDocument()
 })
 
 test('Validate Fish Belt collect record, get management similar name warning, show resolve button, keep original management, and merge duplicate management to original management', async () => {
@@ -419,33 +426,38 @@ test('Validate Fish Belt collect record, get management similar name warning, sh
     ),
   ).toBeInTheDocument()
 
-  await user.click(
-    within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }),
+  const resolveButton = await within(screen.getByTestId('management')).findByTestId(
+    'resolve-management-button',
   )
+  await user.click(resolveButton)
 
-  const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
-  const originalManagement = await within(resolveModal).findByLabelText('Original Management')
-  const keepOriginalManagementButton = await within(originalManagement).findByRole('button', {
-    name: 'Keep MR',
-  })
+  const resolveModal = await screen.findByTestId('resolve-duplicate-management-modal')
+  const originalManagement = await within(resolveModal).findByTestId(
+    'resolve-duplicate-management-original',
+  )
+  const keepOriginalManagementButton = await within(originalManagement).findByTestId(
+    'resolve-duplicate-management-keep-original',
+  )
 
   await user.click(keepOriginalManagementButton)
 
-  const confirmationModal = screen.getByLabelText('Confirm Merge Management Modal')
+  const confirmationModal = await screen.findByTestId(
+    'resolve-duplicate-management-confirmation-modal',
+  )
 
   expect(
-    await within(confirmationModal).findByText(
-      'All instances of this site will be replaced with original mr',
+    await within(confirmationModal).findByTestId(
+      'resolve-duplicate-management-confirmation-message',
     ),
   ).toBeInTheDocument()
 
-  const mergeButton = await within(confirmationModal).findByRole('button', { name: 'Merge' })
+  const mergeButton = await within(confirmationModal).findByTestId(
+    'resolve-duplicate-management-confirm-merge',
+  )
 
   await user.click(mergeButton)
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('Resolve Duplicate Management Modal'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-management-modal'))
 
   await waitFor(() =>
     expect(
@@ -504,33 +516,38 @@ test('Validate Fish Belt collect record, get management similar name warning, sh
     ),
   ).toBeInTheDocument()
 
-  await user.click(
-    within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }),
+  const resolveButton = await within(screen.getByTestId('management')).findByTestId(
+    'resolve-management-button',
   )
+  await user.click(resolveButton)
 
-  const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
-  const duplicateManagement = await within(resolveModal).findByLabelText('Duplicate Management')
-  const keepDuplicateManagementButton = await within(duplicateManagement).findByRole('button', {
-    name: 'Keep MR',
-  })
+  const resolveModal = await screen.findByTestId('resolve-duplicate-management-modal')
+  const duplicateManagement = await within(resolveModal).findByTestId(
+    'resolve-duplicate-management-duplicate',
+  )
+  const keepDuplicateManagementButton = await within(duplicateManagement).findByTestId(
+    'resolve-duplicate-management-keep-duplicate',
+  )
 
   await user.click(keepDuplicateManagementButton)
 
-  const confirmationModal = screen.getByLabelText('Confirm Merge Management Modal')
+  const confirmationModal = await screen.findByTestId(
+    'resolve-duplicate-management-confirmation-modal',
+  )
 
   expect(
-    await within(confirmationModal).findByText(
-      'All instances of this site will be replaced with duplicate mr',
+    await within(confirmationModal).findByTestId(
+      'resolve-duplicate-management-confirmation-message',
     ),
   ).toBeInTheDocument()
 
-  const mergeButton = await within(confirmationModal).findByRole('button', { name: 'Merge' })
+  const mergeButton = await within(confirmationModal).findByTestId(
+    'resolve-duplicate-management-confirm-merge',
+  )
 
   await user.click(mergeButton)
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('Resolve Duplicate Management Modal'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-management-modal'))
 
   await waitFor(() =>
     expect(
@@ -589,15 +606,18 @@ test('Validate Fish Belt collect record, get management duplicate warning, show 
     ),
   ).toBeInTheDocument()
 
-  await user.click(
-    within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }),
+  const resolveButton = await within(screen.getByTestId('management')).findByTestId(
+    'resolve-management-button',
   )
+  await user.click(resolveButton)
 
-  const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
-  const originalManagement = await within(resolveModal).findByLabelText('Original Management')
-  const editOriginalManagementButton = await within(originalManagement).findByRole('button', {
-    name: 'Edit MR',
-  })
+  const resolveModal = await screen.findByTestId('resolve-duplicate-management-modal')
+  const originalManagement = await within(resolveModal).findByTestId(
+    'resolve-duplicate-management-original',
+  )
+  const editOriginalManagementButton = await within(originalManagement).findByTestId(
+    'resolve-duplicate-management-edit-original',
+  )
 
   await user.click(editOriginalManagementButton)
 
@@ -657,15 +677,18 @@ test('Validate Fish Belt collect record, get management duplicate warning, show 
     ),
   ).toBeInTheDocument()
 
-  await user.click(
-    within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }),
+  const resolveButton = await within(screen.getByTestId('management')).findByTestId(
+    'resolve-management-button',
   )
+  await user.click(resolveButton)
 
-  const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
-  const duplicateManagement = await within(resolveModal).findByLabelText('Duplicate Management')
-  const editDuplicateManagementButton = await within(duplicateManagement).findByRole('button', {
-    name: 'Edit MR',
-  })
+  const resolveModal = await screen.findByTestId('resolve-duplicate-management-modal')
+  const duplicateManagement = await within(resolveModal).findByTestId(
+    'resolve-duplicate-management-duplicate',
+  )
+  const editDuplicateManagementButton = await within(duplicateManagement).findByTestId(
+    'resolve-duplicate-management-edit-duplicate',
+  )
 
   await user.click(editDuplicateManagementButton)
 
@@ -725,20 +748,27 @@ test('Validate Fish Belt collect record, get management duplicate warning, show 
     ),
   ).toBeInTheDocument()
 
-  await user.click(
-    within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }),
+  const resolveButton = await within(screen.getByTestId('management')).findByTestId(
+    'resolve-management-button',
   )
+  await user.click(resolveButton)
 
-  const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
-  const keepBothManagementRegimeButton = await within(resolveModal).findByRole('button', {
-    name: 'Keep both',
-  })
+  const resolveModal = await screen.findByTestId('resolve-duplicate-management-modal')
+  const keepBothManagementRegimeButton = await within(resolveModal).findByTestId(
+    'resolve-duplicate-management-keep-both',
+  )
 
   await user.click(keepBothManagementRegimeButton)
 
   await waitFor(() =>
-    expect(within(screen.getByTestId('management')).queryByText('warning')).not.toBeInTheDocument(),
+    expect(
+      within(screen.getByTestId('management')).queryByTestId('input-validation-warning'),
+    ).not.toBeInTheDocument(),
   )
 
-  expect(within(screen.getByTestId('management')).getByText('ignored')).toBeInTheDocument()
+  const ignoredManagementValidation = await within(screen.getByTestId('management')).findByTestId(
+    'message-pill-ignore',
+  )
+
+  expect(ignoredManagementValidation).toBeInTheDocument()
 })

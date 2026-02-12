@@ -36,7 +36,7 @@ test('ErrorBoundary renders the fallback UI when an error is thrown', () => {
     </ErrorBoundary>,
   )
 
-  expect(screen.getByText(/A part of this page did not load correctly./)).toBeInTheDocument()
+  expect(screen.getByTestId('error-boundary-message')).toBeInTheDocument()
 })
 
 test('ErrorBoundary does not display the Try Again button after the Try Again button is clicked', async () => {
@@ -50,11 +50,11 @@ test('ErrorBoundary does not display the Try Again button after the Try Again bu
     </ErrorBoundary>,
   )
 
-  expect(screen.getByText(/A part of this page did not load correctly./)).toBeInTheDocument()
+  expect(screen.getByTestId('error-boundary-message')).toBeInTheDocument()
   await waitFor(() => expect(screen.queryByText(/Content/)).not.toBeInTheDocument())
-  await user.click(screen.queryByRole('button', { name: /Try Again/ }))
+  await user.click(screen.getByTestId('error-boundary-try-again'))
 
-  expect(screen.queryByText(/Try Again/)).not.toBeInTheDocument()
+  expect(screen.queryByTestId('error-boundary-try-again')).not.toBeInTheDocument()
   await waitFor(() => expect(screen.queryByText(/Content/)).not.toBeInTheDocument())
 })
 
@@ -70,9 +70,9 @@ test('ErrorBoundary removes Try Again button after one failed re-render', async 
     </ErrorBoundary>,
   )
 
-  expect(screen.getByText(/A part of this page did not load correctly./)).toBeInTheDocument()
-  await user.click(screen.queryByRole('button', { name: /Try Again/ }))
+  expect(screen.getByTestId('error-boundary-message')).toBeInTheDocument()
+  await user.click(screen.getByTestId('error-boundary-try-again'))
 
-  expect(screen.getByText(/A part of this page did not load correctly./)).toBeInTheDocument()
-  expect(screen.queryByRole('button', { name: /Try Again/ })).not.toBeInTheDocument()
+  expect(screen.getByTestId('error-boundary-message')).toBeInTheDocument()
+  expect(screen.queryByTestId('error-boundary-try-again')).not.toBeInTheDocument()
 })
