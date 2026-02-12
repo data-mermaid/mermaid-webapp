@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react-swc'
 import { configDefaults } from 'vitest/config'
-import type { Plugin } from 'vite'
+import type { Plugin } from 'vitest/config'
 
 /**
  * Vite plugin that stubs CSS/style and static asset imports in tests.
