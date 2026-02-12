@@ -45,17 +45,18 @@ export default defineConfig({
     globals: true,
     restoreMocks: true,
     setupFiles: [
-      // dotenv/config in Jest → here we can load env via vite, but to emulate Jest:
+      // dotenv/config in Jest
+      // here we can load env via vite, but to emulate Jest:
       'dotenv/config',
       'src/setupTests.js',
     ],
-    // Replace jest.setTimeout with a per-project default:
-    testTimeout: 300000, // 5 minutes to match your jest.setTimeout
+    // Per-project default. Replaces jest.setTimeout
+    testTimeout: 300000, // 5 minutes
 
     // Coverage example (Vitest v4 changed defaults)
     coverage: {
       provider: 'v8',
-      // Include only source files to keep reports meaningful
+      // Include only source files - keep reports meaningful
       include: ['src/**/*.{js,jsx,ts,tsx}'],
       exclude: [
         ...configDefaults.exclude,
@@ -66,7 +67,6 @@ export default defineConfig({
       reportsDirectory: './coverage',
       reporter: ['text', 'html', 'json'],
     },
-    // Restore previous excludes if your repo is large
     exclude: [
       ...configDefaults.exclude,
       '**/dist/**',
