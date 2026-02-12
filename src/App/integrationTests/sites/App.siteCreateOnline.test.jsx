@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from 'vitest'
 import { http, HttpResponse } from 'msw'
 import React from 'react'
 
@@ -79,9 +79,9 @@ describe('Online', () => {
     expect(screen.getByTestId('country-input')).toHaveDisplayValue('')
     expect(screen.getByTestId('latitude-input')).toHaveDisplayValue('')
     expect(screen.getByTestId('longitude-input')).toHaveDisplayValue('')
-    expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('choose...')
-    expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('choose...')
-    expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('choose...')
+    expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('Choose...')
+    expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('Choose...')
+    expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('Choose...')
 
     expect(screen.getByTestId('notes-textarea')).toHaveDisplayValue('')
   })

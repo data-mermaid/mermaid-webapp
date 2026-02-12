@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test } from 'vitest'
 import { http, HttpResponse } from 'msw'
 import React from 'react'
 
@@ -75,7 +75,7 @@ describe('Online', () => {
     expect(
       within(screen.getByTestId('rules')).getByTestId('rules-partial-restrictions-radio'),
     ).not.toBeChecked()
-    expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('choose...')
+    expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('Choose...')
   })
 
   test('New MR save success shows saved inputs, toast, and navigates to the edit MR page for the newly created MR', async () => {

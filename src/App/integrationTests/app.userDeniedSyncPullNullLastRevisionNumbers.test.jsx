@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import { http, HttpResponse } from 'msw'
 import React from 'react'
@@ -104,79 +104,75 @@ and project profiles to ensure the user can pull fresh data if they are given pe
   // then we navigate the user to trigger a sync
 
   const _mockApiWithFakeServerGeneratedLastRevisionNumbers = mockMermaidApiAllSuccessful.use(
-    http.post(
-      `${apiBaseUrl}/pull/`,
-      () => {
-        const responseWithSyncErrors = {
-          choices: {
-            last_revision_num: 'server',
-            error: {
-              code: 403,
-              record_ids: [],
-            },
+    http.post(`${apiBaseUrl}/pull/`, () => {
+      const responseWithSyncErrors = {
+        choices: {
+          last_revision_num: 'server',
+          error: {
+            code: 403,
+            record_ids: [],
           },
-          fish_species: {
-            last_revision_num: 'server',
-            error: {
-              code: 403,
-              record_ids: [],
-            },
+        },
+        fish_species: {
+          last_revision_num: 'server',
+          error: {
+            code: 403,
+            record_ids: [],
           },
-          fish_genera: {
-            last_revision_num: 'server',
-            error: {
-              code: 403,
-              record_ids: [],
-            },
+        },
+        fish_genera: {
+          last_revision_num: 'server',
+          error: {
+            code: 403,
+            record_ids: [],
           },
-          fish_families: {
-            last_revision_num: 'server',
-            error: {
-              code: 403,
-              record_ids: [],
-            },
+        },
+        fish_families: {
+          last_revision_num: 'server',
+          error: {
+            code: 403,
+            record_ids: [],
           },
-          benthic_attributes: {
-            last_revision_num: 'server',
-            error: {
-              code: 403,
-              record_ids: [],
-            },
+        },
+        benthic_attributes: {
+          last_revision_num: 'server',
+          error: {
+            code: 403,
+            record_ids: [],
           },
-          collect_records: {
-            last_revision_num: 'server',
-            error: {
-              code: 403,
-              record_ids: [],
-            },
+        },
+        collect_records: {
+          last_revision_num: 'server',
+          error: {
+            code: 403,
+            record_ids: [],
           },
-          project_managements: {
-            last_revision_num: 'server',
-            error: {
-              code: 403,
-              record_ids: [],
-            },
+        },
+        project_managements: {
+          last_revision_num: 'server',
+          error: {
+            code: 403,
+            record_ids: [],
           },
-          project_profiles: {
-            last_revision_num: 'server',
-            error: {
-              code: 403,
-              record_ids: [],
-            },
+        },
+        project_profiles: {
+          last_revision_num: 'server',
+          error: {
+            code: 403,
+            record_ids: [],
           },
-          project_sites: {
-            last_revision_num: 'server',
-            error: {
-              code: 403,
-              record_ids: [],
-            },
+        },
+        project_sites: {
+          last_revision_num: 'server',
+          error: {
+            code: 403,
+            record_ids: [],
           },
-        }
+        },
+      }
 
-        return HttpResponse.json(responseWithSyncErrors)
-      },
-      { once: true },
-    ),
+      return HttpResponse.json(responseWithSyncErrors)
+    }),
   )
 
   const projectCards = await screen.findAllByTestId('project-card')

@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from 'vitest'
 import React from 'react'
 
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -71,7 +71,7 @@ describe('Offline', () => {
     expect(within(rules).getByTestId('rules-open-access-radio')).toBeChecked()
     expect(within(rules).getByTestId('rules-no-take-radio')).not.toBeChecked()
     expect(within(rules).getByTestId('rules-partial-restrictions-radio')).not.toBeChecked()
-    expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('choose...')
+    expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('Choose...')
   })
 
   test('New MR save success shows saved inputs, toast, and navigates to the edit MR page for the newly created MR', async () => {
