@@ -70,9 +70,9 @@ describe('offline', () => {
     expect(screen.getByTestId('country-input')).toHaveDisplayValue('')
     expect(screen.getByTestId('latitude-input')).toHaveDisplayValue('')
     expect(screen.getByTestId('longitude-input')).toHaveDisplayValue('')
-    expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('Choose...')
-    expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('Choose...')
-    expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('Choose...')
+    expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('choose...')
+    expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('choose...')
+    expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('choose...')
 
     expect(screen.getByTestId('notes-textarea')).toHaveDisplayValue('')
   })
