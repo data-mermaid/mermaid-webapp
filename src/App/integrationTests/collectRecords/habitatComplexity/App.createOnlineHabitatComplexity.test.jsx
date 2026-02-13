@@ -184,7 +184,7 @@ describe('Online', () => {
     const table = await screen.findByRole('table')
 
     const linksToHabitatComplexityRecords = within(table).getAllByRole('link', {
-      name: 'Habitat complexity',
+      name: 'protocol_titles.habitatcomplexity',
     })
 
     expect(linksToHabitatComplexityRecords).toHaveLength(2)

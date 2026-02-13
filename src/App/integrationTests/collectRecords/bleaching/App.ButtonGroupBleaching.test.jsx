@@ -87,7 +87,7 @@ test('Validate Bleaching collect record: fails to validate, shows button able to
 
   expect(await screen.findByTestId('validate-button'))
   expect(
-    screen.queryByText('Validation is currently unavailable for this record.'),
+    screen.queryByText('sample_units.errors.validation_unavailable'),
   ).not.toBeInTheDocument()
 })
 
@@ -163,7 +163,7 @@ test('Validate & submit Bleaching collect record: validation passes, shows valid
 
   expect(await screen.findByTestId('validated-button'))
   expect(
-    screen.queryByText('Validation is currently unavailable for this record.'),
+    screen.queryByText('sample_units.errors.validation_unavailable'),
   ).not.toBeInTheDocument()
 
   expect(await screen.findByTestId('submit-button')).toBeEnabled()

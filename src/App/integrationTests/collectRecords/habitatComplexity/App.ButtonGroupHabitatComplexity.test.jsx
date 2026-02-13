@@ -87,7 +87,7 @@ test('Validate Habitat Complexity: fails to validate, shows button able to run v
 
   expect(await screen.findByTestId('validate-button'))
   expect(
-    screen.queryByText('Validation is currently unavailable for this record.'),
+    screen.queryByText('sample_units.errors.validation_unavailable'),
   ).not.toBeInTheDocument()
 })
 
@@ -159,7 +159,7 @@ test('Validate & submit Habitat Complexity: validation passes, shows validate bu
 
   expect(await screen.findByTestId('validated-button'))
   expect(
-    screen.queryByText('Validation is currently unavailable for this record.'),
+    screen.queryByText('sample_units.errors.validation_unavailable'),
   ).not.toBeInTheDocument()
 
   expect(await screen.findByTestId('submit-button')).toBeEnabled()

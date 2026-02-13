@@ -168,7 +168,7 @@ describe('Offline', () => {
     await user.selectOptions(pageSizeSelector, '22')
     const table = await screen.findByRole('table')
 
-    const linksToBleachingRecords = within(table).getAllByRole('link', { name: 'Bleaching' })
+    const linksToBleachingRecords = within(table).getAllByRole('link', { name: 'protocol_titles.bleachingqc' })
 
     expect(linksToBleachingRecords).toHaveLength(2)
 

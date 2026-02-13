@@ -127,7 +127,7 @@ describe('Online', () => {
     await user.selectOptions(pageSizeSelector, '22')
     const table = await screen.findByRole('table')
 
-    const linksToFishbeltRecords = within(table).getAllByRole('link', { name: 'Fish belt' })
+    const linksToFishbeltRecords = within(table).getAllByRole('link', { name: 'protocol_titles.fishbelt' })
 
     // 17 the 16 mock records + the one we just created
     expect(linksToFishbeltRecords).toHaveLength(17)

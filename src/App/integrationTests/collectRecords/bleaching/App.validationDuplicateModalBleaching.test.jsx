@@ -72,7 +72,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -102,7 +102,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+      within(screen.getByTestId('site')).queryByText('validation_messages.not_unique_site'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -150,7 +150,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -181,7 +181,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+      within(screen.getByTestId('site')).queryByText('validation_messages.not_unique_site'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -229,7 +229,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -296,7 +296,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -363,7 +363,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -431,7 +431,7 @@ test('Validate Bleaching collect record, get management similar name warning, sh
 
   expect(
     within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
+      'validation_messages.similar_name',
     ),
   ).toBeInTheDocument()
 
@@ -472,7 +472,7 @@ test('Validate Bleaching collect record, get management similar name warning, sh
   await waitFor(() =>
     expect(
       within(screen.getByTestId('site')).queryByText(
-        'Another Management Regime is similar to this one.',
+        'validation_messages.similar_name',
       ),
     ).not.toBeInTheDocument(),
   )
@@ -522,7 +522,7 @@ test('Validate Bleaching collect record, get management similar name warning, sh
 
   expect(
     within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
+      'validation_messages.similar_name',
     ),
   ).toBeInTheDocument()
 
@@ -563,7 +563,7 @@ test('Validate Bleaching collect record, get management similar name warning, sh
   await waitFor(() =>
     expect(
       within(screen.getByTestId('site')).queryByText(
-        'Another Management Regime is similar to this one.',
+        'validation_messages.similar_name',
       ),
     ).not.toBeInTheDocument(),
   )
@@ -613,7 +613,7 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
 
   expect(
     within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
+      'validation_messages.similar_name',
     ),
   ).toBeInTheDocument()
 
@@ -686,7 +686,7 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
 
   expect(
     within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
+      'validation_messages.similar_name',
     ),
   ).toBeInTheDocument()
 
@@ -759,7 +759,7 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
 
   expect(
     within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
+      'validation_messages.similar_name',
     ),
   ).toBeInTheDocument()
 

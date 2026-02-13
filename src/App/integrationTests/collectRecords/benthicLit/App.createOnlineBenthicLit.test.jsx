@@ -179,7 +179,7 @@ describe('Online', () => {
 
     const table = await screen.findByRole('table')
 
-    const linksToBenthicLitRecords = within(table).getAllByRole('link', { name: 'Benthic LIT' })
+    const linksToBenthicLitRecords = within(table).getAllByRole('link', { name: 'protocol_titles.benthiclit' })
 
     expect(linksToBenthicLitRecords).toHaveLength(2)
 
