@@ -93,7 +93,7 @@ test('Validate Benthic LIT: fails to validate, shows button able to run validati
 
   expect(await screen.findByTestId('validate-button'))
   expect(
-    screen.queryByText('Validation is currently unavailable for this record.'),
+    screen.queryByText('sample_units.errors.validation_unavailable'),
   ).not.toBeInTheDocument()
 })
 
@@ -169,7 +169,7 @@ test('Validate & submit Benthic LIT: validation passes, shows validate button di
 
   expect(await screen.findByTestId('validated-button'))
   expect(
-    screen.queryByText('Validation is currently unavailable for this record.'),
+    screen.queryByText('sample_units.errors.validation_unavailable'),
   ).not.toBeInTheDocument()
 
   expect(await screen.findByTestId('submit-button')).toBeEnabled()
