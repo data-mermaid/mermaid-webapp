@@ -47,6 +47,13 @@ const ProjectName = () => {
 
     openExploreLinkWithBbox(queryParamObject)
   }
+
+  const handleTourClose = (element, step, { state }) => {
+    window.dataLayer?.push({
+      event: `demo_tour_close_step_${state.activeIndex + 1}`,
+    })
+  }
+
   const handleStartTourClick = () => {
     const driverTourObj = driver({
       showProgress: true,
@@ -57,6 +64,7 @@ const ProjectName = () => {
         popover.arrow.remove()
       },
       steps: buildProjectTourSteps(t),
+      onCloseClick: () => handleTourClose,
     })
 
     driverTourObj.drive()
@@ -94,6 +102,7 @@ const ProjectName = () => {
                   ' ',
                 )}
                 type="button"
+                id="gtm-demo-start-tour"
                 aria-label={t('projects.demo.project_tour_start')}
                 onClick={handleStartTourClick}
               >
