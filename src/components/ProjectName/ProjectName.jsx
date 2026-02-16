@@ -11,7 +11,7 @@ import styles from '../../style/ProjectName.module.scss'
 import buttonStyles from '../../style/buttons.module.scss'
 import labelStyles from '../../style/labels.module.scss'
 import { driver } from 'driver.js'
-import { projectTourSteps } from '../../library/demoProjectTour'
+import { buildProjectTourSteps } from '../../library/demoProjectTour'
 import 'driver.js/dist/driver.css'
 
 const ProjectName = () => {
@@ -47,17 +47,18 @@ const ProjectName = () => {
 
     openExploreLinkWithBbox(queryParamObject)
   }
-
-  const driverTourObj = driver({
-    allowClose: false,
-    showProgress: true,
-    nextBtnText: '→',
-    prevBtnText: '←',
-    progressText: `Step {{current}} of {{total}}`, //todo: localization
-    steps: projectTourSteps,
-  })
-
   const handleStartTourClick = () => {
+    const driverTourObj = driver({
+      showProgress: true,
+      nextBtnText: '→',
+      prevBtnText: '←',
+      progressText: t('projects.tour.tour_steps', { current: '{{current}}', total: '{{total}}' }),
+      onPopoverRender: (popover) => {
+        popover.arrow.remove()
+      },
+      steps: buildProjectTourSteps(t),
+    })
+
     driverTourObj.drive()
   }
 
