@@ -68,7 +68,7 @@ const NavMenu = ({ subNavNode = null }) => {
     picture: currentUserImageUrl,
   } = currentUser ?? {}
 
-  // const _getProjectData =
+  // _getProjectData
   useEffect(() => {
     if (!currentProject && isAppOnline && databaseSwitchboardInstance && projectId) {
       const promises = [databaseSwitchboardInstance.getProject(projectId)]
@@ -229,11 +229,7 @@ const NavMenu = ({ subNavNode = null }) => {
               <OfflineHide>
                 <li>
                   {currentProject?.includes_gfcr && (
-                    <NavLinkSidebar
-                      id="nav-project-info"
-                      to={`${projectUrl}/gfcr`}
-                      data-testid="nav-gfcr"
-                    >
+                    <NavLinkSidebar to={`${projectUrl}/gfcr`} data-testid="nav-gfcr">
                       <IconGfcr />
                       <span>{t('gfcr.gfcr')}</span>
                     </NavLinkSidebar>

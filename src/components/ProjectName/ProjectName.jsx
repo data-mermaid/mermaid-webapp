@@ -48,10 +48,15 @@ const ProjectName = () => {
     openExploreLinkWithBbox(queryParamObject)
   }
 
-  const handleTourClose = (element, step, { state }) => {
+  const handleTourClose = (element, step, { _, driver }) => {
+    const isTourComplete = driver.isLastStep()
+    const eventName = isTourComplete
+      ? 'demo_tour_completed'
+      : `demo_tour_close_step_${driver.getActiveIndex() + 1}`
     window.dataLayer?.push({
-      event: `demo_tour_close_step_${state.activeIndex + 1}`,
+      event: eventName,
     })
+    driver.destroy()
   }
 
   const handleStartTourClick = () => {
@@ -59,12 +64,12 @@ const ProjectName = () => {
       showProgress: true,
       nextBtnText: '→',
       prevBtnText: '←',
-      progressText: t('projects.tour.tour_steps', { current: '{{current}}', total: '{{total}}' }),
+      progressText: t('projects.tour.tour_steps'), //driverJS auto passes current and total
       onPopoverRender: (popover) => {
         popover.arrow.remove()
       },
       steps: buildProjectTourSteps(t),
-      onCloseClick: () => handleTourClose,
+      onDestroyStarted: handleTourClose,
     })
 
     driverTourObj.drive()
