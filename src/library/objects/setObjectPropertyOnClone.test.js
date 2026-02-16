@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test } from 'vitest'
 import setObjectPropertyOnClone from './setObjectPropertyOnClone'
 
 test('setObjectPropertyOnClone on populated object', () => {

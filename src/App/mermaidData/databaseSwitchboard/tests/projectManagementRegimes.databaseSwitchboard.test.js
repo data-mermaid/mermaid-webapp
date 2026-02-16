@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test } from 'vitest'
 import { getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess } from './testHelpers.DatabseSwitchboard'
 
 test('getManagementRegimes only returns profiles for a given project', async () => {

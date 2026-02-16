@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test } from 'vitest'
 import getObjectProperty from './getObjectProperty'
 
 test('getObjectProperty on populated object', () => {

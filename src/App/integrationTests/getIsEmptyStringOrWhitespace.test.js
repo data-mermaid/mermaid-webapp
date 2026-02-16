@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test } from 'vitest'
 import { getIsEmptyStringOrWhitespace } from '../../library/getIsEmptyStringOrWhitespace'
 
 test('getIsEmptyStringOrWhitespace on empty string', () => {

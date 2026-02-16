@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test } from 'vitest'
 import { ensureTrailingSlash } from './ensureTrailingSlash'
 
 test('ensureTrailingSlash returns a string with slash on end when input string has no trailing slash', () => {
