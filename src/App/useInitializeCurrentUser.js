@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import language from '../language'
+import { useTranslation } from 'react-i18next'
 import { getToastArguments } from '../library/getToastArguments'
 import { getCurrentUserProfile, setCurrentUserProfile } from './currentUserProfileHelpers'
 
@@ -13,6 +13,8 @@ export const useInitializeCurrentUser = ({
   handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
 }) => {
   const [currentUser, setCurrentUser] = useState()
+  const { t } = useTranslation()
+  const userProfileUnavailableText = t('errors.user_profile_unavailable')
 
   const getCurrentUser = useCallback(() => {
     let isMounted = true
@@ -34,7 +36,7 @@ export const useInitializeCurrentUser = ({
           handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.userProfileUnavailable))
+              toast.error(...getToastArguments(userProfileUnavailableText))
             },
           })
         })
@@ -50,6 +52,7 @@ export const useInitializeCurrentUser = ({
     isMermaidAuthenticated,
     isAppOnline,
     handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
+    userProfileUnavailableText,
   ])
 
   const _initializeUserOnAuthentication = useEffect(getCurrentUser, [getCurrentUser])
@@ -70,8 +73,7 @@ export const useInitializeCurrentUser = ({
         .catch((error) => {
           handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
-            callback: () =>
-              toast.error(...getToastArguments(language.error.userProfileUnavailable)),
+            callback: () => toast.error(...getToastArguments(userProfileUnavailableText)),
           })
         })
     }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import theme from '../../theme'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import {

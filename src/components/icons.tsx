@@ -1,6 +1,6 @@
 import { InlineIcon } from '@iconify/react'
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import theme from '../theme'
 
 import accountCircle from '@iconify-icons/mdi/account-circle'

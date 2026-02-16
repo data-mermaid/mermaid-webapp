@@ -1,7 +1,8 @@
 import { Route, useLocation, Routes, Navigate, useNavigate } from 'react-router-dom'
-import { ThemeProvider } from 'styled-components'
+import { StyleSheetManager, ThemeProvider } from 'styled-components'
 import { toast } from 'react-toastify'
 import React, { useCallback, useMemo } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { BellNotificationProvider } from './BellNotificationContext'
 import { CurrentUserProvider } from './CurrentUserContext'
@@ -24,7 +25,6 @@ import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
 import handleHttpResponseError from '../library/handleHttpResponseError'
 import Header from '../components/Header'
-import language from '../language'
 import Layout from '../components/Layout'
 import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 import PageNotFound from '../components/pages/PageNotFound'
@@ -34,6 +34,8 @@ import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
 import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 import { routes } from './routes'
+import { API_DATA_TABLE_NAMES } from '../library/constants/constants'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline, setServerNotReachable } = useOnlineStatus()
@@ -42,6 +44,9 @@ function App({ dexieCurrentUserInstance }) {
   const navigate = useNavigate()
   const isMounted = useIsMounted()
   const location = useLocation()
+  const { t } = useTranslation()
+  const pushSyncErrorUnsavedDataText = t('api_errors.unsaved_sync_data')
+  const pushSyncErrorMessageStatusCode500 = t('api_errors.unspecified_error')
 
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieCurrentUserInstance,
@@ -59,9 +64,11 @@ function App({ dexieCurrentUserInstance }) {
     [logoutMermaid, setServerNotReachable],
   )
 
-  const handleNested500SyncError = () => {
-    toast.error(...getToastArguments(language.error.pushSyncErrorMessageStatusCode500))
-  }
+  const handleNested500SyncError = useCallback(() => {
+    toast.error(
+      ...getToastArguments(pushSyncErrorMessageStatusCode500, 'sync-error-unspecified-error-toast'),
+    )
+  }, [pushSyncErrorMessageStatusCode500])
 
   const handleUserDeniedSyncPull = useCallback(
     (projectName) => {
@@ -84,13 +91,17 @@ function App({ dexieCurrentUserInstance }) {
         if (isErrorSpecificToProject) {
           const syncErrorUserMessaging = (
             <div data-testid={`sync-error-for-project-${projectId}`}>
-              <P>{language.error.getPushSyncErrorMessage(projectName)}</P>
-              {language.error.pushSyncErrorMessageUnsavedData}
+              <P data-testid={`sync-error-message-${projectId}`}>
+                <Trans
+                  i18nKey="api_errors.no_sync_data_permission"
+                  values={{ projectName }}
+                  components={{ strong: <strong /> }}
+                />
+              </P>
+              {pushSyncErrorUnsavedDataText}
               <ul>
                 {apiDataTablesThatRejectedSyncing?.map((rejectedDataTableName) => (
-                  <li key={rejectedDataTableName}>
-                    {language.apiDataTableNames[rejectedDataTableName]}
-                  </li>
+                  <li key={rejectedDataTableName}>{API_DATA_TABLE_NAMES[rejectedDataTableName]}</li>
                 ))}
               </ul>
             </div>
@@ -100,7 +111,7 @@ function App({ dexieCurrentUserInstance }) {
         }
       })
     },
-    [location],
+    [location, pushSyncErrorUnsavedDataText],
   )
 
   const { currentUser, saveUserProfile, refreshCurrentUser } = useInitializeCurrentUser({
@@ -135,6 +146,7 @@ function App({ dexieCurrentUserInstance }) {
     getAccessToken,
     handleUserDeniedSyncPull,
     handleUserDeniedSyncPush,
+    handleNested500SyncError,
   ])
 
   useInitializeSyncApiDataIntoOfflineStorage({
@@ -202,65 +214,71 @@ function App({ dexieCurrentUserInstance }) {
     (isOfflineStorageHydrated || !!syncErrors.length) // we use isOfflineStrorageHydrated here instead of isSyncInProgress to make sure the app level layout doesnt rerender (flash) on sync
 
   return (
-    <ThemeProvider theme={theme}>
-      <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
-        <CurrentUserProvider value={{ currentUser, saveUserProfile, refreshCurrentUser }}>
-          <CurrentProjectProvider>
-            <HttpResponseErrorHandlerProvider
-              value={handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied}
-            >
-              <BellNotificationProvider
-                value={{ notifications, deleteNotification, deleteAllNotifications }}
+    <StyleSheetManager enableVendorPrefixes>
+      <ThemeProvider theme={theme}>
+        <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
+          <CurrentUserProvider value={{ currentUser, saveUserProfile, refreshCurrentUser }}>
+            <CurrentProjectProvider>
+              <HttpResponseErrorHandlerProvider
+                value={handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied}
               >
-                <GlobalStyle />
-                <CustomToastContainer limit={5} />
-                <ErrorBoundary>
-                  <Layout {...layoutProps}>
-                    {
-                      /** The isMermaidAuthenticated is needed here to prevent an
-                       * infinite log in loop with authentication.
-                       *
-                       * The projects list route and project workflow pages will trigger
-                       * a sync when they are routed to, making isOfflineStorageHydrated = true
-                       */
-                      isMermaidAuthenticated ? (
-                        <ErrorBoundary>
-                          <Routes>
-                            {routes.map(({ path, Component }) => (
-                              <Route
-                                exact
-                                path={path}
-                                key={path}
-                                element={
-                                  isMermaidAuthenticatedAndReady ? (
-                                    <Component />
-                                  ) : (
-                                    <LoadingIndicator />
-                                  )
-                                }
-                              />
-                            ))}
-                            <Route exact path="/" element={<Navigate to="/projects" replace />} />
+                <BellNotificationProvider
+                  value={{ notifications, deleteNotification, deleteAllNotifications }}
+                >
+                  <GlobalStyle />
+                  <CustomToastContainer limit={5} />
+                  <ErrorBoundary>
+                    <Layout {...layoutProps}>
+                      {
+                        /** The isMermaidAuthenticated is needed here to prevent an
+                         * infinite log in loop with authentication.
+                         *
+                         * The projects list route and project workflow pages will trigger
+                         * a sync when they are routed to, making isOfflineStorageHydrated = true
+                         */
+                        isMermaidAuthenticated ? (
+                          <ErrorBoundary>
+                            <Routes>
+                              {routes.map(({ path, Component }) => (
+                                <Route
+                                  exact
+                                  path={path}
+                                  key={path}
+                                  element={
+                                    isMermaidAuthenticatedAndReady ? (
+                                      <Component />
+                                    ) : (
+                                      <LoadingIndicator />
+                                    )
+                                  }
+                                />
+                              ))}
+                              <Route exact path="/" element={<Navigate to="/projects" replace />} />
 
-                            {/* The following route is required b/c of how Cloudfront handles root paths. This is
+                              {/* The following route is required b/c of how Cloudfront handles root paths. This is
                               required for preview urls. When viewing a preview, you will need to append /index.html
                               like so: https://preview.app2.datamermaid.org/123/index.html */}
-                            <Route exact path="/index.html" element={<Navigate to="/projects" />} />
-                            <Route path="/*" element={<PageNotFound />} />
-                          </Routes>
-                        </ErrorBoundary>
-                      ) : (
-                        <LoadingIndicator />
-                      )
-                    }
-                  </Layout>
-                </ErrorBoundary>
-              </BellNotificationProvider>
-            </HttpResponseErrorHandlerProvider>
-          </CurrentProjectProvider>
-        </CurrentUserProvider>
-      </DatabaseSwitchboardInstanceProvider>
-    </ThemeProvider>
+                              <Route
+                                exact
+                                path="/index.html"
+                                element={<Navigate to="/projects" />}
+                              />
+                              <Route path="/*" element={<PageNotFound />} />
+                            </Routes>
+                          </ErrorBoundary>
+                        ) : (
+                          <LoadingIndicator />
+                        )
+                      }
+                    </Layout>
+                  </ErrorBoundary>
+                </BellNotificationProvider>
+              </HttpResponseErrorHandlerProvider>
+            </CurrentProjectProvider>
+          </CurrentUserProvider>
+        </DatabaseSwitchboardInstanceProvider>
+      </ThemeProvider>
+    </StyleSheetManager>
   )
 }
 

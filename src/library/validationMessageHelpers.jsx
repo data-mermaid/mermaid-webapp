@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { Trans } from 'react-i18next'
 import i18n from '../../i18n'
 import { HelperTextLink } from '../components/generic/links'

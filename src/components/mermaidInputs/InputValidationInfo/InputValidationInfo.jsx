@@ -1,7 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import theme from '../../../theme'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InlineMessage from '../../generic/InlineMessage/InlineMessage'
@@ -27,6 +28,7 @@ const InputValidationInfo = ({
   testId = undefined,
 }) => {
   const { projectId } = useParams()
+  const { t } = useTranslation()
   const areThereValidationMessages = validationMessages.length
   const isWarningValidation = areThereValidationMessages && validationType === 'warning'
   const isIgnoredWarningValidation = validationType === 'ignore'
@@ -97,7 +99,11 @@ const InputValidationInfo = ({
       ) : null}
       {additionalText}
       {isWarningValidation || isIgnoredWarningValidation ? getWarningValidationButtons() : null}
-      {isValidationPassing ? <span aria-label="Passed Validation">&nbsp;</span> : null}
+      {isValidationPassing ? (
+        <span aria-label={t('validations.passed')} data-testid="passed-validation-indicator">
+          &nbsp;
+        </span>
+      ) : null}
     </ValidationWrapper>
   )
 }

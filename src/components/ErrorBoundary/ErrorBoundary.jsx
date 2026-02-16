@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
+import i18n from '../../../i18n'
 
 import theme from '../../theme'
 import { ButtonPrimary } from '../generic/buttons'
-import language from '../../language'
 import { IconSync } from '../icons'
 
 const StyledErrorBoundary = styled.div`
@@ -74,13 +74,13 @@ class ErrorBoundary extends React.Component {
             <ErrorBoundaryStatus />
           </ErrorBoundaryStatusContainer>
           <ErrorBoundaryContentContainer>
-            <ErrorBoundaryPrimaryText>
-              {language.error.errorBoundaryPrimary}
+            <ErrorBoundaryPrimaryText data-testid="error-boundary-message">
+              {i18n.t('page.not_loaded')}
             </ErrorBoundaryPrimaryText>
             <p>
-              {language.error.errorBoundarySecondary}{' '}
+              {i18n.t('page.try_reloading')}{' '}
               <a target="_blank" href="https://datamermaid.org/contact-us" rel="noreferrer">
-                {language.error.errorBoundaryContactUs}
+                {i18n.t('contact_us')}
               </a>
               .
             </p>
@@ -88,6 +88,7 @@ class ErrorBoundary extends React.Component {
           <ErrorButtonContainer>
             {!attemptedRerender && (
               <ErrorButton
+                data-testid="error-boundary-try-again"
                 onClick={() => {
                   this.setState({
                     errorMessage: '',
@@ -96,7 +97,7 @@ class ErrorBoundary extends React.Component {
                 }}
               >
                 <IconSync />
-                <span> {language.error.errorBoundaryTryAgain}</span>
+                <span> {i18n.t('try_again')}</span>
               </ErrorButton>
             )}
           </ErrorButtonContainer>

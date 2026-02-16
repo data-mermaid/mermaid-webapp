@@ -1,6 +1,7 @@
 @use './theme.scss' as *;
 @use './functions.module.scss' as *;
 
+//from buttons.buttonCss
 @mixin button {
   transition: $default-transition;
   padding: $spacing-small $spacing-medium;
@@ -41,7 +42,7 @@
 .button--secondary {
   @include button;
   background-color: $white;
-  color: $primary;
+  color: $font-color;
   border: solid 1px $secondary;
   &:hover {
     background-color: lightenColor($secondary, 20%);
@@ -61,6 +62,7 @@
   line-height: 1;
 }
 
+//from buttons.ButtonCaution
 .button--caution {
   @include button;
   color: $white;
@@ -144,6 +146,17 @@
   &:disabled {
     cursor: not-allowed;
     color: $disabled;
+  }
+}
+
+.button--input {
+  @extend .button--secondary;
+  white-space: nowrap;
+  border-color: darkenColor($white, 50%);
+  border-left: 0;
+  padding: $spacing-x-small;
+  @media (min-width: $tablet-portrait-break) {
+    padding: $spacing-small;
   }
 }
 

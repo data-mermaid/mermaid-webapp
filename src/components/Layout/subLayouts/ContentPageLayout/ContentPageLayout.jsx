@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { subNavNodePropTypes } from '../../../SubNavMenuRecordName/subNavNodePropTypes'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import {
@@ -19,6 +19,7 @@ const MainContentPageLayout = styled('div')`
   display: grid;
   grid-template-rows: auto 1fr;
   height: calc(100% - ${theme.spacing.headerHeight});
+  margin-top: ${theme.spacing.headerHeight};
 `
 const ContentWrapper = styled('div')`
   padding: ${contentPadding} 0 0 ${contentPadding};

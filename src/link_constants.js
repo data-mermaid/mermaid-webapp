@@ -19,3 +19,7 @@ export const links = {
   reefZonation:
     'https://www.livingoceansfoundation.org/wp-content/uploads/2015/04/U11-Reef-Zonation-Background.pdf',
 }
+
+export const internalNavigation = {
+  projectStartPage: (projectId) => `/projects/${projectId}/project-info`,
+}

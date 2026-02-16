@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 
 import { Column } from '../../generic/positioning'

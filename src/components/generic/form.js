@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import theme from '../../theme'
 import {
   hoverState,
@@ -79,7 +79,7 @@ export const inputTextareaSelectStyles = css`
 `
 export const RequiredIndicator = styled.span`
   color: ${theme.color.callout};
-  &:after {
+  &::after {
     content: ' *';
   }
 `

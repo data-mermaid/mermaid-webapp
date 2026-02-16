@@ -26,6 +26,7 @@ import { Box } from '@mui/material'
 import { IconClose } from '../icons'
 import cardStyles from '../ProjectCard/ProjectCard.module.scss'
 import { useNavigate } from 'react-router-dom'
+import { internalNavigation } from '../../link_constants'
 
 interface DemoProjectCalloutProps {
   handleDemoClick: () => void
@@ -151,11 +152,11 @@ const Projects = () => {
     databaseSwitchboardInstance
       .addDemoProject()
       .then((response) => {
-        updateUserSettings('hasUserDismissedDemo', true)
         refreshCurrentUser() // ensures correct user privileges
+        updateUserSettings('hasUserDismissedDemo', true)
         toast.success(...getToastArguments(t('projects.demo.created')))
         setIsLoading(false)
-        navigate(`/projects/${response.id}/sites`)
+        navigate(internalNavigation.projectStartPage(response.id))
       })
       .catch((error) => {
         const isDuplicateError = error.response?.status === 400

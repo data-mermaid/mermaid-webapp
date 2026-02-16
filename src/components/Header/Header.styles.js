@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { IconBell, IconOpenInNew, IconExcel, IconMenu } from '../icons'
 import theme from '../../theme'
 import { ButtonThatLooksLikeLink } from '../generic/buttons'
@@ -10,6 +10,7 @@ export const StyledHeader = styled('header')`
   justify-content: space-between;
   align-items: stretch;
   color: ${theme.color.white};
+  position: fixed;
   width: 100%;
   top: 0;
   z-index: ${theme.zIndex.header};

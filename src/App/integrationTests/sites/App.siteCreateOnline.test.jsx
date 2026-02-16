@@ -51,6 +51,7 @@ const saveSite = async (user) => {
 
   const saveButton = screen.getByTestId('save-button-site-form')
 
+  await waitFor(() => expect(saveButton).toBeEnabled())
   await user.click(saveButton)
 }
 
@@ -77,9 +78,9 @@ describe('Online', () => {
     expect(screen.getByTestId('country-input')).toHaveDisplayValue('')
     expect(screen.getByTestId('latitude-input')).toHaveDisplayValue('')
     expect(screen.getByTestId('longitude-input')).toHaveDisplayValue('')
-    expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('Choose...')
-    expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('Choose...')
-    expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('Choose...')
+    expect(screen.getByTestId('exposure-select')).toHaveDisplayValue('choose...')
+    expect(screen.getByTestId('reef-type-select')).toHaveDisplayValue('choose...')
+    expect(screen.getByTestId('reef-zone-select')).toHaveDisplayValue('choose...')
 
     expect(screen.getByTestId('notes-textarea')).toHaveDisplayValue('')
   })

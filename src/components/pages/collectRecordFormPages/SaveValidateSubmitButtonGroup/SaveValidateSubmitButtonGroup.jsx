@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 
 import { ButtonCallout } from '../../../generic/buttons'
@@ -36,7 +36,7 @@ const ArrowRightButton = styled(ButtonCallout)`
   position: relative;
   background: ${theme.color.calloutBorder};
 
-  &:before {
+  &::before {
     clip-path: ${clipPath};
     z-index: -1;
     background: ${theme.color.white};
@@ -53,7 +53,7 @@ const ArrowRightButton = styled(ButtonCallout)`
     cursor: pointer;
     background: ${theme.color.calloutBorder};
 
-    &:before {
+    &::before {
       background: ${theme.color.calloutHover};
     }
   }
