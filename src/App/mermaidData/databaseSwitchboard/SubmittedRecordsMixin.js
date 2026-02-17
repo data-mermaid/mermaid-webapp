@@ -5,7 +5,7 @@ import axios from '../../../library/axiosRetry'
 import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
 
 const SubmittedRecordsMixin = (Base) =>
-  (class extends Base {
+  class extends Base {
     #getSampleUnitLabel = function getSampleUnitLabel(record) {
       const sampleUnit = `${record.sample_unit_number ?? ''} ${record.label ?? ''}`.trim()
 
@@ -137,6 +137,6 @@ const SubmittedRecordsMixin = (Base) =>
           })
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
-  })
+  }
 
 export default SubmittedRecordsMixin

@@ -5,7 +5,7 @@ import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
 import i18n from '../../../../i18n'
 
 const ManagementRegimesMixin = (Base) =>
-  (class extends Base {
+  class extends Base {
     #getManagementRegimeReadyForPush = function getManagementRegimeReadyForPush({
       managementRegime,
       projectId,
@@ -307,6 +307,6 @@ const ManagementRegimesMixin = (Base) =>
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
-  })
+  }
 
 export default ManagementRegimesMixin

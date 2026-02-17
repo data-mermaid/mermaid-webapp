@@ -5,7 +5,7 @@ import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeader
 import { API_NULL_NAME } from '../../../library/constants/constants'
 
 const ProjectHealthMixin = (Base) =>
-  (class extends Base {
+  class extends Base {
     #hasDuplicates = function hasDuplicates(array) {
       return new Set(array).size !== array.length
     }
@@ -515,6 +515,6 @@ const ProjectHealthMixin = (Base) =>
             })
           : Promise.reject(this._operationMissingParameterError)
       }
-  })
+  }
 
 export default ProjectHealthMixin

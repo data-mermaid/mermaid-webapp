@@ -2,7 +2,7 @@ import axios from '../../../library/axiosRetry'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const ImageClassificationMixin = (Base) =>
-  (class extends Base {
+  class extends Base {
     getAnnotationsForImage = async function getAnnotationsForImage(
       projectId,
       imageId,
@@ -114,6 +114,6 @@ const ImageClassificationMixin = (Base) =>
             .then((response) => response)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
-  })
+  }
 
 export default ImageClassificationMixin
