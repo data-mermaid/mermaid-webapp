@@ -25,11 +25,11 @@ describe('handleHttpResponseError', () => {
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
     expect(toastContent.props).toEqual({
-      message: 'The current user does not have permission to do that.',
+      message: 'api_errors.unauthorized_user',
       testId: 'toast',
     })
     expect(toastOptions).toEqual({
-      toastId: 'The current user does not have permission to do that.',
+      toastId: 'api_errors.unauthorized_user',
       transition: Slide,
     })
 
@@ -46,11 +46,11 @@ describe('handleHttpResponseError', () => {
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
     expect(toastContent.props).toEqual({
-      message: 'MERMAID error: please contact support@datamermaid.org',
+      message: 'api_errors.unspecified_error',
       testId: 'toast',
     })
     expect(toastOptions).toEqual({
-      toastId: 'MERMAID error: please contact support@datamermaid.org',
+      toastId: 'api_errors.unspecified_error',
       transition: Slide,
     })
 
@@ -67,11 +67,11 @@ describe('handleHttpResponseError', () => {
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
     expect(toastContent.props).toEqual({
-      message: 'MERMAID error: please contact support@datamermaid.org',
+      message: 'api_errors.unspecified_error',
       testId: 'toast',
     })
     expect(toastOptions).toEqual({
-      toastId: 'MERMAID error: please contact support@datamermaid.org',
+      toastId: 'api_errors.unspecified_error',
       transition: Slide,
     })
 
@@ -88,11 +88,11 @@ describe('handleHttpResponseError', () => {
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
     expect(toastContent.props).toEqual({
-      message: 'MERMAID error: please contact support@datamermaid.org',
+      message: 'api_errors.unspecified_error',
       testId: 'toast',
     })
     expect(toastOptions).toEqual({
-      toastId: 'MERMAID error: please contact support@datamermaid.org',
+      toastId: 'api_errors.unspecified_error',
       transition: Slide,
     })
 

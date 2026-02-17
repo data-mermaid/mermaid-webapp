@@ -85,7 +85,7 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
 
   await user.click(
     within(table).getAllByRole('link', {
-      name: /fish belt/i,
+      name: 'protocol_titles.fishbelt',
     })[0],
   )
 

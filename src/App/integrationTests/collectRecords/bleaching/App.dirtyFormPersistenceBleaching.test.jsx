@@ -83,7 +83,7 @@ test('Unsaved EDIT bleaching form edits clear when the user navigates away and b
   // nav back
   const table = await screen.findByRole('table')
 
-  await user.click(within(table).getAllByText('Bleaching')[0])
+  await user.click(within(table).getAllByText('protocol_titles.bleachingqc')[0])
 
   const formAfterNav = await screen.findByRole('form')
 

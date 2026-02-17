@@ -62,24 +62,15 @@ vi.mock('maplibre-gl', function mapLibreMock() {
   }
 })
 
-// Mock the i18n instance with a real i18next loaded with English translations.
+// Mock the i18n instance using cimode so i18n.t() returns the translation key.
 // Non-component code (e.g. validationMessageHelpers.jsx, handleHttpResponseError.ts) imports
-// i18n directly and calls i18n.t(). In Jest this wasn't mocked and loaded translations naturally;
-// in Vitest we need this mock because the import chain resolves differently, but the behavior
-// is the same: i18n.t('some.key') returns the real English translated text.
+// i18n directly and calls i18n.t(). We use i18next's built-in 'cimode' language which always
+// returns the key, so tests assert against stable keys rather than English text that may change.
 vi.mock('../i18n', async () => {
   const { default: i18next } = await vi.importActual('i18next')
-  const translations = await vi.importActual('./src/locales/en/translation.json')
 
   i18next.init({
-    lng: 'en',
-    fallbackLng: 'en',
-    resources: {
-      en: { translation: translations.default || translations },
-    },
-    interpolation: {
-      escapeValue: false,
-    },
+    lng: 'cimode',
     initImmediate: false,
   })
 

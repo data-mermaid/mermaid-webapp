@@ -83,7 +83,7 @@ test('Unsaved EDIT benthic pit form edits clear when the user navigates away and
   // nav back
   const table = await screen.findByRole('table')
 
-  await user.click(within(table).getAllByText('Benthic PIT')[0])
+  await user.click(within(table).getAllByText('protocol_titles.benthicpit')[0])
 
   const formAfterNav = await screen.findByRole('form')
 
