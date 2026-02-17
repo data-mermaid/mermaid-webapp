@@ -830,7 +830,6 @@
       "observers_overview_review": "Here you can see who’s collecting data and what’s been submitted, helping you track your team’s progress.",
       "project_info_review": "Start your project here by adding a description and tagging associated organizations.",
       "samples_management_review": "This view shows submitted data grouped by management, helping you understand coverage across management areas and identify gaps.",
-      "show_tour": "Show tour guide",
       "sites_review": "This is where you add the reef locations your team surveys, along with their coordinates — linking surveys to the correct places.",
       "submitted_review": "This section stores validated data that are ready for export, visualization, and analysis.",
       "tour_steps": "Step {{current}} of {{total}}",

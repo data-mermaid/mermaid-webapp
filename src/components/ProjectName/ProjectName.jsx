@@ -100,21 +100,15 @@ const ProjectName = () => {
       {isDemoProject && (
         <div className={styles['project-meta-info-wrapper']}>
           <span className={labelStyles['pill--demo']}>{t('projects.demo.demo')}</span>
-          <MuiTooltip title={t('projects.tour.show_tour')} placement="bottom" arrow>
-            <span role="presentation">
-              <button
-                className={[buttonStyles['button--callout'], buttonStyles['button--small']].join(
-                  ' ',
-                )}
-                type="button"
-                id="gtm-demo-start-tour"
-                aria-label={t('projects.demo.project_tour_start')}
-                onClick={handleStartTourClick}
-              >
-                {t('projects.demo.project_tour_start')}
-              </button>
-            </span>
-          </MuiTooltip>
+          <button
+            className={[buttonStyles['button--callout'], buttonStyles['button--small']].join(' ')}
+            type="button"
+            id="gtm-demo-start-tour"
+            aria-label={t('projects.demo.project_tour_start')}
+            onClick={handleStartTourClick}
+          >
+            {t('projects.demo.project_tour_start')}
+          </button>
         </div>
       )}
     </div>
