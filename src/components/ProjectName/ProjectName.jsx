@@ -48,7 +48,7 @@ const ProjectName = () => {
     openExploreLinkWithBbox(queryParamObject)
   }
 
-  const handleTourClose = (element, step, { _, driver }) => {
+  const handleTourClose = (_element, _step, { _state, driver }) => {
     const isTourComplete = driver.isLastStep()
     const eventName = isTourComplete
       ? 'demo_tour_completed'
