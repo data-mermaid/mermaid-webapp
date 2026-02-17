@@ -1,3 +1,4 @@
+import { expect, test, vi } from 'vitest'
 import React, { useEffect } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 
@@ -27,7 +28,7 @@ test('ErrorBoundary renders children when no error is thrown', () => {
 
 test('ErrorBoundary renders the fallback UI when an error is thrown', () => {
   // Surpress the error which will automatically be logged
-  jest.spyOn(console, 'error').mockImplementation(() => {})
+  vi.spyOn(console, 'error').mockImplementation(() => {})
 
   render(
     <ErrorBoundary>
@@ -40,7 +41,7 @@ test('ErrorBoundary renders the fallback UI when an error is thrown', () => {
 
 test('ErrorBoundary does not display the Try Again button after the Try Again button is clicked', async () => {
   // Surpress the error which will automatically be logged
-  jest.spyOn(console, 'error').mockImplementation(() => {})
+  vi.spyOn(console, 'error').mockImplementation(() => {})
   const user = userEvent.setup()
 
   render(
@@ -59,7 +60,7 @@ test('ErrorBoundary does not display the Try Again button after the Try Again bu
 
 test('ErrorBoundary removes Try Again button after one failed re-render', async () => {
   // Surpress the errors which will automatically be logged
-  jest.spyOn(console, 'error').mockImplementation(() => {})
+  vi.spyOn(console, 'error').mockImplementation(() => {})
 
   const user = userEvent.setup()
 

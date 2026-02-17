@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest'
 import { getValueTruncatedToXDecimalPlaces } from './getValueTruncatedToXDecimalPlaces'
 
 test('getValueTruncatedToXDecimalPlaces works with strings and returns a value of the same type as the input', () => {

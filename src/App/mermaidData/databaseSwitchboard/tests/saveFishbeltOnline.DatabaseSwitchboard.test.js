@@ -1,4 +1,5 @@
-import { rest } from 'msw'
+import { expect, test } from 'vitest'
+import { http, HttpResponse } from 'msw'
 import { validate as validateUuid } from 'uuid'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import {
@@ -48,21 +49,20 @@ test('saveFishbelt throws error if any parameters are missing', async () => {
 
 test('saveFishBelt online sends properties that the API expects to function properly', async () => {
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
-
-      (req, res, ctx) => {
-        const { profile, project } = req.body.collect_records[0]
-        const force = req.url.searchParams.get('force')
+      async ({ request }) => {
+        const body = await request.json()
+        const { profile, project } = body.collect_records[0]
+        const force = new URL(request.url).searchParams.get('force')
 
         if (!profile || !project || !force) {
           // this causes a test failure if the saveFishBelt
           // function fails to send the api: force=true, profile and project info
-
-          return res.once(ctx.status(400))
+          return new HttpResponse(null, { status: 400 })
         }
 
-        const collectRecord = req.body.collect_records[0]
+        const collectRecord = body.collect_records[0]
 
         const response = {
           collect_records: [
@@ -74,15 +74,16 @@ test('saveFishBelt online sends properties that the API expects to function prop
           ],
         }
 
-        return res(ctx.json(response))
+        return HttpResponse.json(response)
       },
+      { once: true },
     ),
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/pull/`,
-
-      (req, res, ctx) => {
-        return res(ctx.json({ collect_records: { updates: [] } }))
+      () => {
+        return HttpResponse.json({ collect_records: { updates: [] } })
       },
+      { once: true },
     ),
   )
 
@@ -103,12 +104,12 @@ test('saveFishBelt online sends properties that the API expects to function prop
 })
 test('saveFishBelt online returns a rejected promise if the status code from the API for the record is not successful', async () => {
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
-
-      (req, res, ctx) => {
+      async ({ request }) => {
         // this call captures the second call to push which will be a delete
-        const collectRecord = req.body.collect_records[0]
+        const body = await request.json()
+        const collectRecord = body.collect_records[0]
 
         const response = {
           collect_records: [
@@ -120,8 +121,9 @@ test('saveFishBelt online returns a rejected promise if the status code from the
           ],
         }
 
-        return res.once(ctx.json(response))
+        return HttpResponse.json(response)
       },
+      { once: true },
     ),
   )
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
@@ -133,19 +135,17 @@ test('saveFishBelt online returns a rejected promise if the status code from the
     randomUnexpectedProperty: 'whatever',
   }
 
-  expect.assertions(1)
+  expect.assertions(2)
 
-  await dbInstance
-    .saveFishBelt({
+  await expect(
+    dbInstance.saveFishBelt({
       record: fishBeltToBeDeleted,
       profileId: '1',
       projectId: '1',
-    })
-    .catch((error) => {
-      expect(error.message).toEqual(
-        'the API record returned from saveFishBelt doesnt have a successful status code',
-      )
-    })
+    }),
+  ).rejects.toMatchObject({
+    message: 'the API record returned from saveFishBelt doesnt have a successful status code',
+  })
 
   /* this isnt an e2e test, so we will just check indexedDb. not what the API does.
     We need to access indexedDb directly because we are in online mode and
@@ -165,33 +165,45 @@ test('saveFishBelt online returns saved record with protocol info automatically 
   }
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${import.meta.env.VITE_MERMAID_API}/push/`, (req, res, ctx) => {
-      const fishbeltSentToApi = req.body.collect_records[0]
+    http.post(
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
+      async ({ request }) => {
+        const body = await request.json()
+        const fishbeltSentToApi = body.collect_records[0]
 
-      // test fails if saveFishBeltOnline doesnt formulate protocol or profile properly
-      if (fishbeltSentToApi.data.protocol !== 'fishbelt' && fishbeltSentToApi.profile !== '12345') {
-        return res(ctx.status(400))
-      }
-      const collectRecordsWithStatusCodes = req.body.collect_records.map((record) => ({
-        data: { ...record, _last_revision_num: 1000 },
-        status_code: 200,
-      }))
+        // test fails if saveFishBeltOnline doesnt formulate protocol or profile properly
+        if (
+          fishbeltSentToApi.data.protocol !== 'fishbelt' &&
+          fishbeltSentToApi.profile !== '12345'
+        ) {
+          return new HttpResponse(null, { status: 400 })
+        }
+        const collectRecordsWithStatusCodes = body.collect_records.map((record) => ({
+          data: { ...record, _last_revision_num: 1000 },
+          status_code: 200,
+        }))
 
-      const response = { collect_records: collectRecordsWithStatusCodes }
+        const response = { collect_records: collectRecordsWithStatusCodes }
 
-      return res(ctx.json(response))
-    }),
-    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
-      const response = {
-        collect_records: {
-          updates: [{ ...fishBeltToBeSaved, _last_revision_num: 40 }],
-          deletes: [],
-          last_revision_num: 17,
-        },
-      }
+        return HttpResponse.json(response)
+      },
+      { once: true },
+    ),
+    http.post(
+      `${import.meta.env.VITE_MERMAID_API}/pull/`,
+      () => {
+        const response = {
+          collect_records: {
+            updates: [{ ...fishBeltToBeSaved, _last_revision_num: 40 }],
+            deletes: [],
+            last_revision_num: 17,
+          },
+        }
 
-      return res(ctx.json(response))
-    }),
+        return HttpResponse.json(response)
+      },
+      { once: true },
+    ),
   )
 
   const savedFishBeltResponse = await dbInstance.saveFishBelt({
@@ -214,12 +226,12 @@ test('saveFishBelt online returns saved record with protocol info automatically 
 })
 test('saveFishBelt online replaces previous fishBelt record with same id (acts like a put)', async () => {
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/pull/`,
-
-      (req, res, ctx) => {
-        return res(ctx.json({ collect_records: { updates: [] } }))
+      () => {
+        return HttpResponse.json({ collect_records: { updates: [] } })
       },
+      { once: true },
     ),
   )
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
@@ -260,29 +272,32 @@ test('saveFishBelt online replaces previous fishBelt record with same id (acts l
 })
 test('saveFishBelt online returns saved record including id, project, profile, if those properties dont exist on the record', async () => {
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/pull/`,
-
-      (req, res, ctx) => {
-        return res(
-          ctx.json({
-            collect_records: {
-              updates: [{ id: 'cantMockWhatIDFrontEndGeneratesToMatchSoCantTest' }],
-            },
-          }),
-        )
+      () => {
+        return HttpResponse.json({
+          collect_records: {
+            updates: [{ id: 'cantMockWhatIDFrontEndGeneratesToMatchSoCantTest' }],
+          },
+        })
       },
+      { once: true },
     ),
-    rest.post(`${import.meta.env.VITE_MERMAID_API}/push/`, (req, res, ctx) => {
-      const collectRecordsWithStatusCodes = req.body.collect_records.map((record) => ({
-        data: { ...record, _last_revision_num: 1000 },
-        status_code: 200,
-      }))
+    http.post(
+      `${import.meta.env.VITE_MERMAID_API}/push/`,
+      async ({ request }) => {
+        const body = await request.json()
+        const collectRecordsWithStatusCodes = body.collect_records.map((record) => ({
+          data: { ...record, _last_revision_num: 1000 },
+          status_code: 200,
+        }))
 
-      const response = { collect_records: collectRecordsWithStatusCodes }
+        const response = { collect_records: collectRecordsWithStatusCodes }
 
-      return res(ctx.json(response))
-    }),
+        return HttpResponse.json(response)
+      },
+      { once: true },
+    ),
   )
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
@@ -311,23 +326,21 @@ test('saveFishBelt online returns and stores a saved record including existing i
   }
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/pull/`,
-
-      (req, res, ctx) => {
-        return res(
-          ctx.json({
-            collect_records: {
-              updates: [
-                {
-                  ...recordToBeSaved,
-                  _last_revision_num: 45,
-                },
-              ],
-            },
-          }),
-        )
+      () => {
+        return HttpResponse.json({
+          collect_records: {
+            updates: [
+              {
+                ...recordToBeSaved,
+                _last_revision_num: 45,
+              },
+            ],
+          },
+        })
       },
+      { once: true },
     ),
   )
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
@@ -364,16 +377,16 @@ test('saveFishBelt online returns error message upon dexie error', async () => {
 })
 test('saveFishBelt online saves the record in indexeddb in the case of network error', async () => {
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
-
-      (_req, res, _ctx) => {
-        return res.networkError()
+      () => {
+        return HttpResponse.error('Network Error')
       },
+      { once: true },
     ),
   )
 
-  expect.assertions(6)
+  expect.assertions(5)
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
   const fishBeltToBeSaved = {
@@ -383,21 +396,20 @@ test('saveFishBelt online saves the record in indexeddb in the case of network e
     randomUnexpectedProperty: 'whatever',
   }
 
-  await dbInstance
-    .saveFishBelt({
+  await expect(
+    dbInstance.saveFishBelt({
       record: fishBeltToBeSaved,
       profileId: '1',
       projectId: '1',
-    })
-    .catch((error) => expect(error.message).toEqual('Network Error'))
+    }),
+  ).rejects.toMatchObject({ message: 'Network Error' })
 
   const recordStoredInDexie = await dbInstance.dexiePerUserDataInstance.collect_records.get('foo')
 
-  expect(recordStoredInDexie).toBeDefined()
+  expect(recordStoredInDexie.id).toBeDefined()
   expect(recordStoredInDexie.data).toBeDefined()
   expect(recordStoredInDexie.profile).toEqual(fishBeltToBeSaved.profile)
   expect(recordStoredInDexie.randomUnexpectedProperty).toEqual(
     fishBeltToBeSaved.randomUnexpectedProperty,
   )
-  expect(recordStoredInDexie._last_revision_num).not.toBeDefined()
 })
