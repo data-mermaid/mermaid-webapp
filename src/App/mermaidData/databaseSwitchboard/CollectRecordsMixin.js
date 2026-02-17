@@ -15,7 +15,7 @@ import getObjectProperty from '../../../library/objects/getObjectProperty'
 import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 
 const CollectRecordsMixin = (Base) =>
-  (class extends Base {
+  class extends Base {
     #formatFishbeltRecordForPush = function formatFishbeltRecordForPush({
       record,
       projectId,
@@ -704,6 +704,6 @@ const CollectRecordsMixin = (Base) =>
           })
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
-  })
+  }
 
 export default CollectRecordsMixin

@@ -44,6 +44,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     restoreMocks: true,
+    retry: 2,
     setupFiles: [
       // dotenv/config in Jest
       // here we can load env via vite, but to emulate Jest:

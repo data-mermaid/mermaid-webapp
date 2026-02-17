@@ -152,8 +152,8 @@ const Projects = () => {
     databaseSwitchboardInstance
       .addDemoProject()
       .then((response) => {
-        updateUserSettings('hasUserDismissedDemo', true)
         refreshCurrentUser() // ensures correct user privileges
+        updateUserSettings('hasUserDismissedDemo', true)
         toast.success(...getToastArguments(t('projects.demo.created')))
         setIsLoading(false)
         navigate(internalNavigation.projectStartPage(response.id))
