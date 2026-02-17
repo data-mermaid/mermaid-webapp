@@ -421,9 +421,7 @@ test('Validate Fish Belt collect record, get management similar name warning, sh
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'validation_messages.similar_name',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -461,9 +459,7 @@ test('Validate Fish Belt collect record, get management similar name warning, sh
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText(
-        'validation_messages.similar_name',
-      ),
+      within(screen.getByTestId('site')).queryByText('validation_messages.similar_name'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -511,9 +507,7 @@ test('Validate Fish Belt collect record, get management similar name warning, sh
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'validation_messages.similar_name',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -551,9 +545,7 @@ test('Validate Fish Belt collect record, get management similar name warning, sh
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText(
-        'validation_messages.similar_name',
-      ),
+      within(screen.getByTestId('site')).queryByText('validation_messages.similar_name'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -601,9 +593,7 @@ test('Validate Fish Belt collect record, get management duplicate warning, show 
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'validation_messages.similar_name',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -672,9 +662,7 @@ test('Validate Fish Belt collect record, get management duplicate warning, show 
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'validation_messages.similar_name',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -743,9 +731,7 @@ test('Validate Fish Belt collect record, get management duplicate warning, show 
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'validation_messages.similar_name',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(

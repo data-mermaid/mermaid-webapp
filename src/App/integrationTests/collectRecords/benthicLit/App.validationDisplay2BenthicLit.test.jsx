@@ -71,20 +71,48 @@ test('Validating an empty benthic LIT collect record shows validations (proof of
 
   // input level validations
 
-  expect(within(screen.getByTestId('site')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('management')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-date')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-time')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect-number')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('label')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('len-surveyed')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('reef-slope')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('relative-depth')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('current')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('tide')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('notes')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('observers')).getByText('validation_messages.required')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('site')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('management')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('depth')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-date')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-time')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('transect-number')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('label')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('len-surveyed')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('reef-slope')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('relative-depth')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('current')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('tide')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('notes')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('observers')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
 
   // observations table (has one empty observation)
 

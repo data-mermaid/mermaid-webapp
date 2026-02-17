@@ -52,7 +52,9 @@ describe('Offline', () => {
     await user.selectOptions(pageSizeSelector, '20')
 
     const table = screen.getByRole('table')
-    const linkToBleachingRecord = within(table).queryByRole('link', { name: 'protocol_titles.bleachingqc' })
+    const linkToBleachingRecord = within(table).queryByRole('link', {
+      name: 'protocol_titles.bleachingqc',
+    })
 
     expect(linkToBleachingRecord).not.toBeInTheDocument()
   })

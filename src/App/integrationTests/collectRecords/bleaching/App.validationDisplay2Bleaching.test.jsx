@@ -71,18 +71,42 @@ test('Validating an empty bleaching collect record collect record shows validati
 
   // input level validations
 
-  expect(within(screen.getByTestId('site')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('management')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-date')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-time')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('quadrat-size')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('label')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('relative-depth')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('current')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('tide')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('notes')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('observers')).getByText('validation_messages.required')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('site')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('management')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('depth')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-date')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-time')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('quadrat-size')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('label')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('relative-depth')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('current')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('tide')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('notes')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('observers')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
 
   // observations tables (have one observation error each)
 

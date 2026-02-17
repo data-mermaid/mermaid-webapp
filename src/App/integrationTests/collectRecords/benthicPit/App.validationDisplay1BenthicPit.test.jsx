@@ -184,24 +184,52 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  expect(within(screen.getByTestId('depth')).getByText('validation_messages.required')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('depth')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
 
   await user.type(screen.getByTestId('depth-input'), '1')
 
   // validations remain showing, except Depth is changed
-  expect(await within(screen.getByTestId('site')).findByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('management')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).queryByText('validation_messages.required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-date')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-time')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect-number')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('label')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('len-surveyed')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('interval-size')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('interval-start')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('reef-slope')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('notes')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('observers')).getByText('validation_messages.required')).toBeInTheDocument()
+  expect(
+    await within(screen.getByTestId('site')).findByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('management')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('depth')).queryByText('validation_messages.required'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-date')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-time')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('transect-number')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('label')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('len-surveyed')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('interval-size')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('interval-start')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('reef-slope')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('notes')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('observers')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
   expect(
     within(screen.getByTestId('observations-section')).getByText('observation error'),
   ).toBeInTheDocument()
@@ -213,19 +241,39 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(await screen.findByTestId('saved-button'))
 
   // validations hide
-  expect(within(screen.getByTestId('site')).queryByText('validation_messages.required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('management')).queryByText('validation_messages.required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).queryByText('validation_messages.required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-date')).queryByText('validation_messages.required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-time')).queryByText('validation_messages.required')).not.toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('site')).queryByText('validation_messages.required'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('management')).queryByText('validation_messages.required'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('depth')).queryByText('validation_messages.required'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-date')).queryByText('validation_messages.required'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-time')).queryByText('validation_messages.required'),
+  ).not.toBeInTheDocument()
   expect(
     within(screen.getByTestId('transect-number')).queryByText('validation_messages.required'),
   ).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('label')).queryByText('validation_messages.required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('len-surveyed')).queryByText('validation_messages.required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('reef-slope')).queryByText('validation_messages.required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('notes')).queryByText('validation_messages.required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('observers')).queryByText('validation_messages.required')).not.toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('label')).queryByText('validation_messages.required'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('len-surveyed')).queryByText('validation_messages.required'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('reef-slope')).queryByText('validation_messages.required'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('notes')).queryByText('validation_messages.required'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('observers')).queryByText('validation_messages.required'),
+  ).not.toBeInTheDocument()
   expect(
     within(screen.getByTestId('observations-section')).queryByText('observation error'),
   ).not.toBeInTheDocument()
@@ -236,17 +284,39 @@ test('Validating an empty collect record, and then editing an input with errors 
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   // validations show again
-  expect(within(screen.getByTestId('site')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('management')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-date')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-time')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect-number')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('label')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('len-surveyed')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('reef-slope')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('notes')).getByText('validation_messages.required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('observers')).getByText('validation_messages.required')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('site')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('management')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('depth')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-date')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-time')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('transect-number')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('label')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('len-surveyed')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('reef-slope')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('notes')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('observers')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
   expect(
     within(screen.getByTestId('observations-section')).getByText('observation error'),
   ).toBeInTheDocument()

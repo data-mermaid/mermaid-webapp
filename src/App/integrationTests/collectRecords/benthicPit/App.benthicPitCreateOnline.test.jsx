@@ -180,7 +180,9 @@ describe('Online', () => {
     await user.selectOptions(pageSizeSelector, '22')
     const table = await screen.findByRole('table')
 
-    const linksToBenthicPitRecords = within(table).getAllByRole('link', { name: 'protocol_titles.benthicpit' })
+    const linksToBenthicPitRecords = within(table).getAllByRole('link', {
+      name: 'protocol_titles.benthicpit',
+    })
 
     expect(linksToBenthicPitRecords).toHaveLength(2)
 

@@ -87,9 +87,7 @@ test('Validate fishbelt: fails to validate, shows button able to run validation 
   expect(await screen.findByTestId('validating-button'))
 
   expect(await screen.findByTestId('validate-button'))
-  expect(
-    screen.queryByText('sample_units.errors.validation_unavailable'),
-  ).not.toBeInTheDocument()
+  expect(screen.queryByText('sample_units.errors.validation_unavailable')).not.toBeInTheDocument()
 })
 
 test('Validate & submit fishbelt: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
@@ -163,9 +161,7 @@ test('Validate & submit fishbelt: validation passes, shows validate button disab
   expect(await screen.findByTestId('validating-button'))
 
   expect(await screen.findByTestId('validated-button'))
-  expect(
-    screen.queryByText('sample_units.errors.validation_unavailable'),
-  ).not.toBeInTheDocument()
+  expect(screen.queryByText('sample_units.errors.validation_unavailable')).not.toBeInTheDocument()
 
   expect(await screen.findByTestId('submit-button')).toBeEnabled()
 
