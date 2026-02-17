@@ -1,1 +1,1 @@
-yarn run lint && yarn run test --watchAll=false --silent
+yarn run lint && yarn run test --silent
