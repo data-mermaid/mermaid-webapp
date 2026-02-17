@@ -1,7 +1,7 @@
 export default {
   restoreMocks: true,
   transformIgnorePatterns: [
-    '<rootDir>/node_modules/(?!(@iconify-icons|@reach|@fontsource|uuid|dexie)/.*)', // ignore transforming node_modules except for the libraries inside the inner brackets
+    '<rootDir>/node_modules/(?!(@iconify-icons|@reach|@fontsource|uuid|dexie|msw|until-async)/.*)', // ignore transforming node_modules except for the libraries inside the inner brackets
   ],
   moduleNameMapper: {
     '^.+\\.svg$': 'jest-svg-transformer',
@@ -10,7 +10,7 @@ export default {
     '@fontsource/open-sans': 'identity-obj-proxy',
     'react-toastify/dist/ReactToastify.css': 'identity-obj-proxy',
   },
-  testEnvironment: 'jest-environment-jsdom',
+  testEnvironment: 'jest-fixed-jsdom',
   setupFiles: ['dotenv/config'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
   transform: {

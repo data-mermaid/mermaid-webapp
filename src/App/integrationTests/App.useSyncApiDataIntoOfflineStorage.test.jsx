@@ -1,6 +1,7 @@
+import { beforeEach, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
@@ -28,11 +29,11 @@ beforeEach(() => {
    * with mock implementation details. We isolate this to this test suite to isolate the risk.
    * */
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
-      (req, res, ctx) => {
-        const requestedDataNames = Object.keys(req.body)
+      async ({ request }) => {
+        const requestedDataNames = Object.keys(await request.json())
 
         const onlyRequestedItems = requestedDataNames.reduce(
           (accumulator, dataName) => ({
@@ -42,7 +43,7 @@ beforeEach(() => {
           {},
         )
 
-        return res(ctx.json(onlyRequestedItems))
+        return HttpResponse.json(onlyRequestedItems)
       },
     ),
   )

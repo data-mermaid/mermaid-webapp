@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import {
@@ -28,22 +28,20 @@ test('Fishbelt observations add new species - filling out new species form adds 
   await screen.findByTestId('record-form-title')
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/pull/`,
 
-      (req, res, ctx) => {
-        return res(
-          ctx.json({
-            fish_species: {
-              updates: [
-                {
-                  id: 'whatever',
-                  display_name: 'Nebrius ridens',
-                },
-              ],
-            },
-          }),
-        )
+      () => {
+        return HttpResponse.json({
+          fish_species: {
+            updates: [
+              {
+                id: 'whatever',
+                display_name: 'Nebrius ridens',
+              },
+            ],
+          },
+        })
       },
     ),
   )

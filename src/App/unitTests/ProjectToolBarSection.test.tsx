@@ -1,4 +1,5 @@
 import React from 'react'
+import { describe, expect, it, vi } from 'vitest'
 import { screen } from '@testing-library/react'
 import ProjectToolBarSection from '../../components/ProjectToolBarSection/ProjectToolBarSection'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
@@ -15,12 +16,12 @@ describe('ProjectToolBarSection', () => {
   //
   //     renderAuthenticatedOnline(
   //       <ProjectToolBarSection
-  //         setProjectFilter={jest.fn()}
+  //         setProjectFilter={vi.fn()}
   //         projectSortKey=""
-  //         setProjectSortKey={jest.fn()}
-  //         setIsProjectSortAsc={jest.fn()}
-  //         addProjectToProjectsPage={jest.fn()}
-  //         handleExploreButtonClick={jest.fn()}
+  //         setProjectSortKey={vi.fn()}
+  //         setIsProjectSortAsc={vi.fn()}
+  //         addProjectToProjectsPage={vi.fn()}
+  //         handleExploreButtonClick={vi.fn()}
   //         userHasDemoProject={false}
   //       />,
   //       {
@@ -54,12 +55,12 @@ describe('ProjectToolBarSection', () => {
 
       renderAuthenticatedOnline(
         <ProjectToolBarSection
-          setProjectFilter={jest.fn()}
+          setProjectFilter={vi.fn()}
           projectSortKey=""
-          setProjectSortKey={jest.fn()}
-          setIsProjectSortAsc={jest.fn()}
-          addProjectToProjectsPage={jest.fn()}
-          handleExploreButtonClick={jest.fn()}
+          setProjectSortKey={vi.fn()}
+          setIsProjectSortAsc={vi.fn()}
+          addProjectToProjectsPage={vi.fn()}
+          handleExploreButtonClick={vi.fn()}
           userHasDemoProject={true}
         />,
         {

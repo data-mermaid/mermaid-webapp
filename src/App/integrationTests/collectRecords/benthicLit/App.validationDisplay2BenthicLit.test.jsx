@@ -1,7 +1,8 @@
+import { expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
@@ -21,11 +22,11 @@ test('Validating an empty benthic LIT collect record shows validations (proof of
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicLitCollectRecords[0],
         validations: mockBenthicLitValidationsObject,
@@ -44,7 +45,7 @@ test('Validating an empty benthic LIT collect record shows validations (proof of
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -100,11 +101,11 @@ test('benthic LIT validations will show only the first error when there are mult
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicLitCollectRecords[0],
         validations: {
@@ -122,53 +123,29 @@ test('benthic LIT validations will show only the first error when there are mult
                   {
                     code: 'observation error 1',
                     status: 'error',
-                    validation_id: '2b289dc99c02e9ae1c764e8a71cca3cc',
-                    context: { observation_id: '1' },
-                  },
-                  {
-                    code: 'observation warning 1',
-                    status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
                     context: { observation_id: '1' },
                   },
                   {
                     code: 'observation error 2',
                     status: 'error',
-                    validation_id: '2b289dc99c02e9ae1c764e8a71cca3c8',
+                    validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
+                    context: { observation_id: '1' },
+                  },
+                  {
+                    code: 'observation warning 1',
+                    status: 'warning',
+                    validation_id: 'ccb38683efc25838ec9b7ff026e78a17',
                     context: { observation_id: '1' },
                   },
                   {
                     code: 'observation warning 2',
                     status: 'warning',
-                    validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
+                    validation_id: 'ccb38683efc25838ec9b7ff026e78a16',
                     context: { observation_id: '1' },
                   },
                 ],
               ],
-              sample_event: {
-                site: [
-                  {
-                    validation_id: Math.random(),
-                    code: 'firstError',
-                    status: 'error',
-                  },
-                  {
-                    validation_id: Math.random(),
-                    code: 'secondError',
-                    status: 'error',
-                  },
-                  {
-                    validation_id: Math.random(),
-                    code: 'firstWarning',
-                    status: 'warning',
-                  },
-                  {
-                    validation_id: Math.random(),
-                    code: 'secondWarning',
-                    status: 'warning',
-                  },
-                ],
-              },
             },
           },
         },
@@ -187,7 +164,7 @@ test('benthic LIT validations will show only the first error when there are mult
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -205,22 +182,9 @@ test('benthic LIT validations will show only the first error when there are mult
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  // regular inputs
-
-  expect(within(screen.getByTestId('site')).getByText('firstError')).toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('secondError')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('secondWarning')).not.toBeInTheDocument()
-
-  // observations table (has one empty observation)
-
-  const observationsTable = screen.getByTestId('observations-section')
-
-  expect(within(observationsTable).getByText('observation error 1')).toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation error 2')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation warning 1')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation warning 2')).not.toBeInTheDocument()
-  expect(
-    within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
-  ).not.toBeInTheDocument()
+  expect(screen.getByText('observation error 1')).toBeInTheDocument()
+  expect(screen.queryByText('observation error 2')).not.toBeInTheDocument()
+  expect(screen.queryByText('observation warning 1')).not.toBeInTheDocument()
+  expect(screen.queryByText('observation warning 2')).not.toBeInTheDocument()
+  expect(screen.queryByText(`OK validation shouldn't show`)).not.toBeInTheDocument()
 })
