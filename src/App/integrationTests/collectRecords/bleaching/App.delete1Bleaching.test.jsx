@@ -1,3 +1,4 @@
+import { describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -33,6 +34,7 @@ describe('Offline', () => {
 
     const deleteButton = await screen.findByTestId('delete-record-button')
 
+    vi.spyOn(window, 'confirm').mockReturnValueOnce(true)
     await user.click(deleteButton)
 
     expect(screen.getByTestId('delete-record-prompt'))

@@ -1,3 +1,4 @@
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -32,7 +33,8 @@ test('Unsaved NEW bleaching form edits clear when the user navigates away and ba
 
   expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
 
-  // nav away
+  // nav away (confirm the unsaved changes prompt)
+  vi.spyOn(window, 'confirm').mockReturnValueOnce(true)
   const sideNav = await screen.findByTestId('content-page-side-nav')
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))
@@ -72,7 +74,8 @@ test('Unsaved EDIT bleaching form edits clear when the user navigates away and b
 
   expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
 
-  // nav away
+  // nav away (confirm the unsaved changes prompt)
+  vi.spyOn(window, 'confirm').mockReturnValueOnce(true)
   const sideNav = screen.getByTestId('content-page-side-nav')
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))

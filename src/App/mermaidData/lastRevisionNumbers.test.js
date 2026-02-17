@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import {

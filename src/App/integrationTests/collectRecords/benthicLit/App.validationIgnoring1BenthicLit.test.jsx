@@ -1,7 +1,8 @@
+import { expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
@@ -20,11 +21,11 @@ test('Benthic LIT validation: user can dismiss non-observations input warnings '
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicLitCollectRecords[0],
         validations: {
@@ -235,7 +236,7 @@ test('Benthic LIT validation: user can dismiss non-observations input warnings '
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -419,11 +420,11 @@ test('Benthic LIT validation: user can dismiss record-level warnings ', async ()
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicLitCollectRecords[0],
         validations: {
@@ -453,7 +454,7 @@ test('Benthic LIT validation: user can dismiss record-level warnings ', async ()
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -506,11 +507,11 @@ test('Benthic LIT validation: user can dismiss observation warnings ', async () 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicLitCollectRecords[0],
         validations: {
@@ -571,7 +572,7 @@ test('Benthic LIT validation: user can dismiss observation warnings ', async () 
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -612,11 +613,11 @@ test('Benthic LIT validation: user can reset dismissed non-observation input war
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicLitCollectRecords[0],
         validations: {
@@ -827,7 +828,7 @@ test('Benthic LIT validation: user can reset dismissed non-observation input war
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 

@@ -66,14 +66,16 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
           }
         })
         .catch((error) => {
-          setIsSyncInProgress(false)
-          appendSyncError(apiDataSyncErrorText)
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(apiDataSyncErrorText))
-            },
-          })
+          if (isMounted.current) {
+            setIsSyncInProgress(false)
+            appendSyncError(apiDataSyncErrorText)
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(apiDataSyncErrorText))
+              },
+            })
+          }
         })
     }
   }, [
@@ -122,14 +124,16 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
           }
         })
         .catch((error) => {
-          setIsSyncInProgress(false)
-          appendSyncError(apiDataSyncErrorText)
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(apiDataSyncErrorText))
-            },
-          })
+          if (isMounted.current) {
+            setIsSyncInProgress(false)
+            appendSyncError(apiDataSyncErrorText)
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(apiDataSyncErrorText))
+              },
+            })
+          }
         })
     }
     if (isNotInitialLoadOnProjectPageAndOnline) {
@@ -144,14 +148,16 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
           }
         })
         .catch((error) => {
-          setIsSyncInProgress(false)
-          appendSyncError(apiDataSyncErrorText)
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(apiDataSyncErrorText))
-            },
-          })
+          if (isMounted.current) {
+            setIsSyncInProgress(false)
+            appendSyncError(apiDataSyncErrorText)
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(apiDataSyncErrorText))
+              },
+            })
+          }
         })
     }
   }, [

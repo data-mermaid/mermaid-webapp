@@ -21,7 +21,7 @@
     "strict": false,
     "strictFunctionTypes": true,
     "target": "ESNext",
-    "types": ["vite/client", "vite-plugin-svgr/client", "jest", "node"],
+    "types": ["vite/client", "vite-plugin-svgr/client", "vitest/globals", "node"],
     "useUnknownInCatchVariables": true
   },
   "include": ["src"]

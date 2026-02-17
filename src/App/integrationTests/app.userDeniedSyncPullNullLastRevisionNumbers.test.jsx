@@ -1,5 +1,6 @@
+import { expect, test } from 'vitest'
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import {
@@ -14,7 +15,7 @@ import App from '../App'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test(`When a sync pull responds with sync errors for 403 (user denied pulling data), 
+test(`When a sync pull responds with sync errors for 403 (user denied pulling data),
 the app will reset the last revision numbers for collect records, project sites, project managements,
 and project profiles to ensure the user can pull fresh data if they are given permission again`, async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
@@ -103,7 +104,7 @@ and project profiles to ensure the user can pull fresh data if they are given pe
   // then we navigate the user to trigger a sync
 
   const _mockApiWithFakeServerGeneratedLastRevisionNumbers = mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const responseWithSyncErrors = {
         choices: {
           last_revision_num: 'server',
@@ -170,7 +171,7 @@ and project profiles to ensure the user can pull fresh data if they are given pe
         },
       }
 
-      return res.once(ctx.json(responseWithSyncErrors))
+      return HttpResponse.json(responseWithSyncErrors)
     }),
   )
 

@@ -1,4 +1,5 @@
-import { rest } from 'msw'
+import { describe, expect, test } from 'vitest'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
@@ -139,8 +140,8 @@ describe('Online', () => {
 
     mockMermaidApiAllSuccessful.use(
       // append the validated data on the pull response, because that is what the UI uses to update itself
-      rest.post(`${apiBaseUrl}/push/`, (_req, res, ctx) => {
-        return res(ctx.json(mock400StatusCodeForAllDataTypesPush))
+      http.post(`${apiBaseUrl}/push/`, () => {
+        return HttpResponse.json(mock400StatusCodeForAllDataTypesPush)
       }),
     )
 
@@ -174,8 +175,8 @@ describe('Online', () => {
   test('New MR save will handle 500 push status codes with a generic message and spare the user any api generated error details. Edits persist', async () => {
     mockMermaidApiAllSuccessful.use(
       // append the validated data on the pull response, because that is what the UI uses to update itself
-      rest.post(`${apiBaseUrl}/push/`, (_req, res, ctx) => {
-        return res(ctx.json(mock500StatusCodeForAllDataTypesPush))
+      http.post(`${apiBaseUrl}/push/`, () => {
+        return HttpResponse.json(mock500StatusCodeForAllDataTypesPush)
       }),
     )
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
