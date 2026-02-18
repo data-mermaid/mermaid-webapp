@@ -104,7 +104,7 @@ vi.mock('react-i18next', () => ({
     type: '3rdParty',
     init: vi.fn(),
   },
-  Trans: ({ children }) => children,
+  Trans: ({ i18nKey }) => i18nKey,
   I18nextProvider: ({ children }) => children,
 }))
 
