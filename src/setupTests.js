@@ -79,34 +79,40 @@ vi.mock('../i18n', async () => {
 
 // Mock react-i18next so useTranslation().t() returns the translation key.
 // Keeps component tests isolated from the real react-i18next library internals.
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key) => key,
-    i18n: {
-      changeLanguage: vi.fn(() => Promise.resolve()),
-      language: 'en',
-      languages: ['en'],
-      isInitialized: true,
-      exists: vi.fn(() => true),
-      getFixedT: vi.fn(() => (key) => key),
-      hasResourceBundle: vi.fn(() => true),
-      loadNamespaces: vi.fn(() => Promise.resolve()),
-      loadLanguages: vi.fn(() => Promise.resolve()),
-      off: vi.fn(),
-      on: vi.fn(),
-      emit: vi.fn(),
-      store: {},
-      services: {},
-      options: {},
+// mockT is a shared vi.fn so tests can spy on useTranslation().t() calls.
+vi.mock('react-i18next', () => {
+  const mockT = vi.fn((key) => key)
+
+  return {
+    mockT,
+    useTranslation: () => ({
+      t: mockT,
+      i18n: {
+        changeLanguage: vi.fn(() => Promise.resolve()),
+        language: 'en',
+        languages: ['en'],
+        isInitialized: true,
+        exists: vi.fn(() => true),
+        getFixedT: vi.fn(() => (key) => key),
+        hasResourceBundle: vi.fn(() => true),
+        loadNamespaces: vi.fn(() => Promise.resolve()),
+        loadLanguages: vi.fn(() => Promise.resolve()),
+        off: vi.fn(),
+        on: vi.fn(),
+        emit: vi.fn(),
+        store: {},
+        services: {},
+        options: {},
+      },
+    }),
+    initReactI18next: {
+      type: '3rdParty',
+      init: vi.fn(),
     },
-  }),
-  initReactI18next: {
-    type: '3rdParty',
-    init: vi.fn(),
-  },
-  Trans: ({ i18nKey }) => i18nKey,
-  I18nextProvider: ({ children }) => children,
-}))
+    Trans: ({ i18nKey }) => i18nKey,
+    I18nextProvider: ({ children }) => children,
+  }
+})
 
 configure({ asyncUtilTimeout: 10000 })
 
