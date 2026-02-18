@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -15,6 +15,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import mockBleachingValidationsObject from '../../../../testUtilities/mockBleachingValidationsObject'
 import mockBleachingCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBleachingCollectRecords'
+import i18n from '../../../../../i18n'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
@@ -58,10 +59,13 @@ test('Validating an empty bleaching collect record collect record shows validati
     dexieCurrentUserInstance,
   )
 
+  const tSpy = vi.spyOn(i18n, 't')
   await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
+
+  expect(tSpy).toHaveBeenCalledWith('validation_messages.required')
   // record level validations
   expect(screen.getByText('record level error 1')).toBeInTheDocument()
   expect(screen.getByText('record level error 2')).toBeInTheDocument()

@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -15,6 +15,7 @@ import mockHabitatComplexityCollectRecords from '../../../../testUtilities/mockC
 import mockHabitatComplexityValidationsObject from '../../../../testUtilities/mockCollectRecords/mockHabitatComplexityValidationsObject'
 import App from '../../../App'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
+import i18n from '../../../../../i18n'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
@@ -104,6 +105,7 @@ test('Habitat Complexity validations will show the all warnings when there are m
 
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
+
   // regular inputs
   expect(within(screen.getByTestId('site')).getByText('firstWarning')).toBeInTheDocument()
   expect(within(screen.getByTestId('site')).getByText('secondWarning')).toBeInTheDocument()
@@ -180,10 +182,14 @@ test('Validating an empty collect record, and then editing an input with errors 
     dexieCurrentUserInstance,
   )
 
+  const tSpy = vi.spyOn(i18n, 't')
+
   await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
+
+  expect(tSpy).toHaveBeenCalledWith('validation_messages.required')
 
   expect(
     within(screen.getByTestId('depth')).getByText('validation_messages.required'),

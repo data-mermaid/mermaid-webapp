@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -16,6 +16,7 @@ import App from '../../../App'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import mockSampleEventValidationObject from '../../../../testUtilities/mockCollectRecords/mockSampleEventValidationObject'
 import mockFishbeltCollectRecords from '../../../../testUtilities/mockCollectRecords/mockFishbeltCollectRecords'
+import i18n from '../../../../../i18n'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
@@ -69,11 +70,14 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
     dexieCurrentUserInstance,
   )
 
+  const tSpy = vi.spyOn(i18n, 't')
+
   await validateCollectRecord(user)
 
   expect(
     within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
+  expect(tSpy).toHaveBeenCalledWith('validation_messages.not_unique_site')
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
   await user.click(resolveButton)

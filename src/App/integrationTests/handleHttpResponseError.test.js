@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { toast, Slide } from 'react-toastify'
 import handleHttpResponseError from '../../library/handleHttpResponseError'
+import i18n from '../../../i18n'
 describe('handleHttpResponseError', () => {
   afterEach(() => {
     vi.restoreAllMocks()
@@ -16,11 +17,14 @@ describe('handleHttpResponseError', () => {
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 403', () => {
     const toastSpy = vi.spyOn(toast, 'error')
+    const tSpy = vi.spyOn(i18n, 't')
 
     const callback = vi.fn()
     const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 403 } }, callback, logoutMermaid })
+
+    expect(tSpy).toHaveBeenCalledWith('api_errors.unauthorized_user')
 
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
@@ -37,11 +41,14 @@ describe('handleHttpResponseError', () => {
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 500', () => {
     const toastSpy = vi.spyOn(toast, 'error')
+    const tSpy = vi.spyOn(i18n, 't')
 
     const callback = vi.fn()
     const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 500 } }, callback, logoutMermaid })
+
+    expect(tSpy).toHaveBeenCalledWith('api_errors.unspecified_error')
 
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
@@ -58,11 +65,14 @@ describe('handleHttpResponseError', () => {
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 502', () => {
     const toastSpy = vi.spyOn(toast, 'error')
+    const tSpy = vi.spyOn(i18n, 't')
 
     const callback = vi.fn()
     const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 502 } }, callback, logoutMermaid })
+
+    expect(tSpy).toHaveBeenCalledWith('api_errors.unspecified_error')
 
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
@@ -79,11 +89,14 @@ describe('handleHttpResponseError', () => {
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 503', () => {
     const toastSpy = vi.spyOn(toast, 'error')
+    const tSpy = vi.spyOn(i18n, 't')
 
     const callback = vi.fn()
     const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 503 } }, callback, logoutMermaid })
+
+    expect(tSpy).toHaveBeenCalledWith('api_errors.unspecified_error')
 
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
