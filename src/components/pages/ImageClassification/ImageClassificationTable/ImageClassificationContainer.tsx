@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
 import ImageClassificationObservationTable from './ImageClassificationObservationTable'
 import ImageUploadModal from '../ImageUploadModal.jsx'
 import { ButtonPrimary } from '../../../generic/buttons'
@@ -12,7 +11,11 @@ import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHa
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-const ImageClassificationContainer = (props) => {
+interface ImageClassificationContainerProps {
+  isImageClassificationEnabledForUser: boolean
+}
+
+const ImageClassificationContainer = (props: ImageClassificationContainerProps) => {
   const { t } = useTranslation()
   const { isImageClassificationEnabledForUser } = props
   const [images, setImages] = useState([])
@@ -121,7 +124,3 @@ const ImageClassificationContainer = (props) => {
 }
 
 export default ImageClassificationContainer
-
-ImageClassificationContainer.propTypes = {
-  isImageClassificationEnabledForUser: PropTypes.bool.isRequired,
-}
