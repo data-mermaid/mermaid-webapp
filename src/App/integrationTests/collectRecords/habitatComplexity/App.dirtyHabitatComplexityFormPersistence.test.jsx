@@ -1,6 +1,7 @@
 import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from 'react-i18next'
 
 import {
   screen,
@@ -84,6 +85,7 @@ test('Unsaved EDIT Habitat Complexity form edits clear when the user navigates a
   const table = await screen.findByRole('table')
 
   await user.click(within(table).getAllByText('protocol_titles.habitatcomplexity')[0])
+  expect(mockT).toHaveBeenCalledWith('protocol_titles.habitatcomplexity')
 
   // initial unedited depth value
   await waitFor(async () =>

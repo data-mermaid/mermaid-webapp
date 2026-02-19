@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from 'react-i18next'
 
 import {
   screen,
@@ -52,5 +53,6 @@ describe('Offline', () => {
 
     // row length = 15 because 16 mock records, now minus 1
     expect(linksToFishbeltRecords).toHaveLength(15)
+    expect(mockT).toHaveBeenCalledWith('protocol_titles.fishbelt')
   })
 })

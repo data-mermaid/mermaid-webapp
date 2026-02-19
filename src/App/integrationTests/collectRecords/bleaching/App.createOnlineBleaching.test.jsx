@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from 'react-i18next'
 
 import {
   screen,
@@ -169,6 +170,7 @@ describe('Online', () => {
     })
 
     expect(linksToBleachingRecords).toHaveLength(2)
+    expect(mockT).toHaveBeenCalledWith('protocol_titles.bleachingqc')
 
     // expect unique depth as proxy for New Bleaching
     expect(await within(table).findByText('10000'))

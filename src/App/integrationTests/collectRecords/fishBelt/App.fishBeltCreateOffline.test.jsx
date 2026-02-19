@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from 'react-i18next'
 
 import {
   screen,
@@ -131,6 +132,7 @@ describe('Offline', () => {
 
     // 17 the 16 mock records + the one we just created
     expect(linksToFishbeltRecords).toHaveLength(17)
+    expect(mockT).toHaveBeenCalledWith('protocol_titles.fishbelt')
 
     // expect unique depth as proxy for new fishbelt
     expect(await within(table).findByText('10000'))

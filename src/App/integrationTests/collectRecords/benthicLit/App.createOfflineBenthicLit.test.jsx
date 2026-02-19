@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from 'react-i18next'
 
 import {
   screen,
@@ -187,6 +188,7 @@ describe('Offline', () => {
     })
 
     expect(linksToBenthicLitRecords).toHaveLength(2)
+    expect(mockT).toHaveBeenCalledWith('protocol_titles.benthiclit')
 
     // expect unique depth as proxy for New Benthic LIT
     expect(await within(table).findByText('10000'))

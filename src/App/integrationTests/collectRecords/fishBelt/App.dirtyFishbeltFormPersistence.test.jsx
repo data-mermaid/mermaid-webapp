@@ -1,6 +1,7 @@
 import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from 'react-i18next'
 
 import {
   screen,
@@ -88,6 +89,7 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
       name: 'protocol_titles.fishbelt',
     })[0],
   )
+  expect(mockT).toHaveBeenCalledWith('protocol_titles.fishbelt')
 
   const formAfterNav = await screen.findByRole('form')
 
