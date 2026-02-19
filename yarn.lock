@@ -1873,6 +1873,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fortawesome/fontawesome-common-types@npm:7.2.0":
+  version: 7.2.0
+  resolution: "@fortawesome/fontawesome-common-types@npm:7.2.0"
+  checksum: 10c0/991ca1390c078d973e92034cf7dbae2fc3aa50cd7ff322b7b23e4c54ec84dae12979bada9a782bdaea11a1577ae74d802aa651c590f41d2e1b1126c17e6cd413
+  languageName: node
+  linkType: hard
+
 "@fortawesome/fontawesome-common-types@npm:^0.2.36":
   version: 0.2.36
   resolution: "@fortawesome/fontawesome-common-types@npm:0.2.36"
@@ -1880,12 +1887,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-svg-core@npm:^1.2.34":
-  version: 1.2.36
-  resolution: "@fortawesome/fontawesome-svg-core@npm:1.2.36"
+"@fortawesome/fontawesome-svg-core@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@fortawesome/fontawesome-svg-core@npm:7.2.0"
   dependencies:
-    "@fortawesome/fontawesome-common-types": "npm:^0.2.36"
-  checksum: 10c0/aaff16abc453d5ddf36035720ab9e600a5b22a6d37f8e0641104ecc505a10a7aae3b1ef3ec37992039d4fc00b322d0029b992c88b483f750794792f672b509f6
+    "@fortawesome/fontawesome-common-types": "npm:7.2.0"
+  checksum: 10c0/5c6655b030254804999eb87b96111cdcc42c0789e6e9ea13bc1e37d5ebf9fb982c79a618b68272cc59c23c4e1abf73d487e747a17a61499eac5f9f528fc54ad4
   languageName: node
   linkType: hard
 
@@ -1907,15 +1914,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:^0.1.14":
-  version: 0.1.19
-  resolution: "@fortawesome/react-fontawesome@npm:0.1.19"
-  dependencies:
-    prop-types: "npm:^15.8.1"
+"@fortawesome/react-fontawesome@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@fortawesome/react-fontawesome@npm:3.2.0"
   peerDependencies:
-    "@fortawesome/fontawesome-svg-core": ~1 || ~6
-    react: ">=16.x"
-  checksum: 10c0/e0442e5f6bc4b7768f491504890192c1d78f1ee52587febaaefeedeba98f7c4906f81b4e10871bfb10eae3fafce3eecd27b5653312e846ce7373f0d5a81cf144
+    "@fortawesome/fontawesome-svg-core": ~6 || ~7
+    react: ^18.0.0 || ^19.0.0
+  checksum: 10c0/bd9534ae317d6a2a7db032f48e8780cdb3a0842f1dc58335cfa8508d7e73ab02c5a9684becec06a05c36848c6c8039ffee74a4336c3622a832eb5aed6cd27a7a
   languageName: node
   linkType: hard
 
@@ -8839,10 +8844,10 @@ __metadata:
     "@emotion/styled": "npm:^11.11.0"
     "@eslint/js": "npm:^9.38.0"
     "@fontsource/open-sans": "npm:^4.4.5"
-    "@fortawesome/fontawesome-svg-core": "npm:^1.2.34"
+    "@fortawesome/fontawesome-svg-core": "npm:^7.2.0"
     "@fortawesome/free-regular-svg-icons": "npm:^5.15.2"
     "@fortawesome/free-solid-svg-icons": "npm:^5.15.2"
-    "@fortawesome/react-fontawesome": "npm:^0.1.14"
+    "@fortawesome/react-fontawesome": "npm:^3.2.0"
     "@iconify-icons/mdi": "npm:^1.1.12"
     "@iconify-icons/ri": "npm:^1.1.0"
     "@iconify/react": "npm:^1.1.4"
