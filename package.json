@@ -48,7 +48,7 @@
     "react-is": "^18.2.0",
     "react-router-dom": "6.19.0",
     "react-table": "^7.6.3",
-    "react-toastify": "^7.0.3",
+    "react-toastify": "^11.0.0",
     "styled-components": "^6.3.8",
     "stylis": "^4.0.0",
     "ts-node": "^10.9.2",
