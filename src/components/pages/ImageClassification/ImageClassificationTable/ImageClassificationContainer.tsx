@@ -87,12 +87,7 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
 
   return (
     <>
-      <ImageClassificationObservationTable
-        images={images}
-        isUploading={isUploading}
-        setImages={setImages}
-        {...props}
-      />
+      <ImageClassificationObservationTable images={images} setImages={setImages} {...props} />
       <ButtonContainer>
         {isImageClassificationEnabledForUser ? (
           <ButtonPrimary
