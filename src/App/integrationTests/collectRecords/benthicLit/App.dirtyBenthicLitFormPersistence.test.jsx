@@ -1,7 +1,7 @@
 import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
-import { mockT } from 'react-i18next'
+import { mockT } from '../../../../testUtilities/mockT'
 
 import {
   screen,

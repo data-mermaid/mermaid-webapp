@@ -3,7 +3,7 @@ import '@testing-library/jest-dom'
 
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { mockT } from 'react-i18next'
+import { mockT } from '../../../testUtilities/mockT'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
