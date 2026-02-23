@@ -10,9 +10,17 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { BenthicPhotoQuadratRecord } from '../../../../App/mermaidData/mermaidDataTypes'
+import { ValidationResult } from '../../collectRecordFormPages/CollectRecordFormPage/getDuplicateValidationInfo'
 
 interface ImageClassificationContainerProps {
   isImageClassificationEnabledForUser: boolean
+  collectRecord?: BenthicPhotoQuadratRecord & {
+    validations?: { results?: { $record?: ValidationResult[] } }
+  }
+  areValidationsShowing: boolean
+  ignoreObservationValidations: () => void
+  resetObservationValidations: () => void
 }
 
 const ImageClassificationContainer = (props: ImageClassificationContainerProps) => {
