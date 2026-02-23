@@ -80,11 +80,10 @@ vi.mock('../i18n', async () => {
 // Mock react-i18next so useTranslation().t() returns the translation key.
 // Keeps component tests isolated from the real react-i18next library internals.
 // mockT is a shared vi.fn so tests can spy on useTranslation().t() calls.
-vi.mock('react-i18next', () => {
-  const mockT = vi.fn((key) => key)
+vi.mock('react-i18next', async () => {
+  const { mockT } = await import('./testUtilities/mockT')
 
   return {
-    mockT,
     useTranslation: () => ({
       t: mockT,
       i18n: {
