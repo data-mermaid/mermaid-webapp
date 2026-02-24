@@ -60,7 +60,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
   })
 
   return (
-    <InputRow validationType={validationType} data-testid={testId}>
+    <InputRow $validationType={validationType} data-testid={testId}>
       <label id={`${id}-checkbox-group-with-label-and-validation`}>
         {label}
         {required ? <RequiredIndicator /> : null}

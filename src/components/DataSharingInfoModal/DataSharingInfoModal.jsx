@@ -37,7 +37,7 @@ const TheadCenter = styled.th`
 
 const Tcell = styled(Td)`
   ${(props) =>
-    props.cellWithText
+    props.$cellWithText
       ? css`
           text-align: left;
         `
@@ -73,7 +73,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Td>
           </Tr>
           <Tr>
-            <Tcell cellWithText>{t('data_sharing.organization_admin_names')}</Tcell>
+            <Tcell $cellWithText>{t('data_sharing.organization_admin_names')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -85,12 +85,12 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Td colSpan="4" cellWithText>
+            <Td colSpan="4" $cellWithText>
               <strong>{t('data_sharing.metadata')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell cellWithText>{t('data_sharing.project_metadata')}</Tcell>
+            <Tcell $cellWithText>{t('data_sharing.project_metadata')}</Tcell>
             <Tcell>
               <IconCheck />
             </Tcell>
@@ -102,12 +102,12 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Td colSpan="4" cellWithText>
+            <Td colSpan="4" $cellWithText>
               <strong>{t('data_sharing.site_level_averages')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell cellWithText>{t('data_sharing.average_benthic_cover')}</Tcell>
+            <Tcell $cellWithText>{t('data_sharing.average_benthic_cover')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -119,7 +119,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>{t('data_sharing.average_fish_biomass')}</Tcell>
+            <Tcell $cellWithText>{t('data_sharing.average_fish_biomass')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -131,7 +131,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>{t('data_sharing.average_habitat_complexity')}</Tcell>
+            <Tcell $cellWithText>{t('data_sharing.average_habitat_complexity')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -143,7 +143,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>{t('data_sharing.average_colonies_bleached')}</Tcell>
+            <Tcell $cellWithText>{t('data_sharing.average_colonies_bleached')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -155,12 +155,12 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Td colSpan="4" cellWithText>
+            <Td colSpan="4" $cellWithText>
               <strong>{t('data_sharing.transect_level_observations')}</strong>
             </Td>
           </Tr>
           <Tr>
-            <Tcell cellWithText>{t('data_sharing.benthic_observations')}</Tcell>
+            <Tcell $cellWithText>{t('data_sharing.benthic_observations')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -172,7 +172,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>{t('data_sharing.fish_species_info')}</Tcell>
+            <Tcell $cellWithText>{t('data_sharing.fish_species_info')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -184,7 +184,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>{t('data_sharing.individual_habitat_complexity')}</Tcell>
+            <Tcell $cellWithText>{t('data_sharing.individual_habitat_complexity')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -196,7 +196,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>{t('data_sharing.colonies_bleached_percent_cover')}</Tcell>
+            <Tcell $cellWithText>{t('data_sharing.colonies_bleached_percent_cover')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>

@@ -33,7 +33,7 @@ const InputRadioWithLabelAndValidation = ({
   })
 
   return (
-    <InputRow required={required} validationType={validationType} data-testid={testId}>
+    <InputRow required={required} $validationType={validationType} data-testid={testId}>
       <label id={`${id}-input-radio-with-label-and-validation`}>
         {label}
         {required ? <RequiredIndicator /> : null}

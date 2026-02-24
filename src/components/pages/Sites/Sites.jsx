@@ -370,9 +370,9 @@ const Sites = () => {
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       key={column.id}
                       data-testid={`sites-table-header-${column.id}`}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
+                      $isSortedDescending={column.isSortedDesc}
+                      $sortedIndex={column.sortedIndex}
+                      $isMultiSortColumn={isMultiSortColumn}
                       className={ThClassName}
                     >
                       <span>{column.render('Header')}</span>
@@ -390,7 +390,7 @@ const Sites = () => {
                 <Tr key={row.id} {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td key={cell.column.id} {...cell.getCellProps()} align={cell.column.align}>
+                      <Td key={cell.column.id} {...cell.getCellProps()} $align={cell.column.align}>
                         {cell.render('Cell')}
                       </Td>
                     )

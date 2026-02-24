@@ -181,7 +181,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             <CheckBoxLabel
               htmlFor={project.id}
               onClick={stopEventPropagation}
-              disabled={!isAppOnline}
+              $disabled={!isAppOnline}
             >
               <input
                 id={project.id}

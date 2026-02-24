@@ -356,7 +356,7 @@ const FishBeltObservationTable = ({
       })
 
       return (
-        <ObservationTr key={observationId} messageType={validationType}>
+        <ObservationTr key={observationId} $messageType={validationType}>
           <Td align="center">{rowNumber}</Td>
           <Td align="left">
             {fishNameOptions.length && (

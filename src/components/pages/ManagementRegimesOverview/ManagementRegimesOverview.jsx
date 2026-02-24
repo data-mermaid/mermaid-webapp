@@ -364,12 +364,12 @@ const ManagementRegimesOverview = () => {
                     <OverviewTh
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       key={column.id}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
-                      isSortingEnabled={!column.disableSortBy}
-                      disabledHover={column.disableSortBy}
-                      align={headerAlignment}
+                      $isSortedDescending={column.isSortedDesc}
+                      $sortedIndex={column.sortedIndex}
+                      $isMultiSortColumn={isMultiSortColumn}
+                      $isSortingEnabled={!column.disableSortBy}
+                      $disabledHover={column.disableSortBy}
+                      $align={headerAlignment}
                       className={ThClassName}
                     >
                       <span> {column.render('Header')}</span>
@@ -447,7 +447,7 @@ const ManagementRegimesOverview = () => {
                       <OverviewTd
                         {...cell.getCellProps()}
                         key={cell.column.id}
-                        align={cellAlignment}
+                        $align={cellAlignment}
                         className={cellClassName}
                       >
                         <span>{cell.render('Cell')}</span>

@@ -64,7 +64,7 @@ const BellNotificationDropDown = () => {
 
         return (
           <NotificationCard key={`notification-card-${notification.id}`}>
-            <NotificationStatus status={notification.status} />
+            <NotificationStatus $status={notification.status} />
             <NotificationContent>
               <NotificationHeader>
                 <NotificationTitle>{notification.title}</NotificationTitle>

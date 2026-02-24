@@ -81,19 +81,19 @@ const getHeaderSortAfter = (
   `
 }
 export const thStyles = (props) => css`
-  text-align: ${props.align || 'left'};
+  text-align: ${props.$align || 'left'};
   padding: ${theme.spacing.medium};
   background: ${theme.color.white};
   vertical-align: top;
 
   &::after {
-    content: ${props.isSortingEnabled ? ' \u25b2' : ''};
+    content: ${props.$isSortingEnabled ? ' \u25b2' : ''};
     font-size: small;
     white-space: nowrap;
   }
 
   > span {
-    ${getHeaderSortAfter(props.isMultiSortColumn, props.sortedIndex, props.isSortedDescending)}
+    ${getHeaderSortAfter(props.$isMultiSortColumn, props.$sortedIndex, props.$isSortedDescending)}
   }
 
   font-weight: 700;
@@ -103,7 +103,7 @@ export const Th = styled.th((props) => thStyles(props))
 
 export const Td = styled.td(
   (props) => css`
-    text-align: ${props.align || 'left'};
+    text-align: ${props.$align || 'left'};
     padding: ${theme.spacing.medium};
     border-width: ${theme.spacing.borderSmall};
     border-color: ${theme.color.tableBorderColor};
@@ -134,8 +134,8 @@ export const TableRowTdKey = styled(Td)`
 `
 
 export const TableRowTd = styled(Td)`
-  background-color: ${(props) => props.hightedBackground && 'hsl(50 80% 80% / 1)'};
-  white-space: ${(props) => props.isAllowNewLines && 'pre-wrap'};
+  background-color: ${(props) => props.$hightedBackground && 'hsl(50 80% 80% / 1)'};
+  white-space: ${(props) => props.$isAllowNewLines && 'pre-wrap'};
 `
 
 export const Tr = styled.tr`

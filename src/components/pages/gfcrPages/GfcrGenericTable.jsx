@@ -52,11 +52,11 @@ const GfcrGenericTable = ({
                       {...column.getHeaderProps({
                         ...getTableColumnHeaderProps(column),
                       })}
-                      align={column.align}
+                      $align={column.align}
                       key={column.id}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
+                      $isSortedDescending={column.isSortedDesc}
+                      $sortedIndex={column.sortedIndex}
+                      $isMultiSortColumn={isMultiSortColumn}
                       className={ThClassName}
                     >
                       <span>{column.render('Header')}</span>
@@ -75,7 +75,7 @@ const GfcrGenericTable = ({
                 <Tr key={rowId} {...rowProps}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td key={cell.id} {...cell.getCellProps()} align={cell.column.align}>
+                      <Td key={cell.id} {...cell.getCellProps()} $align={cell.column.align}>
                         {cell.render('Cell')}
                       </Td>
                     )

@@ -358,9 +358,9 @@ const Collect = () => {
                       <Th
                         {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                         key={column.id}
-                        isSortedDescending={column.isSortedDesc}
-                        sortedIndex={column.sortedIndex}
-                        isMultiSortColumn={isMultiSortColumn}
+                        $isSortedDescending={column.isSortedDesc}
+                        $sortedIndex={column.sortedIndex}
+                        $isMultiSortColumn={isMultiSortColumn}
                         data-testid={`collecting-header-${column.id}`}
                       >
                         <span>{column.render('Header')}</span>
@@ -390,7 +390,7 @@ const Collect = () => {
                     const cellContents = isCellEmpty ? '-' : cell.render('Cell')
 
                     return (
-                      <Td {...cell.getCellProps()} align={cell.column.align} key={cell.column.id}>
+                      <Td {...cell.getCellProps()} $align={cell.column.align} key={cell.column.id}>
                         {cellContents}
                       </Td>
                     )

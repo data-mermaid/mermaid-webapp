@@ -144,7 +144,7 @@ const TableHeaderRow = ({ areValidationsShowing }: { areValidationsShowing: bool
   return (
     <Tr>
       {filteredHeaders.map((header) => (
-        <Th key={header.id} align={header.align} id={header.id}>
+        <Th key={header.id} $align={header.align} id={header.id}>
           <span>{header.text}</span>
         </Th>
       ))}

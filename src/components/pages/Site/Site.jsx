@@ -190,7 +190,7 @@ const SiteForm = ({
               }}
             />
           }
-          shouldShowSteps={true}
+          $shouldShowSteps={true}
           step="0.000001"
           renderItemWithinInput={
             <SwapButton
@@ -224,7 +224,7 @@ const SiteForm = ({
               }}
             />
           }
-          shouldShowSteps={true}
+          $shouldShowSteps={true}
           step="0.000001"
           renderItemWithinInput={
             <SwapButton

@@ -508,8 +508,8 @@ const CollectRecordFormPage = ({
 
   const errorBoxContent = (
     <ErrorBox>
-      {<ErrorText isErrorShown={isErrorAbove}>{t('sample_units.warning_or_error')}</ErrorText>}
-      {<ErrorText isErrorShown={isErrorBelow}>{t('sample_units.warning_or_error')}</ErrorText>}
+      {<ErrorText $isErrorShown={isErrorAbove}>{t('sample_units.warning_or_error')}</ErrorText>}
+      {<ErrorText $isErrorShown={isErrorBelow}>{t('sample_units.warning_or_error')}</ErrorText>}
     </ErrorBox>
   )
 
@@ -657,7 +657,7 @@ const CollectRecordFormPage = ({
               />
             )}
             <ErrorBoxSubmit>
-              <ErrorTextSubmit isErrorShown={isSubmitWarningVisible}>
+              <ErrorTextSubmit $isErrorShown={isSubmitWarningVisible}>
                 {t('sample_units.errors.submit_disabled')}
                 <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
                   x
