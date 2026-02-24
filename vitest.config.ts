@@ -44,6 +44,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     restoreMocks: true,
+    clearMocks: true, // reset call history on standalone vi.fn() mocks (restoreMocks only covers vi.spyOn)
     retry: 2,
     setupFiles: [
       // dotenv/config in Jest
