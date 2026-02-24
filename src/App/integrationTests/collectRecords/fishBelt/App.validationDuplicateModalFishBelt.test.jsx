@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -16,6 +16,7 @@ import App from '../../../App'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import mockSampleEventValidationObject from '../../../../testUtilities/mockCollectRecords/mockSampleEventValidationObject'
 import mockFishbeltCollectRecords from '../../../../testUtilities/mockCollectRecords/mockFishbeltCollectRecords'
+import i18n from '../../../../../i18n'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
@@ -69,11 +70,14 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
     dexieCurrentUserInstance,
   )
 
+  const tSpy = vi.spyOn(i18n, 't')
+
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
+  expect(tSpy).toHaveBeenCalledWith('validation_messages.not_unique_site')
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
   await user.click(resolveButton)
@@ -100,7 +104,7 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+      within(screen.getByTestId('site')).queryByText('validation_messages.not_unique_site'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -148,7 +152,7 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -176,7 +180,7 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+      within(screen.getByTestId('site')).queryByText('validation_messages.not_unique_site'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -224,7 +228,7 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -289,7 +293,7 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -354,7 +358,7 @@ test('Validate Fish Belt collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -421,9 +425,7 @@ test('Validate Fish Belt collect record, get management similar name warning, sh
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -461,9 +463,7 @@ test('Validate Fish Belt collect record, get management similar name warning, sh
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText(
-        'Another Management Regime is similar to this one.',
-      ),
+      within(screen.getByTestId('site')).queryByText('validation_messages.similar_name'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -511,9 +511,7 @@ test('Validate Fish Belt collect record, get management similar name warning, sh
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -551,9 +549,7 @@ test('Validate Fish Belt collect record, get management similar name warning, sh
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText(
-        'Another Management Regime is similar to this one.',
-      ),
+      within(screen.getByTestId('site')).queryByText('validation_messages.similar_name'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -601,9 +597,7 @@ test('Validate Fish Belt collect record, get management duplicate warning, show 
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -672,9 +666,7 @@ test('Validate Fish Belt collect record, get management duplicate warning, show 
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -743,9 +735,7 @@ test('Validate Fish Belt collect record, get management duplicate warning, show 
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(

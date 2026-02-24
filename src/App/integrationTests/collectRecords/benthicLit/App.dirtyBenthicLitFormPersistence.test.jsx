@@ -1,6 +1,7 @@
 import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from '../../../../testUtilities/mockT'
 
 import {
   screen,
@@ -83,7 +84,8 @@ test('Unsaved EDIT benthic LIT form edits clear when the user navigates away and
   // nav back
   const table = await screen.findByRole('table')
 
-  await user.click(within(table).getAllByText('Benthic LIT')[0])
+  await user.click(within(table).getAllByText('protocol_titles.benthiclit')[0])
+  expect(mockT).toHaveBeenCalledWith('protocol_titles.benthiclit')
 
   const formAfterNav = await screen.findByRole('form')
 

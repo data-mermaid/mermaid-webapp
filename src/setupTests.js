@@ -62,24 +62,15 @@ vi.mock('maplibre-gl', function mapLibreMock() {
   }
 })
 
-// Mock the i18n instance with a real i18next loaded with English translations.
+// Mock the i18n instance using cimode so i18n.t() returns the translation key.
 // Non-component code (e.g. validationMessageHelpers.jsx, handleHttpResponseError.ts) imports
-// i18n directly and calls i18n.t(). In Jest this wasn't mocked and loaded translations naturally;
-// in Vitest we need this mock because the import chain resolves differently, but the behavior
-// is the same: i18n.t('some.key') returns the real English translated text.
+// i18n directly and calls i18n.t(). We use i18next's built-in 'cimode' language which always
+// returns the key, so tests assert against stable keys rather than English text that may change.
 vi.mock('../i18n', async () => {
   const { default: i18next } = await vi.importActual('i18next')
-  const translations = await vi.importActual('./src/locales/en/translation.json')
 
   i18next.init({
-    lng: 'en',
-    fallbackLng: 'en',
-    resources: {
-      en: { translation: translations.default || translations },
-    },
-    interpolation: {
-      escapeValue: false,
-    },
+    lng: 'cimode',
     initImmediate: false,
   })
 
@@ -88,34 +79,39 @@ vi.mock('../i18n', async () => {
 
 // Mock react-i18next so useTranslation().t() returns the translation key.
 // Keeps component tests isolated from the real react-i18next library internals.
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key) => key,
-    i18n: {
-      changeLanguage: vi.fn(() => Promise.resolve()),
-      language: 'en',
-      languages: ['en'],
-      isInitialized: true,
-      exists: vi.fn(() => true),
-      getFixedT: vi.fn(() => (key) => key),
-      hasResourceBundle: vi.fn(() => true),
-      loadNamespaces: vi.fn(() => Promise.resolve()),
-      loadLanguages: vi.fn(() => Promise.resolve()),
-      off: vi.fn(),
-      on: vi.fn(),
-      emit: vi.fn(),
-      store: {},
-      services: {},
-      options: {},
+// mockT is a shared vi.fn so tests can spy on useTranslation().t() calls.
+vi.mock('react-i18next', async () => {
+  const { mockT } = await import('./testUtilities/mockT')
+
+  return {
+    useTranslation: () => ({
+      t: mockT,
+      i18n: {
+        changeLanguage: vi.fn(() => Promise.resolve()),
+        language: 'en',
+        languages: ['en'],
+        isInitialized: true,
+        exists: vi.fn(() => true),
+        getFixedT: vi.fn(() => (key) => key),
+        hasResourceBundle: vi.fn(() => true),
+        loadNamespaces: vi.fn(() => Promise.resolve()),
+        loadLanguages: vi.fn(() => Promise.resolve()),
+        off: vi.fn(),
+        on: vi.fn(),
+        emit: vi.fn(),
+        store: {},
+        services: {},
+        options: {},
+      },
+    }),
+    initReactI18next: {
+      type: '3rdParty',
+      init: vi.fn(),
     },
-  }),
-  initReactI18next: {
-    type: '3rdParty',
-    init: vi.fn(),
-  },
-  Trans: ({ children }) => children,
-  I18nextProvider: ({ children }) => children,
-}))
+    Trans: ({ i18nKey }) => i18nKey,
+    I18nextProvider: ({ children }) => children,
+  }
+})
 
 configure({ asyncUtilTimeout: 10000 })
 
