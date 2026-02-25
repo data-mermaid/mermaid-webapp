@@ -18,9 +18,9 @@ const SubmittedHabitatComplexityObservationTable = ({ choices, submittedRecord =
 
   const observationsHabitatComplexity = obs_habitat_complexities.map((item, index) => (
     <Tr key={item.id}>
-      <Td align="center">{index + 1}</Td>
-      <Td align="left">{item.interval}</Td>
-      <Td align="right">{getObjectById(habitatComplexityFormOptions, item.score)?.label}</Td>
+      <Td $align="center">{index + 1}</Td>
+      <Td $align="left">{item.interval}</Td>
+      <Td $align="right">{getObjectById(habitatComplexityFormOptions, item.score)?.label}</Td>
     </Tr>
   ))
 
@@ -32,8 +32,8 @@ const SubmittedHabitatComplexityObservationTable = ({ choices, submittedRecord =
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem align="left">{t('interval')}</TheadItem>
-              <TheadItem align="right">{t('habitat_complexity_score')}</TheadItem>
+              <TheadItem $align="left">{t('interval')}</TheadItem>
+              <TheadItem $align="right">{t('habitat_complexity_score')}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationsHabitatComplexity}</tbody>

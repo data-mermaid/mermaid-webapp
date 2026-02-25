@@ -23,16 +23,16 @@ const BleachingColoniesBleachedObservations = ({
 
   const observationsBleaching = observationsColoniesBleached.map((item, index) => (
     <Tr key={item.id}>
-      <Td align="center">{index + 1}</Td>
-      <Td align="right">{getObjectById(benthicAttributeOptions, item.attribute)?.label}</Td>
-      <Td align="right">{getObjectById(growthFormOptions, item.growth_form)?.label}</Td>
-      <Td align="right">{item.count_normal}</Td>
-      <Td align="right">{item.count_pale}</Td>
-      <Td align="right">{item.count_20}</Td>
-      <Td align="right">{item.count_50}</Td>
-      <Td align="right">{item.count_80}</Td>
-      <Td align="right">{item.count_100}</Td>
-      <Td align="right">{item.count_dead}</Td>
+      <Td $align="center">{index + 1}</Td>
+      <Td $align="right">{getObjectById(benthicAttributeOptions, item.attribute)?.label}</Td>
+      <Td $align="right">{getObjectById(growthFormOptions, item.growth_form)?.label}</Td>
+      <Td $align="right">{item.count_normal}</Td>
+      <Td $align="right">{item.count_pale}</Td>
+      <Td $align="right">{item.count_20}</Td>
+      <Td $align="right">{item.count_50}</Td>
+      <Td $align="right">{item.count_80}</Td>
+      <Td $align="right">{item.count_100}</Td>
+      <Td $align="right">{item.count_dead}</Td>
     </Tr>
   ))
 
@@ -44,15 +44,15 @@ const BleachingColoniesBleachedObservations = ({
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
-              <TheadItem align="right">{t('observations.growth_form')}</TheadItem>
-              <TheadItem align="right">{t('observations.normal')}</TheadItem>
-              <TheadItem align="right">{t('observations.pale')}</TheadItem>
-              <TheadItem align="right">{t('observations.percent_0_20')}</TheadItem>
-              <TheadItem align="right">{t('observations.percent_20_50')}</TheadItem>
-              <TheadItem align="right">{t('observations.percent_50_80')}</TheadItem>
-              <TheadItem align="right">{t('observations.percent_80_100')}</TheadItem>
-              <TheadItem align="right">{t('observations.recently_dead')}</TheadItem>
+              <TheadItem $align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
+              <TheadItem $align="right">{t('observations.growth_form')}</TheadItem>
+              <TheadItem $align="right">{t('observations.normal')}</TheadItem>
+              <TheadItem $align="right">{t('observations.pale')}</TheadItem>
+              <TheadItem $align="right">{t('observations.percent_0_20')}</TheadItem>
+              <TheadItem $align="right">{t('observations.percent_20_50')}</TheadItem>
+              <TheadItem $align="right">{t('observations.percent_50_80')}</TheadItem>
+              <TheadItem $align="right">{t('observations.percent_80_100')}</TheadItem>
+              <TheadItem $align="right">{t('observations.recently_dead')}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationsBleaching}</tbody>

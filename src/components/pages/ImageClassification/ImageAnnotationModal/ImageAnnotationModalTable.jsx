@@ -145,7 +145,7 @@ const ImageAnnotationModalTable = ({
                       </MuiTooltip>
                     </TdZoom>
                     {groupedTableRowId === unclassifiedGuid ? (
-                      <Td colSpan={5} align="center" style={{ fontWeight: '700' }}>
+                      <Td colSpan={5} $align="center" style={{ fontWeight: '700' }}>
                         <span>
                           {t('image_classification.annotation.unclassified_points', {
                             count: unclassifiedCount,
@@ -155,7 +155,7 @@ const ImageAnnotationModalTable = ({
                     ) : (
                       <>
                         <Td>{tableData[groupedTableRowId][0].annotations[0].ba_gr_label}</Td>
-                        <Td align="right">
+                        <Td $align="right">
                           {`${confirmedCount} / ${unconfirmedCount + confirmedCount}`}
                         </Td>
                         <Td style={{ textAlign: 'center', width: '104px' }}>

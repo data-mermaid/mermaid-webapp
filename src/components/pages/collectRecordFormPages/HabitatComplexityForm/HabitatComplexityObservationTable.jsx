@@ -175,13 +175,13 @@ const HabitatComplexityObservationsTable = ({
 
       return (
         <ObservationTr key={observationId} $messageType={observationValidationType}>
-          <Td align="center">{rowNumber}</Td>
-          <Td align="right" aria-labelledby="interval-label" data-testid="interval-cell">
+          <Td $align="center">{rowNumber}</Td>
+          <Td $align="right" aria-labelledby="interval-label" data-testid="interval-cell">
             {interval}
             {metersShort}
           </Td>
 
-          <Td align="center">
+          <Td $align="center">
             <Select
               data-testid="habitat-complexity-score-select"
               onChange={handleHabitatComplexityScoreChange}
@@ -215,7 +215,7 @@ const HabitatComplexityObservationsTable = ({
               resetObservationValidations={resetObservationValidations}
             />
           ) : null}
-          <Td align="center">
+          <Td $align="center">
             <ButtonRemoveRow
               tabIndex="-1"
               type="button"
@@ -262,10 +262,10 @@ const HabitatComplexityObservationsTable = ({
               <thead>
                 <Tr>
                   <Th> </Th>
-                  <Th align="right" id="interval-label">
+                  <Th $align="right" id="interval-label">
                     {t('observations.interval')}
                   </Th>
-                  <Th align="center" id="habitat-complexity-score-label">
+                  <Th $align="center" id="habitat-complexity-score-label">
                     <LabelContainer>
                       {t('habitat_complexity_score')} <RequiredIndicator />
                       {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
@@ -284,7 +284,7 @@ const HabitatComplexityObservationsTable = ({
                     </LabelContainer>
                   </Th>
                   {areValidationsShowing ? (
-                    <Th align="center">{t('validations.validations')}</Th>
+                    <Th $align="center">{t('validations.validations')}</Th>
                   ) : null}
                   <Th> </Th>
                 </Tr>

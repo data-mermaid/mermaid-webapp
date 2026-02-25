@@ -214,9 +214,9 @@ const BenthicLitObservationsTable = ({
 
       return (
         <ObservationTr key={observationId} $messageType={observationValidationType}>
-          <Td align="center">{rowNumber}</Td>
+          <Td $align="center">{rowNumber}</Td>
 
-          <Td align="left">
+          <Td $align="left">
             {benthicAttributeSelectOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
@@ -244,7 +244,7 @@ const BenthicLitObservationsTable = ({
               </InputAutocompleteContainer>
             )}
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <Select
               data-testid="growth-form-select"
               onChange={handleGrowthFormChange}
@@ -260,7 +260,7 @@ const BenthicLitObservationsTable = ({
               ))}
             </Select>
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               value={length}
               aria-labelledby="length-label"
@@ -283,7 +283,7 @@ const BenthicLitObservationsTable = ({
               resetObservationValidations={resetObservationValidations}
             />
           ) : null}
-          <Td align="center">
+          <Td $align="center">
             <ButtonRemoveRow
               tabIndex="-1"
               type="button"
@@ -333,7 +333,7 @@ const BenthicLitObservationsTable = ({
                 <Tr>
                   <Th> </Th>
 
-                  <Th align="left" id="benthic-attribute-label">
+                  <Th $align="left" id="benthic-attribute-label">
                     <LabelContainer>
                       <div>
                         {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
@@ -367,7 +367,7 @@ const BenthicLitObservationsTable = ({
                       </IconButton>
                     </LabelContainer>
                   </Th>
-                  <Th align="right" id="growth-form-label">
+                  <Th $align="right" id="growth-form-label">
                     <LabelContainer>
                       <div>{t('observations.growth_form')}</div>
                       {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
@@ -385,12 +385,12 @@ const BenthicLitObservationsTable = ({
                       </IconButton>
                     </LabelContainer>
                   </Th>
-                  <Th align="right" id="length-label">
+                  <Th $align="right" id="length-label">
                     {t('observations.length')} ({t('measurements.centimeter_short')})
                     <RequiredIndicator />
                   </Th>
                   {areValidationsShowing ? (
-                    <Th align="center">{t('validations.validations')}</Th>
+                    <Th $align="center">{t('validations.validations')}</Th>
                   ) : null}
                   <Th> </Th>
                 </Tr>
