@@ -1,15 +1,14 @@
 import Dexie from 'dexie'
-import FDBFactory from 'fake-indexeddb/lib/FDBFactory'
-import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange'
+import { IDBFactory, IDBKeyRange } from 'fake-indexeddb'
 
 const getMockDexieInstancesAllSuccess = () => {
   const dexiePerUserDataInstance = new Dexie('userDataDatabase', {
-    indexedDB: new FDBFactory(),
+    indexedDB: new IDBFactory(),
     IDBKeyRange,
   })
 
   const dexieCurrentUserInstance = new Dexie('uiStateDatabase', {
-    indexedDB: new FDBFactory(),
+    indexedDB: new IDBFactory(),
     IDBKeyRange,
   })
 
