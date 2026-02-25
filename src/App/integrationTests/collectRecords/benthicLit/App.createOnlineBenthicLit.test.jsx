@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from '../../../../testUtilities/mockT'
 
 import {
   screen,
@@ -179,9 +180,12 @@ describe('Online', () => {
 
     const table = await screen.findByRole('table')
 
-    const linksToBenthicLitRecords = within(table).getAllByRole('link', { name: 'Benthic LIT' })
+    const linksToBenthicLitRecords = within(table).getAllByRole('link', {
+      name: 'protocol_titles.benthiclit',
+    })
 
     expect(linksToBenthicLitRecords).toHaveLength(2)
+    expect(mockT).toHaveBeenCalledWith('protocol_titles.benthiclit')
 
     // expect unique depth as proxy for New Benthic LIT
     expect(await within(table).findByText('10000'))
