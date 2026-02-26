@@ -29,7 +29,7 @@
     "dexie": "^4.3.0",
     "dompurify": "^3.0.1",
     "downshift": "^9.0.10",
-    "formik": "^2.2.9",
+    "formik": "^2.4.9",
     "i18next": "^25.6.0",
     "i18next-intervalplural-postprocessor": "^3.0.0",
     "i18next-resources-to-backend": "^1.2.1",
@@ -55,7 +55,7 @@
     "uuid": "^8.3.2",
     "vite-plugin-i18next-loader": "^3.1.2",
     "web-vitals": "^0.2.4",
-    "yup": "^0.32.9"
+    "yup": "^1.7.1"
   },
   "resolutions": {
     "babel-loader": "8.1.0",
