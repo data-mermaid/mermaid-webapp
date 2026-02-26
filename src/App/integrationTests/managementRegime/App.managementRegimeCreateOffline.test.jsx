@@ -52,6 +52,10 @@ describe('Offline', () => {
     // ensure we're not in edit mode, but new management regime mode
     expect(await screen.findByTestId('new-management-regime-form-title'))
 
+    // Wait for formik to initialize with default values
+    const rules = screen.getByTestId('rules')
+    await waitFor(() => expect(within(rules).getByTestId('rules-open-access-radio')).toBeChecked())
+
     // form empty
     expect(screen.getByTestId('name-input')).toHaveValue('')
     expect(screen.getByTestId('secondary-name-input')).toHaveValue('')
@@ -67,8 +71,6 @@ describe('Offline', () => {
     expect(within(parties).getByTestId('parties-government-checkbox')).not.toBeChecked()
     expect(within(parties).getByTestId('parties-private-sector-checkbox')).not.toBeChecked()
 
-    const rules = screen.getByTestId('rules')
-    expect(within(rules).getByTestId('rules-open-access-radio')).toBeChecked()
     expect(within(rules).getByTestId('rules-no-take-radio')).not.toBeChecked()
     expect(within(rules).getByTestId('rules-partial-restrictions-radio')).not.toBeChecked()
     expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('choose...')

@@ -38,6 +38,9 @@ test('Edit Management Regime - shows name and rules required', async () => {
   const nameInput = screen.getByTestId('name-input')
   const secondaryNameInput = screen.getByTestId('secondary-name-input')
 
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(nameInput).not.toHaveValue(''))
+
   await user.click(nameInput)
   await user.clear(nameInput)
   await user.click(secondaryNameInput)
@@ -90,10 +93,13 @@ test('Management Regime component renders with the expected UI elements', async 
 
   await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
-  expect(
-    screen.getByText('Management Regimes B', {
-      selector: 'h2',
-    }),
+  // Wait for formik to initialize with fetched data
+  await waitFor(() =>
+    expect(
+      screen.getByText('Management Regimes B', {
+        selector: 'h2',
+      }),
+    ),
   )
 
   expect(screen.getByTestId('name-input'))
@@ -127,7 +133,8 @@ test('Management Regime component - form inputs are initialized with the correct
 
   await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
-  expect(screen.getByTestId('name-input')).toHaveValue('Management Regimes B')
+  // Wait for formik to initialize with fetched data
+  await waitFor(() => expect(screen.getByTestId('name-input')).toHaveValue('Management Regimes B'))
   expect(screen.getByTestId('secondary-name-input')).toHaveValue('Management Regimes 2')
   expect(screen.getByTestId('year-established-input')).toHaveValue(null)
   expect(screen.getByTestId('area-input')).toHaveValue(10)

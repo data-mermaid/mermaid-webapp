@@ -95,7 +95,9 @@ describe('offline', () => {
     await screen.findByTestId('site-toast-offline-success')
 
     // ensure the new form is now the edit form
-    expect(await screen.findByTestId('edit-site-form-title')).toHaveTextContent('Rebecca')
+    await waitFor(() =>
+      expect(screen.getByTestId('edit-site-form-title')).toHaveTextContent('Rebecca'),
+    )
 
     await waitFor(() => {
       expect(screen.getByTestId('name-input')).toHaveDisplayValue('Rebecca')
