@@ -5705,10 +5705,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dexie@npm:^3.0.3":
-  version: 3.2.7
-  resolution: "dexie@npm:3.2.7"
-  checksum: 10c0/5d7dad9deb3a24b676f8c630a2517ec0e243906fbcbd3cc7946798ee4ff05766eae7b6dd29deb0f090151552f136ac70a2c0bf0a8a8dbd840e643710efb80347
+"dexie@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "dexie@npm:4.3.0"
+  checksum: 10c0/c152db2612f26040c4967c1040c2707837a7b9a97247ff1d7e5e85b6da6abfb26a65248195cd2a54d2202579fa5009b7eb0a696d93444b39fac551eb0d8fc21a
   languageName: node
   linkType: hard
 
@@ -8947,7 +8947,7 @@ __metadata:
     axios-retry: "npm:^3.3.1"
     babel-preset-vite: "npm:^1.1.3"
     color: "npm:^3.1.3"
-    dexie: "npm:^3.0.3"
+    dexie: "npm:^4.3.0"
     dompurify: "npm:^3.0.1"
     dotenv: "npm:^16.4.7"
     downshift: "npm:^9.0.10"
