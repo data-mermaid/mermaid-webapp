@@ -7,7 +7,7 @@ export function buildProjectTourSteps(t: TFunction): DriveStep[] {
       popover: {
         title: t('projects.tour.intro_tagline'),
         description: t('projects.tour.intro'),
-        showButtons: ['next'],
+        showButtons: ['next', 'close'],
       },
     },
     {
