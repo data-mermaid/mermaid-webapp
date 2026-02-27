@@ -758,6 +758,7 @@
     "delete_sample_units_notice": "You must delete all the sample units in this project to delete this project.",
     "demo": {
       "add_users_unavailable": "Users cannot be added to the demo project",
+      "copy_unavailable": "Copy function is disabled in the demo project",
       "created": "Demo project created",
       "delete_users_unavailable": "Users cannot be removed from the demo project",
       "delete_notice": "You can add the demo project again from the Projects page.",

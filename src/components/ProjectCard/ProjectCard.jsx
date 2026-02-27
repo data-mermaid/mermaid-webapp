@@ -26,6 +26,7 @@ import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useTranslation } from 'react-i18next'
+import { MuiTooltip } from '../generic/MuiTooltip'
 import labelStyles from '../../style/labels.module.scss'
 import styles from './ProjectCard.module.scss'
 
@@ -131,6 +132,18 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
 
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
 
+  const copyButton = (
+    <ButtonSecondary
+      onClick={() => setIsProjectModalOpen(true)}
+      aria-label={t('buttons.copy')}
+      disabled={!isAppOnline || isDemoProject}
+      data-testid="copy-project-button"
+    >
+      <IconCopy />
+      <span>{t('buttons.copy')}</span>
+    </ButtonSecondary>
+  )
+
   return (
     <div
       {...restOfProps}
@@ -160,15 +173,11 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <div className={styles['no-wrap-wrapper']}>
-            <ButtonSecondary
-              onClick={() => setIsProjectModalOpen(true)}
-              aria-label={t('buttons.copy')}
-              disabled={!isAppOnline || isDemoProject}
-              data-testid="copy-project-button"
-            >
-              <IconCopy />
-              <span>{t('buttons.copy')}</span>
-            </ButtonSecondary>
+            {isDemoProject ? (
+              <MuiTooltip title={t('projects.demo.copy_unavailable')}>{copyButton}</MuiTooltip>
+            ) : (
+              copyButton
+            )}
 
             {isProjectModalOpen && (
               <ProjectModal
