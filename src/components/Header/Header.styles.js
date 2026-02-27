@@ -63,11 +63,11 @@ export const HeaderButtonThatLooksLikeLink = styled(ButtonThatLooksLikeLink)`
 export const StyledNavLink = styled('a')`
   ${linkStyles}
   ${(props) =>
-    props.disabledLink &&
+    props.$disabledLink &&
     css`
       color: ${theme.color.disabledText};
       pointer-events: none;
-    `} 
+    `}
   }
   display: flex;
 `

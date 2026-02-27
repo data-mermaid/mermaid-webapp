@@ -350,17 +350,21 @@ const Collect = () => {
           <thead>
             {headerGroups.map((headerGroup) => {
               const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
-              const headerProps = headerGroup.getHeaderGroupProps()
+              const { key: headerGroupKey, ...headerGroupProps } = headerGroup.getHeaderGroupProps()
               return (
-                <Tr {...headerProps} key={headerProps.key}>
+                <Tr key={headerGroupKey} {...headerGroupProps}>
                   {headerGroup.headers.map((column) => {
+                    const { key: headerKey, ...headerProps } = column.getHeaderProps(
+                      getTableColumnHeaderProps(column),
+                    )
+
                     return (
                       <Th
-                        {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                        key={column.id}
-                        isSortedDescending={column.isSortedDesc}
-                        sortedIndex={column.sortedIndex}
-                        isMultiSortColumn={isMultiSortColumn}
+                        key={headerKey}
+                        {...headerProps}
+                        $isSortedDescending={column.isSortedDesc}
+                        $sortedIndex={column.sortedIndex}
+                        $isMultiSortColumn={isMultiSortColumn}
                         data-testid={`collecting-header-${column.id}`}
                       >
                         <span>{column.render('Header')}</span>
@@ -374,11 +378,12 @@ const Collect = () => {
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
+              const { key: rowKey, ...rowProps } = row.getRowProps()
 
               return (
                 <TrCollectRecordStatus
-                  {...row.getRowProps()}
-                  key={row.id}
+                  key={rowKey}
+                  {...rowProps}
                   $recordStatusLabel={row.values.status}
                 >
                   {row.cells.map((cell) => {
@@ -388,9 +393,10 @@ const Collect = () => {
                       getIsEmptyStringOrWhitespace(cell.value)
 
                     const cellContents = isCellEmpty ? '-' : cell.render('Cell')
+                    const { key: cellKey, ...cellProps } = cell.getCellProps()
 
                     return (
-                      <Td {...cell.getCellProps()} align={cell.column.align} key={cell.column.id}>
+                      <Td key={cellKey} {...cellProps} $align={cell.column.align}>
                         {cellContents}
                       </Td>
                     )

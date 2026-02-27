@@ -1,23 +1,10 @@
+import React from 'react'
 import { ToastContainer } from 'react-toastify'
 import { styled } from 'styled-components'
 import theme from '../../theme'
 
-export const CustomToastContainer = styled(ToastContainer).attrs({
-  className: 'toast-container',
-  toastClassName: 'toast',
-  bodyClassName: 'body',
-  progressClassName: 'progress',
-  position: 'top-center',
-  autoClose: '5000',
-  hideProgressBar: true,
-  newestOnTop: false,
-  closeOnClick: true,
-  rtl: false,
-  pauseOnFocusLoss: true,
-  draggable: false,
-  pauseOnHover: true,
-})`
-  .toast {
+const ToastWrapper = styled.div`
+  .Toastify__toast {
     &,
     .Toastify__close-button {
       color: ${theme.color.black};
@@ -39,6 +26,21 @@ export const CustomToastContainer = styled(ToastContainer).attrs({
   .Toastify__toast--error {
     border-left-color: ${theme.color.cautionColor};
   }
-  .Toastify__toast--default {
-  }
 `
+
+export const CustomToastContainer = (props) => (
+  <ToastWrapper>
+    <ToastContainer
+      position="top-center"
+      autoClose={5000}
+      hideProgressBar
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable={false}
+      pauseOnHover
+      {...props}
+    />
+  </ToastWrapper>
+)

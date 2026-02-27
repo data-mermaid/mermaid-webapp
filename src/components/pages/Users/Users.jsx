@@ -813,7 +813,7 @@ function UsersTableSection({
       }
 
       const createRoleRadio = (roleValue, prefix) => (
-        <TableRadioLabel htmlFor={`${prefix}-${projectProfileId}`} cursor={getCursorType()}>
+        <TableRadioLabel htmlFor={`${prefix}-${projectProfileId}`} $cursor={getCursorType()}>
           <input
             type="radio"
             value={roleValue}
@@ -987,27 +987,30 @@ function UsersTableSection({
   return (
     <>
       <StickyTableOverflowWrapper>
-        <GenericStickyTable {...getTableProps()} cursor={isTableUpdating ? 'wait' : 'pointer'}>
+        <GenericStickyTable {...getTableProps()} $cursor={isTableUpdating ? 'wait' : 'pointer'}>
           <thead>
             {headerGroups.map((headerGroup) => {
-              const headerProps = headerGroup.getHeaderGroupProps()
+              const { key: headerGroupKey, ...headerGroupProps } = headerGroup.getHeaderGroupProps()
 
               return (
-                <Tr {...headerProps} key={headerProps.key}>
+                <Tr key={headerGroupKey} {...headerGroupProps}>
                   {headerGroup.headers.map((column) => {
                     const isMultiSortColumn = headerGroup.headers.some(
                       (header) => header.sortedIndex > 0,
                     )
+                    const { key: headerKey, ...headerProps } = column.getHeaderProps(
+                      getTableColumnHeaderProps(column),
+                    )
 
                     return (
                       <Th
-                        {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                        key={column.id}
-                        isSortedDescending={column.isSortedDesc}
-                        sortedIndex={column.sortedIndex}
-                        isMultiSortColumn={isMultiSortColumn}
-                        isSortingEnabled={!column.disableSortBy}
-                        disabledHover={column.disableSortBy}
+                        key={headerKey}
+                        {...headerProps}
+                        $isSortedDescending={column.isSortedDesc}
+                        $sortedIndex={column.sortedIndex}
+                        $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={!column.disableSortBy}
+                        $disabledHover={column.disableSortBy}
                       >
                         <span id="header-span">{column.render('Header')}</span>
                       </Th>
@@ -1027,7 +1030,7 @@ function UsersTableSection({
                     const { key: _, ...restCellProps } = cell.getCellProps()
                     const uniqueKey = `${row.original.projectProfileId ?? row.id}-${cell.column.id}`
                     return (
-                      <UserTableTd {...restCellProps} align={cell.column.align} key={uniqueKey}>
+                      <UserTableTd {...restCellProps} $align={cell.column.align} key={uniqueKey}>
                         {cell.render('Cell')}
                       </UserTableTd>
                     )

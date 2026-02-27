@@ -20,7 +20,7 @@ export const NewOptionButton = styled(ButtonThatLooksLikeLink)`
 export const ObservationTr = styled(Tr)`
   border-width: 0 0 0 ${theme.spacing.xsmall};
   border-style: solid;
-  border-color: ${(props) => theme.color.getBorderColor(props.messageType)};
+  border-color: ${(props) => theme.color.getBorderColor(props.$messageType)};
 `
 
 export const InputAutocompleteContainer = styled.div`
@@ -162,7 +162,7 @@ export const DeleteProjectButtonCautionWrapper = styled(DeleteRecordButtonCautio
 
 export const ErrorText = styled.div`
   position: fixed;
-  visibility: ${(props) => (props.isErrorShown ? 'shown' : 'hidden')};
+  visibility: ${(props) => (props.$isErrorShown ? 'shown' : 'hidden')};
   font-size: ${theme.typography.smallFontSize};
   pointer-events: auto;
   white-space: nowrap;

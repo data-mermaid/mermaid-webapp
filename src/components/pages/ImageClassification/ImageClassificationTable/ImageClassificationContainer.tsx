@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
 import ImageClassificationObservationTable from './ImageClassificationObservationTable'
 import ImageUploadModal from '../ImageUploadModal.jsx'
 import { ButtonPrimary } from '../../../generic/buttons'
@@ -11,8 +10,20 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { BenthicPhotoQuadratRecord } from '../../../../App/mermaidData/mermaidDataTypes'
+import { ValidationResult } from '../../collectRecordFormPages/CollectRecordFormPage/getDuplicateValidationInfo'
 
-const ImageClassificationContainer = (props) => {
+interface ImageClassificationContainerProps {
+  isImageClassificationEnabledForUser: boolean
+  collectRecord?: BenthicPhotoQuadratRecord & {
+    validations?: { results?: { $record?: ValidationResult[] } }
+  }
+  areValidationsShowing: boolean
+  ignoreObservationValidations: () => void
+  resetObservationValidations: () => void
+}
+
+const ImageClassificationContainer = (props: ImageClassificationContainerProps) => {
   const { t } = useTranslation()
   const { isImageClassificationEnabledForUser } = props
   const [images, setImages] = useState([])
@@ -86,9 +97,11 @@ const ImageClassificationContainer = (props) => {
     <>
       <ImageClassificationObservationTable
         images={images}
-        isUploading={isUploading}
         setImages={setImages}
-        {...props}
+        collectRecord={props.collectRecord}
+        areValidationsShowing={props.areValidationsShowing}
+        ignoreObservationValidations={props.ignoreObservationValidations}
+        resetObservationValidations={props.resetObservationValidations}
       />
       <ButtonContainer>
         {isImageClassificationEnabledForUser ? (
@@ -121,7 +134,3 @@ const ImageClassificationContainer = (props) => {
 }
 
 export default ImageClassificationContainer
-
-ImageClassificationContainer.propTypes = {
-  isImageClassificationEnabledForUser: PropTypes.bool.isRequired,
-}

@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { styled, css } from 'styled-components'
 import theme from '../../theme'
 
@@ -74,18 +73,20 @@ const TooltipWrapper = styled('div')`
   }
 `
 
+interface TooltipWithTextProps extends React.HTMLAttributes<HTMLParagraphElement> {
+  text: React.ReactNode
+  tooltipText: string | React.ReactNode
+  id: string
+  position?: 'bottom' | 'right'
+}
+
 export const TooltipWithText = ({
   text,
   tooltipText,
   id,
   position = 'bottom',
   ...restOfProps
-}: {
-  text: React.ReactNode
-  tooltipText: string | React.ReactNode
-  id: string
-  position?: 'bottom' | 'right'
-}) => {
+}: TooltipWithTextProps) => {
   return (
     <TooltipP tabIndex={0} id={id} {...restOfProps}>
       {text}
@@ -94,13 +95,6 @@ export const TooltipWithText = ({
       </TooltipPopup>
     </TooltipP>
   )
-}
-
-TooltipWithText.propTypes = {
-  text: PropTypes.node.isRequired,
-  tooltipText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-  id: PropTypes.string.isRequired,
-  position: PropTypes.oneOf(['bottom', 'right']),
 }
 
 export const Tooltip = ({

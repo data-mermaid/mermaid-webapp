@@ -17,7 +17,7 @@ const LayoutContainer = styled(Column)`
 `
 const OfflineIndicatorStyles = styled.div`
   ${(props) =>
-    !props.isAppOnline &&
+    !props.$isAppOnline &&
     css`
       border: solid ${theme.spacing.borderXLarge} ${theme.color.cautionColor};
       pointer-events: none;
@@ -42,7 +42,7 @@ const Layout = ({ children, footer, header }) => {
   return (
     <LayoutContainer>
       <ErrorBoundary>
-        <OfflineIndicatorStyles isAppOnline={isAppOnline} />
+        <OfflineIndicatorStyles $isAppOnline={isAppOnline} />
       </ErrorBoundary>
       <ErrorBoundary>{header}</ErrorBoundary>
       <ErrorBoundary>

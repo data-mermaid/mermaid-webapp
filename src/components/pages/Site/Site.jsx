@@ -142,7 +142,7 @@ const SiteForm = ({
           helperText={t('sites.site_name_info')}
         />
         <InputRow
-          validationType={formik.errors.country && formik.touched.country ? 'error' : null}
+          $validationType={formik.errors.country && formik.touched.country ? 'error' : null}
           data-testid="country-select"
         >
           <label id="country-label">
@@ -190,7 +190,7 @@ const SiteForm = ({
               }}
             />
           }
-          shouldShowSteps={true}
+          $shouldShowSteps={true}
           step="0.000001"
           renderItemWithinInput={
             <SwapButton
@@ -224,7 +224,7 @@ const SiteForm = ({
               }}
             />
           }
-          shouldShowSteps={true}
+          $shouldShowSteps={true}
           step="0.000001"
           renderItemWithinInput={
             <SwapButton
