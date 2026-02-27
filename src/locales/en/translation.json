@@ -120,7 +120,6 @@
     "fish_species_info": "Reef fish species, size and abundance, taxonomy and functional group information, biomass coefficients",
     "individual_habitat_complexity": "Individual habitat complexity scores",
     "information": "Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.",
-    "is_test_project": "This is a test project",
     "learn_more": "Learn more about how your data is shared",
     "metadata": "Metadata",
     "more_powerful": "Data is much more powerful when shared",
@@ -144,7 +143,6 @@
       "fish_belt_public": "Fish belt is now set to public",
       "fish_belt_public_summary": "Fish belt is now set to public summary"
     },
-    "test_project_data": "Data for a test project will not be included in public reporting",
     "transect_level_observations": "Transect-level observations"
   },
   "delete_modal": {
@@ -818,8 +816,7 @@
       "project_copied": "Project copied",
       "project_created": "Project created",
       "project_deleted": "Project deleted",
-      "project_saved": "Project saved",
-      "test_project_status_saved": "Test project selection saved"
+      "project_saved": "Project saved"
     },
     "unknown_project_access": "The admin of <code>unknown project name</code> can add you to this project.",
     "user_confirm_delete": "Are you sure you want to delete {{projectName}}?",

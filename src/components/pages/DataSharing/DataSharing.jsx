@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { styled, css } from 'styled-components'
@@ -49,14 +49,6 @@ const DataSharingTable = styled(Table)`
     }
   }
 `
-const CheckBoxLabel = styled.label`
-  display: inline-block;
-  cursor: ${(props) => props.cursor};
-  input {
-    margin: 0 ${theme.spacing.xsmall} 0 0;
-  }
-`
-
 const Input = styled.input`
   cursor: ${(props) => props.cursor};
 `
@@ -94,8 +86,6 @@ const DataSharing = () => {
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const [isDataUpdating, setIsDataUpdating] = useState(false)
   const handleHttpResponseError = useHttpResponseErrorHandler()
-  const navigate = useNavigate()
-  const location = useLocation()
   const { currentProject } = useCurrentProject()
   const isDemoProject = currentProject?.is_demo
 
@@ -183,9 +173,6 @@ const DataSharing = () => {
           setIsDataUpdating(false)
           setProjectBeingEdited(updatedProject)
           toast.success(...getToastArguments(toastMessage))
-
-          // hack to refresh page and show or hide the dashboard link depending on potentially changed test project status
-          navigate(location.pathname)
         })
         .catch((error) => {
           handleHttpResponseError({
@@ -194,14 +181,7 @@ const DataSharing = () => {
           })
         })
     },
-    [
-      databaseSwitchboardInstance,
-      projectId,
-      navigate,
-      location.pathname,
-      handleHttpResponseError,
-      projectNotSavedText,
-    ],
+    [databaseSwitchboardInstance, projectId, handleHttpResponseError, projectNotSavedText],
   )
 
   const handleDataPolicyChange = (event, propertyToUpdate) => {
@@ -223,19 +203,9 @@ const DataSharing = () => {
     handleSaveProject(editedValues, toastMessage)
   }
 
-  const handleTestProjectChange = (event) => {
-    setIsDataUpdating(true)
-    const isChecked = event.target.checked
-    const status = isChecked ? PROJECT_CODES.status.test : PROJECT_CODES.status.open
-    const editedValues = { ...projectBeingEdited, status }
-
-    handleSaveProject(editedValues, t('projects.success.test_project_status_saved'))
-  }
-
   const findToolTipDescription = (policy) =>
     dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
-  const isTestProject = projectBeingEdited?.status === PROJECT_CODES.status.test
   const contentViewByRole = (
     <MaxWidthInputWrapper cursor={isDataUpdating ? 'wait' : 'auto'}>
       <h3>{t('data_sharing.more_powerful')}</h3>
@@ -344,25 +314,6 @@ const DataSharing = () => {
         </TableOverflowWrapper>
       ) : (
         <ReadOnlyDataSharingContent project={projectBeingEdited} />
-      )}
-      {isAdminUser && !isDemoProject && (
-        <>
-          <CheckBoxLabel cursor={isDataUpdating ? 'wait' : 'auto'}>
-            <Input
-              id="test-project-toggle"
-              type="checkbox"
-              checked={isTestProject}
-              onChange={handleTestProjectChange}
-              disabled={isDataUpdating}
-              cursor={isDataUpdating ? 'wait' : 'pointer'}
-            />{' '}
-            {t('data_sharing.is_test_project')}
-          </CheckBoxLabel>
-          <P>{t('data_sharing.test_project_data')}</P>
-        </>
-      )}
-      {!isAdminUser && isTestProject && !isDemoProject && (
-        <p>{t('data_sharing.is_test_project')}</p>
       )}
       {isDemoProject && (
         <Trans
