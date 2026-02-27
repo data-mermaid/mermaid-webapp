@@ -7,6 +7,7 @@ import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
+  waitFor,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
@@ -70,7 +71,12 @@ describe('Online', () => {
     ).not.toBeChecked()
     expect(within(parties).getByTestId('parties-government-checkbox')).not.toBeChecked()
     expect(within(parties).getByTestId('parties-private-sector-checkbox')).not.toBeChecked()
-    expect(within(screen.getByTestId('rules')).getByTestId('rules-open-access-radio')).toBeChecked()
+    // Wait for formik to initialize with default values
+    await waitFor(() =>
+      expect(
+        within(screen.getByTestId('rules')).getByTestId('rules-open-access-radio'),
+      ).toBeChecked(),
+    )
     expect(within(screen.getByTestId('rules')).getByTestId('rules-no-take-radio')).not.toBeChecked()
     expect(
       within(screen.getByTestId('rules')).getByTestId('rules-partial-restrictions-radio'),
@@ -96,11 +102,16 @@ describe('Online', () => {
 
     expect(await screen.findByTestId('edit-management-regime-form-title'))
 
-    expect(screen.getByTestId('name-input')).toHaveValue('Rebecca')
+    // Wait for formik to reinitialize with saved data on the edit page
+    await waitFor(() => expect(screen.getByTestId('name-input')).toHaveValue('Rebecca'))
     expect(screen.getByTestId('secondary-name-input')).toHaveValue('Becca')
     expect(screen.getByTestId('year-established-input')).toHaveValue(1980)
     expect(screen.getByTestId('area-input')).toHaveValue(40)
-    expect(within(screen.getByTestId('parties')).getByTestId('parties-ngo-checkbox')).toBeChecked()
+    await waitFor(() =>
+      expect(
+        within(screen.getByTestId('parties')).getByTestId('parties-ngo-checkbox'),
+      ).toBeChecked(),
+    )
     expect(within(screen.getByTestId('rules')).getByTestId('rules-open-access-radio')).toBeChecked()
     expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('somewhat')
   })
