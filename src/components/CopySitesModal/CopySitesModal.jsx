@@ -313,37 +313,47 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       <ModalTableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map((headerGroup) => (
-              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => {
-                  const isMultiSortColumn = headerGroup.headers.some(
-                    (header) => header.sortedIndex > 0,
-                  )
+            {headerGroups.map((headerGroup) => {
+              const { key: headerGroupKey, ...headerGroupProps } = headerGroup.getHeaderGroupProps()
 
-                  return (
-                    <Th
-                      key={column.id}
-                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                      $isSortedDescending={column.isSortedDesc}
-                      $sortedIndex={column.sortedIndex}
-                      $isMultiSortColumn={isMultiSortColumn}
-                    >
-                      {column.render('Header')}
-                    </Th>
-                  )
-                })}
-              </Tr>
-            ))}
+              return (
+                <Tr key={headerGroupKey} {...headerGroupProps}>
+                  {headerGroup.headers.map((column) => {
+                    const isMultiSortColumn = headerGroup.headers.some(
+                      (header) => header.sortedIndex > 0,
+                    )
+                    const { key: headerKey, ...headerProps } = column.getHeaderProps(
+                      getTableColumnHeaderProps(column),
+                    )
+
+                    return (
+                      <Th
+                        key={headerKey}
+                        {...headerProps}
+                        $isSortedDescending={column.isSortedDesc}
+                        $sortedIndex={column.sortedIndex}
+                        $isMultiSortColumn={isMultiSortColumn}
+                      >
+                        {column.render('Header')}
+                      </Th>
+                    )
+                  })}
+                </Tr>
+              )
+            })}
           </thead>
           <tbody {...getTableBodyProps()}>
             {tableBodyRow.map((row) => {
               prepareRow(row)
+              const { key: rowKey, ...rowProps } = row.getRowProps()
 
               return (
-                <Tr key={row.id} {...row.getRowProps()}>
+                <Tr key={rowKey} {...rowProps}>
                   {row.cells.map((cell) => {
+                    const { key: cellKey, ...cellProps } = cell.getCellProps()
+
                     return (
-                      <Td key={cell.column.id} {...cell.getCellProps()} $align={cell.column.align}>
+                      <Td key={cellKey} {...cellProps} $align={cell.column.align}>
                         {cell.render('Cell')}
                       </Td>
                     )

@@ -529,9 +529,9 @@ const UsersAndTransects = () => {
         <StickyOverviewTable {...getTableProps()}>
           <OverviewThead>
             {headerGroups.map((headerGroup) => {
-              const headerGroupProps = headerGroup.getHeaderGroupProps()
+              const { key: headerGroupKey, ...headerGroupProps } = headerGroup.getHeaderGroupProps()
               return (
-                <Tr {...headerGroupProps} key={headerGroupProps.key}>
+                <Tr key={headerGroupKey} {...headerGroupProps}>
                   {headerGroup.headers.map((column) => {
                     const isMultiSortColumn = headerGroup.headers.some(
                       (header) => header.sortedIndex > 0,
@@ -542,11 +542,14 @@ const UsersAndTransects = () => {
                       column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
                     const isUserHeader = ThClassName === 'user-headers'
                     const userProfileId = isUserHeader ? column.id : null
+                    const { key: headerKey, ...headerProps } = column.getHeaderProps(
+                      getTableColumnHeaderProps(column),
+                    )
 
                     return (
                       <OverviewTh
-                        {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                        key={column.id}
+                        key={headerKey}
+                        {...headerProps}
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
@@ -575,9 +578,10 @@ const UsersAndTransects = () => {
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
+              const { key: rowKey, ...rowProps } = row.getRowProps()
 
               return (
-                <OverviewTr {...row.getRowProps()} key={row.id}>
+                <OverviewTr key={rowKey} {...rowProps}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
                     const cellColumnGroupId = cell.column.parent.id
@@ -637,10 +641,12 @@ const UsersAndTransects = () => {
                       <>{isCellEmpty ? emptyCellContents : cell.render('Cell')} </>
                     )
 
+                    const { key: cellKey, ...cellProps } = cell.getCellProps()
+
                     return (
                       <OverviewTd
-                        {...cell.getCellProps()}
-                        key={cell.column.id}
+                        key={cellKey}
+                        {...cellProps}
                         $align={cellAlignment}
                         className={cellClassName}
                       >

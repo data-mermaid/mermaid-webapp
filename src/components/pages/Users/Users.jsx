@@ -990,19 +990,22 @@ function UsersTableSection({
         <GenericStickyTable {...getTableProps()} $cursor={isTableUpdating ? 'wait' : 'pointer'}>
           <thead>
             {headerGroups.map((headerGroup) => {
-              const headerProps = headerGroup.getHeaderGroupProps()
+              const { key: headerGroupKey, ...headerGroupProps } = headerGroup.getHeaderGroupProps()
 
               return (
-                <Tr {...headerProps} key={headerProps.key}>
+                <Tr key={headerGroupKey} {...headerGroupProps}>
                   {headerGroup.headers.map((column) => {
                     const isMultiSortColumn = headerGroup.headers.some(
                       (header) => header.sortedIndex > 0,
                     )
+                    const { key: headerKey, ...headerProps } = column.getHeaderProps(
+                      getTableColumnHeaderProps(column),
+                    )
 
                     return (
                       <Th
-                        {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                        key={column.id}
+                        key={headerKey}
+                        {...headerProps}
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
