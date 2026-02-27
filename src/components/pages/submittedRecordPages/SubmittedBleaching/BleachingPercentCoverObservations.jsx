@@ -25,11 +25,11 @@ const BleachingPercentCoverObservations = ({ record = [] }) => {
   const observationRows = record?.obs_quadrat_benthic_percent.map(
     ({ id, percent_hard, percent_soft, percent_algae, quadrat_number }, index) => (
       <Tr key={id}>
-        <Td align="center">{index + 1}</Td>
-        <Td align="center">{quadrat_number}</Td>
-        <Td align="right">{percent_hard}</Td>
-        <Td align="right">{percent_soft}</Td>
-        <Td align="right">{percent_algae}</Td>
+        <Td $align="center">{index + 1}</Td>
+        <Td $align="center">{quadrat_number}</Td>
+        <Td $align="right">{percent_hard}</Td>
+        <Td $align="right">{percent_soft}</Td>
+        <Td $align="right">{percent_algae}</Td>
       </Tr>
     ),
   )
@@ -49,10 +49,10 @@ const BleachingPercentCoverObservations = ({ record = [] }) => {
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem align="center">{t('observations.quadrat')}</TheadItem>
-              <TheadItem align="right">{t('observations.hard_coral_cover')}</TheadItem>
-              <TheadItem align="right">{t('observations.soft_coral_cover')}</TheadItem>
-              <TheadItem align="right">{t('observations.macroalgae_cover')}</TheadItem>
+              <TheadItem $align="center">{t('observations.quadrat')}</TheadItem>
+              <TheadItem $align="right">{t('observations.hard_coral_cover')}</TheadItem>
+              <TheadItem $align="right">{t('observations.soft_coral_cover')}</TheadItem>
+              <TheadItem $align="right">{t('observations.macroalgae_cover')}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationRows}</tbody>

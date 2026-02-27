@@ -435,9 +435,9 @@ const ManagementRegimes = () => {
                     <Th
                       key={column.id}
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
+                      $isSortedDescending={column.isSortedDesc}
+                      $sortedIndex={column.sortedIndex}
+                      $isMultiSortColumn={isMultiSortColumn}
                       data-testid={`management-regime-header-${column.id}`}
                     >
                       <span>{column.render('Header')}</span>
@@ -455,7 +455,7 @@ const ManagementRegimes = () => {
                 <Tr key={row.id} {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td key={cell.column.id} {...cell.getCellProps()} align={cell.column.align}>
+                      <Td key={cell.column.id} {...cell.getCellProps()} $align={cell.column.align}>
                         {cell.render('Cell')}
                       </Td>
                     )

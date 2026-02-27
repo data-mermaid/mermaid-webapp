@@ -11,8 +11,8 @@ import { useTranslation } from 'react-i18next'
 export const MODAL_CONTENT_HEIGHT = '80vh'
 
 interface StyledDialogProps {
-  maxWidth?: string
-  padding?: string
+  $maxWidth?: string
+  $padding?: string
 }
 
 const StyledDialogOverlay = styled('div')`
@@ -28,12 +28,12 @@ const StyledDialogOverlay = styled('div')`
 `
 
 const StyledDialog = styled('div')<StyledDialogProps>`
-  padding: ${(props) => props.padding || '0'};
+  padding: ${(props) => props.$padding || '0'};
   margin: 0;
   min-width: 30rem;
   width: calc(100vw - 4rem);
   max-width: ${(props) =>
-    props.maxWidth || '96rem'}; // Default to 96rem if maxWidth prop is not provided
+    props.$maxWidth || '96rem'}; // Default to 96rem if maxWidth prop is not provided
   background: ${theme.color.white};
   max-height: 98vh;
   display: grid;
@@ -196,8 +196,8 @@ const Modal = ({
           role="dialog"
           aria-labelledby="modal-title"
           aria-describedby="modal-content"
-          maxWidth={maxWidth}
-          padding={padding}
+          $maxWidth={maxWidth}
+          $padding={padding}
         >
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>

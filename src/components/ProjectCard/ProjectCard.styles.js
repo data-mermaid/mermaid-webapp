@@ -44,8 +44,8 @@ export const CheckBoxLabel = styled.label`
   padding: ${theme.spacing.buttonPadding};
   justify-self: end;
   background: ${(props) =>
-    props.disabled ? theme.color.secondaryDisabledColor : theme.color.secondaryColor};
-  color: ${(props) => (props.disabled ? theme.color.primaryDisabledColor : theme.color.textColor)};
+    props.$disabled ? theme.color.secondaryDisabledColor : theme.color.secondaryColor};
+  color: ${(props) => (props.$disabled ? theme.color.primaryDisabledColor : theme.color.textColor)};
   ${hoverState(css`
     background: ${theme.color.secondaryHover};
   `)}
@@ -164,7 +164,7 @@ export const OfflineSummaryCard = styled('div')`
 
 export const OfflineOrReadOnlyContent = styled('span')`
   font-size: ${(props) =>
-    props.smallFont ? theme.typography.smallFontSize : theme.typography.mediumFontSize};
+    props.$smallFont ? theme.typography.smallFontSize : theme.typography.mediumFontSize};
   text-align: center;
   padding: 1rem;
 `

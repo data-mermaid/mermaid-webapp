@@ -71,7 +71,7 @@ const InputWithLabelAndValidation = ({
   )
 
   return (
-    <InputRow required={required} validationType={validationType} data-testid={testId}>
+    <InputRow required={required} $validationType={validationType} data-testid={testId}>
       <LabelContainer>
         <label id={`aria-label${id}`} htmlFor={id}>
           {label}

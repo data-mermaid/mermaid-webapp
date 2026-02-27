@@ -365,9 +365,9 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
                     <Th
                       key={column.id}
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
+                      $isSortedDescending={column.isSortedDesc}
+                      $sortedIndex={column.sortedIndex}
+                      $isMultiSortColumn={isMultiSortColumn}
                     >
                       {column.render('Header')}
                     </Th>
@@ -384,7 +384,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
                 <Tr key={row.id} {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td key={cell.column.id} {...cell.getCellProps()} align={cell.column.align}>
+                      <Td key={cell.column.id} {...cell.getCellProps()} $align={cell.column.align}>
                         {cell.render('Cell')}
                       </Td>
                     )

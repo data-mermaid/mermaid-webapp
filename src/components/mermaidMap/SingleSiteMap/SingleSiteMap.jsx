@@ -221,7 +221,7 @@ const SingleSiteMap = ({
   )
 
   return (
-    <MapInputRow noBorderWidth={isReadOnlyUser}>
+    <MapInputRow $noBorderWidth={isReadOnlyUser}>
       <MapContainer>
         <MapWrapper ref={mapContainer} />
         {!isReadOnlyUser && nullishLatitudeOrLongitude ? placeMarkerButton : null}

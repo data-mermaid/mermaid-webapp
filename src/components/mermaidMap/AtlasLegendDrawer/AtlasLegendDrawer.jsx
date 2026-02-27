@@ -25,7 +25,7 @@ const LegendCheckbox = ({
   handleCheckboxChange = () => {},
 }) => {
   return (
-    <CheckBoxLabel htmlFor={labelName} fullWidth={fullWidth}>
+    <CheckBoxLabel htmlFor={labelName} $fullWidth={fullWidth}>
       <input
         id={labelName}
         type="checkbox"
@@ -34,7 +34,7 @@ const LegendCheckbox = ({
         onChange={handleCheckboxChange}
       />
       {labelName}
-      {bgColor && <LegendColor bgColor={bgColor} />}
+      {bgColor && <LegendColor $bgColor={bgColor} />}
     </CheckBoxLabel>
   )
 }
@@ -186,11 +186,11 @@ const AtlasLegendDrawer = ({
 
   return (
     <>
-      <SliderHandler isOpen={drawerOpen} onClick={handleLegendVisibilityToggle}>
+      <SliderHandler $isOpen={drawerOpen} onClick={handleLegendVisibilityToggle}>
         <SliderHandlerName>{allenCoralAtlasText.replace(/\s/g, '\u00A0')}</SliderHandlerName>
       </SliderHandler>
-      <SliderContainer isOpen={drawerOpen}>
-        <SliderLegendPanel isOpen={drawerOpen}>
+      <SliderContainer $isOpen={drawerOpen}>
+        <SliderLegendPanel $isOpen={drawerOpen}>
           <LegendHeader>
             {allenCoralAtlasText}{' '}
             <a

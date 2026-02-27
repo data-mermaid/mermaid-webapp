@@ -171,11 +171,11 @@ const PercentCoverObservationTable = ({
       }
 
       return (
-        <ObservationTr key={observationId} messageType={observationValidationType}>
-          <Td align="center">{rowNumber}</Td>
-          <Td align="center">{quadrat_number}</Td>
+        <ObservationTr key={observationId} $messageType={observationValidationType}>
+          <Td $align="center">{rowNumber}</Td>
+          <Td $align="center">{quadrat_number}</Td>
 
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="hard-coral-percent-cover-label"
               value={percent_hard}
@@ -190,7 +190,7 @@ const PercentCoverObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="soft-coral-percent-cover-label"
               value={percent_soft}
@@ -203,7 +203,7 @@ const PercentCoverObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="microalgae-percent-cover-label"
               value={percent_algae}
@@ -232,7 +232,7 @@ const PercentCoverObservationTable = ({
               resetObservationValidations={resetObservationValidations}
             />
           ) : null}
-          <Td align="center">
+          <Td $align="center">
             <ButtonRemoveRow
               tabIndex="-1"
               type="button"
@@ -279,7 +279,7 @@ const PercentCoverObservationTable = ({
               <thead>
                 <Tr>
                   <Th />
-                  <Th align="right" id="quadrat-number-label">
+                  <Th $align="right" id="quadrat-number-label">
                     <LabelContainer>
                       {t('observations.quadrat')} <RequiredIndicator />
                       {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
@@ -297,7 +297,7 @@ const PercentCoverObservationTable = ({
                       </IconButton>
                     </LabelContainer>
                   </Th>
-                  <Th align="center" id="hard-coral-percent-cover-label">
+                  <Th $align="center" id="hard-coral-percent-cover-label">
                     <LabelContainer>
                       <div>
                         {t('observations.hard_coral_cover')} <RequiredIndicator />
@@ -317,7 +317,7 @@ const PercentCoverObservationTable = ({
                       </IconButton>
                     </LabelContainer>
                   </Th>
-                  <Th align="center" id="soft-coral-percent-cover-label">
+                  <Th $align="center" id="soft-coral-percent-cover-label">
                     <LabelContainer>
                       <div>
                         {t('observations.soft_coral_cover')} <RequiredIndicator />
@@ -337,7 +337,7 @@ const PercentCoverObservationTable = ({
                       </IconButton>
                     </LabelContainer>
                   </Th>
-                  <Th align="center" id="microalgae-percent-cover-label">
+                  <Th $align="center" id="microalgae-percent-cover-label">
                     <LabelContainer>
                       <div>
                         {t('observations.macroalgae_cover')} <RequiredIndicator />
@@ -358,7 +358,7 @@ const PercentCoverObservationTable = ({
                     </LabelContainer>
                   </Th>
                   {areValidationsShowing ? (
-                    <Th align="center">{t('validations.validations')}</Th>
+                    <Th $align="center">{t('validations.validations')}</Th>
                   ) : null}
                   <Th />
                 </Tr>

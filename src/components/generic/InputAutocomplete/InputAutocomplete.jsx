@@ -138,7 +138,7 @@ const InputAutocomplete = ({
             index,
           })}
           key={item.value}
-          highlighted={highlightedIndex === index}
+          $highlighted={highlightedIndex === index}
         >
           {item.label}
         </Item>
@@ -174,7 +174,7 @@ const InputAutocomplete = ({
             {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
             <Menu
               {...getMenuProps({
-                isOpen: isMenuOpen,
+                $isOpen: isMenuOpen,
                 'data-testid': menuTestId,
               })}
             >

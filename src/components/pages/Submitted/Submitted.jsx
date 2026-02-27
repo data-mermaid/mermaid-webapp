@@ -316,9 +316,9 @@ const Submitted = () => {
                     <Th
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       key={column.id}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
+                      $isSortedDescending={column.isSortedDesc}
+                      $sortedIndex={column.sortedIndex}
+                      $isMultiSortColumn={isMultiSortColumn}
                     >
                       <span>{column.render('Header')}</span>
                     </Th>
@@ -335,7 +335,7 @@ const Submitted = () => {
                 <Tr key={row.id} {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td key={cell.column.id} {...cell.getCellProps()} align={cell.column.align}>
+                      <Td key={cell.column.id} {...cell.getCellProps()} $align={cell.column.align}>
                         {cell.render('Cell')}
                       </Td>
                     )

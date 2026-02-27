@@ -547,12 +547,12 @@ const UsersAndTransects = () => {
                       <OverviewTh
                         {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                         key={column.id}
-                        isSortedDescending={column.isSortedDesc}
-                        sortedIndex={column.sortedIndex}
-                        isMultiSortColumn={isMultiSortColumn}
-                        isSortingEnabled={!column.disableSortBy}
-                        disabledHover={column.disableSortBy}
-                        align={headerAlignment}
+                        $isSortedDescending={column.isSortedDesc}
+                        $sortedIndex={column.sortedIndex}
+                        $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={!column.disableSortBy}
+                        $disabledHover={column.disableSortBy}
+                        $align={headerAlignment}
                         className={ThClassName}
                       >
                         {isUserHeader ? (
@@ -641,7 +641,7 @@ const UsersAndTransects = () => {
                       <OverviewTd
                         {...cell.getCellProps()}
                         key={cell.column.id}
-                        align={cellAlignment}
+                        $align={cellAlignment}
                         className={cellClassName}
                       >
                         <span>
