@@ -1,7 +1,5 @@
-import moment from 'moment'
+import { format } from 'date-fns'
 
 export const removeTimeZoneFromDate = (date) => {
-  const newDate = moment(new Date(date))
-
-  return newDate.format('ddd MMM DD YYYY HH:mm:ss')
+  return format(new Date(date), 'EEE MMM dd yyyy HH:mm:ss')
 }

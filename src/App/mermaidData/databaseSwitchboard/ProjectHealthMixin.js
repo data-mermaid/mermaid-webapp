@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { isValid, parse } from 'date-fns'
 import axios from '../../../library/axiosRetry'
 import i18next from '../../../../i18n'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
@@ -13,11 +13,9 @@ const ProjectHealthMixin = (Base) =>
     #removeDateFromName = function removeDateFromName(name) {
       const elementsInName = name.split(' ')
 
-      const isDateInNames = moment(
-        elementsInName[elementsInName.length - 1],
-        'YYYY-MM-DD',
-        true,
-      ).isValid()
+      const isDateInNames = isValid(
+        parse(elementsInName[elementsInName.length - 1], 'yyyy-MM-dd', new Date()),
+      )
 
       if (elementsInName.length > 1) {
         if (isDateInNames) {

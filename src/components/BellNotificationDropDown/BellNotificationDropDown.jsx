@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import { formatDistanceToNow, intlFormat } from 'date-fns'
 import domPurify from 'dompurify'
 import {
   NoNotifications,
@@ -56,7 +56,17 @@ const BellNotificationDropDown = () => {
         {t('buttons.dismiss_all_notifications')}
       </ButtonSecondary>
       {sortedNotifications.map((notification) => {
-        const dateTime = moment(notification.created_on)
+        const dateTime = new Date(notification.created_on)
+        const distanceToNow = formatDistanceToNow(dateTime, { addSuffix: true }) // e.g. "about 2 hours ago"
+
+        const intlFormattedDateTime = intlFormat(dateTime, {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+        }) // e.g. "Wednesday, February 4, 2026 at 2:34 PM"
 
         const dirtyHTML = notification.description
 
@@ -78,8 +88,8 @@ const BellNotificationDropDown = () => {
               {/*  eslint-disable-next-line react/no-danger */}
               <p dangerouslySetInnerHTML={{ __html: cleanHTML }} />
               <NotificationDateWrapper>
-                <p>{dateTime.fromNow()}</p>
-                <NotificationActualDate>{dateTime.format('LLLL')}</NotificationActualDate>
+                <p>{distanceToNow}</p>
+                <NotificationActualDate>{intlFormattedDateTime}</NotificationActualDate>
               </NotificationDateWrapper>
             </NotificationContent>
           </NotificationCard>
