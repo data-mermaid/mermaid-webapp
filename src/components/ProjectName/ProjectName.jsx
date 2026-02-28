@@ -11,7 +11,7 @@ import styles from '../../style/ProjectName.module.scss'
 import buttonStyles from '../../style/buttons.module.scss'
 import labelStyles from '../../style/labels.module.scss'
 import { driver } from 'driver.js'
-import { buildProjectTourSteps } from '../../library/demoProjectTour'
+import { buildProjectTourSteps, startProjectTour } from '../../library/demoProjectTour'
 import 'driver.js/dist/driver.css'
 
 const ProjectName = () => {
@@ -48,31 +48,8 @@ const ProjectName = () => {
     openExploreLinkWithBbox(queryParamObject)
   }
 
-  const handleTourClose = (_element, _step, { _state, driver }) => {
-    const isTourComplete = driver.isLastStep()
-    const eventName = isTourComplete
-      ? 'demo_tour_completed'
-      : `demo_tour_close_step_${driver.getActiveIndex() + 1}`
-    window.dataLayer?.push({
-      event: eventName,
-    })
-    driver.destroy()
-  }
-
   const handleStartTourClick = () => {
-    const driverTourObj = driver({
-      showProgress: true,
-      nextBtnText: '→',
-      prevBtnText: '←',
-      progressText: t('projects.tour.tour_steps'), //driverJS auto passes current and total
-      onPopoverRender: (popover) => {
-        popover.arrow.remove()
-      },
-      steps: buildProjectTourSteps(t),
-      onDestroyStarted: handleTourClose,
-    })
-
-    driverTourObj.drive()
+    startProjectTour()
   }
 
   const tooltipText = isDemoProject

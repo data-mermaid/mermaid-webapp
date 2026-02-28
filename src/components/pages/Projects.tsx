@@ -152,11 +152,11 @@ const Projects = () => {
     databaseSwitchboardInstance
       .addDemoProject()
       .then((response) => {
-        refreshCurrentUser() // ensures correct user privileges
+        // refreshCurrentUser() // ensures correct user privileges
         updateUserSettings('hasUserDismissedDemo', true)
         toast.success(...getToastArguments(t('projects.demo.created')))
         setIsLoading(false)
-        navigate(internalNavigation.projectStartPage(response.id))
+        navigate(`/projects/${response.id}/project-info/new-demo`)
       })
       .catch((error) => {
         const isDuplicateError = error.response?.status === 400

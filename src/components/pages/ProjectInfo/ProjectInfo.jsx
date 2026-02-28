@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useNavigate, useParams } from 'react-router-dom'
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ButtonPrimary } from '../../generic/buttons'
@@ -12,7 +12,7 @@ import { getProjectInitialValues } from './projectRecordInitialFormValue'
 import { H2, H3, P, PSmall } from '../../generic/text'
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { IconPen } from '../../icons'
-import { InputWrapper, InputRow } from '../../generic/form'
+import { InputRow, InputWrapper } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import EnhancedPrompt from '../../generic/EnhancedPrompt'
@@ -40,13 +40,14 @@ import {
   SuggestNewOrganizationButton,
 } from './ProjectInfo.styles'
 import { OrganizationList } from './OrganizationsList'
+import { startProjectTour } from '../../../library/demoProjectTour'
 
 const getWhichServerCitationToUse = (project) =>
   project?.user_citation // false if empty string, which is how the server stores undefined
     ? project?.user_citation
     : project?.default_citation
 
-const ProjectInfo = () => {
+const ProjectInfo = (isNewDemoProject = false) => {
   const { t } = useTranslation()
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false)
@@ -125,6 +126,9 @@ const ProjectInfo = () => {
             setProjectTagOptions(getOptions(projectTagsResponse))
             setProjectProfiles(projectProfilesResponse)
             setIsLoading(false)
+            if (isNewDemoProject) {
+              startProjectTour()
+            }
           }
         })
         .catch((error) => {
@@ -193,7 +197,9 @@ const ProjectInfo = () => {
         })
     },
     validate: (values) => {
-      const errors = {}
+      const errors = {
+        name: undefined,
+      }
 
       if (!values.name) {
         errors.name = [{ code: requiredFieldErrorText, id: 'Required' }]
