@@ -1,6 +1,7 @@
 import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from '../../../../testUtilities/mockT'
 
 import {
   screen,
@@ -85,9 +86,10 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
 
   await user.click(
     within(table).getAllByRole('link', {
-      name: /fish belt/i,
+      name: 'protocol_titles.fishbelt',
     })[0],
   )
+  expect(mockT).toHaveBeenCalledWith('protocol_titles.fishbelt')
 
   const formAfterNav = await screen.findByRole('form')
 
