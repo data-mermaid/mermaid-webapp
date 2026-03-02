@@ -406,7 +406,7 @@
     "success": {
       "indicator_set_save": "Fund indicator set saved successfully",
       "indicators_disabled": "Disabled GFCR fund indicators for this project",
-      "indicators_enabled": "Enabled GFCR fund indicators to this project"
+      "indicators_enabled": "Enabled GFCR fund indicators for this project"
     },
     "target": "Target",
     "untitled": "Untitled"
@@ -783,7 +783,7 @@
       "not_deleted": "This project has not been deleted.",
       "not_saved": "Project could not be saved",
       "offline_ready_on_failed": "The project {{projectName}} may not be ready to be used offline.",
-      "offline_ready_removal_failure": "The project {{projectName}}, has not been removed from being offline-ready.",
+      "offline_ready_removal_failure": "The project {{projectName}} has not been removed from being offline-ready.",
       "project_name_exists": "Project name already exists in MERMAID"
     },
     "known_project_access": "The admin of {{projectName}} can add you to this project.",
