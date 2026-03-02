@@ -10,8 +10,7 @@ import { useTranslation } from 'react-i18next'
 import styles from '../../style/ProjectName.module.scss'
 import buttonStyles from '../../style/buttons.module.scss'
 import labelStyles from '../../style/labels.module.scss'
-import { driver } from 'driver.js'
-import { buildProjectTourSteps, startProjectTour } from '../../library/demoProjectTour'
+import { startProjectTour } from '../../library/demoProjectTour'
 import 'driver.js/dist/driver.css'
 
 const ProjectName = () => {

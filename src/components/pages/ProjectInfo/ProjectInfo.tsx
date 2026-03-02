@@ -47,7 +47,10 @@ const getWhichServerCitationToUse = (project) =>
     ? project?.user_citation
     : project?.default_citation
 
-const ProjectInfo = (isNewDemoProject = false) => {
+interface ProjectInfoProps {
+  isNewDemoProject?: boolean
+}
+const ProjectInfo = ({ isNewDemoProject }: ProjectInfoProps) => {
   const { t } = useTranslation()
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false)
@@ -151,6 +154,7 @@ const ProjectInfo = (isNewDemoProject = false) => {
     projectId,
     isMounted,
     isAppOnline,
+    isNewDemoProject,
     handleHttpResponseError,
     setProjectBeingEdited,
     projectDataUnavailableToastText,
@@ -228,7 +232,7 @@ const ProjectInfo = (isNewDemoProject = false) => {
     let errorMessage = []
 
     if (formik.errors.name) {
-      errorMessage = formik.errors.name
+      errorMessage = [formik.errors.name]
     } else if (projectNameError) {
       // using same error format as Formik so message can be used in InputWithLabelAndValidation
       errorMessage = [{ code: projectNameError, id: 'Name exists' }]

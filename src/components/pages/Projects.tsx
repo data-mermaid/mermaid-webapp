@@ -26,7 +26,6 @@ import { Box } from '@mui/material'
 import { IconClose } from '../icons'
 import cardStyles from '../ProjectCard/ProjectCard.module.scss'
 import { useNavigate } from 'react-router-dom'
-import { internalNavigation } from '../../link_constants'
 
 interface DemoProjectCalloutProps {
   handleDemoClick: () => void
@@ -95,7 +94,7 @@ const Projects = () => {
   const { isSyncInProgress } = useSyncStatus()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
-  const { currentUser, refreshCurrentUser, saveUserProfile } = useCurrentUser()
+  const { currentUser, saveUserProfile } = useCurrentUser()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const unavailableProjectsErrorText = t('projects.errors.data_unavailable')

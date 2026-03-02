@@ -12,7 +12,6 @@ import LoadingModal from '../../LoadingModal/LoadingModal'
 import handleHttpResponseError from '../../../library/handleHttpResponseError'
 import { AxiosError } from 'axios'
 import { IconDown } from '../../icons'
-import { internalNavigation } from '../../../link_constants'
 
 interface CalloutButtonDropdownProps {
   onClick: () => void
@@ -41,7 +40,7 @@ const CalloutButtonDropdown = ({
     refreshCurrentUser() // ensures correct user privileges
     toast.success(...getToastArguments(languageSuccessMessage))
     setIsLoading(false)
-    navigate(internalNavigation.projectStartPage(response.id))
+    navigate(`/projects/${response.id}/project-info/new-demo`)
   }
 
   const handleResponseError = (error: AxiosError) => {
