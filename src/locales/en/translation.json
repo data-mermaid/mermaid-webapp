@@ -666,8 +666,8 @@
     "length": "Length",
     "macroalgae_cover": "Macroalgae % cover",
     "macroalgae_cover_info": "Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).",
-    "max_length": "Max Length",
-    "max_type": "Max Type",
+    "max_length": "Max length",
+    "max_type": "Max type",
     "no_observations_listed": "No observations listed",
     "normal": "Normal",
     "number_of_colonies": "Number of colonies",
@@ -693,13 +693,13 @@
     "quadrat_number_start": "Quadrat number start",
     "quadrat_number_start_info": "Number of the first quadrat/photo along the transect (e.g. 1)",
     "recently_dead": "Recently dead",
-    "see_references_link": "See References (xlsx download)",
+    "see_references_link": "See references (xlsx download)",
     "soft_coral_cover": "Soft coral % cover",
     "soft_coral_cover_info": "Soft coral cover as decimal percentage of quadrat total area (e.g. 33.3).",
     "summary_of_observations": "Summary of Observations",
     "total_colonies": "Total number of colonies",
     "total_coral_genera": "Total number of coral genera",
-    "trophic_group": "Trophic Group"
+    "trophic_group": "Trophic group"
   },
   "offline": {
     "page_unavailable_offline": "This page is unavailable offline",
@@ -769,10 +769,10 @@
       "explore_unavailable": "The demo project is unavailable in MERMAID Explore",
       "name_restrictions": "Demo project name cannot be changed.",
       "project_reporting": "The demo project is unavailable in MERMAID Explore and filtered by default in <span>mermaidr</span>.",
+      "project_tour_start": "Restart tour",
       "sample_explore_unavailable": "Sample events from the demo project are unavailable in MERMAID Explore",
       "success_deleted": "Demo project deleted. You can add it again from the Projects page.",
       "teaser": "Explore how it works before creating your own and collecting real data.",
-      "project_tour_start": "Restart tour",
       "tryout": "Try the demo project"
     },
     "edit_project_info": "Edit project info",
@@ -822,6 +822,22 @@
       "test_project_status_saved": "Test project selection saved"
     },
     "unknown_project_access": "The admin of <code>unknown project name</code> can add you to this project.",
+    "tour": {
+      "collecting_review": "Enter survey data by method as sample units, including AI-assisted photo quadrats — even while offline.",
+      "data_sharing_review": "Control how data is shared in MERMAID by setting each survey type to private, public summary, or public.",
+      "intro": "Let’s take a quick tour to highlight the key areas of a project and help you get started.",
+      "intro_tagline": "Welcome",
+      "management_regimes_review": "Define how sites are managed at the time of surveys, such as marine protected areas or fishing restrictions.",
+      "observers_overview_review": "See who’s collecting data and what’s been submitted, helping you track your team’s progress.",
+      "project_info_review": "Add a description and tag organizations associated with your project.",
+      "samples_management_review": "View submitted data grouped by management to help you understand your surveys' coverage and identify gaps.",
+      "sites_review": "Add reef locations and their coordinates to link surveys to the correct sites.",
+      "submitted_review": "See submitted clean data that is ready for export, visualization, and analysis.",
+      "tour_steps": "Step {{current}} of {{total}}",
+      "outro_tagline": "You're all set",
+      "outro": "Explore the demo project to see how things work. When you’re ready, create your own project to collect real data.",
+      "users_review": "Add team members and assign them admin, collector, or read-only roles."
+    },
     "user_confirm_delete": "Are you sure you want to delete {{projectName}}?",
     "view_member_emails": "View project member email",
     "warning_readonly_active_units": "You cannot submit these collect records because you only have read-only access to this project. Please contact the project admin."
