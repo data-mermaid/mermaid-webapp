@@ -10,6 +10,9 @@ import { useTranslation } from 'react-i18next'
 import styles from '../../style/ProjectName.module.scss'
 import buttonStyles from '../../style/buttons.module.scss'
 import labelStyles from '../../style/labels.module.scss'
+import { driver } from 'driver.js'
+import { buildProjectTourSteps } from '../../library/demoProjectTour'
+import 'driver.js/dist/driver.css'
 
 const ProjectName = () => {
   const isMounted = useIsMounted()
@@ -45,7 +48,35 @@ const ProjectName = () => {
     openExploreLinkWithBbox(queryParamObject)
   }
 
-  const handleStartTourClick = () => {}
+  const handleTourClose = (_element, _step, { driver }) => {
+    const isTourComplete = driver.isLastStep()
+    const eventName = isTourComplete
+      ? 'demo_tour_completed'
+      : `demo_tour_close_step_${driver.getActiveIndex() + 1}`
+    window.dataLayer?.push({
+      event: eventName,
+    })
+    driver.destroy()
+  }
+
+  const handleStartTourClick = () => {
+    const driverTourObj = driver({
+      nextBtnText: '→',
+      onDestroyStarted: handleTourClose,
+      onPopoverRender: (popover) => {
+        popover.arrow.remove()
+        popover.nextButton.style.fontSize = '16px'
+        popover.previousButton.style.fontSize = '16px'
+      },
+      overlayClickBehavior: () => {}, //disable overlay close on click
+      prevBtnText: '←',
+      progressText: t('projects.tour.tour_steps'), //driverJS auto passes current and total
+      showProgress: true,
+      steps: buildProjectTourSteps(t),
+    })
+
+    driverTourObj.drive()
+  }
 
   const tooltipText = isDemoProject
     ? 'projects.demo.explore_unavailable'
@@ -75,6 +106,7 @@ const ProjectName = () => {
           <button
             className={[buttonStyles['button--callout'], buttonStyles['button--small']].join(' ')}
             type="button"
+            id="gtm-demo-start-tour"
             aria-label={t('projects.demo.project_tour_start')}
             onClick={handleStartTourClick}
           >
