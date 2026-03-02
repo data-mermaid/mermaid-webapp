@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from '../../../../testUtilities/mockT'
 
 import {
   screen,
@@ -188,10 +189,11 @@ describe('Offline', () => {
     const table = await screen.findByRole('table')
 
     const linksToHabitatComplexityRecords = within(table).getAllByRole('link', {
-      name: 'Habitat complexity',
+      name: 'protocol_titles.habitatcomplexity',
     })
 
     expect(linksToHabitatComplexityRecords).toHaveLength(2)
+    expect(mockT).toHaveBeenCalledWith('protocol_titles.habitatcomplexity')
 
     // expect unique depth as proxy for New Habitat Complexity
     expect(await within(table).findByText('10000'))

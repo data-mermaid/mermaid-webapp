@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from '../../../../testUtilities/mockT'
 
 import {
   screen,
@@ -46,9 +47,12 @@ describe('Offline', () => {
 
     const table = await screen.findByRole('table')
 
-    const linksToFishbeltRecords = within(table).getAllByRole('link', { name: 'Fish belt' })
+    const linksToFishbeltRecords = within(table).getAllByRole('link', {
+      name: 'protocol_titles.fishbelt',
+    })
 
     // row length = 15 because 16 mock records, now minus 1
     expect(linksToFishbeltRecords).toHaveLength(15)
+    expect(mockT).toHaveBeenCalledWith('protocol_titles.fishbelt')
   })
 })
