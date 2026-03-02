@@ -280,7 +280,7 @@ const ImageAnnotationModal = ({
           <Footer>
             <Legend>
               <LegendItem>
-                <LegendSquare color={COLORS.confirmed} />
+                <LegendSquare $color={COLORS.confirmed} />
                 {t('image_classification.annotation.confirmed')}
               </LegendItem>
               <LegendItem>

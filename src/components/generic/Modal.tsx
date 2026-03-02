@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { styled, css } from 'styled-components'
 import { IconClose } from '../icons'
@@ -12,8 +11,8 @@ import { useTranslation } from 'react-i18next'
 export const MODAL_CONTENT_HEIGHT = '80vh'
 
 interface StyledDialogProps {
-  maxWidth?: string
-  padding?: string
+  $maxWidth?: string
+  $padding?: string
 }
 
 const StyledDialogOverlay = styled('div')`
@@ -29,12 +28,12 @@ const StyledDialogOverlay = styled('div')`
 `
 
 const StyledDialog = styled('div')<StyledDialogProps>`
-  padding: ${(props) => props.padding || '0'};
+  padding: ${(props) => props.$padding || '0'};
   margin: 0;
   min-width: 30rem;
   width: calc(100vw - 4rem);
   max-width: ${(props) =>
-    props.maxWidth || '96rem'}; // Default to 96rem if maxWidth prop is not provided
+    props.$maxWidth || '96rem'}; // Default to 96rem if maxWidth prop is not provided
   background: ${theme.color.white};
   max-height: 98vh;
   display: grid;
@@ -147,20 +146,36 @@ const ModalInputRow = styled(InputRow)`
 export const ModalTableOverflowWrapper = styled(TableOverflowWrapper)`
   max-width: 100%;
 `
+
+interface ModalProps {
+  allowCloseWithEscapeKey?: boolean
+  footerContent: React.ReactNode
+  isOpen: boolean
+  mainContent: React.ReactNode
+  onDismiss(...args: unknown[]): unknown
+  title: string
+  toolbarContent?: React.ReactNode
+  maxWidth?: string
+  testId?: string
+  padding?: string
+  displayCloseIcon?: boolean
+  contentOverflowStyle?: string
+}
+
 const Modal = ({
   title,
   mainContent,
   isOpen,
   onDismiss,
   footerContent,
-  toolbarContent = null,
-  maxWidth = null,
+  toolbarContent = undefined,
+  maxWidth = undefined,
   testId = '',
-  padding = null,
+  padding = undefined,
   displayCloseIcon = true,
   allowCloseWithEscapeKey = true,
-  contentOverflowStyle = null,
-}) => {
+  contentOverflowStyle = undefined,
+}: ModalProps) => {
   const { t } = useTranslation()
   const _closeModalWithEscapeKey = useEffect(() => {
     const close = (event) => {
@@ -181,8 +196,8 @@ const Modal = ({
           role="dialog"
           aria-labelledby="modal-title"
           aria-describedby="modal-content"
-          maxWidth={maxWidth}
-          padding={padding}
+          $maxWidth={maxWidth}
+          $padding={padding}
         >
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>
@@ -201,21 +216,6 @@ const Modal = ({
       </StyledDialogOverlay>
     )
   )
-}
-
-Modal.propTypes = {
-  allowCloseWithEscapeKey: PropTypes.bool,
-  footerContent: PropTypes.node.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  mainContent: PropTypes.node.isRequired,
-  onDismiss: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  toolbarContent: PropTypes.node,
-  maxWidth: PropTypes.string,
-  testId: PropTypes.string,
-  padding: PropTypes.string,
-  displayCloseIcon: PropTypes.bool,
-  contentOverflowStyle: PropTypes.string,
 }
 
 export default Modal

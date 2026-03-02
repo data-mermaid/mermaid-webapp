@@ -86,7 +86,7 @@ const CopySitesMap = ({ sitesForMapMarkers }) => {
 
   return (
     <MapContainer>
-      <MapWrapper ref={mapContainer} minHeight="30vh" />
+      <MapWrapper ref={mapContainer} $minHeight="30vh" />
       {map.current ? (
         <MiniMapContainer>
           <MiniMap mainMap={map.current} />

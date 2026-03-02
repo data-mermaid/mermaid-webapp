@@ -50,11 +50,11 @@ const DataSharingTable = styled(Table)`
   }
 `
 const Input = styled.input`
-  cursor: ${(props) => props.cursor};
+  cursor: ${(props) => props.$cursor};
 `
 
 const Label = styled.label`
-  cursor: ${(props) => props.cursor};
+  cursor: ${(props) => props.$cursor};
 `
 
 const ReadOnlyDataSharingContent = ({ project = {} }) => {
@@ -207,7 +207,7 @@ const DataSharing = () => {
     dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
   const contentViewByRole = (
-    <MaxWidthInputWrapper cursor={isDataUpdating ? 'wait' : 'auto'}>
+    <MaxWidthInputWrapper $cursor={isDataUpdating ? 'wait' : 'auto'}>
       <h3>{t('data_sharing.more_powerful')}</h3>
       <P>{t('data_sharing.information')}</P>
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
@@ -219,21 +219,21 @@ const DataSharing = () => {
             <thead>
               <Tr>
                 <Th>&nbsp;</Th>
-                <Th align="center">
+                <Th $align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Private')}
                     text={<>{t('data_sharing.private')}</>}
                     id="private-tooltip"
                   />
                 </Th>
-                <Th align="center">
+                <Th $align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Public Summary')}
                     text={<>{t('data_sharing.public_summary')}</>}
                     id="public-summary-tooltip"
                   />
                 </Th>
-                <Th align="center">
+                <Th $align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Public')}
                     text={<>{t('data_sharing.public')}</>}
@@ -249,7 +249,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`fish-belt${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'pointer'}
+                      $cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -259,7 +259,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_beltfish === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_beltfish')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'pointer'}
+                        $cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>
@@ -271,7 +271,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`benthic${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'pointer'}
+                      $cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -281,7 +281,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_benthiclit === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'pointer'}
+                        $cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>
@@ -293,7 +293,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`bleaching${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'pointer'}
+                      $cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -303,7 +303,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_bleachingqc === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_bleachingqc')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'pointer'}
+                        $cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>

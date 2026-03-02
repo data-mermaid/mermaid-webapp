@@ -18,7 +18,7 @@ const TextareaWithLabelAndValidation = ({
   ...restOfProps
 }) => {
   return (
-    <InputRow validationType={validationType} data-testid={testId}>
+    <InputRow $validationType={validationType} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
         {required ? <RequiredIndicator /> : null}
