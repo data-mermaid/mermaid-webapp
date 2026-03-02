@@ -96,7 +96,6 @@
     "fish_species_info": "Spesies ikan karang, ukuran dan kelimpahan, informasi taksonomi dan kelompok fungsional, koefisien biomassa",
     "individual_habitat_complexity": "Skor kompleksitas habitat individu",
     "information": "Mengingat kebutuhan mendesak untuk konservasi terumbu karang global, MERMAID berkomitmen untuk bekerja secara kolektif sebagai sebuah komunitas dan menggunakan kekuatan data untuk membantu membuat keputusan yang lebih cepat dan lebih baik. Data pemantauan terumbu karang dikumpulkan dengan tujuan untuk memajukan ilmu pengetahuan terumbu karang dan meningkatkan pengelolaan. Kami menyadari upaya besar untuk mengumpulkan data dan rasa kepemilikan Anda. Meskipun tidak diwajibkan, kami berharap Anda memilih untuk membuat data Anda tersedia untuk mendorong penemuan baru dan menginformasikan solusi konservasi.",
-    "is_test_project": "Ini adalah proyek uji coba",
     "learn_more": "Pelajari lebih lanjut tentang bagaimana data Anda dibagikan...",
     "metadata": "Metadata",
     "more_powerful": "Data jauh lebih kuat ketika dibagikan.",
@@ -120,7 +119,6 @@
       "fish_belt_public": "Fish Belt kini telah dibuka untuk umum",
       "fish_belt_public_summary": "Fish Belt sekarang diatur ke ringkasan publik"
     },
-    "test_project_data": "Data untuk proyek uji coba tidak akan disertakan dalam pelaporan publik.",
     "transect_level_observations": "Pengamatan tingkat transek"
   },
   "delete_modal": {
@@ -679,8 +677,7 @@
       "project_copied": "Proyek disalin",
       "project_created": "Proyek dibuat",
       "project_deleted": "Proyek dihapus",
-      "project_saved": "Proyek disimpan",
-      "test_project_status_saved": "Pemilihan proyek uji disimpan."
+      "project_saved": "Proyek disimpan"
     },
     "user_confirm_delete": "Apakah Anda yakin ingin menghapus {{projectName}}?",
     "view_member_emails": "Melihat email anggota proyek"
