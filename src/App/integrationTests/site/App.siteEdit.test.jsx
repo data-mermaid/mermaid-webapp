@@ -29,6 +29,9 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
 
   const siteNameInput = await screen.findByTestId('name-input')
 
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(siteNameInput).toHaveValue('Site A'))
+
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
@@ -54,6 +57,9 @@ test('Online: Edit Site shows toast and edited record info', async () => {
   )
 
   const siteNameInput = await screen.findByTestId('name-input')
+
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(siteNameInput).toHaveValue('Site A'))
 
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
@@ -84,6 +90,9 @@ test('Offline: edit site save stored site in dexie', async () => {
   )
 
   const siteNameInput = await screen.findByTestId('name-input')
+
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(siteNameInput).toHaveValue('Site A'))
 
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
@@ -124,6 +133,9 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   )
 
   const siteNameInput = await screen.findByTestId('name-input')
+
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(siteNameInput).toHaveValue('Site A'))
 
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
