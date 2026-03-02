@@ -87,7 +87,7 @@ export const thStyles = (props) => css`
   vertical-align: top;
 
   &::after {
-    content: ${props.$isSortingEnabled ? ' \u25b2' : ''};
+    content: '${props.$isSortingEnabled ? ' \u25b2' : ''}';
     font-size: small;
     white-space: nowrap;
   }
@@ -134,7 +134,7 @@ export const TableRowTdKey = styled(Td)`
 `
 
 export const TableRowTd = styled(Td)`
-  background-color: ${(props) => props.$hightedBackground && 'hsl(50 80% 80% / 1)'};
+  background-color: ${(props) => props.$highlightedBackground && 'hsl(50 80% 80% / 1)'};
   white-space: ${(props) => props.$isAllowNewLines && 'pre-wrap'};
 `
 

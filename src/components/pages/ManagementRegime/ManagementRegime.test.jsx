@@ -94,13 +94,9 @@ test('Management Regime component renders with the expected UI elements', async 
   await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   // Wait for formik to initialize with fetched data
-  await waitFor(() =>
-    expect(
-      screen.getByText('Management Regimes B', {
-        selector: 'h2',
-      }),
-    ),
-  )
+  await waitFor(() => {
+    expect(screen.getByText('Management Regimes B', { selector: 'h2' })).toBeInTheDocument()
+  })
 
   expect(screen.getByTestId('name-input'))
   expect(screen.getByTestId('secondary-name-input'))

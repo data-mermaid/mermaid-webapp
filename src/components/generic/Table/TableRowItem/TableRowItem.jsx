@@ -43,21 +43,24 @@ const TableRowItem = ({
       <TableRowTdKey>{title}</TableRowTdKey>
       {isLink ? (
         <TableRowTd
-          $hightedBackground={highlightedDuplicateSite}
+          $highlightedBackground={highlightedDuplicateSite}
           $isAllowNewLines={isAllowNewlines}
         >
           <a href={linkToSiteOrMR}>{rowItemValue}</a>
         </TableRowTd>
       ) : (
         <TableRowTd
-          $hightedBackground={highlightedDuplicateSite}
+          $highlightedBackground={highlightedDuplicateSite}
           $isAllowNewLines={isAllowNewlines}
         >
           {rowItemValue}
         </TableRowTd>
       )}
       {hasExtraRowForDuplicateRecord && (
-        <TableRowTd $hightedBackground={highlightedCurrentSite} $isAllowNewLines={isAllowNewlines}>
+        <TableRowTd
+          $highlightedBackground={highlightedCurrentSite}
+          $isAllowNewLines={isAllowNewlines}
+        >
           {extraRowItemValue}
         </TableRowTd>
       )}

@@ -66,5 +66,5 @@ export const LegendColor = styled.div`
   border: 1px solid;
   float: right;
   margin-top: 2px;
-  background-color: ${(props) => props.bgColor && props.bgColor};
+  background-color: ${(props) => props.$bgColor && props.$bgColor};
 `

@@ -68,7 +68,6 @@ export const StyledNavLink = styled('a')`
       color: ${theme.color.disabledText};
       pointer-events: none;
     `}
-  }
   display: flex;
 `
 
