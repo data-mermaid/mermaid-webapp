@@ -18,11 +18,11 @@ const FilterLabelWrapper = styled.label`
 const FilterInput = styled(Input)`
   ${inputStyles};
   background-color: ${(props) =>
-    props.hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
+    props.$hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
 
   &:autofill {
     background-color: ${(props) =>
-      props.hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
+      props.$hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
   }
 `
 
@@ -123,7 +123,7 @@ const FilterSearchToolbar = ({
         value={globalSearchText}
         onChange={handleFilterChange}
         disabled={disabled}
-        hasFilter={globalSearchText && globalSearchText.length > 0}
+        $hasFilter={globalSearchText && globalSearchText.length > 0}
       />
     </FilterLabelWrapper>
   )

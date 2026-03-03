@@ -24,10 +24,10 @@ const SubmittedBenthicLitObservationTable = ({
 
   const observationsBenthicLit = obs_benthic_lits.map((item, index) => (
     <Tr key={item.id}>
-      <Td align="center">{index + 1}</Td>
-      <Td align="right">{getObjectById(benthicAttributeOptions, item.attribute)?.label}</Td>
-      <Td align="right">{getObjectById(growthFormOptions, item.growth_form)?.label}</Td>
-      <Td align="left">{item.length}</Td>
+      <Td $align="center">{index + 1}</Td>
+      <Td $align="right">{getObjectById(benthicAttributeOptions, item.attribute)?.label}</Td>
+      <Td $align="right">{getObjectById(growthFormOptions, item.growth_form)?.label}</Td>
+      <Td $align="left">{item.length}</Td>
     </Tr>
   ))
 
@@ -39,9 +39,9 @@ const SubmittedBenthicLitObservationTable = ({
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
-              <TheadItem align="right">{t('observations.growth_form')}</TheadItem>
-              <TheadItem align="left">{`${t('observations.length')} (${t(
+              <TheadItem $align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
+              <TheadItem $align="right">{t('observations.growth_form')}</TheadItem>
+              <TheadItem $align="left">{`${t('observations.length')} (${t(
                 'measurements.centimeter_short',
               )})`}</TheadItem>
             </Tr>

@@ -203,10 +203,10 @@ const ColoniesBleachedObservationTable = ({
       }
 
       return (
-        <ObservationTr key={observationId} messageType={observationValidationType}>
-          <Td align="center">{rowNumber}</Td>
+        <ObservationTr key={observationId} $messageType={observationValidationType}>
+          <Td $align="center">{rowNumber}</Td>
 
-          <Td align="left">
+          <Td $align="left">
             {benthicAttributeSelectOptions?.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
@@ -232,7 +232,7 @@ const ColoniesBleachedObservationTable = ({
               </InputAutocompleteContainer>
             )}
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <Select
               onChange={handleGrowthFormChange}
               value={growth_form}
@@ -248,7 +248,7 @@ const ColoniesBleachedObservationTable = ({
               ))}
             </Select>
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="normal-label"
               value={count_normal}
@@ -261,7 +261,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="pale-label"
               value={count_pale}
@@ -274,7 +274,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="20-bleached-label"
               value={count_20}
@@ -287,7 +287,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="50-bleached-label"
               value={count_50}
@@ -300,7 +300,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="80-bleached-label"
               value={count_80}
@@ -313,7 +313,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="100-bleached-label"
               value={count_100}
@@ -326,7 +326,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="recently-dead-label"
               value={count_dead}
@@ -355,7 +355,7 @@ const ColoniesBleachedObservationTable = ({
               resetObservationValidations={resetObservationValidations}
             />
           ) : null}
-          <Td align="center">
+          <Td $align="center">
             <ButtonRemoveRow
               tabIndex="-1"
               type="button"
@@ -413,42 +413,42 @@ const ColoniesBleachedObservationTable = ({
               <thead>
                 <Tr>
                   <Th colSpan="3" />
-                  <Th colSpan="7" align="center">
+                  <Th colSpan="7" $align="center">
                     {t('observations.bleaching_severity')}
                   </Th>
                   <Th colSpan="1" />
                 </Tr>
                 <Tr>
                   <Th />
-                  <Th align="center" id="benthic-attribute-label">
+                  <Th $align="center" id="benthic-attribute-label">
                     {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
                   </Th>
-                  <Th align="center" id="growth-form-label">
+                  <Th $align="center" id="growth-form-label">
                     {t('observations.growth_form')}
                   </Th>
-                  <Th align="center" id="normal-label">
+                  <Th $align="center" id="normal-label">
                     {t('observations.normal')}
                   </Th>
-                  <Th align="center" id="pale-label">
+                  <Th $align="center" id="pale-label">
                     {t('observations.pale')}
                   </Th>
-                  <Th align="center" id="20-bleached-label">
+                  <Th $align="center" id="20-bleached-label">
                     {t('observations.percent_0_20')}
                   </Th>
-                  <Th align="center" id="50-bleached-label">
+                  <Th $align="center" id="50-bleached-label">
                     {t('observations.percent_20_50')}
                   </Th>
-                  <Th align="center" id="80-bleached-label">
+                  <Th $align="center" id="80-bleached-label">
                     {t('observations.percent_50_80')}
                   </Th>
-                  <Th align="center" id="100-bleached-label">
+                  <Th $align="center" id="100-bleached-label">
                     {t('observations.percent_80_100')}
                   </Th>
-                  <Th align="center" id="recently-dead-label">
+                  <Th $align="center" id="recently-dead-label">
                     {t('observations.recently_dead')}
                   </Th>
                   {areValidationsShowing ? (
-                    <Th align="center">{t('validations.validations')}</Th>
+                    <Th $align="center">{t('validations.validations')}</Th>
                   ) : null}
                   <Th />
                 </Tr>

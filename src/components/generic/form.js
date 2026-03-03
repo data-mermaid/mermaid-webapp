@@ -49,7 +49,7 @@ export const InputWrapper = styled.div`
 `
 export const MaxWidthInputWrapper = styled(InputWrapper)`
   max-width: ${theme.spacing.maxWidth};
-  cursor: ${(props) => props.cursor || 'pointer'};
+  cursor: ${(props) => props.$cursor || 'pointer'};
 `
 export const HelperText = styled.span`
   font-size: ${theme.typography.smallFontSize};
@@ -68,7 +68,7 @@ export const inputTextareaSelectStyles = css`
   }
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
-    -webkit-appearance: ${(props) => (props.shouldShowSteps ? 'auto' : 'none')};
+    -webkit-appearance: ${(props) => (props.$shouldShowSteps ? 'auto' : 'none')};
   }
   -moz-appearance: textfield;
   &:disabled {
@@ -93,7 +93,7 @@ export const InputRow = styled.div.attrs({
   padding: ${theme.spacing.medium};
   border-width: 0 0 0 ${theme.spacing.borderLarge};
   border-style: solid;
-  border-color: ${(props) => theme.color.getBorderColor(props.validationType)};
+  border-color: ${(props) => theme.color.getBorderColor(props.$validationType)};
   align-items: baseline;
   > label {
     align-self: start;
@@ -129,7 +129,7 @@ export const Input = styled.input`
     text-align: right;
   }
   &[type='text'] {
-    text-align: ${(props) => props.textAlign || 'left'};
+    text-align: ${(props) => props.$textAlign || 'left'};
   }
   &:disabled {
     background: ${theme.color.disabledInputBackground};

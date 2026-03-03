@@ -11,9 +11,9 @@ const StyledNav = styled.nav`
 
 const itemStyles = (props) => css`
   border: 1.5px solid white;
-  background-color: ${props.selected ? theme.color.grey5 : theme.color.grey4};
-  background-color: ${props.selected ? theme.color.primaryColor : theme.color.grey4};
-  color: ${props.selected ? theme.color.white : theme.color.textColor};
+  background-color: ${props.$selected ? theme.color.grey5 : theme.color.grey4};
+  background-color: ${props.$selected ? theme.color.primaryColor : theme.color.grey4};
+  color: ${props.$selected ? theme.color.white : theme.color.textColor};
   ${hoverState(css`
     background-color: ${theme.color.primaryHover};
     color: ${theme.color.white};
@@ -73,7 +73,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
       <NavHeader>{t('gfcr.fund_indicators')}</NavHeader>
       <NavSubHeader
         id="report-title-and-year"
-        selected={selectedNavItem === 'report-title-and-year'}
+        $selected={selectedNavItem === 'report-title-and-year'}
         onClick={(e) => {
           setSelectedNavItem(e.currentTarget.id)
         }}
@@ -83,7 +83,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
       <NavList>
         <NavListItem
           id="f1"
-          selected={selectedNavItem === 'f1'}
+          $selected={selectedNavItem === 'f1'}
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F1</FText>
@@ -91,7 +91,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
         </NavListItem>
         <NavListItem
           id="f2"
-          selected={selectedNavItem === 'f2'}
+          $selected={selectedNavItem === 'f2'}
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F2</FText>
@@ -99,7 +99,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
         </NavListItem>
         <NavListItem
           id="f3"
-          selected={selectedNavItem === 'f3'}
+          $selected={selectedNavItem === 'f3'}
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F3</FText>
@@ -107,7 +107,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
         </NavListItem>
         <NavListItem
           id="f4"
-          selected={selectedNavItem === 'f4'}
+          $selected={selectedNavItem === 'f4'}
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F4</FText>
@@ -115,7 +115,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
         </NavListItem>
         <NavListItem
           id="f5"
-          selected={selectedNavItem === 'f5'}
+          $selected={selectedNavItem === 'f5'}
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F5</FText>
@@ -123,7 +123,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
         </NavListItem>
         <NavListItem
           id="f6"
-          selected={selectedNavItem === 'f6'}
+          $selected={selectedNavItem === 'f6'}
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F6</FText>
@@ -131,7 +131,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
         </NavListItem>
         <NavListItem
           id="f7"
-          selected={selectedNavItem === 'f7'}
+          $selected={selectedNavItem === 'f7'}
           onClick={(e) => setSelectedNavItem(e.currentTarget.id)}
         >
           <FText>F7</FText>
@@ -141,7 +141,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
       <NavHeader>F8, F9, F10</NavHeader>
       <NavSubHeader
         id="finance-solutions"
-        selected={selectedNavItem === 'finance-solutions'}
+        $selected={selectedNavItem === 'finance-solutions'}
         onClick={(e) => {
           setSelectedNavItem(e.currentTarget.id)
         }}
@@ -150,7 +150,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
       </NavSubHeader>
       <NavSubHeader
         id="investments"
-        selected={selectedNavItem === 'investments'}
+        $selected={selectedNavItem === 'investments'}
         onClick={(e) => {
           setSelectedNavItem(e.currentTarget.id)
         }}
@@ -159,7 +159,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
       </NavSubHeader>
       <NavSubHeader
         id="revenues"
-        selected={selectedNavItem === 'revenues'}
+        $selected={selectedNavItem === 'revenues'}
         onClick={(e) => {
           setSelectedNavItem(e.currentTarget.id)
         }}

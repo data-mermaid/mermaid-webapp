@@ -58,9 +58,9 @@ const ResolveDuplicateSiteMap = ({ formLatitudeValue = 0, formLongitudeValue = 0
   }, [formLatitudeValue, formLongitudeValue])
 
   return (
-    <MapInputRow noBorderWidth>
+    <MapInputRow $noBorderWidth>
       <MapContainer>
-        <MapWrapper ref={mapContainer} minHeight="20vh" />
+        <MapWrapper ref={mapContainer} $minHeight="20vh" />
       </MapContainer>
     </MapInputRow>
   )

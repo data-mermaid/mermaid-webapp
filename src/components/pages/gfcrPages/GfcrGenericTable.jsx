@@ -31,51 +31,58 @@ const GfcrGenericTable = ({
   onNextClick,
   onGoToPage,
 }) => {
-  const { tableKey, ...tableProps } = getTableProps()
-  const { id: headerGroupId, ...headerGroupProps } = headerGroups[0]
+  const { key: tableKey, ...tableProps } = getTableProps()
 
   return (
     <>
       <StickyTableOverflowWrapper>
         <GenericStickyTableTextWrapTh key={tableKey} {...tableProps}>
           <thead>
-            {headerGroups.map((headerGroup) => (
-              <Tr key={headerGroupId} {...headerGroupProps}>
-                {headerGroup.headers.map((column) => {
-                  const isMultiSortColumn = headerGroup.headers.some(
-                    (header) => header.sortedIndex > 0,
-                  )
-                  const ThClassName = column.parent ? column.parent.id : undefined
+            {headerGroups.map((headerGroup) => {
+              const { key: headerGroupKey, ...headerGroupProps } = headerGroup.getHeaderGroupProps()
 
-                  return (
-                    <Th
-                      {...column.getHeaderProps({
-                        ...getTableColumnHeaderProps(column),
-                      })}
-                      align={column.align}
-                      key={column.id}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
-                      className={ThClassName}
-                    >
-                      <span>{column.render('Header')}</span>
-                    </Th>
-                  )
-                })}
-              </Tr>
-            ))}
+              return (
+                <Tr key={headerGroupKey} {...headerGroupProps}>
+                  {headerGroup.headers.map((column) => {
+                    const isMultiSortColumn = headerGroup.headers.some(
+                      (header) => header.sortedIndex > 0,
+                    )
+                    const ThClassName = column.parent ? column.parent.id : undefined
+
+                    const { key: headerKey, ...headerProps } = column.getHeaderProps({
+                      ...getTableColumnHeaderProps(column),
+                    })
+
+                    return (
+                      <Th
+                        key={headerKey}
+                        {...headerProps}
+                        $align={column.align}
+                        $isSortedDescending={column.isSortedDesc}
+                        $sortedIndex={column.sortedIndex}
+                        $isMultiSortColumn={isMultiSortColumn}
+                        className={ThClassName}
+                      >
+                        <span>{column.render('Header')}</span>
+                      </Th>
+                    )
+                  })}
+                </Tr>
+              )
+            })}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
-              const { id: rowId, ...rowProps } = row.getRowProps()
+              const { key: rowKey, ...rowProps } = row.getRowProps()
 
               return (
-                <Tr key={rowId} {...rowProps}>
+                <Tr key={rowKey} {...rowProps}>
                   {row.cells.map((cell) => {
+                    const { key: cellKey, ...cellProps } = cell.getCellProps()
+
                     return (
-                      <Td key={cell.id} {...cell.getCellProps()} align={cell.column.align}>
+                      <Td key={cellKey} {...cellProps} $align={cell.column.align}>
                         {cell.render('Cell')}
                       </Td>
                     )

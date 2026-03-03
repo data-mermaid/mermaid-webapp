@@ -274,9 +274,9 @@ const BenthicPhotoQuadratObservationTable = ({
       }
 
       return (
-        <ObservationTr key={observationId} messageType={observationValidationType}>
-          <Td align="center">{rowNumber}</Td>
-          <Td align="right">
+        <ObservationTr key={observationId} $messageType={observationValidationType}>
+          <Td $align="center">{rowNumber}</Td>
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               type="number"
               // eslint-disable-next-line jsx-a11y/no-autofocus
@@ -289,7 +289,7 @@ const BenthicPhotoQuadratObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td align="left">
+          <Td $align="left">
             {benthicAttributeSelectOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
@@ -309,7 +309,7 @@ const BenthicPhotoQuadratObservationTable = ({
               </InputAutocompleteContainer>
             )}
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <Select
               onChange={handleGrowthFormChange}
               onKeyDown={handleObservationKeyDown}
@@ -324,7 +324,7 @@ const BenthicPhotoQuadratObservationTable = ({
               ))}
             </Select>
           </Td>
-          <Td align="right">
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               value={numberOfPointsOrEmptyStringToAvoidInputValueErrors}
               step="any"
@@ -348,7 +348,7 @@ const BenthicPhotoQuadratObservationTable = ({
               resetObservationValidations={resetObservationValidations}
             />
           ) : null}
-          <Td align="center">
+          <Td $align="center">
             <ButtonRemoveRow
               tabIndex="-1"
               type="button"
@@ -393,7 +393,7 @@ const BenthicPhotoQuadratObservationTable = ({
           <thead>
             <Tr>
               <Th> </Th>
-              <Th align="right" id="quadrat-number-label">
+              <Th $align="right" id="quadrat-number-label">
                 <LabelContainer>
                   {t('observations.quadrat')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
@@ -411,7 +411,7 @@ const BenthicPhotoQuadratObservationTable = ({
                   </IconButton>
                 </LabelContainer>
               </Th>
-              <Th align="left" id="benthic-attribute-label">
+              <Th $align="left" id="benthic-attribute-label">
                 <LabelContainer>
                   {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
@@ -443,7 +443,7 @@ const BenthicPhotoQuadratObservationTable = ({
                   </IconButton>
                 </LabelContainer>
               </Th>
-              <Th align="right" id="growth-form-label">
+              <Th $align="right" id="growth-form-label">
                 <LabelContainer>
                   <div>{t('observations.growth_form')}</div>
                   {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
@@ -461,7 +461,7 @@ const BenthicPhotoQuadratObservationTable = ({
                   </IconButton>
                 </LabelContainer>
               </Th>
-              <Th align="right" id="number-of-points-label">
+              <Th $align="right" id="number-of-points-label">
                 <LabelContainer>
                   {t('observations.number_of_points')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'numberOfPoints' ? (
@@ -480,7 +480,7 @@ const BenthicPhotoQuadratObservationTable = ({
                 </LabelContainer>
               </Th>
               {areValidationsShowing ? (
-                <Th align="center">{t('validations.validations')}</Th>
+                <Th $align="center">{t('validations.validations')}</Th>
               ) : null}
               <Th> </Th>
             </Tr>

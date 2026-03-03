@@ -42,16 +42,25 @@ const TableRowItem = ({
     <Tr>
       <TableRowTdKey>{title}</TableRowTdKey>
       {isLink ? (
-        <TableRowTd hightedBackground={highlightedDuplicateSite} isAllowNewLines={isAllowNewlines}>
+        <TableRowTd
+          $highlightedBackground={highlightedDuplicateSite}
+          $isAllowNewLines={isAllowNewlines}
+        >
           <a href={linkToSiteOrMR}>{rowItemValue}</a>
         </TableRowTd>
       ) : (
-        <TableRowTd hightedBackground={highlightedDuplicateSite} isAllowNewLines={isAllowNewlines}>
+        <TableRowTd
+          $highlightedBackground={highlightedDuplicateSite}
+          $isAllowNewLines={isAllowNewlines}
+        >
           {rowItemValue}
         </TableRowTd>
       )}
       {hasExtraRowForDuplicateRecord && (
-        <TableRowTd hightedBackground={highlightedCurrentSite} isAllowNewLines={isAllowNewlines}>
+        <TableRowTd
+          $highlightedBackground={highlightedCurrentSite}
+          $isAllowNewLines={isAllowNewlines}
+        >
           {extraRowItemValue}
         </TableRowTd>
       )}

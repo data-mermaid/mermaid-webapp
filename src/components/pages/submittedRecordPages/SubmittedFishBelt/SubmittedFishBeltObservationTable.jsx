@@ -61,11 +61,11 @@ const SubmittedFishBeltObservationTable = ({
 
   const observationBeltFish = obs_belt_fishes.map((item, index) => (
     <Tr key={item.id}>
-      <Td align="center">{index + 1}</Td>
-      <Td align="left">{getFishName(item.fish_attribute)}</Td>
-      <Td align="right">{item.size}</Td>
-      <Td align="right">{item.count}</Td>
-      <Td align="right">{getFishBiomass(item.id)}</Td>
+      <Td $align="center">{index + 1}</Td>
+      <Td $align="left">{getFishName(item.fish_attribute)}</Td>
+      <Td $align="right">{item.size}</Td>
+      <Td $align="right">{item.count}</Td>
+      <Td $align="right">{getFishBiomass(item.id)}</Td>
     </Tr>
   ))
 
@@ -77,12 +77,12 @@ const SubmittedFishBeltObservationTable = ({
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem align="left">{t('fish_name')}</TheadItem>
-              <TheadItem align="right">{`${t('sample_units.size')} (${t(
+              <TheadItem $align="left">{t('fish_name')}</TheadItem>
+              <TheadItem $align="right">{`${t('sample_units.size')} (${t(
                 'measurements.centimeter_short',
               )})`}</TheadItem>
-              <TheadItem align="right">{t('count')}</TheadItem>
-              <TheadItem align="right">{`${t('biomass')} (${t(
+              <TheadItem $align="right">{t('count')}</TheadItem>
+              <TheadItem $align="right">{`${t('biomass')} (${t(
                 'measurements.kilogram_per_hectare_short',
               )})`}</TheadItem>
             </Tr>
