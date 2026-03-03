@@ -127,6 +127,10 @@ export const routes = [
     path: '/projects/:projectId/project-info',
     Component: () => <ProjectInfo />,
   },
+  {
+    path: '/projects/:projectId/project-info/new-demo',
+    Component: () => <ProjectInfo isNewDemoProject={true} />,
+  },
 
   {
     path: '/projects/:projectId/graphs-and-maps',

@@ -26,7 +26,6 @@ import { Box } from '@mui/material'
 import { IconClose } from '../icons'
 import cardStyles from '../ProjectCard/ProjectCard.module.scss'
 import { useNavigate } from 'react-router-dom'
-import { internalNavigation } from '../../link_constants'
 
 interface DemoProjectCalloutProps {
   handleDemoClick: () => void
@@ -95,7 +94,7 @@ const Projects = () => {
   const { isSyncInProgress } = useSyncStatus()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
-  const { currentUser, refreshCurrentUser, saveUserProfile } = useCurrentUser()
+  const { currentUser, saveUserProfile } = useCurrentUser()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const unavailableProjectsErrorText = t('projects.errors.data_unavailable')
@@ -152,11 +151,11 @@ const Projects = () => {
     databaseSwitchboardInstance
       .addDemoProject()
       .then((response) => {
-        refreshCurrentUser() // ensures correct user privileges
+        // refreshCurrentUser() // ensures correct user privileges
         updateUserSettings('hasUserDismissedDemo', true)
         toast.success(...getToastArguments(t('projects.demo.created')))
         setIsLoading(false)
-        navigate(internalNavigation.projectStartPage(response.id))
+        navigate(`/projects/${response.id}/project-info/new-demo`)
       })
       .catch((error) => {
         const isDuplicateError = error.response?.status === 400
