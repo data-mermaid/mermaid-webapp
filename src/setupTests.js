@@ -30,7 +30,11 @@ vi.mock('maplibre-gl', function mapLibreMock() {
         off: vi.fn(),
         remove: vi.fn(),
         touchZoomRotate: { disableRotation: vi.fn() },
-        getSource: vi.fn(() => ({ setData: vi.fn() })),
+        loadImage: vi.fn(() => Promise.resolve({ data: {} })),
+        getSource: vi.fn(() => ({
+          setData: vi.fn(),
+          getClusterExpansionZoom: vi.fn(() => Promise.resolve(5)),
+        })),
         fitBounds: vi.fn(),
         getZoom: vi.fn(),
         getCanvas: vi.fn(() => ({ style: {} })),
