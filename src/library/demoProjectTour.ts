@@ -98,15 +98,19 @@ const handleTourClose = (_element, _step, { state, driver }) => {
 
 export const startProjectTour = () => {
   const driverTourObj = driver({
-    showProgress: true,
     nextBtnText: '→',
-    prevBtnText: '←',
-    progressText: i18n.t('projects.tour.tour_steps'), //driverJS auto passes current and total
+    onDestroyStarted: handleTourClose,
     onPopoverRender: (popover) => {
       popover.arrow.remove()
+      popover.nextButton.style.fontSize = '16px'
+      popover.previousButton.style.fontSize = '16px'
     },
+    overlayClickBehavior: () => {}, //disable overlay close on click
+    prevBtnText: '←',
+    progressText: i18n.t('projects.tour.tour_steps'), //driverJS auto passes current and total
+    showProgress: true,
+    stagePadding: 4,
     steps: buildProjectTourSteps(i18n.t),
-    onDestroyStarted: handleTourClose,
   })
   driverTourObj.drive()
 }

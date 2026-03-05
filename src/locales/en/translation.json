@@ -821,7 +821,7 @@
     "tour": {
       "collecting_review": "Enter survey data by method as sample units, including AI-assisted photo quadrats — even while offline.",
       "data_sharing_review": "Control how data is shared in MERMAID by setting each survey type to private, public summary, or public.",
-      "intro": "Let’s take a quick tour to highlight the key areas of a project and help you get started.",
+      "intro": "Let’s take a quick tour to see the key areas of a project and help you get started.",
       "intro_tagline": "Welcome",
       "management_regimes_review": "Define how sites are managed at the time of surveys, such as marine protected areas or fishing restrictions.",
       "observers_overview_review": "See who’s collecting data and what’s been submitted, helping you track your team’s progress.",
