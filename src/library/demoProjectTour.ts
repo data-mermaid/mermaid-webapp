@@ -101,9 +101,15 @@ export const startProjectTour = () => {
     nextBtnText: '→',
     onDestroyStarted: handleTourClose,
     onPopoverRender: (popover) => {
-      popover.arrow.remove()
-      popover.nextButton.style.fontSize = '16px'
-      popover.previousButton.style.fontSize = '16px'
+      if (popover.arrow && typeof popover.arrow.remove === 'function') {
+        popover.arrow.remove()
+      }
+      if (popover.nextButton) {
+        popover.nextButton.style.fontSize = '16px'
+      }
+      if (popover.previousButton) {
+        popover.previousButton.style.fontSize = '16px'
+      }
     },
     overlayClickBehavior: () => {}, //disable overlay close on click
     prevBtnText: '←',
