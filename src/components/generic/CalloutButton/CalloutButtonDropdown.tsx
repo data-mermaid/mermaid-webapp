@@ -14,12 +14,14 @@ import { AxiosError } from 'axios'
 import { IconDown } from '../../icons'
 
 interface CalloutButtonDropdownProps {
+  updateUserSettings: (setting: string, val: boolean) => void
   onClick: () => void
   label: string
   disabled: boolean
   testId?: string
 }
 const CalloutButtonDropdown = ({
+  updateUserSettings,
   onClick,
   label,
   disabled,
@@ -35,10 +37,11 @@ const CalloutButtonDropdown = ({
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { refreshCurrentUser } = useCurrentUser()
 
-  const handleSuccessResponse = (response, languageSuccessMessage) => {
+  const handleSuccessResponse = (response) => {
     setIsDropdownOpen(false)
+    updateUserSettings('hasUserDismissedDemo', true)
     refreshCurrentUser() // ensures correct user privileges
-    toast.success(...getToastArguments(languageSuccessMessage))
+    toast.success(...getToastArguments(t('projects.demo.created')))
     setIsLoading(false)
     navigate(`/projects/${response.id}/project-info/new-demo`)
   }
@@ -63,7 +66,7 @@ const CalloutButtonDropdown = ({
     databaseSwitchboardInstance
       .addDemoProject()
       .then((response) => {
-        handleSuccessResponse(response, t('projects.success.project_created'))
+        handleSuccessResponse(response)
       })
       .catch((error) => {
         handleResponseError(error)
