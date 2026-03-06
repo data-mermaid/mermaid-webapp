@@ -1,5 +1,5 @@
 import React from 'react'
-import type { Preview } from '@storybook/react'
+import type { Preview } from '@storybook/react-vite'
 import { StyledEngineProvider } from '@mui/material'
 import { I18nextProvider } from 'react-i18next'
 import i18n from '../i18n'
@@ -23,7 +23,7 @@ const preview: Preview = {
 
   // Global decorators that wrap ALL stories - essential for your app context
   decorators: [
-    (Story) =>
+    (Story: React.ComponentType) =>
       React.createElement(
         StyledEngineProvider,
         { injectFirst: true }, // Ensures MUI styles have priority
