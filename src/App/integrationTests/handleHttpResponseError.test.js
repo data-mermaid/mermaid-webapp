@@ -124,7 +124,7 @@ describe('handleHttpResponseError', () => {
     expect(callback).toHaveBeenCalled()
   })
   test('if there is an error, it will be logged to console.error', () => {
-    const consoleSpy = vi.spyOn(console, 'error')
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
     const logoutMermaid = vi.fn()
 
