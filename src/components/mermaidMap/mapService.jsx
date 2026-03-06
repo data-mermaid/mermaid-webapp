@@ -444,16 +444,16 @@ export const addClusterSourceAndLayers = (map) => {
 
 export const addClusterEventListeners = (map, popUpRef, choices) => {
   map.on('click', 'clusters', async ({ features }) => {
-    const clusterId = features[0].properties.cluster_id
+    if (!features?.length) {
+      return
+    }
 
     try {
+      const clusterId = features[0].properties.cluster_id
       const zoom = await map.getSource('mapMarkers').getClusterExpansionZoom(clusterId)
-      map.easeTo({
-        center: features[0].geometry.coordinates,
-        zoom,
-      })
-    } catch {
-      return
+      map.easeTo({ center: features[0].geometry.coordinates, zoom })
+    } catch (error) {
+      console.error('Error expanding cluster zoom:', error)
     }
   })
 

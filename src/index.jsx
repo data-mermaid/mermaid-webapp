@@ -13,8 +13,8 @@ import { DexiePerUserDataInstanceProvider } from './App/dexiePerUserDataInstance
 import { ClearPersistedFormDataHackProvider } from './App/ClearDirtyFormDataHackContext'
 import '../i18n'
 
-import './index.css'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import './index.css'
 
 // Upgrading to react router v6 because of dependabot issues and data routers (createBrowserRouter) which is necessary for many functions we use(eg: useNavigate).
 // We keep the jsx routes as defined in app.js instead of having ALL routes defined here because we were not able to have conditional rendering of the loader otherwise
