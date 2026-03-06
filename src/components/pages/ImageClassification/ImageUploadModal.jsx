@@ -120,13 +120,6 @@ const ImageUploadModal = ({
     onClose()
     setIsUploading(true)
 
-    // Show the persistent uploading toast and store the toastId
-    if (!toastId.current) {
-      toastId.current = toast.info(renderUploadProgress(0, files.length, handleCancelUpload), {
-        autoClose: false,
-      })
-    }
-
     isCancelledRef.current = false
 
     const uploadedFiles = []
@@ -138,7 +131,9 @@ const ImageUploadModal = ({
         return
       }
 
-      // Validate file type, size, dimensions, and uniqueness.
+      // Validate file type, size, and uniqueness synchronously before showing the upload toast.
+      // The toast is created lazily (below, before the first async operation) so that if all
+      // files fail these synchronous checks — e.g. all are duplicates — no upload toast appears.
       if (!VALID_IMAGE_TYPES.includes(file.type)) {
         toast.error(`${t('image_classification.errors.invalid_file_type')}: ${file.name}`)
         continue
@@ -151,6 +146,16 @@ const ImageUploadModal = ({
       if (existingFiles.some((existingFile) => existingFile.original_image_name === file.name)) {
         toast.error(t('image_classification.errors.duplicate_file', { fileName: file.name }))
         continue
+      }
+
+      // Show the persistent uploading toast now — at least one file has passed synchronous
+      // validation and is about to be processed asynchronously. Creating the toast here (rather
+      // than before the loop) ensures React has a chance to render it before any dismissal, which
+      // avoids a race condition where toast.dismiss() fires before the toast is committed.
+      if (!toastId.current) {
+        toastId.current = toast.info(renderUploadProgress(0, files.length, handleCancelUpload), {
+          autoClose: false,
+        })
       }
 
       const result = await validateDimensions(file)
@@ -204,7 +209,7 @@ const ImageUploadModal = ({
       if (toastId.current) {
         toast.update(toastId.current, {
           render: t('image_classification.success.file_upload', { count: uploadedFiles.length }),
-          type: toast.TYPE.SUCCESS,
+          type: 'success',
           autoClose: true,
         })
       }
