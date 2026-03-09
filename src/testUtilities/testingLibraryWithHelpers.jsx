@@ -37,8 +37,8 @@ const AuthenticatedProviders = ({
   children,
   isSyncInProgressOverride = false,
   currentUserOverride = null,
-  saveUserProfileOverride = () => {},
-  refreshCurrentUserOverride = () => {},
+  saveUserProfileOverride = () => Promise.resolve(),
+  refreshCurrentUserOverride = () => Promise.resolve(),
 }) => (
   <Auth0Context.Provider
     value={{

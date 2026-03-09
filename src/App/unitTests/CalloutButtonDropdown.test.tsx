@@ -11,6 +11,15 @@ import {
 } from '../../testUtilities/testingLibraryWithHelpers'
 import CalloutButtonDropdown from '../../components/generic/CalloutButton/CalloutButtonDropdown'
 
+// Mock the demoProjectTour module
+vi.mock('../../library/demoProjectTour', () => ({
+  startProjectTour: vi.fn(),
+}))
+// Import the mocked function for assertions
+import { startProjectTour } from '../../library/demoProjectTour'
+
+const expectStartProjectTourCalled = () => expect(startProjectTour).toHaveBeenCalledTimes(1)
+
 describe('CalloutButtonDropdown', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -19,7 +28,6 @@ describe('CalloutButtonDropdown', () => {
   describe('When the user does not have a demo project', () => {
     test('Renders the main button and dropdown toggle', async () => {
       const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-      //todo: add a conditional check that the data returned does not have demo project data
       await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
       const mockUpdateUserSettings = vi.fn()
@@ -29,7 +37,7 @@ describe('CalloutButtonDropdown', () => {
         <CalloutButtonDropdown
           updateUserSettings={mockUpdateUserSettings}
           onClick={mockOnClick}
-          label="New Project"
+          label="New project"
           disabled={false}
           testId="new-project-button"
         />,
@@ -40,6 +48,7 @@ describe('CalloutButtonDropdown', () => {
       )
 
       expect(screen.getByTestId('new-project-button')).toBeInTheDocument()
+      await waitFor(expectStartProjectTourCalled, { timeout: 5000 })
     })
 
     test('Shows dropdown menu with Add Demo Project button when dropdown is clicked', async () => {

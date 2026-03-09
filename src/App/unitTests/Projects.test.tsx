@@ -338,7 +338,7 @@ describe('Projects dashboard', () => {
   test('Online - Demo callout will NOT show if user has previously dismissed demo', async () => {
     const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+    await initiallyHydrateOfflineStorageWithMockDataNoDemoProject(dexiePerUserDataInstance)
 
     const userWithDismissedDemo = {
       id: 'fake-id',
