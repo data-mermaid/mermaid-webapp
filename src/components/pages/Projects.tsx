@@ -108,6 +108,13 @@ const Projects = () => {
     !userHasDemoProject && !hasUserDismissedDemo && isAppOnline,
   )
 
+  // Hide demo callout when projects load and contain a demo project
+  useEffect(() => {
+    if (userHasDemoProject) {
+      setIsDemoCalloutVisible(false)
+    }
+  }, [userHasDemoProject])
+
   useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
       Promise.all([

@@ -33,7 +33,13 @@ const fakeCurrentUser = {
   collect_state: {},
 }
 
-const AuthenticatedProviders = ({ children, isSyncInProgressOverride = false }) => (
+const AuthenticatedProviders = ({
+  children,
+  isSyncInProgressOverride = false,
+  currentUserOverride = null,
+  saveUserProfileOverride = () => {},
+  refreshCurrentUserOverride = () => {},
+}) => (
   <Auth0Context.Provider
     value={{
       isAuthenticated: true,
@@ -44,7 +50,13 @@ const AuthenticatedProviders = ({ children, isSyncInProgressOverride = false }) 
   >
     <ThemeProvider theme={theme}>
       <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
-        <CurrentUserProvider value={{ currentUser: fakeCurrentUser }}>
+        <CurrentUserProvider
+          value={{
+            currentUser: currentUserOverride ?? fakeCurrentUser,
+            saveUserProfile: saveUserProfileOverride,
+            refreshCurrentUser: refreshCurrentUserOverride,
+          }}
+        >
           <CurrentProjectProvider>
             <HttpResponseErrorHandlerProvider value={() => {}}>
               <BellNotificationProvider
@@ -88,6 +100,9 @@ const UnauthenticatedProviders = ({ children }) => (
 AuthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
   isSyncInProgressOverride: PropTypes.bool,
+  currentUserOverride: PropTypes.object,
+  saveUserProfileOverride: PropTypes.func,
+  refreshCurrentUserOverride: PropTypes.func,
 }
 
 UnauthenticatedProviders.propTypes = {
@@ -139,7 +154,15 @@ export const renderAuthenticated = (
 
 export const renderAuthenticatedOnline = (
   ui,
-  { renderOptions, initialEntries, dexiePerUserDataInstance, isSyncInProgressOverride } = {},
+  {
+    renderOptions,
+    initialEntries,
+    dexiePerUserDataInstance,
+    isSyncInProgressOverride,
+    currentUserOverride,
+    saveUserProfileOverride,
+    refreshCurrentUserOverride,
+  } = {},
 ) => {
   const { dexiePerUserDataInstance: defaultDexieUserDataDatabaseInstance } =
     getMockDexieInstancesAllSuccess()
@@ -159,7 +182,12 @@ export const renderAuthenticatedOnline = (
   )
   const wrapper = ({ children }) => {
     return (
-      <AuthenticatedProviders isSyncInProgressOverride={isSyncInProgressOverride}>
+      <AuthenticatedProviders
+        isSyncInProgressOverride={isSyncInProgressOverride}
+        currentUserOverride={currentUserOverride}
+        saveUserProfileOverride={saveUserProfileOverride}
+        refreshCurrentUserOverride={refreshCurrentUserOverride}
+      >
         <DatabaseSwitchboardInstanceProvider
           value={getMockOnlineDatabaseSwitchboardInstance({
             dexiePerUserDataInstance,

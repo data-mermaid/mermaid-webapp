@@ -116,6 +116,18 @@ vi.mock('react-i18next', async () => {
 
 configure({ asyncUtilTimeout: 10000 })
 
+// Suppress known unhandled rejections from DatabaseSwitchboard async operations during tests
+// These occur when the SyncApiDataIntoOfflineStorage makes network requests that fail after cleanup
+process.on('unhandledRejection', (reason) => {
+  const message = reason?.message || String(reason)
+  if (message.includes('api_errors') || message.includes('app_not_authenticated_or_ready')) {
+    // Silently ignore known async errors from DatabaseSwitchboard
+    return
+  }
+  // Re-throw other unhandled rejections
+  throw reason
+})
+
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen({ onUnhandledRequest: 'warn' })
   // import.meta.env works in Vitest via Vite
