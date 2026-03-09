@@ -1,5 +1,4 @@
 import React from 'react'
-import { formatDistanceToNow, intlFormat } from 'date-fns'
 import domPurify from 'dompurify'
 import {
   NoNotifications,
@@ -15,6 +14,7 @@ import {
 import { IconClose } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
+import { formatDateTimeIntl, formatDistanceNoQuarters } from '../../library/formatDateTime'
 import { useTranslation } from 'react-i18next'
 import { ButtonSecondary, CloseButton } from '../generic/buttons.js'
 
@@ -57,16 +57,9 @@ const BellNotificationDropDown = () => {
       </ButtonSecondary>
       {sortedNotifications.map((notification) => {
         const dateTime = new Date(notification.created_on)
-        const distanceToNow = formatDistanceToNow(dateTime, { addSuffix: true }) // e.g. "about 2 hours ago"
+        const distanceToNow = formatDistanceNoQuarters(new Date(), dateTime) // e.g. "2 hours ago"
 
-        const intlFormattedDateTime = intlFormat(dateTime, {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-        }) // e.g. "Wednesday, February 4, 2026 at 2:34 PM"
+        const intlFormattedDateTime = formatDateTimeIntl(dateTime) // e.g. "Wednesday, February 4, 2026 at 2:34 PM"
 
         const dirtyHTML = notification.description
 
