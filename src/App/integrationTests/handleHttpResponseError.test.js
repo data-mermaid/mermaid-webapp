@@ -3,6 +3,10 @@ import { toast, Slide } from 'react-toastify'
 import handleHttpResponseError from '../../library/handleHttpResponseError'
 import i18n from '../../../i18n'
 describe('handleHttpResponseError', () => {
+  beforeEach(() => {
+    // handleHttpResponseError always logs the error to console.error; suppress the expected noise.
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+  })
   afterEach(() => {
     vi.restoreAllMocks()
   })
