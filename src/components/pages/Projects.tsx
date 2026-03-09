@@ -29,7 +29,7 @@ import { useNavigate } from 'react-router-dom'
 
 interface DemoProjectCalloutProps {
   handleDemoClick: () => void
-  updateUserSettings: (setting: string, val: boolean) => void
+  updateUserSettings: (setting: string, val: boolean) => Promise<void>
   userHasProjects: boolean
   setIsDemoCalloutVisible: Dispatch<SetStateAction<boolean>>
 }
@@ -138,9 +138,9 @@ const Projects = () => {
     unavailableProjectsErrorText,
   ])
 
-  const updateUserSettings = (setting: string, val: boolean) => {
+  const updateUserSettings = (setting: string, val: boolean): Promise<void> => {
     const updatedProfileSettings = { [setting]: val }
-    saveUserProfile({
+    return saveUserProfile({
       ...currentUser,
       collect_state: { ...currentUser.collect_state, ...updatedProfileSettings },
     })
@@ -151,11 +151,12 @@ const Projects = () => {
     databaseSwitchboardInstance
       .addDemoProject()
       .then((response) => {
-        updateUserSettings('hasUserDismissedDemo', true)
-        refreshCurrentUser() // ensures correct user privileges
-        toast.success(...getToastArguments(t('projects.demo.created')))
-        setIsLoading(false)
-        navigate(`/projects/${response.id}/project-info/new-demo`)
+        return updateUserSettings('hasUserDismissedDemo', true).then(() => {
+          refreshCurrentUser() // ensures correct user privileges
+          toast.success(...getToastArguments(t('projects.demo.created')))
+          setIsLoading(false)
+          navigate(`/projects/${response.id}/project-info/new-demo`)
+        })
       })
       .catch((error) => {
         const isDuplicateError = error.response?.status === 400
