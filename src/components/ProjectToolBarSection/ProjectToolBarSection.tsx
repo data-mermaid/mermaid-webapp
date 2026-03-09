@@ -87,7 +87,7 @@ const BiggerIconGlobe = styled(IconGlobe)`
   height: ${theme.typography.mediumIconSize};
 `
 interface ProjectToolBarSectionProps {
-  updateUserSettings: (setting: string, val: boolean) => void
+  updateUserSettings: (setting: string, val: boolean) => Promise<void>
   setProjectFilter: (filter: string) => void
   projectSortKey: string
   setProjectSortKey: (sortKey: string) => void
