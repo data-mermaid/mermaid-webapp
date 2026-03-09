@@ -73,7 +73,7 @@ const TooltipWrapper = styled('div')`
   }
 `
 
-interface TooltipWithTextProps {
+interface TooltipWithTextProps extends React.HTMLAttributes<HTMLParagraphElement> {
   text: React.ReactNode
   tooltipText: string | React.ReactNode
   id: string

@@ -168,13 +168,13 @@ const Modal = ({
   isOpen,
   onDismiss,
   footerContent,
-  toolbarContent = null,
-  maxWidth = null,
+  toolbarContent = undefined,
+  maxWidth = undefined,
   testId = '',
-  padding = null,
+  padding = undefined,
   displayCloseIcon = true,
   allowCloseWithEscapeKey = true,
-  contentOverflowStyle = null,
+  contentOverflowStyle = undefined,
 }: ModalProps) => {
   const { t } = useTranslation()
   const _closeModalWithEscapeKey = useEffect(() => {

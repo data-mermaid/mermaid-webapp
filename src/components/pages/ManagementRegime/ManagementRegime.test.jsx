@@ -94,13 +94,9 @@ test('Management Regime component renders with the expected UI elements', async 
   await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
   // Wait for formik to initialize with fetched data
-  await waitFor(() =>
-    expect(
-      screen.getByText('Management Regimes B', {
-        selector: 'h2',
-      }),
-    ),
-  )
+  await waitFor(() => {
+    expect(screen.getByText('Management Regimes B', { selector: 'h2' })).toBeInTheDocument()
+  })
 
   expect(screen.getByTestId('name-input'))
   expect(screen.getByTestId('secondary-name-input'))
@@ -144,7 +140,11 @@ test('Management Regime component - form inputs are initialized with the correct
   expect(
     within(parties).getByTestId('parties-community-local-government-checkbox'),
   ).not.toBeChecked()
-  expect(await within(parties).findByTestId('parties-government-checkbox')).toBeChecked()
+  await waitFor(() =>
+    expect(
+      within(screen.getByTestId('parties')).getByTestId('parties-government-checkbox'),
+    ).toBeChecked(),
+  )
   expect(within(parties).getByTestId('parties-private-sector-checkbox')).not.toBeChecked()
   expect(within(screen.getByTestId('rules')).getByTestId('rules-open-access-radio')).toBeChecked()
   expect(within(screen.getByTestId('rules')).getByTestId('rules-no-take-radio')).not.toBeChecked()

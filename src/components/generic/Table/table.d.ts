@@ -36,10 +36,12 @@ export interface TdProps extends React.TdHTMLAttributes<HTMLTableDataCellElement
   $isAllowNewLines?: boolean
   $disabledHover?: boolean
   $sortedIndex?: number
+  $highlightedBackground?: string
 }
 
 export const Td: React.ComponentType<TdProps>
 export const Table: React.ComponentType<React.TableHTMLAttributes<HTMLTableElement>>
+export const TableNavigation: React.ComponentType<React.HTMLAttributes<HTMLDivElement>>
 export const TableOverflowWrapper: React.ComponentType<React.HTMLAttributes<HTMLDivElement>>
 export const TableRowTd: React.ComponentType<TdProps>
 export const TableRowTdKey: React.ComponentType<TdProps>
@@ -50,6 +52,3 @@ export const ObservationsSummaryStats: React.ComponentType<
   React.TableHTMLAttributes<HTMLTableElement>
 >
 export const thStyles: (props: ThProps) => ReturnType<typeof import('styled-components').css>
-export const ThClassName: string
-
-export default Table

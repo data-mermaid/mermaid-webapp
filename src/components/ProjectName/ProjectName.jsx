@@ -10,6 +10,8 @@ import { useTranslation } from 'react-i18next'
 import styles from '../../style/ProjectName.module.scss'
 import buttonStyles from '../../style/buttons.module.scss'
 import labelStyles from '../../style/labels.module.scss'
+import { startProjectTour } from '../../library/demoProjectTour'
+import 'driver.js/dist/driver.css'
 
 const ProjectName = () => {
   const isMounted = useIsMounted()
@@ -45,7 +47,9 @@ const ProjectName = () => {
     openExploreLinkWithBbox(queryParamObject)
   }
 
-  const handleStartTourClick = () => {}
+  const handleStartTourClick = () => {
+    startProjectTour()
+  }
 
   const tooltipText = isDemoProject
     ? 'projects.demo.explore_unavailable'
@@ -75,6 +79,7 @@ const ProjectName = () => {
           <button
             className={[buttonStyles['button--callout'], buttonStyles['button--small']].join(' ')}
             type="button"
+            id="gtm-demo-start-tour"
             aria-label={t('projects.demo.project_tour_start')}
             onClick={handleStartTourClick}
           >

@@ -95,7 +95,14 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
 
   return (
     <>
-      <ImageClassificationObservationTable images={images} setImages={setImages} {...props} />
+      <ImageClassificationObservationTable
+        images={images}
+        setImages={setImages}
+        collectRecord={props.collectRecord}
+        areValidationsShowing={props.areValidationsShowing}
+        ignoreObservationValidations={props.ignoreObservationValidations}
+        resetObservationValidations={props.resetObservationValidations}
+      />
       <ButtonContainer>
         {isImageClassificationEnabledForUser ? (
           <ButtonPrimary

@@ -1859,13 +1859,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-common-types@npm:^0.2.36":
-  version: 0.2.36
-  resolution: "@fortawesome/fontawesome-common-types@npm:0.2.36"
-  checksum: 10c0/4918ede75f22bf4623c645153d1385b16b58c638b8d500ba93d198382a1619742c77a3fd1348df8a6c157baf3486dc96710d6fe38e5eb006ea85ac39d294cb24
-  languageName: node
-  linkType: hard
-
 "@fortawesome/fontawesome-svg-core@npm:^7.2.0":
   version: 7.2.0
   resolution: "@fortawesome/fontawesome-svg-core@npm:7.2.0"
@@ -1875,21 +1868,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/free-regular-svg-icons@npm:^5.15.2":
-  version: 5.15.4
-  resolution: "@fortawesome/free-regular-svg-icons@npm:5.15.4"
+"@fortawesome/free-regular-svg-icons@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@fortawesome/free-regular-svg-icons@npm:7.2.0"
   dependencies:
-    "@fortawesome/fontawesome-common-types": "npm:^0.2.36"
-  checksum: 10c0/2b13b95666c4cff0f654ce3db3afa4cd0a7067238833cda7dbe756b2a2172a3573ee4418b71c9f46d783a767f5865ee47fd9b94779cd72684987bed7a30e66b7
+    "@fortawesome/fontawesome-common-types": "npm:7.2.0"
+  checksum: 10c0/57b0fdecb2d820b5732559ef3893c905ccfe59cc267ee8b631f2826a3703acba54e73a37b5783436a2cf54c3561213068877b2455c5b1b23377ad7aacf27c019
   languageName: node
   linkType: hard
 
-"@fortawesome/free-solid-svg-icons@npm:^5.15.2":
-  version: 5.15.4
-  resolution: "@fortawesome/free-solid-svg-icons@npm:5.15.4"
+"@fortawesome/free-solid-svg-icons@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@fortawesome/free-solid-svg-icons@npm:7.2.0"
   dependencies:
-    "@fortawesome/fontawesome-common-types": "npm:^0.2.36"
-  checksum: 10c0/746acdf9a443d149084a0a0fea684bc37cddf602a2fe04dda8911263e7e13d0105522337cc53a66e835e241d7d27a799e5a675ff16902a415520e14c7a5a1ca6
+    "@fortawesome/fontawesome-common-types": "npm:7.2.0"
+  checksum: 10c0/922ffe0f53b3cebcf36a4a6872958e7d6a0fbaa5c5c73cddbdea9301181fe8625331a0bf8aa09ca54c4d284805473e38d0eb9f06da05546f1914cec2c062343f
   languageName: node
   linkType: hard
 
@@ -5830,6 +5823,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"driver.js@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "driver.js@npm:1.4.0"
+  checksum: 10c0/f868e85037d4180d55a883ec5bdad7a59e3b16e84438af4285ad605cab651b21fe565839a1607992362b0c028309d4ae6d052926d1c4ab67b2c62142a579b529
+  languageName: node
+  linkType: hard
+
 "dunder-proto@npm:^1.0.0, dunder-proto@npm:^1.0.1":
   version: 1.0.1
   resolution: "dunder-proto@npm:1.0.1"
@@ -8916,8 +8916,8 @@ __metadata:
     "@eslint/js": "npm:^9.38.0"
     "@fontsource/open-sans": "npm:^4.4.5"
     "@fortawesome/fontawesome-svg-core": "npm:^7.2.0"
-    "@fortawesome/free-regular-svg-icons": "npm:^5.15.2"
-    "@fortawesome/free-solid-svg-icons": "npm:^5.15.2"
+    "@fortawesome/free-regular-svg-icons": "npm:^7.2.0"
+    "@fortawesome/free-solid-svg-icons": "npm:^7.2.0"
     "@fortawesome/react-fontawesome": "npm:^3.2.0"
     "@iconify-icons/mdi": "npm:^1.1.12"
     "@iconify-icons/ri": "npm:^1.1.0"
@@ -8952,6 +8952,7 @@ __metadata:
     dompurify: "npm:^3.0.1"
     dotenv: "npm:^16.4.7"
     downshift: "npm:^9.0.10"
+    driver.js: "npm:^1.4.0"
     eslint: "npm:^9.22.0"
     eslint-plugin-import: "npm:^2.32.0"
     eslint-plugin-jest-dom: "npm:^5.5.0"
@@ -8982,7 +8983,7 @@ __metadata:
     react-dom: "npm:^19.0.0"
     react-error-overlay: "npm:^6.0.9"
     react-i18next: "npm:^15.5.2"
-    react-is: "npm:^18.2.0"
+    react-is: "npm:^19.0.0"
     react-router-dom: "npm:6.19.0"
     react-table: "npm:^7.6.3"
     react-toastify: "npm:^11.0.0"
