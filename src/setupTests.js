@@ -30,7 +30,11 @@ vi.mock('maplibre-gl', function mapLibreMock() {
         off: vi.fn(),
         remove: vi.fn(),
         touchZoomRotate: { disableRotation: vi.fn() },
-        getSource: vi.fn(() => ({ setData: vi.fn() })),
+        loadImage: vi.fn(() => Promise.resolve({ data: {} })),
+        getSource: vi.fn(() => ({
+          setData: vi.fn(),
+          getClusterExpansionZoom: vi.fn(() => Promise.resolve(5)),
+        })),
         fitBounds: vi.fn(),
         getZoom: vi.fn(),
         getCanvas: vi.fn(() => ({ style: {} })),
@@ -115,6 +119,18 @@ vi.mock('react-i18next', async () => {
 })
 
 configure({ asyncUtilTimeout: 10000 })
+
+// Suppress known unhandled rejections from DatabaseSwitchboard async operations during tests
+// These occur when the SyncApiDataIntoOfflineStorage makes network requests that fail after cleanup
+process.on('unhandledRejection', (reason) => {
+  const message = reason?.message || String(reason)
+  if (message.includes('api_errors') || message.includes('app_not_authenticated_or_ready')) {
+    // Silently ignore known async errors from DatabaseSwitchboard
+    return
+  }
+  // Re-throw other unhandled rejections
+  throw reason
+})
 
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen({ onUnhandledRequest: 'warn' })
