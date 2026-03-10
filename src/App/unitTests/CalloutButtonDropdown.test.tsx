@@ -1,4 +1,4 @@
-import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -12,14 +12,9 @@ import {
 } from '../../testUtilities/testingLibraryWithHelpers'
 import CalloutButtonDropdown from '../../components/generic/CalloutButton/CalloutButtonDropdown'
 
-// Mock the demoProjectTour module
 vi.mock('../../library/demoProjectTour', () => ({
   startProjectTour: vi.fn(),
 }))
-// Import the mocked function for assertions
-import { startProjectTour } from '../../library/demoProjectTour'
-
-const expectStartProjectTourCalled = () => expect(startProjectTour).toHaveBeenCalledTimes(1)
 
 describe('CalloutButtonDropdown', () => {
   beforeEach(() => {
