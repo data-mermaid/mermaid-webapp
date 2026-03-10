@@ -36,6 +36,7 @@ vi.mock('maplibre-gl', function mapLibreMock() {
         flyTo: vi.fn(),
         setCenter: vi.fn(),
         getZoom: vi.fn(),
+        setZoom: vi.fn(),
         getCanvas: vi.fn(() => ({ style: {} })),
       }
     },
