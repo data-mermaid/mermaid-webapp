@@ -111,6 +111,8 @@ const MiniMap = ({ mainMap }) => {
         center: getMainMapCenter(),
         zoom: DEFAULT_ZOOM,
         interactive: false,
+        attributionControl: false,
+        maplibreLogo: false,
       })
 
       miniMap.current.on('load', onMapLoad)
