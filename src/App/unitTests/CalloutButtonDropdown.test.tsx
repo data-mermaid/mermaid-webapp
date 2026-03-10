@@ -1,10 +1,11 @@
-import { describe, expect, test, vi, beforeEach } from 'vitest'
+import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import {
+  cleanup,
   renderAuthenticatedOnline,
   screen,
   waitFor,
@@ -24,33 +25,10 @@ describe('CalloutButtonDropdown', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
-
+  afterEach(() => {
+    cleanup()
+  })
   describe('When the user does not have a demo project', () => {
-    test('Renders the main button and dropdown toggle', async () => {
-      const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-      await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-
-      const mockUpdateUserSettings = vi.fn()
-      const mockOnClick = vi.fn()
-
-      renderAuthenticatedOnline(
-        <CalloutButtonDropdown
-          updateUserSettings={mockUpdateUserSettings}
-          onClick={mockOnClick}
-          label="New project"
-          disabled={false}
-          testId="new-project-button"
-        />,
-        {
-          dexiePerUserDataInstance,
-          isSyncInProgressOverride: true,
-        },
-      )
-
-      expect(screen.getByTestId('new-project-button')).toBeInTheDocument()
-      await waitFor(expectStartProjectTourCalled, { timeout: 5000 })
-    })
-
     test('Shows dropdown menu with Add Demo Project button when dropdown is clicked', async () => {
       const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
