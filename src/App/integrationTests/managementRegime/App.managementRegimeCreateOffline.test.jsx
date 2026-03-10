@@ -148,7 +148,7 @@ describe('Offline', () => {
   })
 
   test('New MR save failure shows toast message with edits persisting', async () => {
-    const consoleSpy = vi.spyOn(console, 'error')
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

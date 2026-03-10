@@ -104,6 +104,13 @@ and project profiles to ensure the user can pull fresh data if they are given pe
   // then we navigate the user to trigger a sync
 
   const _mockApiWithFakeServerGeneratedLastRevisionNumbers = mockMermaidApiAllSuccessful.use(
+    // The base mock only covers /projects/5/summary/. Clicking the first project
+    // card navigates to project 2, which triggers a summary fetch. Without this
+    // handler MSW would warn about an unhandled request and axios would throw a
+    // Network Error as the request would fall through to jsdom's non-existent network.
+    http.get(`${apiBaseUrl}/projects/2/summary/`, () => {
+      return new HttpResponse(null, { status: 200 })
+    }),
     http.post(`${apiBaseUrl}/pull/`, () => {
       const responseWithSyncErrors = {
         choices: {

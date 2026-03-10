@@ -32,6 +32,9 @@ vi.mock('maplibre-gl', function mapLibreMock() {
         touchZoomRotate: { disableRotation: vi.fn() },
         getSource: vi.fn(() => ({ setData: vi.fn() })),
         fitBounds: vi.fn(),
+        getCenter: vi.fn(() => ({ lng: 0, lat: 0 })),
+        flyTo: vi.fn(),
+        setCenter: vi.fn(),
         getZoom: vi.fn(),
         getCanvas: vi.fn(() => ({ style: {} })),
       }
