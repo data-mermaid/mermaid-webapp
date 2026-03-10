@@ -119,6 +119,10 @@ vi.mock('react-i18next', async () => {
 
 configure({ asyncUtilTimeout: 10000 })
 
+// jsdom doesn't implement window.scrollTo; mock it to silence "Not implemented" errors
+// triggered by Downshift's InputAutocomplete when the input value changes.
+window.scrollTo = vi.fn()
+
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen({ onUnhandledRequest: 'warn' })
   // import.meta.env works in Vitest via Vite
