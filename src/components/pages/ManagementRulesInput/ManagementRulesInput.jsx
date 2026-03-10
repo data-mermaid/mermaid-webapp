@@ -124,7 +124,8 @@ const ManagementRulesInput = ({
 
   const initialRadioValues = getManagementRulesRadioInputValue(managementFormValues)
 
-  const [managementRulesRadioInputValue, setManagementRulesRadioInputValue] = useState(initialRadioValues)
+  const [managementRulesRadioInputValue, setManagementRulesRadioInputValue] =
+    useState(initialRadioValues)
 
   const [partialRestrictionCheckboxValues, setPartialRestrictionCheckboxValues] = useState(
     getPartialRestrictionCheckboxValues(managementFormValues),

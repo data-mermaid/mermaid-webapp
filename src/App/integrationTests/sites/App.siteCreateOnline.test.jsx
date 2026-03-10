@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { http, HttpResponse } from 'msw'
 import React from 'react'
 
@@ -151,6 +151,8 @@ describe('Online', () => {
 
   test('new site save will handle 400 push status codes by passing on reasoning to the user. Edits persist.', async () => {
     // it is possible that other 40X status codes will be received, but this test can represent the whole lot as a time management tradeoff
+    // The 400 response is intentional; suppress the expected nested sync error console.error noise.
+    vi.spyOn(console, 'error').mockImplementation(() => {})
 
     mockMermaidApiAllSuccessful.use(
       // append the validated data on the pull response, because that is what the UI uses to update itself
@@ -189,6 +191,9 @@ describe('Online', () => {
 })
 
 test('New site save will handle 500 push status codes with a generic message and spare the user any api generated error details. Edits will perisit', async () => {
+  // The 500 response is intentional; suppress the expected nested sync error console.error noise.
+  vi.spyOn(console, 'error').mockImplementation(() => {})
+
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
     http.post(`${apiBaseUrl}/push/`, () => {
