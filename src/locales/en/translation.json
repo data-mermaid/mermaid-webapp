@@ -861,7 +861,7 @@
   "remove_sort": "Remove sort",
   "remove_user": "Remove user",
   "remove_user_confirmation": "Are you sure you want to remove <strong>{{userName}}</strong> as an observer?",
-  "removed_from_project_message": "<strong>{{userName}}</strong> is an observer on this sample unit but is no longer a part of this project.",
+  "removed_from_project_message": "<strong>{{userName}}</strong> is an observer on this sample unit but is no longer a part of this project.<br />",
   "sample_units": {
     "add": "Add sample unit",
     "collect": "Collect",
