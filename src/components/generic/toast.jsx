@@ -40,6 +40,7 @@ export const CustomToastContainer = (props) => (
       pauseOnFocusLoss
       draggable={false}
       pauseOnHover
+      icon={false}
       {...props}
     />
   </ToastWrapper>
