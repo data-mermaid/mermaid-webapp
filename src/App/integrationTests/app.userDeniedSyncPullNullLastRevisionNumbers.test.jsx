@@ -109,7 +109,11 @@ and project profiles to ensure the user can pull fresh data if they are given pe
     // handler MSW would warn about an unhandled request and axios would throw a
     // Network Error as the request would fall through to jsdom's non-existent network.
     http.get(`${apiBaseUrl}/projects/2/summary/`, () => {
-      return new HttpResponse(null, { status: 200 })
+      return HttpResponse.json({
+        site_submitted_summary: {},
+        site_collecting_summary: {},
+        protocols: [],
+      })
     }),
     http.post(`${apiBaseUrl}/pull/`, () => {
       const responseWithSyncErrors = {
