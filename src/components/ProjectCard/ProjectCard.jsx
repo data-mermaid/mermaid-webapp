@@ -15,7 +15,7 @@ import stopEventPropagation from '../../library/stopEventPropagation'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { IconCopy } from '../icons'
 import { ButtonSecondary } from '../generic/buttons'
-import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
+import { formatDateTimeIntl } from '../../library/formatDateTime'
 import ProjectCardSummary from './ProjectCardSummary'
 import ProjectModal from './ProjectModal'
 import {
@@ -204,7 +204,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             </CheckBoxLabel>
           </div>
           <span className={styles['date-country-label']} style={{ marginTop: '1rem' }}>
-            {removeTimeZoneFromDate(updated_on)}
+            {formatDateTimeIntl(updated_on)}
           </span>
         </ProjectCardHeaderButtonsAndDate>
       </ProjectCardHeader>
