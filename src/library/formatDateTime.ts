@@ -21,7 +21,7 @@ export const formatDistanceNoQuarters = (laterDate: Date, earlierDate: Date): st
   return intlFormatDistance(laterDate, earlierDate)
 }
 
-// e.g. "Wednesday, February 4, 2026 at 2:34 PM"
+// e.g. "Wednesday, February 4, 2026 at 14:34 PM"
 export const formatDateTimeIntl = (date: Date | string | number): string =>
   intlFormat(date instanceof Date ? date : new Date(date), {
     weekday: 'long',
