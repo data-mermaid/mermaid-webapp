@@ -29,7 +29,7 @@ import { useNavigate } from 'react-router-dom'
 
 interface DemoProjectCalloutProps {
   handleDemoClick: () => void
-  updateUserSettings: (setting: string, val: boolean) => void
+  updateUserSettings: (setting: string, val: boolean) => Promise<void>
   userHasProjects: boolean
   setIsDemoCalloutVisible: Dispatch<SetStateAction<boolean>>
 }
@@ -94,7 +94,7 @@ const Projects = () => {
   const { isSyncInProgress } = useSyncStatus()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
-  const { currentUser, saveUserProfile } = useCurrentUser()
+  const { currentUser, refreshCurrentUser, saveUserProfile } = useCurrentUser()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const unavailableProjectsErrorText = t('projects.errors.data_unavailable')
@@ -107,6 +107,13 @@ const Projects = () => {
   const [isDemoCalloutVisible, setIsDemoCalloutVisible] = useState(
     !userHasDemoProject && !hasUserDismissedDemo && isAppOnline,
   )
+
+  // Hide demo callout when projects load and contain a demo project
+  useEffect(() => {
+    if (userHasDemoProject) {
+      setIsDemoCalloutVisible(false)
+    }
+  }, [userHasDemoProject])
 
   useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -138,9 +145,9 @@ const Projects = () => {
     unavailableProjectsErrorText,
   ])
 
-  const updateUserSettings = (setting: string, val: boolean) => {
+  const updateUserSettings = (setting: string, val: boolean): Promise<void> => {
     const updatedProfileSettings = { [setting]: val }
-    saveUserProfile({
+    return saveUserProfile({
       ...currentUser,
       collect_state: { ...currentUser.collect_state, ...updatedProfileSettings },
     })
@@ -151,11 +158,12 @@ const Projects = () => {
     databaseSwitchboardInstance
       .addDemoProject()
       .then((response) => {
-        // refreshCurrentUser() // ensures correct user privileges
-        updateUserSettings('hasUserDismissedDemo', true)
-        toast.success(...getToastArguments(t('projects.demo.created')))
-        setIsLoading(false)
-        navigate(`/projects/${response.id}/project-info/new-demo`)
+        return updateUserSettings('hasUserDismissedDemo', true).then(() => {
+          refreshCurrentUser() // ensures correct user privileges
+          toast.success(...getToastArguments(t('projects.demo.created')))
+          setIsLoading(false)
+          navigate(`/projects/${response.id}/project-info/new-demo`)
+        })
       })
       .catch((error) => {
         const isDuplicateError = error.response?.status === 400
@@ -263,6 +271,7 @@ const Projects = () => {
     <HomePageLayout
       topRow={
         <ProjectToolBarSection
+          updateUserSettings={updateUserSettings}
           setProjectFilter={setProjectFilter}
           projectSortKey={projectSortKey}
           setProjectSortKey={setProjectSortKey}

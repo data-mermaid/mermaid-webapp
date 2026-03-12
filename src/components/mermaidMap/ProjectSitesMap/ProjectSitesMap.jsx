@@ -40,8 +40,8 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       center: defaultCenter,
       zoom: defaultZoom,
       maxZoom: 17,
-      attributionControl: true,
-      customAttribution: mapAttribution,
+      attributionControl: { customAttribution: mapAttribution },
+      maplibreLogo: false,
     })
 
     addZoomController(map.current)

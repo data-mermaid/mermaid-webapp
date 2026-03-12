@@ -87,6 +87,7 @@ const BiggerIconGlobe = styled(IconGlobe)`
   height: ${theme.typography.mediumIconSize};
 `
 interface ProjectToolBarSectionProps {
+  updateUserSettings: (setting: string, val: boolean) => Promise<void>
   setProjectFilter: (filter: string) => void
   projectSortKey: string
   setProjectSortKey: (sortKey: string) => void
@@ -97,6 +98,7 @@ interface ProjectToolBarSectionProps {
 }
 
 const ProjectToolBarSection = ({
+  updateUserSettings,
   setProjectFilter,
   projectSortKey,
   setProjectSortKey,
@@ -156,6 +158,7 @@ const ProjectToolBarSection = ({
               disabled={!isAppOnline}
               testId="new-project-button-dropdown"
               label={t('projects.new_project')}
+              updateUserSettings={updateUserSettings}
             />
           ) : (
             <CalloutButton

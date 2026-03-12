@@ -92,8 +92,8 @@ const SingleSiteMap = ({
       center: defaultCenter,
       zoom: defaultZoom,
       maxZoom: 16,
-      attributionControl: true,
-      customAttribution: mapAttribution,
+      attributionControl: { customAttribution: mapAttribution },
+      maplibreLogo: false,
     })
 
     if (formLatitudeValue && formLongitudeValue) {

@@ -52,3 +52,6 @@ jsconfig.json
 **.envrc
 
 
+
+*storybook.log
+storybook-static
