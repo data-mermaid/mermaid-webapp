@@ -9,7 +9,7 @@ on:
         type: string
 
 jobs:
-  test:
+  test-app:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     env:
@@ -35,5 +35,52 @@ jobs:
       - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
         name: Install dependencies
         run: yarn install
-      - name: Run Tests
-        run: yarn run test
+
+      - name: Run app tests
+        run: TZ=UTC yarn vitest run --project app
+
+  test-storybook:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    env:
+      VITE_AUTH0_AUDIENCE: ${{ vars.VITE_AUTH0_AUDIENCE }}
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+      VITE_AUTH0_DOMAIN: ${{ vars.VITE_AUTH0_DOMAIN }}
+      VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
+      VITE_MERMAID_API: ${{ vars.VITE_MERMAID_API }}
+      VITE_MERMAID_REFERENCE_LINK: ${{ vars.VITE_MERMAID_REFERENCE_LINK }}
+      VITE_MERMAID_EXPLORE_LINK: ${{ vars.VITE_MERMAID_EXPLORE_LINK }}
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-node@v6.2.0
+        with:
+          node-version-file: '.nvmrc'
+
+      - uses: actions/cache@v5.0.3
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+
+      - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        name: Install dependencies
+        run: yarn install
+
+      - uses: actions/cache@v5.0.3
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright browsers
+        if: ${{ steps.playwright-cache.outputs.cache-hit != 'true' }}
+        run: yarn playwright install chromium --with-deps
+
+      - name: Install Playwright OS dependencies
+        if: ${{ steps.playwright-cache.outputs.cache-hit == 'true' }}
+        run: yarn playwright install-deps chromium
+
+      - name: Run storybook tests
+        run: TZ=UTC yarn vitest run --project storybook
