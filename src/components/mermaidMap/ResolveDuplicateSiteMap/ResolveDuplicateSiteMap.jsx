@@ -27,13 +27,13 @@ const ResolveDuplicateSiteMap = ({ formLatitudeValue = 0, formLongitudeValue = 0
       center: defaultCenter,
       zoom: defaultZoom,
       maxZoom: 16,
-      attributionControl: true,
-      customAttribution: mapAttribution,
+      attributionControl: { customAttribution: mapAttribution },
+      maplibreLogo: false,
     })
 
     addZoomController(map.current)
 
-    recordMarker.current = new maplibregl.Marker(markerElement, { draggable: false })
+    recordMarker.current = new maplibregl.Marker({ element: markerElement, draggable: false })
 
     // clean up on unmount
     return () => {

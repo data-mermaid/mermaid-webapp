@@ -9,10 +9,17 @@ import type { Plugin } from 'vitest/config'
  * only matches literal strings/prefixes. This plugin intercepts imports at the
  * resolve step so Vite never tries to find the actual files.
  */
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
+import { playwright } from '@vitest/browser-playwright'
+const dirname =
+  typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url))
+
+// More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 function stubAssetImports(): Plugin {
   const styleRE = /\.(css|less|scss|sass|styl|stylus|pcss|postcss)($|\?)/
   const assetRE = /\.(png|jpe?g|gif|webp|bmp|svg|ico|woff2?|eot|ttf|otf)($|\?)/
-
   return {
     name: 'vitest-stub-assets',
     enforce: 'pre',
@@ -37,14 +44,14 @@ function stubAssetImports(): Plugin {
     },
   }
 }
-
 export default defineConfig({
   plugins: [react(), stubAssetImports()],
   test: {
     environment: 'jsdom',
     globals: true,
     restoreMocks: true,
-    clearMocks: true, // reset call history on standalone vi.fn() mocks (restoreMocks only covers vi.spyOn)
+    clearMocks: true,
+    // reset call history on standalone vi.fn() mocks (restoreMocks only covers vi.spyOn)
     retry: 2,
     setupFiles: [
       // dotenv/config in Jest
@@ -53,7 +60,8 @@ export default defineConfig({
       'src/setupTests.js',
     ],
     // Per-project default. Replaces jest.setTimeout
-    testTimeout: 300000, // 5 minutes
+    testTimeout: 300000,
+    // 5 minutes
 
     // Coverage example (Vitest v4 changed defaults)
     coverage: {
@@ -75,6 +83,37 @@ export default defineConfig({
       '**/.{idea,git,cache,output,temp}/**',
       '**/{rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build,eslint,prettier}.config.*',
       '**/cypress/**',
+    ],
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'app',
+        },
+      },
+      {
+        plugins: [
+          // The plugin will run tests for the stories defined in your Storybook config
+          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
+          storybookTest({
+            configDir: path.join(dirname, '.storybook'),
+          }),
+        ],
+        test: {
+          name: 'storybook',
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [
+              {
+                browser: 'chromium',
+              },
+            ],
+          },
+          setupFiles: ['.storybook/vitest.setup.ts'],
+        },
+      },
     ],
   },
 })
