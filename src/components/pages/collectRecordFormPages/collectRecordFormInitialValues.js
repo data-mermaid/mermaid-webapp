@@ -55,13 +55,13 @@ const getBenthicPitAdditionalValues = (collectRecord) => {
   return {
     interval_start: collectRecord?.data?.interval_start ?? '',
     interval_size: collectRecord?.data?.interval_size ?? '',
-    is_interval_size_as_start: collectRecord?.data?.is_interval_size_as_start ?? false,
+    is_interval_size_as_start: collectRecord?.data?.is_interval_size_as_start ?? true,
   }
 }
 
 const getHabitatComplexityAdditionalValues = (collectRecord) => {
   return {
-    is_interval_size_as_start: collectRecord?.data?.is_interval_size_as_start ?? false,
+    is_interval_size_as_start: collectRecord?.data?.is_interval_size_as_start ?? true,
     interval_size: collectRecord?.data?.interval_size ?? '',
     interval_start: collectRecord?.data?.interval_start ?? '',
   }
