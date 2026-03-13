@@ -7,21 +7,21 @@ import {
 import { secondsInQuarter, secondsInYear } from 'date-fns/constants'
 
 // intlFormatDistance uses quarters for distances of 3–9 months - force months instead
-export const formatDistanceNoQuarters = (laterDate: Date, earlierDate: Date): string => {
-  const absSeconds = Math.abs(differenceInSeconds(laterDate, earlierDate))
+export const formatDistanceNoQuarters = (date: Date, baseDate: Date): string => {
+  const absSeconds = Math.abs(differenceInSeconds(date, baseDate))
 
   if (
     absSeconds >= secondsInQuarter &&
     absSeconds < secondsInYear &&
-    Math.abs(differenceInCalendarQuarters(laterDate, earlierDate)) < 4 // intlFormatDistance source logic
+    Math.abs(differenceInCalendarQuarters(date, baseDate)) < 4 // intlFormatDistance source logic
   ) {
-    return intlFormatDistance(laterDate, earlierDate, { unit: 'month' })
+    return intlFormatDistance(date, baseDate, { unit: 'month' })
   }
 
-  return intlFormatDistance(laterDate, earlierDate)
+  return intlFormatDistance(date, baseDate)
 }
 
-// e.g. "Wednesday, February 4, 2026 at 14:34 PM"
+// e.g. "Wednesday, February 4, 2026 at 14:34"
 export const formatDateTimeIntl = (date: Date | string | number): string =>
   intlFormat(date instanceof Date ? date : new Date(date), {
     weekday: 'long',

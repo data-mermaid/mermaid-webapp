@@ -57,7 +57,7 @@ const BellNotificationDropDown = () => {
       </ButtonSecondary>
       {sortedNotifications.map((notification) => {
         const dateTime = new Date(notification.created_on)
-        const distanceToNow = formatDistanceNoQuarters(new Date(), dateTime) // e.g. "2 hours ago"
+        const distanceToNow = formatDistanceNoQuarters(dateTime, new Date()) // e.g. "2 hours ago"
 
         const intlFormattedDateTime = formatDateTimeIntl(dateTime) // e.g. "Wednesday, February 4, 2026 at 14:34"
 
