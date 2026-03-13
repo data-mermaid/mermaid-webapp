@@ -99,9 +99,9 @@ const DataSharing = () => {
   const location = useLocation()
   const { currentProject } = useCurrentProject()
   const isDemoProject = currentProject?.is_demo
-  const { enabled: isTestProjectCheckboxEnabled = false } = getCurrentUserOptionalFeature(
+  const { enabled: isDemoProjectFeatureEnabled = false } = getCurrentUserOptionalFeature(
     currentUser,
-    'test_project',
+    'demo_project',
   )
 
   useDocumentTitle(`${t('data_sharing.data_sharing')} - ${t('mermaid')}`)
@@ -350,7 +350,7 @@ const DataSharing = () => {
       ) : (
         <ReadOnlyDataSharingContent project={projectBeingEdited} />
       )}
-      {isTestProjectCheckboxEnabled && isAdminUser && !isDemoProject && (
+      {isDemoProjectFeatureEnabled && isAdminUser && !isDemoProject && (
         <>
           <CheckBoxLabel cursor={isDataUpdating ? 'wait' : 'auto'}>
             <Input
@@ -366,7 +366,7 @@ const DataSharing = () => {
           <P>{t('data_sharing.test_project_data')}</P>
         </>
       )}
-      {isTestProjectCheckboxEnabled && !isAdminUser && isTestProject && !isDemoProject && (
+      {isDemoProjectFeatureEnabled && !isAdminUser && isTestProject && !isDemoProject && (
         <p>{t('data_sharing.is_test_project')}</p>
       )}
       {isDemoProject && (
