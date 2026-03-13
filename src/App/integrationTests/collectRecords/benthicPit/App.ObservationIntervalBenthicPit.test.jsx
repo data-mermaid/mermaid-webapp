@@ -25,7 +25,9 @@ test('Benthic Pit observations: intervals are derived from interval start and in
   )
 
   const intervalSize = await screen.findByTestId('interval-size-input')
+  const intervalStartCheckbox = await screen.findByTestId('interval-start-sync-checkbox')
 
+  await user.click(intervalStartCheckbox) // uncheck to enable manual interval start entry
   await user.type(intervalSize, '5')
   const intervalStart = await screen.findByTestId('interval-start-input')
 
@@ -98,7 +100,9 @@ test('Benthic PIT observations: intervals recalculate when user deletes an obser
   )
 
   const intervalSize = await screen.findByTestId('interval-size-input')
+  const intervalStartCheckbox = await screen.findByTestId('interval-start-sync-checkbox')
 
+  await user.click(intervalStartCheckbox) // uncheck to enable manual interval start entry
   await user.type(intervalSize, '5')
   const intervalStart = await screen.findByTestId('interval-start-input')
 
@@ -154,7 +158,9 @@ test('Benthic Pit observations: intervals reclaculate when a user inserts a row 
   )
 
   const intervalSize = await screen.findByTestId('interval-size-input')
+  const intervalStartCheckbox = await screen.findByTestId('interval-start-sync-checkbox')
 
+  await user.click(intervalStartCheckbox) // uncheck to enable manual interval start entry
   await user.type(intervalSize, '5')
   const intervalStart = await screen.findByTestId('interval-start-input')
 

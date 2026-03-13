@@ -48,7 +48,8 @@ export const usePointsGeoJson = ({ dataToReview, map, imageScale }) => {
             isConfirmed: !!point.annotations[0]?.is_confirmed,
             isPointInLeftHalfOfImage,
             isPointInTopHalfOfImage,
-            labelAnchor: topCenter,
+            // Stringify to plain object — MapLibre v5's worker serializer rejects LngLat class instances
+            labelAnchor: JSON.stringify({ lng: topCenter.lng, lat: topCenter.lat }),
           },
           geometry: {
             type: 'Polygon',

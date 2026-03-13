@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { styled, css } from 'styled-components'
@@ -49,20 +49,12 @@ const DataSharingTable = styled(Table)`
     }
   }
 `
-const CheckBoxLabel = styled.label`
-  display: inline-block;
-  cursor: ${(props) => props.cursor};
-  input {
-    margin: 0 ${theme.spacing.xsmall} 0 0;
-  }
-`
-
 const Input = styled.input`
-  cursor: ${(props) => props.cursor};
+  cursor: ${(props) => props.$cursor};
 `
 
 const Label = styled.label`
-  cursor: ${(props) => props.cursor};
+  cursor: ${(props) => props.$cursor};
 `
 
 const ReadOnlyDataSharingContent = ({ project = {} }) => {
@@ -94,8 +86,6 @@ const DataSharing = () => {
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const [isDataUpdating, setIsDataUpdating] = useState(false)
   const handleHttpResponseError = useHttpResponseErrorHandler()
-  const navigate = useNavigate()
-  const location = useLocation()
   const { currentProject } = useCurrentProject()
   const isDemoProject = currentProject?.is_demo
 
@@ -183,9 +173,6 @@ const DataSharing = () => {
           setIsDataUpdating(false)
           setProjectBeingEdited(updatedProject)
           toast.success(...getToastArguments(toastMessage))
-
-          // hack to refresh page and show or hide the dashboard link depending on potentially changed test project status
-          navigate(location.pathname)
         })
         .catch((error) => {
           handleHttpResponseError({
@@ -194,14 +181,7 @@ const DataSharing = () => {
           })
         })
     },
-    [
-      databaseSwitchboardInstance,
-      projectId,
-      navigate,
-      location.pathname,
-      handleHttpResponseError,
-      projectNotSavedText,
-    ],
+    [databaseSwitchboardInstance, projectId, handleHttpResponseError, projectNotSavedText],
   )
 
   const handleDataPolicyChange = (event, propertyToUpdate) => {
@@ -223,21 +203,11 @@ const DataSharing = () => {
     handleSaveProject(editedValues, toastMessage)
   }
 
-  const handleTestProjectChange = (event) => {
-    setIsDataUpdating(true)
-    const isChecked = event.target.checked
-    const status = isChecked ? PROJECT_CODES.status.test : PROJECT_CODES.status.open
-    const editedValues = { ...projectBeingEdited, status }
-
-    handleSaveProject(editedValues, t('projects.success.test_project_status_saved'))
-  }
-
   const findToolTipDescription = (policy) =>
     dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
-  const isTestProject = projectBeingEdited?.status === PROJECT_CODES.status.test
   const contentViewByRole = (
-    <MaxWidthInputWrapper cursor={isDataUpdating ? 'wait' : 'auto'}>
+    <MaxWidthInputWrapper $cursor={isDataUpdating ? 'wait' : 'auto'}>
       <h3>{t('data_sharing.more_powerful')}</h3>
       <P>{t('data_sharing.information')}</P>
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
@@ -249,21 +219,21 @@ const DataSharing = () => {
             <thead>
               <Tr>
                 <Th>&nbsp;</Th>
-                <Th align="center">
+                <Th $align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Private')}
                     text={<>{t('data_sharing.private')}</>}
                     id="private-tooltip"
                   />
                 </Th>
-                <Th align="center">
+                <Th $align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Public Summary')}
                     text={<>{t('data_sharing.public_summary')}</>}
                     id="public-summary-tooltip"
                   />
                 </Th>
-                <Th align="center">
+                <Th $align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Public')}
                     text={<>{t('data_sharing.public')}</>}
@@ -279,7 +249,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`fish-belt${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'pointer'}
+                      $cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -289,7 +259,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_beltfish === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_beltfish')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'pointer'}
+                        $cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>
@@ -301,7 +271,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`benthic${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'pointer'}
+                      $cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -311,7 +281,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_benthiclit === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'pointer'}
+                        $cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>
@@ -323,7 +293,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`bleaching${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'pointer'}
+                      $cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -333,7 +303,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_bleachingqc === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_bleachingqc')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'pointer'}
+                        $cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>
@@ -344,25 +314,6 @@ const DataSharing = () => {
         </TableOverflowWrapper>
       ) : (
         <ReadOnlyDataSharingContent project={projectBeingEdited} />
-      )}
-      {isAdminUser && !isDemoProject && (
-        <>
-          <CheckBoxLabel cursor={isDataUpdating ? 'wait' : 'auto'}>
-            <Input
-              id="test-project-toggle"
-              type="checkbox"
-              checked={isTestProject}
-              onChange={handleTestProjectChange}
-              disabled={isDataUpdating}
-              cursor={isDataUpdating ? 'wait' : 'pointer'}
-            />{' '}
-            {t('data_sharing.is_test_project')}
-          </CheckBoxLabel>
-          <P>{t('data_sharing.test_project_data')}</P>
-        </>
-      )}
-      {!isAdminUser && isTestProject && !isDemoProject && (
-        <p>{t('data_sharing.is_test_project')}</p>
       )}
       {isDemoProject && (
         <Trans

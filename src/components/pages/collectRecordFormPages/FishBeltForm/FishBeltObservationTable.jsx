@@ -356,9 +356,9 @@ const FishBeltObservationTable = ({
       })
 
       return (
-        <ObservationTr key={observationId} messageType={validationType}>
-          <Td align="center">{rowNumber}</Td>
-          <Td align="left">
+        <ObservationTr key={observationId} $messageType={validationType}>
+          <Td $align="center">{rowNumber}</Td>
+          <Td $align="left">
             {fishNameOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
@@ -409,8 +409,8 @@ const FishBeltObservationTable = ({
               </InputAutocompleteContainer>
             )}
           </Td>
-          <Td align="right">{sizeInput}</Td>
-          <Td align="right">
+          <Td $align="right">{sizeInput}</Td>
+          <Td $align="right">
             <InputNumberNumericCharactersOnly
               value={countOrEmptyStringToAvoidInputValueErrors}
               step="any"
@@ -423,7 +423,7 @@ const FishBeltObservationTable = ({
               }}
             />
           </Td>
-          <Td align="right">{observationBiomass ?? <> - </>}</Td>
+          <Td $align="right">{observationBiomass ?? <> - </>}</Td>
           {areValidationsShowing ? (
             <ObservationValidationInfo
               hasObservationErrorValidation={hasObservationErrorValidation}
@@ -437,7 +437,7 @@ const FishBeltObservationTable = ({
               resetObservationValidations={resetObservationValidations}
             />
           ) : null}
-          <Td align="center">
+          <Td $align="center">
             <ButtonRemoveRow
               tabIndex="-1"
               type="button"
@@ -495,7 +495,7 @@ const FishBeltObservationTable = ({
           <thead>
             <Tr>
               <Th> </Th>
-              <Th align="left" id="fish-name-label">
+              <Th $align="left" id="fish-name-label">
                 <LabelContainer>
                   {t('fish_name')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishName' ? (
@@ -528,7 +528,7 @@ const FishBeltObservationTable = ({
                   </IconButton>
                 </LabelContainer>
               </Th>
-              <Th align="right" id="fish-size-label">
+              <Th $align="right" id="fish-size-label">
                 <LabelContainer>
                   {`${t('sample_units.size')} (${t('measurements.centimeter_short')})`}
                   <RequiredIndicator />
@@ -547,7 +547,7 @@ const FishBeltObservationTable = ({
                   </IconButton>
                 </LabelContainer>
               </Th>
-              <Th align="right" id="fish-count-label">
+              <Th $align="right" id="fish-count-label">
                 <LabelContainer>
                   {t('count')} <RequiredIndicator />
                   {isHelperTextShowing && currentHelperTextLabel === 'fishCount' ? (
@@ -565,13 +565,13 @@ const FishBeltObservationTable = ({
                   </IconButton>
                 </LabelContainer>
               </Th>
-              <Th align="right" id="fish-biomass-label">
+              <Th $align="right" id="fish-biomass-label">
                 {t('biomass')}
                 <br />
                 <small>(kg/ha)</small>
               </Th>
               {areValidationsShowing ? (
-                <Th align="center" id="fish-validations-label">
+                <Th $align="center" id="fish-validations-label">
                   {t('validations.validations')}
                 </Th>
               ) : null}

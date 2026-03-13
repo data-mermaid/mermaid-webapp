@@ -3,6 +3,7 @@ import '@testing-library/jest-dom'
 
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { mockT } from '../../../testUtilities/mockT'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
@@ -52,13 +53,14 @@ test('Collect Records table sorts properly by method column', async () => {
 
   const tableRowsAfterDescending = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterDescending[1]).getByText('Habitat complexity'))
+  expect(within(tableRowsAfterDescending[1]).getByText('protocol_titles.habitatcomplexity'))
+  expect(mockT).toHaveBeenCalledWith('protocol_titles.habitatcomplexity')
 
   await user.dblClick(within(table).getByTestId('collecting-header-method'))
 
   const tableRowsAfterAscending = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterAscending[1]).getByText('Benthic LIT'))
+  expect(within(tableRowsAfterAscending[1]).getByText('protocol_titles.benthiclit'))
 })
 
 test('Collect Records table sorts properly by site column', async () => {

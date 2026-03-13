@@ -92,8 +92,8 @@ const SingleSiteMap = ({
       center: defaultCenter,
       zoom: defaultZoom,
       maxZoom: 16,
-      attributionControl: true,
-      customAttribution: mapAttribution,
+      attributionControl: { customAttribution: mapAttribution },
+      maplibreLogo: false,
     })
 
     if (formLatitudeValue && formLongitudeValue) {
@@ -221,7 +221,7 @@ const SingleSiteMap = ({
   )
 
   return (
-    <MapInputRow noBorderWidth={isReadOnlyUser}>
+    <MapInputRow $noBorderWidth={isReadOnlyUser}>
       <MapContainer>
         <MapWrapper ref={mapContainer} />
         {!isReadOnlyUser && nullishLatitudeOrLongitude ? placeMarkerButton : null}

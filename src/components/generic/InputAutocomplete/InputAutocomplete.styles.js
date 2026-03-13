@@ -18,8 +18,8 @@ export const Menu = styled('ul')`
   border-width: 0 1px 1px 1px;
   border-style: solid;
   color: ${theme.color.textColor};
-  border: ${(props) => (props.isOpen ? null : 'none')};
-  outline: ${(props) => (props.isOpen ? null : 'none')};
+  border: ${(props) => (props.$isOpen ? null : 'none')};
+  outline: ${(props) => (props.$isOpen ? null : 'none')};
 `
 
 export const Item = styled('li')`
@@ -32,6 +32,6 @@ export const Item = styled('li')`
   white-space: normal;
   word-wrap: normal;
   background-color: ${(props) =>
-    props.highlighted ? theme.color.primaryColor : theme.color.white};
-  color: ${(props) => (props.highlighted ? theme.color.white : theme.color.black)};
+    props.$highlighted ? theme.color.primaryColor : theme.color.white};
+  color: ${(props) => (props.$highlighted ? theme.color.white : theme.color.black)};
 `

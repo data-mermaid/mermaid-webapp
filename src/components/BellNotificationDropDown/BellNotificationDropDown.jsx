@@ -1,5 +1,4 @@
 import React from 'react'
-import moment from 'moment'
 import domPurify from 'dompurify'
 import {
   NoNotifications,
@@ -15,6 +14,7 @@ import {
 import { IconClose } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
+import { formatDateTimeIntl, formatDistanceNoQuarters } from '../../library/formatDateTime'
 import { useTranslation } from 'react-i18next'
 import { ButtonSecondary, CloseButton } from '../generic/buttons.js'
 
@@ -56,7 +56,10 @@ const BellNotificationDropDown = () => {
         {t('buttons.dismiss_all_notifications')}
       </ButtonSecondary>
       {sortedNotifications.map((notification) => {
-        const dateTime = moment(notification.created_on)
+        const dateTime = new Date(notification.created_on)
+        const distanceToNow = formatDistanceNoQuarters(dateTime, new Date()) // e.g. "2 hours ago"
+
+        const intlFormattedDateTime = formatDateTimeIntl(dateTime) // e.g. "Wednesday, February 4, 2026 at 14:34"
 
         const dirtyHTML = notification.description
 
@@ -64,7 +67,7 @@ const BellNotificationDropDown = () => {
 
         return (
           <NotificationCard key={`notification-card-${notification.id}`}>
-            <NotificationStatus status={notification.status} />
+            <NotificationStatus $status={notification.status} />
             <NotificationContent>
               <NotificationHeader>
                 <NotificationTitle>{notification.title}</NotificationTitle>
@@ -78,8 +81,8 @@ const BellNotificationDropDown = () => {
               {/*  eslint-disable-next-line react/no-danger */}
               <p dangerouslySetInnerHTML={{ __html: cleanHTML }} />
               <NotificationDateWrapper>
-                <p>{dateTime.fromNow()}</p>
-                <NotificationActualDate>{dateTime.format('LLLL')}</NotificationActualDate>
+                <p>{distanceToNow}</p>
+                <NotificationActualDate>{intlFormattedDateTime}</NotificationActualDate>
               </NotificationDateWrapper>
             </NotificationContent>
           </NotificationCard>

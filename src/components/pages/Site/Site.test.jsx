@@ -34,6 +34,10 @@ test('Edit Site page - Save button initially disabled, then enabled when form di
   expect(saveButton).toBeDisabled()
 
   const siteNameInput = await screen.findByTestId('name-input')
+
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(siteNameInput).toHaveValue('Site A'))
+
   await user.type(siteNameInput, 'updated name')
 
   expect(saveButton).toBeEnabled()
@@ -57,6 +61,9 @@ test('Edit Site page - Save button disabled and "Required" error valudation mess
 
   const siteNameInput = await screen.findByTestId('name-input')
   const countryInput = await screen.findByTestId('country-input')
+
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(siteNameInput).toHaveValue('Site A'))
 
   await user.clear(siteNameInput)
   await user.click(countryInput)
@@ -87,6 +94,9 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
   // Clear latitude input field => "Required" in validation message showed, Save button disabled
   const latitudeInput = screen.getByTestId('latitude-input')
   const countryInput = await screen.findByTestId('country-input')
+
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(latitudeInput).toHaveValue(-17.3774))
 
   await user.clear(latitudeInput)
   await user.click(countryInput)
@@ -137,13 +147,16 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
   const latitudeInput = screen.getByTestId('latitude-input')
   const countryInput = screen.getByTestId('country-input')
 
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(latitudeInput).toHaveValue(-17.3774))
+
   await user.clear(latitudeInput)
   await user.type(latitudeInput, '91')
   await user.click(countryInput)
 
   await screen.findByTestId('latitude-validation')
 
-  expect(await screen.findByTestId('save-button-site-form')).toBeDisabled()
+  await waitFor(() => expect(screen.getByTestId('save-button-site-form')).toBeDisabled())
 
   await user.clear(latitudeInput)
   await user.type(latitudeInput, '20')
@@ -174,6 +187,9 @@ test('Edit Site page - enter invalid inputs to longitude shows inline error vali
 
   const longitudeInput = screen.getByTestId('longitude-input')
   const countryInput = screen.getByTestId('country-input')
+
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(longitudeInput).toHaveValue(179.4206))
 
   await user.click(longitudeInput)
   await user.clear(longitudeInput)

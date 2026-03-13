@@ -6,13 +6,17 @@
   align-items: center;
   padding: $spacing-medium;
   @media (max-width: $mobile-break) {
-    align-items: flex-start;
+    display: block;
     padding: $spacing-small;
   }
 }
 .project-name-header {
   display: inline;
   margin: 0 $spacing-small 0 0;
+  @media (max-width: $mobile-break) {
+    display: inline-block;
+    max-width: 80%;
+  }
 }
 
 .project-meta-info-wrapper {
@@ -21,8 +25,11 @@
   row-gap: $spacing-small;
   align-content: baseline;
   @media (max-width: $mobile-break) {
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
     column-gap: $spacing-medium;
-    flex-direction: column;
   }
   button {
     @media (min-width: $tablet-portrait-break) {

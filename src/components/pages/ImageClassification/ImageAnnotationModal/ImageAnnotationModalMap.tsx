@@ -8,9 +8,9 @@ import { buffer } from '@turf/buffer'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import maplibregl, {
-  Expression,
+  ExpressionSpecification,
   LngLatLike,
-  MapboxGeoJSONFeature,
+  MapGeoJSONFeature,
   MapMouseEvent,
   Popup,
 } from 'maplibre-gl'
@@ -82,7 +82,7 @@ const IMAGE_CLASSIFICATION_COLOR_EXP = [
   COLORS.confirmedPoint,
 
   COLORS.unconfirmedPoint,
-] as Expression
+] as ExpressionSpecification
 
 const pointLabelPopup = new maplibregl.Popup({
   anchor: 'bottom',
@@ -239,8 +239,8 @@ const ImageAnnotationModalMap = ({
       minZoom: DEFAULT_MAP_ZOOM,
       renderWorldCopies: false, // prevents the image from repeating
       dragRotate: false,
-      accessToken: import.meta.env.VITE_MAPBOX_ACCESS_TOKEN,
       touchPitch: false,
+      maplibreLogo: false,
     })
 
     const bounds = map.current.getBounds()
@@ -255,7 +255,6 @@ const ImageAnnotationModalMap = ({
     map.current.setStyle({
       version: 8,
       name: 'image',
-      glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
       sources: {
         benthicQuadratImage: {
           type: 'image',
@@ -350,13 +349,12 @@ const ImageAnnotationModalMap = ({
       [boundsEast, boundsNorth],
     ])
 
-    const handleMapLoad = () => {
+    const handleMapLoad = async () => {
       setHasMapLoaded(true)
-      map.current?.loadImage(crossHairIcon, (error: Error, image: HTMLImageElement) => {
-        if (error) {
-          return
-        }
-        map.current?.addImage('cross-hair', image)
+
+      try {
+        const { data: crossHairImage } = await map.current!.loadImage(crossHairIcon)
+        map.current?.addImage('cross-hair', crossHairImage)
         map.current?.addLayer({
           id: 'patches-center-layer',
           type: 'symbol',
@@ -365,22 +363,22 @@ const ImageAnnotationModalMap = ({
             'icon-image': 'cross-hair',
           },
         })
-      })
+      } catch (error) {
+        console.error('Error loading crosshair image: ', error)
+      }
 
-      map.current?.loadImage(labelBackgroundUrl, (error: Error, image: HTMLImageElement) => {
-        if (error) {
-          return
-        }
-
-        map.current?.addImage('label-background', image, {
+      try {
+        const { data: labelBgImage } = await map.current!.loadImage(labelBackgroundUrl)
+        map.current?.addImage('label-background', labelBgImage, {
           // this configuration allows the image to stretch around the label text
-          // @ts-expect-error Doesn't like the config
           stretchX: [[5, 135]],
           stretchY: [[5, 135]],
           content: [5, 5, 135, 135],
           pixelRatio: 2,
         })
-      })
+      } catch (error) {
+        console.error('Error loading label background image: ', error)
+      }
     }
 
     map.current.on('load', handleMapLoad)
@@ -399,9 +397,7 @@ const ImageAnnotationModalMap = ({
       if (!map.current) {
         return
       }
-      const handlePatchMouseEnter = (
-        event: MapMouseEvent & { features?: MapboxGeoJSONFeature[] },
-      ) => {
+      const handlePatchMouseEnter = (event: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
         const { features } = event
         if (!map.current) {
           return
@@ -427,7 +423,7 @@ const ImageAnnotationModalMap = ({
         pointLabelPopup.setLngLat(popupLngLat).setDOMContent(popupContentHack).addTo(map.current)
 
         pointLabelPopup.once('open', () => {
-          const popupElementForStylingHack = document.querySelector('.mapboxgl-popup-content')
+          const popupElementForStylingHack = document.querySelector('.maplibregl-popup-content')
 
           if (popupElementForStylingHack) {
             // @ts-expect-error - style exists on this Element
@@ -538,9 +534,7 @@ const ImageAnnotationModalMap = ({
       return () => {}
     }
 
-    const showFeaturePopupOnClick = (
-      event: MapMouseEvent & { features?: MapboxGeoJSONFeature[] },
-    ) => {
+    const showFeaturePopupOnClick = (event: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
       const { features } = event
       if (!features || features.length === 0 || !map.current) {
         return
@@ -565,10 +559,7 @@ const ImageAnnotationModalMap = ({
       const easeToOptions = {
         center: popupAnchorLngLat,
         duration: DEFAULT_MAP_ANIMATION_DURATION,
-      }
-      if (shouldAlsoZoom) {
-        // @ts-expect-error - maplibre-gl types are incomplete
-        easeToOptions.zoom = 4.5
+        ...(shouldAlsoZoom && { zoom: 4.5 }),
       }
 
       if (!isBufferedFeatureCompletelyWithinMapBounds) {
@@ -602,7 +593,7 @@ const ImageAnnotationModalMap = ({
     }
     const applyPointHoverStyle = ({
       features,
-    }: MapMouseEvent & { features?: MapboxGeoJSONFeature[] }) => {
+    }: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
       if (features && features.length > 0) {
         const [{ properties }] = features
         setHoverPatchAttributeGuid(properties?.id)

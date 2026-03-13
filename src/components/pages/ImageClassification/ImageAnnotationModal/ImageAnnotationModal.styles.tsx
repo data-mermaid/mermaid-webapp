@@ -44,11 +44,11 @@ export const LegendItem = styled.div`
   align-items: center;
 `
 
-export const LegendSquare = styled.div`
+export const LegendSquare = styled.div<{ $color: string }>`
   width: 15px;
   height: 15px;
   margin-right: 3px;
-  border: ${({ color }) => `3px solid ${color}`};
+  border: ${({ $color }) => `3px solid ${$color}`};
 `
 
 export const LoadingContainer = styled.div`

@@ -181,7 +181,6 @@ export const satelliteBaseMap = {
       source: 'worldmap',
     },
   ],
-  glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
 }
 
 export const addZoomController = (map) => {
@@ -342,13 +341,9 @@ export const getMapMarkersFeature = (records) => {
   return { markersData: data, bounds }
 }
 
-export const loadMapMarkersLayer = (map) => {
-  map.loadImage(mapPin, (error, image) => {
-    if (error) {
-      console.error('Error loading image: ', error)
-      return
-    }
-
+export const loadMapMarkersLayer = async (map) => {
+  try {
+    const { data: image } = await map.loadImage(mapPin)
     map.addImage('custom-marker', image)
 
     map.addSource('mapMarkers', {
@@ -368,7 +363,9 @@ export const loadMapMarkersLayer = (map) => {
         'icon-size': 1,
       },
     })
-  })
+  } catch (error) {
+    console.error('Error loading image: ', error)
+  }
 }
 
 export const handleMapOnWheel = (mapCurrent, handleZoomDisplayHelpText) => {
@@ -446,19 +443,18 @@ export const addClusterSourceAndLayers = (map) => {
 }
 
 export const addClusterEventListeners = (map, popUpRef, choices) => {
-  map.on('click', 'clusters', ({ features }) => {
-    const clusterId = features[0].properties.cluster_id
+  map.on('click', 'clusters', async ({ features }) => {
+    if (!features?.length) {
+      return
+    }
 
-    map.getSource('mapMarkers').getClusterExpansionZoom(clusterId, (err, zoom) => {
-      if (err) {
-        return
-      }
-
-      map.easeTo({
-        center: features[0].geometry.coordinates,
-        zoom: zoom,
-      })
-    })
+    try {
+      const clusterId = features[0].properties.cluster_id
+      const zoom = await map.getSource('mapMarkers').getClusterExpansionZoom(clusterId)
+      map.easeTo({ center: features[0].geometry.coordinates, zoom })
+    } catch (error) {
+      console.error('Error expanding cluster zoom:', error)
+    }
   })
 
   map.on('click', 'unclustered-point', (e) => {

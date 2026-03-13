@@ -167,7 +167,7 @@ const useAuthentication = ({
       // cant see profile data from the last logged in user if they go searching in dev tools.
       // databaseSwitcboard isnt used because that would create circular dependencies (it depends on the output of this hook)
       dexieCurrentUserInstance.currentUser.delete('enforceOnlyOneRecordEverStoredAndOverwritten')
-      auth0Logout({ returnTo: window.location.origin })
+      auth0Logout({ logoutParams: { returnTo: window.location.origin } })
       setUnauthenticatedStates()
     }
   }, [auth0Logout, setUnauthenticatedStates, dexieCurrentUserInstance.currentUser, isAppOnline])

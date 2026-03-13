@@ -12,15 +12,16 @@ import LoadingModal from '../../LoadingModal/LoadingModal'
 import handleHttpResponseError from '../../../library/handleHttpResponseError'
 import { AxiosError } from 'axios'
 import { IconDown } from '../../icons'
-import { internalNavigation } from '../../../link_constants'
 
 interface CalloutButtonDropdownProps {
+  updateUserSettings: (setting: string, val: boolean) => Promise<void>
   onClick: () => void
   label: string
   disabled: boolean
   testId?: string
 }
 const CalloutButtonDropdown = ({
+  updateUserSettings,
   onClick,
   label,
   disabled,
@@ -36,12 +37,14 @@ const CalloutButtonDropdown = ({
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { refreshCurrentUser } = useCurrentUser()
 
-  const handleSuccessResponse = (response, languageSuccessMessage) => {
+  const handleSuccessResponse = (response) => {
     setIsDropdownOpen(false)
-    refreshCurrentUser() // ensures correct user privileges
-    toast.success(...getToastArguments(languageSuccessMessage))
-    setIsLoading(false)
-    navigate(internalNavigation.projectStartPage(response.id))
+    return updateUserSettings('hasUserDismissedDemo', true).then(() => {
+      refreshCurrentUser() // ensures correct user privileges
+      toast.success(...getToastArguments(t('projects.demo.created')))
+      setIsLoading(false)
+      navigate(`/projects/${response.id}/project-info/new-demo`)
+    })
   }
 
   const handleResponseError = (error: AxiosError) => {
@@ -64,7 +67,7 @@ const CalloutButtonDropdown = ({
     databaseSwitchboardInstance
       .addDemoProject()
       .then((response) => {
-        handleSuccessResponse(response, t('projects.success.project_created'))
+        return handleSuccessResponse(response)
       })
       .catch((error) => {
         handleResponseError(error)

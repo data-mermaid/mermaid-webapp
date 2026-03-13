@@ -102,11 +102,11 @@ const SubmittedBenthicPhotoQuadratObservationTable = ({
     return (
       <Tr key={id}>
         {image_classification && getThumbnail(observation, index)}
-        <Td align="center">{index + 1}</Td>
-        <Td align="right">{quadrat_number}</Td>
-        <Td align="right">{getObjectById(benthicAttributeOptions, attribute)?.label}</Td>
-        <Td align="right">{getObjectById(growthFormOptions, growth_form)?.label}</Td>
-        <Td align="right">{num_points}</Td>
+        <Td $align="center">{index + 1}</Td>
+        <Td $align="right">{quadrat_number}</Td>
+        <Td $align="right">{getObjectById(benthicAttributeOptions, attribute)?.label}</Td>
+        <Td $align="right">{getObjectById(growthFormOptions, growth_form)?.label}</Td>
+        <Td $align="right">{num_points}</Td>
       </Tr>
     )
   })
@@ -119,10 +119,10 @@ const SubmittedBenthicPhotoQuadratObservationTable = ({
           <Tr>
             {image_classification && <TheadItem>{t('image_classification.thumbnail')}</TheadItem>}
             <TheadItem> </TheadItem>
-            <TheadItem align="right">{t('observations.quadrat')}</TheadItem>
-            <TheadItem align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
-            <TheadItem align="right">{t('observations.growth_form')}</TheadItem>
-            <TheadItem align="right">{t('observations.number_of_points')}</TheadItem>
+            <TheadItem $align="right">{t('observations.quadrat')}</TheadItem>
+            <TheadItem $align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
+            <TheadItem $align="right">{t('observations.growth_form')}</TheadItem>
+            <TheadItem $align="right">{t('observations.number_of_points')}</TheadItem>
           </Tr>
         </thead>
         <tbody>{observationBeltFish}</tbody>

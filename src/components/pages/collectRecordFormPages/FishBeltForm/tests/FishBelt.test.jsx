@@ -7,6 +7,7 @@ import {
   renderAuthenticatedOnline,
   renderAuthenticatedOffline,
   screen,
+  waitFor,
   waitForElementToBeRemoved,
   within,
 } from '../../../../../testUtilities/testingLibraryWithHelpers'
@@ -119,7 +120,9 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
 
   await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
-  expect(screen.getByTestId('site-select')).toHaveDisplayValue('Site D')
+  // Wait for formik to initialize with fetched data
+  await waitFor(() => expect(screen.getByTestId('site-select')).toHaveDisplayValue('Site D'))
+
   expect(screen.getByTestId('management-select')).toHaveDisplayValue(
     'Management Regimes C [Management Regimes 3]',
   )

@@ -1,6 +1,7 @@
 import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from '../../../../testUtilities/mockT'
 
 import {
   screen,
@@ -83,7 +84,8 @@ test('Unsaved EDIT bleaching form edits clear when the user navigates away and b
   // nav back
   const table = await screen.findByRole('table')
 
-  await user.click(within(table).getAllByText('Bleaching')[0])
+  await user.click(within(table).getAllByText('protocol_titles.bleachingqc')[0])
+  expect(mockT).toHaveBeenCalledWith('protocol_titles.bleachingqc')
 
   const formAfterNav = await screen.findByRole('form')
 

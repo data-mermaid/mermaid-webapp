@@ -218,7 +218,7 @@ const ManagementRulesInput = ({
     : null
 
   return (
-    <InputRow validationType={validationType} data-testid={testId} {...inputRowProps}>
+    <InputRow $validationType={validationType} data-testid={testId} {...inputRowProps}>
       <LabelContainer>
         <label id={`${id}-management-rules-input`}>{resolvedLabel}</label>
         <span>{required ? <RequiredIndicator /> : null}</span>

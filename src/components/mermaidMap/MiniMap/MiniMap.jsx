@@ -10,7 +10,7 @@ const MiniMapWrapper = styled.div`
   height: 150px;
   border: 2px solid white;
   // chose opacity instead of display: none to avoid reflow
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
 `
 
 const MiniMap = ({ mainMap }) => {
@@ -111,6 +111,8 @@ const MiniMap = ({ mainMap }) => {
         center: getMainMapCenter(),
         zoom: DEFAULT_ZOOM,
         interactive: false,
+        attributionControl: false,
+        maplibreLogo: false,
       })
 
       miniMap.current.on('load', onMapLoad)
@@ -133,7 +135,7 @@ const MiniMap = ({ mainMap }) => {
     return () => miniMap.current.remove()
   }, [mainMap])
 
-  return <MiniMapWrapper ref={miniMapContainer} visible={isVisible} />
+  return <MiniMapWrapper ref={miniMapContainer} $visible={isVisible} />
 }
 
 MiniMap.propTypes = {

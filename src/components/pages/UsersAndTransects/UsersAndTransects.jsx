@@ -1,10 +1,10 @@
-import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { styled } from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
+import { isValid, parse } from 'date-fns'
 
 import { ContentPageLayout } from '../../Layout'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
@@ -69,7 +69,7 @@ const ActiveRecordsCount = styled.strong`
 const checkDateAndGetSiteName = (name) => {
   const elementsInName = name.split(' ')
   const lastItemInName = elementsInName.pop()
-  const isDateValid = moment(lastItemInName, 'YYYY-MM-DD', true).isValid()
+  const isDateValid = isValid(parse(lastItemInName, 'yyyy-MM-dd', new Date()))
 
   if (isDateValid) {
     return `${elementsInName.join(' ')} ${getSampleDateLabel(lastItemInName)}`
@@ -529,9 +529,9 @@ const UsersAndTransects = () => {
         <StickyOverviewTable {...getTableProps()}>
           <OverviewThead>
             {headerGroups.map((headerGroup) => {
-              const headerGroupProps = headerGroup.getHeaderGroupProps()
+              const { key: headerGroupKey, ...headerGroupProps } = headerGroup.getHeaderGroupProps()
               return (
-                <Tr {...headerGroupProps} key={headerGroupProps.key}>
+                <Tr key={headerGroupKey} {...headerGroupProps}>
                   {headerGroup.headers.map((column) => {
                     const isMultiSortColumn = headerGroup.headers.some(
                       (header) => header.sortedIndex > 0,
@@ -542,17 +542,20 @@ const UsersAndTransects = () => {
                       column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
                     const isUserHeader = ThClassName === 'user-headers'
                     const userProfileId = isUserHeader ? column.id : null
+                    const { key: headerKey, ...headerProps } = column.getHeaderProps(
+                      getTableColumnHeaderProps(column),
+                    )
 
                     return (
                       <OverviewTh
-                        {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                        key={column.id}
-                        isSortedDescending={column.isSortedDesc}
-                        sortedIndex={column.sortedIndex}
-                        isMultiSortColumn={isMultiSortColumn}
-                        isSortingEnabled={!column.disableSortBy}
-                        disabledHover={column.disableSortBy}
-                        align={headerAlignment}
+                        key={headerKey}
+                        {...headerProps}
+                        $isSortedDescending={column.isSortedDesc}
+                        $sortedIndex={column.sortedIndex}
+                        $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={!column.disableSortBy}
+                        $disabledHover={column.disableSortBy}
+                        $align={headerAlignment}
                         className={ThClassName}
                       >
                         {isUserHeader ? (
@@ -575,9 +578,10 @@ const UsersAndTransects = () => {
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
+              const { key: rowKey, ...rowProps } = row.getRowProps()
 
               return (
-                <OverviewTr {...row.getRowProps()} key={row.id}>
+                <OverviewTr key={rowKey} {...rowProps}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
                     const cellColumnGroupId = cell.column.parent.id
@@ -637,11 +641,13 @@ const UsersAndTransects = () => {
                       <>{isCellEmpty ? emptyCellContents : cell.render('Cell')} </>
                     )
 
+                    const { key: cellKey, ...cellProps } = cell.getCellProps()
+
                     return (
                       <OverviewTd
-                        {...cell.getCellProps()}
-                        key={cell.column.id}
-                        align={cellAlignment}
+                        key={cellKey}
+                        {...cellProps}
+                        $align={cellAlignment}
                         className={cellClassName}
                       >
                         <span>
