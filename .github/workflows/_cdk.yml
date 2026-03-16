@@ -47,7 +47,7 @@ jobs:
 
       - name: Install yarn dependencies
         if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Create version file for dev
         if: startsWith(github.ref, 'refs/heads/develop')
@@ -79,7 +79,7 @@ jobs:
         run: npm ci
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v5.1.1
+        uses: aws-actions/configure-aws-credentials@v6.0.0
         env:
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
