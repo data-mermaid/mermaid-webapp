@@ -25,7 +25,7 @@ import { CloseButton } from '../generic/buttons'
 import { Box } from '@mui/material'
 import { IconClose } from '../icons'
 import cardStyles from '../ProjectCard/ProjectCard.module.scss'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 interface DemoProjectCalloutProps {
   handleDemoClick: () => void

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import theme from '../../../../theme'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { toast } from 'react-toastify'
 import Modal from '../../../generic/Modal'
 import {
