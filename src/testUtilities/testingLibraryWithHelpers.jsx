@@ -1,5 +1,5 @@
 import { Auth0Context } from '@auth0/auth0-react'
-import { RouterProvider, createMemoryRouter } from 'react-router-dom'
+import { RouterProvider, createMemoryRouter } from 'react-router'
 import { render } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components'
 import PropTypes from 'prop-types'

@@ -1,5 +1,5 @@
 import { styled, css } from 'styled-components'
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router'
 
 import theme from '../../theme'
 import { mediaQueryPhoneOnly, hoverState } from '../../library/styling/mediaQueries'

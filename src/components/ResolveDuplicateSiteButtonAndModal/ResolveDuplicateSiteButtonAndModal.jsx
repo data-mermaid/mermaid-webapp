@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import { styled } from 'styled-components'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'

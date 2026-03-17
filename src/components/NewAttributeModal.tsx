@@ -1,6 +1,6 @@
 import { Slide, toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import * as Yup from 'yup'
 import React, { useEffect, useState } from 'react'

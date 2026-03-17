@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { styled, css } from 'styled-components'
