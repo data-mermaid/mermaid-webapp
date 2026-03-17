@@ -134,7 +134,13 @@ export const renderAuthenticated = (
               value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
             >
               <ClearPersistedFormDataHackProvider value={router}>
-                <RouterProvider router={router}>{children}</RouterProvider>
+                {/* unstable_useTransitions={false}: disables React.startTransition wrapping so router
+                    state updates are synchronous, preventing act() warnings and async test failures
+                    in jsdom. Without this, deferred updates cause tests to assert before state settles.
+                    See: reactrouter.com/explanation/react-transitions (introduced in v7.10.0) */}
+                <RouterProvider router={router} unstable_useTransitions={false}>
+                  {children}
+                </RouterProvider>
               </ClearPersistedFormDataHackProvider>
             </DexiePerUserDataInstanceProvider>
           </OnlineStatusProvider>
@@ -198,7 +204,9 @@ export const renderAuthenticatedOnline = (
               value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
             >
               <ClearPersistedFormDataHackProvider value={router}>
-                <RouterProvider router={router}>{children}</RouterProvider>
+                <RouterProvider router={router} unstable_useTransitions={false}>
+                  {children}
+                </RouterProvider>
               </ClearPersistedFormDataHackProvider>
             </DexiePerUserDataInstanceProvider>
           </OnlineStatusProvider>
@@ -236,7 +244,9 @@ export const renderUnauthenticatedOnline = (
             value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
           >
             <ClearPersistedFormDataHackProvider value={router}>
-              <RouterProvider router={router}>{children}</RouterProvider>
+              <RouterProvider router={router} unstable_useTransitions={false}>
+                {children}
+              </RouterProvider>
             </ClearPersistedFormDataHackProvider>
           </DexiePerUserDataInstanceProvider>
         </OnlineStatusProvider>
@@ -279,7 +289,9 @@ export const renderAuthenticatedOffline = (
               value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
             >
               <ClearPersistedFormDataHackProvider value={router}>
-                <RouterProvider router={router}>{children}</RouterProvider>
+                <RouterProvider router={router} unstable_useTransitions={false}>
+                  {children}
+                </RouterProvider>
               </ClearPersistedFormDataHackProvider>
             </DexiePerUserDataInstanceProvider>
           </OnlineStatusProvider>
@@ -318,7 +330,9 @@ export const renderUnauthenticatedOffline = (
             value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
           >
             <ClearPersistedFormDataHackProvider value={router}>
-              <RouterProvider router={router}>{children}</RouterProvider>
+              <RouterProvider router={router} unstable_useTransitions={false}>
+                {children}
+              </RouterProvider>
             </ClearPersistedFormDataHackProvider>
           </DexiePerUserDataInstanceProvider>
         </OnlineStatusProvider>
