@@ -350,7 +350,7 @@ const DataSharing = () => {
       ) : (
         <ReadOnlyDataSharingContent project={projectBeingEdited} />
       )}
-      {isDemoProjectFeatureEnabled && isAdminUser && !isDemoProject && (
+      {!isDemoProjectFeatureEnabled && isAdminUser && !isDemoProject && (
         <>
           <CheckBoxLabel cursor={isDataUpdating ? 'wait' : 'auto'}>
             <Input
@@ -366,7 +366,7 @@ const DataSharing = () => {
           <P>{t('data_sharing.test_project_data')}</P>
         </>
       )}
-      {isDemoProjectFeatureEnabled && !isAdminUser && isTestProject && !isDemoProject && (
+      {!isDemoProjectFeatureEnabled && !isAdminUser && isTestProject && !isDemoProject && (
         <p>{t('data_sharing.is_test_project')}</p>
       )}
       {isDemoProject && (
