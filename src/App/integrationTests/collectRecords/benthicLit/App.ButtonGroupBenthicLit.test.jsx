@@ -1,5 +1,6 @@
+import { expect, test } from 'vitest'
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import {
@@ -61,35 +62,37 @@ test('Validate Benthic LIT: fails to validate, shows button able to run validati
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
-      const collectRecordWithValidation = {
-        ...mockBenthicLitCollectRecords[0],
-        validations: mockBenthicLitValidationsObject, // fails validation
-      }
+    http.post(
+      `${apiBaseUrl}/pull/`,
+      () => {
+        const collectRecordWithValidation = {
+          ...mockBenthicLitCollectRecords[0],
+          validations: mockBenthicLitValidationsObject, // fails validation
+        }
 
-      const response = {
-        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-        choices: { updates: mockMermaidData.choices },
-        collect_records: { updates: [collectRecordWithValidation] },
-        fish_families: { updates: mockMermaidData.fish_families },
-        fish_genera: { updates: mockMermaidData.fish_genera },
-        fish_species: { updates: mockMermaidData.fish_species },
-        project_managements: { updates: mockMermaidData.project_managements },
-        project_profiles: { updates: mockMermaidData.project_profiles },
-        project_sites: { updates: mockMermaidData.project_sites },
-        projects: { updates: mockMermaidData.projects },
-      }
+        const response = {
+          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+          choices: { updates: mockMermaidData.choices },
+          collect_records: { updates: [collectRecordWithValidation] },
+          fish_families: { updates: mockMermaidData.fish_families },
+          fish_genera: { updates: mockMermaidData.fish_genera },
+          fish_species: { updates: mockMermaidData.fish_species },
+          project_managements: { updates: mockMermaidData.project_managements },
+          project_profiles: { updates: mockMermaidData.project_profiles },
+          project_sites: { updates: mockMermaidData.project_sites },
+          projects: { updates: mockMermaidData.projects },
+        }
 
-      return res(ctx.json(response))
-    }),
+        return HttpResponse.json(response)
+      },
+      { once: true },
+    ),
   )
 
   expect(await screen.findByTestId('validating-button'))
 
   expect(await screen.findByTestId('validate-button'))
-  expect(
-    screen.queryByText('Validation is currently unavailable for this record.'),
-  ).not.toBeInTheDocument()
+  expect(screen.queryByText('sample_units.errors.validation_unavailable')).not.toBeInTheDocument()
 })
 
 test('Validate & submit Benthic LIT: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
@@ -106,48 +109,56 @@ test('Validate & submit Benthic LIT: validation passes, shows validate button di
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
-      const collectRecordWithValidationFailing = {
-        ...mockBenthicLitCollectRecords[0],
-        validations: mockBenthicLitValidationsObject, // fails validation
-      }
+    http.post(
+      `${apiBaseUrl}/pull/`,
+      () => {
+        const collectRecordWithValidationFailing = {
+          ...mockBenthicLitCollectRecords[0],
+          validations: mockBenthicLitValidationsObject, // fails validation
+        }
 
-      const firstPullResponse = {
-        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-        choices: { updates: mockMermaidData.choices },
-        collect_records: { updates: [collectRecordWithValidationFailing] },
-        fish_families: { updates: mockMermaidData.fish_families },
-        fish_genera: { updates: mockMermaidData.fish_genera },
-        fish_species: { updates: mockMermaidData.fish_species },
-        project_managements: { updates: mockMermaidData.project_managements },
-        project_profiles: { updates: mockMermaidData.project_profiles },
-        project_sites: { updates: mockMermaidData.project_sites },
-        projects: { updates: mockMermaidData.projects },
-      }
+        const firstPullResponse = {
+          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+          choices: { updates: mockMermaidData.choices },
+          collect_records: { updates: [collectRecordWithValidationFailing] },
+          fish_families: { updates: mockMermaidData.fish_families },
+          fish_genera: { updates: mockMermaidData.fish_genera },
+          fish_species: { updates: mockMermaidData.fish_species },
+          project_managements: { updates: mockMermaidData.project_managements },
+          project_profiles: { updates: mockMermaidData.project_profiles },
+          project_sites: { updates: mockMermaidData.project_sites },
+          projects: { updates: mockMermaidData.projects },
+        }
 
-      return res.once(ctx.json(firstPullResponse))
-    }),
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
-      const collectRecordWithValidationOk = {
-        ...mockBenthicLitCollectRecords[0],
-        validations: { status: 'ok' },
-      }
+        return HttpResponse.json(firstPullResponse)
+      },
+      { once: true },
+    ),
+    http.post(
+      `${apiBaseUrl}/pull/`,
+      () => {
+        const collectRecordWithValidationOk = {
+          ...mockBenthicLitCollectRecords[0],
+          validations: { status: 'ok' },
+        }
 
-      const secondPullResponse = {
-        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-        choices: { updates: mockMermaidData.choices },
-        collect_records: { updates: [collectRecordWithValidationOk] },
-        fish_families: { updates: mockMermaidData.fish_families },
-        fish_genera: { updates: mockMermaidData.fish_genera },
-        fish_species: { updates: mockMermaidData.fish_species },
-        project_managements: { updates: mockMermaidData.project_managements },
-        project_profiles: { updates: mockMermaidData.project_profiles },
-        project_sites: { updates: mockMermaidData.project_sites },
-        projects: { updates: mockMermaidData.projects },
-      }
+        const secondPullResponse = {
+          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+          choices: { updates: mockMermaidData.choices },
+          collect_records: { updates: [collectRecordWithValidationOk] },
+          fish_families: { updates: mockMermaidData.fish_families },
+          fish_genera: { updates: mockMermaidData.fish_genera },
+          fish_species: { updates: mockMermaidData.fish_species },
+          project_managements: { updates: mockMermaidData.project_managements },
+          project_profiles: { updates: mockMermaidData.project_profiles },
+          project_sites: { updates: mockMermaidData.project_sites },
+          projects: { updates: mockMermaidData.projects },
+        }
 
-      return res.once(ctx.json(secondPullResponse))
-    }),
+        return HttpResponse.json(secondPullResponse)
+      },
+      { once: true },
+    ),
   )
 
   await user.click(await screen.findByTestId('validate-button'))
@@ -155,9 +166,7 @@ test('Validate & submit Benthic LIT: validation passes, shows validate button di
   expect(await screen.findByTestId('validating-button'))
 
   expect(await screen.findByTestId('validated-button'))
-  expect(
-    screen.queryByText('Validation is currently unavailable for this record.'),
-  ).not.toBeInTheDocument()
+  expect(screen.queryByText('sample_units.errors.validation_unavailable')).not.toBeInTheDocument()
 
   expect(await screen.findByTestId('submit-button')).toBeEnabled()
 
@@ -182,27 +191,31 @@ test('Initial load of successfully validated record', async () => {
 
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
-      const collectRecordWithValidation = {
-        ...mockBenthicLitCollectRecords[0],
-        validations: { status: 'ok' },
-      }
+    http.post(
+      `${apiBaseUrl}/pull/`,
+      () => {
+        const collectRecordWithValidation = {
+          ...mockBenthicLitCollectRecords[0],
+          validations: { status: 'ok' },
+        }
 
-      const response = {
-        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-        choices: { updates: mockMermaidData.choices },
-        collect_records: { updates: [collectRecordWithValidation] },
-        fish_families: { updates: mockMermaidData.fish_families },
-        fish_genera: { updates: mockMermaidData.fish_genera },
-        fish_species: { updates: mockMermaidData.fish_species },
-        project_managements: { updates: mockMermaidData.project_managements },
-        project_profiles: { updates: mockMermaidData.project_profiles },
-        project_sites: { updates: mockMermaidData.project_sites },
-        projects: { updates: mockMermaidData.projects },
-      }
+        const response = {
+          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+          choices: { updates: mockMermaidData.choices },
+          collect_records: { updates: [collectRecordWithValidation] },
+          fish_families: { updates: mockMermaidData.fish_families },
+          fish_genera: { updates: mockMermaidData.fish_genera },
+          fish_species: { updates: mockMermaidData.fish_species },
+          project_managements: { updates: mockMermaidData.project_managements },
+          project_profiles: { updates: mockMermaidData.project_profiles },
+          project_sites: { updates: mockMermaidData.project_sites },
+          projects: { updates: mockMermaidData.projects },
+        }
 
-      return res(ctx.json(response))
-    }),
+        return HttpResponse.json(response)
+      },
+      { once: true },
+    ),
   )
 
   expect(await screen.findByTestId('saved-button')).toBeDisabled()

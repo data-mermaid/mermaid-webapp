@@ -24,10 +24,10 @@ const SubmittedBenthicPitObservationTable = ({
 
   const observationsBenthicPit = obs_benthic_pits.map((item, index) => (
     <Tr key={item.id}>
-      <Td align="center">{index + 1}</Td>
-      <Td align="left">{item.interval}</Td>
-      <Td align="right">{getObjectById(benthicAttributeOptions, item.attribute)?.label}</Td>
-      <Td align="right">{getObjectById(growthFormOptions, item.growth_form)?.label}</Td>
+      <Td $align="center">{index + 1}</Td>
+      <Td $align="left">{item.interval}</Td>
+      <Td $align="right">{getObjectById(benthicAttributeOptions, item.attribute)?.label}</Td>
+      <Td $align="right">{getObjectById(growthFormOptions, item.growth_form)?.label}</Td>
     </Tr>
   ))
 
@@ -39,9 +39,9 @@ const SubmittedBenthicPitObservationTable = ({
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem align="left">{t('observations.interval')}</TheadItem>
-              <TheadItem align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
-              <TheadItem align="right">{t('observations.growth_form')}</TheadItem>
+              <TheadItem $align="left">{t('observations.interval')}</TheadItem>
+              <TheadItem $align="right">{t('benthic_observations.benthic_attribute')}</TheadItem>
+              <TheadItem $align="right">{t('observations.growth_form')}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationsBenthicPit}</tbody>

@@ -1,10 +1,10 @@
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { InputRow } from '../generic/form'
 import MapPin from '../../assets/map-pin.png'
 
 export const MapInputRow = styled(InputRow)`
   grid-template-columns: 1fr;
-  border-width: ${(props) => props.noBorderWidth && '0px'};
+  border-width: ${(props) => props.$noBorderWidth && '0px'};
 `
 export const MapContainer = styled.div`
   position: relative;
@@ -15,7 +15,7 @@ export const MapContainer = styled.div`
 
 export const MapWrapper = styled.div`
   height: 100%;
-  min-height: ${(props) => (props.minHeight ? props.minHeight : '70vh')};
+  min-height: ${(props) => (props.$minHeight ? props.$minHeight : '70vh')};
 
   #marker {
     background-image: url(${MapPin});

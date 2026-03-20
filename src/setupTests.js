@@ -1,94 +1,140 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// @testing-library/jest-dom adds custom matchers for asserting on DOM nodes (works with Vitest).
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
+import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { configure } from '@testing-library/react'
-import { enableFetchMocks } from 'jest-fetch-mock'
+import axiosInstance from './library/axiosRetry'
 
 import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSuccessful'
 import { mockDocumentCookie } from './testUtilities/mockDocumentCookie'
 
-enableFetchMocks() // avoids ReferenceError: Request is not defined errors in tests
+// Disable axios-retry globally in tests to avoid masking failures
+axiosInstance.defaults['axios-retry'] = {
+  retries: 0,
+  retryCondition: () => false,
+  retryDelay: () => 0,
+}
 
-jest.setTimeout(300000)
-window.URL.createObjectURL = () => {}
-window.confirm = () => true // simulates user clicking OK
-window.scrollTo = () => {}
-
-jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
-  return {
+// jest.mock → vi.mock, and return full export objects
+vi.mock('maplibre-gl', function mapLibreMock() {
+  const mockMaplibre = {
     Map: function () {
       return {
-        addControl: jest.fn(() => ({})),
-        dragRotate: { disable: jest.fn() },
-        getLayer: jest.fn(),
-        jumpTo: jest.fn(),
-        on: jest.fn(),
-        off: jest.fn(),
-        remove: jest.fn(),
-        touchZoomRotate: { disableRotation: jest.fn() },
-        getSource: jest.fn(() => ({ setData: jest.fn() })),
-        fitBounds: jest.fn(),
-        getZoom: jest.fn(),
-        getCanvas: jest.fn(() => ({ style: {} })),
+        addControl: vi.fn(() => ({})),
+        dragRotate: { disable: vi.fn() },
+        getLayer: vi.fn(),
+        jumpTo: vi.fn(),
+        on: vi.fn(),
+        off: vi.fn(),
+        remove: vi.fn(),
+        touchZoomRotate: { disableRotation: vi.fn() },
+        loadImage: vi.fn(() => Promise.resolve({ data: {} })),
+        getSource: vi.fn(() => ({
+          setData: vi.fn(),
+          getClusterExpansionZoom: vi.fn(() => Promise.resolve(5)),
+        })),
+        fitBounds: vi.fn(),
+        getZoom: vi.fn(),
+        getCanvas: vi.fn(() => ({ style: {} })),
       }
     },
     Marker: function () {
       return {
-        setLngLat: jest.fn(() => ({ addTo: jest.fn() })),
-        on: jest.fn(),
-        remove: jest.fn(),
-        getElement: jest.fn(() => ({})),
+        setLngLat: vi.fn(() => ({ addTo: vi.fn() })),
+        on: vi.fn(),
+        remove: vi.fn(),
+        getElement: vi.fn(() => ({})),
       }
     },
     Popup: function () {
       return {
-        setLngLat: jest.fn(() => ({ setDOMContent: jest.fn(() => ({ addTo: jest.fn() })) })),
+        setLngLat: vi.fn(() => ({ setDOMContent: vi.fn(() => ({ addTo: vi.fn() })) })),
       }
     },
     LngLatBounds: function () {
       return {
-        extend: jest.fn,
+        extend: vi.fn,
       }
     },
-    NavigationControl: jest.fn(),
+    NavigationControl: vi.fn(),
+  }
+  return {
+    default: mockMaplibre,
+    ...mockMaplibre,
   }
 })
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key) => key,
-    i18n: {
-      changeLanguage: jest.fn(() => Promise.resolve()),
-      language: 'en',
-      languages: ['en'],
-      isInitialized: true,
-      exists: jest.fn(() => true),
-      getFixedT: jest.fn(() => (key) => key),
-      hasResourceBundle: jest.fn(() => true),
-      loadNamespaces: jest.fn(() => Promise.resolve()),
-      loadLanguages: jest.fn(() => Promise.resolve()),
-      off: jest.fn(),
-      on: jest.fn(),
-      emit: jest.fn(),
-      store: {},
-      services: {},
-      options: {},
+// Mock the i18n instance using cimode so i18n.t() returns the translation key.
+// Non-component code (e.g. validationMessageHelpers.jsx, handleHttpResponseError.ts) imports
+// i18n directly and calls i18n.t(). We use i18next's built-in 'cimode' language which always
+// returns the key, so tests assert against stable keys rather than English text that may change.
+vi.mock('../i18n', async () => {
+  const { default: i18next } = await vi.importActual('i18next')
+
+  i18next.init({
+    lng: 'cimode',
+    initImmediate: false,
+    showSupportNotice: false,
+  })
+
+  return { default: i18next }
+})
+
+// Mock react-i18next so useTranslation().t() returns the translation key.
+// Keeps component tests isolated from the real react-i18next library internals.
+// mockT is a shared vi.fn so tests can spy on useTranslation().t() calls.
+vi.mock('react-i18next', async () => {
+  const { mockT } = await import('./testUtilities/mockT')
+
+  return {
+    useTranslation: () => ({
+      t: mockT,
+      i18n: {
+        changeLanguage: vi.fn(() => Promise.resolve()),
+        language: 'en',
+        languages: ['en'],
+        isInitialized: true,
+        exists: vi.fn(() => true),
+        getFixedT: vi.fn(() => (key) => key),
+        hasResourceBundle: vi.fn(() => true),
+        loadNamespaces: vi.fn(() => Promise.resolve()),
+        loadLanguages: vi.fn(() => Promise.resolve()),
+        off: vi.fn(),
+        on: vi.fn(),
+        emit: vi.fn(),
+        store: {},
+        services: {},
+        options: {},
+      },
+    }),
+    initReactI18next: {
+      type: '3rdParty',
+      init: vi.fn(),
     },
-  }),
-  initReactI18next: {
-    type: '3rdParty',
-    init: jest.fn(),
-  },
-  Trans: ({ children }) => children,
-  I18nextProvider: ({ children }) => children,
-}))
+    Trans: ({ i18nKey }) => i18nKey,
+    I18nextProvider: ({ children }) => children,
+  }
+})
 
 configure({ asyncUtilTimeout: 10000 })
 
+// Suppress known unhandled rejections from DatabaseSwitchboard async operations during tests
+// These occur when the SyncApiDataIntoOfflineStorage makes network requests that fail after cleanup
+process.on('unhandledRejection', (reason) => {
+  const message = reason?.message || String(reason)
+  if (message.includes('api_errors') || message.includes('app_not_authenticated_or_ready')) {
+    // Silently ignore known async errors from DatabaseSwitchboard
+    return
+  }
+  // Re-throw other unhandled rejections
+  throw reason
+})
+
 beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
+  mockMermaidApiAllSuccessful.listen({ onUnhandledRequest: 'warn' })
+  // import.meta.env works in Vitest via Vite
   global.IS_REACT_ACT_ENVIRONMENT = !!import.meta.env.VITE_IGNORE_TESTING_ACT_WARNINGS // suppress missing act warnings or not, defaults to false
 })
 beforeEach(() => {

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { CheckRadioLabel, CheckRadioWrapper } from '../../generic/form'
 
 export const StyledCheckRadioWrapper = styled(CheckRadioWrapper)`

@@ -1,5 +1,7 @@
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from '../../../../testUtilities/mockT'
 
 import {
   screen,
@@ -32,7 +34,8 @@ test('Unsaved NEW fishbelt form edits clear when the user navigates away and bac
 
   expect(within(form).getByTestId('depth-input')).toHaveValue(45)
 
-  // nav away
+  // nav away (confirm the unsaved changes prompt)
+  vi.spyOn(window, 'confirm').mockReturnValueOnce(true)
   const sideNav = await screen.findByTestId('content-page-side-nav')
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))
@@ -72,7 +75,8 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
 
   expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
 
-  // nav away
+  // nav away (confirm the unsaved changes prompt)
+  vi.spyOn(window, 'confirm').mockReturnValueOnce(true)
   const sideNav = screen.getByTestId('content-page-side-nav')
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))
@@ -82,9 +86,10 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
 
   await user.click(
     within(table).getAllByRole('link', {
-      name: /fish belt/i,
+      name: 'protocol_titles.fishbelt',
     })[0],
   )
+  expect(mockT).toHaveBeenCalledWith('protocol_titles.fishbelt')
 
   const formAfterNav = await screen.findByRole('form')
 

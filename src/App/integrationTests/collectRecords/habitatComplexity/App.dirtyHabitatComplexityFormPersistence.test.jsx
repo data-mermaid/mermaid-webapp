@@ -1,5 +1,7 @@
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from '../../../../testUtilities/mockT'
 
 import {
   screen,
@@ -32,7 +34,8 @@ test('Unsaved NEW Habitat Complexity form edits clear when the user navigates aw
 
   expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
 
-  // nav away
+  // nav away (confirm the unsaved changes prompt)
+  vi.spyOn(window, 'confirm').mockReturnValueOnce(true)
   const sideNav = await screen.findByTestId('content-page-side-nav')
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))
@@ -72,7 +75,8 @@ test('Unsaved EDIT Habitat Complexity form edits clear when the user navigates a
 
   expect(await within(form).findByTestId('depth-input')).toHaveValue(45)
 
-  // nav away
+  // nav away (confirm the unsaved changes prompt)
+  vi.spyOn(window, 'confirm').mockReturnValueOnce(true)
   const sideNav = screen.getByTestId('content-page-side-nav')
 
   await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))
@@ -80,7 +84,8 @@ test('Unsaved EDIT Habitat Complexity form edits clear when the user navigates a
   // nav back
   const table = await screen.findByRole('table')
 
-  await user.click(within(table).getAllByText('Habitat complexity')[0])
+  await user.click(within(table).getAllByText('protocol_titles.habitatcomplexity')[0])
+  expect(mockT).toHaveBeenCalledWith('protocol_titles.habitatcomplexity')
 
   // initial unedited depth value
   await waitFor(async () =>

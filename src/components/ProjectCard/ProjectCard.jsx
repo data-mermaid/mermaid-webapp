@@ -15,7 +15,7 @@ import stopEventPropagation from '../../library/stopEventPropagation'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { IconCopy } from '../icons'
 import { ButtonSecondary } from '../generic/buttons'
-import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
+import { formatDateTimeIntl } from '../../library/formatDateTime'
 import ProjectCardSummary from './ProjectCardSummary'
 import ProjectModal from './ProjectModal'
 import {
@@ -26,6 +26,7 @@ import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useTranslation } from 'react-i18next'
+import { MuiTooltip } from '../generic/MuiTooltip'
 import labelStyles from '../../style/labels.module.scss'
 import styles from './ProjectCard.module.scss'
 
@@ -131,6 +132,18 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
 
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
 
+  const copyButton = (
+    <ButtonSecondary
+      onClick={() => setIsProjectModalOpen(true)}
+      aria-label={t('buttons.copy')}
+      disabled={!isAppOnline || isDemoProject}
+      data-testid="copy-project-button"
+    >
+      <IconCopy />
+      <span>{t('buttons.copy')}</span>
+    </ButtonSecondary>
+  )
+
   return (
     <div
       {...restOfProps}
@@ -149,14 +162,10 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             <h2>{name}</h2>
             <div className={styles['pill-container']}>
               {isAdminUser && (
-                <div className={[labelStyles.pill, labelStyles.pill__admin].join(' ')}>
-                  {t('users.roles.admin')}
-                </div>
+                <span className={labelStyles['pill--admin']}>{t('users.roles.admin')}</span>
               )}
               {isDemoProject && (
-                <div className={[labelStyles.pill, labelStyles.pill__demo].join(' ')}>
-                  {t('projects.demo.demo')}
-                </div>
+                <span className={labelStyles['pill--demo']}>{t('projects.demo.demo')}</span>
               )}
             </div>
           </div>
@@ -164,15 +173,11 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <div className={styles['no-wrap-wrapper']}>
-            <ButtonSecondary
-              onClick={() => setIsProjectModalOpen(true)}
-              aria-label={t('buttons.copy')}
-              disabled={!isAppOnline || isDemoProject}
-              data-testid="copy-project-button"
-            >
-              <IconCopy />
-              <span>{t('buttons.copy')}</span>
-            </ButtonSecondary>
+            {isDemoProject ? (
+              <MuiTooltip title={t('projects.demo.copy_unavailable')}>{copyButton}</MuiTooltip>
+            ) : (
+              copyButton
+            )}
 
             {isProjectModalOpen && (
               <ProjectModal
@@ -185,7 +190,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             <CheckBoxLabel
               htmlFor={project.id}
               onClick={stopEventPropagation}
-              disabled={!isAppOnline}
+              $disabled={!isAppOnline}
             >
               <input
                 id={project.id}
@@ -199,7 +204,7 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
             </CheckBoxLabel>
           </div>
           <span className={styles['date-country-label']} style={{ marginTop: '1rem' }}>
-            {removeTimeZoneFromDate(updated_on)}
+            {formatDateTimeIntl(updated_on)}
           </span>
         </ProjectCardHeaderButtonsAndDate>
       </ProjectCardHeader>

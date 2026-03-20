@@ -212,7 +212,7 @@ const zIndex = {
   autocomplete: 15,
   header: 10,
   modal: 20,
-  stickyToolbar: 1,
+  stickyToolbar: 5,
   nestedStickyPageHeader: 1,
 }
 

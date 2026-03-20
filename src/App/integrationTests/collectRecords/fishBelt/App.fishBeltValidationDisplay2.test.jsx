@@ -1,7 +1,8 @@
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
@@ -13,6 +14,7 @@ import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import mockFishbeltValidationsObject from '../../../../testUtilities/mockFishbeltValidationsObject'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
+import i18n from '../../../../../i18n'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
@@ -20,11 +22,11 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockMermaidData.collect_records[0],
         validations: mockFishbeltValidationsObject,
@@ -43,7 +45,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -56,10 +58,13 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
     dexieCurrentUserInstance,
   )
 
+  const tSpy = vi.spyOn(i18n, 't')
   await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
+
+  expect(tSpy).toHaveBeenCalledWith('validation_messages.required')
   // record level validations
   expect(screen.getByText('record level error 1')).toBeInTheDocument()
   expect(screen.getByText('record level error 2')).toBeInTheDocument()
@@ -69,23 +74,57 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
 
   // input level validations
 
-  expect(within(screen.getByTestId('site')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('management')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-date')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-time')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect-number')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('len-surveyed')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('width')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('size-bin')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('reef-slope')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('relative-depth')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('visibility')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('current')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('tide')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('site')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('management')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('depth')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-date')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-time')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('transect-number')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('label')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('len-surveyed')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('width')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('size-bin')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('reef-slope')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('relative-depth')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('visibility')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('current')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('tide')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('notes')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('observers')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
 
   // observations table (has one empty observation)
 
@@ -102,11 +141,11 @@ test('Fishbelt validations will show only the first error when there are multipl
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockMermaidData.collect_records[0],
         validations: {
@@ -189,7 +228,7 @@ test('Fishbelt validations will show only the first error when there are multipl
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 

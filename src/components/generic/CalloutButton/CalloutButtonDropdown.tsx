@@ -14,12 +14,14 @@ import { AxiosError } from 'axios'
 import { IconDown } from '../../icons'
 
 interface CalloutButtonDropdownProps {
+  updateUserSettings: (setting: string, val: boolean) => Promise<void>
   onClick: () => void
   label: string
   disabled: boolean
   testId?: string
 }
 const CalloutButtonDropdown = ({
+  updateUserSettings,
   onClick,
   label,
   disabled,
@@ -35,12 +37,14 @@ const CalloutButtonDropdown = ({
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { refreshCurrentUser } = useCurrentUser()
 
-  const handleSuccessResponse = (response, languageSuccessMessage) => {
+  const handleSuccessResponse = (response) => {
     setIsDropdownOpen(false)
-    refreshCurrentUser() // ensures correct user privileges
-    toast.success(...getToastArguments(languageSuccessMessage))
-    setIsLoading(false)
-    navigate(`/projects/${response.id}/sites`)
+    return updateUserSettings('hasUserDismissedDemo', true).then(() => {
+      refreshCurrentUser() // ensures correct user privileges
+      toast.success(...getToastArguments(t('projects.demo.created')))
+      setIsLoading(false)
+      navigate(`/projects/${response.id}/project-info/new-demo`)
+    })
   }
 
   const handleResponseError = (error: AxiosError) => {
@@ -63,7 +67,7 @@ const CalloutButtonDropdown = ({
     databaseSwitchboardInstance
       .addDemoProject()
       .then((response) => {
-        handleSuccessResponse(response, t('projects.success.project_created'))
+        return handleSuccessResponse(response)
       })
       .catch((error) => {
         handleResponseError(error)
@@ -90,6 +94,7 @@ const CalloutButtonDropdown = ({
             root: buttonStyles['button--callout'],
           }}
           onClick={toggleMenu}
+          style={{ marginLeft: 0 }} //override default nth button margin
         >
           <IconDown
             style={{

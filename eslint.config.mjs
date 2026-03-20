@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from 'eslint-plugin-storybook'
+
 import globals from 'globals'
 import eslint from '@eslint/js'
 
@@ -20,7 +23,6 @@ export default [
   jestDomPlugin.configs['flat/recommended'],
   importPlugin.flatConfigs.recommended,
   jsxA11yPlugin.flatConfigs.recommended,
-
   {
     settings: {
       react: {
@@ -79,7 +81,14 @@ export default [
   },
   { languageOptions: { globals: { ...globals.browser } } },
   {
-    files: ['**/*.test.js', '**/*.test.jsx', 'src/setupTests.js'],
-    languageOptions: { globals: { ...globals.jest, ...globals.node } },
+    files: ['**/*.test.js', '**/*.test.jsx', '**/*.test.ts', '**/*.test.tsx', 'src/setupTests.js'],
+    languageOptions: { globals: { ...globals.vitest, ...globals.node } },
+  },
+  ...storybook.configs['flat/recommended'],
+  {
+    files: ['**/*.stories.@(js|jsx|ts|tsx)'],
+    rules: {
+      'import/no-unresolved': 'off',
+    },
   },
 ]

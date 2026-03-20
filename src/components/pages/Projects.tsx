@@ -30,7 +30,7 @@ import { getCurrentUserOptionalFeature } from '../../library/getCurrentUserOptio
 
 interface DemoProjectCalloutProps {
   handleDemoClick: () => void
-  updateUserSettings: (setting: string, val: boolean) => void
+  updateUserSettings: (setting: string, val: boolean) => Promise<void>
   userHasProjects: boolean
   setIsDemoCalloutVisible: Dispatch<SetStateAction<boolean>>
 }
@@ -113,6 +113,13 @@ const Projects = () => {
     !userHasDemoProject && !hasUserDismissedDemo && isAppOnline && isDemoProjectEnabledForUser,
   )
 
+  // Hide demo callout when projects load and contain a demo project
+  useEffect(() => {
+    if (userHasDemoProject) {
+      setIsDemoCalloutVisible(false)
+    }
+  }, [userHasDemoProject])
+
   useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
       Promise.all([
@@ -143,9 +150,9 @@ const Projects = () => {
     unavailableProjectsErrorText,
   ])
 
-  const updateUserSettings = (setting: string, val: boolean) => {
+  const updateUserSettings = (setting: string, val: boolean): Promise<void> => {
     const updatedProfileSettings = { [setting]: val }
-    saveUserProfile({
+    return saveUserProfile({
       ...currentUser,
       collect_state: { ...currentUser.collect_state, ...updatedProfileSettings },
     })
@@ -156,11 +163,12 @@ const Projects = () => {
     databaseSwitchboardInstance
       .addDemoProject()
       .then((response) => {
-        updateUserSettings('hasUserDismissedDemo', true)
-        refreshCurrentUser() // ensures correct user privileges
-        toast.success(...getToastArguments(t('projects.demo.created')))
-        setIsLoading(false)
-        navigate(`/projects/${response.id}/sites`)
+        return updateUserSettings('hasUserDismissedDemo', true).then(() => {
+          refreshCurrentUser() // ensures correct user privileges
+          toast.success(...getToastArguments(t('projects.demo.created')))
+          setIsLoading(false)
+          navigate(`/projects/${response.id}/project-info/new-demo`)
+        })
       })
       .catch((error) => {
         const isDuplicateError = error.response?.status === 400
@@ -268,6 +276,7 @@ const Projects = () => {
     <HomePageLayout
       topRow={
         <ProjectToolBarSection
+          updateUserSettings={updateUserSettings}
           setProjectFilter={setProjectFilter}
           projectSortKey={projectSortKey}
           setProjectSortKey={setProjectSortKey}

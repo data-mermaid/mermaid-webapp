@@ -1,3 +1,4 @@
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -28,10 +29,15 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
 
   const siteNameInput = await screen.findByTestId('name-input')
 
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(siteNameInput).toHaveValue('Site A'))
+
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(screen.getByTestId('save-button-site-form'))
+  const saveButton = screen.getByTestId('save-button-site-form')
+  await waitFor(() => expect(saveButton).toBeEnabled())
+  await user.click(saveButton)
 
   await screen.findByTestId('site-toast-offline-success')
 
@@ -52,10 +58,15 @@ test('Online: Edit Site shows toast and edited record info', async () => {
 
   const siteNameInput = await screen.findByTestId('name-input')
 
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(siteNameInput).toHaveValue('Site A'))
+
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(screen.getByTestId('save-button-site-form'))
+  const saveButton = screen.getByTestId('save-button-site-form')
+  await waitFor(() => expect(saveButton).toBeEnabled())
+  await user.click(saveButton)
 
   await screen.findByTestId('site-toast-success')
 
@@ -80,10 +91,15 @@ test('Offline: edit site save stored site in dexie', async () => {
 
   const siteNameInput = await screen.findByTestId('name-input')
 
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(siteNameInput).toHaveValue('Site A'))
+
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(screen.getByTestId('save-button-site-form'))
+  const saveButton = screen.getByTestId('save-button-site-form')
+  await waitFor(() => expect(saveButton).toBeEnabled())
+  await user.click(saveButton)
 
   await screen.findByTestId('site-toast-offline-success')
 
@@ -94,7 +110,7 @@ test('Offline: edit site save stored site in dexie', async () => {
   await waitFor(() => expect(updatedSite.name).toEqual('OOF'))
 })
 test('Offline: Edit site  save failure shows toast message with new edits persisting', async () => {
-  const consoleSpy = jest.spyOn(console, 'error')
+  const consoleSpy = vi.spyOn(console, 'error')
 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
@@ -102,7 +118,7 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   const dexieError = new Error('this is a dexie error')
 
   // make sure the next save will fail
-  dexiePerUserDataInstance.project_sites.put = jest.fn().mockRejectedValueOnce(dexieError)
+  dexiePerUserDataInstance.project_sites.put = vi.fn().mockRejectedValueOnce(dexieError)
 
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -118,10 +134,15 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
 
   const siteNameInput = await screen.findByTestId('name-input')
 
+  // Wait for formik to initialize with fetched data before interacting
+  await waitFor(() => expect(siteNameInput).toHaveValue('Site A'))
+
   await user.clear(siteNameInput)
   await user.type(siteNameInput, 'OOF')
 
-  await user.click(screen.getByTestId('save-button-site-form'))
+  const saveButton = screen.getByTestId('save-button-site-form')
+  await waitFor(() => expect(saveButton).toBeEnabled())
+  await user.click(saveButton)
 
   await screen.findByTestId('site-toast-error')
   expect(consoleSpy).toHaveBeenCalledWith(dexieError)

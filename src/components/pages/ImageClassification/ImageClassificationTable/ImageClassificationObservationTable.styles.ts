@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { Td, Tr } from '../../../generic/Table/table'
 import theme from '../../../../theme'
 import { MessageType } from '../../../../types/constants'
@@ -11,9 +11,9 @@ interface StyledTrProps {
 }
 
 interface StyledTdProps {
-  textAlign?: string
-  cursor?: string
-  isDuplicatedImageShowing?: boolean
+  $textAlign?: string
+  $cursor?: string
+  $isDuplicatedImageShowing?: boolean
 }
 
 const StyledColgroup = styled('colgroup')`
@@ -50,7 +50,7 @@ const StyledColgroup = styled('colgroup')`
 
 const StyledTd = styled(Td)<StyledTdProps>`
   padding: 0.5em !important;
-  text-align: ${(props) => props.textAlign};
+  text-align: ${(props) => props.$textAlign};
 
   &.hover-highlight {
     background-color: ${theme.color.tableRowHover};
@@ -91,9 +91,9 @@ const ImageWrapper = styled('div')`
 `
 
 const TdWithHoverText = styled(StyledTd)<StyledTdProps>`
-  cursor: ${(props) => props.cursor};
+  cursor: ${(props) => props.$cursor};
   box-shadow: ${(props) =>
-    props.isDuplicatedImageShowing ? `inset 0 0 0 2px ${theme.color.warning}` : 'none'};
+    props.$isDuplicatedImageShowing ? `inset 0 0 0 2px ${theme.color.warning}` : 'none'};
   position: relative;
 
   &.hover-highlight {

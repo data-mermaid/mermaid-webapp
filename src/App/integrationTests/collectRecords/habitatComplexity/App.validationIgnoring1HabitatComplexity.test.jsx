@@ -1,7 +1,8 @@
+import { expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
@@ -20,11 +21,11 @@ test('Habitat Complexity validation: user can dismiss non-observations input war
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockHabitatComplexityCollectRecords[0],
         validations: {
@@ -246,7 +247,7 @@ test('Habitat Complexity validation: user can dismiss non-observations input war
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -444,11 +445,11 @@ test('Habitat Complexity validation: user can dismiss record-level warnings ', a
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockHabitatComplexityCollectRecords[0],
         validations: {
@@ -478,7 +479,7 @@ test('Habitat Complexity validation: user can dismiss record-level warnings ', a
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -527,11 +528,11 @@ test('Habitat Complexity validation: user can dismiss observation warnings ', as
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockHabitatComplexityCollectRecords[0],
         validations: {
@@ -592,7 +593,7 @@ test('Habitat Complexity validation: user can dismiss observation warnings ', as
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -634,11 +635,11 @@ test('Habitat Complexity validation: user can reset dismissed non-observation in
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockHabitatComplexityCollectRecords[0],
         validations: {
@@ -861,7 +862,7 @@ test('Habitat Complexity validation: user can reset dismissed non-observation in
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 

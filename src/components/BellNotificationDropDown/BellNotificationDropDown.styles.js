@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 
 import theme from '../../theme'
 
@@ -52,11 +52,11 @@ const getNotificationStatusColor = (props) => {
     error: theme.color.cautionColor,
   }
 
-  if (!props.status) {
+  if (!props.$status) {
     return theme.infoColor
   }
 
-  return statusColors[props.status] || theme.infoColor
+  return statusColors[props.$status] || theme.infoColor
 }
 
 export const NotificationStatus = styled('span')`

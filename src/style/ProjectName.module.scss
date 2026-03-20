@@ -1,0 +1,39 @@
+@use './theme.scss' as *;
+
+.project-name-wrapper {
+  background-color: $white;
+  display: flex;
+  align-items: center;
+  padding: $spacing-medium;
+  @media (max-width: $mobile-break) {
+    display: block;
+    padding: $spacing-small;
+  }
+}
+.project-name-header {
+  display: inline;
+  margin: 0 $spacing-small 0 0;
+  @media (max-width: $mobile-break) {
+    display: inline-block;
+    max-width: 80%;
+  }
+}
+
+.project-meta-info-wrapper {
+  display: flex;
+  flex-direction: row;
+  row-gap: $spacing-small;
+  align-content: baseline;
+  @media (max-width: $mobile-break) {
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    column-gap: $spacing-medium;
+  }
+  button {
+    @media (min-width: $tablet-portrait-break) {
+      margin-left: $spacing-medium;
+    }
+  }
+}

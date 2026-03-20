@@ -11,10 +11,12 @@
   font-size: $small-font-size;
   cursor: text;
 }
-.pill__admin {
+.pill--admin {
+  @extend .pill;
   color: $white;
 }
-.pill__demo {
+.pill--demo {
+  @extend .pill;
   color: $white;
   background-color: $callout;
 }

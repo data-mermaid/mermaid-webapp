@@ -4,11 +4,7 @@ import { hoverState } from './mediaQueries'
 import '@fontsource/open-sans'
 import '@fontsource/open-sans/700.css'
 
-// eslint-disable-next-line import/no-unresolved
-import toastifyCss from 'react-toastify/dist/ReactToastify.css?raw'
-
 const GlobalStyle = createGlobalStyle`
-    ${toastifyCss}
     :root {
         font-size: 62.5%;
     }
@@ -16,11 +12,11 @@ const GlobalStyle = createGlobalStyle`
         background-color: ${theme.color.backgroundColor};
     }
     body, select, input, textarea, button, p, a{
-        font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'; 
+        font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
         font-size: ${theme.typography.defaultFontSize};
         color: ${theme.color.textColor};
         -webkit-font-smoothing: antialiased;
-    
+
     }
     select, input, textarea, p, a, button{
         line-height: ${theme.typography.lineHeight};
@@ -32,7 +28,7 @@ const GlobalStyle = createGlobalStyle`
     }
     *,*::before,*::after {
         box-sizing: border-box;
-    } 
+    }
     a{
         text-decoration: underline;
         ${hoverState(css`

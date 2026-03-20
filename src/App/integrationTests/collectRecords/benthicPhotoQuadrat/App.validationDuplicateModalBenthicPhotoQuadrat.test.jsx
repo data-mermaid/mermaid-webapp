@@ -1,7 +1,8 @@
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
@@ -15,6 +16,7 @@ import mockBenthicPhotoQuadratCollectRecords from '../../../../testUtilities/moc
 import App from '../../../App'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import mockSampleEventValidationObject from '../../../../testUtilities/mockCollectRecords/mockSampleEventValidationObject'
+import i18n from '../../../../../i18n'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
@@ -32,11 +34,11 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -55,7 +57,7 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -68,11 +70,14 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
     dexieCurrentUserInstance,
   )
 
+  const tSpy = vi.spyOn(i18n, 't')
+
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
+  expect(tSpy).toHaveBeenCalledWith('validation_messages.not_unique_site')
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
   await user.click(resolveButton)
@@ -99,7 +104,7 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+      within(screen.getByTestId('site')).queryByText('validation_messages.not_unique_site'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -108,11 +113,11 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -131,7 +136,7 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -147,7 +152,7 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -175,7 +180,7 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+      within(screen.getByTestId('site')).queryByText('validation_messages.not_unique_site'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -184,11 +189,11 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -207,7 +212,7 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -223,7 +228,7 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -249,11 +254,11 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -272,7 +277,7 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -288,7 +293,7 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -314,11 +319,11 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -337,7 +342,7 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -353,7 +358,7 @@ test('Validate Benthic Photo Quadrat collect record, get site duplicate warning,
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -381,11 +386,11 @@ test('Validate Benthic Photo Quadrat collect record, get management similar name
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -404,7 +409,7 @@ test('Validate Benthic Photo Quadrat collect record, get management similar name
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -420,9 +425,7 @@ test('Validate Benthic Photo Quadrat collect record, get management similar name
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -460,9 +463,7 @@ test('Validate Benthic Photo Quadrat collect record, get management similar name
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText(
-        'Another Management Regime is similar to this one.',
-      ),
+      within(screen.getByTestId('management')).queryByText('validation_messages.similar_name'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -471,11 +472,11 @@ test('Validate Benthic Photo Quadrat collect record, get management similar name
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -494,7 +495,7 @@ test('Validate Benthic Photo Quadrat collect record, get management similar name
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -510,9 +511,7 @@ test('Validate Benthic Photo Quadrat collect record, get management similar name
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -550,9 +549,7 @@ test('Validate Benthic Photo Quadrat collect record, get management similar name
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText(
-        'Another Management Regime is similar to this one.',
-      ),
+      within(screen.getByTestId('site')).queryByText('validation_messages.similar_name'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -561,11 +558,11 @@ test('Validate Benthic Photo Quadrat collect record, get management duplicate wa
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -584,7 +581,7 @@ test('Validate Benthic Photo Quadrat collect record, get management duplicate wa
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -600,9 +597,7 @@ test('Validate Benthic Photo Quadrat collect record, get management duplicate wa
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -632,11 +627,11 @@ test('Validate Benthic Photo Quadrat collect record, get management duplicate wa
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -655,7 +650,7 @@ test('Validate Benthic Photo Quadrat collect record, get management duplicate wa
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -671,9 +666,7 @@ test('Validate Benthic Photo Quadrat collect record, get management duplicate wa
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(
@@ -703,11 +696,11 @@ test('Validate Benthic Photo Quadrat collect record, get management duplicate wa
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -726,7 +719,7 @@ test('Validate Benthic Photo Quadrat collect record, get management duplicate wa
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -742,9 +735,7 @@ test('Validate Benthic Photo Quadrat collect record, get management duplicate wa
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('management')).findByTestId(

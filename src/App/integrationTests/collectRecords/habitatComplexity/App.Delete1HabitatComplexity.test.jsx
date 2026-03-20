@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -47,7 +48,7 @@ describe('Offline', () => {
     const table = screen.getByRole('table')
 
     const linkToHabitatComplexityRecord = within(table).queryByRole('link', {
-      name: 'Habitat complexity',
+      name: 'protocol_titles.habitatcomplexity',
     })
 
     expect(linkToHabitatComplexityRecord).not.toBeInTheDocument()

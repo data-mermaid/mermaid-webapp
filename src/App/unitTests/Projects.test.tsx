@@ -1,7 +1,11 @@
+import { describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
-import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+import {
+  initiallyHydrateOfflineStorageWithMockData,
+  initiallyHydrateOfflineStorageWithMockDataNoDemoProject,
+} from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
@@ -313,22 +317,124 @@ describe('Projects dashboard', () => {
     expect(projectCards.length).toEqual(1)
     expect(within(projectCards[0]).getByText("Project Z has an apostrophe foo's"))
   })
-  // Commented out until demo project is released and enabled in the production environment
-  // test('Online - Demo callout will show if the user does not have a demo project', async () => {
-  //   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-  //
-  //   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-  //
-  //   renderAuthenticatedOnline(<Projects />, {
-  //     dexiePerUserDataInstance,
-  //     isSyncInProgressOverride: true,
-  //   })
-  //
-  //   await waitFor(() =>
-  //     expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
-  //   )
-  //
-  //   expect(screen.getByTestId('demo-project-callout')).toBeInTheDocument()
-  //   expect(screen.getByTestId('callout-close-button')).toBeInTheDocument()
-  // })
+  test('Online - Demo callout will show if the user does not have a demo project', async () => {
+    const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockDataNoDemoProject(dexiePerUserDataInstance)
+
+    renderAuthenticatedOnline(<Projects />, {
+      dexiePerUserDataInstance,
+      isSyncInProgressOverride: true,
+    })
+
+    await waitFor(() =>
+      expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
+    )
+
+    expect(screen.getByTestId('demo-project-callout')).toBeInTheDocument()
+    expect(screen.getByTestId('callout-close-button')).toBeInTheDocument()
+  })
+
+  test('Online - Demo callout will NOT show if user has previously dismissed demo', async () => {
+    const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockDataNoDemoProject(dexiePerUserDataInstance)
+
+    const userWithDismissedDemo = {
+      id: 'fake-id',
+      first_name: 'FakeFirstName',
+      last_name: 'FakeLastName',
+      full_name: 'FakeFirstName FakeLastName',
+      projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
+      collect_state: { hasUserDismissedDemo: true },
+    }
+
+    renderAuthenticatedOnline(<Projects />, {
+      dexiePerUserDataInstance,
+      isSyncInProgressOverride: true,
+      currentUserOverride: userWithDismissedDemo,
+    })
+
+    await waitFor(() =>
+      expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
+    )
+
+    expect(screen.queryByTestId('demo-project-callout')).not.toBeInTheDocument()
+  })
+
+  test('Online - Clicking the demo callout close button dismisses it and calls saveUserProfile', async () => {
+    const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockDataNoDemoProject(dexiePerUserDataInstance)
+
+    const mockSaveUserProfile = vi.fn()
+    const userWithoutDismissedDemo = {
+      id: 'fake-id',
+      first_name: 'FakeFirstName',
+      last_name: 'FakeLastName',
+      full_name: 'FakeFirstName FakeLastName',
+      projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
+      collect_state: {},
+    }
+
+    const { user } = renderAuthenticatedOnline(<Projects />, {
+      dexiePerUserDataInstance,
+      isSyncInProgressOverride: true,
+      currentUserOverride: userWithoutDismissedDemo,
+      saveUserProfileOverride: mockSaveUserProfile,
+    })
+
+    await waitFor(() =>
+      expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
+    )
+
+    expect(screen.getByTestId('demo-project-callout')).toBeInTheDocument()
+
+    const closeButton = screen.getByTestId('callout-close-button')
+    await user.click(closeButton)
+
+    // Verify callout is no longer visible
+    expect(screen.queryByTestId('demo-project-callout')).not.toBeInTheDocument()
+
+    // Verify saveUserProfile was called with hasUserDismissedDemo: true
+    expect(mockSaveUserProfile).toHaveBeenCalledTimes(1)
+    expect(mockSaveUserProfile).toHaveBeenCalledWith(
+      expect.objectContaining({
+        collect_state: expect.objectContaining({
+          hasUserDismissedDemo: true,
+        }),
+      }),
+    )
+  })
+
+  test('Online - Demo callout will NOT show if user already has a demo project', async () => {
+    const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+    // The mock data includes a project with is_demo: true (Project Z id: '6')
+    // This test validates that when user has a demo project, callout doesn't show
+    const userWithoutDismissedDemo = {
+      id: 'fake-id',
+      first_name: 'FakeFirstName',
+      last_name: 'FakeLastName',
+      full_name: 'FakeFirstName FakeLastName',
+      projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
+      collect_state: {},
+    }
+
+    renderAuthenticatedOnline(<Projects />, {
+      dexiePerUserDataInstance,
+      isSyncInProgressOverride: true,
+      currentUserOverride: userWithoutDismissedDemo,
+    })
+
+    await waitFor(() =>
+      expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
+    )
+
+    // Mock data includes Project Z with is_demo: true (id: '6')
+    // Since a demo project exists, the callout should NOT appear
+    expect(screen.queryByTestId('demo-project-callout')).not.toBeInTheDocument()
+  })
 })

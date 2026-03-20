@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { subNavNodePropTypes } from '../../../SubNavMenuRecordName/subNavNodePropTypes'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import {
@@ -40,7 +40,7 @@ const ContentToolbar = styled('div')`
   margin-bottom: 0;
   z-index: ${theme.zIndex.stickyToolbar};
   ${(props) =>
-    props.isToolbarSticky &&
+    props.$isToolbarSticky &&
     css`
       position: sticky;
       top: ${theme.spacing.headerHeight};
@@ -94,7 +94,9 @@ const ContentPageLayout = ({
                   ) : (
                     <>
                       {toolbar && (
-                        <ContentToolbar isToolbarSticky={isToolbarSticky}>{toolbar}</ContentToolbar>
+                        <ContentToolbar $isToolbarSticky={isToolbarSticky}>
+                          {toolbar}
+                        </ContentToolbar>
                       )}
                       <ErrorBoundary>
                         <Content>{content}</Content>

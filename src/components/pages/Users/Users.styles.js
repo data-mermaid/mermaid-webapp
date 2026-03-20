@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import theme from '../../../theme'
 import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { IconAlert } from '../../icons'
@@ -41,7 +41,7 @@ export const TableRadioLabel = styled.label(
   (props) => css`
     top: 0;
     right: 0;
-    cursor: ${props.cursor};
+    cursor: ${props.$cursor};
     bottom: 0;
     left: 0;
     position: absolute;
@@ -52,7 +52,7 @@ export const TableRadioLabel = styled.label(
     `)}
 
     input {
-      cursor: ${props.cursor};
+      cursor: ${props.$cursor};
     }
   `,
 )

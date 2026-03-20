@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { NavLink } from 'react-router-dom'
 import theme from '../../theme'
 import {
@@ -44,8 +44,8 @@ export const CheckBoxLabel = styled.label`
   padding: ${theme.spacing.buttonPadding};
   justify-self: end;
   background: ${(props) =>
-    props.disabled ? theme.color.secondaryDisabledColor : theme.color.secondaryColor};
-  color: ${(props) => (props.disabled ? theme.color.primaryDisabledColor : theme.color.textColor)};
+    props.$disabled ? theme.color.secondaryDisabledColor : theme.color.secondaryColor};
+  color: ${(props) => (props.$disabled ? theme.color.primaryDisabledColor : theme.color.textColor)};
   ${hoverState(css`
     background: ${theme.color.secondaryHover};
   `)}
@@ -96,8 +96,8 @@ export const SummaryCard = styled(NavLink)`
 `
 export const DataSharingSummaryCard = styled(SummaryCard)`
   display: grid;
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     content: '';
   }
   grid-template-columns: 1fr auto 1fr;
@@ -164,7 +164,7 @@ export const OfflineSummaryCard = styled('div')`
 
 export const OfflineOrReadOnlyContent = styled('span')`
   font-size: ${(props) =>
-    props.smallFont ? theme.typography.smallFontSize : theme.typography.mediumFontSize};
+    props.$smallFont ? theme.typography.smallFontSize : theme.typography.mediumFontSize};
   text-align: center;
   padding: 1rem;
 `

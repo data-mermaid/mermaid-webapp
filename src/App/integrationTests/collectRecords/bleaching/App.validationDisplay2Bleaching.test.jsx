@@ -1,7 +1,8 @@
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
@@ -14,6 +15,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import mockBleachingValidationsObject from '../../../../testUtilities/mockBleachingValidationsObject'
 import mockBleachingCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBleachingCollectRecords'
+import i18n from '../../../../../i18n'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
@@ -21,11 +23,11 @@ test('Validating an empty bleaching collect record collect record shows validati
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockBleachingValidationsObject,
@@ -44,7 +46,7 @@ test('Validating an empty bleaching collect record collect record shows validati
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -57,10 +59,13 @@ test('Validating an empty bleaching collect record collect record shows validati
     dexieCurrentUserInstance,
   )
 
+  const tSpy = vi.spyOn(i18n, 't')
   await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
   expect(await screen.findByTestId('validating-button'))
   await waitFor(() => expect(screen.getByTestId('validate-button')))
+
+  expect(tSpy).toHaveBeenCalledWith('validation_messages.required')
   // record level validations
   expect(screen.getByText('record level error 1')).toBeInTheDocument()
   expect(screen.getByText('record level error 2')).toBeInTheDocument()
@@ -70,18 +75,42 @@ test('Validating an empty bleaching collect record collect record shows validati
 
   // input level validations
 
-  expect(within(screen.getByTestId('site')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('management')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-date')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample-time')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('quadrat-size')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('relative-depth')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('current')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('tide')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('site')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('management')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('depth')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-date')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('sample-time')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('quadrat-size')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('label')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('relative-depth')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('current')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('tide')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('notes')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('observers')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
 
   // observations tables (have one observation error each)
 
@@ -116,11 +145,11 @@ test('bleaching collect record validations will show only the first error when t
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: {
@@ -203,7 +232,7 @@ test('bleaching collect record validations will show only the first error when t
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 

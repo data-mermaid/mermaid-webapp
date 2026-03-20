@@ -1,5 +1,6 @@
+import { expect, test } from 'vitest'
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import React from 'react'
 import {
   mockMermaidApiAllSuccessful,
@@ -17,11 +18,11 @@ test('User being denied push sync shows toasts on project-related page', async (
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
 
-      (req, res, ctx) => {
-        return res(ctx.json(mockUserDoesntHavePushSyncPermissionForProjects))
+      () => {
+        return HttpResponse.json(mockUserDoesntHavePushSyncPermissionForProjects)
       },
     ),
   )
@@ -77,11 +78,11 @@ test('User being denied push sync toast doesnt show duplicate unsaved data types
   }
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
 
-      (req, res, ctx) => {
-        return res(ctx.json(mockSyncErrorDataWithDuplicateUnsavedDataInfo))
+      () => {
+        return HttpResponse.json(mockSyncErrorDataWithDuplicateUnsavedDataInfo)
       },
     ),
   )

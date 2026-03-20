@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -26,10 +27,12 @@ describe('Habitat Complexity Observations', () => {
 
     const intervalSizeInput = await screen.findByTestId('interval-size-input')
     const intervalStartInput = await screen.findByTestId('interval-start-input')
-    await user.clear(intervalStartInput)
-    // interval start has a default value or 1, so we need to clear it so that our test typing produces 0 instead of 10
-    await user.type(intervalStartInput, '0')
+    const intervalStartCheckbox = await screen.findByTestId('interval-start-sync-checkbox')
 
+    await user.click(intervalStartCheckbox) // uncheck to enable manual interval start entry
+    // interval start has a default value or 1, so we need to clear it so that our test typing produces 0 instead of 10
+    await user.clear(intervalStartInput)
+    await user.type(intervalStartInput, '0')
     await user.type(intervalSizeInput, '5')
 
     const observationsSection = await screen.findByTestId('observations-section')
@@ -100,12 +103,9 @@ describe('Habitat Complexity Observations', () => {
     )
 
     const intervalSizeInput = await screen.findByTestId('interval-size-input')
-    const intervalStartInput = await screen.findByTestId('interval-start-input')
-    const intervalStartCheckbox = await screen.findByTestId('interval-start-sync-checkbox')
 
-    await user.clear(intervalStartInput)
+    // checkbox is checked by default, so interval_start syncs with interval_size
     await user.type(intervalSizeInput, '5')
-    await user.click(intervalStartCheckbox)
 
     const observationsSection = await screen.findByTestId('observations-section')
 
@@ -147,18 +147,12 @@ describe('Habitat Complexity Observations', () => {
     )
 
     const intervalSizeInput = await screen.findByTestId('interval-size-input')
-    const intervalStartCheckbox = await screen.findByTestId('interval-start-sync-checkbox')
 
+    // checkbox is checked by default, so interval_start syncs with interval_size
     await user.type(intervalSizeInput, '5')
 
     const observationsSection = await screen.findByTestId('observations-section')
     const getIntervalCells = () => within(observationsSection).getAllByTestId('interval-cell')
-
-    await waitFor(() => {
-      expect(getIntervalCells()[0]).toHaveTextContent('0m')
-    })
-
-    await user.click(intervalStartCheckbox)
 
     await waitFor(() => {
       expect(getIntervalCells()[0]).toHaveTextContent('5m')
@@ -218,6 +212,7 @@ describe('Habitat Complexity Observations', () => {
 
     const intervalSizeInput = await screen.findByTestId('interval-size-input')
 
+    // checkbox is checked by default, so interval_start syncs with interval_size (5)
     await user.type(intervalSizeInput, '5')
 
     const observationsSection = await screen.findByTestId('observations-section')
@@ -230,16 +225,16 @@ describe('Habitat Complexity Observations', () => {
       within(observationsSection).getAllByTestId('interval-cell')
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('0m')
+      expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('5m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('5m')
+      expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('10m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('10m')
+      expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('15m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('15m')
+      expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('20m')
     })
     await waitFor(() => {
       expect(observationIntervalLabelsAfterFourRowsAdded[4]).toBeUndefined()
@@ -256,20 +251,20 @@ describe('Habitat Complexity Observations', () => {
       within(observationsSection).getAllByTestId('interval-cell')
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterEnterKey[0]).toHaveTextContent('0m')
+      expect(observationIntervalLabelsAfterEnterKey[0]).toHaveTextContent('5m')
     })
 
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterEnterKey[1]).toHaveTextContent('5m')
+      expect(observationIntervalLabelsAfterEnterKey[1]).toHaveTextContent('10m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterEnterKey[2]).toHaveTextContent('10m')
+      expect(observationIntervalLabelsAfterEnterKey[2]).toHaveTextContent('15m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterEnterKey[3]).toHaveTextContent('15m')
+      expect(observationIntervalLabelsAfterEnterKey[3]).toHaveTextContent('20m')
     })
     await waitFor(() => {
-      expect(observationIntervalLabelsAfterEnterKey[4]).toHaveTextContent('20m')
+      expect(observationIntervalLabelsAfterEnterKey[4]).toHaveTextContent('25m')
     })
   })
 })

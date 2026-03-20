@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import theme from '../../../theme'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../library/styling/mediaQueries'
 import {
@@ -20,7 +20,7 @@ export const NewOptionButton = styled(ButtonThatLooksLikeLink)`
 export const ObservationTr = styled(Tr)`
   border-width: 0 0 0 ${theme.spacing.xsmall};
   border-style: solid;
-  border-color: ${(props) => theme.color.getBorderColor(props.messageType)};
+  border-color: ${(props) => theme.color.getBorderColor(props.$messageType)};
 `
 
 export const InputAutocompleteContainer = styled.div`
@@ -162,7 +162,7 @@ export const DeleteProjectButtonCautionWrapper = styled(DeleteRecordButtonCautio
 
 export const ErrorText = styled.div`
   position: fixed;
-  visibility: ${(props) => (props.isErrorShown ? 'shown' : 'hidden')};
+  visibility: ${(props) => (props.$isErrorShown ? 'shown' : 'hidden')};
   font-size: ${theme.typography.smallFontSize};
   pointer-events: auto;
   white-space: nowrap;
@@ -173,7 +173,7 @@ export const ErrorText = styled.div`
   padding: 0.1rem 1rem;
   border-radius: 5px;
   right: 5px;
-  &:after {
+  &::after {
     position: absolute;
     content: '';
     background: ${theme.color.inlineErrorColor};
@@ -190,7 +190,7 @@ export const ErrorTextSubmit = styled(ErrorText)`
   position: absolute;
   margin-top: 1em;
   margin-right: 3em;
-  &:after {
+  &::after {
     left: calc(90% - 5px);
   }
 `
@@ -202,7 +202,7 @@ export const ErrorBox = styled.div`
   top: calc(${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + 20px);
   bottom: ${theme.spacing.small};
   div:nth-child(1) {
-    &:after {
+    &::after {
       /* top */
       top: -6px;
       transform: rotate(45deg);
@@ -210,7 +210,7 @@ export const ErrorBox = styled.div`
   }
   div:nth-child(2) {
     bottom: 10px;
-    &:after {
+    &::after {
       /* bottom */
       bottom: -6px;
       transform: rotate(-135deg);

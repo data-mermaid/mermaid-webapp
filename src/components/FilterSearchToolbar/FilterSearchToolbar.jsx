@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { Input, LabelContainer, inputStyles } from '../generic/form'
 import { IconInfo } from '../icons'
@@ -18,11 +18,11 @@ const FilterLabelWrapper = styled.label`
 const FilterInput = styled(Input)`
   ${inputStyles};
   background-color: ${(props) =>
-    props.hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
+    props.$hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
 
   &:autofill {
     background-color: ${(props) =>
-      props.hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
+      props.$hasFilter ? theme.color.getMessageColorBackground('warning') : 'transparent'};
   }
 `
 
@@ -123,7 +123,7 @@ const FilterSearchToolbar = ({
         value={globalSearchText}
         onChange={handleFilterChange}
         disabled={disabled}
-        hasFilter={globalSearchText && globalSearchText.length > 0}
+        $hasFilter={globalSearchText && globalSearchText.length > 0}
       />
     </FilterLabelWrapper>
   )

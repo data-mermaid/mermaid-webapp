@@ -1,12 +1,14 @@
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import { toast, Slide } from 'react-toastify'
 import handleHttpResponseError from '../../library/handleHttpResponseError'
+import i18n from '../../../i18n'
 describe('handleHttpResponseError', () => {
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 401', () => {
-    const callback = jest.fn()
-    const logoutMermaid = jest.fn()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 401 } }, callback, logoutMermaid })
 
@@ -14,12 +16,15 @@ describe('handleHttpResponseError', () => {
     expect(callback).not.toHaveBeenCalled()
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 403', () => {
-    const toastSpy = jest.spyOn(toast, 'error')
+    const toastSpy = vi.spyOn(toast, 'error')
+    const tSpy = vi.spyOn(i18n, 't')
 
-    const callback = jest.fn()
-    const logoutMermaid = jest.fn()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 403 } }, callback, logoutMermaid })
+
+    expect(tSpy).toHaveBeenCalledWith('api_errors.unauthorized_user')
 
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
@@ -35,12 +40,15 @@ describe('handleHttpResponseError', () => {
     expect(callback).not.toHaveBeenCalled()
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 500', () => {
-    const toastSpy = jest.spyOn(toast, 'error')
+    const toastSpy = vi.spyOn(toast, 'error')
+    const tSpy = vi.spyOn(i18n, 't')
 
-    const callback = jest.fn()
-    const logoutMermaid = jest.fn()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 500 } }, callback, logoutMermaid })
+
+    expect(tSpy).toHaveBeenCalledWith('api_errors.unspecified_error')
 
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
@@ -56,12 +64,15 @@ describe('handleHttpResponseError', () => {
     expect(callback).not.toHaveBeenCalled()
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 502', () => {
-    const toastSpy = jest.spyOn(toast, 'error')
+    const toastSpy = vi.spyOn(toast, 'error')
+    const tSpy = vi.spyOn(i18n, 't')
 
-    const callback = jest.fn()
-    const logoutMermaid = jest.fn()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 502 } }, callback, logoutMermaid })
+
+    expect(tSpy).toHaveBeenCalledWith('api_errors.unspecified_error')
 
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
@@ -77,12 +88,15 @@ describe('handleHttpResponseError', () => {
     expect(callback).not.toHaveBeenCalled()
   })
   test('handleHttpResponseError produces the appropriate toast message if the status is 503', () => {
-    const toastSpy = jest.spyOn(toast, 'error')
+    const toastSpy = vi.spyOn(toast, 'error')
+    const tSpy = vi.spyOn(i18n, 't')
 
-    const callback = jest.fn()
-    const logoutMermaid = jest.fn()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 503 } }, callback, logoutMermaid })
+
+    expect(tSpy).toHaveBeenCalledWith('api_errors.unspecified_error')
 
     const [toastContent, toastOptions] = toastSpy.mock.calls[0]
 
@@ -98,8 +112,8 @@ describe('handleHttpResponseError', () => {
     expect(callback).not.toHaveBeenCalled()
   })
   test('handleHttpResponseError can be extended with a callback function', () => {
-    const callback = jest.fn()
-    const logoutMermaid = jest.fn()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({
       error: { response: { status: 'something that wont be handled in util function logic' } },
@@ -110,9 +124,9 @@ describe('handleHttpResponseError', () => {
     expect(callback).toHaveBeenCalled()
   })
   test('if there is an error, it will be logged to console.error', () => {
-    const consoleSpy = jest.spyOn(console, 'error')
+    const consoleSpy = vi.spyOn(console, 'error')
 
-    const logoutMermaid = jest.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({
       error: 'the provided error',
@@ -123,10 +137,10 @@ describe('handleHttpResponseError', () => {
   })
 
   test('If a callback is provided, handleHttpResponseError will not produce a generic user message for status 400', () => {
-    const toastSpy = jest.spyOn(toast, 'error')
+    const toastSpy = vi.spyOn(toast, 'error')
 
-    const callback = jest.fn()
-    const logoutMermaid = jest.fn()
+    const callback = vi.fn()
+    const logoutMermaid = vi.fn()
 
     handleHttpResponseError({ error: { response: { status: 400 } }, callback, logoutMermaid })
 

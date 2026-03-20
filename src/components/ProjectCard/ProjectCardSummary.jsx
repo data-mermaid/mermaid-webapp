@@ -60,7 +60,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
 
   const readOnlyUserCollectCardContent =
     userCollectCount > 0 ? (
-      <OfflineOrReadOnlyContent smallFont>
+      <OfflineOrReadOnlyContent $smallFont>
         {t('projects.warning_readonly_active_units')}
       </OfflineOrReadOnlyContent>
     ) : (

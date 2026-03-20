@@ -2,7 +2,7 @@ import { toast } from 'react-toastify'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper } from '../../generic/Table/table'
@@ -27,6 +27,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { getIsUserAdminForProject } from '../../../App/currentUserProfileHelpers'
+import { getCurrentUserOptionalFeature } from '../../../library/getCurrentUserOptionalFeature'
 import { PROJECT_CODES } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { useCurrentProject } from '../../../App/CurrentProjectContext'
@@ -58,11 +59,11 @@ const CheckBoxLabel = styled.label`
 `
 
 const Input = styled.input`
-  cursor: ${(props) => props.cursor};
+  cursor: ${(props) => props.$cursor};
 `
 
 const Label = styled.label`
-  cursor: ${(props) => props.cursor};
+  cursor: ${(props) => props.$cursor};
 `
 
 const ReadOnlyDataSharingContent = ({ project = {} }) => {
@@ -98,6 +99,10 @@ const DataSharing = () => {
   const location = useLocation()
   const { currentProject } = useCurrentProject()
   const isDemoProject = currentProject?.is_demo
+  const { enabled: isDemoProjectFeatureEnabled = false } = getCurrentUserOptionalFeature(
+    currentUser,
+    'demo_project',
+  )
 
   useDocumentTitle(`${t('data_sharing.data_sharing')} - ${t('mermaid')}`)
 
@@ -228,16 +233,16 @@ const DataSharing = () => {
     const isChecked = event.target.checked
     const status = isChecked ? PROJECT_CODES.status.test : PROJECT_CODES.status.open
     const editedValues = { ...projectBeingEdited, status }
-
     handleSaveProject(editedValues, t('projects.success.test_project_status_saved'))
   }
+
+  const isTestProject = projectBeingEdited?.status === PROJECT_CODES.status.test
 
   const findToolTipDescription = (policy) =>
     dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
-  const isTestProject = projectBeingEdited?.status === PROJECT_CODES.status.test
   const contentViewByRole = (
-    <MaxWidthInputWrapper cursor={isDataUpdating ? 'wait' : 'auto'}>
+    <MaxWidthInputWrapper $cursor={isDataUpdating ? 'wait' : 'auto'}>
       <h3>{t('data_sharing.more_powerful')}</h3>
       <P>{t('data_sharing.information')}</P>
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
@@ -249,21 +254,21 @@ const DataSharing = () => {
             <thead>
               <Tr>
                 <Th>&nbsp;</Th>
-                <Th align="center">
+                <Th $align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Private')}
                     text={<>{t('data_sharing.private')}</>}
                     id="private-tooltip"
                   />
                 </Th>
-                <Th align="center">
+                <Th $align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Public Summary')}
                     text={<>{t('data_sharing.public_summary')}</>}
                     id="public-summary-tooltip"
                   />
                 </Th>
-                <Th align="center">
+                <Th $align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Public')}
                     text={<>{t('data_sharing.public')}</>}
@@ -279,7 +284,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`fish-belt${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'pointer'}
+                      $cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -289,7 +294,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_beltfish === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_beltfish')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'pointer'}
+                        $cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>
@@ -301,7 +306,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`benthic${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'pointer'}
+                      $cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -311,7 +316,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_benthiclit === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'pointer'}
+                        $cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>
@@ -323,7 +328,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`bleaching${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'pointer'}
+                      $cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -333,7 +338,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_bleachingqc === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_bleachingqc')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'pointer'}
+                        $cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>
@@ -345,7 +350,7 @@ const DataSharing = () => {
       ) : (
         <ReadOnlyDataSharingContent project={projectBeingEdited} />
       )}
-      {isAdminUser && !isDemoProject && (
+      {!isDemoProjectFeatureEnabled && isAdminUser && !isDemoProject && (
         <>
           <CheckBoxLabel cursor={isDataUpdating ? 'wait' : 'auto'}>
             <Input
@@ -354,14 +359,14 @@ const DataSharing = () => {
               checked={isTestProject}
               onChange={handleTestProjectChange}
               disabled={isDataUpdating}
-              cursor={isDataUpdating ? 'wait' : 'pointer'}
+              $cursor={isDataUpdating ? 'wait' : 'pointer'}
             />{' '}
             {t('data_sharing.is_test_project')}
           </CheckBoxLabel>
           <P>{t('data_sharing.test_project_data')}</P>
         </>
       )}
-      {!isAdminUser && isTestProject && !isDemoProject && (
+      {!isDemoProjectFeatureEnabled && !isAdminUser && isTestProject && !isDemoProject && (
         <p>{t('data_sharing.is_test_project')}</p>
       )}
       {isDemoProject && (

@@ -349,35 +349,43 @@ const ManagementRegimesOverview = () => {
       <StickyTableOverflowWrapper>
         <StickyOverviewTable {...getTableProps()}>
           <OverviewThead>
-            {headerGroups.map((headerGroup) => (
-              <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => {
-                  const isMultiSortColumn = headerGroup.headers.some(
-                    (header) => header.sortedIndex > 0,
-                  )
-                  const ThClassName = column.parent ? column.parent.id : undefined
+            {headerGroups.map((headerGroup) => {
+              const { key: headerGroupKey, ...headerGroupProps } = headerGroup.getHeaderGroupProps()
 
-                  const headerAlignment =
-                    column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
+              return (
+                <Tr key={headerGroupKey} {...headerGroupProps}>
+                  {headerGroup.headers.map((column) => {
+                    const isMultiSortColumn = headerGroup.headers.some(
+                      (header) => header.sortedIndex > 0,
+                    )
+                    const ThClassName = column.parent ? column.parent.id : undefined
 
-                  return (
-                    <OverviewTh
-                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                      key={column.id}
-                      isSortedDescending={column.isSortedDesc}
-                      sortedIndex={column.sortedIndex}
-                      isMultiSortColumn={isMultiSortColumn}
-                      isSortingEnabled={!column.disableSortBy}
-                      disabledHover={column.disableSortBy}
-                      align={headerAlignment}
-                      className={ThClassName}
-                    >
-                      <span> {column.render('Header')}</span>
-                    </OverviewTh>
-                  )
-                })}
-              </Tr>
-            ))}
+                    const headerAlignment =
+                      column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
+
+                    const { key: headerKey, ...headerProps } = column.getHeaderProps(
+                      getTableColumnHeaderProps(column),
+                    )
+
+                    return (
+                      <OverviewTh
+                        key={headerKey}
+                        {...headerProps}
+                        $isSortedDescending={column.isSortedDesc}
+                        $sortedIndex={column.sortedIndex}
+                        $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={!column.disableSortBy}
+                        $disabledHover={column.disableSortBy}
+                        $align={headerAlignment}
+                        className={ThClassName}
+                      >
+                        <span> {column.render('Header')}</span>
+                      </OverviewTh>
+                    )
+                  })}
+                </Tr>
+              )
+            })}
           </OverviewThead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
@@ -409,8 +417,10 @@ const ManagementRegimesOverview = () => {
                 mrTransectNumberRowCellValues.length > 1 &&
                 mrTransectNumberRowCellValues.every(isEqualToMaxSampleUnitCount)
 
+              const { key: rowKey, ...rowProps } = row.getRowProps()
+
               return (
-                <OverviewTr key={row.id} {...row.getRowProps()}>
+                <OverviewTr key={rowKey} {...rowProps}>
                   {row.cells.map((cell) => {
                     const cellColumnGroupId = cell.column.parent.id
 
@@ -443,11 +453,13 @@ const ManagementRegimesOverview = () => {
                       ? `${cellColumnGroupId} highlighted`
                       : cellColumnGroupId
 
+                    const { key: cellKey, ...cellProps } = cell.getCellProps()
+
                     return (
                       <OverviewTd
-                        {...cell.getCellProps()}
-                        key={cell.column.id}
-                        align={cellAlignment}
+                        key={cellKey}
+                        {...cellProps}
+                        $align={cellAlignment}
                         className={cellClassName}
                       >
                         <span>{cell.render('Cell')}</span>

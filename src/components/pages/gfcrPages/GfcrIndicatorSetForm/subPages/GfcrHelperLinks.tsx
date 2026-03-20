@@ -1,6 +1,6 @@
 import React from 'react'
 import { Trans } from 'react-i18next'
-import styled from 'styled-components'
+import { styled } from 'styled-components'
 import theme from '../../../../../theme'
 import { links } from '../../../../../link_constants'
 

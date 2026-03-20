@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { IconBell, IconOpenInNew, IconExcel, IconMenu } from '../icons'
 import theme from '../../theme'
 import { ButtonThatLooksLikeLink } from '../generic/buttons'
@@ -63,12 +63,11 @@ export const HeaderButtonThatLooksLikeLink = styled(ButtonThatLooksLikeLink)`
 export const StyledNavLink = styled('a')`
   ${linkStyles}
   ${(props) =>
-    props.disabledLink &&
+    props.$disabledLink &&
     css`
       color: ${theme.color.disabledText};
       pointer-events: none;
-    `} 
-  }
+    `}
   display: flex;
 `
 

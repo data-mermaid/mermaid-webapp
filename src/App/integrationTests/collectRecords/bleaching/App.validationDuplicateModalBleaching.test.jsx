@@ -1,7 +1,8 @@
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
@@ -15,6 +16,7 @@ import App from '../../../App'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import mockSampleEventValidationObject from '../../../../testUtilities/mockCollectRecords/mockSampleEventValidationObject'
 import mockBleachingCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBleachingCollectRecords'
+import i18n from '../../../../../i18n'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
@@ -32,11 +34,11 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -55,7 +57,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -68,11 +70,14 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
     dexieCurrentUserInstance,
   )
 
+  const tSpy = vi.spyOn(i18n, 't')
+
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
+  expect(tSpy).toHaveBeenCalledWith('validation_messages.not_unique_site')
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
   await user.click(resolveButton)
@@ -101,7 +106,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+      within(screen.getByTestId('site')).queryByText('validation_messages.not_unique_site'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -110,11 +115,11 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -133,7 +138,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -149,7 +154,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -180,7 +185,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+      within(screen.getByTestId('site')).queryByText('validation_messages.not_unique_site'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -189,11 +194,11 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -212,7 +217,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -228,7 +233,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -256,11 +261,11 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -279,7 +284,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -295,7 +300,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -323,11 +328,11 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -346,7 +351,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -362,7 +367,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('site')).getByText('Site: Similar records detected'),
+    within(screen.getByTestId('site')).getByText('validation_messages.not_unique_site'),
   ).toBeInTheDocument()
 
   const resolveButton = await within(screen.getByTestId('site')).findByTestId('resolve-site-button')
@@ -390,11 +395,11 @@ test('Validate Bleaching collect record, get management similar name warning, sh
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -413,7 +418,7 @@ test('Validate Bleaching collect record, get management similar name warning, sh
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -429,9 +434,7 @@ test('Validate Bleaching collect record, get management similar name warning, sh
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveManagementButton = await within(screen.getByTestId('management')).findByTestId(
@@ -470,9 +473,7 @@ test('Validate Bleaching collect record, get management similar name warning, sh
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText(
-        'Another Management Regime is similar to this one.',
-      ),
+      within(screen.getByTestId('management')).queryByText('validation_messages.similar_name'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -481,11 +482,11 @@ test('Validate Bleaching collect record, get management similar name warning, sh
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -504,7 +505,7 @@ test('Validate Bleaching collect record, get management similar name warning, sh
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -520,9 +521,7 @@ test('Validate Bleaching collect record, get management similar name warning, sh
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveManagementButton = await within(screen.getByTestId('management')).findByTestId(
@@ -561,9 +560,7 @@ test('Validate Bleaching collect record, get management similar name warning, sh
 
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText(
-        'Another Management Regime is similar to this one.',
-      ),
+      within(screen.getByTestId('management')).queryByText('validation_messages.similar_name'),
     ).not.toBeInTheDocument(),
   )
 }, 50000)
@@ -572,11 +569,11 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -595,7 +592,7 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -611,9 +608,7 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveManagementButton = await within(screen.getByTestId('management')).findByTestId(
@@ -645,11 +640,11 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -668,7 +663,7 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -684,9 +679,7 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveManagementButton = await within(screen.getByTestId('management')).findByTestId(
@@ -718,11 +711,11 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-      return res(ctx.status(200))
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      return HttpResponse.json({}, { status: 200 })
     }),
 
-    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+    http.post(`${apiBaseUrl}/pull/`, () => {
       const collectRecordWithValidation = {
         ...mockBleachingCollectRecords[0],
         validations: mockSampleEventValidationObject,
@@ -741,7 +734,7 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -757,9 +750,7 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
   await validateCollectRecord(user)
 
   expect(
-    within(screen.getByTestId('management')).getByText(
-      'Another Management Regime is similar to this one.',
-    ),
+    within(screen.getByTestId('management')).getByText('validation_messages.similar_name'),
   ).toBeInTheDocument()
 
   const resolveManagementButton = await within(screen.getByTestId('management')).findByTestId(

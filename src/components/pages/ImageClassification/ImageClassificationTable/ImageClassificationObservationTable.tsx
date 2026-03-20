@@ -144,7 +144,7 @@ const TableHeaderRow = ({ areValidationsShowing }: { areValidationsShowing: bool
   return (
     <Tr>
       {filteredHeaders.map((header) => (
-        <Th key={header.id} align={header.align} id={header.id}>
+        <Th key={header.id} $align={header.align} id={header.id}>
           <span>{header.text}</span>
         </Th>
       ))}
@@ -487,12 +487,12 @@ const ImageClassificationObservationTable = ({
                 <TdWithHoverText
                   data-tooltip={file.original_image_name}
                   onClick={() => handleImageClick(file)}
-                  cursor={
+                  $cursor={
                     file.classification_status?.status === IMAGE_CLASSIFICATION_STATUS.completed
                       ? 'pointer'
                       : 'default'
                   }
-                  isDuplicatedImageShowing={isDuplicatedImageShowing}
+                  $isDuplicatedImageShowing={isDuplicatedImageShowing}
                 >
                   <ImageWrapper>
                     {file.thumbnail ? (
@@ -589,13 +589,13 @@ const ImageClassificationObservationTable = ({
                         rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
                         data-tooltip={file.original_image_name}
                         onClick={() => handleImageClick(file)}
-                        cursor={
+                        $cursor={
                           file.classification_status?.status ===
                           IMAGE_CLASSIFICATION_STATUS.completed
                             ? 'pointer'
                             : 'default'
                         }
-                        isDuplicatedImageShowing={isDuplicatedImageShowing}
+                        $isDuplicatedImageShowing={isDuplicatedImageShowing}
                         className={isGroupHovered ? 'hover-highlight' : ''}
                       >
                         {isDuplicatedImageShowing && (

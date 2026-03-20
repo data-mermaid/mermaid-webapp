@@ -5,7 +5,7 @@ import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal'
 import { getObserverNameToUse } from '../../library/observerHelpers'
 import { observerPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 
 const RemoveObserverModal = ({ isOpen, onDismiss, observer = undefined, onSubmit }) => {
   const { t } = useTranslation()
@@ -14,7 +14,7 @@ const RemoveObserverModal = ({ isOpen, onDismiss, observer = undefined, onSubmit
   const footerContent = (
     <RightFooter>
       <ButtonSecondary type="button" onClick={onDismiss}>
-        {t('button.cancel')}
+        {t('buttons.cancel')}
       </ButtonSecondary>
       <ButtonCaution type="button" onClick={onSubmit} data-testid="remove-observer-confirm-button">
         {t('remove_user')}
@@ -27,7 +27,9 @@ const RemoveObserverModal = ({ isOpen, onDismiss, observer = undefined, onSubmit
       isOpen={isOpen}
       onDismiss={onDismiss}
       title={t('remove_observer_from_record')}
-      mainContent={<>{t('remove_user_confirmation', { userName: observerNameToUse })}</>}
+      mainContent={
+        <Trans i18nKey="remove_user_confirmation" values={{ userName: observerNameToUse }} />
+      }
       footerContent={footerContent}
       testid="remove-observer-modal"
     />

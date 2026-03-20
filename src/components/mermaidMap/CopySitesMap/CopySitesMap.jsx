@@ -36,8 +36,8 @@ const CopySitesMap = ({ sitesForMapMarkers }) => {
       center: defaultCenter,
       zoom: defaultZoom,
       maxZoom: 17,
-      attributionControl: true,
-      customAttribution: mapAttribution,
+      attributionControl: { customAttribution: mapAttribution },
+      maplibreLogo: false,
     })
 
     addZoomController(map.current)
@@ -86,7 +86,7 @@ const CopySitesMap = ({ sitesForMapMarkers }) => {
 
   return (
     <MapContainer>
-      <MapWrapper ref={mapContainer} minHeight="30vh" />
+      <MapWrapper ref={mapContainer} $minHeight="30vh" />
       {map.current ? (
         <MiniMapContainer>
           <MiniMap mainMap={map.current} />

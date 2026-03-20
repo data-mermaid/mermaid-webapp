@@ -1,4 +1,5 @@
-import { rest } from 'msw'
+import { expect, test } from 'vitest'
+import { http, HttpResponse } from 'msw'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
@@ -11,17 +12,17 @@ test('pushThenPullAllProjectDataExceptChoices keeps track of returned last_revis
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
+    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async ({ request }) => {
       const areLastRevisionNumbersNull =
-        req.body.benthic_attributes.last_revision === null &&
-        req.body.collect_records.last_revision === null &&
-        req.body.fish_families.last_revision === null &&
-        req.body.fish_genera.last_revision === null &&
-        req.body.fish_species.last_revision === null &&
-        req.body.project_managements.last_revision === null &&
-        req.body.project_profiles.last_revision === null &&
-        req.body.project_sites.last_revision === null &&
-        req.body.projects.last_revision === null
+        (await request.clone().json()).benthic_attributes.last_revision === null &&
+        (await request.clone().json()).collect_records.last_revision === null &&
+        (await request.clone().json()).fish_families.last_revision === null &&
+        (await request.clone().json()).fish_genera.last_revision === null &&
+        (await request.clone().json()).fish_species.last_revision === null &&
+        (await request.clone().json()).project_managements.last_revision === null &&
+        (await request.clone().json()).project_profiles.last_revision === null &&
+        (await request.clone().json()).project_sites.last_revision === null &&
+        (await request.clone().json()).projects.last_revision === null
 
       if (areLastRevisionNumbersNull === null && !hasFirstPullCallHappened) {
         hasFirstPullCallHappened = true
@@ -29,17 +30,17 @@ test('pushThenPullAllProjectDataExceptChoices keeps track of returned last_revis
           collect_records: { updates: [], deletes: [], last_revision_num: 17 },
         }
 
-        return res(ctx.json(response))
+        return HttpResponse.json(response)
       }
 
       if (areLastRevisionNumbersNull && hasFirstPullCallHappened) {
         // pushThenPullAllProjectDataExceptChoices shouldn't be sending nulls after
         // it has received a response from the server so we want
         // to cause the test to fail here
-        return res(ctx.status(400))
+        return HttpResponse.json({}, { status: 400 })
       }
 
-      return res(ctx.status(200))
+      return HttpResponse.json({}, { status: 200 })
     }),
   )
 
@@ -65,18 +66,18 @@ test('pushThenPullAllProjectData keeps track of returned last_revision_nums and 
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
+    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async ({ request }) => {
       const areLastRevisionNumbersNull =
-        req.body.benthic_attributes.last_revision === null &&
-        req.body.choices.last_revision === null &&
-        req.body.collect_records.last_revision === null &&
-        req.body.fish_families.last_revision === null &&
-        req.body.fish_genera.last_revision === null &&
-        req.body.fish_species.last_revision === null &&
-        req.body.project_managements.last_revision === null &&
-        req.body.project_profiles.last_revision === null &&
-        req.body.project_sites.last_revision === null &&
-        req.body.projects.last_revision === null
+        (await request.clone().json()).benthic_attributes.last_revision === null &&
+        (await request.clone().json()).choices.last_revision === null &&
+        (await request.clone().json()).collect_records.last_revision === null &&
+        (await request.clone().json()).fish_families.last_revision === null &&
+        (await request.clone().json()).fish_genera.last_revision === null &&
+        (await request.clone().json()).fish_species.last_revision === null &&
+        (await request.clone().json()).project_managements.last_revision === null &&
+        (await request.clone().json()).project_profiles.last_revision === null &&
+        (await request.clone().json()).project_sites.last_revision === null &&
+        (await request.clone().json()).projects.last_revision === null
 
       if (areLastRevisionNumbersNull === null && !hasFirstPullCallHappened) {
         hasFirstPullCallHappened = true
@@ -84,17 +85,17 @@ test('pushThenPullAllProjectData keeps track of returned last_revision_nums and 
           collect_records: { updates: [], deletes: [], last_revision_num: 17 },
         }
 
-        return res(ctx.json(response))
+        return HttpResponse.json(response)
       }
 
       if (areLastRevisionNumbersNull && hasFirstPullCallHappened) {
         // pushThenPullEverything shouldn't be sending nulls after
         // it has received a response from the server so we want
         // to cause the test to fail here
-        return res(ctx.status(400))
+        return HttpResponse.json({}, { status: 400 })
       }
 
-      return res(ctx.status(200))
+      return HttpResponse.json({}, { status: 200 })
     }),
   )
 
@@ -120,14 +121,14 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
+    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async ({ request }) => {
       const areLastRevisionNumbersNull =
-        req.body.benthic_attributes.last_revision === null &&
-        req.body.choices.last_revision === null &&
-        req.body.fish_families.last_revision === null &&
-        req.body.fish_genera.last_revision === null &&
-        req.body.fish_species.last_revision === null &&
-        req.body.projects.last_revision === null
+        (await request.clone().json()).benthic_attributes.last_revision === null &&
+        (await request.clone().json()).choices.last_revision === null &&
+        (await request.clone().json()).fish_families.last_revision === null &&
+        (await request.clone().json()).fish_genera.last_revision === null &&
+        (await request.clone().json()).fish_species.last_revision === null &&
+        (await request.clone().json()).projects.last_revision === null
 
       if (areLastRevisionNumbersNull && !hasFirstPullCallHappened) {
         hasFirstPullCallHappened = true
@@ -135,17 +136,17 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
           choices: { updates: [], deletes: [], last_revision_num: 17 },
         }
 
-        return res(ctx.json(response))
+        return HttpResponse.json(response)
       }
 
       if (areLastRevisionNumbersNull && hasFirstPullCallHappened) {
         // pushThenPullEverything shouldn't be sending nulls after
         // it has received a response from the server so we want
         // to cause the test to fail here
-        return res(ctx.status(400))
+        return HttpResponse.json({}, { status: 400 })
       }
 
-      return res(ctx.status(200))
+      return HttpResponse.json({}, { status: 200 })
     }),
   )
 
@@ -216,7 +217,7 @@ test('pushThenPullAllProjectDataExceptChoices updates IDB with API data', async 
   )
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
+    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async () => {
       const response = {
         benthic_attributes: {
           updates: [mockMermaidData.benthic_attributes[1]],
@@ -265,7 +266,7 @@ test('pushThenPullAllProjectDataExceptChoices updates IDB with API data', async 
         },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -400,7 +401,7 @@ test('pushThenPullAllProjectData updates IDB with API data', async () => {
   )
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
+    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async () => {
       const response = {
         benthic_attributes: {
           updates: [mockMermaidData.benthic_attributes[1]],
@@ -455,7 +456,7 @@ test('pushThenPullAllProjectData updates IDB with API data', async () => {
         },
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -583,7 +584,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
   )
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, (req, res, ctx) => {
+    http.post(`${import.meta.env.VITE_MERMAID_API}/pull/`, async ({ request }) => {
       const response = {
         benthic_attributes: {
           updates: [mockMermaidData.benthic_attributes[1]],
@@ -618,7 +619,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
         },
       }
 
-      const isOfflineReadyProjectsPull = !!req.body.collect_records
+      const isOfflineReadyProjectsPull = !!(await request.clone().json()).collect_records
 
       if (isOfflineReadyProjectsPull) {
         response.collect_records = {
@@ -643,7 +644,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
         }
       }
 
-      return res(ctx.json(response))
+      return HttpResponse.json(response)
     }),
   )
 
@@ -720,20 +721,21 @@ test('pushChanges includes the force flag', async () => {
   })
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
 
-      (req, res, ctx) => {
-        const force = req.url.searchParams.get('force')
+      async ({ request }) => {
+        let req = request
+        const force = new URL(req.url).searchParams.get('force')
 
         if (!force) {
           // this causes a test failure if the pushChanges
           // function fails to send the api: force=true
 
-          return res.once(ctx.status(400))
+          return HttpResponse.json({}, { status: 400 })
         }
 
-        return res(ctx.status(200))
+        return HttpResponse.json({}, { status: 200 })
       },
     ),
   )
@@ -790,10 +792,10 @@ test('pushChanges includes the expected modified data', async () => {
   })
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
 
-      (req, res, ctx) => {
+      async ({ request }) => {
         const {
           benthic_attributes,
           collect_records,
@@ -802,7 +804,7 @@ test('pushChanges includes the expected modified data', async () => {
           project_profiles,
           project_sites,
           projects,
-        } = req.body
+        } = await request.clone().json()
 
         if (
           !benthic_attributes.length === 1 ||
@@ -813,10 +815,10 @@ test('pushChanges includes the expected modified data', async () => {
           !project_sites.length === 1 ||
           !projects.length === 1
         ) {
-          return res(ctx.status(400))
+          return HttpResponse.json({}, { status: 400 })
         }
 
-        return res(ctx.status(200))
+        return HttpResponse.json({}, { status: 200 })
       },
     ),
   )
@@ -828,14 +830,14 @@ test('pushChanges includes the expected modified data', async () => {
 
 test('All of the push functions handle sync errors with the handleUserDeniedSyncPush callback function', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-  const pushSyncErrorCallback = jest.fn()
+  const pushSyncErrorCallback = vi.fn()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
+    http.post(
       `${import.meta.env.VITE_MERMAID_API}/push/`,
 
-      (req, res, ctx) => {
-        return res(ctx.json(mockUserDoesntHavePushSyncPermissionForProjects))
+      async () => {
+        return HttpResponse.json(mockUserDoesntHavePushSyncPermissionForProjects)
       },
     ),
   )

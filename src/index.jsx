@@ -2,11 +2,9 @@ import { Auth0Provider } from '@auth0/auth0-react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { StyledEngineProvider } from '@mui/material'
 
-import './index.css'
-import 'maplibre-gl/dist/maplibre-gl.css'
 import reportWebVitals from './reportWebVitals'
-
 import { App } from './App'
 import { OnlineStatusProvider } from './library/onlineStatusContext'
 import { SyncStatusProvider } from './App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -14,7 +12,9 @@ import dexieCurrentUserInstance from './App/dexieCurrentUserInstance'
 import { DexiePerUserDataInstanceProvider } from './App/dexiePerUserDataInstanceContext'
 import { ClearPersistedFormDataHackProvider } from './App/ClearDirtyFormDataHackContext'
 import '../i18n'
-import { StyledEngineProvider } from '@mui/material'
+
+import 'maplibre-gl/dist/maplibre-gl.css'
+import './index.css'
 
 // Upgrading to react router v6 because of dependabot issues and data routers (createBrowserRouter) which is necessary for many functions we use(eg: useNavigate).
 // We keep the jsx routes as defined in app.js instead of having ALL routes defined here because we were not able to have conditional rendering of the loader otherwise
@@ -37,8 +37,11 @@ root.render(
     <Auth0Provider
       domain={import.meta.env.VITE_AUTH0_DOMAIN}
       clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
-      redirectUri={window.location.origin}
-      audience={import.meta.env.VITE_AUTH0_AUDIENCE}
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+        scope: 'openid profile email read:current_user update:current_user_metadata',
+      }}
       useRefreshTokens={true}
       onRedirectCallback={onRedirectCallback}
       // Note that while storing tokens in local storage provides persistence
@@ -47,7 +50,6 @@ root.render(
       // More information here: https://auth0.com/docs/libraries/auth0-single-page-app-sdk#change-storage-options
       // Recommend researching a different approach to authentication
       cacheLocation="localstorage"
-      scope="read:current_user update:current_user_metadata"
     >
       <OnlineStatusProvider>
         <SyncStatusProvider>

@@ -1,3 +1,4 @@
+import { describe, expect, test, vi } from 'vitest'
 import React from 'react'
 
 import {
@@ -94,7 +95,9 @@ describe('offline', () => {
     await screen.findByTestId('site-toast-offline-success')
 
     // ensure the new form is now the edit form
-    expect(await screen.findByTestId('edit-site-form-title')).toHaveTextContent('Rebecca')
+    await waitFor(() =>
+      expect(screen.getByTestId('edit-site-form-title')).toHaveTextContent('Rebecca'),
+    )
 
     await waitFor(() => {
       expect(screen.getByTestId('name-input')).toHaveDisplayValue('Rebecca')
@@ -141,7 +144,7 @@ describe('offline', () => {
     expect(await within(table).findByText('Rebecca'))
   })
   test('new site save failure shows toast message with edits persisting', async () => {
-    const consoleSpy = jest.spyOn(console, 'error')
+    const consoleSpy = vi.spyOn(console, 'error')
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
