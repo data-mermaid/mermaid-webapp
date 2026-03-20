@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -8,8 +8,8 @@ import {
 } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import {
-  renderAuthenticatedOnline,
   renderAuthenticatedOffline,
+  renderAuthenticatedOnline,
   screen,
   waitFor,
   within,
