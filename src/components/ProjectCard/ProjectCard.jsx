@@ -174,7 +174,9 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <div className={styles['no-wrap-wrapper']}>
             {isDemoProject ? (
-              <MuiTooltip title={t('projects.demo.copy_unavailable')}>{copyButton}</MuiTooltip>
+              <MuiTooltip title={t('projects.demo.copy_unavailable')}>
+                <span>{copyButton}</span>
+              </MuiTooltip>
             ) : (
               copyButton
             )}
