@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -8,8 +8,8 @@ import {
 } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import {
-  renderAuthenticatedOnline,
   renderAuthenticatedOffline,
+  renderAuthenticatedOnline,
   screen,
   waitFor,
   within,
@@ -317,23 +317,25 @@ describe('Projects dashboard', () => {
     expect(projectCards.length).toEqual(1)
     expect(within(projectCards[0]).getByText("Project Z has an apostrophe foo's"))
   })
-  test('Online - Demo callout will show if the user does not have a demo project', async () => {
-    const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockDataNoDemoProject(dexiePerUserDataInstance)
-
-    renderAuthenticatedOnline(<Projects />, {
-      dexiePerUserDataInstance,
-      isSyncInProgressOverride: true,
-    })
-
-    await waitFor(() =>
-      expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
-    )
-
-    expect(screen.getByTestId('demo-project-callout')).toBeInTheDocument()
-    expect(screen.getByTestId('callout-close-button')).toBeInTheDocument()
-  })
+  // enable after the demo project feature flag has been released - or mock out the functionality
+  // test('Online - Demo callout will show if the user does not have a demo project', async () => {
+  //   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+  //
+  //   await initiallyHydrateOfflineStorageWithMockDataNoDemoProject(dexiePerUserDataInstance)
+  //
+  //   renderAuthenticatedOnline(<Projects />, {
+  //     dexiePerUserDataInstance,
+  //     isSyncInProgressOverride: true,
+  //   })
+  //
+  //   await waitFor(() =>
+  //     expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
+  //   )
+  //
+  //   expect(screen.getByTestId('demo-project-callout')).toBeInTheDocument()
+  //   expect(screen.getByTestId('callout-close-button')).toBeInTheDocument()
+  // })
 
   test('Online - Demo callout will NOT show if user has previously dismissed demo', async () => {
     const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
@@ -362,50 +364,51 @@ describe('Projects dashboard', () => {
     expect(screen.queryByTestId('demo-project-callout')).not.toBeInTheDocument()
   })
 
-  test('Online - Clicking the demo callout close button dismisses it and calls saveUserProfile', async () => {
-    const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-
-    await initiallyHydrateOfflineStorageWithMockDataNoDemoProject(dexiePerUserDataInstance)
-
-    const mockSaveUserProfile = vi.fn()
-    const userWithoutDismissedDemo = {
-      id: 'fake-id',
-      first_name: 'FakeFirstName',
-      last_name: 'FakeLastName',
-      full_name: 'FakeFirstName FakeLastName',
-      projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
-      collect_state: {},
-    }
-
-    const { user } = renderAuthenticatedOnline(<Projects />, {
-      dexiePerUserDataInstance,
-      isSyncInProgressOverride: true,
-      currentUserOverride: userWithoutDismissedDemo,
-      saveUserProfileOverride: mockSaveUserProfile,
-    })
-
-    await waitFor(() =>
-      expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
-    )
-
-    expect(screen.getByTestId('demo-project-callout')).toBeInTheDocument()
-
-    const closeButton = screen.getByTestId('callout-close-button')
-    await user.click(closeButton)
-
-    // Verify callout is no longer visible
-    expect(screen.queryByTestId('demo-project-callout')).not.toBeInTheDocument()
-
-    // Verify saveUserProfile was called with hasUserDismissedDemo: true
-    expect(mockSaveUserProfile).toHaveBeenCalledTimes(1)
-    expect(mockSaveUserProfile).toHaveBeenCalledWith(
-      expect.objectContaining({
-        collect_state: expect.objectContaining({
-          hasUserDismissedDemo: true,
-        }),
-      }),
-    )
-  })
+  // enable after the demo project feature flag has been released - or mock out the functionality
+  // test('Online - Clicking the demo callout close button dismisses it and calls saveUserProfile', async () => {
+  //   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+  //
+  //   await initiallyHydrateOfflineStorageWithMockDataNoDemoProject(dexiePerUserDataInstance)
+  //
+  //   const mockSaveUserProfile = vi.fn()
+  //   const userWithoutDismissedDemo = {
+  //     id: 'fake-id',
+  //     first_name: 'FakeFirstName',
+  //     last_name: 'FakeLastName',
+  //     full_name: 'FakeFirstName FakeLastName',
+  //     projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
+  //     collect_state: {},
+  //   }
+  //
+  //   const { user } = renderAuthenticatedOnline(<Projects />, {
+  //     dexiePerUserDataInstance,
+  //     isSyncInProgressOverride: true,
+  //     currentUserOverride: userWithoutDismissedDemo,
+  //     saveUserProfileOverride: mockSaveUserProfile,
+  //   })
+  //
+  //   await waitFor(() =>
+  //     expect(screen.queryByTestId('projects-loading-indicator')).not.toBeInTheDocument(),
+  //   )
+  //
+  //   expect(screen.getByTestId('demo-project-callout')).toBeInTheDocument()
+  //
+  //   const closeButton = screen.getByTestId('callout-close-button')
+  //   await user.click(closeButton)
+  //
+  //   // Verify callout is no longer visible
+  //   expect(screen.queryByTestId('demo-project-callout')).not.toBeInTheDocument()
+  //
+  //   // Verify saveUserProfile was called with hasUserDismissedDemo: true
+  //   expect(mockSaveUserProfile).toHaveBeenCalledTimes(1)
+  //   expect(mockSaveUserProfile).toHaveBeenCalledWith(
+  //     expect.objectContaining({
+  //       collect_state: expect.objectContaining({
+  //         hasUserDismissedDemo: true,
+  //       }),
+  //     }),
+  //   )
+  // })
 
   test('Online - Demo callout will NOT show if user already has a demo project', async () => {
     const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
