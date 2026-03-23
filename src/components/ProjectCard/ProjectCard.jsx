@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 

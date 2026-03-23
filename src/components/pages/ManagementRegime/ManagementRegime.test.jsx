@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import '@testing-library/jest-dom'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router'
 import React from 'react'
 
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'

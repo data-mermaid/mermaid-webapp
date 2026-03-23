@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

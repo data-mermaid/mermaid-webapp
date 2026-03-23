@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router'
 import { styled, css } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 
