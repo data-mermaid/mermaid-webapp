@@ -1,10 +1,10 @@
-import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { styled } from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
+import { isValid, parse } from 'date-fns'
 
 import { ContentPageLayout } from '../../Layout'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
@@ -69,7 +69,7 @@ const ActiveRecordsCount = styled.strong`
 const checkDateAndGetSiteName = (name) => {
   const elementsInName = name.split(' ')
   const lastItemInName = elementsInName.pop()
-  const isDateValid = moment(lastItemInName, 'YYYY-MM-DD', true).isValid()
+  const isDateValid = isValid(parse(lastItemInName, 'yyyy-MM-dd', new Date()))
 
   if (isDateValid) {
     return `${elementsInName.join(' ')} ${getSampleDateLabel(lastItemInName)}`

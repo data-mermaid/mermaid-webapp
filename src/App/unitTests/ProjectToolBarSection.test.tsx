@@ -55,6 +55,7 @@ describe('ProjectToolBarSection', () => {
 
       renderAuthenticatedOnline(
         <ProjectToolBarSection
+          updateUserSettings={vi.fn()}
           setProjectFilter={vi.fn()}
           projectSortKey=""
           setProjectSortKey={vi.fn()}

@@ -120,6 +120,7 @@
     "fish_species_info": "Reef fish species, size and abundance, taxonomy and functional group information, biomass coefficients",
     "individual_habitat_complexity": "Individual habitat complexity scores",
     "information": "Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.",
+    "is_test_project": "This is a test project",
     "learn_more": "Learn more about how your data is shared",
     "metadata": "Metadata",
     "more_powerful": "Data is much more powerful when shared",
@@ -143,6 +144,7 @@
       "fish_belt_public": "Fish belt is now set to public",
       "fish_belt_public_summary": "Fish belt is now set to public summary"
     },
+    "test_project_data": "Data for a test project will not be included in public reporting",
     "transect_level_observations": "Transect-level observations"
   },
   "delete_modal": {
@@ -330,7 +332,7 @@
       "f7_heading": "Number of people supported to better adapt, respond and recover to the effects of climate change and major external shocks as a result of GFCR",
       "finance_solutions": {
         "add": "Add facility / solution",
-        "business_finance_solution": "Facilities / solutions",
+        "business_finance_solution": "Facility / solution",
         "business_finance_solution_name": "Facility / solution name",
         "gender_program_criteria": "Gender 2X criteria",
         "gender_program_criteria_helper": "Indicate if the solution qualifies under at least one 2X Challenge Criterion. Refer to the <2xLink>2X Criteria Reference Guide</2xLink> for details. This applies to F10 (Number of gender-smart investments), which measures GFCR support for gender equality through investments meeting 2X Challenge standards.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
@@ -404,7 +406,7 @@
     "success": {
       "indicator_set_save": "Fund indicator set saved successfully",
       "indicators_disabled": "Disabled GFCR fund indicators for this project",
-      "indicators_enabled": "Enabled GFCR fund indicators for this project"
+      "indicators_enabled": "Enabled GFCR fund indicators to this project"
     },
     "target": "Target",
     "untitled": "Untitled"
@@ -545,7 +547,7 @@
     "name_info": "Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a governmental or standardized source such as <helperTextLink>protectedseas.net</helperTextLink>; alternatively, a descriptive local label like 'Northeast Point seasonal closure' can be used.",
     "new": "New management regime",
     "new_mr": "New management regime",
-    "no_data_info": "This page will show the Management Regime of submitted sample units by method and site.",
+    "no_data_info": "This page will show the management regime of submitted sample units by method and site.",
     "no_management_regimes": "This project has no management regimes.",
     "no_take": "No take",
     "no_take_info": "Total extraction ban",
@@ -763,9 +765,9 @@
       "delete_notice": "You can add the demo project again from the Projects page.",
       "delete_users_unavailable": "Users cannot be removed from the demo project",
       "demo": "Demo project",
-      "dismissed": "Add the demo project any time from the new project dropdown",
+      "dismissed": "Add the demo project any time from the New project dropdown",
       "explore_unavailable": "The demo project is unavailable in MERMAID Explore",
-      "name_restrictions": "The demo project name cannot be changed.",
+      "name_restrictions": "Demo project name cannot be changed",
       "project_reporting": "The demo project is unavailable in MERMAID Explore and filtered by default in <span>mermaidr</span>.",
       "project_tour_start": "Restart tour",
       "sample_explore_unavailable": "Sample events from the demo project are unavailable in MERMAID Explore",
@@ -781,7 +783,7 @@
       "not_deleted": "This project has not been deleted.",
       "not_saved": "Project could not be saved",
       "offline_ready_on_failed": "The project {{projectName}} may not be ready to be used offline.",
-      "offline_ready_removal_failure": "The project {{projectName}} has not been removed from being offline-ready.",
+      "offline_ready_removal_failure": "The project {{projectName}}, has not been removed from being offline-ready.",
       "project_name_exists": "Project name already exists in MERMAID"
     },
     "known_project_access": "The admin of {{projectName}} can add you to this project.",
@@ -793,7 +795,7 @@
     "no_notes": "No notes for this project",
     "no_offline_projects": "You do not have any offline projects.",
     "no_organizations": "This project has no organizations.",
-    "no_projects": "You are not part of any projects yet.",
+    "no_projects": "You are not part of any projects yet",
     "no_projects_match": "No projects match the current filter.",
     "no_submitted_sample_units": "This project has no submitted sample units yet.",
     "notify_user_email": "Notify users by email",
@@ -816,7 +818,8 @@
       "project_copied": "Project copied",
       "project_created": "Project created",
       "project_deleted": "Project deleted",
-      "project_saved": "Project saved"
+      "project_saved": "Project saved",
+      "test_project_status_saved": "Test project selection saved"
     },
     "tour": {
       "collecting_review": "Enter survey data by method as sample units, including AI-assisted photo quadrats — even while offline.",
@@ -861,7 +864,7 @@
   "remove_sort": "Remove sort",
   "remove_user": "Remove user",
   "remove_user_confirmation": "Are you sure you want to remove <strong>{{userName}}</strong> as an observer?",
-  "removed_from_project_message": "<strong>{{userName}}</strong> is an observer on this sample unit but is no longer a part of this project",
+  "removed_from_project_message": "<strong>{{userName}}</strong> is an observer on this sample unit but is no longer a part of this project.<br />",
   "sample_units": {
     "add": "Add sample unit",
     "collect": "Collect",
@@ -1044,8 +1047,8 @@
       "pending_user_added": "Sign-up email sent. New user added as pending user.",
       "role_changed_error": "{{userName}}'s role has not been changed",
       "role_changed_success": "{{userName}}'s role is now set to {{role}}",
-      "sample_units_transferred_one": "{{count}} sample unit transferred",
-      "sample_units_transferred_other": "{{count}} sample units transferred",
+      "sample_units_transfer_one": "{{count}} sample unit transferred",
+      "sample_units_transfer_other": "{{count}} sample units transferred",
       "something_went_wrong": "Something went wrong",
       "user_removed": "User removed"
     },
@@ -1132,7 +1135,7 @@
     "obs_total_length_toosmall": "Total length of observations ({{totalLength}} cm) is less than 50% of the transect length ({{transectLength}} m)",
     "observation_count": "{{comparison}} than {{count}} observations in {{suffixToken}}",
     "required": "Required",
-    "required_management_rules": "At least one rule must be specified for this Management Regime.",
+    "required_management_rules": "At least one rule must be specified for this management regime.",
     "sample_time_out_of_range": "Sample time outside of range {{start}} and {{end}}",
     "similar_date_sample_unit": "Other sample units with the same sample event have a different sample date (+/- 30 days).",
     "similar_name": "Another management regime is similar to this one.",
