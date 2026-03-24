@@ -104,7 +104,7 @@
     background-color: $callout-hover;
     border-color: $callout;
   }
-  &:focus,
+  &:focus-visible,
   &:active:enabled {
     background-color: $callout-active;
     border-color: $callout;
