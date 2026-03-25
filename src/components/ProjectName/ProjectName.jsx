@@ -76,15 +76,17 @@ const ProjectName = () => {
       {isDemoProject && (
         <div className={styles['project-meta-info-wrapper']}>
           <span className={labelStyles['pill--demo']}>{t('projects.demo.demo')}</span>
-          <button
-            className={[buttonStyles['button--callout'], buttonStyles['button--small']].join(' ')}
-            type="button"
-            id="gtm-demo-start-tour"
-            aria-label={t('projects.demo.project_tour_start')}
-            onClick={handleStartTourClick}
-          >
-            {t('projects.demo.project_tour_start')}
-          </button>
+          {isAppOnline && (
+            <button
+              className={[buttonStyles['button--callout'], buttonStyles['button--small']].join(' ')}
+              type="button"
+              id="gtm-demo-start-tour"
+              aria-label={t('projects.demo.project_tour_start')}
+              onClick={handleStartTourClick}
+            >
+              {t('projects.demo.project_tour_start')}
+            </button>
+          )}
         </div>
       )}
     </div>
