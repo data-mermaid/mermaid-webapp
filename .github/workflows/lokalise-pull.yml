@@ -39,7 +39,7 @@ jobs:
 
             **Review checklist:**
             - [ ] Verify translation values look correct
-            - [ ] Check for any unexpected changes to `en/translation.json`
+            - [ ] Check for any unexpected changes to `src/locales/en/translation.json`
             - [ ] Confirm text normalization (capitalization, etc.) is consistent
           pr_labels: i18n,automated
           additional_params: >
