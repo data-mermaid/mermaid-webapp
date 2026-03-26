@@ -52,6 +52,14 @@ export function buildProjectTourSteps(t: TFunction): DriveStep[] {
         align: 'center',
         description: t('projects.tour.collecting_review'),
       },
+      // Expand stage padding to encompass the collection avatar that overflows above the element
+      // https://driverjs.com/docs/configuration
+      onHighlightStarted: (_element, _step, { driver }) => {
+        driver.setConfig({ ...driver.getConfig(), stagePadding: 20 })
+      },
+      onDeselected: (_element, _step, { driver }) => {
+        driver.setConfig({ ...driver.getConfig(), stagePadding: 4 })
+      },
     },
     {
       element: '#nav-submitted',
