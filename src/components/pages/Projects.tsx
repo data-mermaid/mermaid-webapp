@@ -113,12 +113,14 @@ const Projects = () => {
     !userHasDemoProject && !hasUserDismissedDemo && isAppOnline && isDemoProjectEnabledForUser,
   )
 
-  // Hide demo callout when projects load and contain a demo project
+  // Hide demo callout when projects load and contain a demo project, or when offline
   useEffect(() => {
-    if (userHasDemoProject) {
+    if (userHasDemoProject || !isAppOnline) {
       setIsDemoCalloutVisible(false)
+    } else if (isAppOnline && !hasUserDismissedDemo && isDemoProjectEnabledForUser) {
+      setIsDemoCalloutVisible(true)
     }
-  }, [userHasDemoProject])
+  }, [userHasDemoProject, isAppOnline, hasUserDismissedDemo, isDemoProjectEnabledForUser])
 
   useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
