@@ -1,7 +1,7 @@
 import { styled, css } from 'styled-components'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import theme from '../../theme'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 

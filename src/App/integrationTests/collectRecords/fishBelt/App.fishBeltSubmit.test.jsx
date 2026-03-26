@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { http, HttpResponse } from 'msw'
 import React from 'react'
@@ -93,6 +93,9 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
 })
 
 test('Submit fishbelt failure shows toast message and an enabled submit button', async () => {
+  // The 400 response is intentional; suppress the expected AxiosError console.error noise.
+  vi.spyOn(console, 'error').mockImplementation(() => {})
+
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   const { user } = renderAuthenticatedOnline(

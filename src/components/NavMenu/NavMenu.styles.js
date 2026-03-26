@@ -1,5 +1,5 @@
 import { styled, css } from 'styled-components'
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router'
 
 import theme from '../../theme'
 import { mediaQueryPhoneOnly, hoverState } from '../../library/styling/mediaQueries'
@@ -19,6 +19,10 @@ export const LiCollecting = styled('li')`
   border-color: ${theme.color.primaryColor};
   border-width: 2px 0;
   position: relative;
+  /* Override driver.js overflow:hidden so the collection avatar is not clipped during the tour */
+  &:has(.driver-active-element) {
+    overflow: visible !important;
+  }
   ${mediaQueryPhoneOnly(css`
     border: none;
   `)}

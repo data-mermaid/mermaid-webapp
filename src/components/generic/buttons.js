@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { styled, css } from 'styled-components'
 
 import { hoverState } from '../../library/styling/mediaQueries'
@@ -38,7 +38,11 @@ const buttonCss = css`
   }
 `
 
-export const Button = styled.button`
+// Default to type="button" so buttons inside Formik forms don't accidentally trigger submission.
+// Buttons that intentionally submit a form must pass type="submit" explicitly
+export const Button = styled.button.attrs((props) => ({
+  type: props.type ?? 'button',
+}))`
   ${buttonCss}
 `
 

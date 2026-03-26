@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import PropTypes from 'prop-types'
 import { styled } from 'styled-components'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'

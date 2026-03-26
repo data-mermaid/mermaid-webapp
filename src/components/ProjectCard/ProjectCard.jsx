@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
@@ -174,7 +174,9 @@ const ProjectCard = ({ project, isOfflineReady, addProjectToProjectsPage, ...res
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <div className={styles['no-wrap-wrapper']}>
             {isDemoProject ? (
-              <MuiTooltip title={t('projects.demo.copy_unavailable')}>{copyButton}</MuiTooltip>
+              <MuiTooltip title={t('projects.demo.copy_unavailable')}>
+                <span>{copyButton}</span>
+              </MuiTooltip>
             ) : (
               copyButton
             )}
