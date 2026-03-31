@@ -62,7 +62,6 @@ export function applyNagSuppressions(stack: cdk.Stack): void {
         {
           regex: '/Resource::arn:aws:s3:::cdk-hnb659fds-assets-.*\\/\\*/',
         },
-        'Resource::*',
       ],
     },
 
