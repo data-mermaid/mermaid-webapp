@@ -50,7 +50,8 @@ export const Primary: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'The main call-to-action button. Use for the single most important action on a page.',
+        story:
+          'The main call-to-action button. Use for the single most important action on a page.',
       },
     },
   },
@@ -74,7 +75,8 @@ export const Secondary: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A secondary action button. Use alongside a primary button for less prominent actions like Cancel.',
+        story:
+          'A secondary action button. Use alongside a primary button for less prominent actions like Cancel.',
       },
     },
   },
@@ -99,7 +101,8 @@ export const SecondarySmall: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A compact variant of the secondary button for use in tight layouts like toolbars or table rows.',
+        story:
+          'A compact variant of the secondary button for use in tight layouts like toolbars or table rows.',
       },
     },
   },
@@ -149,7 +152,8 @@ export const Callout: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A callout button for drawing attention to an action without it being the primary CTA. Used for actions like Add New.',
+        story:
+          'A callout button for drawing attention to an action without it being the primary CTA. Used for actions like Add New.',
       },
     },
   },
@@ -174,7 +178,8 @@ export const LooksLikeLink: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A button styled as plain text. Use when an action should feel lightweight and inline, without the visual weight of a button.',
+        story:
+          'A button styled as plain text. Use when an action should feel lightweight and inline, without the visual weight of a button.',
       },
     },
   },
@@ -199,7 +204,8 @@ export const LooksLikeLinkUnderlined: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A button styled as an underlined text link. Use when the action should appear inline with body text.',
+        story:
+          'A button styled as an underlined text link. Use when the action should appear inline with body text.',
       },
     },
   },
@@ -239,7 +245,8 @@ export const Icon: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A minimal button for icon-only actions. No background or border — the icon itself is the affordance.',
+        story:
+          'A minimal button for icon-only actions. No background or border — the icon itself is the affordance.',
       },
     },
   },
@@ -253,7 +260,8 @@ export const InlineValidation: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A compact secondary button for inline validation messages, prompting the user to resolve a field error.',
+        story:
+          'A compact secondary button for inline validation messages, prompting the user to resolve a field error.',
       },
     },
   },
@@ -274,14 +282,21 @@ export const InlineValidationDisabled: Story = {
 // ── LinkLooksLikeButtonSecondary ──────────────────────────────────────────────
 
 export const LinkAsSecondaryButton: Story = {
-  decorators: [(Story) => <MemoryRouter><Story /></MemoryRouter>],
+  decorators: [
+    (Story) => (
+      <MemoryRouter>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
   render: (args) => (
     <LinkLooksLikeButtonSecondary to="/">{args.children}</LinkLooksLikeButtonSecondary>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'A React Router `<Link>` styled as a secondary button. Use when navigation should look like a button action rather than a text link.',
+        story:
+          'A React Router `<Link>` styled as a secondary button. Use when navigation should look like a button action rather than a text link.',
       },
     },
   },
