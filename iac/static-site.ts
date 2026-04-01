@@ -8,7 +8,6 @@ import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment'
 import * as targets from 'aws-cdk-lib/aws-route53-targets'
 import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins'
 import { CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib'
-import * as iam from 'aws-cdk-lib/aws-iam'
 import { Construct } from 'constructs'
 
 export interface StaticSiteProps {
@@ -36,9 +35,6 @@ export class StaticSite extends Construct {
     })
 
     const siteDomain = `${props.siteSubDomain}.${props.domainName}`
-    const cloudfrontOAI = new cloudfront.OriginAccessIdentity(this, 'CloudfrontOAI', {
-      comment: `OAI for ${name}`,
-    })
 
     new CfnOutput(this, 'Site', { value: `https://${siteDomain}` })
 
@@ -62,18 +58,6 @@ export class StaticSite extends Construct {
       autoDeleteObjects: props.siteSubDomain === 'dev',
     })
 
-    // Grant access to cloudfront
-    siteBucket.addToResourcePolicy(
-      new iam.PolicyStatement({
-        actions: ['s3:GetObject'],
-        resources: [siteBucket.arnForObjects('*')],
-        principals: [
-          new iam.CanonicalUserPrincipal(
-            cloudfrontOAI.cloudFrontOriginAccessIdentityS3CanonicalUserId,
-          ),
-        ],
-      }),
-    )
     new CfnOutput(this, 'BucketName', { value: siteBucket.bucketName })
 
     // TLS certificate
@@ -116,9 +100,7 @@ export class StaticSite extends Construct {
         cachePolicy: props.isPreview
           ? cloudfront.CachePolicy.CACHING_DISABLED
           : cloudfront.CachePolicy.CACHING_OPTIMIZED,
-        origin: cloudfront_origins.S3BucketOrigin.withOriginAccessIdentity(siteBucket, {
-          originAccessIdentity: cloudfrontOAI,
-        }),
+        origin: cloudfront_origins.S3BucketOrigin.withOriginAccessControl(siteBucket),
         compress: true,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
