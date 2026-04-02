@@ -109,16 +109,14 @@ const Projects = () => {
     currentUser,
     'demo_project',
   )
-  const [isDemoCalloutVisible, setIsDemoCalloutVisible] = useState(
-    !userHasDemoProject && !hasUserDismissedDemo && isAppOnline && isDemoProjectEnabledForUser,
-  )
+  const shouldShowDemoCallout =
+    !userHasDemoProject && !hasUserDismissedDemo && isAppOnline && isDemoProjectEnabledForUser
+  const [isDemoCalloutVisible, setIsDemoCalloutVisible] = useState(shouldShowDemoCallout)
 
-  // Hide demo callout when projects load and contain a demo project
+  // Keep callout visibility in sync with current eligibility state
   useEffect(() => {
-    if (userHasDemoProject) {
-      setIsDemoCalloutVisible(false)
-    }
-  }, [userHasDemoProject])
+    setIsDemoCalloutVisible(shouldShowDemoCallout)
+  }, [shouldShowDemoCallout])
 
   useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
