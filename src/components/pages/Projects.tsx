@@ -110,7 +110,10 @@ const Projects = () => {
     'demo_project',
   )
   const shouldShowDemoCallout =
-    !userHasDemoProject && !hasUserDismissedDemo && isAppOnline && isDemoProjectEnabledForUser
+    !userHasDemoProject &&
+    (!hasUserDismissedDemo || !userHasProjects) &&
+    isAppOnline &&
+    isDemoProjectEnabledForUser
   const [isDemoCalloutVisible, setIsDemoCalloutVisible] = useState(shouldShowDemoCallout)
 
   // Keep callout visibility in sync with current eligibility state
