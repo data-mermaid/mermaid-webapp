@@ -1,0 +1,53 @@
+name: Pull Translations from Lokalise
+
+on:
+  schedule:
+    # Runs every Monday at 09:00 UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  pull-translations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      - name: Pull translations from Lokalise
+        id: lokalise-pull
+        uses: lokalise/lokalise-pull-action@v5.0.1
+        with:
+          api_token: ${{ secrets.LOKALISE_API_TOKEN }}
+          project_id: ${{ secrets.LOKALISE_PROJECT_ID }}
+          translations_path: src/locales
+          file_format: json
+          base_lang: en
+          skip_include_tags: true
+          override_branch_name: chore/lokalise-translations
+          override_base_branch: develop
+          git_commit_message: "chore(i18n): pull latest translations from Lokalise"
+          pr_title: "chore(i18n): pull latest translations from Lokalise"
+          pr_body: |
+            Automated weekly pull of translated strings from [Lokalise](https://lokalise.com/).
+
+            **Review checklist:**
+            - [ ] Verify translation values look correct
+            - [ ] Check for any unexpected changes to `src/locales/en/translation.json`
+            - [ ] Confirm text normalization (capitalization, etc.) is consistent
+          pr_labels: i18n,automated
+          additional_params: >
+            {
+              "indentation": "2sp",
+              "export_empty_as": "skip",
+              "export_sort": "a_z",
+              "replace_breaks": false,
+              "placeholder_format": "i18next",
+              "filter_data": ["reviewed_only"]
+            }
