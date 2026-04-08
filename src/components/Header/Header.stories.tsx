@@ -15,26 +15,22 @@ const currentUser = {
   email: 'ada@example.com',
 }
 
-const withProviders =
-  (online: boolean, notifications: unknown[] = []) =>
-  (Story: React.ComponentType) =>
-    React.createElement(
-      MemoryRouter,
-      null,
-      React.createElement(
-        OnlineStatusProvider,
-        { value: { isAppOnline: online } },
-        React.createElement(
-          BellNotificationProvider,
-          { value: { notifications } },
-          React.createElement(
-            CurrentUserProvider,
-            { value: currentUser },
-            React.createElement(Story),
-          ),
-        ),
-      ),
+const withProviders = (online: boolean, notifications: unknown[] = []) => {
+  function Decorator(Story: React.ComponentType) {
+    return (
+      <MemoryRouter>
+        <OnlineStatusProvider value={{ isAppOnline: online }}>
+          <BellNotificationProvider value={{ notifications }}>
+            <CurrentUserProvider value={currentUser}>
+              <Story />
+            </CurrentUserProvider>
+          </BellNotificationProvider>
+        </OnlineStatusProvider>
+      </MemoryRouter>
     )
+  }
+  return Decorator
+}
 
 const meta = {
   component: Header,
