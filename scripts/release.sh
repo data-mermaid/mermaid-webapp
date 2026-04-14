@@ -38,8 +38,7 @@ git merge develop --no-ff -m "Merge develop into main for release"
 
 # Bump version — updates package.json, creates commit, creates annotated tag
 echo "Bumping version ($BUMP_TYPE)..."
-npm version "$BUMP_TYPE"
-NEW_VERSION="v$(node -p "require('./package.json').version")"
+NEW_VERSION=$(npm version "$BUMP_TYPE")
 echo "New version: $NEW_VERSION"
 
 # Push main + tag in one go
