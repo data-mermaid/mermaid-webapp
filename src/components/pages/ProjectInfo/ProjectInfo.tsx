@@ -201,9 +201,7 @@ const ProjectInfo = ({ isNewDemoProject }: ProjectInfoProps) => {
         })
     },
     validate: (values) => {
-      const errors = {
-        name: undefined,
-      }
+      const errors: { name?: { code: string; id: string }[] } = {}
 
       if (!values.name) {
         errors.name = [{ code: requiredFieldErrorText, id: 'Required' }]
