@@ -1,1 +1,19 @@
+# Warn when pushing directly to protected branches
+# Set SKIP_BRANCH_WARNING=1 to bypass (used by scripts/release.sh)
+if [ "$SKIP_BRANCH_WARNING" != "1" ]; then
+  BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "develop" ]; then
+    echo ""
+    echo "⚠️  You are pushing directly to '$BRANCH'."
+    echo "   Most changes should go through a feature branch + PR."
+    echo ""
+    read -p "Are you sure? (y/N) " -n 1 -r < /dev/tty
+    echo ""
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+      echo "Push aborted."
+      exit 1
+    fi
+  fi
+fi
+
 yarn run lint && yarn run test --silent
