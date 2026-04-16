@@ -38,7 +38,9 @@ When cdk-nag flags a new resource:
 Check for unsuppressed Error-level findings:
 
 ```bash
-cd iac && npx cdk synth --quiet 2>&1 | tee /tmp/cdk-nag.log && grep '^\[Error' /tmp/cdk-nag.log
+cd iac && npx cdk synth --quiet 2>&1 | tee /tmp/cdk-nag.log || true; grep '^\[Error' /tmp/cdk-nag.log
 ```
+
+The `|| true` prevents `cdk synth` from aborting the command when cdk-nag finds errors (or if `pipefail` is active), while `; grep` ensures the grep always runs regardless of the synth exit code.
 
 No `[Error` output means all Error-level findings are suppressed. Warnings may still appear.
