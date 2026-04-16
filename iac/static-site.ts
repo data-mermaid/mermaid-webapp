@@ -42,6 +42,7 @@ export class StaticSite extends Construct {
     const siteBucket = new s3.Bucket(this, 'Bucket', {
       publicReadAccess: false,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
       bucketName: siteDomain,
 
       /**
