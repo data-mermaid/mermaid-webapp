@@ -1,0 +1,171 @@
+name: PR
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+    branches:
+      - develop
+
+permissions:
+  contents: read
+  id-token: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  deps-cache:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-node@v6.2.0
+        with:
+          node-version-file: '.nvmrc'
+
+      - uses: actions/cache@v5.0.3
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        name: Install dependencies
+        run: yarn install
+
+  call-lint:
+    if: github.event.pull_request.draft == false
+    needs: [deps-cache]
+    uses: ./.github/workflows/_lint.yml
+
+  call-test:
+    if: github.event.pull_request.draft == false
+    needs: [deps-cache, call-lint]
+    uses: ./.github/workflows/_test.yml
+    secrets: inherit
+    with:
+      environment: dev
+
+  cdk-nag:
+    if: github.event.pull_request.draft == false
+    needs: [call-test]
+    environment: dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-node@v6.2.0
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Fetch yarn cache
+        uses: actions/cache@v5.0.3
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Install yarn dependencies
+        if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        run: yarn install --immutable
+
+      # cdk synth needs a build/ dir for the S3 asset source;
+      # a placeholder is sufficient since cdk-nag only validates constructs.
+      - name: Create placeholder build directory
+        run: mkdir -p build && echo '<!doctype html>' > build/index.html
+
+      - name: Fetch iac node cache
+        uses: actions/cache@v5.0.3
+        id: iac-cache
+        with:
+          path: iac/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('iac/package-lock.json') }}
+
+      - name: Install IaC dependencies
+        if: ${{ steps.iac-cache.outputs.cache-hit != 'true' }}
+        working-directory: iac
+        run: npm ci
+
+      - name: CDK Nag
+        id: cdk-nag
+        working-directory: iac
+        env:
+          CDK_DEFAULT_ACCOUNT: '000000000000'
+          CDK_DEFAULT_REGION: us-east-1
+        run: |
+          npx cdk synth --quiet 2>&1 | tee /tmp/cdk-nag.log || true
+          if grep -q '^\[Error' /tmp/cdk-nag.log; then
+            echo "has_errors=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_errors=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Post CDK Nag results to PR
+        if: always() && steps.cdk-nag.conclusion != 'skipped'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const log = fs.readFileSync('/tmp/cdk-nag.log', 'utf8');
+            const errors = log.split('\n').filter(l => l.startsWith('[Error'));
+            const warnings = log.split('\n').filter(l => l.startsWith('[Warning'));
+            let body = '## cdk-nag report\n\n';
+            if (errors.length === 0) {
+              body += ':white_check_mark: **No unsuppressed errors.**\n';
+            } else {
+              body += `:x: **${errors.length} unsuppressed error(s):**\n\n`;
+              body += '```\n' + errors.join('\n') + '\n```\n';
+            }
+            if (warnings.length > 0) {
+              body += `\n:warning: ${warnings.length} warning(s)\n`;
+            }
+            body += '\n---\n*See `iac/nag-suppressions.ts` to add suppressions for accepted risks.*';
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body.includes('## cdk-nag report'));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      - name: Fail on CDK Nag errors
+        if: steps.cdk-nag.outputs.has_errors == 'true'
+        run: |
+          echo "::error::cdk-nag found unsuppressed errors — see PR comment for details"
+          exit 1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6.0.0
+        with:
+          role-to-assume: ${{ secrets.CDK_DEPLOY_ROLE }}
+          aws-region: us-east-1
+          role-skip-session-tagging: true
+
+      - name: CDK Diff
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+          CDK_DEFAULT_REGION: us-east-1
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+        run: |
+          cd iac && ./cdk_diff.sh
