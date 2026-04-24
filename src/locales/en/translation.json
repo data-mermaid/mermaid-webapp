@@ -844,6 +844,7 @@
   },
   "propose_new_species": "Propose new species",
   "protocol_titles": {
+    "benthic": "Benthic",
     "benthiclit": "Benthic LIT",
     "benthicpit": "Benthic PIT",
     "benthicpqt": "Benthic photo quadrat",
