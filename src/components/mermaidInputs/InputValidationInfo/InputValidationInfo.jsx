@@ -1,7 +1,7 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import PropTypes from 'prop-types'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import theme from '../../../theme'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'

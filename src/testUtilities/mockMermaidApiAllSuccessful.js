@@ -85,6 +85,9 @@ const mockMermaidApiAllSuccessful = setupServer(
   http.get(`${apiBaseUrl}/projects/5/summary/`, () => {
     return new HttpResponse(null, { status: 200 })
   }),
+  http.get(`${apiBaseUrl}/projecttags/`, () => {
+    return HttpResponse.json({ count: 0, next: null, previous: null, results: [] })
+  }),
   http.get(`${apiBaseUrl}/sites/`, () => {
     return HttpResponse.json(mockMermaidData.sitesEndpoint)
   }),

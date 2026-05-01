@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } from 'react-table'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'

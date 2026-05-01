@@ -1,6 +1,6 @@
 {
   "name": "mermaid-webapp",
-  "version": "0.1.0",
+  "version": "2.31.0",
   "type": "module",
   "private": true,
   "homepage": "",
@@ -47,7 +47,7 @@
     "react-error-overlay": "^6.0.9",
     "react-i18next": "^15.5.2",
     "react-is": "^19.0.0",
-    "react-router-dom": "6.19.0",
+    "react-router": "^7.13.1",
     "react-table": "^7.6.3",
     "react-toastify": "^11.0.0",
     "styled-components": "^6.3.8",

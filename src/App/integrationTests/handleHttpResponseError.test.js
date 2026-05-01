@@ -3,6 +3,10 @@ import { toast, Slide } from 'react-toastify'
 import handleHttpResponseError from '../../library/handleHttpResponseError'
 import i18n from '../../../i18n'
 describe('handleHttpResponseError', () => {
+  beforeEach(() => {
+    // handleHttpResponseError always logs the error to console.error; suppress the expected noise.
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+  })
   afterEach(() => {
     vi.restoreAllMocks()
   })
@@ -124,7 +128,7 @@ describe('handleHttpResponseError', () => {
     expect(callback).toHaveBeenCalled()
   })
   test('if there is an error, it will be logged to console.error', () => {
-    const consoleSpy = vi.spyOn(console, 'error')
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
     const logoutMermaid = vi.fn()
 
