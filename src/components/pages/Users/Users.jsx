@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

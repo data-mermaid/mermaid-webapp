@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { styled } from 'styled-components'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'

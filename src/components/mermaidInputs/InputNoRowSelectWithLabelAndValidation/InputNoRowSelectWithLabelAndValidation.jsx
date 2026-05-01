@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
 import { getProjectIdFromLocation } from '../../../library/getProjectIdFromLocation'

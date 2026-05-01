@@ -153,7 +153,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
             <strong>{getDataSharingPolicyLabel(data_policy_beltfish)}</strong>
           </li>
           <li data-testid="benthic-policy">
-            {t('protocol_titles.benthiclit')}:{' '}
+            {t('protocol_titles.benthic')}:{' '}
             <strong>{getDataSharingPolicyLabel(data_policy_benthiclit)}</strong>
           </li>
           <li data-testid="bleaching-policy">

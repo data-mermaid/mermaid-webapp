@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import PropTypes from 'prop-types'
 import React, { useState, useReducer, useEffect, useMemo, useCallback } from 'react'
 

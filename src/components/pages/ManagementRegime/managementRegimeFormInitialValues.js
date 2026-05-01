@@ -1,9 +1,7 @@
-// Radios dont complain when initial value is undefined (because they have a value
-// already and checked is the state that changes) but other inputs types do.
-// An exception to this is the ManagementRulesInput which has some custom logic
-// and requires values to be set for open_access and no_take.
-// We also dont want 'not reported' (has empty string value) to be selected   by default,
-// this is why some of these properties don't default to an empty string, but others do
+// All boolean fields default to false and all string fields default to '' to ensure
+// controlled inputs are always controlled from the first render (avoiding React's
+// "uncontrolled to controlled" warning). The compliance field intentionally defaults
+// to '' rather than a specific value so no compliance option is pre-selected.
 const getManagementRegimeInitialValues = (managementRegimeRecord) => {
   return {
     name: managementRegimeRecord?.name ?? '',
@@ -13,12 +11,12 @@ const getManagementRegimeInitialValues = (managementRegimeRecord) => {
     parties: managementRegimeRecord?.parties ?? [],
     open_access: managementRegimeRecord?.open_access ?? true,
     no_take: managementRegimeRecord?.no_take ?? false,
-    access_restriction: managementRegimeRecord?.access_restriction,
-    periodic_closure: managementRegimeRecord?.periodic_closure,
-    size_limits: managementRegimeRecord?.size_limits,
-    gear_restriction: managementRegimeRecord?.gear_restriction,
-    species_restriction: managementRegimeRecord?.species_restriction,
-    compliance: managementRegimeRecord?.compliance,
+    access_restriction: managementRegimeRecord?.access_restriction ?? false,
+    periodic_closure: managementRegimeRecord?.periodic_closure ?? false,
+    size_limits: managementRegimeRecord?.size_limits ?? false,
+    gear_restriction: managementRegimeRecord?.gear_restriction ?? false,
+    species_restriction: managementRegimeRecord?.species_restriction ?? false,
+    compliance: managementRegimeRecord?.compliance ?? '',
     notes: managementRegimeRecord?.notes ?? '',
   }
 }

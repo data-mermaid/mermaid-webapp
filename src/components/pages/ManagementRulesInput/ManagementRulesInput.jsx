@@ -122,12 +122,17 @@ const ManagementRulesInput = ({
     }
   }
 
-  const [managementRulesRadioInputValue, setManagementRulesRadioInputValue] = useState({})
+  const initialRadioValues = getManagementRulesRadioInputValue(managementFormValues)
 
-  const [partialRestrictionCheckboxValues, setPartialRestrictionCheckboxValues] = useState({})
+  const [managementRulesRadioInputValue, setManagementRulesRadioInputValue] =
+    useState(initialRadioValues)
+
+  const [partialRestrictionCheckboxValues, setPartialRestrictionCheckboxValues] = useState(
+    getPartialRestrictionCheckboxValues(managementFormValues),
+  )
 
   const [isPartialRestrictionsExpanded, setIsPartialRestrictionsExpanded] = useState(
-    managementRulesRadioInputValue.partial_restrictions,
+    initialRadioValues.partial_restrictions,
   )
 
   useEffect(
