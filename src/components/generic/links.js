@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router'
 import { styled, css } from 'styled-components'
 import theme from '../../theme'
 import { hoverState } from '../../library/styling/mediaQueries'

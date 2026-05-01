@@ -8,7 +8,7 @@ import { EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD } from '../imageCla
 import { getIsImageProcessed } from '../getIsImageProcessed'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { BenthicPhotoQuadratRecord } from '../../../../App/mermaidData/mermaidDataTypes'
 import { ValidationResult } from '../../collectRecordFormPages/CollectRecordFormPage/getDuplicateValidationInfo'

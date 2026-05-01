@@ -30,7 +30,7 @@ const FilterSearchToolbar = ({
   id = 'filter-search',
   name,
   disabled = false,
-  globalSearchText,
+  globalSearchText = '', // react-table sets globalFilter to undefined when cleared; default to '' to keep the input controlled
   handleGlobalFilterChange,
   type = 'page',
 }) => {

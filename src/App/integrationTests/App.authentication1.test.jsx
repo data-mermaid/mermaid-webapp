@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -31,6 +31,10 @@ test('App renders the initial screen as expected for an online and authenticated
 })
 
 test('App: an online and authenticated user can logout', async () => {
+  // Logging out closes the Dexie DB; suppress the expected DatabaseClosedError that
+  // fires when async operations attempt to use it after close
+  vi.spyOn(console, 'error').mockImplementation(() => {})
+
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {

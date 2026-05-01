@@ -1,5 +1,5 @@
 import { CSVLink } from 'react-csv'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'

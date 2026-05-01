@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router'
 import { styled } from 'styled-components'
 
 import { Trans, useTranslation } from 'react-i18next'

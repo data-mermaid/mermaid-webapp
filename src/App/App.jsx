@@ -1,4 +1,4 @@
-import { Route, useLocation, Routes, Navigate, useNavigate } from 'react-router-dom'
+import { Route, useLocation, Routes, Navigate, useNavigate } from 'react-router'
 import { StyleSheetManager, ThemeProvider } from 'styled-components'
 import { toast } from 'react-toastify'
 import React, { useCallback, useMemo } from 'react'

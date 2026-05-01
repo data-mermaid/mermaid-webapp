@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
 import { getProjectIdFromLocation } from '../../../library/getProjectIdFromLocation'

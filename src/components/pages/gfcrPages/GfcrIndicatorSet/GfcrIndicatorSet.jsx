@@ -4,7 +4,7 @@ import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { Slide, toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router'
 
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
