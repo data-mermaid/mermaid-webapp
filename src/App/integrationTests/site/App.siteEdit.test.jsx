@@ -110,7 +110,7 @@ test('Offline: edit site save stored site in dexie', async () => {
   await waitFor(() => expect(updatedSite.name).toEqual('OOF'))
 })
 test('Offline: Edit site  save failure shows toast message with new edits persisting', async () => {
-  const consoleSpy = vi.spyOn(console, 'error')
+  const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

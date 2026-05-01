@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import PropTypes, { string } from 'prop-types'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'

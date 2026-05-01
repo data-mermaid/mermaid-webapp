@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import React, { useEffect, useState } from 'react'
 import { styled, css } from 'styled-components'
 import { useTranslation } from 'react-i18next'

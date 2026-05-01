@@ -25,7 +25,7 @@ import { CloseButton } from '../generic/buttons'
 import { Box } from '@mui/material'
 import { IconClose } from '../icons'
 import cardStyles from '../ProjectCard/ProjectCard.module.scss'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { getCurrentUserOptionalFeature } from '../../library/getCurrentUserOptionalFeature'
 
 interface DemoProjectCalloutProps {
@@ -109,16 +109,17 @@ const Projects = () => {
     currentUser,
     'demo_project',
   )
-  const [isDemoCalloutVisible, setIsDemoCalloutVisible] = useState(
-    !userHasDemoProject && !hasUserDismissedDemo && isAppOnline && isDemoProjectEnabledForUser,
-  )
+  const shouldShowDemoCallout =
+    !userHasDemoProject &&
+    (!hasUserDismissedDemo || !userHasProjects) &&
+    isAppOnline &&
+    isDemoProjectEnabledForUser
+  const [isDemoCalloutVisible, setIsDemoCalloutVisible] = useState(shouldShowDemoCallout)
 
-  // Hide demo callout when projects load and contain a demo project
+  // Keep callout visibility in sync with current eligibility state
   useEffect(() => {
-    if (userHasDemoProject) {
-      setIsDemoCalloutVisible(false)
-    }
-  }, [userHasDemoProject])
+    setIsDemoCalloutVisible(shouldShowDemoCallout)
+  }, [shouldShowDemoCallout])
 
   useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import PropTypes from 'prop-types'
 import Modal from '../../generic/Modal'
 import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../generic/buttons.js'

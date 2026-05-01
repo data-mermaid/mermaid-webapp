@@ -23,7 +23,7 @@ import { ButtonCaution, ButtonSecondary, IconButton } from '../../../../generic/
 import SaveButton from './SaveButton'
 import { getChips } from './modalHelpers'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { toast } from 'react-toastify'
 import { getToastArguments } from '../../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'

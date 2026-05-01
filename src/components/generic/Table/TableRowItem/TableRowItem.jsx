@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import { getProjectIdFromLocation } from '../../../../library/getProjectIdFromLocation'
 import { getObjectById } from '../../../../library/getObjectById'
 import { Tr, TableRowTdKey, TableRowTd } from '../table'
