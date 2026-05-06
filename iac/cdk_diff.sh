@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-STACK_NAME="${CDK_STACK_NAME:-dev-webapp}"
+CDK_SUBDOMAIN="${CDK_SUBDOMAIN:-dev}"
+STACK_NAME="${CDK_STACK_NAME:-${CDK_SUBDOMAIN}-webapp}"
 
-function diff(){
+function run_cdk_diff(){
 	echo "Run cdk diff"
 	set +e
-	npx cdk diff "${STACK_NAME}" 2>&1 | tee /tmp/cdk-diff.log
+	npx cdk diff "${STACK_NAME}" -c "subdomain=${CDK_SUBDOMAIN}" 2>&1 | tee /tmp/cdk-diff.log
 	exitCode=${?}
 	set -e
 
@@ -16,4 +17,4 @@ function diff(){
 	fi
 }
 
-diff
+run_cdk_diff

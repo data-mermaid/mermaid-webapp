@@ -73,19 +73,25 @@ export function applyNagSuppressions(stack: cdk.Stack): void {
   ])
 
   // CloudFront invalidation APIs (cloudfront:CreateInvalidation, cloudfront:GetInvalidation)
-  // do not support resource-level permissions, so the BucketDeployment Lambda role requires
-  // Resource::*. Scoped to that specific role rather than suppressing it stack-wide.
-  // The singleton ID encodes the Lambda asset hash + memory limit (1024 MiB); update if CDK
-  // changes the BucketDeployment Lambda asset.
-  NagSuppressions.addResourceSuppressionsByPath(
-    stack,
-    `/${stack.stackName}/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiB/ServiceRole/DefaultPolicy/Resource`,
-    [
-      {
-        id: 'AwsSolutions-IAM5',
-        reason: `${ACCEPTED}: Resource::* is required for CloudFront invalidation APIs which do not support resource-level permissions.`,
-        appliesTo: ['Resource::*'],
-      },
-    ],
-  )
+  // do not support resource-level permissions, so the BucketDeployment singleton Lambda role
+  // requires Resource::*. CDK places the singleton directly under the stack with an ID that
+  // begins with 'Custom::CDKBucketDeployment', so we locate it by prefix rather than
+  // hardcoding the asset hash, then navigate to its DefaultPolicy/Resource child.
+  for (const child of stack.node.children) {
+    if (child.node.id.startsWith('Custom::CDKBucketDeployment')) {
+      const policyResource = child.node
+        .tryFindChild('ServiceRole')
+        ?.node.tryFindChild('DefaultPolicy')
+        ?.node.tryFindChild('Resource')
+      if (policyResource) {
+        NagSuppressions.addResourceSuppressions(policyResource, [
+          {
+            id: 'AwsSolutions-IAM5',
+            reason: `${ACCEPTED}: Resource::* is required for CloudFront invalidation APIs which do not support resource-level permissions.`,
+            appliesTo: ['Resource::*'],
+          },
+        ])
+      }
+    }
+  }
 }

@@ -16,6 +16,10 @@ permissions:
   issues: write
   pull-requests: write
 
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   deps-cache:
     if: github.event.pull_request.draft == false
@@ -53,7 +57,7 @@ jobs:
 
   cdk-nag:
     if: github.event.pull_request.draft == false
-    needs: [call-test]
+    needs: [deps-cache]
     environment: dev
     runs-on: ubuntu-latest
     steps:
@@ -98,7 +102,8 @@ jobs:
           CDK_DEFAULT_REGION: us-east-1
         run: |
           npx cdk synth --quiet 2>&1 | tee /tmp/cdk-nag.log || true
-          if grep -q '^\[Error' /tmp/cdk-nag.log; then
+          synth_exit=${PIPESTATUS[0]}
+          if [ "${synth_exit}" != "0" ] || grep -q '^\[Error' /tmp/cdk-nag.log; then
             echo "has_errors=true" >> "$GITHUB_OUTPUT"
           else
             echo "has_errors=false" >> "$GITHUB_OUTPUT"
@@ -129,7 +134,7 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
-            const existing = comments.find(c => c.body.includes('## cdk-nag report'));
+            const existing = comments.find(c => c.body?.includes('## cdk-nag report'));
             if (existing) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
@@ -193,7 +198,7 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
-            const existing = comments.find(c => c.body.includes('#### `cdk diff`'));
+            const existing = comments.find(c => c.body?.includes('#### `cdk diff`'));
             if (existing) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
