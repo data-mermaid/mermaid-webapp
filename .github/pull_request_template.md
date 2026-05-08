@@ -12,7 +12,7 @@
 - [ ] Any necessary updates to the documentation have been made
 - [ ] Unit tests have been added or updated, where possible, to prevent future regressions
 - [ ] styled-components code in changed files has been updated to CSS modules in the styles folder
-- [ ] touched JS files have been updated with TypeScript
+- [ ] Touched JS files are migrated to TypeScript where in scope; PropTypes are replaced with TypeScript interfaces in converted files and not added for shapes already typed in `mermaidDataTypes.ts`.
       -- Update where possible and within scope
 
 ---Post-Merge---
