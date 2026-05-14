@@ -30,6 +30,23 @@ fi
 echo "Pulling latest develop and main..."
 git checkout develop && git pull
 git checkout main && git pull
+git fetch --tags
+
+# Verify package.json version matches the latest git tag.
+# If they drift (e.g. someone tagged manually without bumping package.json),
+# `npm version` can either fail ("tag already exists") or silently produce a
+# version lower than an existing tag. Abort and let the user reconcile first.
+PKG_VERSION=$(node -p "require('./package.json').version")
+LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
+LATEST_TAG_VERSION="${LATEST_TAG#v}"
+if [[ "$PKG_VERSION" != "$LATEST_TAG_VERSION" ]]; then
+  echo "Error: package.json version ($PKG_VERSION) does not match latest tag ($LATEST_TAG)."
+  echo "Reconcile before releasing. To sync package.json up to the tag:"
+  echo "  npm version $LATEST_TAG_VERSION --no-git-tag-version"
+  echo "  git commit -am \"chore: sync package.json with $LATEST_TAG tag\""
+  echo "  git push origin main"
+  exit 1
+fi
 
 # Merge develop into main
 # --no-ff: forces a merge commit so releases are visible in history and individually revertable
