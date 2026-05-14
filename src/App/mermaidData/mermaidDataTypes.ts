@@ -125,7 +125,7 @@ interface SubmittedBenthicPhotoQuadratObservation {
   updated_by?: string
   updated_on?: string
 }
-interface BeltInvertObservation {
+interface SubmittedBeltInvertObservation {
   id?: string
   updated_by?: string
   size?: number | string
@@ -251,7 +251,7 @@ export interface SubmittedBeltInvert {
   sample_event: SampleEvent
   beltinvert_transect: BeltInvertTransect
   observers: Observer[]
-  obs_belt_inverts: BeltInvertObservation[]
+  obs_belt_inverts: SubmittedBeltInvertObservation[]
 }
 
 export interface BenthicPitRecord {

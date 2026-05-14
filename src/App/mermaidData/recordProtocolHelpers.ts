@@ -30,7 +30,7 @@ export const getIsQuadratSampleUnit = (protocol: Protocol): boolean => {
 export const noLabelSymbol = '-'
 
 export const getObservationsPropertyNames = (collectRecord: {
-  data?: { protocol?: Protocol | string }
+  data?: { protocol?: Protocol }
 }): string[] => {
   return (
     {
