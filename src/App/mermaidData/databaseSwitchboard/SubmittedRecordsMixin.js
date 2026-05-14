@@ -21,7 +21,7 @@ const SubmittedRecordsMixin = (Base) =>
         ? axios
             .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
               params: {
-                protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc,benthicpqt`,
+                protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc,benthicpqt,macroinvertebrate`,
                 page: pageNo,
                 limit: DEFAULT_RECORDS_PER_PAGE,
               },
