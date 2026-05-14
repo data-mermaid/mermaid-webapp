@@ -515,6 +515,7 @@ export type MermaidRecord =
   | BleachingRecord
   | FishBeltRecord
   | HabitatComplexityRecord
+  | BeltInvertRecord
 
 export interface FishFamily {
   id: string
