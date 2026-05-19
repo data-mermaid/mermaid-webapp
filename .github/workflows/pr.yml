@@ -40,7 +40,7 @@ jobs:
 
       - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
         name: Install dependencies
-        run: yarn install
+        run: yarn install --immutable
 
   call-lint:
     if: github.event.pull_request.draft == false

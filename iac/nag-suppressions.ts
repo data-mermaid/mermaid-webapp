@@ -36,11 +36,6 @@ export function applyNagSuppressions(stack: cdk.Stack): void {
       id: 'AwsSolutions-CFR3',
       reason: `${TODO}: Enable CloudFront access logging.`,
     },
-    {
-      id: 'AwsSolutions-CFR7',
-      reason: `${TODO}: Migrate from Origin Access Identity (OAI) to Origin Access Control (OAC).`,
-    },
-
     // --- IAM ---
     {
       id: 'AwsSolutions-IAM4',
