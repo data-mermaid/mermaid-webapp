@@ -27,7 +27,6 @@ import { IconClose } from '../icons'
 import cardStyles from '../ProjectCard/ProjectCard.module.scss'
 import { useNavigate } from 'react-router'
 import { getCurrentUserOptionalFeature } from '../../library/getCurrentUserOptionalFeature'
-import GatedFeature from '../../library/GatedFeature'
 
 interface DemoProjectCalloutProps {
   handleDemoClick: () => void
@@ -299,12 +298,6 @@ const Projects = () => {
             />
           )}
           {projectCardsList}
-          <GatedFeature featureFlag="macroinvertebrate_enabled">
-            <div>
-              Seeing this text means the macro invertebrate feature flag is enabled for the current
-              user.
-            </div>
-          </GatedFeature>
         </div>
       }
     />
