@@ -15,7 +15,7 @@ export const getProtocolTransectType = (protocol: Protocol): string | undefined 
     habitatcomplexity: 'benthic_transect',
     bleachingqc: 'quadrat_collection',
     benthicpqt: 'quadrat_transect',
-    macroinvertebrate: 'beltinvert_transect', // Placeholder. May change when API is live
+    macroinvertebrate: 'beltinvert_transect',
   }[protocol]
 }
 
@@ -53,6 +53,6 @@ export const getProtocolMethodsType = (protocol: Protocol): string | undefined =
     habitatcomplexity: 'habitatcomplexitytransectmethods',
     bleachingqc: 'bleachingquadratcollectionmethods',
     benthicpqt: 'benthicphotoquadrattransectmethods',
-    macroinvertebrate: 'beltinverttransectmethods', // Placeholder. May change when API is live
+    macroinvertebrate: 'beltinverttransectmethods',
   }[protocol]
 }
