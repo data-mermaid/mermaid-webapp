@@ -9,10 +9,8 @@ interface GatedFeatureProps {
 
 const GatedFeature: React.FC<GatedFeatureProps> = ({ featureFlag, children }) => {
   const { currentUser } = useCurrentUser()
-  const { enabled: isFeatureEnabled = false } = getCurrentUserOptionalFeature(
-    currentUser,
-    featureFlag,
-  )
+  const { enabled: isFeatureEnabled = false } =
+    getCurrentUserOptionalFeature(currentUser, featureFlag) ?? {}
 
   return isFeatureEnabled ? children : null
 }
