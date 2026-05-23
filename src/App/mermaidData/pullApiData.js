@@ -6,6 +6,7 @@ import {
 } from './lastRevisionNumbers'
 import { getAuthorizationHeaders } from '../../library/getAuthorizationHeaders'
 import { getIsDataTypeProjectAssociated } from './getIsDataTypeProjectAssociated'
+import getAttributesInUse from './getAttributesInUse'
 
 const resetPushToApiTagFromItems = (items) =>
   items.map((item) => ({ ...item, uiState_pushToApi: false }))
@@ -85,6 +86,8 @@ export const pullApiData = async ({
           projectId,
         })
 
+        let attributesInUseCounts = null
+
         apiDataNamesToPull.forEach(async (apiDataType) => {
           if (apiDataType === 'choices') {
             // choices deletes property will always be empty, so we just ignore it
@@ -101,7 +104,24 @@ export const pullApiData = async ({
             const deletes = apiData[apiDataType]?.deletes ?? []
             const removes = apiData[apiDataType]?.removes ?? []
             const deleteIds = deletes.map(({ id }) => id)
-            const removeIds = removes.map(({ id }) => id)
+
+            const isBenthicOrFishSpecies =
+              apiDataType === 'benthic_attributes' || apiDataType === 'fish_species'
+            if (isBenthicOrFishSpecies && !attributesInUseCounts) {
+              attributesInUseCounts = await getAttributesInUse(dexiePerUserDataInstance)
+            }
+
+            const removeIds = removes
+              .filter(({ id }) => {
+                // Checks benthic_attributes and fish_species if there are any proposed attributes.
+                // If any collect records use a proposed attribute, skip removing it from IndexedDB
+                if (isBenthicOrFishSpecies && attributesInUseCounts) {
+                  const protocolAttributesCount = attributesInUseCounts[apiDataType]
+                  return !protocolAttributesCount[id]
+                }
+                return true
+              })
+              .map(({ id }) => id)
             const error = apiData[apiDataType]?.error
             const is401 = error?.code === 401
             const is403 = error?.code === 403

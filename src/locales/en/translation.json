@@ -885,6 +885,7 @@
       "submitted_moved_to_collecting": "The submitted record has been moved to collecting.",
       "submitted_not_editable": "The submitted record has not been made editable",
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable",
+      "attribute_unavailable": "Failed to retrieve attribute details. Please try again.",
       "validation_ignore": "This validation cannot be ignored.",
       "validation_reset": "This validation cannot be reset.",
       "validation_unavailable": "Validation is currently unavailable for this record."
