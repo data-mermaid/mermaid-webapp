@@ -10,6 +10,7 @@ import getAttributesInUse from './getAttributesInUse'
 
 const resetPushToApiTagFromItems = (items) =>
   items.map((item) => ({ ...item, uiState_pushToApi: false }))
+const PROPOSED_STATUS = 10
 
 export const pullApiData = async ({
   apiBaseUrl,
@@ -86,7 +87,7 @@ export const pullApiData = async ({
           projectId,
         })
 
-        let attributesInUseCounts = null
+        const attributesInUseCounts = await getAttributesInUse(dexiePerUserDataInstance)
 
         for (const apiDataType of apiDataNamesToPull) {
           if (apiDataType === 'choices') {
@@ -107,16 +108,30 @@ export const pullApiData = async ({
 
             const isBenthicOrFishSpecies =
               apiDataType === 'benthic_attributes' || apiDataType === 'fish_species'
-            if (isBenthicOrFishSpecies && !attributesInUseCounts) {
-              attributesInUseCounts = await getAttributesInUse(dexiePerUserDataInstance)
-            }
+            const protocolAttributesCount = isBenthicOrFishSpecies
+              ? attributesInUseCounts?.[apiDataType] ?? {}
+              : {}
+
+            // If an attribute update arrives with proposed status and no record uses it,
+            // do not keep it in local storage.
+            const proposedUpdateIdsToDelete = updatesWithPushToApiTagReset
+              .filter(
+                (item) =>
+                  isBenthicOrFishSpecies &&
+                  item?.status === PROPOSED_STATUS &&
+                  !protocolAttributesCount[item.id],
+              )
+              .map(({ id }) => id)
+
+            const updatesToStore = updatesWithPushToApiTagReset.filter(
+              (item) => !proposedUpdateIdsToDelete.includes(item.id),
+            )
 
             const removeIds = removes
               .filter(({ id }) => {
                 // Checks benthic_attributes and fish_species if there are any proposed attributes.
                 // If any collect records use a proposed attribute, skip removing it from IndexedDB
-                if (isBenthicOrFishSpecies && attributesInUseCounts) {
-                  const protocolAttributesCount = attributesInUseCounts[apiDataType]
+                if (isBenthicOrFishSpecies) {
                   return !protocolAttributesCount[id]
                 }
                 return true
@@ -132,9 +147,11 @@ export const pullApiData = async ({
 
             const isDataTypeProjectAssociated = getIsDataTypeProjectAssociated(apiDataType)
 
-            const bulkDeleteIdsWithNoDuplicates = Array.from(new Set([...deleteIds, ...removeIds]))
+            const bulkDeleteIdsWithNoDuplicates = Array.from(
+              new Set([...deleteIds, ...removeIds, ...proposedUpdateIdsToDelete]),
+            )
 
-            await dexiePerUserDataInstance[apiDataType].bulkPut(updatesWithPushToApiTagReset)
+            await dexiePerUserDataInstance[apiDataType].bulkPut(updatesToStore)
             await dexiePerUserDataInstance[apiDataType].bulkDelete(bulkDeleteIdsWithNoDuplicates)
 
             if ((is401 || is403) && isDataTypeProjectAssociated && projectId) {
