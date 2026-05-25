@@ -88,12 +88,12 @@ export const pullApiData = async ({
 
         let attributesInUseCounts = null
 
-        apiDataNamesToPull.forEach(async (apiDataType) => {
+        for (const apiDataType of apiDataNamesToPull) {
           if (apiDataType === 'choices') {
             // choices deletes property will always be empty, so we just ignore it
             // additionally the updates property is an object, not an array, so we just store it directly
 
-            dexiePerUserDataInstance.choices.put({
+            await dexiePerUserDataInstance.choices.put({
               id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
               choices: { ...apiData.choices?.updates, uiState_pushToApi: false },
             })
@@ -134,8 +134,8 @@ export const pullApiData = async ({
 
             const bulkDeleteIdsWithNoDuplicates = Array.from(new Set([...deleteIds, ...removeIds]))
 
-            dexiePerUserDataInstance[apiDataType].bulkPut(updatesWithPushToApiTagReset)
-            dexiePerUserDataInstance[apiDataType].bulkDelete(bulkDeleteIdsWithNoDuplicates)
+            await dexiePerUserDataInstance[apiDataType].bulkPut(updatesWithPushToApiTagReset)
+            await dexiePerUserDataInstance[apiDataType].bulkDelete(bulkDeleteIdsWithNoDuplicates)
 
             if ((is401 || is403) && isDataTypeProjectAssociated && projectId) {
               // we still delete project related data in addition to anything in the removes array,
@@ -164,7 +164,7 @@ export const pullApiData = async ({
               ])
             }
           }
-        })
+        }
 
         if (shouldHandleUserDeniedSyncPull && projectId && projectName) {
           /* user will only be denied pulling when they are trying to

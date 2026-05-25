@@ -12,7 +12,7 @@ interface CollectRecordObservationData {
 }
 
 interface CollectRecord {
-  data: CollectRecordObservationData
+  data?: CollectRecordObservationData
 }
 
 interface DexiePerUserDataInstance {
@@ -44,6 +44,9 @@ const getAttributesInUse = async (
   const collectRecordsInUse = await dexiePerUserDataInstance.collect_records.toArray()
   collectRecordsInUse.forEach((record) => {
     const data = record.data
+    if (!data) {
+      return
+    }
 
     data.obs_belt_fishes?.forEach((obs) => incrementIfTruthy(obs.fish_attribute, 'fish_species'))
     data.obs_benthic_lits?.forEach((obs) => incrementIfTruthy(obs.attribute, 'benthic_attributes'))
