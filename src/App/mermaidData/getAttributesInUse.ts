@@ -25,6 +25,7 @@ interface DexiePerUserDataInstance {
 // grouped by attribute type with counts per attribute ID.
 const getAttributesInUse = async (
   dexiePerUserDataInstance: DexiePerUserDataInstance,
+  pulledCollectRecords: CollectRecord[] = [],
 ): Promise<AttributeCounts> => {
   const attributeCounts: AttributeCounts = {
     benthic_attributes: {},
@@ -42,8 +43,10 @@ const getAttributesInUse = async (
   }
 
   const collectRecordsInUse = await dexiePerUserDataInstance.collect_records.toArray()
-  collectRecordsInUse.forEach((record) => {
-    const data = record.data
+  const collectRecordsToCount = [...collectRecordsInUse, ...pulledCollectRecords]
+
+  collectRecordsToCount.forEach((record) => {
+    const data = record?.data
     if (!data) {
       return
     }

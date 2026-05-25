@@ -47,11 +47,6 @@ import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCollectRecordValidation from './useCollectRecordValidation'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
-import axios from '../../../../library/axiosRetry'
-import { getAuthorizationHeaders } from '../../../../library/getAuthorizationHeaders'
-import useAuthentication from '../../../../App/useAuthentication'
-import dexieCurrentUserInstance from '../../../../App/dexieCurrentUserInstance'
-import getAttributesInUse from '../../../../App/mermaidData/getAttributesInUse'
 
 function loadObservationsFromCollectRecordIntoTableState({
   collectRecordBeingEdited,
@@ -173,7 +168,6 @@ const CollectRecordFormPage = ({
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new record is saved (and that triggers a navigation to its new page)
   const isBenthicPQTNewRecordWithImageClassificationEnabled =
     isImageClassificationEnabledForUser && isNewRecord && sampleUnitName === 'benthicpqt'
-  const { getAccessToken } = useAuthentication({ dexieCurrentUserInstance })
 
   const { t } = useTranslation()
 
@@ -444,79 +438,6 @@ const CollectRecordFormPage = ({
       })
   }
 
-  const removeInaccessibleAttributes = async (recordData) => {
-    const attributesInUse = await getAttributesInUse(
-      databaseSwitchboardInstance._dexiePerUserDataInstance,
-    )
-    const authHeaders = await getAuthorizationHeaders(getAccessToken)
-
-    // Create an object to hold the attribute IDs that are being used the current collect
-    // record, grouped by their protocol. Using Sets to avoid duplicates.
-    const attributesToCheck = {
-      benthic_attributes: new Set(),
-      fish_species: new Set(),
-    }
-
-    // Populate the object with attribute IDs from the collect record being edited
-    recordData.obs_belt_fishes?.forEach((obs) => {
-      if (obs.fish_attribute) {
-        attributesToCheck.fish_species.add(obs.fish_attribute)
-      }
-    })
-    recordData.obs_benthic_lits?.forEach((obs) => {
-      if (obs.attribute) {
-        attributesToCheck.benthic_attributes.add(obs.attribute)
-      }
-    })
-    recordData.obs_benthic_pits?.forEach((obs) => {
-      if (obs.attribute) {
-        attributesToCheck.benthic_attributes.add(obs.attribute)
-      }
-    })
-    recordData.obs_colonies_bleached?.forEach((obs) => {
-      if (obs.attribute) {
-        attributesToCheck.benthic_attributes.add(obs.attribute)
-      }
-    })
-    recordData.obs_quadrat_benthic_percent?.forEach((obs) => {
-      if (obs.attribute) {
-        attributesToCheck.benthic_attributes.add(obs.attribute)
-      }
-    })
-    recordData.obs_benthic_photo_quadrats?.forEach((obs) => {
-      if (obs.attribute) {
-        attributesToCheck.benthic_attributes.add(obs.attribute)
-      }
-    })
-
-    // Loop through the object and check each attribute ID
-    try {
-      await Promise.all(
-        Object.entries(attributesToCheck).flatMap(([protocol, attributeIds]) => {
-          const indexedDbTableToUpdate =
-            databaseSwitchboardInstance._dexiePerUserDataInstance[protocol]
-
-          return Array.from(attributeIds).map(async (attributeId) => {
-            const numTimesAttributeInUse = attributesInUse[protocol][attributeId]
-            // If the attribute is no longer being used by any collect records, check if it is still accessible via the API
-            if (!numTimesAttributeInUse) {
-              const protocolEndpoint =
-                protocol === 'benthic_attributes' ? 'benthicattributes' : 'fishspecies'
-              const url = `${import.meta.env.VITE_MERMAID_API}/${protocolEndpoint}/${attributeId}`
-              const response = await axios.get(url, authHeaders)
-              if (response.data.status === 10) {
-                // A status of 10 means the attribute is proposed and should be deleted from the user's IndexedDB
-                await indexedDbTableToUpdate.delete(attributeId)
-              }
-            }
-          })
-        }),
-      )
-    } catch {
-      toast.error(...getToastArguments(t('sample_units.errors.attribute_unavailable')))
-    }
-  }
-
   const handleSubmit = () => {
     setSubmitButtonState(buttonGroupStates.submitting)
 
@@ -524,8 +445,17 @@ const CollectRecordFormPage = ({
       .submitSampleUnit({ recordId, projectId })
       .then(() => {
         toast.success(...getToastArguments(t('sample_units.success.record_submitted')))
-        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
-        removeInaccessibleAttributes(collectRecordBeingEdited.data).catch(() => {})
+        const removeInaccessibleAttributesPromise = collectRecordBeingEdited?.data
+          ? databaseSwitchboardInstance.removeInaccessibleAttributes(collectRecordBeingEdited.data)
+          : Promise.resolve()
+
+        removeInaccessibleAttributesPromise
+          .catch(() => {
+            toast.error(...getToastArguments(t('sample_units.errors.attribute_unavailable')))
+          })
+          .finally(() => {
+            navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+          })
       })
       .catch((error) => {
         setSubmitButtonState(buttonGroupStates.submittable)
@@ -569,8 +499,17 @@ const CollectRecordFormPage = ({
         closeDeleteRecordModal()
         setIsDeletingRecord(false)
         toast.success(...getToastArguments(t('sample_units.success.record_deleted')))
-        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
-        removeInaccessibleAttributes(collectRecordBeingEdited.data).catch(() => {})
+        const removeInaccessibleAttributesPromise = collectRecordBeingEdited?.data
+          ? databaseSwitchboardInstance.removeInaccessibleAttributes(collectRecordBeingEdited.data)
+          : Promise.resolve()
+
+        removeInaccessibleAttributesPromise
+          .catch(() => {
+            toast.error(...getToastArguments(t('sample_units.errors.attribute_unavailable')))
+          })
+          .finally(() => {
+            navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+          })
       })
       .catch((error) => {
         setIsDeletingRecord(false)

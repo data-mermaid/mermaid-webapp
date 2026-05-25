@@ -87,7 +87,10 @@ export const pullApiData = async ({
           projectId,
         })
 
-        const attributesInUseCounts = await getAttributesInUse(dexiePerUserDataInstance)
+        const attributesInUseCounts = await getAttributesInUse(
+          dexiePerUserDataInstance,
+          apiData.collect_records?.updates ?? [],
+        )
 
         for (const apiDataType of apiDataNamesToPull) {
           if (apiDataType === 'choices') {

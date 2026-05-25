@@ -875,7 +875,6 @@
       "submitted_moved_to_collecting": "Catatan yang dikirimkan telah dipindahkan ke pengumpulan.",
       "submitted_not_editable": "Catatan yang dikirimkan belum dapat diedit",
       "supporting_data_unavailable": "Data pendukung untuk membuat unit sampel saat ini tidak tersedia",
-      "attribute_unavailable": "Gagal mengambil detail atribut. Silakan coba lagi.",
       "validation_ignore": "Validasi ini tidak dapat diabaikan.",
       "validation_reset": "Validasi ini tidak dapat diatur ulang.",
       "validation_unavailable": "Validasi saat ini tidak tersedia untuk catatan ini."
