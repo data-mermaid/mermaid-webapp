@@ -12,6 +12,7 @@ interface CollectRecordObservationData {
 }
 
 interface CollectRecord {
+  id?: string | number
   data?: CollectRecordObservationData
 }
 
@@ -43,7 +44,20 @@ const getAttributesInUse = async (
   }
 
   const collectRecordsInUse = await dexiePerUserDataInstance.collect_records.toArray()
-  const collectRecordsToCount = [...collectRecordsInUse, ...pulledCollectRecords]
+  const localRecordIds = new Set(
+    collectRecordsInUse
+      .map((record) => record?.id)
+      .filter(
+        (recordId): recordId is string | number => recordId !== undefined && recordId !== null,
+      ),
+  )
+
+  // Local records are the source of truth when IDs overlap.
+  const pulledRecordsNotInLocal = pulledCollectRecords.filter(
+    (record) => record?.id === undefined || !localRecordIds.has(record.id),
+  )
+
+  const collectRecordsToCount = [...collectRecordsInUse, ...pulledRecordsNotInLocal]
 
   collectRecordsToCount.forEach((record) => {
     const data = record?.data
