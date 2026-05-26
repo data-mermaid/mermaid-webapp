@@ -68,7 +68,7 @@ test('Sync: initial page load on non project page', async () => {
   await waitForElementToBeRemoved(() => screen.queryByTestId('projects-loading-indicator'))
 
   expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(
-    mockMermaidData.benthic_attributes.length,
+    mockMermaidData.benthic_attributes.length - 1, // proposed benthic attributes are filtered out unless a collect record uses them
   )
   expect((await dexiePerUserDataInstance.invert_attributes.toArray()).length).toEqual(
     mockMermaidData.invert_attributes.length,

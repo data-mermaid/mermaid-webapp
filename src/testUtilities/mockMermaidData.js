@@ -3106,7 +3106,7 @@ const benthic_attributes = [
   {
     id: 'fcf25ee3-701b-4d15-9a17-71f40406db4c',
     updated_by: '8aab2cc3-d76e-4c78-ab45-6b59b387c7b0',
-    status: 90,
+    status: 10,
     created_on: '2021-01-25T09:47:50.448879Z',
     updated_on: '2021-06-16T13:29:10.087019Z',
     name: 'Dead Coral with Algae',
