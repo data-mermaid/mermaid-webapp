@@ -68,6 +68,7 @@ export const pullApiData = async ({
     await dexiePerUserDataInstance.transaction(
       'rw',
       dexiePerUserDataInstance.benthic_attributes,
+      dexiePerUserDataInstance.invert_attributes,
       dexiePerUserDataInstance.choices,
       dexiePerUserDataInstance.collect_records,
       dexiePerUserDataInstance.fish_families,

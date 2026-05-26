@@ -15,6 +15,7 @@ test('Make sure last revision numbers are stored per project where appropriate, 
 
   const apiDataForProjectA = {
     benthic_attributes: { updates: mockMermaidData.benthic_attributes, last_revision_num: 'pull1' },
+    invert_attributes: { updates: mockMermaidData.invert_attributes, last_revision_num: 'pull1' },
     choices: { updates: mockMermaidData.choices, last_revision_num: 'pull1' },
     collect_records: { updates: mockMermaidData.collect_records, last_revision_num: 'pull1' },
     fish_families: { updates: mockMermaidData.fish_families, last_revision_num: 'pull1' },
@@ -31,6 +32,7 @@ test('Make sure last revision numbers are stored per project where appropriate, 
 
   const apiDataForProjectB = {
     benthic_attributes: { updates: mockMermaidData.benthic_attributes, last_revision_num: 'pull2' },
+    invert_attributes: { updates: mockMermaidData.invert_attributes, last_revision_num: 'pull2' },
     choices: { updates: mockMermaidData.choices, last_revision_num: 'pull2' },
     collect_records: { updates: mockMermaidData.collect_records, last_revision_num: 'pull2' },
     fish_families: { updates: mockMermaidData.fish_families, last_revision_num: 'pull2' },
@@ -79,6 +81,7 @@ test('Make sure last revision numbers are stored per project where appropriate, 
   // non-project-specific entities should just have the most recent
   // last revision number returned regardless of project parameter supplied
   expect(lastRevisonNumbersForProjectA.benthic_attributes).toEqual('pull2')
+  expect(lastRevisonNumbersForProjectA.invert_attributes).toEqual('pull2')
   expect(lastRevisonNumbersForProjectA.choices).toEqual('pull2')
   expect(lastRevisonNumbersForProjectA.fish_families).toEqual('pull2')
   expect(lastRevisonNumbersForProjectA.fish_genera).toEqual('pull2')
@@ -86,6 +89,7 @@ test('Make sure last revision numbers are stored per project where appropriate, 
   expect(lastRevisonNumbersForProjectA.projects).toEqual('pull2')
 
   expect(lastRevisonNumbersForProjectB.benthic_attributes).toEqual('pull2')
+  expect(lastRevisonNumbersForProjectB.invert_attributes).toEqual('pull2')
   expect(lastRevisonNumbersForProjectB.choices).toEqual('pull2')
   expect(lastRevisonNumbersForProjectB.fish_families).toEqual('pull2')
   expect(lastRevisonNumbersForProjectB.fish_genera).toEqual('pull2')
@@ -100,6 +104,7 @@ test("resetLastRevisionNumberForProjectDataType will replace last revision numbe
 
   const apiDataForProjectA = {
     benthic_attributes: { updates: mockMermaidData.benthic_attributes, last_revision_num: 'pull1' },
+    invert_attributes: { updates: mockMermaidData.invert_attributes, last_revision_num: 'pull1' },
     choices: { updates: mockMermaidData.choices, last_revision_num: 'pull1' },
     collect_records: { updates: mockMermaidData.collect_records, last_revision_num: 'pull1' },
     fish_families: { updates: mockMermaidData.fish_families, last_revision_num: 'pull1' },
@@ -130,6 +135,7 @@ test("resetLastRevisionNumberForProjectDataType will replace last revision numbe
   expect(lastRevisonNumbersForProjectA.project_profiles).toEqual('pull1')
   expect(lastRevisonNumbersForProjectA.project_sites).toEqual('pull1')
   expect(lastRevisonNumbersForProjectA.benthic_attributes).toEqual('pull1')
+  expect(lastRevisonNumbersForProjectA.invert_attributes).toEqual('pull1')
   expect(lastRevisonNumbersForProjectA.choices).toEqual('pull1')
   expect(lastRevisonNumbersForProjectA.fish_families).toEqual('pull1')
   expect(lastRevisonNumbersForProjectA.fish_genera).toEqual('pull1')
@@ -172,6 +178,7 @@ test("resetLastRevisionNumberForProjectDataType will replace last revision numbe
 
   // non-project-specific entities should remain untouched
   expect(lastRevisonNumbersAfterResetForProjectA.benthic_attributes).toEqual('pull1')
+  expect(lastRevisonNumbersAfterResetForProjectA.invert_attributes).toEqual('pull1')
   expect(lastRevisonNumbersAfterResetForProjectA.choices).toEqual('pull1')
   expect(lastRevisonNumbersAfterResetForProjectA.fish_families).toEqual('pull1')
   expect(lastRevisonNumbersAfterResetForProjectA.fish_genera).toEqual('pull1')
