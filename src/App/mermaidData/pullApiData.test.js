@@ -127,63 +127,13 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
   )
 })
 
-test('pullApiData removes proposed benthic attribute updates when attribute is not in use by any collect records', async () => {
+test('pullApiData keeps proposed benthic attribute updates when attribute is not in use by any collect records', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
   const benthicAttributeId = mockMermaidData.benthic_attributes[0].id
 
   await dexiePerUserDataInstance.benthic_attributes.put({
     ...mockMermaidData.benthic_attributes[0],
     status: 90,
-  })
-
-  mockMermaidApiAllSuccessful.use(
-    http.post(
-      `${import.meta.env.VITE_MERMAID_API}/pull/`,
-      () => {
-        const response = {
-          benthic_attributes: {
-            updates: [{ ...mockMermaidData.benthic_attributes[0], status: 10 }],
-          },
-        }
-
-        return HttpResponse.json(response)
-      },
-      { once: true },
-    ),
-  )
-
-  await pullApiData({
-    apiBaseUrl,
-    apiDataNamesToPull: allTheDataNames,
-    dexiePerUserDataInstance,
-    getAccessToken: getFakeAccessToken,
-    handleUserDeniedSyncPull: () => {},
-    projectId,
-  })
-
-  const benthicAttribute = await dexiePerUserDataInstance.benthic_attributes.get(benthicAttributeId)
-  expect(benthicAttribute).toBeUndefined()
-})
-
-test('pullApiData keeps proposed benthic attribute updates when attribute is in use by a collect record', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-  const benthicAttributeId = mockMermaidData.benthic_attributes[0].id
-
-  await dexiePerUserDataInstance.benthic_attributes.put({
-    ...mockMermaidData.benthic_attributes[0],
-    status: 90,
-  })
-
-  await dexiePerUserDataInstance.collect_records.put({
-    id: 'collect-record-using-benthic-attribute',
-    data: {
-      obs_belt_fishes: [],
-      obs_benthic_lits: [{ attribute: benthicAttributeId }],
-      obs_benthic_pits: [],
-      obs_colonies_bleached: [],
-      obs_quadrat_benthic_percent: [],
-      obs_benthic_photo_quadrats: [],
-    },
   })
 
   mockMermaidApiAllSuccessful.use(
@@ -214,4 +164,56 @@ test('pullApiData keeps proposed benthic attribute updates when attribute is in 
   const benthicAttribute = await dexiePerUserDataInstance.benthic_attributes.get(benthicAttributeId)
   expect(benthicAttribute).toBeTruthy()
   expect(benthicAttribute.status).toBe(10)
+})
+
+test('pullApiData keeps benthic attributes in removes when attribute is in use by a collect record', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+  const benthicAttributeId = mockMermaidData.benthic_attributes[0].id
+
+  await dexiePerUserDataInstance.benthic_attributes.put({
+    ...mockMermaidData.benthic_attributes[0],
+    status: 90,
+  })
+
+  await dexiePerUserDataInstance.collect_records.put({
+    id: 'collect-record-using-benthic-attribute',
+    data: {
+      obs_belt_fishes: [],
+      obs_benthic_lits: [{ attribute: benthicAttributeId }],
+      obs_benthic_pits: [],
+      obs_colonies_bleached: [],
+      obs_quadrat_benthic_percent: [],
+      obs_benthic_photo_quadrats: [],
+    },
+  })
+
+  mockMermaidApiAllSuccessful.use(
+    http.post(
+      `${import.meta.env.VITE_MERMAID_API}/pull/`,
+      () => {
+        const response = {
+          benthic_attributes: {
+            updates: [],
+            removes: [{ id: benthicAttributeId }],
+          },
+        }
+
+        return HttpResponse.json(response)
+      },
+      { once: true },
+    ),
+  )
+
+  await pullApiData({
+    apiBaseUrl,
+    apiDataNamesToPull: allTheDataNames,
+    dexiePerUserDataInstance,
+    getAccessToken: getFakeAccessToken,
+    handleUserDeniedSyncPull: () => {},
+    projectId,
+  })
+
+  const benthicAttribute = await dexiePerUserDataInstance.benthic_attributes.get(benthicAttributeId)
+  expect(benthicAttribute).toBeTruthy()
+  expect(benthicAttribute.id).toBe(benthicAttributeId)
 })

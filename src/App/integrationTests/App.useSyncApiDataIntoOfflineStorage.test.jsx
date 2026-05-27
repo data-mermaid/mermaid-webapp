@@ -67,7 +67,7 @@ test('Sync: initial page load on non project page', async () => {
   await waitForElementToBeRemoved(() => screen.queryByTestId('projects-loading-indicator'))
 
   expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(
-    mockMermaidData.benthic_attributes.filter((attribute) => attribute.status !== 10).length,
+    mockMermaidData.benthic_attributes.length,
   )
   expect((await dexiePerUserDataInstance.choices.toArray()).length).toEqual(1) // choices is weird and gets overwritten
   expect((await dexiePerUserDataInstance.fish_families.toArray()).length).toEqual(

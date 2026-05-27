@@ -445,17 +445,7 @@ const CollectRecordFormPage = ({
       .submitSampleUnit({ recordId, projectId })
       .then(() => {
         toast.success(...getToastArguments(t('sample_units.success.record_submitted')))
-        const removeInaccessibleAttributesPromise = collectRecordBeingEdited?.data
-          ? databaseSwitchboardInstance.removeInaccessibleAttributes(collectRecordBeingEdited.data)
-          : Promise.resolve()
-
-        removeInaccessibleAttributesPromise
-          .catch(() => {
-            toast.error(...getToastArguments(t('sample_units.errors.attribute_unavailable')))
-          })
-          .finally(() => {
-            navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
-          })
+        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
       })
       .catch((error) => {
         setSubmitButtonState(buttonGroupStates.submittable)
@@ -499,17 +489,7 @@ const CollectRecordFormPage = ({
         closeDeleteRecordModal()
         setIsDeletingRecord(false)
         toast.success(...getToastArguments(t('sample_units.success.record_deleted')))
-        const removeInaccessibleAttributesPromise = collectRecordBeingEdited?.data
-          ? databaseSwitchboardInstance.removeInaccessibleAttributes(collectRecordBeingEdited.data)
-          : Promise.resolve()
-
-        removeInaccessibleAttributesPromise
-          .catch(() => {
-            toast.error(...getToastArguments(t('sample_units.errors.attribute_unavailable')))
-          })
-          .finally(() => {
-            navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
-          })
+        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
       })
       .catch((error) => {
         setIsDeletingRecord(false)

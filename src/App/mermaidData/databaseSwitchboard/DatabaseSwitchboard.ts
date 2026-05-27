@@ -12,15 +12,20 @@ import SubmittedRecordsMixin from './SubmittedRecordsMixin'
 import ProjectHealthMixin from './ProjectHealthMixin'
 import GfcrMixin from './GfcrMixin'
 import ImageClassificationMixin from './ImageClassificationMixin'
+import InvertAttributesMixin from './InvertAttributesMixin'
 class DatabaseSwitchboard extends ProjectHealthMixin(
   BenthicAttributesMixin(
     FishNameMixin(
-      SubmittedRecordsMixin(
-        SitesMixin(
-          ProjectsMixin(
-            ChoicesMixin(
-              ManagementRegimesMixin(
-                CollectRecordsMixin(GfcrMixin(ImageClassificationMixin(DatabaseSwitchboardState))),
+      InvertAttributesMixin(
+        SubmittedRecordsMixin(
+          SitesMixin(
+            ProjectsMixin(
+              ChoicesMixin(
+                ManagementRegimesMixin(
+                  CollectRecordsMixin(
+                    GfcrMixin(ImageClassificationMixin(DatabaseSwitchboardState)),
+                  ),
+                ),
               ),
             ),
           ),
@@ -30,6 +35,7 @@ class DatabaseSwitchboard extends ProjectHealthMixin(
   ),
 ) {}
 
+// Keep PropTypes for now until the files that use this are also converted to TypeScript
 const databaseSwitchboardPropTypes = PropTypes.shape({
   getChoices: PropTypes.func,
   getCollectRecord: PropTypes.func,
