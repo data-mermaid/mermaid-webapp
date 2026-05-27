@@ -18,6 +18,7 @@
     "@iconify-icons/ri": "^1.1.0",
     "@iconify/react": "^1.1.4",
     "@mui/material": "^5.15.16",
+    "@mui/x-data-grid": "^7.29.13",
     "@turf/bbox": "^7.2.0",
     "@turf/bbox-polygon": "^7.2.0",
     "@turf/boolean-contains": "^7.2.0",

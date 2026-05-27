@@ -1,15 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import {
-  reactTableNaturalSort,
-  reactTableNaturalSortReactNodes,
-} from '../../../../generic/Table/reactTableNaturalSort'
-import usePersistUserTablePreferences from '../../../../generic/Table/usePersistUserTablePreferences'
-import { useCurrentUser } from '../../../../../App/CurrentUserContext'
-import { splitSearchQueryStrings } from '../../../../../library/splitSearchQueryStrings'
-import { getTableFilteredRows } from '../../../../../library/getTableFilteredRows'
-import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
-import { PAGE_SIZE_DEFAULT } from '../../../../../library/constants/constants'
 import { StyledToolbarButtonWrapper } from '../../Gfcr/Gfcr.styles'
 import { IconPlus } from '../../../../icons'
 import {
@@ -48,8 +38,7 @@ const Investments = ({
   const investmentTypeHeaderText = t('gfcr.forms.investments.investment_type')
   const investmentAmountHeaderText = t('gfcr.forms.investments.investment_amount')
 
-  const { currentUser } = useCurrentUser()
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
+  const [searchText, setSearchText] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [investmentBeingEdited, setInvestmentBeingEdited] = useState()
 
@@ -57,28 +46,35 @@ const Investments = ({
     return indicatorSet.finance_solutions.flatMap((fs) => fs.investment_sources)
   }, [indicatorSet.finance_solutions])
 
+  const handleEditInvestment = useCallback(
+    (id) => {
+      const investment = investments.find((inv) => inv.id === id)
+      setInvestmentBeingEdited(investment)
+      setIsModalOpen(true)
+    },
+    [investments],
+  )
+
   const tableColumns = useMemo(
     () => [
       {
-        Header: businessFinanceSolutionHeaderText,
-        accessor: 'finance_solution',
-        sortType: reactTableNaturalSortReactNodes,
+        field: 'finance_solution',
+        headerName: businessFinanceSolutionHeaderText,
+        flex: 1,
+        renderCell: (params) => (
+          <StyledTableAnchor onClick={() => handleEditInvestment(params.id)}>
+            {params.value}
+          </StyledTableAnchor>
+        ),
       },
+      { field: 'investment_source', headerName: investmentSourceHeaderText, width: 200 },
+      { field: 'investment_type', headerName: investmentTypeHeaderText, width: 200 },
       {
-        Header: investmentSourceHeaderText,
-        accessor: 'investment_source',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: investmentTypeHeaderText,
-        accessor: 'investment_type',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: investmentAmountHeaderText,
-        accessor: 'investment_amount',
-        sortType: reactTableNaturalSort,
+        field: 'investment_amount',
+        headerName: investmentAmountHeaderText,
+        width: 180,
         align: 'right',
+        headerAlign: 'right',
       },
     ],
     [
@@ -86,144 +82,37 @@ const Investments = ({
       investmentSourceHeaderText,
       investmentTypeHeaderText,
       investmentAmountHeaderText,
+      handleEditInvestment,
     ],
-  )
-
-  const handleEditInvestment = useCallback(
-    (event) => {
-      event.preventDefault()
-      const investment = investments.find((inv) => inv.id === event.target.id)
-
-      setInvestmentBeingEdited(investment)
-      setIsModalOpen(true)
-    },
-    [investments],
   )
 
   const tableCellData = useMemo(() => {
     if (!choices || !investments) {
-      return
+      return []
     }
 
-    // eslint-disable-next-line consistent-return
     return investments.map((investment) => {
       const { id, finance_solution, investment_source, investment_type, investment_amount } =
         investment
 
       const investmentSourceName = choices.investmentsources.data?.find(
-        (investmentSourceChoice) => investmentSourceChoice.id === investment_source,
+        (c) => c.id === investment_source,
       ).name
       const investmentTypeName = choices.investmenttypes.data?.find(
-        (investmentTypeChoice) => investmentTypeChoice.id === investment_type,
+        (c) => c.id === investment_type,
       )?.name
 
-      const formattedInvestmentAmount = formattedCurrencyAmount(investment_amount)
-
       return {
-        finance_solution: (
-          <StyledTableAnchor id={id} onClick={(event) => handleEditInvestment(event)}>
-            {indicatorSet.finance_solutions.find((fs) => fs.id === finance_solution).name}
-          </StyledTableAnchor>
-        ),
+        id,
+        finance_solution: indicatorSet.finance_solutions.find((fs) => fs.id === finance_solution).name,
         investment_source: investmentSourceName,
         investment_type: investmentTypeName,
-        investment_amount: `${formattedInvestmentAmount}`,
+        investment_amount: `${formattedCurrencyAmount(investment_amount)}`,
       }
     })
-  }, [choices, handleEditInvestment, indicatorSet, investments])
+  }, [choices, indicatorSet, investments])
 
-  const tableDefaultPrefs = useMemo(() => {
-    return {
-      sortBy: [
-        {
-          id: 'finance_solution',
-          desc: false,
-        },
-      ],
-      globalFilter: '',
-    }
-  }, [])
-
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser && currentUser.id}-gfcrInvestmentsTable`,
-    defaultValue: tableDefaultPrefs,
-  })
-
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = [
-        'values.finance_solution.props.children',
-        'values.investment_source',
-        'values.investment_type',
-        'values.investment_amount',
-      ]
-
-      const queryTerms = splitSearchQueryStrings(query)
-      const filteredRows =
-        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
-
-      const filteredRowNames = filteredRows.map((row) => row.original.name)
-      const filteredInvestments = investments.filter((investment) =>
-        filteredRowNames.includes(investment.finance_solution),
-      )
-
-      setSearchFilteredRowsLength(filteredInvestments.length)
-
-      return filteredRows
-    },
-    [investments],
-  )
-
-  const {
-    canNextPage,
-    canPreviousPage,
-    getTableBodyProps,
-    getTableProps,
-    gotoPage,
-    headerGroups,
-    nextPage,
-    page,
-    pageOptions,
-    prepareRow,
-    previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize, sortBy, globalFilter },
-    setGlobalFilter,
-  } = useTable(
-    {
-      columns: tableColumns,
-      data: tableCellData,
-      initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
-        sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter,
-      },
-      globalFilter: tableGlobalFilters,
-      // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true,
-    },
-    useGlobalFilter,
-    useSortBy,
-    usePagination,
-  )
-
-  const handleRowsNumberChange = (e) => {
-    setPageSize(Number(e.target.value))
-  }
-
-  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
-
-  const _setSortByPrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
-  }, [sortBy, handleSetTableUserPrefs])
-
-  const _setFilterPrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
-  }, [globalFilter, handleSetTableUserPrefs])
-
-  const _setPageSizePrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
-  }, [pageSize, handleSetTableUserPrefs])
+  const handleGlobalFilterChange = (value) => setSearchText(value)
 
   const handleAddInvestment = (event) => {
     event.preventDefault()
@@ -251,23 +140,9 @@ const Investments = ({
 
   const table = investments.length ? (
     <GfcrGenericTable
-      getTableProps={getTableProps}
-      headerGroups={headerGroups}
-      getTableBodyProps={getTableBodyProps}
-      page={page}
-      prepareRow={prepareRow}
-      onPageSizeChange={handleRowsNumberChange}
-      pageSize={pageSize}
-      unfilteredRowLength={investments.length}
-      searchFilteredRowLength={searchFilteredRowsLength}
-      isSearchFilterEnabled={!!globalFilter?.length}
-      onPreviousClick={previousPage}
-      previousDisabled={!canPreviousPage}
-      onNextClick={nextPage}
-      nextDisabled={!canNextPage}
-      onGoToPage={gotoPage}
-      currentPageIndex={pageIndex}
-      pageCount={pageOptions.length}
+      rows={tableCellData}
+      columns={tableColumns}
+      filterModel={{ items: [], quickFilterValues: searchText ? [searchText] : [] }}
     />
   ) : (
     <PageUnavailable
@@ -299,7 +174,7 @@ const Investments = ({
           <FilterSearchToolbar
             name={t('filters.by_investment')}
             disabled={investments.length === 0}
-            globalSearchText={globalFilter || ''}
+            globalSearchText={searchText}
             handleGlobalFilterChange={handleGlobalFilterChange}
           />
           <ToolbarButtonWrapper>{toolbarButtons}</ToolbarButtonWrapper>

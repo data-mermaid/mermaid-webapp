@@ -1,15 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import {
-  reactTableNaturalSort,
-  reactTableNaturalSortReactNodes,
-} from '../../../../generic/Table/reactTableNaturalSort'
-import usePersistUserTablePreferences from '../../../../generic/Table/usePersistUserTablePreferences'
-import { useCurrentUser } from '../../../../../App/CurrentUserContext'
-import { splitSearchQueryStrings } from '../../../../../library/splitSearchQueryStrings'
-import { getTableFilteredRows } from '../../../../../library/getTableFilteredRows'
-import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
-import { PAGE_SIZE_DEFAULT } from '../../../../../library/constants/constants'
 import { StyledToolbarButtonWrapper } from '../../Gfcr/Gfcr.styles'
 import { IconPlus } from '../../../../icons'
 import {
@@ -34,8 +24,7 @@ import { useTranslation, Trans } from 'react-i18next'
 
 const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, displayHelp }) => {
   const { t } = useTranslation()
-  const { currentUser } = useCurrentUser()
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
+  const [searchText, setSearchText] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [revenueBeingEdited, setRevenueBeingEdited] = useState()
 
@@ -43,166 +32,69 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
     return indicatorSet.finance_solutions.flatMap((fs) => fs.revenues)
   }, [indicatorSet.finance_solutions])
 
-  const tableColumns = useMemo(
-    () => [
-      {
-        Header: 'Business / Finance Solution',
-        accessor: 'finance_solution',
-        sortType: reactTableNaturalSortReactNodes,
-      },
-      {
-        Header: 'Revenue Type',
-        accessor: 'revenue_type',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: 'Sustainable Revenue Stream',
-        accessor: 'sustainable_revenue_stream',
-        sortType: reactTableNaturalSort,
-        align: 'center',
-      },
-      {
-        Header: 'Revenue Amount',
-        accessor: 'revenue_amount',
-        sortType: reactTableNaturalSort,
-        align: 'right',
-      },
-    ],
-    [],
-  )
-
   const handleEditRevenue = useCallback(
-    (event) => {
-      event.preventDefault()
-      const revenue = revenues.find((rev) => rev.id === event.target.id)
-
+    (id) => {
+      const revenue = revenues.find((rev) => rev.id === id)
       setRevenueBeingEdited(revenue)
       setIsModalOpen(true)
     },
     [revenues],
   )
 
+  const tableColumns = useMemo(
+    () => [
+      {
+        field: 'finance_solution',
+        headerName: 'Business / Finance Solution',
+        flex: 1,
+        renderCell: (params) => (
+          <StyledTableAnchor onClick={() => handleEditRevenue(params.id)}>
+            {params.value}
+          </StyledTableAnchor>
+        ),
+      },
+      { field: 'revenue_type', headerName: 'Revenue Type', width: 200 },
+      {
+        field: 'sustainable_revenue_stream',
+        headerName: 'Sustainable Revenue Stream',
+        width: 200,
+        align: 'center',
+        headerAlign: 'center',
+        renderCell: (params) => <IconCheckLabel isCheck={params.value} />,
+      },
+      {
+        field: 'revenue_amount',
+        headerName: 'Revenue Amount',
+        width: 180,
+        align: 'right',
+        headerAlign: 'right',
+      },
+    ],
+    [handleEditRevenue],
+  )
+
   const tableCellData = useMemo(() => {
     if (!choices || !revenues) {
-      return
+      return []
     }
 
-    // eslint-disable-next-line consistent-return
     return revenues.map((revenue) => {
       const { id, finance_solution, revenue_type, sustainable_revenue_stream, revenue_amount } =
         revenue
 
-      const revenueTypeName = choices.revenuetypes.data?.find(
-        (revenueTypeChoice) => revenueTypeChoice.id === revenue_type,
-      ).name
-
-      const formattedRevenueAmount = formattedCurrencyAmount(revenue_amount)
+      const revenueTypeName = choices.revenuetypes.data?.find((c) => c.id === revenue_type).name
 
       return {
-        finance_solution: (
-          <StyledTableAnchor id={id} onClick={(event) => handleEditRevenue(event)}>
-            {indicatorSet.finance_solutions.find((fs) => fs.id === finance_solution).name}
-          </StyledTableAnchor>
-        ),
+        id,
+        finance_solution: indicatorSet.finance_solutions.find((fs) => fs.id === finance_solution).name,
         revenue_type: revenueTypeName,
-        sustainable_revenue_stream: <IconCheckLabel isCheck={!!sustainable_revenue_stream} />,
-        revenue_amount: `${formattedRevenueAmount}`,
+        sustainable_revenue_stream: !!sustainable_revenue_stream,
+        revenue_amount: `${formattedCurrencyAmount(revenue_amount)}`,
       }
     })
-  }, [choices, handleEditRevenue, indicatorSet.finance_solutions, revenues])
+  }, [choices, indicatorSet.finance_solutions, revenues])
 
-  const tableDefaultPrefs = useMemo(() => {
-    return {
-      sortBy: [
-        {
-          id: 'finance_solution',
-          desc: false,
-        },
-      ],
-      globalFilter: '',
-    }
-  }, [])
-
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser && currentUser.id}-gfcrRevenuesTable`,
-    defaultValue: tableDefaultPrefs,
-  })
-
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = [
-        'values.finance_solution.props.children',
-        'values.revenue_type',
-        'values.sustainable_revenue_stream',
-        'values.revenue_amount',
-      ]
-
-      const queryTerms = splitSearchQueryStrings(query)
-      const filteredRows =
-        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
-
-      const filteredRowNames = filteredRows.map((row) => row.original.name)
-      const filteredRevenues = revenues.filter((investment) =>
-        filteredRowNames.includes(investment.finance_solution),
-      )
-
-      setSearchFilteredRowsLength(filteredRevenues.length)
-
-      return filteredRows
-    },
-    [revenues],
-  )
-
-  const {
-    canNextPage,
-    canPreviousPage,
-    getTableBodyProps,
-    getTableProps,
-    gotoPage,
-    headerGroups,
-    nextPage,
-    page,
-    pageOptions,
-    prepareRow,
-    previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize, sortBy, globalFilter },
-    setGlobalFilter,
-  } = useTable(
-    {
-      columns: tableColumns,
-      data: tableCellData,
-      initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
-        sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter,
-      },
-      globalFilter: tableGlobalFilters,
-      // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true,
-    },
-    useGlobalFilter,
-    useSortBy,
-    usePagination,
-  )
-
-  const handleRowsNumberChange = (e) => {
-    setPageSize(Number(e.target.value))
-  }
-
-  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
-
-  const _setSortByPrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
-  }, [sortBy, handleSetTableUserPrefs])
-
-  const _setFilterPrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
-  }, [globalFilter, handleSetTableUserPrefs])
-
-  const _setPageSizePrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
-  }, [pageSize, handleSetTableUserPrefs])
+  const handleGlobalFilterChange = (value) => setSearchText(value)
 
   const handleAddRevenue = (event) => {
     event.preventDefault()
@@ -230,23 +122,9 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
 
   const table = revenues.length ? (
     <GfcrGenericTable
-      getTableProps={getTableProps}
-      headerGroups={headerGroups}
-      getTableBodyProps={getTableBodyProps}
-      page={page}
-      prepareRow={prepareRow}
-      onPageSizeChange={handleRowsNumberChange}
-      pageSize={pageSize}
-      unfilteredRowLength={revenues.length}
-      searchFilteredRowLength={searchFilteredRowsLength}
-      isSearchFilterEnabled={!!globalFilter?.length}
-      onPreviousClick={previousPage}
-      previousDisabled={!canPreviousPage}
-      onNextClick={nextPage}
-      nextDisabled={!canNextPage}
-      onGoToPage={gotoPage}
-      currentPageIndex={pageIndex}
-      pageCount={pageOptions.length}
+      rows={tableCellData}
+      columns={tableColumns}
+      filterModel={{ items: [], quickFilterValues: searchText ? [searchText] : [] }}
     />
   ) : (
     <PageUnavailable
@@ -278,7 +156,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
           <FilterSearchToolbar
             name={t('filters.by_revenue')}
             disabled={revenues.length === 0}
-            globalSearchText={globalFilter || ''}
+            globalSearchText={searchText}
             handleGlobalFilterChange={handleGlobalFilterChange}
           />
           <ToolbarButtonWrapper>{toolbarButtons}</ToolbarButtonWrapper>

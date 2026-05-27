@@ -271,7 +271,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         selectedNavItem={selectedNavItem}
         setSelectedNavItem={setSelectedNavItem}
       />
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
         {!!indicatorSetBeingEdited && (
           <GfcrIndicatorSetForm
             formik={formik}

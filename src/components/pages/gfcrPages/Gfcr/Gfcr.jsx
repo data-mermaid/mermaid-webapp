@@ -1,22 +1,15 @@
 import { Link, useParams } from 'react-router'
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
-import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 
 import { ContentPageLayout } from '../../../Layout'
 import FilterSearchToolbar from '../../../FilterSearchToolbar/FilterSearchToolbar'
 import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
-import { getTableFilteredRows } from '../../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
 import { IconPlus, IconDownload } from '../../../icons'
 import { useTranslation } from 'react-i18next'
 import PageUnavailable from '../../PageUnavailable'
-import {
-  reactTableNaturalSort,
-  reactTableNaturalSortReactNodes,
-} from '../../../generic/Table/reactTableNaturalSort'
-import { splitSearchQueryStrings } from '../../../../library/splitSearchQueryStrings'
 import { ButtonSecondary, ToolbarButtonWrapper } from '../../../generic/buttons'
 import { Column, ToolBarRow } from '../../../generic/positioning'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
@@ -25,8 +18,6 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import useDocumentTitle from '../../../../library/useDocumentTitle'
 import useIsMounted from '../../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../../library/onlineStatusContext'
-import usePersistUserTablePreferences from '../../../generic/Table/usePersistUserTablePreferences'
-import { PAGE_SIZE_DEFAULT } from '../../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { StyledToolbarButtonWrapper } from './Gfcr.styles'
 import ButtonSecondaryDropdown from '../../../generic/ButtonSecondaryDropdown'
@@ -63,7 +54,7 @@ const Gfcr = () => {
   const [newIndicatorSetType, setNewIndicatorSetType] = useState()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
+  const [searchText, setSearchText] = useState('')
 
   useDocumentTitle(`${gfcrTitleText} - ${t('mermaid')}`)
   const [isExporting, setIsExporting] = useState(false)
@@ -106,22 +97,28 @@ const Gfcr = () => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: titleHeaderText,
-        accessor: 'title',
-        sortType: reactTableNaturalSortReactNodes,
+        field: 'title',
+        headerName: titleHeaderText,
+        flex: 1,
+        renderCell: (params) =>
+          isAdminUser ? (
+            <Link to={`${currentProjectPath}/gfcr/${params.id}`}>{params.value}</Link>
+          ) : (
+            <span>{params.value}</span>
+          ),
       },
       {
-        Header: typeHeaderText,
-        accessor: 'indicator_set_type',
-        sortType: reactTableNaturalSort,
+        field: 'indicator_set_type',
+        headerName: typeHeaderText,
+        width: 150,
       },
       {
-        Header: reportingDateHeaderText,
-        accessor: 'report_date',
-        sortType: reactTableNaturalSort,
+        field: 'report_date',
+        headerName: reportingDateHeaderText,
+        width: 200,
       },
     ],
-    [titleHeaderText, typeHeaderText, reportingDateHeaderText],
+    [titleHeaderText, typeHeaderText, reportingDateHeaderText, isAdminUser, currentProjectPath],
   )
 
   const tableCellData = useMemo(() => {
@@ -133,106 +130,15 @@ const Gfcr = () => {
       const localizedDate = new Date(report_date).toLocaleDateString(currentLocale, dateOptions)
 
       return {
-        title: isAdminUser ? (
-          <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link>
-        ) : (
-          <span>{title || untitledText}</span>
-        ),
-        indicator_set_type: (
-          <span>{indicator_set_type === 'report' ? reportText : targetText}</span>
-        ),
-        report_date: <span>{localizedDate}</span>,
+        id,
+        title: title || untitledText,
+        indicator_set_type: indicator_set_type === 'report' ? reportText : targetText,
+        report_date: localizedDate,
       }
     })
-  }, [gfcrIndicatorSets, isAdminUser, currentProjectPath, untitledText, reportText, targetText])
+  }, [gfcrIndicatorSets, untitledText, reportText, targetText])
 
-  const tableDefaultPrefs = useMemo(() => {
-    return {
-      sortBy: [
-        {
-          id: 'title',
-          desc: false,
-        },
-      ],
-      globalFilter: '',
-    }
-  }, [])
-
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser && currentUser.id}-gfcrTable`,
-    defaultValue: tableDefaultPrefs,
-  })
-
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = ['values.title.props.children', 'values.report_date']
-
-      const queryTerms = splitSearchQueryStrings(query)
-      const filteredRows =
-        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
-
-      const filteredRowIds = filteredRows.map((row) => row.original.id)
-      const filteredIndicatorSets = gfcrIndicatorSets.filter((indicatorSet) =>
-        filteredRowIds.includes(indicatorSet.id),
-      )
-
-      setSearchFilteredRowsLength(filteredIndicatorSets.length)
-
-      return filteredRows
-    },
-    [gfcrIndicatorSets],
-  )
-
-  const {
-    canNextPage,
-    canPreviousPage,
-    getTableBodyProps,
-    getTableProps,
-    gotoPage,
-    headerGroups,
-    nextPage,
-    page,
-    pageOptions,
-    prepareRow,
-    previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize, sortBy, globalFilter },
-    setGlobalFilter,
-  } = useTable(
-    {
-      columns: tableColumns,
-      data: tableCellData,
-      initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
-        sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter,
-      },
-      globalFilter: tableGlobalFilters,
-      // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true,
-    },
-    useGlobalFilter,
-    useSortBy,
-    usePagination,
-  )
-
-  const handleRowsNumberChange = (e) => {
-    setPageSize(Number(e.target.value))
-  }
-
-  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
-
-  const _setSortByPrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
-  }, [sortBy, handleSetTableUserPrefs])
-
-  const _setFilterPrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
-  }, [globalFilter, handleSetTableUserPrefs])
-
-  const _setPageSizePrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
-  }, [pageSize, handleSetTableUserPrefs])
+  const handleGlobalFilterChange = (value) => setSearchText(value)
 
   const createDropdownLabel = (
     <>
@@ -293,23 +199,9 @@ const Gfcr = () => {
 
   const table = gfcrIndicatorSets.length ? (
     <GfcrGenericTable
-      getTableProps={getTableProps}
-      headerGroups={headerGroups}
-      getTableBodyProps={getTableBodyProps}
-      page={page}
-      prepareRow={prepareRow}
-      onPageSizeChange={handleRowsNumberChange}
-      pageSize={pageSize}
-      unfilteredRowLength={gfcrIndicatorSets.length}
-      searchFilteredRowLength={searchFilteredRowsLength}
-      isSearchFilterEnabled={!!globalFilter?.length}
-      onPreviousClick={previousPage}
-      previousDisabled={!canPreviousPage}
-      onNextClick={nextPage}
-      nextDisabled={!canNextPage}
-      onGoToPage={gotoPage}
-      currentPageIndex={pageIndex}
-      pageCount={pageOptions.length}
+      rows={tableCellData}
+      columns={tableColumns}
+      filterModel={{ items: [], quickFilterValues: searchText ? [searchText] : [] }}
     />
   ) : (
     <PageUnavailable mainText={noIndicatorText} subText={noIndicatorInfoText} />
@@ -325,7 +217,7 @@ const Gfcr = () => {
               <FilterSearchToolbar
                 name={filterToolbarText}
                 disabled={gfcrIndicatorSets.length === 0}
-                globalSearchText={globalFilter || ''}
+                globalSearchText={searchText}
                 handleGlobalFilterChange={handleGlobalFilterChange}
               />
 

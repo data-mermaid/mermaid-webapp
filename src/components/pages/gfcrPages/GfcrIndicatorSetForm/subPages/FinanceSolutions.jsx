@@ -1,15 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import {
-  reactTableNaturalSort,
-  reactTableNaturalSortReactNodes,
-} from '../../../../generic/Table/reactTableNaturalSort'
-import usePersistUserTablePreferences from '../../../../generic/Table/usePersistUserTablePreferences'
-import { useCurrentUser } from '../../../../../App/CurrentUserContext'
-import { splitSearchQueryStrings } from '../../../../../library/splitSearchQueryStrings'
-import { getTableFilteredRows } from '../../../../../library/getTableFilteredRows'
-import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
-import { PAGE_SIZE_DEFAULT } from '../../../../../library/constants/constants'
 import { StyledToolbarButtonWrapper } from '../../Gfcr/Gfcr.styles'
 import { IconPlus } from '../../../../icons'
 import { ButtonSecondary, ToolbarButtonWrapper } from '../../../../generic/buttons'
@@ -25,224 +15,89 @@ import {
 import FinanceSolutionModal from '../modals/FinanceSolutionModal'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import GfcrGenericTable from '../../GfcrGenericTable'
-import IconCheckLabel from './IconCheckLabel'
+
+const MOCK_ROWS = [
+  { id: 1,  name: 'Green Fins',                                                          type: 'Technical assistance facility (TAF)', sector: '',                                                              geographical_coverage: '',            used_a_taf: '',                    taf_name: '',                    local_enterprise: '',  gender_2x_criteria: '',  total_solutions_supported: 47, sustainable_finance_mechanisms: '',               notes: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+  { id: 2,  name: 'Self-Financing Model for MPA for East Kalimantan (BLUD KKP3K KDPS)', type: 'Conservation trust fund (CTF)',        sector: '',                                                              geographical_coverage: 'Regional',    used_a_taf: '',                    taf_name: '',                    local_enterprise: '',  gender_2x_criteria: '',  total_solutions_supported: 23, sustainable_finance_mechanisms: '',               notes: '' },
+  { id: 3,  name: 'Coral Reef Funding Facility',                                         type: 'Financial facility',                   sector: '',                                                              geographical_coverage: '',            used_a_taf: '',                    taf_name: '',                    local_enterprise: '✓', gender_2x_criteria: '',  total_solutions_supported: 61, sustainable_finance_mechanisms: '',               notes: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+  { id: 4,  name: 'Shrimp Hatchery in Berau',                                            type: 'Business solution',                    sector: 'Sustainable ocean production - aquaculture',                    geographical_coverage: '',            used_a_taf: 'Yes: GFCR-funded',   taf_name: 'Yes: GFCR-funded',   local_enterprise: '✓', gender_2x_criteria: '✓', total_solutions_supported: '',  sustainable_finance_mechanisms: '',               notes: '' },
+  { id: 5,  name: 'Aquahub',                                                             type: 'Financial mechanism solution',         sector: '',                                                              geographical_coverage: '',            used_a_taf: 'Yes: non-GFCR-funded', taf_name: 'Yes: non-GFCR-funded', local_enterprise: '✓', gender_2x_criteria: '✓', total_solutions_supported: '',  sustainable_finance_mechanisms: 'Blue bonds',     notes: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
+  { id: 6,  name: 'Blended Finance Structure',                                           type: 'Programmatic co-financing',            sector: '',                                                              geographical_coverage: '',            used_a_taf: '',                    taf_name: '',                    local_enterprise: '',  gender_2x_criteria: '',  total_solutions_supported: '',  sustainable_finance_mechanisms: '',               notes: '' },
+  { id: 7,  name: 'Blue carbon - Pemba',                                                 type: 'Business solution',                    sector: 'Sustainable coastal development - ecotourism',                  geographical_coverage: '',            used_a_taf: 'Yes: GFCR-funded',   taf_name: 'Yes: GFCR-funded',   local_enterprise: '✓', gender_2x_criteria: '✓', total_solutions_supported: '',  sustainable_finance_mechanisms: '',               notes: 'Duis aute irure dolor in reprehenderit in voluptate velit esse.' },
+  { id: 8,  name: 'BlueWild Coral Safari - Pemba',                                       type: 'Conservation trust fund (CTF)',        sector: '',                                                              geographical_coverage: 'National',    used_a_taf: '',                    taf_name: '',                    local_enterprise: '',  gender_2x_criteria: '',  total_solutions_supported: 85, sustainable_finance_mechanisms: '',               notes: '' },
+  { id: 9,  name: 'BlueWild Underwater Room',                                            type: 'Financial mechanism solution',         sector: '',                                                              geographical_coverage: '',            used_a_taf: 'Yes: non-GFCR-funded', taf_name: 'Yes: non-GFCR-funded', local_enterprise: '✓', gender_2x_criteria: '✓', total_solutions_supported: '',  sustainable_finance_mechanisms: 'Insurance products', notes: '' },
+  { id: 10, name: 'Impact Loan Facility',                                                type: 'Technical assistance facility (TAF)', sector: '',                                                              geographical_coverage: '',            used_a_taf: '',                    taf_name: '',                    local_enterprise: '',  gender_2x_criteria: '',  total_solutions_supported: 34, sustainable_finance_mechanisms: '',               notes: 'Excepteur sint occaecat cupidatat non proident.' },
+  { id: 11, name: 'Samaki Bluu',                                                         type: 'Financial facility',                   sector: '',                                                              geographical_coverage: '',            used_a_taf: '',                    taf_name: '',                    local_enterprise: '✓', gender_2x_criteria: '',  total_solutions_supported: 12, sustainable_finance_mechanisms: '',               notes: '' },
+  { id: 12, name: 'Sea Sensorium',                                                       type: 'Business solution',                    sector: 'Sustainable ocean production - fisheries',                      geographical_coverage: '',            used_a_taf: 'Yes: GFCR-funded',   taf_name: 'Yes: GFCR-funded',   local_enterprise: '✓', gender_2x_criteria: '✓', total_solutions_supported: '',  sustainable_finance_mechanisms: '',               notes: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+  { id: 13, name: 'MPA Pecca',                                                           type: 'Programmatic co-financing',            sector: '',                                                              geographical_coverage: '',            used_a_taf: '',                    taf_name: '',                    local_enterprise: '',  gender_2x_criteria: '',  total_solutions_supported: '',  sustainable_finance_mechanisms: '',               notes: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+  { id: 14, name: 'Aquahub Mangrove Crab - PHI',                                         type: 'Conservation trust fund (CTF)',        sector: '',                                                              geographical_coverage: 'Subnational', used_a_taf: '',                    taf_name: '',                    local_enterprise: '',  gender_2x_criteria: '',  total_solutions_supported: 76, sustainable_finance_mechanisms: '',               notes: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
+  { id: 15, name: 'Blue Wild Mindoro Coral Safari',                                      type: 'Financial mechanism solution',         sector: '',                                                              geographical_coverage: '',            used_a_taf: 'Yes: GFCR-funded',   taf_name: 'Yes: GFCR-funded',   local_enterprise: '✓', gender_2x_criteria: '✓', total_solutions_supported: '',  sustainable_finance_mechanisms: 'MPA entry fees', notes: '' },
+  { id: 16, name: 'Sea Sensorium',                                                       type: 'Technical assistance facility (TAF)', sector: '',                                                              geographical_coverage: '',            used_a_taf: '',                    taf_name: '',                    local_enterprise: '',  gender_2x_criteria: '',  total_solutions_supported: 55, sustainable_finance_mechanisms: '',               notes: '' },
+  { id: 17, name: 'Blended Finance Structure',                                           type: 'Business solution',                    sector: 'Circular economy and pollution mitigation - waste management',  geographical_coverage: '',            used_a_taf: 'Yes: non-GFCR-funded', taf_name: 'Yes: non-GFCR-funded', local_enterprise: '✓', gender_2x_criteria: '✓', total_solutions_supported: '',  sustainable_finance_mechanisms: '',               notes: '' },
+  { id: 18, name: 'Aquahub Sea Cucumber',                                                type: 'Financial facility',                   sector: '',                                                              geographical_coverage: '',            used_a_taf: '',                    taf_name: '',                    local_enterprise: '✓', gender_2x_criteria: '',  total_solutions_supported: 8,  sustainable_finance_mechanisms: '',               notes: 'Duis aute irure dolor in reprehenderit in voluptate velit esse.' },
+  { id: 19, name: 'Large MPA networks',                                                  type: 'Conservation trust fund (CTF)',        sector: '',                                                              geographical_coverage: 'Regional',    used_a_taf: '',                    taf_name: '',                    local_enterprise: '',  gender_2x_criteria: '',  total_solutions_supported: 92, sustainable_finance_mechanisms: '',               notes: '' },
+  { id: 20, name: 'Blue Carbon PHI',                                                     type: 'Programmatic co-financing',            sector: '',                                                              geographical_coverage: '',            used_a_taf: '',                    taf_name: '',                    local_enterprise: '',  gender_2x_criteria: '',  total_solutions_supported: '',  sustainable_finance_mechanisms: '',               notes: 'Excepteur sint occaecat cupidatat non proident.' },
+]
 
 const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp }) => {
   const { t } = useTranslation()
 
-  const businessFinanceSolutionNameHeaderText = t(
-    'gfcr.forms.finance_solutions.business_finance_solution_name',
-  )
-  const sectorHeaderText = t('gfcr.forms.finance_solutions.sector')
-  const usedAnIncubatorHeaderText = t('gfcr.forms.finance_solutions.used_an_incubator')
-  const gender2xCriteriaHeaderText = t('gfcr.forms.finance_solutions.gender_program_criteria')
-  const localEnterpriseHeaderText = t('gfcr.forms.finance_solutions.local_enterprise')
-  const sustainableFinanceMechanismsHeaderText = t(
-    'gfcr.forms.finance_solutions.sustainable_finance_mechanisms',
-  )
-
-  const { currentUser } = useCurrentUser()
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
+  const [searchText, setSearchText] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [financeSolutionBeingEdited, setFinanceSolutionBeingEdited] = useState()
+
+  const handleEditFinanceSolution = (id) => {
+    const financeSolution = indicatorSet.finance_solutions.find((fs) => fs.id === id)
+    setFinanceSolutionBeingEdited(financeSolution)
+    setIsModalOpen(true)
+  }
 
   const tableColumns = useMemo(
     () => [
       {
-        Header: businessFinanceSolutionNameHeaderText,
-        accessor: 'name',
-        sortType: reactTableNaturalSortReactNodes,
-      },
-      {
-        Header: sectorHeaderText,
-        accessor: 'sector',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: usedAnIncubatorHeaderText,
-        accessor: 'used_an_incubator',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: gender2xCriteriaHeaderText,
-        accessor: 'gender_smart',
-        sortType: reactTableNaturalSort,
-        align: 'center',
-      },
-      {
-        Header: localEnterpriseHeaderText,
-        accessor: 'local_enterprise',
-        sortType: reactTableNaturalSort,
-        align: 'center',
-      },
-      {
-        Header: sustainableFinanceMechanismsHeaderText,
-        accessor: 'sustainable_finance_mechanisms',
-        sortType: reactTableNaturalSort,
-      },
-    ],
-    [
-      businessFinanceSolutionNameHeaderText,
-      sectorHeaderText,
-      usedAnIncubatorHeaderText,
-      gender2xCriteriaHeaderText,
-      localEnterpriseHeaderText,
-      sustainableFinanceMechanismsHeaderText,
-    ],
-  )
-
-  const handleEditFinanceSolution = useCallback(
-    (event) => {
-      event.preventDefault()
-      const financeSolution = indicatorSet.finance_solutions.find(
-        (financeSolution) => financeSolution.id === event.target.id,
-      )
-
-      setFinanceSolutionBeingEdited(financeSolution)
-      setIsModalOpen(true)
-    },
-    [indicatorSet.finance_solutions],
-  )
-
-  const tableCellData = useMemo(() => {
-    if (!choices) {
-      return
-    }
-
-    // eslint-disable-next-line consistent-return
-    return indicatorSet.finance_solutions.map((indicatorSet) => {
-      const {
-        id,
-        name,
-        sector,
-        used_an_incubator,
-        gender_smart,
-        local_enterprise,
-        sustainable_finance_mechanisms,
-      } = indicatorSet
-
-      const sectorName = choices.sectors.data?.find(
-        (sectorChoice) => sectorChoice.id === sector,
-      )?.name
-      const incubatorName = choices.incubatortypes.data?.find(
-        (incubatorTypeChoice) => incubatorTypeChoice.id === used_an_incubator,
-      )?.name
-      const sustainableFinanceMechanismNames = sustainable_finance_mechanisms.map((mechanism) => {
-        return choices.sustainablefinancemechanisms.data?.find(
-          // eslint-disable-next-line max-nested-callbacks
-          (sfmChoice) => sfmChoice.id === mechanism,
-        ).name
-      })
-
-      return {
-        name: (
-          <StyledTableAnchor id={id} onClick={(event) => handleEditFinanceSolution(event)}>
-            {name}
+        field: 'name',
+        headerName: 'Name',
+        width: 280,
+        renderCell: (params) => (
+          <StyledTableAnchor onClick={() => handleEditFinanceSolution(params.id)}>
+            {params.value}
           </StyledTableAnchor>
         ),
-        sector: sectorName,
-        used_an_incubator: incubatorName ? incubatorName : 'None',
-        gender_smart: <IconCheckLabel isCheck={!!gender_smart} />,
-        local_enterprise: <IconCheckLabel isCheck={!!local_enterprise} />,
-        sustainable_finance_mechanisms: sustainableFinanceMechanismNames.join(', '),
-      }
-    })
-  }, [choices, handleEditFinanceSolution, indicatorSet.finance_solutions])
-
-  const tableDefaultPrefs = useMemo(() => {
-    return {
-      sortBy: [
-        {
-          id: 'name',
-          desc: false,
-        },
-      ],
-      globalFilter: '',
-    }
-  }, [])
-
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser && currentUser.id}-gfcrFinanceSolutionsTable`,
-    defaultValue: tableDefaultPrefs,
-  })
-
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = [
-        'values.name.props.children',
-        'values.sector',
-        'values.used_an_incubator',
-        'values.gender_smart',
-        'values.local_enterprise',
-        'values.sustainable_finance_mechanisms',
-      ]
-
-      const queryTerms = splitSearchQueryStrings(query)
-      const filteredRows =
-        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
-
-      const filteredRowNames = filteredRows.map((row) => row.original.id)
-      const filteredFinanceSolutions = indicatorSet.finance_solutions.filter((financeSolution) =>
-        filteredRowNames.includes(financeSolution.id),
-      )
-
-      setSearchFilteredRowsLength(filteredFinanceSolutions.length)
-
-      return filteredRows
-    },
-    [indicatorSet.finance_solutions],
-  )
-
-  const {
-    canNextPage,
-    canPreviousPage,
-    getTableBodyProps,
-    getTableProps,
-    gotoPage,
-    headerGroups,
-    nextPage,
-    page,
-    pageOptions,
-    prepareRow,
-    previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize, sortBy, globalFilter },
-    setGlobalFilter,
-  } = useTable(
-    {
-      columns: tableColumns,
-      data: tableCellData,
-      initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
-        sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter,
       },
-      globalFilter: tableGlobalFilters,
-      // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true,
-    },
-    useGlobalFilter,
-    useSortBy,
-    usePagination,
+      { field: 'type', headerName: 'Type', width: 250 },
+      { field: 'sector', headerName: 'Sector', width: 320 },
+      { field: 'geographical_coverage', headerName: 'Geographical coverage', width: 200 },
+      { field: 'used_a_taf', headerName: 'Used a TAF (incubator)', width: 200 },
+      { field: 'taf_name', headerName: 'If yes, name of TAF (incubator)', width: 270 },
+      {
+        field: 'local_enterprise',
+        headerName: 'Local enterprise',
+        width: 150,
+        align: 'center',
+        headerAlign: 'center',
+      },
+      {
+        field: 'gender_2x_criteria',
+        headerName: 'Gender 2X Criteria',
+        width: 165,
+        align: 'center',
+        headerAlign: 'center',
+      },
+      {
+        field: 'total_solutions_supported',
+        headerName: 'Total number of solutions (businesses and financial mechanisms) supported by',
+        width: 460,
+        align: 'right',
+        headerAlign: 'right',
+      },
+      { field: 'sustainable_finance_mechanisms', headerName: 'Sustainable finance mechanisms', width: 260 },
+      { field: 'notes', headerName: 'Notes', width: 300 },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   )
 
-  const handleRowsNumberChange = (e) => {
-    setPageSize(Number(e.target.value))
-  }
-
-  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
-
-  const _setSortByPrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
-  }, [sortBy, handleSetTableUserPrefs])
-
-  const _setFilterPrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
-  }, [globalFilter, handleSetTableUserPrefs])
-
-  const _setPageSizePrefs = useEffect(() => {
-    handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
-  }, [pageSize, handleSetTableUserPrefs])
+  const handleGlobalFilterChange = (value) => setSearchText(value)
 
   const handleAddFinanceSolution = (event) => {
     event.preventDefault()
@@ -265,25 +120,11 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
     </>
   )
 
-  const table = indicatorSet.finance_solutions.length ? (
+  const table = MOCK_ROWS.length ? (
     <GfcrGenericTable
-      getTableProps={getTableProps}
-      headerGroups={headerGroups}
-      getTableBodyProps={getTableBodyProps}
-      page={page}
-      prepareRow={prepareRow}
-      onPageSizeChange={handleRowsNumberChange}
-      pageSize={pageSize}
-      unfilteredRowLength={indicatorSet.finance_solutions.length}
-      searchFilteredRowLength={searchFilteredRowsLength}
-      isSearchFilterEnabled={!!globalFilter?.length}
-      onPreviousClick={previousPage}
-      previousDisabled={!canPreviousPage}
-      onNextClick={nextPage}
-      nextDisabled={!canNextPage}
-      onGoToPage={gotoPage}
-      currentPageIndex={pageIndex}
-      pageCount={pageOptions.length}
+      rows={MOCK_ROWS}
+      columns={tableColumns}
+      filterModel={{ items: [], quickFilterValues: searchText ? [searchText] : [] }}
     />
   ) : (
     <PageUnavailable
@@ -298,8 +139,8 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         <ToolBarRow>
           <FilterSearchToolbar
             name={t('filters.by_finance_solution')}
-            disabled={indicatorSet.finance_solutions.length === 0}
-            globalSearchText={globalFilter || ''}
+            disabled={MOCK_ROWS.length === 0}
+            globalSearchText={searchText}
             handleGlobalFilterChange={handleGlobalFilterChange}
           />
           <ToolbarButtonWrapper>{toolbarButtons}</ToolbarButtonWrapper>
