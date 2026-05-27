@@ -14,6 +14,7 @@ const getMockDexieInstancesAllSuccess = () => {
 
   dexiePerUserDataInstance.version(1).stores({
     benthic_attributes: 'id',
+    invert_attributes: 'id',
     choices: 'id',
     collect_records: 'id, project',
     fish_families: 'id',

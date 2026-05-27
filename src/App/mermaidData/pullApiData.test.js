@@ -8,6 +8,7 @@ import { pullApiData } from './pullApiData'
 
 const allTheDataNames = [
   'benthic_attributes',
+  'invert_attributes',
   'choices',
   'collect_records',
   'fish_families',
@@ -33,6 +34,15 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
             updates: [
               {
                 ...mockMermaidData.benthic_attributes[0],
+                status: 90,
+                uiState_pushToApi: true,
+              },
+            ],
+          },
+          invert_attributes: {
+            updates: [
+              {
+                ...mockMermaidData.invert_attributes[0],
                 status: 90,
                 uiState_pushToApi: true,
               },
@@ -90,6 +100,7 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
 
   await Promise.all([
     dexiePerUserDataInstance.benthic_attributes.toArray(),
+    dexiePerUserDataInstance.invert_attributes.toArray(),
     dexiePerUserDataInstance.choices.toArray(),
     dexiePerUserDataInstance.collect_records.toArray(),
     dexiePerUserDataInstance.fish_families.toArray(),
@@ -102,6 +113,7 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
   ]).then(
     ([
       benthicAttributesStored,
+      invertAttributesStored,
       choicesStored,
       collectRecordsStored,
       fishFamiliesStored,
@@ -109,10 +121,11 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
       fishSpeciesStored,
       projectManagementsStored,
       projectProfilesStored,
-      projectStiesStored,
+      projectSitesStored,
       projectsStored,
     ]) => {
       expect(benthicAttributesStored[0].uiState_pushToApi).toBeFalsy()
+      expect(invertAttributesStored[0].uiState_pushToApi).toBeFalsy()
       // choices is weird
       expect(choicesStored[0].choices.uiState_pushToApi).toBeFalsy()
       expect(collectRecordsStored[0].uiState_pushToApi).toBeFalsy()
@@ -121,7 +134,7 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
       expect(fishSpeciesStored[0].uiState_pushToApi).toBeFalsy()
       expect(projectManagementsStored[0].uiState_pushToApi).toBeFalsy()
       expect(projectProfilesStored[0].uiState_pushToApi).toBeFalsy()
-      expect(projectStiesStored[0].uiState_pushToApi).toBeFalsy()
+      expect(projectSitesStored[0].uiState_pushToApi).toBeFalsy()
       expect(projectsStored[0].uiState_pushToApi).toBeFalsy()
     },
   )

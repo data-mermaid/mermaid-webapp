@@ -110,6 +110,7 @@ const SyncApiDataIntoOfflineStorage = class {
   #pullAllDataExceptSpecificProject = () => {
     const apiDataNamesToPullNonProject = [
       'benthic_attributes',
+      'invert_attributes',
       'choices',
       'fish_families',
       'fish_groupings',
@@ -155,6 +156,7 @@ const SyncApiDataIntoOfflineStorage = class {
   pushChanges = async () => {
     return Promise.all([
       this.#dexiePerUserDataInstance.benthic_attributes.toArray(),
+      this.#dexiePerUserDataInstance.invert_attributes.toArray(),
       this.#dexiePerUserDataInstance.collect_records.toArray(),
       this.#dexiePerUserDataInstance.fish_species.toArray(),
       this.#dexiePerUserDataInstance.project_managements.toArray(),
@@ -165,6 +167,7 @@ const SyncApiDataIntoOfflineStorage = class {
     ]).then(
       ([
         benthic_attributes,
+        invert_attributes,
         collect_records,
         fish_species,
         project_managements,
@@ -178,6 +181,7 @@ const SyncApiDataIntoOfflineStorage = class {
             `${this.#apiBaseUrl}/push/`,
             {
               benthic_attributes: this.#getOnlyModifiedAndDeletedItems(benthic_attributes),
+              invert_attributes: this.#getOnlyModifiedAndDeletedItems(invert_attributes),
               collect_records: this.#getOnlyModifiedAndDeletedItems(collect_records),
               fish_species: this.#getOnlyModifiedAndDeletedItems(fish_species),
               project_managements: this.#getOnlyModifiedAndDeletedItems(project_managements),
@@ -249,6 +253,7 @@ const SyncApiDataIntoOfflineStorage = class {
   pushThenPullAllProjectData = async (projectId) => {
     const allTheDataNames = [
       'benthic_attributes',
+      'invert_attributes',
       'choices',
       'collect_records',
       'fish_families',
@@ -283,6 +288,7 @@ const SyncApiDataIntoOfflineStorage = class {
     // usage notes. This function skips pulling choices data because it rarely changes
     const apiDataNamesToPull = [
       'benthic_attributes',
+      'invert_attributes',
       'collect_records',
       'fish_families',
       'fish_groupings',
@@ -328,6 +334,7 @@ const SyncApiDataIntoOfflineStorage = class {
       this.#dexiePerUserDataInstance.project_managements,
       this.#dexiePerUserDataInstance.project_profiles,
       this.#dexiePerUserDataInstance.project_sites,
+      this.#dexiePerUserDataInstance.invert_attributes,
       this.#dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled,
 
       async () => {
