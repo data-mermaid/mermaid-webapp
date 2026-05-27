@@ -68,6 +68,7 @@ export const pullApiData = async ({
     await dexiePerUserDataInstance.transaction(
       'rw',
       dexiePerUserDataInstance.benthic_attributes,
+      dexiePerUserDataInstance.invert_attributes,
       dexiePerUserDataInstance.choices,
       dexiePerUserDataInstance.collect_records,
       dexiePerUserDataInstance.fish_families,
@@ -109,6 +110,8 @@ export const pullApiData = async ({
             const removes = apiData[apiDataType]?.removes ?? []
             const deleteIds = deletes.map(({ id }) => id)
 
+            // Invert attributes intentionally left out. The removal of old attributes
+            // is for attributes created before invert attributes are added to the app
             const isBenthicOrFishSpecies =
               apiDataType === 'benthic_attributes' || apiDataType === 'fish_species'
             const protocolAttributesCount = isBenthicOrFishSpecies

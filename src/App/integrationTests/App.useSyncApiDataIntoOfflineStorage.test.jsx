@@ -52,6 +52,7 @@ test('Sync: initial page load on non project page', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.invert_attributes.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.choices.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.fish_families.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.fish_genera.toArray()).length).toEqual(0)
@@ -67,7 +68,10 @@ test('Sync: initial page load on non project page', async () => {
   await waitForElementToBeRemoved(() => screen.queryByTestId('projects-loading-indicator'))
 
   expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(
-    mockMermaidData.benthic_attributes.filter((attribute) => attribute.status !== 10).length,
+    mockMermaidData.benthic_attributes.length - 1, // proposed benthic attributes are filtered out unless a collect record uses them
+  )
+  expect((await dexiePerUserDataInstance.invert_attributes.toArray()).length).toEqual(
+    mockMermaidData.invert_attributes.length,
   )
   expect((await dexiePerUserDataInstance.choices.toArray()).length).toEqual(1) // choices is weird and gets overwritten
   expect((await dexiePerUserDataInstance.fish_families.toArray()).length).toEqual(
@@ -87,6 +91,7 @@ test('Sync: initial page load on project page', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.invert_attributes.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.choices.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.fish_families.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.fish_genera.toArray()).length).toEqual(0)
@@ -109,6 +114,9 @@ test('Sync: initial page load on project page', async () => {
 
   expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(
     mockMermaidData.benthic_attributes.length,
+  )
+  expect((await dexiePerUserDataInstance.invert_attributes.toArray()).length).toEqual(
+    mockMermaidData.invert_attributes.length,
   )
   // choices is weird and is just a giant object that gets overwritten
   expect((await dexiePerUserDataInstance.choices.toArray()).length).toEqual(1)

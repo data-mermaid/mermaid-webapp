@@ -19,7 +19,9 @@ const BenthicAttributesMixin = (Base) =>
       newBenthicAttributeName,
     }) {
       if (!benthicAttributeParentId || !benthicAttributeParentName || !newBenthicAttributeName) {
-        Promise.reject(new Error('addBenthicAttribute was implemented with missing parameters'))
+        return Promise.reject(
+          new Error('addBenthicAttribute was implemented with missing parameters'),
+        )
       }
 
       const existingBenthicAttribute = await this.getBenthicAttributes()
