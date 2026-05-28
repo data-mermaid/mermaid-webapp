@@ -110,6 +110,7 @@ describe('Projects dashboard', () => {
     expect(within(dataSharingSummaryCard).getByTestId('fishbelt-policy')).toBeInTheDocument()
     expect(within(dataSharingSummaryCard).getByTestId('benthic-policy')).toBeInTheDocument()
     expect(within(dataSharingSummaryCard).getByTestId('bleaching-policy')).toBeInTheDocument()
+    expect(within(dataSharingSummaryCard).getByTestId('macroinvertebrate-policy')).toBeInTheDocument()
 
     const offlineCheckbox = within(projectCard).getByTestId('offline-ready')
 

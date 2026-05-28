@@ -30,6 +30,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
     data_policy_beltfish,
     data_policy_benthiclit,
     data_policy_bleachingqc,
+    data_policy_macroinvertebrate,
     id,
   } = project
 
@@ -159,6 +160,10 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
           <li data-testid="bleaching-policy">
             {t('protocol_titles.bleachingqc')}:{' '}
             <strong>{getDataSharingPolicyLabel(data_policy_bleachingqc)}</strong>
+          </li>
+          <li data-testid="macroinvertebrate-policy">
+            {t('protocol_titles.macroinvertebrate')}:{' '}
+            <strong>{getDataSharingPolicyLabel(data_policy_macroinvertebrate)}</strong>
           </li>
         </DataSharingList>
       </div>
