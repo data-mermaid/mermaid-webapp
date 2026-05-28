@@ -9,6 +9,7 @@ const getProjectInitialValues = (projectRecord) => {
     data_policy_benthicpit: projectRecord?.data_policy_benthicpit,
     data_policy_bleachingqc: projectRecord?.data_policy_bleachingqc,
     data_policy_habitatcomplexity: projectRecord?.data_policy_habitatcomplexity,
+    data_policy_macroinvertebrate: projectRecord?.data_policy_macroinvertebrate,
     status: projectRecord?.status,
   }
 }
