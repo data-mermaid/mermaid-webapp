@@ -87,6 +87,15 @@ describe('Projects dashboard', () => {
     renderAuthenticatedOnline(<Projects />, {
       dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
+      currentUserOverride: {
+        id: 'fake-id',
+        first_name: 'FakeFirstName',
+        last_name: 'FakeLastNameOffline',
+        full_name: 'FakeFirstNameOffline FakeLastNameOffline',
+        projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
+        collect_state: {},
+        optional_features: [{ label: 'macroinvertebrate_enabled', enabled: true }],
+      },
     })
 
     await waitFor(() =>
@@ -110,7 +119,9 @@ describe('Projects dashboard', () => {
     expect(within(dataSharingSummaryCard).getByTestId('fishbelt-policy')).toBeInTheDocument()
     expect(within(dataSharingSummaryCard).getByTestId('benthic-policy')).toBeInTheDocument()
     expect(within(dataSharingSummaryCard).getByTestId('bleaching-policy')).toBeInTheDocument()
-    expect(within(dataSharingSummaryCard).getByTestId('macroinvertebrate-policy')).toBeInTheDocument()
+    expect(
+      within(dataSharingSummaryCard).getByTestId('macroinvertebrate-policy'),
+    ).toBeInTheDocument()
 
     const offlineCheckbox = within(projectCard).getByTestId('offline-ready')
 

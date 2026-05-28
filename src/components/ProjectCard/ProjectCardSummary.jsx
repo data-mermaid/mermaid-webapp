@@ -18,6 +18,7 @@ import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { getIsUserReadOnlyForProject } from '../../App/currentUserProfileHelpers'
+import GatedFeature from '../generic/GatedFeature'
 
 const ProjectCardSummary = ({ project, isAppOnline }) => {
   const { currentUser } = useCurrentUser()
@@ -161,10 +162,12 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
             {t('protocol_titles.bleachingqc')}:{' '}
             <strong>{getDataSharingPolicyLabel(data_policy_bleachingqc)}</strong>
           </li>
-          <li data-testid="macroinvertebrate-policy">
-            {t('protocol_titles.macroinvertebrate')}:{' '}
-            <strong>{getDataSharingPolicyLabel(data_policy_macroinvertebrate)}</strong>
-          </li>
+          <GatedFeature featureFlag="macroinvertebrate_enabled">
+            <li data-testid="macroinvertebrate-policy">
+              {t('protocol_titles.macroinvertebrate')}:{' '}
+              <strong>{getDataSharingPolicyLabel(data_policy_macroinvertebrate)}</strong>
+            </li>
+          </GatedFeature>
         </DataSharingList>
       </div>
     </DataSharingSummaryCard>

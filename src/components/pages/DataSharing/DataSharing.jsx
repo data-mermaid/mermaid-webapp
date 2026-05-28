@@ -32,6 +32,7 @@ import { PROJECT_CODES } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { useCurrentProject } from '../../../App/CurrentProjectContext'
 import textStyles from '../../../style/typography.module.scss'
+import GatedFeature from '../../generic/GatedFeature'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -348,28 +349,32 @@ const DataSharing = () => {
                   </Td>
                 ))}
               </Tr>
-              <Tr>
-                <Td>{t('protocol_titles.macroinvertebrate')}</Td>
-                {dataPolicyOptions.map((item) => (
-                  <Td key={item.value}>
-                    <Label
-                      htmlFor={`macroinvertebrate${item.value}`}
-                      $cursor={isDataUpdating ? 'wait' : 'pointer'}
-                    >
-                      <Input
-                        type="radio"
-                        name="macroinvertebrate"
-                        id={`macroinvertebrate${item.value}`}
-                        value={item.value}
-                        checked={projectBeingEdited?.data_policy_macroinvertebrate === item.value}
-                        onChange={(e) => handleDataPolicyChange(e, 'data_policy_macroinvertebrate')}
-                        disabled={isDataUpdating}
+              <GatedFeature featureFlag="macroinvertebrate_enabled">
+                <Tr>
+                  <Td>{t('protocol_titles.macroinvertebrate')}</Td>
+                  {dataPolicyOptions.map((item) => (
+                    <Td key={item.value}>
+                      <Label
+                        htmlFor={`macroinvertebrate${item.value}`}
                         $cursor={isDataUpdating ? 'wait' : 'pointer'}
-                      />
-                    </Label>
-                  </Td>
-                ))}
-              </Tr>
+                      >
+                        <Input
+                          type="radio"
+                          name="macroinvertebrate"
+                          id={`macroinvertebrate${item.value}`}
+                          value={item.value}
+                          checked={projectBeingEdited?.data_policy_macroinvertebrate === item.value}
+                          onChange={(e) =>
+                            handleDataPolicyChange(e, 'data_policy_macroinvertebrate')
+                          }
+                          disabled={isDataUpdating}
+                          $cursor={isDataUpdating ? 'wait' : 'pointer'}
+                        />
+                      </Label>
+                    </Td>
+                  ))}
+                </Tr>
+              </GatedFeature>
             </tbody>
           </DataSharingTable>
         </TableOverflowWrapper>
