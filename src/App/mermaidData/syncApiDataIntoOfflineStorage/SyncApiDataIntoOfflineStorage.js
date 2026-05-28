@@ -238,7 +238,7 @@ const SyncApiDataIntoOfflineStorage = class {
     return Promise.all([this.#pullAllDataExceptSpecificProject(), this.#pullOfflineProjects()])
   }
 
-  pushThenPullFishOrBenthicAttributes = async (fishOrBenthicAttributesData) => {
+  pushThenPullAttributes = async (fishOrBenthicAttributesData) => {
     await this.pushChanges()
 
     return pullApiData({

@@ -50,7 +50,7 @@ const BenthicAttributesMixin = (Base) =>
           await this._dexiePerUserDataInstance.benthic_attributes.put(newBenthicAttributeObject)
 
         return this._apiSyncInstance
-          .pushThenPullFishOrBenthicAttributes('benthic_attributes')
+          .pushThenPullAttributes('benthic_attributes')
           .then((response) => {
             const newBenthicAttributeFromApi = response.data.benthic_attributes.updates[0]
 
@@ -65,7 +65,6 @@ const BenthicAttributesMixin = (Base) =>
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
-
   }
 
 export default BenthicAttributesMixin

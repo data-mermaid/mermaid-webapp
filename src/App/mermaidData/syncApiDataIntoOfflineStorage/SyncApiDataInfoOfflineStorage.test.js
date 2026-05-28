@@ -855,7 +855,7 @@ test('All of the push functions handle sync errors with the handleUserDeniedSync
   await apiSync.pushThenPullAllProjectData('PROJECT ID')
   await apiSync.pushThenPullAllProjectDataExceptChoices('PROJECT ID')
   await apiSync.pushThenPullEverything()
-  await apiSync.pushThenPullFishOrBenthicAttributes('fish_species')
+  await apiSync.pushThenPullAttributes('fish_species')
   await apiSync.pushThenRemoveProjectFromOfflineStorage('PROJECT ID')
 
   expect(pushSyncErrorCallback).toHaveBeenCalledTimes(6)
