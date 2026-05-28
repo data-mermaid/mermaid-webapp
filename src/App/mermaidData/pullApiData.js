@@ -10,7 +10,6 @@ import getAttributesInUse from './getAttributesInUse'
 
 const resetPushToApiTagFromItems = (items) =>
   items.map((item) => ({ ...item, uiState_pushToApi: false }))
-const PROPOSED_STATUS = 10
 
 export const pullApiData = async ({
   apiBaseUrl,
@@ -118,20 +117,7 @@ export const pullApiData = async ({
               ? attributesInUseCounts?.[apiDataType] ?? {}
               : {}
 
-            // If an attribute update arrives with proposed status and no record uses it,
-            // do not keep it in local storage.
-            const proposedUpdateIdsToDelete = updatesWithPushToApiTagReset
-              .filter(
-                (item) =>
-                  isBenthicOrFishSpecies &&
-                  item?.status === PROPOSED_STATUS &&
-                  !protocolAttributesCount[item.id],
-              )
-              .map(({ id }) => id)
-
-            const updatesToStore = updatesWithPushToApiTagReset.filter(
-              (item) => !proposedUpdateIdsToDelete.includes(item.id),
-            )
+            const updatesToStore = updatesWithPushToApiTagReset
 
             const removeIds = removes
               .filter(({ id }) => {
@@ -154,7 +140,7 @@ export const pullApiData = async ({
             const isDataTypeProjectAssociated = getIsDataTypeProjectAssociated(apiDataType)
 
             const bulkDeleteIdsWithNoDuplicates = Array.from(
-              new Set([...deleteIds, ...removeIds, ...proposedUpdateIdsToDelete]),
+              new Set([...deleteIds, ...removeIds]),
             )
 
             await dexiePerUserDataInstance[apiDataType].bulkPut(updatesToStore)

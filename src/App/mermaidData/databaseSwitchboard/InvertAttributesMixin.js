@@ -50,7 +50,7 @@ const InvertAttributesMixin = (Base) =>
           await this._dexiePerUserDataInstance.invert_attributes.put(newInvertAttributeObject)
 
         return this._apiSyncInstance
-          .pushThenPullFishOrBenthicAttributes('invert_attributes')
+          .pushThenPullAttributes('invert_attributes')
           .then((response) => {
             const newInvertAttributeFromApi = response.data.invert_attributes.updates[0]
 
