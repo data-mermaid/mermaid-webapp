@@ -78,8 +78,10 @@ const ReadOnlyDataSharingContent = ({ project = {} }) => {
       <P>{getDataSharingPolicyLabel(project?.data_policy_benthiclit)}</P>
       <H3>{t('protocol_titles.bleachingqc')}</H3>
       <P>{getDataSharingPolicyLabel(project?.data_policy_bleachingqc)}</P>
-      <H3>{t('protocol_titles.macroinvertebrate')}</H3>
-      <P>{getDataSharingPolicyLabel(project?.data_policy_macroinvertebrate)}</P>
+      <GatedFeature featureFlag="macroinvertebrate_enabled">
+        <H3>{t('protocol_titles.macroinvertebrate')}</H3>
+        <P>{getDataSharingPolicyLabel(project?.data_policy_macroinvertebrate)}</P>
+      </GatedFeature>
     </>
   )
 }
