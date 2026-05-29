@@ -6,6 +6,7 @@ import {
 } from './lastRevisionNumbers'
 import { getAuthorizationHeaders } from '../../library/getAuthorizationHeaders'
 import { getIsDataTypeProjectAssociated } from './getIsDataTypeProjectAssociated'
+import getAttributesInUse from './getAttributesInUse'
 
 const resetPushToApiTagFromItems = (items) =>
   items.map((item) => ({ ...item, uiState_pushToApi: false }))
@@ -66,6 +67,7 @@ export const pullApiData = async ({
     await dexiePerUserDataInstance.transaction(
       'rw',
       dexiePerUserDataInstance.benthic_attributes,
+      dexiePerUserDataInstance.invert_attributes,
       dexiePerUserDataInstance.choices,
       dexiePerUserDataInstance.collect_records,
       dexiePerUserDataInstance.fish_families,
@@ -85,12 +87,17 @@ export const pullApiData = async ({
           projectId,
         })
 
-        apiDataNamesToPull.forEach(async (apiDataType) => {
+        const attributesInUseCounts = await getAttributesInUse(
+          dexiePerUserDataInstance,
+          apiData.collect_records?.updates ?? [],
+        )
+
+        for (const apiDataType of apiDataNamesToPull) {
           if (apiDataType === 'choices') {
             // choices deletes property will always be empty, so we just ignore it
             // additionally the updates property is an object, not an array, so we just store it directly
 
-            dexiePerUserDataInstance.choices.put({
+            await dexiePerUserDataInstance.choices.put({
               id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
               choices: { ...apiData.choices?.updates, uiState_pushToApi: false },
             })
@@ -101,7 +108,27 @@ export const pullApiData = async ({
             const deletes = apiData[apiDataType]?.deletes ?? []
             const removes = apiData[apiDataType]?.removes ?? []
             const deleteIds = deletes.map(({ id }) => id)
-            const removeIds = removes.map(({ id }) => id)
+
+            // Invert attributes intentionally left out. The removal of old attributes
+            // is for attributes created before invert attributes are added to the app
+            const isBenthicOrFishSpecies =
+              apiDataType === 'benthic_attributes' || apiDataType === 'fish_species'
+            const protocolAttributesCount = isBenthicOrFishSpecies
+              ? attributesInUseCounts?.[apiDataType] ?? {}
+              : {}
+
+            const updatesToStore = updatesWithPushToApiTagReset
+
+            const removeIds = removes
+              .filter(({ id }) => {
+                // Checks benthic_attributes and fish_species if there are any proposed attributes.
+                // If any collect records use a proposed attribute, skip removing it from IndexedDB
+                if (isBenthicOrFishSpecies) {
+                  return !protocolAttributesCount[id]
+                }
+                return true
+              })
+              .map(({ id }) => id)
             const error = apiData[apiDataType]?.error
             const is401 = error?.code === 401
             const is403 = error?.code === 403
@@ -112,10 +139,12 @@ export const pullApiData = async ({
 
             const isDataTypeProjectAssociated = getIsDataTypeProjectAssociated(apiDataType)
 
-            const bulkDeleteIdsWithNoDuplicates = Array.from(new Set([...deleteIds, ...removeIds]))
+            const bulkDeleteIdsWithNoDuplicates = Array.from(
+              new Set([...deleteIds, ...removeIds]),
+            )
 
-            dexiePerUserDataInstance[apiDataType].bulkPut(updatesWithPushToApiTagReset)
-            dexiePerUserDataInstance[apiDataType].bulkDelete(bulkDeleteIdsWithNoDuplicates)
+            await dexiePerUserDataInstance[apiDataType].bulkPut(updatesToStore)
+            await dexiePerUserDataInstance[apiDataType].bulkDelete(bulkDeleteIdsWithNoDuplicates)
 
             if ((is401 || is403) && isDataTypeProjectAssociated && projectId) {
               // we still delete project related data in addition to anything in the removes array,
@@ -144,7 +173,7 @@ export const pullApiData = async ({
               ])
             }
           }
-        })
+        }
 
         if (shouldHandleUserDeniedSyncPull && projectId && projectName) {
           /* user will only be denied pulling when they are trying to

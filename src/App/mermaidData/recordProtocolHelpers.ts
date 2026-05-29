@@ -1,4 +1,13 @@
-export const getProtocolTransectType = (protocol) => {
+type Protocol =
+  | 'fishbelt'
+  | 'benthiclit'
+  | 'benthicpit'
+  | 'habitatcomplexity'
+  | 'bleachingqc'
+  | 'benthicpqt'
+  | 'macroinvertebrate'
+
+export const getProtocolTransectType = (protocol: Protocol): string | undefined => {
   return {
     fishbelt: 'fishbelt_transect',
     benthiclit: 'benthic_transect',
@@ -6,20 +15,23 @@ export const getProtocolTransectType = (protocol) => {
     habitatcomplexity: 'benthic_transect',
     bleachingqc: 'quadrat_collection',
     benthicpqt: 'quadrat_transect',
+    macroinvertebrate: 'beltinvert_transect',
   }[protocol]
 }
 
-export const getIsFishBelt = (protocol) => {
+export const getIsFishBelt = (protocol: Protocol): boolean => {
   return protocol === 'fishbelt'
 }
 
-export const getIsQuadratSampleUnit = (protocol) => {
+export const getIsQuadratSampleUnit = (protocol: Protocol): boolean => {
   return protocol === 'benthicpqt' || protocol === 'bleachingqc'
 }
 
 export const noLabelSymbol = '-'
 
-export const getObservationsPropertyNames = (collectRecord) => {
+export const getObservationsPropertyNames = (collectRecord: {
+  data?: { protocol?: Protocol }
+}): string[] => {
   return (
     {
       fishbelt: ['obs_belt_fishes'],
@@ -28,11 +40,12 @@ export const getObservationsPropertyNames = (collectRecord) => {
       habitatcomplexity: ['obs_habitat_complexities'],
       benthicpqt: ['obs_benthic_photo_quadrats'],
       bleachingqc: ['obs_colonies_bleached', 'obs_quadrat_benthic_percent'],
-    }[collectRecord?.data?.protocol] ?? []
+      macroinvertebrate: ['obs_belt_inverts'],
+    }[collectRecord?.data?.protocol ?? ''] ?? []
   )
 }
 
-export const getProtocolMethodsType = (protocol) => {
+export const getProtocolMethodsType = (protocol: Protocol): string | undefined => {
   return {
     fishbelt: 'beltfishtransectmethods',
     benthiclit: 'benthiclittransectmethods',
@@ -40,5 +53,6 @@ export const getProtocolMethodsType = (protocol) => {
     habitatcomplexity: 'habitatcomplexitytransectmethods',
     bleachingqc: 'bleachingquadratcollectionmethods',
     benthicpqt: 'benthicphotoquadrattransectmethods',
+    macroinvertebrate: 'beltinverttransectmethods',
   }[protocol]
 }

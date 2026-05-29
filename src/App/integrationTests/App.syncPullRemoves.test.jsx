@@ -33,6 +33,14 @@ the items in the removes array are deleted from browser storage`, async () => {
   })
   const collectRecordsHydrationPromise = dexiePerUserDataInstance.collect_records.add({
     id: 'myCatIsCute',
+    data: {
+      obs_belt_fishes: [],
+      obs_benthic_lits: [],
+      obs_benthic_pits: [],
+      obs_colonies_bleached: [],
+      obs_quadrat_benthic_percent: [],
+      obs_benthic_photo_quadrats: [],
+    },
   })
 
   const projectManagementsHydrationPromise = dexiePerUserDataInstance.project_managements.add({
@@ -122,7 +130,7 @@ the items in the removes array are deleted from browser storage`, async () => {
   expect(await dexiePerUserDataInstance.fish_genera.get('myCatIsCute')).toBeUndefined()
   expect(await dexiePerUserDataInstance.fish_species.get('myCatIsCute')).toBeUndefined()
   expect(await dexiePerUserDataInstance.collect_records.get('myCatIsCute')).toBeUndefined()
-  expect(await dexiePerUserDataInstance.project_managements.get('1')).toBeUndefined()
+  expect(await dexiePerUserDataInstance.project_managements.get('myCatIsCute')).toBeUndefined()
   expect(await dexiePerUserDataInstance.project_profiles.get('myCatIsCute')).toBeUndefined()
   expect(await dexiePerUserDataInstance.project_sites.get('myCatIsCute')).toBeUndefined()
 })

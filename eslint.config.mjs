@@ -82,6 +82,7 @@ export default [
       'react/no-danger': 'error',
       'max-nested-callbacks': ['error', { max: 3 }],
       'consistent-return': 'error',
+      'import/no-unresolved': ['error', { ignore: ['^uuid$'] }],
     },
   },
   { languageOptions: { globals: { ...globals.browser } } },

@@ -142,7 +142,10 @@
       "bleaching_public_summary": "Bleaching is now set to public summary",
       "fish_belt_private": "Fish belt is now set to private",
       "fish_belt_public": "Fish belt is now set to public",
-      "fish_belt_public_summary": "Fish belt is now set to public summary"
+      "fish_belt_public_summary": "Fish belt is now set to public summary",
+      "macroinvertebrate_private": "Macroinvertebrates is now set to private",
+      "macroinvertebrate_public": "Macroinvertebrates is now set to public",
+      "macroinvertebrate_public_summary": "Macroinvertebrates is now set to public summary"
     },
     "test_project_data": "Data for a test project will not be included in public reporting",
     "transect_level_observations": "Transect-level observations"
@@ -850,7 +853,8 @@
     "benthicpqt": "Benthic photo quadrat",
     "bleachingqc": "Bleaching",
     "fishbelt": "Fish belt",
-    "habitatcomplexity": "Habitat complexity"
+    "habitatcomplexity": "Habitat complexity",
+    "macroinvertebrate": "Macroinvertebrates"
   },
   "quadrat_collection": "Quadrat collection",
   "quadrat_size": "Quadrat size",
@@ -885,6 +889,7 @@
       "submitted_moved_to_collecting": "The submitted record has been moved to collecting.",
       "submitted_not_editable": "The submitted record has not been made editable",
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable",
+      "attribute_unavailable": "Failed to retrieve attribute details. Please try again.",
       "validation_ignore": "This validation cannot be ignored.",
       "validation_reset": "This validation cannot be reset.",
       "validation_unavailable": "Validation is currently unavailable for this record."

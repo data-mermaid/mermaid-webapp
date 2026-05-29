@@ -56,6 +56,10 @@ const mockMermaidApiAllSuccessful = setupServer(
         updates: mockMermaidData.benthic_attributes,
         last_revision_num: 'initial',
       },
+      invert_attributes: {
+        updates: mockMermaidData.invert_attributes,
+        last_revision_num: 'initial',
+      },
       choices: { updates: mockMermaidData.choices, last_revision_num: 'initial' },
       collect_records: { updates: mockMermaidData.collect_records, last_revision_num: 'initial' },
       fish_families: { updates: mockMermaidData.fish_families, last_revision_num: 'initial' },

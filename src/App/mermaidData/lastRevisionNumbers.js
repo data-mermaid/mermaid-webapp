@@ -7,6 +7,7 @@ const persistLastRevisionNumbersPulled = ({ dexiePerUserDataInstance, apiData, p
     async () => {
       const dataTypes = [
         'benthic_attributes',
+        'invert_attributes',
         'choices',
         'collect_records',
         'fish_families',

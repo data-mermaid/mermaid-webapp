@@ -10,6 +10,6 @@ export const getCurrentUserOptionalFeature = (
   currentUser: CurrentUser | undefined,
   featureLabel: string,
 ): Partial<OptionalFeature> => {
-  const optionalFeatures = currentUser?.optional_features || []
-  return optionalFeatures.find((feature) => feature.label === featureLabel) || {}
+  const optionalFeatures = currentUser?.optional_features ?? []
+  return optionalFeatures.find((feature) => feature.label === featureLabel) ?? {}
 }

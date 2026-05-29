@@ -32,6 +32,7 @@ import { PROJECT_CODES } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { useCurrentProject } from '../../../App/CurrentProjectContext'
 import textStyles from '../../../style/typography.module.scss'
+import GatedFeature from '../../generic/GatedFeature'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -77,6 +78,10 @@ const ReadOnlyDataSharingContent = ({ project = {} }) => {
       <P>{getDataSharingPolicyLabel(project?.data_policy_benthiclit)}</P>
       <H3>{t('protocol_titles.bleachingqc')}</H3>
       <P>{getDataSharingPolicyLabel(project?.data_policy_bleachingqc)}</P>
+      <GatedFeature featureFlag="macroinvertebrate_enabled">
+        <H3>{t('protocol_titles.macroinvertebrate')}</H3>
+        <P>{getDataSharingPolicyLabel(project?.data_policy_macroinvertebrate)}</P>
+      </GatedFeature>
     </>
   )
 }
@@ -172,6 +177,8 @@ const DataSharing = () => {
         return t(getMessageKey('benthic', policy))
       case 'data_policy_bleachingqc':
         return t(getMessageKey('bleaching', policy))
+      case 'data_policy_macroinvertebrate':
+        return t(getMessageKey('macroinvertebrate', policy))
       default:
         return t('projects.success.project_saved')
     }
@@ -344,6 +351,32 @@ const DataSharing = () => {
                   </Td>
                 ))}
               </Tr>
+              <GatedFeature featureFlag="macroinvertebrate_enabled">
+                <Tr>
+                  <Td>{t('protocol_titles.macroinvertebrate')}</Td>
+                  {dataPolicyOptions.map((item) => (
+                    <Td key={item.value}>
+                      <Label
+                        htmlFor={`macroinvertebrate${item.value}`}
+                        $cursor={isDataUpdating ? 'wait' : 'pointer'}
+                      >
+                        <Input
+                          type="radio"
+                          name="macroinvertebrate"
+                          id={`macroinvertebrate${item.value}`}
+                          value={item.value}
+                          checked={projectBeingEdited?.data_policy_macroinvertebrate === item.value}
+                          onChange={(e) =>
+                            handleDataPolicyChange(e, 'data_policy_macroinvertebrate')
+                          }
+                          disabled={isDataUpdating}
+                          $cursor={isDataUpdating ? 'wait' : 'pointer'}
+                        />
+                      </Label>
+                    </Td>
+                  ))}
+                </Tr>
+              </GatedFeature>
             </tbody>
           </DataSharingTable>
         </TableOverflowWrapper>
@@ -412,6 +445,7 @@ ReadOnlyDataSharingContent.propTypes = {
     data_policy_beltfish: PropTypes.number,
     data_policy_benthiclit: PropTypes.number,
     data_policy_bleachingqc: PropTypes.number,
+    data_policy_macroinvertebrate: PropTypes.number,
   }),
 }
 
