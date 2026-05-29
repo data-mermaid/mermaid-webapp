@@ -69,7 +69,7 @@ const MethodsFilterDropDown = ({
 
   // Remove the following code when macroinvertebrate goes live
   const { currentUser } = useCurrentUser()
-  const { enabled: isMacroinvertebrateEnabled } = getCurrentUserOptionalFeature(
+  const { enabled: isMacroinvertebrateEnabled = false } = getCurrentUserOptionalFeature(
     currentUser,
     'macroinvertebrate_enabled',
   )
