@@ -1,14 +1,23 @@
 import React from 'react'
-import PropTypes, { string } from 'prop-types'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import ListItemText from '@mui/material/ListItemText'
+import type { SelectChangeEvent } from '@mui/material/Select'
 import Select from '@mui/material/Select'
 import Checkbox from '@mui/material/Checkbox'
 import { useTranslation } from 'react-i18next'
 import theme from '../../theme'
+import { useCurrentUser } from '../../App/CurrentUserContext'
+import { getCurrentUserOptionalFeature } from '../../library/getCurrentUserOptionalFeature'
+
+interface MethodsFilterDropDownProps {
+  handleMethodsColumnFilterChange: (value: string[]) => void
+  value?: string[]
+  id?: string
+  disabled?: boolean
+}
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -47,6 +56,7 @@ const methodKeys = [
   'protocol_titles.benthicpqt',
   'protocol_titles.bleachingqc',
   'protocol_titles.habitatcomplexity',
+  'protocol_titles.macroinvertebrate',
 ]
 
 const MethodsFilterDropDown = ({
@@ -54,13 +64,24 @@ const MethodsFilterDropDown = ({
   value = [],
   id = 'methods-filter-search',
   disabled = false,
-}) => {
+}: MethodsFilterDropDownProps) => {
   const { t } = useTranslation()
-  const methods = methodKeys.map((key) => t(key))
 
-  const handleChange = (event) => {
-    const eventValue = event.target.value
-    handleMethodsColumnFilterChange(eventValue)
+  // Remove the following code when macroinvertebrate goes live
+  const { currentUser } = useCurrentUser()
+  const { enabled: isMacroinvertebrateEnabled } = getCurrentUserOptionalFeature(
+    currentUser,
+    'macroinvertebrate_enabled',
+  )
+  // Remove down to here
+
+  const methods = isMacroinvertebrateEnabled
+    ? methodKeys.map((key) => t(key))
+    : // Remove false case when macroinvertebrate goes live
+      methodKeys.filter((key) => key !== 'protocol_titles.macroinvertebrate').map((key) => t(key))
+
+  const handleChange = (event: SelectChangeEvent<string[]>) => {
+    handleMethodsColumnFilterChange(event.target.value as string[])
   }
 
   // Dynamic FormStyle with background color applied to notchedOutline
@@ -106,7 +127,7 @@ const MethodsFilterDropDown = ({
           id={id}
           multiple
           value={value}
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
           input={<OutlinedInput label={t('filters.method')} />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
@@ -122,13 +143,6 @@ const MethodsFilterDropDown = ({
       </FormControl>
     </div>
   )
-}
-
-MethodsFilterDropDown.propTypes = {
-  handleMethodsColumnFilterChange: PropTypes.func.isRequired,
-  id: PropTypes.string,
-  value: PropTypes.arrayOf(string),
-  disabled: PropTypes.bool,
 }
 
 export default MethodsFilterDropDown
