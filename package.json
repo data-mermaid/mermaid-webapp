@@ -1,6 +1,6 @@
 {
   "name": "mermaid-webapp",
-  "version": "2.32.0",
+  "version": "2.33.0",
   "type": "module",
   "private": true,
   "homepage": "",
@@ -68,6 +68,7 @@
     "serve": "vite preview",
     "test": "TZ=UTC vitest run",
     "test:watch": "TZ=UTC vitest",
+    "test:storybook": "TZ=UTC vitest run --config vitest.storybook.config.ts",
     "prettier": "prettier --write ./src",
     "lint": "tsc && eslint './src/**/*'",
     "prepare": "husky",

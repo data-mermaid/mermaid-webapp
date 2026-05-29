@@ -37,6 +37,11 @@ export default [
     },
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     rules: {
+      // uuid v14+ is ESM-only (exports field only, no main); eslint-import-resolver-node
+      // uses the resolve package which doesn't support the exports field, producing a false
+      // positive. Vite and the test runner resolve it correctly.
+      'import/no-unresolved': ['error', { ignore: ['^uuid$'] }],
+
       camelcase: 'off',
       curly: 'error',
       'no-underscore-dangle': 'off',
