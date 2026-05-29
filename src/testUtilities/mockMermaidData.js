@@ -22,6 +22,7 @@ const projects = [
     data_policy_benthicpit: 50,
     data_policy_bleachingqc: 100,
     data_policy_habitatcomplexity: 50,
+    data_policy_macroinvertebrate: 50,
     members: [
       '0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3',
       '4eb4bf65-6aee-4014-beee-04ad23484bcd',
@@ -50,6 +51,7 @@ const projects = [
     data_policy_benthicpit: 10,
     data_policy_bleachingqc: 100,
     data_policy_habitatcomplexity: 10,
+    data_policy_macroinvertebrate: 50,
     members: [
       '0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3',
       '4eb4bf65-6aee-4014-beee-04ad23484bcd',
@@ -72,6 +74,7 @@ const projects = [
     data_policy_benthicpit: 50,
     data_policy_bleachingqc: 10,
     data_policy_habitatcomplexity: 50,
+    data_policy_macroinvertebrate: 50,
     members: ['0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3', '697a1123-ef22-4acb-aea4-05abbd5589d0'],
   },
   {
@@ -90,6 +93,7 @@ const projects = [
     data_policy_benthicpit: 50,
     data_policy_bleachingqc: 10,
     data_policy_habitatcomplexity: 50,
+    data_policy_macroinvertebrate: 50,
     members: [
       '0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3',
       '4ff5f714-43b3-4564-be1c-c6053f7c0487',
@@ -113,6 +117,7 @@ const projects = [
     data_policy_benthicpit: 100,
     data_policy_bleachingqc: 10,
     data_policy_habitatcomplexity: 100,
+    data_policy_macroinvertebrate: 10,
     members: ['697a1123-ef22-4acb-aea4-05abbd5589d0'],
   },
   {
@@ -131,6 +136,7 @@ const projects = [
     data_policy_benthicpit: 100,
     data_policy_bleachingqc: 10,
     data_policy_habitatcomplexity: 100,
+    data_policy_macroinvertebrate: 100,
     members: ['697a1123-ef22-4acb-aea4-05abbd5589d0'],
   },
 ]
