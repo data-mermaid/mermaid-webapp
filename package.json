@@ -68,6 +68,7 @@
     "serve": "vite preview",
     "test": "TZ=UTC vitest run",
     "test:watch": "TZ=UTC vitest",
+    "test:storybook": "TZ=UTC vitest run --config vitest.storybook.config.ts",
     "prettier": "prettier --write ./src",
     "lint": "tsc && eslint './src/**/*'",
     "prepare": "husky",

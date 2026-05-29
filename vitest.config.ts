@@ -9,12 +9,6 @@ import type { Plugin } from 'vitest/config'
  * only matches literal strings/prefixes. This plugin intercepts imports at the
  * resolve step so Vite never tries to find the actual files.
  */
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
-import { playwright } from '@vitest/browser-playwright'
-const dirname =
-  typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url))
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 function stubAssetImports(): Plugin {
@@ -47,6 +41,7 @@ function stubAssetImports(): Plugin {
 export default defineConfig({
   plugins: [react(), stubAssetImports()],
   test: {
+    name: 'app',
     environment: 'jsdom',
     globals: true,
     restoreMocks: true,
@@ -83,37 +78,6 @@ export default defineConfig({
       '**/.{idea,git,cache,output,temp}/**',
       '**/{rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build,eslint,prettier}.config.*',
       '**/cypress/**',
-    ],
-    projects: [
-      {
-        extends: true,
-        test: {
-          name: 'app',
-        },
-      },
-      {
-        plugins: [
-          // The plugin will run tests for the stories defined in your Storybook config
-          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
-          storybookTest({
-            configDir: path.join(dirname, '.storybook'),
-          }),
-        ],
-        test: {
-          name: 'storybook',
-          browser: {
-            enabled: true,
-            headless: true,
-            provider: playwright({}),
-            instances: [
-              {
-                browser: 'chromium',
-              },
-            ],
-          },
-          setupFiles: ['.storybook/vitest.setup.ts'],
-        },
-      },
     ],
   },
 })
