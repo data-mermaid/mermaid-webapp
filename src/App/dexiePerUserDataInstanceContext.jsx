@@ -21,7 +21,6 @@ const DexiePerUserDataInstanceProvider = ({ children, value = {} }) => {
 
 const useDexiePerUserDataInstance = ({ currentUser }) => {
   const context = useContext(DexiePerUserDataInstanceContext)
-  const { setDexiePerUserDataInstance } = context
   const userId = currentUser?.id
 
   if (context === undefined) {
@@ -29,13 +28,15 @@ const useDexiePerUserDataInstance = ({ currentUser }) => {
       'useDexiePerUserDataInstance must be used within a DexiePerUserDataInstanceProvider',
     )
   }
+  const { setDexiePerUserDataInstance } = context
 
   const _initializePerUserDexieInstance = useEffect(() => {
     if (userId) {
       const dexiePerUserDataInstance = new Dexie(userId)
 
-      dexiePerUserDataInstance.version(2).stores({
+      dexiePerUserDataInstance.version(3).stores({
         benthic_attributes: 'id',
+        invert_attributes: 'id',
         choices: 'id',
         collect_records: 'id, project',
         fish_families: 'id',

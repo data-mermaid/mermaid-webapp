@@ -61,6 +61,22 @@ interface BenthicPhotoQuadratTransect {
   notes?: string
 }
 
+interface BeltInvertTransect {
+  depth?: number | string
+  label?: string
+  len_surveyed?: number | string
+  number?: number | string
+  reef_slope?: string
+  sample_time?: string
+  size_bin?: string
+  width?: string
+  visibility?: string
+  current?: string
+  relative_depth?: string
+  tide?: string
+  notes?: string
+}
+
 interface BleachingQuadrat {
   id?: string
   depth?: number | string
@@ -109,6 +125,19 @@ interface SubmittedBenthicPhotoQuadratObservation {
   updated_by?: string
   updated_on?: string
 }
+interface SubmittedBeltInvertObservation {
+  id?: string
+  updated_by?: string
+  size?: number | string
+  created_on?: string
+  updated_on?: string
+  count?: number
+  include?: boolean
+  notes?: string
+  created_by?: string
+  beltinvert?: string
+  invertebrate_attribute?: string
+}
 
 export const projectPropType = PropTypes.shape({
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -119,6 +148,7 @@ export const projectPropType = PropTypes.shape({
   data_policy_beltfish: PropTypes.number,
   data_policy_benthiclit: PropTypes.number,
   data_policy_bleachingqc: PropTypes.number,
+  data_policy_macroinvertebrate: PropTypes.number,
   includes_gfcr: PropTypes.bool,
 })
 
@@ -131,6 +161,7 @@ export interface Project {
   data_policy_beltfish: number
   data_policy_benthiclit: number
   data_policy_bleachingqc: number
+  data_policy_macroinvertebrate: number
   includes_gfcr: boolean
 }
 
@@ -188,6 +219,16 @@ export interface BenthicPhotoQuadratRecord {
   }
 }
 
+export interface BeltInvertRecord {
+  id: string
+  data: {
+    protocol: string
+    sample_event: SampleEvent
+    beltinvert_transect: BeltInvertTransect
+    observers: Observer[]
+  }
+}
+
 export interface SubmittedFishBelt {
   id: string
   sample_event: SampleEvent
@@ -203,6 +244,14 @@ export interface SubmittedBenthicPhotoQuadrat {
   quadrat_transect: BenthicPhotoQuadratTransect
   observers: Observer[]
   obs_benthic_photo_quadrats: SubmittedBenthicPhotoQuadratObservation[]
+}
+
+export interface SubmittedBeltInvert {
+  id: string
+  sample_event: SampleEvent
+  beltinvert_transect: BeltInvertTransect
+  observers: Observer[]
+  obs_belt_inverts: SubmittedBeltInvertObservation[]
 }
 
 export interface BenthicPitRecord {
@@ -444,6 +493,15 @@ export interface HabitatComplexityValidation {
   obs_habitat_complexities: Validations
 }
 
+export interface BeltInvertValidation {
+  depth: DepthValidation
+  len_surveyed: LenSurveyedValidation
+  number: Validations
+  sample_time: SampleTimeValidation
+  size_bin: Validations
+  width: Validations
+}
+
 export interface SubNavNode {
   name: string
   number: number | string
@@ -457,6 +515,7 @@ export type MermaidRecord =
   | BleachingRecord
   | FishBeltRecord
   | HabitatComplexityRecord
+  | BeltInvertRecord
 
 export interface FishFamily {
   id: string
