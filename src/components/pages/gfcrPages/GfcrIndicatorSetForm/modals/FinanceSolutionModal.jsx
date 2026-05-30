@@ -34,6 +34,11 @@ import { IconInfo } from '../../../../icons'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
 import GfcrHelperLinks from '../subPages/GfcrHelperLinks'
 
+const isTafNameVisible = (fs_type, used_an_incubator) =>
+  ['business', 'financial_mechanism'].includes(fs_type) &&
+  !!used_an_incubator &&
+  used_an_incubator !== 'none'
+
 const FinanceSolutionModal = ({
   isOpen,
   onDismiss,
@@ -69,6 +74,13 @@ const FinanceSolutionModal = ({
         id: financeSolution?.id,
         used_an_incubator:
           formikValues.used_an_incubator === 'none' ? null : formikValues.used_an_incubator,
+        geographical_coverage: formikValues.fs_type === 'ctf' ? formikValues.geographical_coverage : '',
+        taf_name: isTafNameVisible(formikValues.fs_type, formikValues.used_an_incubator) ? formikValues.taf_name : '',
+        number_of_solutions_supported_by: ['taf', 'ctf', 'financial_facility'].includes(
+          formikValues.fs_type,
+        )
+          ? formikValues.number_of_solutions_supported_by
+          : 0,
       }
 
       const existingFinanceSolutions = indicatorSet.finance_solutions
@@ -137,20 +149,40 @@ const FinanceSolutionModal = ({
         errors.name = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      if (!values.sector) {
+      const isStandardFsType = (choices.financesolutiontypes?.data || []).some(
+        (c) => c.id === values.fs_type,
+      )
+      if (!values.fs_type || !isStandardFsType) {
+        errors.fs_type = [{ code: t('forms.required_field'), id: 'Required' }]
+      }
+
+      if (
+        values.fs_type === 'programmatic_co_financing' &&
+        financeSolution?.revenues?.length > 0
+      ) {
+        errors.fs_type = [
+          {
+            code: t('gfcr.forms.finance_solutions.pcf_revenues_error'),
+            id: 'PCFRevenues',
+          },
+        ]
+      }
+
+      if (values.fs_type === 'business' && !values.sector) {
         errors.sector = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      if (values.used_an_incubator === '') {
-        errors.used_an_incubator = [{ code: t('forms.required_field'), id: 'Required' }]
+      if (values.fs_type === 'ctf' && !values.geographical_coverage) {
+        errors.geographical_coverage = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      if (values.local_enterprise === '') {
-        errors.local_enterprise = [{ code: t('forms.required_field'), id: 'Required' }]
-      }
-
-      if (values.gender_smart === '') {
-        errors.gender_smart = [{ code: t('forms.required_field'), id: 'Required' }]
+      if (
+        ['taf', 'ctf', 'financial_facility'].includes(values.fs_type) &&
+        Number(values.number_of_solutions_supported_by) <= 0
+      ) {
+        errors.number_of_solutions_supported_by = [
+          { code: t('forms.required_field'), id: 'Required' },
+        ]
       }
 
       return errors
@@ -208,6 +240,29 @@ const FinanceSolutionModal = ({
 
   const _setIsFormDirty = useEffect(() => setIsFormDirty(!!formik.dirty), [formik.dirty])
 
+  const fsTypeOptions = useMemo(() => {
+    const standardData = choices.financesolutiontypes?.data || []
+    const standard = getOptions(standardData)
+    const storedFsType = financeSolution?.fs_type
+    const isNonStandard = !!storedFsType && !standardData.some((c) => c.id === storedFsType)
+    if (isNonStandard && formik.values.fs_type === storedFsType) {
+      return [
+        {
+          value: storedFsType,
+          label: `${storedFsType} ${t('gfcr.non_standard_title_suffix')}`,
+        },
+        ...standard,
+      ]
+    }
+    return standard
+  }, [choices.financesolutiontypes?.data, financeSolution?.fs_type, formik.values.fs_type, t])
+
+  const showGeographicalCoverage = formik.values.fs_type === 'ctf'
+  const showTafName = isTafNameVisible(formik.values.fs_type, formik.values.used_an_incubator)
+  const showNumberOfSolutionsSupportedBy = ['taf', 'ctf', 'financial_facility'].includes(
+    formik.values.fs_type,
+  )
+
   const [SFMShowHelperText, setSFMShowHelperText] = useState()
 
   useEffect(() => {
@@ -256,6 +311,21 @@ const FinanceSolutionModal = ({
     return (
       <form id="finance-solution-form" onSubmit={formik.handleSubmit}>
         <StyledModalInputRow>
+          <InputNoRowSelectWithLabelAndValidation
+            label={t('gfcr.forms.finance_solutions.fs_type')}
+            id="fs-type-select"
+            {...formik.getFieldProps('fs_type')}
+            options={fsTypeOptions}
+            required={true}
+            validationMessages={
+              formik.errors.fs_type?.filter((e) => e.id === 'PCFRevenues') ?? []
+            }
+            validationType={
+              formik.errors.fs_type?.some((e) => e.id === 'PCFRevenues') ? 'error' : undefined
+            }
+          />
+        </StyledModalInputRow>
+        <StyledModalInputRow>
           <InputNoRowWithLabelAndValidation
             label={t('gfcr.forms.finance_solutions.business_finance_solution_name')}
             id="finance-solution-input"
@@ -278,9 +348,20 @@ const FinanceSolutionModal = ({
               <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.sector_helper" />
             }
             showHelperText={displayHelp}
-            required={true}
+            required={formik.values.fs_type === 'business'}
           />
         </StyledModalInputRow>
+        {showGeographicalCoverage && (
+          <StyledModalInputRow>
+            <InputNoRowSelectWithLabelAndValidation
+              label={t('gfcr.forms.finance_solutions.geographical_coverage')}
+              id="geographical-coverage-select"
+              {...formik.getFieldProps('geographical_coverage')}
+              options={getOptions(choices.geographicalcoverage?.data || [])}
+              required={true}
+            />
+          </StyledModalInputRow>
+        )}
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
             label={t('gfcr.forms.finance_solutions.used_an_incubator')}
@@ -294,9 +375,18 @@ const FinanceSolutionModal = ({
               <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.used_an_incubator_helper" />
             }
             showHelperText={displayHelp}
-            required={true}
           />
         </StyledModalInputRow>
+        {showTafName && (
+          <StyledModalInputRow>
+            <InputNoRowWithLabelAndValidation
+              label={t('gfcr.forms.finance_solutions.taf_name')}
+              id="taf-name-input"
+              type="text"
+              {...formik.getFieldProps('taf_name')}
+            />
+          </StyledModalInputRow>
+        )}
         <StyledModalInputRow>
           <InputNoRowSelectWithLabelAndValidation
             label={t('gfcr.forms.finance_solutions.local_enterprise')}
@@ -310,7 +400,6 @@ const FinanceSolutionModal = ({
               <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.local_enterprise_helper" />
             }
             showHelperText={displayHelp}
-            required={true}
           />
         </StyledModalInputRow>
         <StyledModalInputRow>
@@ -326,9 +415,20 @@ const FinanceSolutionModal = ({
               <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.gender_program_criteria_helper" />
             }
             showHelperText={displayHelp}
-            required={true}
           />
         </StyledModalInputRow>
+        {showNumberOfSolutionsSupportedBy && (
+          <StyledModalInputRow>
+            <InputNoRowWithLabelAndValidation
+              label={t('gfcr.forms.finance_solutions.number_of_solutions_supported_by')}
+              id="number-of-solutions-input"
+              type="number"
+              min="1"
+              {...formik.getFieldProps('number_of_solutions_supported_by')}
+              required={true}
+            />
+          </StyledModalInputRow>
+        )}
         <StyledModalInputRow>
           <label
             id="sustainable-finance-mechanisms-label"
