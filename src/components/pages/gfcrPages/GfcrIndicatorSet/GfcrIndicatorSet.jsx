@@ -245,7 +245,10 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
       const validTitleIds = TITLE_IDS_BY_TYPE[indicatorSetType] ?? []
       if (!values.title) {
         errors.title = [{ code: t('forms.required_field'), id: 'Required' }]
-      } else if (!validTitleIds.includes(values.title)) {
+      } else if (
+        !validTitleIds.includes(values.title) &&
+        values.title !== initialFormValues.title
+      ) {
         errors.title = [{ code: t('gfcr.errors.non_standard_title'), id: 'NonStandard' }]
       }
 
