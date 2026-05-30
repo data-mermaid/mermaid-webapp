@@ -23,12 +23,21 @@ import Modal, { RightFooter } from '../../../generic/Modal'
 import SaveButton from '../GfcrIndicatorSetForm/modals/SaveButton'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import InputNoRowWithLabelAndValidation from '../../../mermaidInputs/InputNoRowWithLabelAndValidation'
+import InputNoRowSelectWithLabelAndValidation from '../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
 import { displayErrorMessagesGFCR } from '../../../../library/displayErrorMessagesGFCR'
+import { getOptions } from '../../../../library/getOptions'
+import { TITLE_IDS_BY_TYPE } from '../GfcrIndicatorSetForm/subPages/ReportTitleAndDateForm'
 
 const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
   const { t } = useTranslation()
 
   const indicatorSetSaveText = t('gfcr.create_indicator_set')
+  const modalTitle =
+    indicatorSetType === 'report'
+      ? t('gfcr.create_report_indicator_set')
+      : indicatorSetType === 'target'
+        ? t('gfcr.create_target_indicator_set')
+        : ''
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
@@ -40,6 +49,26 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [titleOptions, setTitleOptions] = useState([])
+
+  useEffect(
+    function loadTitleOptions() {
+      if (!databaseSwitchboardInstance || !isAppOnline) {
+        return
+      }
+      databaseSwitchboardInstance
+        .getChoices()
+        .then((choices) => {
+          const validIds = TITLE_IDS_BY_TYPE[indicatorSetType] ?? []
+          const allTitles = choices?.indicatorsettitles?.data ?? []
+          setTitleOptions(getOptions(allTitles.filter(({ id }) => validIds.includes(id))))
+        })
+        .catch(() => {
+          toast.error(...getToastArguments(t('gfcr.errors.indicator_sets_unavailable')))
+        })
+    },
+    [databaseSwitchboardInstance, isAppOnline, indicatorSetType],
+  )
 
   const handleFormSubmit = useCallback(
     async (formikValues, formikActions) => {
@@ -92,7 +121,8 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
     validate: (values) => {
       const errors = {}
 
-      if (!values.title) {
+      const validTitleIds = TITLE_IDS_BY_TYPE[indicatorSetType] ?? []
+      if (!values.title || !validTitleIds.includes(values.title)) {
         errors.title = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
@@ -133,16 +163,18 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
     <Modal
       isOpen={isOpen}
       onDismiss={() => onDismiss(formik.resetForm)}
-      title={t('gfcr.create_indicator_set')}
+      title={modalTitle}
       mainContent={
         <form id="new-indicator-set-modal-form" onSubmit={formik.handleSubmit}>
           <StyledModalInputRow>
-            <InputNoRowWithLabelAndValidation
+            <InputNoRowSelectWithLabelAndValidation
               required
               label={t('title')}
               id="indicator-set-title-input"
-              type="text"
+              options={titleOptions}
               {...formik.getFieldProps('title')}
+              validationType={formik.errors.title && formik.touched.title ? 'error' : null}
+              validationMessages={formik.errors.title}
               helperText={t('gfcr.indicator_set_title_info')}
             />
           </StyledModalInputRow>

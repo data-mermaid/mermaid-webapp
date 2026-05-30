@@ -226,6 +226,8 @@
     "conservation_and_management": "Conservation and management",
     "coral_reef_health": "Coral reef health",
     "create_indicator_set": "Create fund indicator set",
+    "create_report_indicator_set": "Create report indicator set",
+    "create_target_indicator_set": "Create target indicator set",
     "create_new": "Create new",
     "disabled_gfcr_info": "Disabling GFCR fund indicators for this project will not delete them, but just hide them from <a />. No data will be lost. You can re-enable them at any time.",
     "disabled_info": "Disabling GFCR fund indicators for this project will not delete them, but just hide them from <a />. No data will be lost. You can re-enable them at any time.",
@@ -233,7 +235,8 @@
       "indicator_set_save_failed": "There was an error saving the fund indicator set",
       "indicator_sets_unavailable": "GFCR fund indicator sets are currently unavailable",
       "indicators_disable_failed": "Could not disable GFCR fund indicators for this project",
-      "indicators_enable_failed": "Could not enable GFCR fund indicators for this project"
+      "indicators_enable_failed": "Could not enable GFCR fund indicators for this project",
+      "non_standard_title": "Please select a standard title"
     },
     "exporting": "Exporting",
     "form_errors": "Form errors:",
@@ -391,6 +394,7 @@
     "indicator_set": "Fund indicator set",
     "indicator_set_date_info": "End date of the reporting period of the GFCR Programme, e.g., an end-year report may have December 31 as the reporting date.",
     "indicator_set_title_info": "Recommended naming conventions: For targets, use \"Phase 1 target\", \"Mid-term target\", or \"Final target\". For bi-annual progress reports, use \"Mid-year report\" or \"End-year report\".",
+    "non_standard_title_suffix": "(non-standard)",
     "investments": "Investments",
     "no_indicator_info": "Select 'Create new' to add a fund indicator set to this project",
     "no_indicator_sets": "No fund indicator sets yet",
