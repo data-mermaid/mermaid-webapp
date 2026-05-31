@@ -53,7 +53,7 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
 
   useEffect(
     function loadTitleOptions() {
-      if (!databaseSwitchboardInstance || !isAppOnline) {
+      if (!databaseSwitchboardInstance || !isAppOnline || !isOpen) {
         return
       }
       databaseSwitchboardInstance
@@ -67,7 +67,7 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
           toast.error(...getToastArguments(t('gfcr.errors.indicator_sets_unavailable')))
         })
     },
-    [databaseSwitchboardInstance, isAppOnline, indicatorSetType],
+    [databaseSwitchboardInstance, isAppOnline, indicatorSetType, isOpen],
   )
 
   const handleFormSubmit = useCallback(
