@@ -64,10 +64,6 @@ interface SubmittedToolbarSectionProps {
   submittedRecordsForUiDisplay: SubmittedRecordForUiDisplay[]
 }
 
-interface DatabaseSwitchboard {
-  exportSubmittedRecords: (args: { projectId?: string; protocol: Protocol }) => Promise<unknown>
-}
-
 const SubmittedToolbarSection = ({
   name,
   globalSearchText,
