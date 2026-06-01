@@ -1,7 +1,7 @@
 import { Protocol } from './protocols'
 
 interface SubmittedRecordUiLabels {
-  protocol: Protocol
+  protocol: string
   site: string
   management: string
   size: string
