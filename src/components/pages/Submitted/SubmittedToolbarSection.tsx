@@ -16,31 +16,8 @@ import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import SuccessExportModal from '../../SuccessExportModal/SuccessExportModal'
 import GatedFeature from '../../generic/GatedFeature'
-
-type Protocol =
-  | 'fishbelt'
-  | 'benthicpit'
-  | 'benthiclit'
-  | 'benthicpqt'
-  | 'bleachingqc'
-  | 'habitatcomplexity'
-  | 'macroinvertebrate'
-
-interface SubmittedRecordUiLabels {
-  protocol: string
-  site: string
-  management: string
-  size: string
-  depth: string
-  sampleDate: string
-  observers: string
-}
-
-interface SubmittedRecordForUiDisplay {
-  id: string | number
-  protocol: string
-  uiLabels: SubmittedRecordUiLabels
-}
+import { SubmittedRecordForUiDisplay } from '../../../types/submitted'
+import { Protocol } from '../../../types/protocols'
 
 interface TableUserPrefsUpdate {
   propertyKey: string
