@@ -8,7 +8,7 @@ interface SubmittedRecordUiLabels {
   depth: string
   sampleDate: string
   observers: string
-  sampleUnitNumber: number
+  sampleUnitNumber: string | undefined
 }
 
 export interface SubmittedRecordForUiDisplay {
