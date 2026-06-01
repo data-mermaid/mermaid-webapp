@@ -29,6 +29,7 @@ import SubmittedHabitatComplexity from '../components/pages/submittedRecordPages
 import UserDoesntHaveProjectAccess from '../components/pages/UserDoesntHaveProjectAccess'
 import Users from '../components/pages/Users'
 import UsersAndTransects from '../components/pages/UsersAndTransects'
+import BeltInvertForm from '../components/pages/collectRecordFormPages/BeltInvertForm/BeltInvertForm'
 
 export const routes = [
   {
@@ -94,6 +95,14 @@ export const routes = [
   {
     path: '/projects/:projectId/collecting/bleachingqc/:recordId',
     Component: () => <BleachingForm isNewRecord={false} />,
+  },
+  {
+    path: '/projects/:projectId/collecting/macroinvertebrate',
+    Component: () => <BeltInvertForm isNewRecord={true} />,
+  },
+  {
+    path: '/projects/:projectId/collecting/macroinvertebrate/:recordId',
+    Component: () => <BeltInvertForm isNewRecord={false} />,
   },
   {
     path: '/projects/:projectId/submitted',
