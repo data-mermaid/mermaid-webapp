@@ -52,8 +52,8 @@ const beltInvertObservationReducer = (state, action) => {
 
         const { newCount } = action.payload
 
-        const newCountToUse =
-          Number.isNaN(newCount) || newCount === '' ? null : parseFloat(newCount)
+        const parsedCount = parseFloat(newCount)
+        const newCountToUse = Number.isNaN(parsedCount) || newCount === '' ? null : parsedCount
 
         return isObservationToUpdate ? { ...observation, count: newCountToUse } : observation
       })
