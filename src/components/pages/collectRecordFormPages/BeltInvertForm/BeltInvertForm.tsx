@@ -4,7 +4,6 @@ import React, { useState, useEffect, useCallback, useReducer, useMemo } from 're
 import { useTranslation } from 'react-i18next'
 
 import {
-  getBeltInvertAdditionalValues,
   getCollectRecordDataInitialValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,

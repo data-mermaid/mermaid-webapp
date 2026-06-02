@@ -67,26 +67,6 @@ const getHabitatComplexityAdditionalValues = (collectRecord) => {
   }
 }
 
-const getBeltInvertAdditionalValues = (collectRecord) => {
-  const collectRecordBeltinvertTransectData = collectRecord?.data?.beltinvert_transect
-
-  return {
-    depth: collectRecordBeltinvertTransectData?.depth ?? '',
-    number: collectRecordBeltinvertTransectData?.number ?? '',
-    label: collectRecordBeltinvertTransectData?.label ?? '',
-    len_surveyed: collectRecordBeltinvertTransectData?.len_surveyed ?? '',
-    width: collectRecordBeltinvertTransectData?.width,
-    sample_time: collectRecordBeltinvertTransectData?.sample_time ?? '',
-    size_bin: collectRecordBeltinvertTransectData?.size_bin,
-    reef_slope: collectRecordBeltinvertTransectData?.reef_slope,
-    relative_depth: collectRecordBeltinvertTransectData?.relative_depth,
-    visibility: collectRecordBeltinvertTransectData?.visibility,
-    current: collectRecordBeltinvertTransectData?.current,
-    tide: collectRecordBeltinvertTransectData?.tide,
-    notes: collectRecordBeltinvertTransectData?.notes,
-  }
-}
-
 const getBleachingQuadratCollection = (collectRecord) => {
   const quadratCollection = collectRecord?.data?.quadrat_collection
 
