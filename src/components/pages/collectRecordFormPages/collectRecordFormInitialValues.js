@@ -94,5 +94,4 @@ export {
   getHabitatComplexityAdditionalValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,
-  getBeltInvertAdditionalValues,
 }
