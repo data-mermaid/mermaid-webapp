@@ -120,7 +120,6 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
     const collectRecordInitialValues = getPersistedUnsavedFormikData() ?? {
       ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
       ...getSampleInfoInitialValues(collectRecordBeingEdited),
-      ...getBeltInvertAdditionalValues(collectRecordBeingEdited),
     }
 
     return (

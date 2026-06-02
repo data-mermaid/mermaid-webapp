@@ -27,6 +27,8 @@ const VISIBILITY_VALIDATION_PATH = 'data.beltinvert_transect.visibility'
 const WIDTH_VALIDATION_PATH = 'data.beltinvert_transect.width'
 
 interface BeltInvertTransectInputsProps {
+  observationsDispatch: (action: { type: string; payload?: unknown }) => void
+  observationsState: { invert_attribute?: string | null }[]
   areValidationsShowing: boolean
   choices: Record<string, { data: unknown[] }>
   formik: {
@@ -47,6 +49,8 @@ interface BeltInvertTransectInputsProps {
 }
 
 const BeltInvertTransectInputs = ({
+  observationsDispatch,
+  observationsState,
   areValidationsShowing,
   choices,
   formik,
@@ -70,6 +74,9 @@ const BeltInvertTransectInputs = ({
   const tideOptions = getOptions(choices.tides?.data ?? [])
 
   const beltinvert_transect = validationsApiData?.beltinvert_transect
+  // Account for an empty starter row before real observation values exist.
+  const hasBeltInvertObservations =
+    observationsState?.length > 0 && !!observationsState[0]?.invert_attribute
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     beltinvert_transect?.number,
@@ -130,6 +137,11 @@ const BeltInvertTransectInputs = ({
     validationPath: string,
   ) => {
     formik.handleChange(event)
+
+    if (inputName === 'size_bin' && hasBeltInvertObservations) {
+      observationsDispatch({ type: 'resetFishSizes' })
+    }
+
     resetNonObservationFieldValidations({ inputName, validationPath })
   }
 

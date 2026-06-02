@@ -30,7 +30,7 @@ const beltInvertObservationReducer = (state, action) => {
 
       observationsWithInsertedRow.splice(indexToInsertAt, 0, {
         id: createUuid(),
-        fish_attribute: null,
+        invert_attribute: null,
         count: null,
         size: null,
       })
@@ -62,7 +62,8 @@ const beltInvertObservationReducer = (state, action) => {
         const isObservationToUpdate = observation.id === action.payload.observationId
         const { newSize } = action.payload
 
-        const newSizeToUse = Number.isNaN(newSize) || newSize === '' ? null : parseFloat(newSize)
+        const parsedSize = parseFloat(newSize)
+        const newSizeToUse = Number.isNaN(parsedSize) || newSize === '' ? null : parsedSize
 
         return isObservationToUpdate ? { ...observation, size: newSizeToUse } : observation
       })
@@ -73,7 +74,7 @@ const beltInvertObservationReducer = (state, action) => {
         return isObservationToUpdate
           ? {
               ...observation,
-              fish_attribute: action.payload.newFishName,
+              invert_attribute: action.payload.newInvertAttribute,
             }
           : observation
       })
