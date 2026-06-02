@@ -67,7 +67,7 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
           toast.error(...getToastArguments(t('gfcr.errors.indicator_sets_unavailable')))
         })
     },
-    [databaseSwitchboardInstance, isAppOnline, indicatorSetType, isOpen],
+    [databaseSwitchboardInstance, isAppOnline, indicatorSetType, isOpen, t],
   )
 
   const handleFormSubmit = useCallback(
