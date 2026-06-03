@@ -136,7 +136,7 @@ interface SubmittedBeltInvertObservation {
   notes?: string
   created_by?: string
   beltinvert?: string
-  invertebrate_attribute?: string
+  invert_attribute?: string
 }
 
 export const projectPropType = PropTypes.shape({
