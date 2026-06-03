@@ -35,9 +35,7 @@ const NewIndicatorSetModal = ({ indicatorSetType, isOpen, onDismiss }) => {
   const modalTitle =
     indicatorSetType === 'report'
       ? t('gfcr.create_report_indicator_set')
-      : indicatorSetType === 'target'
-        ? t('gfcr.create_target_indicator_set')
-        : ''
+      : t('gfcr.create_target_indicator_set')
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
