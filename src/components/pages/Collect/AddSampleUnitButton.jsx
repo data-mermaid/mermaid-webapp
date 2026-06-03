@@ -9,6 +9,7 @@ import { IconPlus } from '../../icons'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import theme from '../../../theme'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import GatedFeature from '../../generic/GatedFeature'
 
 const CustomNavLink = styled(NavLink)`
   padding: ${theme.spacing.buttonPadding};
@@ -65,6 +66,14 @@ const AddSampleUnitButton = () => {
         >
           {t('protocol_titles.habitatcomplexity')}
         </CustomNavLink>
+        <GatedFeature featureFlag="macroinvertebrate_enabled">
+          <CustomNavLink
+            to={`${currentProjectPath}/collecting/macroinvertebrate`}
+            data-testid="macroinvertebrate-link"
+          >
+            {t('protocol_titles.macroinvertebrate')}
+          </CustomNavLink>
+        </GatedFeature>
       </Column>
     </StyledButtonSecondaryDropdown>
   )
