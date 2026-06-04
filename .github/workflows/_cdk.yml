@@ -58,13 +58,13 @@ jobs:
         run: |
           short_sha=$(git rev-parse --short ${{ github.sha }})
           echo "export const versionNumber = '$short_sha'" > src/version.js
-          cat src/version.js
+          echo "VITE_APP_VERSION=$short_sha" >> $GITHUB_ENV
 
       - name: Set variables and version for prod
         if: startsWith(github.ref, 'refs/tags')
-        run: | 
+        run: |
           echo "export const versionNumber = '${{ github.ref_name }}'" > src/version.js
-          cat src/version.js
+          echo "VITE_APP_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
 
       - name: Yarn Build
         run: yarn build
