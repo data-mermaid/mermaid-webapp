@@ -18,6 +18,8 @@
     "@iconify-icons/ri": "^1.1.0",
     "@iconify/react": "^1.1.4",
     "@mui/material": "^5.15.16",
+    "@sentry/react": "^10.56.0",
+    "@sentry/vite-plugin": "^5.3.0",
     "@turf/bbox": "^7.2.0",
     "@turf/bbox-polygon": "^7.2.0",
     "@turf/boolean-contains": "^7.2.0",
