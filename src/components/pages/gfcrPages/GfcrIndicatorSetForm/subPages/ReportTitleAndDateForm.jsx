@@ -24,7 +24,13 @@ export const TITLE_IDS_BY_TYPE = {
   target: ['Phase 1 target', 'Mid-term target', 'Final target'],
 }
 
-const ReportTitleAndDateForm = ({ formik, isNewIndicatorSet, displayHelp, choices, indicatorSetType }) => {
+const ReportTitleAndDateForm = ({
+  formik,
+  isNewIndicatorSet,
+  displayHelp,
+  choices,
+  indicatorSetType,
+}) => {
   const { t } = useTranslation()
 
   const deleteModalText = getDeleteModalText(t('gfcr.indicator_set'))
