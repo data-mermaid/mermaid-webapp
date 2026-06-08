@@ -55,8 +55,7 @@ const getAttributesInUse = async (
   // Local records are the source of truth when IDs overlap.
   // Pulled records without IDs are ignored because they cannot be deduplicated safely.
   const pulledRecordsNotInLocal = pulledCollectRecords.filter(
-    (record) =>
-      record?.id !== undefined && record?.id !== null && !localRecordIds.has(record.id),
+    (record) => record?.id !== undefined && record?.id !== null && !localRecordIds.has(record.id),
   )
 
   const collectRecordsToCount = [...collectRecordsInUse, ...pulledRecordsNotInLocal]

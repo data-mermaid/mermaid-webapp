@@ -1,10 +1,7 @@
 import { expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
-import {
-  renderAuthenticatedOnline,
-  screen,
-} from '../../testUtilities/testingLibraryWithHelpers'
+import { renderAuthenticatedOnline, screen } from '../../testUtilities/testingLibraryWithHelpers'
 import MethodsFilterDropDown from './MethodsFilterDropDown'
 
 const macroinvertebrateEnabledUser = {

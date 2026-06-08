@@ -139,9 +139,7 @@ export const pullApiData = async ({
 
             const isDataTypeProjectAssociated = getIsDataTypeProjectAssociated(apiDataType)
 
-            const bulkDeleteIdsWithNoDuplicates = Array.from(
-              new Set([...deleteIds, ...removeIds]),
-            )
+            const bulkDeleteIdsWithNoDuplicates = Array.from(new Set([...deleteIds, ...removeIds]))
 
             await dexiePerUserDataInstance[apiDataType].bulkPut(updatesToStore)
             await dexiePerUserDataInstance[apiDataType].bulkDelete(bulkDeleteIdsWithNoDuplicates)
