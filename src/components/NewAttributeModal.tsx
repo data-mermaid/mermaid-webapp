@@ -60,7 +60,6 @@ const NewAttributeModal = ({
   onSubmit,
   modalAttributeOptions,
 }: NewAttributeModalProps) => {
-  console.log('modalAttributeOptions', modalAttributeOptions)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const isMounted = useIsMounted()
   const { projectId } = useParams()
