@@ -74,8 +74,11 @@ const FinanceSolutionModal = ({
         id: financeSolution?.id,
         used_an_incubator:
           formikValues.used_an_incubator === 'none' ? null : formikValues.used_an_incubator,
-        geographical_coverage: formikValues.fs_type === 'ctf' ? formikValues.geographical_coverage : '',
-        taf_name: isTafNameVisible(formikValues.fs_type, formikValues.used_an_incubator) ? formikValues.taf_name : '',
+        geographical_coverage:
+          formikValues.fs_type === 'ctf' ? formikValues.geographical_coverage : '',
+        taf_name: isTafNameVisible(formikValues.fs_type, formikValues.used_an_incubator)
+          ? formikValues.taf_name
+          : '',
         number_of_solutions_supported_by: ['taf', 'ctf', 'financial_facility'].includes(
           formikValues.fs_type,
         )
@@ -156,10 +159,7 @@ const FinanceSolutionModal = ({
         errors.fs_type = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      if (
-        values.fs_type === 'programmatic_co_financing' &&
-        financeSolution?.revenues?.length > 0
-      ) {
+      if (values.fs_type === 'programmatic_co_financing' && financeSolution?.revenues?.length > 0) {
         errors.fs_type = [
           {
             code: t('gfcr.forms.finance_solutions.pcf_revenues_error'),
@@ -317,9 +317,7 @@ const FinanceSolutionModal = ({
             {...formik.getFieldProps('fs_type')}
             options={fsTypeOptions}
             required={true}
-            validationMessages={
-              formik.errors.fs_type?.filter((e) => e.id === 'PCFRevenues') ?? []
-            }
+            validationMessages={formik.errors.fs_type?.filter((e) => e.id === 'PCFRevenues') ?? []}
             validationType={
               formik.errors.fs_type?.some((e) => e.id === 'PCFRevenues') ? 'error' : undefined
             }

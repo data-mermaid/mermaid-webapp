@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import i18nextLoader from 'vite-plugin-i18next-loader'
 import react from '@vitejs/plugin-react-swc'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -29,12 +30,23 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*'], //  cache all the imports
-        maximumFileSizeToCacheInBytes: 3500000,
+        globIgnores: ['**/*.map'],
+        maximumFileSizeToCacheInBytes: 4000000,
       },
 
       includeAssets: ['**/*'], //cache all the static assets in the public folder
     }),
     i18nextLoader({ paths: ['./src/locales'] }),
+    // Only upload source maps during CI builds where SENTRY_AUTH_TOKEN is set
+    ...(process.env.SENTRY_AUTH_TOKEN
+      ? [
+          sentryVitePlugin({
+            org: process.env.SENTRY_ORG,
+            project: process.env.SENTRY_PROJECT,
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+          }),
+        ]
+      : []),
   ],
   server: {
     port: 3000,
@@ -45,6 +57,7 @@ export default defineConfig({
   build: {
     outDir: 'build',
     emptyOutDir: true,
+    sourcemap: true,
   },
   define: {
     'process.env': process.env.VITE_ENVIRONMENT,
