@@ -531,6 +531,7 @@
     "done": "Done",
     "edit_notes": "Edit Notes",
     "macroinvertebrate_name": "Macroinvertebrate name",
+    "macroinvertebrate_species": "Macroinvertebrate species",
     "must_select_size_bin_warning": "You must select a macroinvertebrate size bin before adding any observations",
     "size_bin": "Macroinvertebrate size bin (cm)",
     "size_bin_info": "Name of bin scheme used to estimate macroinvertebrate size for the transect. Choose 1 cm if macroinvertebrate size does not use bins.",

@@ -44,17 +44,14 @@ const InvertAttributesMixin = (Base) =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        await this._dexiePerUserDataInstance.invert_attributes.put(newInvertSpeciesObject)
+        const _protectAgainstNetworkStutter = await this._dexiePerUserDataInstance.invert_attributes.put(
+          newInvertSpeciesObject,
+        )
 
-        return this._apiSyncInstance.pushThenPullInvertSpecies().then(async () => {
-          const newInvertSpeciesFromDexie =
-            await this._dexiePerUserDataInstance.invert_attributes.get(newInvertSpeciesObject.id)
+        return this._apiSyncInstance.pushThenPullInvertSpecies().then((response) => {
+          const newInvertSpeciesFromApi = response.data.invert_attributes.updates[0]
 
-          if (!newInvertSpeciesFromDexie || newInvertSpeciesFromDexie.uiState_pushToApi) {
-            return Promise.reject(new Error('Failed to save invert species'))
-          }
-
-          return newInvertSpeciesFromDexie
+          return newInvertSpeciesFromApi
         })
       }
       if (this._isOfflineAuthenticatedAndReady) {

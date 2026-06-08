@@ -214,6 +214,7 @@ const BeltInvertObservationRow = ({
   }
 
   const handleIncludeToggle = () => {
+    setAreObservationsInputsDirty(true)
     observationsDispatch({
       type: 'includeToggle',
       payload: { observationId },

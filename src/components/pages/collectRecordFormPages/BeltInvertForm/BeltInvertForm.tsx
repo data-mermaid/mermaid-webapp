@@ -209,6 +209,7 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
         speciesName,
       })
       .then((newInvertSpecies) => {
+        setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateInvertName',
           payload: {

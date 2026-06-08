@@ -203,7 +203,7 @@ const NewAttributeModal = ({
     proposedParentIdError: speciesProposalForm.errors.genusId,
     proposedAttributeInputError: speciesProposalForm.errors.species,
     proposedSummary: t('benthic_observations.attribute_proposal_summary', {
-      attribute: 'macroinvertebrate species',
+      attribute: t('macroinvertebrate_observations.macroinvertebrate_species'),
     }),
   }
 
