@@ -35,12 +35,6 @@ interface ObservationRecord {
   include?: boolean
 }
 
-interface ValidationRecord {
-  context?: {
-    observation_id?: string
-  }
-}
-
 interface SizeBinChoice {
   id: string
   name: string
@@ -68,19 +62,6 @@ interface InvertAttributeOptionInput {
 interface SelectOption {
   label: string
   value: string | number
-}
-
-const getObservationValidations = (observationId: string, collectRecord?: unknown) => {
-  const dataRoot = (
-    collectRecord as {
-      validations?: { results?: { data?: { obs_belt_inverts?: ValidationRecord[] } } }
-    }
-  )?.validations?.results?.data
-  const allObservationsValidations = dataRoot?.obs_belt_inverts ?? []
-
-  return allObservationsValidations.flat().filter((validation: ValidationRecord) => {
-    return validation.context?.observation_id === observationId
-  })
 }
 
 const getBinLabelById = (choices: ChoicesWithSizeBins, sizeBinId: string | number | undefined) => {
