@@ -31,7 +31,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*'], //  cache all the imports
         globIgnores: ['**/*.map'],
-        maximumFileSizeToCacheInBytes: 3500000,
+        maximumFileSizeToCacheInBytes: 4000000,
       },
 
       includeAssets: ['**/*'], //cache all the static assets in the public folder
