@@ -196,7 +196,7 @@ const FinanceSolutionModal = ({
       }
 
       if (
-        ['taf', 'ctf', 'financial_facility'].includes(values.fs_type) &&
+        NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES.includes(values.fs_type) &&
         Number(values.number_of_solutions_supported_by) <= 0
       ) {
         errors.number_of_solutions_supported_by = [
