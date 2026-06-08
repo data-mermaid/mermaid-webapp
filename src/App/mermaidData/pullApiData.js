@@ -11,6 +11,9 @@ import getAttributesInUse from './getAttributesInUse'
 const resetPushToApiTagFromItems = (items) =>
   items.map((item) => ({ ...item, uiState_pushToApi: false }))
 
+const getLocalTableNameForApiDataType = (apiDataType) =>
+  apiDataType === 'invert_species' ? 'invert_attributes' : apiDataType
+
 export const pullApiData = async ({
   apiBaseUrl,
   apiDataNamesToPull,
@@ -93,6 +96,8 @@ export const pullApiData = async ({
         )
 
         for (const apiDataType of apiDataNamesToPull) {
+          const localTableName = getLocalTableNameForApiDataType(apiDataType)
+
           if (apiDataType === 'choices') {
             // choices deletes property will always be empty, so we just ignore it
             // additionally the updates property is an object, not an array, so we just store it directly
@@ -109,11 +114,9 @@ export const pullApiData = async ({
             const removes = apiData[apiDataType]?.removes ?? []
             const deleteIds = deletes.map(({ id }) => id)
 
-            // Invert attributes intentionally left out. The removal of old attributes
-            // is for attributes created before invert attributes are added to the app
-            const isBenthicOrFishSpecies =
+            const isAttributeDataTypeWithProposalSupport =
               apiDataType === 'benthic_attributes' || apiDataType === 'fish_species'
-            const protocolAttributesCount = isBenthicOrFishSpecies
+            const protocolAttributesCount = isAttributeDataTypeWithProposalSupport
               ? attributesInUseCounts?.[apiDataType] ?? {}
               : {}
 
@@ -121,9 +124,9 @@ export const pullApiData = async ({
 
             const removeIds = removes
               .filter(({ id }) => {
-                // Checks benthic_attributes and fish_species if there are any proposed attributes.
+                // For proposal-capable attributes tables, keep items that are still in use by records.
                 // If any collect records use a proposed attribute, skip removing it from IndexedDB
-                if (isBenthicOrFishSpecies) {
+                if (isAttributeDataTypeWithProposalSupport) {
                   return !protocolAttributesCount[id]
                 }
                 return true
@@ -139,12 +142,12 @@ export const pullApiData = async ({
 
             const isDataTypeProjectAssociated = getIsDataTypeProjectAssociated(apiDataType)
 
-            const bulkDeleteIdsWithNoDuplicates = Array.from(
-              new Set([...deleteIds, ...removeIds]),
-            )
+            const bulkDeleteIdsWithNoDuplicates = Array.from(new Set([...deleteIds, ...removeIds]))
 
-            await dexiePerUserDataInstance[apiDataType].bulkPut(updatesToStore)
-            await dexiePerUserDataInstance[apiDataType].bulkDelete(bulkDeleteIdsWithNoDuplicates)
+            await dexiePerUserDataInstance[localTableName].bulkPut(updatesToStore)
+            await dexiePerUserDataInstance[localTableName].bulkDelete(
+              bulkDeleteIdsWithNoDuplicates,
+            )
 
             if ((is401 || is403) && isDataTypeProjectAssociated && projectId) {
               // we still delete project related data in addition to anything in the removes array,
@@ -157,7 +160,7 @@ export const pullApiData = async ({
               // when we call handleUserDeniedSyncPull below. After that is called, we
               // the project from being in the offline-ready list
               shouldRemoveProjectFromOfflineReadyList = true
-              const deleteProjectRelatedRecords = dexiePerUserDataInstance[apiDataType]
+              const deleteProjectRelatedRecords = dexiePerUserDataInstance[localTableName]
                 .where({ project: projectId })
                 .delete()
               const resetProjectRelatedLastRevisionNumbers =
