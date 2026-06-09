@@ -5,7 +5,7 @@ const getFinanceSolutionInitialValues = (financeSolution) => {
     sector = '',
     geographical_coverage = '',
     taf_name = '',
-    number_of_solutions_supported_by = 0,
+    number_of_solutions_supported_by,
     gender_smart = '',
     local_enterprise = '',
     sustainable_finance_mechanisms = [],
@@ -26,7 +26,8 @@ const getFinanceSolutionInitialValues = (financeSolution) => {
     sector,
     geographical_coverage,
     taf_name,
-    number_of_solutions_supported_by,
+    // '' not 0: a literal 0 causes digit-concatenation in the number input (e.g. "10" → "100")
+    number_of_solutions_supported_by: number_of_solutions_supported_by || '',
     used_an_incubator,
     gender_smart,
     local_enterprise,

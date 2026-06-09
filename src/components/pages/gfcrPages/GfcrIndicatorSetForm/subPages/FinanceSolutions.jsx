@@ -33,6 +33,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
   const businessFinanceSolutionNameHeaderText = t(
     'gfcr.forms.finance_solutions.business_finance_solution_name',
   )
+  const fsTypeHeaderText = t('gfcr.forms.finance_solutions.fs_type')
   const sectorHeaderText = t('gfcr.forms.finance_solutions.sector')
   const usedAnIncubatorHeaderText = t('gfcr.forms.finance_solutions.used_an_incubator')
   const gender2xCriteriaHeaderText = t('gfcr.forms.finance_solutions.gender_program_criteria')
@@ -52,6 +53,11 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         Header: businessFinanceSolutionNameHeaderText,
         accessor: 'name',
         sortType: reactTableNaturalSortReactNodes,
+      },
+      {
+        Header: fsTypeHeaderText,
+        accessor: 'fs_type',
+        sortType: reactTableNaturalSort,
       },
       {
         Header: sectorHeaderText,
@@ -83,6 +89,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
     ],
     [
       businessFinanceSolutionNameHeaderText,
+      fsTypeHeaderText,
       sectorHeaderText,
       usedAnIncubatorHeaderText,
       gender2xCriteriaHeaderText,
@@ -114,6 +121,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
       const {
         id,
         name,
+        fs_type,
         sector,
         used_an_incubator,
         gender_smart,
@@ -121,6 +129,9 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         sustainable_finance_mechanisms,
       } = indicatorSet
 
+      const fsTypeName = choices.financesolutiontypes?.data?.find(
+        (fsTypeChoice) => fsTypeChoice.id === fs_type,
+      )?.name
       const sectorName = choices.sectors.data?.find(
         (sectorChoice) => sectorChoice.id === sector,
       )?.name
@@ -131,7 +142,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         return choices.sustainablefinancemechanisms.data?.find(
           // eslint-disable-next-line max-nested-callbacks
           (sfmChoice) => sfmChoice.id === mechanism,
-        ).name
+        )?.name
       })
 
       return {
@@ -140,6 +151,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
             {name}
           </StyledTableAnchor>
         ),
+        fs_type: fsTypeName,
         sector: sectorName,
         used_an_incubator: incubatorName ? incubatorName : 'None',
         gender_smart: <IconCheckLabel isCheck={!!gender_smart} />,
@@ -170,6 +182,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
     (rows, id, query) => {
       const keys = [
         'values.name.props.children',
+        'values.fs_type',
         'values.sector',
         'values.used_an_incubator',
         'values.gender_smart',
