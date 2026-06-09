@@ -183,7 +183,15 @@ const InputAutocomplete = ({
             {isMenuOpen && !menuItems.length && (
               <div>
                 {noResultsText && <p data-testid="noResult">{noResultsText}</p>}
-                {noResultsAction}
+                {noResultsAction && (
+                  <div
+                    role="presentation"
+                    onClick={() => setIsMenuOpen(false)}
+                    onKeyDown={() => setIsMenuOpen(false)}
+                  >
+                    {noResultsAction}
+                  </div>
+                )}
               </div>
             )}
           </AutoCompleteResultsWrapper>
