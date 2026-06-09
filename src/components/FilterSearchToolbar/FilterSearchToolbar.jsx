@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
@@ -26,50 +26,21 @@ const FilterInput = styled(Input)`
   }
 `
 
+const VIEWPORT_MARGIN = 8
+
 const FilterSearchToolbar = ({
   id = 'filter-search',
   name,
   disabled = false,
   globalSearchText = '', // react-table sets globalFilter to undefined when cleared; default to '' to keep the input controlled
   handleGlobalFilterChange,
-  type = 'page',
 }) => {
   const { t } = useTranslation()
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
-  const [maxWidth, setMaxWidth] = useState('50em')
+  const [tooltipStyle, setTooltipStyle] = useState({ top: '0px', left: '0px', arrowOffset: '50%' })
   const tooltipRef = useRef(null)
-
-  useEffect(() => {
-    let pixelAdjustTop = 302
-
-    let pixelAdjustLeft = 487
-
-    if (type === 'copy-site-modal') {
-      pixelAdjustLeft = 652
-      pixelAdjustTop = 285
-      setMaxWidth('60em')
-    }
-    if (type === 'copy-mr-modal') {
-      pixelAdjustLeft = 422
-    }
-
-    const handleResize = () => {
-      // Calculate the position of the icon relative to the viewport
-      const iconInfoRect = document.getElementById('info-icon').getBoundingClientRect()
-      const tooltipTop = `${iconInfoRect.top - pixelAdjustTop}px`
-      const tooltipLeft = `${iconInfoRect.left + iconInfoRect.width / 2 - pixelAdjustLeft}px`
-
-      setTooltipPosition({ top: tooltipTop, left: tooltipLeft })
-    }
-
-    handleResize()
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [type])
+  const iconRef = useRef(null)
+  const labelContainerRef = useRef(null)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -85,35 +56,62 @@ const FilterSearchToolbar = ({
     }
   }, [])
 
-  const handleFilterChange = (event) => {
-    const eventValue = event.target.value
+  const computeTooltipPosition = useCallback(() => {
+    if (!iconRef.current || !labelContainerRef.current || !tooltipRef.current) {
+      return
+    }
 
-    handleGlobalFilterChange(eventValue)
+    const iconRect = iconRef.current.getBoundingClientRect()
+    const containerRect = labelContainerRef.current.getBoundingClientRect()
+    const tooltipWidth = tooltipRef.current.offsetWidth
+    const tooltipHeight = tooltipRef.current.offsetHeight
+
+    const iconCenterX = iconRect.left + iconRect.width / 2 - containerRect.left
+    let left = iconCenterX - tooltipWidth / 2
+    const top = -tooltipHeight
+
+    // clamp to viewport
+    const absLeft = containerRect.left + left
+    const absRight = absLeft + tooltipWidth
+    if (absRight > window.innerWidth - VIEWPORT_MARGIN) {
+      left -= absRight - (window.innerWidth - VIEWPORT_MARGIN)
+    }
+    if (containerRect.left + left < VIEWPORT_MARGIN) {
+      left = VIEWPORT_MARGIN - containerRect.left
+    }
+
+    // arrow tracks the icon regardless of clamping
+    const arrowOffset = `${iconCenterX - left}px`
+
+    setTooltipStyle({ top: `${top}px`, left: `${left}px`, arrowOffset })
+  }, [])
+
+  const handleFilterChange = (event) => {
+    handleGlobalFilterChange(event.target.value)
   }
 
   const handleInfoIconClick = (event) => {
-    setIsHelperTextShowing(!isHelperTextShowing)
     event.stopPropagation()
+    setIsHelperTextShowing((prev) => !prev)
   }
 
   return (
     <FilterLabelWrapper htmlFor={id}>
-      <LabelContainer>
+      <LabelContainer ref={labelContainerRef}>
         {name}
-        <IconButton
-          type="button"
-          onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
-        >
+        <IconButton ref={iconRef} type="button" onClick={handleInfoIconClick}>
           <IconInfo id="info-icon" aria-label="info" />
         </IconButton>
         {isHelperTextShowing ? (
           <ColumnHeaderToolTip
             id={`aria-descp${id}`}
-            left={tooltipPosition.left}
-            top={tooltipPosition.top}
-            maxWidth={maxWidth}
+            left={tooltipStyle.left}
+            top={tooltipStyle.top}
+            arrowOffset={tooltipStyle.arrowOffset}
+            maxWidth="50em"
             html={t('filters.search_helper_text')}
             ref={tooltipRef}
+            onMount={computeTooltipPosition}
           />
         ) : null}
       </LabelContainer>
@@ -135,7 +133,6 @@ FilterSearchToolbar.propTypes = {
   disabled: PropTypes.bool,
   globalSearchText: PropTypes.string,
   handleGlobalFilterChange: PropTypes.func.isRequired,
-  type: PropTypes.string,
 }
 
 export default FilterSearchToolbar

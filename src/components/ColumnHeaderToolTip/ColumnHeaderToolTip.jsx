@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
 import { styled } from 'styled-components'
 import domPurify from 'dompurify'
@@ -13,19 +13,12 @@ export const TooltipPopup = styled('span')`
   position: absolute;
   font-size: ${theme.typography.smallFontSize};
   clip-path: polygon(
-    //top left
     0 0,
-    //top right
     100% 0,
-    //bottom right
     100% calc(100% - 15px),
-    // right size of arrow
-    calc(50% + 10px) calc(100% - 15px),
-    //bottom peak
-    50% 100%,
-    // left side of arrow
-    calc(50% - 10px) calc(100% - 15px),
-    //bottom left
+    calc(${(props) => props.$arrowOffset || '50%'} + 10px) calc(100% - 15px),
+    ${(props) => props.$arrowOffset || '50%'} 100%,
+    calc(${(props) => props.$arrowOffset || '50%'} - 10px) calc(100% - 15px),
     0 calc(100% - 15px)
   );
   padding: 1em;
@@ -39,10 +32,24 @@ export const TooltipPopup = styled('span')`
 
 // eslint-disable-next-line react/display-name
 const ColumnHeaderToolTip = forwardRef(
-  ({ helperText = '', left = '0em', top = '0em', maxWidth = '25rem', html = '' }, ref) => {
+  (
+    {
+      helperText = '',
+      left = '0em',
+      top = '0em',
+      maxWidth = '25rem',
+      html = '',
+      arrowOffset = '50%',
+      onMount = undefined,
+    },
+    ref,
+  ) => {
     const sanitizeHtml = domPurify.sanitize
-    const dirtyHTML = html
-    const cleanHTML = sanitizeHtml(dirtyHTML)
+    const cleanHTML = sanitizeHtml(html)
+
+    useLayoutEffect(() => {
+      onMount?.()
+    }, [onMount])
 
     return (
       <TooltipPopup
@@ -52,6 +59,7 @@ const ColumnHeaderToolTip = forwardRef(
         left={left}
         maxWidth={maxWidth}
         top={top}
+        $arrowOffset={arrowOffset}
       >
         {/* eslint-disable-next-line react/no-danger */}
         {html ? <div dangerouslySetInnerHTML={{ __html: cleanHTML }} /> : <span>{helperText}</span>}
@@ -68,4 +76,6 @@ ColumnHeaderToolTip.propTypes = {
   top: PropTypes.string,
   maxWidth: PropTypes.string,
   html: PropTypes.string,
+  arrowOffset: PropTypes.string,
+  onMount: PropTypes.func,
 }
