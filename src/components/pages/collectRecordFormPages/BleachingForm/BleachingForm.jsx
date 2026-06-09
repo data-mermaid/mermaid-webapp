@@ -256,7 +256,7 @@ const BleachingForm = ({ isNewRecord = true }) => {
       />
       {!!projectId && !!currentUser && (
         <NewAttributeModal
-          isFishBeltSampleUnit={false}
+          sampleUnit="benthic"
           isOpen={isNewBenthicAttributeModalOpen}
           onDismiss={closeNewBenthicAttributeModal}
           onSubmit={handleSubmitNewBenthicAttribute}

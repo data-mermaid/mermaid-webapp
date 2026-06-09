@@ -330,7 +330,7 @@ const FishBeltForm = ({ isNewRecord = true }) => {
       />
       {!!projectId && !!currentUser && (
         <NewAttributeModal
-          isFishBeltSampleUnit={true}
+          sampleUnit="fishbelt"
           isOpen={isNewFishNameModalOpen}
           onDismiss={closeNewObservationModal}
           onSubmit={onSubmitNewFishSpecies}

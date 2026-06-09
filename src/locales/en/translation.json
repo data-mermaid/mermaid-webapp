@@ -159,6 +159,7 @@
   },
   "delete_observation": "Delete observation",
   "delete_sites_regimes": "Delete sites or management regimes",
+  "density": "Density",
   "download_sites_regimes": "Export sites and management regimes",
   "email": "Email",
   "errors": {
@@ -525,6 +526,21 @@
   "loading": "Loading",
   "loading_indicator": "Loading indicator",
   "loading_item": "Loading {{itemName}}",
+  "macroinvertebrate_observations": {
+    "add_macroinvertebrate": "Add macroinvertebrate species",
+    "done": "Done",
+    "edit_notes": "Edit Notes",
+    "macroinvertebrate_name": "Macroinvertebrate name",
+    "macroinvertebrate_species": "Macroinvertebrate species",
+    "must_select_size_bin_warning": "You must select a macroinvertebrate size bin before adding any observations",
+    "size_bin": "Macroinvertebrate size bin (cm)",
+    "size_bin_info": "Name of bin scheme used to estimate macroinvertebrate size for the transect. Choose 1 cm if macroinvertebrate size does not use bins.",
+    "proposed_species_already_exists": "Proposed macroinvertebrate species {{attributeName}} already exists",
+    "proposed_species_saved": "Proposed macroinvertebrate species {{attributeName}} saved. Observation has been updated with this species.",
+    "row": "Row",
+    "species_taxonomy_unavailable": "Macroinvertebrate species taxonomy is unavailable. Please try again."
+  },
+
   "management_regime": "Management regime",
   "management_regimes": {
     "access_restriction": "Access restrictions",

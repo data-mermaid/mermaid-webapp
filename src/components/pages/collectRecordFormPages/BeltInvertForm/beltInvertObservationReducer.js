@@ -6,6 +6,8 @@ const beltInvertObservationReducer = (state, action) => {
       const updateObservationsWithIds = [...action.payload].map((record) => ({
         id: record.id || createUuid(),
         ...record,
+        notes: record.notes ?? '',
+        include: record.include ?? true,
       }))
 
       return updateObservationsWithIds
@@ -22,7 +24,7 @@ const beltInvertObservationReducer = (state, action) => {
     }
 
     case 'addObservation':
-      return [...state, { id: createUuid(), count: null, size: null }]
+      return [...state, { id: createUuid(), count: null, size: null, notes: '', include: true }]
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
       const { referenceObservationIndex } = action.payload
@@ -33,6 +35,8 @@ const beltInvertObservationReducer = (state, action) => {
         invert_attribute: null,
         count: null,
         size: null,
+        notes: '',
+        include: true,
       })
 
       return observationsWithInsertedRow
@@ -67,7 +71,7 @@ const beltInvertObservationReducer = (state, action) => {
 
         return isObservationToUpdate ? { ...observation, size: newSizeToUse } : observation
       })
-    case 'updateFishName':
+    case 'updateInvertName':
       return state.map((observation) => {
         const isObservationToUpdate = observation.id === action.payload.observationId
 
@@ -78,9 +82,25 @@ const beltInvertObservationReducer = (state, action) => {
             }
           : observation
       })
-    case 'resetFishSizes': {
+    case 'resetObservationSizes': {
       return state.map((observation) => ({ ...observation, size: '' }))
     }
+    case 'updateNotes':
+      return state.map((observation) => {
+        const isObservationToUpdate = observation.id === action.payload.observationId
+
+        return isObservationToUpdate
+          ? { ...observation, notes: action.payload.newNotes }
+          : observation
+      })
+    case 'includeToggle':
+      return state.map((observation) => {
+        const isObservationToUpdate = observation.id === action.payload.observationId
+
+        return isObservationToUpdate
+          ? { ...observation, include: !observation.include }
+          : observation
+      })
     default:
       throw new Error("This action isn't supported by the observationReducer")
   }

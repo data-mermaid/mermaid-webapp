@@ -21,7 +21,7 @@ import { links } from '../link_constants'
 import style from '../style/NewAttributeModal.module.scss'
 import { InputOption } from '../App/mermaidData/mermaidDataTypes'
 
-interface FishBeltSubmission {
+interface SpeciesSubmission {
   genusId: string
   genusName: string | undefined
   speciesName: string
@@ -33,11 +33,13 @@ interface BenthicAttributeSubmission {
   newBenthicAttributeName: string
 }
 
+type SampleUnit = 'fishbelt' | 'benthic' | 'macroinvertebrate'
+
 interface NewAttributeModalProps {
-  isFishBeltSampleUnit: boolean
+  sampleUnit: SampleUnit
   isOpen: boolean
   onDismiss: () => void
-  onSubmit: (submissionValues: FishBeltSubmission | BenthicAttributeSubmission) => Promise<void>
+  onSubmit: (submissionValues: SpeciesSubmission | BenthicAttributeSubmission) => Promise<void>
   modalAttributeOptions: InputOption[]
 }
 
@@ -52,7 +54,7 @@ const NoResults = (
 )
 
 const NewAttributeModal = ({
-  isFishBeltSampleUnit,
+  sampleUnit,
   isOpen,
   onDismiss,
   onSubmit,
@@ -64,6 +66,8 @@ const NewAttributeModal = ({
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
+  const isFishBeltSampleUnit = sampleUnit === 'fishbelt'
+  const usesSpeciesForm = isFishBeltSampleUnit || sampleUnit === 'macroinvertebrate'
 
   const [currentPage, setCurrentPage] = useState<1 | 2>(1)
   const [projectName, setProjectName] = useState<string>('')
@@ -115,7 +119,7 @@ const NewAttributeModal = ({
     },
     enableReinitialize: true,
   }
-  const fishBeltProposalForm = useFormik({
+  const speciesProposalForm = useFormik({
     ...formValidationSchema,
     initialValues: { genusId: '', species: '' },
     validationSchema: Yup.object().shape({
@@ -131,9 +135,7 @@ const NewAttributeModal = ({
       newBenthicAttribute: Yup.string().required(t('forms.required_field')),
     }),
   })
-  const attributeProposalForm = isFishBeltSampleUnit
-    ? fishBeltProposalForm
-    : benthicAttributeProposalForm
+  const attributeProposalForm = usesSpeciesForm ? speciesProposalForm : benthicAttributeProposalForm
 
   const resetAndCloseModal = () => {
     goToPageOne()
@@ -141,7 +143,7 @@ const NewAttributeModal = ({
     onDismiss()
   }
 
-  const fishBeltAttributes = {
+  const speciesFormAttributes = {
     attributeId: 'genusId',
     attributeProperty: 'species',
   }
@@ -151,7 +153,7 @@ const NewAttributeModal = ({
     attributeProperty: 'newBenthicAttribute',
   }
 
-  const formAttributes = isFishBeltSampleUnit ? fishBeltAttributes : benthicAttributes
+  const formAttributes = usesSpeciesForm ? speciesFormAttributes : benthicAttributes
 
   const handleAttributeProposalFormValueChange = (selectedItem: InputOption) => {
     attributeProposalForm.setFieldValue(formAttributes.attributeId, selectedItem.value)
@@ -159,19 +161,19 @@ const NewAttributeModal = ({
   }
 
   const handleNewAttributeChange = (event) => {
-    const valueToUse = isFishBeltSampleUnit ? event.target.value.toLowerCase() : event.target.value
+    const valueToUse = usesSpeciesForm ? event.target.value.toLowerCase() : event.target.value
     attributeProposalForm.setFieldValue(formAttributes.attributeProperty, valueToUse)
   }
 
   const fishBeltSampleUnitAssets = {
     modalTitle: t('taxonomies.add_fish_species'),
     proposedAttributeParentIdLabel: t('taxonomies.genus'),
-    proposedAttributeParentId: fishBeltProposalForm.values.genusId,
+    proposedAttributeParentId: speciesProposalForm.values.genusId,
     pageTwoFirstLabel: t('taxonomies.species'),
     proposedAttributeInputLabel: t('taxonomies.species'),
-    proposedAttributeValue: fishBeltProposalForm.values.species,
-    proposedParentIdError: fishBeltProposalForm.errors.genusId,
-    proposedAttributeInputError: fishBeltProposalForm.errors.species,
+    proposedAttributeValue: speciesProposalForm.values.species,
+    proposedParentIdError: speciesProposalForm.errors.genusId,
+    proposedAttributeInputError: speciesProposalForm.errors.species,
     proposedSummary: t('benthic_observations.attribute_proposal_summary', {
       attribute: 'fish species',
     }),
@@ -191,14 +193,31 @@ const NewAttributeModal = ({
     }),
   }
 
-  const modalAssets = isFishBeltSampleUnit
-    ? fishBeltSampleUnitAssets
-    : generalBenthicAttributeAssets
+  const invertAttributeAssets = {
+    modalTitle: t('macroinvertebrate_observations.add_macroinvertebrate'),
+    proposedAttributeParentIdLabel: t('taxonomies.genus'),
+    proposedAttributeParentId: speciesProposalForm.values.genusId,
+    pageTwoFirstLabel: t('taxonomies.species'),
+    proposedAttributeInputLabel: t('taxonomies.species'),
+    proposedAttributeValue: speciesProposalForm.values.species,
+    proposedParentIdError: speciesProposalForm.errors.genusId,
+    proposedAttributeInputError: speciesProposalForm.errors.species,
+    proposedSummary: t('benthic_observations.attribute_proposal_summary', {
+      attribute: t('macroinvertebrate_observations.macroinvertebrate_species'),
+    }),
+  }
 
-  const fishBeltFormValues = {
-    genusId: fishBeltProposalForm.values.genusId,
+  const modalAssetsBySampleUnit = {
+    fishbelt: fishBeltSampleUnitAssets,
+    benthic: generalBenthicAttributeAssets,
+    macroinvertebrate: invertAttributeAssets,
+  }
+  const modalAssets = modalAssetsBySampleUnit[sampleUnit]
+
+  const speciesFormValues = {
+    genusId: speciesProposalForm.values.genusId,
     genusName: attributeName,
-    speciesName: fishBeltProposalForm.values.species,
+    speciesName: speciesProposalForm.values.species,
   }
 
   const benthicAttributeFormValues = {
@@ -208,10 +227,19 @@ const NewAttributeModal = ({
   }
 
   const handleOnSubmit = () => {
-    const submissionValues = isFishBeltSampleUnit ? fishBeltFormValues : benthicAttributeFormValues
-    onSubmit(submissionValues).then(() => {
-      resetAndCloseModal()
-    })
+    const submissionValuesBySampleUnit = {
+      fishbelt: speciesFormValues,
+      benthic: benthicAttributeFormValues,
+      macroinvertebrate: speciesFormValues,
+    }
+    const submissionValues = submissionValuesBySampleUnit[sampleUnit]
+    onSubmit(submissionValues)
+      .then(() => {
+        resetAndCloseModal()
+      })
+      .catch(() => {
+        // Errors are handled by the submit handler for each sample unit.
+      })
   }
 
   const CancelButton = (

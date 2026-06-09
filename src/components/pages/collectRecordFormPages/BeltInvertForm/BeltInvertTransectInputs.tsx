@@ -139,7 +139,7 @@ const BeltInvertTransectInputs = ({
     formik.handleChange(event)
 
     if (inputName === 'size_bin' && hasBeltInvertObservations) {
-      observationsDispatch({ type: 'resetFishSizes' })
+      observationsDispatch({ type: 'resetObservationSizes' })
     }
 
     resetNonObservationFieldValidations({ inputName, validationPath })
@@ -278,7 +278,7 @@ const BeltInvertTransectInputs = ({
         helperText={t('width_info')}
       />
       <InputSelectWithLabelAndValidation
-        label={t('fish_size_bin')}
+        label={t('macroinvertebrate_observations.size_bin')}
         required={true}
         id="size_bin"
         testId="size-bin"
@@ -298,7 +298,7 @@ const BeltInvertTransectInputs = ({
         onChange={(event: React.ChangeEvent<HTMLElement>) =>
           handleInputChange(event, 'size_bin', SIZE_BIN_VALIDATION_PATH)
         }
-        helperText={t('fish_size_bin_info')}
+        helperText={t('macroinvertebrate_observations.size_bin_info')}
       />
       <InputSelectWithLabelAndValidation
         label={t('reef_slope')}
