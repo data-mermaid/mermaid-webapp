@@ -142,7 +142,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         return choices.sustainablefinancemechanisms.data?.find(
           // eslint-disable-next-line max-nested-callbacks
           (sfmChoice) => sfmChoice.id === mechanism,
-        ).name
+        )?.name
       })
 
       return {

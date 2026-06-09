@@ -97,7 +97,7 @@ const FinanceSolutionModal = ({
         number_of_solutions_supported_by: NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES.includes(
           formikValues.fs_type,
         )
-          ? formikValues.number_of_solutions_supported_by
+          ? Number(formikValues.number_of_solutions_supported_by) || 0
           : 0,
         sustainable_finance_mechanisms:
           formikValues.fs_type === 'financial_mechanism'
