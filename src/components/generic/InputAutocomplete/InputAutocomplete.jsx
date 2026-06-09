@@ -184,6 +184,8 @@ const InputAutocomplete = ({
               <div>
                 {noResultsText && <p data-testid="noResult">{noResultsText}</p>}
                 {noResultsAction && (
+                  // role="presentation" marks this as a structural wrapper, not an interactive element.
+                  // onKeyDown satisfies the a11y linter — real keyboard interaction is handled by the button inside.
                   <div
                     role="presentation"
                     onClick={() => setIsMenuOpen(false)}
