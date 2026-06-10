@@ -70,7 +70,6 @@ const ColumnHeaderToolTip = forwardRef<HTMLSpanElement, ColumnHeaderToolTipProps
       <TooltipPopup
         ref={ref}
         role="tooltip"
-        aria-labelledby="tooltip"
         $left={left}
         $maxWidth={maxWidth}
         $top={top}
