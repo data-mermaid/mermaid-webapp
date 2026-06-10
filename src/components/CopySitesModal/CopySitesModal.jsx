@@ -414,6 +414,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
+        maxHeight="70vh"
         title={t('sites.copy')}
         mainContent={
           isModalContentLoading ? (

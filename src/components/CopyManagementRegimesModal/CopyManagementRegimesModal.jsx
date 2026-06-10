@@ -454,6 +454,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
+        maxHeight="70vh"
         title={t('management_regimes.copy')}
         mainContent={
           isModalContentLoading ? (
