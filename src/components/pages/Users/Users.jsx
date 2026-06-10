@@ -701,7 +701,6 @@ function UsersTableSection({
       },
     ]
   }, [
-    tooltipGroupRef,
     adminHeaderText,
     adminTooltipText,
     collectorHeaderText,

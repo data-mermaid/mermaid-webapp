@@ -1,19 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
 import { LabelContainer } from '../generic/form'
 import { IconInfo } from '../icons'
 import { IconButton } from '../generic/buttons'
 import ColumnHeaderToolTip from './ColumnHeaderToolTip'
 import useTooltipPosition from '../../library/useTooltipPosition'
 
-// groupRef is an optional shared ref({ current: closeFn | null }) passed to a set of sibling
-// instances. Opening one tooltip calls groupRef.current() to close whichever is currently open,
-// ensuring only one is visible at a time without lifting state to the parent.
-const LabelWithTooltip = ({ label, tooltipText, groupRef = undefined }) => {
-  const [isShowing, setIsShowing] = useState(false)
-  const tooltipRef = useRef(null)
-  const iconRef = useRef(null)
-  const containerRef = useRef(null)
+interface LabelWithTooltipProps {
+  label: React.ReactNode
+  tooltipText: React.ReactNode
+  // groupRef is an optional shared ref({ current: closeFn | null }) passed to a set of sibling
+  // instances. Opening one tooltip calls groupRef.current() to close whichever is currently open,
+  // ensuring only one is visible at a time without lifting state to the parent.
+  groupRef?: React.MutableRefObject<(() => void) | null>
+}
+
+const LabelWithTooltip = ({ label, tooltipText, groupRef }: LabelWithTooltipProps) => {
+  const [isTooltipTextShowing, setIsTooltipTextShowing] = useState(false)
+  const tooltipRef = useRef<HTMLSpanElement>(null)
+  const iconRef = useRef<HTMLButtonElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const [tooltipStyle, computeTooltipPosition] = useTooltipPosition(
     iconRef,
@@ -22,9 +27,13 @@ const LabelWithTooltip = ({ label, tooltipText, groupRef = undefined }) => {
   )
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (containerRef.current && !containerRef.current.contains(event.target)) {
-        setIsShowing(false)
+    if (!isTooltipTextShowing) {
+      return undefined
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsTooltipTextShowing(false)
         if (groupRef) {
           groupRef.current = null
         }
@@ -34,21 +43,21 @@ const LabelWithTooltip = ({ label, tooltipText, groupRef = undefined }) => {
     document.addEventListener('click', handleClickOutside)
 
     return () => document.removeEventListener('click', handleClickOutside)
-  }, [groupRef])
+  }, [isTooltipTextShowing, groupRef])
 
-  const handleIconClick = (event) => {
+  const handleIconClick = (event: React.MouseEvent) => {
     event.stopPropagation()
-    if (!isShowing) {
+    if (!isTooltipTextShowing) {
       if (groupRef) {
         groupRef.current?.()
-        groupRef.current = () => setIsShowing(false)
+        groupRef.current = () => setIsTooltipTextShowing(false)
       }
-      setIsShowing(true)
+      setIsTooltipTextShowing(true)
     } else {
       if (groupRef) {
         groupRef.current = null
       }
-      setIsShowing(false)
+      setIsTooltipTextShowing(false)
     }
   }
 
@@ -58,7 +67,7 @@ const LabelWithTooltip = ({ label, tooltipText, groupRef = undefined }) => {
       <IconButton ref={iconRef} type="button" onClick={handleIconClick}>
         <IconInfo aria-label="info" />
       </IconButton>
-      {isShowing ? (
+      {isTooltipTextShowing ? (
         <ColumnHeaderToolTip
           helperText={tooltipText}
           left={tooltipStyle.left}
@@ -70,12 +79,6 @@ const LabelWithTooltip = ({ label, tooltipText, groupRef = undefined }) => {
       ) : null}
     </LabelContainer>
   )
-}
-
-LabelWithTooltip.propTypes = {
-  label: PropTypes.node.isRequired,
-  tooltipText: PropTypes.node.isRequired,
-  groupRef: PropTypes.shape({ current: PropTypes.func }),
 }
 
 export default LabelWithTooltip

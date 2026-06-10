@@ -1,12 +1,18 @@
 import React, { forwardRef, useLayoutEffect } from 'react'
-import PropTypes from 'prop-types'
 import { styled } from 'styled-components'
 import domPurify from 'dompurify'
 import theme from '../../theme'
 
-export const TooltipPopup = styled('span')`
+interface TooltipPopupProps {
+  $maxWidth?: string
+  $left?: string
+  $top?: string
+  $arrowOffset?: string
+}
+
+export const TooltipPopup = styled('span')<TooltipPopupProps>`
   display: block;
-  max-width: ${(props) => props.maxWidth || '25rem'};
+  max-width: min(${(props) => props.$maxWidth || '25rem'}, calc(100vw - 2rem));
   width: max-content;
   background: ${theme.color.primaryColor};
   color: ${theme.color.white};
@@ -23,15 +29,24 @@ export const TooltipPopup = styled('span')`
   );
   padding: 1em;
   padding-bottom: calc(1rem + 15px);
-  left: ${(props) => props.left || '0em'};
-  top: ${(props) => props.top || '0em'};
+  left: ${(props) => props.$left || '0em'};
+  top: ${(props) => props.$top || '0em'};
   white-space: normal;
   z-index: 100;
   text-align: left;
 `
 
-// eslint-disable-next-line react/display-name
-const ColumnHeaderToolTip = forwardRef(
+interface ColumnHeaderToolTipProps {
+  helperText?: React.ReactNode
+  left?: string
+  top?: string
+  maxWidth?: string
+  html?: string
+  arrowOffset?: string
+  onMount?: () => void
+}
+
+const ColumnHeaderToolTip = forwardRef<HTMLSpanElement, ColumnHeaderToolTipProps>(
   (
     {
       helperText = '',
@@ -56,9 +71,9 @@ const ColumnHeaderToolTip = forwardRef(
         ref={ref}
         role="tooltip"
         aria-labelledby="tooltip"
-        left={left}
-        maxWidth={maxWidth}
-        top={top}
+        $left={left}
+        $maxWidth={maxWidth}
+        $top={top}
         $arrowOffset={arrowOffset}
       >
         {/* eslint-disable-next-line react/no-danger */}
@@ -68,14 +83,6 @@ const ColumnHeaderToolTip = forwardRef(
   },
 )
 
-export default ColumnHeaderToolTip
+ColumnHeaderToolTip.displayName = 'ColumnHeaderToolTip'
 
-ColumnHeaderToolTip.propTypes = {
-  helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  left: PropTypes.string,
-  top: PropTypes.string,
-  maxWidth: PropTypes.string,
-  html: PropTypes.string,
-  arrowOffset: PropTypes.string,
-  onMount: PropTypes.func,
-}
+export default ColumnHeaderToolTip

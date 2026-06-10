@@ -35,7 +35,7 @@ const FilterSearchToolbar = ({
   handleGlobalFilterChange,
 }) => {
   const { t } = useTranslation()
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
+  const [isTooltipTextShowing, setIsHelperTextShowing] = useState(false)
   const tooltipRef = useRef(null)
   const iconRef = useRef(null)
   const labelContainerRef = useRef(null)
@@ -47,6 +47,10 @@ const FilterSearchToolbar = ({
   )
 
   useEffect(() => {
+    if (!isTooltipTextShowing) {
+      return undefined
+    }
+
     const handleClickOutside = (event) => {
       if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
         setIsHelperTextShowing(false)
@@ -58,7 +62,7 @@ const FilterSearchToolbar = ({
     return () => {
       document.removeEventListener('click', handleClickOutside)
     }
-  }, [])
+  }, [isTooltipTextShowing])
 
   const handleFilterChange = (event) => {
     handleGlobalFilterChange(event.target.value)
@@ -76,7 +80,7 @@ const FilterSearchToolbar = ({
         <IconButton ref={iconRef} type="button" onClick={handleInfoIconClick}>
           <IconInfo id="info-icon" aria-label="info" />
         </IconButton>
-        {isHelperTextShowing ? (
+        {isTooltipTextShowing ? (
           <ColumnHeaderToolTip
             id={`aria-descp${id}`}
             left={tooltipStyle.left}
