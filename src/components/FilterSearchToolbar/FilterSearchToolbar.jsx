@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
@@ -6,6 +6,7 @@ import { Input, LabelContainer, inputStyles } from '../generic/form'
 import { IconInfo } from '../icons'
 import { IconButton } from '../generic/buttons'
 import ColumnHeaderToolTip from '../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import useTooltipPosition from '../../library/useTooltipPosition'
 import theme from '../../theme'
 
 const FilterLabelWrapper = styled.label`
@@ -26,8 +27,6 @@ const FilterInput = styled(Input)`
   }
 `
 
-const VIEWPORT_MARGIN = 8
-
 const FilterSearchToolbar = ({
   id = 'filter-search',
   name,
@@ -37,10 +36,15 @@ const FilterSearchToolbar = ({
 }) => {
   const { t } = useTranslation()
   const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [tooltipStyle, setTooltipStyle] = useState({ top: '0px', left: '0px', arrowOffset: '50%' })
   const tooltipRef = useRef(null)
   const iconRef = useRef(null)
   const labelContainerRef = useRef(null)
+
+  const [tooltipStyle, computeTooltipPosition] = useTooltipPosition(
+    iconRef,
+    labelContainerRef,
+    tooltipRef,
+  )
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -54,36 +58,6 @@ const FilterSearchToolbar = ({
     return () => {
       document.removeEventListener('click', handleClickOutside)
     }
-  }, [])
-
-  const computeTooltipPosition = useCallback(() => {
-    if (!iconRef.current || !labelContainerRef.current || !tooltipRef.current) {
-      return
-    }
-
-    const iconRect = iconRef.current.getBoundingClientRect()
-    const containerRect = labelContainerRef.current.getBoundingClientRect()
-    const tooltipWidth = tooltipRef.current.offsetWidth
-    const tooltipHeight = tooltipRef.current.offsetHeight
-
-    const iconCenterX = iconRect.left + iconRect.width / 2 - containerRect.left
-    let left = iconCenterX - tooltipWidth / 2
-    const top = -tooltipHeight
-
-    // clamp to viewport
-    const absLeft = containerRect.left + left
-    const absRight = absLeft + tooltipWidth
-    if (absRight > window.innerWidth - VIEWPORT_MARGIN) {
-      left -= absRight - (window.innerWidth - VIEWPORT_MARGIN)
-    }
-    if (containerRect.left + left < VIEWPORT_MARGIN) {
-      left = VIEWPORT_MARGIN - containerRect.left
-    }
-
-    // arrow tracks the icon regardless of clamping
-    const arrowOffset = `${iconCenterX - left}px`
-
-    setTooltipStyle({ top: `${top}px`, left: `${left}px`, arrowOffset })
   }, [])
 
   const handleFilterChange = (event) => {
