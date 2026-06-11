@@ -386,7 +386,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         name={t('filters.by_name_project_country')}
         globalSearchText={globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
-        type="copy-site-modal"
       />
       <ViewSelectedOnly htmlFor="viewSelectedOnly">
         <input
@@ -415,6 +414,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
+        maxHeight="70vh"
         title={t('sites.copy')}
         mainContent={
           isModalContentLoading ? (

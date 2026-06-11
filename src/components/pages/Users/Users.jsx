@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { useParams } from 'react-router'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -14,7 +14,7 @@ import {
   ToolbarRowWrapper,
   UserTableTd,
 } from './Users.styles'
-import { ButtonPrimary, ButtonSecondary, IconButton } from '../../generic/buttons'
+import { ButtonPrimary, ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
@@ -60,8 +60,7 @@ import {
 } from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
-import { LabelContainer } from '../../generic/form'
-import ColumnHeaderToolTip from '../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import LabelWithTooltip from '../../ColumnHeaderToolTip/LabelWithTooltip'
 import UserRolesInfoModal from '../../UserRolesInfoModal'
 import { UserIcon } from '../../UserIcon/UserIcon'
 import { MuiTooltip } from '../../generic/MuiTooltip'
@@ -429,6 +428,8 @@ const Users = () => {
     ],
   )
 
+  const tooltipGroupRef = useRef(null)
+
   const toolbar = (
     <>
       <H3>{t('users.users')}</H3>
@@ -452,6 +453,7 @@ const Users = () => {
               name={isAdminUser ? t('filters.by_name_email') : t('filters.by_name_role')}
               globalSearchText={globalFilterValue}
               handleGlobalFilterChange={handleGlobalFilterChange}
+              groupRef={tooltipGroupRef}
             />
             {isAdminUser && (
               <InputAndButton
@@ -509,6 +511,7 @@ const Users = () => {
                 globalFilterValue={globalFilterValue}
                 setGlobalFilterValue={setGlobalFilterValue}
                 isDemoProject={isDemoProject}
+                tooltipGroupRef={tooltipGroupRef}
               />
             ) : (
               <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
@@ -563,13 +566,13 @@ function UsersTableSection({
   globalFilterValue,
   setGlobalFilterValue,
   isDemoProject,
+  tooltipGroupRef,
 }) {
   const { t } = useTranslation()
 
   const adminTooltipText = t('users.roles.admin_description')
   const collectorTooltipText = t('users.roles.collector_description')
   const readOnlyTooltipText = t('users.roles.read_only_description')
-  const infoLabelText = t('message_type.info')
   const nameHeaderText = t('name')
   const emailHeaderText = t('email')
   const userRoleHeaderText = t('users.role')
@@ -579,8 +582,6 @@ function UsersTableSection({
   const collectorHeaderText = t('users.roles.collector')
   const readOnlyHeaderText = t('users.roles.read_only')
 
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [hasInitializedStoredFilter, setHasInitializedStoredFilter] = useState(false)
 
@@ -622,20 +623,6 @@ function UsersTableSection({
     setHasInitializedStoredFilter(true)
   }, [tableUserPrefs?.globalFilter, setGlobalFilterValue, hasInitializedStoredFilter])
 
-  useEffect(() => {
-    const handleBodyClick = () => {
-      if (isHelperTextShowing) {
-        setIsHelperTextShowing(false)
-      }
-    }
-
-    document.body.addEventListener('click', handleBodyClick)
-
-    return () => {
-      document.body.removeEventListener('click', handleBodyClick)
-    }
-  }, [isHelperTextShowing])
-
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
       const keys = isAdminUser
@@ -661,17 +648,6 @@ function UsersTableSection({
   )
 
   const tableColumnsForAdmin = useMemo(() => {
-    const handleInfoIconClick = (event, label) => {
-      if (currentHelperTextLabel === label) {
-        setIsHelperTextShowing(!isHelperTextShowing)
-      } else {
-        setIsHelperTextShowing(true)
-        setCurrentHelperTextLabel(label)
-      }
-
-      event.stopPropagation()
-    }
-
     return [
       {
         Header: nameHeaderText,
@@ -685,58 +661,33 @@ function UsersTableSection({
       },
       {
         Header: () => (
-          <>
-            <LabelContainer>
-              {adminHeaderText}
-              {isHelperTextShowing && currentHelperTextLabel === 'admin' ? (
-                <ColumnHeaderToolTip helperText={adminTooltipText} left="-5em" top="-13.7em" />
-              ) : null}
-              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'admin')}>
-                <IconInfo aria-label={infoLabelText} />
-              </IconButton>
-            </LabelContainer>
-          </>
+          <LabelWithTooltip
+            label={adminHeaderText}
+            tooltipText={adminTooltipText}
+            groupRef={tooltipGroupRef}
+          />
         ),
         accessor: 'admin',
         disableSortBy: true,
       },
       {
         Header: () => (
-          <>
-            <LabelContainer>
-              {collectorHeaderText}
-              {isHelperTextShowing && currentHelperTextLabel === 'collector' ? (
-                <ColumnHeaderToolTip
-                  helperText={collectorTooltipText}
-                  left="-2.5em"
-                  top="-13.7em"
-                />
-              ) : null}
-              <IconButton
-                type="button"
-                onClick={(event) => handleInfoIconClick(event, 'collector')}
-              >
-                <IconInfo aria-label={infoLabelText} />
-              </IconButton>
-            </LabelContainer>
-          </>
+          <LabelWithTooltip
+            label={collectorHeaderText}
+            tooltipText={collectorTooltipText}
+            groupRef={tooltipGroupRef}
+          />
         ),
         accessor: 'collector',
         disableSortBy: true,
       },
       {
         Header: () => (
-          <>
-            <LabelContainer>
-              {readOnlyHeaderText}
-              {isHelperTextShowing && currentHelperTextLabel === 'readOnly' ? (
-                <ColumnHeaderToolTip helperText={readOnlyTooltipText} left="-2.5em" top="-7.7em" />
-              ) : null}
-              <IconButton type="button" onClick={(event) => handleInfoIconClick(event, 'readOnly')}>
-                <IconInfo aria-label={infoLabelText} />
-              </IconButton>
-            </LabelContainer>
-          </>
+          <LabelWithTooltip
+            label={readOnlyHeaderText}
+            tooltipText={readOnlyTooltipText}
+            groupRef={tooltipGroupRef}
+          />
         ),
         accessor: 'readonly',
         disableSortBy: true,
@@ -758,14 +709,12 @@ function UsersTableSection({
     adminTooltipText,
     collectorHeaderText,
     collectorTooltipText,
-    infoLabelText,
-    currentHelperTextLabel,
-    isHelperTextShowing,
     nameHeaderText,
     emailHeaderText,
     readOnlyHeaderText,
     readOnlyTooltipText,
     removeFromProjectHeaderText,
+    tooltipGroupRef,
     unsubmittedSampleUnitsHeaderText,
   ])
 
@@ -1089,6 +1038,9 @@ UsersTableSection.propTypes = {
   roleLabels: PropTypes.objectOf(PropTypes.string).isRequired,
   globalFilterValue: PropTypes.string.isRequired,
   setGlobalFilterValue: PropTypes.func.isRequired,
+  tooltipGroupRef: PropTypes.shape({
+    current: PropTypes.oneOfType([PropTypes.func, PropTypes.oneOf([null])]),
+  }),
 }
 
 export default Users
