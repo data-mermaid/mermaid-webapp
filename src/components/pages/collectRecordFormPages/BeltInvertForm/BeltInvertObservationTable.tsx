@@ -305,7 +305,6 @@ const BeltInvertObservationRow = ({
         role="button"
         tabIndex={0}
         aria-label={`Edit notes for row ${rowNumber}`}
-        data-testid="notes-cell"
         data-observation-id={observationId}
         onClick={() => onNotesClick(observationId)}
         onKeyDown={(e: React.KeyboardEvent) => {
@@ -383,6 +382,18 @@ const BeltInvertObservationTable = ({
     ? observationsState.findIndex((o) => o.id === notesModalObservationId)
     : -1
 
+  const focusOnNotesCell = (observationId: string) => {
+    requestAnimationFrame(() => {
+      const cell = document.querySelector<HTMLElement>(`[data-observation-id="${observationId}"]`)
+      cell?.focus()
+    })
+  }
+
+  const handleDismissModal = () => {
+    focusOnNotesCell(notesModalObservationId ?? '')
+    setNotesModalObservationId(null)
+  }
+
   const handleNotesDone = (newNote: string) => {
     if (!notesModalObservationId) {
       return
@@ -392,14 +403,8 @@ const BeltInvertObservationTable = ({
       type: 'updateNotes',
       payload: { observationId: notesModalObservationId, newNotes: newNote },
     })
+    focusOnNotesCell(notesModalObservationId)
     setNotesModalObservationId(null)
-    // Set the focus back on the Td cell when modal is closed
-    requestAnimationFrame(() => {
-      const cell = document.querySelector<HTMLElement>(
-        `[data-observation-id="${notesModalObservationId}"][data-testid="notes-cell"]`,
-      )
-      cell?.focus()
-    })
   }
 
   const noResultsText = t('search.no_results')
@@ -487,7 +492,7 @@ const BeltInvertObservationTable = ({
             : undefined
         }
         currentNote={notesModalObservation?.notes ?? ''}
-        onDismiss={() => setNotesModalObservationId(null)}
+        onDismiss={handleDismissModal}
         onDone={handleNotesDone}
       />
       <H2 id="table-label">{t('observations.observations')}</H2>

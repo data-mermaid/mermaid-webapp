@@ -25,7 +25,7 @@ const EditNotesModal = ({
   const [draft, setDraft] = useState(currentNote)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       setDraft(currentNote)
     }
