@@ -1,4 +1,4 @@
-import { styled, css } from 'styled-components'
+import { styled, css, keyframes } from 'styled-components'
 import { IconBell, IconOpenInNew, IconExcel, IconMenu } from '../icons'
 import theme from '../../theme'
 import { ButtonThatLooksLikeLink } from '../generic/buttons'
@@ -130,8 +130,29 @@ export const MediumIconOpenInNew = styled(IconOpenInNew)`
 export const MediumIconExcel = styled(IconExcel)`
   ${mediumIcons};
 `
+const bellShake = keyframes`
+  0%   { transform: rotate(0deg); }
+  15%  { transform: rotate(15deg); }
+  30%  { transform: rotate(-15deg); }
+  45%  { transform: rotate(10deg); }
+  60%  { transform: rotate(-10deg); }
+  75%  { transform: rotate(5deg); }
+  90%  { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+`
+
 export const BiggerIconBell = styled(IconBell)`
   ${biggerIcons}
+  ${({ $animated }) =>
+    $animated &&
+    css`
+      animation: ${bellShake} 0.5s ease-in-out;
+      animation-iteration-count: var(--bell-animation-count, 1);
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+    `}
 `
 export const BiggerIconMenu = styled(IconMenu)`
   ${biggerIcons}
