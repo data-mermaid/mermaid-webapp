@@ -1038,7 +1038,9 @@ UsersTableSection.propTypes = {
   roleLabels: PropTypes.objectOf(PropTypes.string).isRequired,
   globalFilterValue: PropTypes.string.isRequired,
   setGlobalFilterValue: PropTypes.func.isRequired,
-  tooltipGroupRef: PropTypes.shape({ current: PropTypes.func }),
+  tooltipGroupRef: PropTypes.shape({
+    current: PropTypes.oneOfType([PropTypes.func, PropTypes.oneOf([null])]),
+  }),
 }
 
 export default Users

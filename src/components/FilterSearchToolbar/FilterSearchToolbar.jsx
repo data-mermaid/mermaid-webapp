@@ -126,7 +126,9 @@ FilterSearchToolbar.propTypes = {
   disabled: PropTypes.bool,
   globalSearchText: PropTypes.string,
   handleGlobalFilterChange: PropTypes.func.isRequired,
-  groupRef: PropTypes.shape({ current: PropTypes.func }),
+  groupRef: PropTypes.shape({
+    current: PropTypes.oneOfType([PropTypes.func, PropTypes.oneOf([null])]),
+  }),
 }
 
 export default FilterSearchToolbar
