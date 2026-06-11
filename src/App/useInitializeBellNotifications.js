@@ -58,6 +58,20 @@ export const useInitializeBellNotifications = ({
     updateNotifications()
   }, [apiBaseUrl, getAccessToken, isMermaidAuthenticated, isAppOnline, location]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (!isMermaidAuthenticated || !isAppOnline) {
+      return undefined
+    }
+
+    const intervalId = setInterval(() => {
+      updateNotifications()
+    }, 60000)
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [isMermaidAuthenticated, isAppOnline]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const deleteNotification = (notificationId) => {
     if (isMermaidAuthenticated && apiBaseUrl) {
       deleteBellNotification(notificationId, {
