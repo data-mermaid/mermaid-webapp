@@ -32,6 +32,8 @@ const ObservationSizeSelect = ({
     if (isValue50OrMore) {
       setShow50PlusInput(true)
       setPlus50Value(value)
+    } else {
+      setShow50PlusInput(false)
     }
   }, [isValue50OrMore, value])
 
