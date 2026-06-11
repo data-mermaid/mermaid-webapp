@@ -47,6 +47,8 @@ export const unclassifiedGuid = '00000000-0000-0000-0000-000000000000'
 
 export const PENDING_USER_PROFILE_NAME = '(pending user)'
 
+export const NOTIFICATIONS_OPENED_SESSION_KEY = 'notifications_opened'
+
 export const VALID_IMAGE_TYPES = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/mpo']
 export const MAX_IMAGE_UPLOAD_SIZE = 30 * 1024 * 1024 // 30 MB
 export const MAX_IMAGE_UPLOAD_SIZE_MB = 30 // 30 MB

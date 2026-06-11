@@ -9,6 +9,7 @@ import {
   deleteBellNotification,
   deleteAllBellNotifications,
 } from './bellNotificationHelpers'
+import { NOTIFICATIONS_OPENED_SESSION_KEY } from '../library/constants/constants'
 
 export const useInitializeBellNotifications = ({
   apiBaseUrl,
@@ -29,7 +30,7 @@ export const useInitializeBellNotifications = ({
   const hasTriggeredInitialAnimationRef = useRef(false)
 
   const markNotificationsOpened = () => {
-    sessionStorage.setItem('notifications_opened', 'true')
+    sessionStorage.setItem(NOTIFICATIONS_OPENED_SESSION_KEY, 'true')
     setIsAnimating(false)
   }
 
@@ -92,7 +93,7 @@ export const useInitializeBellNotifications = ({
     }
 
     hasTriggeredInitialAnimationRef.current = true
-    const hasOpenedThisSession = sessionStorage.getItem('notifications_opened') === 'true'
+    const hasOpenedThisSession = sessionStorage.getItem(NOTIFICATIONS_OPENED_SESSION_KEY) === 'true'
     if (hasOpenedThisSession) {
       return undefined
     }
@@ -124,7 +125,8 @@ export const useInitializeBellNotifications = ({
 
     if (!wasAuthenticated && isMermaidAuthenticated) {
       prevNotificationCountRef.current = null // reset so polling doesn't false-trigger after re-login
-      const hasOpenedThisSession = sessionStorage.getItem('notifications_opened') === 'true'
+      const hasOpenedThisSession =
+        sessionStorage.getItem(NOTIFICATIONS_OPENED_SESSION_KEY) === 'true'
       if (!hasOpenedThisSession && notifications.length > 0) {
         setAnimationLoopCount(3)
         setIsAnimating(true)
