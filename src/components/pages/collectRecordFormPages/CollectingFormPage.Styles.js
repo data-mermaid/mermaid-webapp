@@ -7,7 +7,7 @@ import {
   ButtonSecondary,
   Button,
 } from '../../generic/buttons'
-import { TableOverflowWrapper, Tr, Td, GenericStickyTable } from '../../generic/Table/table'
+import { TableOverflowWrapper, Tr, GenericStickyTable } from '../../generic/Table/table'
 import { inputTextareaSelectStyles } from '../../generic/form'
 
 export const NewOptionButton = styled(ButtonThatLooksLikeLink)`

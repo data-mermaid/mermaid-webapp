@@ -248,7 +248,7 @@ const BeltInvertObservationRow = ({
         onObservationKeyDown({ event, index, observation })
       }
       options={sizeOptions}
-      value={sizeOrEmptyString}
+      value={sizeOrEmptyString.toString()}
       labelledBy="invert-size-label"
       testid="invert-size-select"
       plusInputTestId="invert-size-50-input"
