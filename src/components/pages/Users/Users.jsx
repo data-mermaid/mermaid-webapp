@@ -428,6 +428,8 @@ const Users = () => {
     ],
   )
 
+  const tooltipGroupRef = useRef(null)
+
   const toolbar = (
     <>
       <H3>{t('users.users')}</H3>
@@ -451,6 +453,7 @@ const Users = () => {
               name={isAdminUser ? t('filters.by_name_email') : t('filters.by_name_role')}
               globalSearchText={globalFilterValue}
               handleGlobalFilterChange={handleGlobalFilterChange}
+              groupRef={tooltipGroupRef}
             />
             {isAdminUser && (
               <InputAndButton
@@ -508,6 +511,7 @@ const Users = () => {
                 globalFilterValue={globalFilterValue}
                 setGlobalFilterValue={setGlobalFilterValue}
                 isDemoProject={isDemoProject}
+                tooltipGroupRef={tooltipGroupRef}
               />
             ) : (
               <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
@@ -562,6 +566,7 @@ function UsersTableSection({
   globalFilterValue,
   setGlobalFilterValue,
   isDemoProject,
+  tooltipGroupRef,
 }) {
   const { t } = useTranslation()
 
@@ -577,7 +582,6 @@ function UsersTableSection({
   const collectorHeaderText = t('users.roles.collector')
   const readOnlyHeaderText = t('users.roles.read_only')
 
-  const tooltipGroupRef = useRef(null)
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [hasInitializedStoredFilter, setHasInitializedStoredFilter] = useState(false)
 
@@ -710,6 +714,7 @@ function UsersTableSection({
     readOnlyHeaderText,
     readOnlyTooltipText,
     removeFromProjectHeaderText,
+    tooltipGroupRef,
     unsubmittedSampleUnitsHeaderText,
   ])
 
@@ -1033,6 +1038,7 @@ UsersTableSection.propTypes = {
   roleLabels: PropTypes.objectOf(PropTypes.string).isRequired,
   globalFilterValue: PropTypes.string.isRequired,
   setGlobalFilterValue: PropTypes.func.isRequired,
+  tooltipGroupRef: PropTypes.shape({ current: PropTypes.func }),
 }
 
 export default Users

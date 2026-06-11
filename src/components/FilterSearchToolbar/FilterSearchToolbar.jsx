@@ -33,6 +33,7 @@ const FilterSearchToolbar = ({
   disabled = false,
   globalSearchText = '', // react-table sets globalFilter to undefined when cleared; default to '' to keep the input controlled
   handleGlobalFilterChange,
+  groupRef = null,
 }) => {
   const { t } = useTranslation()
   const [isTooltipTextShowing, setIsHelperTextShowing] = useState(false)
@@ -53,6 +54,9 @@ const FilterSearchToolbar = ({
 
     const handleClickOutside = (event) => {
       if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+        if (groupRef) {
+          groupRef.current = null
+        }
         setIsHelperTextShowing(false)
       }
     }
@@ -62,7 +66,7 @@ const FilterSearchToolbar = ({
     return () => {
       document.removeEventListener('click', handleClickOutside)
     }
-  }, [isTooltipTextShowing])
+  }, [isTooltipTextShowing, groupRef])
 
   const handleFilterChange = (event) => {
     handleGlobalFilterChange(event.target.value)
@@ -70,7 +74,18 @@ const FilterSearchToolbar = ({
 
   const handleInfoIconClick = (event) => {
     event.stopPropagation()
-    setIsHelperTextShowing((prev) => !prev)
+    if (!isTooltipTextShowing) {
+      if (groupRef) {
+        groupRef.current?.()
+        groupRef.current = () => setIsHelperTextShowing(false)
+      }
+      setIsHelperTextShowing(true)
+    } else {
+      if (groupRef) {
+        groupRef.current = null
+      }
+      setIsHelperTextShowing(false)
+    }
   }
 
   return (
@@ -111,6 +126,7 @@ FilterSearchToolbar.propTypes = {
   disabled: PropTypes.bool,
   globalSearchText: PropTypes.string,
   handleGlobalFilterChange: PropTypes.func.isRequired,
+  groupRef: PropTypes.shape({ current: PropTypes.func }),
 }
 
 export default FilterSearchToolbar
