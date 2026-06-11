@@ -401,6 +401,13 @@ export const observationsReducerPropType = (props, propName, componentName) => {
 }
 
 export const notificationsPropType = PropTypes.shape({
+  notifications: PropTypes.array,
+  deleteNotification: PropTypes.func,
+  deleteAllNotifications: PropTypes.func,
+  isAnimating: PropTypes.bool,
+  animationLoopCount: PropTypes.number,
+  markNotificationsOpened: PropTypes.func,
+  stopAnimation: PropTypes.func,
   count: PropTypes.number,
   next: PropTypes.string,
   previous: PropTypes.string,

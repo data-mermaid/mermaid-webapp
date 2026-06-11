@@ -176,6 +176,8 @@ export const useInitializeBellNotifications = ({
     }
   }
 
+  const stopAnimation = () => setIsAnimating(false)
+
   return {
     notifications,
     deleteNotification,
@@ -183,5 +185,6 @@ export const useInitializeBellNotifications = ({
     isAnimating,
     animationLoopCount,
     markNotificationsOpened,
+    stopAnimation,
   }
 }
