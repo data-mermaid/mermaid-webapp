@@ -8,7 +8,18 @@ import {
   screen,
   waitFor,
 } from '../../testUtilities/testingLibraryWithHelpers'
+import { BellNotificationProvider } from '../../App/BellNotificationContext'
 import Header from '.'
+
+const mockBellContextBase = {
+  notifications: [],
+  deleteNotification: () => {},
+  deleteAllNotifications: () => {},
+  isAnimating: false,
+  animationLoopCount: 1,
+  markNotificationsOpened: () => {},
+  stopAnimation: () => {},
+}
 
 const mermaidReferenceLink = import.meta.env.VITE_MERMAID_REFERENCE_LINK
 const mermaidExploreLink = import.meta.env.VITE_MERMAID_EXPLORE_LINK
@@ -47,4 +58,26 @@ test('Header component shows projects, reference; hides global dashboard links w
   await waitFor(() => {
     expect(mermaidExploreHeader).not.toBeInTheDocument()
   })
+})
+
+test('Header shows NotificationIndicator when notifications exist', () => {
+  renderAuthenticatedOnline(
+    <BellNotificationProvider
+      value={{ ...mockBellContextBase, notifications: [{ id: '1', title: 'Test notification' }] }}
+    >
+      <Header />
+    </BellNotificationProvider>,
+  )
+
+  expect(screen.getAllByText('•').length).toBeGreaterThan(0)
+})
+
+test('Header does not show NotificationIndicator when no notifications', () => {
+  renderAuthenticatedOnline(
+    <BellNotificationProvider value={mockBellContextBase}>
+      <Header />
+    </BellNotificationProvider>,
+  )
+
+  expect(screen.queryByText('•')).not.toBeInTheDocument()
 })
