@@ -129,7 +129,8 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const openProfileModal = () => setIsProfileModalOpen(true)
   const closeProfileModal = () => setIsProfileModalOpen(false)
-  const { notifications, isAnimating, animationLoopCount, stopAnimation } = useBellNotifications()
+  const { notifications, isAnimating, animationLoopCount, stopAnimation, markNotificationsOpened } =
+    useBellNotifications()
   const { isAppOnline } = useOnlineStatus()
   const {
     first_name: currentUserFirstName,
@@ -175,6 +176,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
               <HideShow
                 closeOnClickWithin={false}
                 id="gtm-bell-notifications-hideshow"
+                onOpen={markNotificationsOpened}
                 button={
                   <HeaderButtonThatLooksLikeLink id="gtm-bell-notifications">
                     <BiggerIconBell
@@ -209,6 +211,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
           <div className="mobile">
             {isAppOnline && (
               <HideShow
+                onOpen={markNotificationsOpened}
                 button={
                   <HeaderButtonThatLooksLikeLink>
                     <BiggerIconBell
