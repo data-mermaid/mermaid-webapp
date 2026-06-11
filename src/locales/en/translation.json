@@ -528,6 +528,7 @@
   "loading_item": "Loading {{itemName}}",
   "macroinvertebrate_observations": {
     "add_macroinvertebrate": "Add macroinvertebrate species",
+    "density": "Density",
     "done": "Done",
     "edit_notes": "Edit Notes",
     "macroinvertebrate_name": "Macroinvertebrate name",
@@ -538,7 +539,10 @@
     "proposed_species_already_exists": "Proposed macroinvertebrate species {{attributeName}} already exists",
     "proposed_species_saved": "Proposed macroinvertebrate species {{attributeName}} saved. Observation has been updated with this species.",
     "row": "Row",
-    "species_taxonomy_unavailable": "Macroinvertebrate species taxonomy is unavailable. Please try again."
+    "species": "Species",
+    "species_taxonomy_unavailable": "Macroinvertebrate species taxonomy is unavailable. Please try again.",
+    "total_density_units": "Total density (ind/ha)",
+    "unknown_group": "Unknown Group"
   },
 
   "management_regime": "Management regime",
@@ -1030,6 +1034,14 @@
   "status_online": "You're <strong>ONLINE</strong>",
   "still_working": "Still working...",
   "submitted": "Submitted",
+  "submitted_macroinvertebrate": {
+    "abundance": "Total abundance",
+    "density_column_header": "Density (ind/ha)",
+    "density_per_group_of_interest": "Density",
+    "observations_title": "Observations",
+    "total_density_units": "Total density (ind/ha)",
+    "unknown": "Unknown"
+  },
   "submitted_no_data_message": "This project has no submitted sample units",
   "system_validation_error": "System validation error:",
   "taxonomies": {

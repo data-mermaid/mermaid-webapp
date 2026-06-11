@@ -25,6 +25,7 @@ import getObservationValidationInfo from '../CollectRecordFormPage/getObservatio
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 
 interface ObservationRecord {
   id: string
@@ -36,17 +37,22 @@ interface ObservationRecord {
 }
 
 interface SizeBinChoice {
-  id: string
-  name: string
+  id: string | number
+  name: string | number
+  conditions?: { val?: string | number }[]
 }
 
 interface ChoicesWithSizeBins {
   invertsizebins?: { data?: SizeBinChoice[] }
   fishsizebins?: { data?: SizeBinChoice[] }
+  invertbelttransectwidths?: { data?: SizeBinChoice[] }
+  belttransectwidths?: { data?: SizeBinChoice[] }
 }
 
 interface FormikValues {
   size_bin?: string | number
+  len_surveyed?: string | number
+  width?: string | number
 }
 
 interface FormikLike {
@@ -57,6 +63,7 @@ interface InvertAttributeOptionInput {
   id: string
   name: string
   display_name?: string
+  group_of_interest?: string | null
 }
 
 interface SelectOption {
@@ -70,8 +77,8 @@ const getBinLabelById = (choices: ChoicesWithSizeBins, sizeBinId: string | numbe
   return selected?.name
 }
 
-const buildSizeOptionsFromBinLabel = (sizeBinLabel: string | undefined) => {
-  const sizeBinInterval = Number.parseInt(sizeBinLabel ?? '', 10)
+const buildSizeOptionsFromBinLabel = (sizeBinLabel: string | number | undefined) => {
+  const sizeBinInterval = Number.parseInt(String(sizeBinLabel ?? ''), 10)
 
   if (!Number.isFinite(sizeBinInterval) || sizeBinInterval <= 1) {
     return []
@@ -108,22 +115,20 @@ interface ObservationRowProps {
   areValidationsShowing: boolean
   autoFocusAllowed: boolean
   collectRecord?: unknown
-  deleteObservationText: string
   ignoreObservationValidations: (...args: unknown[]) => void
   index: number
   invertAttributeOptions: SelectOption[]
-  noResultsText: string
   observation: ObservationRecord
   observationsCount: number
   observationsDispatch: (action: unknown) => void
   onNotesClick: (observationId: string) => void
-  proposeNewSpeciesText: string
   resetObservationValidations: (args: { observationId: string }) => void
   setAreObservationsInputsDirty: (isDirty: boolean) => void
   setIsNewInvertAttributeModalOpen: (isOpen: boolean) => void
   setObservationIdToAddNewInvertAttributeTo: (observationId: string) => void
-  sizeBinSelectedLabel?: string
+  sizeBinSelectedLabel?: string | number
   sizeOptions: SelectOption[]
+  transectAreaM2: number
   onObservationKeyDown: (args: {
     event: React.KeyboardEvent
     index: number
@@ -136,28 +141,27 @@ const BeltInvertObservationRow = ({
   areValidationsShowing,
   autoFocusAllowed,
   collectRecord,
-  deleteObservationText,
   ignoreObservationValidations,
   index,
   invertAttributeOptions,
-  noResultsText,
   observation,
   observationsCount,
   observationsDispatch,
   onNotesClick,
-  proposeNewSpeciesText,
   resetObservationValidations,
   setAreObservationsInputsDirty,
   setIsNewInvertAttributeModalOpen,
   setObservationIdToAddNewInvertAttributeTo,
   sizeBinSelectedLabel,
   sizeOptions,
+  transectAreaM2,
   onObservationKeyDown,
 }: ObservationRowProps) => {
+  const { t } = useTranslation()
   const { id: observationId, count, size, invert_attribute: invertAttributeId } = observation
   const rowNumber = index + 1
-  const sizeOrEmptyString = size ?? ''
-  const countOrEmptyString = count ?? ''
+  const observationDensity =
+    transectAreaM2 > 0 && Number(count ?? 0) ? (Number(count ?? 0) / transectAreaM2) * 10000 : 0
 
   const showNumericSizeInput =
     sizeBinSelectedLabel?.toString() === '1' || typeof sizeBinSelectedLabel === 'undefined'
@@ -237,7 +241,7 @@ const BeltInvertObservationRow = ({
 
   const sizeInput = showNumericSizeInput ? (
     <InputNumberNumericCharactersOnly
-      value={sizeOrEmptyString}
+      value={size ?? ''}
       step="any"
       disabled={!sizeBinSelectedLabel}
       aria-labelledby="invert-size-label"
@@ -249,7 +253,7 @@ const BeltInvertObservationRow = ({
     />
   ) : (
     <Select
-      value={sizeOrEmptyString}
+      value={size ?? ''}
       aria-labelledby="invert-size-label"
       data-testid="invert-size-select"
       disabled={!sizeBinSelectedLabel}
@@ -278,23 +282,23 @@ const BeltInvertObservationRow = ({
         <InputAutocompleteContainer>
           <ObservationAutocomplete
             id={`observation-${observationId}`}
-            data-testid="invert-name-autocomplete"
+            data-testid="species-name-autocomplete"
             disabled={!sizeBinSelectedLabel}
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus={autoFocusAllowed}
             isLastRow={observationsCount === rowNumber}
-            aria-labelledby="invert-name-label"
+            aria-labelledby="species-name-label"
             options={invertAttributeOptions}
             onChange={handleInvertAttributeChange}
             value={invertAttributeId}
-            noResultsText={noResultsText}
+            noResultsText={t('search.no_results')}
             noResultsAction={
               <NewOptionButton
                 type="button"
-                data-testid="propose-new-invert-button"
+                data-testid="propose-new-species-button"
                 onClick={proposeNewSpeciesClick}
               >
-                {proposeNewSpeciesText}
+                {t('propose_new_species')}
               </NewOptionButton>
             }
           />
@@ -303,7 +307,7 @@ const BeltInvertObservationRow = ({
       <Td $align="right">{sizeInput}</Td>
       <Td $align="right">
         <InputNumberNumericCharactersOnly
-          value={countOrEmptyString}
+          value={count ?? ''}
           step="any"
           aria-labelledby="invert-count-label"
           onChange={handleUpdateCount}
@@ -352,12 +356,13 @@ const BeltInvertObservationRow = ({
           resetObservationValidations={resetObservationValidations}
         />
       ) : null}
+      <Td $align="right">{roundToOneDecimal(observationDensity)}</Td>
       <Td $align="center">
         <ButtonRemoveRow
           tabIndex={-1}
           type="button"
           onClick={handleDeleteObservation}
-          aria-label={deleteObservationText}
+          aria-label={t('delete_observation')}
           data-testid="delete-observation-button"
         >
           <IconClose />
@@ -384,6 +389,21 @@ const BeltInvertObservationTable = ({
 }: BeltInvertObservationTableProps) => {
   const { t } = useTranslation()
   const sizeBinSelected = formik?.values?.size_bin
+  const transectLengthSurveyed = Number(formik?.values?.len_surveyed)
+  const selectedWidthId = formik?.values?.width
+  const transectWidth = useMemo(() => {
+    const widthChoices =
+      choices?.invertbelttransectwidths?.data ?? choices?.belttransectwidths?.data ?? []
+    const selectedWidth = widthChoices?.find((option) => `${option.id}` === `${selectedWidthId}`)
+    const widthFromChoice = Number(selectedWidth?.conditions?.[0]?.val ?? Number.NaN)
+    const widthFromFormikValue = Number(selectedWidthId)
+
+    if (Number.isFinite(widthFromChoice)) {
+      return widthFromChoice
+    }
+
+    return Number.isFinite(widthFromFormikValue) ? widthFromFormikValue : 0
+  }, [choices, selectedWidthId])
   const sizeBinSelectedLabel = getBinLabelById(choices, sizeBinSelected)
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
@@ -408,10 +428,6 @@ const BeltInvertObservationTable = ({
     setNotesModalObservationId(null)
   }
 
-  const noResultsText = t('search.no_results')
-  const proposeNewSpeciesText = t('propose_new_species')
-  const deleteObservationText = t('delete_observation')
-
   const invertAttributeOptions = useMemo(() => {
     return ((invertAttributes as InvertAttributeOptionInput[]) ?? []).map(
       ({ id, name, display_name }) => ({
@@ -429,6 +445,48 @@ const BeltInvertObservationTable = ({
     () => summarizeArrayObjectValuesByProperty(observationsState, 'count'),
     [observationsState],
   )
+
+  const transectAreaM2 =
+    Number.isFinite(transectLengthSurveyed) && Number.isFinite(transectWidth)
+      ? transectLengthSurveyed * transectWidth
+      : 0
+
+  const totalDensity = useMemo(() => {
+    const includedAbundance = observationsState.reduce((sum, observation) => {
+      if (observation.include === false) {
+        return sum
+      }
+
+      const count = Number(observation.count ?? 0)
+      return sum + (Number.isFinite(count) ? count : 0)
+    }, 0)
+
+    return transectAreaM2 > 0 ? (includedAbundance / transectAreaM2) * 10000 : 0
+  }, [observationsState, transectAreaM2])
+
+  const densityPerGroupOfInterest = useMemo(() => {
+    const groupMap = new Map<string | null, number>()
+
+    observationsState.forEach((observation) => {
+      if (observation.include === false || !observation.invert_attribute) {
+        return
+      }
+
+      const attribute = invertAttributes.find((attr) => attr.id === observation.invert_attribute)
+      const groupOfInterestId = attribute?.group_of_interest ?? null
+      const count = Number(observation.count ?? 0)
+
+      if (!Number.isFinite(count)) {
+        return
+      }
+
+      const density = transectAreaM2 > 0 ? (count / transectAreaM2) * 10000 : 0
+      const current = groupMap.get(groupOfInterestId) ?? 0
+      groupMap.set(groupOfInterestId, current + density)
+    })
+
+    return groupMap
+  }, [observationsState, invertAttributes, transectAreaM2])
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -510,6 +568,7 @@ const BeltInvertObservationTable = ({
             <col className={tableStyles.colInclude} />
             <col className={tableStyles.colNotes} />
             {areValidationsShowing ? <col className={tableStyles.colValidations} /> : null}
+            <col className={tableStyles.colDensity} />
             <col className={tableStyles.colRemove} />
           </colgroup>
           <thead>
@@ -542,6 +601,11 @@ const BeltInvertObservationTable = ({
                   {t('validations.validations')}
                 </Th>
               ) : null}
+              <Th $align="right" id="invert-density-label">
+                <LabelContainer>
+                  {t('submitted_macroinvertebrate.density_column_header')}
+                </LabelContainer>
+              </Th>
               <Th> </Th>
             </Tr>
           </thead>
@@ -553,21 +617,19 @@ const BeltInvertObservationTable = ({
                 areValidationsShowing={areValidationsShowing}
                 autoFocusAllowed={autoFocusAllowed}
                 collectRecord={collectRecord}
-                deleteObservationText={deleteObservationText}
                 ignoreObservationValidations={ignoreObservationValidations}
                 index={index}
                 invertAttributeOptions={invertAttributeOptions}
-                noResultsText={noResultsText}
                 observation={observation}
                 observationsCount={observationsState.length}
                 observationsDispatch={observationsDispatch}
-                proposeNewSpeciesText={proposeNewSpeciesText}
                 resetObservationValidations={resetObservationValidations}
                 setAreObservationsInputsDirty={setAreObservationsInputsDirty}
                 setIsNewInvertAttributeModalOpen={setIsNewInvertAttributeModalOpen}
                 setObservationIdToAddNewInvertAttributeTo={
                   setObservationIdToAddNewInvertAttributeTo
                 }
+                transectAreaM2={transectAreaM2}
                 onNotesClick={setNotesModalObservationId}
                 sizeBinSelectedLabel={sizeBinSelectedLabel}
                 sizeOptions={sizeOptions}
@@ -596,6 +658,24 @@ const BeltInvertObservationTable = ({
         </UnderTableRowButtonArea>
         <ObservationsSummaryStats>
           <tbody>
+            {Array.from(densityPerGroupOfInterest.entries()).map(([groupOfInterestId, density]) => {
+              const groupAttribute = invertAttributes.find(
+                (attr) =>
+                  attr.group_of_interest === groupOfInterestId && attr.id === groupOfInterestId,
+              )
+              const groupName =
+                groupAttribute?.name ?? t('macroinvertebrate_observations.unknown_group')
+              return (
+                <Tr key={groupOfInterestId}>
+                  <Th>{`${t('macroinvertebrate_observations.density')} - ${groupName}`}</Th>
+                  <Td>{roundToOneDecimal(density)}</Td>
+                </Tr>
+              )
+            })}
+            <Tr>
+              <Th>{t('macroinvertebrate_observations.total_density_units')}</Th>
+              <Td>{roundToOneDecimal(totalDensity)}</Td>
+            </Tr>
             <Tr>
               <Th>{t('total_abundance')}</Th>
               <Td>{totalAbundance.toFixed(1)}</Td>
