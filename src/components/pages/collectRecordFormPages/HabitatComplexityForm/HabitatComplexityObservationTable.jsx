@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { styled } from 'styled-components'
 
@@ -15,16 +15,16 @@ import {
   observationsReducerPropType,
   habitatComplexityPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonPrimary, IconButton } from '../../../generic/buttons'
+import { ButtonPrimary } from '../../../generic/buttons'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus, IconInfo } from '../../../icons'
-import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../../generic/form'
+import { IconClose, IconPlus } from '../../../icons'
+import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import ObservationValidationInfo from '../ObservationValidationInfo'
-import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -56,8 +56,7 @@ const HabitatComplexityObservationsTable = ({
   const metersShort = t('measurements.meter_short')
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+  const tooltipGroupRef = useRef(null)
   const deleteObservationText = t('delete_observation')
 
   const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
@@ -71,25 +70,6 @@ const HabitatComplexityObservationsTable = ({
     },
     [intervalSize, intervalStart, observationsDispatch],
   )
-
-  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
-    document.body.addEventListener('click', () => {
-      if (isHelperTextShowing === true) {
-        setIsHelperTextShowing(false)
-      }
-    })
-  }, [isHelperTextShowing])
-
-  const handleInfoIconClick = (event, label) => {
-    if (currentHelperTextLabel === label) {
-      setIsHelperTextShowing(!isHelperTextShowing)
-    } else {
-      setIsHelperTextShowing(true)
-      setCurrentHelperTextLabel(label)
-    }
-
-    event.stopPropagation()
-  }
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -266,22 +246,15 @@ const HabitatComplexityObservationsTable = ({
                     {t('observations.interval')}
                   </Th>
                   <Th $align="center" id="habitat-complexity-score-label">
-                    <LabelContainer>
-                      {t('habitat_complexity_score')} <RequiredIndicator />
-                      {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
-                        <ColumnHeaderToolTip
-                          helperText={t('habitat_complexity_score_info')}
-                          left="8.3em"
-                          top="-21em"
-                        />
-                      ) : null}
-                      <IconButton
-                        type="button"
-                        onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
-                      >
-                        <IconInfo aria-label={t('message_type.info')} />
-                      </IconButton>
-                    </LabelContainer>
+                    <LabelWithTooltip
+                      label={
+                        <>
+                          {t('habitat_complexity_score')} <RequiredIndicator />
+                        </>
+                      }
+                      tooltipText={t('habitat_complexity_score_info')}
+                      groupRef={tooltipGroupRef}
+                    />
                   </Th>
                   {areValidationsShowing ? (
                     <Th $align="center">{t('validations.validations')}</Th>

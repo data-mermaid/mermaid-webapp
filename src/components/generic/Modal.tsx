@@ -12,6 +12,7 @@ export const MODAL_CONTENT_HEIGHT = '80vh'
 
 interface StyledDialogProps {
   $maxWidth?: string
+  $maxHeight?: string
   $padding?: string
 }
 
@@ -35,7 +36,7 @@ const StyledDialog = styled('div')<StyledDialogProps>`
   max-width: ${(props) =>
     props.$maxWidth || '96rem'}; // Default to 96rem if maxWidth prop is not provided
   background: ${theme.color.white};
-  max-height: 98vh;
+  max-height: ${(props) => props.$maxHeight || '98vh'};
   display: grid;
   grid-template-rows: auto auto 1fr auto;
 `
@@ -156,6 +157,7 @@ interface ModalProps {
   title: string
   toolbarContent?: React.ReactNode
   maxWidth?: string
+  maxHeight?: string
   testId?: string
   padding?: string
   displayCloseIcon?: boolean
@@ -170,6 +172,7 @@ const Modal = ({
   footerContent,
   toolbarContent = undefined,
   maxWidth = undefined,
+  maxHeight = undefined,
   testId = '',
   padding = undefined,
   displayCloseIcon = true,
@@ -197,6 +200,7 @@ const Modal = ({
           aria-labelledby="modal-title"
           aria-describedby="modal-content"
           $maxWidth={maxWidth}
+          $maxHeight={maxHeight}
           $padding={padding}
         >
           <ModalTitle>
