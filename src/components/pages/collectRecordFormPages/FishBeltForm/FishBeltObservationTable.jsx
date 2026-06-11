@@ -25,8 +25,8 @@ import {
   Popover,
 } from '../CollectingFormPage.Styles'
 import { ButtonPrimary, IconButton } from '../../../generic/buttons'
-import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
-import { getFishBinLabel } from './fishBeltBins'
+import ObservationSizeSelect from '../ObservationSizeSelect'
+import { fishBeltBins, getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishBeltBiomass'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { H2 } from '../../../generic/text'
@@ -283,13 +283,14 @@ const FishBeltObservationTable = ({
       }
 
       const sizeSelect = !showNumericSizeInput ? (
-        <FishBeltObservationSizeSelect
+        <ObservationSizeSelect
           onValueEntered={handleUpdateSize}
           onKeyDown={handleObservationKeyDown}
-          fishBinSelectedLabel={fishBinSelectedLabel}
+          options={fishBeltBins[fishBinSelectedLabel] ?? []}
           value={sizeOrEmptyStringToAvoidInputValueErrors}
           labelledBy="fish-size-label"
           testid="fish-size-select"
+          plusInputTestId="fish-size-50-input"
         />
       ) : null
 

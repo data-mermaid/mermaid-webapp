@@ -1,30 +1,39 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { Select } from '../../../generic/form'
-import { fishBeltBins } from './fishBeltBins'
-import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
+import { Select } from '../../generic/form'
+import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 
-export const FishBeltObservationSizeSelect = ({
+const ObservationSizeSelect = ({
   onValueEntered,
-  fishBinSelectedLabel = undefined,
+  onKeyDown,
+  options = [],
   value = '',
   labelledBy = undefined,
   testid = undefined,
+  disabled = false,
+  plusInputTestId = 'size-50-input',
   ...restOfProps
 }) => {
-  const binsToUse = fishBeltBins[fishBinSelectedLabel] ?? []
-  const isValue50OrMore = value >= 50
+  const numericValue = Number(value)
+  const isValue50OrMore = Number.isFinite(numericValue) && numericValue >= 50
   const optionSelected = isValue50OrMore ? 50 : value
-  const [show50PlusInput, setShow50PlusInput] = useState(isValue50OrMore)
-  const [plus50Value, setPlus50Value] = useState(value >= 50 ? value : 50)
 
-  const _resetPlus50 = useEffect(() => {
-    if (!value) {
+  const [show50PlusInput, setShow50PlusInput] = useState(isValue50OrMore)
+  const [plus50Value, setPlus50Value] = useState(isValue50OrMore ? value : 50)
+
+  useEffect(() => {
+    if (value === '' || value === null || typeof value === 'undefined') {
       setPlus50Value(50)
       setShow50PlusInput(false)
+      return
     }
-  }, [value])
+
+    if (isValue50OrMore) {
+      setShow50PlusInput(true)
+      setPlus50Value(value)
+    }
+  }, [isValue50OrMore, value])
 
   const handleSelectOnChange = (event) => {
     const selectedValue = event.target.value
@@ -40,8 +49,8 @@ export const FishBeltObservationSizeSelect = ({
   }
 
   const handlePlus50OnBlur = (event) => {
-    const eventValue = event.target.value
-    const validPlus50Value = eventValue < 50 ? '' : eventValue
+    const eventValue = Number(event.target.value)
+    const validPlus50Value = Number.isFinite(eventValue) && eventValue >= 50 ? eventValue : ''
 
     onValueEntered(validPlus50Value)
   }
@@ -50,13 +59,15 @@ export const FishBeltObservationSizeSelect = ({
     <>
       <Select
         onChange={handleSelectOnChange}
+        onKeyDown={onKeyDown}
         value={optionSelected}
         aria-labelledby={labelledBy}
         data-testid={testid}
+        disabled={disabled}
         {...restOfProps}
       >
         <option value=""> </option>
-        {binsToUse.map(({ value: optionValue, label }) => {
+        {options.map(({ value: optionValue, label }) => {
           return (
             <option value={optionValue} key={optionValue}>
               {label}
@@ -74,17 +85,28 @@ export const FishBeltObservationSizeSelect = ({
           unit="cm"
           step="any"
           aria-labelledby={labelledBy}
-          data-testid="fish-size-50-input"
+          data-testid={plusInputTestId}
+          disabled={disabled}
         />
       )}
     </>
   )
 }
 
-FishBeltObservationSizeSelect.propTypes = {
+ObservationSizeSelect.propTypes = {
   onValueEntered: PropTypes.func.isRequired,
-  fishBinSelectedLabel: PropTypes.string,
+  onKeyDown: PropTypes.func,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    }),
+  ),
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   labelledBy: PropTypes.string,
   testid: PropTypes.string,
+  disabled: PropTypes.bool,
+  plusInputTestId: PropTypes.string,
 }
+
+export default ObservationSizeSelect
