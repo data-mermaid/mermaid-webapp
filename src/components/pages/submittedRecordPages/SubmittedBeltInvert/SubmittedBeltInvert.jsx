@@ -77,6 +77,13 @@ const SubmittedBeltInvert = () => {
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
+              if (!submittedRecordResponse) {
+                setIdsNotAssociatedWithData([projectId, submittedRecordId])
+                setIsLoading(false)
+                toast.error(...getToastArguments(submittedRecordUnavailableErrorMessage))
+                return
+              }
+
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
@@ -101,6 +108,9 @@ const SubmittedBeltInvert = () => {
 
               if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
                 setIdsNotAssociatedWithData([projectId, submittedRecordId])
+              }
+
+              if (isMounted.current) {
                 setIsLoading(false)
               }
               toast.error(...getToastArguments(submittedRecordUnavailableErrorMessage))
@@ -155,32 +165,35 @@ const SubmittedBeltInvert = () => {
       subNavNode={subNavNode}
       content={
         isAppOnline ? (
-          <>
-            <SubmittedBeltInvertInfoTable
-              choices={choices}
-              sites={sites}
-              managementRegimes={managementRegimes}
-              submittedRecord={submittedRecord}
-            />
-            <FormSubTitle>{t('sample_units.observers')}</FormSubTitle>
-            <ul>
-              {observers.map((observer) => (
-                <li key={observer.id}>{observer.profile_name}</li>
-              ))}
-            </ul>
+          submittedRecord ? (
+            <>
+              <SubmittedBeltInvertInfoTable
+                choices={choices}
+                sites={sites}
+                managementRegimes={managementRegimes}
+                submittedRecord={submittedRecord}
+              />
+              <FormSubTitle>{t('sample_units.observers')}</FormSubTitle>
+              <ul>
+                {observers.map((observer) => (
+                  <li key={observer.id}>{observer.profile_name}</li>
+                ))}
+              </ul>
 
-            <SubmittedBeltInvertObservationTable
-              choices={choices}
-              invertAttributes={invertAttributes}
-              submittedRecord={submittedRecord}
-            />
-          </>
+              <SubmittedBeltInvertObservationTable
+                choices={choices}
+                invertAttributes={invertAttributes}
+                submittedRecord={submittedRecord}
+              />
+            </>
+          ) : null
         ) : (
           <PageUnavailable mainText={t('offline.page_unavailable_offline')} />
         )
       }
       toolbar={
-        isAppOnline && (
+        isAppOnline &&
+        submittedRecord && (
           <>
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}

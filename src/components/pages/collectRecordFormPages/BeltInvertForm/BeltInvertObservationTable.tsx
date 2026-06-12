@@ -26,6 +26,7 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { calculateBeltInvertMetrics } from '../../submittedRecordPages/SubmittedBeltInvert/calculateBeltInvertMetrics'
 
 interface ObservationRecord {
   id: string
@@ -40,6 +41,7 @@ interface SizeBinChoice {
   id: string | number
   name: string | number
   conditions?: { val?: string | number }[]
+  val?: number
 }
 
 interface ChoicesWithSizeBins {
@@ -395,7 +397,7 @@ const BeltInvertObservationTable = ({
     const widthChoices =
       choices?.invertbelttransectwidths?.data ?? choices?.belttransectwidths?.data ?? []
     const selectedWidth = widthChoices?.find((option) => `${option.id}` === `${selectedWidthId}`)
-    const widthFromChoice = Number(selectedWidth?.conditions?.[0]?.val ?? Number.NaN)
+    const widthFromChoice = Number(selectedWidth?.val)
     const widthFromFormikValue = Number(selectedWidthId)
 
     if (Number.isFinite(widthFromChoice)) {
@@ -451,42 +453,14 @@ const BeltInvertObservationTable = ({
       ? transectLengthSurveyed * transectWidth
       : 0
 
-  const totalDensity = useMemo(() => {
-    const includedAbundance = observationsState.reduce((sum, observation) => {
-      if (observation.include === false) {
-        return sum
-      }
-
-      const count = Number(observation.count ?? 0)
-      return sum + (Number.isFinite(count) ? count : 0)
-    }, 0)
-
-    return transectAreaM2 > 0 ? (includedAbundance / transectAreaM2) * 10000 : 0
-  }, [observationsState, transectAreaM2])
-
-  const densityPerGroupOfInterest = useMemo(() => {
-    const groupMap = new Map<string | null, number>()
-
-    observationsState.forEach((observation) => {
-      if (observation.include === false || !observation.invert_attribute) {
-        return
-      }
-
-      const attribute = invertAttributes.find((attr) => attr.id === observation.invert_attribute)
-      const groupOfInterestId = attribute?.group_of_interest ?? null
-      const count = Number(observation.count ?? 0)
-
-      if (!Number.isFinite(count)) {
-        return
-      }
-
-      const density = transectAreaM2 > 0 ? (count / transectAreaM2) * 10000 : 0
-      const current = groupMap.get(groupOfInterestId) ?? 0
-      groupMap.set(groupOfInterestId, current + density)
-    })
-
-    return groupMap
-  }, [observationsState, invertAttributes, transectAreaM2])
+  const { density: totalDensity, densityPerGroupOfInterest } = useMemo(() => {
+    return calculateBeltInvertMetrics(
+      observationsState,
+      transectLengthSurveyed,
+      transectWidth,
+      invertAttributes,
+    )
+  }, [observationsState, transectLengthSurveyed, transectWidth, invertAttributes])
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -659,14 +633,11 @@ const BeltInvertObservationTable = ({
         <ObservationsSummaryStats>
           <tbody>
             {Array.from(densityPerGroupOfInterest.entries()).map(([groupOfInterestId, density]) => {
-              const groupAttribute = invertAttributes.find(
-                (attr) =>
-                  attr.group_of_interest === groupOfInterestId && attr.id === groupOfInterestId,
-              )
+              const groupAttribute = invertAttributes.find((attr) => attr.id === groupOfInterestId)
               const groupName =
                 groupAttribute?.name ?? t('macroinvertebrate_observations.unknown_group')
               return (
-                <Tr key={groupOfInterestId}>
+                <Tr key={groupOfInterestId ?? 'unknown-group'}>
                   <Th>{`${t('macroinvertebrate_observations.density')} - ${groupName}`}</Th>
                   <Td>{roundToOneDecimal(density)}</Td>
                 </Tr>

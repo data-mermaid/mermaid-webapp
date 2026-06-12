@@ -27,6 +27,8 @@ export const calculateBeltInvertMetrics = (
 
   const abundance = includedObs.reduce((sum, obs) => sum + Number(obs.count ?? 0), 0)
 
+  console.log('lenSurveyed', lenSurveyed)
+  console.log('width', width)
   const areaM2 = Number(lenSurveyed) * Number(width)
   // Convert m^2 to ha: 1 ha = 10,000 m^2
   const density = areaM2 > 0 ? (abundance / areaM2) * 10000 : 0

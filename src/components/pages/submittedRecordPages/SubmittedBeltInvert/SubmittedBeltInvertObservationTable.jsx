@@ -24,13 +24,18 @@ const SubmittedBeltInvertObservationTable = ({
   submittedRecord = undefined,
 }) => {
   const { t } = useTranslation()
+
+  if (!submittedRecord) {
+    return null
+  }
+
   const { obs_belt_inverts } = submittedRecord
   const { width: widthId, len_surveyed } = submittedRecord.beltinvert_transect
 
   const widthChoices =
     choices?.invertbelttransectwidths?.data ?? choices?.belttransectwidths?.data ?? []
   const selectedWidth = widthChoices.find((option) => `${option.id}` === `${widthId}`)
-  const width = Number(selectedWidth?.conditions?.[0]?.val ?? widthId ?? 0)
+  const width = Number(selectedWidth?.val)
 
   const { abundance, density, observationDensities, densityPerGroupOfInterest } =
     calculateBeltInvertMetrics(obs_belt_inverts, len_surveyed, width, invertAttributes)

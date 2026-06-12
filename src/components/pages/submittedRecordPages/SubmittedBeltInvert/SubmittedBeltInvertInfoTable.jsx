@@ -17,6 +17,11 @@ const SubmittedBeltInvertInfoTable = ({
   submittedRecord = undefined,
 }) => {
   const { t } = useTranslation()
+
+  if (!submittedRecord) {
+    return null
+  }
+
   const { site, management, sample_date } = submittedRecord.sample_event
   const { sample_time, depth, number, label, len_surveyed, width, size_bin, reef_slope, notes } =
     submittedRecord.beltinvert_transect
