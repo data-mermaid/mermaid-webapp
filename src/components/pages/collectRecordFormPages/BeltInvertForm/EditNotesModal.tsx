@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Modal, { RightFooter } from '../../../generic/Modal'
 import { ButtonPrimary } from '../../../generic/buttons'
@@ -23,12 +23,22 @@ const EditNotesModal = ({
 }: EditNotesModalProps) => {
   const { t } = useTranslation()
   const [draft, setDraft] = useState(currentNote)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       setDraft(currentNote)
     }
   }, [isOpen, currentNote])
+
+  useEffect(() => {
+    // Focuses the text area and moves the cursor to the end of the textarea when modal is opened
+    if (isOpen && textareaRef.current) {
+      const el = textareaRef.current
+      el.focus()
+      el.setSelectionRange(el.value.length, el.value.length)
+    }
+  }, [isOpen])
 
   const subheading = invertAttributeName ? (
     <p className={styles.notesSubheading}>
@@ -50,6 +60,7 @@ const EditNotesModal = ({
         <>
           {subheading}
           <textarea
+            ref={textareaRef}
             className={styles.notesTextarea}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
