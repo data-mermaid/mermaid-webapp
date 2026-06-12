@@ -130,23 +130,33 @@ export const MediumIconOpenInNew = styled(IconOpenInNew)`
 export const MediumIconExcel = styled(IconExcel)`
   ${mediumIcons};
 `
-const bellShake = keyframes`
-  0%   { transform: rotate(0deg); }
-  15%  { transform: rotate(15deg); }
-  30%  { transform: rotate(-15deg); }
-  45%  { transform: rotate(10deg); }
-  60%  { transform: rotate(-10deg); }
-  75%  { transform: rotate(5deg); }
-  90%  { transform: rotate(-5deg); }
+const bellRing = keyframes`
+  0%   { transform: rotate(20deg); }
+  5%   { transform: rotate(-20deg); }
+  10%  { transform: rotate(35deg); }
+  15%  { transform: rotate(-35deg); }
+  20%  { transform: rotate(20deg); }
+  25%  { transform: rotate(-20deg); }
+  30%  { transform: rotate(30deg); }
+  35%  { transform: rotate(-30deg); }
+  40%  { transform: rotate(20deg); }
+  45%  { transform: rotate(-10deg); }
+  50%  { transform: rotate(0deg); }
   100% { transform: rotate(0deg); }
 `
 
 export const BiggerIconBell = styled(IconBell)`
   ${biggerIcons}
+`
+
+export const BellWrapper = styled.span`
+  position: relative;
+  display: inline-flex;
   ${({ $animated }) =>
     $animated &&
     css`
-      animation: ${bellShake} 0.5s ease-in-out;
+      transform-origin: top center;
+      animation: ${bellRing} 2.7s linear;
       animation-iteration-count: var(--bell-animation-count, 1);
 
       @media (prefers-reduced-motion: reduce) {
@@ -161,7 +171,7 @@ export const NotificationIndicator = styled.span`
   color: red;
   font-size: 4rem;
   position: absolute;
-  bottom: 6px;
+  top: 90%;
   left: -3px;
   line-height: 1rem;
   height: 1rem;

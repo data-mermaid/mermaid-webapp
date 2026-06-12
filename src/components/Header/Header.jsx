@@ -13,6 +13,7 @@ import {
   UserMenuButton,
   UserMenu,
   BiggerIconBell,
+  BellWrapper,
   MediumIconExcel,
   BiggerIconMenu,
   LoggedInAs,
@@ -180,15 +181,16 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
                 onOpen={markNotificationsOpened}
                 button={
                   <HeaderButtonThatLooksLikeLink id="gtm-bell-notifications">
-                    <BiggerIconBell
-                      id="gtm-bell-notifications-icon"
+                    <BellWrapper
                       $animated={isAnimating}
                       style={{ '--bell-animation-count': animationLoopCount }}
                       onAnimationEnd={stopAnimation}
-                    />
-                    {notifications.length ? (
-                      <NotificationIndicator>&bull;</NotificationIndicator>
-                    ) : undefined}
+                    >
+                      <BiggerIconBell id="gtm-bell-notifications-icon" />
+                      {notifications.length ? (
+                        <NotificationIndicator>&bull;</NotificationIndicator>
+                      ) : undefined}
+                    </BellWrapper>
                   </HeaderButtonThatLooksLikeLink>
                 }
                 contents={<BellNotificationDropDown />}
@@ -215,14 +217,16 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
                 onOpen={markNotificationsOpened}
                 button={
                   <HeaderButtonThatLooksLikeLink>
-                    <BiggerIconBell
+                    <BellWrapper
                       $animated={isAnimating}
                       style={{ '--bell-animation-count': animationLoopCount }}
                       onAnimationEnd={stopAnimation}
-                    />
-                    {notifications.length ? (
-                      <NotificationIndicator>&bull;</NotificationIndicator>
-                    ) : undefined}
+                    >
+                      <BiggerIconBell />
+                      {notifications.length ? (
+                        <NotificationIndicator>&bull;</NotificationIndicator>
+                      ) : undefined}
+                    </BellWrapper>
                   </HeaderButtonThatLooksLikeLink>
                 }
                 contents={<BellNotificationDropDown />}
