@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
 
-import { CellValidation, TableValidationList } from './CollectingFormPage.Styles'
+import { TableValidationList } from './CollectingFormPage.Styles'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
 import { getValidationMessage } from '../../../library/validationMessageHelpers'
+import { Td } from '../../generic/Table/table'
 
 const ObservationValidationInfo = ({
   ignoreObservationValidations,
@@ -35,7 +36,7 @@ const ObservationValidationInfo = ({
   }
 
   return (
-    <CellValidation>
+    <Td>
       {isObservationValid ? (
         <span aria-label={t('validations.passed')} data-testid="passed-validation-indicator">
           &nbsp;
@@ -59,7 +60,7 @@ const ObservationValidationInfo = ({
           checked={hasObservationIgnoredValidation}
         />
       ) : null}
-    </CellValidation>
+    </Td>
   )
 }
 
