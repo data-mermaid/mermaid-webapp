@@ -146,6 +146,7 @@ export const LabelContainer = styled.div.attrs({
 })`
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
   position: relative;
 `
 export const InputContainer = styled.div`

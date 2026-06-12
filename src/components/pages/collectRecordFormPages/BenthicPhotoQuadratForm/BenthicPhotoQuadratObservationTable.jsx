@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { styled } from 'styled-components'
 import { Trans, useTranslation } from 'react-i18next'
 
@@ -12,7 +12,7 @@ import {
   StickyObservationTable,
   UnderTableRow,
 } from '../CollectingFormPage.Styles'
-import { ButtonPrimary, IconButton } from '../../../generic/buttons'
+import { ButtonPrimary } from '../../../generic/buttons'
 import {
   choicesPropType,
   benthicPhotoQuadratPropType,
@@ -21,9 +21,9 @@ import {
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus, IconInfo } from '../../../icons'
+import { IconClose, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../../generic/form'
+import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
@@ -33,7 +33,7 @@ import { HelperTextLink } from '../../../generic/links'
 
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
-import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -82,33 +82,13 @@ const BenthicPhotoQuadratObservationTable = ({
 }) => {
   const { t } = useTranslation()
   const [observationsState, observationsDispatch] = observationsReducer
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+  const tooltipGroupRef = useRef(null)
 
   const missingBenthicAttributeText = t('benthic_observations.missing_benthic_attribute')
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     observationsDispatch({ type: 'addObservation' })
-  }
-
-  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
-    document.body.addEventListener('click', () => {
-      if (isHelperTextShowing === true) {
-        setIsHelperTextShowing(false)
-      }
-    })
-  }, [isHelperTextShowing])
-
-  const handleInfoIconClick = (event, label) => {
-    if (currentHelperTextLabel === label) {
-      setIsHelperTextShowing(!isHelperTextShowing)
-    } else {
-      setIsHelperTextShowing(true)
-      setCurrentHelperTextLabel(label)
-    }
-
-    event.stopPropagation()
   }
 
   const observationCategoryPercentages = useMemo(() => {
@@ -394,90 +374,58 @@ const BenthicPhotoQuadratObservationTable = ({
             <Tr>
               <Th> </Th>
               <Th $align="right" id="quadrat-number-label">
-                <LabelContainer>
-                  {t('observations.quadrat')} <RequiredIndicator />
-                  {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
-                    <ColumnHeaderToolTip
-                      helperText={t('observations.quadrat_info')}
-                      left="-3em"
-                      top="-6.5em"
-                    />
-                  ) : null}
-                  <IconButton
-                    type="button"
-                    onClick={(event) => handleInfoIconClick(event, 'quadrat')}
-                  >
-                    <IconInfo aria-label={t('message_type.info')} />
-                  </IconButton>
-                </LabelContainer>
+                <LabelWithTooltip
+                  label={
+                    <>
+                      {t('observations.quadrat')} <RequiredIndicator />
+                    </>
+                  }
+                  tooltipText={t('observations.quadrat_info')}
+                  groupRef={tooltipGroupRef}
+                />
               </Th>
               <Th $align="left" id="benthic-attribute-label">
-                <LabelContainer>
-                  {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
-                  {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
-                    <ColumnHeaderToolTip
-                      helperText={
-                        <Trans
-                          i18nKey="benthic_observations.benthic_attribute_info"
-                          components={{
-                            helperTextLink: (
-                              <HelperTextLink
-                                href="https://www.marinespecies.org/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                color="#fff"
-                              />
-                            ),
-                          }}
-                        />
-                      }
-                      left="3em"
-                      top="-13.5em"
+                <LabelWithTooltip
+                  label={
+                    <>
+                      {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
+                    </>
+                  }
+                  tooltipText={
+                    <Trans
+                      i18nKey="benthic_observations.benthic_attribute_info"
+                      components={{
+                        helperTextLink: (
+                          <HelperTextLink
+                            href="https://www.marinespecies.org/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            color="#fff"
+                          />
+                        ),
+                      }}
                     />
-                  ) : null}
-                  <IconButton
-                    type="button"
-                    onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
-                  >
-                    <IconInfo aria-label={t('message_type.info')} />
-                  </IconButton>
-                </LabelContainer>
+                  }
+                  groupRef={tooltipGroupRef}
+                />
               </Th>
               <Th $align="right" id="growth-form-label">
-                <LabelContainer>
-                  <div>{t('observations.growth_form')}</div>
-                  {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
-                    <ColumnHeaderToolTip
-                      helperText={t('observations.growth_form_info')}
-                      left="-0.5em"
-                      top="-9em"
-                    />
-                  ) : null}
-                  <IconButton
-                    type="button"
-                    onClick={(event) => handleInfoIconClick(event, 'growthForm')}
-                  >
-                    <IconInfo aria-label={t('message_type.info')} />
-                  </IconButton>
-                </LabelContainer>
+                <LabelWithTooltip
+                  label={t('observations.growth_form')}
+                  tooltipText={t('observations.growth_form_info')}
+                  groupRef={tooltipGroupRef}
+                />
               </Th>
               <Th $align="right" id="number-of-points-label">
-                <LabelContainer>
-                  {t('observations.number_of_points')} <RequiredIndicator />
-                  {isHelperTextShowing && currentHelperTextLabel === 'numberOfPoints' ? (
-                    <ColumnHeaderToolTip
-                      helperText={t('observations.number_of_points_info')}
-                      left="-1em"
-                      top="-11em"
-                    />
-                  ) : null}
-                  <IconButton
-                    type="button"
-                    onClick={(event) => handleInfoIconClick(event, 'numberOfPoints')}
-                  >
-                    <IconInfo aria-label={t('message_type.info')} />
-                  </IconButton>
-                </LabelContainer>
+                <LabelWithTooltip
+                  label={
+                    <>
+                      {t('observations.number_of_points')} <RequiredIndicator />
+                    </>
+                  }
+                  tooltipText={t('observations.number_of_points_info')}
+                  groupRef={tooltipGroupRef}
+                />
               </Th>
               {areValidationsShowing ? (
                 <Th $align="center">{t('validations.validations')}</Th>
