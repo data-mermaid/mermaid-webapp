@@ -17,6 +17,7 @@ import {
   BiggerIconMenu,
   LoggedInAs,
   HeaderIconWrapper,
+  VisuallyHidden,
 } from './Header.styles'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { IconGlobe, IconLibraryBooks } from '../icons'
@@ -248,6 +249,9 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
           </div>
         </GlobalNav>
       </StyledHeader>
+      <VisuallyHidden aria-live="polite" aria-atomic="true">
+        {isAnimating ? t('new_notifications_announced') : ''}
+      </VisuallyHidden>
       <ProfileModal isOpen={isProfileModalOpen} onDismiss={closeProfileModal} />
     </>
   )
