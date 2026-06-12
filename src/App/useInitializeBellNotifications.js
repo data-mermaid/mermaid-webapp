@@ -28,6 +28,7 @@ export const useInitializeBellNotifications = ({
   const prevNotificationCountRef = useRef(null)
   const prevAuthRef = useRef(isMermaidAuthenticated)
   const hasTriggeredInitialAnimationRef = useRef(false)
+  const pendingReloginRef = useRef(false)
 
   const markNotificationsOpened = () => {
     sessionStorage.setItem(NOTIFICATIONS_OPENED_SESSION_KEY, 'true')
@@ -125,21 +126,30 @@ export const useInitializeBellNotifications = ({
     prevNotificationCountRef.current = notifications.length
   }, [notifications])
 
-  // Trigger animation on re-login if notifications exist and user hasn't opened bell this session
+  // Set pending flag on re-login; actual animation fires once notifications arrive
   useEffect(() => {
     const wasAuthenticated = prevAuthRef.current
     prevAuthRef.current = isMermaidAuthenticated
 
     if (!wasAuthenticated && isMermaidAuthenticated) {
       prevNotificationCountRef.current = null // reset so polling doesn't false-trigger after re-login
-      const hasOpenedThisSession =
-        sessionStorage.getItem(NOTIFICATIONS_OPENED_SESSION_KEY) === 'true'
-      if (!hasOpenedThisSession && notifications.length > 0) {
-        setAnimationLoopCount(3)
-        setIsAnimating(true)
-      }
+      pendingReloginRef.current = true
     }
-  }, [isMermaidAuthenticated]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isMermaidAuthenticated])
+
+  // Consume pending re-login flag once notifications have arrived
+  useEffect(() => {
+    if (!pendingReloginRef.current || notifications.length === 0) {
+      return
+    }
+
+    pendingReloginRef.current = false
+    const hasOpenedThisSession = sessionStorage.getItem(NOTIFICATIONS_OPENED_SESSION_KEY) === 'true'
+    if (!hasOpenedThisSession) {
+      setAnimationLoopCount(3)
+      setIsAnimating(true)
+    }
+  }, [notifications])
 
   const deleteNotification = (notificationId) => {
     if (isMermaidAuthenticated && apiBaseUrl) {
