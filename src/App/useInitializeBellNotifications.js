@@ -199,6 +199,17 @@ export const useInitializeBellNotifications = ({
 
   const stopAnimation = () => setIsAnimating(false)
 
+  // When reduced-motion is enabled the CSS animation never runs so onAnimationEnd never fires.
+  // Reset isAnimating immediately so it doesn't get stuck true.
+  useEffect(() => {
+    if (!isAnimating) {
+      return
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      stopAnimation()
+    }
+  }, [isAnimating])
+
   return {
     notifications,
     deleteNotification,
