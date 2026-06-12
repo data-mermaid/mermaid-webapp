@@ -73,10 +73,12 @@ export const useInitializeBellNotifications = ({
     t,
   ])
 
-  const _initializeNotifications = useEffect(() => {
+  // Fetch notifications on mount and whenever auth, online status, or route changes
+  useEffect(() => {
     updateNotifications()
   }, [apiBaseUrl, getAccessToken, isMermaidAuthenticated, isAppOnline, location]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Poll for new notifications every 60s while authenticated and online
   useEffect(() => {
     if (!isMermaidAuthenticated || !isAppOnline) {
       return undefined
