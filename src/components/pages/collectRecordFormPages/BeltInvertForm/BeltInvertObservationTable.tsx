@@ -18,7 +18,6 @@ import { ButtonPrimary } from '../../../generic/buttons'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper, LabelContainer, RequiredIndicator } from '../../../generic/form'
-import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
@@ -26,7 +25,10 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import { calculateBeltInvertMetrics } from '../../../../library/beltInvert/calculateBeltInvertMetrics'
+import {
+  formatDensityToTwoDecimals,
+  useBeltInvertDensityMetrics,
+} from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
 import ObservationSizeSelect from '../ObservationSizeSelect'
 
 interface ObservationRecord {
@@ -45,11 +47,17 @@ interface SizeBinChoice {
   val?: number
 }
 
+interface GoiChoiceInput {
+  id: string | number
+  name: string
+}
+
 interface ChoicesWithSizeBins {
   invertsizebins?: { data?: SizeBinChoice[] }
   fishsizebins?: { data?: SizeBinChoice[] }
   invertbelttransectwidths?: { data?: SizeBinChoice[] }
   belttransectwidths?: { data?: SizeBinChoice[] }
+  invertgroupsofinterest?: { data?: GoiChoiceInput[] }
 }
 
 interface FormikValues {
@@ -66,6 +74,8 @@ interface InvertAttributeOptionInput {
   id: string
   name: string
   display_name?: string
+  parent?: string | null
+  taxonomic_rank?: string | null
   group_of_interest?: string | null
 }
 
@@ -233,7 +243,6 @@ const BeltInvertObservationRow = ({
     areValidationsShowing,
     observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
   })
-  const { t } = useTranslation()
 
   const sizeInput = showNumericSizeInput ? (
     <InputNumberNumericCharactersOnly
@@ -254,7 +263,7 @@ const BeltInvertObservationRow = ({
         onObservationKeyDown({ event, index, observation })
       }
       options={sizeOptions}
-      value={sizeOrEmptyString.toString()}
+      value={String(size ?? '')}
       labelledBy="invert-size-label"
       testid="invert-size-select"
       plusInputTestId="invert-size-50-input"
@@ -379,19 +388,6 @@ const BeltInvertObservationTable = ({
   const sizeBinSelected = formik?.values?.size_bin
   const transectLengthSurveyed = Number(formik?.values?.len_surveyed)
   const selectedWidthId = formik?.values?.width
-  const transectWidth = useMemo(() => {
-    const widthChoices =
-      choices?.invertbelttransectwidths?.data ?? choices?.belttransectwidths?.data ?? []
-    const selectedWidth = widthChoices?.find((option) => `${option.id}` === `${selectedWidthId}`)
-    const widthFromChoice = Number(selectedWidth?.val)
-    const widthFromFormikValue = Number(selectedWidthId)
-
-    if (Number.isFinite(widthFromChoice)) {
-      return widthFromChoice
-    }
-
-    return Number.isFinite(widthFromFormikValue) ? widthFromFormikValue : 0
-  }, [choices, selectedWidthId])
   const sizeBinSelectedLabel = getBinLabelById(choices, sizeBinSelected)
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
@@ -442,24 +438,13 @@ const BeltInvertObservationTable = ({
     [sizeBinSelectedLabel],
   )
 
-  const totalAbundance = useMemo(
-    () => summarizeArrayObjectValuesByProperty(observationsState, 'count'),
-    [observationsState],
-  )
-
-  const transectAreaM2 =
-    Number.isFinite(transectLengthSurveyed) && Number.isFinite(transectWidth)
-      ? transectLengthSurveyed * transectWidth
-      : 0
-
-  const { density: totalDensity, densityPerGroupOfInterest } = useMemo(() => {
-    return calculateBeltInvertMetrics(
-      observationsState,
-      transectLengthSurveyed,
-      transectWidth,
-      invertAttributes,
-    )
-  }, [observationsState, transectLengthSurveyed, transectWidth, invertAttributes])
+  const { abundance, transectAreaM2, totalDensity, densityByGoi } = useBeltInvertDensityMetrics({
+    observations: observationsState,
+    invertAttributes,
+    choices,
+    lenSurveyed: transectLengthSurveyed,
+    widthId: selectedWidthId,
+  })
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -627,24 +612,21 @@ const BeltInvertObservationTable = ({
         </UnderTableRowButtonArea>
         <ObservationsSummaryStats>
           <tbody>
-            {Array.from(densityPerGroupOfInterest.entries()).map(([groupOfInterestId, density]) => {
-              const groupAttribute = invertAttributes.find((attr) => attr.id === groupOfInterestId)
-              const groupName =
-                groupAttribute?.name ?? t('macroinvertebrate_observations.unknown_group')
+            {Object.entries(densityByGoi).map(([groupName, density]) => {
               return (
-                <Tr key={groupOfInterestId ?? 'unknown-group'}>
+                <Tr key={groupName}>
                   <Th>{`${t('macroinvertebrate_observations.density')} - ${groupName}`}</Th>
-                  <Td>{roundToOneDecimal(density)}</Td>
+                  <Td>{formatDensityToTwoDecimals(density)}</Td>
                 </Tr>
               )
             })}
             <Tr>
               <Th>{t('macroinvertebrate_observations.total_density_units')}</Th>
-              <Td>{roundToOneDecimal(totalDensity)}</Td>
+              <Td>{formatDensityToTwoDecimals(totalDensity)}</Td>
             </Tr>
             <Tr>
               <Th>{t('total_abundance')}</Th>
-              <Td>{totalAbundance.toFixed(1)}</Td>
+              <Td>{abundance.toFixed(1)}</Td>
             </Tr>
           </tbody>
         </ObservationsSummaryStats>

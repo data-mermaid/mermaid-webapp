@@ -16,7 +16,11 @@ import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal
 import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.styles'
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
-import { calculateBeltInvertMetrics } from '../../../../library/beltInvert/calculateBeltInvertMetrics'
+import {
+  formatDensityToTwoDecimals,
+  useBeltInvertDensityMetrics,
+} from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
+const EMPTY_OBSERVATIONS = []
 
 const SubmittedBeltInvertObservationTable = ({
   choices,
@@ -24,21 +28,22 @@ const SubmittedBeltInvertObservationTable = ({
   submittedRecord = undefined,
 }) => {
   const { t } = useTranslation()
+  const obs_belt_inverts = submittedRecord?.obs_belt_inverts ?? EMPTY_OBSERVATIONS
+  const widthId = submittedRecord?.beltinvert_transect?.width
+  const len_surveyed = submittedRecord?.beltinvert_transect?.len_surveyed ?? 0
+
+  const { abundance, observationDensities, totalDensity, densityByGoi } =
+    useBeltInvertDensityMetrics({
+      observations: obs_belt_inverts,
+      invertAttributes,
+      choices,
+      lenSurveyed: len_surveyed,
+      widthId,
+    })
 
   if (!submittedRecord) {
     return null
   }
-
-  const { obs_belt_inverts } = submittedRecord
-  const { width: widthId, len_surveyed } = submittedRecord.beltinvert_transect
-
-  const widthChoices =
-    choices?.invertbelttransectwidths?.data ?? choices?.belttransectwidths?.data ?? []
-  const selectedWidth = widthChoices.find((option) => `${option.id}` === `${widthId}`)
-  const width = Number(selectedWidth?.val)
-
-  const { abundance, density, observationDensities, densityPerGroupOfInterest } =
-    calculateBeltInvertMetrics(obs_belt_inverts, len_surveyed, width, invertAttributes)
 
   const getInvertName = (invertAttributeId) => {
     const found = invertAttributes.find((invert) => invert.id === invertAttributeId)
@@ -82,25 +87,19 @@ const SubmittedBeltInvertObservationTable = ({
       <UnderTableRow>
         <ObservationsSummaryStats>
           <tbody>
-            {Array.from(densityPerGroupOfInterest.entries()).map(([groupId, groupDensity]) => {
-              const groupAttribute = invertAttributes.find((attr) => attr.id === groupId)
-              const groupName =
-                groupAttribute?.display_name ??
-                groupAttribute?.name ??
-                t('submitted_macroinvertebrate.unknown')
-
+            {Object.entries(densityByGoi).map(([groupName, groupDensity]) => {
               return (
-                <Tr key={groupId ?? 'unknown-group'}>
+                <Tr key={groupName}>
                   <Th>{`${t(
                     'submitted_macroinvertebrate.density_per_group_of_interest',
                   )} - ${groupName}`}</Th>
-                  <Td>{roundToOneDecimal(groupDensity)}</Td>
+                  <Td>{formatDensityToTwoDecimals(groupDensity)}</Td>
                 </Tr>
               )
             })}
             <Tr>
               <Th>{t('submitted_macroinvertebrate.total_density_units')}</Th>
-              <Td>{roundToOneDecimal(density)}</Td>
+              <Td>{formatDensityToTwoDecimals(totalDensity)}</Td>
             </Tr>
             <Tr>
               <Th>{t('submitted_macroinvertebrate.abundance')}</Th>
