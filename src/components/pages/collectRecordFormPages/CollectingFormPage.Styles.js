@@ -7,7 +7,7 @@ import {
   ButtonSecondary,
   Button,
 } from '../../generic/buttons'
-import { TableOverflowWrapper, Tr, Td, GenericStickyTable } from '../../generic/Table/table'
+import { TableOverflowWrapper, Tr, GenericStickyTable } from '../../generic/Table/table'
 import { inputTextareaSelectStyles } from '../../generic/form'
 
 export const NewOptionButton = styled(ButtonThatLooksLikeLink)`
@@ -133,10 +133,6 @@ export const UnderTableRowButtonArea = styled('div')`
   button {
     align-self: flex-start;
   }
-`
-
-export const CellValidation = styled(Td)`
-  border: none;
 `
 
 export const CellValidationButton = styled(ButtonSecondary)`

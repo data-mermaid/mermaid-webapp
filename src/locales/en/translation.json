@@ -527,6 +527,7 @@
   "loading_indicator": "Loading indicator",
   "loading_item": "Loading {{itemName}}",
   "macroinvertebrate_observations": {
+    "add_notes": "Add notes...",
     "add_macroinvertebrate": "Add macroinvertebrate species",
     "density": "Density",
     "done": "Done",

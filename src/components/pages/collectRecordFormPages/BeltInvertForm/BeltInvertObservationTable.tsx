@@ -17,7 +17,7 @@ import {
 import { ButtonPrimary } from '../../../generic/buttons'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
-import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../../generic/form'
+import { InputWrapper, LabelContainer, RequiredIndicator } from '../../../generic/form'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
@@ -27,6 +27,7 @@ import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { calculateBeltInvertMetrics } from '../../../../library/beltInvert/calculateBeltInvertMetrics'
+import ObservationSizeSelect from '../ObservationSizeSelect'
 
 interface ObservationRecord {
   id: string
@@ -135,7 +136,7 @@ interface ObservationRowProps {
     event: React.KeyboardEvent
     index: number
     observation: ObservationRecord
-    isCount?: boolean
+    isNotes?: boolean
   }) => void
 }
 
@@ -219,14 +220,6 @@ const BeltInvertObservationRow = ({
     setIsNewInvertAttributeModalOpen(true)
   }
 
-  const handleIncludeToggle = () => {
-    setAreObservationsInputsDirty(true)
-    observationsDispatch({
-      type: 'includeToggle',
-      payload: { observationId },
-    })
-  }
-
   const {
     isObservationValid,
     hasObservationWarningValidation,
@@ -240,6 +233,7 @@ const BeltInvertObservationRow = ({
     areValidationsShowing,
     observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
   })
+  const { t } = useTranslation()
 
   const sizeInput = showNumericSizeInput ? (
     <InputNumberNumericCharactersOnly
@@ -254,27 +248,18 @@ const BeltInvertObservationRow = ({
       }
     />
   ) : (
-    <Select
-      value={size ?? ''}
-      aria-labelledby="invert-size-label"
-      data-testid="invert-size-select"
-      disabled={!sizeBinSelectedLabel}
-      onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-        handleUpdateSize(event.target.value)
-      }
+    <ObservationSizeSelect
+      onValueEntered={handleUpdateSize}
       onKeyDown={(event: React.KeyboardEvent) =>
         onObservationKeyDown({ event, index, observation })
       }
-    >
-      <option value=""> </option>
-      {sizeOptions.map((option: SelectOption) => {
-        return (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        )
-      })}
-    </Select>
+      options={sizeOptions}
+      value={sizeOrEmptyString.toString()}
+      labelledBy="invert-size-label"
+      testid="invert-size-select"
+      plusInputTestId="invert-size-50-input"
+      disabled={!sizeBinSelectedLabel}
+    />
   )
 
   return (
@@ -316,17 +301,8 @@ const BeltInvertObservationRow = ({
           disabled={!sizeBinSelectedLabel}
           data-testid="invert-count-input"
           onKeyDown={(event: React.KeyboardEvent) => {
-            onObservationKeyDown({ event, index, observation, isCount: true })
+            onObservationKeyDown({ event, index, observation })
           }}
-        />
-      </Td>
-      <Td $align="center">
-        <input
-          type="checkbox"
-          checked={observation.include ?? true}
-          onChange={handleIncludeToggle}
-          data-testid="invert-include-checkbox"
-          aria-label={`Include observation row ${index + 1}`}
         />
       </Td>
       <Td
@@ -335,15 +311,25 @@ const BeltInvertObservationRow = ({
         role="button"
         tabIndex={0}
         aria-label={`Edit notes for row ${rowNumber}`}
-        data-testid="notes-cell"
+        data-observation-id={observationId}
         onClick={() => onNotesClick(observationId)}
         onKeyDown={(e: React.KeyboardEvent) => {
+          if (e.code === 'Tab' && !e.shiftKey) {
+            onObservationKeyDown({ event: e, index, observation, isNotes: true })
+          }
+
           if (e.key === 'Enter' || e.key === ' ') {
             onNotesClick(observationId)
           }
         }}
       >
-        {observation.notes ?? ''}
+        <span
+          className={`${modalStyles.notesCellText} ${
+            !observation.notes?.trim() ? modalStyles.addNotesPlaceholder : ''
+          }`}
+        >
+          {observation.notes?.trim() || t('macroinvertebrate_observations.add_notes')}
+        </span>
       </Td>
       {areValidationsShowing ? (
         <ObservationValidationInfo
@@ -418,6 +404,18 @@ const BeltInvertObservationTable = ({
     ? observationsState.findIndex((o) => o.id === notesModalObservationId)
     : -1
 
+  const focusOnNotesCell = (observationId: string) => {
+    requestAnimationFrame(() => {
+      const cell = document.querySelector<HTMLElement>(`[data-observation-id="${observationId}"]`)
+      cell?.focus()
+    })
+  }
+
+  const handleDismissModal = () => {
+    focusOnNotesCell(notesModalObservationId ?? '')
+    setNotesModalObservationId(null)
+  }
+
   const handleNotesDone = (newNote: string) => {
     if (!notesModalObservationId) {
       return
@@ -427,6 +425,7 @@ const BeltInvertObservationTable = ({
       type: 'updateNotes',
       payload: { observationId: notesModalObservationId, newNotes: newNote },
     })
+    focusOnNotesCell(notesModalObservationId)
     setNotesModalObservationId(null)
   }
 
@@ -473,18 +472,18 @@ const BeltInvertObservationTable = ({
       event,
       index,
       observation,
-      isCount = false,
+      isNotes = false,
     }: {
       event: React.KeyboardEvent
       index: number
       observation: ObservationRecord
-      isCount?: boolean
+      isNotes?: boolean
     }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
       const isLastRow = index === observationsState.length - 1
 
-      if (isTabKey && isLastRow && isCount && sizeBinSelectedLabel) {
+      if (isTabKey && isLastRow && isNotes && sizeBinSelectedLabel) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
@@ -525,7 +524,7 @@ const BeltInvertObservationTable = ({
             : undefined
         }
         currentNote={notesModalObservation?.notes ?? ''}
-        onDismiss={() => setNotesModalObservationId(null)}
+        onDismiss={handleDismissModal}
         onDone={handleNotesDone}
       />
       <H2 id="table-label">{t('observations.observations')}</H2>
@@ -539,7 +538,6 @@ const BeltInvertObservationTable = ({
             <col className={tableStyles.colInvertName} />
             <col className={tableStyles.colSize} />
             <col className={tableStyles.colCount} />
-            <col className={tableStyles.colInclude} />
             <col className={tableStyles.colNotes} />
             {areValidationsShowing ? <col className={tableStyles.colValidations} /> : null}
             <col className={tableStyles.colDensity} />
@@ -564,15 +562,12 @@ const BeltInvertObservationTable = ({
                   {t('count')} <RequiredIndicator />
                 </LabelContainer>
               </Th>
-              <Th $align="center" id="invert-include-label">
-                <LabelContainer>{t('include')}</LabelContainer>
-              </Th>
               <Th $align="left" id="invert-notes-label">
                 <LabelContainer>{t('notes')}</LabelContainer>
               </Th>
               {areValidationsShowing ? (
                 <Th $align="center" id="invert-validations-label">
-                  {t('validations.validations')}
+                  <LabelContainer>{t('validations.validations')}</LabelContainer>
                 </Th>
               ) : null}
               <Th $align="right" id="invert-density-label">

@@ -447,7 +447,7 @@ const BeltInvertTransectInputs = ({
         }}
         {...notesValidationProperties}
         onBlur={formik.handleBlur}
-        value={formik.values.notes as string}
+        value={(formik.values.notes ?? '') as string}
         onChange={(event: React.ChangeEvent<HTMLElement>) =>
           handleInputChange(event, 'notes', NOTES_VALIDATION_PATH)
         }
