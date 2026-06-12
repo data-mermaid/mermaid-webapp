@@ -408,22 +408,6 @@ export const notificationsPropType = PropTypes.shape({
   animationLoopCount: PropTypes.number,
   markNotificationsOpened: PropTypes.func,
   stopAnimation: PropTypes.func,
-  count: PropTypes.number,
-  next: PropTypes.string,
-  previous: PropTypes.string,
-  results: PropTypes.arrayOf(
-    PropTypes.shape({
-      created_by: PropTypes.string,
-      created_on: PropTypes.string,
-      description: PropTypes.string,
-      id: PropTypes.string,
-      owner: PropTypes.string,
-      status: PropTypes.string,
-      title: PropTypes.string,
-      updated_by: PropTypes.string,
-      updated_on: PropTypes.string,
-    }),
-  ),
 })
 
 // Start of PropTypes for validation object
