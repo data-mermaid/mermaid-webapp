@@ -16,7 +16,7 @@ import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal
 import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.styles'
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
-import { calculateBeltInvertMetrics } from './calculateBeltInvertMetrics'
+import { calculateBeltInvertMetrics } from '../../../../library/beltInvert/calculateBeltInvertMetrics'
 
 const SubmittedBeltInvertObservationTable = ({
   choices,

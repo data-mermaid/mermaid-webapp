@@ -1,4 +1,4 @@
-import { calculateBeltInvertMetrics } from './calculateBeltInvertMetrics'
+import { calculateBeltInvertMetrics } from '../../../../library/beltInvert/calculateBeltInvertMetrics'
 
 const makeObs = (id, count, include = true) => ({ id, count, include })
 

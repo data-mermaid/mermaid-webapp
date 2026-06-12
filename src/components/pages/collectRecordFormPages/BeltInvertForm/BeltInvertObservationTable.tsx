@@ -26,7 +26,7 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import { calculateBeltInvertMetrics } from '../../submittedRecordPages/SubmittedBeltInvert/calculateBeltInvertMetrics'
+import { calculateBeltInvertMetrics } from '../../../../library/beltInvert/calculateBeltInvertMetrics'
 
 interface ObservationRecord {
   id: string
