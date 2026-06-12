@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
@@ -34,7 +34,7 @@ export const useInitializeBellNotifications = ({
     setIsAnimating(false)
   }
 
-  const updateNotifications = () => {
+  const updateNotifications = useCallback(() => {
     let isMounted = true
 
     if (isMermaidAuthenticated && apiBaseUrl && isAppOnline) {
@@ -63,7 +63,14 @@ export const useInitializeBellNotifications = ({
     return () => {
       isMounted = false
     }
-  }
+  }, [
+    apiBaseUrl,
+    getAccessToken,
+    handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
+    isAppOnline,
+    isMermaidAuthenticated,
+    t,
+  ])
 
   const _initializeNotifications = useEffect(() => {
     updateNotifications()
@@ -81,7 +88,7 @@ export const useInitializeBellNotifications = ({
     return () => {
       clearInterval(intervalId)
     }
-  }, [isMermaidAuthenticated, isAppOnline]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isMermaidAuthenticated, isAppOnline, updateNotifications])
 
   // Trigger animation once on initial load if notifications exist and user hasn't opened bell this session
   useEffect(() => {
