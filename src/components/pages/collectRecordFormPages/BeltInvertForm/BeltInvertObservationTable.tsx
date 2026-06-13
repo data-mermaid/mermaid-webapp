@@ -521,7 +521,6 @@ const BeltInvertObservationTable = ({
               <Th $align="right" id="invert-size-label">
                 <LabelContainer>
                   {`${t('sample_units.size')} (${t('measurements.centimeter_short')})`}
-                  <RequiredIndicator />
                 </LabelContainer>
               </Th>
               <Th $align="right" id="invert-count-label">
