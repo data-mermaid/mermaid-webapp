@@ -13,6 +13,14 @@ import { useTranslation } from 'react-i18next'
 import { useCurrentProject } from '../App/CurrentProjectContext'
 import buttonStyles from '../style/buttons.module.scss'
 
+const TooltipH2 = styled('h2')`
+  white-space: nowrap;
+  border-style: dotted;
+  border-width: 0 0 ${theme.spacing.borderMedium} 0;
+  cursor: pointer;
+  display: inline-block;
+`
+
 const TitleContainer = styled('div')`
   display: flex;
   flex-wrap: wrap;
@@ -68,22 +76,24 @@ const RecordFormTitle = ({
     <TitleContainer id="collect-form-title" data-testid="record-form-title">
       {protocolTitle && (
         <MuiTooltip title={t('sample_units.protocol')} placement="top" arrow>
-          <h2 data-testid="protocol-tooltip">{protocolTitle}</h2>
+          <TooltipH2 tabIndex={0} data-testid="protocol-tooltip">
+            {protocolTitle}
+          </TooltipH2>
         </MuiTooltip>
       )}
       {siteName && (
         <MuiTooltip title={t('sites.site_name')} placement="top" arrow>
-          <h2>{siteName}</h2>
+          <TooltipH2 tabIndex={0}>{siteName}</TooltipH2>
         </MuiTooltip>
       )}
       {transectNumber && (
         <MuiTooltip title={t('sample_units.transect_number')} placement="top" arrow>
-          <h2>{transectNumber}</h2>
+          <TooltipH2 tabIndex={0}>{transectNumber}</TooltipH2>
         </MuiTooltip>
       )}
       {label && (
         <MuiTooltip title={t('label')} placement="top" arrow>
-          <h2>{label}</h2>
+          <TooltipH2 tabIndex={0}>{label}</TooltipH2>
         </MuiTooltip>
       )}
       {sampleEventId && (

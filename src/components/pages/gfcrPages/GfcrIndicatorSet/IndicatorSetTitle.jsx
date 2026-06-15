@@ -9,6 +9,14 @@ import { MuiTooltip } from '../../../generic/MuiTooltip'
 import useDocumentTitle from '../../../../library/useDocumentTitle'
 import { H2 } from '../../../generic/text'
 
+const TooltipH2 = styled('h2')`
+  white-space: nowrap;
+  border-style: dotted;
+  border-width: 0 0 ${theme.spacing.borderMedium} 0;
+  cursor: pointer;
+  display: inline-block;
+`
+
 const TitleContainer = styled('div')`
   display: flex;
   flex-wrap: wrap;
@@ -41,13 +49,13 @@ const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingDate, isNew = fal
   return (
     <TitleContainer id="gfcr-indicator-set-form-title">
       <MuiTooltip title={t('title')} placement="top" arrow>
-        <h2>{indicatorSetTitle}</h2>
+        <TooltipH2 tabIndex={0}>{indicatorSetTitle}</TooltipH2>
       </MuiTooltip>
       <MuiTooltip title={t('type')} placement="top" arrow>
-        <h2>{type}</h2>
+        <TooltipH2 tabIndex={0}>{type}</TooltipH2>
       </MuiTooltip>
       <MuiTooltip title={t('gfcr.reporting_date_year')} placement="top" arrow>
-        <h2>{reportingYear}</h2>
+        <TooltipH2 tabIndex={0}>{reportingYear}</TooltipH2>
       </MuiTooltip>
     </TitleContainer>
   )
