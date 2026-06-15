@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
+import Tooltip from '@mui/material/Tooltip'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
 import { LabelContainer } from '../generic/form'
 import { IconInfo } from '../icons'
 import { IconButton } from '../generic/buttons'
-import ColumnHeaderToolTip from './ColumnHeaderToolTip'
-import useTooltipPosition from '../../library/useTooltipPosition'
+import tooltipStyles from '../../style/MuiComponents.module.scss'
 
 interface LabelWithTooltipProps {
   label: React.ReactNode
@@ -15,69 +16,51 @@ interface LabelWithTooltipProps {
 }
 
 const LabelWithTooltip = ({ label, tooltipText, groupRef }: LabelWithTooltipProps) => {
-  const [isTooltipTextShowing, setIsTooltipTextShowing] = useState(false)
-  const tooltipRef = useRef<HTMLSpanElement>(null)
-  const iconRef = useRef<HTMLButtonElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
 
-  const [tooltipStyle, computeTooltipPosition] = useTooltipPosition(
-    iconRef,
-    containerRef,
-    tooltipRef,
-  )
-
-  useEffect(() => {
-    if (!isTooltipTextShowing) {
-      return undefined
+  const handleClose = () => {
+    setIsOpen(false)
+    if (groupRef) {
+      groupRef.current = null
     }
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsTooltipTextShowing(false)
-        if (groupRef) {
-          groupRef.current = null
-        }
-      }
-    }
-
-    document.addEventListener('click', handleClickOutside)
-
-    return () => document.removeEventListener('click', handleClickOutside)
-  }, [isTooltipTextShowing, groupRef])
+  }
 
   const handleIconClick = (event: React.MouseEvent) => {
     event.stopPropagation()
-    if (!isTooltipTextShowing) {
-      if (groupRef) {
-        groupRef.current?.()
-        groupRef.current = () => setIsTooltipTextShowing(false)
-      }
-      setIsTooltipTextShowing(true)
+    if (isOpen) {
+      handleClose()
     } else {
+      groupRef?.current?.()
       if (groupRef) {
-        groupRef.current = null
+        groupRef.current = handleClose
       }
-      setIsTooltipTextShowing(false)
+      setIsOpen(true)
     }
   }
 
   return (
-    <LabelContainer ref={containerRef}>
-      {label}
-      <IconButton ref={iconRef} type="button" onClick={handleIconClick}>
-        <IconInfo aria-label="info" />
-      </IconButton>
-      {isTooltipTextShowing ? (
-        <ColumnHeaderToolTip
-          helperText={tooltipText}
-          left={tooltipStyle.left}
-          top={tooltipStyle.top}
-          arrowOffset={tooltipStyle.arrowOffset}
-          ref={tooltipRef}
-          onMount={computeTooltipPosition}
-        />
-      ) : null}
-    </LabelContainer>
+    <ClickAwayListener onClickAway={handleClose}>
+      <LabelContainer>
+        {label}
+        <Tooltip
+          title={tooltipText}
+          placement="top"
+          arrow
+          open={isOpen}
+          disableFocusListener
+          disableHoverListener
+          disableTouchListener
+          classes={{
+            tooltip: tooltipStyles['MuiTooltip-tooltip'],
+            arrow: tooltipStyles['MuiTooltip-arrow'],
+          }}
+        >
+          <IconButton type="button" onClick={handleIconClick}>
+            <IconInfo aria-label="info" />
+          </IconButton>
+        </Tooltip>
+      </LabelContainer>
+    </ClickAwayListener>
   )
 }
 
