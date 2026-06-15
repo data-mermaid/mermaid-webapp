@@ -48,13 +48,13 @@ const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingDate, isNew = fal
 
   return (
     <TitleContainer id="gfcr-indicator-set-form-title">
-      <MuiTooltip title={t('title')} placement="top" arrow>
+      <MuiTooltip title={t('title')} placement="bottom" arrow>
         <TooltipH2 tabIndex={0}>{indicatorSetTitle}</TooltipH2>
       </MuiTooltip>
-      <MuiTooltip title={t('type')} placement="top" arrow>
+      <MuiTooltip title={t('type')} placement="bottom" arrow>
         <TooltipH2 tabIndex={0}>{type}</TooltipH2>
       </MuiTooltip>
-      <MuiTooltip title={t('gfcr.reporting_date_year')} placement="top" arrow>
+      <MuiTooltip title={t('gfcr.reporting_date_year')} placement="bottom" arrow>
         <TooltipH2 tabIndex={0}>{reportingYear}</TooltipH2>
       </MuiTooltip>
     </TitleContainer>

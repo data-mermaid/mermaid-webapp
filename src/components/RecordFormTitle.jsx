@@ -75,30 +75,30 @@ const RecordFormTitle = ({
   return (
     <TitleContainer id="collect-form-title" data-testid="record-form-title">
       {protocolTitle && (
-        <MuiTooltip title={t('sample_units.protocol')} placement="top" arrow>
+        <MuiTooltip title={t('sample_units.protocol')} placement="bottom" arrow>
           <TooltipH2 tabIndex={0} data-testid="protocol-tooltip">
             {protocolTitle}
           </TooltipH2>
         </MuiTooltip>
       )}
       {siteName && (
-        <MuiTooltip title={t('sites.site_name')} placement="top" arrow>
+        <MuiTooltip title={t('sites.site_name')} placement="bottom" arrow>
           <TooltipH2 tabIndex={0}>{siteName}</TooltipH2>
         </MuiTooltip>
       )}
       {transectNumber && (
-        <MuiTooltip title={t('sample_units.transect_number')} placement="top" arrow>
+        <MuiTooltip title={t('sample_units.transect_number')} placement="bottom" arrow>
           <TooltipH2 tabIndex={0}>{transectNumber}</TooltipH2>
         </MuiTooltip>
       )}
       {label && (
-        <MuiTooltip title={t('label')} placement="top" arrow>
+        <MuiTooltip title={t('label')} placement="bottom" arrow>
           <TooltipH2 tabIndex={0}>{label}</TooltipH2>
         </MuiTooltip>
       )}
       {sampleEventId && (
         <MuiTooltip title={t(exploreTooltipText)} placement="top" arrow>
-          <span role="presentation">
+          <span role="presentation" className={buttonStyles['button--icon-tooltip-wrapper']}>
             <button
               className={buttonStyles['button--icon']}
               type="button"

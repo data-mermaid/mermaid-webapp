@@ -270,18 +270,18 @@ const DataSharing = () => {
               <Tr>
                 <Th>&nbsp;</Th>
                 <Th $align="center">
-                  <MuiTooltip title={findToolTipDescription('Private')} placement="top">
-                    <PolicyLabel>{t('data_sharing.private')}</PolicyLabel>
+                  <MuiTooltip title={findToolTipDescription('Private')} placement="bottom">
+                    <PolicyLabel tabIndex={0}>{t('data_sharing.private')}</PolicyLabel>
                   </MuiTooltip>
                 </Th>
                 <Th $align="center">
-                  <MuiTooltip title={findToolTipDescription('Public Summary')} placement="top">
-                    <PolicyLabel>{t('data_sharing.public_summary')}</PolicyLabel>
+                  <MuiTooltip title={findToolTipDescription('Public Summary')} placement="bottom">
+                    <PolicyLabel tabIndex={0}>{t('data_sharing.public_summary')}</PolicyLabel>
                   </MuiTooltip>
                 </Th>
                 <Th $align="center">
-                  <MuiTooltip title={findToolTipDescription('Public')} placement="top">
-                    <PolicyLabel>{t('data_sharing.public')}</PolicyLabel>
+                  <MuiTooltip title={findToolTipDescription('Public')} placement="bottom">
+                    <PolicyLabel tabIndex={0}>{t('data_sharing.public')}</PolicyLabel>
                   </MuiTooltip>
                 </Th>
               </Tr>
