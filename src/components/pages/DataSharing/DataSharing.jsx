@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { styled, css } from 'styled-components'
 import { Trans, useTranslation } from 'react-i18next'
@@ -14,7 +14,7 @@ import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
 import { H2, H3, P } from '../../generic/text'
 import { IconInfo } from '../../icons'
 import { MaxWidthInputWrapper } from '../../generic/form'
-import { TooltipWithText } from '../../generic/tooltip'
+import LabelWithTooltip from '../../ColumnHeaderToolTip/LabelWithTooltip'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import DataSharingInfoModal from '../../DataSharingInfoModal'
@@ -245,6 +245,8 @@ const DataSharing = () => {
 
   const isTestProject = projectBeingEdited?.status === PROJECT_CODES.status.test
 
+  const tooltipGroupRef = useRef(null)
+
   const findToolTipDescription = (policy) =>
     dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
@@ -262,24 +264,24 @@ const DataSharing = () => {
               <Tr>
                 <Th>&nbsp;</Th>
                 <Th $align="center">
-                  <TooltipWithText
+                  <LabelWithTooltip
+                    label={t('data_sharing.private')}
                     tooltipText={findToolTipDescription('Private')}
-                    text={<>{t('data_sharing.private')}</>}
-                    id="private-tooltip"
+                    groupRef={tooltipGroupRef}
                   />
                 </Th>
                 <Th $align="center">
-                  <TooltipWithText
+                  <LabelWithTooltip
+                    label={t('data_sharing.public_summary')}
                     tooltipText={findToolTipDescription('Public Summary')}
-                    text={<>{t('data_sharing.public_summary')}</>}
-                    id="public-summary-tooltip"
+                    groupRef={tooltipGroupRef}
                   />
                 </Th>
                 <Th $align="center">
-                  <TooltipWithText
+                  <LabelWithTooltip
+                    label={t('data_sharing.public')}
                     tooltipText={findToolTipDescription('Public')}
-                    text={<>{t('data_sharing.public')}</>}
-                    id="public-tooltip"
+                    groupRef={tooltipGroupRef}
                   />
                 </Th>
               </Tr>
