@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import theme from '../theme'
 import { mediaQueryTabletLandscapeOnly } from '../library/styling/mediaQueries'
 import { getObjectById } from '../library/getObjectById'
-import { TooltipWithText, TooltipPopup } from './generic/tooltip'
 import { fishBeltPropType, sitePropType } from '../App/mermaidData/mermaidDataProptypes'
 import useDocumentTitle from '../library/useDocumentTitle'
 import { getProtocolTransectType } from '../App/mermaidData/recordProtocolHelpers'
@@ -28,14 +27,6 @@ const TitleContainer = styled('div')`
       margin-block: ${theme.spacing.small};
     }
   `)}
-`
-
-const ProjectTooltip = styled(TooltipWithText)`
-  ${TooltipPopup} {
-    width: auto;
-    min-width: max-content;
-    text-align: center;
-  }
 `
 
 const RecordFormTitle = ({
@@ -76,32 +67,24 @@ const RecordFormTitle = ({
   return (
     <TitleContainer id="collect-form-title" data-testid="record-form-title">
       {protocolTitle && (
-        <ProjectTooltip
-          forwardedAs="h2"
-          text={protocolTitle}
-          tooltipText={t('sample_units.protocol')}
-          id="protocol-tooltip"
-          data-testid="protocol-tooltip"
-        />
+        <MuiTooltip title={t('sample_units.protocol')} placement="top" arrow>
+          <h2 data-testid="protocol-tooltip">{protocolTitle}</h2>
+        </MuiTooltip>
       )}
       {siteName && (
-        <ProjectTooltip
-          forwardedAs="h2"
-          text={siteName}
-          tooltipText={t('sites.site_name')}
-          id="site-name-tooltip"
-        />
+        <MuiTooltip title={t('sites.site_name')} placement="top" arrow>
+          <h2>{siteName}</h2>
+        </MuiTooltip>
       )}
       {transectNumber && (
-        <ProjectTooltip
-          forwardedAs="h2"
-          text={transectNumber}
-          tooltipText={t('sample_units.transect_number')}
-          id="transect-number-tooltip"
-        />
+        <MuiTooltip title={t('sample_units.transect_number')} placement="top" arrow>
+          <h2>{transectNumber}</h2>
+        </MuiTooltip>
       )}
       {label && (
-        <ProjectTooltip forwardedAs="h2" text={label} tooltipText={t('label')} id="label-tooltip" />
+        <MuiTooltip title={t('label')} placement="top" arrow>
+          <h2>{label}</h2>
+        </MuiTooltip>
       )}
       {sampleEventId && (
         <MuiTooltip title={t(exploreTooltipText)} placement="top" arrow>
