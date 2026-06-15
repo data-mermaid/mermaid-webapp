@@ -13,9 +13,10 @@ interface LabelWithTooltipProps {
   // instances. Opening one tooltip calls groupRef.current() to close whichever is currently open,
   // ensuring only one is visible at a time without lifting state to the parent.
   groupRef?: React.MutableRefObject<(() => void) | null>
+  maxWidth?: string
 }
 
-const LabelWithTooltip = ({ label, tooltipText, groupRef }: LabelWithTooltipProps) => {
+const LabelWithTooltip = ({ label, tooltipText, groupRef, maxWidth }: LabelWithTooltipProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleClose = () => {
@@ -58,6 +59,7 @@ const LabelWithTooltip = ({ label, tooltipText, groupRef }: LabelWithTooltipProp
             popper: {
               modifiers: [{ name: 'offset', options: { offset: [0, -10] } }],
             },
+            tooltip: maxWidth ? { style: { maxWidth } } : undefined,
           }}
         >
           <IconButton type="button" onClick={handleIconClick}>
