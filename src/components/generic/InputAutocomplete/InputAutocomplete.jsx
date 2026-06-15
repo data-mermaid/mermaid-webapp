@@ -25,7 +25,7 @@ const AutoCompleteResultsWrapper = styled.div`
     outline-offset: -2px;
     background: ${theme.color.white};
 
-    > * {
+    > p {
       margin: 0;
       padding: ${theme.spacing.buttonPadding};
     }

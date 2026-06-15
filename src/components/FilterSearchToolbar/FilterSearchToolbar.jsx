@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
-import { Input, LabelContainer, inputStyles } from '../generic/form'
-import { IconInfo } from '../icons'
-import { IconButton } from '../generic/buttons'
-import ColumnHeaderToolTip from '../ColumnHeaderToolTip/ColumnHeaderToolTip'
-import useTooltipPosition from '../../library/useTooltipPosition'
+import domPurify from 'dompurify'
+import { Input, inputStyles } from '../generic/form'
+import LabelWithTooltip from '../ColumnHeaderToolTip/LabelWithTooltip'
 import theme from '../../theme'
 
 const FilterLabelWrapper = styled.label`
@@ -36,78 +34,22 @@ const FilterSearchToolbar = ({
   groupRef = null,
 }) => {
   const { t } = useTranslation()
-  const [isTooltipTextShowing, setIsHelperTextShowing] = useState(false)
-  const tooltipRef = useRef(null)
-  const iconRef = useRef(null)
-  const labelContainerRef = useRef(null)
-
-  const [tooltipStyle, computeTooltipPosition] = useTooltipPosition(
-    iconRef,
-    labelContainerRef,
-    tooltipRef,
-  )
-
-  useEffect(() => {
-    if (!isTooltipTextShowing) {
-      return undefined
-    }
-
-    const handleClickOutside = (event) => {
-      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
-        if (groupRef) {
-          groupRef.current = null
-        }
-        setIsHelperTextShowing(false)
-      }
-    }
-
-    document.addEventListener('click', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside)
-    }
-  }, [isTooltipTextShowing, groupRef])
 
   const handleFilterChange = (event) => {
     handleGlobalFilterChange(event.target.value)
   }
 
-  const handleInfoIconClick = (event) => {
-    event.stopPropagation()
-    if (!isTooltipTextShowing) {
-      if (groupRef) {
-        groupRef.current?.()
-        groupRef.current = () => setIsHelperTextShowing(false)
-      }
-      setIsHelperTextShowing(true)
-    } else {
-      if (groupRef) {
-        groupRef.current = null
-      }
-      setIsHelperTextShowing(false)
-    }
-  }
+  /* eslint-disable react/no-danger */
+  const tooltipTitle = (
+    <span
+      dangerouslySetInnerHTML={{ __html: domPurify.sanitize(t('filters.search_helper_text')) }}
+    />
+  )
+  /* eslint-enable react/no-danger */
 
   return (
     <FilterLabelWrapper htmlFor={id}>
-      <LabelContainer ref={labelContainerRef}>
-        {name}
-        <IconButton ref={iconRef} type="button" onClick={handleInfoIconClick}>
-          <IconInfo id="info-icon" aria-label="info" />
-        </IconButton>
-        {isTooltipTextShowing ? (
-          <ColumnHeaderToolTip
-            id={`aria-descp${id}`}
-            left={tooltipStyle.left}
-            top={tooltipStyle.top}
-            arrowOffset={tooltipStyle.arrowOffset}
-            maxWidth="50em"
-            html={t('filters.search_helper_text')}
-            ref={tooltipRef}
-            onMount={computeTooltipPosition}
-          />
-        ) : null}
-      </LabelContainer>
+      <LabelWithTooltip label={name} tooltipText={tooltipTitle} groupRef={groupRef} />
       <FilterInput
         type="text"
         id={id}

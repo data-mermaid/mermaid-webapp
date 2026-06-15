@@ -44,9 +44,8 @@ const InvertAttributesMixin = (Base) =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        const _protectAgainstNetworkStutter = await this._dexiePerUserDataInstance.invert_attributes.put(
-          newInvertSpeciesObject,
-        )
+        const _protectAgainstNetworkStutter =
+          await this._dexiePerUserDataInstance.invert_attributes.put(newInvertSpeciesObject)
 
         return this._apiSyncInstance.pushThenPullInvertSpecies().then((response) => {
           const newInvertSpeciesFromApi = response.data.invert_attributes.updates[0]
