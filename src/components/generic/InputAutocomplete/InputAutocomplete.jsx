@@ -185,10 +185,7 @@ const InputAutocomplete = ({
                 {noResultsText && <p data-testid="noResult">{noResultsText}</p>}
                 {noResultsAction && (
                   // role="presentation" marks this as a structural wrapper, not an interactive element.
-                  <div
-                    role="presentation"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
+                  <div role="presentation" onClick={() => setIsMenuOpen(false)}>
                     {noResultsAction}
                   </div>
                 )}

@@ -14,7 +14,7 @@ import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
 import { H2, H3, P } from '../../generic/text'
 import { IconInfo } from '../../icons'
 import { MaxWidthInputWrapper } from '../../generic/form'
-import { TooltipWithText } from '../../generic/tooltip'
+import { MuiTooltip } from '../../generic/MuiTooltip'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import DataSharingInfoModal from '../../DataSharingInfoModal'
@@ -65,6 +65,14 @@ const Input = styled.input`
 
 const Label = styled.label`
   cursor: ${(props) => props.$cursor};
+`
+
+const PolicyLabel = styled.span`
+  white-space: nowrap;
+  border-style: dotted;
+  border-width: 0 0 ${theme.spacing.borderMedium} 0;
+  cursor: pointer;
+  display: inline-block;
 `
 
 const ReadOnlyDataSharingContent = ({ project = {} }) => {
@@ -262,25 +270,19 @@ const DataSharing = () => {
               <Tr>
                 <Th>&nbsp;</Th>
                 <Th $align="center">
-                  <TooltipWithText
-                    tooltipText={findToolTipDescription('Private')}
-                    text={<>{t('data_sharing.private')}</>}
-                    id="private-tooltip"
-                  />
+                  <MuiTooltip title={findToolTipDescription('Private')} placement="bottom">
+                    <PolicyLabel tabIndex={0}>{t('data_sharing.private')}</PolicyLabel>
+                  </MuiTooltip>
                 </Th>
                 <Th $align="center">
-                  <TooltipWithText
-                    tooltipText={findToolTipDescription('Public Summary')}
-                    text={<>{t('data_sharing.public_summary')}</>}
-                    id="public-summary-tooltip"
-                  />
+                  <MuiTooltip title={findToolTipDescription('Public Summary')} placement="bottom">
+                    <PolicyLabel tabIndex={0}>{t('data_sharing.public_summary')}</PolicyLabel>
+                  </MuiTooltip>
                 </Th>
                 <Th $align="center">
-                  <TooltipWithText
-                    tooltipText={findToolTipDescription('Public')}
-                    text={<>{t('data_sharing.public')}</>}
-                    id="public-tooltip"
-                  />
+                  <MuiTooltip title={findToolTipDescription('Public')} placement="bottom">
+                    <PolicyLabel tabIndex={0}>{t('data_sharing.public')}</PolicyLabel>
+                  </MuiTooltip>
                 </Th>
               </Tr>
             </thead>

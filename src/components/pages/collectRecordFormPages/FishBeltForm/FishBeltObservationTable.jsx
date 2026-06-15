@@ -522,6 +522,7 @@ const FishBeltObservationTable = ({
                   }
                   tooltipText={t('fish_count_observed')}
                   groupRef={tooltipGroupRef}
+                  maxWidth="15rem"
                 />
               </Th>
               <Th $align="right" id="fish-biomass-label">
