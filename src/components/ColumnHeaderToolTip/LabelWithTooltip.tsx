@@ -54,6 +54,11 @@ const LabelWithTooltip = ({ label, tooltipText, groupRef }: LabelWithTooltipProp
             tooltip: tooltipStyles['MuiTooltip-tooltip'],
             arrow: tooltipStyles['MuiTooltip-arrow'],
           }}
+          slotProps={{
+            popper: {
+              modifiers: [{ name: 'offset', options: { offset: [0, -10] } }],
+            },
+          }}
         >
           <IconButton type="button" onClick={handleIconClick}>
             <IconInfo aria-label="info" />
