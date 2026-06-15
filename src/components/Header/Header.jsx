@@ -131,7 +131,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const openProfileModal = () => setIsProfileModalOpen(true)
   const closeProfileModal = () => setIsProfileModalOpen(false)
-  const { notifications, isAnimating, animationLoopCount, stopAnimation, markNotificationsOpened } =
+  const { notifications, isAnimating, stopAnimation, markNotificationsOpened } =
     useBellNotifications()
   const { isAppOnline } = useOnlineStatus()
   const {
@@ -181,11 +181,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
                 onOpen={markNotificationsOpened}
                 button={
                   <HeaderButtonThatLooksLikeLink id="gtm-bell-notifications">
-                    <BellWrapper
-                      $animated={isAnimating}
-                      style={{ '--bell-animation-count': animationLoopCount }}
-                      onAnimationEnd={stopAnimation}
-                    >
+                    <BellWrapper $animated={isAnimating} onAnimationEnd={stopAnimation}>
                       <BiggerIconBell id="gtm-bell-notifications-icon" />
                       {notifications.length ? (
                         <NotificationIndicator>&bull;</NotificationIndicator>
@@ -217,11 +213,7 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
                 onOpen={markNotificationsOpened}
                 button={
                   <HeaderButtonThatLooksLikeLink>
-                    <BellWrapper
-                      $animated={isAnimating}
-                      style={{ '--bell-animation-count': animationLoopCount }}
-                      onAnimationEnd={stopAnimation}
-                    >
+                    <BellWrapper $animated={isAnimating} onAnimationEnd={stopAnimation}>
                       <BiggerIconBell />
                       {notifications.length ? (
                         <NotificationIndicator>&bull;</NotificationIndicator>

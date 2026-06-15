@@ -24,7 +24,6 @@ export const useInitializeBellNotifications = ({
 
   const [notifications, setNotifications] = useState([])
   const [isAnimating, setIsAnimating] = useState(false)
-  const [animationLoopCount, setAnimationLoopCount] = useState(1)
   const prevNotificationCountRef = useRef(null)
   const prevAuthRef = useRef(isMermaidAuthenticated)
   const hasTriggeredInitialAnimationRef = useRef(false)
@@ -109,7 +108,6 @@ export const useInitializeBellNotifications = ({
     }
 
     const timeoutId = setTimeout(() => {
-      setAnimationLoopCount(1)
       setIsAnimating(true)
     }, 500)
 
@@ -121,7 +119,6 @@ export const useInitializeBellNotifications = ({
     const prevCount = prevNotificationCountRef.current
 
     if (prevCount !== null && notifications.length > prevCount) {
-      setAnimationLoopCount(3)
       setIsAnimating(true)
     }
 
@@ -148,7 +145,6 @@ export const useInitializeBellNotifications = ({
     pendingReloginRef.current = false
     const hasOpenedThisSession = sessionStorage.getItem(NOTIFICATIONS_OPENED_SESSION_KEY) === 'true'
     if (!hasOpenedThisSession) {
-      setAnimationLoopCount(3)
       setIsAnimating(true)
     }
   }, [notifications])
@@ -215,7 +211,6 @@ export const useInitializeBellNotifications = ({
     deleteNotification,
     deleteAllNotifications,
     isAnimating,
-    animationLoopCount,
     markNotificationsOpened,
     stopAnimation,
   }

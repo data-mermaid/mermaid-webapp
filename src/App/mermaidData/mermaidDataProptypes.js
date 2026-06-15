@@ -405,7 +405,6 @@ export const notificationsPropType = PropTypes.shape({
   deleteNotification: PropTypes.func,
   deleteAllNotifications: PropTypes.func,
   isAnimating: PropTypes.bool,
-  animationLoopCount: PropTypes.number,
   markNotificationsOpened: PropTypes.func,
   stopAnimation: PropTypes.func,
 })

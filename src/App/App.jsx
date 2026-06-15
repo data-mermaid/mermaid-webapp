@@ -185,7 +185,6 @@ function App({ dexieCurrentUserInstance }) {
     deleteNotification,
     deleteAllNotifications,
     isAnimating,
-    animationLoopCount,
     markNotificationsOpened,
     stopAnimation,
   } = useInitializeBellNotifications({
@@ -234,7 +233,6 @@ function App({ dexieCurrentUserInstance }) {
                     deleteNotification,
                     deleteAllNotifications,
                     isAnimating,
-                    animationLoopCount,
                     markNotificationsOpened,
                     stopAnimation,
                   }}

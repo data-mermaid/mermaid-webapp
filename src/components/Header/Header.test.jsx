@@ -16,7 +16,6 @@ const mockBellContextBase = {
   deleteNotification: () => {},
   deleteAllNotifications: () => {},
   isAnimating: false,
-  animationLoopCount: 1,
   markNotificationsOpened: () => {},
   stopAnimation: () => {},
 }

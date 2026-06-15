@@ -157,7 +157,7 @@ export const BellWrapper = styled.span`
     css`
       transform-origin: top center;
       animation: ${bellRing} 2.7s linear;
-      animation-iteration-count: var(--bell-animation-count, 1);
+      animation-iteration-count: 1;
 
       @media (prefers-reduced-motion: reduce) {
         animation: none;
