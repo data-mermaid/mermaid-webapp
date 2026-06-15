@@ -9,7 +9,11 @@ import {
   deleteBellNotification,
   deleteAllBellNotifications,
 } from './bellNotificationHelpers'
-import { NOTIFICATIONS_OPENED_SESSION_KEY } from '../library/constants/constants'
+import {
+  NOTIFICATIONS_OPENED_SESSION_KEY,
+  NOTIFICATION_POLLING_INTERVAL_MS,
+  NOTIFICATION_ANIMATION_TRIGGER_DELAY_MS,
+} from '../library/constants/constants'
 
 export const useInitializeBellNotifications = ({
   apiBaseUrl,
@@ -85,7 +89,7 @@ export const useInitializeBellNotifications = ({
 
     const intervalId = setInterval(() => {
       updateNotifications()
-    }, 60000)
+    }, NOTIFICATION_POLLING_INTERVAL_MS)
 
     return () => {
       clearInterval(intervalId)
@@ -109,7 +113,7 @@ export const useInitializeBellNotifications = ({
 
     const timeoutId = setTimeout(() => {
       setIsAnimating(true)
-    }, 500)
+    }, NOTIFICATION_ANIMATION_TRIGGER_DELAY_MS)
 
     return () => clearTimeout(timeoutId)
   }, [notifications])
