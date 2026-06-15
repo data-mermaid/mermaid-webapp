@@ -39,7 +39,7 @@ const LabelWithTooltip = ({ label, tooltipText, groupRef }: LabelWithTooltipProp
   }
 
   return (
-    <ClickAwayListener onClickAway={handleClose}>
+    <ClickAwayListener mouseEvent="onMouseDown" onClickAway={handleClose}>
       <LabelContainer>
         {label}
         <Tooltip
