@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Tooltip from '@mui/material/Tooltip'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
 import { LabelContainer } from '../generic/form'
 import { IconInfo } from '../icons'
 import { IconButton } from '../generic/buttons'
@@ -40,7 +39,14 @@ const LabelWithTooltip = ({ label, tooltipText, groupRef, maxWidth }: LabelWithT
   }
 
   return (
-    <ClickAwayListener mouseEvent="onMouseDown" onClickAway={handleClose}>
+    <>
+      {isOpen && (
+        // Transparent backdrop sits below the MUI tooltip (z-index 1500) but above everything
+        // else. Any mousedown outside the tooltip hits this and closes it, bypassing any
+        // stopPropagation calls from table inputs or autocompletes.
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+        <div style={{ position: 'fixed', inset: 0, zIndex: 1499 }} onMouseDown={handleClose} />
+      )}
       <LabelContainer>
         {label}
         <Tooltip
@@ -67,7 +73,7 @@ const LabelWithTooltip = ({ label, tooltipText, groupRef, maxWidth }: LabelWithT
           </IconButton>
         </Tooltip>
       </LabelContainer>
-    </ClickAwayListener>
+    </>
   )
 }
 
