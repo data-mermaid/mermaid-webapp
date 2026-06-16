@@ -626,6 +626,7 @@
     "centimeter_short": "cm",
     "fewer": "Fewer",
     "greater": "Greater",
+    "individuals_per_hectare_short": "ind/ha",
     "kilogram_per_hectare_short": "kg/ha",
     "meter_short": "m",
     "square_meter_short": "m²"
@@ -679,7 +680,6 @@
     "biomass_constants": "Biomass constants",
     "bleaching_severity": "Bleaching severity",
     "colonies_bleached": "Observations - colonies bleached",
-    "density_column_header": "Density (ind/ha)",
     "family": "Family",
     "functional_group": "Functional group",
     "group_size": "Group size",

@@ -554,7 +554,9 @@ const BeltInvertObservationTable = ({
                 </Th>
               ) : null}
               <Th $align="right" id="invert-density-label">
-                <LabelContainer>{t('observations.density_column_header')}</LabelContainer>
+                <LabelContainer>{`${t('density')} (${t(
+                  'measurements.individuals_per_hectare_short',
+                )})`}</LabelContainer>
               </Th>
               <Th> </Th>
             </Tr>

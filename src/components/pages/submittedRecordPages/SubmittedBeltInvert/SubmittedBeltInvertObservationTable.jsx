@@ -73,7 +73,9 @@ const SubmittedBeltInvertObservationTable = ({
               <TheadItem> </TheadItem>
               <TheadItem $align="left">{t('taxonomies.species')}</TheadItem>
               <TheadItem $align="right">{t('count')}</TheadItem>
-              <TheadItem $align="right">{`${t('density')}`}</TheadItem>
+              <TheadItem $align="right">{`${t('density')} (${t(
+                'measurements.individuals_per_hectare_short',
+              )})`}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationBeltInverts}</tbody>
