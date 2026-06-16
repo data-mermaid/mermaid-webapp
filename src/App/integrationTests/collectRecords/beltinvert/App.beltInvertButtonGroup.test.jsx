@@ -1,0 +1,208 @@
+import { expect, test } from 'vitest'
+import '@testing-library/jest-dom'
+import { http, HttpResponse } from 'msw'
+import React from 'react'
+import {
+  screen,
+  renderAuthenticatedOnline,
+  waitForElementToBeRemoved,
+} from '../../../../testUtilities/testingLibraryWithHelpers'
+import App from '../../../App'
+import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
+import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
+import mockMermaidData from '../../../../testUtilities/mockMermaidData'
+import mockBeltInvertValidationsObject from '../../../../testUtilities/mockBeltInvertValidationsObject'
+import mockBeltInvertCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBeltInvertCollectRecords'
+
+const apiBaseUrl = import.meta.env.VITE_MERMAID_API
+
+test('Edit Macroinvertebrate - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/macroinvertebrate/bi-2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
+
+  await screen.findByTestId('loading-indicator')
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
+  await user.clear(await screen.findByTestId('depth-input'))
+  await user.type(screen.getByTestId('depth-input'), '45')
+
+  expect(screen.getByTestId('save-button'))
+
+  expect(screen.getByTestId('validate-button')).toBeDisabled()
+
+  await user.click(screen.getByTestId('save-button'))
+
+  expect(await screen.findByTestId('saving-button'))
+
+  expect(await screen.findByTestId('saved-button'))
+  expect(screen.getByTestId('validate-button')).toBeEnabled()
+  expect(screen.getByTestId('submit-button')).toBeDisabled()
+})
+
+test('Validate macroinvertebrate: fails to validate, shows button able to run validation again.', async () => {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/macroinvertebrate/bi-1'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
+
+  await user.click(await screen.findByTestId('validate-button'))
+
+  mockMermaidApiAllSuccessful.use(
+    // append the validated data on the pull response, because that is what the UI uses to update itself
+    http.post(`${apiBaseUrl}/pull/`, () => {
+      const collectRecordWithValidation = {
+        ...mockMermaidData.collect_records[0],
+        validations: mockBeltInvertValidationsObject, // fails validation
+      }
+
+      const response = {
+        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+        choices: { updates: mockMermaidData.choices },
+        collect_records: { updates: [collectRecordWithValidation] },
+        project_managements: { updates: mockMermaidData.project_managements },
+        project_profiles: { updates: mockMermaidData.project_profiles },
+        project_sites: { updates: mockMermaidData.project_sites },
+        projects: { updates: mockMermaidData.projects },
+        invert_attributes: { updates: mockMermaidData.invert_attributes },
+      }
+
+      return HttpResponse.json(response)
+    }),
+  )
+
+  expect(await screen.findByTestId('validating-button'))
+
+  expect(await screen.findByTestId('validate-button'))
+  expect(screen.queryByText('sample_units.errors.validation_unavailable')).not.toBeInTheDocument()
+})
+
+test('Validate & submit macroinvertebrate: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/macroinvertebrate/bi-1'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
+
+  mockMermaidApiAllSuccessful.use(
+    // append the validated data on the pull response, because that is what the UI uses to update itself
+    http.post(
+      `${apiBaseUrl}/pull/`,
+      () => {
+        const collectRecordWithValidationFailing = {
+          ...mockBeltInvertCollectRecords[0],
+          validations: mockBeltInvertValidationsObject, // fails validation
+        }
+
+        const firstPullResponse = {
+          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+          choices: { updates: mockMermaidData.choices },
+          collect_records: { updates: [collectRecordWithValidationFailing] },
+          project_managements: { updates: mockMermaidData.project_managements },
+          project_profiles: { updates: mockMermaidData.project_profiles },
+          project_sites: { updates: mockMermaidData.project_sites },
+          projects: { updates: mockMermaidData.projects },
+          invert_attributes: { updates: mockMermaidData.invert_attributes },
+        }
+
+        return HttpResponse.json(firstPullResponse)
+      },
+      { once: true },
+    ),
+    http.post(
+      `${apiBaseUrl}/pull/`,
+      () => {
+        const collectRecordWithValidationOk = {
+          ...mockBeltInvertCollectRecords[0],
+          validations: { status: 'ok' },
+        }
+
+        const secondPullResponse = {
+          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+          choices: { updates: mockMermaidData.choices },
+          collect_records: { updates: [collectRecordWithValidationOk] },
+          project_managements: { updates: mockMermaidData.project_managements },
+          project_profiles: { updates: mockMermaidData.project_profiles },
+          project_sites: { updates: mockMermaidData.project_sites },
+          projects: { updates: mockMermaidData.projects },
+          invert_attributes: { updates: mockMermaidData.invert_attributes },
+        }
+
+        return HttpResponse.json(secondPullResponse)
+      },
+      { once: true },
+    ),
+  )
+
+  await user.click(await screen.findByTestId('validate-button'))
+
+  expect(await screen.findByTestId('validating-button'))
+
+  expect(await screen.findByTestId('validated-button'))
+  expect(screen.queryByText('sample_units.errors.validation_unavailable')).not.toBeInTheDocument()
+
+  expect(await screen.findByTestId('submit-button')).toBeEnabled()
+
+  await user.click(await screen.findByTestId('submit-button'))
+
+  expect(await screen.findByTestId('submitting-button')).toBeDisabled()
+})
+
+test('Initial load of successfully validated record', async () => {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/macroinvertebrate/bi-1'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
+
+  await user.click(await screen.findByTestId('validate-button'))
+
+  mockMermaidApiAllSuccessful.use(
+    // append the validated data on the pull response, because that is what the UI uses to update itself
+    http.post(`${apiBaseUrl}/pull/`, () => {
+      const collectRecordWithValidation = {
+        ...mockMermaidData.collect_records[0],
+        validations: { status: 'ok' },
+      }
+
+      const response = {
+        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+        choices: { updates: mockMermaidData.choices },
+        collect_records: { updates: [collectRecordWithValidation] },
+        project_managements: { updates: mockMermaidData.project_managements },
+        project_profiles: { updates: mockMermaidData.project_profiles },
+        project_sites: { updates: mockMermaidData.project_sites },
+        projects: { updates: mockMermaidData.projects },
+        invert_attributes: { updates: mockMermaidData.invert_attributes },
+      }
+
+      return HttpResponse.json(response)
+    }),
+  )
+
+  expect(await screen.findByTestId('saved-button')).toBeDisabled()
+  expect(await screen.findByTestId('validated-button')).toBeDisabled()
+  expect(await screen.findByTestId('submit-button')).toBeEnabled()
+})

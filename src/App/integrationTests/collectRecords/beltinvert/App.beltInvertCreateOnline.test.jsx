@@ -13,7 +13,7 @@ import {
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
-const saveFishbeltRecord = async (user) => {
+const saveBeltInvertRecord = async (user) => {
   await user.selectOptions(await screen.findByTestId('site-select'), '1')
   await user.selectOptions(await screen.findByTestId('management-select'), '2')
   await user.type(await screen.findByTestId('depth-input'), '10000')
@@ -55,13 +55,13 @@ const saveFishbeltRecord = async (user) => {
 }
 
 describe('Online', () => {
-  test('New fishbelt save success shows toast, and navigates to edit fishbelt page for new record', async () => {
+  test('New belt invert save success shows toast, and navigates to edit belt invert page for new record', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     const { user } = renderAuthenticatedOnline(
       <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
       {
-        initialEntries: ['/projects/5/collecting/fishbelt/'],
+        initialEntries: ['/projects/5/collecting/macroinvertebrate/'],
       },
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -70,7 +70,7 @@ describe('Online', () => {
     await screen.findByTestId('loading-indicator')
     await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
-    await saveFishbeltRecord(user)
+    await saveBeltInvertRecord(user)
 
     expect(await screen.findByTestId('saved-button'))
 
@@ -101,19 +101,19 @@ describe('Online', () => {
     })
   }, 50000)
 
-  test('New fishbelt save success show new record in collecting table', async () => {
+  test('New belt invert save success show new record in collecting table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     const { user } = renderAuthenticatedOnline(
       <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
       {
-        initialEntries: ['/projects/5/collecting/fishbelt/'],
+        initialEntries: ['/projects/5/collecting/macroinvertebrate/'],
       },
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
     )
 
-    await saveFishbeltRecord(user)
+    await saveBeltInvertRecord(user)
 
     expect(await screen.findByTestId('saved-button'))
 
@@ -128,25 +128,25 @@ describe('Online', () => {
     await user.selectOptions(pageSizeSelector, '24')
     const table = await screen.findByRole('table')
 
-    const linksToFishbeltRecords = within(table).getAllByRole('link', {
-      name: 'protocol_titles.fishbelt',
+    const linksToBeltInvertRecords = within(table).getAllByRole('link', {
+      name: 'protocol_titles.macroinvertebrate',
     })
 
-    // 17 = 16 mock fishbelt records + the one we just created
-    expect(linksToFishbeltRecords).toHaveLength(17)
-    expect(mockT).toHaveBeenCalledWith('protocol_titles.fishbelt')
+    // 3: 2 existing macroinvertebrate mock records + the one we just created
+    expect(linksToBeltInvertRecords).toHaveLength(3)
+    expect(mockT).toHaveBeenCalledWith('protocol_titles.macroinvertebrate')
 
-    // expect unique depth as proxy for new fishbelt
+    // expect unique depth as proxy for new macroinvertebrate
     expect(await within(table).findByText('10000'))
   }, 50000)
-  test('New fishbelt save failure shows toast message with edits persisting', async () => {
+  test('New belt invert save failure shows toast message with edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     dexiePerUserDataInstance.collect_records.put = () => Promise.reject()
     const { user } = renderAuthenticatedOnline(
       <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
       {
-        initialEntries: ['/projects/5/collecting/fishbelt/'],
+        initialEntries: ['/projects/5/collecting/macroinvertebrate/'],
         dexiePerUserDataInstance,
         dexieCurrentUserInstance,
       },
@@ -155,12 +155,12 @@ describe('Online', () => {
     await screen.findByTestId('loading-indicator')
     await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
-    await saveFishbeltRecord(user)
+    await saveBeltInvertRecord(user)
 
     expect(await screen.findByTestId('save-button'))
 
-    // ensure the were not in edit mode, but new fish belt mode
-    expect(screen.getByTestId('fishbelt-page-title'))
+    // ensure the were not in edit mode, but new belt invert mode
+    expect(screen.getByTestId('macroinvertebrate-page-title'))
 
     await waitFor(() => {
       expect(screen.getByTestId('site-select')).toHaveDisplayValue('Site A')

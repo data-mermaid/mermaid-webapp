@@ -238,10 +238,20 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
               }),
             ),
           )
+          setAreObservationsInputsDirty(true)
+          observationsDispatch({
+            type: 'updateInvertName',
+            payload: {
+              observationId: observationIdToAddNewInvertAttributeTo,
+              newInvertAttribute: error.existingSpecies.id,
+            },
+          })
+          // Keep duplicate behavior non-blocking so modal flow can complete.
+          return
         } else {
           toast.error(...getToastArguments(errorMessage))
+          throw error
         }
-        throw error
       })
   }
 

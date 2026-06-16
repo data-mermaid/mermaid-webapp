@@ -4,6 +4,7 @@ import mockBenthicPitCollectRecords from './mockCollectRecords/mockBenthicPitCol
 import mockBleachingCollectRecords from './mockCollectRecords/mockBleachingCollectRecords'
 import mockFishbeltCollectRecords from './mockCollectRecords/mockFishbeltCollectRecords'
 import mockBenthicPhotoQuadratCollectRecords from './mockCollectRecords/mockBenthicPhotoQuadratCollectRecords'
+import mockBeltInvertCollectRecords from './mockCollectRecords/mockBeltInvertCollectRecords'
 
 const projects = [
   {
@@ -494,6 +495,7 @@ const collect_records = [
   ...mockBenthicLitCollectRecords,
   ...mockHabitatComplexityCollectRecords,
   ...mockBenthicPhotoQuadratCollectRecords,
+  ...mockBeltInvertCollectRecords,
 ]
 
 const project_sites = [
@@ -3147,6 +3149,38 @@ const benthic_attributes = [
 ]
 
 const invert_attributes = [
+  {
+    id: 'diadema-genus-0000-0000-000000000000',
+    updated_by: null,
+    status: 90,
+    created_on: '2021-02-11T12:20:14.101000Z',
+    updated_on: '2021-06-16T13:29:10.087019Z',
+    name: 'Diadema',
+    created_by: null,
+    parent: null,
+    taxonomic_rank: 'genus',
+    life_history: null,
+    regions: [],
+    _last_revision_num: 15368,
+    _modified: false,
+    _deleted: false,
+  },
+  {
+    id: 'nebrius-genus-0000-0000-000000000000',
+    updated_by: null,
+    status: 90,
+    created_on: '2021-02-11T12:20:14.101000Z',
+    updated_on: '2021-06-16T13:29:10.087019Z',
+    name: 'Nebrius',
+    created_by: null,
+    parent: null,
+    taxonomic_rank: 'genus',
+    life_history: null,
+    regions: [],
+    _last_revision_num: 15367,
+    _modified: false,
+    _deleted: false,
+  },
   {
     id: 'd5e89c06-5bcf-42f6-bf0c-6d5438f311b0',
     updated_by: null,
