@@ -60,7 +60,7 @@ const ProjectName = () => {
       <h2 className={styles['project-name-header']}>{project?.name}</h2>
       {isAppOnline && (
         <MuiTooltip title={t(tooltipText)} placement="top" arrow>
-          <span role="presentation">
+          <span role="presentation" className={buttonStyles['button--icon-tooltip-wrapper']}>
             <button
               className={buttonStyles['button--icon']}
               type="button"

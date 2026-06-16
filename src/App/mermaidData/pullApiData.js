@@ -145,9 +145,7 @@ export const pullApiData = async ({
             const bulkDeleteIdsWithNoDuplicates = Array.from(new Set([...deleteIds, ...removeIds]))
 
             await dexiePerUserDataInstance[localTableName].bulkPut(updatesToStore)
-            await dexiePerUserDataInstance[localTableName].bulkDelete(
-              bulkDeleteIdsWithNoDuplicates,
-            )
+            await dexiePerUserDataInstance[localTableName].bulkDelete(bulkDeleteIdsWithNoDuplicates)
 
             if ((is401 || is403) && isDataTypeProjectAssociated && projectId) {
               // we still delete project related data in addition to anything in the removes array,

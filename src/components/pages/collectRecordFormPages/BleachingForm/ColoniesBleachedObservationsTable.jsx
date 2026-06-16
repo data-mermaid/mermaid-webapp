@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { styled } from 'styled-components'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import {
   InputAutocompleteContainer,
@@ -30,6 +30,10 @@ import getObservationValidationInfo from '../CollectRecordFormPage/getObservatio
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
+import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
+import { HelperTextLink } from '../../../generic/links'
+
+const WORMS_LINK = 'https://www.marinespecies.org/'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -64,6 +68,7 @@ const ColoniesBleachedObservationTable = ({
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const { t } = useTranslation()
+  const tooltipGroupRef = useRef(null)
 
   const deleteObservationText = t('delete_observation')
   const proposeNewBenthicAttributeText = t('benthic_observations.add_benthic_attribute')
@@ -421,10 +426,36 @@ const ColoniesBleachedObservationTable = ({
                 <Tr>
                   <Th />
                   <Th $align="center" id="benthic-attribute-label">
-                    {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
+                    <LabelWithTooltip
+                      label={
+                        <>
+                          {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
+                        </>
+                      }
+                      tooltipText={
+                        <Trans
+                          i18nKey="benthic_observations.benthic_attribute_info"
+                          components={{
+                            helperTextLink: (
+                              <HelperTextLink
+                                href={WORMS_LINK}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                color="#fff"
+                              />
+                            ),
+                          }}
+                        />
+                      }
+                      groupRef={tooltipGroupRef}
+                    />
                   </Th>
                   <Th $align="center" id="growth-form-label">
-                    {t('observations.growth_form')}
+                    <LabelWithTooltip
+                      label={t('observations.growth_form')}
+                      tooltipText={t('observations.growth_form_info')}
+                      groupRef={tooltipGroupRef}
+                    />
                   </Th>
                   <Th $align="center" id="normal-label">
                     {t('observations.normal')}
