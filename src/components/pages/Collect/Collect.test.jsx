@@ -220,7 +220,9 @@ test('Collect Records table sorts properly by size column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  await user.selectOptions(screen.getByTestId('page-size-selector'), '23')
+  const pageSizeSelector = await screen.findByTestId('page-size-selector')
+  await waitFor(() => within(pageSizeSelector).getByText('23'))
+  await user.selectOptions(pageSizeSelector, '23')
 
   expect(within(tableRows[1]).getByText('10m'))
 
@@ -310,7 +312,9 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   const table = screen.getByRole('table')
 
-  await user.selectOptions(screen.getByTestId('page-size-selector'), '23')
+  const pageSizeSelector = await screen.findByTestId('page-size-selector')
+  await waitFor(() => within(pageSizeSelector).getByText('23'))
+  await user.selectOptions(pageSizeSelector, '23')
 
   // Double click all of the default sort columns twice to disable default sorting
   await user.dblClick(within(table).getByTestId('collecting-header-site'))
