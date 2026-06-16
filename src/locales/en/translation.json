@@ -529,10 +529,7 @@
   "macroinvertebrate_observations": {
     "add_notes": "Add notes...",
     "add_macroinvertebrate": "Add macroinvertebrate species",
-    "density": "Density",
-    "done": "Done",
     "edit_notes": "Edit Notes",
-    "macroinvertebrate_name": "Macroinvertebrate name",
     "macroinvertebrate_species": "Macroinvertebrate species",
     "must_select_size_bin_warning": "You must select a macroinvertebrate size bin before adding any observations",
     "size_bin": "Macroinvertebrate size bin (cm)",
@@ -540,10 +537,7 @@
     "proposed_species_already_exists": "Proposed macroinvertebrate species {{attributeName}} already exists",
     "proposed_species_saved": "Proposed macroinvertebrate species {{attributeName}} saved. Observation has been updated with this species.",
     "row": "Row",
-    "species": "Species",
-    "species_taxonomy_unavailable": "Macroinvertebrate species taxonomy is unavailable. Please try again.",
-    "total_density_units": "Total density (ind/ha)",
-    "unknown_group": "Unknown Group"
+    "species_taxonomy_unavailable": "Macroinvertebrate species taxonomy is unavailable. Please try again."
   },
 
   "management_regime": "Management regime",
@@ -685,6 +679,7 @@
     "biomass_constants": "Biomass constants",
     "bleaching_severity": "Bleaching severity",
     "colonies_bleached": "Observations - colonies bleached",
+    "density_column_header": "Density (ind/ha)",
     "family": "Family",
     "functional_group": "Functional group",
     "group_size": "Group size",
@@ -700,6 +695,7 @@
     "length": "Length",
     "macroalgae_cover": "Macroalgae % cover",
     "macroalgae_cover_info": "Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).",
+    "macroinvertebrate_name": "Macroinvertebrate name",
     "max_length": "Max length",
     "max_type": "Max type",
     "no_observations_listed": "No observations listed",
@@ -733,6 +729,8 @@
     "summary_of_observations": "Summary of observations",
     "total_colonies": "Total number of colonies",
     "total_coral_genera": "Total number of coral genera",
+    "total_density_units": "Total density (ind/ha)",
+
     "trophic_group": "Trophic group"
   },
   "offline": {
@@ -1035,14 +1033,6 @@
   "status_online": "You're <strong>ONLINE</strong>",
   "still_working": "Still working...",
   "submitted": "Submitted",
-  "submitted_macroinvertebrate": {
-    "abundance": "Total abundance",
-    "density_column_header": "Density (ind/ha)",
-    "density_per_group_of_interest": "Density",
-    "observations_title": "Observations",
-    "total_density_units": "Total density (ind/ha)",
-    "unknown": "Unknown"
-  },
   "submitted_no_data_message": "This project has no submitted sample units",
   "system_validation_error": "System validation error:",
   "taxonomies": {

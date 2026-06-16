@@ -76,7 +76,7 @@ const EditNotesModal = ({
             data-testid="notes-done-button"
             onClick={() => onDone(draft)}
           >
-            {t('macroinvertebrate_observations.done')}
+            {t('buttons.done')}
           </ButtonPrimary>
         </RightFooter>
       }

@@ -20,7 +20,6 @@ import {
   formatDensityToTwoDecimals,
   useBeltInvertDensityMetrics,
 } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
-const EMPTY_OBSERVATIONS = []
 
 const SubmittedBeltInvertObservationTable = ({
   choices,
@@ -28,7 +27,7 @@ const SubmittedBeltInvertObservationTable = ({
   submittedRecord = undefined,
 }) => {
   const { t } = useTranslation()
-  const obs_belt_inverts = submittedRecord?.obs_belt_inverts ?? EMPTY_OBSERVATIONS
+  const obs_belt_inverts = submittedRecord?.obs_belt_inverts ?? []
   const widthId = submittedRecord?.beltinvert_transect?.width
   const len_surveyed = submittedRecord?.beltinvert_transect?.len_surveyed ?? 0
 
@@ -66,19 +65,15 @@ const SubmittedBeltInvertObservationTable = ({
 
   return (
     <InputWrapper>
-      <FormSubTitle id="table-label">
-        {t('submitted_macroinvertebrate.observations_title')}
-      </FormSubTitle>
+      <FormSubTitle id="table-label">{t('observations.observations')}</FormSubTitle>
       <StyledOverflowWrapper>
         <SubmittedObservationStickyTable>
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem $align="left">{t('macroinvertebrate_observations.species')}</TheadItem>
+              <TheadItem $align="left">{t('taxonomies.species')}</TheadItem>
               <TheadItem $align="right">{t('count')}</TheadItem>
-              <TheadItem $align="right">{`${t(
-                'submitted_macroinvertebrate.density_column_header',
-              )}`}</TheadItem>
+              <TheadItem $align="right">{`${t('density')}`}</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationBeltInverts}</tbody>
@@ -90,19 +85,17 @@ const SubmittedBeltInvertObservationTable = ({
             {Object.entries(densityByGoi).map(([groupName, groupDensity]) => {
               return (
                 <Tr key={groupName}>
-                  <Th>{`${t(
-                    'submitted_macroinvertebrate.density_per_group_of_interest',
-                  )} - ${groupName}`}</Th>
+                  <Th>{`${t('density')} - ${groupName}`}</Th>
                   <Td>{formatDensityToTwoDecimals(groupDensity)}</Td>
                 </Tr>
               )
             })}
             <Tr>
-              <Th>{t('submitted_macroinvertebrate.total_density_units')}</Th>
+              <Th>{t('observations.total_density_units')}</Th>
               <Td>{formatDensityToTwoDecimals(totalDensity)}</Td>
             </Tr>
             <Tr>
-              <Th>{t('submitted_macroinvertebrate.abundance')}</Th>
+              <Th>{t('total_abundance')}</Th>
               <Td>{abundance}</Td>
             </Tr>
           </tbody>

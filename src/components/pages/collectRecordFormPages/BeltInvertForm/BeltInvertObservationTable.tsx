@@ -129,10 +129,11 @@ interface ObservationRowProps {
   autoFocusAllowed: boolean
   collectRecord?: unknown
   ignoreObservationValidations: (...args: unknown[]) => void
+  isLastRow: boolean
   index: number
   invertAttributeOptions: SelectOption[]
   observation: ObservationRecord
-  observationsCount: number
+  observationDensity: number
   observationsDispatch: (action: unknown) => void
   onNotesClick: (observationId: string) => void
   resetObservationValidations: (args: { observationId: string }) => void
@@ -141,7 +142,6 @@ interface ObservationRowProps {
   setObservationIdToAddNewInvertAttributeTo: (observationId: string) => void
   sizeBinSelectedLabel?: string | number
   sizeOptions: SelectOption[]
-  transectAreaM2: number
   onObservationKeyDown: (args: {
     event: React.KeyboardEvent
     index: number
@@ -155,10 +155,11 @@ const BeltInvertObservationRow = ({
   autoFocusAllowed,
   collectRecord,
   ignoreObservationValidations,
+  isLastRow,
   index,
   invertAttributeOptions,
   observation,
-  observationsCount,
+  observationDensity,
   observationsDispatch,
   onNotesClick,
   resetObservationValidations,
@@ -167,14 +168,11 @@ const BeltInvertObservationRow = ({
   setObservationIdToAddNewInvertAttributeTo,
   sizeBinSelectedLabel,
   sizeOptions,
-  transectAreaM2,
   onObservationKeyDown,
 }: ObservationRowProps) => {
   const { t } = useTranslation()
   const { id: observationId, count, size, invert_attribute: invertAttributeId } = observation
   const rowNumber = index + 1
-  const observationDensity =
-    transectAreaM2 > 0 && Number(count ?? 0) ? (Number(count ?? 0) / transectAreaM2) * 10000 : 0
 
   const showNumericSizeInput =
     sizeBinSelectedLabel?.toString() === '1' || typeof sizeBinSelectedLabel === 'undefined'
@@ -282,7 +280,7 @@ const BeltInvertObservationRow = ({
             disabled={!sizeBinSelectedLabel}
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus={autoFocusAllowed}
-            isLastRow={observationsCount === rowNumber}
+            isLastRow={isLastRow}
             aria-labelledby="species-name-label"
             options={invertAttributeOptions}
             onChange={handleInvertAttributeChange}
@@ -438,13 +436,14 @@ const BeltInvertObservationTable = ({
     [sizeBinSelectedLabel],
   )
 
-  const { abundance, transectAreaM2, totalDensity, densityByGoi } = useBeltInvertDensityMetrics({
-    observations: observationsState,
-    invertAttributes,
-    choices,
-    lenSurveyed: transectLengthSurveyed,
-    widthId: selectedWidthId,
-  })
+  const { abundance, observationDensities, totalDensity, densityByGoi } =
+    useBeltInvertDensityMetrics({
+      observations: observationsState,
+      invertAttributes,
+      choices,
+      lenSurveyed: transectLengthSurveyed,
+      widthId: selectedWidthId,
+    })
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -533,7 +532,7 @@ const BeltInvertObservationTable = ({
               <Th> </Th>
               <Th $align="left" id="invert-name-label">
                 <LabelContainer>
-                  {t('macroinvertebrate_observations.macroinvertebrate_name')} <RequiredIndicator />
+                  {t('observations.macroinvertebrate_name')} <RequiredIndicator />
                 </LabelContainer>
               </Th>
               <Th $align="right" id="invert-size-label">
@@ -555,9 +554,7 @@ const BeltInvertObservationTable = ({
                 </Th>
               ) : null}
               <Th $align="right" id="invert-density-label">
-                <LabelContainer>
-                  {t('submitted_macroinvertebrate.density_column_header')}
-                </LabelContainer>
+                <LabelContainer>{t('observations.density_column_header')}</LabelContainer>
               </Th>
               <Th> </Th>
             </Tr>
@@ -571,10 +568,11 @@ const BeltInvertObservationTable = ({
                 autoFocusAllowed={autoFocusAllowed}
                 collectRecord={collectRecord}
                 ignoreObservationValidations={ignoreObservationValidations}
+                isLastRow={index === observationsState.length - 1}
                 index={index}
                 invertAttributeOptions={invertAttributeOptions}
                 observation={observation}
-                observationsCount={observationsState.length}
+                observationDensity={observationDensities.get(observation.id) ?? 0}
                 observationsDispatch={observationsDispatch}
                 resetObservationValidations={resetObservationValidations}
                 setAreObservationsInputsDirty={setAreObservationsInputsDirty}
@@ -582,7 +580,6 @@ const BeltInvertObservationTable = ({
                 setObservationIdToAddNewInvertAttributeTo={
                   setObservationIdToAddNewInvertAttributeTo
                 }
-                transectAreaM2={transectAreaM2}
                 onNotesClick={setNotesModalObservationId}
                 sizeBinSelectedLabel={sizeBinSelectedLabel}
                 sizeOptions={sizeOptions}
@@ -614,13 +611,13 @@ const BeltInvertObservationTable = ({
             {Object.entries(densityByGoi).map(([groupName, density]) => {
               return (
                 <Tr key={groupName}>
-                  <Th>{`${t('macroinvertebrate_observations.density')} - ${groupName}`}</Th>
+                  <Th>{`${t('density')} - ${groupName}`}</Th>
                   <Td>{formatDensityToTwoDecimals(density)}</Td>
                 </Tr>
               )
             })}
             <Tr>
-              <Th>{t('macroinvertebrate_observations.total_density_units')}</Th>
+              <Th>{t('observations.total_density_units')}</Th>
               <Td>{formatDensityToTwoDecimals(totalDensity)}</Td>
             </Tr>
             <Tr>
