@@ -30,6 +30,7 @@ import UserDoesntHaveProjectAccess from '../components/pages/UserDoesntHaveProje
 import Users from '../components/pages/Users'
 import UsersAndTransects from '../components/pages/UsersAndTransects'
 import BeltInvertForm from '../components/pages/collectRecordFormPages/BeltInvertForm/BeltInvertForm'
+import SubmittedBeltInvert from '../components/pages/submittedRecordPages/SubmittedBeltInvert/SubmittedBeltInvert'
 
 export const routes = [
   {
@@ -111,6 +112,10 @@ export const routes = [
   {
     path: '/projects/:projectId/submitted/fishbelt/:submittedRecordId',
     Component: () => <SubmittedFishBelt />,
+  },
+  {
+    path: '/projects/:projectId/submitted/macroinvertebrate/:submittedRecordId',
+    Component: () => <SubmittedBeltInvert />,
   },
   {
     path: '/projects/:projectId/submitted/benthicpqt/:submittedRecordId',

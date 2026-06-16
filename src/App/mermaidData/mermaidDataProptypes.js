@@ -95,6 +95,20 @@ export const _submittedFishBeltObservationPropType = PropTypes.shape({
   fish_attribute: PropTypes.string,
 })
 
+export const _submittedBeltInvertObservationPropType = PropTypes.shape({
+  id: PropTypes.string,
+  updated_by: PropTypes.string,
+  size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  created_on: PropTypes.string,
+  updated_on: PropTypes.string,
+  count: PropTypes.number,
+  include: PropTypes.bool,
+  notes: PropTypes.string,
+  created_by: PropTypes.string,
+  beltinvert: PropTypes.string,
+  invert_attribute: PropTypes.string,
+})
+
 export const _submittedBenthicPhotoQuadratObservationPropType = PropTypes.shape({
   attribute: PropTypes.string,
   benthic_photo_quadrat_transect: PropTypes.string,
@@ -183,6 +197,24 @@ export const submittedFishBeltPropType = PropTypes.shape({
   fishbelt_transect: _fishBeltTransectPropType,
   observers: PropTypes.arrayOf(observerPropType),
   obs_belt_fishes: PropTypes.arrayOf(_submittedFishBeltObservationPropType),
+})
+
+export const submittedBeltInvertPropType = PropTypes.shape({
+  id: PropTypes.string,
+  sample_event: _sampleEventPropType,
+  beltinvert_transect: PropTypes.shape({
+    depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    label: PropTypes.string,
+    len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    reef_slope: PropTypes.string,
+    sample_time: PropTypes.string,
+    size_bin: PropTypes.string,
+    width: PropTypes.string,
+    notes: PropTypes.string,
+  }),
+  observers: PropTypes.arrayOf(observerPropType),
+  obs_belt_inverts: PropTypes.arrayOf(_submittedBeltInvertObservationPropType),
 })
 
 export const submittedBenthicPhotoQuadratPropType = PropTypes.shape({

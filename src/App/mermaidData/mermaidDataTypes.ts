@@ -70,10 +70,6 @@ interface BeltInvertTransect {
   sample_time?: string
   size_bin?: string
   width?: string
-  visibility?: string
-  current?: string
-  relative_depth?: string
-  tide?: string
   notes?: string
 }
 

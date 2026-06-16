@@ -529,9 +529,7 @@
   "macroinvertebrate_observations": {
     "add_notes": "Add notes...",
     "add_macroinvertebrate": "Add macroinvertebrate species",
-    "done": "Done",
     "edit_notes": "Edit Notes",
-    "macroinvertebrate_name": "Macroinvertebrate name",
     "macroinvertebrate_species": "Macroinvertebrate species",
     "must_select_size_bin_warning": "You must select a macroinvertebrate size bin before adding any observations",
     "size_bin": "Macroinvertebrate size bin (cm)",
@@ -628,6 +626,7 @@
     "centimeter_short": "cm",
     "fewer": "Fewer",
     "greater": "Greater",
+    "individuals_per_hectare_short": "ind/ha",
     "kilogram_per_hectare_short": "kg/ha",
     "meter_short": "m",
     "square_meter_short": "m²"
@@ -696,6 +695,7 @@
     "length": "Length",
     "macroalgae_cover": "Macroalgae % cover",
     "macroalgae_cover_info": "Macroalgae cover as decimal percentage of quadrat total area (e.g. 33.3).",
+    "macroinvertebrate_name": "Macroinvertebrate name",
     "max_length": "Max length",
     "max_type": "Max type",
     "no_observations_listed": "No observations listed",
@@ -729,6 +729,7 @@
     "summary_of_observations": "Summary of observations",
     "total_colonies": "Total number of colonies",
     "total_coral_genera": "Total number of coral genera",
+    "total_density_units": "Total density (ind/ha)",
     "trophic_group": "Trophic group"
   },
   "offline": {
