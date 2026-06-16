@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
-import { Input, LabelContainer, inputStyles } from '../generic/form'
-import { IconInfo } from '../icons'
-import { IconButton } from '../generic/buttons'
-import ColumnHeaderToolTip from '../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import domPurify from 'dompurify'
+import { Input, inputStyles } from '../generic/form'
+import LabelWithTooltip from '../ColumnHeaderToolTip/LabelWithTooltip'
 import theme from '../../theme'
 
 const FilterLabelWrapper = styled.label`
@@ -32,91 +31,25 @@ const FilterSearchToolbar = ({
   disabled = false,
   globalSearchText = '', // react-table sets globalFilter to undefined when cleared; default to '' to keep the input controlled
   handleGlobalFilterChange,
-  type = 'page',
+  groupRef = null,
 }) => {
   const { t } = useTranslation()
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
-  const [maxWidth, setMaxWidth] = useState('50em')
-  const tooltipRef = useRef(null)
-
-  useEffect(() => {
-    let pixelAdjustTop = 302
-
-    let pixelAdjustLeft = 487
-
-    if (type === 'copy-site-modal') {
-      pixelAdjustLeft = 652
-      pixelAdjustTop = 285
-      setMaxWidth('60em')
-    }
-    if (type === 'copy-mr-modal') {
-      pixelAdjustLeft = 422
-    }
-
-    const handleResize = () => {
-      // Calculate the position of the icon relative to the viewport
-      const iconInfoRect = document.getElementById('info-icon').getBoundingClientRect()
-      const tooltipTop = `${iconInfoRect.top - pixelAdjustTop}px`
-      const tooltipLeft = `${iconInfoRect.left + iconInfoRect.width / 2 - pixelAdjustLeft}px`
-
-      setTooltipPosition({ top: tooltipTop, left: tooltipLeft })
-    }
-
-    handleResize()
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [type])
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
-        setIsHelperTextShowing(false)
-      }
-    }
-
-    document.addEventListener('click', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside)
-    }
-  }, [])
 
   const handleFilterChange = (event) => {
-    const eventValue = event.target.value
-
-    handleGlobalFilterChange(eventValue)
+    handleGlobalFilterChange(event.target.value)
   }
 
-  const handleInfoIconClick = (event) => {
-    setIsHelperTextShowing(!isHelperTextShowing)
-    event.stopPropagation()
-  }
+  /* eslint-disable react/no-danger */
+  const tooltipTitle = (
+    <span
+      dangerouslySetInnerHTML={{ __html: domPurify.sanitize(t('filters.search_helper_text')) }}
+    />
+  )
+  /* eslint-enable react/no-danger */
 
   return (
     <FilterLabelWrapper htmlFor={id}>
-      <LabelContainer>
-        {name}
-        <IconButton
-          type="button"
-          onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
-        >
-          <IconInfo id="info-icon" aria-label="info" />
-        </IconButton>
-        {isHelperTextShowing ? (
-          <ColumnHeaderToolTip
-            id={`aria-descp${id}`}
-            left={tooltipPosition.left}
-            top={tooltipPosition.top}
-            maxWidth={maxWidth}
-            html={t('filters.search_helper_text')}
-            ref={tooltipRef}
-          />
-        ) : null}
-      </LabelContainer>
+      <LabelWithTooltip label={name} tooltipText={tooltipTitle} groupRef={groupRef} />
       <FilterInput
         type="text"
         id={id}
@@ -135,7 +68,9 @@ FilterSearchToolbar.propTypes = {
   disabled: PropTypes.bool,
   globalSearchText: PropTypes.string,
   handleGlobalFilterChange: PropTypes.func.isRequired,
-  type: PropTypes.string,
+  groupRef: PropTypes.shape({
+    current: PropTypes.oneOfType([PropTypes.func, PropTypes.oneOf([null])]),
+  }),
 }
 
 export default FilterSearchToolbar

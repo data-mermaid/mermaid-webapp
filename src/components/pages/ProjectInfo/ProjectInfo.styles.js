@@ -22,12 +22,6 @@ export const ClearTagButton = styled(CloseButton)`
   &:focus {
     opacity: 1;
   }
-  &:hover,
-  &:focus {
-    & + span {
-      display: block;
-    }
-  }
 `
 export const TagStyle = styled.li`
   position: relative;
@@ -56,30 +50,6 @@ export const TagStyle = styled.li`
   }
 `
 
-export const TooltipPopup = styled('span')`
-  display: none;
-  background: ${theme.color.primaryColor};
-  color: ${theme.color.white};
-  position: absolute;
-  font-size: ${theme.typography.smallFontSize};
-  clip-path: polygon(
-    calc(20px - 10px) 15px,
-    20px 0,
-    calc(20px + 10px) 15px,
-    100% 15px,
-    100% 100%,
-    0 100%,
-    0 15px
-  );
-  padding: ${theme.spacing.small};
-  padding-top: calc(4rem - 15px);
-  top: 4rem;
-  white-space: normal;
-  text-align: start;
-  line-height: ${theme.typography.lineHeight};
-  z-index: 101;
-  ${theme.typography.upperCase};
-`
 export const InputAutocompleteWrapper = styled(InputRow)`
   height: 100px;
 `

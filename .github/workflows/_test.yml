@@ -37,7 +37,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Run app tests
-        run: TZ=UTC yarn vitest run --project app
+        run: TZ=UTC yarn vitest run
 
   test-storybook:
     environment: ${{ inputs.environment }}
@@ -83,4 +83,4 @@ jobs:
         run: yarn playwright install-deps chromium
 
       - name: Run storybook tests
-        run: TZ=UTC yarn vitest run --project storybook
+        run: TZ=UTC yarn vitest run --config vitest.storybook.config.ts

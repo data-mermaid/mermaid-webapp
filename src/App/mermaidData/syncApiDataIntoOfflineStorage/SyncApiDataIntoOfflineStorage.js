@@ -111,6 +111,7 @@ const SyncApiDataIntoOfflineStorage = class {
     const apiDataNamesToPullNonProject = [
       'benthic_attributes',
       'invert_attributes',
+      'invert_species',
       'choices',
       'fish_families',
       'fish_groupings',
@@ -181,7 +182,7 @@ const SyncApiDataIntoOfflineStorage = class {
             `${this.#apiBaseUrl}/push/`,
             {
               benthic_attributes: this.#getOnlyModifiedAndDeletedItems(benthic_attributes),
-              invert_attributes: this.#getOnlyModifiedAndDeletedItems(invert_attributes),
+              invert_species: this.#getOnlyModifiedAndDeletedItems(invert_attributes),
               collect_records: this.#getOnlyModifiedAndDeletedItems(collect_records),
               fish_species: this.#getOnlyModifiedAndDeletedItems(fish_species),
               project_managements: this.#getOnlyModifiedAndDeletedItems(project_managements),
@@ -250,10 +251,26 @@ const SyncApiDataIntoOfflineStorage = class {
     })
   }
 
+  pushThenPullInvertSpecies = async () => {
+    // Push any pending invert species changes
+    // Then pull updates from both invert attribute and species because
+    // the backend creates invert attribute records when we push to invert species
+    await this.pushChanges()
+
+    return pullApiData({
+      apiBaseUrl: this.#apiBaseUrl,
+      apiDataNamesToPull: ['invert_attributes', 'invert_species'],
+      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+      getAccessToken: this.#getAccessToken,
+      handleUserDeniedSyncPull: this.#handleUserDeniedSyncPull,
+    })
+  }
+
   pushThenPullAllProjectData = async (projectId) => {
     const allTheDataNames = [
       'benthic_attributes',
       'invert_attributes',
+      'invert_species',
       'choices',
       'collect_records',
       'fish_families',
@@ -289,6 +306,7 @@ const SyncApiDataIntoOfflineStorage = class {
     const apiDataNamesToPull = [
       'benthic_attributes',
       'invert_attributes',
+      'invert_species',
       'collect_records',
       'fish_families',
       'fish_groupings',

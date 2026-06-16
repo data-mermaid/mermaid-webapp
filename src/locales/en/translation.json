@@ -159,6 +159,7 @@
   },
   "delete_observation": "Delete observation",
   "delete_sites_regimes": "Delete sites or management regimes",
+  "density": "Density",
   "download_sites_regimes": "Export sites and management regimes",
   "email": "Email",
   "errors": {
@@ -215,7 +216,7 @@
   },
   "gfcr": {
     "add_gfcr_indicators": "The GFCR coalition mobilizes financial resources to scale sustainable businesses and innovative solutions for coral reef conservation. \nIf you're a GFCR program, enable the GFCR fund indicators for this project to start your M&E.",
-    "businesses_finance_solutions": "Facilities / solutions",
+    "facilities_solutions": "Facilities / solutions",
     "buttons": {
       "disable_gfcr": "Disable GFCR fund indicators",
       "enable_gfcr": "Enable GFCR fund indicators",
@@ -226,6 +227,8 @@
     "conservation_and_management": "Conservation and management",
     "coral_reef_health": "Coral reef health",
     "create_indicator_set": "Create fund indicator set",
+    "create_report_indicator_set": "Create report indicator set",
+    "create_target_indicator_set": "Create target indicator set",
     "create_new": "Create new",
     "disabled_gfcr_info": "Disabling GFCR fund indicators for this project will not delete them, but just hide them from <a />. No data will be lost. You can re-enable them at any time.",
     "disabled_info": "Disabling GFCR fund indicators for this project will not delete them, but just hide them from <a />. No data will be lost. You can re-enable them at any time.",
@@ -233,7 +236,8 @@
       "indicator_set_save_failed": "There was an error saving the fund indicator set",
       "indicator_sets_unavailable": "GFCR fund indicator sets are currently unavailable",
       "indicators_disable_failed": "Could not disable GFCR fund indicators for this project",
-      "indicators_enable_failed": "Could not enable GFCR fund indicators for this project"
+      "indicators_enable_failed": "Could not enable GFCR fund indicators for this project",
+      "non_standard_title": "Please select a standard title"
     },
     "exporting": "Exporting",
     "form_errors": "Form errors:",
@@ -342,15 +346,20 @@
         "local_enterprise": "Local enterprise",
         "local_enterprise_helper": "Defined as a small to medium-sized business operating within the specific location of the GFCR Programme. This applies to F9.3 (amount (and %) of revenue in local enterprises), which measures the revenue that is retained within a local geography, differing from revenue that is transferred overseas.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
         "name_helper": "Enter the name of each business or financial mechanism solution financed by the GFCR Programme separately. You may copy solutions from previous reports. Indicators F8, F9, and F10 will be disaggregated by both solution and sector. New solutions financed by the Programme will be added here progressively.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
+        "fs_type": "Type",
+        "geographical_coverage": "Geographical coverage",
         "no_finance_solutions": "No facilities / solutions yet",
+        "number_of_solutions_supported_by": "Number of solutions supported by",
+        "pcf_revenues_error": "Remove revenues before changing type to Programmatic co-financing",
         "save": "Save facility / solution",
         "sector": "Sector",
         "sector_helper": "Enter the sector of the solution in this GFCR Programme. Refer to the Annex 3 of the GFCR M&E Toolkit for details.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
         "select_add_finance_solution": "Select 'Add facility / solution' to add one to this fund indicator set",
         "sustainable_finance_mechanisms": "Sustainable financial mechanisms",
         "sustainable_finance_mechanisms_helper": "Financing that generates a significant, recurring revenue stream directed toward conservation or sustainable ecosystem management. This applies to F8.5 (Number and type of sustainable financial mechanisms). Select all applicable options, as one solution may include multiple mechanisms.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
+        "taf_name": "Name of TAF (incubator)",
         "update": "Update facility / solution",
-        "used_an_incubator": "Used an incubator?",
+        "used_an_incubator": "Used a TAF (incubator)?",
         "used_an_incubator_helper": "Indicate if the solution utilized an incubator for early-stage support and access to resources. Specify whether the incubator was funded by GFCR.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>"
       },
       "investments": {
@@ -372,6 +381,7 @@
         "add": "Add revenue",
         "add_before_revenues": "Add a <financeSolutionLink>facility / solution</financeSolutionLink> before adding revenues",
         "business_finance_solution_helper": "Select the business or financial mechanism solution financed by the GFCR Programme to report revenue. Report revenue separately for each solution, disaggregated by type. This applies to F9 (amount of revenue and Return on Investment).",
+        "no_non_pcf_finance_solutions": "All facilities / solutions are Programmatic co-financing; revenues cannot be added",
         "no_revenues": "No revenues yet",
         "revenue_amount": "Revenue amount",
         "revenue_amount_helper": "Enter the revenue amount in US dollars as cumulative total since the start of the GFCR Programme. This applies to F9 (Amount of revenue and Return on Investment).<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
@@ -391,6 +401,7 @@
     "indicator_set": "Fund indicator set",
     "indicator_set_date_info": "End date of the reporting period of the GFCR Programme, e.g., an end-year report may have December 31 as the reporting date.",
     "indicator_set_title_info": "Recommended naming conventions: For targets, use \"Phase 1 target\", \"Mid-term target\", or \"Final target\". For bi-annual progress reports, use \"Mid-year report\" or \"End-year report\".",
+    "non_standard_title_suffix": "(non-standard)",
     "investments": "Investments",
     "no_indicator_info": "Select 'Create new' to add a fund indicator set to this project",
     "no_indicator_sets": "No fund indicator sets yet",
@@ -515,6 +526,22 @@
   "loading": "Loading",
   "loading_indicator": "Loading indicator",
   "loading_item": "Loading {{itemName}}",
+  "macroinvertebrate_observations": {
+    "add_notes": "Add notes...",
+    "add_macroinvertebrate": "Add macroinvertebrate species",
+    "done": "Done",
+    "edit_notes": "Edit Notes",
+    "macroinvertebrate_name": "Macroinvertebrate name",
+    "macroinvertebrate_species": "Macroinvertebrate species",
+    "must_select_size_bin_warning": "You must select a macroinvertebrate size bin before adding any observations",
+    "size_bin": "Macroinvertebrate size bin (cm)",
+    "size_bin_info": "Name of bin scheme used to estimate macroinvertebrate size for the transect. Choose 1 cm if macroinvertebrate size does not use bins.",
+    "proposed_species_already_exists": "Proposed macroinvertebrate species {{attributeName}} already exists",
+    "proposed_species_saved": "Proposed macroinvertebrate species {{attributeName}} saved. Observation has been updated with this species.",
+    "row": "Row",
+    "species_taxonomy_unavailable": "Macroinvertebrate species taxonomy is unavailable. Please try again."
+  },
+
   "management_regime": "Management regime",
   "management_regimes": {
     "access_restriction": "Access restrictions",

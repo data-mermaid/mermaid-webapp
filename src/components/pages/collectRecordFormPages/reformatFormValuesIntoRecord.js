@@ -323,3 +323,53 @@ export const reformatFormValuesIntoHabitatComplexityRecord = ({
     },
   }
 }
+
+export const reformatFormValuesIntoBeltInvertRecord = ({
+  formikValues,
+  observationsTable1State,
+  collectRecordBeingEdited,
+}) => {
+  const {
+    depth,
+    label,
+    len_surveyed,
+    notes,
+    number,
+    reef_slope,
+    sample_time,
+    size_bin,
+    width,
+    relative_depth,
+    visibility,
+    current,
+    tide,
+    management,
+    sample_date,
+    site,
+    observers,
+  } = formikValues
+
+  return {
+    ...collectRecordBeingEdited,
+    data: {
+      beltinvert_transect: {
+        depth,
+        label,
+        len_surveyed,
+        notes,
+        number,
+        reef_slope,
+        sample_time,
+        size_bin,
+        width,
+        relative_depth,
+        visibility,
+        current,
+        tide,
+      },
+      sample_event: { management, sample_date, site },
+      obs_belt_inverts: observationsTable1State,
+      observers,
+    },
+  }
+}

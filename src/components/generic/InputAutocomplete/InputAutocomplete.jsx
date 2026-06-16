@@ -25,7 +25,7 @@ const AutoCompleteResultsWrapper = styled.div`
     outline-offset: -2px;
     background: ${theme.color.white};
 
-    > * {
+    > p {
       margin: 0;
       padding: ${theme.spacing.buttonPadding};
     }
@@ -183,7 +183,12 @@ const InputAutocomplete = ({
             {isMenuOpen && !menuItems.length && (
               <div>
                 {noResultsText && <p data-testid="noResult">{noResultsText}</p>}
-                {noResultsAction}
+                {noResultsAction && (
+                  // role="presentation" marks this as a structural wrapper, not an interactive element.
+                  <div role="presentation" onClick={() => setIsMenuOpen(false)}>
+                    {noResultsAction}
+                  </div>
+                )}
               </div>
             )}
           </AutoCompleteResultsWrapper>

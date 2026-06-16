@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router'
-import PropTypes, { string } from 'prop-types'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
@@ -16,6 +15,31 @@ import FilterIndicatorPill from '../../generic/FilterIndicatorPill/FilterIndicat
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import MethodsFilterDropDown from '../../MethodsFilterDropDown/MethodsFilterDropDown'
 import SuccessExportModal from '../../SuccessExportModal/SuccessExportModal'
+import GatedFeature from '../../generic/GatedFeature'
+import { SubmittedRecordForUiDisplay } from '../../../types/submitted'
+import { Protocol } from '../../../types/protocols'
+
+interface TableUserPrefsUpdate {
+  propertyKey: string
+  currentValue: string
+}
+
+interface SubmittedToolbarSectionProps {
+  name: string
+  globalSearchText?: string
+  handleGlobalFilterChange: (value: string) => void
+  handleMethodsColumnFilterChange: (value: string[]) => void
+  methodFilterValue?: string[]
+  disabled?: boolean
+  unfilteredRowLength: number
+  methodFilteredRowLength?: number | null
+  searchFilteredRowLength?: number | null
+  isSearchFilterEnabled?: boolean
+  isMethodFilterEnabled?: boolean
+  setMethodsFilter: (value: string[]) => void
+  handleSetTableUserPrefs: (update: TableUserPrefsUpdate) => void
+  submittedRecordsForUiDisplay: SubmittedRecordForUiDisplay[]
+}
 
 const SubmittedToolbarSection = ({
   name,
@@ -32,10 +56,10 @@ const SubmittedToolbarSection = ({
   setMethodsFilter,
   handleSetTableUserPrefs,
   submittedRecordsForUiDisplay,
-}) => {
+}: SubmittedToolbarSectionProps) => {
   const { t } = useTranslation()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { projectId } = useParams()
+  const { projectId } = useParams<{ projectId: string }>()
   const [isSuccessExportModalOpen, setIsSuccessExportModalOpen] = useState(false)
   const [protocolSampleEventCount, setProtocolSampleEventCount] = useState(0)
   const sampleEventCounts = getSampleEventCounts(submittedRecordsForUiDisplay)
@@ -46,7 +70,7 @@ const SubmittedToolbarSection = ({
     </>
   )
 
-  const handleExportSubmitted = (protocol) => {
+  const handleExportSubmitted = (protocol: Protocol) => {
     const sampleEventCount = sampleEventCounts[protocol] || 0
     setProtocolSampleEventCount(sampleEventCount)
 
@@ -142,48 +166,25 @@ const SubmittedToolbarSection = ({
             >
               {t('protocol_titles.habitatcomplexity')}
             </DropdownItemStyle>
+            <GatedFeature featureFlag="macroinvertebrate_enabled">
+              <DropdownItemStyle
+                as="button"
+                disabled={!sampleEventCounts?.macroinvertebrate}
+                onClick={() => handleExportSubmitted('macroinvertebrate')}
+              >
+                {t('protocol_titles.macroinvertebrate')}
+              </DropdownItemStyle>
+            </GatedFeature>
           </Column>
         </ButtonSecondaryDropdown>
       </ToolBarItemsRow>
       <SuccessExportModal
         isOpen={isSuccessExportModalOpen}
         onDismiss={closeModal}
-        projectId={projectId}
         protocolSampleEventCount={protocolSampleEventCount}
       />
     </>
   )
-}
-
-SubmittedToolbarSection.propTypes = {
-  name: PropTypes.string.isRequired,
-  globalSearchText: PropTypes.string,
-  handleGlobalFilterChange: PropTypes.func.isRequired,
-  handleMethodsColumnFilterChange: PropTypes.func.isRequired,
-  methodFilterValue: PropTypes.arrayOf(string),
-  disabled: PropTypes.bool,
-  unfilteredRowLength: PropTypes.number.isRequired,
-  methodFilteredRowLength: PropTypes.number,
-  searchFilteredRowLength: PropTypes.number,
-  isMethodFilterEnabled: PropTypes.bool,
-  isSearchFilterEnabled: PropTypes.bool,
-  setMethodsFilter: PropTypes.func.isRequired,
-  handleSetTableUserPrefs: PropTypes.func.isRequired,
-  submittedRecordsForUiDisplay: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      protocol: PropTypes.string.isRequired,
-      uiLabels: PropTypes.shape({
-        protocol: PropTypes.string.isRequired,
-        site: PropTypes.string.isRequired,
-        management: PropTypes.string.isRequired,
-        size: PropTypes.string.isRequired,
-        depth: PropTypes.string.isRequired,
-        sampleDate: PropTypes.string.isRequired,
-        observers: PropTypes.string.isRequired,
-      }).isRequired,
-    }).isRequired,
-  ).isRequired,
 }
 
 export default SubmittedToolbarSection

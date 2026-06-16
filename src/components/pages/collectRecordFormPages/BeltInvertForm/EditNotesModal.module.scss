@@ -1,0 +1,46 @@
+@use '../../../../style/theme.scss' as theme;
+
+.notesTextarea {
+  width: 100%;
+  min-height: 12rem;
+  padding: theme.$spacing-small;
+  font-size: theme.$default-font-size;
+  font-family: inherit;
+  border: 1px solid #808183;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.notesSubheading {
+  margin: 0 0 theme.$spacing-medium 0;
+}
+
+.clickableNotesTd {
+  cursor: pointer;
+
+  &:hover {
+    background: theme.$tableRowEven;
+  }
+
+  &:focus {
+    outline: theme.$border-medium solid theme.$primary;
+    outline-offset: -2px;
+  }
+}
+
+.notesCellText {
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  text-decoration: underline;
+  word-break: break-word;
+  padding-left: theme.$spacing-medium;
+}
+
+.addNotesPlaceholder {
+  opacity: 0.55;
+}

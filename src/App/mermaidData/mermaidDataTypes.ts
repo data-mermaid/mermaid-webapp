@@ -136,7 +136,7 @@ interface SubmittedBeltInvertObservation {
   notes?: string
   created_by?: string
   beltinvert?: string
-  invertebrate_attribute?: string
+  invert_attribute?: string
 }
 
 export const projectPropType = PropTypes.shape({
@@ -398,10 +398,28 @@ interface ReefSlope {
   }[]
 }
 
+interface SimpleChoice {
+  name: string
+  data: {
+    id: string
+    name: string
+    updated_on: string
+  }[]
+}
+
 export interface Choices {
   fishsizebins: FishSizeBin
   belttransectwidths: BeltTransectWidth
   reefslopes: ReefSlope
+  financesolutiontypes: SimpleChoice
+  geographicalcoverage: SimpleChoice
+  incubatortypes: SimpleChoice
+  indicatorsettitles: SimpleChoice
+  investmentsources: SimpleChoice
+  investmenttypes: SimpleChoice
+  revenuetypes: SimpleChoice
+  sectors: SimpleChoice
+  sustainablefinancemechanisms: SimpleChoice
 }
 
 export type Observers = Observer[]

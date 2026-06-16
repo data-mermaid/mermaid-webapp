@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useRef } from 'react'
 import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 
@@ -14,17 +14,17 @@ import {
   bleachingRecordPropType,
   observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonPrimary, IconButton } from '../../../generic/buttons'
+import { ButtonPrimary } from '../../../generic/buttons'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus, IconInfo } from '../../../icons'
-import { InputWrapper, LabelContainer, RequiredIndicator } from '../../../generic/form'
+import { IconClose, IconPlus } from '../../../icons'
+import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import BleachingPercentCoverSummaryStats from '../../../BleachingPercentCoverSummaryStats/BleachingPercentCoverSummaryStats'
 import ObservationValidationInfo from '../ObservationValidationInfo'
-import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -54,11 +54,9 @@ const PercentCoverObservationTable = ({
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+  const tooltipGroupRef = useRef(null)
   const { t } = useTranslation()
 
-  const infoLabelText = t('message_type.info')
   const deleteObservationText = t('delete_observation')
 
   const handleAddObservation = () => {
@@ -66,25 +64,6 @@ const PercentCoverObservationTable = ({
     setAutoFocusAllowed(true)
 
     observationsDispatch({ type: 'addObservation' })
-  }
-
-  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
-    document.body.addEventListener('click', () => {
-      if (isHelperTextShowing === true) {
-        setIsHelperTextShowing(false)
-      }
-    })
-  }, [isHelperTextShowing])
-
-  const handleInfoIconClick = (event, label) => {
-    if (currentHelperTextLabel === label) {
-      setIsHelperTextShowing(!isHelperTextShowing)
-    } else {
-      setIsHelperTextShowing(true)
-      setCurrentHelperTextLabel(label)
-    }
-
-    event.stopPropagation()
   }
 
   const observationRows = useMemo(() => {
@@ -280,82 +259,48 @@ const PercentCoverObservationTable = ({
                 <Tr>
                   <Th />
                   <Th $align="right" id="quadrat-number-label">
-                    <LabelContainer>
-                      {t('observations.quadrat')} <RequiredIndicator />
-                      {isHelperTextShowing && currentHelperTextLabel === 'quadrat' ? (
-                        <ColumnHeaderToolTip
-                          helperText={t('observations.quadrat_info')}
-                          left="-3em"
-                          top="-6.1em"
-                        />
-                      ) : null}
-                      <IconButton
-                        type="button"
-                        onClick={(event) => handleInfoIconClick(event, 'quadrat')}
-                      >
-                        <IconInfo aria-label={infoLabelText} />
-                      </IconButton>
-                    </LabelContainer>
+                    <LabelWithTooltip
+                      label={
+                        <>
+                          {t('observations.quadrat')} <RequiredIndicator />
+                        </>
+                      }
+                      tooltipText={t('observations.quadrat_info')}
+                      groupRef={tooltipGroupRef}
+                    />
                   </Th>
                   <Th $align="center" id="hard-coral-percent-cover-label">
-                    <LabelContainer>
-                      <div>
-                        {t('observations.hard_coral_cover')} <RequiredIndicator />
-                      </div>
-                      {isHelperTextShowing && currentHelperTextLabel === 'hardCoralPercentage' ? (
-                        <ColumnHeaderToolTip
-                          helperText={t('observations.hard_coral_cover_info')}
-                          left="4.2em"
-                          top="-7.5em"
-                        />
-                      ) : null}
-                      <IconButton
-                        type="button"
-                        onClick={(event) => handleInfoIconClick(event, 'hardCoralPercentage')}
-                      >
-                        <IconInfo aria-label={infoLabelText} />
-                      </IconButton>
-                    </LabelContainer>
+                    <LabelWithTooltip
+                      label={
+                        <>
+                          {t('observations.hard_coral_cover')} <RequiredIndicator />
+                        </>
+                      }
+                      tooltipText={t('observations.hard_coral_cover_info')}
+                      groupRef={tooltipGroupRef}
+                    />
                   </Th>
                   <Th $align="center" id="soft-coral-percent-cover-label">
-                    <LabelContainer>
-                      <div>
-                        {t('observations.soft_coral_cover')} <RequiredIndicator />
-                      </div>
-                      {isHelperTextShowing && currentHelperTextLabel === 'softCoralPercentage' ? (
-                        <ColumnHeaderToolTip
-                          helperText={t('observations.soft_coral_cover_info')}
-                          left="3.6em"
-                          top="-7.5em"
-                        />
-                      ) : null}
-                      <IconButton
-                        type="button"
-                        onClick={(event) => handleInfoIconClick(event, 'softCoralPercentage')}
-                      >
-                        <IconInfo aria-label={infoLabelText} />
-                      </IconButton>
-                    </LabelContainer>
+                    <LabelWithTooltip
+                      label={
+                        <>
+                          {t('observations.soft_coral_cover')} <RequiredIndicator />
+                        </>
+                      }
+                      tooltipText={t('observations.soft_coral_cover_info')}
+                      groupRef={tooltipGroupRef}
+                    />
                   </Th>
                   <Th $align="center" id="microalgae-percent-cover-label">
-                    <LabelContainer>
-                      <div>
-                        {t('observations.macroalgae_cover')} <RequiredIndicator />
-                      </div>
-                      {isHelperTextShowing && currentHelperTextLabel === 'macroalgaePercentage' ? (
-                        <ColumnHeaderToolTip
-                          helperText={t('observations.macroalgae_cover_info')}
-                          left="5em"
-                          top="-7.5em"
-                        />
-                      ) : null}
-                      <IconButton
-                        type="button"
-                        onClick={(event) => handleInfoIconClick(event, 'macroalgaePercentage')}
-                      >
-                        <IconInfo aria-label={infoLabelText} />
-                      </IconButton>
-                    </LabelContainer>
+                    <LabelWithTooltip
+                      label={
+                        <>
+                          {t('observations.macroalgae_cover')} <RequiredIndicator />
+                        </>
+                      }
+                      tooltipText={t('observations.macroalgae_cover_info')}
+                      groupRef={tooltipGroupRef}
+                    />
                   </Th>
                   {areValidationsShowing ? (
                     <Th $align="center">{t('validations.validations')}</Th>

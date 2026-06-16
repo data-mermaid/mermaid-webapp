@@ -149,6 +149,18 @@
   }
 }
 
+// Tooltip anchor wrapper for icon buttons. Moves margins from the button to the
+// wrapper span so the MUI tooltip arrow centers correctly over the icon.
+.button--icon-tooltip-wrapper {
+  display: inline-flex;
+  margin-left: $spacing-small;
+  margin-right: $spacing-x-small;
+
+  .button--icon {
+    margin: 0;
+  }
+}
+
 .button--input {
   @extend .button--secondary;
   white-space: nowrap;

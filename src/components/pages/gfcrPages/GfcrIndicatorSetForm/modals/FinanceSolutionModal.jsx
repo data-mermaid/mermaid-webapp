@@ -34,6 +34,16 @@ import { IconInfo } from '../../../../icons'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
 import GfcrHelperLinks from '../subPages/GfcrHelperLinks'
 
+// Field visibility per fs_type — see "GFCR change requests - May_2026.csv"
+const BUSINESS_OR_FINANCIAL_MECHANISM_TYPES = ['business', 'financial_mechanism']
+const LOCAL_ENTERPRISE_TYPES = ['financial_facility', 'business', 'financial_mechanism']
+const NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES = ['taf', 'ctf', 'financial_facility']
+
+const isTafNameVisible = (fs_type, used_an_incubator) =>
+  BUSINESS_OR_FINANCIAL_MECHANISM_TYPES.includes(fs_type) &&
+  !!used_an_incubator &&
+  used_an_incubator !== 'none'
+
 const FinanceSolutionModal = ({
   isOpen,
   onDismiss,
@@ -64,11 +74,35 @@ const FinanceSolutionModal = ({
     async (formikValues, formikActions) => {
       setSaveButtonState(buttonGroupStates.saving)
 
+      const isBusinessOrFinancialMechanism = BUSINESS_OR_FINANCIAL_MECHANISM_TYPES.includes(
+        formikValues.fs_type,
+      )
+      const usedAnIncubator =
+        formikValues.used_an_incubator === 'none' ? null : formikValues.used_an_incubator
+
       const formattedValues = {
         ...formikValues,
         id: financeSolution?.id,
-        used_an_incubator:
-          formikValues.used_an_incubator === 'none' ? null : formikValues.used_an_incubator,
+        sector: formikValues.fs_type === 'business' ? formikValues.sector : '',
+        geographical_coverage:
+          formikValues.fs_type === 'ctf' ? formikValues.geographical_coverage : '',
+        used_an_incubator: isBusinessOrFinancialMechanism ? usedAnIncubator : null,
+        taf_name: isTafNameVisible(formikValues.fs_type, usedAnIncubator)
+          ? formikValues.taf_name
+          : '',
+        local_enterprise: LOCAL_ENTERPRISE_TYPES.includes(formikValues.fs_type)
+          ? formikValues.local_enterprise
+          : false,
+        gender_smart: isBusinessOrFinancialMechanism ? formikValues.gender_smart : false,
+        number_of_solutions_supported_by: NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES.includes(
+          formikValues.fs_type,
+        )
+          ? Number(formikValues.number_of_solutions_supported_by) || 0
+          : 0,
+        sustainable_finance_mechanisms:
+          formikValues.fs_type === 'financial_mechanism'
+            ? formikValues.sustainable_finance_mechanisms
+            : [],
       }
 
       const existingFinanceSolutions = indicatorSet.finance_solutions
@@ -137,20 +171,37 @@ const FinanceSolutionModal = ({
         errors.name = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      if (!values.sector) {
+      const isStandardFsType = (choices.financesolutiontypes?.data || []).some(
+        (c) => c.id === values.fs_type,
+      )
+      if (!values.fs_type || !isStandardFsType) {
+        errors.fs_type = [{ code: t('forms.required_field'), id: 'Required' }]
+      }
+
+      if (values.fs_type === 'programmatic_co_financing' && financeSolution?.revenues?.length > 0) {
+        errors.fs_type = [
+          {
+            code: t('gfcr.forms.finance_solutions.pcf_revenues_error'),
+            id: 'PCFRevenues',
+          },
+        ]
+      }
+
+      if (values.fs_type === 'business' && !values.sector) {
         errors.sector = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      if (values.used_an_incubator === '') {
-        errors.used_an_incubator = [{ code: t('forms.required_field'), id: 'Required' }]
+      if (values.fs_type === 'ctf' && !values.geographical_coverage) {
+        errors.geographical_coverage = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      if (values.local_enterprise === '') {
-        errors.local_enterprise = [{ code: t('forms.required_field'), id: 'Required' }]
-      }
-
-      if (values.gender_smart === '') {
-        errors.gender_smart = [{ code: t('forms.required_field'), id: 'Required' }]
+      if (
+        NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES.includes(values.fs_type) &&
+        Number(values.number_of_solutions_supported_by) <= 0
+      ) {
+        errors.number_of_solutions_supported_by = [
+          { code: t('forms.required_field'), id: 'Required' },
+        ]
       }
 
       return errors
@@ -208,6 +259,34 @@ const FinanceSolutionModal = ({
 
   const _setIsFormDirty = useEffect(() => setIsFormDirty(!!formik.dirty), [formik.dirty])
 
+  const fsTypeOptions = useMemo(() => {
+    const standardData = choices.financesolutiontypes?.data || []
+    const standard = getOptions(standardData)
+    const storedFsType = financeSolution?.fs_type
+    const isNonStandard = !!storedFsType && !standardData.some((c) => c.id === storedFsType)
+    if (isNonStandard && formik.values.fs_type === storedFsType) {
+      return [
+        {
+          value: storedFsType,
+          label: `${storedFsType} ${t('gfcr.non_standard_title_suffix')}`,
+        },
+        ...standard,
+      ]
+    }
+    return standard
+  }, [choices.financesolutiontypes?.data, financeSolution?.fs_type, formik.values.fs_type, t])
+
+  const showSector = formik.values.fs_type === 'business'
+  const showGeographicalCoverage = formik.values.fs_type === 'ctf'
+  const showUsedAnIncubator = BUSINESS_OR_FINANCIAL_MECHANISM_TYPES.includes(formik.values.fs_type)
+  const showTafName = isTafNameVisible(formik.values.fs_type, formik.values.used_an_incubator)
+  const showLocalEnterprise = LOCAL_ENTERPRISE_TYPES.includes(formik.values.fs_type)
+  const showGenderSmart = BUSINESS_OR_FINANCIAL_MECHANISM_TYPES.includes(formik.values.fs_type)
+  const showNumberOfSolutionsSupportedBy = NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES.includes(
+    formik.values.fs_type,
+  )
+  const showSustainableFinanceMechanisms = formik.values.fs_type === 'financial_mechanism'
+
   const [SFMShowHelperText, setSFMShowHelperText] = useState()
 
   useEffect(() => {
@@ -256,6 +335,19 @@ const FinanceSolutionModal = ({
     return (
       <form id="finance-solution-form" onSubmit={formik.handleSubmit}>
         <StyledModalInputRow>
+          <InputNoRowSelectWithLabelAndValidation
+            label={t('gfcr.forms.finance_solutions.fs_type')}
+            id="fs-type-select"
+            {...formik.getFieldProps('fs_type')}
+            options={fsTypeOptions}
+            required={true}
+            validationMessages={formik.errors.fs_type?.filter((e) => e.id === 'PCFRevenues') ?? []}
+            validationType={
+              formik.errors.fs_type?.some((e) => e.id === 'PCFRevenues') ? 'error' : undefined
+            }
+          />
+        </StyledModalInputRow>
+        <StyledModalInputRow>
           <InputNoRowWithLabelAndValidation
             label={t('gfcr.forms.finance_solutions.business_finance_solution_name')}
             id="finance-solution-input"
@@ -268,111 +360,151 @@ const FinanceSolutionModal = ({
             required={true}
           />
         </StyledModalInputRow>
-        <StyledModalInputRow>
-          <InputNoRowSelectWithLabelAndValidation
-            label={t('gfcr.forms.finance_solutions.sector')}
-            id="sector-select"
-            {...formik.getFieldProps('sector')}
-            options={getOptions(choices.sectors.data)}
-            helperText={
-              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.sector_helper" />
-            }
-            showHelperText={displayHelp}
-            required={true}
-          />
-        </StyledModalInputRow>
-        <StyledModalInputRow>
-          <InputNoRowSelectWithLabelAndValidation
-            label={t('gfcr.forms.finance_solutions.used_an_incubator')}
-            id="used-an-incubator-select"
-            {...formik.getFieldProps('used_an_incubator')}
-            options={[
-              { value: 'none', label: t('no') },
-              ...getOptions(choices.incubatortypes.data),
-            ]}
-            helperText={
-              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.used_an_incubator_helper" />
-            }
-            showHelperText={displayHelp}
-            required={true}
-          />
-        </StyledModalInputRow>
-        <StyledModalInputRow>
-          <InputNoRowSelectWithLabelAndValidation
-            label={t('gfcr.forms.finance_solutions.local_enterprise')}
-            id="local-enterprise-select"
-            {...formik.getFieldProps('local_enterprise')}
-            options={[
-              { value: true, label: t('yes') },
-              { value: false, label: t('no') },
-            ]}
-            helperText={
-              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.local_enterprise_helper" />
-            }
-            showHelperText={displayHelp}
-            required={true}
-          />
-        </StyledModalInputRow>
-        <StyledModalInputRow>
-          <InputNoRowSelectWithLabelAndValidation
-            label={t('gfcr.forms.finance_solutions.gender_program_criteria')}
-            id="gender-smart-select"
-            {...formik.getFieldProps('gender_smart')}
-            options={[
-              { value: true, label: t('yes') },
-              { value: false, label: t('no') },
-            ]}
-            helperText={
-              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.gender_program_criteria_helper" />
-            }
-            showHelperText={displayHelp}
-            required={true}
-          />
-        </StyledModalInputRow>
-        <StyledModalInputRow>
-          <label
-            id="sustainable-finance-mechanisms-label"
-            htmlFor="sustainable-finance-mechanisms-select"
-          >
-            {t('gfcr.forms.finance_solutions.sustainable_finance_mechanisms')}
-            <IconButton type="button" onClick={(event) => handleSFMInfoIconClick(event)}>
-              <IconInfo aria-label="info" />
-            </IconButton>
-          </label>
-          <CustomMuiSelect
-            id="sustainable-finance-mechanisms-select"
-            labelId="sustainable-finance-mechanisms-label"
-            multiple
-            {...formik.getFieldProps('sustainable_finance_mechanisms')}
-            input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-            renderValue={(selected) =>
-              selected?.length
-                ? getChips(selected, choices.sustainablefinancemechanisms.data)
-                : `${t('choose')}...`
-            }
-            displayEmpty={true}
-          >
-            {choices.sustainablefinancemechanisms.data.map((option) => (
-              <CustomMenuItem
-                key={option.id}
-                value={option.id}
-                sx={{ fontSize: theme.typography.defaultFontSize }}
-              >
-                <Checkbox
-                  checked={formik
-                    .getFieldProps('sustainable_finance_mechanisms')
-                    .value.includes(option.id)}
-                />
-                {option.name}
-              </CustomMenuItem>
-            ))}
-          </CustomMuiSelect>
-          {displayHelp || SFMShowHelperText ? (
-            <HelperText id="sfm-helper">
-              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.sustainable_finance_mechanisms_helper" />
-            </HelperText>
-          ) : null}
-        </StyledModalInputRow>
+        {showSector && (
+          <StyledModalInputRow>
+            <InputNoRowSelectWithLabelAndValidation
+              label={t('gfcr.forms.finance_solutions.sector')}
+              id="sector-select"
+              {...formik.getFieldProps('sector')}
+              options={getOptions(choices.sectors.data)}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.sector_helper" />
+              }
+              showHelperText={displayHelp}
+              required={true}
+            />
+          </StyledModalInputRow>
+        )}
+        {showGeographicalCoverage && (
+          <StyledModalInputRow>
+            <InputNoRowSelectWithLabelAndValidation
+              label={t('gfcr.forms.finance_solutions.geographical_coverage')}
+              id="geographical-coverage-select"
+              {...formik.getFieldProps('geographical_coverage')}
+              options={getOptions(choices.geographicalcoverage?.data || [])}
+              required={true}
+            />
+          </StyledModalInputRow>
+        )}
+        {showUsedAnIncubator && (
+          <StyledModalInputRow>
+            <InputNoRowSelectWithLabelAndValidation
+              label={t('gfcr.forms.finance_solutions.used_an_incubator')}
+              id="used-an-incubator-select"
+              {...formik.getFieldProps('used_an_incubator')}
+              options={[
+                { value: 'none', label: t('no') },
+                ...getOptions(choices.incubatortypes.data),
+              ]}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.used_an_incubator_helper" />
+              }
+              showHelperText={displayHelp}
+            />
+          </StyledModalInputRow>
+        )}
+        {showTafName && (
+          <StyledModalInputRow>
+            <InputNoRowWithLabelAndValidation
+              label={t('gfcr.forms.finance_solutions.taf_name')}
+              id="taf-name-input"
+              type="text"
+              {...formik.getFieldProps('taf_name')}
+            />
+          </StyledModalInputRow>
+        )}
+        {showLocalEnterprise && (
+          <StyledModalInputRow>
+            <InputNoRowSelectWithLabelAndValidation
+              label={t('gfcr.forms.finance_solutions.local_enterprise')}
+              id="local-enterprise-select"
+              {...formik.getFieldProps('local_enterprise')}
+              options={[
+                { value: true, label: t('yes') },
+                { value: false, label: t('no') },
+              ]}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.local_enterprise_helper" />
+              }
+              showHelperText={displayHelp}
+            />
+          </StyledModalInputRow>
+        )}
+        {showGenderSmart && (
+          <StyledModalInputRow>
+            <InputNoRowSelectWithLabelAndValidation
+              label={t('gfcr.forms.finance_solutions.gender_program_criteria')}
+              id="gender-smart-select"
+              {...formik.getFieldProps('gender_smart')}
+              options={[
+                { value: true, label: t('yes') },
+                { value: false, label: t('no') },
+              ]}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.gender_program_criteria_helper" />
+              }
+              showHelperText={displayHelp}
+            />
+          </StyledModalInputRow>
+        )}
+        {showNumberOfSolutionsSupportedBy && (
+          <StyledModalInputRow>
+            <InputNoRowWithLabelAndValidation
+              label={t('gfcr.forms.finance_solutions.number_of_solutions_supported_by')}
+              id="number-of-solutions-input"
+              type="number"
+              min="1"
+              {...formik.getFieldProps('number_of_solutions_supported_by')}
+              required={true}
+            />
+          </StyledModalInputRow>
+        )}
+        {showSustainableFinanceMechanisms && (
+          <StyledModalInputRow>
+            <label
+              id="sustainable-finance-mechanisms-label"
+              htmlFor="sustainable-finance-mechanisms-select"
+            >
+              {t('gfcr.forms.finance_solutions.sustainable_finance_mechanisms')}
+              <IconButton type="button" onClick={(event) => handleSFMInfoIconClick(event)}>
+                <IconInfo aria-label="info" />
+              </IconButton>
+            </label>
+            <CustomMuiSelect
+              id="sustainable-finance-mechanisms-select"
+              labelId="sustainable-finance-mechanisms-label"
+              multiple
+              {...formik.getFieldProps('sustainable_finance_mechanisms')}
+              input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+              renderValue={(selected) =>
+                selected?.length
+                  ? getChips(selected, choices.sustainablefinancemechanisms.data)
+                  : `${t('choose')}...`
+              }
+              displayEmpty={true}
+            >
+              {choices.sustainablefinancemechanisms.data.map((option) => (
+                <CustomMenuItem
+                  key={option.id}
+                  value={option.id}
+                  sx={{ fontSize: theme.typography.defaultFontSize }}
+                >
+                  <Checkbox
+                    checked={formik
+                      .getFieldProps('sustainable_finance_mechanisms')
+                      .value.includes(option.id)}
+                  />
+                  {option.name}
+                </CustomMenuItem>
+              ))}
+            </CustomMuiSelect>
+            {displayHelp || SFMShowHelperText ? (
+              <HelperText id="sfm-helper">
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.sustainable_finance_mechanisms_helper" />
+              </HelperText>
+            ) : null}
+          </StyledModalInputRow>
+        )}
         <hr />
         <StyledModalInputRow>
           <label id="notes-label" htmlFor="notes-input">

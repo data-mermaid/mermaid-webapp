@@ -426,7 +426,6 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         name={t('filters.by_name_project_year')}
         globalSearchText={globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
-        type="copy-mr-modal"
       />
       <ViewSelectedOnly htmlFor="viewSelectedOnly">
         <input
@@ -455,6 +454,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
+        maxHeight="70vh"
         title={t('management_regimes.copy')}
         mainContent={
           isModalContentLoading ? (

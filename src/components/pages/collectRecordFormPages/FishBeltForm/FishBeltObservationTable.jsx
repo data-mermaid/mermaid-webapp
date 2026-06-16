@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState, useRef } from 'react'
 import { styled } from 'styled-components'
 
 import {
@@ -24,15 +24,15 @@ import {
   ButtonPopover,
   Popover,
 } from '../CollectingFormPage.Styles'
-import { ButtonPrimary, IconButton } from '../../../generic/buttons'
-import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
-import { getFishBinLabel } from './fishBeltBins'
+import { ButtonPrimary } from '../../../generic/buttons'
+import ObservationSizeSelect from '../ObservationSizeSelect'
+import { fishBeltBins, getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishBeltBiomass'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus, IconInfo, IconBook } from '../../../icons'
+import { IconClose, IconPlus, IconBook } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { InputWrapper, LabelContainer, RequiredIndicator } from '../../../generic/form'
+import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
@@ -41,7 +41,7 @@ import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
-import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
 import theme from '../../../../theme'
 import { getFishNameTable } from '../../../../App/mermaidData/fishNameHelpers'
 import { useTranslation, Trans } from 'react-i18next'
@@ -117,8 +117,7 @@ const FishBeltObservationTable = ({
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+  const tooltipGroupRef = useRef(null)
   const [observationIdWithFishNamePopoverShowing, setObservationIdWithFishNamePopoverShowing] =
     useState()
   const [fishNamePopoverContent, setFishNamePopoverContent] = useState()
@@ -158,25 +157,6 @@ const FishBeltObservationTable = ({
     () => summarizeArrayObjectValuesByProperty(observationsState, 'count'),
     [observationsState],
   )
-
-  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
-    document.body.addEventListener('click', () => {
-      if (isHelperTextShowing === true) {
-        setIsHelperTextShowing(false)
-      }
-    })
-  }, [isHelperTextShowing])
-
-  const handleInfoIconClick = (event, label) => {
-    if (currentHelperTextLabel === label) {
-      setIsHelperTextShowing(!isHelperTextShowing)
-    } else {
-      setIsHelperTextShowing(true)
-      setCurrentHelperTextLabel(label)
-    }
-
-    event.stopPropagation()
-  }
 
   const handlePopoverButtonClick = useCallback(
     ({ observationId, fishNameId }) => {
@@ -283,13 +263,14 @@ const FishBeltObservationTable = ({
       }
 
       const sizeSelect = !showNumericSizeInput ? (
-        <FishBeltObservationSizeSelect
+        <ObservationSizeSelect
           onValueEntered={handleUpdateSize}
           onKeyDown={handleObservationKeyDown}
-          fishBinSelectedLabel={fishBinSelectedLabel}
+          options={fishBeltBins[fishBinSelectedLabel] ?? []}
           value={sizeOrEmptyStringToAvoidInputValueErrors}
           labelledBy="fish-size-label"
           testid="fish-size-select"
+          plusInputTestId="fish-size-50-input"
         />
       ) : null
 
@@ -496,74 +477,53 @@ const FishBeltObservationTable = ({
             <Tr>
               <Th> </Th>
               <Th $align="left" id="fish-name-label">
-                <LabelContainer>
-                  {t('fish_name')} <RequiredIndicator />
-                  {isHelperTextShowing && currentHelperTextLabel === 'fishName' ? (
-                    <ColumnHeaderToolTip
-                      helperText={
-                        <Trans
-                          i18nKey="fish_name_observed"
-                          components={{
-                            a: (
-                              <HelperTextLink
-                                href={links.fishBaseLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                color="#fff"
-                              />
-                            ),
-                          }}
-                        />
-                      }
-                      top="-13.5em"
-                      left="-1.5em"
-                      paddingBottom="3.5em"
+                <LabelWithTooltip
+                  label={
+                    <>
+                      {t('fish_name')} <RequiredIndicator />
+                    </>
+                  }
+                  tooltipText={
+                    <Trans
+                      i18nKey="fish_name_observed"
+                      components={{
+                        a: (
+                          <HelperTextLink
+                            href={links.fishBaseLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            color="#fff"
+                          />
+                        ),
+                      }}
                     />
-                  ) : null}
-                  <IconButton
-                    type="button"
-                    onClick={(event) => handleInfoIconClick(event, 'fishName')}
-                  >
-                    <IconInfo aria-label={t('show_fish_name_info')} />
-                  </IconButton>
-                </LabelContainer>
+                  }
+                  groupRef={tooltipGroupRef}
+                />
               </Th>
               <Th $align="right" id="fish-size-label">
-                <LabelContainer>
-                  {`${t('sample_units.size')} (${t('measurements.centimeter_short')})`}
-                  <RequiredIndicator />
-                  {isHelperTextShowing && currentHelperTextLabel === 'fishSize' ? (
-                    <ColumnHeaderToolTip
-                      helperText={t('fish_size_observed')}
-                      top="-6em"
-                      left="-2.8em"
-                    />
-                  ) : null}
-                  <IconButton
-                    type="button"
-                    onClick={(event) => handleInfoIconClick(event, 'fishSize')}
-                  >
-                    <IconInfo aria-label={t('show_fish_size_info')} />
-                  </IconButton>
-                </LabelContainer>
+                <LabelWithTooltip
+                  label={
+                    <>
+                      {`${t('sample_units.size')} (${t('measurements.centimeter_short')})`}
+                      <RequiredIndicator />
+                    </>
+                  }
+                  tooltipText={t('fish_size_observed')}
+                  groupRef={tooltipGroupRef}
+                />
               </Th>
               <Th $align="right" id="fish-count-label">
-                <LabelContainer>
-                  {t('count')} <RequiredIndicator />
-                  {isHelperTextShowing && currentHelperTextLabel === 'fishCount' ? (
-                    <ColumnHeaderToolTip
-                      helperText={t('fish_count_observed')}
-                      top="-6em"
-                      left="-4.7em"
-                    />
-                  ) : null}
-                  <IconButton
-                    type="button"
-                    onClick={(event) => handleInfoIconClick(event, 'fishCount')}
-                  >
-                    <IconInfo aria-label={t('show_fish_count_info')} />
-                  </IconButton>
-                </LabelContainer>
+                <LabelWithTooltip
+                  label={
+                    <>
+                      {t('count')} <RequiredIndicator />
+                    </>
+                  }
+                  tooltipText={t('fish_count_observed')}
+                  groupRef={tooltipGroupRef}
+                  maxWidth="15rem"
+                />
               </Th>
               <Th $align="right" id="fish-biomass-label">
                 {t('biomass')}

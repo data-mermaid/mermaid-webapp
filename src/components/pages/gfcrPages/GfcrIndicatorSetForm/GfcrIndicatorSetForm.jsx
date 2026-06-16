@@ -54,6 +54,8 @@ const GfcrIndicatorSetForm = ({
               formik={formik}
               isNewIndicatorSet={isNewIndicatorSet}
               displayHelp={displayHelp}
+              choices={choices}
+              indicatorSetType={indicatorSetType}
             />
           )}
           {selectedNavItem === 'f1' && (

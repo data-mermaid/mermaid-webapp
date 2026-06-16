@@ -352,10 +352,30 @@ const _reefSlopePropType = PropTypes.shape({
   ),
 })
 
+const _indicatorSetTitlePropType = PropTypes.shape({
+  name: PropTypes.string,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      updated_on: PropTypes.string,
+    }),
+  ),
+})
+
 export const choicesPropType = PropTypes.shape({
   fishsizebins: _fishSizeBinPropType,
   belttransectwidths: _beltTransectWidthPropType,
   reefslopes: _reefSlopePropType,
+  financesolutiontypes: _indicatorSetTitlePropType,
+  geographicalcoverage: _indicatorSetTitlePropType,
+  incubatortypes: _indicatorSetTitlePropType,
+  indicatorsettitles: _indicatorSetTitlePropType,
+  investmentsources: _indicatorSetTitlePropType,
+  investmenttypes: _indicatorSetTitlePropType,
+  revenuetypes: _indicatorSetTitlePropType,
+  sectors: _indicatorSetTitlePropType,
+  sustainablefinancemechanisms: _indicatorSetTitlePropType,
 })
 
 export const observersPropType = PropTypes.arrayOf(observerPropType)

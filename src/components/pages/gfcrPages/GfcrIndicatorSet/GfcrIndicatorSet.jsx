@@ -27,6 +27,7 @@ import GfcrIndicatorSetNav from '../GfcrIndicatorSetNav'
 import GfcrIndicatorSetForm from '../GfcrIndicatorSetForm/GfcrIndicatorSetForm'
 import IndicatorSetTitle from './IndicatorSetTitle'
 import { GfcrPageUnavailablePadding } from '../Gfcr/Gfcr.styles'
+import { TITLE_IDS_BY_TYPE } from '../GfcrIndicatorSetForm/subPages/ReportTitleAndDateForm'
 import PageUnavailable from '../../PageUnavailable'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import { ButtonSecondary } from '../../../generic/buttons'
@@ -241,8 +242,14 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
     validate: (values) => {
       const errors = {}
 
+      const validTitleIds = TITLE_IDS_BY_TYPE[indicatorSetType] ?? []
       if (!values.title) {
         errors.title = [{ code: t('forms.required_field'), id: 'Required' }]
+      } else if (
+        !validTitleIds.includes(values.title) &&
+        values.title !== initialFormValues.title
+      ) {
+        errors.title = [{ code: t('gfcr.errors.non_standard_title'), id: 'NonStandard' }]
       }
 
       if (!values.report_date) {
@@ -336,7 +343,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
                 <SaveButton
                   formId="gfcr-indicator-set-form"
                   saveButtonState={saveButtonState}
-                  formHasErrors={!!Object.keys(formik.errors).length}
+                  formHasErrors={Object.keys(formik.errors).some((field) => formik.touched[field])}
                   formDirty={isFormDirty}
                 />
               </ButtonContainer>

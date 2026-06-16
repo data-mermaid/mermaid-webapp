@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { styled } from 'styled-components'
 
@@ -17,12 +17,12 @@ import {
   observationsReducerPropType,
   benthicPitRecordPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonPrimary, IconButton } from '../../../generic/buttons'
+import { ButtonPrimary } from '../../../generic/buttons'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus, IconInfo } from '../../../icons'
+import { IconClose, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { InputWrapper, LabelContainer, RequiredIndicator, Select } from '../../../generic/form'
+import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { HelperTextLink } from '../../../generic/links'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
@@ -30,7 +30,7 @@ import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservat
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
-import ColumnHeaderToolTip from '../../../ColumnHeaderToolTip/ColumnHeaderToolTip'
+import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -77,8 +77,7 @@ const BenthicPitObservationsTable = ({
   const { t } = useTranslation()
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
-  const [isHelperTextShowing, setIsHelperTextShowing] = useState(false)
-  const [currentHelperTextLabel, setCurrentHelperTextLabel] = useState(null)
+  const tooltipGroupRef = useRef(null)
 
   const noResultsText = t('search.no_results')
   const proposeNewBenthicAttributeText = t('benthic_observations.add_benthic_attribute')
@@ -101,25 +100,6 @@ const BenthicPitObservationsTable = ({
     },
     [intervalSize, intervalStart, observationsDispatch],
   )
-
-  const _useOnClickOutsideOfInfoIcon = useEffect(() => {
-    document.body.addEventListener('click', () => {
-      if (isHelperTextShowing === true) {
-        setIsHelperTextShowing(false)
-      }
-    })
-  }, [isHelperTextShowing])
-
-  const handleInfoIconClick = (event, label) => {
-    if (currentHelperTextLabel === label) {
-      setIsHelperTextShowing(!isHelperTextShowing)
-    } else {
-      setIsHelperTextShowing(true)
-      setCurrentHelperTextLabel(label)
-    }
-
-    event.stopPropagation()
-  }
 
   const observationsRows = useMemo(() => {
     const growthFormOptions = getOptions(choices.growthforms.data)
@@ -339,54 +319,36 @@ const BenthicPitObservationsTable = ({
                     {t('observations.interval')}
                   </Th>
                   <Th $align="left" id="benthic-attribute-label">
-                    <LabelContainer>
-                      {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
-                      {isHelperTextShowing && currentHelperTextLabel === 'benthicAttribute' ? (
-                        <ColumnHeaderToolTip
-                          helperText={
-                            <Trans
-                              i18nKey="benthic_observations.benthic_attribute_info"
-                              components={{
-                                helperTextLink: (
-                                  <HelperTextLink
-                                    href="https://www.marinespecies.org/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    color="#fff"
-                                  />
-                                ),
-                              }}
-                            />
-                          }
-                          left="3em"
-                          top="-13.5em"
+                    <LabelWithTooltip
+                      label={
+                        <>
+                          {t('benthic_observations.benthic_attribute')} <RequiredIndicator />
+                        </>
+                      }
+                      tooltipText={
+                        <Trans
+                          i18nKey="benthic_observations.benthic_attribute_info"
+                          components={{
+                            helperTextLink: (
+                              <HelperTextLink
+                                href="https://www.marinespecies.org/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                color="#fff"
+                              />
+                            ),
+                          }}
                         />
-                      ) : null}
-                      <IconButton
-                        type="button"
-                        onClick={(event) => handleInfoIconClick(event, 'benthicAttribute')}
-                      >
-                        <IconInfo aria-label={t('message_type.info')} />
-                      </IconButton>
-                    </LabelContainer>
+                      }
+                      groupRef={tooltipGroupRef}
+                    />
                   </Th>
                   <Th $align="right" id="growth-form-label">
-                    <LabelContainer>
-                      <div>{t('observations.growth_form')}</div>
-                      {isHelperTextShowing && currentHelperTextLabel === 'growthForm' ? (
-                        <ColumnHeaderToolTip
-                          helperText={t('observations.growth_form_info')}
-                          left="-0.5em"
-                          top="-9em"
-                        />
-                      ) : null}
-                      <IconButton
-                        type="button"
-                        onClick={(event) => handleInfoIconClick(event, 'growthForm')}
-                      >
-                        <IconInfo aria-label={t('message_type.info')} />
-                      </IconButton>
-                    </LabelContainer>
+                    <LabelWithTooltip
+                      label={t('observations.growth_form')}
+                      tooltipText={t('observations.growth_form_info')}
+                      groupRef={tooltipGroupRef}
+                    />
                   </Th>
                   {areValidationsShowing ? (
                     <Th $align="center">{t('validations.validations')}</Th>

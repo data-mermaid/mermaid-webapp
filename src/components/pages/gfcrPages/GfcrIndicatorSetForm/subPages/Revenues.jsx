@@ -26,6 +26,7 @@ import {
   StyledTableAnchor,
 } from './subPages.styles'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
+import { MuiTooltip } from '../../../../generic/MuiTooltip'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
 import RevenueModal from '../modals/RevenueModal'
@@ -42,6 +43,13 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
   const revenues = useMemo(() => {
     return indicatorSet.finance_solutions.flatMap((fs) => fs.revenues)
   }, [indicatorSet.finance_solutions])
+
+  const nonPcfFinanceSolutions = useMemo(
+    () => indicatorSet.finance_solutions.filter((fs) => fs.fs_type !== 'programmatic_co_financing'),
+    [indicatorSet.finance_solutions],
+  )
+
+  const addRevenueDisabled = !nonPcfFinanceSolutions.length
 
   const tableColumns = useMemo(
     () => [
@@ -218,12 +226,23 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
   const toolbarButtons = (
     <>
       <StyledToolbarButtonWrapper>
-        <ButtonSecondary
-          onClick={(event) => handleAddRevenue(event)}
-          disabled={!indicatorSet.finance_solutions.length}
+        <MuiTooltip
+          title={
+            addRevenueDisabled && indicatorSet.finance_solutions.length > 0
+              ? t('gfcr.forms.revenues.no_non_pcf_finance_solutions')
+              : ''
+          }
         >
-          <IconPlus /> {t('gfcr.forms.revenues.add')}
-        </ButtonSecondary>
+          <span>
+            <ButtonSecondary
+              onClick={(event) => handleAddRevenue(event)}
+              disabled={addRevenueDisabled}
+              style={addRevenueDisabled ? { pointerEvents: 'none' } : undefined}
+            >
+              <IconPlus /> {t('gfcr.forms.revenues.add')}
+            </ButtonSecondary>
+          </span>
+        </MuiTooltip>
       </StyledToolbarButtonWrapper>
     </>
   )
@@ -288,7 +307,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
       <RevenueModal
         isOpen={isModalOpen}
         revenue={revenueBeingEdited}
-        financeSolutions={indicatorSet.finance_solutions}
+        financeSolutions={nonPcfFinanceSolutions}
         choices={choices}
         onDismiss={handleRevenueModalDismiss}
         indicatorSet={indicatorSet}

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { styled } from 'styled-components'
+import * as Sentry from '@sentry/react'
 import i18n from '../../../i18n'
 
 import theme from '../../theme'
@@ -55,11 +56,12 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI
     return { errorMessage: error.toString() }
   }
 
-  // There is also potential to use the componentDidCatch() lifecycle method here if we want to do something with the error itself
+  componentDidCatch(error, info) {
+    Sentry.captureException(error, { extra: { componentStack: info.componentStack } })
+  }
 
   render() {
     const { errorMessage, attemptedRerender } = this.state

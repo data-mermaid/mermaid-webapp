@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabelAndValidation'
+import InputSelectWithLabelAndValidation from '../../../../mermaidInputs/InputSelectWithLabelAndValidation'
 import { formikPropType } from '../../../../../library/formik/formikPropType'
 import { StyledGfcrInputWrapper } from './subPages.styles'
 import DeleteRecordButton from '../../../../DeleteRecordButton/DeleteRecordButton'
@@ -15,8 +16,21 @@ import useCurrentProjectPath from '../../../../../library/useCurrentProjectPath'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
 import { getDeleteModalText } from '../../../../../library/getDeleteModalText'
+import { getOptions } from '../../../../../library/getOptions'
+import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 
-const ReportTitleAndDateForm = ({ formik, isNewIndicatorSet, displayHelp }) => {
+export const TITLE_IDS_BY_TYPE = {
+  report: ['Baseline', 'Mid-year report', 'End-year report'],
+  target: ['Phase 1 target', 'Mid-term target', 'Final target'],
+}
+
+const ReportTitleAndDateForm = ({
+  formik,
+  isNewIndicatorSet,
+  displayHelp,
+  choices,
+  indicatorSetType,
+}) => {
   const { t } = useTranslation()
 
   const deleteModalText = getDeleteModalText(t('gfcr.indicator_set'))
@@ -57,14 +71,26 @@ const ReportTitleAndDateForm = ({ formik, isNewIndicatorSet, displayHelp }) => {
       })
   }
 
+  const validTitleIds = TITLE_IDS_BY_TYPE[indicatorSetType] ?? []
+  const allTitleChoices = choices?.indicatorsettitles?.data ?? []
+  const standardOptions = getOptions(allTitleChoices.filter(({ id }) => validTitleIds.includes(id)))
+
+  const currentTitle = formik.values.title
+  const isNonStandard = !!currentTitle && !validTitleIds.includes(currentTitle)
+  const titleOptions = isNonStandard
+    ? [
+        { value: currentTitle, label: `${currentTitle} ${t('gfcr.non_standard_title_suffix')}` },
+        ...standardOptions,
+      ]
+    : standardOptions
+
   return (
     <StyledGfcrInputWrapper>
-      <InputWithLabelAndValidation
+      <InputSelectWithLabelAndValidation
         required
         label={t('title')}
         id="gfcr-title"
-        type="text"
-        $textAlign="left"
+        options={titleOptions}
         {...formik.getFieldProps('title')}
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}
@@ -101,6 +127,8 @@ ReportTitleAndDateForm.propTypes = {
   formik: formikPropType.isRequired,
   isNewIndicatorSet: PropTypes.bool.isRequired,
   displayHelp: PropTypes.bool,
+  choices: choicesPropType,
+  indicatorSetType: PropTypes.string,
 }
 
 export default ReportTitleAndDateForm

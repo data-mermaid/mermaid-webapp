@@ -3,7 +3,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { StyledEngineProvider } from '@mui/material'
+import * as Sentry from '@sentry/react'
 
+import { initSentry } from './sentry'
 import reportWebVitals from './reportWebVitals'
 import { App } from './App'
 import { OnlineStatusProvider } from './library/onlineStatusContext'
@@ -16,9 +18,13 @@ import '../i18n'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './index.css'
 
+initSentry()
+
+const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouterV7(createBrowserRouter)
+
 // Upgrading to react router v6 because of dependabot issues and data routers (createBrowserRouter) which is necessary for many functions we use(eg: useNavigate).
 // We keep the jsx routes as defined in app.js instead of having ALL routes defined here because we were not able to have conditional rendering of the loader otherwise
-const router = createBrowserRouter(
+const router = sentryCreateBrowserRouter(
   [{ path: '*', element: <App dexieCurrentUserInstance={dexieCurrentUserInstance} /> }],
   { basename: import.meta.env.BASE_URL },
 )

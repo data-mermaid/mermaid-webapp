@@ -2,7 +2,8 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ClearTagButton, TagStyle, TagStyleWrapper, TooltipPopup } from './ProjectInfo.styles'
+import { ClearTagButton, TagStyle, TagStyleWrapper } from './ProjectInfo.styles'
+import { MuiTooltip } from '../../generic/MuiTooltip'
 import { createUuid } from '../../../library/createUuid'
 import { IconClose } from '../../icons'
 
@@ -17,17 +18,16 @@ export const OrganizationList = ({ organizations, handleOrganizationsChange }) =
 
           return (
             <TagStyle tabIndex="0" key={item}>
-              <ClearTagButton
-                type="button"
-                onClick={() => handleOrganizationsChange(item)}
-                id={`remove-button-${uid}`}
-                aria-labelledby={`aria-tooltip-label${uid}`}
-              >
-                <IconClose />
-              </ClearTagButton>
-              <TooltipPopup id={`aria-tooltip-label${uid}`}>
-                {t('organizations.remove_organization')}
-              </TooltipPopup>
+              <MuiTooltip title={t('organizations.remove_organization')} placement="bottom" arrow>
+                <ClearTagButton
+                  type="button"
+                  onClick={() => handleOrganizationsChange(item)}
+                  id={`remove-button-${uid}`}
+                  aria-label={t('organizations.remove_organization')}
+                >
+                  <IconClose />
+                </ClearTagButton>
+              </MuiTooltip>
               {item}
             </TagStyle>
           )
