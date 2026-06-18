@@ -162,7 +162,7 @@ describe('Online', () => {
 
     // show all the records
     await waitFor(() => expect(pageSizeSelector))
-    await user.selectOptions(pageSizeSelector, '22')
+    await user.selectOptions(pageSizeSelector, '24')
     const table = await screen.findByRole('table')
 
     const linksToBleachingRecords = within(table).getAllByRole('link', {

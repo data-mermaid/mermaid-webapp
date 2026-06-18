@@ -37,10 +37,10 @@ test('Collect Records table sorts properly by method column', async () => {
 
   const pageSizeSelector = await screen.findByTestId('page-size-selector')
 
-  await waitFor(() => within(pageSizeSelector).getByText('21'))
+  await waitFor(() => within(pageSizeSelector).getByText('23'))
 
   // show all the records
-  await user.selectOptions(pageSizeSelector, '21')
+  await user.selectOptions(pageSizeSelector, '23')
 
   // Double click all of the default sort columns twice to disable default sorting
   await user.dblClick(within(table).getByTestId('collecting-header-site'))
@@ -53,8 +53,8 @@ test('Collect Records table sorts properly by method column', async () => {
 
   const tableRowsAfterDescending = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterDescending[1]).getByText('protocol_titles.habitatcomplexity'))
-  expect(mockT).toHaveBeenCalledWith('protocol_titles.habitatcomplexity')
+  expect(within(tableRowsAfterDescending[1]).getByText('protocol_titles.macroinvertebrate'))
+  expect(mockT).toHaveBeenCalledWith('protocol_titles.macroinvertebrate')
 
   await user.dblClick(within(table).getByTestId('collecting-header-method'))
 
@@ -220,7 +220,9 @@ test('Collect Records table sorts properly by size column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  await user.selectOptions(screen.getByTestId('page-size-selector'), '21')
+  const pageSizeSelector = await screen.findByTestId('page-size-selector')
+  await waitFor(() => within(pageSizeSelector).getByText('23'))
+  await user.selectOptions(pageSizeSelector, '23')
 
   expect(within(tableRows[1]).getByText('10m'))
 
@@ -235,7 +237,8 @@ test('Collect Records table sorts properly by size column', async () => {
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('5m x 2m'))
+  // beltinvert records have no size ('-'), they sort before fishbelt sizes
+  expect(within(tableRowsAfter[3]).getByText('5m x 2m'))
 
   // // click again to change to descending order
   await user.click(within(table).getByTestId('collecting-header-size'))
@@ -309,7 +312,9 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   const table = screen.getByRole('table')
 
-  await user.selectOptions(screen.getByTestId('page-size-selector'), '21')
+  const pageSizeSelector = await screen.findByTestId('page-size-selector')
+  await waitFor(() => within(pageSizeSelector).getByText('23'))
+  await user.selectOptions(pageSizeSelector, '23')
 
   // Double click all of the default sort columns twice to disable default sorting
   await user.dblClick(within(table).getByTestId('collecting-header-site'))
@@ -329,8 +334,8 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   const tableRowsAfterSecondClick = within(table).getAllByRole('row')
 
-  // test last row. (heads up, this is a multi page table)
-  expect(within(tableRowsAfterSecondClick[20]).getByText('June 12, 2012'))
+  // 23 records total; row 20 descending = April 19, 2017 (fishbelt record 4)
+  expect(within(tableRowsAfterSecondClick[20]).getByText('April 19, 2017'))
 })
 
 test('Collect Records table sorts properly by observers column', async () => {
@@ -449,15 +454,15 @@ test('Collect Records table changes number of rows visible size when pagination 
 
   const pageSizeSelector = await screen.findByTestId('page-size-selector')
 
-  await waitFor(() => expect(within(pageSizeSelector).getByText('21')))
+  await waitFor(() => within(pageSizeSelector).getByText('23'))
 
   // show all the records
-  await user.selectOptions(pageSizeSelector, '21')
+  await user.selectOptions(pageSizeSelector, '23')
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  // 21 mock records + header row
-  expect(tableRowsAfter.length).toEqual(22)
+  // 23 mock records + header row
+  expect(tableRowsAfter.length).toEqual(24)
 })
 
 test('Collect Records table change pages when different page is selected ', async () => {
@@ -491,5 +496,5 @@ test('Collect Records table change pages when different page is selected ', asyn
 
   const linksToCollectRecords = within(table).getAllByRole('link')
 
-  expect(linksToCollectRecords).toHaveLength(6)
+  expect(linksToCollectRecords).toHaveLength(8)
 })

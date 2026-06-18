@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
+import { mockT } from '../../../../testUtilities/mockT'
 
 import {
   screen,
@@ -14,7 +15,7 @@ import App from '../../../App'
 
 // test suite cut up into 2 parts for performance reasons
 describe('Offline', () => {
-  test('Delete Benthic LIT prompt confirm deletes the record with the proper UI response and messaging', async () => {
+  test('Delete macroinvertebrate prompt confirm deletes the record with the proper UI response and messaging', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -22,14 +23,13 @@ describe('Offline', () => {
     const { user } = renderAuthenticatedOffline(
       <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
       {
-        initialEntries: ['/projects/5/collecting/benthiclit/70'],
+        initialEntries: ['/projects/5/collecting/macroinvertebrate/bi-2'],
         dexiePerUserDataInstance,
         dexieCurrentUserInstance,
       },
     )
-    const deleteButton = await screen.findByTestId('delete-record-button')
 
-    await user.click(deleteButton)
+    await user.click(await screen.findByTestId('delete-record-button'))
 
     expect(screen.getByTestId('delete-record-prompt'))
 
@@ -45,12 +45,14 @@ describe('Offline', () => {
     await waitFor(() => expect(pageSizeSelector))
     await user.selectOptions(pageSizeSelector, '22')
 
-    const table = screen.getByRole('table')
+    const table = await screen.findByRole('table')
 
-    const linkToBenthicLitRecord = within(table).queryByRole('link', {
-      name: 'protocol_titles.benthiclit',
+    const linksToBeltInvertRecords = within(table).getAllByRole('link', {
+      name: 'protocol_titles.macroinvertebrate',
     })
 
-    expect(linkToBenthicLitRecord).not.toBeInTheDocument()
+    // row length = 1 because there were 2 mock records, now minus 1
+    expect(linksToBeltInvertRecords).toHaveLength(1)
+    expect(mockT).toHaveBeenCalledWith('protocol_titles.macroinvertebrate')
   })
 })

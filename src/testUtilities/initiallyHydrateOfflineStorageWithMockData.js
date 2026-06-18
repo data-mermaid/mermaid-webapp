@@ -9,6 +9,7 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexiePerUserDataInsta
     dexiePerUserDataInstance.fish_families,
     dexiePerUserDataInstance.fish_genera,
     dexiePerUserDataInstance.fish_species,
+    dexiePerUserDataInstance.invert_attributes,
     dexiePerUserDataInstance.project_managements,
     dexiePerUserDataInstance.project_profiles,
     dexiePerUserDataInstance.project_sites,
@@ -28,6 +29,7 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexiePerUserDataInsta
         'project_profiles',
         'project_sites',
         'projects',
+        'invert_attributes',
       ]
 
       allThePullableDataNamesButChoices.forEach((dataType) => {
@@ -57,6 +59,7 @@ export const initiallyHydrateOfflineStorageWithMockDataNoDemoProject = (
     dexiePerUserDataInstance.fish_families,
     dexiePerUserDataInstance.fish_genera,
     dexiePerUserDataInstance.fish_species,
+    dexiePerUserDataInstance.invert_attributes,
     dexiePerUserDataInstance.project_managements,
     dexiePerUserDataInstance.project_profiles,
     dexiePerUserDataInstance.project_sites,
@@ -71,6 +74,7 @@ export const initiallyHydrateOfflineStorageWithMockDataNoDemoProject = (
         'fish_families',
         'fish_genera',
         'fish_species',
+        'invert_attributes',
         'project_managements',
         'project_profiles',
         'project_sites',
