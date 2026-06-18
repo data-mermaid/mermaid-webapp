@@ -11,7 +11,6 @@ import {
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import mockBeltInvertCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBeltInvertCollectRecords'
 import App from '../../../App'
 
 // test suite cut up into 2 parts for performance reasons
@@ -20,7 +19,6 @@ describe('Offline', () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-    await dexiePerUserDataInstance.collect_records.bulkPut(mockBeltInvertCollectRecords)
 
     const { user } = renderAuthenticatedOffline(
       <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,

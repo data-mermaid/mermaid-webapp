@@ -12,7 +12,6 @@ import {
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import App from '../../../App'
-import mockBeltInvertCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBeltInvertCollectRecords'
 
 describe('Offline', () => {
   test('Edit belt invert save success shows toast message and proper record information', async () => {
@@ -20,7 +19,6 @@ describe('Offline', () => {
 
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-    await dexiePerUserDataInstance.collect_records.bulkPut(mockBeltInvertCollectRecords)
 
     const { user } = renderAuthenticatedOffline(
       <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
