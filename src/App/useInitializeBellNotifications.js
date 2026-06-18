@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
@@ -9,6 +9,11 @@ import {
   deleteBellNotification,
   deleteAllBellNotifications,
 } from './bellNotificationHelpers'
+import {
+  NOTIFICATIONS_OPENED_SESSION_KEY,
+  NOTIFICATION_POLLING_INTERVAL_MS,
+  NOTIFICATION_ANIMATION_TRIGGER_DELAY_MS,
+} from '../library/constants/constants'
 
 export const useInitializeBellNotifications = ({
   apiBaseUrl,
@@ -22,8 +27,18 @@ export const useInitializeBellNotifications = ({
   const location = useLocation() // Changes when the route changes. Useful for fetching notifications again
 
   const [notifications, setNotifications] = useState([])
+  const [isAnimating, setIsAnimating] = useState(false)
+  const prevNotificationCountRef = useRef(null)
+  const prevAuthRef = useRef(isMermaidAuthenticated)
+  const hasTriggeredInitialAnimationRef = useRef(false)
+  const pendingReloginRef = useRef(false)
 
-  const updateNotifications = () => {
+  const markNotificationsOpened = () => {
+    sessionStorage.setItem(NOTIFICATIONS_OPENED_SESSION_KEY, 'true')
+    setIsAnimating(false)
+  }
+
+  const updateNotifications = useCallback(() => {
     let isMounted = true
 
     if (isMermaidAuthenticated && apiBaseUrl && isAppOnline) {
@@ -52,11 +67,91 @@ export const useInitializeBellNotifications = ({
     return () => {
       isMounted = false
     }
-  }
+  }, [
+    apiBaseUrl,
+    getAccessToken,
+    handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
+    isAppOnline,
+    isMermaidAuthenticated,
+    t,
+  ])
 
-  const _initializeNotifications = useEffect(() => {
+  // Fetch notifications on mount and whenever auth, online status, or route changes
+  useEffect(() => {
     updateNotifications()
   }, [apiBaseUrl, getAccessToken, isMermaidAuthenticated, isAppOnline, location]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Poll for new notifications every 60s while authenticated and online
+  useEffect(() => {
+    if (!isMermaidAuthenticated || !isAppOnline) {
+      return undefined
+    }
+
+    const intervalId = setInterval(() => {
+      updateNotifications()
+    }, NOTIFICATION_POLLING_INTERVAL_MS)
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [isMermaidAuthenticated, isAppOnline, updateNotifications])
+
+  // Trigger animation once on initial load if notifications exist and user hasn't opened bell this session
+  useEffect(() => {
+    if (hasTriggeredInitialAnimationRef.current) {
+      return undefined
+    }
+    if (notifications.length === 0) {
+      return undefined
+    }
+
+    hasTriggeredInitialAnimationRef.current = true
+    const hasOpenedThisSession = sessionStorage.getItem(NOTIFICATIONS_OPENED_SESSION_KEY) === 'true'
+    if (hasOpenedThisSession) {
+      return undefined
+    }
+
+    const timeoutId = setTimeout(() => {
+      setIsAnimating(true)
+    }, NOTIFICATION_ANIMATION_TRIGGER_DELAY_MS)
+
+    return () => clearTimeout(timeoutId)
+  }, [notifications])
+
+  // Trigger animation when polling detects new notifications
+  useEffect(() => {
+    const prevCount = prevNotificationCountRef.current
+
+    if (prevCount !== null && notifications.length > prevCount) {
+      setIsAnimating(true)
+    }
+
+    prevNotificationCountRef.current = notifications.length
+  }, [notifications])
+
+  // Set pending flag on re-login; actual animation fires once notifications arrive
+  useEffect(() => {
+    const wasAuthenticated = prevAuthRef.current
+    prevAuthRef.current = isMermaidAuthenticated
+
+    if (!wasAuthenticated && isMermaidAuthenticated) {
+      prevNotificationCountRef.current = null // reset so polling doesn't false-trigger after re-login
+      pendingReloginRef.current = true
+    }
+  }, [isMermaidAuthenticated])
+
+  // Consume pending re-login flag once notifications have arrived
+  useEffect(() => {
+    if (!pendingReloginRef.current || notifications.length === 0) {
+      return
+    }
+
+    pendingReloginRef.current = false
+    const hasOpenedThisSession = sessionStorage.getItem(NOTIFICATIONS_OPENED_SESSION_KEY) === 'true'
+    if (!hasOpenedThisSession) {
+      setIsAnimating(true)
+    }
+  }, [notifications])
 
   const deleteNotification = (notificationId) => {
     if (isMermaidAuthenticated && apiBaseUrl) {
@@ -102,5 +197,25 @@ export const useInitializeBellNotifications = ({
     }
   }
 
-  return { notifications, deleteNotification, deleteAllNotifications }
+  const stopAnimation = () => setIsAnimating(false)
+
+  // When reduced-motion is enabled the CSS animation never runs so onAnimationEnd never fires.
+  // Reset isAnimating immediately so it doesn't get stuck true.
+  useEffect(() => {
+    if (!isAnimating) {
+      return
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      stopAnimation()
+    }
+  }, [isAnimating])
+
+  return {
+    notifications,
+    deleteNotification,
+    deleteAllNotifications,
+    isAnimating,
+    markNotificationsOpened,
+    stopAnimation,
+  }
 }
