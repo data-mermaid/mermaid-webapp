@@ -28,19 +28,6 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
     }),
 
     http.post(`${apiBaseUrl}/pull/`, () => {
-      const beltinvert_transect_validation =
-        mockBeltInvertValidationsObject?.results?.data?.beltinvert_transects
-      const correctedBeltInvertValidationsObject = {
-        ...mockBeltInvertValidationsObject,
-        results: {
-          ...mockBeltInvertValidationsObject.results,
-          data: {
-            ...mockBeltInvertValidationsObject.results.data,
-            beltinvert_transect: beltinvert_transect_validation,
-          },
-        },
-      }
-
       const collectRecordWithValidation = {
         ...mockBeltInvertCollectRecords[0],
         data: {
@@ -69,7 +56,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
           },
           observers: [],
         },
-        validations: correctedBeltInvertValidationsObject,
+        validations: mockBeltInvertValidationsObject,
       }
 
       const response = {

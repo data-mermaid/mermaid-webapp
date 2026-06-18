@@ -85,7 +85,7 @@ export default {
           },
         ],
       ],
-      beltinvert_transects: {
+      beltinvert_transect: {
         relative_depth: [
           {
             validation_id: Math.random(),
