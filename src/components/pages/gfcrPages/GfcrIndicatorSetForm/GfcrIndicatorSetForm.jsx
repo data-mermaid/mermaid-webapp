@@ -47,67 +47,65 @@ const GfcrIndicatorSetForm = ({
 }) => {
   return (
     <>
-      {!['finance-solutions'].includes(selectedNavItem) && (
-        <StyledForm id="gfcr-indicator-set-form" onSubmit={formik.handleSubmit}>
-          {selectedNavItem === 'report-title-and-year' && (
-            <ReportTitleAndDateForm
-              formik={formik}
-              isNewIndicatorSet={isNewIndicatorSet}
-              displayHelp={displayHelp}
-              choices={choices}
-              indicatorSetType={indicatorSetType}
-            />
-          )}
-          {selectedNavItem === 'f1' && (
-            <F1Form formik={formik} handleInputFocus={handleInputFocus} displayHelp={displayHelp} />
-          )}
-          {selectedNavItem === 'f2' && (
-            <F2Form formik={formik} handleInputFocus={handleInputFocus} displayHelp={displayHelp} />
-          )}
-          {selectedNavItem === 'f3' && (
-            <F3Form
-              formik={formik}
-              handleInputFocus={handleInputFocus}
-              getFieldValueTotal={getFieldValueTotal}
-              displayHelp={displayHelp}
-            />
-          )}
-          {selectedNavItem === 'f4' && (
-            <F4Form
-              formik={formik}
-              handleInputFocus={handleInputFocus}
-              indicatorSetType={indicatorSetType}
-              indicatorSet={indicatorSet}
-              handleFormSubmit={handleFormSubmit}
-              displayHelp={displayHelp}
-            />
-          )}
-          {selectedNavItem === 'f5' && (
-            <F5Form
-              formik={formik}
-              handleInputFocus={handleInputFocus}
-              getFieldValueTotal={getFieldValueTotal}
-              displayHelp={displayHelp}
-            />
-          )}
-          {selectedNavItem === 'f6' && (
-            <F6Form
-              formik={formik}
-              handleInputFocus={handleInputFocus}
-              getFieldValueTotal={getFieldValueTotal}
-              displayHelp={displayHelp}
-            />
-          )}
-          {selectedNavItem === 'f7' && (
-            <F7Form
-              formik={formik}
-              handleInputFocus={handleInputFocus}
-              getFieldValueTotal={getFieldValueTotal}
-              displayHelp={displayHelp}
-            />
-          )}
-        </StyledForm>
-      )}
+      <StyledForm id="gfcr-indicator-set-form" onSubmit={formik.handleSubmit}>
+        {selectedNavItem === 'report-title-and-year' && (
+          <ReportTitleAndDateForm
+            formik={formik}
+            isNewIndicatorSet={isNewIndicatorSet}
+            displayHelp={displayHelp}
+            choices={choices}
+            indicatorSetType={indicatorSetType}
+          />
+        )}
+        {selectedNavItem === 'f1' && (
+          <F1Form formik={formik} handleInputFocus={handleInputFocus} displayHelp={displayHelp} />
+        )}
+        {selectedNavItem === 'f2' && (
+          <F2Form formik={formik} handleInputFocus={handleInputFocus} displayHelp={displayHelp} />
+        )}
+        {selectedNavItem === 'f3' && (
+          <F3Form
+            formik={formik}
+            handleInputFocus={handleInputFocus}
+            getFieldValueTotal={getFieldValueTotal}
+            displayHelp={displayHelp}
+          />
+        )}
+        {selectedNavItem === 'f4' && (
+          <F4Form
+            formik={formik}
+            handleInputFocus={handleInputFocus}
+            indicatorSetType={indicatorSetType}
+            indicatorSet={indicatorSet}
+            handleFormSubmit={handleFormSubmit}
+            displayHelp={displayHelp}
+          />
+        )}
+        {selectedNavItem === 'f5' && (
+          <F5Form
+            formik={formik}
+            handleInputFocus={handleInputFocus}
+            getFieldValueTotal={getFieldValueTotal}
+            displayHelp={displayHelp}
+          />
+        )}
+        {selectedNavItem === 'f6' && (
+          <F6Form
+            formik={formik}
+            handleInputFocus={handleInputFocus}
+            getFieldValueTotal={getFieldValueTotal}
+            displayHelp={displayHelp}
+          />
+        )}
+        {selectedNavItem === 'f7' && (
+          <F7Form
+            formik={formik}
+            handleInputFocus={handleInputFocus}
+            getFieldValueTotal={getFieldValueTotal}
+            displayHelp={displayHelp}
+          />
+        )}
+      </StyledForm>
       {selectedNavItem === 'finance-solutions' && (
         <FinanceSolutions
           indicatorSet={indicatorSet}
