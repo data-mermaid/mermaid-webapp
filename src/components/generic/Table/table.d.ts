@@ -51,4 +51,7 @@ export const OverviewTd: React.ComponentType<TdProps>
 export const ObservationsSummaryStats: React.ComponentType<
   React.TableHTMLAttributes<HTMLTableElement>
 >
+export const MacroinvertebrateObservationsSummaryStats: React.ComponentType<
+  React.TableHTMLAttributes<HTMLTableElement>
+>
 export const thStyles: (props: ThProps) => ReturnType<typeof import('styled-components').css>

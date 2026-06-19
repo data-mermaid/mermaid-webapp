@@ -6,7 +6,7 @@ import {
   submittedBeltInvertPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import {
-  ObservationsSummaryStats,
+  MacroinvertebrateObservationsSummaryStats,
   SubmittedObservationStickyTable,
   Tr,
   Td,
@@ -58,7 +58,9 @@ const SubmittedBeltInvertObservationTable = ({
     <Tr key={item.id}>
       <Td $align="center">{index + 1}</Td>
       <Td $align="left">{getInvertName(item.invert_attribute)}</Td>
+      <Td $align="left">{item.size}</Td>
       <Td $align="right">{item.count}</Td>
+      <Td $align="right">{item.notes}</Td>
       <Td $align="right">{getInvertDensity(item)}</Td>
     </Tr>
   ))
@@ -71,8 +73,10 @@ const SubmittedBeltInvertObservationTable = ({
           <thead>
             <Tr>
               <TheadItem> </TheadItem>
-              <TheadItem $align="left">{t('taxonomies.species')}</TheadItem>
+              <TheadItem $align="left">{t('observations.macroinvertebrate_name')}</TheadItem>
+              <TheadItem $align="left">{t('size_cm')}</TheadItem>
               <TheadItem $align="right">{t('count')}</TheadItem>
+              <TheadItem $align="right">{t('notes')}</TheadItem>
               <TheadItem $align="right">{`${t('density')} (${t(
                 'measurements.individuals_per_hectare_short',
               )})`}</TheadItem>
@@ -82,12 +86,19 @@ const SubmittedBeltInvertObservationTable = ({
         </SubmittedObservationStickyTable>
       </StyledOverflowWrapper>
       <UnderTableRow>
-        <ObservationsSummaryStats>
+        <MacroinvertebrateObservationsSummaryStats>
+          <thead>
+            <Tr>
+              <Th colSpan={2}>
+                {t('macroinvertebrate_observations.density_by_group_of_interest_units')}
+              </Th>
+            </Tr>
+          </thead>
           <tbody>
             {Object.entries(densityByGoi).map(([groupName, groupDensity]) => {
               return (
                 <Tr key={groupName}>
-                  <Th>{`${t('density')} - ${groupName}`}</Th>
+                  <Th className="goi-density">{groupName}</Th>
                   <Td>{formatDensityToTwoDecimals(groupDensity)}</Td>
                 </Tr>
               )
@@ -101,7 +112,7 @@ const SubmittedBeltInvertObservationTable = ({
               <Td>{abundance}</Td>
             </Tr>
           </tbody>
-        </ObservationsSummaryStats>
+        </MacroinvertebrateObservationsSummaryStats>
       </UnderTableRow>
     </InputWrapper>
   )

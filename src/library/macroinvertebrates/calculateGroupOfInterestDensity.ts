@@ -302,12 +302,11 @@ export const calculateDensityByGroupOfInterest = (
   widthM: number,
   options: GoiDensityOptions = {},
 ): GoiDensityResult => {
-  // Phase 1: Setup
   const goiChoices = options.goiChoices ?? getGoiChoices(options.choices, invertAttributes)
   const goiWeightMaps = options.goiWeightMaps ?? buildGoiWeightMaps(invertAttributes)
   const attributeById = new Map(invertAttributes.map((attribute) => [attribute.id, attribute]))
 
-  // Phase 2: Attribution — accumulate per-GoI count totals from included observations
+  // Accumulate per-GoI count totals from included observations
   const includedObservations = observations.filter((observation) => observation.include !== false)
   const totalIncludedCount = includedObservations.reduce(
     (sum, observation) => sum + Number(observation.count ?? 0),
@@ -335,7 +334,7 @@ export const calculateDensityByGroupOfInterest = (
     attributeObservationToGoi(attribute, count, goiWeightMaps, goiCountTotals)
   })
 
-  // Phase 3: Density conversion — (count / area_m2) * 10000 to get ind/ha
+  // Density conversion — (count / area_m2) * 10000 to get ind/ha
   const areaM2 = Number(lenSurveyed) * Number(widthM)
   const totalDensity = areaM2 > 0 ? roundToTwoDecimals((totalIncludedCount / areaM2) * 10000) : 0
   const densityByGoi = buildDensityByGoi(goiCountTotals, goiChoices, areaM2)
