@@ -529,6 +529,7 @@
   "macroinvertebrate_observations": {
     "add_notes": "Add notes...",
     "add_macroinvertebrate": "Add macroinvertebrate species",
+    "density_by_group_of_interest_units": "Density by group of interest (ind/ha)",
     "edit_notes": "Edit Notes",
     "macroinvertebrate_species": "Macroinvertebrate species",
     "must_select_size_bin_warning": "You must select a macroinvertebrate size bin before adding any observations",
