@@ -78,7 +78,7 @@ const BeltInvertTransectInputs = ({
 
   const beltinvert_transect = validationsApiData?.beltinvert_transect
   const [isClearSizeValueModalOpen, setIsClearSizeValueModalOpen] = useState(false)
-  const [pendingSizeBinValue, setPendingSizeBinValue] = useState('')
+  const [pendingSizeBinValue, setPendingSizeBinValue] = useState<string | null>(null)
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     beltinvert_transect?.number,
@@ -149,7 +149,7 @@ const BeltInvertTransectInputs = ({
 
   const closeClearSizeValuesModal = () => {
     setIsClearSizeValueModalOpen(false)
-    setPendingSizeBinValue('')
+    setPendingSizeBinValue(null)
   }
 
   const applySizeBinChange = (sizeBinValue: string) => {
@@ -176,7 +176,7 @@ const BeltInvertTransectInputs = ({
   }
 
   const handleResetSizeValues = () => {
-    if (pendingSizeBinValue) {
+    if (pendingSizeBinValue !== null) {
       applySizeBinChange(pendingSizeBinValue)
     }
 
