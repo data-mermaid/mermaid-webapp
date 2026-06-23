@@ -155,6 +155,18 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
+            <Tcell $cellWithText>{t('data_sharing.average_macroinvertebrate_density')}</Tcell>
+            <TcellWithIconClose>
+              <IconClose />
+            </TcellWithIconClose>
+            <Tcell>
+              <IconCheck />
+            </Tcell>
+            <Tcell>
+              <IconCheck />
+            </Tcell>
+          </Tr>
+          <Tr>
             <Td colSpan="4" $cellWithText>
               <strong>{t('data_sharing.transect_level_observations')}</strong>
             </Td>
@@ -197,6 +209,18 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
           </Tr>
           <Tr>
             <Tcell $cellWithText>{t('data_sharing.colonies_bleached_percent_cover')}</Tcell>
+            <TcellWithIconClose>
+              <IconClose />
+            </TcellWithIconClose>
+            <TcellWithIconClose>
+              <IconClose />
+            </TcellWithIconClose>
+            <Tcell>
+              <IconCheck />
+            </Tcell>
+          </Tr>
+          <Tr>
+            <Tcell $cellWithText>{t('data_sharing.macroinvertebrate_transect')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
