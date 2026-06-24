@@ -26,7 +26,7 @@ import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import {
-  formatDensityToTwoDecimals,
+  formatDensityToOneDecimal,
   useBeltInvertDensityMetrics,
 } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
 import ObservationSizeSelect from '../ObservationSizeSelect'
@@ -614,13 +614,13 @@ const BeltInvertObservationTable = ({
               return (
                 <Tr key={groupName}>
                   <Th>{`${t('density')} - ${groupName}`}</Th>
-                  <Td>{formatDensityToTwoDecimals(density)}</Td>
+                  <Td>{formatDensityToOneDecimal(density)}</Td>
                 </Tr>
               )
             })}
             <Tr>
               <Th>{t('observations.total_density_units')}</Th>
-              <Td>{formatDensityToTwoDecimals(totalDensity)}</Td>
+              <Td>{formatDensityToOneDecimal(totalDensity)}</Td>
             </Tr>
             <Tr>
               <Th>{t('total_abundance')}</Th>

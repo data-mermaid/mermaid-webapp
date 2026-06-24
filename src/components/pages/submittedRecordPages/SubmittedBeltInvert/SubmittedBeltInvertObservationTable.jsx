@@ -17,7 +17,7 @@ import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.sty
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import {
-  formatDensityToTwoDecimals,
+  formatDensityToOneDecimal,
   useBeltInvertDensityMetrics,
 } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
 
@@ -99,13 +99,13 @@ const SubmittedBeltInvertObservationTable = ({
               return (
                 <Tr key={groupName}>
                   <Th className="goi-density">{groupName}</Th>
-                  <Td>{formatDensityToTwoDecimals(groupDensity)}</Td>
+                  <Td>{formatDensityToOneDecimal(groupDensity)}</Td>
                 </Tr>
               )
             })}
             <Tr>
               <Th>{t('observations.total_density_units')}</Th>
-              <Td>{formatDensityToTwoDecimals(totalDensity)}</Td>
+              <Td>{formatDensityToOneDecimal(totalDensity)}</Td>
             </Tr>
             <Tr>
               <Th>{t('total_abundance')}</Th>
