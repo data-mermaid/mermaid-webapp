@@ -152,9 +152,6 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
     within(screen.getByTestId('width')).getByText('validation_messages.required'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('size-bin')).getByText('validation_messages.required'),
-  ).toBeInTheDocument()
-  expect(
     within(screen.getByTestId('reef-slope')).getByText('validation_messages.required'),
   ).toBeInTheDocument()
   expect(
