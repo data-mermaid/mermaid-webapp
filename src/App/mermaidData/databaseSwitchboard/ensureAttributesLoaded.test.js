@@ -90,3 +90,36 @@ test('ensureAttributesLoaded tolerates fetch failures', async () => {
 
   expect(put).not.toHaveBeenCalled()
 })
+
+test('ensureAttributesLoaded rejects when dexieTable.put fails after a successful fetch', async () => {
+  const put = vi.fn(async () => {
+    throw new Error('dexie put failed')
+  })
+  const bulkGet = vi.fn(async () => [undefined])
+
+  const dexieTable = {
+    bulkGet,
+    put,
+  }
+
+  mockMermaidApiAllSuccessful.use(
+    http.get(`${apiBaseUrl}/invertattributes/missing-id/`, () => {
+      return HttpResponse.json({
+        id: 'missing-id',
+        name: 'Fetched Name',
+      })
+    }),
+  )
+
+  await expect(
+    ensureAttributesLoaded({
+      ids: ['missing-id'],
+      dexieTable,
+      detailUrlById: (id) => `${apiBaseUrl}/invertattributes/${id}/`,
+      getAccessToken: async () => 'fake-token',
+      isOnlineAuthenticatedAndReady: true,
+    }),
+  ).rejects.toThrow('dexie put failed')
+
+  expect(put).toHaveBeenCalledTimes(1)
+})

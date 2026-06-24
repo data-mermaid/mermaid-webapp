@@ -29,17 +29,20 @@ export const ensureAttributesLoaded = async ({
 
   await Promise.all(
     missingIds.map(async (id) => {
+      let response
+
       try {
-        const response = await axios.get(
+        response = await axios.get(
           detailUrlById(id),
           await getAuthorizationHeaders(getAccessToken),
         )
-
-        if (response?.data) {
-          await dexieTable.put({ ...response.data, uiState_pushToApi: false })
-        }
       } catch {
         // Silently tolerate missing attributes and offline races.
+        return
+      }
+
+      if (response?.data) {
+        await dexieTable.put({ ...response.data, uiState_pushToApi: false })
       }
     }),
   )
