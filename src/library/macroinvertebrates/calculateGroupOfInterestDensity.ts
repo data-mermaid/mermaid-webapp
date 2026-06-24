@@ -9,7 +9,6 @@ interface InvertAttribute {
 
 interface Observation {
   count?: number | null
-  include?: boolean
   invert_attribute?: string | null
 }
 
@@ -307,15 +306,14 @@ export const calculateDensityByGroupOfInterest = (
   const attributeById = new Map(invertAttributes.map((attribute) => [attribute.id, attribute]))
 
   // Accumulate per-GoI count totals from included observations
-  const includedObservations = observations.filter((observation) => observation.include !== false)
-  const totalIncludedCount = includedObservations.reduce(
+  const totalIncludedCount = observations.reduce(
     (sum, observation) => sum + Number(observation.count ?? 0),
     0,
   )
 
   const goiCountTotals = new Map<string, number>()
 
-  includedObservations.forEach((observation) => {
+  observations.forEach((observation) => {
     const count = Number(observation.count ?? 0)
     if (!Number.isFinite(count) || count <= 0) {
       return

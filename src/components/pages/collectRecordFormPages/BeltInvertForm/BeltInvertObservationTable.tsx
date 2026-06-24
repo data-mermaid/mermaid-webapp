@@ -37,7 +37,6 @@ interface ObservationRecord {
   size?: number | string | null
   invert_attribute?: string | null
   notes?: string | null
-  include?: boolean
 }
 
 interface SizeBinChoice {
