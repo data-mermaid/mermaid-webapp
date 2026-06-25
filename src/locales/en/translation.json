@@ -77,7 +77,7 @@
     "send_email": "Send email",
     "submit": "Submit",
     "submitting": "Submitting",
-    "suggestion_review_request": "Send to MERMAID for review",
+    "suggestion_review_request": "Send for review",
     "transfer": "Transfer",
     "user_account_dropdown": "User account dropdown",
     "validate": "Validate",
@@ -212,7 +212,7 @@
   "fish_size_observed": "Size of fish observed, in cm (e.g. 4.5 or 5-10)",
   "forms": {
     "required_field": "This field is required",
-    "submit_for_review": "Send to MERMAID for review"
+    "submit_for_review": "Send for review"
   },
   "gfcr": {
     "add_gfcr_indicators": "The GFCR coalition mobilizes financial resources to scale sustainable businesses and innovative solutions for coral reef conservation. \nIf you're a GFCR program, enable the GFCR fund indicators for this project to start your M&E.",
@@ -783,7 +783,7 @@
     "copy_of_project_name": "Copy of {{projectName}}",
     "copy_project": "Copy project",
     "country": "Country",
-    "create_or_join_project": "Create a new project or ask an admin to add you to an existing one",
+    "create_or_join_project": "Create a new project or ask an admin to add you to an existing one.",
     "create_project": "Create project",
     "data_copy_to_project": "Sites, management regimes, data sharing policies, and users and their roles will be copied to new project.",
     "data_unavailable": "Project data is currently unavailable.",
@@ -1082,8 +1082,8 @@
       "pending_user_added": "Sign-up email sent. New user added as pending user.",
       "role_changed_error": "{{userName}}'s role has not been changed",
       "role_changed_success": "{{userName}}'s role is now set to {{role}}",
-      "sample_units_transfer_one": "{{count}} sample unit transferred",
-      "sample_units_transfer_other": "{{count}} sample units transferred",
+      "sample_units_transferred_one": "{{count}} sample unit transferred",
+      "sample_units_transferred_other": "{{count}} sample units transferred",
       "something_went_wrong": "Something went wrong",
       "user_removed": "User removed"
     },
@@ -1165,7 +1165,7 @@
     "no_region_match": "Coral or fish not previously observed in site region",
     "not_part_of_fish_family_subset": "Fish is not part of project-defined fish families",
     "not_positive_integer": "Value is not an integer greater or equal to zero",
-    "not_unique_site": "Site: Similar records detected",
+    "not_unique_site": "Site: similar records detected",
     "obs_total_length_toolarge": "Total length of observations ({{totalLength}} cm) is greater than the transect length ({{transectLength}} m) + 50%",
     "obs_total_length_toosmall": "Total length of observations ({{totalLength}} cm) is less than 50% of the transect length ({{transectLength}} m)",
     "observation_count": "{{comparison}} than {{count}} observations in {{suffixToken}}",
