@@ -25,19 +25,13 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { formatOneDecimalDisplayValue } from '../../../../library/numbers/formatOneDecimalDisplayValue'
 import {
   formatDensityToTwoDecimals,
   useBeltInvertDensityMetrics,
 } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
 import ObservationSizeSelect from '../ObservationSizeSelect'
-
-interface ObservationRecord {
-  id: string
-  count?: number | null
-  size?: number | string | null
-  invert_attribute?: string | null
-  notes?: string | null
-}
+import { ObservationRecord } from './BeltInvertTypes'
 
 interface SizeBinChoice {
   id: string | number
@@ -107,6 +101,13 @@ const buildSizeOptionsFromBinLabel = (sizeBinLabel: string | number | undefined)
   return sizeOptions
 }
 
+const sanitizeOneDecimalInput = (value: string) => {
+  const digitsAndDotOnly = value.replace(/[^\d.]/g, '')
+  const [integerPart = '', ...decimalParts] = digitsAndDotOnly.split('.')
+  const decimalPart = decimalParts.join('').slice(0, 1)
+  return digitsAndDotOnly.includes('.') ? `${integerPart}.${decimalPart}` : integerPart
+}
+
 interface BeltInvertObservationTableProps {
   areValidationsShowing: boolean
   choices: ChoicesWithSizeBins
@@ -172,6 +173,8 @@ const BeltInvertObservationRow = ({
   const { t } = useTranslation()
   const { id: observationId, count, size, invert_attribute: invertAttributeId } = observation
   const rowNumber = index + 1
+  const [isSizeInputFocused, setIsSizeInputFocused] = useState(false)
+  const [sizeInputDraft, setSizeInputDraft] = useState('')
 
   const showNumericSizeInput =
     sizeBinSelectedLabel?.toString() === '1' || typeof sizeBinSelectedLabel === 'undefined'
@@ -191,9 +194,21 @@ const BeltInvertObservationRow = ({
   }
 
   const handleUpdateSizeFromInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const regExNumbers = new RegExp(/\D/g)
-    const newValue = event.target.value.replace(regExNumbers, '')
+    const newValue = sanitizeOneDecimalInput(event.target.value)
+    setSizeInputDraft(newValue)
     handleUpdateSize(newValue)
+  }
+
+  const handleSizeInputFocus = () => {
+    setIsSizeInputFocused(true)
+    setSizeInputDraft(
+      size === null || typeof size === 'undefined' || size === '' ? '' : String(size),
+    )
+  }
+
+  const handleSizeInputBlur = () => {
+    setSizeInputDraft(formatOneDecimalDisplayValue(size))
+    setIsSizeInputFocused(false)
   }
 
   const handleUpdateCount = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -243,12 +258,13 @@ const BeltInvertObservationRow = ({
 
   const sizeInput = showNumericSizeInput ? (
     <InputNumberNumericCharactersOnly
-      value={size ?? ''}
+      value={isSizeInputFocused ? sizeInputDraft : formatOneDecimalDisplayValue(size)}
       step="any"
-      disabled={!sizeBinSelectedLabel}
       aria-labelledby="invert-size-label"
       data-testid="invert-size-input"
       onChange={handleUpdateSizeFromInput}
+      onFocus={handleSizeInputFocus}
+      onBlur={handleSizeInputBlur}
       onKeyDown={(event: React.KeyboardEvent) =>
         onObservationKeyDown({ event, index, observation })
       }
@@ -264,7 +280,6 @@ const BeltInvertObservationRow = ({
       labelledBy="invert-size-label"
       testid="invert-size-select"
       plusInputTestId="invert-size-50-input"
-      disabled={!sizeBinSelectedLabel}
     />
   )
 
@@ -276,7 +291,6 @@ const BeltInvertObservationRow = ({
           <ObservationAutocomplete
             id={`observation-${observationId}`}
             data-testid="species-name-autocomplete"
-            disabled={!sizeBinSelectedLabel}
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus={autoFocusAllowed}
             isLastRow={isLastRow}
@@ -297,14 +311,13 @@ const BeltInvertObservationRow = ({
           />
         </InputAutocompleteContainer>
       </Td>
-      <Td $align="right">{sizeInput}</Td>
+      {sizeBinSelectedLabel && <Td $align="right">{sizeInput}</Td>}
       <Td $align="right">
         <InputNumberNumericCharactersOnly
           value={count ?? ''}
           step="any"
           aria-labelledby="invert-count-label"
           onChange={handleUpdateCount}
-          disabled={!sizeBinSelectedLabel}
           data-testid="invert-count-input"
           onKeyDown={(event: React.KeyboardEvent) => {
             onObservationKeyDown({ event, index, observation })
@@ -519,7 +532,7 @@ const BeltInvertObservationTable = ({
           <colgroup>
             <col className={tableStyles.colNumber} />
             <col className={tableStyles.colInvertName} />
-            <col className={tableStyles.colSize} />
+            {sizeBinSelectedLabel && <col className={tableStyles.colSize} />}
             <col className={tableStyles.colCount} />
             <col className={tableStyles.colNotes} />
             {areValidationsShowing ? <col className={tableStyles.colValidations} /> : null}
@@ -534,11 +547,13 @@ const BeltInvertObservationTable = ({
                   {t('observations.macroinvertebrate_name')} <RequiredIndicator />
                 </LabelContainer>
               </Th>
-              <Th $align="right" id="invert-size-label">
-                <LabelContainer>
-                  {`${t('sample_units.size')} (${t('measurements.centimeter_short')})`}
-                </LabelContainer>
-              </Th>
+              {sizeBinSelectedLabel && (
+                <Th $align="right" id="invert-size-label">
+                  <LabelContainer>
+                    {`${t('sample_units.size')} (${t('measurements.centimeter_short')})`}
+                  </LabelContainer>
+                </Th>
+              )}
               <Th $align="right" id="invert-count-label">
                 <LabelContainer>
                   {t('count')} <RequiredIndicator />
@@ -595,14 +610,11 @@ const BeltInvertObservationTable = ({
           <ButtonPrimary
             type="button"
             onClick={handleAddObservation}
-            disabled={!sizeBinSelectedLabel || invertAttributesLoadError}
+            disabled={invertAttributesLoadError}
             data-testid="add-observation-row"
           >
             <IconPlus /> {t('buttons.add_row')}
           </ButtonPrimary>
-          {!sizeBinSelectedLabel ? (
-            <p>{t('macroinvertebrate_observations.must_select_size_bin_warning')}</p>
-          ) : null}
           {invertAttributesLoadError ? (
             <p>{t('macroinvertebrate_observations.species_taxonomy_unavailable')}</p>
           ) : null}

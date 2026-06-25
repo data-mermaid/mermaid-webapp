@@ -163,15 +163,6 @@ export default {
             validation_id: 'b0781708804d47a9816741c010587f88',
           },
         ],
-        size_bin: [
-          {
-            code: 'required',
-            fields: ['data.beltinvert_transect.size_bin'],
-            status: 'error',
-            context: null,
-            validation_id: '7ef514ed41d46f3e6e3f2e70a8fa6a68',
-          },
-        ],
         sample_time: [
           {
             validation_id: Math.random(),
