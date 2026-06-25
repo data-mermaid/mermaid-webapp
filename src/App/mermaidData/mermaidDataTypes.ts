@@ -100,7 +100,6 @@ interface SubmittedFishBeltObservation {
   created_on?: string
   updated_on?: string
   count?: number
-  include?: boolean
   notes?: string
   created_by?: string
   beltfish?: string
@@ -128,7 +127,6 @@ interface SubmittedBeltInvertObservation {
   created_on?: string
   updated_on?: string
   count?: number
-  include?: boolean
   notes?: string
   created_by?: string
   beltinvert?: string
