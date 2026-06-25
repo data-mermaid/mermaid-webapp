@@ -65,31 +65,39 @@ const SubmittedBeltInvertObservationTable = ({
     setNotesModalObservationId(null)
   }
 
-  const observationBeltInverts = obs_belt_inverts.map((item, index) => (
-    <Tr key={item.id}>
-      <Td $align="center">{index + 1}</Td>
-      <Td $align="left">{getInvertName(item.invert_attribute)}</Td>
-      <Td $align="left">{item.size}</Td>
-      <Td $align="right">{item.count}</Td>
-      <Td
-        className={styles.clickableNotesTd}
-        $align="left"
-        role="button"
-        tabIndex={0}
-        aria-label={`View notes for row ${index + 1}`}
-        onClick={() => setNotesModalObservationId(item.id)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            setNotesModalObservationId(item.id)
+  const observationBeltInverts = obs_belt_inverts.map((item, index) => {
+    const hasNotes = Boolean(item.notes?.trim())
+
+    return (
+      <Tr key={item.id}>
+        <Td $align="center">{index + 1}</Td>
+        <Td $align="left">{getInvertName(item.invert_attribute)}</Td>
+        <Td $align="left">{item.size}</Td>
+        <Td $align="right">{item.count}</Td>
+        <Td
+          className={hasNotes ? styles.clickableNotesTd : undefined}
+          $align="left"
+          role={hasNotes ? 'button' : undefined}
+          tabIndex={hasNotes ? 0 : undefined}
+          aria-label={hasNotes ? `View notes for row ${index + 1}` : undefined}
+          onClick={hasNotes ? () => setNotesModalObservationId(item.id) : undefined}
+          onKeyDown={
+            hasNotes
+              ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    setNotesModalObservationId(item.id)
+                  }
+                }
+              : undefined
           }
-        }}
-      >
-        {item.notes?.trim() ? <span className={styles.notesCellText}>{item.notes}</span> : null}
-      </Td>
-      <Td $align="right">{getInvertDensity(item)}</Td>
-    </Tr>
-  ))
+        >
+          {hasNotes ? <span className={styles.notesCellText}>{item.notes}</span> : null}
+        </Td>
+        <Td $align="right">{getInvertDensity(item)}</Td>
+      </Tr>
+    )
+  })
 
   return (
     <InputWrapper>
