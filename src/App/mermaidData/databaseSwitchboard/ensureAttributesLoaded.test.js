@@ -91,7 +91,7 @@ test('ensureAttributesLoaded tolerates fetch failures', async () => {
   expect(put).not.toHaveBeenCalled()
 })
 
-test('ensureAttributesLoaded rejects when dexieTable.put fails after a successful fetch', async () => {
+test('ensureAttributesLoaded tolerates dexieTable.put failures after a successful fetch', async () => {
   const put = vi.fn(async () => {
     throw new Error('dexie put failed')
   })
@@ -119,7 +119,7 @@ test('ensureAttributesLoaded rejects when dexieTable.put fails after a successfu
       getAccessToken: async () => 'fake-token',
       isOnlineAuthenticatedAndReady: true,
     }),
-  ).rejects.toThrow('dexie put failed')
+  ).resolves.toBeUndefined()
 
   expect(put).toHaveBeenCalledTimes(1)
 })

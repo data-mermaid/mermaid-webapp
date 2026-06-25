@@ -32,17 +32,22 @@ export const ensureAttributesLoaded = async ({
       let response
 
       try {
-        response = await axios.get(
-          detailUrlById(id),
-          await getAuthorizationHeaders(getAccessToken),
-        )
+        response = await axios.get(detailUrlById(id), await getAuthorizationHeaders(getAccessToken))
       } catch {
-        // Silently tolerate missing attributes and offline races.
+        // Tolerate network failures and offline races — the attribute name will
+        // just render blank rather than breaking the page load.
         return
       }
 
       if (response?.data) {
-        await dexieTable.put({ ...response.data, uiState_pushToApi: false })
+        try {
+          await dexieTable.put({ ...response.data, uiState_pushToApi: false })
+        } catch (writeError) {
+          // Tolerate write failures (e.g. storage quota exceeded, schema mismatch).
+          // The fetch succeeded, so the page can still render; the attribute simply
+          // won't be cached for next time.
+          console.warn('ensureAttributesLoaded: failed to cache attribute', id, writeError)
+        }
       }
     }),
   )
