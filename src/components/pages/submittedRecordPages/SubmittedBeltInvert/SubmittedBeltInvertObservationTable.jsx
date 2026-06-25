@@ -20,6 +20,7 @@ import {
   formatDensityToOneDecimal,
   useBeltInvertDensityMetrics,
 } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
+import { formatOneDecimalDisplayValue } from '../../../../library/numbers/formatOneDecimalDisplayValue'
 
 const SubmittedBeltInvertObservationTable = ({
   choices,
@@ -54,11 +55,13 @@ const SubmittedBeltInvertObservationTable = ({
     return roundToOneDecimal(observationDensities.get(item.id))
   }
 
+  const hasSizeData = obs_belt_inverts.some((item) => item.size)
+
   const observationBeltInverts = obs_belt_inverts.map((item, index) => (
     <Tr key={item.id}>
       <Td $align="center">{index + 1}</Td>
       <Td $align="left">{getInvertName(item.invert_attribute)}</Td>
-      <Td $align="left">{item.size}</Td>
+      {hasSizeData && <Td $align="left">{formatOneDecimalDisplayValue(item.size)}</Td>}
       <Td $align="right">{item.count}</Td>
       <Td $align="right">{item.notes}</Td>
       <Td $align="right">{getInvertDensity(item)}</Td>
@@ -74,7 +77,7 @@ const SubmittedBeltInvertObservationTable = ({
             <Tr>
               <TheadItem> </TheadItem>
               <TheadItem $align="left">{t('observations.macroinvertebrate_name')}</TheadItem>
-              <TheadItem $align="left">{t('size_cm')}</TheadItem>
+              {hasSizeData && <TheadItem $align="left">{t('size_cm')}</TheadItem>}
               <TheadItem $align="right">{t('count')}</TheadItem>
               <TheadItem $align="right">{t('notes')}</TheadItem>
               <TheadItem $align="right">{`${t('density')} (${t(
