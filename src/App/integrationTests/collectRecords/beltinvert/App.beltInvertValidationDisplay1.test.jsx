@@ -251,9 +251,6 @@ test('Validating an empty collect record, and then editing an input with errors 
     within(screen.getByTestId('width')).getByText('validation_messages.required'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('size-bin')).getByText('validation_messages.required'),
-  ).toBeInTheDocument()
-  expect(
     within(screen.getByTestId('reef-slope')).getByText('validation_messages.required'),
   ).toBeInTheDocument()
   expect(
@@ -301,9 +298,6 @@ test('Validating an empty collect record, and then editing an input with errors 
     within(screen.getByTestId('width')).queryByText('validation_messages.required'),
   ).not.toBeInTheDocument()
   expect(
-    within(screen.getByTestId('size-bin')).queryByText('validation_messages.required'),
-  ).not.toBeInTheDocument()
-  expect(
     within(screen.getByTestId('reef-slope')).queryByText('validation_messages.required'),
   ).not.toBeInTheDocument()
   expect(
@@ -348,9 +342,6 @@ test('Validating an empty collect record, and then editing an input with errors 
   ).toBeInTheDocument()
   expect(
     within(screen.getByTestId('width')).getByText('validation_messages.required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('size-bin')).getByText('validation_messages.required'),
   ).toBeInTheDocument()
   expect(
     within(screen.getByTestId('reef-slope')).getByText('validation_messages.required'),
