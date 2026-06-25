@@ -51,9 +51,6 @@ interface BeltInvertObservationMetrics {
   observationDensities: Map<string, number>
 }
 
-export const formatDensityToTwoDecimals = (value: number) =>
-  (Math.round(Number(value) * 100) / 100).toFixed(2)
-
 const calculateBeltInvertObservationMetrics = (
   observations: BeltInvertObservation[],
   lenSurveyed: number | string,
