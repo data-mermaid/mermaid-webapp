@@ -25,6 +25,7 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { formatOneDecimalDisplayValue } from '../../../../library/numbers/formatOneDecimalDisplayValue'
 import {
   formatDensityToTwoDecimals,
   useBeltInvertDensityMetrics,
@@ -105,15 +106,6 @@ const sanitizeOneDecimalInput = (value: string) => {
   const [integerPart = '', ...decimalParts] = digitsAndDotOnly.split('.')
   const decimalPart = decimalParts.join('').slice(0, 1)
   return digitsAndDotOnly.includes('.') ? `${integerPart}.${decimalPart}` : integerPart
-}
-
-const formatOneDecimalDisplayValue = (size: number | string | null | undefined) => {
-  if (size === null || typeof size === 'undefined' || size === '') {
-    return ''
-  }
-
-  const parsed = Number.parseFloat(String(size))
-  return Number.isNaN(parsed) ? '' : parsed.toFixed(1)
 }
 
 interface BeltInvertObservationTableProps {

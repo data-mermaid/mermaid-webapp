@@ -20,6 +20,7 @@ import {
   formatDensityToTwoDecimals,
   useBeltInvertDensityMetrics,
 } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
+import { formatOneDecimalDisplayValue } from '../../../../library/numbers/formatOneDecimalDisplayValue'
 
 const SubmittedBeltInvertObservationTable = ({
   choices,
@@ -60,7 +61,7 @@ const SubmittedBeltInvertObservationTable = ({
     <Tr key={item.id}>
       <Td $align="center">{index + 1}</Td>
       <Td $align="left">{getInvertName(item.invert_attribute)}</Td>
-      {hasSizeData && <Td $align="left">{item.size}</Td>}
+      {hasSizeData && <Td $align="left">{formatOneDecimalDisplayValue(item.size)}</Td>}
       <Td $align="right">{item.count}</Td>
       <Td $align="right">{item.notes}</Td>
       <Td $align="right">{getInvertDensity(item)}</Td>
