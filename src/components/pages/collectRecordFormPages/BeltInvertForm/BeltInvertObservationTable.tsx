@@ -319,14 +319,13 @@ const BeltInvertObservationRow = ({
           />
         </InputAutocompleteContainer>
       </Td>
-      <Td $align="right">{sizeInput}</Td>
+      {sizeBinSelectedLabel && <Td $align="right">{sizeInput}</Td>}
       <Td $align="right">
         <InputNumberNumericCharactersOnly
           value={count ?? ''}
           step="any"
           aria-labelledby="invert-count-label"
           onChange={handleUpdateCount}
-          // disabled={!sizeBinSelectedLabel}
           data-testid="invert-count-input"
           onKeyDown={(event: React.KeyboardEvent) => {
             onObservationKeyDown({ event, index, observation })
@@ -541,7 +540,7 @@ const BeltInvertObservationTable = ({
           <colgroup>
             <col className={tableStyles.colNumber} />
             <col className={tableStyles.colInvertName} />
-            <col className={tableStyles.colSize} />
+            {sizeBinSelectedLabel && <col className={tableStyles.colSize} />}
             <col className={tableStyles.colCount} />
             <col className={tableStyles.colNotes} />
             {areValidationsShowing ? <col className={tableStyles.colValidations} /> : null}
@@ -556,11 +555,13 @@ const BeltInvertObservationTable = ({
                   {t('observations.macroinvertebrate_name')} <RequiredIndicator />
                 </LabelContainer>
               </Th>
-              <Th $align="right" id="invert-size-label">
-                <LabelContainer>
-                  {`${t('sample_units.size')} (${t('measurements.centimeter_short')})`}
-                </LabelContainer>
-              </Th>
+              {sizeBinSelectedLabel && (
+                <Th $align="right" id="invert-size-label">
+                  <LabelContainer>
+                    {`${t('sample_units.size')} (${t('measurements.centimeter_short')})`}
+                  </LabelContainer>
+                </Th>
+              )}
               <Th $align="right" id="invert-count-label">
                 <LabelContainer>
                   {t('count')} <RequiredIndicator />
