@@ -220,7 +220,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell $cellWithText>{t('data_sharing.macroinvertebrate_transect')}</Tcell>
+            <Tcell $cellWithText>{t('data_sharing.macroinvertebrate_info')}</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
