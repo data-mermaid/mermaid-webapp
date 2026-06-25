@@ -59,7 +59,6 @@ const calculateBeltInvertObservationMetrics = (
   lenSurveyed: number | string,
   width: number | string,
 ): BeltInvertObservationMetrics => {
-
   const abundance = observations.reduce(
     (sum, observation) => sum + Number(observation.count ?? 0),
     0,
