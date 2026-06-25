@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   choicesPropType,
@@ -20,6 +20,8 @@ import {
   formatDensityToTwoDecimals,
   useBeltInvertDensityMetrics,
 } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
+import ViewNotesModal from './ViewNotesModal'
+import styles from './SubmittedBeltInvertObservationTable.module.scss'
 
 const SubmittedBeltInvertObservationTable = ({
   choices,
@@ -27,6 +29,7 @@ const SubmittedBeltInvertObservationTable = ({
   submittedRecord = undefined,
 }) => {
   const { t } = useTranslation()
+  const [notesModalObservationId, setNotesModalObservationId] = useState(null)
   const obs_belt_inverts = submittedRecord?.obs_belt_inverts ?? []
   const widthId = submittedRecord?.beltinvert_transect?.width
   const len_surveyed = submittedRecord?.beltinvert_transect?.len_surveyed ?? 0
@@ -44,6 +47,10 @@ const SubmittedBeltInvertObservationTable = ({
     return null
   }
 
+  const notesModalObservation = notesModalObservationId
+    ? obs_belt_inverts.find((o) => o.id === notesModalObservationId)
+    : null
+
   const getInvertName = (invertAttributeId) => {
     const found = invertAttributes.find((invert) => invert.id === invertAttributeId)
 
@@ -54,19 +61,48 @@ const SubmittedBeltInvertObservationTable = ({
     return roundToOneDecimal(observationDensities.get(item.id))
   }
 
+  const handleDismissNotesModal = () => {
+    setNotesModalObservationId(null)
+  }
+
   const observationBeltInverts = obs_belt_inverts.map((item, index) => (
     <Tr key={item.id}>
       <Td $align="center">{index + 1}</Td>
       <Td $align="left">{getInvertName(item.invert_attribute)}</Td>
       <Td $align="left">{item.size}</Td>
       <Td $align="right">{item.count}</Td>
-      <Td $align="right">{item.notes}</Td>
+      <Td
+        className={styles.clickableNotesTd}
+        $align="left"
+        role="button"
+        tabIndex={0}
+        aria-label={`View notes for row ${index + 1}`}
+        onClick={() => setNotesModalObservationId(item.id)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            setNotesModalObservationId(item.id)
+          }
+        }}
+      >
+        {item.notes?.trim() ? <span className={styles.notesCellText}>{item.notes}</span> : null}
+      </Td>
       <Td $align="right">{getInvertDensity(item)}</Td>
     </Tr>
   ))
 
   return (
     <InputWrapper>
+      <ViewNotesModal
+        isOpen={notesModalObservationId !== null}
+        notes={notesModalObservation?.notes ?? ''}
+        invertAttributeName={
+          notesModalObservation?.invert_attribute
+            ? getInvertName(notesModalObservation.invert_attribute)
+            : undefined
+        }
+        onDismiss={handleDismissNotesModal}
+      />
       <FormSubTitle id="table-label">{t('observations.observations')}</FormSubTitle>
       <StyledOverflowWrapper>
         <SubmittedObservationStickyTable>
@@ -76,7 +112,7 @@ const SubmittedBeltInvertObservationTable = ({
               <TheadItem $align="left">{t('observations.macroinvertebrate_name')}</TheadItem>
               <TheadItem $align="left">{t('size_cm')}</TheadItem>
               <TheadItem $align="right">{t('count')}</TheadItem>
-              <TheadItem $align="right">{t('notes')}</TheadItem>
+              <TheadItem $align="left">{t('notes')}</TheadItem>
               <TheadItem $align="right">{`${t('density')} (${t(
                 'measurements.individuals_per_hectare_short',
               )})`}</TheadItem>
