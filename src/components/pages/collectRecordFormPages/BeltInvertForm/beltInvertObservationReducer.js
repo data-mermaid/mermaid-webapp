@@ -7,7 +7,6 @@ const beltInvertObservationReducer = (state, action) => {
         id: record.id || createUuid(),
         ...record,
         notes: record.notes ?? '',
-        include: record.include ?? true,
       }))
 
       return updateObservationsWithIds
@@ -24,7 +23,7 @@ const beltInvertObservationReducer = (state, action) => {
     }
 
     case 'addObservation':
-      return [...state, { id: createUuid(), count: null, size: null, notes: '', include: true }]
+      return [...state, { id: createUuid(), count: null, size: null, notes: ''}]
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
       const { referenceObservationIndex } = action.payload
@@ -36,7 +35,6 @@ const beltInvertObservationReducer = (state, action) => {
         count: null,
         size: null,
         notes: '',
-        include: true,
       })
 
       return observationsWithInsertedRow
@@ -91,14 +89,6 @@ const beltInvertObservationReducer = (state, action) => {
 
         return isObservationToUpdate
           ? { ...observation, notes: action.payload.newNotes }
-          : observation
-      })
-    case 'includeToggle':
-      return state.map((observation) => {
-        const isObservationToUpdate = observation.id === action.payload.observationId
-
-        return isObservationToUpdate
-          ? { ...observation, include: !observation.include }
           : observation
       })
     default:

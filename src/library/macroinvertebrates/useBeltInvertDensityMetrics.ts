@@ -4,7 +4,6 @@ import { calculateDensityByGroupOfInterest } from './calculateGroupOfInterestDen
 interface BeltInvertObservation {
   id: string
   count?: number | null
-  include?: boolean
   invert_attribute?: string | null
 }
 
@@ -57,9 +56,7 @@ const calculateBeltInvertObservationMetrics = (
   lenSurveyed: number | string,
   width: number | string,
 ): BeltInvertObservationMetrics => {
-  const includedObservations = observations.filter((observation) => observation.include !== false)
-
-  const abundance = includedObservations.reduce(
+  const abundance = observations.reduce(
     (sum, observation) => sum + Number(observation.count ?? 0),
     0,
   )
@@ -67,10 +64,6 @@ const calculateBeltInvertObservationMetrics = (
   const areaM2 = Number(lenSurveyed) * Number(width)
   const observationDensities = new Map<string, number>(
     observations.map((observation) => {
-      if (observation.include === false) {
-        return [observation.id, 0]
-      }
-
       const observationDensity = areaM2 > 0 ? (Number(observation.count ?? 0) / areaM2) * 10000 : 0
       return [observation.id, observationDensity]
     }),
