@@ -65,10 +65,22 @@ const BeltInvertTransectInputs = ({
   const { t } = useTranslation()
 
   // Keep compatibility while API choice keys finish propagating to all environments.
-  const widthChoices = choices.invertbelttransectwidths ?? choices.belttransectwidths
+  const widthChoices = choices.invertbelttransectwidths
   const sizeBinChoices = choices.invertsizebins ?? choices.fishsizebins
 
-  const transectWidthOptions = sortArrayByObjectKey(getOptions(widthChoices?.data ?? []), 'label')
+  const transectWidthOptions = sortArrayByObjectKey(
+    (widthChoices?.data ?? [])
+      .map((choice) => {
+        const { val, id } = choice as { val: number; id: string }
+
+        return {
+          label: `${val} m`,
+          value: id,
+        }
+      })
+      .filter((option): option is { label: string; value: string } => option !== null),
+    'label',
+  )
   const invertSizeBinOptions = getOptions(sizeBinChoices?.data ?? [])
   const reefSlopeOptions = getOptions(choices.reefslopes?.data ?? [])
   const visibilityOptions = getOptions(choices.visibilities?.data ?? [])
