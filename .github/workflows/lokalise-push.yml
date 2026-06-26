@@ -1,0 +1,47 @@
+name: Push Source Translations to Lokalise
+
+on:
+  # Upload the English source whenever it changes on develop (e.g. a merged PR)
+  push:
+    branches:
+      - develop
+    paths:
+      - 'src/locales/en/**'
+  workflow_dispatch: # Allow manual trigger (e.g. backfilling source)
+
+# Prevent overlapping uploads from racing on the change-tracking tag
+concurrency:
+  group: lokalise-push
+  cancel-in-progress: false
+
+permissions:
+  contents: write # required to push the change-tracking tag
+
+jobs:
+  push-translations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+        with:
+          ref: develop
+          fetch-depth: 0 # full history required for change detection / tag tracking
+
+      - name: Push source translations to Lokalise
+        id: lokalise-push
+        uses: lokalise/lokalise-push-action@v5.3.2
+        with:
+          api_token: ${{ secrets.LOKALISE_API_TOKEN }}
+          project_id: ${{ secrets.LOKALISE_PROJECT_ID }}
+          # Uploads the base language only (source of truth lives in code);
+          # target-language values are authored and reviewed in Lokalise.
+          translations_path: src/locales
+          file_ext: json
+          base_lang: en
+          # Track the last-synced commit via a git tag so multi-commit pushes
+          # (e.g. squash/merge PRs) reliably detect every changed source file.
+          use_tag_tracking: true
+          # Keep i18next {{placeholders}} and custom tags (<helperTextLink>,
+          # $t(...)) literal; do not convert to Lokalise universal placeholders.
+          additional_params: |
+            convert_placeholders: false

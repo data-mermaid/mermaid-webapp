@@ -35,7 +35,7 @@ jobs:
           git_commit_message: "chore(i18n): pull latest translations from Lokalise"
           pr_title: "chore(i18n): pull latest translations from Lokalise"
           pr_body: |
-            Automated weekly pull of translated strings from [Lokalise](https://lokalise.com/).
+            ${{ github.event_name == 'workflow_dispatch' && 'Manual pull of reviewed translations from' || 'Automated weekly pull of reviewed translations from' }} [Lokalise](https://lokalise.com/).
 
             **Review checklist:**
             - [ ] Verify translation values look correct
