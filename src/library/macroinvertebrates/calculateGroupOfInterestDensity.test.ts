@@ -108,12 +108,25 @@ describe('calculateDensityByGroupOfInterest', () => {
   })
 
   describe('ghost-zero filter', () => {
-    it('omits GoIs whose density rounds to 0.00', () => {
-      // count=0 observation should produce no GoI entries
+    it('skips zero-count observations', () => {
       const obs = [{ count: 0, invert_attribute: 'family-1' }]
       const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, { goiChoices })
 
       expect(Object.keys(densityByGoi)).toHaveLength(0)
+    })
+
+    it('omits GoIs whose density rounds to 0.00 and keeps those above', () => {
+      // area = 2001 * 1000 = 2,001,000 m²
+      // genus-1 (Corallivore): (1 / 2001000) * 10000 ≈ 0.0050 → rounds to 0.00 → excluded
+      // genus-3 (Other):       (2 / 2001000) * 10000 ≈ 0.0100 → rounds to 0.01 → included
+      const obs = [
+        { count: 1, invert_attribute: 'genus-1' },
+        { count: 2, invert_attribute: 'genus-3' },
+      ]
+      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, 2001, 1000, { goiChoices })
+
+      expect(densityByGoi['Corallivore']).toBeUndefined()
+      expect(densityByGoi['Other']).toBe(0.01)
     })
   })
 })
