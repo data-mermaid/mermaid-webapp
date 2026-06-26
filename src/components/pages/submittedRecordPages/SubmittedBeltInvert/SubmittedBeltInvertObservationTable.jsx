@@ -17,10 +17,8 @@ import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.sty
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import {
-  formatDensityToTwoDecimals,
   useBeltInvertDensityMetrics,
 } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
-import { formatOneDecimalDisplayValue } from '../../../../library/numbers/formatOneDecimalDisplayValue'
 
 const SubmittedBeltInvertObservationTable = ({
   choices,
@@ -61,7 +59,7 @@ const SubmittedBeltInvertObservationTable = ({
     <Tr key={item.id}>
       <Td $align="center">{index + 1}</Td>
       <Td $align="left">{getInvertName(item.invert_attribute)}</Td>
-      {hasSizeData && <Td $align="left">{formatOneDecimalDisplayValue(item.size)}</Td>}
+      {hasSizeData && <Td $align="left">{item.size ? roundToOneDecimal(item.size) : ''}</Td>}
       <Td $align="right">{item.count}</Td>
       <Td $align="right">{item.notes}</Td>
       <Td $align="right">{getInvertDensity(item)}</Td>
@@ -102,13 +100,13 @@ const SubmittedBeltInvertObservationTable = ({
               return (
                 <Tr key={groupName}>
                   <Th className="goi-density">{groupName}</Th>
-                  <Td>{formatDensityToTwoDecimals(groupDensity)}</Td>
+                  <Td>{roundToOneDecimal(groupDensity)}</Td>
                 </Tr>
               )
             })}
             <Tr>
               <Th>{t('observations.total_density_units')}</Th>
-              <Td>{formatDensityToTwoDecimals(totalDensity)}</Td>
+              <Td>{roundToOneDecimal(totalDensity)}</Td>
             </Tr>
             <Tr>
               <Th>{t('total_abundance')}</Th>
