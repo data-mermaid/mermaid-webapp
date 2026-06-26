@@ -230,3 +230,56 @@ test('pullApiData keeps benthic attributes in removes when attribute is in use b
   expect(benthicAttribute).toBeTruthy()
   expect(benthicAttribute.id).toBe(benthicAttributeId)
 })
+
+test('pullApiData keeps invert species in removes when attribute is in use by a collect record', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+  const invertAttributeId = mockMermaidData.invert_attributes[0].id
+
+  await dexiePerUserDataInstance.invert_attributes.put({
+    ...mockMermaidData.invert_attributes[0],
+    status: 90,
+  })
+
+  await dexiePerUserDataInstance.collect_records.put({
+    id: 'collect-record-using-invert-attribute',
+    data: {
+      obs_belt_inverts: [{ invert_attribute: invertAttributeId }],
+      obs_belt_fishes: [],
+      obs_benthic_lits: [],
+      obs_benthic_pits: [],
+      obs_colonies_bleached: [],
+      obs_quadrat_benthic_percent: [],
+      obs_benthic_photo_quadrats: [],
+    },
+  })
+
+  mockMermaidApiAllSuccessful.use(
+    http.post(
+      `${import.meta.env.VITE_MERMAID_API}/pull/`,
+      () => {
+        const response = {
+          invert_species: {
+            updates: [],
+            removes: [{ id: invertAttributeId }],
+          },
+        }
+
+        return HttpResponse.json(response)
+      },
+      { once: true },
+    ),
+  )
+
+  await pullApiData({
+    apiBaseUrl,
+    apiDataNamesToPull: ['collect_records', 'invert_species'],
+    dexiePerUserDataInstance,
+    getAccessToken: getFakeAccessToken,
+    handleUserDeniedSyncPull: () => {},
+    projectId,
+  })
+
+  const invertAttribute = await dexiePerUserDataInstance.invert_attributes.get(invertAttributeId)
+  expect(invertAttribute).toBeTruthy()
+  expect(invertAttribute.id).toBe(invertAttributeId)
+})

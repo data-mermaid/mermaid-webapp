@@ -115,7 +115,9 @@ export const pullApiData = async ({
             const deleteIds = deletes.map(({ id }) => id)
 
             const isAttributeDataTypeWithProposalSupport =
-              apiDataType === 'benthic_attributes' || apiDataType === 'fish_species'
+              apiDataType === 'benthic_attributes' ||
+              apiDataType === 'fish_species' ||
+              apiDataType === 'invert_species'
             const protocolAttributesCount = isAttributeDataTypeWithProposalSupport
               ? attributesInUseCounts?.[apiDataType] ?? {}
               : {}

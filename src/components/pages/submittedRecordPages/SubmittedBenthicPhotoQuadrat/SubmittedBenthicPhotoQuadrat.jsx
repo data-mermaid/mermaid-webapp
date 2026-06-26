@@ -70,7 +70,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
 
       Promise.all(promises)
         .then(
-          ([
+          async ([
             sitesResponse,
             managementRegimesResponse,
             choicesResponse,
@@ -78,13 +78,30 @@ const SubmittedBenthicPhotoQuadrat = () => {
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
+              let resolvedBenthicAttributes = benthicAttributes
+
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
                 'benthicpqt',
               )
 
-              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+              const observationAttributeIds =
+                submittedRecordResponse?.obs_benthic_photo_quadrats
+                  ?.map((observation) => observation?.attribute)
+                  .filter(Boolean) ?? []
+
+              if (observationAttributeIds.length) {
+                await databaseSwitchboardInstance.ensureBenthicAttributesLoaded(
+                  observationAttributeIds,
+                )
+                resolvedBenthicAttributes = await databaseSwitchboardInstance.getBenthicAttributes()
+                if (!isMounted.current) {
+                  return
+                }
+              }
+
+              const updateBenthicAttributeOptions = getBenthicOptions(resolvedBenthicAttributes)
 
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
