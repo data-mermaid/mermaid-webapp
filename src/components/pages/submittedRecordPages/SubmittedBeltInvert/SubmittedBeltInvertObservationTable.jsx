@@ -73,22 +73,26 @@ const SubmittedBeltInvertObservationTable = ({
       <Td $align="left">{getInvertName(item.invert_attribute)}</Td>
       {hasSizeData && <Td $align="left">{formatOneDecimalDisplayValue(item.size)}</Td>}
       <Td $align="right">{item.count}</Td>
-      <Td
-        className={styles.clickableNotesTd}
-        $align="left"
-        role="button"
-        tabIndex={0}
-        aria-label={`View notes for row ${index + 1}`}
-        onClick={() => setNotesModalObservationId(item.id)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            setNotesModalObservationId(item.id)
-          }
-        }}
-      >
-        {item.notes?.trim() ? <span className={styles.notesCellText}>{item.notes}</span> : null}
-      </Td>
+      {item.notes?.trim() ? (
+        <Td
+          className={styles.clickableNotesTd}
+          $align="left"
+          role="button"
+          tabIndex={0}
+          aria-label={`View notes for row ${index + 1}`}
+          onClick={() => setNotesModalObservationId(item.id)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              setNotesModalObservationId(item.id)
+            }
+          }}
+        >
+          <span className={styles.notesCellText}>{item.notes}</span>
+        </Td>
+      ) : (
+        <Td $align="left" />
+      )}
       <Td $align="right">{getInvertDensity(item)}</Td>
     </Tr>
   ))
