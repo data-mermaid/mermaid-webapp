@@ -19,7 +19,6 @@ import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFo
 import { useBeltInvertDensityMetrics } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
 import ViewNotesModal from './ViewNotesModal'
 import styles from './SubmittedBeltInvertObservationTable.module.scss'
-import { formatOneDecimalDisplayValue } from '../../../../library/numbers/formatOneDecimalDisplayValue'
 
 const SubmittedBeltInvertObservationTable = ({
   choices,
