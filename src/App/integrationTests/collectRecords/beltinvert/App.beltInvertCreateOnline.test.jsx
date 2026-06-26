@@ -24,7 +24,7 @@ const saveBeltInvertRecord = async (user) => {
   await user.type(await screen.findByTestId('len-surveyed-input'), '2')
   await user.selectOptions(
     await screen.findByTestId('width-select'),
-    '18fc5c30-1786-4fe1-9536-4ee41ef3c08a',
+    'e1a133d3-70fe-403c-aed2-a70d630ef910',
   )
   await user.selectOptions(
     await screen.findByTestId('size-bin-select'),
@@ -90,7 +90,7 @@ describe('Online', () => {
       expect(screen.getByTestId('transect-number-input')).toHaveValue(56)
       expect(screen.getByTestId('label-input')).toHaveValue('some label')
       expect(screen.getByTestId('len-surveyed-input')).toHaveValue(2)
-      expect(screen.getByTestId('width-select')).toHaveDisplayValue('4 m')
+      expect(screen.getByTestId('width-select')).toHaveDisplayValue('2 m')
       expect(screen.getByTestId('size-bin-select')).toHaveDisplayValue('1')
       expect(screen.getByTestId('reef-slope-select')).toHaveDisplayValue('flat')
       expect(screen.getByTestId('visibility-select')).toHaveDisplayValue('1-5m - poor')
@@ -173,7 +173,7 @@ describe('Online', () => {
       expect(screen.getByTestId('transect-number-input')).toHaveValue(56)
       expect(screen.getByTestId('label-input')).toHaveValue('some label')
       expect(screen.getByTestId('len-surveyed-input')).toHaveValue(2)
-      expect(screen.getByTestId('width-select')).toHaveDisplayValue('4 m')
+      expect(screen.getByTestId('width-select')).toHaveDisplayValue('2 m')
       expect(screen.getByTestId('size-bin-select')).toHaveDisplayValue('1')
       expect(screen.getByTestId('reef-slope-select')).toHaveDisplayValue('flat')
       expect(screen.getByTestId('visibility-select')).toHaveDisplayValue('1-5m - poor')

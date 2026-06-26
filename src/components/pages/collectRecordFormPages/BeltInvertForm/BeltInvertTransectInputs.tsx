@@ -29,8 +29,8 @@ const VISIBILITY_VALIDATION_PATH = 'data.beltinvert_transect.visibility'
 const WIDTH_VALIDATION_PATH = 'data.beltinvert_transect.width'
 
 interface WidthChoice {
-  id: string | number
-  val: string | number
+  id: string
+  val: number
 }
 
 interface NamedChoice {
@@ -44,7 +44,6 @@ interface ChoiceCollection<T> {
 
 interface BeltInvertChoices {
   invertbelttransectwidths?: ChoiceCollection<WidthChoice>
-  belttransectwidths?: ChoiceCollection<WidthChoice>
   invertsizebins?: ChoiceCollection<NamedChoice>
   fishsizebins?: ChoiceCollection<NamedChoice>
   reefslopes?: ChoiceCollection<NamedChoice>
@@ -90,10 +89,10 @@ const BeltInvertTransectInputs = ({
 }: BeltInvertTransectInputsProps) => {
   const { t } = useTranslation()
 
-  // Keep compatibility while API choice keys finish propagating to all environments.
-  const widthChoices = choices.invertbelttransectwidths ?? choices.belttransectwidths
+  const widthChoices = choices.invertbelttransectwidths
   const sizeBinChoices = choices.invertsizebins ?? choices.fishsizebins
 
+  // This pattern is different from other protocols because the api returns the values differently
   const transectWidthOptions = sortArrayByObjectKey(
     (widthChoices?.data ?? []).map(({ val, id }) => ({
       label: `${val} m`,
