@@ -28,7 +28,7 @@ const saveBeltInvertRecord = async (user) => {
   )
   await user.selectOptions(
     await screen.findByTestId('size-bin-select'),
-    '67c1356f-e0a7-4383-8034-77b2f36e1a49',
+    'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
   )
   await user.selectOptions(
     await screen.findByTestId('reef-slope-select'),

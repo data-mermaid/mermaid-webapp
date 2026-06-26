@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 
 import { getOptions } from '../../../../library/getOptions'
-import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
@@ -90,16 +89,16 @@ const BeltInvertTransectInputs = ({
   const { t } = useTranslation()
 
   const widthChoices = choices.invertbelttransectwidths
-  const sizeBinChoices = choices.invertsizebins ?? choices.fishsizebins
+  const sizeBinChoices = choices.invertsizebins
 
   // This pattern is different from other protocols because the api returns the values differently
-  const transectWidthOptions = sortArrayByObjectKey(
-    (widthChoices?.data ?? []).map(({ val, id }) => ({
+  const transectWidthOptions = (widthChoices?.data ?? [])
+    .slice()
+    .sort((a, b) => a.val - b.val)
+    .map(({ val, id }) => ({
       label: `${val} m`,
       value: id,
-    })),
-    'label',
-  )
+    }))
   const invertSizeBinOptions = getOptions(sizeBinChoices?.data ?? [])
   const reefSlopeOptions = getOptions(choices.reefslopes?.data ?? [])
   const visibilityOptions = getOptions(choices.visibilities?.data ?? [])

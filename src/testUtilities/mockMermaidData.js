@@ -635,6 +635,29 @@ const choices = {
       },
     ],
   },
+  invertsizebins: {
+    name: 'invertsizebins',
+    data: [
+      {
+        id: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+        name: '1',
+        updated_on: '2026-05-05T14:59:51.905155Z',
+        val: '1',
+      },
+      {
+        id: 'f0c1e3d5-4a7b-4f8e-9c6e-2f1b5c3d9e2a',
+        name: '5',
+        updated_on: '2026-05-05T14:59:55.123456Z',
+        val: '5',
+      },
+      {
+        id: 'c0d5e4f6-7a8b-4c9e-9d1f-3e2b4c5d6e7f',
+        name: '10',
+        updated_on: '2026-05-05T14:59:59.789012Z',
+        val: '10',
+      },
+    ],
+  },
   belttransectwidths: {
     name: 'belttransectwidths',
     data: [
