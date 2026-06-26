@@ -70,7 +70,7 @@ const SubmittedBenthicLit = () => {
 
       Promise.all(promises)
         .then(
-          ([
+          async ([
             sitesResponse,
             benthicAttributes,
             managementRegimesResponse,
@@ -78,13 +78,30 @@ const SubmittedBenthicLit = () => {
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
+              let resolvedBenthicAttributes = benthicAttributes
+
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
                 'benthiclit',
               )
 
-              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+              const observationAttributeIds =
+                submittedRecordResponse?.obs_benthic_lits
+                  ?.map((observation) => observation?.attribute)
+                  .filter(Boolean) ?? []
+
+              if (observationAttributeIds.length) {
+                await databaseSwitchboardInstance.ensureBenthicAttributesLoaded(
+                  observationAttributeIds,
+                )
+                resolvedBenthicAttributes = await databaseSwitchboardInstance.getBenthicAttributes()
+                if (!isMounted.current) {
+                  return
+                }
+              }
+
+              const updateBenthicAttributeOptions = getBenthicOptions(resolvedBenthicAttributes)
 
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
