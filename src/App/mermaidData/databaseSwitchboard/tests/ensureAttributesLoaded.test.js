@@ -1,7 +1,7 @@
 import { expect, test, vi } from 'vitest'
 import { http, HttpResponse } from 'msw'
-import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
-import { ensureAttributesLoaded } from './ensureAttributesLoaded'
+import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
+import { ensureAttributesLoaded } from '../ensureAttributesLoaded'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
