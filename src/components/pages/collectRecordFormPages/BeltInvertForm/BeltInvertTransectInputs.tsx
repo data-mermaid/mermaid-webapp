@@ -44,7 +44,6 @@ interface ChoiceCollection<T> {
 interface BeltInvertChoices {
   invertbelttransectwidths?: ChoiceCollection<WidthChoice>
   invertsizebins?: ChoiceCollection<NamedChoice>
-  fishsizebins?: ChoiceCollection<NamedChoice>
   reefslopes?: ChoiceCollection<NamedChoice>
   visibilities?: ChoiceCollection<NamedChoice>
   currents?: ChoiceCollection<NamedChoice>
