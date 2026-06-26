@@ -28,11 +28,37 @@ const TRANSECT_NUMBER_VALIDATION_PATH = 'data.beltinvert_transect.number'
 const VISIBILITY_VALIDATION_PATH = 'data.beltinvert_transect.visibility'
 const WIDTH_VALIDATION_PATH = 'data.beltinvert_transect.width'
 
+interface WidthChoice {
+  id: string | number
+  val: string | number
+}
+
+interface NamedChoice {
+  id: string | number
+  name: string
+}
+
+interface ChoiceCollection<T> {
+  data: T[]
+}
+
+interface BeltInvertChoices {
+  invertbelttransectwidths?: ChoiceCollection<WidthChoice>
+  belttransectwidths?: ChoiceCollection<WidthChoice>
+  invertsizebins?: ChoiceCollection<NamedChoice>
+  fishsizebins?: ChoiceCollection<NamedChoice>
+  reefslopes?: ChoiceCollection<NamedChoice>
+  visibilities?: ChoiceCollection<NamedChoice>
+  currents?: ChoiceCollection<NamedChoice>
+  relativedepths?: ChoiceCollection<NamedChoice>
+  tides?: ChoiceCollection<NamedChoice>
+}
+
 interface BeltInvertTransectInputsProps {
   observationsDispatch: (action: { type: string; payload?: unknown }) => void
   observationsState: ObservationRecord[]
   areValidationsShowing: boolean
-  choices: Record<string, { data: unknown[] }>
+  choices: BeltInvertChoices
   formik: {
     values: Record<string, unknown>
     handleBlur: (event: React.FocusEvent<HTMLElement>) => void
@@ -65,20 +91,14 @@ const BeltInvertTransectInputs = ({
   const { t } = useTranslation()
 
   // Keep compatibility while API choice keys finish propagating to all environments.
-  const widthChoices = choices.invertbelttransectwidths
+  const widthChoices = choices.invertbelttransectwidths ?? choices.belttransectwidths
   const sizeBinChoices = choices.invertsizebins ?? choices.fishsizebins
 
   const transectWidthOptions = sortArrayByObjectKey(
-    (widthChoices?.data ?? [])
-      .map((choice) => {
-        const { val, id } = choice as { val: number; id: string }
-
-        return {
-          label: `${val} m`,
-          value: id,
-        }
-      })
-      .filter((option): option is { label: string; value: string } => option !== null),
+    (widthChoices?.data ?? []).map(({ val, id }) => ({
+      label: `${val} m`,
+      value: id,
+    })),
     'label',
   )
   const invertSizeBinOptions = getOptions(sizeBinChoices?.data ?? [])
