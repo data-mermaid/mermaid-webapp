@@ -44,7 +44,7 @@ interface NewAttributeModalProps {
 }
 
 const NoResults = (
-  <div className={style['styled-not-found-dropdown']}>
+  <div className={style['no-results-dropdown']}>
     <Trans
       i18nKey="taxonomies.genus_not_found"
       components={{
