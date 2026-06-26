@@ -612,6 +612,29 @@ const project_managements = [
 ]
 
 const choices = {
+  invertbelttransectwidths: {
+    name: 'invertbelttransectwidths',
+    data: [
+      {
+        id: 'e1a133d3-70fe-403c-aed2-a70d630ef910',
+        name: '2.0',
+        updated_on: '2026-05-05T14:59:33.040520Z',
+        val: 2,
+      },
+      {
+        id: '18fc5c30-1786-4fe1-9536-4ee41ef3c08a',
+        name: '4.0',
+        updated_on: '2026-05-05T14:59:38.500671Z',
+        val: 4,
+      },
+      {
+        id: 'fdc582d4-f093-49f3-81a7-c84ddeee2c95',
+        name: '5.0',
+        updated_on: '2026-05-05T14:59:46.341115Z',
+        val: 5,
+      },
+    ],
+  },
   belttransectwidths: {
     name: 'belttransectwidths',
     data: [
