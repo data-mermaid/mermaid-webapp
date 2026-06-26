@@ -9,7 +9,6 @@ interface InvertAttribute {
 
 interface Observation {
   count?: number | null
-  include?: boolean
   invert_attribute?: string | null
 }
 
@@ -306,16 +305,15 @@ export const calculateDensityByGroupOfInterest = (
   const goiWeightMaps = options.goiWeightMaps ?? buildGoiWeightMaps(invertAttributes)
   const attributeById = new Map(invertAttributes.map((attribute) => [attribute.id, attribute]))
 
-  // Accumulate per-GoI count totals from included observations
-  const includedObservations = observations.filter((observation) => observation.include !== false)
-  const totalIncludedCount = includedObservations.reduce(
+  // Accumulate per-GoI count totals from observations
+  const totalObservationCount = observations.reduce(
     (sum, observation) => sum + Number(observation.count ?? 0),
     0,
   )
 
   const goiCountTotals = new Map<string, number>()
 
-  includedObservations.forEach((observation) => {
+  observations.forEach((observation) => {
     const count = Number(observation.count ?? 0)
     if (!Number.isFinite(count) || count <= 0) {
       return
@@ -336,7 +334,7 @@ export const calculateDensityByGroupOfInterest = (
 
   // Density conversion — (count / area_m2) * 10000 to get ind/ha
   const areaM2 = Number(lenSurveyed) * Number(widthM)
-  const totalDensity = areaM2 > 0 ? roundToTwoDecimals((totalIncludedCount / areaM2) * 10000) : 0
+  const totalDensity = areaM2 > 0 ? roundToTwoDecimals((totalObservationCount / areaM2) * 10000) : 0
   const densityByGoi = buildDensityByGoi(goiCountTotals, goiChoices, areaM2)
 
   return { totalDensity, densityByGoi }

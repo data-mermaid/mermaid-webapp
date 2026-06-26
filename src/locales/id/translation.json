@@ -1038,8 +1038,8 @@
       "pending_user_added": "Email pendaftaran terkirim. Pengguna baru ditambahkan sebagai Pengguna Tertunda.",
       "role_changed_error": "{{userName}}peran tersebut tidak berubah.",
       "role_changed_success": "{{userName}}sekarang diatur ke {{role}}.",
-      "sample_units_transfer_one": "{{count}} unit sampel yang ditransfer",
-      "sample_units_transfer_other": "{{count}} unit sampel yang ditransfer",
+      "sample_units_transferred_one": "{{count}} unit sampel yang ditransfer",
+      "sample_units_transferred_other": "{{count}} unit sampel yang ditransfer",
       "something_went_wrong": "Ada yang tidak beres",
       "user_removed": "Pengguna dihapus"
     },

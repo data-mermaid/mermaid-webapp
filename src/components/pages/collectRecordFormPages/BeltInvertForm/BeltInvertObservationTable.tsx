@@ -25,9 +25,7 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import { formatOneDecimalDisplayValue } from '../../../../library/numbers/formatOneDecimalDisplayValue'
 import {
-  formatDensityToTwoDecimals,
   useBeltInvertDensityMetrics,
 } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
 import ObservationSizeSelect from '../ObservationSizeSelect'
@@ -207,7 +205,7 @@ const BeltInvertObservationRow = ({
   }
 
   const handleSizeInputBlur = () => {
-    setSizeInputDraft(formatOneDecimalDisplayValue(size))
+    setSizeInputDraft(size ? roundToOneDecimal(size) : '')
     setIsSizeInputFocused(false)
   }
 
@@ -258,7 +256,7 @@ const BeltInvertObservationRow = ({
 
   const sizeInput = showNumericSizeInput ? (
     <InputNumberNumericCharactersOnly
-      value={isSizeInputFocused ? sizeInputDraft : formatOneDecimalDisplayValue(size)}
+      value={isSizeInputFocused ? sizeInputDraft : (size ? roundToOneDecimal(size) : '')}
       step="any"
       aria-labelledby="invert-size-label"
       data-testid="invert-size-input"
@@ -625,13 +623,13 @@ const BeltInvertObservationTable = ({
               return (
                 <Tr key={groupName}>
                   <Th>{`${t('density')} - ${groupName}`}</Th>
-                  <Td>{formatDensityToTwoDecimals(density)}</Td>
+                  <Td>{roundToOneDecimal(density)}</Td>
                 </Tr>
               )
             })}
             <Tr>
               <Th>{t('observations.total_density_units')}</Th>
-              <Td>{formatDensityToTwoDecimals(totalDensity)}</Td>
+              <Td>{roundToOneDecimal(totalDensity)}</Td>
             </Tr>
             <Tr>
               <Th>{t('total_abundance')}</Th>
