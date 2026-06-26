@@ -76,7 +76,7 @@ const SubmittedFishBelt = () => {
 
       Promise.all(promises)
         .then(
-          ([
+          async ([
             sitesResponse,
             managementRegimesResponse,
             choicesResponse,
@@ -86,14 +86,29 @@ const SubmittedFishBelt = () => {
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
+              let resolvedSpecies = species
+
+              const observationAttributeIds =
+                submittedRecordResponse?.obs_belt_fishes
+                  ?.map((observation) => observation?.fish_attribute)
+                  .filter(Boolean) ?? []
+
+              if (observationAttributeIds.length) {
+                await databaseSwitchboardInstance.ensureFishSpeciesLoaded(observationAttributeIds)
+                resolvedSpecies = await databaseSwitchboardInstance.getFishSpecies()
+                if (!isMounted.current) {
+                  return
+                }
+              }
+
               const updateFishNameOptions = getFishNameOptions({
-                species,
+                species: resolvedSpecies,
                 genera,
                 families,
               })
 
               const updateFishNameConstants = getFishNameConstants({
-                species,
+                species: resolvedSpecies,
                 genera,
                 families,
               })

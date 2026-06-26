@@ -1,4 +1,5 @@
 import { createUuid } from '../../../library/createUuid'
+import { ensureAttributesLoaded } from './ensureAttributesLoaded'
 
 const FishNameMixin = (Base) =>
   class extends Base {
@@ -8,6 +9,16 @@ const FishNameMixin = (Base) =>
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    ensureFishSpeciesLoaded = async function ensureFishSpeciesLoaded(attributeIds = []) {
+      return ensureAttributesLoaded({
+        ids: attributeIds,
+        dexieTable: this._dexiePerUserDataInstance.fish_species,
+        detailUrlById: (id) => `${this._apiBaseUrl}/fishspecies/${id}/`,
+        getAccessToken: this._getAccessToken,
+        isOnlineAuthenticatedAndReady: this._isOnlineAuthenticatedAndReady,
+      })
     }
 
     addFishSpecies = async function addFishSpecies({ genusId, genusName, speciesName }) {
