@@ -1,12 +1,14 @@
 name: Push Source Translations to Lokalise
 
 on:
+  # Temporarily disabled: do not auto-upload on push to develop.
+  # Re-enable by uncommenting the block below.
   # Upload the English source whenever it changes on develop (e.g. a merged PR)
-  push:
-    branches:
-      - develop
-    paths:
-      - 'src/locales/en/**'
+  # push:
+  #   branches:
+  #     - develop
+  #   paths:
+  #     - 'src/locales/en/**'
   workflow_dispatch: # Allow manual trigger (e.g. backfilling source)
 
 # Prevent overlapping uploads from racing on the change-tracking tag
