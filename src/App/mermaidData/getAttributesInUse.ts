@@ -1,9 +1,10 @@
-type AttributeType = 'benthic_attributes' | 'fish_species'
+type AttributeType = 'benthic_attributes' | 'fish_species' | 'invert_species'
 
 type AttributeCounts = Record<AttributeType, Record<string, number>>
 
 interface CollectRecordObservationData {
   obs_belt_fishes?: { fish_attribute?: string | null }[]
+  obs_belt_inverts?: { invert_attribute?: string | null }[]
   obs_benthic_lits?: { attribute?: string | null }[]
   obs_benthic_pits?: { attribute?: string | null }[]
   obs_colonies_bleached?: { attribute?: string | null }[]
@@ -31,6 +32,7 @@ const getAttributesInUse = async (
   const attributeCounts: AttributeCounts = {
     benthic_attributes: {},
     fish_species: {},
+    invert_species: {},
   }
 
   const incrementIfTruthy = (
@@ -67,6 +69,9 @@ const getAttributesInUse = async (
     }
 
     data.obs_belt_fishes?.forEach((obs) => incrementIfTruthy(obs.fish_attribute, 'fish_species'))
+    data.obs_belt_inverts?.forEach((obs) =>
+      incrementIfTruthy(obs.invert_attribute, 'invert_species'),
+    )
     data.obs_benthic_lits?.forEach((obs) => incrementIfTruthy(obs.attribute, 'benthic_attributes'))
     data.obs_benthic_pits?.forEach((obs) => incrementIfTruthy(obs.attribute, 'benthic_attributes'))
     data.obs_colonies_bleached?.forEach((obs) =>

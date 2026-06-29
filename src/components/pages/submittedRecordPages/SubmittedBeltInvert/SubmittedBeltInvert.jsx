@@ -69,7 +69,7 @@ const SubmittedBeltInvert = () => {
 
       Promise.all(promises)
         .then(
-          ([
+          async ([
             sitesResponse,
             managementRegimesResponse,
             choicesResponse,
@@ -77,6 +77,8 @@ const SubmittedBeltInvert = () => {
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
+              let resolvedInvertAttributes = invertAttributesResponse
+
               if (!submittedRecordResponse) {
                 setIdsNotAssociatedWithData([projectId, submittedRecordId])
                 setIsLoading(false)
@@ -90,11 +92,26 @@ const SubmittedBeltInvert = () => {
                 'beltinvert',
               )
 
+              const observationAttributeIds =
+                submittedRecordResponse?.obs_belt_inverts
+                  ?.map((observation) => observation?.invert_attribute)
+                  .filter(Boolean) ?? []
+
+              if (observationAttributeIds.length) {
+                await databaseSwitchboardInstance.ensureInvertAttributesLoaded(
+                  observationAttributeIds,
+                )
+                resolvedInvertAttributes = await databaseSwitchboardInstance.getInvertAttributes()
+                if (!isMounted.current) {
+                  return
+                }
+              }
+
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
               setSubmittedRecord(submittedRecordResponse)
-              setInvertAttributes(invertAttributesResponse)
+              setInvertAttributes(resolvedInvertAttributes)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }

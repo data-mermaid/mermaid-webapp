@@ -71,10 +71,27 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
         }
 
         Promise.all(promises)
-          .then(([benthicAttributesResponse, sitesResponse, collectRecordResponse]) => {
+          .then(async ([benthicAttributesResponse, sitesResponse, collectRecordResponse]) => {
             if (isMounted.current) {
+              let resolvedBenthicAttributes = benthicAttributesResponse
+
               if (!isNewRecord && !collectRecordResponse && recordId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
+              }
+
+              const observationAttributeIds =
+                collectRecordResponse?.data?.obs_benthic_pits
+                  ?.map((observation) => observation?.attribute)
+                  .filter(Boolean) ?? []
+
+              if (observationAttributeIds.length) {
+                await databaseSwitchboardInstance.ensureBenthicAttributesLoaded(
+                  observationAttributeIds,
+                )
+                resolvedBenthicAttributes = await databaseSwitchboardInstance.getBenthicAttributes()
+                if (!isMounted.current) {
+                  return
+                }
               }
 
               setSubNavNode(
@@ -87,7 +104,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
               )
 
               setCollectRecordBeingEdited(collectRecordResponse)
-              setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributesResponse))
+              setBenthicAttributeSelectOptions(getBenthicOptions(resolvedBenthicAttributes))
               setSites(sitesResponse)
 
               setIsLoading(false)
