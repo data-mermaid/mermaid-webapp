@@ -249,7 +249,6 @@
   "remove_observer_from_record": "Menghapus pengamat dari unit sampel",
   "remove_user": "Hapus pengguna",
   "remove_user_confirmation": "Apakah Anda yakin ingin menghapus <strong>{{userName}}<\/strong> sebagai pengamat?",
-  "removed_from_project_message": "<strong>{{userName}}<\/strong> adalah pengamat pada unit sampel ini tetapi tidak lagi menjadi bagian dari proyek ini",
   "sample_units": {
     "add": "Tambahkan unit sampel",
     "errors": {
