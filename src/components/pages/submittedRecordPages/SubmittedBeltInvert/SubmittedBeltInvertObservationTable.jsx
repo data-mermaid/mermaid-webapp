@@ -67,7 +67,7 @@ const SubmittedBeltInvertObservationTable = ({
     <Tr key={item.id}>
       <Td $align="center">{index + 1}</Td>
       <Td $align="left">{getInvertName(item.invert_attribute)}</Td>
-      {hasSizeData && <Td $align="left">{item.size ? roundToOneDecimal(item.size) : ''}</Td>}
+      {hasSizeData && <Td $align="right">{item.size ? roundToOneDecimal(item.size) : ''}</Td>}
       <Td $align="right">{item.count}</Td>
       {item.notes?.trim() ? (
         <Td
@@ -112,7 +112,7 @@ const SubmittedBeltInvertObservationTable = ({
             <Tr>
               <TheadItem> </TheadItem>
               <TheadItem $align="left">{t('observations.macroinvertebrate_name')}</TheadItem>
-              {hasSizeData && <TheadItem $align="left">{t('size_cm')}</TheadItem>}
+              {hasSizeData && <TheadItem $align="right">{t('size_cm')}</TheadItem>}
               <TheadItem $align="right">{t('count')}</TheadItem>
               <TheadItem $align="left">{t('notes')}</TheadItem>
               <TheadItem $align="right">{`${t('density')} (${t(

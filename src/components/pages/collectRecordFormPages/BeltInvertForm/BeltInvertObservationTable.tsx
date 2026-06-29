@@ -17,7 +17,7 @@ import {
 import { ButtonPrimary } from '../../../generic/buttons'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
-import { InputWrapper, LabelContainer, RequiredIndicator } from '../../../generic/form'
+import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
@@ -25,9 +25,7 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import {
-  useBeltInvertDensityMetrics,
-} from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
+import { useBeltInvertDensityMetrics } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
 import ObservationSizeSelect from '../ObservationSizeSelect'
 import { ObservationRecord } from './BeltInvertTypes'
 
@@ -256,7 +254,8 @@ const BeltInvertObservationRow = ({
 
   const sizeInput = showNumericSizeInput ? (
     <InputNumberNumericCharactersOnly
-      value={isSizeInputFocused ? sizeInputDraft : (size ? roundToOneDecimal(size) : '')}
+      $textAlign="right"
+      value={isSizeInputFocused ? sizeInputDraft : size ? roundToOneDecimal(size) : ''}
       step="any"
       aria-labelledby="invert-size-label"
       data-testid="invert-size-input"
@@ -310,8 +309,9 @@ const BeltInvertObservationRow = ({
         </InputAutocompleteContainer>
       </Td>
       {sizeBinSelectedLabel && <Td $align="right">{sizeInput}</Td>}
-      <Td $align="right">
+      <Td>
         <InputNumberNumericCharactersOnly
+          $textAlign="right"
           value={count ?? ''}
           step="any"
           aria-labelledby="invert-count-label"
@@ -541,34 +541,26 @@ const BeltInvertObservationTable = ({
             <Tr>
               <Th> </Th>
               <Th $align="left" id="invert-name-label">
-                <LabelContainer>
-                  {t('observations.macroinvertebrate_name')} <RequiredIndicator />
-                </LabelContainer>
+                {t('observations.macroinvertebrate_name')} <RequiredIndicator />
               </Th>
               {sizeBinSelectedLabel && (
                 <Th $align="right" id="invert-size-label">
-                  <LabelContainer>
-                    {`${t('sample_units.size')} (${t('measurements.centimeter_short')})`}
-                  </LabelContainer>
+                  {`${t('sample_units.size')} (${t('measurements.centimeter_short')})`}
                 </Th>
               )}
               <Th $align="right" id="invert-count-label">
-                <LabelContainer>
-                  {t('count')} <RequiredIndicator />
-                </LabelContainer>
+                {t('count')} <RequiredIndicator />
               </Th>
               <Th $align="left" id="invert-notes-label">
-                <LabelContainer>{t('notes')}</LabelContainer>
+                {t('notes')}
               </Th>
               {areValidationsShowing ? (
                 <Th $align="center" id="invert-validations-label">
-                  <LabelContainer>{t('validations.validations')}</LabelContainer>
+                  {t('validations.validations')}
                 </Th>
               ) : null}
               <Th $align="right" id="invert-density-label">
-                <LabelContainer>{`${t('density')} (${t(
-                  'measurements.individuals_per_hectare_short',
-                )})`}</LabelContainer>
+                {`${t('density')} (${t('measurements.individuals_per_hectare_short')})`}
               </Th>
               <Th> </Th>
             </Tr>
