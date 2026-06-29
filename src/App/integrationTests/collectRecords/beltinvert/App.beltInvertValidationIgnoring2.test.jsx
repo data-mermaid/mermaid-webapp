@@ -471,17 +471,17 @@ test('Validation: user edits non-observation input with ignored validation reset
     expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  // Width selection 10m
+  // Width selection 2m
   await user.selectOptions(
     screen.getByTestId('width-select'),
-    '228c932d-b5da-4464-b0df-d15a05c05c02',
+    'e1a133d3-70fe-403c-aed2-a70d630ef910',
   )
   await waitFor(() => expect(within(widthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  // Fish Size Bin selection AGRRA
+  // Macroinvertebrate Size Bin selection
   await user.selectOptions(
     screen.getByTestId('size-bin-select'),
-    'ccef720a-a1c9-4956-906d-09ed56f16249',
+    'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
   )
   await waitFor(() => expect(within(sizeBinRow).queryByText('Ignored')).not.toBeInTheDocument())
 

@@ -78,7 +78,7 @@ const FishBeltForm = ({ isNewRecord = true }) => {
       }
       Promise.all(promises)
         .then(
-          ([
+          async ([
             sitesResponse,
             fishSpeciesResponse,
             fishGeneraResponse,
@@ -89,6 +89,8 @@ const FishBeltForm = ({ isNewRecord = true }) => {
             collectRecordResponse,
           ]) => {
             if (isMounted.current) {
+              let resolvedFishSpecies = fishSpeciesResponse
+
               if (!isNewRecord && !collectRecordResponse && recordId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
@@ -97,15 +99,29 @@ const FishBeltForm = ({ isNewRecord = true }) => {
                   Array.from(new Set([...previousState, projectId])),
                 )
               }
+
+              const observationAttributeIds =
+                collectRecordResponse?.data?.obs_belt_fishes
+                  ?.map((observation) => observation?.fish_attribute)
+                  .filter(Boolean) ?? []
+
+              if (observationAttributeIds.length) {
+                await databaseSwitchboardInstance.ensureFishSpeciesLoaded(observationAttributeIds)
+                resolvedFishSpecies = await databaseSwitchboardInstance.getFishSpecies()
+                if (!isMounted.current) {
+                  return
+                }
+              }
+
               const updateFishNameConstants = getFishNameConstants({
-                species: fishSpeciesResponse,
+                species: resolvedFishSpecies,
                 genera: fishGeneraResponse,
                 families: fishFamiliesResponse,
                 groupings: fishGroupingsResponse,
               })
 
               const updateFishNameOptions = getFishNameOptions({
-                species: fishSpeciesResponse,
+                species: resolvedFishSpecies,
                 genera: fishGeneraResponse,
                 families: fishFamiliesResponse,
                 groupings: fishGroupingsResponse,
@@ -130,7 +146,7 @@ const FishBeltForm = ({ isNewRecord = true }) => {
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
               setModalAttributeOptions(generaOptions)
-              setFishSpecies(fishSpeciesResponse)
+              setFishSpecies(resolvedFishSpecies)
               setFishGenera(fishGeneraResponse)
               setFishFamilies(fishFamiliesResponse)
               setFishGroupings(fishGroupingsResponse)

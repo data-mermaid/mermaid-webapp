@@ -83,8 +83,15 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
 
       Promise.all(promises)
         .then(
-          ([sitesResponse, invertAttributesResponse, projectResponse, collectRecordResponse]) => {
+          async ([
+            sitesResponse,
+            invertAttributesResponse,
+            projectResponse,
+            collectRecordResponse,
+          ]) => {
             if (isMounted.current) {
+              let resolvedInvertAttributes = invertAttributesResponse
+
               if (!isNewRecord && !collectRecordResponse && recordId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
@@ -94,8 +101,23 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
                 )
               }
 
+              const observationAttributeIds =
+                collectRecordResponse?.data?.obs_belt_inverts
+                  ?.map((observation) => observation?.invert_attribute)
+                  .filter(Boolean) ?? []
+
+              if (observationAttributeIds.length) {
+                await databaseSwitchboardInstance.ensureInvertAttributesLoaded(
+                  observationAttributeIds,
+                )
+                resolvedInvertAttributes = await databaseSwitchboardInstance.getInvertAttributes()
+                if (!isMounted.current) {
+                  return
+                }
+              }
+
               // Treat only a missing/invalid response as load failure.
-              if (!Array.isArray(invertAttributesResponse)) {
+              if (!Array.isArray(resolvedInvertAttributes)) {
                 setInvertAttributesLoadError(true)
                 toast.error(
                   ...getToastArguments(
@@ -104,7 +126,7 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
                 )
               } else {
                 setInvertAttributesLoadError(false)
-                setInvertAttributes(invertAttributesResponse)
+                setInvertAttributes(resolvedInvertAttributes)
               }
 
               setSubNavNode(

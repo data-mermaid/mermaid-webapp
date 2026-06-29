@@ -71,7 +71,7 @@ const SubmittedBleaching = () => {
 
       Promise.all(promises)
         .then(
-          ([
+          async ([
             sitesResponse,
             benthicAttributes,
             managementRegimesResponse,
@@ -79,13 +79,30 @@ const SubmittedBleaching = () => {
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
+              let resolvedBenthicAttributes = benthicAttributes
+
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
                 'bleachingqc',
               )
 
-              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+              const observationAttributeIds =
+                submittedRecordResponse?.obs_colonies_bleached
+                  ?.map((observation) => observation?.attribute)
+                  .filter(Boolean) ?? []
+
+              if (observationAttributeIds.length) {
+                await databaseSwitchboardInstance.ensureBenthicAttributesLoaded(
+                  observationAttributeIds,
+                )
+                resolvedBenthicAttributes = await databaseSwitchboardInstance.getBenthicAttributes()
+                if (!isMounted.current) {
+                  return
+                }
+              }
+
+              const updateBenthicAttributeOptions = getBenthicOptions(resolvedBenthicAttributes)
 
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)

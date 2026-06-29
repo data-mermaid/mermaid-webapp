@@ -1,4 +1,5 @@
 import { createUuid } from '../../../library/createUuid'
+import { ensureAttributesLoaded } from './ensureAttributesLoaded'
 
 const BenthicAttributesMixin = (Base) =>
   class extends Base {
@@ -8,6 +9,18 @@ const BenthicAttributesMixin = (Base) =>
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    ensureBenthicAttributesLoaded = async function ensureBenthicAttributesLoaded(
+      attributeIds = [],
+    ) {
+      return ensureAttributesLoaded({
+        ids: attributeIds,
+        dexieTable: this._dexiePerUserDataInstance.benthic_attributes,
+        detailUrlById: (id) => `${this._apiBaseUrl}/benthicattributes/${id}/`,
+        getAccessToken: this._getAccessToken,
+        isOnlineAuthenticatedAndReady: this._isOnlineAuthenticatedAndReady,
+      })
     }
 
     addBenthicAttribute = async function addBenthicAttribute({
