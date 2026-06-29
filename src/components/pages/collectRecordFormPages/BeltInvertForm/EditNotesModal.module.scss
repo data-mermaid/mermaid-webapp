@@ -20,6 +20,7 @@
 
   &:hover {
     background: theme.$tableRowEven;
+    border: theme.$border-medium solid theme.$primary;
   }
 
   &:focus {
@@ -36,7 +37,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
-  text-decoration: underline;
   word-break: break-word;
   padding-left: theme.$spacing-medium;
 }

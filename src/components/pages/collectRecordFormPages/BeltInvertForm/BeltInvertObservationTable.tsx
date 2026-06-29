@@ -25,9 +25,7 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import {
-  useBeltInvertDensityMetrics,
-} from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
+import { useBeltInvertDensityMetrics } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
 import ObservationSizeSelect from '../ObservationSizeSelect'
 import { ObservationRecord } from './BeltInvertTypes'
 
@@ -173,6 +171,7 @@ const BeltInvertObservationRow = ({
   const rowNumber = index + 1
   const [isSizeInputFocused, setIsSizeInputFocused] = useState(false)
   const [sizeInputDraft, setSizeInputDraft] = useState('')
+  const [focusedObservationId, setFocusedObservationId] = useState<string | null>(null)
 
   const showNumericSizeInput =
     sizeBinSelectedLabel?.toString() === '1' || typeof sizeBinSelectedLabel === 'undefined'
@@ -256,7 +255,7 @@ const BeltInvertObservationRow = ({
 
   const sizeInput = showNumericSizeInput ? (
     <InputNumberNumericCharactersOnly
-      value={isSizeInputFocused ? sizeInputDraft : (size ? roundToOneDecimal(size) : '')}
+      value={isSizeInputFocused ? sizeInputDraft : size ? roundToOneDecimal(size) : ''}
       step="any"
       aria-labelledby="invert-size-label"
       data-testid="invert-size-input"
@@ -330,12 +329,14 @@ const BeltInvertObservationRow = ({
         aria-label={`Edit notes for row ${rowNumber}`}
         data-observation-id={observationId}
         onClick={() => onNotesClick(observationId)}
+        onFocus={() => setFocusedObservationId(observationId)}
+        onBlur={() => setFocusedObservationId((prev) => (prev === observationId ? null : prev))}
         onKeyDown={(e: React.KeyboardEvent) => {
           if (e.code === 'Tab' && !e.shiftKey) {
             onObservationKeyDown({ event: e, index, observation, isNotes: true })
           }
 
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (e.key === ' ') {
             onNotesClick(observationId)
           }
         }}
@@ -345,7 +346,9 @@ const BeltInvertObservationRow = ({
             !observation.notes?.trim() ? modalStyles.addNotesPlaceholder : ''
           }`}
         >
-          {observation.notes?.trim() || t('macroinvertebrate_observations.add_notes')}
+          {focusedObservationId === observationId
+            ? t('macroinvertebrate_observations.click_or_press_space_to_add_notes')
+            : observation.notes?.trim() || t('macroinvertebrate_observations.add_notes')}
         </span>
       </Td>
       {areValidationsShowing ? (
