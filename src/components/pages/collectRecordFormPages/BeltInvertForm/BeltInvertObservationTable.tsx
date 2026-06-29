@@ -26,6 +26,7 @@ import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { useBeltInvertDensityMetrics } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
+import { hasNonEmptyValue } from '../../../../library/hasNonEmptyValue'
 import ObservationSizeSelect from '../ObservationSizeSelect'
 import { ObservationRecord } from './BeltInvertTypes'
 
@@ -102,6 +103,10 @@ const sanitizeOneDecimalInput = (value: string) => {
   const [integerPart = '', ...decimalParts] = digitsAndDotOnly.split('.')
   const decimalPart = decimalParts.join('').slice(0, 1)
   return digitsAndDotOnly.includes('.') ? `${integerPart}.${decimalPart}` : integerPart
+}
+
+const getDisplaySizeValue = (value: unknown) => {
+  return hasNonEmptyValue(value) ? roundToOneDecimal(value) : ''
 }
 
 interface BeltInvertObservationTableProps {
@@ -197,13 +202,11 @@ const BeltInvertObservationRow = ({
 
   const handleSizeInputFocus = () => {
     setIsSizeInputFocused(true)
-    setSizeInputDraft(
-      size === null || typeof size === 'undefined' || size === '' ? '' : String(size),
-    )
+    setSizeInputDraft(hasNonEmptyValue(size) ? String(size) : '')
   }
 
   const handleSizeInputBlur = () => {
-    setSizeInputDraft(size ? roundToOneDecimal(size) : '')
+    setSizeInputDraft(getDisplaySizeValue(size))
     setIsSizeInputFocused(false)
   }
 
@@ -255,7 +258,7 @@ const BeltInvertObservationRow = ({
   const sizeInput = showNumericSizeInput ? (
     <InputNumberNumericCharactersOnly
       $textAlign="right"
-      value={isSizeInputFocused ? sizeInputDraft : size ? roundToOneDecimal(size) : ''}
+      value={isSizeInputFocused ? sizeInputDraft : getDisplaySizeValue(size)}
       step="any"
       aria-labelledby="invert-size-label"
       data-testid="invert-size-input"

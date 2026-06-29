@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Select } from '../../generic/form'
 import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
+import { hasNonEmptyValue } from '../../../library/hasNonEmptyValue'
 
 const ObservationSizeSelect = ({
   onValueEntered,
@@ -23,7 +24,7 @@ const ObservationSizeSelect = ({
   const [plus50Value, setPlus50Value] = useState(isValue50OrMore ? value : 50)
 
   useEffect(() => {
-    if (value === '' || value === null || typeof value === 'undefined') {
+    if (!hasNonEmptyValue(value)) {
       setPlus50Value(50)
       setShow50PlusInput(false)
       return
