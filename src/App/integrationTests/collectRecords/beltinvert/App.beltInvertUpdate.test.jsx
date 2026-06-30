@@ -50,7 +50,7 @@ describe('Offline', () => {
     expect(screen.getByTestId('label-input')).toHaveValue('FB-2')
     expect(screen.getByTestId('len-surveyed-input')).toHaveValue(6)
     expect(screen.getByTestId('width-select')).toHaveDisplayValue('2 m')
-    expect(screen.getByTestId('size-bin-select')).toHaveDisplayValue('5')
+    expect(screen.getByTestId('size-bin-select')).toHaveDisplayValue('5.0')
     expect(screen.getByTestId('reef-slope-select')).toHaveDisplayValue('flat')
     expect(screen.getByTestId('visibility-select')).toHaveDisplayValue('<1m - bad')
     expect(screen.getByTestId('current-select')).toHaveDisplayValue('moderate')
