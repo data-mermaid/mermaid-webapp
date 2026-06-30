@@ -59,6 +59,47 @@ describe('Offline', () => {
     expect(screen.getByTestId('notes-textarea')).toHaveValue('some fish notes')
   })
 
+  test('Edit belt invert displays size 0 as 0.0', async () => {
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+    const collectRecordToEdit = await dexiePerUserDataInstance.collect_records.get('bi-2')
+    const updatedRecord = {
+      ...collectRecordToEdit,
+      data: {
+        ...collectRecordToEdit.data,
+        beltinvert_transect: {
+          ...collectRecordToEdit.data.beltinvert_transect,
+          size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+        },
+        obs_belt_inverts: collectRecordToEdit.data.obs_belt_inverts.map((observation, index) => {
+          if (index === 0) {
+            return {
+              ...observation,
+              size: 0,
+            }
+          }
+
+          return observation
+        }),
+      },
+    }
+
+    await dexiePerUserDataInstance.collect_records.put(updatedRecord)
+
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+      initialEntries: ['/projects/5/collecting/macroinvertebrate/bi-2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    })
+
+    await screen.findByTestId('loading-indicator')
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
+
+    expect(screen.getByDisplayValue('0.0')).toBeInTheDocument()
+  })
+
   test.skip('(TODO - TEST TECH DEBT) Edit belt invert save stores properly formatted belt invert observations in dexie', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
