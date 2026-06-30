@@ -205,7 +205,7 @@ const NewAttributeModal = ({
     proposedParentIdError: speciesProposalForm.errors.genusId,
     proposedAttributeInputError: speciesProposalForm.errors.species,
     proposedSummary: t('macroinvertebrate_observations.attribute_proposal_summary', {
-      attribute: t('macroinvertebrate species'),
+      attribute: 'macroinvertebrate species',
     }),
   }
 
