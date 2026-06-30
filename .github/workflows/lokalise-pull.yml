@@ -49,6 +49,5 @@ jobs:
               "export_sort": "a_z",
               "replace_breaks": false,
               "plural_format": "i18next_v4",
-              "json_unescaped_slashes": true,
-              "filter_data": ["reviewed_only"]
+              "json_unescaped_slashes": true
             }
