@@ -13,7 +13,7 @@ export default [
       beltinvert_transect: {
         depth: 20,
         label: 'FB-1',
-        width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
+        width: 'e1a133d3-70fe-403c-aed2-a70d630ef910',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
         notes: 'some fish notes',
@@ -53,8 +53,8 @@ export default [
       beltinvert_transect: {
         depth: 10,
         label: 'FB-2',
-        width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
-        size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+        width: 'e1a133d3-70fe-403c-aed2-a70d630ef910',
+        size_bin: 'f0c1e3d5-4a7b-4f8e-9c6e-2f1b5c3d9e2a',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
         notes: 'some fish notes',
         number: 2,

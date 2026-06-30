@@ -531,6 +531,7 @@
   "macroinvertebrate_observations": {
     "add_notes": "Add notes...",
     "add_macroinvertebrate": "Add macroinvertebrate species",
+    "attribute_proposal_summary": "Your proposed {{attribute}} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.",
     "density_by_group_of_interest_units": "Density by group of interest (ind/ha)",
     "edit_notes": "Edit Notes",
     "macroinvertebrate_species": "Macroinvertebrate species",
@@ -885,7 +886,7 @@
     "bleachingqc": "Bleaching",
     "fishbelt": "Fish belt",
     "habitatcomplexity": "Habitat complexity",
-    "macroinvertebrate": "Macroinvertebrates"
+    "macroinvertebrate": "Macroinvertebrate belt"
   },
   "quadrat_collection": "Quadrat collection",
   "quadrat_size": "Quadrat size",
@@ -1142,6 +1143,9 @@
     "invalid_fish_count": "Fish count must be a non-negative integer",
     "invalid_fish_size": "Invalid fish size",
     "invalid_fishbelt_transect": "One or more invalid fields: site, management, sample date, transect number, width, depth",
+    "invalid_invert_belt_transect": "One or more invalid fields: site, management, sample date, transect number, width, depth",
+    "invert_count_high": "Macroinvertebrate count is unusually high",
+    "invert_size_exceeds_maximum": "Macroinvertebrate size is larger than the maximum expected value",
     "invalid_interval_size": "Interval size must be a positive number",
     "invalid_intervals": "Invalid intervals",
     "invalid_number_of_points": "Total number of points entered for quadrats: {{invalidQuadratNumbers}} does not match defined number of points per quadrat",

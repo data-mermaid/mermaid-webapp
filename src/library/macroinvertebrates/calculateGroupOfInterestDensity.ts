@@ -54,9 +54,9 @@ interface GoiDensityOptions {
  * - Genus, species, and GoI-level observations map directly to a Group of Interest (GoI).
  *   - genus/species use attribute.group_of_interest if present.
  *   - goi-level uses attribute.id directly.
- * - Family, order, and class observations are split proportionally across descendant genera GoIs.
- *   - Weight for GoI = (genera count for GoI) / (total genera WITH a GoI at that rank).
- *   - Only tagged genera (those with group_of_interest) count toward the denominator,
+ * - Family, order, and class observations are split equally across distinct descendant GoIs.
+ *   - Weight for each GoI = 1 / (count of distinct GoIs among tagged genera at that rank).
+ *   - Only tagged genera (those with group_of_interest) count toward the distinct-GoI set,
  *     so weights always sum to 1 and no attribution is silently lost.
  * - Density formula: (count / area_m2) * 10000
  *   where area_m2 = lenSurveyed * widthM, and 10000 converts m² to ha.
@@ -103,8 +103,8 @@ const getGoiChoices = (
 }
 
 /**
- * Compute GoI weights from a list of genera.
- * Only genera with group_of_interest contribute to the denominator,
+ * Compute GoI weights from a list of genera using equal-split.
+ * Each distinct GoI present among tagged genera receives weight 1 / distinctGoiCount,
  * so weights always sum to 1 and no attribution is silently lost.
  */
 const buildWeightsFromGenera = (genera: InvertAttribute[]): GoiWeights => {
@@ -114,16 +114,10 @@ const buildWeightsFromGenera = (genera: InvertAttribute[]): GoiWeights => {
     return new Map()
   }
 
-  const countsByGoi = new Map<string, number>()
+  const distinctGoiIds = new Set(taggedGenera.map((genus) => genus.group_of_interest!))
+  const weight = 1 / distinctGoiIds.size
 
-  taggedGenera.forEach((genus) => {
-    const goiId = genus.group_of_interest!
-    countsByGoi.set(goiId, (countsByGoi.get(goiId) ?? 0) + 1)
-  })
-
-  return new Map(
-    Array.from(countsByGoi.entries()).map(([goiId, count]) => [goiId, count / taggedGenera.length]),
-  )
+  return new Map(Array.from(distinctGoiIds).map((goiId) => [goiId, weight]))
 }
 
 /** Build genus index: familyId → genera[] */
@@ -243,7 +237,7 @@ const buildGoiWeightMaps = (invertAttributes: InvertAttribute[]): GoiWeightMaps 
 /**
  * Attribute a single observation's count to one or more GoIs.
  * - goi/genus/species: direct attribution
- * - family/order/class: proportional split via pre-computed weight maps
+ * - family/order/class: equal-split via pre-computed weight maps
  * - unknown rank with group_of_interest: direct fallback
  */
 const attributeObservationToGoi = (

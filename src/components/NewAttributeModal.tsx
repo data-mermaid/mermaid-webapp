@@ -44,13 +44,15 @@ interface NewAttributeModalProps {
 }
 
 const NoResults = (
-  <Trans
-    i18nKey="taxonomies.genus_not_found"
-    components={{
-      // eslint-disable-next-line jsx-a11y/anchor-has-content
-      a: <a href={links.contactUs} target="_blank" rel="noopener noreferrer" />,
-    }}
-  />
+  <div className={style['no-results-dropdown']}>
+    <Trans
+      i18nKey="taxonomies.genus_not_found"
+      components={{
+        // eslint-disable-next-line jsx-a11y/anchor-has-content
+        a: <a href={links.contactUs} target="_blank" rel="noopener noreferrer" />,
+      }}
+    />
+  </div>
 )
 
 const NewAttributeModal = ({
@@ -202,8 +204,8 @@ const NewAttributeModal = ({
     proposedAttributeValue: speciesProposalForm.values.species,
     proposedParentIdError: speciesProposalForm.errors.genusId,
     proposedAttributeInputError: speciesProposalForm.errors.species,
-    proposedSummary: t('benthic_observations.attribute_proposal_summary', {
-      attribute: t('macroinvertebrate_observations.macroinvertebrate_species'),
+    proposedSummary: t('macroinvertebrate_observations.attribute_proposal_summary', {
+      attribute: 'macroinvertebrate species',
     }),
   }
 

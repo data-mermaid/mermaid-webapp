@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 
 import { getOptions } from '../../../../library/getOptions'
-import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
@@ -28,11 +27,35 @@ const TRANSECT_NUMBER_VALIDATION_PATH = 'data.beltinvert_transect.number'
 const VISIBILITY_VALIDATION_PATH = 'data.beltinvert_transect.visibility'
 const WIDTH_VALIDATION_PATH = 'data.beltinvert_transect.width'
 
+interface WidthChoice {
+  id: string
+  val: number
+}
+
+interface NamedChoice {
+  id: string | number
+  name: string
+}
+
+interface ChoiceCollection<T> {
+  data: T[]
+}
+
+interface BeltInvertChoices {
+  invertbelttransectwidths?: ChoiceCollection<WidthChoice>
+  invertsizebins?: ChoiceCollection<NamedChoice>
+  reefslopes?: ChoiceCollection<NamedChoice>
+  visibilities?: ChoiceCollection<NamedChoice>
+  currents?: ChoiceCollection<NamedChoice>
+  relativedepths?: ChoiceCollection<NamedChoice>
+  tides?: ChoiceCollection<NamedChoice>
+}
+
 interface BeltInvertTransectInputsProps {
   observationsDispatch: (action: { type: string; payload?: unknown }) => void
   observationsState: ObservationRecord[]
   areValidationsShowing: boolean
-  choices: Record<string, { data: unknown[] }>
+  choices: BeltInvertChoices
   formik: {
     values: Record<string, unknown>
     handleBlur: (event: React.FocusEvent<HTMLElement>) => void
@@ -64,11 +87,17 @@ const BeltInvertTransectInputs = ({
 }: BeltInvertTransectInputsProps) => {
   const { t } = useTranslation()
 
-  // Keep compatibility while API choice keys finish propagating to all environments.
-  const widthChoices = choices.invertbelttransectwidths ?? choices.belttransectwidths
-  const sizeBinChoices = choices.invertsizebins ?? choices.fishsizebins
+  const widthChoices = choices.invertbelttransectwidths
+  const sizeBinChoices = choices.invertsizebins
 
-  const transectWidthOptions = sortArrayByObjectKey(getOptions(widthChoices?.data ?? []), 'label')
+  // This pattern is different from other protocols because the api returns the values differently
+  const transectWidthOptions = (widthChoices?.data ?? [])
+    .slice()
+    .sort((a, b) => a.val - b.val)
+    .map(({ val, id }) => ({
+      label: `${val} m`,
+      value: id,
+    }))
   const invertSizeBinOptions = getOptions(sizeBinChoices?.data ?? [])
   const reefSlopeOptions = getOptions(choices.reefslopes?.data ?? [])
   const visibilityOptions = getOptions(choices.visibilities?.data ?? [])
