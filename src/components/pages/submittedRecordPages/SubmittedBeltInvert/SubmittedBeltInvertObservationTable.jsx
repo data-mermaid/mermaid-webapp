@@ -147,7 +147,7 @@ const SubmittedBeltInvertObservationTable = ({
             </Tr>
             <Tr>
               <Th>{t('total_abundance')}</Th>
-              <Td>{abundance}</Td>
+              <Td>{abundance.toFixed(1)}</Td>
             </Tr>
           </tbody>
         </MacroinvertebrateObservationsSummaryStats>
