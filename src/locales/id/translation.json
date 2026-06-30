@@ -2,7 +2,7 @@
   "atlas_legend_drawer": {
     "back_reef_slope": "Lereng terumbu belakang",
     "benthic_microalgae": "Karpet mikroalga",
-    "coral_algae": "Karang \/ alga",
+    "coral_algae": "Karang / alga",
     "inner_reef_flat": "Rataan terumbu bagian dalam",
     "outer_reef_flat": "Rataan terumbu bagian luar",
     "patch_reefs": "Gosong",
@@ -74,7 +74,7 @@
     },
     "proposed_species_saved": "Spesies ikan yang diusulkan {{speciesName}} tersimpan. Pengamatan telah diperbarui dengan spesies ini."
   },
-  "fish_count_observed": "Jumlah ikan yang diamati, dari spesies\/genus\/famili dan ukuran yang sama",
+  "fish_count_observed": "Jumlah ikan yang diamati, dari spesies/genus/famili dan ukuran yang sama",
   "fish_name": "Nama ikan",
   "fish_size_bin": "Rentang ukuran ikan (cm)",
   "fish_size_bin_info": "Nama skema rentang ukuran yang digunakan untuk memperkirakan ukuran ikan pada tiap transek. Pilih 1 cm jika ukuran ikan yang dicatat tidak menggunakan rentang ukuran.",
@@ -88,7 +88,7 @@
       "enable_gfcr": "Aktifkan indikator pendanaan GFCR",
       "go_to_gfcr": "Buka halaman GFCR"
     },
-    "disabled_gfcr_info": "Menonaktifkan indikator pendanaan GFCR untuk proyek ini tidak akan menghapusnya, tetapi hanya menyembunyikannya dari <a \/>. Tidak ada data yang akan hilang. Anda dapat mengaktifkannya kembali kapan saja."
+    "disabled_gfcr_info": "Menonaktifkan indikator pendanaan GFCR untuk proyek ini tidak akan menghapusnya, tetapi hanya menyembunyikannya dari <a />. Tidak ada data yang akan hilang. Anda dapat mengaktifkannya kembali kapan saja."
   },
   "go_to_explore_projects": "Lihat semua proyek Anda di MERMAID Explore",
   "go_to_explore_this_project": "Lihat proyek ini di MERMAID Explore",
@@ -102,7 +102,7 @@
       "unclassified": "Tidak berhasil diklasifikasikan",
       "unconfirmed": "Belum dikonfirmasi"
     },
-    "attribute_growth_form": "Atribut bentik \/ bentuk pertumbuhan",
+    "attribute_growth_form": "Atribut bentik / bentuk pertumbuhan",
     "benthic_attribute": "Atribut bentik",
     "buttons": {
       "confirm_all": "Konfirmasi semua",
@@ -111,7 +111,7 @@
     },
     "classifier_guesses_other": "Prediksi model",
     "confidence": "Keyakinan",
-    "confirmed_total": "Dikonfirmasi \/ total",
+    "confirmed_total": "Dikonfirmasi / total",
     "errors": {
       "duplicate_file": "File duplikat: {{fileName}}",
       "failed_annotations_fetch": "Gagal memuat anotasi gambar",
@@ -125,7 +125,7 @@
       "photo_too_small": "Foto harus memiliki tinggi dan lebar minimum {{minImageWidthAndHeight}} piksel. Foto ini terlalu kecil: {{fileName}}"
     },
     "feature_introduction": {
-      "description": "Melalui kemitraan dengan <a \/> dari University of California San Diego dan Scripps Institution of Oceanography, MERMAID kini menyertakan klasifikasi berbasis AI dengan menggunakan model pembelajaran mendalam pyspacer. Integrasi ini memungkinkan analisis foto bentik yang cepat dan terukur sehingga Anda dapat menghasilkan wawasan dengan cepat dan konsisten dengan menggunakan pembelajaran mesin dan AI.",
+      "description": "Melalui kemitraan dengan <a /> dari University of California San Diego dan Scripps Institution of Oceanography, MERMAID kini menyertakan klasifikasi berbasis AI dengan menggunakan model pembelajaran mendalam pyspacer. Integrasi ini memungkinkan analisis foto bentik yang cepat dan terukur sehingga Anda dapat menghasilkan wawasan dengan cepat dan konsisten dengan menggunakan pembelajaran mesin dan AI.",
       "title": "MERMAID baru saja bertambah pintar",
       "use_ai_button": "Klasifikasi foto dengan AI (Beta)"
     },
@@ -161,7 +161,7 @@
     "year_est": "Tahun pembentukan"
   },
   "map": {
-    "attribution": "Tiles &copy; Esri &mdash; Sumber: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, dan Komunitas Pengguna SIG &copy; <a href=\"http:\/\/www.allencoralatlas.org\/\"  style=\"font-size:1.25rem;\">2019 Allen Coral Atlas Partnership dan Vulcan, Inc.<\/a>",
+    "attribution": "Tiles &copy; Esri &mdash; Sumber: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, dan Komunitas Pengguna SIG &copy; <a href=\"http://www.allencoralatlas.org/\"  style=\"font-size:1.25rem;\">2019 Allen Coral Atlas Partnership dan Vulcan, Inc.</a>",
     "legend": {
       "allen_coral_atlas": "Allen Coral Atlas",
       "visit_allen_coral_atlas": "Kunjungi Allen Coral Atlas"
@@ -183,7 +183,7 @@
       "failed_upload": "Gagal mengunggah {{fileName}}"
     },
     "upload_cancelled": "Unggahan dibatalkan",
-    "uploading_files": "<p>Mengunggah file {{processedCount}}\/{{totalCount}}...<\/p><button>Batalkan unggahan<\/button>",
+    "uploading_files": "<p>Mengunggah file {{processedCount}}/{{totalCount}}...</p><button>Batalkan unggahan</button>",
     "user_guidance": {
       "crop_icon": "Ikon transisi yang dipotong",
       "cropped_photo_example": "Contoh yang dipotong",
@@ -241,14 +241,14 @@
   },
   "quadrat_size_info": "Ukuran kuadrat yang digunakan per transek, dalam meter persegi (misalnya 1)",
   "reef_slope": "Lereng terumbu",
-  "reef_slope_info": "Indikasi profil terumbu karang di lokasi survei. Lihat definisi <a>di sini<\/a>.",
+  "reef_slope_info": "Indikasi profil terumbu karang di lokasi survei. Lihat definisi <a>di sini</a>.",
   "reference": "Referensi",
   "relative_depth": "Kedalaman relatif",
   "relative_depth_info": "Apakah survei tersebut relatif 'dalam' atau 'dangkal' dibandingkan dengan transek lain yang disurvei, terlepas dari kedalaman numerik dalam meter",
   "remove_as_observer": "Hapus sebagai pengamat",
   "remove_observer_from_record": "Menghapus pengamat dari unit sampel",
   "remove_user": "Hapus pengguna",
-  "remove_user_confirmation": "Apakah Anda yakin ingin menghapus <strong>{{userName}}<\/strong> sebagai pengamat?",
+  "remove_user_confirmation": "Apakah Anda yakin ingin menghapus <strong>{{userName}}</strong> sebagai pengamat?",
   "sample_units": {
     "add": "Tambahkan unit sampel",
     "errors": {
@@ -279,7 +279,7 @@
     "view_submitted": "Lihat unit sampel yang sudah di submit",
     "who_has_unsubmitted": "Siapa yang memiliki unit sampel yang belum di submit"
   },
-  "sample_units_and_observers": "Unit sampel \/ Pengamat",
+  "sample_units_and_observers": "Unit sampel / Pengamat",
   "search": {
     "no_results": "Tidak ada hasil yang ditemukan"
   },
@@ -310,13 +310,13 @@
     "species": "Spesies"
   },
   "tide": "Pasang surut",
-  "tide_info": "Karakteristik pasang surut selama survei (<a>lebih detail<\/a>)",
+  "tide_info": "Karakteristik pasang surut selama survei (<a>lebih detail</a>)",
   "toasts": {
     "export_error": "Terjadi kesalahan dalam mengekspor data"
   },
   "toggle_table_visibility": "Aktifkan tampilan tabel",
   "total_abundance": "Total kelimpahan",
-  "total_biomass": "Total biomassa (kg\/ha)",
+  "total_biomass": "Total biomassa (kg/ha)",
   "transect": "Transek",
   "transect_number": "Nomor transek",
   "transect_number_info": "Nomor unit sampel, dalam bentuk bilangan bulat (misalnya 1). Biasanya, unit sampel diberi nomor secara berurutan di setiap lokasi, dengan nomor yang sama di setiap lokasi dalam suatu proyek.",
