@@ -1,0 +1,48 @@
+{
+  "buttons": {
+    "suggestion_review_request": "Enviar para revisão"
+  },
+  "forms": {
+    "submit_for_review": "Enviar para revisão"
+  },
+  "gfcr": {
+    "forms": {
+      "finance_solutions": {
+        "business_finance_solution": "Instalação/solução",
+        "pcf_revenues_error": "Remova as receitas associadas antes de alterar o tipo para cofinanciamento programático."
+      },
+      "revenues": {
+        "no_non_pcf_finance_solutions": "Não é possível adicionar receitas para cofinanciamento programático. Acesse a seção de investimentos e adicione o valor do cofinanciamento como investimento. "
+      }
+    }
+  },
+  "projects": {
+    "demo": {
+      "copy_unavailable": "A função de copiar está desativada no projeto de demonstração."
+    },
+    "tour": {
+      "collecting_review": "Insira dados de pesquisa por método como unidades de amostra, incluindo quadrantes fotográficos com auxílio de IA — mesmo offline.",
+      "data_sharing_review": "Controle como os dados são compartilhados no MERMAID definindo cada tipo de pesquisa como privado, resumo público ou público.",
+      "intro": "Vamos fazer um breve tour para destacar as áreas principais de um projeto e ajudar você a começar.",
+      "intro_tagline": "Bem-vindo",
+      "management_regimes_review": "Defina como os locais são gerenciados no momento das pesquisas, como áreas marinhas protegidas ou restrições à pesca.",
+      "observers_overview_review": "Veja quem está coletando dados e o que já foi enviado, ajudando você a acompanhar o progresso da sua equipe.",
+      "outro": "Explore o projeto de demonstração para ver como tudo funciona. Quando estiver pronto, crie seu próprio projeto para coletar dados reais.",
+      "outro_tagline": "Está tudo pronto!",
+      "project_info_review": "Adicione uma descrição e marque as organizações associadas ao seu projeto.",
+      "samples_management_review": "Visualize os dados enviados, agrupados por gestão, para ajudar você a entender a abrangência das suas pesquisas e identificar lacunas.",
+      "sites_review": "Adicione a localização dos recifes e suas coordenadas para vincular os levantamentos aos locais corretos.",
+      "submitted_review": "Veja os dados limpos enviados, prontos para exportação, visualização e análise.",
+      "tour_steps": "Etapa {{current}} de {{total}}",
+      "users_review": "Adicione membros à equipe e atribua a eles funções de administrador, coletor ou somente leitura."
+    }
+  },
+  "users": {
+    "messages": {
+      "sample_units_transfer_one": "{{count}} unidade de amostra transferida",
+      "sample_units_transfer_other": "{{count}} unidades de amostra transferidas",
+      "sample_units_transferred_one": "{{count}} unidade de amostra transferida",
+      "sample_units_transferred_other": "{{count}} unidades de amostra transferidas"
+    }
+  }
+}
