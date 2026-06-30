@@ -196,6 +196,11 @@ export const getValidationMessage = (validation, projectId = '') => {
     invalid_fish_count: () => i18n.t('validation_messages.invalid_fish_count'),
     invalid_fish_size: () => i18n.t('validation_messages.invalid_fish_size'),
     invalid_fishbelt_transect: () => i18n.t('validation_messages.invalid_fishbelt_transect'),
+    invert_count_high: () => i18n.t('validation_messages.invert_count_high'),
+    invert_size_exceeds_maximum: () =>
+      i18n.t('validation_messages.invert_size_exceeds_maximum'),
+    invalid_invert_belt_transect: () =>
+      i18n.t('validation_messages.invalid_invert_belt_transect'),
     invalid_number_of_points: () =>
       i18n.t('validation_messages.invalid_number_of_points', {
         invalidQuadratNumbers: context?.invalid_quadrat_numbers ?? '',
