@@ -2,6 +2,11 @@
   "accessible_info": "Accessible information",
   "add_update_sites_regimes": "Add/update sites or management regimes",
   "admin": "Admin",
+  "auth": {
+    "email_not_verified_heading": "Please verify your email address",
+    "email_not_verified_message": "Check your inbox for a verification link and click it before logging in.",
+    "try_login_again": "Try logging in"
+  },
   "api_errors": {
     "app_not_authenticated_or_ready": "MERMAID did not load correctly. Try logging out and then logging back in.",
     "data_not_sync": "MERMAID was not able to sync data.",
