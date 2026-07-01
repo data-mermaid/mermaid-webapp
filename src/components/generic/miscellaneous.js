@@ -2,6 +2,14 @@ import { styled } from 'styled-components'
 
 import theme from '../../theme'
 
+export const CenterCenter = styled('div')`
+  display: flex;
+  height: calc(100% - ${theme.spacing.headerHeight});
+  margin-top: ${theme.spacing.headerHeight};
+  justify-content: center;
+  align-items: center;
+`
+
 export const Figure = styled.figure`
   all: unset;
   & figcaption {

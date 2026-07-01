@@ -1,19 +1,10 @@
 import React from 'react'
 
 import { Link, useParams } from 'react-router'
-import { styled } from 'styled-components'
 
 import { Trans, useTranslation } from 'react-i18next'
-import theme from '../../theme'
 import { H2, P } from '../generic/text'
-
-const CenterCenter = styled('div')`
-  display: flex;
-  height: calc(100% - ${theme.spacing.headerHeight});
-  margin-top: ${theme.spacing.headerHeight};
-  justify-content: center;
-  align-items: center;
-`
+import { CenterCenter } from '../generic/miscellaneous'
 
 const UserDoesntHaveProjectAccess = () => {
   const { projectName } = useParams()

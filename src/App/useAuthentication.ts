@@ -18,6 +18,8 @@ interface UseAuthenticationReturn {
   isMermaidAuthenticated: boolean
   logoutMermaid: () => void
   getAccessToken: () => Promise<string>
+  emailNotVerified: boolean
+  loginMermaid: () => void
 }
 
 const useAuthentication = ({
@@ -25,6 +27,7 @@ const useAuthentication = ({
 }: UseAuthenticationParams): UseAuthenticationReturn => {
   const { isAppOnline } = useOnlineStatus()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
+  const [emailNotVerified, setEmailNotVerified] = useState(false)
   const navigate = useNavigate()
 
   const setAuthenticatedStates = useCallback(() => {
@@ -64,6 +67,23 @@ const useAuthentication = ({
     logout: auth0Logout,
     getAccessTokenSilently: getAuth0AccessTokenSilently,
   } = useAuth0()
+
+  const redirectToAuth0Login = useCallback(
+    (returnTo: string) => {
+      pullRequestRedirectAuth0Hack()
+      const isValidReturnPath = returnTo.startsWith('/') && !returnTo.startsWith('//')
+      auth0LoginWithRedirect({
+        appState: {
+          returnTo: isValidReturnPath ? returnTo : '/',
+        },
+      })
+    },
+    [auth0LoginWithRedirect],
+  )
+
+  const loginMermaid = useCallback(() => {
+    redirectToAuth0Login('/')
+  }, [redirectToAuth0Login])
 
   const _silentAuthentication = useEffect(() => {
     const silentAuth = async () => {
@@ -106,25 +126,18 @@ const useAuthentication = ({
       if (error && error === 'access_denied') {
         const errorDescription = urlParams.get('error_description')
         if (errorDescription && errorDescription === 'email_not_verified') {
-          const returnMsg = 'You must verify your email before you can login.'
-          const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID
-          window.location.href = `https://${
-            import.meta.env.VITE_AUTH0_DOMAIN
-          }/login?client=${clientId}&error=${error}&error_description=${encodeURIComponent(
-            returnMsg,
-          )}`
+          // Show an in-app message instead of redirecting directly to Auth0's login page.
+          // A raw redirect to /login bypasses the OAuth PKCE flow (no redirect_uri, state,
+          // code_challenge), so Auth0 cannot complete the callback and shows a
+          // misconfiguration error when the user tries to log in after verifying their email.
+          setEmailNotVerified(true)
+          return () => {
+            isMounted = false
+          }
         }
       } else {
         const { pathname, search } = window.location
-
-        const returnTo = `${pathname}${search}`
-        const isValidReturnPath = pathname.startsWith('/') && !pathname.startsWith('//')
-
-        auth0LoginWithRedirect({
-          appState: {
-            returnTo: isValidReturnPath ? returnTo : '/',
-          },
-        })
+        redirectToAuth0Login(`${pathname}${search}`)
       }
     }
 
@@ -149,7 +162,7 @@ const useAuthentication = ({
       isMounted = false
     }
   }, [
-    auth0LoginWithRedirect,
+    redirectToAuth0Login,
     getAuth0AccessTokenSilently,
     setAuthenticatedStates,
     setUnauthenticatedStates,
@@ -176,6 +189,8 @@ const useAuthentication = ({
     isMermaidAuthenticated,
     logoutMermaid,
     getAccessToken: getAuth0AccessTokenSilently,
+    emailNotVerified,
+    loginMermaid,
   }
 }
 
