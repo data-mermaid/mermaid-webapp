@@ -616,13 +616,15 @@ const BeltInvertObservationTable = ({
           ) : null}
         </UnderTableRowButtonArea>
         <MacroinvertebrateObservationsSummaryStats>
-          <thead>
-            <Tr>
-              <Th colSpan={2}>
-                {t('macroinvertebrate_observations.density_by_group_of_interest_units')}
-              </Th>
-            </Tr>
-          </thead>
+          {Object.entries(densityByGoi).length > 0 && (
+            <thead>
+              <Tr>
+                <Th colSpan={2}>
+                  {t('macroinvertebrate_observations.density_by_group_of_interest_units')}
+                </Th>
+              </Tr>
+            </thead>
+          )}
           <tbody>
             {Object.entries(densityByGoi).map(([groupName, density]) => {
               return (
