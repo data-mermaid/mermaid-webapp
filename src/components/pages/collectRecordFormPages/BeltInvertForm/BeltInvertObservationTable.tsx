@@ -364,7 +364,9 @@ const BeltInvertObservationRow = ({
           resetObservationValidations={resetObservationValidations}
         />
       ) : null}
-      <Td $align="right">{roundToOneDecimal(observationDensity)}</Td>
+      <Td $align="right" className={tableStyles.tdCellText}>
+        {roundToOneDecimal(observationDensity)}
+      </Td>
       <Td $align="center">
         <ButtonRemoveRow
           tabIndex={-1}
