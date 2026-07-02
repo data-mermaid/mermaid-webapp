@@ -34,32 +34,4 @@ export const Item = styled('li')`
   background-color: ${(props) =>
     props.$highlighted ? theme.color.primaryColor : theme.color.white};
   color: ${(props) => (props.$highlighted ? theme.color.white : theme.color.black)};
-
-  &:has(button) {
-    padding: 0;
-  }
-
-  button {
-    display: block;
-    width: 100%;
-    margin: 0;
-    padding: ${theme.spacing.buttonPadding};
-    border: none;
-    background: transparent;
-    color: inherit;
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-
-  p {
-    margin: 0;
-    padding: 0;
-  }
-
-  a {
-    display: block;
-    margin-top: ${theme.spacing.small};
-    color: inherit;
-  }
 `
