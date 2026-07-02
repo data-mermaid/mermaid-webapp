@@ -311,7 +311,7 @@ const BeltInvertObservationRow = ({
           />
         </InputAutocompleteContainer>
       </Td>
-      {sizeBinSelectedLabel && <Td>{sizeInput}</Td>}
+      {sizeBinSelectedLabel && <Td $align="right">{sizeInput}</Td>}
       <Td>
         <InputNumberNumericCharactersOnly
           $textAlign="right"
