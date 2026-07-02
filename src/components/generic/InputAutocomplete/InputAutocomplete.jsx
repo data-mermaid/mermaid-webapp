@@ -175,9 +175,7 @@ const InputAutocomplete = ({
               {isMenuOpen && !menuItems.length && noResultsText && (
                 <Item data-testid="noResult">{noResultsText}</Item>
               )}
-              {isMenuOpen && !menuItems.length && noResultsAction && (
-                <Item onClick={() => setIsMenuOpen(false)}>{noResultsAction}</Item>
-              )}
+              {isMenuOpen && !menuItems.length && noResultsAction && <Item>{noResultsAction}</Item>}
             </Menu>
           </AutoCompleteResultsWrapper>
         )
