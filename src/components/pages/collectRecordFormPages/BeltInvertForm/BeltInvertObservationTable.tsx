@@ -336,7 +336,12 @@ const BeltInvertObservationRow = ({
             onObservationKeyDown({ event: e, index, observation, isNotes: true })
           }
 
+          if (e.code === 'Enter') {
+            onObservationKeyDown({ event: e, index, observation, isNotes: true })
+          }
+
           if (e.key === ' ') {
+            e.preventDefault()
             onNotesClick(observationId)
           }
         }}
@@ -347,7 +352,8 @@ const BeltInvertObservationRow = ({
           }`}
         >
           {focusedObservationId === observationId
-            ? t('macroinvertebrate_observations.click_or_press_space_to_add_notes')
+            ? observation.notes?.trim() ||
+              t('macroinvertebrate_observations.click_or_press_space_to_add_notes')
             : observation.notes?.trim() || t('macroinvertebrate_observations.add_notes')}
         </span>
       </Td>
