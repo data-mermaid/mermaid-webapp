@@ -529,8 +529,9 @@
   "loading_indicator": "Loading indicator",
   "loading_item": "Loading {{itemName}}",
   "macroinvertebrate_observations": {
-    "add_notes": "Add notes...",
+    "add_notes": "Click to add notes...",
     "add_macroinvertebrate": "Add macroinvertebrate species",
+    "click_or_press_space_to_add_notes": "Click or press space to add notes...",
     "attribute_proposal_summary": "Your proposed {{attribute}} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.",
     "density_by_group_of_interest_units": "Density by group of interest (ind/ha)",
     "edit_notes": "Edit Notes",
