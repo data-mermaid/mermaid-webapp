@@ -77,11 +77,11 @@ interface BeltInvertTransectInputsProps {
 const formatSizeBinOptionLabel = (label: string) => {
   const numericLabel = Number(label)
 
-  if (Number.isFinite(numericLabel) && Number.isInteger(numericLabel)) {
+  if (Number.isInteger(numericLabel)) {
     return numericLabel.toFixed(1)
   }
 
-  return String(label)
+  return label
 }
 
 const BeltInvertTransectInputs = ({
