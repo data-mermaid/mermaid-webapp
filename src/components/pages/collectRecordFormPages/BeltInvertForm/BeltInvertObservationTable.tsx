@@ -18,7 +18,7 @@ import { ButtonPrimary } from '../../../generic/buttons'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper, LabelContainer, RequiredIndicator } from '../../../generic/form'
-import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
+import { MacroinvertebrateObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
@@ -626,12 +626,19 @@ const BeltInvertObservationTable = ({
             <p>{t('macroinvertebrate_observations.species_taxonomy_unavailable')}</p>
           ) : null}
         </UnderTableRowButtonArea>
-        <ObservationsSummaryStats>
+        <MacroinvertebrateObservationsSummaryStats>
+          <thead>
+            <Tr>
+              <Th colSpan={2}>
+                {t('macroinvertebrate_observations.density_by_group_of_interest_units')}
+              </Th>
+            </Tr>
+          </thead>
           <tbody>
             {Object.entries(densityByGoi).map(([groupName, density]) => {
               return (
                 <Tr key={groupName}>
-                  <Th>{`${t('density')} - ${groupName}`}</Th>
+                  <Th className="goi-density">{groupName}</Th>
                   <Td>{roundToOneDecimal(density)}</Td>
                 </Tr>
               )
@@ -645,7 +652,7 @@ const BeltInvertObservationTable = ({
               <Td>{abundance.toFixed(1)}</Td>
             </Tr>
           </tbody>
-        </ObservationsSummaryStats>
+        </MacroinvertebrateObservationsSummaryStats>
       </UnderTableRow>
     </InputWrapper>
   )
