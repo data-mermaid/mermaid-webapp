@@ -20,7 +20,8 @@
 
   &:hover {
     background: theme.$tableRowEven;
-    border: theme.$border-medium solid theme.$primary;
+    outline: theme.$border-medium solid theme.$primary;
+    outline-offset: -2px;
   }
 
   &:focus {
