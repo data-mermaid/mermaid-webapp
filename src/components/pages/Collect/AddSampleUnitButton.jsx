@@ -31,7 +31,7 @@ const AddSampleUnitButton = () => {
   )
 
   return (
-    <StyledButtonSecondaryDropdown label={label} data-testid="add-sample-unit-button">
+    <StyledButtonSecondaryDropdown label={label} align="right" data-testid="add-sample-unit-button">
       <Column as="nav" data-testid="new-sample-unit-nav">
         <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`} data-testid="fishbelt-link">
           {t('protocol_titles.fishbelt')}

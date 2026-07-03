@@ -25,13 +25,14 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 230,
+      width: 'max-content',
+      minWidth: 230,
       color: theme.color.textColor,
     },
   },
 }
 
-const fontStyle = { fontFamily: 'Open Sans', fontSize: '1.6rem' }
+const fontStyle = { fontFamily: 'Open Sans', fontSize: '1.6rem', whiteSpace: 'nowrap' }
 
 const SelectStyle = { borderRadius: 0, height: '36px' }
 

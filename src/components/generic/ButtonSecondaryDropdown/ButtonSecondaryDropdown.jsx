@@ -10,6 +10,7 @@ const ButtonSecondaryDropdown = ({
   label,
   className = undefined,
   disabled = false,
+  align = 'left',
   ...props
 }) => {
   return (
@@ -19,7 +20,11 @@ const ButtonSecondaryDropdown = ({
           {label} <IconDown />
         </ButtonSecondary>
       }
-      contents={<StyledDropdownContainer>{children}</StyledDropdownContainer>}
+      contents={
+        <StyledDropdownContainer $alignRight={align === 'right'}>
+          {children}
+        </StyledDropdownContainer>
+      }
     />
   )
 }
@@ -29,6 +34,7 @@ ButtonSecondaryDropdown.propTypes = {
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   className: PropTypes.string,
   disabled: PropTypes.bool,
+  align: PropTypes.oneOf(['left', 'right']),
 }
 
 export default ButtonSecondaryDropdown
