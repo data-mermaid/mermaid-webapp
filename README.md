@@ -36,6 +36,7 @@
 - Hot reloading happens inconsistently, notably, changes to DatabaseSwitchboard code seem to require a manual browser refresh.
 - To reset the API and its database, run `make freshinstall`
 - This app was initialized with Create React App, and then migrated to Vite. Tests were originally written for Jest but use Vitest with jsdom now. Test configuration is in `vitest.config.ts`.
+- UI text is tokenized with i18next and translated via Lokalise. See [TranslationSyncWorkflow](docs/TranslationSyncWorkflow.md) for how source strings and translations sync between the code and Lokalise, [LokaliseTranslatorGuide](docs/LokaliseTranslatorGuide.md) for the translator-facing process, and [TranslationBestPractices](docs/TranslationBestPractices.md) for token naming conventions.
 
 ### General Architecture
 
