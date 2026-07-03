@@ -23,7 +23,7 @@ Note: after you mark something Reviewed, allow a few minutes before expecting it
 ## How your work reaches the app
 
 - **Weekly:** every Monday, an automated job pulls translations into a pull request against the code.
-- **On demand:** for time-sensitive changes, ask a developer to run the pull manually (a one-click GitHub Action) instead of waiting for Monday.
+- **On demand:** for time-sensitive changes, run the pull yourself instead of waiting for Monday - GitHub → **Actions** → "Pull Translations from Lokalise" → **Run workflow** (branch `develop`).
 
 Reviewing and merging that pull request is **your responsibility** - see [Reviewing and merging the translation PR](#reviewing-and-merging-the-translation-pr) below.
 
@@ -53,14 +53,14 @@ English is the source of truth in the code. In Lokalise, only **text normalizati
 
 On the **dev** app (not production), a language picker appears in the header. Switch between English and Bahasa Indonesia to check translations in context and spot missing or incorrect values. Missing translations show English - that's the expected fallback, not a bug.
 
-## Don't use the old "push to GitHub" button
+## The old Lokalise → GitHub options are disabled
 
-The old native GitHub integration was retired. Don't use Lokalise's "push / download to GitHub" build button - the automated pull handles delivery. If you need translations out sooner, ask a developer for a manual pull run.
+The old native Lokalise↔GitHub integration was retired, and its "push / download to GitHub" build options in Lokalise are now disabled. Delivery is handled entirely by the automated pull - if you need translations out sooner, run the pull yourself (see [How your work reaches the app](#how-your-work-reaches-the-app)) instead of waiting for the weekly run.
 
 ## Quick reference
 
 - **Right now:** all translations sync regardless of status (reviewed-only filter temporarily off). Keep marking **Reviewed** to work toward enabling it.
 - Once the filter is on: edit **and mark Reviewed** = releases to the next pull.
-- Weekly pull = Monday; need it sooner = ask a dev for a manual run.
+- Weekly pull = Monday; need it sooner = run the pull yourself (Actions → Run workflow).
 - Missing translation → the app shows English (expected).
 - English source comes from code; normalization-only in Lokalise.
