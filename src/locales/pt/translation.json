@@ -17,6 +17,7 @@
     }
   },
   "macroinvertebrate_observations": {
+    "add_macroinvertebrate": "Propor novas espécies de macroinvertebrados",
     "attribute_proposal_summary": "Sua proposta {{attribute}} Será analisado pela equipe MERMAID. Eles aprovarão a inclusão na taxonomia ou entrarão em contato para dar seguimento ao assunto."
   },
   "projects": {
