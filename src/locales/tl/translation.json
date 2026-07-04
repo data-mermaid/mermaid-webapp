@@ -465,6 +465,7 @@
   "loading_indicator": "Tagapagpahiwatig ng Pagkarga",
   "loading_item": "Nilo-load ang {{itemName}}",
   "macroinvertebrate_observations": {
+    "add_macroinvertebrate": "Magmungkahi ng mga bagong uri ng macroinvertebrate",
     "attribute_proposal_summary": "Ang iyong iminungkahi {{attribute}} ay susuriin ng pangkat ng MERMAID. Aaprubahan nila ito para maisama sa taxonomy o makikipag-ugnayan sa iyo para sa follow-up."
   },
   "management_regime": "Pamamahala ng rehimen",

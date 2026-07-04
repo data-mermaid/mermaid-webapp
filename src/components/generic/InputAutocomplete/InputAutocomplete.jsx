@@ -30,13 +30,6 @@ const AutoCompleteResultsWrapper = styled.div`
       padding: ${theme.spacing.buttonPadding};
     }
   }
-
-  button {
-    width: 100%;
-    border: none;
-    text-align: start;
-    padding: ${theme.spacing.small};
-  }
 `
 
 const InputAutocomplete = ({
@@ -178,19 +171,12 @@ const InputAutocomplete = ({
                 'data-testid': menuTestId,
               })}
             >
-              {isMenuOpen && getMenuContents(downshiftObject)}
+              {isMenuOpen && menuItems.length > 0 && getMenuContents(downshiftObject)}
+              {isMenuOpen && !menuItems.length && noResultsText && (
+                <Item data-testid="noResult">{noResultsText}</Item>
+              )}
+              {isMenuOpen && !menuItems.length && noResultsAction && <Item>{noResultsAction}</Item>}
             </Menu>
-            {isMenuOpen && !menuItems.length && (
-              <div>
-                {noResultsText && <p data-testid="noResult">{noResultsText}</p>}
-                {noResultsAction && (
-                  // role="presentation" marks this as a structural wrapper, not an interactive element.
-                  <div role="presentation" onClick={() => setIsMenuOpen(false)}>
-                    {noResultsAction}
-                  </div>
-                )}
-              </div>
-            )}
           </AutoCompleteResultsWrapper>
         )
       }}

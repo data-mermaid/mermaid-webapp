@@ -44,15 +44,13 @@ interface NewAttributeModalProps {
 }
 
 const NoResults = (
-  <div className={style['no-results-dropdown']}>
-    <Trans
-      i18nKey="taxonomies.genus_not_found"
-      components={{
-        // eslint-disable-next-line jsx-a11y/anchor-has-content
-        a: <a href={links.contactUs} target="_blank" rel="noopener noreferrer" />,
-      }}
-    />
-  </div>
+  <Trans
+    i18nKey="taxonomies.genus_not_found"
+    components={{
+      // eslint-disable-next-line jsx-a11y/anchor-has-content
+      a: <a href={links.contactUs} target="_blank" rel="noopener noreferrer" />,
+    }}
+  />
 )
 
 const NewAttributeModal = ({

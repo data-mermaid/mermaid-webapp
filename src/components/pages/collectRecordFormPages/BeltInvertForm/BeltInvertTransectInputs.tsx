@@ -74,6 +74,16 @@ interface BeltInvertTransectInputsProps {
   validationsApiData?: { beltinvert_transect?: Record<string, unknown> }
 }
 
+const formatSizeBinOptionLabel = (label: string) => {
+  const numericLabel = Number(label)
+
+  if (Number.isInteger(numericLabel)) {
+    return numericLabel.toFixed(1)
+  }
+
+  return label
+}
+
 const BeltInvertTransectInputs = ({
   observationsDispatch,
   observationsState,
@@ -98,7 +108,10 @@ const BeltInvertTransectInputs = ({
       label: `${val} m`,
       value: id,
     }))
-  const invertSizeBinOptions = getOptions(sizeBinChoices?.data ?? [])
+  const invertSizeBinOptions = getOptions(sizeBinChoices?.data ?? []).map((option) => ({
+    ...option,
+    label: formatSizeBinOptionLabel(option.label),
+  }))
   const reefSlopeOptions = getOptions(choices.reefslopes?.data ?? [])
   const visibilityOptions = getOptions(choices.visibilities?.data ?? [])
   const currentOptions = getOptions(choices.currents?.data ?? [])
