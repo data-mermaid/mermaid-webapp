@@ -6,7 +6,6 @@ import { matchSorter } from 'match-sorter'
 import { Menu, Item } from './InputAutocomplete.styles'
 import { Input, HelperText } from '../form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import theme from '../../../theme'
 
 const AutoCompleteInput = styled(Input)`
   width: 100%;
@@ -14,22 +13,6 @@ const AutoCompleteInput = styled(Input)`
 `
 const AutoCompleteResultsWrapper = styled.div`
   position: relative;
-
-  & > div {
-    z-index: 110;
-    position: absolute;
-    display: block;
-    width: 100%;
-    top: 4rem;
-    outline: ${theme.color.outline};
-    outline-offset: -2px;
-    background: ${theme.color.white};
-
-    > p {
-      margin: 0;
-      padding: ${theme.spacing.buttonPadding};
-    }
-  }
 `
 
 const InputAutocomplete = ({
@@ -173,9 +156,13 @@ const InputAutocomplete = ({
             >
               {isMenuOpen && menuItems.length > 0 && getMenuContents(downshiftObject)}
               {isMenuOpen && !menuItems.length && noResultsText && (
-                <Item data-testid="noResult">{noResultsText}</Item>
+                <Item role="presentation" data-testid="noResult">
+                  {noResultsText}
+                </Item>
               )}
-              {isMenuOpen && !menuItems.length && noResultsAction && <Item>{noResultsAction}</Item>}
+              {isMenuOpen && !menuItems.length && noResultsAction && (
+                <Item role="presentation">{noResultsAction}</Item>
+              )}
             </Menu>
           </AutoCompleteResultsWrapper>
         )
