@@ -6,6 +6,13 @@ import theme from '../../../theme'
 export const StyledDropdownContainer = styled(DropdownContainer)`
   background-color: ${theme.color.white};
   border: solid 1px ${theme.color.border};
+  white-space: nowrap;
+  ${({ $alignRight }) =>
+    $alignRight &&
+    css`
+      left: auto;
+      right: 0;
+    `}
 `
 
 export const DropdownItemStyle = styled.button`
