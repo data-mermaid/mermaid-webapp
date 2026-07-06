@@ -31,7 +31,7 @@ Reviewing and merging that pull request is **your responsibility** - see [Review
 
 When the pull runs, it opens a pull request on GitHub containing the translation changes. Getting it reviewed, merged, and live is **your responsibility**:
 
-1. **Open the PR** in GitHub - it's on the branch `chore/lokalise-translations` and labelled `i18n`.
+1. **Open the PR** in GitHub - it's on the branch `chore/lokalise-translations` and labelled `i18n` and `automated`.
 2. **Review the changes** - look through the diff (the "Files changed" tab) and confirm the translations look correct and nothing unexpected changed.
 3. **Approve** the pull request.
 4. **Merge** it into `develop`.
@@ -47,7 +47,10 @@ When developers **change** existing English text, the affected tokens' review st
 
 ## English source - hands off (mostly)
 
-English is the source of truth in the code. In Lokalise, only **text normalization** (capitalization, punctuation, small wording tidy-ups) is acceptable for English strings. Larger verbiage changes should go through a ticket so they land in the code first - editing English freely in Lokalise could cause merge conflicts.
+- For **new** keys, English in the code is the source of truth - developers add them to `src/locales/en/translation.json` and the push sends them up to Lokalise.
+- For **existing** keys, **Lokalise is the source of truth for the English text** - the pull overwrites `en/translation.json` with Lokalise's export, so English normalization done in Lokalise flows back into the code.
+
+In Lokalise, only **text normalization** (capitalization, punctuation, small wording tidy-ups) is acceptable for English strings. Larger verbiage changes should go through a ticket so they land in the code first - editing English freely in Lokalise could cause merge conflicts.
 
 ## Previewing Indonesian (QA)
 

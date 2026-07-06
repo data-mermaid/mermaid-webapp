@@ -4,7 +4,8 @@ How English source and translated strings move between the codebase and Lokalise
 
 ## Overview
 
-- English is the **source of truth**, in `src/locales/en/translation.json`.
+- English is the **source of truth for new keys**, in `src/locales/en/translation.json` - developers add them in code and the push sends them up to Lokalise.
+- **Lokalise is the source of truth for existing keys' English** - the pull overwrites `en/translation.json` with Lokalise's export, so English normalization done there flows back into the code.
 - Target-language values are authored and **reviewed in Lokalise**, then pulled back.
 - Two token-based GitHub Actions do the sync, using the `LOKALISE_API_TOKEN` and `LOKALISE_PROJECT_ID` secrets:
   - **Push** (`.github/workflows/lokalise-push.yml`) - uploads English source to Lokalise, automatically on merge to `develop` (plus a manual option).
@@ -61,7 +62,7 @@ The intended design is to export **reviewed-only** strings (`filter_data: ["revi
 
 Both workflows keep their automatic triggers **and** stay available to run by hand whenever you need to - the automation is in addition to, not instead of, manual runs. Actions → select the workflow → **Run workflow** (branch `develop`), or:
 
-```
+```bash
 gh workflow run lokalise-pull.yml --ref develop
 gh workflow run lokalise-push.yml --ref develop
 ```
