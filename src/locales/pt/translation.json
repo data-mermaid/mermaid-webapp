@@ -20,6 +20,11 @@
     "add_macroinvertebrate": "Propor novas espécies de macroinvertebrados",
     "attribute_proposal_summary": "Sua proposta {{attribute}} Será analisado pela equipe MERMAID. Eles aprovarão a inclusão na taxonomia ou entrarão em contato para dar seguimento ao assunto."
   },
+  "management_regimes": {
+    "export": "Gestão de exportações",
+    "new": "Nova gestão",
+    "new_mr": "Nova gestão"
+  },
   "projects": {
     "demo": {
       "copy_unavailable": "A função de copiar está desativada no projeto de demonstração."
