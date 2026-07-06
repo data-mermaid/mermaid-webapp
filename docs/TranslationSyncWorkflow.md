@@ -42,6 +42,7 @@ flowchart LR
 - Opens a PR against `develop` (branch `chore/lokalise-translations`, labels `i18n,automated`).
 - Runs **weekly (Mondays 09:00 UTC)** and **on demand** (`workflow_dispatch`). The PR body says "Automated weekly pull" vs "Manual pull" depending on the trigger.
 - **Overwrites** the locale files with what Lokalise exports (it does not merge). The app falls back to English for anything missing.
+- **Includes English** via `always_pull_base: true` - without it the action drops base-language changes and `en/translation.json` never updates (see [Critical configuration](#critical-configuration-and-why)).
 - Pulls **all enabled languages** (currently `en`, `id`, `es`, `fr`, `pt`, `tl`).
 
 ### Reviewed-only filter (currently disabled)
@@ -53,6 +54,7 @@ The intended design is to export **reviewed-only** strings (`filter_data: ["revi
 ## Critical configuration (and why)
 
 - **Key filenames must be `src/locales/%LANG_ISO%/translation.json`.** This is what maps Lokalise files to the repo. Bare filenames (e.g. `translation.json`) silently break the pull with "No changes detected". Set in Lokalise via bulk **File: assign**.
+- **`always_pull_base: true`** (pull config) - the pull action **defaults this to `false`**, which silently drops base-language (English) changes: target languages sync but `en/translation.json` is never updated. It **must** be set to `true` for Lokalise's English source-of-truth edits on existing keys to flow back (see [Pull](#pull-lokalise--code)).
 - **`plural_format: i18next_v4`** - matches the code's `_one` / `_other` plural keys (i18next v4). The older `i18next` (v3, `_plural`) would break pluralization.
 - **`json_unescaped_slashes: true`** - exports `/` instead of `\/`, matching the repo and prettier (avoids diff noise).
 - **`filter_data: ["reviewed_only"]`** - the reviewed-only filter, **currently disabled/removed** (see [Reviewed-only filter](#reviewed-only-filter-currently-disabled)). `export_empty_as: skip`, `export_sort: a_z`, 2-space indent.
@@ -73,6 +75,7 @@ gh workflow run lokalise-push.yml --ref develop
 - **Pull PR deletes many translations** - this happens when the reviewed-only filter is on but those strings aren't marked Reviewed (overwrite + reviewed-only). The filter is currently disabled to avoid exactly this; before re-enabling it, mark all needed strings Reviewed first.
 - **Escaped-slash or plural churn in a PR** - check `json_unescaped_slashes` and `plural_format` in the pull config.
 - **A just-reviewed string isn't in the pull** - Lokalise export can lag a few minutes after the Reviewed flag is set; re-run the pull.
+- **English edits made in Lokalise don't reach the repo (but target languages do)** - the pull's `always_pull_base` is `false` (its default). It must be `true`, or the action silently drops all base-language changes.
 
 ## Languages and rollout phases
 
