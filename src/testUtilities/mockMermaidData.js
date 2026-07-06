@@ -3156,8 +3156,9 @@ const benthic_attributes = [
     status: 10,
     created_on: '2021-01-25T09:47:50.448879Z',
     updated_on: '2021-06-16T13:29:10.087019Z',
+    // proposed by the mock current user, so it remains selectable in observation inputs
     name: 'Dead Coral with Algae',
-    created_by: '8aab2cc3-d76e-4c78-ab45-6b59b387c7b0',
+    created_by: 'fake-id',
     parent: 'abde283f-5dd4-4a67-bc0b-e7403ad9c517',
     life_history: null,
     regions: [],
@@ -3256,8 +3257,9 @@ const invert_attributes = [
     status: 10,
     created_on: '2022-11-03T10:08:03.777000Z',
     updated_on: '2022-11-03T10:08:03.777000Z',
+    // proposed by the mock current user, so it remains selectable in observation inputs
     name: 'Test Proposed Invert Attribute',
-    created_by: '8aab2cc3-d76e-4c78-ab45-6b59b387c7b0',
+    created_by: 'fake-id',
     parent: '8b70dc27-598e-47ef-b413-53f8d02e5750',
     life_history: null,
     regions: [],

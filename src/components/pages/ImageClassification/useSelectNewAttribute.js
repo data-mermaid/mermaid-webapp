@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { getBenthicOptions } from '../../../library/getOptions'
+import getSelectableAttributes from '../../../App/mermaidData/getSelectableAttributes'
 import { toast } from 'react-toastify'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const isAClassifierGuessOfSelectedPoint = (annotations, ba_gr) =>
@@ -19,6 +21,7 @@ export const useSelectNewAttribute = ({
   const [selectedBenthicAttr, setSelectedBenthicAttr] = useState('')
   const [selectedGrowthForm, setSelectedGrowthForm] = useState('')
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const { currentUser } = useCurrentUser()
 
   const handleDisplayNewRowSelection = () => {
     const promises = [
@@ -28,7 +31,9 @@ export const useSelectNewAttribute = ({
 
     Promise.all(promises)
       .then(([benthicAttributes, choices]) => {
-        const benthicOptions = getBenthicOptions(benthicAttributes)
+        const benthicOptions = getBenthicOptions(
+          getSelectableAttributes(benthicAttributes, currentUser?.id),
+        )
         const growthFormOptions = choices.growthforms.data
         setBenthicAttributeSelectOptions(benthicOptions)
         setGrowthFormSelectOptions(growthFormOptions)
