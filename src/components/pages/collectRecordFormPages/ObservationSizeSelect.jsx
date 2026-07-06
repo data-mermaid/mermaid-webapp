@@ -5,6 +5,17 @@ import { Select } from '../../generic/form'
 import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import { hasNonEmptyValue } from '../../../library/hasNonEmptyValue'
 
+const sanitizeNumericDecimalInput = (value) => {
+  const digitsAndDotOnly = String(value ?? '').replace(/[^\d.]/g, '')
+  const [integerPart = '', ...decimalParts] = digitsAndDotOnly.split('.')
+  const decimalPart = decimalParts.join('').slice(0, 1)
+  const sanitizedValue = digitsAndDotOnly.includes('.')
+    ? `${integerPart}.${decimalPart}`
+    : integerPart
+
+  return Number(sanitizedValue)
+}
+
 const ObservationSizeSelect = ({
   onValueEntered,
   onKeyDown,
@@ -21,7 +32,9 @@ const ObservationSizeSelect = ({
   const optionSelected = isValue50OrMore ? 50 : value
 
   const [show50PlusInput, setShow50PlusInput] = useState(isValue50OrMore)
-  const [plus50Value, setPlus50Value] = useState(isValue50OrMore ? value : 50)
+  const [plus50Value, setPlus50Value] = useState(
+    isValue50OrMore ? sanitizeNumericDecimalInput(value) : 50,
+  )
 
   useEffect(() => {
     if (!hasNonEmptyValue(value)) {
@@ -32,7 +45,7 @@ const ObservationSizeSelect = ({
 
     if (isValue50OrMore) {
       setShow50PlusInput(true)
-      setPlus50Value(value)
+      setPlus50Value(sanitizeNumericDecimalInput(value))
     } else {
       setShow50PlusInput(false)
     }
@@ -41,21 +54,25 @@ const ObservationSizeSelect = ({
   const handleSelectOnChange = (event) => {
     const selectedValue = event.target.value
     const isSelectedValue50 = selectedValue === '50'
-    const valueToSubmit = isSelectedValue50 ? plus50Value : selectedValue
+    const valueToSubmit = isSelectedValue50
+      ? plus50Value
+      : sanitizeNumericDecimalInput(selectedValue)
 
     setShow50PlusInput(isSelectedValue50)
     onValueEntered(valueToSubmit)
   }
 
   const handlePlus50OnChange = (event) => {
-    setPlus50Value(event.target.value)
+    const sanitizedValue = sanitizeNumericDecimalInput(event.target.value)
+    setPlus50Value(sanitizedValue)
   }
 
   const handlePlus50OnBlur = (event) => {
-    const eventValue = Number(event.target.value)
-    const validPlus50Value = Number.isFinite(eventValue) && eventValue >= 50 ? eventValue : ''
+    const sanitizedValue = sanitizeNumericDecimalInput(event.target.value)
+    const isValidPlus50Value = sanitizedValue >= 50
 
-    onValueEntered(validPlus50Value)
+    setPlus50Value(isValidPlus50Value ? sanitizedValue : 50)
+    onValueEntered(isValidPlus50Value ? sanitizedValue : '')
   }
 
   return (
@@ -80,13 +97,13 @@ const ObservationSizeSelect = ({
       </Select>
       {show50PlusInput && (
         <InputNumberNoScrollWithUnit
-          value={plus50Value}
+          value={Number.isNaN(plus50Value) ? '' : plus50Value}
           onChange={handlePlus50OnChange}
           onBlur={handlePlus50OnBlur}
           type="number"
           min="50"
           unit="cm"
-          step="any"
+          step="0.1"
           aria-labelledby={labelledBy}
           data-testid={plusInputTestId}
           disabled={disabled}
