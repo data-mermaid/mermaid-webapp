@@ -5,18 +5,13 @@ import {
   choicesPropType,
   submittedBeltInvertPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import {
-  MacroinvertebrateObservationsSummaryStats,
-  SubmittedObservationStickyTable,
-  Tr,
-  Td,
-  Th,
-} from '../../../generic/Table/table'
+import { SubmittedObservationStickyTable, Tr, Td } from '../../../generic/Table/table'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.styles'
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import { useBeltInvertDensityMetrics } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
+import MacroinvertebrateSummaryStats from '../../BeltInvert/MacroinvertebrateSummaryStats'
 import { hasNonEmptyValue } from '../../../../library/hasNonEmptyValue'
 import ViewNotesModal from './ViewNotesModal'
 import styles from './SubmittedBeltInvertObservationTable.module.scss'
@@ -69,9 +64,7 @@ const SubmittedBeltInvertObservationTable = ({
       <Td $align="center">{index + 1}</Td>
       <Td $align="left">{getInvertName(item.invert_attribute)}</Td>
       {hasSizeData && (
-        <Td $align="right">
-          {hasNonEmptyValue(item.size) ? roundToOneDecimal(item.size) : ''}
-        </Td>
+        <Td $align="right">{hasNonEmptyValue(item.size) ? roundToOneDecimal(item.size) : ''}</Td>
       )}
       <Td $align="right">{item.count}</Td>
       {item.notes?.trim() ? (
@@ -129,33 +122,11 @@ const SubmittedBeltInvertObservationTable = ({
         </SubmittedObservationStickyTable>
       </StyledOverflowWrapper>
       <UnderTableRow>
-        <MacroinvertebrateObservationsSummaryStats>
-          <thead>
-            <Tr>
-              <Th colSpan={2}>
-                {t('macroinvertebrate_observations.density_by_group_of_interest_units')}
-              </Th>
-            </Tr>
-          </thead>
-          <tbody>
-            {Object.entries(densityByGoi).map(([groupName, groupDensity]) => {
-              return (
-                <Tr key={groupName}>
-                  <Th className="goi-density">{groupName}</Th>
-                  <Td>{roundToOneDecimal(groupDensity)}</Td>
-                </Tr>
-              )
-            })}
-            <Tr>
-              <Th>{t('observations.total_density_units')}</Th>
-              <Td>{roundToOneDecimal(totalDensity)}</Td>
-            </Tr>
-            <Tr>
-              <Th>{t('total_abundance')}</Th>
-              <Td>{abundance.toFixed(1)}</Td>
-            </Tr>
-          </tbody>
-        </MacroinvertebrateObservationsSummaryStats>
+        <MacroinvertebrateSummaryStats
+          densityByGoi={densityByGoi}
+          totalDensity={totalDensity}
+          abundance={abundance}
+        />
       </UnderTableRow>
     </InputWrapper>
   )
