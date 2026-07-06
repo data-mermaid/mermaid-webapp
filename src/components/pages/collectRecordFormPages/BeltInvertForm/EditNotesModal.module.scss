@@ -20,6 +20,8 @@
 
   &:hover {
     background: theme.$tableRowEven;
+    outline: theme.$border-medium solid theme.$primary;
+    outline-offset: -2px;
   }
 
   &:focus {
@@ -36,7 +38,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
-  text-decoration: underline;
   word-break: break-word;
   padding-left: theme.$spacing-medium;
 }
