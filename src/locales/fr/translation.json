@@ -515,6 +515,7 @@
   "loading_indicator": "Indicateur de chargement",
   "loading_item": "Chargement de {{itemName}}",
   "macroinvertebrate_observations": {
+    "add_macroinvertebrate": "Proposer de nouvelles espèces de macroinvertébrés",
     "attribute_proposal_summary": "Votre proposition {{attribute}} L'équipe MERMAID examinera votre proposition. Elle l'approuvera pour inclusion dans la taxonomie ou vous contactera pour un suivi."
   },
   "management_regime": "Régime de gestion",

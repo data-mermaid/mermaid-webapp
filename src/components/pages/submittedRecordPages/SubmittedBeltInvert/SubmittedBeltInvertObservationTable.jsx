@@ -5,17 +5,14 @@ import {
   choicesPropType,
   submittedBeltInvertPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import {
-  SubmittedObservationStickyTable,
-  Tr,
-  Td,
-} from '../../../generic/Table/table'
+import { SubmittedObservationStickyTable, Tr, Td } from '../../../generic/Table/table'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { TheadItem, FormSubTitle, UnderTableRow } from '../SubmittedFormPage.styles'
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import { useBeltInvertDensityMetrics } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
 import MacroinvertebrateSummaryStats from '../../BeltInvert/MacroinvertebrateSummaryStats'
+import { hasNonEmptyValue } from '../../../../library/hasNonEmptyValue'
 import ViewNotesModal from './ViewNotesModal'
 import styles from './SubmittedBeltInvertObservationTable.module.scss'
 
@@ -60,13 +57,15 @@ const SubmittedBeltInvertObservationTable = ({
   const handleDismissNotesModal = () => {
     setNotesModalObservationId(null)
   }
-  const hasSizeData = obs_belt_inverts.some((item) => item.size)
+  const hasSizeData = obs_belt_inverts.some((item) => hasNonEmptyValue(item.size))
 
   const observationBeltInverts = obs_belt_inverts.map((item, index) => (
     <Tr key={item.id}>
       <Td $align="center">{index + 1}</Td>
       <Td $align="left">{getInvertName(item.invert_attribute)}</Td>
-      {hasSizeData && <Td $align="left">{item.size ? roundToOneDecimal(item.size) : ''}</Td>}
+      {hasSizeData && (
+        <Td $align="right">{hasNonEmptyValue(item.size) ? roundToOneDecimal(item.size) : ''}</Td>
+      )}
       <Td $align="right">{item.count}</Td>
       {item.notes?.trim() ? (
         <Td
@@ -111,7 +110,7 @@ const SubmittedBeltInvertObservationTable = ({
             <Tr>
               <TheadItem> </TheadItem>
               <TheadItem $align="left">{t('observations.macroinvertebrate_name')}</TheadItem>
-              {hasSizeData && <TheadItem $align="left">{t('size_cm')}</TheadItem>}
+              {hasSizeData && <TheadItem $align="right">{t('size_cm')}</TheadItem>}
               <TheadItem $align="right">{t('count')}</TheadItem>
               <TheadItem $align="left">{t('notes')}</TheadItem>
               <TheadItem $align="right">{`${t('density')} (${t(

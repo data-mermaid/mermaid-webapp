@@ -508,6 +508,7 @@
   "loading_indicator": "Indikator Pemuatan",
   "loading_item": "Memuat {{itemName}}",
   "macroinvertebrate_observations": {
+    "add_macroinvertebrate": "Mengusulkan spesies makroinvertebrata baru",
     "attribute_proposal_summary": "Usulan Anda mengenai \" {{attribute}} \" akan ditinjau oleh tim MERMAID. Mereka akan menyetujuinya untuk dimasukkan ke dalam taksonomi atau menghubungi Anda untuk tindak lanjut."
   },
   "management_regime": "Rezim manajemen",
