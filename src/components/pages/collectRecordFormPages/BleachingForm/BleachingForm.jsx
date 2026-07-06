@@ -9,6 +9,7 @@ import {
   getSampleInfoInitialValues,
 } from '../collectRecordFormInitialValues'
 import { getBenthicOptions } from '../../../../library/getOptions'
+import getSelectableAttributes from '../../../../App/mermaidData/getSelectableAttributes'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoBleachingRecord } from '../reformatFormValuesIntoRecord'
@@ -105,7 +106,11 @@ const BleachingForm = ({ isNewRecord = true }) => {
               )
 
               setCollectRecordBeingEdited(collectRecordResponse)
-              setBenthicAttributeSelectOptions(getBenthicOptions(resolvedBenthicAttributes))
+              setBenthicAttributeSelectOptions(
+                getBenthicOptions(
+                  getSelectableAttributes(resolvedBenthicAttributes, currentUser.id),
+                ),
+              )
               setSites(sitesResponse)
               setIsLoading(false)
             }
@@ -129,6 +134,7 @@ const BleachingForm = ({ isNewRecord = true }) => {
       handleHttpResponseError,
       isSyncInProgress,
       errorMessage,
+      currentUser,
     ],
   )
 
@@ -160,12 +166,14 @@ const BleachingForm = ({ isNewRecord = true }) => {
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
-        const updatedBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+        const updatedBenthicAttributeOptions = getBenthicOptions(
+          getSelectableAttributes(benthicAttributes, currentUser.id),
+        )
 
         setBenthicAttributeSelectOptions(updatedBenthicAttributeOptions)
       })
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, currentUser])
 
   const closeNewBenthicAttributeModal = () => {
     setIsNewBenthicAttributeModalOpen(false)

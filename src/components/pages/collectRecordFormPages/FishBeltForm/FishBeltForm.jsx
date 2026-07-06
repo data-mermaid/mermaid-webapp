@@ -14,6 +14,7 @@ import {
 } from '../collectRecordFormInitialValues'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
+import getSelectableAttributes from '../../../../App/mermaidData/getSelectableAttributes'
 import { reformatFormValuesIntoFishBeltRecord } from '../reformatFormValuesIntoRecord'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
@@ -121,7 +122,7 @@ const FishBeltForm = ({ isNewRecord = true }) => {
               })
 
               const updateFishNameOptions = getFishNameOptions({
-                species: resolvedFishSpecies,
+                species: getSelectableAttributes(resolvedFishSpecies, currentUser.id),
                 genera: fishGeneraResponse,
                 families: fishFamiliesResponse,
                 groupings: fishGroupingsResponse,
@@ -172,6 +173,7 @@ const FishBeltForm = ({ isNewRecord = true }) => {
     handleHttpResponseError,
     isSyncInProgress,
     errorMessage,
+    currentUser,
   ])
 
   const closeNewObservationModal = () => {
@@ -214,7 +216,7 @@ const FishBeltForm = ({ isNewRecord = true }) => {
         databaseSwitchboardInstance.getFishFamilies(),
       ]).then(([species, genera, families]) => {
         const updateFishNameOptions = getFishNameOptions({
-          species,
+          species: getSelectableAttributes(species, currentUser.id),
           genera,
           families,
         })
@@ -222,7 +224,7 @@ const FishBeltForm = ({ isNewRecord = true }) => {
         setFishNameOptions(updateFishNameOptions)
       })
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, currentUser])
 
   const onSubmitNewFishSpecies = ({ genusId, genusName, speciesName }) => {
     databaseSwitchboardInstance
