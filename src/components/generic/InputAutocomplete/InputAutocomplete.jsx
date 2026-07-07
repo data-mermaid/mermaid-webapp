@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { styled } from 'styled-components'
 import Downshift from 'downshift'
@@ -38,6 +38,7 @@ const InputAutocomplete = ({
   const [selectedValue, setSelectedValue] = useState(optionMatchingValueProp)
   const [menuItems, setMenuItems] = useState(options)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const menuRef = useRef(null)
 
   const _updateSelectedValueWhenPropsChange = useEffect(() => {
     setIsMenuOpen(false)
@@ -87,9 +88,14 @@ const InputAutocomplete = ({
 
   const handleInputValueChange = useCallback(
     (inputValueItem) => {
-      // scroll to bottom of page to show full menu contents
+      // Nudge the open dropdown into view when it's the last row, without
+      // jumping the whole page to the bottom (which overshoots when other
+      // content is rendered below the table, e.g. the density summary).
+      // Deferred a frame so the scroll uses the freshly filtered menu height.
       if (isLastRow && isMenuOpen) {
-        window.scrollTo(0, document.body.scrollHeight)
+        requestAnimationFrame(() => {
+          menuRef.current?.scrollIntoView?.({ block: 'nearest' })
+        })
       }
 
       const matchingMenuItems = inputValueItem
@@ -152,6 +158,7 @@ const InputAutocomplete = ({
               {...getMenuProps({
                 $isOpen: isMenuOpen,
                 'data-testid': menuTestId,
+                ref: menuRef,
               })}
             >
               {isMenuOpen && menuItems.length > 0 && getMenuContents(downshiftObject)}
