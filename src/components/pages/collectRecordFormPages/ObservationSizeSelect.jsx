@@ -54,9 +54,7 @@ const ObservationSizeSelect = ({
   const handleSelectOnChange = (event) => {
     const selectedValue = event.target.value
     const isSelectedValue50 = selectedValue === '50'
-    const valueToSubmit = isSelectedValue50
-      ? plus50Value
-      : sanitizeNumericDecimalInput(selectedValue)
+    const valueToSubmit = isSelectedValue50 ? plus50Value : selectedValue
 
     setShow50PlusInput(isSelectedValue50)
     onValueEntered(valueToSubmit)
@@ -71,7 +69,9 @@ const ObservationSizeSelect = ({
     const sanitizedValue = sanitizeNumericDecimalInput(event.target.value)
     const isValidPlus50Value = sanitizedValue >= 50
 
-    setPlus50Value(isValidPlus50Value ? sanitizedValue : 50)
+    if (isValidPlus50Value) {
+      setPlus50Value(sanitizedValue)
+    }
     onValueEntered(isValidPlus50Value ? sanitizedValue : '')
   }
 
