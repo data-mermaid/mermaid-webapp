@@ -218,6 +218,7 @@
       "indicators_enable_failed": "Hindi makapagdagdag ng mga indicator ng GFCR sa proyekto."
     },
     "exporting": "Nag-e-export...",
+    "facilities_solutions": "Mga pasilidad / solusyon",
     "form_errors": "Mga error sa porma:",
     "forms": {
       "common": {
@@ -466,7 +467,9 @@
   "loading_item": "Nilo-load ang {{itemName}}",
   "macroinvertebrate_observations": {
     "add_macroinvertebrate": "Magmungkahi ng mga bagong uri ng macroinvertebrate",
-    "attribute_proposal_summary": "Ang iyong iminungkahi {{attribute}} ay susuriin ng pangkat ng MERMAID. Aaprubahan nila ito para maisama sa taxonomy o makikipag-ugnayan sa iyo para sa follow-up."
+    "add_notes": "I-click para magdagdag ng mga tala...",
+    "attribute_proposal_summary": "Ang iyong iminungkahi {{attribute}} ay susuriin ng pangkat ng MERMAID. Aaprubahan nila ito para maisama sa taxonomy o makikipag-ugnayan sa iyo para sa follow-up.",
+    "click_or_press_space_to_add_notes": "I-click o pindutin ang space para magdagdag ng mga tala..."
   },
   "management_regime": "Pamamahala ng rehimen",
   "management_regimes": {

@@ -218,6 +218,7 @@
       "indicators_enable_failed": "No se pudieron agregar indicadores GFCR al proyecto."
     },
     "exporting": "Exportador...",
+    "facilities_solutions": "Instalaciones / soluciones",
     "form_errors": "Errores de formato:",
     "forms": {
       "common": {
@@ -469,7 +470,9 @@
   "loading_item": "Cargando {{itemName}}",
   "macroinvertebrate_observations": {
     "add_macroinvertebrate": "Proponer nuevas especies de macroinvertebrados",
-    "attribute_proposal_summary": "Su propuesta {{attribute}} Será revisado por el equipo de MERMAID. Ellos aprobarán su inclusión en la taxonomía o se pondrán en contacto con usted para darle seguimiento."
+    "add_notes": "Haz clic para añadir notas...",
+    "attribute_proposal_summary": "Su propuesta {{attribute}} Será revisado por el equipo de MERMAID. Ellos aprobarán su inclusión en la taxonomía o se pondrán en contacto con usted para darle seguimiento.",
+    "click_or_press_space_to_add_notes": "Haz clic o pulsa la barra espaciadora para añadir notas..."
   },
   "management_regime": "Régimen de gestión",
   "management_regimes": {
