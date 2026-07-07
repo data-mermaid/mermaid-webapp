@@ -29,6 +29,10 @@ import { getToastArguments } from '../../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
+import {
+  formikHandleGfcrNumberInputChange,
+  formikHandleIntegerInputOnBlur,
+} from '../../../../../library/formik/formikHandleInputTypes'
 import { getOptions } from '../../../../../library/getOptions'
 import { IconInfo } from '../../../../icons'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
@@ -195,18 +199,25 @@ const FinanceSolutionModal = ({
         errors.geographical_coverage = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      if (
-        NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES.includes(values.fs_type) &&
-        Number(values.number_of_solutions_supported_by) <= 0
-      ) {
-        errors.number_of_solutions_supported_by = [
-          { code: t('forms.required_field'), id: 'Required' },
-        ]
-      }
-
       return errors
     },
   })
+
+  const handleNumberOfSolutionsChange = (event) => {
+    formikHandleGfcrNumberInputChange({
+      formik,
+      event,
+      fieldName: 'number_of_solutions_supported_by',
+    })
+  }
+
+  const handleNumberOfSolutionsBlur = (event) => {
+    formikHandleIntegerInputOnBlur({
+      formik,
+      event,
+      fieldName: 'number_of_solutions_supported_by',
+    })
+  }
 
   const handleDelete = useCallback(async () => {
     setIsDeleting(true)
@@ -451,10 +462,13 @@ const FinanceSolutionModal = ({
           <StyledModalInputRow>
             <InputNoRowWithLabelAndValidation
               label={t('gfcr.forms.finance_solutions.number_of_solutions_supported_by')}
-              id="number-of-solutions-input"
-              type="number"
-              min="1"
+              id="number_of_solutions_supported_by"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               {...formik.getFieldProps('number_of_solutions_supported_by')}
+              onChange={handleNumberOfSolutionsChange}
+              onBlur={handleNumberOfSolutionsBlur}
               required={true}
             />
           </StyledModalInputRow>

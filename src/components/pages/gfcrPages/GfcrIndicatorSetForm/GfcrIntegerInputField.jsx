@@ -13,6 +13,7 @@ const GfcrIntegerInputField = ({
   displayHelp = false,
   handleInputFocus = () => {},
   formik,
+  required = false,
 }) => {
   const handleBlur = (event) => {
     formikHandleIntegerInputOnBlur({
@@ -40,6 +41,7 @@ const GfcrIntegerInputField = ({
       pattern="[0-9]*"
       helperText={helperText}
       showHelperText={displayHelp}
+      required={required}
       {...formik.getFieldProps(id)}
       onBlur={handleBlur}
       onFocus={handleInputFocus}
@@ -55,6 +57,7 @@ GfcrIntegerInputField.propTypes = {
   helperText: PropTypes.node,
   handleInputFocus: PropTypes.func,
   formik: PropTypes.object.isRequired,
+  required: PropTypes.bool,
 }
 
 export default GfcrIntegerInputField
