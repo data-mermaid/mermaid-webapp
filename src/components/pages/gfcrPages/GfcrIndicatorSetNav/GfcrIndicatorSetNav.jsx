@@ -146,7 +146,7 @@ const GfcrIndicatorSetNav = ({ selectedNavItem, setSelectedNavItem }) => {
           setSelectedNavItem(e.currentTarget.id)
         }}
       >
-        {t('gfcr.facilities_solutions')}
+        {t('gfcr.businesses_finance_solutions')}
       </NavSubHeader>
       <NavSubHeader
         id="investments"
