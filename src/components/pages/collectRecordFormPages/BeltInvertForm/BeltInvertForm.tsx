@@ -10,6 +10,7 @@ import {
 } from '../collectRecordFormInitialValues'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getOptions } from '../../../../library/getOptions'
+import getSelectableAttributes from '../../../../App/mermaidData/getSelectableAttributes'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoBeltInvertRecord } from '../reformatFormValuesIntoRecord'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
@@ -211,9 +212,11 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
 
   const invertAttributeParentOptions = useMemo(() => {
     // Filter to only genus-level attributes for species creation
-    const genusList = invertAttributes.filter((attr) => attr.taxonomic_rank === 'genus')
+    const genusList = getSelectableAttributes(invertAttributes, currentUser?.id).filter(
+      (attr) => attr.taxonomic_rank === 'genus',
+    )
     return getOptions(genusList)
-  }, [invertAttributes])
+  }, [invertAttributes, currentUser])
 
   const onSubmitNewInvertAttribute = (
     submissionValues: NewAttributeModalSubmissionValues,

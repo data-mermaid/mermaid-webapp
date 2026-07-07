@@ -11,6 +11,7 @@ import {
 } from '../collectRecordFormInitialValues'
 
 import { getBenthicOptions } from '../../../../library/getOptions'
+import getSelectableAttributes from '../../../../App/mermaidData/getSelectableAttributes'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoBenthicPQTRecord } from '../reformatFormValuesIntoRecord'
@@ -118,7 +119,11 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
               )
 
               setCollectRecordBeingEdited(collectRecordResponse)
-              setBenthicAttributeSelectOptions(getBenthicOptions(resolvedBenthicAttributes))
+              setBenthicAttributeSelectOptions(
+                getBenthicOptions(
+                  getSelectableAttributes(resolvedBenthicAttributes, currentUser.id),
+                ),
+              )
               setSites(sitesResponse)
 
               setIsLoading(false)
@@ -143,6 +148,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       handleHttpResponseError,
       isSyncInProgress,
       errorMessage,
+      currentUser,
     ],
   )
 
@@ -180,12 +186,14 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
-        const updatedBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+        const updatedBenthicAttributeOptions = getBenthicOptions(
+          getSelectableAttributes(benthicAttributes, currentUser.id),
+        )
 
         setBenthicAttributeSelectOptions(updatedBenthicAttributeOptions)
       })
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, currentUser])
 
   const onSubmitNewBenthicAttribute = ({
     benthicAttributeParentId,

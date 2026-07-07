@@ -20,6 +20,8 @@ import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
+import getSelectableAttributes from '../../../../App/mermaidData/getSelectableAttributes'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import ObservationValidationInfo from '../ObservationValidationInfo'
@@ -68,6 +70,8 @@ interface InvertAttributeOptionInput {
   parent?: string | null
   taxonomic_rank?: string | null
   group_of_interest?: string | null
+  status?: number | null
+  created_by?: string | null
 }
 
 interface SelectOption {
@@ -410,6 +414,7 @@ const BeltInvertObservationTable = ({
   testId,
 }: BeltInvertObservationTableProps) => {
   const { t } = useTranslation()
+  const { currentUser } = useCurrentUser()
   const sizeBinSelected = formik?.values?.size_bin
   const transectLengthSurveyed = Number(formik?.values?.len_surveyed)
   const selectedWidthId = formik?.values?.width
@@ -451,13 +456,18 @@ const BeltInvertObservationTable = ({
   }
 
   const invertAttributeOptions = useMemo(() => {
-    return ((invertAttributes as InvertAttributeOptionInput[]) ?? []).map(
-      ({ id, name, display_name }) => ({
-        label: display_name ?? name,
-        value: id,
-      }),
+    // Other users' proposed attributes can be present in offline storage for
+    // read-only display purposes, but must not be selectable for observations.
+    const selectableInvertAttributes = getSelectableAttributes(
+      (invertAttributes as InvertAttributeOptionInput[]) ?? [],
+      currentUser?.id,
     )
-  }, [invertAttributes])
+
+    return selectableInvertAttributes.map(({ id, name, display_name }) => ({
+      label: display_name ?? name,
+      value: id,
+    }))
+  }, [invertAttributes, currentUser])
   const sizeOptions = useMemo(
     () => buildSizeOptionsFromBinLabel(sizeBinSelectedLabel),
     [sizeBinSelectedLabel],
