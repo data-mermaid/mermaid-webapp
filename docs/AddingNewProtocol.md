@@ -3,7 +3,7 @@
 Use a feature gate so in-progress work for a new protocol can merge safely without exposing unfinished UI in production.
 
 - Requirements:
-  Add or reuse feature-flag infrastructure that reads a backend-provided optional feature (for example, `<new_protocol>_enabled`) and gates rendering through a reusable wrapper.
+  Reuse existing feature-flag infrastructure that reads a backend-provided optional feature (for example, `<new_protocol>_enabled`) and gates rendering through a reusable wrapper. Also ensure the API/database feature-flag row exists (for example, a `MERMAIDFeature` row named `<new_protocol>_enabled`), otherwise frontend gating will never activate.
 - Acceptance criteria:
   1.  A backend-driven boolean feature flag is available to the frontend.
   2.  Frontend logic can read the flag from current user optional features.
@@ -11,8 +11,18 @@ Use a feature gate so in-progress work for a new protocol can merge safely witho
   4.  Lint/tests pass.
 - Possible files that may be affected or need to be added:
   1.  src/components/generic/GatedFeature/GatedFeature.tsx
-  2.  src/components/generic/GatedFeature/index.js
+  2.  src/components/generic/GatedFeature/index.ts
   3.  src/library/getCurrentUserOptionalFeature.ts
+
+### Cross-Repo Prerequisite Before Frontend Step 2
+
+Before starting frontend core data-layer registration, deploy API changes for the new protocol through API URL/endpoint registration steps.
+
+- Requirements:
+  API-side protocol constant(s), `data_policy_<new_protocol>` model field(s), and sample-unit-method endpoint slug should exist in dev before frontend core data-layer wiring begins.
+- Acceptance criteria:
+  1.  API readme protocol registration steps (including URL registration) are complete and deployed to dev.
+  2.  Frontend step 2 uses confirmed API slugs/field names, not placeholders.
 
 ### Register New Protocol in Core Data Layer
 
@@ -142,6 +152,8 @@ Replace placeholder observations with full row editing and optional propose-new-
 
 - Requirements:
   Implement row CRUD, per-row validations, size/count/notes handling, and taxonomy proposal flow. Ensure behavior rules are explicit (gating, optional fields, alignment, keyboard interactions, decimal formatting, modal confirmations).
+  If the new protocol introduces its own taxonomy, include two-source taxonomy sync design in this step:
+  1. read-only hierarchy source and 2) writable leaf/species source, with frontend reconciliation between API type names and local table names.
 - Acceptance criteria:
   1.  Full observation table supports add/edit/delete/duplicate row behavior.
   2.  Observation reducer/actions cover required row state updates.
@@ -159,10 +171,14 @@ Replace placeholder observations with full row editing and optional propose-new-
   3.  src/components/pages/collectRecordFormPages/<NewProtocolForm>/<ObservationReducer>.js
   4.  src/components/pages/collectRecordFormPages/ObservationSizeSelect.jsx
   5.  src/components/pages/collectRecordFormPages/<NewProtocolForm>/<NotesModal>.tsx
-  6.  src/locales/en/translation.json
-  7.  src/App/mermaidData/pullApiData.js
-  8.  src/App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage.js
-  9.  src/App/mermaidData/databaseSwitchboard/\*Mixin.js
+  6.  src/components/NewAttributeModal.tsx
+  7.  src/locales/en/translation.json
+  8.  src/App/mermaidData/pullApiData.js
+  9.  src/App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage.js
+  10. src/App/mermaidData/databaseSwitchboard/\*Mixin.js
+  11. src/App/mermaidData/databaseSwitchboard/DatabaseSwitchboard.ts
+  12. src/App/mermaidData/getAttributesInUse.ts
+  13. src/App/mermaidData/getSelectableAttributes.ts
 
 ### Implement Submitted Record View and Calculated Metrics
 
