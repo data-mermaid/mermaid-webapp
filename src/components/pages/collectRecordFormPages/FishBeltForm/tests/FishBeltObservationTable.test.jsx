@@ -203,3 +203,42 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
   const sizeInput = await within(observationsTable).findByTestId('fish-size-50-input')
   await waitFor(() => expect(sizeInput).toBeInTheDocument())
 })
+
+test.each([
+  ['5 cm bin', 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf'],
+  ['10 cm bin', '3232100a-a9b2-462c-955c-0dae7b72514f'],
+])('Fishbelt >50 size input keeps one decimal for %s', async (_label, sizeBinId) => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+  const { user } = renderAuthenticatedOnline(
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt"
+        element={<FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />}
+      />
+    </Routes>,
+    {
+      isSyncInProgressOverride: true,
+      dexiePerUserDataInstance,
+      initialEntries: ['/projects/5/collecting/fishbelt/'],
+    },
+  )
+
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
+  const fishbeltForm = screen.getByRole('form')
+
+  await user.selectOptions(within(screen.getByTestId('size-bin')).getByRole('combobox'), sizeBinId)
+
+  const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
+  const sizeSelect = await within(observationsTable).findByTestId('fish-size-select')
+  await user.selectOptions(sizeSelect, '50')
+
+  const sizeInput = await within(observationsTable).findByTestId('fish-size-50-input')
+
+  await user.clear(sizeInput)
+  await user.type(sizeInput, '52.3456')
+
+  expect(sizeInput).toHaveDisplayValue('52.3')
+})
