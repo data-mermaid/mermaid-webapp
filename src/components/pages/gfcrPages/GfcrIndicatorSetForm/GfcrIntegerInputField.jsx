@@ -5,6 +5,7 @@ import {
   formikHandleIntegerInputOnBlur,
 } from '../../../../library/formik/formikHandleInputTypes'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
+import InputNoRowWithLabelAndValidation from '../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 
 const GfcrIntegerInputField = ({
   id,
@@ -14,6 +15,7 @@ const GfcrIntegerInputField = ({
   handleInputFocus = () => {},
   formik,
   required = false,
+  noRow = false,
 }) => {
   const handleBlur = (event) => {
     formikHandleIntegerInputOnBlur({
@@ -31,17 +33,19 @@ const GfcrIntegerInputField = ({
     })
   }
 
+  const InputComponent = noRow ? InputNoRowWithLabelAndValidation : InputWithLabelAndValidation
+
   return (
-    <InputWithLabelAndValidation
+    <InputComponent
       label={label}
       id={id}
       type="text"
-      $textAlign="right"
       inputMode="numeric"
       pattern="[0-9]*"
       helperText={helperText}
       showHelperText={displayHelp}
       required={required}
+      {...(noRow ? {} : { $textAlign: 'right' })}
       {...formik.getFieldProps(id)}
       onBlur={handleBlur}
       onFocus={handleInputFocus}
@@ -58,6 +62,7 @@ GfcrIntegerInputField.propTypes = {
   handleInputFocus: PropTypes.func,
   formik: PropTypes.object.isRequired,
   required: PropTypes.bool,
+  noRow: PropTypes.bool,
 }
 
 export default GfcrIntegerInputField

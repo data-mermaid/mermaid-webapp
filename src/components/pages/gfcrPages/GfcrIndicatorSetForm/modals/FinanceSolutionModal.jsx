@@ -29,10 +29,7 @@ import { getToastArguments } from '../../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
-import {
-  formikHandleGfcrNumberInputChange,
-  formikHandleIntegerInputOnBlur,
-} from '../../../../../library/formik/formikHandleInputTypes'
+import GfcrIntegerInputField from '../GfcrIntegerInputField'
 import { getOptions } from '../../../../../library/getOptions'
 import { IconInfo } from '../../../../icons'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
@@ -202,22 +199,6 @@ const FinanceSolutionModal = ({
       return errors
     },
   })
-
-  const handleNumberOfSolutionsChange = (event) => {
-    formikHandleGfcrNumberInputChange({
-      formik,
-      event,
-      fieldName: 'number_of_solutions_supported_by',
-    })
-  }
-
-  const handleNumberOfSolutionsBlur = (event) => {
-    formikHandleIntegerInputOnBlur({
-      formik,
-      event,
-      fieldName: 'number_of_solutions_supported_by',
-    })
-  }
 
   const handleDelete = useCallback(async () => {
     setIsDeleting(true)
@@ -460,16 +441,12 @@ const FinanceSolutionModal = ({
         )}
         {showNumberOfSolutionsSupportedBy && (
           <StyledModalInputRow>
-            <InputNoRowWithLabelAndValidation
+            <GfcrIntegerInputField
               label={t('gfcr.forms.finance_solutions.number_of_solutions_supported_by')}
               id="number_of_solutions_supported_by"
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              {...formik.getFieldProps('number_of_solutions_supported_by')}
-              onChange={handleNumberOfSolutionsChange}
-              onBlur={handleNumberOfSolutionsBlur}
-              required={true}
+              formik={formik}
+              required
+              noRow
             />
           </StyledModalInputRow>
         )}
