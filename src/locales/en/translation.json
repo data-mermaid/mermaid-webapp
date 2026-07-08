@@ -36,7 +36,7 @@
   "benthic_observations": {
     "add_benthic_attribute": "Propose new benthic attribute",
     "attribute_already_exists": "Proposed attribute {{attribute}} already exists in the list. Observation has been updated with this attribute.",
-    "attribute_proposal_summary": "Your proposed attribute {{attribute}} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.",
+    "attribute_proposal_summary": "Your proposed attribute {{attribute}} will be reviewed by the MERMAID team. Once approved, it will be included in our taxonomic database or we will contact you.",
     "benthic_attribute": "Benthic attribute",
     "benthic_attribute_info": "Benthic attribute observed. A benthic attribute can be a taxonomic name for a coral or other sessile organism, or an abiotic classification. MERMAID benthic attributes are organized hierarchically and are consistent with <helperTextLink>WoRMS.</helperTextLink>",
     "errors": {
@@ -529,9 +529,9 @@
   "loading_indicator": "Loading indicator",
   "loading_item": "Loading {{itemName}}",
   "macroinvertebrate_observations": {
-    "add_macroinvertebrate": "Add macroinvertebrate species",
+    "add_macroinvertebrate": "Propose macroinvertebrate species",
     "add_notes": "Click to add notes...",
-    "attribute_proposal_summary": "Your proposed {{attribute}} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.",
+    "attribute_proposal_summary": "Your proposed {{attribute}} will be reviewed by the MERMAID team. Once approved, it will be included in our taxonomic database or we will contact you.",
     "click_or_press_space_to_add_notes": "Click or press space to add notes...",
     "density_by_group_of_interest_units": "Density by group of interest (ind/ha)",
     "edit_notes": "Edit Notes",
@@ -562,7 +562,7 @@
     "duplicate_management": "Duplicate management",
     "duplicate_mr": "Duplicate MR",
     "edit_mr": "Edit MR",
-    "export": "Export MRs",
+    "export": "Export management",
     "export_mrs": "Export management",
     "gear_restriction": "Gear restrictions",
     "gear_restriction_info": "Restrictions on what types of fishing gear can be used",
@@ -577,7 +577,7 @@
     "missing_mr_name": "(Missing MR name)",
     "name_info": "Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a governmental or standardized source such as <helperTextLink>protectedseas.net</helperTextLink>; alternatively, a descriptive local label like 'Northeast Point seasonal closure' can be used.",
     "new": "New management regime",
-    "new_mr": "New management regime",
+    "new_mr": "New management",
     "no_data_info": "This page will show the management regime of submitted sample units by method and site.",
     "no_management_regimes": "This project has no management regimes.",
     "no_take": "No take",
