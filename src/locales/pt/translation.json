@@ -1,4 +1,7 @@
 {
+  "benthic_observations": {
+    "attribute_proposal_summary": "Seu atributo proposto {{attribute}} Será analisado pela equipe MERMAID. Após a aprovação, será incluído em nosso banco de dados taxonômico ou entraremos em contato com você."
+  },
   "buttons": {
     "suggestion_review_request": "Enviar para revisão"
   },
@@ -6,7 +9,6 @@
     "submit_for_review": "Enviar para revisão"
   },
   "gfcr": {
-    "facilities_solutions": "Instalações/soluções",
     "forms": {
       "finance_solutions": {
         "business_finance_solution": "Instalação/solução",
