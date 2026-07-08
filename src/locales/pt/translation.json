@@ -6,6 +6,7 @@
     "submit_for_review": "Enviar para revisão"
   },
   "gfcr": {
+    "facilities_solutions": "Instalações/soluções",
     "forms": {
       "finance_solutions": {
         "business_finance_solution": "Instalação/solução",
@@ -18,7 +19,14 @@
   },
   "macroinvertebrate_observations": {
     "add_macroinvertebrate": "Propor novas espécies de macroinvertebrados",
-    "attribute_proposal_summary": "Sua proposta {{attribute}} Será analisado pela equipe MERMAID. Eles aprovarão a inclusão na taxonomia ou entrarão em contato para dar seguimento ao assunto."
+    "add_notes": "Clique para adicionar notas...",
+    "attribute_proposal_summary": "Sua proposta {{attribute}} Será analisado pela equipe MERMAID. Eles aprovarão a inclusão na taxonomia ou entrarão em contato para dar seguimento ao assunto.",
+    "click_or_press_space_to_add_notes": "Clique ou pressione a barra de espaço para adicionar notas..."
+  },
+  "management_regimes": {
+    "export": "Gestão de exportações",
+    "new": "Nova gestão",
+    "new_mr": "Nova gestão"
   },
   "projects": {
     "demo": {
@@ -46,8 +54,6 @@
   },
   "users": {
     "messages": {
-      "sample_units_transfer_one": "{{count}} unidade de amostra transferida",
-      "sample_units_transfer_other": "{{count}} unidades de amostra transferidas",
       "sample_units_transferred_one": "{{count}} unidade de amostra transferida",
       "sample_units_transferred_other": "{{count}} unidades de amostra transferidas"
     }
