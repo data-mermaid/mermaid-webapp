@@ -30,14 +30,20 @@ fi
 echo "Pulling latest develop and main..."
 git checkout develop && git pull
 git checkout main && git pull
-git fetch --tags
+# --force lets mutable tags (e.g. lokalise-sync-develop, which the Lokalise
+# workflow keeps moving) update in place instead of aborting with "would
+# clobber existing tag". Annotated release tags (vX.Y.Z) never move, so this
+# only affects sync tags.
+git fetch --tags --force
 
 # Verify package.json version matches the latest git tag.
 # If they drift (e.g. someone tagged manually without bumping package.json),
 # `npm version` can either fail ("tag already exists") or silently produce a
 # version lower than an existing tag. Abort and let the user reconcile first.
 PKG_VERSION=$(node -p "require('./package.json').version")
-LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
+# Filter to semver release tags only. Without the grep, a non-version tag
+# (e.g. lokalise-sync-develop) could sort to the top and break the comparison.
+LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
 LATEST_TAG_VERSION="${LATEST_TAG#v}"
 if [[ "$PKG_VERSION" != "$LATEST_TAG_VERSION" ]]; then
   echo "Error: package.json version ($PKG_VERSION) does not match latest tag ($LATEST_TAG)."

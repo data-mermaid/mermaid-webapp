@@ -113,6 +113,7 @@ If you would like to suppress missing act warnings in your test console, you can
 
 - Available at [app.datamermaid.org](https://app.datamermaid.org)
 - Is updated using semantically versioned (eg: `v2.0` or `v2.0.0`) tag creation
+- To cut a release, run `scripts/release.sh` - see the [Release Workflow](docs/ReleaseWorkflow.md) guide
 
 ### Infrastructure as Code (IaC)
 
