@@ -1,0 +1,24 @@
+.clickableNotesTd {
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    background: #f4f4f6;
+  }
+
+  &:focus {
+    outline: 2px solid #1f5f95;
+    outline-offset: -2px;
+  }
+}
+
+.notesCellText {
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}

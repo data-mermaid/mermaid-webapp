@@ -1,0 +1,184 @@
+import { describe, expect, test } from 'vitest'
+import '@testing-library/jest-dom'
+import React from 'react'
+import { mockT } from '../../../../testUtilities/mockT'
+
+import {
+  screen,
+  within,
+  renderAuthenticatedOffline,
+  waitFor,
+} from '../../../../testUtilities/testingLibraryWithHelpers'
+import App from '../../../App'
+import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+
+const saveBeltInvertRecord = async (user) => {
+  await user.selectOptions(await screen.findByTestId('site-select'), '1')
+  await user.selectOptions(await screen.findByTestId('management-select'), '2')
+  await user.type(await screen.findByTestId('depth-input'), '10000')
+  await user.type(await screen.findByTestId('sample-date-input'), '2021-04-21')
+  await user.type(await screen.findByTestId('sample-time-input'), '12:34')
+  await user.type(await screen.findByTestId('transect-number-input'), '56')
+  await user.type(await screen.findByTestId('label-input'), 'some label')
+  await user.type(await screen.findByTestId('len-surveyed-input'), '2')
+  await user.selectOptions(
+    await screen.findByTestId('width-select'),
+    'e1a133d3-70fe-403c-aed2-a70d630ef910',
+  )
+  await user.selectOptions(
+    await screen.findByTestId('size-bin-select'),
+    'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+  )
+  await user.selectOptions(
+    await screen.findByTestId('reef-slope-select'),
+    'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+  )
+  await user.selectOptions(
+    await screen.findByTestId('visibility-select'),
+    'a3ba3f14-330d-47ee-9763-bc32d37d03a5',
+  )
+  await user.selectOptions(
+    await screen.findByTestId('current-select'),
+    'e5dcb32c-614d-44ed-8155-5911b7ee774a',
+  )
+  await user.selectOptions(
+    await screen.findByTestId('relative-depth-select'),
+    '8f381e71-219e-469c-8c13-231b088fb861',
+  )
+  await user.selectOptions(
+    await screen.findByTestId('tide-select'),
+    '97a63da7-e98c-4be7-8f13-e95d38aa17ae',
+  )
+  await user.type(await screen.findByTestId('notes-textarea'), 'some notes')
+  await user.click(await screen.findByTestId('save-button'))
+}
+describe('Offline', () => {
+  test('New belt invert save success shows saved input values, toast, and navigates to edit belt invert page for new record', async () => {
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/macroinvertebrate/'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
+
+    await saveBeltInvertRecord(user)
+
+    expect(await screen.findByTestId('saved-button'))
+
+    // ensure the new form is now the edit form
+    expect(await screen.findByTestId('record-form-title'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('site-select')).toHaveDisplayValue('Site A')
+      expect(screen.getByTestId('management-select')).toHaveDisplayValue(
+        'Management Regimes B [Management Regimes 2]',
+      )
+      expect(screen.getByTestId('depth-input')).toHaveValue(10000)
+      expect(screen.getByTestId('sample-date-input')).toHaveValue('2021-04-21')
+      expect(screen.getByTestId('sample-time-input')).toHaveValue('12:34')
+      expect(screen.getByTestId('transect-number-input')).toHaveValue(56)
+      expect(screen.getByTestId('label-input')).toHaveValue('some label')
+      expect(screen.getByTestId('len-surveyed-input')).toHaveValue(2)
+      expect(screen.getByTestId('width-select')).toHaveDisplayValue('2 m')
+      expect(screen.getByTestId('size-bin-select')).toHaveDisplayValue('1.0')
+      expect(screen.getByTestId('reef-slope-select')).toHaveDisplayValue('flat')
+      expect(screen.getByTestId('visibility-select')).toHaveDisplayValue('1-5m - poor')
+      expect(screen.getByTestId('current-select')).toHaveDisplayValue('high')
+      expect(screen.getByTestId('relative-depth-select')).toHaveDisplayValue('deep')
+      expect(screen.getByTestId('tide-select')).toHaveDisplayValue('falling')
+      expect(screen.getByTestId('notes-textarea')).toHaveValue('some notes')
+    })
+  })
+
+  test('New belt invert save success show new record in collecting table', async () => {
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/macroinvertebrate/'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
+
+    await saveBeltInvertRecord(user)
+
+    expect(await screen.findByTestId('saved-button'))
+
+    const sideNav = await screen.findByTestId('content-page-side-nav')
+
+    await user.click(within(sideNav).getByTestId('nav-collecting'))
+
+    const pageSizeSelector = await screen.findByTestId('page-size-selector')
+
+    // show all the records
+    await waitFor(() => expect(pageSizeSelector))
+    await user.selectOptions(pageSizeSelector, '24')
+    const table = await screen.findByRole('table')
+
+    const linksToBeltInvertRecords = within(table).getAllByRole('link', {
+      name: 'protocol_titles.macroinvertebrate',
+    })
+
+    // 3: 2 existing macroinvertebrate mock records + the one we just created
+    expect(linksToBeltInvertRecords).toHaveLength(3)
+    expect(mockT).toHaveBeenCalledWith('protocol_titles.macroinvertebrate')
+
+    // expect unique depth as proxy for new belt invert
+    expect(await within(table).findByText('10000'))
+  })
+
+  test('New belt invert save failure shows toast message with edits persisting', async () => {
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+    dexiePerUserDataInstance.collect_records.put = () => Promise.reject()
+    const { user } = renderAuthenticatedOffline(
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/macroinvertebrate/'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
+
+    await saveBeltInvertRecord(user)
+
+    expect(await screen.findByTestId('save-button'))
+
+    // ensure the were not in edit mode, but new belt invert mode
+    expect(screen.getByTestId('macroinvertebrate-page-title'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('site-select')).toHaveDisplayValue('Site A')
+      expect(screen.getByTestId('management-select')).toHaveDisplayValue(
+        'Management Regimes B [Management Regimes 2]',
+      )
+      expect(screen.getByTestId('depth-input')).toHaveValue(10000)
+      expect(screen.getByTestId('sample-date-input')).toHaveValue('2021-04-21')
+      expect(screen.getByTestId('sample-time-input')).toHaveValue('12:34')
+      expect(screen.getByTestId('transect-number-input')).toHaveValue(56)
+      expect(screen.getByTestId('label-input')).toHaveValue('some label')
+      expect(screen.getByTestId('len-surveyed-input')).toHaveValue(2)
+      expect(screen.getByTestId('width-select')).toHaveDisplayValue('2 m')
+      expect(screen.getByTestId('size-bin-select')).toHaveDisplayValue('1.0')
+      expect(screen.getByTestId('reef-slope-select')).toHaveDisplayValue('flat')
+      expect(screen.getByTestId('visibility-select')).toHaveDisplayValue('1-5m - poor')
+      expect(screen.getByTestId('current-select')).toHaveDisplayValue('high')
+      expect(screen.getByTestId('relative-depth-select')).toHaveDisplayValue('deep')
+      expect(screen.getByTestId('tide-select')).toHaveDisplayValue('falling')
+      expect(screen.getByTestId('notes-textarea')).toHaveValue('some notes')
+    })
+  })
+})

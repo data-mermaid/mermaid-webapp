@@ -43,7 +43,7 @@ describe('Offline', () => {
     const pageSizeSelector = await screen.findByTestId('page-size-selector')
 
     await waitFor(() => expect(pageSizeSelector))
-    await user.selectOptions(pageSizeSelector, '20')
+    await user.selectOptions(pageSizeSelector, '22')
 
     const table = await screen.findByRole('table')
 
@@ -51,7 +51,7 @@ describe('Offline', () => {
       name: 'protocol_titles.fishbelt',
     })
 
-    // row length = 15 because 16 mock records, now minus 1
+    // row length = 15 because 16 mock fishbelt records, now minus 1
     expect(linksToFishbeltRecords).toHaveLength(15)
     expect(mockT).toHaveBeenCalledWith('protocol_titles.fishbelt')
   })

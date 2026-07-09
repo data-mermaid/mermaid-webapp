@@ -11,6 +11,7 @@ import {
 } from '../collectRecordFormInitialValues'
 
 import { getBenthicOptions } from '../../../../library/getOptions'
+import getSelectableAttributes from '../../../../App/mermaidData/getSelectableAttributes'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoBenthicPitRecord } from '../reformatFormValuesIntoRecord'
@@ -71,10 +72,27 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
         }
 
         Promise.all(promises)
-          .then(([benthicAttributesResponse, sitesResponse, collectRecordResponse]) => {
+          .then(async ([benthicAttributesResponse, sitesResponse, collectRecordResponse]) => {
             if (isMounted.current) {
+              let resolvedBenthicAttributes = benthicAttributesResponse
+
               if (!isNewRecord && !collectRecordResponse && recordId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
+              }
+
+              const observationAttributeIds =
+                collectRecordResponse?.data?.obs_benthic_pits
+                  ?.map((observation) => observation?.attribute)
+                  .filter(Boolean) ?? []
+
+              if (observationAttributeIds.length) {
+                await databaseSwitchboardInstance.ensureBenthicAttributesLoaded(
+                  observationAttributeIds,
+                )
+                resolvedBenthicAttributes = await databaseSwitchboardInstance.getBenthicAttributes()
+                if (!isMounted.current) {
+                  return
+                }
               }
 
               setSubNavNode(
@@ -87,7 +105,11 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
               )
 
               setCollectRecordBeingEdited(collectRecordResponse)
-              setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributesResponse))
+              setBenthicAttributeSelectOptions(
+                getBenthicOptions(
+                  getSelectableAttributes(resolvedBenthicAttributes, currentUser.id),
+                ),
+              )
               setSites(sitesResponse)
 
               setIsLoading(false)
@@ -112,6 +134,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
       handleHttpResponseError,
       isSyncInProgress,
       errorMessage,
+      currentUser,
     ],
   )
 
@@ -144,10 +167,12 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
-        setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributes))
+        setBenthicAttributeSelectOptions(
+          getBenthicOptions(getSelectableAttributes(benthicAttributes, currentUser.id)),
+        )
       })
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, currentUser])
 
   const closeNewBenthicAttributeModal = () => {
     setIsNewBenthicAttributeModalOpen(false)

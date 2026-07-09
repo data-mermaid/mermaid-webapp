@@ -88,11 +88,23 @@ export const _submittedFishBeltObservationPropType = PropTypes.shape({
   created_on: PropTypes.string,
   updated_on: PropTypes.string,
   count: PropTypes.number,
-  include: PropTypes.bool,
   notes: PropTypes.string,
   created_by: PropTypes.string,
   beltfish: PropTypes.string,
   fish_attribute: PropTypes.string,
+})
+
+export const _submittedBeltInvertObservationPropType = PropTypes.shape({
+  id: PropTypes.string,
+  updated_by: PropTypes.string,
+  size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  created_on: PropTypes.string,
+  updated_on: PropTypes.string,
+  count: PropTypes.number,
+  notes: PropTypes.string,
+  created_by: PropTypes.string,
+  beltinvert: PropTypes.string,
+  invert_attribute: PropTypes.string,
 })
 
 export const _submittedBenthicPhotoQuadratObservationPropType = PropTypes.shape({
@@ -183,6 +195,24 @@ export const submittedFishBeltPropType = PropTypes.shape({
   fishbelt_transect: _fishBeltTransectPropType,
   observers: PropTypes.arrayOf(observerPropType),
   obs_belt_fishes: PropTypes.arrayOf(_submittedFishBeltObservationPropType),
+})
+
+export const submittedBeltInvertPropType = PropTypes.shape({
+  id: PropTypes.string,
+  sample_event: _sampleEventPropType,
+  beltinvert_transect: PropTypes.shape({
+    depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    label: PropTypes.string,
+    len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    reef_slope: PropTypes.string,
+    sample_time: PropTypes.string,
+    size_bin: PropTypes.string,
+    width: PropTypes.string,
+    notes: PropTypes.string,
+  }),
+  observers: PropTypes.arrayOf(observerPropType),
+  obs_belt_inverts: PropTypes.arrayOf(_submittedBeltInvertObservationPropType),
 })
 
 export const submittedBenthicPhotoQuadratPropType = PropTypes.shape({
@@ -401,22 +431,12 @@ export const observationsReducerPropType = (props, propName, componentName) => {
 }
 
 export const notificationsPropType = PropTypes.shape({
-  count: PropTypes.number,
-  next: PropTypes.string,
-  previous: PropTypes.string,
-  results: PropTypes.arrayOf(
-    PropTypes.shape({
-      created_by: PropTypes.string,
-      created_on: PropTypes.string,
-      description: PropTypes.string,
-      id: PropTypes.string,
-      owner: PropTypes.string,
-      status: PropTypes.string,
-      title: PropTypes.string,
-      updated_by: PropTypes.string,
-      updated_on: PropTypes.string,
-    }),
-  ),
+  notifications: PropTypes.array,
+  deleteNotification: PropTypes.func,
+  deleteAllNotifications: PropTypes.func,
+  isAnimating: PropTypes.bool,
+  markNotificationsOpened: PropTypes.func,
+  stopAnimation: PropTypes.func,
 })
 
 // Start of PropTypes for validation object

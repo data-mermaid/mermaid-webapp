@@ -35,14 +35,14 @@ test('Collect page only shows records that arent marked to be deleted next sync'
 
   const pageSizeSelector = await screen.findByTestId('page-size-selector')
 
-  await waitFor(() => expect(within(pageSizeSelector).getByText('20')))
+  await waitFor(() => expect(within(pageSizeSelector).getByText('22')))
 
   // show all the records
-  await user.selectOptions(pageSizeSelector, '20')
+  await user.selectOptions(pageSizeSelector, '22')
 
   const rows = await screen.findAllByRole('row')
 
-  expect(rows).toHaveLength(21)
+  expect(rows).toHaveLength(23)
 })
 
 test('Sites page only shows records that arent marked to be deleted next sync', async () => {

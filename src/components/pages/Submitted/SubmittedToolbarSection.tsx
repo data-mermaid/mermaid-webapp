@@ -122,7 +122,7 @@ const SubmittedToolbarSection = ({
             />
           ) : null}
         </FilterItems>
-        <ButtonSecondaryDropdown label={label}>
+        <ButtonSecondaryDropdown label={label} align="right">
           <Column as="nav" data-testid="export-to-csv">
             <DropdownItemStyle
               as="button"

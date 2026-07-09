@@ -29,13 +29,17 @@ jobs:
           translations_path: src/locales
           file_format: json
           base_lang: en
+          # Include base-language (English) changes in the pull. The action
+          # defaults this to false, which silently drops Lokalise's English
+          # source-of-truth edits for existing keys (only target languages sync).
+          always_pull_base: true
           skip_include_tags: true
           override_branch_name: chore/lokalise-translations
           override_base_branch: develop
           git_commit_message: "chore(i18n): pull latest translations from Lokalise"
           pr_title: "chore(i18n): pull latest translations from Lokalise"
           pr_body: |
-            Automated weekly pull of translated strings from [Lokalise](https://lokalise.com/).
+            ${{ github.event_name == 'workflow_dispatch' && 'Manual pull of reviewed translations from' || 'Automated weekly pull of reviewed translations from' }} [Lokalise](https://lokalise.com/).
 
             **Review checklist:**
             - [ ] Verify translation values look correct
@@ -48,6 +52,6 @@ jobs:
               "export_empty_as": "skip",
               "export_sort": "a_z",
               "replace_breaks": false,
-              "plural_format": "i18next",
-              "filter_data": ["reviewed_only"]
+              "plural_format": "i18next_v4",
+              "json_unescaped_slashes": true
             }

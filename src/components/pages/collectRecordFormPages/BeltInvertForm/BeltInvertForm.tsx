@@ -10,6 +10,7 @@ import {
 } from '../collectRecordFormInitialValues'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getOptions } from '../../../../library/getOptions'
+import getSelectableAttributes from '../../../../App/mermaidData/getSelectableAttributes'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoBeltInvertRecord } from '../reformatFormValuesIntoRecord'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
@@ -83,8 +84,15 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
 
       Promise.all(promises)
         .then(
-          ([sitesResponse, invertAttributesResponse, projectResponse, collectRecordResponse]) => {
+          async ([
+            sitesResponse,
+            invertAttributesResponse,
+            projectResponse,
+            collectRecordResponse,
+          ]) => {
             if (isMounted.current) {
+              let resolvedInvertAttributes = invertAttributesResponse
+
               if (!isNewRecord && !collectRecordResponse && recordId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
@@ -94,8 +102,23 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
                 )
               }
 
+              const observationAttributeIds =
+                collectRecordResponse?.data?.obs_belt_inverts
+                  ?.map((observation) => observation?.invert_attribute)
+                  .filter(Boolean) ?? []
+
+              if (observationAttributeIds.length) {
+                await databaseSwitchboardInstance.ensureInvertAttributesLoaded(
+                  observationAttributeIds,
+                )
+                resolvedInvertAttributes = await databaseSwitchboardInstance.getInvertAttributes()
+                if (!isMounted.current) {
+                  return
+                }
+              }
+
               // Treat only a missing/invalid response as load failure.
-              if (!Array.isArray(invertAttributesResponse)) {
+              if (!Array.isArray(resolvedInvertAttributes)) {
                 setInvertAttributesLoadError(true)
                 toast.error(
                   ...getToastArguments(
@@ -104,7 +127,7 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
                 )
               } else {
                 setInvertAttributesLoadError(false)
-                setInvertAttributes(invertAttributesResponse)
+                setInvertAttributes(resolvedInvertAttributes)
               }
 
               setSubNavNode(
@@ -189,9 +212,11 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
 
   const invertAttributeParentOptions = useMemo(() => {
     // Filter to only genus-level attributes for species creation
-    const genusList = invertAttributes.filter((attr) => attr.taxonomic_rank === 'genus')
+    const genusList = getSelectableAttributes(invertAttributes, currentUser?.id).filter(
+      (attr) => attr.taxonomic_rank === 'genus',
+    )
     return getOptions(genusList)
-  }, [invertAttributes])
+  }, [invertAttributes, currentUser])
 
   const onSubmitNewInvertAttribute = (
     submissionValues: NewAttributeModalSubmissionValues,
@@ -238,10 +263,20 @@ const BeltInvertForm = ({ isNewRecord = true }: BeltInvertFormProps) => {
               }),
             ),
           )
+          setAreObservationsInputsDirty(true)
+          observationsDispatch({
+            type: 'updateInvertName',
+            payload: {
+              observationId: observationIdToAddNewInvertAttributeTo,
+              newInvertAttribute: error.existingSpecies.id,
+            },
+          })
+          // Keep duplicate behavior non-blocking so modal flow can complete.
+          return
         } else {
           toast.error(...getToastArguments(errorMessage))
+          throw error
         }
-        throw error
       })
   }
 

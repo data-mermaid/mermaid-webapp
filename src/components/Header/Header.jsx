@@ -13,10 +13,12 @@ import {
   UserMenuButton,
   UserMenu,
   BiggerIconBell,
+  BellWrapper,
   MediumIconExcel,
   BiggerIconMenu,
   LoggedInAs,
   HeaderIconWrapper,
+  VisuallyHidden,
 } from './Header.styles'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { IconGlobe, IconLibraryBooks } from '../icons'
@@ -129,7 +131,8 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const openProfileModal = () => setIsProfileModalOpen(true)
   const closeProfileModal = () => setIsProfileModalOpen(false)
-  const { notifications } = useBellNotifications()
+  const { notifications, isAnimating, stopAnimation, markNotificationsOpened } =
+    useBellNotifications()
   const { isAppOnline } = useOnlineStatus()
   const {
     first_name: currentUserFirstName,
@@ -175,12 +178,15 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
               <HideShow
                 closeOnClickWithin={false}
                 id="gtm-bell-notifications-hideshow"
+                onOpen={markNotificationsOpened}
                 button={
                   <HeaderButtonThatLooksLikeLink id="gtm-bell-notifications">
-                    <BiggerIconBell id="gtm-bell-notifications-icon" />
-                    {notifications.length ? (
-                      <NotificationIndicator>&bull;</NotificationIndicator>
-                    ) : undefined}
+                    <BellWrapper $animated={isAnimating} onAnimationEnd={stopAnimation}>
+                      <BiggerIconBell id="gtm-bell-notifications-icon" />
+                      {notifications.length ? (
+                        <NotificationIndicator>&bull;</NotificationIndicator>
+                      ) : undefined}
+                    </BellWrapper>
                   </HeaderButtonThatLooksLikeLink>
                 }
                 contents={<BellNotificationDropDown />}
@@ -204,12 +210,15 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
           <div className="mobile">
             {isAppOnline && (
               <HideShow
+                onOpen={markNotificationsOpened}
                 button={
                   <HeaderButtonThatLooksLikeLink>
-                    <BiggerIconBell />
-                    {notifications.length ? (
-                      <NotificationIndicator>&bull;</NotificationIndicator>
-                    ) : undefined}
+                    <BellWrapper $animated={isAnimating} onAnimationEnd={stopAnimation}>
+                      <BiggerIconBell />
+                      {notifications.length ? (
+                        <NotificationIndicator>&bull;</NotificationIndicator>
+                      ) : undefined}
+                    </BellWrapper>
                   </HeaderButtonThatLooksLikeLink>
                 }
                 contents={<BellNotificationDropDown />}
@@ -236,6 +245,9 @@ const Header = ({ logout = () => {}, currentUser = undefined }) => {
           </div>
         </GlobalNav>
       </StyledHeader>
+      <VisuallyHidden aria-live="polite" aria-atomic="true">
+        {isAnimating ? t('new_notifications_announced') : ''}
+      </VisuallyHidden>
       <ProfileModal isOpen={isProfileModalOpen} onDismiss={closeProfileModal} />
     </>
   )

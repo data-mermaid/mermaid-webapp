@@ -90,7 +90,7 @@ describe('Offline integration tests', () => {
 
     await waitFor(() => expect(projectOfflineCheckboxAfterProjectSetOffline).toBeChecked())
 
-    expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(22)
+    expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(24)
     expect((await dexiePerUserDataInstance.project_managements.toArray()).length).toEqual(
       mockMermaidData.project_managements.length,
     )

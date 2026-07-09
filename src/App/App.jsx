@@ -180,14 +180,20 @@ function App({ dexieCurrentUserInstance }) {
     apiSyncInstance,
   ])
 
-  const { notifications, deleteNotification, deleteAllNotifications } =
-    useInitializeBellNotifications({
-      apiBaseUrl,
-      getAccessToken,
-      isMermaidAuthenticated,
-      isAppOnline,
-      handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
-    })
+  const {
+    notifications,
+    deleteNotification,
+    deleteAllNotifications,
+    isAnimating,
+    markNotificationsOpened,
+    stopAnimation,
+  } = useInitializeBellNotifications({
+    apiBaseUrl,
+    getAccessToken,
+    isMermaidAuthenticated,
+    isAppOnline,
+    handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
+  })
 
   const deleteMermaidData = () => {
     dexiePerUserDataInstance.delete()
@@ -222,7 +228,14 @@ function App({ dexieCurrentUserInstance }) {
                 value={handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied}
               >
                 <BellNotificationProvider
-                  value={{ notifications, deleteNotification, deleteAllNotifications }}
+                  value={{
+                    notifications,
+                    deleteNotification,
+                    deleteAllNotifications,
+                    isAnimating,
+                    markNotificationsOpened,
+                    stopAnimation,
+                  }}
                 >
                   <GlobalStyle />
                   <CustomToastContainer limit={5} />

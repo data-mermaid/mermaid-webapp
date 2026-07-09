@@ -180,8 +180,8 @@ describe('Offline', () => {
 
     const pageSizeSelector = await screen.findByTestId('page-size-selector')
 
-    await waitFor(() => within(pageSizeSelector).getByText('22'))
-    await user.selectOptions(pageSizeSelector, '22')
+    await waitFor(() => within(pageSizeSelector).getByText('24'))
+    await user.selectOptions(pageSizeSelector, '24')
     const table = await screen.findByRole('table')
 
     const linksToBenthicPitRecords = within(table).getAllByRole('link', {

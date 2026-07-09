@@ -173,10 +173,10 @@ describe('Online', () => {
     await user.click(within(sideNav).getByTestId('nav-collecting'))
     const pageSizeSelector = await screen.findByTestId('page-size-selector')
 
-    await waitFor(() => within(pageSizeSelector).getByText('22'))
+    await waitFor(() => within(pageSizeSelector).getByText('24'))
 
     // show all the records
-    await user.selectOptions(pageSizeSelector, '22')
+    await user.selectOptions(pageSizeSelector, '24')
 
     const table = await screen.findByRole('table')
 

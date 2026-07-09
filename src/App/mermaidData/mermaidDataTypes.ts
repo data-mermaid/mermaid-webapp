@@ -70,10 +70,6 @@ interface BeltInvertTransect {
   sample_time?: string
   size_bin?: string
   width?: string
-  visibility?: string
-  current?: string
-  relative_depth?: string
-  tide?: string
   notes?: string
 }
 
@@ -104,7 +100,6 @@ interface SubmittedFishBeltObservation {
   created_on?: string
   updated_on?: string
   count?: number
-  include?: boolean
   notes?: string
   created_by?: string
   beltfish?: string
@@ -132,7 +127,6 @@ interface SubmittedBeltInvertObservation {
   created_on?: string
   updated_on?: string
   count?: number
-  include?: boolean
   notes?: string
   created_by?: string
   beltinvert?: string

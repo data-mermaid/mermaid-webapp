@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { styled } from 'styled-components'
 import Downshift from 'downshift'
@@ -6,7 +6,6 @@ import { matchSorter } from 'match-sorter'
 import { Menu, Item } from './InputAutocomplete.styles'
 import { Input, HelperText } from '../form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import theme from '../../../theme'
 
 const AutoCompleteInput = styled(Input)`
   width: 100%;
@@ -14,29 +13,6 @@ const AutoCompleteInput = styled(Input)`
 `
 const AutoCompleteResultsWrapper = styled.div`
   position: relative;
-
-  & > div {
-    z-index: 110;
-    position: absolute;
-    display: block;
-    width: 100%;
-    top: 4rem;
-    outline: ${theme.color.outline};
-    outline-offset: -2px;
-    background: ${theme.color.white};
-
-    > p {
-      margin: 0;
-      padding: ${theme.spacing.buttonPadding};
-    }
-  }
-
-  button {
-    width: 100%;
-    border: none;
-    text-align: start;
-    padding: ${theme.spacing.small};
-  }
 `
 
 const InputAutocomplete = ({
@@ -62,6 +38,7 @@ const InputAutocomplete = ({
   const [selectedValue, setSelectedValue] = useState(optionMatchingValueProp)
   const [menuItems, setMenuItems] = useState(options)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const menuRef = useRef(null)
 
   const _updateSelectedValueWhenPropsChange = useEffect(() => {
     setIsMenuOpen(false)
@@ -111,9 +88,14 @@ const InputAutocomplete = ({
 
   const handleInputValueChange = useCallback(
     (inputValueItem) => {
-      // scroll to bottom of page to show full menu contents
+      // Nudge the open dropdown into view when it's the last row, without
+      // jumping the whole page to the bottom (which overshoots when other
+      // content is rendered below the table, e.g. the density summary).
+      // Deferred a frame so the scroll uses the freshly filtered menu height.
       if (isLastRow && isMenuOpen) {
-        window.scrollTo(0, document.body.scrollHeight)
+        requestAnimationFrame(() => {
+          menuRef.current?.scrollIntoView?.({ block: 'nearest' })
+        })
       }
 
       const matchingMenuItems = inputValueItem
@@ -176,21 +158,19 @@ const InputAutocomplete = ({
               {...getMenuProps({
                 $isOpen: isMenuOpen,
                 'data-testid': menuTestId,
+                ref: menuRef,
               })}
             >
-              {isMenuOpen && getMenuContents(downshiftObject)}
+              {isMenuOpen && menuItems.length > 0 && getMenuContents(downshiftObject)}
+              {isMenuOpen && !menuItems.length && noResultsText && (
+                <Item role="presentation" data-testid="noResult">
+                  {noResultsText}
+                </Item>
+              )}
+              {isMenuOpen && !menuItems.length && noResultsAction && (
+                <Item role="presentation">{noResultsAction}</Item>
+              )}
             </Menu>
-            {isMenuOpen && !menuItems.length && (
-              <div>
-                {noResultsText && <p data-testid="noResult">{noResultsText}</p>}
-                {noResultsAction && (
-                  // role="presentation" marks this as a structural wrapper, not an interactive element.
-                  <div role="presentation" onClick={() => setIsMenuOpen(false)}>
-                    {noResultsAction}
-                  </div>
-                )}
-              </div>
-            )}
           </AutoCompleteResultsWrapper>
         )
       }}

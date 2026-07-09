@@ -1,4 +1,5 @@
 import { createUuid } from '../../../library/createUuid'
+import { ensureAttributesLoaded } from './ensureAttributesLoaded'
 
 const InvertAttributesMixin = (Base) =>
   class extends Base {
@@ -10,6 +11,16 @@ const InvertAttributesMixin = (Base) =>
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    ensureInvertAttributesLoaded = async function ensureInvertAttributesLoaded(attributeIds = []) {
+      return ensureAttributesLoaded({
+        ids: attributeIds,
+        dexieTable: this._dexiePerUserDataInstance.invert_attributes,
+        detailUrlById: (id) => `${this._apiBaseUrl}/invertattributes/${id}/`,
+        getAccessToken: this._getAccessToken,
+        isOnlineAuthenticatedAndReady: this._isOnlineAuthenticatedAndReady,
+      })
     }
 
     addInvertSpecies = async function addInvertSpecies({ genusId, genusName, speciesName }) {

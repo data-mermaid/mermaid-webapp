@@ -1,3 +1,5 @@
+@use '../../../../style/theme.scss' as theme;
+
 .colNumber {
   width: 5rem;
 }
@@ -14,6 +16,10 @@
   width: 10%;
 }
 
+.colDensity {
+  width: 12%;
+}
+
 .colInclude {
   width: 8%;
 }
@@ -28,4 +34,8 @@
 
 .colRemove {
   width: 5rem;
+}
+
+tbody tr td.tdCellText {
+  padding-right: theme.$spacing-x-small;
 }

@@ -19,14 +19,18 @@ const PositionedAncestor = styled.div`
   width: max-content;
 `
 
-const HideShow = ({ contents, button, closeOnClickWithin = true }) => {
+const HideShow = ({ contents, button, closeOnClickWithin = true, onOpen }) => {
   const [showItems, setShowItems] = useState(false)
   const buttonRef = useRef(null)
   const contentsRef = useRef(null)
   const isMounted = useIsMounted()
 
   const toggleShowItems = () => {
-    setShowItems(!showItems)
+    const willShow = !showItems
+    setShowItems(willShow)
+    if (willShow && onOpen) {
+      onOpen()
+    }
   }
 
   useEffect(() => {
@@ -82,6 +86,7 @@ HideShow.propTypes = {
   button: PropTypes.node.isRequired,
   contents: PropTypes.node.isRequired,
   closeOnClickWithin: PropTypes.bool,
+  onOpen: PropTypes.func,
 }
 
 export default HideShow

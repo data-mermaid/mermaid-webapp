@@ -1,0 +1,17 @@
+@use '../../../../style/theme.scss' as theme;
+
+.notesTextContainer {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  min-height: 14rem;
+  max-height: 22rem;
+  overflow-y: auto;
+  font-family: inherit;
+  padding: theme.$spacing-small;
+  font-size: theme.$default-font-size;
+  border: 1px solid #808183;
+}
+
+.notesSubheading {
+  margin: 0 0 theme.$spacing-medium 0;
+}

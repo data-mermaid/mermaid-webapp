@@ -4,6 +4,7 @@ import mockBenthicPitCollectRecords from './mockCollectRecords/mockBenthicPitCol
 import mockBleachingCollectRecords from './mockCollectRecords/mockBleachingCollectRecords'
 import mockFishbeltCollectRecords from './mockCollectRecords/mockFishbeltCollectRecords'
 import mockBenthicPhotoQuadratCollectRecords from './mockCollectRecords/mockBenthicPhotoQuadratCollectRecords'
+import mockBeltInvertCollectRecords from './mockCollectRecords/mockBeltInvertCollectRecords'
 
 const projects = [
   {
@@ -308,7 +309,6 @@ const fishBeltTransectMethods = [
         updated_on: '2021-07-20T19:31:39.295836Z',
         data: null,
         count: 1,
-        include: true,
         notes: '',
         created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
         beltfish: 'cbe69d6c-6b0d-4b3c-bba9-8817615d696a',
@@ -322,7 +322,6 @@ const fishBeltTransectMethods = [
         updated_on: '2021-07-20T19:31:39.313715Z',
         data: null,
         count: 2,
-        include: true,
         notes: '',
         created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
         beltfish: 'cbe69d6c-6b0d-4b3c-bba9-8817615d696a',
@@ -336,7 +335,6 @@ const fishBeltTransectMethods = [
         updated_on: '2021-07-20T19:31:39.330812Z',
         data: null,
         count: 1,
-        include: true,
         notes: '',
         created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
         beltfish: 'cbe69d6c-6b0d-4b3c-bba9-8817615d696a',
@@ -350,7 +348,6 @@ const fishBeltTransectMethods = [
         updated_on: '2021-07-20T19:31:39.346580Z',
         data: null,
         count: 2,
-        include: true,
         notes: '',
         created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
         beltfish: 'cbe69d6c-6b0d-4b3c-bba9-8817615d696a',
@@ -364,7 +361,6 @@ const fishBeltTransectMethods = [
         updated_on: '2021-07-20T19:31:39.364085Z',
         data: null,
         count: 3,
-        include: true,
         notes: '',
         created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
         beltfish: 'cbe69d6c-6b0d-4b3c-bba9-8817615d696a',
@@ -458,7 +454,6 @@ const fishBeltTransectMethods = [
         updated_on: '2021-07-20T19:31:39.295836Z',
         data: null,
         count: 1,
-        include: true,
         notes: '',
         created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
         beltfish: 'cbe69d6c-6b0d-4b3c-bba9-8817615d696a',
@@ -472,7 +467,6 @@ const fishBeltTransectMethods = [
         updated_on: '2021-07-20T19:31:39.313715Z',
         data: null,
         count: 2,
-        include: true,
         notes: '',
         created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
         beltfish: 'cbe69d6c-6b0d-4b3c-bba9-8817615d696a',
@@ -494,6 +488,7 @@ const collect_records = [
   ...mockBenthicLitCollectRecords,
   ...mockHabitatComplexityCollectRecords,
   ...mockBenthicPhotoQuadratCollectRecords,
+  ...mockBeltInvertCollectRecords,
 ]
 
 const project_sites = [
@@ -617,6 +612,52 @@ const project_managements = [
 ]
 
 const choices = {
+  invertbelttransectwidths: {
+    name: 'invertbelttransectwidths',
+    data: [
+      {
+        id: 'e1a133d3-70fe-403c-aed2-a70d630ef910',
+        name: '2.0',
+        updated_on: '2026-05-05T14:59:33.040520Z',
+        val: 2,
+      },
+      {
+        id: '18fc5c30-1786-4fe1-9536-4ee41ef3c08a',
+        name: '4.0',
+        updated_on: '2026-05-05T14:59:38.500671Z',
+        val: 4,
+      },
+      {
+        id: 'fdc582d4-f093-49f3-81a7-c84ddeee2c95',
+        name: '5.0',
+        updated_on: '2026-05-05T14:59:46.341115Z',
+        val: 5,
+      },
+    ],
+  },
+  invertsizebins: {
+    name: 'invertsizebins',
+    data: [
+      {
+        id: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+        name: '1',
+        updated_on: '2026-05-05T14:59:51.905155Z',
+        val: '1',
+      },
+      {
+        id: 'f0c1e3d5-4a7b-4f8e-9c6e-2f1b5c3d9e2a',
+        name: '5',
+        updated_on: '2026-05-05T14:59:55.123456Z',
+        val: '5',
+      },
+      {
+        id: 'c0d5e4f6-7a8b-4c9e-9d1f-3e2b4c5d6e7f',
+        name: '10',
+        updated_on: '2026-05-05T14:59:59.789012Z',
+        val: '10',
+      },
+    ],
+  },
   belttransectwidths: {
     name: 'belttransectwidths',
     data: [
@@ -3115,8 +3156,9 @@ const benthic_attributes = [
     status: 10,
     created_on: '2021-01-25T09:47:50.448879Z',
     updated_on: '2021-06-16T13:29:10.087019Z',
+    // proposed by the mock current user, so it remains selectable in observation inputs
     name: 'Dead Coral with Algae',
-    created_by: '8aab2cc3-d76e-4c78-ab45-6b59b387c7b0',
+    created_by: 'fake-id',
     parent: 'abde283f-5dd4-4a67-bc0b-e7403ad9c517',
     life_history: null,
     regions: [],
@@ -3147,6 +3189,38 @@ const benthic_attributes = [
 ]
 
 const invert_attributes = [
+  {
+    id: 'diadema-genus-0000-0000-000000000000',
+    updated_by: null,
+    status: 90,
+    created_on: '2021-02-11T12:20:14.101000Z',
+    updated_on: '2021-06-16T13:29:10.087019Z',
+    name: 'Diadema',
+    created_by: null,
+    parent: null,
+    taxonomic_rank: 'genus',
+    life_history: null,
+    regions: [],
+    _last_revision_num: 15368,
+    _modified: false,
+    _deleted: false,
+  },
+  {
+    id: 'nebrius-genus-0000-0000-000000000000',
+    updated_by: null,
+    status: 90,
+    created_on: '2021-02-11T12:20:14.101000Z',
+    updated_on: '2021-06-16T13:29:10.087019Z',
+    name: 'Nebrius',
+    created_by: null,
+    parent: null,
+    taxonomic_rank: 'genus',
+    life_history: null,
+    regions: [],
+    _last_revision_num: 15367,
+    _modified: false,
+    _deleted: false,
+  },
   {
     id: 'd5e89c06-5bcf-42f6-bf0c-6d5438f311b0',
     updated_by: null,
@@ -3183,8 +3257,9 @@ const invert_attributes = [
     status: 10,
     created_on: '2022-11-03T10:08:03.777000Z',
     updated_on: '2022-11-03T10:08:03.777000Z',
+    // proposed by the mock current user, so it remains selectable in observation inputs
     name: 'Test Proposed Invert Attribute',
-    created_by: '8aab2cc3-d76e-4c78-ab45-6b59b387c7b0',
+    created_by: 'fake-id',
     parent: '8b70dc27-598e-47ef-b413-53f8d02e5750',
     life_history: null,
     regions: [],

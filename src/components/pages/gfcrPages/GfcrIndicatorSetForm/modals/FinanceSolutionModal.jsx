@@ -29,6 +29,7 @@ import { getToastArguments } from '../../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
+import GfcrIntegerInputField from '../GfcrIntegerInputField'
 import { getOptions } from '../../../../../library/getOptions'
 import { IconInfo } from '../../../../icons'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
@@ -193,15 +194,6 @@ const FinanceSolutionModal = ({
 
       if (values.fs_type === 'ctf' && !values.geographical_coverage) {
         errors.geographical_coverage = [{ code: t('forms.required_field'), id: 'Required' }]
-      }
-
-      if (
-        NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES.includes(values.fs_type) &&
-        Number(values.number_of_solutions_supported_by) <= 0
-      ) {
-        errors.number_of_solutions_supported_by = [
-          { code: t('forms.required_field'), id: 'Required' },
-        ]
       }
 
       return errors
@@ -449,13 +441,12 @@ const FinanceSolutionModal = ({
         )}
         {showNumberOfSolutionsSupportedBy && (
           <StyledModalInputRow>
-            <InputNoRowWithLabelAndValidation
+            <GfcrIntegerInputField
               label={t('gfcr.forms.finance_solutions.number_of_solutions_supported_by')}
-              id="number-of-solutions-input"
-              type="number"
-              min="1"
-              {...formik.getFieldProps('number_of_solutions_supported_by')}
-              required={true}
+              id="number_of_solutions_supported_by"
+              formik={formik}
+              required
+              noRow
             />
           </StyledModalInputRow>
         )}

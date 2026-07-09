@@ -49,7 +49,7 @@ describe('Offline', () => {
     const pageSizeSelector = await screen.findByTestId('page-size-selector')
 
     await waitFor(() => expect(pageSizeSelector))
-    await user.selectOptions(pageSizeSelector, '20')
+    await user.selectOptions(pageSizeSelector, '22')
 
     const table = screen.getByRole('table')
     const linkToBleachingRecord = within(table).queryByRole('link', {

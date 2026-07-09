@@ -257,6 +257,14 @@ export const ObservationsSummaryStats = styled(Table)`
     font-size: smaller;
   `)}
 `
+
+export const MacroinvertebrateObservationsSummaryStats = styled(ObservationsSummaryStats)`
+  width: 45%;
+
+  th.goi-density {
+    padding-left: ${theme.spacing.xlarge};
+  }
+`
 export const HeaderCenter = styled.p`
   text-align: center;
   white-space: nowrap;

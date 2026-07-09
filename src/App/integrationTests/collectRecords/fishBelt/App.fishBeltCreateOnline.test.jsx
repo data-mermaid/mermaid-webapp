@@ -125,14 +125,14 @@ describe('Online', () => {
 
     // show all the records
     await waitFor(() => expect(pageSizeSelector))
-    await user.selectOptions(pageSizeSelector, '22')
+    await user.selectOptions(pageSizeSelector, '24')
     const table = await screen.findByRole('table')
 
     const linksToFishbeltRecords = within(table).getAllByRole('link', {
       name: 'protocol_titles.fishbelt',
     })
 
-    // 17 the 16 mock records + the one we just created
+    // 17 = 16 mock fishbelt records + the one we just created
     expect(linksToFishbeltRecords).toHaveLength(17)
     expect(mockT).toHaveBeenCalledWith('protocol_titles.fishbelt')
 

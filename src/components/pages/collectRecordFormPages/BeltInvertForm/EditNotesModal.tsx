@@ -42,8 +42,7 @@ const EditNotesModal = ({
 
   const subheading = invertAttributeName ? (
     <p className={styles.notesSubheading}>
-      <strong>{t('macroinvertebrate_observations.macroinvertebrate_name')}:</strong>{' '}
-      {invertAttributeName}
+      <strong>{t('observations.macroinvertebrate_name')}:</strong> {invertAttributeName}
     </p>
   ) : (
     <p className={styles.notesSubheading}>
@@ -76,7 +75,7 @@ const EditNotesModal = ({
             data-testid="notes-done-button"
             onClick={() => onDone(draft)}
           >
-            {t('macroinvertebrate_observations.done')}
+            {t('buttons.done')}
           </ButtonPrimary>
         </RightFooter>
       }

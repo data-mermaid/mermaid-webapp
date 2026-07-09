@@ -77,7 +77,7 @@
     "send_email": "Kirim Email",
     "submit": "Submit",
     "submitting": "Mengirimkan",
-    "suggestion_review_request": "Kirim ke MERMAID untuk ditinjau",
+    "suggestion_review_request": "Kirim untuk ditinjau",
     "transfer": "Transfer",
     "user_account_dropdown": "Menu tarik-turun akun pengguna",
     "validate": "Memvalidasi",
@@ -206,11 +206,11 @@
   "fish_size_observed": "Ukuran ikan yang diamati, dalam cm (misalnya 4,5 atau 5-10)",
   "forms": {
     "required_field": "Bidang ini wajib diisi",
-    "submit_for_review": "Kirim ke MERMAID untuk ditinjau"
+    "submit_for_review": "Kirim untuk ditinjau"
   },
   "gfcr": {
     "add_gfcr_indicators": "Koalisi GFCR menggalang sumber daya keuangan untuk mengembangkan solusi bisnis berkelanjutan dan inovatif dalam konservasi terumbu karang.\nJika Anda tergabung dalam program GFCR, aktifkan indikator dana GFCR untuk proyek ini agar dapat memulai proses M&E.",
-    "facilities_solutions": "Solusi Bisnis / Keuangan",
+    "businesses_finance_solutions": "Solusi Bisnis / Keuangan",
     "buttons": {
       "disable_gfcr": "Menonaktifkan indikator pendanaan GFCR",
       "enable_gfcr": "Aktifkan indikator pendanaan GFCR",
@@ -338,6 +338,7 @@
         "local_enterprise_helper": "Didefinisikan sebagai usaha kecil dan menengah yang beroperasi di lokasi spesifik Program GFCR. Hal ini berlaku untuk F9.3 (Jumlah (dan %) pendapatan di perusahaan lokal), yang mengukur pendapatan yang dipertahankan di dalam geografi lokal, yang berbeda dengan pendapatan yang ditransfer ke luar negeri.<br /><gfcrPdfLink>Lihat Toolkit M&E PDF</gfcrPdfLink>",
         "name_helper": "Masukkan nama setiap solusi bisnis atau keuangan yang dibiayai oleh Program GFCR secara terpisah. Anda bisa menyalin solusi dari laporan sebelumnya. Indikator F8, F9, dan F10 akan dipilah-pilah berdasarkan solusi dan sektor. Solusi baru yang dibiayai oleh Program akan ditambahkan di sini secara bertahap.<br /><gfcrPdfLink>Lihat Toolkit M&E PDF</gfcrPdfLink>",
         "no_finance_solutions": "Belum ada Solusi Keuangan.",
+        "pcf_revenues_error": "Hapus pendapatan terkait sebelum mengubah jenisnya menjadi pembiayaan bersama programatik",
         "save": "Simpan Baris Solusi Bisnis / Keuangan",
         "sector": "Sektor",
         "sector_helper": "Masukkan sektor solusi dalam Program GFCR ini. Lihat Lampiran 3 dari Toolkit M&E GFCR untuk rinciannya.<br /><gfcrPdfLink>Lihat Toolkit M&E PDF</gfcrPdfLink>",
@@ -367,6 +368,7 @@
         "add": "Tambahkan Pendapatan",
         "add_before_revenues": "Tambahkan solusi keuangan <financeSolutionLink></financeSolutionLink> sebelum menambahkan pendapatan.",
         "business_finance_solution_helper": "Pilih solusi bisnis atau keuangan yang dibiayai oleh Program GFCR untuk melaporkan pendapatan. Laporkan pendapatan secara terpisah untuk setiap solusi, dipilah berdasarkan jenisnya. Hal ini berlaku untuk F9 (Jumlah pendapatan dan Pengembalian Investasi).",
+        "no_non_pcf_finance_solutions": "Pendapatan tidak dapat ditambahkan untuk pembiayaan bersama programatik. Buka bagian investasi dan tambahkan jumlah pembiayaan bersama sebagai investasi. ",
         "no_revenues": "Belum ada pendapatan.",
         "revenue_amount": "Jumlah pendapatan",
         "revenue_amount_helper": "Masukkan jumlah pendapatan dalam dolar AS sebagai total kumulatif sejak dimulainya Program GFCR. Ini berlaku untuk F9 (Jumlah pendapatan dan Pengembalian Investasi).<br /><gfcrPdfLink>Lihat M&E Toolkit PDF</gfcrPdfLink>",
@@ -505,6 +507,12 @@
   "loading": "Memuat",
   "loading_indicator": "Indikator Pemuatan",
   "loading_item": "Memuat {{itemName}}",
+  "macroinvertebrate_observations": {
+    "add_macroinvertebrate": "Mengusulkan spesies makroinvertebrata baru",
+    "add_notes": "Klik untuk menambahkan catatan...",
+    "attribute_proposal_summary": "Usulan Anda mengenai \" {{attribute}} \" akan ditinjau oleh tim MERMAID. Mereka akan menyetujuinya untuk dimasukkan ke dalam taksonomi atau menghubungi Anda untuk tindak lanjut.",
+    "click_or_press_space_to_add_notes": "Klik atau tekan tombol spasi untuk menambahkan catatan..."
+  },
   "management_regime": "Rezim manajemen",
   "management_regimes": {
     "access_restriction": "Pembatasan akses",
@@ -744,7 +752,7 @@
     "copy_of_project_name": "Salinan {{projectName}}",
     "copy_project": "Salin proyek",
     "country": "Negara",
-    "create_or_join_project": "Buat proyek baru atau minta admin untuk menambahkan Anda ke proyek yang ada",
+    "create_or_join_project": "Buat proyek baru atau minta admin untuk menambahkan Anda ke proyek yang ada.",
     "create_project": "Buat proyek",
     "data_copy_to_project": "Situs, manajemen, kebijakan berbagi data, dan pengguna beserta perannya akan disalin ke proyek yang baru",
     "data_unavailable": "Data proyek saat ini tidak tersedia",
@@ -840,7 +848,8 @@
     "benthicpqt": "Foto kuadrat bentik",
     "bleachingqc": "Pemutihan karang",
     "fishbelt": "Sabuk ikan",
-    "habitatcomplexity": "Kompleksitas habitat"
+    "habitatcomplexity": "Kompleksitas habitat",
+    "macroinvertebrate": "Sabuk makroinvertebrata"
   },
   "quadrat_collection": "Koleksi Quadrat",
   "quadrat_size": "Ukuran kuadrat",
@@ -872,7 +881,7 @@
       "observations_unavailable_offline": "Pengamatan unit sampel tidak tersedia secara offline",
       "submit_disabled": "Kesalahan atau peringatan mencegah Anda untuk mengirimkan",
       "submitted_data_unavailable": "Data yang di submit saat ini tidak tersedia",
-      "submitted_moved_to_collecting": "Catatan yang dikirimkan telah dipindahkan ke pengumpulan.",
+      "submitted_moved_to_collecting": "Catatan yang dikirimkan telah dipindahkan ke Pengumpulan.",
       "submitted_not_editable": "Catatan yang dikirimkan belum dapat diedit",
       "supporting_data_unavailable": "Data pendukung untuk membuat unit sampel saat ini tidak tersedia",
       "validation_ignore": "Validasi ini tidak dapat diabaikan.",
@@ -1038,8 +1047,7 @@
       "pending_user_added": "Email pendaftaran terkirim. Pengguna baru ditambahkan sebagai Pengguna Tertunda.",
       "role_changed_error": "{{userName}}peran tersebut tidak berubah.",
       "role_changed_success": "{{userName}}sekarang diatur ke {{role}}.",
-      "sample_units_transfer_one": "{{count}} unit sampel yang ditransfer",
-      "sample_units_transfer_other": "{{count}} unit sampel yang ditransfer",
+      "sample_units_transferred_other": "{{count}} unit sampel yang ditransfer",
       "something_went_wrong": "Ada yang tidak beres",
       "user_removed": "Pengguna dihapus"
     },
@@ -1096,6 +1104,7 @@
     "invalid_fishbelt_transect": "Satu atau beberapa isian yang tidak valid: lokasi, manajemen, tanggal sampel, nomor transek, lebar, kedalaman",
     "invalid_interval_size": "Ukuran interval harus berupa angka positif",
     "invalid_intervals": "Interval tidak valid",
+    "invalid_invert_belt_transect": "Satu atau lebih kolom tidak valid: lokasi, pengelolaan, tanggal sampel, nomor transek, lebar, kedalaman",
     "invalid_number_of_points": "Jumlah total poin yang dimasukkan untuk kuadrat: {{invalidQuadratNumbers}} tidak sesuai dengan jumlah poin yang ditentukan per kuadrat",
     "invalid_quadrat_collection": "Satu atau beberapa kolom transek yang tidak valid: lokasi, manajemen, tanggal, kedalaman",
     "invalid_quadrat_size": "Ukuran kuadrat harus berupa angka positif",
@@ -1103,6 +1112,8 @@
     "invalid_sample_date": "Tanggal tidak valid",
     "invalid_score": "Skor tidak valid",
     "invalid_total": "Jumlah nilai tidak boleh kurang dari {{min}} atau lebih besar dari {{max}}",
+    "invert_count_high": "Jumlah makroinvertebrata sangat tinggi",
+    "invert_size_exceeds_maximum": "Ukuran makroinvertebrata lebih besar daripada nilai maksimum yang diperkirakan",
     "large_num_quadrats": "Jumlah kuadrat terlalu besar",
     "len_surveyed_not_positive": "Panjang transek harus berupa angka non-negatif",
     "len_surveyed_out_of_range": "Nilai panjang transek yang disurvei berada di luar jangkauan {{min}} dan {{max}}",
@@ -1119,7 +1130,7 @@
     "no_region_match": "Karang atau ikan yang sebelumnya tidak teramati di wilayah lokasi",
     "not_part_of_fish_family_subset": "Ikan bukan merupakan bagian dari famili ikan yang ditetapkan proyek",
     "not_positive_integer": "Nilai bukan bilangan bulat yang lebih besar atau sama dengan nol",
-    "not_unique_site": "Situs: Catatan serupa terdeteksi",
+    "not_unique_site": "Situs: catatan serupa terdeteksi",
     "obs_total_length_toolarge": "Total panjang pengamatan ({{totalLength}} cm) lebih besar dari panjang transek ({{transectLength}} m) + 50%",
     "obs_total_length_toosmall": "Total panjang pengamatan ({{totalLength}} cm) kurang dari 50% panjang transek ({{transectLength}} m)",
     "observation_count": "{{comparison}} dari {{count}} pengamatan di {{suffixToken}}",
