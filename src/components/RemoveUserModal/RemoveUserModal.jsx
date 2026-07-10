@@ -38,9 +38,14 @@ const RemoveUserModal = ({
   }
 
   const handleOnSubmit = () => {
-    onSubmit().then(() => {
-      closeModal()
-    })
+    onSubmit()
+      .then(() => {
+        closeModal()
+      })
+      .catch(() => {
+        // Error feedback (toast) is already shown by onSubmit; leave the modal open
+        // so the user can see it and decide whether to retry or cancel.
+      })
   }
 
   const title = {
