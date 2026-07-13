@@ -101,7 +101,9 @@ const RemoveUserModal = ({
   const footerContentPageTwo = (
     <RightFooter>
       {cancelButton}
-      <ButtonCaution onClick={handleOnSubmit}>{t('users.remove_user')}</ButtonCaution>
+      <ButtonCaution onClick={handleOnSubmit} disabled={isLoading}>
+        {t('users.remove_user')}
+      </ButtonCaution>
     </RightFooter>
   )
 
