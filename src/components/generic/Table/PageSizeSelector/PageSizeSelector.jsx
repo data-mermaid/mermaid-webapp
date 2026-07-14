@@ -65,9 +65,11 @@ const PageSizeSelector = ({
     setPageOptionsToDisplay(pageOptionsLessThanRowLength)
   }, [pageSizeOptions, filteredAmountToDisplay])
 
+  const isFilterEnabled = isSearchFilterEnabled || isMethodFilterEnabled
+
   return (
     <label htmlFor="page-size-selector">
-      {t('showing')}{' '}
+      {t('page_size_selector.showing')}{' '}
       <PageSizeSelect
         value={pageSize}
         onChange={onChange}
@@ -80,11 +82,14 @@ const PageSizeSelector = ({
           </option>
         ))}
       </PageSizeSelect>
-      of {filteredAmountToDisplay}
-      {isSearchFilterEnabled || isMethodFilterEnabled
-        ? `${' '}(filtered from ${unfilteredRowLength}${' '}${pageType}${
-            unfilteredRowLength > 1 ? 's' : ''
-          })`
+      {t('page_size_selector.of_total', { total: filteredAmountToDisplay })}
+      {isFilterEnabled
+        ? ` ${t('page_size_selector.filtered_from', {
+            count: unfilteredRowLength,
+            itemType: t(`page_size_selector.item_type.${pageType}`, {
+              count: unfilteredRowLength,
+            }),
+          })}`
         : null}
     </label>
   )
@@ -96,7 +101,8 @@ PageSizeSelector.propTypes = {
   searchFilteredRowLength: PropTypes.number,
   isMethodFilterEnabled: PropTypes.bool,
   isSearchFilterEnabled: PropTypes.bool,
-  pageType: PropTypes.string.isRequired,
+  pageType: PropTypes.oneOf(['sample_unit', 'record', 'site', 'user', 'management_regime'])
+    .isRequired,
   pageSize: PropTypes.number.isRequired,
   pageSizeOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
   onChange: PropTypes.func.isRequired,

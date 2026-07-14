@@ -760,6 +760,24 @@
     "try_reloading": "If you keep seeing this error, try reloading this page, or you can",
     "will_show": "This page will show:"
   },
+  "page_size_selector": {
+    "showing": "Showing",
+    "of_total": "of {{total}}",
+    "filtered_from_one": "(filtered from {{count}} {{itemType}})",
+    "filtered_from_other": "(filtered from {{count}} {{itemType}})",
+    "item_type": {
+      "sample_unit_one": "sample unit",
+      "sample_unit_other": "sample units",
+      "record_one": "record",
+      "record_other": "records",
+      "site_one": "site",
+      "site_other": "sites",
+      "user_one": "user",
+      "user_other": "users",
+      "management_regime_one": "management regime",
+      "management_regime_other": "management regimes"
+    }
+  },
   "percent_cover": "Percent cover",
   "profile": {
     "email_address": "Email address",
@@ -986,7 +1004,6 @@
   "show_fish_count_info": "Show fish count info",
   "show_fish_name_info": "Show fish name info",
   "show_fish_size_info": "Show fish size info",
-  "showing": "Showing",
   "sites": {
     "cannot_delete": "You cannot delete this site because it is used in the following sample units:",
     "confirm_delete": "Are you sure you want to delete this site?",

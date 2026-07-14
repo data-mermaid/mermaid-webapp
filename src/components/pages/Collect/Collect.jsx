@@ -412,7 +412,7 @@ const Collect = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="sample unit"
+          pageType="sample_unit"
           unfilteredRowLength={collectRecordsForUiDisplay.length}
           methodFilteredRowLength={methodsFilteredTableCellData.length}
           searchFilteredRowLength={searchFilteredRowsLength}
