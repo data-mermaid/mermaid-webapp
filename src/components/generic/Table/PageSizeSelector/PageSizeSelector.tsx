@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { styled } from 'styled-components'
 import { Select } from '../../form'
 import { useTranslation } from 'react-i18next'
+
+type PageType = 'sample_unit' | 'record' | 'site' | 'user' | 'management_regime'
+
+interface PageSizeSelectorProps {
+  pageSize: number
+  pageType: PageType
+  pageSizeOptions: number[]
+  onChange: React.ChangeEventHandler<HTMLSelectElement>
+  unfilteredRowLength: number
+  methodFilteredRowLength?: number | null
+  searchFilteredRowLength?: number | null
+  isMethodFilterEnabled?: boolean
+  isSearchFilterEnabled?: boolean
+}
 
 const PageSizeSelect = styled(Select)`
   width: auto;
@@ -20,10 +33,10 @@ const PageSizeSelector = ({
   searchFilteredRowLength = null,
   isMethodFilterEnabled = false,
   isSearchFilterEnabled = false,
-}) => {
+}: PageSizeSelectorProps) => {
   const { t } = useTranslation()
-  const [pageOptionsToDisplay, setPageOptionsToDisplay] = useState([])
-  const [filteredAmountToDisplay, setFilteredAmountToDisplay] = useState(null)
+  const [pageOptionsToDisplay, setPageOptionsToDisplay] = useState<number[]>([])
+  const [filteredAmountToDisplay, setFilteredAmountToDisplay] = useState<number | null>(null)
 
   const _findFilteredAmountToDisplay = useEffect(() => {
     // the search results will be method filtered already, which is not the case the opposite way around
@@ -93,19 +106,6 @@ const PageSizeSelector = ({
         : null}
     </label>
   )
-}
-
-PageSizeSelector.propTypes = {
-  unfilteredRowLength: PropTypes.number.isRequired,
-  methodFilteredRowLength: PropTypes.number,
-  searchFilteredRowLength: PropTypes.number,
-  isMethodFilterEnabled: PropTypes.bool,
-  isSearchFilterEnabled: PropTypes.bool,
-  pageType: PropTypes.oneOf(['sample_unit', 'record', 'site', 'user', 'management_regime'])
-    .isRequired,
-  pageSize: PropTypes.number.isRequired,
-  pageSizeOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
-  onChange: PropTypes.func.isRequired,
 }
 
 export default PageSizeSelector

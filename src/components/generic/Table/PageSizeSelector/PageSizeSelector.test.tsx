@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 import {
@@ -13,7 +13,7 @@ import PageSizeSelector from './PageSizeSelector'
 
 const defaultProps = {
   pageSize: 15,
-  pageType: 'sample_unit',
+  pageType: 'sample_unit' as const,
   pageSizeOptions: [15, 50, 100],
   onChange: () => {},
   unfilteredRowLength: 200,
