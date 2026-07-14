@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { styled } from 'styled-components'
 import { Select } from '../../form'
 import { useTranslation } from 'react-i18next'
+import styles from './PageSizeSelector.module.scss'
 
 type PageType = 'sample_unit' | 'record' | 'site' | 'user' | 'management_regime'
 
@@ -16,12 +16,6 @@ interface PageSizeSelectorProps {
   isMethodFilterEnabled?: boolean
   isSearchFilterEnabled?: boolean
 }
-
-const PageSizeSelect = styled(Select)`
-  width: auto;
-  min-width: auto;
-  margin-right: 0.3em;
-`
 
 const PageSizeSelector = ({
   pageSize,
@@ -83,7 +77,8 @@ const PageSizeSelector = ({
   return (
     <label htmlFor="page-size-selector">
       {t('page_size_selector.showing')}{' '}
-      <PageSizeSelect
+      <Select
+        className={styles['page-size-select']}
         value={pageSize}
         onChange={onChange}
         id="page-size-selector"
@@ -94,7 +89,7 @@ const PageSizeSelector = ({
             {size}
           </option>
         ))}
-      </PageSizeSelect>
+      </Select>
       {t('page_size_selector.of_total', { total: filteredAmountToDisplay })}
       {isFilterEnabled
         ? ` ${t('page_size_selector.filtered_from', {
