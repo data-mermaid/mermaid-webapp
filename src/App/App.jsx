@@ -28,6 +28,7 @@ import Header from '../components/Header'
 import Layout from '../components/Layout'
 import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 import PageNotFound from '../components/pages/PageNotFound'
+import EmailVerificationRequired from '../components/pages/EmailVerificationRequired'
 import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
@@ -47,9 +48,10 @@ function App({ dexieCurrentUserInstance }) {
   const pushSyncErrorUnsavedDataText = t('api_errors.unsaved_sync_data')
   const pushSyncErrorMessageStatusCode500 = t('api_errors.unspecified_error')
 
-  const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
-    dexieCurrentUserInstance,
-  })
+  const { getAccessToken, isMermaidAuthenticated, logoutMermaid, loginMermaid, emailNotVerified } =
+    useAuthentication({
+      dexieCurrentUserInstance,
+    })
 
   const handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied = useCallback(
     ({ error, callback, shouldShowServerNonResponseMessage }) =>
@@ -278,6 +280,8 @@ function App({ dexieCurrentUserInstance }) {
                               <Route path="/*" element={<PageNotFound />} />
                             </Routes>
                           </ErrorBoundary>
+                        ) : emailNotVerified ? (
+                          <EmailVerificationRequired onLogin={loginMermaid} />
                         ) : (
                           <LoadingIndicator />
                         )
