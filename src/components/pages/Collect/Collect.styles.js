@@ -1,15 +1,17 @@
-import { RECORD_STATUS_LABELS } from './collectConstants'
+import { VALIDATION_STATUS } from './collectConstants'
 import { Tr } from '../../generic/Table/table'
 import { styled } from 'styled-components'
 import theme from '../../../theme'
 
+// Keyed on the stable status value (not the translated label) so the status
+// border colour is consistent across all app languages.
 const RECORD_STATUS_COLORS = {
-  [RECORD_STATUS_LABELS.error]: theme.color.cautionColor,
-  [RECORD_STATUS_LABELS.ok]: '#298217',
-  [RECORD_STATUS_LABELS.stale]: theme.color.primaryColor,
-  [RECORD_STATUS_LABELS.warning]: theme.color.warningColor,
+  [VALIDATION_STATUS.error]: theme.color.cautionColor,
+  [VALIDATION_STATUS.ok]: '#298217',
+  [VALIDATION_STATUS.stale]: theme.color.primaryColor,
+  [VALIDATION_STATUS.warning]: theme.color.warningColor,
 }
 
 export const TrCollectRecordStatus = styled(Tr)`
-  border-left: 4px solid ${({ $recordStatusLabel }) => RECORD_STATUS_COLORS[$recordStatusLabel]};
+  border-left: 4px solid ${({ $recordStatus }) => RECORD_STATUS_COLORS[$recordStatus]};
 `

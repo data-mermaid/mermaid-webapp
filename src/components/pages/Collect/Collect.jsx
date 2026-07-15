@@ -203,6 +203,7 @@ const Collect = () => {
           sampleDate: uiLabels.sampleDate,
           observers: uiLabels.observers,
           status: uiLabels.status,
+          statusValue: uiLabels.statusValue,
         }
       }),
     [collectRecordsForUiDisplay, currentProjectPath],
@@ -384,7 +385,7 @@ const Collect = () => {
                 <TrCollectRecordStatus
                   key={rowKey}
                   {...rowProps}
-                  $recordStatusLabel={row.values.status}
+                  $recordStatus={row.original.statusValue}
                 >
                   {row.cells.map((cell) => {
                     const isCellEmpty =

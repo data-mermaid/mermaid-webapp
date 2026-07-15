@@ -85,12 +85,26 @@ const CollectRecordsMixin = (Base) =>
         : noLabelSymbol
     }
 
-    #getStatusLabel = function getStatusLabel(record) {
-      const { validations } = record
-      const statusKey = validations?.status
+    // Normalise the raw validation status to a stable key used for both the
+    // translated label and the status border colour. Anything without an
+    // error/warning/ok status (including offline records with no validation
+    // status yet) is treated as 'stale'.
+    #getStatusValue = function getStatusValue(record) {
+      const statusKey = record.validations?.status
 
-      // Map status to translation keys and return translated text
       switch (statusKey) {
+        case 'error':
+        case 'warning':
+        case 'ok':
+          return statusKey
+        default:
+          return 'stale'
+      }
+    }
+
+    #getStatusLabel = function getStatusLabel(record) {
+      // Map the stable status value to translation keys and return translated text
+      switch (this.#getStatusValue(record)) {
         case 'error':
           return i18next.t('sample_units.validation_status.errors')
         case 'warning':
@@ -699,6 +713,7 @@ const CollectRecordsMixin = (Base) =>
                 site: getObjectById(sites, record.data.sample_event.site)?.name,
                 size: this.#getSizeLabel(record, choices),
                 status: this.#getStatusLabel(record),
+                statusValue: this.#getStatusValue(record),
               },
             }))
           })
