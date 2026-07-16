@@ -44,7 +44,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
   const geographicalCoverageHeaderText = t('gfcr.forms.finance_solutions.geographical_coverage')
   const tafNameHeaderText = t('gfcr.forms.finance_solutions.taf_name')
   const numberOfSolutionsSupportedByHeaderText = t(
-    'gfcr.forms.finance_solutions.number_of_solutions_supported_by',
+    'gfcr.forms.finance_solutions.number_of_solutions_supported_by_table_header',
   )
 
   const { currentUser } = useCurrentUser()
@@ -85,14 +85,14 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         sortType: reactTableNaturalSort,
       },
       {
-        Header: gender2xCriteriaHeaderText,
-        accessor: 'gender_smart',
+        Header: localEnterpriseHeaderText,
+        accessor: 'local_enterprise',
         sortType: reactTableNaturalSort,
         align: 'center',
       },
       {
-        Header: localEnterpriseHeaderText,
-        accessor: 'local_enterprise',
+        Header: gender2xCriteriaHeaderText,
+        accessor: 'gender_smart',
         sortType: reactTableNaturalSort,
         align: 'center',
       },
@@ -114,8 +114,8 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
       geographicalCoverageHeaderText,
       usedAnIncubatorHeaderText,
       tafNameHeaderText,
-      gender2xCriteriaHeaderText,
       localEnterpriseHeaderText,
+      gender2xCriteriaHeaderText,
       numberOfSolutionsSupportedByHeaderText,
       sustainableFinanceMechanismsHeaderText,
     ],

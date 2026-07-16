@@ -352,6 +352,7 @@
         "name_helper": "Enter the name of each business or financial mechanism solution financed by the GFCR Programme separately. You may copy solutions from previous reports. Indicators F8, F9, and F10 will be disaggregated by both solution and sector. New solutions financed by the Programme will be added here progressively.<br /><gfcrPdfLink>View M&E Toolkit PDF</gfcrPdfLink>",
         "no_finance_solutions": "No facilities / solutions yet",
         "number_of_solutions_supported_by": "Number of solutions supported by",
+        "number_of_solutions_supported_by_table_header": "Total number of solutions supported",
         "pcf_revenues_error": "Remove revenues before changing type to Programmatic co-financing",
         "save": "Save facility / solution",
         "sector": "Sector",
