@@ -174,9 +174,7 @@ const NewAttributeModal = ({
     proposedAttributeValue: speciesProposalForm.values.species,
     proposedParentIdError: speciesProposalForm.errors.genusId,
     proposedAttributeInputError: speciesProposalForm.errors.species,
-    proposedSummary: t('benthic_observations.attribute_proposal_summary', {
-      attribute: 'fish species',
-    }),
+    proposedSummary: t('fish_belt_observations.attribute_proposal_summary'),
   }
 
   const generalBenthicAttributeAssets = {
@@ -188,9 +186,7 @@ const NewAttributeModal = ({
     proposedAttributeValue: benthicAttributeProposalForm.values.newBenthicAttribute,
     proposedParentIdError: benthicAttributeProposalForm.errors.benthicAttributeParentId,
     proposedAttributeInputError: benthicAttributeProposalForm.errors.newBenthicAttribute,
-    proposedSummary: t('benthic_observations.attribute_proposal_summary', {
-      attribute: 'benthic attribute',
-    }),
+    proposedSummary: t('benthic_observations.attribute_proposal_summary'),
   }
 
   const invertAttributeAssets = {
@@ -202,9 +198,7 @@ const NewAttributeModal = ({
     proposedAttributeValue: speciesProposalForm.values.species,
     proposedParentIdError: speciesProposalForm.errors.genusId,
     proposedAttributeInputError: speciesProposalForm.errors.species,
-    proposedSummary: t('macroinvertebrate_observations.attribute_proposal_summary', {
-      attribute: 'macroinvertebrate species',
-    }),
+    proposedSummary: t('macroinvertebrate_observations.attribute_proposal_summary'),
   }
 
   const modalAssetsBySampleUnit = {
