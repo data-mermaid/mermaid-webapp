@@ -10,6 +10,8 @@ How to cut a production release of mermaid-webapp. Production ([app.datamermaid.
 
 That's it - the script handles branches, versioning, tagging, pushing, and the GitHub release. Pick the bump type first (see below).
 
+Shipping a fix that already landed directly on `main`? Use the hotfix flow instead - see [Hotfix release](#hotfix-release).
+
 ## Choosing the bump
 
 Look at what's shipped since the last release and apply [Conventional Commits](https://www.conventionalcommits.org/):
@@ -44,6 +46,51 @@ To see what's shipped, use whichever is easiest:
 5. Pushes `main` and the tag - **this is what triggers the production deploy** (`.github/workflows/deployment.yml`).
 6. Back-merges `main` into `develop` so the version bump lands there too.
 7. Creates a GitHub release with auto-generated notes.
+
+`release.sh` and `hotfix.sh` share their common steps (checks, version verification, bump, push, back-merge, release) via `scripts/_release-lib.sh`, so fixes to that plumbing apply to both.
+
+## Hotfix release
+
+Occasionally a fix is committed **directly to `main`** (bypassing `develop`) and needs to ship on its own, without dragging in unreleased `develop` work. That's a hotfix.
+
+```bash
+./scripts/hotfix.sh <major|minor|patch>   # almost always patch
+```
+
+Same bump rules as above (a `fix:` on its own means `patch`).
+
+### How it differs from a normal release
+
+A hotfix is the normal release flow **minus the develop→main merge**, plus a safety check:
+
+- It only pulls and operates on `main`; it never merges `develop` into `main`.
+- It aborts if `main` isn't ahead of the latest tag (nothing to ship).
+- It prints the exact commits that will be released and asks for confirmation before tagging - your last chance to check that *only* the intended fix is on `main`.
+
+Everything else matches `release.sh`: it verifies `package.json` vs the latest tag, bumps the version, pushes `main` + tag (triggering the deploy), back-merges `main` into `develop` so the fix and version bump land there, and creates the GitHub release.
+
+### Doing it manually
+
+If you'd rather run it by hand (e.g. `v2.35.0` → `v2.35.1`):
+
+```bash
+git checkout main && git pull
+git fetch --tags --force
+
+# Sanity check what's on main since the last tag
+git log $(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | head -1)..HEAD --oneline
+
+npm version patch                                        # creates the bump commit + tag
+SKIP_BRANCH_WARNING=1 git push origin main --follow-tags # triggers the deploy
+
+git checkout develop && git pull                         # back-merge into develop
+git merge main
+SKIP_BRANCH_WARNING=1 git push origin develop
+
+gh release create v2.35.1 --generate-notes --target main
+```
+
+Note the absence of any `git merge develop` step - that's what keeps unreleased work out of the hotfix.
 
 ## Troubleshooting
 
