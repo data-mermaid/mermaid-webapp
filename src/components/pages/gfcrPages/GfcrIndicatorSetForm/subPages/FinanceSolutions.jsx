@@ -11,8 +11,9 @@ import { getTableFilteredRows } from '../../../../../library/getTableFilteredRow
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { PAGE_SIZE_DEFAULT } from '../../../../../library/constants/constants'
 import { StyledToolbarButtonWrapper } from '../../Gfcr/Gfcr.styles'
-import { IconPlus } from '../../../../icons'
+import { IconCopy, IconPlus } from '../../../../icons'
 import { ButtonSecondary, ToolbarButtonWrapper } from '../../../../generic/buttons'
+import { MuiTooltip } from '../../../../generic/MuiTooltip'
 import PageUnavailable from '../../../PageUnavailable'
 import { useTranslation } from 'react-i18next'
 import { ToolBarRow } from '../../../../generic/positioning'
@@ -23,7 +24,9 @@ import {
   StyledTableAnchor,
 } from './subPages.styles'
 import FinanceSolutionModal from '../modals/FinanceSolutionModal'
+import CopyFinanceSolutionsModal from '../modals/CopyFinanceSolutionsModal'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
+import { useCurrentProject } from '../../../../../App/CurrentProjectContext'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
 
@@ -42,10 +45,19 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
     'gfcr.forms.finance_solutions.sustainable_finance_mechanisms',
   )
 
+  const copyFinanceSolutionText = t('gfcr.forms.finance_solutions.copy')
+  const noCopyTargetsText = t('gfcr.forms.finance_solutions.no_copy_targets')
+
   const { currentUser } = useCurrentUser()
+  const { gfcrIndicatorSets } = useCurrentProject()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [financeSolutionBeingEdited, setFinanceSolutionBeingEdited] = useState()
+  const [isCopyModalOpen, setIsCopyModalOpen] = useState(false)
+
+  const hasCopyTargets = gfcrIndicatorSets
+    .filter((otherIndicatorSet) => otherIndicatorSet.id !== indicatorSet.id)
+    .some((otherIndicatorSet) => otherIndicatorSet.finance_solutions?.length > 0)
 
   const tableColumns = useMemo(
     () => [
@@ -268,14 +280,32 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
     setIsModalOpen(false)
   }
 
+  const handleOpenCopyModal = (event) => {
+    event.preventDefault()
+    setIsCopyModalOpen(true)
+  }
+
+  const handleCopyModalDismiss = () => {
+    setIsCopyModalOpen(false)
+  }
+
   const toolbarButtons = (
-    <>
-      <StyledToolbarButtonWrapper>
-        <ButtonSecondary onClick={(event) => handleAddFinanceSolution(event)}>
-          <IconPlus /> {t('gfcr.forms.finance_solutions.add')}
-        </ButtonSecondary>
-      </StyledToolbarButtonWrapper>
-    </>
+    <StyledToolbarButtonWrapper>
+      <ButtonSecondary onClick={(event) => handleAddFinanceSolution(event)}>
+        <IconPlus /> {t('gfcr.forms.finance_solutions.add')}
+      </ButtonSecondary>
+      <MuiTooltip title={hasCopyTargets ? '' : noCopyTargetsText}>
+        <span>
+          <ButtonSecondary
+            onClick={(event) => handleOpenCopyModal(event)}
+            disabled={!hasCopyTargets}
+            style={!hasCopyTargets ? { pointerEvents: 'none' } : undefined}
+          >
+            <IconCopy /> {copyFinanceSolutionText}
+          </ButtonSecondary>
+        </span>
+      </MuiTooltip>
+    </StyledToolbarButtonWrapper>
   )
 
   const table = indicatorSet.finance_solutions.length ? (
@@ -327,6 +357,13 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         choices={choices}
         onDismiss={handleFinanceSolutionModalDismiss}
         displayHelp={displayHelp}
+      />
+      <CopyFinanceSolutionsModal
+        isOpen={isCopyModalOpen}
+        indicatorSet={indicatorSet}
+        setIndicatorSet={setIndicatorSet}
+        choices={choices}
+        onDismiss={handleCopyModalDismiss}
       />
     </>
   )
