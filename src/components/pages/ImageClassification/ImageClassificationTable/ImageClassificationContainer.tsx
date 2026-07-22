@@ -35,8 +35,9 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isUploadingRef = useRef(isUploading) // we use a ref for state here so that we can access non-stale value from within setInterval callbacks
 
-  const handleFilesUpload = () => {
+  const handleFilesUpload = (uploadedFile) => {
     setIsModalOpen(false)
+    setImages((prev) => [...prev, uploadedFile])
     onPhotosChanged?.()
   }
 
