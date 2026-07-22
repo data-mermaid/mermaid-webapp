@@ -261,7 +261,12 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
   }
 
   const handlePhotosChanged = useCallback(() => {
-    setCollectRecordBeingEdited((prev) => (prev ? { ...prev, validations: undefined } : prev))
+    setCollectRecordBeingEdited((prev) => {
+      if (!prev || prev.validations === undefined) {
+        return prev
+      }
+      return { ...prev, validations: undefined }
+    })
   }, [])
 
   const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
