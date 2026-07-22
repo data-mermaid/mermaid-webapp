@@ -1,43 +1,8 @@
-export interface InvestmentSource {
-  id: string
-  finance_solution: string
-  investment_source: string
-  investment_type: string
-  investment_amount: string
-  notes: string
-}
-
-export interface Revenue {
-  id: string
-  finance_solution: string
-  revenue_type: string
-  sustainable_revenue_stream: string
-  revenue_amount: string
-  notes: string
-}
-
-export interface FinanceSolution {
-  id: string
-  name: string
-  fs_type: string
-  sector: string
-  geographical_coverage: string
-  taf_name: string
-  number_of_solutions_supported_by: number
-  used_an_incubator: string | null
-  gender_smart: boolean
-  local_enterprise: boolean
-  sustainable_finance_mechanisms: string[]
-  notes: string
-  investment_sources: InvestmentSource[]
-  revenues: Revenue[]
-}
-
-export interface IndicatorSet {
-  id: string
-  title: string
-  finance_solutions: FinanceSolution[]
-}
+import {
+  FinanceSolution,
+  InvestmentSource,
+  Revenue,
+} from '../../../../../App/mermaidData/mermaidDataTypes'
 
 export type NewFinanceSolution = Omit<
   FinanceSolution,

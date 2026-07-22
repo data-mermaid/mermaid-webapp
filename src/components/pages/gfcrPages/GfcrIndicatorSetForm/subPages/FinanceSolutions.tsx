@@ -26,8 +26,7 @@ import CopyFinanceSolutionsModal from '../modals/CopyFinanceSolutionsModal'
 import { useCurrentProject } from '../../../../../App/CurrentProjectContext'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
-import { Choices } from '../../../../../App/mermaidData/mermaidDataTypes'
-import { FinanceSolution, IndicatorSet } from '../modals/copyHelpers'
+import { Choices, FinanceSolution, IndicatorSet } from '../../../../../App/mermaidData/mermaidDataTypes'
 import styles from './FinanceSolutions.module.scss'
 
 interface FinanceSolutionsProps {
@@ -59,6 +58,7 @@ const FinanceSolutions = ({
 
   const copyFinanceSolutionText = t('gfcr.forms.finance_solutions.copy')
   const noCopyTargetsText = t('gfcr.forms.finance_solutions.no_copy_targets')
+  const noIncubatorText = t('gfcr.forms.finance_solutions.no_incubator')
 
   const { currentUser } = useCurrentUser()
   const { gfcrIndicatorSets } = useCurrentProject()
@@ -179,13 +179,13 @@ const FinanceSolutions = ({
         ),
         fs_type: fsTypeName,
         sector: sectorName,
-        used_an_incubator: incubatorName ? incubatorName : 'None',
+        used_an_incubator: incubatorName || noIncubatorText,
         gender_smart: <IconCheckLabel isCheck={!!gender_smart} />,
         local_enterprise: <IconCheckLabel isCheck={!!local_enterprise} />,
         sustainable_finance_mechanisms: sustainableFinanceMechanismNames.join(', '),
       }
     })
-  }, [choices, handleEditFinanceSolution, indicatorSet.finance_solutions])
+  }, [choices, handleEditFinanceSolution, indicatorSet.finance_solutions, noIncubatorText])
 
   const tableDefaultPrefs = useMemo(() => {
     return {

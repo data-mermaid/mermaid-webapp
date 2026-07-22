@@ -28,20 +28,9 @@ import { useCurrentProject } from '../../../../../App/CurrentProjectContext'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 import IconCheckLabel from '../subPages/IconCheckLabel'
-import { stripId, FinanceSolution, IndicatorSet } from './copyHelpers'
+import { stripId } from './copyHelpers'
+import { Choices, FinanceSolution, IndicatorSet } from '../../../../../App/mermaidData/mermaidDataTypes'
 import styles from './CopyFinanceSolutionsModal.module.scss'
-
-interface ChoiceItem {
-  id: string
-  name: string
-}
-
-interface Choices {
-  financesolutiontypes?: { data?: ChoiceItem[] }
-  sectors?: { data?: ChoiceItem[] }
-  incubatortypes?: { data?: ChoiceItem[] }
-  sustainablefinancemechanisms?: { data?: ChoiceItem[] }
-}
 
 export interface CopyFinanceSolutionsModalProps {
   isOpen: boolean
@@ -99,6 +88,7 @@ const CopyFinanceSolutionsModal = ({
   const sustainableFinanceMechanismsHeaderText = t(
     'gfcr.forms.finance_solutions.sustainable_finance_mechanisms',
   )
+  const noIncubatorText = t('gfcr.forms.finance_solutions.no_incubator')
 
   const copyableEntries = useMemo(() => {
     return gfcrIndicatorSets
@@ -209,13 +199,13 @@ const CopyFinanceSolutionsModal = ({
         name,
         fs_type: fsTypeName,
         sector: sectorName,
-        used_an_incubator: incubatorName ? incubatorName : 'None',
+        used_an_incubator: incubatorName || noIncubatorText,
         gender_smart: <IconCheckLabel isCheck={!!gender_smart} />,
         local_enterprise: <IconCheckLabel isCheck={!!local_enterprise} />,
         sustainable_finance_mechanisms: sustainableFinanceMechanismNames,
       }
     })
-  }, [choices, copyableEntries])
+  }, [choices, copyableEntries, noIncubatorText])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -306,14 +296,14 @@ const CopyFinanceSolutionsModal = ({
       )
       .filter((financeSolution): financeSolution is FinanceSolution => !!financeSolution)
 
-    const newFinanceSolutions = selectedFinanceSolutions.map(stripId)
-
-    const updatedIndicatorSet = {
-      ...indicatorSet,
-      finance_solutions: [...indicatorSet.finance_solutions, ...newFinanceSolutions],
-    }
-
     try {
+      const newFinanceSolutions = selectedFinanceSolutions.map(stripId)
+
+      const updatedIndicatorSet = {
+        ...indicatorSet,
+        finance_solutions: [...indicatorSet.finance_solutions, ...newFinanceSolutions],
+      }
+
       const response = await databaseSwitchboardInstance.saveIndicatorSet(
         projectId,
         updatedIndicatorSet,
