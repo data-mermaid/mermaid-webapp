@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+import { isCancel } from 'axios'
 import { useParams } from 'react-router'
 import PropTypes from 'prop-types'
 import Modal from '../../generic/Modal'
@@ -45,6 +46,7 @@ const ImageUploadModal = ({
 }) => {
   const { t } = useTranslation()
   const isCancelledRef = useRef(false)
+  const abortControllerRef = useRef(null)
   const fileInputRef = useRef(null)
   const { recordId, projectId } = useParams()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -97,10 +99,18 @@ const ImageUploadModal = ({
 
   const processSingleImage = async (file) => {
     try {
-      const imageData = await databaseSwitchboardInstance.uploadImage(projectId, recordId, file)
+      const imageData = await databaseSwitchboardInstance.uploadImage(
+        projectId,
+        recordId,
+        file,
+        abortControllerRef.current?.signal,
+      )
 
       return imageData
     } catch (error) {
+      if (isCancel(error)) {
+        return null
+      }
       handleHttpResponseError({
         error,
         callback: () => {
@@ -121,6 +131,7 @@ const ImageUploadModal = ({
     setIsUploading(true)
 
     isCancelledRef.current = false
+    abortControllerRef.current = new AbortController()
 
     const uploadedFiles = []
     let processedCount = 0
@@ -243,6 +254,7 @@ const ImageUploadModal = ({
 
   const handleCancelUpload = () => {
     isCancelledRef.current = true
+    abortControllerRef.current?.abort()
 
     toast.info(t('media.upload_cancelled'))
     if (toastId.current) {

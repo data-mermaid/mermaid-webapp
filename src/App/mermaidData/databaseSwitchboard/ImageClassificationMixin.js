@@ -48,7 +48,7 @@ const ImageClassificationMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    uploadImage = async function uploadImage(projectId, recordId, file) {
+    uploadImage = async function uploadImage(projectId, recordId, file, signal) {
       if (!projectId || !recordId || !file) {
         return Promise.reject(this._operationMissingParameterError)
       }
@@ -64,6 +64,7 @@ const ImageClassificationMixin = (Base) =>
                 ...(await getAuthorizationHeaders(this._getAccessToken)).headers,
                 'Content-Type': 'multipart/form-data',
               },
+              signal,
             })
             .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
