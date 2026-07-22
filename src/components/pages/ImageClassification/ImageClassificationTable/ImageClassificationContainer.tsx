@@ -21,12 +21,12 @@ interface ImageClassificationContainerProps {
   areValidationsShowing: boolean
   ignoreObservationValidations: () => void
   resetObservationValidations: () => void
-  onPhotosUploaded?: () => void
+  onPhotosChanged?: () => void
 }
 
 const ImageClassificationContainer = (props: ImageClassificationContainerProps) => {
   const { t } = useTranslation()
-  const { isImageClassificationEnabledForUser, onPhotosUploaded } = props
+  const { isImageClassificationEnabledForUser, onPhotosChanged } = props
   const [images, setImages] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -37,7 +37,7 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
 
   const handleFilesUpload = () => {
     setIsModalOpen(false)
-    onPhotosUploaded?.()
+    onPhotosChanged?.()
   }
 
   useEffect(
@@ -104,6 +104,7 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
         areValidationsShowing={props.areValidationsShowing}
         ignoreObservationValidations={props.ignoreObservationValidations}
         resetObservationValidations={props.resetObservationValidations}
+        onPhotosChanged={onPhotosChanged}
       />
       <ButtonContainer>
         {isImageClassificationEnabledForUser ? (
