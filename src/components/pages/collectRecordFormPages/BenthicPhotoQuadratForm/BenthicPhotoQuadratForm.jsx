@@ -260,6 +260,10 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       })
   }
 
+  const handlePhotosUploaded = useCallback(() => {
+    setCollectRecordBeingEdited((prev) => (prev ? { ...prev, validations: undefined } : prev))
+  }, [])
+
   const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
     (props) => {
       const isImageClassificationObservationsOfflineMessageShowing =
@@ -290,6 +294,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
           <ImageClassificationContainer
             {...props}
             isImageClassificationEnabledForUser={isImageClassificationEnabledForUser}
+            onPhotosUploaded={handlePhotosUploaded}
           />
         )
       }
@@ -301,6 +306,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       isNewRecord,
       isImageClassificationEnabledForUser,
       benthicAttributeSelectOptions,
+      handlePhotosUploaded,
     ],
   )
 
