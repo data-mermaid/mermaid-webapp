@@ -28,7 +28,7 @@ import { useCurrentProject } from '../../../../../App/CurrentProjectContext'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 import IconCheckLabel from '../subPages/IconCheckLabel'
-import { stripId, FinanceSolution } from './copyHelpers'
+import { stripId, FinanceSolution, IndicatorSet } from './copyHelpers'
 import styles from './CopyFinanceSolutionsModal.module.scss'
 
 interface ChoiceItem {
@@ -41,12 +41,6 @@ interface Choices {
   sectors?: { data?: ChoiceItem[] }
   incubatortypes?: { data?: ChoiceItem[] }
   sustainablefinancemechanisms?: { data?: ChoiceItem[] }
-}
-
-interface IndicatorSet {
-  id: string
-  title: string
-  finance_solutions: FinanceSolution[]
 }
 
 export interface CopyFinanceSolutionsModalProps {

@@ -33,6 +33,12 @@ export interface FinanceSolution {
   revenues: Revenue[]
 }
 
+export interface IndicatorSet {
+  id: string
+  title: string
+  finance_solutions: FinanceSolution[]
+}
+
 export type NewFinanceSolution = Omit<
   FinanceSolution,
   'id' | 'investment_sources' | 'revenues'

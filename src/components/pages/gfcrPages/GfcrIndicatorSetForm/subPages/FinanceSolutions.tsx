@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import PropTypes from 'prop-types'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
@@ -10,7 +9,6 @@ import { splitSearchQueryStrings } from '../../../../../library/splitSearchQuery
 import { getTableFilteredRows } from '../../../../../library/getTableFilteredRows'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { PAGE_SIZE_DEFAULT } from '../../../../../library/constants/constants'
-import { StyledToolbarButtonWrapper } from '../../Gfcr/Gfcr.styles'
 import { IconCopy, IconPlus } from '../../../../icons'
 import { ButtonSecondary, ToolbarButtonWrapper } from '../../../../generic/buttons'
 import { MuiTooltip } from '../../../../generic/MuiTooltip'
@@ -25,12 +23,26 @@ import {
 } from './subPages.styles'
 import FinanceSolutionModal from '../modals/FinanceSolutionModal'
 import CopyFinanceSolutionsModal from '../modals/CopyFinanceSolutionsModal'
-import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { useCurrentProject } from '../../../../../App/CurrentProjectContext'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
+import { Choices } from '../../../../../App/mermaidData/mermaidDataTypes'
+import { FinanceSolution, IndicatorSet } from '../modals/copyHelpers'
+import styles from './FinanceSolutions.module.scss'
 
-const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp }) => {
+interface FinanceSolutionsProps {
+  indicatorSet: IndicatorSet
+  setIndicatorSet: (indicatorSet: IndicatorSet) => void
+  choices: Choices
+  displayHelp?: boolean
+}
+
+const FinanceSolutions = ({
+  indicatorSet,
+  setIndicatorSet,
+  choices,
+  displayHelp,
+}: FinanceSolutionsProps) => {
   const { t } = useTranslation()
 
   const businessFinanceSolutionNameHeaderText = t(
@@ -52,7 +64,9 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
   const { gfcrIndicatorSets } = useCurrentProject()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [financeSolutionBeingEdited, setFinanceSolutionBeingEdited] = useState()
+  const [financeSolutionBeingEdited, setFinanceSolutionBeingEdited] = useState<
+    FinanceSolution | undefined
+  >()
   const [isCopyModalOpen, setIsCopyModalOpen] = useState(false)
 
   const hasCopyTargets = gfcrIndicatorSets
@@ -276,7 +290,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
 
   const handleFinanceSolutionModalDismiss = (resetForm) => {
     resetForm()
-    setFinanceSolutionBeingEdited()
+    setFinanceSolutionBeingEdited(undefined)
     setIsModalOpen(false)
   }
 
@@ -290,12 +304,12 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
   }
 
   const toolbarButtons = (
-    <StyledToolbarButtonWrapper>
+    <div className={styles.toolbarButtons}>
       <ButtonSecondary onClick={(event) => handleAddFinanceSolution(event)}>
         <IconPlus /> {t('gfcr.forms.finance_solutions.add')}
       </ButtonSecondary>
       <MuiTooltip title={hasCopyTargets ? '' : noCopyTargetsText}>
-        <span>
+        <span className={styles.copyButtonTooltipWrapper}>
           <ButtonSecondary
             onClick={(event) => handleOpenCopyModal(event)}
             disabled={!hasCopyTargets}
@@ -305,7 +319,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
           </ButtonSecondary>
         </span>
       </MuiTooltip>
-    </StyledToolbarButtonWrapper>
+    </div>
   )
 
   const table = indicatorSet.finance_solutions.length ? (
@@ -318,7 +332,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
       onPageSizeChange={handleRowsNumberChange}
       pageSize={pageSize}
       unfilteredRowLength={indicatorSet.finance_solutions.length}
-      searchFilteredRowLength={searchFilteredRowsLength}
+      searchFilteredRowsLength={searchFilteredRowsLength}
       isSearchFilterEnabled={!!globalFilter?.length}
       onPreviousClick={previousPage}
       previousDisabled={!canPreviousPage}
@@ -367,13 +381,6 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
       />
     </>
   )
-}
-
-FinanceSolutions.propTypes = {
-  indicatorSet: PropTypes.object.isRequired,
-  setIndicatorSet: PropTypes.func.isRequired,
-  choices: choicesPropType.isRequired,
-  displayHelp: PropTypes.bool,
 }
 
 export default FinanceSolutions
