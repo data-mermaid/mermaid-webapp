@@ -12,6 +12,7 @@ import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { BenthicPhotoQuadratRecord } from '../../../../App/mermaidData/mermaidDataTypes'
 import { ValidationResult } from '../../collectRecordFormPages/CollectRecordFormPage/getDuplicateValidationInfo'
+import { ImageClassificationImage } from '../../../../types/ImageClassificationTypes'
 
 interface ImageClassificationContainerProps {
   isImageClassificationEnabledForUser: boolean
@@ -21,11 +22,12 @@ interface ImageClassificationContainerProps {
   areValidationsShowing: boolean
   ignoreObservationValidations: () => void
   resetObservationValidations: () => void
+  onPhotosChanged?: () => void
 }
 
 const ImageClassificationContainer = (props: ImageClassificationContainerProps) => {
   const { t } = useTranslation()
-  const { isImageClassificationEnabledForUser } = props
+  const { isImageClassificationEnabledForUser, onPhotosChanged } = props
   const [images, setImages] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -34,8 +36,10 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isUploadingRef = useRef(isUploading) // we use a ref for state here so that we can access non-stale value from within setInterval callbacks
 
-  const handleFilesUpload = () => {
+  const handleFilesUpload = (uploadedFile: ImageClassificationImage) => {
     setIsModalOpen(false)
+    setImages((prev) => [...prev, uploadedFile])
+    onPhotosChanged?.()
   }
 
   useEffect(
@@ -102,6 +106,7 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
         areValidationsShowing={props.areValidationsShowing}
         ignoreObservationValidations={props.ignoreObservationValidations}
         resetObservationValidations={props.resetObservationValidations}
+        onPhotosChanged={onPhotosChanged}
       />
       <ButtonContainer>
         {isImageClassificationEnabledForUser ? (
