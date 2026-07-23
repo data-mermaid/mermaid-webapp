@@ -17,6 +17,8 @@ interface UseAuthenticationParams {
 interface UseAuthenticationReturn {
   isMermaidAuthenticated: boolean
   logoutMermaid: () => void
+  loginMermaid: () => void
+  emailNotVerified: boolean
   getAccessToken: () => Promise<string>
 }
 
@@ -25,6 +27,7 @@ const useAuthentication = ({
 }: UseAuthenticationParams): UseAuthenticationReturn => {
   const { isAppOnline } = useOnlineStatus()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
+  const [emailNotVerified, setEmailNotVerified] = useState(false)
   const navigate = useNavigate()
 
   const setAuthenticatedStates = useCallback(() => {
@@ -106,13 +109,12 @@ const useAuthentication = ({
       if (error && error === 'access_denied') {
         const errorDescription = urlParams.get('error_description')
         if (errorDescription && errorDescription === 'email_not_verified') {
-          const returnMsg = 'You must verify your email before you can login.'
-          const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID
-          window.location.href = `https://${
-            import.meta.env.VITE_AUTH0_DOMAIN
-          }/login?client=${clientId}&error=${error}&error_description=${encodeURIComponent(
-            returnMsg,
-          )}`
+          // Do NOT redirect to Auth0's /login page directly here. That bypasses the
+          // OAuth PKCE flow (no redirect_uri/state/code_challenge/nonce), which leaves
+          // Auth0 with no valid transaction to complete and produces the
+          // "Oops! something went wrong" error page on /login/callback.
+          // Instead surface a dedicated screen and let loginMermaid start a proper flow.
+          setEmailNotVerified(true)
         }
       } else {
         const { pathname, search } = window.location
@@ -159,6 +161,21 @@ const useAuthentication = ({
     handlePostLoginRedirect,
   ])
 
+  const loginMermaid = useCallback(() => {
+    setEmailNotVerified(false)
+
+    const { pathname, search } = window.location
+    const isValidReturnPath = pathname.startsWith('/') && !pathname.startsWith('//')
+
+    // Route through the SDK so the full OAuth PKCE flow is initialized
+    // (redirect_uri, state, code_challenge, nonce).
+    auth0LoginWithRedirect({
+      appState: {
+        returnTo: isValidReturnPath ? `${pathname}${search}` : '/',
+      },
+    })
+  }, [auth0LoginWithRedirect])
+
   const logoutMermaid = useCallback(() => {
     if (isAppOnline) {
       sessionStorage.removeItem('auth0_returnTo')
@@ -175,6 +192,8 @@ const useAuthentication = ({
   return {
     isMermaidAuthenticated,
     logoutMermaid,
+    loginMermaid,
+    emailNotVerified,
     getAccessToken: getAuth0AccessTokenSilently,
   }
 }
