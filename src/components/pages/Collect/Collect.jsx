@@ -54,7 +54,7 @@ import { getIsEmptyStringOrWhitespace } from '../../../library/getIsEmptyStringO
 // border colour is consistent across all app languages.
 const RECORD_STATUS_COLORS = {
   [VALIDATION_STATUS.error]: theme.color.cautionColor,
-  [VALIDATION_STATUS.ok]: '#298217',
+  [VALIDATION_STATUS.ok]: theme.color.successColor,
   [VALIDATION_STATUS.stale]: theme.color.primaryColor,
   [VALIDATION_STATUS.warning]: theme.color.warningColor,
 }
