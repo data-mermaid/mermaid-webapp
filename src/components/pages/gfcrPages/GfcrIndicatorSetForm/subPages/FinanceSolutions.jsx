@@ -41,6 +41,11 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
   const sustainableFinanceMechanismsHeaderText = t(
     'gfcr.forms.finance_solutions.sustainable_finance_mechanisms',
   )
+  const geographicalCoverageHeaderText = t('gfcr.forms.finance_solutions.geographical_coverage')
+  const tafNameHeaderText = t('gfcr.forms.finance_solutions.taf_name')
+  const numberOfSolutionsSupportedByHeaderText = t(
+    'gfcr.forms.finance_solutions.number_of_solutions_supported_by_table_header',
+  )
 
   const { currentUser } = useCurrentUser()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
@@ -65,9 +70,25 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         sortType: reactTableNaturalSort,
       },
       {
+        Header: geographicalCoverageHeaderText,
+        accessor: 'geographical_coverage',
+        sortType: reactTableNaturalSort,
+      },
+      {
         Header: usedAnIncubatorHeaderText,
         accessor: 'used_an_incubator',
         sortType: reactTableNaturalSort,
+      },
+      {
+        Header: tafNameHeaderText,
+        accessor: 'taf_name',
+        sortType: reactTableNaturalSort,
+      },
+      {
+        Header: localEnterpriseHeaderText,
+        accessor: 'local_enterprise',
+        sortType: reactTableNaturalSort,
+        align: 'center',
       },
       {
         Header: gender2xCriteriaHeaderText,
@@ -76,10 +97,9 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         align: 'center',
       },
       {
-        Header: localEnterpriseHeaderText,
-        accessor: 'local_enterprise',
+        Header: numberOfSolutionsSupportedByHeaderText,
+        accessor: 'number_of_solutions_supported_by',
         sortType: reactTableNaturalSort,
-        align: 'center',
       },
       {
         Header: sustainableFinanceMechanismsHeaderText,
@@ -91,9 +111,12 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
       businessFinanceSolutionNameHeaderText,
       fsTypeHeaderText,
       sectorHeaderText,
+      geographicalCoverageHeaderText,
       usedAnIncubatorHeaderText,
-      gender2xCriteriaHeaderText,
+      tafNameHeaderText,
       localEnterpriseHeaderText,
+      gender2xCriteriaHeaderText,
+      numberOfSolutionsSupportedByHeaderText,
       sustainableFinanceMechanismsHeaderText,
     ],
   )
@@ -123,9 +146,12 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         name,
         fs_type,
         sector,
+        geographical_coverage,
         used_an_incubator,
+        taf_name,
         gender_smart,
         local_enterprise,
+        number_of_solutions_supported_by,
         sustainable_finance_mechanisms,
       } = indicatorSet
 
@@ -134,6 +160,9 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
       )?.name
       const sectorName = choices.sectors.data?.find(
         (sectorChoice) => sectorChoice.id === sector,
+      )?.name
+      const geographicalCoverageName = choices.geographicalcoverage?.data?.find(
+        (geographicalCoverageChoice) => geographicalCoverageChoice.id === geographical_coverage,
       )?.name
       const incubatorName = choices.incubatortypes.data?.find(
         (incubatorTypeChoice) => incubatorTypeChoice.id === used_an_incubator,
@@ -153,9 +182,12 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         ),
         fs_type: fsTypeName,
         sector: sectorName,
+        geographical_coverage: geographicalCoverageName,
         used_an_incubator: incubatorName ? incubatorName : 'None',
+        taf_name,
         gender_smart: <IconCheckLabel isCheck={!!gender_smart} />,
         local_enterprise: <IconCheckLabel isCheck={!!local_enterprise} />,
+        number_of_solutions_supported_by,
         sustainable_finance_mechanisms: sustainableFinanceMechanismNames.join(', '),
       }
     })
@@ -184,9 +216,12 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         'values.name.props.children',
         'values.fs_type',
         'values.sector',
+        'values.geographical_coverage',
         'values.used_an_incubator',
+        'values.taf_name',
         'values.gender_smart',
         'values.local_enterprise',
+        'values.number_of_solutions_supported_by',
         'values.sustainable_finance_mechanisms',
       ]
 
