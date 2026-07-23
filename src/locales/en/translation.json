@@ -33,6 +33,11 @@
     "small_reef": "Small reef",
     "terrestrial_reef_flat": "Terrestrial reef flat"
   },
+  "auth": {
+    "email_not_verified_heading": "Please verify your email",
+    "email_not_verified_message": "We sent a verification link to your email address. Open it to verify your account, then try logging in again.",
+    "try_login_again": "Try logging in"
+  },
   "benthic_observations": {
     "add_benthic_attribute": "Propose new benthic attribute",
     "attribute_already_exists": "Proposed attribute {{attribute}} already exists in the list. Observation has been updated with this attribute.",
@@ -1081,6 +1086,7 @@
       "enter_email": "Please enter an email address",
       "failed_sample_units_transfer": "Sample units failed to transfer",
       "invalid_email": "Invalid email address",
+      "last_admin_tooltip": "You are the only admin on this project. Assign another admin before changing your role or removing yourself.",
       "new_user_added": "New user added",
       "pending_user_added": "Sign-up email sent. New user added as pending user.",
       "role_changed_error": "{{userName}}'s role has not been changed",
@@ -1088,7 +1094,8 @@
       "sample_units_transferred_one": "{{count}} sample unit transferred",
       "sample_units_transferred_other": "{{count}} sample units transferred",
       "something_went_wrong": "Something went wrong",
-      "user_removed": "User removed"
+      "user_removed": "User removed",
+      "user_remove_error": "{{userName}} has not been removed from project"
     },
     "not_signed_up": "will need to sign up because they're not already a MERMAID user",
     "pending_user": "Pending user",
