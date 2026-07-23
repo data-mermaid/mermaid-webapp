@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest'
 import {
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess,
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError,
-} from './testHelpers.DatabseSwitchboard'
+} from './testHelpers.DatabaseSwitchboard'
 
 describe('Offline delete fishbelt', () => {
   test('deleteSampleUnit offline returns error message upon dexie error', async () => {

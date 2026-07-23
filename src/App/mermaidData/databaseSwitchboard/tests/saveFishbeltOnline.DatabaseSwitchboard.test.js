@@ -5,7 +5,7 @@ import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidAp
 import {
   getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess,
   getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError,
-} from './testHelpers.DatabseSwitchboard'
+} from './testHelpers.DatabaseSwitchboard'
 
 test('saveFishbelt throws error if any parameters are missing', async () => {
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
