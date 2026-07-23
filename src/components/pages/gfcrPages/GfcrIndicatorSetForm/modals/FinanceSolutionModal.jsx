@@ -172,10 +172,7 @@ const FinanceSolutionModal = ({
         errors.name = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      const isStandardFsType = (choices.financesolutiontypes?.data || []).some(
-        (c) => c.id === values.fs_type,
-      )
-      if (!values.fs_type || !isStandardFsType) {
+      if (!values.fs_type) {
         errors.fs_type = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
@@ -251,22 +248,10 @@ const FinanceSolutionModal = ({
 
   const _setIsFormDirty = useEffect(() => setIsFormDirty(!!formik.dirty), [formik.dirty])
 
-  const fsTypeOptions = useMemo(() => {
-    const standardData = choices.financesolutiontypes?.data || []
-    const standard = getOptions(standardData)
-    const storedFsType = financeSolution?.fs_type
-    const isNonStandard = !!storedFsType && !standardData.some((c) => c.id === storedFsType)
-    if (isNonStandard && formik.values.fs_type === storedFsType) {
-      return [
-        {
-          value: storedFsType,
-          label: `${storedFsType} ${t('gfcr.non_standard_title_suffix')}`,
-        },
-        ...standard,
-      ]
-    }
-    return standard
-  }, [choices.financesolutiontypes?.data, financeSolution?.fs_type, formik.values.fs_type, t])
+  const fsTypeOptions = useMemo(
+    () => getOptions(choices.financesolutiontypes?.data || []),
+    [choices.financesolutiontypes?.data],
+  )
 
   const showSector = formik.values.fs_type === 'business'
   const showGeographicalCoverage = formik.values.fs_type === 'ctf'

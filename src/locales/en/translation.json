@@ -239,8 +239,7 @@
       "indicator_set_save_failed": "There was an error saving the fund indicator set",
       "indicator_sets_unavailable": "GFCR fund indicator sets are currently unavailable",
       "indicators_disable_failed": "Could not disable GFCR fund indicators for this project",
-      "indicators_enable_failed": "Could not enable GFCR fund indicators for this project",
-      "non_standard_title": "Please select a standard title"
+      "indicators_enable_failed": "Could not enable GFCR fund indicators for this project"
     },
     "exporting": "Exporting",
     "form_errors": "Form errors:",
@@ -413,7 +412,6 @@
     "investments": "Investments",
     "no_indicator_info": "Select 'Create new' to add a fund indicator set to this project",
     "no_indicator_sets": "No fund indicator sets yet",
-    "non_standard_title_suffix": "(non-standard)",
     "partnership": "GFCR is a global partnership that aims to mobilize resources to support coral reef conservation and restoration projects around the world.",
     "people": "People",
     "programme_area": "Programme area",
