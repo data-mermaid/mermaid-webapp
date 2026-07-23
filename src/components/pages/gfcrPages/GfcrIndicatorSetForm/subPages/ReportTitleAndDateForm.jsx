@@ -75,22 +75,13 @@ const ReportTitleAndDateForm = ({
   const allTitleChoices = choices?.indicatorsettitles?.data ?? []
   const standardOptions = getOptions(allTitleChoices.filter(({ id }) => validTitleIds.includes(id)))
 
-  const currentTitle = formik.values.title
-  const isNonStandard = !!currentTitle && !validTitleIds.includes(currentTitle)
-  const titleOptions = isNonStandard
-    ? [
-        { value: currentTitle, label: `${currentTitle} ${t('gfcr.non_standard_title_suffix')}` },
-        ...standardOptions,
-      ]
-    : standardOptions
-
   return (
     <StyledGfcrInputWrapper>
       <InputSelectWithLabelAndValidation
         required
         label={t('title')}
         id="gfcr-title"
-        options={titleOptions}
+        options={standardOptions}
         {...formik.getFieldProps('title')}
         validationType={formik.errors.title && formik.touched.title ? 'error' : null}
         validationMessages={formik.errors.title}
