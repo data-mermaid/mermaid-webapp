@@ -316,11 +316,8 @@ const CopyFinanceSolutionsModal = ({
       onDismiss()
     } catch (error) {
       setIsSaving(false)
-
-      if (error) {
-        toast.error(...getToastArguments(indicatorSetSaveFailedText))
-        handleHttpResponseError({ error })
-      }
+      toast.error(...getToastArguments(indicatorSetSaveFailedText))
+      handleHttpResponseError({ error })
     }
   }
 
