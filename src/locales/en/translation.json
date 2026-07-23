@@ -33,6 +33,11 @@
     "small_reef": "Small reef",
     "terrestrial_reef_flat": "Terrestrial reef flat"
   },
+  "auth": {
+    "email_not_verified_heading": "Please verify your email",
+    "email_not_verified_message": "We sent a verification link to your email address. Open it to verify your account, then try logging in again.",
+    "try_login_again": "Try logging in"
+  },
   "benthic_observations": {
     "add_benthic_attribute": "Propose new benthic attribute",
     "attribute_already_exists": "Proposed attribute {{attribute}} already exists in the list. Observation has been updated with this attribute.",
