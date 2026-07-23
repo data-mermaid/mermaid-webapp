@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Modal from '../../generic/Modal'
 import { ButtonCaution, ButtonPrimary, ButtonSecondary } from '../../generic/buttons.js'
 import { toast } from 'react-toastify'
+import { isCancel } from 'axios'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext.jsx'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext.jsx'
 import { getToastArguments } from '../../../library/getToastArguments'
@@ -45,6 +46,7 @@ const ImageUploadModal = ({
 }) => {
   const { t } = useTranslation()
   const isCancelledRef = useRef(false)
+  const abortControllerRef = useRef(null)
   const fileInputRef = useRef(null)
   const { recordId, projectId } = useParams()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -95,12 +97,20 @@ const ImageUploadModal = ({
     })
   }
 
-  const processSingleImage = async (file) => {
+  const processSingleImage = async (file, signal) => {
     try {
-      const imageData = await databaseSwitchboardInstance.uploadImage(projectId, recordId, file)
+      const imageData = await databaseSwitchboardInstance.uploadImage(
+        projectId,
+        recordId,
+        file,
+        signal,
+      )
 
       return imageData
     } catch (error) {
+      if (isCancel(error)) {
+        return null
+      }
       handleHttpResponseError({
         error,
         callback: () => {
@@ -116,14 +126,25 @@ const ImageUploadModal = ({
     }
   }
 
+  const validateFileSync = (file) => {
+    if (!VALID_IMAGE_TYPES.includes(file.type)) {
+      return `${t('image_classification.errors.invalid_file_type')}: ${file.name}`
+    }
+    if (file.size > MAX_IMAGE_UPLOAD_SIZE) {
+      return `${t('image_classification.errors.file_too_big')}: ${file.name}`
+    }
+    if (existingFiles.some((existingFile) => existingFile.original_image_name === file.name)) {
+      return t('image_classification.errors.duplicate_file', { fileName: file.name })
+    }
+    return null
+  }
+
   const validateAndUploadFiles = async (files) => {
     onClose()
     setIsUploading(true)
-
     isCancelledRef.current = false
 
     const uploadedFiles = []
-    let processedCount = 0
 
     for (const file of files) {
       if (isCancelledRef.current) {
@@ -134,24 +155,15 @@ const ImageUploadModal = ({
       // Validate file type, size, and uniqueness synchronously before showing the upload toast.
       // The toast is created lazily (below, before the first async operation) so that if all
       // files fail these synchronous checks — e.g. all are duplicates — no upload toast appears.
-      if (!VALID_IMAGE_TYPES.includes(file.type)) {
-        toast.error(`${t('image_classification.errors.invalid_file_type')}: ${file.name}`)
-        continue
-      }
-      if (file.size > MAX_IMAGE_UPLOAD_SIZE) {
-        toast.error(`${t('image_classification.errors.file_too_big')}: ${file.name}`)
+      const syncError = validateFileSync(file)
+      if (syncError) {
+        toast.error(syncError)
         continue
       }
 
-      if (existingFiles.some((existingFile) => existingFile.original_image_name === file.name)) {
-        toast.error(t('image_classification.errors.duplicate_file', { fileName: file.name }))
-        continue
-      }
-
-      // Show the persistent uploading toast now — at least one file has passed synchronous
-      // validation and is about to be processed asynchronously. Creating the toast here (rather
-      // than before the loop) ensures React has a chance to render it before any dismissal, which
-      // avoids a race condition where toast.dismiss() fires before the toast is committed.
+      // Creating the toast here (rather than before the loop) ensures React has a chance to
+      // render it before any dismissal, avoiding a race condition where toast.dismiss() fires
+      // before the toast is committed.
       if (!toastId.current) {
         toastId.current = toast.info(renderUploadProgress(0, files.length, handleCancelUpload), {
           autoClose: false,
@@ -177,24 +189,24 @@ const ImageUploadModal = ({
         continue
       }
 
-      // Start processing the file as soon as it's validated.
-      const uploadedFile = await processSingleImage(file)
-      const isFirstUploadedFile = uploadedFile && uploadedFiles.length === 0
-      if (isFirstUploadedFile) {
-        // wait for first image to be successfully
-        // uploaded before initiating polling
-        // to avoid hitting the API unecessarily
-        pollCollectRecordUntilAllImagesProcessed()
+      if (isCancelledRef.current) {
+        setIsUploading(false)
+        return
       }
+
+      abortControllerRef.current = new AbortController()
+      const uploadedFile = await processSingleImage(file, abortControllerRef.current.signal)
+
       if (uploadedFile) {
+        if (uploadedFiles.length === 0) {
+          // start polling only after the first successful upload to avoid unnecessary API calls
+          pollCollectRecordUntilAllImagesProcessed()
+        }
         uploadedFiles.push(uploadedFile)
         onFilesUpload(uploadedFile)
-
-        processedCount += 1
-
         if (toastId.current) {
           toast.update(toastId.current, {
-            render: renderUploadProgress(processedCount, files.length, handleCancelUpload),
+            render: renderUploadProgress(uploadedFiles.length, files.length, handleCancelUpload),
           })
         }
       }
@@ -218,7 +230,6 @@ const ImageUploadModal = ({
     }
 
     toastId.current = null
-
     setIsUploading(false)
   }
 
@@ -243,6 +254,7 @@ const ImageUploadModal = ({
 
   const handleCancelUpload = () => {
     isCancelledRef.current = true
+    abortControllerRef.current?.abort()
 
     toast.info(t('media.upload_cancelled'))
     if (toastId.current) {
