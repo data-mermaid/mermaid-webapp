@@ -45,8 +45,19 @@ import {
 } from '../../../App/mermaidData/recordProtocolHelpers'
 import { getIsUserReadOnlyForProject } from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
-import { TrCollectRecordStatus } from './Collect.styles'
+import theme from '../../../theme'
+import { VALIDATION_STATUS } from './collectConstants'
+import styles from './Collect.module.scss'
 import { getIsEmptyStringOrWhitespace } from '../../../library/getIsEmptyStringOrWhitespace'
+
+// Keyed on the stable status value (not the translated label) so the status
+// border colour is consistent across all app languages.
+const RECORD_STATUS_COLORS = {
+  [VALIDATION_STATUS.error]: theme.color.cautionColor,
+  [VALIDATION_STATUS.ok]: theme.color.successColor,
+  [VALIDATION_STATUS.stale]: theme.color.primaryColor,
+  [VALIDATION_STATUS.warning]: theme.color.warningColor,
+}
 
 const Collect = () => {
   const { t } = useTranslation()
@@ -203,6 +214,7 @@ const Collect = () => {
           sampleDate: uiLabels.sampleDate,
           observers: uiLabels.observers,
           status: uiLabels.status,
+          statusValue: uiLabels.statusValue,
         }
       }),
     [collectRecordsForUiDisplay, currentProjectPath],
@@ -381,10 +393,11 @@ const Collect = () => {
               const { key: rowKey, ...rowProps } = row.getRowProps()
 
               return (
-                <TrCollectRecordStatus
+                <Tr
                   key={rowKey}
                   {...rowProps}
-                  $recordStatusLabel={row.values.status}
+                  className={styles['record-status-row']}
+                  style={{ '--record-status-color': RECORD_STATUS_COLORS[row.original.statusValue] }}
                 >
                   {row.cells.map((cell) => {
                     const isCellEmpty =
@@ -401,7 +414,7 @@ const Collect = () => {
                       </Td>
                     )
                   })}
-                </TrCollectRecordStatus>
+                </Tr>
               )
             })}
           </tbody>
