@@ -34,11 +34,11 @@ import { getOptions } from '../../../../../library/getOptions'
 import { IconInfo } from '../../../../icons'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
 import GfcrHelperLinks from '../subPages/GfcrHelperLinks'
-
-// Field visibility per fs_type — see "GFCR change requests - May_2026.csv"
-const BUSINESS_OR_FINANCIAL_MECHANISM_TYPES = ['business', 'financial_mechanism']
-const LOCAL_ENTERPRISE_TYPES = ['financial_facility', 'business', 'financial_mechanism']
-const NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES = ['taf', 'ctf', 'financial_facility']
+import {
+  BUSINESS_OR_FINANCIAL_MECHANISM_TYPES,
+  LOCAL_ENTERPRISE_TYPES,
+  NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES,
+} from './financeSolutionFieldVisibility'
 
 const isTafNameVisible = (fs_type, used_an_incubator) =>
   BUSINESS_OR_FINANCIAL_MECHANISM_TYPES.includes(fs_type) &&
