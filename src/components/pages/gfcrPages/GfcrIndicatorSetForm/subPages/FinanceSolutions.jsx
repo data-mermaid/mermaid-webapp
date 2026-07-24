@@ -127,12 +127,18 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         accessor: 'local_enterprise',
         sortType: reactTableNaturalSort,
         align: 'center',
+        // eslint-disable-next-line react/prop-types
+        Cell: ({ value }) =>
+          typeof value === 'boolean' ? <IconCheckLabel isCheck={value} /> : null,
       },
       {
         Header: gender2xCriteriaHeaderText,
         accessor: 'gender_smart',
         sortType: reactTableNaturalSort,
         align: 'center',
+        // eslint-disable-next-line react/prop-types
+        Cell: ({ value }) =>
+          typeof value === 'boolean' ? <IconCheckLabel isCheck={value} /> : null,
       },
       {
         Header: numberOfSolutionsSupportedHeaderText,
@@ -227,16 +233,10 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         fs_type: fsTypeName,
         sector: sectorName,
         geographical_coverage: geographicalCoverageName,
-        used_an_incubator: isUsedAnIncubatorApplicable(fs_type)
-          ? incubatorName || 'None'
-          : null,
+        used_an_incubator: isUsedAnIncubatorApplicable(fs_type) ? incubatorName || 'None' : null,
         taf_name,
-        local_enterprise: isLocalEnterpriseApplicable(fs_type) ? (
-          <IconCheckLabel isCheck={!!local_enterprise} />
-        ) : null,
-        gender_smart: isGenderSmartApplicable(fs_type) ? (
-          <IconCheckLabel isCheck={!!gender_smart} />
-        ) : null,
+        local_enterprise: isLocalEnterpriseApplicable(fs_type) ? !!local_enterprise : null,
+        gender_smart: isGenderSmartApplicable(fs_type) ? !!gender_smart : null,
         number_of_solutions_supported_by: isNumberOfSolutionsSupportedApplicable(fs_type)
           ? number_of_solutions_supported_by
           : null,
