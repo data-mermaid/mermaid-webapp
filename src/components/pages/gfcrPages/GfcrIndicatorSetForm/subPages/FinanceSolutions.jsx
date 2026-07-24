@@ -26,6 +26,12 @@ import FinanceSolutionModal from '../modals/FinanceSolutionModal'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
+import {
+  isGenderSmartApplicable,
+  isLocalEnterpriseApplicable,
+  isNumberOfSolutionsSupportedApplicable,
+  isUsedAnIncubatorApplicable,
+} from '../modals/financeSolutionFieldVisibility'
 
 const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp }) => {
   const { t } = useTranslation()
@@ -43,8 +49,8 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
   )
   const geographicalCoverageHeaderText = t('gfcr.forms.finance_solutions.geographical_coverage')
   const tafNameHeaderText = t('gfcr.forms.finance_solutions.taf_name')
-  const numberOfSolutionsSupportedByHeaderText = t(
-    'gfcr.forms.finance_solutions.number_of_solutions_supported_by_table_header',
+  const numberOfSolutionsSupportedHeaderText = t(
+    'gfcr.forms.finance_solutions.number_of_solutions_supported_table_header',
   )
 
   const { currentUser } = useCurrentUser()
@@ -52,8 +58,40 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [financeSolutionBeingEdited, setFinanceSolutionBeingEdited] = useState()
 
-  const tableColumns = useMemo(
-    () => [
+  // A column is hidden when it is blank for every row. For the applicability
+  // driven columns (the yes/no columns, "used an incubator" and "number of
+  // solutions supported") "blank" means the field does not apply to any row's
+  // type (see decision on M1981); for the text columns it means no value was
+  // entered.
+  const columnHasData = useMemo(() => {
+    const financeSolutions = indicatorSet.finance_solutions
+
+    return {
+      sector: financeSolutions.some((financeSolution) => !!financeSolution.sector),
+      geographical_coverage: financeSolutions.some(
+        (financeSolution) => !!financeSolution.geographical_coverage,
+      ),
+      used_an_incubator: financeSolutions.some((financeSolution) =>
+        isUsedAnIncubatorApplicable(financeSolution.fs_type),
+      ),
+      taf_name: financeSolutions.some((financeSolution) => !!financeSolution.taf_name),
+      local_enterprise: financeSolutions.some((financeSolution) =>
+        isLocalEnterpriseApplicable(financeSolution.fs_type),
+      ),
+      gender_smart: financeSolutions.some((financeSolution) =>
+        isGenderSmartApplicable(financeSolution.fs_type),
+      ),
+      number_of_solutions_supported_by: financeSolutions.some((financeSolution) =>
+        isNumberOfSolutionsSupportedApplicable(financeSolution.fs_type),
+      ),
+      sustainable_finance_mechanisms: financeSolutions.some(
+        (financeSolution) => financeSolution.sustainable_finance_mechanisms?.length > 0,
+      ),
+    }
+  }, [indicatorSet.finance_solutions])
+
+  const tableColumns = useMemo(() => {
+    const columns = [
       {
         Header: businessFinanceSolutionNameHeaderText,
         accessor: 'name',
@@ -89,15 +127,21 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         accessor: 'local_enterprise',
         sortType: reactTableNaturalSort,
         align: 'center',
+        // eslint-disable-next-line react/prop-types
+        Cell: ({ value }) =>
+          typeof value === 'boolean' ? <IconCheckLabel isCheck={value} /> : null,
       },
       {
         Header: gender2xCriteriaHeaderText,
         accessor: 'gender_smart',
         sortType: reactTableNaturalSort,
         align: 'center',
+        // eslint-disable-next-line react/prop-types
+        Cell: ({ value }) =>
+          typeof value === 'boolean' ? <IconCheckLabel isCheck={value} /> : null,
       },
       {
-        Header: numberOfSolutionsSupportedByHeaderText,
+        Header: numberOfSolutionsSupportedHeaderText,
         accessor: 'number_of_solutions_supported_by',
         sortType: reactTableNaturalSort,
       },
@@ -106,20 +150,26 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         accessor: 'sustainable_finance_mechanisms',
         sortType: reactTableNaturalSort,
       },
-    ],
-    [
-      businessFinanceSolutionNameHeaderText,
-      fsTypeHeaderText,
-      sectorHeaderText,
-      geographicalCoverageHeaderText,
-      usedAnIncubatorHeaderText,
-      tafNameHeaderText,
-      localEnterpriseHeaderText,
-      gender2xCriteriaHeaderText,
-      numberOfSolutionsSupportedByHeaderText,
-      sustainableFinanceMechanismsHeaderText,
-    ],
-  )
+    ]
+
+    // Drop any column that columnHasData marks as blank for every row. Columns
+    // not listed in columnHasData (e.g. name, fs_type) are always shown.
+    return columns.filter(
+      (column) => !(column.accessor in columnHasData) || columnHasData[column.accessor],
+    )
+  }, [
+    businessFinanceSolutionNameHeaderText,
+    fsTypeHeaderText,
+    sectorHeaderText,
+    geographicalCoverageHeaderText,
+    usedAnIncubatorHeaderText,
+    tafNameHeaderText,
+    localEnterpriseHeaderText,
+    gender2xCriteriaHeaderText,
+    numberOfSolutionsSupportedHeaderText,
+    sustainableFinanceMechanismsHeaderText,
+    columnHasData,
+  ])
 
   const handleEditFinanceSolution = useCallback(
     (event) => {
@@ -183,11 +233,13 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         fs_type: fsTypeName,
         sector: sectorName,
         geographical_coverage: geographicalCoverageName,
-        used_an_incubator: incubatorName ? incubatorName : 'None',
+        used_an_incubator: isUsedAnIncubatorApplicable(fs_type) ? incubatorName || 'None' : null,
         taf_name,
-        gender_smart: <IconCheckLabel isCheck={!!gender_smart} />,
-        local_enterprise: <IconCheckLabel isCheck={!!local_enterprise} />,
-        number_of_solutions_supported_by,
+        local_enterprise: isLocalEnterpriseApplicable(fs_type) ? !!local_enterprise : null,
+        gender_smart: isGenderSmartApplicable(fs_type) ? !!gender_smart : null,
+        number_of_solutions_supported_by: isNumberOfSolutionsSupportedApplicable(fs_type)
+          ? number_of_solutions_supported_by
+          : null,
         sustainable_finance_mechanisms: sustainableFinanceMechanismNames.join(', '),
       }
     })
