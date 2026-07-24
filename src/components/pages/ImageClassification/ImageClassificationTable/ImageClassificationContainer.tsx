@@ -51,13 +51,15 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
     [isUploading],
   )
 
-  const pollCollectRecordUntilAllImagesProcessed = () => {
+  const pollCollectRecordUntilAllImagesProcessed = (minResultsCount = 0, maxPolls = Infinity) => {
     if (!databaseSwitchboardInstance || !handleHttpResponseError || !projectId || !recordId) {
       throw new Error('pollCollectRecordUntilAllImagesProcessed has missing dependencies')
     }
     let intervalId
+    let pollCount = 0
 
     const pollCollectRecordForImages = async () => {
+      pollCount++
       try {
         const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
           projectId,
@@ -77,7 +79,12 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
         // (since useState values will be stale within a closure/setInterval callback,
         // we use a reference to access the current value for isUploading instead of the stale closure value directly)
         const areMoreImagesStillBeingUploaded = isUploadingRef.current
-        if (areAllUploadedImagesProcessed && !areMoreImagesStillBeingUploaded) {
+        const hasReachedMinCount = response.results.length >= minResultsCount
+        const hasExceededMaxPolls = pollCount >= maxPolls
+        if (
+          (areAllUploadedImagesProcessed && hasReachedMinCount && !areMoreImagesStillBeingUploaded) ||
+          hasExceededMaxPolls
+        ) {
           clearTimeout(intervalId)
         } else {
           intervalId = setTimeout(pollCollectRecordForImages, 5000)

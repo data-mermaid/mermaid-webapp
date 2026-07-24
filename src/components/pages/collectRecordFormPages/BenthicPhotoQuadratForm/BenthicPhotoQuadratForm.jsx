@@ -264,7 +264,9 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
     if (!recordId || !databaseSwitchboardInstance) {
       return
     }
-    const updatedRecord = await databaseSwitchboardInstance.markCollectRecordValidationsStale(recordId)
+    const updatedRecord = await databaseSwitchboardInstance.markCollectRecordValidationsStale(
+      recordId,
+    )
     if (updatedRecord) {
       setCollectRecordBeingEdited(updatedRecord)
     }

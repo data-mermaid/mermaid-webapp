@@ -145,6 +145,7 @@ const ImageUploadModal = ({
     isCancelledRef.current = false
 
     const uploadedFiles = []
+    let anyUploadStarted = false
 
     for (const file of files) {
       if (isCancelledRef.current) {
@@ -171,6 +172,10 @@ const ImageUploadModal = ({
       }
 
       const result = await validateDimensions(file)
+      if (result.cancelled) {
+        setIsUploading(false)
+        return
+      }
       if (!result.valid || result.corrupt) {
         if (result.isImageTooSmall) {
           toast.error(
@@ -194,6 +199,7 @@ const ImageUploadModal = ({
         return
       }
 
+      anyUploadStarted = true
       abortControllerRef.current = new AbortController()
       const uploadedFile = await processSingleImage(file, abortControllerRef.current.signal)
 
@@ -213,6 +219,12 @@ const ImageUploadModal = ({
 
       if (isCancelledRef.current) {
         setIsUploading(false)
+        if (anyUploadStarted && !uploadedFile) {
+          // Upload was in-flight when cancelled — poll until the server-indexed image appears.
+          // minResultsCount prevents stopping early on pre-existing processed images.
+          // maxPolls caps at 6 (30 s) in case the server never received the upload.
+          pollCollectRecordUntilAllImagesProcessed(existingFiles.length + 1, 6)
+        }
         return
       }
     }
