@@ -82,7 +82,9 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
         const hasReachedMinCount = response.results.length >= minResultsCount
         const hasExceededMaxPolls = pollCount >= maxPolls
         if (
-          (areAllUploadedImagesProcessed && hasReachedMinCount && !areMoreImagesStillBeingUploaded) ||
+          (areAllUploadedImagesProcessed &&
+            hasReachedMinCount &&
+            !areMoreImagesStillBeingUploaded) ||
           hasExceededMaxPolls
         ) {
           clearTimeout(intervalId)
@@ -97,7 +99,9 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
           },
           shouldShowServerNonResponseMessage: false,
         })
-        intervalId = setTimeout(pollCollectRecordForImages, 5000)
+        if (pollCount < maxPolls) {
+          intervalId = setTimeout(pollCollectRecordForImages, 5000)
+        }
       }
     }
 
