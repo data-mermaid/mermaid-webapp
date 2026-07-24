@@ -1,0 +1,11 @@
+@use '../../../../../style/theme.scss' as theme;
+
+.toolbarButtons {
+  display: flex;
+  align-items: center;
+  gap: theme.$spacing-small;
+}
+
+.copyButtonTooltipWrapper {
+  display: inline-flex;
+}
