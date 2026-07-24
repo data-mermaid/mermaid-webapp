@@ -260,14 +260,15 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       })
   }
 
-  const handlePhotosChanged = useCallback(() => {
-    setCollectRecordBeingEdited((prev) => {
-      if (!prev || prev.validations === undefined) {
-        return prev
-      }
-      return { ...prev, validations: undefined }
-    })
-  }, [])
+  const handlePhotosChanged = useCallback(async () => {
+    if (!recordId || !databaseSwitchboardInstance) {
+      return
+    }
+    const updatedRecord = await databaseSwitchboardInstance.markCollectRecordValidationsStale(recordId)
+    if (updatedRecord) {
+      setCollectRecordBeingEdited(updatedRecord)
+    }
+  }, [databaseSwitchboardInstance, recordId])
 
   const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
     (props) => {
