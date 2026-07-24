@@ -36,7 +36,6 @@ import { useTranslation, Trans } from 'react-i18next'
 const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, displayHelp }) => {
   const { t } = useTranslation()
   const { currentUser } = useCurrentUser()
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [revenueBeingEdited, setRevenueBeingEdited] = useState()
 
@@ -136,30 +135,18 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
     defaultValue: tableDefaultPrefs,
   })
 
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = [
-        'values.finance_solution.props.children',
-        'values.revenue_type',
-        'values.sustainable_revenue_stream',
-        'values.revenue_amount',
-      ]
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = [
+      'values.finance_solution.props.children',
+      'values.revenue_type',
+      'values.sustainable_revenue_stream',
+      'values.revenue_amount',
+    ]
 
-      const queryTerms = splitSearchQueryStrings(query)
-      const filteredRows =
-        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+    const queryTerms = splitSearchQueryStrings(query)
 
-      const filteredRowNames = filteredRows.map((row) => row.original.name)
-      const filteredRevenues = revenues.filter((investment) =>
-        filteredRowNames.includes(investment.finance_solution),
-      )
-
-      setSearchFilteredRowsLength(filteredRevenues.length)
-
-      return filteredRows
-    },
-    [revenues],
-  )
+    return !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+  }, [])
 
   const {
     canNextPage,
@@ -173,6 +160,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
     pageOptions,
     prepareRow,
     previousPage,
+    rows,
     setPageSize,
     state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
@@ -257,7 +245,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
       onPageSizeChange={handleRowsNumberChange}
       pageSize={pageSize}
       unfilteredRowLength={revenues.length}
-      searchFilteredRowsLength={searchFilteredRowsLength}
+      searchFilteredRowsLength={rows.length}
       isSearchFilterEnabled={!!globalFilter?.length}
       onPreviousClick={previousPage}
       previousDisabled={!canPreviousPage}

@@ -49,7 +49,6 @@ const Investments = ({
   const investmentAmountHeaderText = t('gfcr.forms.investments.investment_amount')
 
   const { currentUser } = useCurrentUser()
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [investmentBeingEdited, setInvestmentBeingEdited] = useState()
 
@@ -149,30 +148,18 @@ const Investments = ({
     defaultValue: tableDefaultPrefs,
   })
 
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = [
-        'values.finance_solution.props.children',
-        'values.investment_source',
-        'values.investment_type',
-        'values.investment_amount',
-      ]
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = [
+      'values.finance_solution.props.children',
+      'values.investment_source',
+      'values.investment_type',
+      'values.investment_amount',
+    ]
 
-      const queryTerms = splitSearchQueryStrings(query)
-      const filteredRows =
-        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+    const queryTerms = splitSearchQueryStrings(query)
 
-      const filteredRowNames = filteredRows.map((row) => row.original.name)
-      const filteredInvestments = investments.filter((investment) =>
-        filteredRowNames.includes(investment.finance_solution),
-      )
-
-      setSearchFilteredRowsLength(filteredInvestments.length)
-
-      return filteredRows
-    },
-    [investments],
-  )
+    return !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+  }, [])
 
   const {
     canNextPage,
@@ -186,6 +173,7 @@ const Investments = ({
     pageOptions,
     prepareRow,
     previousPage,
+    rows,
     setPageSize,
     state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
@@ -259,7 +247,7 @@ const Investments = ({
       onPageSizeChange={handleRowsNumberChange}
       pageSize={pageSize}
       unfilteredRowLength={investments.length}
-      searchFilteredRowsLength={searchFilteredRowsLength}
+      searchFilteredRowsLength={rows.length}
       isSearchFilterEnabled={!!globalFilter?.length}
       onPreviousClick={previousPage}
       previousDisabled={!canPreviousPage}

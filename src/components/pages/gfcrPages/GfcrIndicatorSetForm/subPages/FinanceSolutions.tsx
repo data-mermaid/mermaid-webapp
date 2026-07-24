@@ -77,7 +77,6 @@ const FinanceSolutions = ({
 
   const { currentUser } = useCurrentUser()
   const { gfcrIndicatorSets } = useCurrentProject()
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [financeSolutionBeingEdited, setFinanceSolutionBeingEdited] = useState<
     FinanceSolution | undefined
@@ -294,36 +293,24 @@ const FinanceSolutions = ({
     defaultValue: tableDefaultPrefs,
   })
 
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = [
-        'values.name.props.children',
-        'values.fs_type',
-        'values.sector',
-        'values.geographical_coverage',
-        'values.used_an_incubator',
-        'values.taf_name',
-        'values.gender_smart',
-        'values.local_enterprise',
-        'values.number_of_solutions_supported_by',
-        'values.sustainable_finance_mechanisms',
-      ]
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = [
+      'values.name.props.children',
+      'values.fs_type',
+      'values.sector',
+      'values.geographical_coverage',
+      'values.used_an_incubator',
+      'values.taf_name',
+      'values.gender_smart',
+      'values.local_enterprise',
+      'values.number_of_solutions_supported_by',
+      'values.sustainable_finance_mechanisms',
+    ]
 
-      const queryTerms = splitSearchQueryStrings(query)
-      const filteredRows =
-        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+    const queryTerms = splitSearchQueryStrings(query)
 
-      const filteredRowNames = filteredRows.map((row) => row.original.id)
-      const filteredFinanceSolutions = indicatorSet.finance_solutions.filter((financeSolution) =>
-        filteredRowNames.includes(financeSolution.id),
-      )
-
-      setSearchFilteredRowsLength(filteredFinanceSolutions.length)
-
-      return filteredRows
-    },
-    [indicatorSet.finance_solutions],
-  )
+    return !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+  }, [])
 
   const {
     canNextPage,
@@ -337,6 +324,7 @@ const FinanceSolutions = ({
     pageOptions,
     prepareRow,
     previousPage,
+    rows,
     setPageSize,
     state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
@@ -425,7 +413,7 @@ const FinanceSolutions = ({
       onPageSizeChange={handleRowsNumberChange}
       pageSize={pageSize}
       unfilteredRowLength={indicatorSet.finance_solutions.length}
-      searchFilteredRowsLength={searchFilteredRowsLength}
+      searchFilteredRowsLength={rows.length}
       isSearchFilterEnabled={!!globalFilter?.length}
       onPreviousClick={previousPage}
       previousDisabled={!canPreviousPage}
