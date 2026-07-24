@@ -41,6 +41,7 @@ flowchart LR
 
 - Opens a PR against `develop` (branch `chore/lokalise-translations`, labels `i18n,automated`).
 - Runs **weekly (Mondays 09:00 UTC)** and **on demand** (`workflow_dispatch`). The PR body says "Automated weekly pull" vs "Manual pull" depending on the trigger.
+- **Force-pushes a single fresh commit each run** (`force_push: true`) rather than appending. The branch (and its existing PR, same number/thread) is rewritten to one commit representing the full diff between `develop` and Lokalise's current export. This works because **nobody edits this branch** - all corrections go back through Lokalise - so there is no branch-local work to preserve, and the PR always mirrors Lokalise's current state instead of accumulating weeks of stacked "pull latest" commits. See [Critical configuration](#critical-configuration-and-why).
 - **Overwrites** the locale files with what Lokalise exports (it does not merge). The app falls back to English for anything missing.
 - **Includes English** via `always_pull_base: true` - without it the action drops base-language changes and `en/translation.json` never updates (see [Critical configuration](#critical-configuration-and-why)).
 - Pulls **all enabled languages** (currently `en`, `id`, `es`, `fr`, `pt`, `tl`).
@@ -55,6 +56,7 @@ The intended design is to export **reviewed-only** strings (`filter_data: ["revi
 
 - **Key filenames must be `src/locales/%LANG_ISO%/translation.json`.** This is what maps Lokalise files to the repo. Bare filenames (e.g. `translation.json`) silently break the pull with "No changes detected". Set in Lokalise via bulk **File: assign**.
 - **`always_pull_base: true`** (pull config) - the pull action **defaults this to `false`**, which silently drops base-language (English) changes: target languages sync but `en/translation.json` is never updated. It **must** be set to `true` for Lokalise's English source-of-truth edits on existing keys to flow back (see [Pull](#pull-lokalise--code)).
+- **`force_push: true`** (pull config) - each run replaces the `chore/lokalise-translations` branch with one fresh commit instead of appending. Safe because the branch is never hand-edited (corrections are made in Lokalise), and it keeps the PR a clean, always-current mirror of Lokalise rather than a growing stack of weekly commits (see [Pull](#pull-lokalise--code)).
 - **`plural_format: i18next_v4`** - matches the code's `_one` / `_other` plural keys (i18next v4). The older `i18next` (v3, `_plural`) would break pluralization.
 - **`json_unescaped_slashes: true`** - exports `/` instead of `\/`, matching the repo and prettier (avoids diff noise).
 - **`filter_data: ["reviewed_only"]`** - the reviewed-only filter, **currently disabled/removed** (see [Reviewed-only filter](#reviewed-only-filter-currently-disabled)). `export_empty_as: skip`, `export_sort: a_z`, 2-space indent.

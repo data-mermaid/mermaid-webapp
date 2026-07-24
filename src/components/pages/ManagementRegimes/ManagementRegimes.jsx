@@ -481,7 +481,7 @@ const ManagementRegimes = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="management regime"
+          pageType="management_regime"
           unfilteredRowLength={managementRegimeRecordsForUiDisplay.length}
           searchFilteredRowLength={searchFilteredRowsLength}
           isSearchFilterEnabled={!!globalFilter?.length}
