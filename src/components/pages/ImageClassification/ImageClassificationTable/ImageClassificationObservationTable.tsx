@@ -98,6 +98,7 @@ interface ImageClassificationObservationTableProps {
   resetObservationValidations: () => void
   images: ImageClassificationImage[]
   setImages: React.Dispatch<React.SetStateAction<ImageClassificationImage[]>>
+  onPhotosChanged?: () => void
 }
 
 const sortByLatest = (a, b) =>
@@ -159,6 +160,7 @@ const ImageClassificationObservationTable = ({
   resetObservationValidations,
   images: imageSet,
   setImages,
+  onPhotosChanged,
 }: ImageClassificationObservationTableProps) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
@@ -394,6 +396,7 @@ const ImageClassificationObservationTable = ({
       await databaseSwitchboardInstance.deleteImage(projectId, photoToBeRemoved.id)
 
       setImages((prev) => prev.filter((img) => img.id !== photoToBeRemoved.id))
+      onPhotosChanged?.()
       toast.warn(t('image_classification.warns.photo_removed'))
     } catch (error: unknown) {
       handleHttpResponseError({
