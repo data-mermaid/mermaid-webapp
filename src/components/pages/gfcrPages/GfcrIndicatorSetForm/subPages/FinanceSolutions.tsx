@@ -1,18 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import PropTypes from 'prop-types'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
 } from '../../../../generic/Table/reactTableNaturalSort'
 import usePersistUserTablePreferences from '../../../../generic/Table/usePersistUserTablePreferences'
 import { useCurrentUser } from '../../../../../App/CurrentUserContext'
+import { useCurrentProject } from '../../../../../App/CurrentProjectContext'
 import { splitSearchQueryStrings } from '../../../../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../../../../library/getTableFilteredRows'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { PAGE_SIZE_DEFAULT } from '../../../../../library/constants/constants'
-import { StyledToolbarButtonWrapper } from '../../Gfcr/Gfcr.styles'
-import { IconPlus } from '../../../../icons'
+import { IconCopy, IconPlus } from '../../../../icons'
 import { ButtonSecondary, ToolbarButtonWrapper } from '../../../../generic/buttons'
+import { MuiTooltip } from '../../../../generic/MuiTooltip'
 import PageUnavailable from '../../../PageUnavailable'
 import { useTranslation } from 'react-i18next'
 import { ToolBarRow } from '../../../../generic/positioning'
@@ -23,7 +23,7 @@ import {
   StyledTableAnchor,
 } from './subPages.styles'
 import FinanceSolutionModal from '../modals/FinanceSolutionModal'
-import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
+import CopyFinanceSolutionsModal from '../modals/CopyFinanceSolutionsModal'
 import GfcrGenericTable from '../../GfcrGenericTable'
 import IconCheckLabel from './IconCheckLabel'
 import {
@@ -32,8 +32,26 @@ import {
   isNumberOfSolutionsSupportedApplicable,
   isUsedAnIncubatorApplicable,
 } from '../modals/financeSolutionFieldVisibility'
+import {
+  Choices,
+  FinanceSolution,
+  IndicatorSet,
+} from '../../../../../App/mermaidData/mermaidDataTypes'
+import styles from './FinanceSolutions.module.scss'
 
-const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp }) => {
+interface FinanceSolutionsProps {
+  indicatorSet: IndicatorSet
+  setIndicatorSet: (indicatorSet: IndicatorSet) => void
+  choices: Choices
+  displayHelp?: boolean
+}
+
+const FinanceSolutions = ({
+  indicatorSet,
+  setIndicatorSet,
+  choices,
+  displayHelp,
+}: FinanceSolutionsProps) => {
   const { t } = useTranslation()
 
   const businessFinanceSolutionNameHeaderText = t(
@@ -53,10 +71,22 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
     'gfcr.forms.finance_solutions.number_of_solutions_supported_table_header',
   )
 
+  const copyFinanceSolutionText = t('gfcr.forms.finance_solutions.copy')
+  const noCopyTargetsText = t('gfcr.forms.finance_solutions.no_copy_targets')
+  const noIncubatorText = t('gfcr.forms.finance_solutions.no_incubator')
+
   const { currentUser } = useCurrentUser()
+  const { gfcrIndicatorSets } = useCurrentProject()
   const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [financeSolutionBeingEdited, setFinanceSolutionBeingEdited] = useState()
+  const [financeSolutionBeingEdited, setFinanceSolutionBeingEdited] = useState<
+    FinanceSolution | undefined
+  >()
+  const [isCopyModalOpen, setIsCopyModalOpen] = useState(false)
+
+  const hasCopyTargets = gfcrIndicatorSets
+    .filter((otherIndicatorSet) => otherIndicatorSet.id !== indicatorSet.id)
+    .some((otherIndicatorSet) => otherIndicatorSet.finance_solutions?.length > 0)
 
   // A column is hidden when it is blank for every row. For the applicability
   // driven columns (the yes/no columns, "used an incubator" and "number of
@@ -190,7 +220,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
     }
 
     // eslint-disable-next-line consistent-return
-    return indicatorSet.finance_solutions.map((indicatorSet) => {
+    return indicatorSet.finance_solutions.map((financeSolution) => {
       const {
         id,
         name,
@@ -203,7 +233,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         local_enterprise,
         number_of_solutions_supported_by,
         sustainable_finance_mechanisms,
-      } = indicatorSet
+      } = financeSolution
 
       const fsTypeName = choices.financesolutiontypes?.data?.find(
         (fsTypeChoice) => fsTypeChoice.id === fs_type,
@@ -233,7 +263,9 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         fs_type: fsTypeName,
         sector: sectorName,
         geographical_coverage: geographicalCoverageName,
-        used_an_incubator: isUsedAnIncubatorApplicable(fs_type) ? incubatorName || 'None' : null,
+        used_an_incubator: isUsedAnIncubatorApplicable(fs_type)
+          ? incubatorName || noIncubatorText
+          : null,
         taf_name,
         local_enterprise: isLocalEnterpriseApplicable(fs_type) ? !!local_enterprise : null,
         gender_smart: isGenderSmartApplicable(fs_type) ? !!gender_smart : null,
@@ -243,7 +275,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         sustainable_finance_mechanisms: sustainableFinanceMechanismNames.join(', '),
       }
     })
-  }, [choices, handleEditFinanceSolution, indicatorSet.finance_solutions])
+  }, [choices, handleEditFinanceSolution, indicatorSet.finance_solutions, noIncubatorText])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -351,18 +383,36 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
 
   const handleFinanceSolutionModalDismiss = (resetForm) => {
     resetForm()
-    setFinanceSolutionBeingEdited()
+    setFinanceSolutionBeingEdited(undefined)
     setIsModalOpen(false)
   }
 
+  const handleOpenCopyModal = (event) => {
+    event.preventDefault()
+    setIsCopyModalOpen(true)
+  }
+
+  const handleCopyModalDismiss = () => {
+    setIsCopyModalOpen(false)
+  }
+
   const toolbarButtons = (
-    <>
-      <StyledToolbarButtonWrapper>
-        <ButtonSecondary onClick={(event) => handleAddFinanceSolution(event)}>
-          <IconPlus /> {t('gfcr.forms.finance_solutions.add')}
-        </ButtonSecondary>
-      </StyledToolbarButtonWrapper>
-    </>
+    <div className={styles.toolbarButtons}>
+      <ButtonSecondary onClick={(event) => handleAddFinanceSolution(event)}>
+        <IconPlus /> {t('gfcr.forms.finance_solutions.add')}
+      </ButtonSecondary>
+      <MuiTooltip title={hasCopyTargets ? '' : noCopyTargetsText}>
+        <span className={styles.copyButtonTooltipWrapper}>
+          <ButtonSecondary
+            onClick={(event) => handleOpenCopyModal(event)}
+            disabled={!hasCopyTargets}
+            style={!hasCopyTargets ? { pointerEvents: 'none' } : undefined}
+          >
+            <IconCopy /> {copyFinanceSolutionText}
+          </ButtonSecondary>
+        </span>
+      </MuiTooltip>
+    </div>
   )
 
   const table = indicatorSet.finance_solutions.length ? (
@@ -375,7 +425,7 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
       onPageSizeChange={handleRowsNumberChange}
       pageSize={pageSize}
       unfilteredRowLength={indicatorSet.finance_solutions.length}
-      searchFilteredRowLength={searchFilteredRowsLength}
+      searchFilteredRowsLength={searchFilteredRowsLength}
       isSearchFilterEnabled={!!globalFilter?.length}
       onPreviousClick={previousPage}
       previousDisabled={!canPreviousPage}
@@ -415,15 +465,15 @@ const FinanceSolutions = ({ indicatorSet, setIndicatorSet, choices, displayHelp 
         onDismiss={handleFinanceSolutionModalDismiss}
         displayHelp={displayHelp}
       />
+      <CopyFinanceSolutionsModal
+        isOpen={isCopyModalOpen}
+        indicatorSet={indicatorSet}
+        setIndicatorSet={setIndicatorSet}
+        choices={choices}
+        onDismiss={handleCopyModalDismiss}
+      />
     </>
   )
-}
-
-FinanceSolutions.propTypes = {
-  indicatorSet: PropTypes.object.isRequired,
-  setIndicatorSet: PropTypes.func.isRequired,
-  choices: choicesPropType.isRequired,
-  displayHelp: PropTypes.bool,
 }
 
 export default FinanceSolutions
