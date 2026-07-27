@@ -25,12 +25,11 @@ const GfcrDecimalInputField = ({
   formik,
 }: GfcrDecimalInputFieldProps) => {
   const rawValue = formik.values[id]
-  const numericValue: number | null =
-    rawValue === null || rawValue === undefined || rawValue === ''
-      ? null
-      : typeof rawValue === 'number'
-      ? rawValue
-      : parseFloat(String(rawValue))
+  let numericValue: number | null = null
+  if (rawValue !== null && rawValue !== undefined && rawValue !== '') {
+    const parsed = typeof rawValue === 'number' ? rawValue : parseFloat(String(rawValue))
+    numericValue = Number.isNaN(parsed) ? null : parsed
+  }
 
   return (
     <InputWithLabelAndValidation

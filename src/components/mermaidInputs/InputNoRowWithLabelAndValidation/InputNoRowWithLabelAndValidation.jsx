@@ -52,28 +52,25 @@ const InputNoRowWithLabelAndValidation = ({
 
   const inputTestId = testId ? `${testId}-input` : undefined
 
-  const inputType =
-    renderInput ??
-    (unit ? (
-      <InputNumberNoScrollWithUnit
-        aria-labelledby={`aria-label${id}`}
-        aria-describedby={`aria-descp${id}`}
-        id={id}
-        data-testid={inputTestId}
-        unit={unit}
-        disabled={isInputDisabled}
-        {...restOfProps}
-      />
-    ) : (
-      <Input
-        aria-labelledby={`aria-label${id}`}
-        aria-describedby={`aria-descp${id}`}
-        id={id}
-        data-testid={inputTestId}
-        {...restOfProps}
-        ref={textFieldRef}
-      />
-    ))
+  const ariaProps = {
+    'aria-labelledby': `aria-label${id}`,
+    'aria-describedby': `aria-descp${id}`,
+  }
+
+  const defaultInput = unit ? (
+    <InputNumberNoScrollWithUnit
+      {...ariaProps}
+      id={id}
+      data-testid={inputTestId}
+      unit={unit}
+      disabled={isInputDisabled}
+      {...restOfProps}
+    />
+  ) : (
+    <Input {...ariaProps} id={id} data-testid={inputTestId} {...restOfProps} ref={textFieldRef} />
+  )
+
+  const inputType = renderInput ?? defaultInput
 
   return (
     <>
