@@ -33,6 +33,11 @@
     "small_reef": "Terumbu kecil",
     "terrestrial_reef_flat": "Rataan terumbu terestrial"
   },
+  "auth": {
+    "email_not_verified_heading": "Silakan verifikasi alamat email Anda",
+    "email_not_verified_message": "Kami telah mengirimkan tautan verifikasi ke alamat email Anda. Silakan buka tautan tersebut untuk memverifikasi akun Anda, lalu coba masuk kembali.",
+    "try_login_again": "Coba masuk"
+  },
   "benthic_observations": {
     "add_benthic_attribute": "Usulkan atribut bentik baru",
     "attribute_already_exists": "Atribut yang diusulkan {{attribute}} sudah ada di dalam daftar. Pengamatan telah diperbarui dengan atribut ini.",
@@ -176,6 +181,7 @@
   },
   "filters": {
     "by_finance_solution": "Filter tabel ini berdasarkan solusi keuangan",
+    "by_indicator_set_or_solution_name": "Saring berdasarkan kumpulan indikator atau nama solusi",
     "by_investment": "Filter tabel ini berdasarkan investasi",
     "by_name_email": "Filter tabel ini berdasarkan nama atau email",
     "by_name_project_country": "Saring berdasarkan nama, proyek, atau negara",
@@ -192,6 +198,7 @@
     "search_helper_text": "<b>Gunakan tanda kutip ganda untuk mencari frasa yang identik.</b><br>Misalnya, gunakan North Shore untuk mencari data dengan kata North atau Shore (data dengan South Shore akan muncul). Atau gunakan \"North Shore\" untuk menemukan data yang memiliki kata North Shore (data dengan South Shore tidak akan muncul)."
   },
   "fish_belt_observations": {
+    "attribute_proposal_summary": "Spesies ikan yang Anda usulkan akan ditinjau oleh tim MERMAID. Setelah disetujui, spesies tersebut akan dimasukkan ke dalam basis data taksonomi kami atau kami akan menghubungi Anda.",
     "errors": {
       "proposed_species_unsaved": "Spesies ikan yang diusulkan {{speciesName}} belum disimpan",
       "species_already_exists": "Spesies ikan yang diusulkan {{speciesName}} sudah ada dalam daftar. Pengamatan telah diperbarui dengan spesies ini."
@@ -332,12 +339,19 @@
         "add": "Tambahkan Solusi Bisnis / Keuangan",
         "business_finance_solution": "Solusi Bisnis / Keuangan",
         "business_finance_solution_name": "Nama solusi Bisnis / Keuangan",
+        "copy": "Fasilitas penyalinan / solusi",
+        "copy_info": "Investasi dan Pendapatan yang terkait juga akan disalin.",
+        "copy_selected": "Salin fasilitas / solusi yang dipilih",
         "gender_program_criteria": "Kriteria 2X jenis kelamin",
         "gender_program_criteria_helper": "Tunjukkan apakah solusi memenuhi syarat dalam setidaknya satu Kriteria Tantangan 2X. Lihat <2xLink>Panduan Referensi Kriteria 2X</2xLink> untuk detailnya. Hal ini berlaku untuk F10 (Jumlah investasi cerdas gender), yang mengukur dukungan GFCR terhadap kesetaraan gender melalui investasi yang memenuhi standar 2X Challenge.<br /><gfcrPdfLink>Lihat M&E Toolkit PDF</gfcrPdfLink>",
+        "indicator_set": "Kumpulan indikator",
         "local_enterprise": "Perusahaan lokal",
         "local_enterprise_helper": "Didefinisikan sebagai usaha kecil dan menengah yang beroperasi di lokasi spesifik Program GFCR. Hal ini berlaku untuk F9.3 (Jumlah (dan %) pendapatan di perusahaan lokal), yang mengukur pendapatan yang dipertahankan di dalam geografi lokal, yang berbeda dengan pendapatan yang ditransfer ke luar negeri.<br /><gfcrPdfLink>Lihat Toolkit M&E PDF</gfcrPdfLink>",
         "name_helper": "Masukkan nama setiap solusi bisnis atau keuangan yang dibiayai oleh Program GFCR secara terpisah. Anda bisa menyalin solusi dari laporan sebelumnya. Indikator F8, F9, dan F10 akan dipilah-pilah berdasarkan solusi dan sektor. Solusi baru yang dibiayai oleh Program akan ditambahkan di sini secara bertahap.<br /><gfcrPdfLink>Lihat Toolkit M&E PDF</gfcrPdfLink>",
+        "no_copy_targets": "Tidak ada kumpulan indikator dana lain dalam proyek ini yang dilengkapi dengan fasilitas atau solusi untuk menyalin",
         "no_finance_solutions": "Belum ada Solusi Keuangan.",
+        "no_incubator": "Tidak ada",
+        "number_of_solutions_supported_table_header": "Jumlah total solusi yang didukung",
         "pcf_revenues_error": "Hapus pendapatan terkait sebelum mengubah jenisnya menjadi pembiayaan bersama programatik",
         "save": "Simpan Baris Solusi Bisnis / Keuangan",
         "sector": "Sektor",
@@ -726,6 +740,18 @@
     "try_reloading": "Jika Anda terus melihat kesalahan ini, coba muat ulang halaman ini, atau Anda dapat",
     "will_show": "Halaman ini akan menampilkan:"
   },
+  "page_size_selector": {
+    "filtered_from_other": "(diambil dari {{count}} {{itemType}})",
+    "item_type": {
+      "management_regime_other": "sistem pengelolaan",
+      "record_other": "catatan",
+      "sample_unit_other": "unit sampel",
+      "site_other": "situs",
+      "user_other": "pengguna"
+    },
+    "of_total": "dari {{total}}",
+    "showing": "Menampilkan"
+  },
   "percent_cover": "Persen Penutupan",
   "profile": {
     "email_address": "Alamat email",
@@ -1043,12 +1069,14 @@
       "enter_email": "Silakan masukkan alamat email.",
       "failed_sample_units_transfer": "Unit sampel gagal ditransfer.",
       "invalid_email": "Alamat email tidak valid.",
+      "last_admin_tooltip": "Anda adalah satu-satunya admin di proyek ini. Tunjuk admin lain sebelum mengubah peran Anda atau menghapus diri Anda sendiri.",
       "new_user_added": "Pengguna baru ditambahkan.",
       "pending_user_added": "Email pendaftaran terkirim. Pengguna baru ditambahkan sebagai Pengguna Tertunda.",
       "role_changed_error": "{{userName}}peran tersebut tidak berubah.",
       "role_changed_success": "{{userName}}sekarang diatur ke {{role}}.",
       "sample_units_transferred_other": "{{count}} unit sampel yang ditransfer",
       "something_went_wrong": "Ada yang tidak beres",
+      "user_remove_error": "{{userName}} belum dihapus dari proyek",
       "user_removed": "Pengguna dihapus"
     },
     "not_signed_up": "harus mendaftar karena mereka belum menjadi pengguna MERMAID.",
