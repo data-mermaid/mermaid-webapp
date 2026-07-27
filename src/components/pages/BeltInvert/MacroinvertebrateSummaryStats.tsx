@@ -1,11 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  MacroinvertebrateObservationsSummaryStats,
-  Tr,
-  Td,
-  Th,
-} from '../../generic/Table/table'
+import { MacroinvertebrateObservationsSummaryStats, Tr, Td, Th } from '../../generic/Table/table'
 import { roundToOneDecimal } from '../../../library/numbers/roundToOneDecimal'
 
 interface MacroinvertebrateSummaryStatsProps {

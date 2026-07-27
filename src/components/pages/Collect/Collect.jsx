@@ -397,7 +397,9 @@ const Collect = () => {
                   key={rowKey}
                   {...rowProps}
                   className={styles['record-status-row']}
-                  style={{ '--record-status-color': RECORD_STATUS_COLORS[row.original.statusValue] }}
+                  style={{
+                    '--record-status-color': RECORD_STATUS_COLORS[row.original.statusValue],
+                  }}
                 >
                   {row.cells.map((cell) => {
                     const isCellEmpty =

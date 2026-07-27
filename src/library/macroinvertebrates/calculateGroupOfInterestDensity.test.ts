@@ -13,14 +13,45 @@ const order1 = { id: 'order-1', taxonomic_rank: 'order', parent: 'class-1' }
 const class1 = { id: 'class-1', taxonomic_rank: 'class', parent: null }
 
 // F1: 2 corallivore genera + 1 other genus → 2 distinct GoIs
-const genusG1 = { id: 'genus-1', taxonomic_rank: 'genus', parent: 'family-1', group_of_interest: 'goi-corallivore' }
-const genusG2 = { id: 'genus-2', taxonomic_rank: 'genus', parent: 'family-1', group_of_interest: 'goi-corallivore' }
-const genusG3 = { id: 'genus-3', taxonomic_rank: 'genus', parent: 'family-1', group_of_interest: 'goi-other' }
+const genusG1 = {
+  id: 'genus-1',
+  taxonomic_rank: 'genus',
+  parent: 'family-1',
+  group_of_interest: 'goi-corallivore',
+}
+const genusG2 = {
+  id: 'genus-2',
+  taxonomic_rank: 'genus',
+  parent: 'family-1',
+  group_of_interest: 'goi-corallivore',
+}
+const genusG3 = {
+  id: 'genus-3',
+  taxonomic_rank: 'genus',
+  parent: 'family-1',
+  group_of_interest: 'goi-other',
+}
 
 // F2: 1 corallivore genus → 1 distinct GoI
-const genusG4 = { id: 'genus-4', taxonomic_rank: 'genus', parent: 'family-2', group_of_interest: 'goi-corallivore' }
+const genusG4 = {
+  id: 'genus-4',
+  taxonomic_rank: 'genus',
+  parent: 'family-2',
+  group_of_interest: 'goi-corallivore',
+}
 
-const allAttributes = [corallivore, other, family1, family2, order1, class1, genusG1, genusG2, genusG3, genusG4]
+const allAttributes = [
+  corallivore,
+  other,
+  family1,
+  family2,
+  order1,
+  class1,
+  genusG1,
+  genusG2,
+  genusG3,
+  genusG4,
+]
 
 const goiChoices = [corallivore, other]
 
@@ -32,7 +63,9 @@ describe('calculateDensityByGroupOfInterest', () => {
   describe('genus/species observations', () => {
     it('attributes a genus observation directly to its GoI', () => {
       const obs = [{ count: 10, invert_attribute: 'genus-1' }]
-      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, { goiChoices })
+      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, {
+        goiChoices,
+      })
 
       // 10 / 50 * 10000 = 2000 ind/ha
       expect(densityByGoi['Corallivore']).toBe(2000)
@@ -43,7 +76,9 @@ describe('calculateDensityByGroupOfInterest', () => {
   describe('family-level observations — equal-split weighting', () => {
     it('splits equally when both GoIs appear (2 corallivore genera, 1 other genus = 2 distinct GoIs → 0.5 each)', () => {
       const obs = [{ count: 400, invert_attribute: 'family-1' }]
-      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, { goiChoices })
+      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, {
+        goiChoices,
+      })
 
       // equal-split: weight = 0.5 each
       // corallivore: (400 * 0.5) / 50 * 10000 = 40000 ind/ha
@@ -54,7 +89,9 @@ describe('calculateDensityByGroupOfInterest', () => {
 
     it('returns the full count when a family has only one distinct GoI', () => {
       const obs = [{ count: 100, invert_attribute: 'family-2' }]
-      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, { goiChoices })
+      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, {
+        goiChoices,
+      })
 
       // only corallivore → weight = 1.0
       // (100 * 1.0) / 50 * 10000 = 20000 ind/ha
@@ -67,7 +104,9 @@ describe('calculateDensityByGroupOfInterest', () => {
     it('aggregates distinct GoIs across all families in the order', () => {
       // O1 has F1 (corallivore + other) and F2 (corallivore) → 2 distinct GoIs → 0.5 each
       const obs = [{ count: 200, invert_attribute: 'order-1' }]
-      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, { goiChoices })
+      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, {
+        goiChoices,
+      })
 
       expect(densityByGoi['Corallivore']).toBe(20000)
       expect(densityByGoi['Other']).toBe(20000)
@@ -77,7 +116,9 @@ describe('calculateDensityByGroupOfInterest', () => {
   describe('class-level observations — equal-split weighting', () => {
     it('aggregates distinct GoIs across all orders in the class', () => {
       const obs = [{ count: 200, invert_attribute: 'class-1' }]
-      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, { goiChoices })
+      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, {
+        goiChoices,
+      })
 
       expect(densityByGoi['Corallivore']).toBe(20000)
       expect(densityByGoi['Other']).toBe(20000)
@@ -87,7 +128,9 @@ describe('calculateDensityByGroupOfInterest', () => {
   describe('goi-level observations', () => {
     it('attributes a goi observation directly to itself', () => {
       const obs = [{ count: 50, invert_attribute: 'goi-corallivore' }]
-      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, { goiChoices })
+      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, {
+        goiChoices,
+      })
 
       expect(densityByGoi['Corallivore']).toBe(10000)
       expect(densityByGoi['Other']).toBeUndefined()
@@ -100,7 +143,9 @@ describe('calculateDensityByGroupOfInterest', () => {
         { count: 100, invert_attribute: 'family-1' },
         { count: 50, invert_attribute: 'genus-4' },
       ]
-      const { totalDensity } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, { goiChoices })
+      const { totalDensity } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, {
+        goiChoices,
+      })
 
       // (100 + 50) / 50 * 10000 = 30000
       expect(totalDensity).toBe(30000)
@@ -110,7 +155,9 @@ describe('calculateDensityByGroupOfInterest', () => {
   describe('ghost-zero filter', () => {
     it('skips zero-count observations', () => {
       const obs = [{ count: 0, invert_attribute: 'family-1' }]
-      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, { goiChoices })
+      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, LEN, WIDTH, {
+        goiChoices,
+      })
 
       expect(Object.keys(densityByGoi)).toHaveLength(0)
     })
@@ -123,7 +170,9 @@ describe('calculateDensityByGroupOfInterest', () => {
         { count: 1, invert_attribute: 'genus-1' },
         { count: 2, invert_attribute: 'genus-3' },
       ]
-      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, 2001, 1000, { goiChoices })
+      const { densityByGoi } = calculateDensityByGroupOfInterest(obs, allAttributes, 2001, 1000, {
+        goiChoices,
+      })
 
       expect(densityByGoi['Corallivore']).toBeUndefined()
       expect(densityByGoi['Other']).toBe(0.01)
