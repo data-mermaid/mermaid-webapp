@@ -9,14 +9,7 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+' # eg: v1.1.1
 
 permissions:
-  actions: write
   contents: read
-  id-token: write
-
-env:
-  CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-  CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
-  GITHUB_TOKEN: ${{ github.token }}
 
 jobs:
   deps-cache:
@@ -29,7 +22,9 @@ jobs:
   call-test:
     needs: [deps-cache, call-lint]
     uses: ./.github/workflows/_test.yml
-    secrets: inherit
+    secrets:
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+      VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
     with:
       environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
 
@@ -37,8 +32,19 @@ jobs:
     concurrency:
       group: app-deployment-${{ github.ref }}
     needs: [call-lint, call-test]
+    permissions:
+      actions: write
+      contents: read
+      id-token: write
     uses: ./.github/workflows/_cdk.yml
-    secrets: inherit
+    secrets:
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+      VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
+      VITE_CORAL_ATLAS_APP_ID: ${{ secrets.VITE_CORAL_ATLAS_APP_ID }}
+      VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+      CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
     with:
       cdk_subcommand: deploy
       environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}

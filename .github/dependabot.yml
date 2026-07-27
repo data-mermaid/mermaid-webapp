@@ -5,7 +5,8 @@
 
 version: 2
 updates:
-  - package-ecosystem: 'npm' # npm === yarn
+  - package-ecosystem: 'npm' # npm === yarn # zizmor: ignore[dependabot-cooldown]
     directory: '/' # Location of package manifests
     schedule:
       interval: 'weekly'
+      day: 'monday'

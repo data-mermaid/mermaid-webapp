@@ -22,14 +22,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # zizmor: ignore[artipacked]
         with:
           ref: develop
           fetch-depth: 0 # full history required for change detection / tag tracking
- 
+
       - name: Push source translations to Lokalise
         id: lokalise-push
-        uses: lokalise/lokalise-push-action@v5.3.2
+        uses: lokalise/lokalise-push-action@48a07f0c11b7ae2afa8e9966554238a7976539e3
         with:
           api_token: ${{ secrets.LOKALISE_API_TOKEN }}
           project_id: ${{ secrets.LOKALISE_PROJECT_ID }}

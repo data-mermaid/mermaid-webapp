@@ -12,9 +12,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
-  issues: write
-  pull-requests: write
 
 concurrency:
   group: pr-${{ github.event.pull_request.number }}
@@ -30,14 +27,21 @@ jobs:
     needs: [deps-cache]
     environment: dev
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      issues: write
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v6.0.2
-      - uses: actions/setup-node@v6.2.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version-file: '.nvmrc'
 
       - name: Fetch yarn cache
-        uses: actions/cache@v5.0.3
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         id: yarn-cache
         with:
           path: node_modules
@@ -53,7 +57,7 @@ jobs:
         run: mkdir -p build && echo '<!doctype html>' > build/index.html
 
       - name: Fetch iac node cache
-        uses: actions/cache@v5.0.3
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         id: iac-cache
         with:
           path: iac/node_modules
@@ -81,7 +85,7 @@ jobs:
 
       - name: Post CDK Nag results to PR
         if: always() && steps.cdk-nag.conclusion != 'skipped'
-        uses: actions/github-script@v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
         with:
           script: |
             const fs = require('fs');
@@ -128,7 +132,7 @@ jobs:
           exit 1
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6.0.0
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c
         with:
           role-to-assume: ${{ secrets.CDK_DEPLOY_ROLE }}
           aws-region: us-east-1
@@ -144,12 +148,15 @@ jobs:
 
       - name: Post CDK Diff results to PR
         if: always() && steps.cdk-diff.outcome != 'skipped'
-        uses: actions/github-script@v7
+        env:
+          WORKFLOW_NAME: ${{ github.workflow }}
+          CDK_DIFF_OUTCOME: ${{ steps.cdk-diff.outcome }}
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
         with:
           script: |
             const fs = require('fs');
             const log = fs.readFileSync('/tmp/cdk-diff.log', 'utf8');
-            const status = '${{ steps.cdk-diff.outcome }}' === 'success' ? 'Success' : 'Failed';
+            const status = process.env.CDK_DIFF_OUTCOME === 'success' ? 'Success' : 'Failed';
             const icon = status === 'Success' ? ':white_check_mark:' : ':x:';
             const body = [
               `#### \`cdk diff\` ${icon} ${status}`,
@@ -161,7 +168,7 @@ jobs:
               '',
               '</details>',
               '',
-              `*Workflow: \`${{ github.workflow }}\`*`,
+              `*Workflow: \`${process.env.WORKFLOW_NAME}\`*`,
             ].join('\n');
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
