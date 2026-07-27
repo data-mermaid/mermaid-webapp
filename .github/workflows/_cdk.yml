@@ -119,9 +119,8 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           CDK_DEFAULT_REGION: us-east-1
-        # zizmor: ignore[adhoc-packages]
         run: |
-          npm install -g aws-cdk && cdk "$CDK_SUBCOMMAND" dev-webapp --require-approval never
+          ./node_modules/.bin/cdk "$CDK_SUBCOMMAND" dev-webapp --require-approval never
 
 
       - name: CDK ${{ inputs.cdk_subcommand }} PROD
@@ -132,6 +131,5 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           CDK_DEFAULT_REGION: us-east-1
-        # zizmor: ignore[adhoc-packages]
         run: |
-          npm install -g aws-cdk && cdk "$CDK_SUBCOMMAND" prod-webapp -c subdomain=prod --require-approval never
+          ./node_modules/.bin/cdk "$CDK_SUBCOMMAND" prod-webapp -c subdomain=prod --require-approval never

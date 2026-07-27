@@ -55,3 +55,5 @@ jobs:
           persist-credentials: false
 
       - uses: sparkgeo/github-actions/.github/actions/zizmor@349a429e52e0ee3c79345ac70f5e9e38b97cffaf
+        with:
+          advanced-security: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
