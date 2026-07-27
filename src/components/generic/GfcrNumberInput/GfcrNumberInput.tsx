@@ -45,9 +45,13 @@ const UnitInputWrapper = styled.div`
   align-items: stretch;
   padding: 0;
 
-  &:focus-within {
-    outline: ${theme.color.outline};
-    outline-offset: -3px;
+  /* Mantine renders div > div > input with unstyled; propagate flex so they fill the container */
+  & > div,
+  & > div > div {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: stretch;
   }
 
   input {
@@ -57,7 +61,10 @@ const UnitInputWrapper = styled.div`
     border: none;
     padding: ${theme.spacing.xsmall};
     background: transparent;
-    outline: none;
+    &:focus {
+      outline: ${theme.color.outline};
+      outline-offset: -3px;
+    }
     &:disabled {
       background: transparent;
       cursor: not-allowed;
