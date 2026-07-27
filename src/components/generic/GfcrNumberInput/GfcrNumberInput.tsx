@@ -1,33 +1,77 @@
 import { NumberInput } from '@mantine/core'
 import React, { useEffect, useRef, useState } from 'react'
-import { styled } from 'styled-components'
+import { styled, css } from 'styled-components'
 import { inputTextareaSelectStyles } from '../form'
 import { getBrowserLocale } from '../../../library/numbers/getBrowserLocale'
+import theme from '../../../theme'
 
 export interface GfcrNumberInputProps {
   id: string
   value: number | null
   onChange: (value: number | null) => void
   onBlur?: React.FocusEventHandler<HTMLInputElement>
+  onFocus?: React.FocusEventHandler<HTMLInputElement>
   decimalPlaces?: number
   min?: number
   max?: number
   allowNegatives?: boolean
   disabled?: boolean
+  unit?: string
 }
+
+const innerInputStyles = css`
+  text-align: right;
+  height: auto;
+  min-height: 0;
+  border-radius: 0;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  box-sizing: border-box;
+`
 
 const InputWrapper = styled.div`
   input {
     ${inputTextareaSelectStyles}
-    text-align: right;
-    height: auto;
-    min-height: 0;
-    border-radius: 0;
-    font-size: inherit;
-    font-family: inherit;
-    color: inherit;
-    box-sizing: border-box;
+    ${innerInputStyles}
   }
+`
+
+const UnitInputWrapper = styled.div`
+  ${inputTextareaSelectStyles}
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 0;
+
+  &:focus-within {
+    outline: ${theme.color.outline};
+    outline-offset: -3px;
+  }
+
+  input {
+    ${innerInputStyles}
+    flex: 1;
+    min-width: 0;
+    border: none;
+    padding: ${theme.spacing.xsmall};
+    background: transparent;
+    outline: none;
+    &:disabled {
+      background: transparent;
+      cursor: not-allowed;
+      color: ${theme.color.disabledTextDark};
+    }
+  }
+`
+
+const UnitLabel = styled.span`
+  white-space: nowrap;
+  background: ${theme.color.unitBackground};
+  padding: 0 0.5em;
+  font-size: ${theme.typography.defaultFontSize};
+  display: flex;
+  align-items: center;
 `
 
 function getLocaleFormatParts(locale: string): {
@@ -50,11 +94,13 @@ const GfcrNumberInput = ({
   value,
   onChange,
   onBlur,
+  onFocus,
   decimalPlaces,
   min,
   max,
   allowNegatives = false,
   disabled = false,
+  unit,
 }: GfcrNumberInputProps) => {
   const locale = getBrowserLocale()
   const { decimalSeparator, thousandSeparator } = getLocaleFormatParts(locale)
@@ -103,27 +149,37 @@ const GfcrNumberInput = ({
     onBlur?.(event)
   }
 
-  return (
-    <InputWrapper>
-      <NumberInput
-        id={id}
-        value={displayValue}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        decimalSeparator={decimalSeparator}
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore — thousandSeparator is a react-number-format prop forwarded via ...others
-        thousandSeparator={thousandSeparator}
-        hideControls
-        clampBehavior="blur"
-        allowNegative={allowNegatives}
-        disabled={disabled}
-        min={min}
-        max={max}
-        unstyled
-      />
-    </InputWrapper>
+  const numberInput = (
+    <NumberInput
+      id={id}
+      value={displayValue}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      onFocus={onFocus}
+      decimalSeparator={decimalSeparator}
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore — thousandSeparator is a react-number-format prop forwarded via ...others
+      thousandSeparator={thousandSeparator}
+      hideControls
+      clampBehavior="blur"
+      allowNegative={allowNegatives}
+      disabled={disabled}
+      min={min}
+      max={max}
+      unstyled
+    />
   )
+
+  if (unit) {
+    return (
+      <UnitInputWrapper>
+        {numberInput}
+        <UnitLabel>{unit}</UnitLabel>
+      </UnitInputWrapper>
+    )
+  }
+
+  return <InputWrapper>{numberInput}</InputWrapper>
 }
 
 export default GfcrNumberInput
