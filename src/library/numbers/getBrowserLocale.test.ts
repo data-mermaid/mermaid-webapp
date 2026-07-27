@@ -16,7 +16,7 @@ describe('getBrowserLocale', () => {
 
   it('falls back to en-US when the locale tag is invalid', () => {
     const original = Object.getOwnPropertyDescriptor(navigator, 'language')
-    Object.defineProperty(navigator, 'language', { value: 'not-a-locale', configurable: true })
+    Object.defineProperty(navigator, 'language', { value: 'en_US', configurable: true })
     expect(getBrowserLocale()).toBe('en-US')
     if (original) {
       Object.defineProperty(navigator, 'language', original)

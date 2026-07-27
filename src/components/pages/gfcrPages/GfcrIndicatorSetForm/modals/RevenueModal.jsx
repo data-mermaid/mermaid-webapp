@@ -303,6 +303,9 @@ const RevenueModal = ({
             renderInput={
               <GfcrNumberInput
                 id="revenue-amount-input"
+                name="revenue_amount"
+                aria-labelledby="aria-labelrevenue-amount-input"
+                aria-describedby="aria-descprevenue-amount-input"
                 value={formik.values.revenue_amount}
                 onChange={(val) => formik.setFieldValue('revenue_amount', val)}
                 onBlur={formik.handleBlur}

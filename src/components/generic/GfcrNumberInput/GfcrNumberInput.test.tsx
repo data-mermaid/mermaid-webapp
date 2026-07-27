@@ -51,13 +51,17 @@ describe('GfcrNumberInput', () => {
   })
 
   it('accepts comma as decimal separator for comma-decimal locales', async () => {
+    const originalLanguage = navigator.language
     Object.defineProperty(navigator, 'language', { value: 'de-DE', configurable: true })
-    const onChangeSpy = vi.fn()
-    const { user } = renderUnauthenticatedOffline(<ControlledInput onChangeSpy={onChangeSpy} />)
-    const input = screen.getByRole('textbox')
-    await user.type(input, '1,5')
-    expect(onChangeSpy).toHaveBeenLastCalledWith(1.5)
-    Object.defineProperty(navigator, 'language', { value: 'en-US', configurable: true })
+    try {
+      const onChangeSpy = vi.fn()
+      const { user } = renderUnauthenticatedOffline(<ControlledInput onChangeSpy={onChangeSpy} />)
+      const input = screen.getByRole('textbox')
+      await user.type(input, '1,5')
+      expect(onChangeSpy).toHaveBeenLastCalledWith(1.5)
+    } finally {
+      Object.defineProperty(navigator, 'language', { value: originalLanguage, configurable: true })
+    }
   })
 
   it('rounds to decimalPlaces on blur', async () => {

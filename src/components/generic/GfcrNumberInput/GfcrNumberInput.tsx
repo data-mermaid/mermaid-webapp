@@ -7,6 +7,9 @@ import theme from '../../../theme'
 
 export interface GfcrNumberInputProps {
   id: string
+  name?: string
+  'aria-labelledby'?: string
+  'aria-describedby'?: string
   value: number | null
   onChange: (value: number | null) => void
   onBlur?: React.FocusEventHandler<HTMLInputElement>
@@ -98,6 +101,9 @@ function roundToDecimalPlaces(value: number, places: number): number {
 
 const GfcrNumberInput = ({
   id,
+  name,
+  'aria-labelledby': ariaLabelledby,
+  'aria-describedby': ariaDescribedby,
   value,
   onChange,
   onBlur,
@@ -122,6 +128,7 @@ const GfcrNumberInput = ({
   useEffect(() => {
     if (value !== lastExternalValue.current) {
       lastExternalValue.current = value
+      committedValue.current = value
       setDisplayValue(value ?? '')
     }
   }, [value])
@@ -160,6 +167,9 @@ const GfcrNumberInput = ({
   const numberInput = (
     <NumberInput
       id={id}
+      name={name}
+      aria-labelledby={ariaLabelledby}
+      aria-describedby={ariaDescribedby}
       value={displayValue}
       onChange={handleChange}
       onBlur={handleBlur}

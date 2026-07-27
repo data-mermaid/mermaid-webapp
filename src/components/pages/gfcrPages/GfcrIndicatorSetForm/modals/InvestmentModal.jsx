@@ -301,6 +301,9 @@ const InvestmentModal = ({
             renderInput={
               <GfcrNumberInput
                 id="investment-amount-input"
+                name="investment_amount"
+                aria-labelledby="aria-labelinvestment-amount-input"
+                aria-describedby="aria-descpinvestment-amount-input"
                 value={formik.values.investment_amount}
                 onChange={(val) => formik.setFieldValue('investment_amount', val)}
                 onBlur={formik.handleBlur}
