@@ -10,7 +10,7 @@ import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
 import { buttonGroupStates } from '../../../../../library/buttonGroupStates'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
-import { formikHandleNumericDecimalInputChange } from '../../../../../library/formik/formikHandleInputTypes'
+import GfcrNumberInput from '../../../../generic/GfcrNumberInput/GfcrNumberInput'
 import { getInvestmentInitialValues } from './investmentInitialValues'
 import { getOptions } from '../../../../../library/getOptions'
 import { getToastArguments } from '../../../../../library/getToastArguments'
@@ -148,7 +148,7 @@ const InvestmentModal = ({
         errors.investment_type = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      if (values.investment_amount === '') {
+      if (values.investment_amount === null) {
         errors.investment_amount = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
@@ -293,21 +293,22 @@ const InvestmentModal = ({
           <InputNoRowWithLabelAndValidation
             label={t('gfcr.forms.investments.investment_amount')}
             id="investment-amount-input"
-            type="number"
-            unit="USD $"
-            alignUnitsLeft={true}
-            {...formik.getFieldProps('investment_amount')}
             helperText={
               <GfcrHelperLinks translationKey="gfcr.forms.investments.investment_amount_helper" />
             }
             showHelperText={displayHelp}
             required={true}
-            onChange={(event) =>
-              formikHandleNumericDecimalInputChange({
-                formik,
-                event,
-                fieldName: 'investment_amount',
-              })
+            renderInput={
+              <GfcrNumberInput
+                id="investment-amount-input"
+                value={formik.values.investment_amount}
+                onChange={(val) => formik.setFieldValue('investment_amount', val)}
+                onBlur={formik.handleBlur}
+                decimalPlaces={2}
+                min={0}
+                unit="USD $"
+                alignUnitsLeft={true}
+              />
             }
           />
         </StyledModalInputRow>

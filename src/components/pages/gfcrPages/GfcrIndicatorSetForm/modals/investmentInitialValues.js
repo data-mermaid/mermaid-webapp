@@ -3,7 +3,7 @@ const getInvestmentInitialValues = (investment) => {
     finance_solution,
     investment_source = '',
     investment_type = '',
-    investment_amount = '',
+    investment_amount = null,
     notes = '',
   } = investment || {}
 

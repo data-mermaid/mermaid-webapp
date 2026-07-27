@@ -10,7 +10,7 @@ import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
 import { buttonGroupStates } from '../../../../../library/buttonGroupStates'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
-import { formikHandleNumericDecimalInputChange } from '../../../../../library/formik/formikHandleInputTypes'
+import GfcrNumberInput from '../../../../generic/GfcrNumberInput/GfcrNumberInput'
 import { getOptions } from '../../../../../library/getOptions'
 import { getRevenueInitialValues } from './revenueInitialValues'
 import { getToastArguments } from '../../../../../library/getToastArguments'
@@ -151,7 +151,7 @@ const RevenueModal = ({
         errors.sustainable_revenue_stream = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      if (values.revenue_amount === '') {
+      if (values.revenue_amount === null) {
         errors.revenue_amount = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
@@ -295,21 +295,22 @@ const RevenueModal = ({
           <InputNoRowWithLabelAndValidation
             label={t('gfcr.forms.revenues.revenue_amount')}
             id="revenue-amount-input"
-            type="number"
-            unit="USD $"
-            alignUnitsLeft={true}
-            {...formik.getFieldProps('revenue_amount')}
             helperText={
               <GfcrHelperLinks translationKey="gfcr.forms.revenues.revenue_amount_helper" />
             }
             showHelperText={displayHelp}
             required={true}
-            onChange={(event) =>
-              formikHandleNumericDecimalInputChange({
-                formik,
-                event,
-                fieldName: 'revenue_amount',
-              })
+            renderInput={
+              <GfcrNumberInput
+                id="revenue-amount-input"
+                value={formik.values.revenue_amount}
+                onChange={(val) => formik.setFieldValue('revenue_amount', val)}
+                onBlur={formik.handleBlur}
+                decimalPlaces={2}
+                min={0}
+                unit="USD $"
+                alignUnitsLeft={true}
+              />
             }
           />
         </StyledModalInputRow>

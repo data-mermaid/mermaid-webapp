@@ -17,6 +17,7 @@ export interface GfcrNumberInputProps {
   allowNegatives?: boolean
   disabled?: boolean
   unit?: string
+  alignUnitsLeft?: boolean
 }
 
 const innerInputStyles = css`
@@ -101,6 +102,7 @@ const GfcrNumberInput = ({
   allowNegatives = false,
   disabled = false,
   unit,
+  alignUnitsLeft = false,
 }: GfcrNumberInputProps) => {
   const locale = getBrowserLocale()
   const { decimalSeparator, thousandSeparator } = getLocaleFormatParts(locale)
@@ -173,8 +175,9 @@ const GfcrNumberInput = ({
   if (unit) {
     return (
       <UnitInputWrapper>
+        {alignUnitsLeft && <UnitLabel>{unit}</UnitLabel>}
         {numberInput}
-        <UnitLabel>{unit}</UnitLabel>
+        {!alignUnitsLeft && <UnitLabel>{unit}</UnitLabel>}
       </UnitInputWrapper>
     )
   }
