@@ -15,6 +15,7 @@ import { DexiePerUserDataInstanceProvider } from './App/dexiePerUserDataInstance
 import { ClearPersistedFormDataHackProvider } from './App/ClearDirtyFormDataHackContext'
 import '../i18n'
 
+import '@mantine/core/styles.css'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './index.css'
 
