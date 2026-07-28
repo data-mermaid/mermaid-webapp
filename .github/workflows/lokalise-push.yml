@@ -21,15 +21,20 @@ jobs:
   push-translations:
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411  # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # zizmor: ignore[artipacked]
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # zizmor: ignore[artipacked] # v7.0.1
         with:
           ref: develop
           fetch-depth: 0 # full history required for change detection / tag tracking
 
       - name: Push source translations to Lokalise
         id: lokalise-push
-        uses: lokalise/lokalise-push-action@48a07f0c11b7ae2afa8e9966554238a7976539e3
+        uses: lokalise/lokalise-push-action@48a07f0c11b7ae2afa8e9966554238a7976539e3 # v5.4.2
         with:
           api_token: ${{ secrets.LOKALISE_API_TOKEN }}
           project_id: ${{ secrets.LOKALISE_PROJECT_ID }}
