@@ -18,6 +18,7 @@ const InputWithLabelAndValidation = ({
   unit = undefined,
   validationMessages = [],
   validationType = undefined,
+  validationPath = undefined,
   renderItemWithinInput = undefined,
   renderItemAboveInput = undefined,
   isInputDisabled = false,
@@ -29,7 +30,12 @@ const InputWithLabelAndValidation = ({
   useStopInputScrollingIncrementNumber(textFieldRef)
 
   return (
-    <InputRow required={required} $validationType={validationType} data-testid={testId}>
+    <InputRow
+      required={required}
+      $validationType={validationType}
+      data-testid={testId}
+      data-validation-path={validationPath}
+    >
       <InputNoRowWithLabelAndValidation
         required={required}
         helperText={helperText}
@@ -66,6 +72,7 @@ InputWithLabelAndValidation.propTypes = {
   unit: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
+  validationPath: PropTypes.string,
 }
 
 export default InputWithLabelAndValidation

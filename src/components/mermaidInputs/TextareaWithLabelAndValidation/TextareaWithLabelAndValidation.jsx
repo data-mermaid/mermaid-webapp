@@ -15,10 +15,15 @@ const TextareaWithLabelAndValidation = ({
   testId = undefined,
   validationMessages = undefined,
   validationType = undefined,
+  validationPath = undefined,
   ...restOfProps
 }) => {
   return (
-    <InputRow $validationType={validationType} data-testid={testId}>
+    <InputRow
+      $validationType={validationType}
+      data-testid={testId}
+      data-validation-path={validationPath}
+    >
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
         {required ? <RequiredIndicator /> : null}
@@ -54,6 +59,7 @@ TextareaWithLabelAndValidation.propTypes = {
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
+  validationPath: PropTypes.string,
 }
 
 export default TextareaWithLabelAndValidation

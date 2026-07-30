@@ -15,6 +15,7 @@ const InputSelectWithLabelAndValidation = ({
   ignoreNonObservationFieldValidations = () => {},
   resetNonObservationFieldValidations = () => {},
   validationType = undefined,
+  validationPath = undefined,
   testId = undefined,
   value = '',
   updateValueAndResetValidationForDuplicateWarning = () => {},
@@ -23,7 +24,11 @@ const InputSelectWithLabelAndValidation = ({
   ...restOfProps
 }) => {
   return (
-    <InputRow $validationType={validationType} data-testid={testId}>
+    <InputRow
+      $validationType={validationType}
+      data-testid={testId}
+      data-validation-path={validationPath}
+    >
       <InputNoRowSelectWithLabelAndValidation
         label={label}
         id={id}
@@ -60,6 +65,7 @@ InputSelectWithLabelAndValidation.propTypes = {
   value: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
+  validationPath: PropTypes.string,
   updateValueAndResetValidationForDuplicateWarning: PropTypes.func,
   showHelperText: PropTypes.bool,
 }

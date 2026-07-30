@@ -121,6 +121,7 @@ const ObserversInput = ({
           label={t('sample_units.observers')}
           required={true}
           id="observers"
+          validationPath={validationPath}
           options={observerNameOptions}
           value={observerNameValues}
           ignoreNonObservationFieldValidations={() => {

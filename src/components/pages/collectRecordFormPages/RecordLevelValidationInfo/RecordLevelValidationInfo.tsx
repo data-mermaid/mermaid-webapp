@@ -93,7 +93,7 @@ const RecordLevelValidationInfo = ({
   })
 
   return (
-    <ValidationList data-testid="record-level-validations">
+    <ValidationList data-testid="record-level-validations" data-validation-path="$record">
       {filteredValidations.map((validation) => {
         const { status, validation_id, code, context } = validation
         const isWarning = status === 'warning'
