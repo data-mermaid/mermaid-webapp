@@ -6,7 +6,7 @@ import { styled, css } from 'styled-components'
 import { ButtonThatLooksLikeLink } from '../../../generic/buttons'
 import { hoverState } from '../../../../library/styling/mediaQueries'
 import { ValidationList } from '../../../generic/form'
-import { MessageType } from '../../../../types/constants'
+import { MessageType, ValidationStatus } from '../../../../types/constants'
 import InlineMessage from '../../../generic/InlineMessage'
 import { getValidationMessage } from '../../../../library/validationMessageHelpers'
 import theme from '../../../../theme'
@@ -14,7 +14,7 @@ import InputIgnoreValidationWarningCheckboxWithLabel from '../../../mermaidInput
 import DuplicateImageValidationContent, { Image } from './DuplicateImageValidationContent'
 
 interface RecordValidationInfo {
-  status: 'ok' | 'warning' | 'error' | 'ignore' | 'reset'
+  status: ValidationStatus
   validation_id: string
   code: string
   fields?: string[]

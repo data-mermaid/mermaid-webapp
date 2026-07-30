@@ -29,17 +29,23 @@ const Chip = styled('span')<{ $variant: ChipVariant }>`
 `
 
 interface FormStatusIndicatorsProps {
+  areValidationsShowing: boolean
   errorCount: number
   warningCount: number
   ignoredCount: number
 }
 
 const FormStatusIndicators = ({
+  areValidationsShowing,
   errorCount,
   warningCount,
   ignoredCount,
 }: FormStatusIndicatorsProps) => {
   const { t } = useTranslation()
+
+  if (!areValidationsShowing) {
+    return null
+  }
 
   if (errorCount === 0 && warningCount === 0 && ignoredCount === 0) {
     return null

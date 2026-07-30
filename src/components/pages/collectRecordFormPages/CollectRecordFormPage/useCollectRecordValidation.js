@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import getValidationCounts from './getValidationCounts'
 
 const useCollectRecordValidation = ({
   collectRecordBeingEdited,
@@ -275,6 +276,10 @@ const useCollectRecordValidation = ({
     ],
   )
 
+  // Recompute each render — the reset flow mutates the results subtree in place
+  // (see setObjectPropertyOnClone), so reference-based memoization would miss updates.
+  const validationCounts = getValidationCounts(collectRecordBeingEdited?.validations?.results)
+
   return {
     handleScrollToObservation,
     handleValidate,
@@ -285,6 +290,7 @@ const useCollectRecordValidation = ({
     resetObservationValidations,
     resetRecordLevelValidation,
     validationPropertiesWithDirtyResetOnInputChange,
+    validationCounts,
   }
 }
 

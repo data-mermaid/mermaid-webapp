@@ -368,6 +368,7 @@ const CollectRecordFormPage = ({
     resetObservationValidations,
     resetRecordLevelValidation,
     validationPropertiesWithDirtyResetOnInputChange,
+    validationCounts,
   } = useCollectRecordValidation({
     collectRecordBeingEdited,
     databaseSwitchboardInstance,
@@ -655,8 +656,14 @@ const CollectRecordFormPage = ({
         headerTitle={renderCollectRecordTitle()}
         toolbar={
           <CollectFormToolbarWrapper>
-            <FormStatusIndicators errorCount={2} warningCount={1} ignoredCount={3} />{' '}
-            {/* M2062: stubbed counts — replaced with live aggregation in Commit 3 */}
+            <div>
+              <FormStatusIndicators
+                areValidationsShowing={areValidationsShowing}
+                errorCount={validationCounts.errorCount}
+                warningCount={validationCounts.warningCount}
+                ignoredCount={validationCounts.ignoredCount}
+              />
+            </div>
             {!isReadOnlyUser && (
               <SaveValidateSubmitButtonGroup
                 isNewRecord={isNewRecord}
