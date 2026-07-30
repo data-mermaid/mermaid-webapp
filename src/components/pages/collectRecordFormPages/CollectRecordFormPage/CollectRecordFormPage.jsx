@@ -36,6 +36,7 @@ import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflin
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import DeleteRecordButton from '../../../DeleteRecordButton'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
+import FormStatusIndicators from '../FormStatusIndicators'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
 import ObserversInput from '../ObserversInput'
@@ -654,7 +655,8 @@ const CollectRecordFormPage = ({
         headerTitle={renderCollectRecordTitle()}
         toolbar={
           <CollectFormToolbarWrapper>
-            <div /> {/* left slot — FormStatusIndicators mounts here */}
+            <FormStatusIndicators errorCount={2} warningCount={1} ignoredCount={3} />{' '}
+            {/* M2062: stubbed counts — replaced with live aggregation in Commit 3 */}
             {!isReadOnlyUser && (
               <SaveValidateSubmitButtonGroup
                 isNewRecord={isNewRecord}
