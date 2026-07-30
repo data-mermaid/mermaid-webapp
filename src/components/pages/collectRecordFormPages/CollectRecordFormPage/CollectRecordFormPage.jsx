@@ -13,9 +13,9 @@ import {
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
-import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import {
+  CollectFormToolbarWrapper,
   ErrorBox,
   ErrorText,
   ErrorTextButton,
@@ -619,6 +619,26 @@ const CollectRecordFormPage = ({
     <PageUnavailable mainText={t('page.read_only')} />
   )
 
+  const renderCollectRecordTitle = () => {
+    if (isNewRecord) {
+      return (
+        <H2 data-testid={`${sampleUnitName}-page-title`}>
+          {t(`protocol_titles.${sampleUnitName}`)}
+        </H2>
+      )
+    }
+    if (collectRecordBeingEdited) {
+      return (
+        <RecordFormTitle
+          submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
+          sites={sites}
+          protocol={sampleUnitName}
+        />
+      )
+    }
+    return null
+  }
+
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -631,20 +651,10 @@ const CollectRecordFormPage = ({
         isToolbarSticky={true}
         subNavNode={subNavNode}
         content={contentViewByRole}
+        headerTitle={renderCollectRecordTitle()}
         toolbar={
-          <ContentPageToolbarWrapper>
-            {isNewRecord && (
-              <H2 data-testid={`${sampleUnitName}-page-title`}>
-                {t(`protocol_titles.${sampleUnitName}`)}
-              </H2>
-            )}
-            {collectRecordBeingEdited && !isNewRecord && (
-              <RecordFormTitle
-                submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
-                sites={sites}
-                protocol={sampleUnitName}
-              />
-            )}
+          <CollectFormToolbarWrapper>
+            <div /> {/* left slot — FormStatusIndicators mounts here */}
             {!isReadOnlyUser && (
               <SaveValidateSubmitButtonGroup
                 isNewRecord={isNewRecord}
@@ -664,7 +674,7 @@ const CollectRecordFormPage = ({
                 </ErrorTextButton>
               </ErrorTextSubmit>
             </ErrorBoxSubmit>
-          </ContentPageToolbarWrapper>
+          </CollectFormToolbarWrapper>
         }
       />
 
