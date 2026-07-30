@@ -254,7 +254,11 @@ const BenthicPhotoQuadratObservationTable = ({
       }
 
       return (
-        <ObservationTr key={observationId} $messageType={observationValidationType}>
+        <ObservationTr
+          key={observationId}
+          data-observation-id={observationId}
+          $messageType={observationValidationType}
+        >
           <Td $align="center">{rowNumber}</Td>
           <Td $align="right">
             <InputNumberNumericCharactersOnly
