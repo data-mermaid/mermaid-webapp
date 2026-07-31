@@ -35,6 +35,17 @@ const GlobalStyle = createGlobalStyle`
           text-decoration: none;
         `)}
     }
+    @keyframes validation-target-highlight-fade {
+        0% { background-color: var(--validation-target-highlight-color, ${
+          theme.color.chipWarningBackground
+        }); }
+        100% { background-color: transparent; }
+    }
+    .validation-target-highlight {
+        animation: validation-target-highlight-fade ${
+          theme.timing.validationTargetHighlightMs
+        }ms ease-out;
+    }
 `
 
 export default GlobalStyle

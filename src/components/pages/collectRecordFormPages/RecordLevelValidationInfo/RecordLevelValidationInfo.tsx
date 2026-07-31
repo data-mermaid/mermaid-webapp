@@ -93,7 +93,7 @@ const RecordLevelValidationInfo = ({
   })
 
   return (
-    <ValidationList data-testid="record-level-validations" data-validation-path="$record">
+    <ValidationList data-testid="record-level-validations">
       {filteredValidations.map((validation) => {
         const { status, validation_id, code, context } = validation
         const isWarning = status === 'warning'
@@ -114,7 +114,7 @@ const RecordLevelValidationInfo = ({
         const isScrollToViewAvailable = checkScrollToObservation(validation)
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
-          <InlineValidationItem key={validation_id}>
+          <InlineValidationItem key={validation_id} data-record-validation-id={validation_id}>
             <InlineMessage type={statusForStyling as MessageType}>
               {validationMessage}
             </InlineMessage>

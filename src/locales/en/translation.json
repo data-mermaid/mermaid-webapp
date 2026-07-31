@@ -1006,6 +1006,7 @@
       "chip_label_warning_one": "{{count}} Warning",
       "chip_label_warning_other": "{{count}} Warnings",
       "errors": "Errors",
+      "next": "Next",
       "ready_to_submit": "Ready to submit",
       "saved": "Saved",
       "warnings": "Warnings"

@@ -191,6 +191,7 @@ const timing = {
   hoverTransition: '0.25s',
   activeTransition: '0.25s',
   TooltipTransition: 'visibility 0.1s linear 0.1s',
+  validationTargetHighlightMs: 1000,
 }
 
 const typography = {

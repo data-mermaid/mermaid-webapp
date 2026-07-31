@@ -369,6 +369,7 @@ const CollectRecordFormPage = ({
     resetRecordLevelValidation,
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
+    goToNextValidation,
   } = useCollectRecordValidation({
     collectRecordBeingEdited,
     databaseSwitchboardInstance,
@@ -662,6 +663,7 @@ const CollectRecordFormPage = ({
                 errorCount={validationCounts.errorCount}
                 warningCount={validationCounts.warningCount}
                 ignoredCount={validationCounts.ignoredCount}
+                onNext={goToNextValidation}
               />
             </div>
             {!isReadOnlyUser && (
