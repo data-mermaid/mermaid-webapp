@@ -33,7 +33,7 @@ test('Submit macroinvertebrate success shows toast message and redirects to coll
       `${apiBaseUrl}/pull/`,
       () => {
         const collectRecordWithValidationFailing = {
-          ...mockMermaidData.collect_records.find((r) => r.id === 'bi-1'),
+          ...mockMermaidData.collect_records.find(r => r.id === 'bi-1'),
           validations: mockBeltInvertValidationsObject, // fails validation
         }
 
@@ -56,7 +56,7 @@ test('Submit macroinvertebrate success shows toast message and redirects to coll
       `${apiBaseUrl}/pull/`,
       () => {
         const collectRecordWithValidationOk = {
-          ...mockMermaidData.collect_records.find((r) => r.id === 'bi-1'),
+          ...mockMermaidData.collect_records.find(r => r.id === 'bi-1'),
           validations: { status: 'ok' },
         }
 
@@ -109,7 +109,7 @@ test('Submit macroinvertebrate failure shows toast message and an enabled submit
       `${apiBaseUrl}/pull/`,
       () => {
         const collectRecordWithValidationFailing = {
-          ...mockMermaidData.collect_records.find((r) => r.id === 'bi-1'),
+          ...mockMermaidData.collect_records.find(r => r.id === 'bi-1'),
           validations: mockBeltInvertValidationsObject, // fails validation
         }
 
@@ -132,7 +132,7 @@ test('Submit macroinvertebrate failure shows toast message and an enabled submit
       `${apiBaseUrl}/pull/`,
       () => {
         const collectRecordWithValidationOk = {
-          ...mockMermaidData.collect_records.find((r) => r.id === 'bi-1'),
+          ...mockMermaidData.collect_records.find(r => r.id === 'bi-1'),
           validations: { status: 'ok' },
         }
 

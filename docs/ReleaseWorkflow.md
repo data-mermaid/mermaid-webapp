@@ -16,11 +16,11 @@ Shipping a fix that already landed directly on `main`? Use the hotfix flow inste
 
 Look at what's shipped since the last release and apply [Conventional Commits](https://www.conventionalcommits.org/):
 
-| Changes since last release contain… | Bump    | Example             |
-| ----------------------------------- | ------- | ------------------- |
-| a `BREAKING CHANGE` / `feat!`       | `major` | `2.34.1` → `3.0.0`  |
-| any `feat:`                         | `minor` | `2.34.1` → `2.35.0` |
-| only `fix:` / `chore:` / `docs:`    | `patch` | `2.34.1` → `2.34.2` |
+| Changes since last release contain… | Bump    | Example         |
+| ------------------------------------ | ------- | --------------- |
+| a `BREAKING CHANGE` / `feat!`        | `major` | `2.34.1` → `3.0.0` |
+| any `feat:`                          | `minor` | `2.34.1` → `2.35.0` |
+| only `fix:` / `chore:` / `docs:`     | `patch` | `2.34.1` → `2.34.2` |
 
 Take the highest signal present (one `feat:` among many `fix:` still means `minor`). If it's unclear, **check with the dev team** - the bump is a judgement call, not just a script output.
 
@@ -65,7 +65,7 @@ A hotfix is the normal release flow **minus the develop→main merge**, plus a s
 
 - It only pulls and operates on `main`; it never merges `develop` into `main`.
 - It aborts if `main` isn't ahead of the latest tag (nothing to ship).
-- It prints the exact commits that will be released and asks for confirmation before tagging - your last chance to check that _only_ the intended fix is on `main`.
+- It prints the exact commits that will be released and asks for confirmation before tagging - your last chance to check that *only* the intended fix is on `main`.
 
 Everything else matches `release.sh`: it verifies `package.json` vs the latest tag, bumps the version, pushes `main` + tag (triggering the deploy), back-merges `main` into `develop` so the fix and version bump land there, and creates the GitHub release.
 

@@ -10,7 +10,7 @@ The current focus is **Bahasa Indonesia**, with Portuguese planned. Spanish, Fre
 
 ## The key action: mark **Reviewed**
 
-> **Current status:** the reviewed-only filter is **temporarily off** while we get the languages fully reviewed. Right now, _all_ translations sync to the app regardless of review status. **Keep marking translations Reviewed anyway** - the goal is to get every relevant language fully reviewed, and once that's done the filter gets switched on.
+> **Current status:** the reviewed-only filter is **temporarily off** while we get the languages fully reviewed. Right now, *all* translations sync to the app regardless of review status. **Keep marking translations Reviewed anyway** - the goal is to get every relevant language fully reviewed, and once that's done the filter gets switched on.
 
 Once the filter is enabled, a translation only reaches the app once you mark it **Reviewed** in Lokalise:
 
