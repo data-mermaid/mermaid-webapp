@@ -1,5 +1,5 @@
 {
-  "accessible_info": "Accessible information",
+  "accessible_info": "Accessible information edit",
   "add_update_sites_regimes": "Add/update sites or management regimes",
   "admin": "Admin",
   "api_errors": {
@@ -683,6 +683,7 @@
   "method": "Method",
   "must_select_fish_warning": "You must select a fish size bin before adding any observations",
   "name": "Name",
+  "new_key": "new key",
   "new_notifications_announced": "You have new notifications.",
   "no": "No",
   "no_notifications": "There are currently no notifications",

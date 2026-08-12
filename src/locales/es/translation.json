@@ -592,6 +592,7 @@
   "method": "Método",
   "must_select_fish_warning": "Debe seleccionar un contenedor de tamaño de pez antes de agregar cualquier observación.",
   "name": "Nombre",
+  "new_key": "nueva clave",
   "no": "No",
   "no_notifications": "Actualmente no hay notificaciones",
   "notes": "Notas",

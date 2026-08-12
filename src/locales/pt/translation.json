@@ -1,4 +1,5 @@
 {
+  "accessible_info": "Editar informações acessíveis",
   "auth": {
     "email_not_verified_heading": "Por favor, verifique seu e-mail.",
     "email_not_verified_message": "Enviamos um link de verificação para o seu endereço de e-mail. Abra-o para verificar sua conta e, em seguida, tente fazer login novamente.",
@@ -48,6 +49,7 @@
     "new": "Nova gestão",
     "new_mr": "Nova gestão"
   },
+  "new_key": "nova chave",
   "page_size_selector": {
     "filtered_from_one": "(filtrado de) {{count}} {{itemType}})",
     "filtered_from_other": "(filtrado de) {{count}} {{itemType}})",
