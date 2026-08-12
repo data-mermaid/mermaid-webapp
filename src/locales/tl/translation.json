@@ -33,6 +33,11 @@
     "small_reef": "Maliit na Reef",
     "terrestrial_reef_flat": "Terrestrial Reef Flat"
   },
+  "auth": {
+    "email_not_verified_heading": "Paki-verify ang iyong email",
+    "email_not_verified_message": "Nagpadala kami ng link sa pag-verify sa iyong email address. Buksan ito para i-verify ang iyong account, pagkatapos ay subukang mag-log in muli.",
+    "try_login_again": "Subukang mag-log in"
+  },
   "benthic_observations": {
     "add_benthic_attribute": "Magdagdag ng bagong benthic attribute",
     "attribute_already_exists": "Ang iminungkahing katangian {{attribute}} ay umiiral na sa listahan. Na-update ang obserbasyon gamit ang katangiang ito.",
@@ -163,6 +168,7 @@
   },
   "filters": {
     "by_finance_solution": "Salain ang talahanayang ito ayon sa solusyon sa pananalapi",
+    "by_indicator_set_or_solution_name": "Salain ayon sa hanay ng indicator o pangalan ng solusyon",
     "by_investment": "Salain ang talahanayang ito ayon sa pamumuhunan",
     "by_name_email": "I-filter ang talahanayang ito ayon sa pangalan o email",
     "by_name_project_country": "I-filter ang talahanayang ito ayon sa pangalan, proyekto, o bansa",
@@ -179,6 +185,7 @@
     "search_helper_text": "<b> Gumamit ng dobleng panipi upang maghanap ng mga eksaktong parirala. </b><br> Halimbawa, maghanap sa North Shore upang makahanap ng mga talaan na may mga salitang North o Shore (magtutugma ang mga tala na may South Shore). O maghanap sa \"North Shore\" upang mahanap ang mga talaan na may eksaktong mga salitang North Shore (ang mga talaan na may South Shore ay hindi magkatugma)."
   },
   "fish_belt_observations": {
+    "attribute_proposal_summary": "Ang iyong iminungkahing uri ng isda ay susuriin ng pangkat ng MERMAID. Kapag naaprubahan na, isasama ito sa aming taxonomic database o makikipag-ugnayan kami sa iyo.",
     "errors": {
       "proposed_species_unsaved": "Ang iminungkahing uri ng isda {{speciesName}} ay hindi na-save.",
       "species_already_exists": "Ang iminungkahing species ng isda {{speciesName}} ay umiiral na sa listahan. Ang pagmamasid ay na-update sa species na ito."
@@ -319,12 +326,19 @@
         "add": "Magdagdag ng Solusyon sa Negosyo / Pananalapi",
         "business_finance_solution": "Solusyon sa Negosyo / Pananalapi",
         "business_finance_solution_name": "Pangalan ng solusyon sa Negosyo / Pananalapi",
+        "copy": "Pasilidad/solusyon sa pagkopya",
+        "copy_info": "Kokopyahin din ang mga Kaugnay na Pamumuhunan at Kita.",
+        "copy_selected": "Kopyahin ang mga napiling pasilidad / solusyon",
         "gender_program_criteria": "Pamantayan ng Kasarian 2X",
         "gender_program_criteria_helper": "Ipahiwatig kung ang solusyon ay kwalipikado sa ilalim ng kahit isang Pamantayan ng Hamon ng 2X. Sumangguni sa <2xLink>Gabay sa Sanggunian ng Pamantayan ng 2X</2xLink> para sa mga detalye. Nalalapat ito sa F10 (Bilang ng mga pamumuhunan na matalino sa kasarian), na sumusukat sa suporta ng GFCR para sa pagkakapantay-pantay ng kasarian sa pamamagitan ng mga pamumuhunang nakakatugon sa mga pamantayan ng 2X Challenge.<br /><gfcrPdfLink>Tingnan ang M&E Toolkit PDF</gfcrPdfLink>",
+        "indicator_set": "Set ng tagapagpahiwatig",
         "local_enterprise": "Lokal na negosyo",
         "local_enterprise_helper": "Tinukoy bilang isang maliit hanggang katamtamang laki ng negosyo na tumatakbo sa loob ng partikular na lokasyon ng Programa ng GFCR. Nalalapat ito sa F9.3 (Halaga (at %) ng kita sa mga lokal na negosyo), na sumusukat sa kita na nananatili sa loob ng isang lokal na heograpiya, na naiiba sa kita na inililipat sa ibang bansa.<br /><gfcrPdfLink>Tingnan ang M&E Toolkit PDF</gfcrPdfLink>",
         "name_helper": "Ilagay nang hiwalay ang pangalan ng bawat negosyo o solusyon sa pananalapi na pinopondohan ng Programa ng GFCR. Maaari mong kopyahin ang mga solusyon mula sa mga nakaraang ulat. Ang mga tagapagpahiwatig na F8, F9, at F10 ay paghihiwalayin ayon sa solusyon at sektor. Ang mga bagong solusyon na pinopondohan ng Programa ay unti-unting idadagdag dito.<br /><gfcrPdfLink>Tingnan ang M&E Toolkit PDF</gfcrPdfLink>",
+        "no_copy_targets": "Walang ibang mga hanay ng tagapagpahiwatig ng pondo sa proyektong ito na may mga pasilidad / solusyon na maaaring kopyahin.",
         "no_finance_solutions": "Wala pang Solusyon sa Pananalapi.",
+        "no_incubator": "Wala",
+        "number_of_solutions_supported_table_header": "Kabuuang bilang ng mga solusyong sinusuportahan",
         "pcf_revenues_error": "Alisin ang mga kaugnay na kita bago baguhin ang uri patungo sa programmatic co-financing",
         "save": "I-save ang Negosyo / Solusyon sa Pananalapi",
         "sector": "Sektor",
@@ -575,6 +589,7 @@
   "method": "Pamamaraan",
   "must_select_fish_warning": "Dapat kang pumili ng lalagyan ng isda bago magdagdag ng anumang mga obserbasyon.",
   "name": "Pangalan",
+  "new_key": "bagong susi",
   "no": "Hindi",
   "no_notifications": "Kasalukuyang walang mga abiso",
   "notes": "Mga Tala",
@@ -661,6 +676,24 @@
     "read_only": "Hindi mo ma-access ang pahinang ito dahil ikaw ay isang read-only na miyembro ng proyektong ito.",
     "try_reloading": "Kung patuloy mong nakikita ang error na ito, subukang i-reload ang pahinang ito, o maaari mong",
     "will_show": "Ipapakita ng page na ito ang:"
+  },
+  "page_size_selector": {
+    "filtered_from_one": "(sinala mula sa {{count}} {{itemType}})",
+    "filtered_from_other": "(sinala mula sa {{count}} {{itemType}})",
+    "item_type": {
+      "management_regime_one": "rehimen ng pamamahala",
+      "management_regime_other": "mga rehimen ng pamamahala",
+      "record_one": "talaan",
+      "record_other": "mga talaan",
+      "sample_unit_one": "yunit ng sampol",
+      "sample_unit_other": "mga yunit ng sample",
+      "site_one": "lugar",
+      "site_other": "mga site",
+      "user_one": "gumagamit",
+      "user_other": "mga gumagamit"
+    },
+    "of_total": "ng {{total}}",
+    "showing": "Ipinapakita"
   },
   "percent_cover": "Porsyento ng Saklaw",
   "profile": {
@@ -978,6 +1011,7 @@
       "enter_email": "Mangyaring magpasok ng email address.",
       "failed_sample_units_transfer": "Nabigong ilipat ang mga sample na unit.",
       "invalid_email": "Di-wastong email address.",
+      "last_admin_tooltip": "Ikaw lang ang admin sa proyektong ito. Magtalaga ng isa pang admin bago baguhin ang iyong tungkulin o alisin ang iyong sarili.",
       "new_user_added": "Idinagdag ang bagong user.",
       "pending_user_added": "Ipinadala ang email sa pag-sign up. Idinagdag ang bagong user bilang Nakabinbing User.",
       "role_changed_error": "{{userName}}hindi nabago ang tungkulin.",
@@ -985,6 +1019,7 @@
       "sample_units_transferred_one": "{{count}} inilipat na yunit ng sample",
       "sample_units_transferred_other": "{{count}} mga yunit ng sample na inilipat",
       "something_went_wrong": "Nagkaproblema",
+      "user_remove_error": "{{userName}} hindi pa naaalis sa proyekto",
       "user_removed": "Inalis ang user"
     },
     "not_signed_up": "kakailanganing mag-sign up dahil hindi pa sila gumagamit ng MERMAID.",

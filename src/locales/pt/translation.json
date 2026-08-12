@@ -1,9 +1,21 @@
 {
+  "accessible_info": "Editar informações acessíveis",
+  "auth": {
+    "email_not_verified_heading": "Por favor, verifique seu e-mail.",
+    "email_not_verified_message": "Enviamos um link de verificação para o seu endereço de e-mail. Abra-o para verificar sua conta e, em seguida, tente fazer login novamente.",
+    "try_login_again": "Tente fazer login."
+  },
   "benthic_observations": {
     "attribute_proposal_summary": "Seu atributo proposto {{attribute}} Será analisado pela equipe MERMAID. Após a aprovação, será incluído em nosso banco de dados taxonômico ou entraremos em contato com você."
   },
   "buttons": {
     "suggestion_review_request": "Enviar para revisão"
+  },
+  "filters": {
+    "by_indicator_set_or_solution_name": "Filtrar por conjunto de indicadores ou nome da solução"
+  },
+  "fish_belt_observations": {
+    "attribute_proposal_summary": "A espécie de peixe que você propôs será analisada pela equipe MERMAID. Após a aprovação, ela será incluída em nosso banco de dados taxonômico ou entraremos em contato com você."
   },
   "forms": {
     "submit_for_review": "Enviar para revisão"
@@ -12,6 +24,13 @@
     "forms": {
       "finance_solutions": {
         "business_finance_solution": "Instalação/solução",
+        "copy": "Recurso de cópia / solução",
+        "copy_info": "Os investimentos e receitas relacionados também serão copiados.",
+        "copy_selected": "Copiar instalações/soluções selecionadas",
+        "indicator_set": "Conjunto de indicadores",
+        "no_copy_targets": "Não existem outros conjuntos de indicadores de fundos neste projeto com recursos/soluções para copiar.",
+        "no_incubator": "Nenhum",
+        "number_of_solutions_supported_table_header": "Número total de soluções suportadas",
         "pcf_revenues_error": "Remova as receitas associadas antes de alterar o tipo para cofinanciamento programático."
       },
       "revenues": {
@@ -29,6 +48,25 @@
     "export": "Gestão de exportações",
     "new": "Nova gestão",
     "new_mr": "Nova gestão"
+  },
+  "new_key": "nova chave",
+  "page_size_selector": {
+    "filtered_from_one": "(filtrado de) {{count}} {{itemType}})",
+    "filtered_from_other": "(filtrado de) {{count}} {{itemType}})",
+    "item_type": {
+      "management_regime_one": "regime de gestão",
+      "management_regime_other": "regimes de gestão",
+      "record_one": "registro",
+      "record_other": "registros",
+      "sample_unit_one": "unidade de amostra",
+      "sample_unit_other": "unidades de amostra",
+      "site_one": "site",
+      "site_other": "sites",
+      "user_one": "usuário",
+      "user_other": "Usuários"
+    },
+    "of_total": "de {{total}}",
+    "showing": "Exibindo"
   },
   "projects": {
     "demo": {
@@ -56,8 +94,10 @@
   },
   "users": {
     "messages": {
+      "last_admin_tooltip": "Você é o único administrador deste projeto. Atribua outro administrador antes de alterar sua função ou remover seu próprio perfil.",
       "sample_units_transferred_one": "{{count}} unidade de amostra transferida",
-      "sample_units_transferred_other": "{{count}} unidades de amostra transferidas"
+      "sample_units_transferred_other": "{{count}} unidades de amostra transferidas",
+      "user_remove_error": "{{userName}} não foi removido do projeto"
     }
   },
   "validation_messages": {
