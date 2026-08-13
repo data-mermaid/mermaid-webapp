@@ -189,7 +189,7 @@
   },
   "filters": {
     "by_finance_solution": "Filter by facility / solution",
-    "by_indicator_set_or_solution_name": "Filter by indicator set or solution name",
+    "by_indicator_set_date_or_solution_name": "Filter by indicator set, date, or solution name",
     "by_investment": "Filter by investment",
     "by_name_email": "Filter by name or email",
     "by_name_project_country": "Filter by name, project, or country",
@@ -417,6 +417,7 @@
     "indicator_set": "Fund indicator set",
     "indicator_set_date_info": "End date of the reporting period of the GFCR Programme, e.g., an end-year report may have December 31 as the reporting date.",
     "indicator_set_title_info": "Recommended naming conventions: For targets, use \"Phase 1 target\", \"Mid-term target\", or \"Final target\". For bi-annual progress reports, use \"Mid-year report\" or \"End-year report\".",
+    "indicator_set_type": "Indicator set type",
     "investments": "Investments",
     "no_indicator_info": "Select 'Create new' to add a fund indicator set to this project",
     "no_indicator_sets": "No fund indicator sets yet",

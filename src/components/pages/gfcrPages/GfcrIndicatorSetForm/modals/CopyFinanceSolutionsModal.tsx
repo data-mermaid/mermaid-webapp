@@ -27,7 +27,7 @@ import { useCurrentUser } from '../../../../../App/CurrentUserContext'
 import { useCurrentProject } from '../../../../../App/CurrentProjectContext'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
-import { formatReportDate } from '../../../../../library/formatDateTime'
+import { formatDateOnlyIntl } from '../../../../../library/formatDateTime'
 import { stripId } from './copyHelpers'
 import {
   Choices,
@@ -83,7 +83,10 @@ const CopyFinanceSolutionsModal = ({
   const indicatorSetSaveSuccessText = t('gfcr.success.indicator_set_save')
   const indicatorSetSaveFailedText = t('gfcr.errors.indicator_set_save_failed')
   const indicatorSetHeaderText = t('gfcr.forms.finance_solutions.indicator_set')
+  const indicatorSetTypeHeaderText = t('gfcr.indicator_set_type')
   const reportingDateHeaderText = t('gfcr.reporting_date')
+  const reportText = t('gfcr.report')
+  const targetText = t('gfcr.target')
   const nameHeaderText = t('gfcr.forms.finance_solutions.business_finance_solution_name')
   const fsTypeHeaderText = t('gfcr.forms.finance_solutions.fs_type')
 
@@ -93,6 +96,7 @@ const CopyFinanceSolutionsModal = ({
       .flatMap((set) =>
         (set.finance_solutions ?? []).map((financeSolution) => ({
           indicatorSetTitle: set.title,
+          indicatorSetType: set.indicator_set_type,
           reportDate: set.report_date,
           financeSolution,
         })),
@@ -118,17 +122,28 @@ const CopyFinanceSolutionsModal = ({
         sortType: reactTableNaturalSort,
       },
       {
-        Header: reportingDateHeaderText,
-        accessor: 'report_date',
-        // Sorts on the raw YYYY-MM-DD value, not the localized text the Cell renders,
-        // so the order stays chronological rather than alphabetical by month name.
+        Header: indicatorSetTypeHeaderText,
+        accessor: 'indicatorSetType',
         sortType: reactTableNaturalSort,
-        Cell: ({ value }) => formatReportDate(value),
+      },
+      {
+        Header: reportingDateHeaderText,
+        // Sorts on the raw YYYY-MM-DD value rather than the localized label, so the order
+        // stays chronological instead of alphabetical by month name.
+        accessor: 'reportDate',
+        sortType: reactTableNaturalSort,
+        Cell: ({ row }) => row.original.reportDateLabel,
       },
       { Header: nameHeaderText, accessor: 'name', sortType: reactTableNaturalSort },
       { Header: fsTypeHeaderText, accessor: 'fs_type', sortType: reactTableNaturalSort },
     ],
-    [indicatorSetHeaderText, reportingDateHeaderText, nameHeaderText, fsTypeHeaderText],
+    [
+      indicatorSetHeaderText,
+      indicatorSetTypeHeaderText,
+      reportingDateHeaderText,
+      nameHeaderText,
+      fsTypeHeaderText,
+    ],
   )
 
   const tableCellData = useMemo(() => {
@@ -136,22 +151,28 @@ const CopyFinanceSolutionsModal = ({
       return []
     }
 
-    return copyableEntries.map(({ indicatorSetTitle, reportDate, financeSolution }) => {
-      const { id, name, fs_type } = financeSolution
+    return copyableEntries.map(
+      ({ indicatorSetTitle, indicatorSetType, reportDate, financeSolution }) => {
+        const { id, name, fs_type } = financeSolution
 
-      const fsTypeName = choices.financesolutiontypes?.data?.find(
-        (fsTypeChoice) => fsTypeChoice.id === fs_type,
-      )?.name
+        const fsTypeName = choices.financesolutiontypes?.data?.find(
+          (fsTypeChoice) => fsTypeChoice.id === fs_type,
+        )?.name
 
-      return {
-        id,
-        indicatorSetTitle,
-        report_date: reportDate,
-        name,
-        fs_type: fsTypeName,
-      }
-    })
-  }, [choices, copyableEntries])
+        return {
+          id,
+          indicatorSetTitle,
+          indicatorSetType: indicatorSetType === 'report' ? reportText : targetText,
+          reportDate,
+          // The label the date column renders, kept alongside the raw value so the filter can
+          // match what the user actually sees ("February 2024") instead of "2024-02-10"
+          reportDateLabel: formatDateOnlyIntl(reportDate),
+          name,
+          fs_type: fsTypeName,
+        }
+      },
+    )
+  }, [choices, copyableEntries, reportText, targetText])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -166,7 +187,8 @@ const CopyFinanceSolutionsModal = ({
   })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = ['values.indicatorSetTitle', 'values.name']
+    // reportDateLabel has no column of its own, so it is read from the row rather than its values
+    const keys = ['values.indicatorSetTitle', 'original.reportDateLabel', 'values.name']
 
     const queryTerms = splitSearchQueryStrings(query)
     const filteredRows =
@@ -351,7 +373,7 @@ const CopyFinanceSolutionsModal = ({
       <CopyModalToolbarWrapper>
         <FilterSearchToolbar
           id="copy-finance-solutions-filter"
-          name={t('filters.by_indicator_set_or_solution_name')}
+          name={t('filters.by_indicator_set_date_or_solution_name')}
           globalSearchText={globalFilter}
           handleGlobalFilterChange={handleGlobalFilterChange}
         />
