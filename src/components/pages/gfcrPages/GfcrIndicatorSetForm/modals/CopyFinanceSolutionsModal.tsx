@@ -27,7 +27,7 @@ import { useCurrentUser } from '../../../../../App/CurrentUserContext'
 import { useCurrentProject } from '../../../../../App/CurrentProjectContext'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
-import IconCheckLabel from '../subPages/IconCheckLabel'
+import { formatDateOnlyIntl } from '../../../../../library/formatDateTime'
 import { stripId } from './copyHelpers'
 import {
   Choices,
@@ -83,16 +83,12 @@ const CopyFinanceSolutionsModal = ({
   const indicatorSetSaveSuccessText = t('gfcr.success.indicator_set_save')
   const indicatorSetSaveFailedText = t('gfcr.errors.indicator_set_save_failed')
   const indicatorSetHeaderText = t('gfcr.forms.finance_solutions.indicator_set')
+  const indicatorSetTypeHeaderText = t('gfcr.indicator_set_type')
+  const reportingDateHeaderText = t('gfcr.reporting_date')
+  const reportText = t('gfcr.report')
+  const targetText = t('gfcr.target')
   const nameHeaderText = t('gfcr.forms.finance_solutions.business_finance_solution_name')
   const fsTypeHeaderText = t('gfcr.forms.finance_solutions.fs_type')
-  const sectorHeaderText = t('gfcr.forms.finance_solutions.sector')
-  const usedAnIncubatorHeaderText = t('gfcr.forms.finance_solutions.used_an_incubator')
-  const gender2xCriteriaHeaderText = t('gfcr.forms.finance_solutions.gender_program_criteria')
-  const localEnterpriseHeaderText = t('gfcr.forms.finance_solutions.local_enterprise')
-  const sustainableFinanceMechanismsHeaderText = t(
-    'gfcr.forms.finance_solutions.sustainable_finance_mechanisms',
-  )
-  const noIncubatorText = t('gfcr.forms.finance_solutions.no_incubator')
 
   const copyableEntries = useMemo(() => {
     return gfcrIndicatorSets
@@ -100,6 +96,8 @@ const CopyFinanceSolutionsModal = ({
       .flatMap((set) =>
         (set.finance_solutions ?? []).map((financeSolution) => ({
           indicatorSetTitle: set.title,
+          indicatorSetType: set.indicator_set_type,
+          reportDate: set.report_date,
           financeSolution,
         })),
       )
@@ -123,41 +121,28 @@ const CopyFinanceSolutionsModal = ({
         accessor: 'indicatorSetTitle',
         sortType: reactTableNaturalSort,
       },
+      {
+        Header: indicatorSetTypeHeaderText,
+        accessor: 'indicatorSetType',
+        sortType: reactTableNaturalSort,
+      },
+      {
+        Header: reportingDateHeaderText,
+        // Sorts on the raw YYYY-MM-DD value rather than the localized label, so the order
+        // stays chronological instead of alphabetical by month name.
+        accessor: 'reportDate',
+        sortType: reactTableNaturalSort,
+        Cell: ({ row }) => row.original.reportDateLabel,
+      },
       { Header: nameHeaderText, accessor: 'name', sortType: reactTableNaturalSort },
       { Header: fsTypeHeaderText, accessor: 'fs_type', sortType: reactTableNaturalSort },
-      { Header: sectorHeaderText, accessor: 'sector', sortType: reactTableNaturalSort },
-      {
-        Header: usedAnIncubatorHeaderText,
-        accessor: 'used_an_incubator',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: gender2xCriteriaHeaderText,
-        accessor: 'gender_smart',
-        sortType: reactTableNaturalSort,
-        align: 'center',
-      },
-      {
-        Header: localEnterpriseHeaderText,
-        accessor: 'local_enterprise',
-        sortType: reactTableNaturalSort,
-        align: 'center',
-      },
-      {
-        Header: sustainableFinanceMechanismsHeaderText,
-        accessor: 'sustainable_finance_mechanisms',
-        sortType: reactTableNaturalSort,
-      },
     ],
     [
       indicatorSetHeaderText,
+      indicatorSetTypeHeaderText,
+      reportingDateHeaderText,
       nameHeaderText,
       fsTypeHeaderText,
-      sectorHeaderText,
-      usedAnIncubatorHeaderText,
-      gender2xCriteriaHeaderText,
-      localEnterpriseHeaderText,
-      sustainableFinanceMechanismsHeaderText,
     ],
   )
 
@@ -166,50 +151,28 @@ const CopyFinanceSolutionsModal = ({
       return []
     }
 
-    return copyableEntries.map(({ indicatorSetTitle, financeSolution }) => {
-      const {
-        id,
-        name,
-        fs_type,
-        sector,
-        used_an_incubator,
-        gender_smart,
-        local_enterprise,
-        sustainable_finance_mechanisms,
-      } = financeSolution
+    return copyableEntries.map(
+      ({ indicatorSetTitle, indicatorSetType, reportDate, financeSolution }) => {
+        const { id, name, fs_type } = financeSolution
 
-      const fsTypeName = choices.financesolutiontypes?.data?.find(
-        (fsTypeChoice) => fsTypeChoice.id === fs_type,
-      )?.name
-      const sectorName = choices.sectors?.data?.find(
-        (sectorChoice) => sectorChoice.id === sector,
-      )?.name
-      const incubatorName = choices.incubatortypes?.data?.find(
-        (incubatorTypeChoice) => incubatorTypeChoice.id === used_an_incubator,
-      )?.name
-      const sustainableFinanceMechanismNames = sustainable_finance_mechanisms
-        .map(
-          (mechanism) =>
-            choices.sustainablefinancemechanisms?.data?.find(
-              // eslint-disable-next-line max-nested-callbacks
-              (sfmChoice) => sfmChoice.id === mechanism,
-            )?.name,
-        )
-        .join(', ')
+        const fsTypeName = choices.financesolutiontypes?.data?.find(
+          (fsTypeChoice) => fsTypeChoice.id === fs_type,
+        )?.name
 
-      return {
-        id,
-        indicatorSetTitle,
-        name,
-        fs_type: fsTypeName,
-        sector: sectorName,
-        used_an_incubator: incubatorName || noIncubatorText,
-        gender_smart: <IconCheckLabel isCheck={!!gender_smart} />,
-        local_enterprise: <IconCheckLabel isCheck={!!local_enterprise} />,
-        sustainable_finance_mechanisms: sustainableFinanceMechanismNames,
-      }
-    })
-  }, [choices, copyableEntries, noIncubatorText])
+        return {
+          id,
+          indicatorSetTitle,
+          indicatorSetType: indicatorSetType === 'report' ? reportText : targetText,
+          reportDate,
+          // The label the date column renders, kept alongside the raw value so the filter can
+          // match what the user actually sees ("February 2024") instead of "2024-02-10"
+          reportDateLabel: formatDateOnlyIntl(reportDate),
+          name,
+          fs_type: fsTypeName,
+        }
+      },
+    )
+  }, [choices, copyableEntries, reportText, targetText])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -224,7 +187,8 @@ const CopyFinanceSolutionsModal = ({
   })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = ['values.indicatorSetTitle', 'values.name']
+    // reportDateLabel has no column of its own, so it is read from the row rather than its values
+    const keys = ['values.indicatorSetTitle', 'original.reportDateLabel', 'values.name']
 
     const queryTerms = splitSearchQueryStrings(query)
     const filteredRows =
@@ -409,7 +373,7 @@ const CopyFinanceSolutionsModal = ({
       <CopyModalToolbarWrapper>
         <FilterSearchToolbar
           id="copy-finance-solutions-filter"
-          name={t('filters.by_indicator_set_or_solution_name')}
+          name={t('filters.by_indicator_set_date_or_solution_name')}
           globalSearchText={globalFilter}
           handleGlobalFilterChange={handleGlobalFilterChange}
         />
