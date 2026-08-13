@@ -27,7 +27,7 @@ import { useCurrentUser } from '../../../../../App/CurrentUserContext'
 import { useCurrentProject } from '../../../../../App/CurrentProjectContext'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
-import IconCheckLabel from '../subPages/IconCheckLabel'
+import { formatReportDate } from '../../../../../library/formatDateTime'
 import { stripId } from './copyHelpers'
 import {
   Choices,
@@ -83,16 +83,9 @@ const CopyFinanceSolutionsModal = ({
   const indicatorSetSaveSuccessText = t('gfcr.success.indicator_set_save')
   const indicatorSetSaveFailedText = t('gfcr.errors.indicator_set_save_failed')
   const indicatorSetHeaderText = t('gfcr.forms.finance_solutions.indicator_set')
+  const reportingDateHeaderText = t('gfcr.reporting_date')
   const nameHeaderText = t('gfcr.forms.finance_solutions.business_finance_solution_name')
   const fsTypeHeaderText = t('gfcr.forms.finance_solutions.fs_type')
-  const sectorHeaderText = t('gfcr.forms.finance_solutions.sector')
-  const usedAnIncubatorHeaderText = t('gfcr.forms.finance_solutions.used_an_incubator')
-  const gender2xCriteriaHeaderText = t('gfcr.forms.finance_solutions.gender_program_criteria')
-  const localEnterpriseHeaderText = t('gfcr.forms.finance_solutions.local_enterprise')
-  const sustainableFinanceMechanismsHeaderText = t(
-    'gfcr.forms.finance_solutions.sustainable_finance_mechanisms',
-  )
-  const noIncubatorText = t('gfcr.forms.finance_solutions.no_incubator')
 
   const copyableEntries = useMemo(() => {
     return gfcrIndicatorSets
@@ -100,6 +93,7 @@ const CopyFinanceSolutionsModal = ({
       .flatMap((set) =>
         (set.finance_solutions ?? []).map((financeSolution) => ({
           indicatorSetTitle: set.title,
+          reportDate: set.report_date,
           financeSolution,
         })),
       )
@@ -123,42 +117,18 @@ const CopyFinanceSolutionsModal = ({
         accessor: 'indicatorSetTitle',
         sortType: reactTableNaturalSort,
       },
+      {
+        Header: reportingDateHeaderText,
+        accessor: 'report_date',
+        // Sorts on the raw YYYY-MM-DD value, not the localized text the Cell renders,
+        // so the order stays chronological rather than alphabetical by month name.
+        sortType: reactTableNaturalSort,
+        Cell: ({ value }) => formatReportDate(value),
+      },
       { Header: nameHeaderText, accessor: 'name', sortType: reactTableNaturalSort },
       { Header: fsTypeHeaderText, accessor: 'fs_type', sortType: reactTableNaturalSort },
-      { Header: sectorHeaderText, accessor: 'sector', sortType: reactTableNaturalSort },
-      {
-        Header: usedAnIncubatorHeaderText,
-        accessor: 'used_an_incubator',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: gender2xCriteriaHeaderText,
-        accessor: 'gender_smart',
-        sortType: reactTableNaturalSort,
-        align: 'center',
-      },
-      {
-        Header: localEnterpriseHeaderText,
-        accessor: 'local_enterprise',
-        sortType: reactTableNaturalSort,
-        align: 'center',
-      },
-      {
-        Header: sustainableFinanceMechanismsHeaderText,
-        accessor: 'sustainable_finance_mechanisms',
-        sortType: reactTableNaturalSort,
-      },
     ],
-    [
-      indicatorSetHeaderText,
-      nameHeaderText,
-      fsTypeHeaderText,
-      sectorHeaderText,
-      usedAnIncubatorHeaderText,
-      gender2xCriteriaHeaderText,
-      localEnterpriseHeaderText,
-      sustainableFinanceMechanismsHeaderText,
-    ],
+    [indicatorSetHeaderText, reportingDateHeaderText, nameHeaderText, fsTypeHeaderText],
   )
 
   const tableCellData = useMemo(() => {
@@ -166,50 +136,22 @@ const CopyFinanceSolutionsModal = ({
       return []
     }
 
-    return copyableEntries.map(({ indicatorSetTitle, financeSolution }) => {
-      const {
-        id,
-        name,
-        fs_type,
-        sector,
-        used_an_incubator,
-        gender_smart,
-        local_enterprise,
-        sustainable_finance_mechanisms,
-      } = financeSolution
+    return copyableEntries.map(({ indicatorSetTitle, reportDate, financeSolution }) => {
+      const { id, name, fs_type } = financeSolution
 
       const fsTypeName = choices.financesolutiontypes?.data?.find(
         (fsTypeChoice) => fsTypeChoice.id === fs_type,
       )?.name
-      const sectorName = choices.sectors?.data?.find(
-        (sectorChoice) => sectorChoice.id === sector,
-      )?.name
-      const incubatorName = choices.incubatortypes?.data?.find(
-        (incubatorTypeChoice) => incubatorTypeChoice.id === used_an_incubator,
-      )?.name
-      const sustainableFinanceMechanismNames = sustainable_finance_mechanisms
-        .map(
-          (mechanism) =>
-            choices.sustainablefinancemechanisms?.data?.find(
-              // eslint-disable-next-line max-nested-callbacks
-              (sfmChoice) => sfmChoice.id === mechanism,
-            )?.name,
-        )
-        .join(', ')
 
       return {
         id,
         indicatorSetTitle,
+        report_date: reportDate,
         name,
         fs_type: fsTypeName,
-        sector: sectorName,
-        used_an_incubator: incubatorName || noIncubatorText,
-        gender_smart: <IconCheckLabel isCheck={!!gender_smart} />,
-        local_enterprise: <IconCheckLabel isCheck={!!local_enterprise} />,
-        sustainable_finance_mechanisms: sustainableFinanceMechanismNames,
       }
     })
-  }, [choices, copyableEntries, noIncubatorText])
+  }, [choices, copyableEntries])
 
   const tableDefaultPrefs = useMemo(() => {
     return {

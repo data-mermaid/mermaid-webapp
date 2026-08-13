@@ -21,6 +21,27 @@ export const formatDistanceNoQuarters = (date: Date, baseDate: Date): string => 
   return intlFormatDistance(date, baseDate)
 }
 
+// GFCR reporting dates are plain YYYY-MM-DD, so they parse as UTC midnight. Format in UTC
+// too, otherwise anyone west of UTC sees the previous day. e.g. "February 10, 2024"
+export const formatReportDate = (reportDate: string): string => {
+  if (!reportDate) {
+    return ''
+  }
+
+  const date = new Date(reportDate)
+
+  if (Number.isNaN(date.getTime())) {
+    return ''
+  }
+
+  return date.toLocaleDateString(navigator.language, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  })
+}
+
 // e.g. "Wednesday, February 4, 2026 at 14:34"
 export const formatDateTimeIntl = (date: Date | string | number): string =>
   intlFormat(date instanceof Date ? date : new Date(date), {
