@@ -189,7 +189,7 @@
   },
   "filters": {
     "by_finance_solution": "Filter by facility / solution",
-    "by_indicator_set_or_solution_name": "Filter by indicator set or solution name",
+    "by_indicator_set_date_or_solution_name": "Filter by indicator set, date, or solution name",
     "by_investment": "Filter by investment",
     "by_name_email": "Filter by name or email",
     "by_name_project_country": "Filter by name, project, or country",
@@ -201,6 +201,7 @@
     "by_site": "Filter by site",
     "by_site_management_observer": "Filter by site, management, or observer",
     "by_title_date": "Filter by title or date",
+    "filtered": "Filtered",
     "method": "Filter by method",
     "projects_by_name_year": "Filter by name or country",
     "search_helper_text": "<b>Use double quotes to search exact phrases.</b><br>For example, search North Shore to find records with the words North or Shore (records with South Shore would match). Or search \"North Shore\" to find records that have exactly the words North Shore (records with South Shore would not match)."
@@ -417,6 +418,7 @@
     "indicator_set": "Fund indicator set",
     "indicator_set_date_info": "End date of the reporting period of the GFCR Programme, e.g., an end-year report may have December 31 as the reporting date.",
     "indicator_set_title_info": "Recommended naming conventions: For targets, use \"Phase 1 target\", \"Mid-term target\", or \"Final target\". For bi-annual progress reports, use \"Mid-year report\" or \"End-year report\".",
+    "indicator_set_type": "Indicator set type",
     "investments": "Investments",
     "no_indicator_info": "Select 'Create new' to add a fund indicator set to this project",
     "no_indicator_sets": "No fund indicator sets yet",
@@ -1018,7 +1020,6 @@
   "show_fish_count_info": "Show fish count info",
   "show_fish_name_info": "Show fish name info",
   "show_fish_size_info": "Show fish size info",
-  "showing": "Showing",
   "sites": {
     "cannot_delete": "You cannot delete this site because it is used in the following sample units:",
     "confirm_delete": "Are you sure you want to delete this site?",
