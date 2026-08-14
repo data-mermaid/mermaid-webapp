@@ -49,7 +49,6 @@
     "new": "Nova gestão",
     "new_mr": "Nova gestão"
   },
-  "new_key": "nova chave",
   "page_size_selector": {
     "filtered_from_one": "(filtrado de) {{count}} {{itemType}})",
     "filtered_from_other": "(filtrado de) {{count}} {{itemType}})",
