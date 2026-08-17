@@ -168,6 +168,7 @@
   },
   "filters": {
     "by_finance_solution": "Filtrar esta tabla por solución financiera",
+    "by_indicator_set_date_or_solution_name": "Filtrar por conjunto de indicadores, fecha o nombre de la solución.",
     "by_indicator_set_or_solution_name": "Filtrar por conjunto de indicadores o nombre de la solución.",
     "by_investment": "Filtrar esta tabla por inversión",
     "by_name_email": "Filtrar esta tabla por nombre o correo electrónico",
@@ -180,6 +181,7 @@
     "by_site": "Filtra esta tabla por sitio",
     "by_site_management_observer": "Filtre esta tabla por sitio, administración u observador.",
     "by_title_date": "Filtrar esta tabla por título o fecha",
+    "filtered": "Filtrado",
     "method": "Método de filtrado",
     "projects_by_name_year": "Filtrar proyectos por nombre o país",
     "search_helper_text": "<b> Utilice comillas dobles para buscar frases exactas. </b><br> Por ejemplo, busque «North Shore» para encontrar registros con las palabras «North» o «Shore» (los registros con «South Shore» coincidirían). O bien, busque «North Shore» para encontrar registros que contengan exactamente las palabras «North Shore» (los registros con «South Shore» no coincidirían)."
@@ -216,6 +218,8 @@
     "coral_reef_health": "Salud de los arrecifes de coral",
     "create_indicator_set": "Crear un conjunto de indicadores",
     "create_new": "Crear nuevo",
+    "create_report_indicator_set": "Crear conjunto de indicadores de fondos de informe",
+    "create_target_indicator_set": "Crear conjunto de indicadores de fondos objetivo",
     "disabled_gfcr_info": "Deshabilitar los indicadores GFCR para este proyecto no los eliminará, sino que los ocultará de <a />. No se perderán datos. Puede reactivarlos en cualquier momento.",
     "disabled_info": "Deshabilitar los indicadores GFCR para este proyecto no los eliminará, sino que simplemente los ocultará. <a />No se perderán datos. Puedes reactivarlos en cualquier momento.",
     "errors": {
@@ -389,6 +393,7 @@
     "indicator_set": "Conjunto de indicadores",
     "indicator_set_date_info": "La fecha para la cual se informa este conjunto de indicadores.",
     "indicator_set_title_info": "Convenciones de nomenclatura recomendadas: Para los informes de objetivos, utilice \"Objetivo de la Fase 1\", \"Objetivo a Medio Plazo\" u \"Objetivo Final\". Para los informes de progreso semestrales, utilice \"Informe de Medio Año\" o \"Informe de Fin de Año\".",
+    "indicator_set_type": "Tipo de conjunto de indicadores",
     "investments": "Inversiones",
     "no_indicator_info": "Seleccione “Crear nuevo” para agregar un conjunto de indicadores a este proyecto.",
     "no_indicator_sets": "Aún no hay conjuntos de indicadores.",
@@ -521,7 +526,7 @@
     "missing_mr_name": "(Falta el nombre del Sr.)",
     "name_info": "Nombre del AMP, OECM u otra área gestionada relevante. Puede ser un nombre oficial definido por una fuente gubernamental o estandarizada, como <helperTextLink>protectedseas.net</helperTextLink>; alternativamente, se puede utilizar una etiqueta local descriptiva como 'Cierre estacional de Northeast Point'.",
     "new": "Nuevo MR",
-    "new_mr": "Nuevo MR",
+    "new_mr": "Nueva dirección",
     "no_data_info": "En esta página se mostrará el Régimen de Gestión de las unidades de muestra enviadas por método y sitio.",
     "no_management_regimes": "Este proyecto no tiene regímenes de gestión.",
     "no_take": "No se aceptan pedidos",
@@ -592,6 +597,7 @@
   "method": "Método",
   "must_select_fish_warning": "Debe seleccionar un contenedor de tamaño de pez antes de agregar cualquier observación.",
   "name": "Nombre",
+  "new_key": "nueva clave",
   "no": "No",
   "no_notifications": "Actualmente no hay notificaciones",
   "notes": "Notas",
@@ -918,7 +924,6 @@
   "show_fish_count_info": "mostrar información del recuento de peces",
   "show_fish_name_info": "mostrar información del nombre del pez",
   "show_fish_size_info": "Cómo obtener información sobre el tamaño de los peces",
-  "showing": "Demostración",
   "sites": {
     "cannot_delete": "No puedes eliminar este sitio porque se utiliza en las siguientes unidades de muestra:",
     "confirm_delete": "¿Estás seguro que deseas eliminar este sitio?",

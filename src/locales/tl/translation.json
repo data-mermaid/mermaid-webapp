@@ -168,6 +168,7 @@
   },
   "filters": {
     "by_finance_solution": "Salain ang talahanayang ito ayon sa solusyon sa pananalapi",
+    "by_indicator_set_date_or_solution_name": "I-filter ayon sa hanay ng indicator, petsa, o pangalan ng solusyon",
     "by_indicator_set_or_solution_name": "Salain ayon sa hanay ng indicator o pangalan ng solusyon",
     "by_investment": "Salain ang talahanayang ito ayon sa pamumuhunan",
     "by_name_email": "I-filter ang talahanayang ito ayon sa pangalan o email",
@@ -180,6 +181,7 @@
     "by_site": "I-filter ang talahanayang ito ayon sa site",
     "by_site_management_observer": "I-filter ang talahanayang ito ayon sa site, pamamahala, o tagamasid",
     "by_title_date": "Salain ang talahanayang ito ayon sa pamagat o petsa",
+    "filtered": "Na-filter",
     "method": "Paraan ng Filter",
     "projects_by_name_year": "I-filter ang Mga Proyekto Ayon sa Pangalan o Bansa",
     "search_helper_text": "<b> Gumamit ng dobleng panipi upang maghanap ng mga eksaktong parirala. </b><br> Halimbawa, maghanap sa North Shore upang makahanap ng mga talaan na may mga salitang North o Shore (magtutugma ang mga tala na may South Shore). O maghanap sa \"North Shore\" upang mahanap ang mga talaan na may eksaktong mga salitang North Shore (ang mga talaan na may South Shore ay hindi magkatugma)."
@@ -216,6 +218,8 @@
     "coral_reef_health": "Kalusugan ng korales",
     "create_indicator_set": "Gumawa ng Set ng Tagapagpahiwatig",
     "create_new": "Gumawa ng bago",
+    "create_report_indicator_set": "Gumawa ng set ng tagapagpahiwatig ng pondo ng ulat",
+    "create_target_indicator_set": "Gumawa ng set ng indicator ng target na pondo",
     "disabled_gfcr_info": "Ang hindi pagpapagana ng GFCR Indicators para sa proyektong ito ay hindi magtatanggal ng mga ito, ngunit itatago lamang ang mga ito mula sa <a />. Walang data na mawawala. Maaari mong muling paganahin ang mga ito anumang oras.",
     "disabled_info": "Ang hindi pagpapagana ng GFCR Indicators para sa proyektong ito ay hindi magtatanggal ng mga ito, ngunit itatago lamang ang mga ito mula sa <a />. Walang data na mawawala. Maaari mong muling paganahin ang mga ito anumang oras.",
     "errors": {
@@ -389,6 +393,7 @@
     "indicator_set": "Set ng Tagapagpahiwatig",
     "indicator_set_date_info": "Ang petsa kung kailan iniuulat ang hanay ng tagapagpahiwatig na ito.",
     "indicator_set_title_info": "Mga inirerekomendang kombensiyon sa pagpapangalan: Para sa mga ulat ng target, gamitin ang \"Phase 1 Target\", \"Mid-term Target\", o \"Final Target\". Para sa mga ulat ng progreso na ginagawa kada dalawang taon, gamitin ang \"Mid-year Report\" o \"End-year Report\".",
+    "indicator_set_type": "Uri ng hanay ng tagapagpahiwatig",
     "investments": "Mga Pamumuhunan",
     "no_indicator_info": "Piliin ang 'Gumawa ng bago' para magdagdag ng hanay ng indicator sa proyektong ito.",
     "no_indicator_sets": "Wala pang nakatakdang indicator.",
@@ -518,7 +523,7 @@
     "missing_mr_name": "(Walang MR Name)",
     "name_info": "Pangalan ng MPA, OECM, o iba pang kaugnay na pinamamahalaang lugar. Maaaring isang opisyal na pangalan na tinukoy ng isang pamahalaan o pamantayang mapagkukunan tulad ng <helperTextLink>protectedseas.net</helperTextLink>; bilang alternatibo, maaaring gumamit ng naglalarawang lokal na etiketa tulad ng 'Northeast Point seasonal closure'.",
     "new": "Bagong MR",
-    "new_mr": "Bagong MR",
+    "new_mr": "Bagong pamamahala",
     "no_data_info": "Ipapakita ng pahinang ito ang Pamamahala ng mga isinumiteng sample unit ayon sa pamamaraan at lugar.",
     "no_management_regimes": "Ang proyektong ito ay walang mga rehimen sa pamamahala.",
     "no_take": "Walang kunin",
@@ -589,6 +594,7 @@
   "method": "Pamamaraan",
   "must_select_fish_warning": "Dapat kang pumili ng lalagyan ng isda bago magdagdag ng anumang mga obserbasyon.",
   "name": "Pangalan",
+  "new_key": "bagong susi",
   "no": "Hindi",
   "no_notifications": "Kasalukuyang walang mga abiso",
   "notes": "Mga Tala",
@@ -915,7 +921,6 @@
   "show_fish_count_info": "ipakita ang impormasyon ng bilang ng isda",
   "show_fish_name_info": "ipakita ang impormasyon ng pangalan ng isda",
   "show_fish_size_info": "paano ang impormasyon ng laki ng isda",
-  "showing": "Nagpapakita",
   "sites": {
     "cannot_delete": "Hindi mo maaaring burahin ang site na ito dahil ginagamit ito sa mga sumusunod na sample unit:",
     "confirm_delete": "Sigurado ka bang gusto mong burahin ang site na ito?",
