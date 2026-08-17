@@ -63,8 +63,6 @@ const Gfcr = () => {
   const [newIndicatorSetType, setNewIndicatorSetType] = useState()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
-
   useDocumentTitle(`${gfcrTitleText} - ${t('mermaid')}`)
   const [isExporting, setIsExporting] = useState(false)
 
@@ -163,25 +161,13 @@ const Gfcr = () => {
     defaultValue: tableDefaultPrefs,
   })
 
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = ['values.title.props.children', 'values.report_date']
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = ['values.title.props.children', 'values.report_date']
 
-      const queryTerms = splitSearchQueryStrings(query)
-      const filteredRows =
-        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+    const queryTerms = splitSearchQueryStrings(query)
 
-      const filteredRowIds = filteredRows.map((row) => row.original.id)
-      const filteredIndicatorSets = gfcrIndicatorSets.filter((indicatorSet) =>
-        filteredRowIds.includes(indicatorSet.id),
-      )
-
-      setSearchFilteredRowsLength(filteredIndicatorSets.length)
-
-      return filteredRows
-    },
-    [gfcrIndicatorSets],
-  )
+    return !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+  }, [])
 
   const {
     canNextPage,
@@ -195,6 +181,7 @@ const Gfcr = () => {
     pageOptions,
     prepareRow,
     previousPage,
+    rows,
     setPageSize,
     state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
@@ -301,7 +288,7 @@ const Gfcr = () => {
       onPageSizeChange={handleRowsNumberChange}
       pageSize={pageSize}
       unfilteredRowLength={gfcrIndicatorSets.length}
-      searchFilteredRowLength={searchFilteredRowsLength}
+      searchFilteredRowsLength={rows.length}
       isSearchFilterEnabled={!!globalFilter?.length}
       onPreviousClick={previousPage}
       previousDisabled={!canPreviousPage}

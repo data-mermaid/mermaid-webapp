@@ -12,6 +12,7 @@ import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { BenthicPhotoQuadratRecord } from '../../../../App/mermaidData/mermaidDataTypes'
 import { ValidationResult } from '../../collectRecordFormPages/CollectRecordFormPage/getDuplicateValidationInfo'
+import { ImageClassificationImage } from '../../../../types/ImageClassificationTypes'
 
 interface ImageClassificationContainerProps {
   isImageClassificationEnabledForUser: boolean
@@ -21,11 +22,12 @@ interface ImageClassificationContainerProps {
   areValidationsShowing: boolean
   ignoreObservationValidations: () => void
   resetObservationValidations: () => void
+  onPhotosChanged?: () => void
 }
 
 const ImageClassificationContainer = (props: ImageClassificationContainerProps) => {
   const { t } = useTranslation()
-  const { isImageClassificationEnabledForUser } = props
+  const { isImageClassificationEnabledForUser, onPhotosChanged } = props
   const [images, setImages] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -34,8 +36,10 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isUploadingRef = useRef(isUploading) // we use a ref for state here so that we can access non-stale value from within setInterval callbacks
 
-  const handleFilesUpload = () => {
+  const handleFilesUpload = (uploadedFile: ImageClassificationImage) => {
     setIsModalOpen(false)
+    setImages((prev) => [...prev, uploadedFile])
+    onPhotosChanged?.()
   }
 
   useEffect(
@@ -47,13 +51,15 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
     [isUploading],
   )
 
-  const pollCollectRecordUntilAllImagesProcessed = () => {
+  const pollCollectRecordUntilAllImagesProcessed = (minResultsCount = 0, maxPolls = Infinity) => {
     if (!databaseSwitchboardInstance || !handleHttpResponseError || !projectId || !recordId) {
       throw new Error('pollCollectRecordUntilAllImagesProcessed has missing dependencies')
     }
     let intervalId
+    let pollCount = 0
 
     const pollCollectRecordForImages = async () => {
+      pollCount++
       try {
         const response = await databaseSwitchboardInstance.getAllImagesInCollectRecord(
           projectId,
@@ -73,7 +79,14 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
         // (since useState values will be stale within a closure/setInterval callback,
         // we use a reference to access the current value for isUploading instead of the stale closure value directly)
         const areMoreImagesStillBeingUploaded = isUploadingRef.current
-        if (areAllUploadedImagesProcessed && !areMoreImagesStillBeingUploaded) {
+        const hasReachedMinCount = response.results.length >= minResultsCount
+        const hasExceededMaxPolls = pollCount >= maxPolls
+        if (
+          (areAllUploadedImagesProcessed &&
+            hasReachedMinCount &&
+            !areMoreImagesStillBeingUploaded) ||
+          hasExceededMaxPolls
+        ) {
           clearTimeout(intervalId)
         } else {
           intervalId = setTimeout(pollCollectRecordForImages, 5000)
@@ -86,7 +99,9 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
           },
           shouldShowServerNonResponseMessage: false,
         })
-        intervalId = setTimeout(pollCollectRecordForImages, 5000)
+        if (pollCount < maxPolls) {
+          intervalId = setTimeout(pollCollectRecordForImages, 5000)
+        }
       }
     }
 
@@ -102,6 +117,7 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
         areValidationsShowing={props.areValidationsShowing}
         ignoreObservationValidations={props.ignoreObservationValidations}
         resetObservationValidations={props.resetObservationValidations}
+        onPhotosChanged={onPhotosChanged}
       />
       <ButtonContainer>
         {isImageClassificationEnabledForUser ? (

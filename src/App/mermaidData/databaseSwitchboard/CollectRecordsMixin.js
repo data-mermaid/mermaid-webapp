@@ -1,5 +1,6 @@
 import axios from '../../../library/axiosRetry'
 import i18next from '../../../../i18n'
+import { VALIDATION_STATUS } from '../../../components/pages/Collect/collectConstants'
 import {
   getProtocolTransectType,
   getIsFishBelt,
@@ -656,6 +657,23 @@ const CollectRecordsMixin = (Base) =>
       return this._dexiePerUserDataInstance.collect_records
         .put(modifiedCollectRecordWithResetObservationValidations)
         .then(() => modifiedCollectRecordWithResetObservationValidations)
+    }
+
+    markCollectRecordValidationsStale = async function markCollectRecordValidationsStale(recordId) {
+      if (!recordId) {
+        throw new Error('markCollectRecordValidationsStale requires a recordId parameter')
+      }
+      const record = await this._dexiePerUserDataInstance.collect_records.get(recordId)
+      if (!record?.validations) {
+        return record
+      }
+      const updatedRecord = {
+        ...record,
+        validations: { ...record.validations, status: VALIDATION_STATUS.stale },
+      }
+      return this._dexiePerUserDataInstance.collect_records
+        .put(updatedRecord)
+        .then(() => updatedRecord)
     }
 
     getCollectRecord = function getCollectRecord(id) {

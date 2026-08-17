@@ -33,6 +33,11 @@
     "small_reef": "Petit récif",
     "terrestrial_reef_flat": "Platier récifal terrestre"
   },
+  "auth": {
+    "email_not_verified_heading": "Veuillez vérifier votre adresse e-mail",
+    "email_not_verified_message": "Nous avons envoyé un lien de vérification à votre adresse courriel. Ouvrez-le pour vérifier votre compte, puis essayez de vous connecter à nouveau.",
+    "try_login_again": "Essayez de vous connecter"
+  },
   "benthic_observations": {
     "add_benthic_attribute": "Ajouter un nouvel attribut benthique",
     "attribute_already_exists": "L'attribut proposé {{attribute}} existe déjà dans la liste. L'observation a été mise à jour avec cet attribut.",
@@ -178,6 +183,8 @@
   },
   "filters": {
     "by_finance_solution": "Filtrer ce tableau par solution financière",
+    "by_indicator_set_date_or_solution_name": "Filtrer par ensemble d'indicateurs, date ou nom de solution",
+    "by_indicator_set_or_solution_name": "Filtrer par ensemble d'indicateurs ou nom de solution",
     "by_investment": "Filtrez ce tableau par investissement",
     "by_name_email": "Filtrez ce tableau par nom ou par adresse e-mail",
     "by_name_project_country": "Filtrez ce tableau par nom, projet ou pays",
@@ -189,11 +196,13 @@
     "by_site": "Filtrer ce tableau par site",
     "by_site_management_observer": "Filtrez ce tableau par site, gestion ou observateur",
     "by_title_date": "Filtrez ce tableau par titre ou par date",
+    "filtered": "Filtré",
     "method": "Méthode de filtrage",
     "projects_by_name_year": "Filtrer les projets par nom ou par pays",
     "search_helper_text": "Utilisez les <b> pour rechercher des expressions exactes. Par exemple, recherchez « North Shore » pour trouver les enregistrements contenant les </b><br> « North » ou « Shore » (les enregistrements contenant « South Shore » correspondront également). Ou recherchez « North Shore » pour trouver les enregistrements contenant exactement les mots « North Shore » (les enregistrements contenant « South Shore » ne correspondront pas)."
   },
   "fish_belt_observations": {
+    "attribute_proposal_summary": "L’espèce de poisson que vous proposez sera examinée par l’équipe MERMAID. Une fois approuvée, elle sera intégrée à notre base de données taxonomiques ou nous vous contacterons.",
     "errors": {
       "proposed_species_unsaved": "L'espèce de poisson proposée {{speciesName}} n'a pas été sauvegardée.",
       "species_already_exists": "L'espèce de poisson proposée {{speciesName}} existe déjà dans la liste. L'observation a été mise à jour avec cette espèce."
@@ -224,6 +233,8 @@
     "coral_reef_health": "santé des récifs coralliens",
     "create_indicator_set": "Créer un ensemble d'indicateurs",
     "create_new": "Créer un nouveau",
+    "create_report_indicator_set": "Créer un ensemble d'indicateurs de fonds de rapport",
+    "create_target_indicator_set": "Créer un ensemble d'indicateurs de fonds cibles",
     "disabled_gfcr_info": "La désactivation des indicateurs GFCR pour ce projet ne les supprimera pas, mais les masquera simplement du <a />. Aucune donnée ne sera perdue. Vous pouvez les réactiver à tout moment.",
     "disabled_info": "La désactivation des indicateurs GFCR pour ce projet ne les supprimera pas, mais les masquera simplement. <a />Aucune donnée ne sera perdue. Vous pouvez les réactiver à tout moment.",
     "errors": {
@@ -334,12 +345,19 @@
         "add": "Ajouter une solution commerciale/financière",
         "business_finance_solution": "Solution commerciale/financière",
         "business_finance_solution_name": "Nom de la solution commerciale/financière",
+        "copy": "Service de photocopie / solution",
+        "copy_info": "Les investissements et revenus connexes seront également copiés.",
+        "copy_selected": "Copier les installations/solutions sélectionnées",
         "gender_program_criteria": "Critères de genre 2X",
         "gender_program_criteria_helper": "Indiquez si la solution répond à au moins un critère du Défi 2X. Consultez le <2xLink>Guide de référence des critères 2X</2xLink> pour plus de détails. Ceci s'applique au critère F10 (Nombre d'investissements sensibles au genre), qui mesure le soutien du GFCR à l'égalité des sexes par le biais d'investissements conformes aux normes du Défi 2X.<br /><gfcrPdfLink>Consulter le PDF du kit d'outils de suivi et d'évaluation</gfcrPdfLink>",
+        "indicator_set": "Ensemble d'indicateurs",
         "local_enterprise": "Entreprise locale",
         "local_enterprise_helper": "Définie comme une petite ou moyenne entreprise exerçant ses activités dans la zone géographique spécifique du programme GFCR. Ceci s'applique à la rubrique F9.3 (Montant (et %) des recettes des entreprises locales), qui mesure les recettes conservées au sein d'une zone géographique donnée, par opposition aux recettes transférées à l'étranger.<br /><gfcrPdfLink>Consulter le PDF du kit d'outils de suivi et d'évaluation</gfcrPdfLink>",
         "name_helper": "Veuillez saisir séparément le nom de chaque solution commerciale ou financière financée par le programme GFCR. Vous pouvez reprendre des solutions issues de rapports précédents. Les indicateurs F8, F9 et F10 seront ventilés par solution et par secteur. Les nouvelles solutions financées par le programme seront ajoutées progressivement.<br /><gfcrPdfLink>Consulter le PDF du kit d'outils de suivi et d'évaluation</gfcrPdfLink>",
+        "no_copy_targets": "Il n'existe pas d'autres ensembles d'indicateurs de fonds dans ce projet avec des installations/solutions à copier",
         "no_finance_solutions": "Aucune solution financière pour le moment.",
+        "no_incubator": "Aucun",
+        "number_of_solutions_supported_table_header": "Nombre total de solutions prises en charge",
         "pcf_revenues_error": "Supprimer les revenus associés avant de passer au cofinancement programmatique.",
         "save": "Solution Sauvegarder Entreprise / Finance",
         "sector": "Secteur",
@@ -390,6 +408,7 @@
     "indicator_set": "Ensemble d'indicateurs",
     "indicator_set_date_info": "La date pour laquelle cet ensemble d'indicateurs est présenté.",
     "indicator_set_title_info": "Conventions d’appellation recommandées : pour les rapports d’objectifs, utilisez « Objectif de la phase 1 », « Objectif à mi-parcours » ou « Objectif final ». Pour les rapports d’étape semestriels, utilisez « Rapport de mi-année » ou « Rapport de fin d’année ».",
+    "indicator_set_type": "type d'ensemble d'indicateurs",
     "investments": "Investissements",
     "no_indicator_info": "Sélectionnez « Créer » pour ajouter un ensemble d'indicateurs à ce projet.",
     "no_indicator_sets": "Aucun indicateur n'est encore défini.",
@@ -554,7 +573,7 @@
     "missing_mr_name": "(Nom du médecin manquant)",
     "name_info": "Nom de l'AMP, de l'OECM ou de toute autre zone gérée pertinente. Il peut s'agir d'un nom officiel défini par une source gouvernementale ou normalisée, telle que : <helperTextLink>protectedseas.net</helperTextLink>; on peut également utiliser une étiquette descriptive locale comme « fermeture saisonnière de Northeast Point ».",
     "new": "Nouveau MR",
-    "new_mr": "Nouveau MR",
+    "new_mr": "Nouvelle direction",
     "no_data_info": "Cette page affichera le régime de gestion des unités d'échantillons soumises, par méthode et par site.",
     "no_management_regimes": "Ce projet ne dispose d'aucun régime de gestion.",
     "no_take": "Pas de prise",
@@ -645,6 +664,7 @@
   "method": "Méthode",
   "must_select_fish_warning": "Vous devez sélectionner une classe de taille de poisson avant d'ajouter des observations.",
   "name": "Nom",
+  "new_key": "nouvelle clé",
   "no": "Non",
   "no_notifications": "Aucune notification n'est actuellement disponible.",
   "notes": "Notes",
@@ -732,6 +752,24 @@
     "read_only": "Vous ne pouvez pas accéder à cette page car vous êtes un membre en lecture seule de ce projet.",
     "try_reloading": "Si vous continuez à voir cette erreur, essayez de recharger cette page, ou vous pouvez",
     "will_show": "Cette page affichera :"
+  },
+  "page_size_selector": {
+    "filtered_from_one": "(filtré à partir de {{count}} {{itemType}})",
+    "filtered_from_other": "(filtré à partir de {{count}} {{itemType}})",
+    "item_type": {
+      "management_regime_one": "régime de gestion",
+      "management_regime_other": "régimes de gestion",
+      "record_one": "enregistrer",
+      "record_other": "archives",
+      "sample_unit_one": "unité d'échantillon",
+      "sample_unit_other": "unités d'échantillon",
+      "site_one": "site",
+      "site_other": "sites",
+      "user_one": "utilisateur",
+      "user_other": "utilisateurs"
+    },
+    "of_total": "de {{total}}",
+    "showing": "Affichage"
   },
   "percent_cover": "Pourcentage de couverture",
   "profile": {
@@ -957,7 +995,6 @@
   "show_fish_count_info": "afficher les informations de comptage des poissons",
   "show_fish_name_info": "afficher les informations sur le nom du poisson",
   "show_fish_size_info": "informations sur la taille des poissons",
-  "showing": "Affichage",
   "sites": {
     "cannot_delete": "Vous ne pouvez pas supprimer ce site car il est utilisé dans les unités d'exemple suivantes :",
     "confirm_delete": "Êtes-vous sûr de vouloir supprimer ce site ?",
@@ -1052,6 +1089,7 @@
       "enter_email": "Veuillez saisir une adresse e-mail.",
       "failed_sample_units_transfer": "Les unités d'échantillon n'ont pas pu être transférées.",
       "invalid_email": "Adresse e-mail invalide.",
+      "last_admin_tooltip": "Vous êtes le seul administrateur de ce projet. Veuillez désigner un autre administrateur avant de modifier votre rôle ou de vous retirer.",
       "new_user_added": "Nouvel utilisateur ajouté.",
       "pending_user_added": "Courriel d'inscription envoyé. Nouvel utilisateur ajouté en tant qu'utilisateur en attente.",
       "role_changed_error": "{{userName}}Le rôle de [nom] n'a pas été modifié.",
@@ -1059,6 +1097,7 @@
       "sample_units_transferred_one": "{{count}} unité échantillon transférée",
       "sample_units_transferred_other": "{{count}} unités d'échantillon transférées",
       "something_went_wrong": "Quelque chose s'est mal passé",
+      "user_remove_error": "{{userName}} n'a pas été retiré du projet",
       "user_removed": "Utilisateur supprimé"
     },
     "not_signed_up": "Ils devront s'inscrire car ils ne sont pas déjà utilisateurs de MERMAID.",
