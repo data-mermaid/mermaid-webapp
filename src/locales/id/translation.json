@@ -181,6 +181,7 @@
   },
   "filters": {
     "by_finance_solution": "Filter tabel ini berdasarkan solusi keuangan",
+    "by_indicator_set_date_or_solution_name": "Saring berdasarkan kumpulan indikator, tanggal, atau nama solusi",
     "by_indicator_set_or_solution_name": "Saring berdasarkan kumpulan indikator atau nama solusi",
     "by_investment": "Filter tabel ini berdasarkan investasi",
     "by_name_email": "Filter tabel ini berdasarkan nama atau email",
@@ -193,6 +194,7 @@
     "by_site": "Saring berdasarkan situs",
     "by_site_management_observer": "Saring berdasarkan situs, manajemen, atau pengamat",
     "by_title_date": "Filter tabel ini berdasarkan judul atau tanggal",
+    "filtered": "Telah disaring",
     "method": "Metode Filter",
     "projects_by_name_year": "Saring berdasarkan nama atau negara",
     "search_helper_text": "<b>Gunakan tanda kutip ganda untuk mencari frasa yang identik.</b><br>Misalnya, gunakan North Shore untuk mencari data dengan kata North atau Shore (data dengan South Shore akan muncul). Atau gunakan \"North Shore\" untuk menemukan data yang memiliki kata North Shore (data dengan South Shore tidak akan muncul)."
@@ -229,6 +231,8 @@
     "coral_reef_health": "Kesehatan terumbu karang",
     "create_indicator_set": "Membuat Kumpulan Indikator",
     "create_new": "Buat baru",
+    "create_report_indicator_set": "Buat kumpulan indikator dana laporan",
+    "create_target_indicator_set": "Buat kumpulan indikator dana sasaran",
     "disabled_gfcr_info": "Menonaktifkan indikator pendanaan GFCR untuk proyek ini tidak akan menghapusnya, tetapi hanya menyembunyikannya dari <a />. Tidak ada data yang akan hilang. Anda dapat mengaktifkannya kembali kapan saja.",
     "disabled_info": "Menonaktifkan Indikator GFCR untuk proyek ini tidak akan menghapusnya, tetapi hanya menyembunyikannya dari situs <a />. Tidak ada data yang akan hilang. Anda dapat mengaktifkannya kembali kapan saja.",
     "errors": {
@@ -402,6 +406,7 @@
     "indicator_set": "Set Indikator",
     "indicator_set_date_info": "Tanggal penetapan indikator ini dilaporkan.",
     "indicator_set_title_info": "Konvensi penamaan yang disarankan: Untuk laporan target, gunakan \"Target Tahap 1\", \"Target Jangka Menengah\", atau \"Target Akhir\". Untuk laporan kemajuan dua tahunan, gunakan \"Laporan Pertengahan Tahun\" atau \"Laporan Akhir Tahun\".",
+    "indicator_set_type": "Jenis kumpulan indikator",
     "investments": "Investasi",
     "no_indicator_info": "Pilih 'Buat baru' untuk menambahkan satu set indikator ke proyek ini.",
     "no_indicator_sets": "Belum ada indikator yang ditetapkan.",
@@ -561,7 +566,7 @@
     "missing_mr_name": "(Nama RM tidak ditemukan)",
     "name_info": "Nama KKL, OECM, atau kawasan yang dikelola lainnya yang relevan. Dapat berupa nama resmi yang ditetapkan oleh pemerintah atau sumber standar seperti <helperTextLink>protectedseas.net</helperTextLink>; sebagai alternatif, label lokal deskriptif seperti 'Penutupan musiman Titik Timur Laut' dapat digunakan.",
     "new": "Rezim manajemen baru",
-    "new_mr": "Rezim manajemen baru",
+    "new_mr": "Manajemen baru",
     "no_data_info": "Halaman ini akan menunjukkan Rezim Manajemen unit sampel yang dikirimkan berdasarkan metode dan lokasi.",
     "no_management_regimes": "Proyek ini tidak memiliki rezim manajemen.",
     "no_take": "Larang ambil",
@@ -652,6 +657,7 @@
   "method": "Metode",
   "must_select_fish_warning": "Anda harus memilih rentang ukuran ikan sebelum menambahkan pengamatan",
   "name": "Nama",
+  "new_key": "kunci baru",
   "no": "Tidak",
   "no_notifications": "Saat ini tidak ada pemberitahuan",
   "notes": "Catatan",
@@ -974,7 +980,6 @@
   "show_fish_count_info": "Tampilkan info jumlah ikan",
   "show_fish_name_info": "Tampilkan info nama ikan",
   "show_fish_size_info": "Tampilkan info ukuran ikan",
-  "showing": "Menampilkan",
   "sites": {
     "cannot_delete": "Anda tidak dapat menghapus situs ini karena situs ini digunakan dalam unit sampel berikut:",
     "confirm_delete": "Apakah Anda yakin ingin menghapus situs ini?",

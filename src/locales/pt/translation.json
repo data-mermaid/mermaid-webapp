@@ -12,7 +12,9 @@
     "suggestion_review_request": "Enviar para revisão"
   },
   "filters": {
-    "by_indicator_set_or_solution_name": "Filtrar por conjunto de indicadores ou nome da solução"
+    "by_indicator_set_date_or_solution_name": "Filtrar por conjunto de indicadores, data ou nome da solução.",
+    "by_indicator_set_or_solution_name": "Filtrar por conjunto de indicadores ou nome da solução",
+    "filtered": "Filtrado"
   },
   "fish_belt_observations": {
     "attribute_proposal_summary": "A espécie de peixe que você propôs será analisada pela equipe MERMAID. Após a aprovação, ela será incluída em nosso banco de dados taxonômico ou entraremos em contato com você."
@@ -21,7 +23,24 @@
     "submit_for_review": "Enviar para revisão"
   },
   "gfcr": {
+    "add_gfcr_indicators": "A coalizão GFCR mobiliza recursos financeiros para ampliar negócios sustentáveis ​​e soluções inovadoras para a conservação de recifes de coral. \n Se você faz parte de um programa GFCR, habilite os conjuntos de indicadores GFCR para este projeto para começar a gerar relatórios sobre o seu programa.",
+    "buttons": {
+      "disable_gfcr": "Desativar conjuntos de indicadores GFCR",
+      "enable_gfcr": "Ativar conjuntos de indicadores GFCR"
+    },
+    "create_indicator_set": "Criar conjunto de indicadores",
+    "create_report_indicator_set": "Criar conjunto de indicadores de fundos de relatório",
+    "create_target_indicator_set": "Criar conjunto de indicadores de fundo alvo",
+    "disabled_gfcr_info": "Desativar os conjuntos de indicadores de fundos GFCR não os excluirá, apenas os ocultará de <a />. Nenhum dado será perdido. Você pode reativá-los a qualquer momento.",
+    "disabled_info": "Desativar os conjuntos de indicadores GFCR não os excluirá, apenas os ocultará de <a />. Nenhum dado será perdido. Você pode reativá-los a qualquer momento.",
+    "errors": {
+      "indicator_set_save_failed": "Havia um indicador de erro ao salvar configurado.",
+      "indicator_sets_unavailable": "Os conjuntos de indicadores estão indisponíveis no momento.",
+      "indicators_disable_failed": "Não foi possível desativar os conjuntos de indicadores GFCR para este projeto.",
+      "indicators_enable_failed": "Não foi possível ativar os conjuntos de indicadores GFCR para este projeto."
+    },
     "forms": {
+      "f4_value_from_mermaid_data": "Este valor provém de dados de levantamento de recifes deste projeto.",
       "finance_solutions": {
         "business_finance_solution": "Instalação/solução",
         "copy": "Recurso de cópia / solução",
@@ -36,6 +55,15 @@
       "revenues": {
         "no_non_pcf_finance_solutions": "Não é possível adicionar receitas para cofinanciamento programático. Acesse a seção de investimentos e adicione o valor do cofinanciamento como investimento. "
       }
+    },
+    "indicator_set": "Conjunto de indicadores",
+    "indicator_set_type": "Tipo de conjunto de indicadores",
+    "no_indicator_sets": "Ainda não existem conjuntos de indicadores.",
+    "remove_gfcr_indicators": "Remover os conjuntos de indicadores GFCR deste projeto não os excluirá, apenas os ocultará.",
+    "success": {
+      "indicator_set_save": "Conjunto de indicadores salvo com sucesso",
+      "indicators_disabled": "Conjuntos de indicadores GFCR desativados para este projeto",
+      "indicators_enabled": "Ative os conjuntos de indicadores GFCR para este projeto."
     }
   },
   "macroinvertebrate_observations": {
@@ -49,6 +77,7 @@
     "new": "Nova gestão",
     "new_mr": "Nova gestão"
   },
+  "new_key": "nova chave",
   "page_size_selector": {
     "filtered_from_one": "(filtrado de) {{count}} {{itemType}})",
     "filtered_from_other": "(filtrado de) {{count}} {{itemType}})",

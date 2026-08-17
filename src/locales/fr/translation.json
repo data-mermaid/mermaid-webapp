@@ -183,6 +183,7 @@
   },
   "filters": {
     "by_finance_solution": "Filtrer ce tableau par solution financière",
+    "by_indicator_set_date_or_solution_name": "Filtrer par ensemble d'indicateurs, date ou nom de solution",
     "by_indicator_set_or_solution_name": "Filtrer par ensemble d'indicateurs ou nom de solution",
     "by_investment": "Filtrez ce tableau par investissement",
     "by_name_email": "Filtrez ce tableau par nom ou par adresse e-mail",
@@ -195,6 +196,7 @@
     "by_site": "Filtrer ce tableau par site",
     "by_site_management_observer": "Filtrez ce tableau par site, gestion ou observateur",
     "by_title_date": "Filtrez ce tableau par titre ou par date",
+    "filtered": "Filtré",
     "method": "Méthode de filtrage",
     "projects_by_name_year": "Filtrer les projets par nom ou par pays",
     "search_helper_text": "Utilisez les <b> pour rechercher des expressions exactes. Par exemple, recherchez « North Shore » pour trouver les enregistrements contenant les </b><br> « North » ou « Shore » (les enregistrements contenant « South Shore » correspondront également). Ou recherchez « North Shore » pour trouver les enregistrements contenant exactement les mots « North Shore » (les enregistrements contenant « South Shore » ne correspondront pas)."
@@ -231,6 +233,8 @@
     "coral_reef_health": "santé des récifs coralliens",
     "create_indicator_set": "Créer un ensemble d'indicateurs",
     "create_new": "Créer un nouveau",
+    "create_report_indicator_set": "Créer un ensemble d'indicateurs de fonds de rapport",
+    "create_target_indicator_set": "Créer un ensemble d'indicateurs de fonds cibles",
     "disabled_gfcr_info": "La désactivation des indicateurs GFCR pour ce projet ne les supprimera pas, mais les masquera simplement du <a />. Aucune donnée ne sera perdue. Vous pouvez les réactiver à tout moment.",
     "disabled_info": "La désactivation des indicateurs GFCR pour ce projet ne les supprimera pas, mais les masquera simplement. <a />Aucune donnée ne sera perdue. Vous pouvez les réactiver à tout moment.",
     "errors": {
@@ -404,6 +408,7 @@
     "indicator_set": "Ensemble d'indicateurs",
     "indicator_set_date_info": "La date pour laquelle cet ensemble d'indicateurs est présenté.",
     "indicator_set_title_info": "Conventions d’appellation recommandées : pour les rapports d’objectifs, utilisez « Objectif de la phase 1 », « Objectif à mi-parcours » ou « Objectif final ». Pour les rapports d’étape semestriels, utilisez « Rapport de mi-année » ou « Rapport de fin d’année ».",
+    "indicator_set_type": "type d'ensemble d'indicateurs",
     "investments": "Investissements",
     "no_indicator_info": "Sélectionnez « Créer » pour ajouter un ensemble d'indicateurs à ce projet.",
     "no_indicator_sets": "Aucun indicateur n'est encore défini.",
@@ -568,7 +573,7 @@
     "missing_mr_name": "(Nom du médecin manquant)",
     "name_info": "Nom de l'AMP, de l'OECM ou de toute autre zone gérée pertinente. Il peut s'agir d'un nom officiel défini par une source gouvernementale ou normalisée, telle que : <helperTextLink>protectedseas.net</helperTextLink>; on peut également utiliser une étiquette descriptive locale comme « fermeture saisonnière de Northeast Point ».",
     "new": "Nouveau MR",
-    "new_mr": "Nouveau MR",
+    "new_mr": "Nouvelle direction",
     "no_data_info": "Cette page affichera le régime de gestion des unités d'échantillons soumises, par méthode et par site.",
     "no_management_regimes": "Ce projet ne dispose d'aucun régime de gestion.",
     "no_take": "Pas de prise",
@@ -659,6 +664,7 @@
   "method": "Méthode",
   "must_select_fish_warning": "Vous devez sélectionner une classe de taille de poisson avant d'ajouter des observations.",
   "name": "Nom",
+  "new_key": "nouvelle clé",
   "no": "Non",
   "no_notifications": "Aucune notification n'est actuellement disponible.",
   "notes": "Notes",
@@ -989,7 +995,6 @@
   "show_fish_count_info": "afficher les informations de comptage des poissons",
   "show_fish_name_info": "afficher les informations sur le nom du poisson",
   "show_fish_size_info": "informations sur la taille des poissons",
-  "showing": "Affichage",
   "sites": {
     "cannot_delete": "Vous ne pouvez pas supprimer ce site car il est utilisé dans les unités d'exemple suivantes :",
     "confirm_delete": "Êtes-vous sûr de vouloir supprimer ce site ?",
