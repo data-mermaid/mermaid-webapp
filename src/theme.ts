@@ -8,6 +8,7 @@ const secondary = colorHelper('#DDDCE4')
 const callout = colorHelper('#DB3B00')
 const caution = colorHelper('#BB1600')
 const warning = colorHelper('#FEDD2F')
+const success = colorHelper('#298217')
 const ignore = colorHelper('#D6DDE6')
 const white = colorHelper('#fff')
 const black = primary.mix(colorHelper('black'), 0.95)
@@ -52,6 +53,7 @@ const color = {
   valid,
   warningColor: warning.toString(),
   warningBorder: warning.mix(colorHelper('black'), 0.1).toString(),
+  successColor: success.toString(),
   warningHover: warning.mix(colorHelper(white), 0.1).toString(),
   backgroundColor: background.toString(),
   primaryColor: primary.toString(),
