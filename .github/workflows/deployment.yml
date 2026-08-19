@@ -21,6 +21,7 @@ jobs:
 
   call-test:
     needs: [deps-cache, call-lint]
+    environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
     uses: ./.github/workflows/_test.yml
     secrets:
       VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
@@ -32,6 +33,7 @@ jobs:
     concurrency:
       group: app-deployment-${{ github.ref }}
     needs: [call-lint, call-test]
+    environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
     permissions:
       contents: read
       id-token: write

@@ -155,11 +155,15 @@ jobs:
         env:
           WORKFLOW_NAME: ${{ github.workflow }}
           CDK_DIFF_OUTCOME: ${{ steps.cdk-diff.outcome }}
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const fs = require('fs');
-            const log = fs.readFileSync('/tmp/cdk-diff.log', 'utf8');
+            let log = fs.readFileSync('/tmp/cdk-diff.log', 'utf8');
+            if (process.env.CDK_DEFAULT_ACCOUNT) {
+              log = log.split(process.env.CDK_DEFAULT_ACCOUNT).join('[ACCOUNT_ID]');
+            }
             const status = process.env.CDK_DIFF_OUTCOME === 'success' ? 'Success' : 'Failed';
             const icon = status === 'Success' ? ':white_check_mark:' : ':x:';
             const body = [
