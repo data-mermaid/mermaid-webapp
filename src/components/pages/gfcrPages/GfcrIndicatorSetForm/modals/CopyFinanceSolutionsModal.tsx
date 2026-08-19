@@ -14,6 +14,7 @@ import {
   CopyModalPaginationWrapper,
 } from '../../../../generic/Table/table'
 import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
+import { MuiTooltip } from '../../../../generic/MuiTooltip'
 import { IconCopy } from '../../../../icons'
 import { getTableColumnHeaderProps } from '../../../../../library/getTableColumnHeaderProps'
 import { reactTableNaturalSort } from '../../../../generic/Table/reactTableNaturalSort'
@@ -29,6 +30,10 @@ import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/d
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 import { formatDateOnlyIntl } from '../../../../../library/formatDateTime'
 import { stripId } from './copyHelpers'
+import {
+  getFinanceSolutionDuplicateKey,
+  getFinanceSolutionDuplicateKeys,
+} from './financeSolutionDuplicates'
 import {
   Choices,
   FinanceSolution,
@@ -89,6 +94,15 @@ const CopyFinanceSolutionsModal = ({
   const targetText = t('gfcr.target')
   const nameHeaderText = t('gfcr.forms.finance_solutions.business_finance_solution_name')
   const fsTypeHeaderText = t('gfcr.forms.finance_solutions.fs_type')
+  const alreadyAddedText = t('gfcr.forms.finance_solutions.copy_already_added')
+  const duplicateOfSelectionText = t('gfcr.forms.finance_solutions.copy_duplicate_of_selection')
+
+  // Keys for what the current indicator set already holds, so rows that would duplicate one of
+  // them can be blocked. See financeSolutionDuplicates for what counts as the same solution.
+  const existingDuplicateKeys = useMemo(
+    () => getFinanceSolutionDuplicateKeys(indicatorSet.finance_solutions),
+    [indicatorSet.finance_solutions],
+  )
 
   const copyableEntries = useMemo(() => {
     return gfcrIndicatorSets
@@ -110,11 +124,38 @@ const CopyFinanceSolutionsModal = ({
         // react-table's row/column objects aren't real component props, so react/prop-types
         // false-positives on every `row.*`/`column.*` access from here to the end of the file.
         /* eslint-disable react/prop-types */
-        Cell: ({ row }) => (
-          <div>
-            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-          </div>
-        ),
+        // react-table v7 spreads the whole table instance into cell renderers, which is where
+        // selectedFlatRows comes from. Reading it here rather than closing over it keeps the
+        // columns memo independent of selection state.
+        Cell: ({ row, selectedFlatRows }) => {
+          const { duplicateKey, isAlreadyInIndicatorSet } = row.original
+
+          // A selected row is never blocked, otherwise it could not be deselected.
+          const isDuplicateOfSelection =
+            !row.isSelected &&
+            selectedFlatRows.some(
+              (selectedRow) => selectedRow.original.duplicateKey === duplicateKey,
+            )
+
+          const blockedReason =
+            (isAlreadyInIndicatorSet && alreadyAddedText) ||
+            (isDuplicateOfSelection && duplicateOfSelectionText) ||
+            ''
+
+          return (
+            <MuiTooltip title={blockedReason}>
+              {/* MUI tooltips don't fire on a disabled control, so the wrapper takes the hover
+                  and pointer events pass through it. Same pattern as the disabled copy button. */}
+              <span className={styles.selectionCell}>
+                <IndeterminateCheckbox
+                  {...row.getToggleRowSelectedProps()}
+                  disabled={!!blockedReason}
+                  style={blockedReason ? { pointerEvents: 'none' } : undefined}
+                />
+              </span>
+            </MuiTooltip>
+          )
+        },
       },
       {
         Header: indicatorSetHeaderText,
@@ -143,6 +184,8 @@ const CopyFinanceSolutionsModal = ({
       reportingDateHeaderText,
       nameHeaderText,
       fsTypeHeaderText,
+      alreadyAddedText,
+      duplicateOfSelectionText,
     ],
   )
 
@@ -159,8 +202,13 @@ const CopyFinanceSolutionsModal = ({
           (fsTypeChoice) => fsTypeChoice.id === fs_type,
         )?.name
 
+        // Keyed off the source record rather than the row, whose fs_type holds the display name
+        const duplicateKey = getFinanceSolutionDuplicateKey(financeSolution)
+
         return {
           id,
+          duplicateKey,
+          isAlreadyInIndicatorSet: existingDuplicateKeys.has(duplicateKey),
           indicatorSetTitle,
           indicatorSetType: indicatorSetType === 'report' ? reportText : targetText,
           reportDate,
@@ -172,7 +220,7 @@ const CopyFinanceSolutionsModal = ({
         }
       },
     )
-  }, [choices, copyableEntries, reportText, targetText])
+  }, [choices, copyableEntries, existingDuplicateKeys, reportText, targetText])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -265,7 +313,22 @@ const CopyFinanceSolutionsModal = ({
       .filter((financeSolution): financeSolution is FinanceSolution => !!financeSolution)
 
     try {
-      const newFinanceSolutions = selectedFinanceSolutions.map(stripId)
+      // The table blocks duplicate rows from being selected, but the guarantee belongs on the
+      // save path too, in case the indicator set changed underneath a stale selection.
+      const claimedDuplicateKeys = new Set(existingDuplicateKeys)
+      const newFinanceSolutions = selectedFinanceSolutions
+        .filter((financeSolution) => {
+          const duplicateKey = getFinanceSolutionDuplicateKey(financeSolution)
+
+          if (claimedDuplicateKeys.has(duplicateKey)) {
+            return false
+          }
+
+          claimedDuplicateKeys.add(duplicateKey)
+
+          return true
+        })
+        .map(stripId)
 
       const updatedIndicatorSet = {
         ...indicatorSet,
