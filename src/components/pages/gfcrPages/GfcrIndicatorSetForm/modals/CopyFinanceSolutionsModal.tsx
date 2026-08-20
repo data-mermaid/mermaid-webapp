@@ -55,16 +55,30 @@ const IndeterminateCheckbox = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { indeterminate?: boolean }
 >(({ indeterminate, ...rest }, ref) => {
-  const defaultRef = useRef<HTMLInputElement>(null)
-  const resolvedRef = (ref as React.RefObject<HTMLInputElement>) || defaultRef
+  const innerRef = useRef<HTMLInputElement | null>(null)
+
+  // A forwarded ref can be a callback as well as an object, and MUI's Tooltip passes a callback.
+  // Keeping our own ref for the indeterminate property means either kind works.
+  const setRefs = useCallback(
+    (node: HTMLInputElement | null) => {
+      innerRef.current = node
+
+      if (typeof ref === 'function') {
+        ref(node)
+      } else if (ref) {
+        ;(ref as React.MutableRefObject<HTMLInputElement | null>).current = node
+      }
+    },
+    [ref],
+  )
 
   useEffect(() => {
-    if (resolvedRef.current) {
-      resolvedRef.current.indeterminate = !!indeterminate
+    if (innerRef.current) {
+      innerRef.current.indeterminate = !!indeterminate
     }
-  }, [resolvedRef, indeterminate])
+  }, [indeterminate])
 
-  return <input type="checkbox" ref={resolvedRef} {...rest} />
+  return <input type="checkbox" ref={setRefs} {...rest} />
 })
 
 IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
@@ -87,6 +101,7 @@ const CopyFinanceSolutionsModal = ({
 
   const indicatorSetSaveSuccessText = t('gfcr.success.indicator_set_save')
   const indicatorSetSaveFailedText = t('gfcr.errors.indicator_set_save_failed')
+  const copySkippedDuplicatesText = t('gfcr.forms.finance_solutions.copy_skipped_duplicates')
   const indicatorSetHeaderText = t('gfcr.forms.finance_solutions.indicator_set')
   const indicatorSetTypeHeaderText = t('gfcr.indicator_set_type')
   const reportingDateHeaderText = t('gfcr.reporting_date')
@@ -125,16 +140,20 @@ const CopyFinanceSolutionsModal = ({
         // false-positives on every `row.*`/`column.*` access from here to the end of the file.
         /* eslint-disable react/prop-types */
         // react-table v7 spreads the whole table instance into cell renderers, which is where
-        // selectedFlatRows comes from. Reading it here rather than closing over it keeps the
-        // columns memo independent of selection state.
-        Cell: ({ row, selectedFlatRows }) => {
+        // state and preGlobalFilteredRowsById come from. Reading them here rather than closing
+        // over them keeps the columns memo independent of selection state.
+        Cell: ({ row, state: { selectedRowIds }, preGlobalFilteredRowsById }) => {
           const { duplicateKey, isAlreadyInIndicatorSet } = row.original
 
+          // selectedRowIds rather than selectedFlatRows, which only holds rows passing the
+          // current global filter: a ticked row filtered out of view would otherwise stop
+          // blocking its duplicates. Resolved against the pre-filter rows for the same reason.
           // A selected row is never blocked, otherwise it could not be deselected.
           const isDuplicateOfSelection =
             !row.isSelected &&
-            selectedFlatRows.some(
-              (selectedRow) => selectedRow.original.duplicateKey === duplicateKey,
+            Object.keys(selectedRowIds).some(
+              (selectedRowId) =>
+                preGlobalFilteredRowsById[selectedRowId]?.original.duplicateKey === duplicateKey,
             )
 
           const blockedReason =
@@ -142,17 +161,28 @@ const CopyFinanceSolutionsModal = ({
             (isDuplicateOfSelection && duplicateOfSelectionText) ||
             ''
 
+          // aria-disabled rather than disabled, because browsers drop a disabled control from
+          // the tab order and suppress its tooltip, leaving no way to say why it is blocked. The
+          // checkbox stays focusable and is announced as unavailable, with the toggle stopped in
+          // onClick, which covers the space key as well as the mouse.
+          // react-table's title is dropped so it can't override the description MuiTooltip sets,
+          // and its style carries cursor: pointer, so merge into that rather than replacing it.
+          const {
+            style: toggleStyle,
+            title: _toggleTitle,
+            ...toggleProps
+          } = row.getToggleRowSelectedProps()
+          const isBlocked = !!blockedReason
+
           return (
-            <MuiTooltip title={blockedReason}>
-              {/* MUI tooltips don't fire on a disabled control, so the wrapper takes the hover
-                  and pointer events pass through it. Same pattern as the disabled copy button. */}
-              <span className={styles.selectionCell}>
-                <IndeterminateCheckbox
-                  {...row.getToggleRowSelectedProps()}
-                  disabled={!!blockedReason}
-                  style={blockedReason ? { pointerEvents: 'none' } : undefined}
-                />
-              </span>
+            <MuiTooltip title={blockedReason} describeChild disableInteractive>
+              <IndeterminateCheckbox
+                {...toggleProps}
+                aria-disabled={isBlocked}
+                onClick={isBlocked ? (event) => event.preventDefault() : undefined}
+                className={isBlocked ? styles.blockedCheckbox : undefined}
+                style={isBlocked ? { ...toggleStyle, cursor: 'not-allowed' } : toggleStyle}
+              />
             </MuiTooltip>
           )
         },
@@ -258,7 +288,7 @@ const CopyFinanceSolutionsModal = ({
     prepareRow,
     previousPage,
     selectedFlatRows,
-    state: { pageIndex, sortBy, globalFilter },
+    state: { pageIndex, sortBy, globalFilter, selectedRowIds },
     toggleAllRowsSelected,
     setGlobalFilter,
   } = useTable(
@@ -304,10 +334,12 @@ const CopyFinanceSolutionsModal = ({
   const handleCopySelectedFinanceSolutions = async () => {
     setIsSaving(true)
 
-    const selectedFinanceSolutions = selectedFlatRows
+    // selectedRowIds rather than selectedFlatRows, which only holds rows passing the current
+    // global filter and would silently drop selections the user has filtered out of view.
+    const selectedFinanceSolutions = Object.keys(selectedRowIds)
       .map(
-        (row) =>
-          copyableEntries.find((entry) => entry.financeSolution.id === row.original.id)
+        (selectedRowId) =>
+          copyableEntries.find((entry) => entry.financeSolution.id === selectedRowId)
             ?.financeSolution,
       )
       .filter((financeSolution): financeSolution is FinanceSolution => !!financeSolution)
@@ -342,6 +374,13 @@ const CopyFinanceSolutionsModal = ({
 
       setIndicatorSet(response)
       toast.success(...getToastArguments(indicatorSetSaveSuccessText))
+
+      // Saying nothing here would report a clean copy while quietly discarding part of the
+      // selection. Only reachable if the blocking above lets a duplicate through.
+      if (newFinanceSolutions.length < selectedFinanceSolutions.length) {
+        toast.warning(...getToastArguments(copySkippedDuplicatesText))
+      }
+
       toggleAllRowsSelected(false)
       setIsSaving(false)
       onDismiss()
@@ -457,7 +496,7 @@ const CopyFinanceSolutionsModal = ({
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary
-        disabled={!selectedFlatRows.length || isSaving}
+        disabled={!Object.keys(selectedRowIds).length || isSaving}
         onClick={handleCopySelectedFinanceSolutions}
       >
         <IconCopy />

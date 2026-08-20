@@ -356,6 +356,7 @@
         "copy_duplicate_of_selection": "Another selected facility / solution has the same name and type",
         "copy_info": "Related investments and revenues will be copied as well.",
         "copy_selected": "Copy selected facilities / solutions",
+        "copy_skipped_duplicates": "Some facilities / solutions were skipped as duplicates",
         "duplicate_error": "A facility / solution with this name and type already exists in this fund indicator set",
         "fs_type": "Type",
         "gender_program_criteria": "Gender 2X criteria",
