@@ -6,9 +6,9 @@ const getFinanceSolutionInitialValues = (financeSolution) => {
     geographical_coverage = '',
     taf_name = '',
     number_of_solutions_supported_by = '0',
-    gender_smart = '',
-    local_enterprise = '',
-    sustainable_finance_mechanisms = [],
+    gender_smart,
+    local_enterprise,
+    sustainable_finance_mechanisms,
     notes = '',
   } = financeSolution || {}
 
@@ -28,9 +28,12 @@ const getFinanceSolutionInitialValues = (financeSolution) => {
     taf_name,
     number_of_solutions_supported_by,
     used_an_incubator,
-    gender_smart,
-    local_enterprise,
-    sustainable_finance_mechanisms,
+    // A boolean false is a real answer for the yes/no fields, so only null and undefined
+    // become blank. A destructuring default would let a null through and leave the select
+    // uncontrolled.
+    gender_smart: gender_smart ?? '',
+    local_enterprise: local_enterprise ?? '',
+    sustainable_finance_mechanisms: sustainable_finance_mechanisms ?? [],
     notes,
   }
 }
