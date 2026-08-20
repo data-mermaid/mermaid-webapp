@@ -39,6 +39,10 @@ import {
   LOCAL_ENTERPRISE_TYPES,
   NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES,
 } from './financeSolutionFieldVisibility'
+import {
+  getFinanceSolutionDuplicateKey,
+  getFinanceSolutionDuplicateKeys,
+} from './financeSolutionDuplicates'
 
 const isTafNameVisible = (fs_type, used_an_incubator) =>
   BUSINESS_OR_FINANCIAL_MECHANISM_TYPES.includes(fs_type) &&
@@ -193,6 +197,23 @@ const FinanceSolutionModal = ({
         errors.geographical_coverage = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
+      // An indicator set can't hold two facilities / solutions with the same name and type. The
+      // row being edited is excluded so it isn't flagged against itself. Only checked once name
+      // and type are both filled in, so it never overwrites their required errors.
+      const otherFinanceSolutions = indicatorSet.finance_solutions.filter(
+        (existingFinanceSolution) => existingFinanceSolution.id !== financeSolution?.id,
+      )
+      const isDuplicate =
+        !!values.name &&
+        !!values.fs_type &&
+        getFinanceSolutionDuplicateKeys(otherFinanceSolutions).has(
+          getFinanceSolutionDuplicateKey(values),
+        )
+
+      if (isDuplicate) {
+        errors.name = [{ code: t('gfcr.forms.finance_solutions.duplicate_error'), id: 'Duplicate' }]
+      }
+
       return errors
     },
   })
@@ -335,6 +356,10 @@ const FinanceSolutionModal = ({
             }
             showHelperText={displayHelp}
             required={true}
+            validationMessages={formik.errors.name?.filter((e) => e.id === 'Duplicate') ?? []}
+            validationType={
+              formik.errors.name?.some((e) => e.id === 'Duplicate') ? 'error' : undefined
+            }
           />
         </StyledModalInputRow>
         {showSector && (
