@@ -367,6 +367,10 @@ const FinanceSolutionModal = ({
             id="fs-type-select"
             {...formik.getFieldProps('fs_type')}
             options={fsTypeOptions}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.fs_type_helper" />
+            }
+            showHelperText={displayHelp}
             required={true}
             validationMessages={formik.errors.fs_type?.filter((e) => e.id === 'PCFRevenues') ?? []}
             validationType={
@@ -413,6 +417,10 @@ const FinanceSolutionModal = ({
               id="geographical-coverage-select"
               {...formik.getFieldProps('geographical_coverage')}
               options={getOptions(choices.geographicalcoverage?.data || [])}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.geographical_coverage_helper" />
+              }
+              showHelperText={displayHelp}
               required={true}
             />
           </StyledModalInputRow>
@@ -442,6 +450,10 @@ const FinanceSolutionModal = ({
               id="taf-name-input"
               type="text"
               {...formik.getFieldProps('taf_name')}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.taf_name_helper" />
+              }
+              showHelperText={displayHelp}
             />
           </StyledModalInputRow>
         )}
@@ -487,6 +499,10 @@ const FinanceSolutionModal = ({
               label={t('gfcr.forms.finance_solutions.number_of_solutions_supported_by')}
               id="number_of_solutions_supported_by"
               formik={formik}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.number_of_solutions_supported_by_helper" />
+              }
+              displayHelp={displayHelp}
               required
               noRow
             />
