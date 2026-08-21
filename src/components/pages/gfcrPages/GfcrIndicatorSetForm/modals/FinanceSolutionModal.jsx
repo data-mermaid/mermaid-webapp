@@ -533,6 +533,7 @@ const FinanceSolutionModal = ({
               id="sustainable-finance-mechanisms-select"
               labelId="sustainable-finance-mechanisms-label"
               aria-describedby="sfm-helper"
+              SelectDisplayProps={{ 'aria-required': 'true' }}
               multiple
               {...formik.getFieldProps('sustainable_finance_mechanisms')}
               input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
@@ -558,7 +559,7 @@ const FinanceSolutionModal = ({
                 </CustomMenuItem>
               ))}
             </CustomMuiSelect>
-            {displayHelp || SFMShowHelperText ? (
+            {SFMShowHelperText ? (
               <HelperText id="sfm-helper">
                 <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.sustainable_finance_mechanisms_helper" />
               </HelperText>
