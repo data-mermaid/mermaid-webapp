@@ -4,7 +4,7 @@ import { Checkbox, OutlinedInput } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import theme from '../../../../../theme'
-import { HelperText, RequiredIndicator, Textarea } from '../../../../generic/form'
+import { HelperText, LabelContainer, RequiredIndicator, Textarea } from '../../../../generic/form'
 import {
   CustomMenuItem,
   CustomMuiSelect,
@@ -367,6 +367,10 @@ const FinanceSolutionModal = ({
             id="fs-type-select"
             {...formik.getFieldProps('fs_type')}
             options={fsTypeOptions}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.fs_type_helper" />
+            }
+            showHelperText={displayHelp}
             required={true}
             validationMessages={formik.errors.fs_type?.filter((e) => e.id === 'PCFRevenues') ?? []}
             validationType={
@@ -413,6 +417,10 @@ const FinanceSolutionModal = ({
               id="geographical-coverage-select"
               {...formik.getFieldProps('geographical_coverage')}
               options={getOptions(choices.geographicalcoverage?.data || [])}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.geographical_coverage_helper" />
+              }
+              showHelperText={displayHelp}
               required={true}
             />
           </StyledModalInputRow>
@@ -442,6 +450,10 @@ const FinanceSolutionModal = ({
               id="taf-name-input"
               type="text"
               {...formik.getFieldProps('taf_name')}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.taf_name_helper" />
+              }
+              showHelperText={displayHelp}
             />
           </StyledModalInputRow>
         )}
@@ -487,6 +499,10 @@ const FinanceSolutionModal = ({
               label={t('gfcr.forms.finance_solutions.number_of_solutions_supported_by')}
               id="number_of_solutions_supported_by"
               formik={formik}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.number_of_solutions_supported_by_helper" />
+              }
+              displayHelp={displayHelp}
               required
               noRow
             />
@@ -494,19 +510,30 @@ const FinanceSolutionModal = ({
         )}
         {showSustainableFinanceMechanisms && (
           <StyledModalInputRow>
-            <label
-              id="sustainable-finance-mechanisms-label"
-              htmlFor="sustainable-finance-mechanisms-select"
-            >
-              {t('gfcr.forms.finance_solutions.sustainable_finance_mechanisms')}
-              <RequiredIndicator />
+            {/* Laid out to match the LabelContainer structure the shared mermaidInputs
+            wrappers use (label, required indicator, info icon as flex siblings) so this
+            field lines up with the rest of the form. The wrappers themselves can't be
+            used here: they render a native select, which can't show chips or per-option
+            checkboxes. */}
+            <LabelContainer>
+              <label
+                id="sustainable-finance-mechanisms-label"
+                htmlFor="sustainable-finance-mechanisms-select"
+              >
+                {t('gfcr.forms.finance_solutions.sustainable_finance_mechanisms')}
+              </label>
+              <span>
+                <RequiredIndicator />
+              </span>
               <IconButton type="button" onClick={(event) => handleSFMInfoIconClick(event)}>
                 <IconInfo aria-label="info" />
               </IconButton>
-            </label>
+            </LabelContainer>
             <CustomMuiSelect
               id="sustainable-finance-mechanisms-select"
               labelId="sustainable-finance-mechanisms-label"
+              aria-describedby="sfm-helper"
+              SelectDisplayProps={{ 'aria-required': 'true' }}
               multiple
               {...formik.getFieldProps('sustainable_finance_mechanisms')}
               input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
@@ -532,7 +559,7 @@ const FinanceSolutionModal = ({
                 </CustomMenuItem>
               ))}
             </CustomMuiSelect>
-            {displayHelp || SFMShowHelperText ? (
+            {SFMShowHelperText ? (
               <HelperText id="sfm-helper">
                 <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.sustainable_finance_mechanisms_helper" />
               </HelperText>
