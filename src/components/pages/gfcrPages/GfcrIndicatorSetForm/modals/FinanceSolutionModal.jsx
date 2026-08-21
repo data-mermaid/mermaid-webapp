@@ -4,7 +4,7 @@ import { Checkbox, OutlinedInput } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import theme from '../../../../../theme'
-import { HelperText, Textarea } from '../../../../generic/form'
+import { HelperText, RequiredIndicator, Textarea } from '../../../../generic/form'
 import {
   CustomMenuItem,
   CustomMuiSelect,
@@ -38,6 +38,9 @@ import {
   BUSINESS_OR_FINANCIAL_MECHANISM_TYPES,
   LOCAL_ENTERPRISE_TYPES,
   NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES,
+  isGenderSmartApplicable,
+  isLocalEnterpriseApplicable,
+  isUsedAnIncubatorApplicable,
 } from './financeSolutionFieldVisibility'
 import {
   getFinanceSolutionDuplicateKey,
@@ -48,6 +51,11 @@ const isTafNameVisible = (fs_type, used_an_incubator) =>
   BUSINESS_OR_FINANCIAL_MECHANISM_TYPES.includes(fs_type) &&
   !!used_an_incubator &&
   used_an_incubator !== 'none'
+
+// A boolean false is a real answer for the yes/no fields, and 'none' is a real answer for
+// used_an_incubator, so an unanswered field can only be recognised by a blank value rather
+// than by falsiness.
+const isBlank = (value) => value === '' || value === null || value === undefined
 
 const FinanceSolutionModal = ({
   isOpen,
@@ -195,6 +203,27 @@ const FinanceSolutionModal = ({
 
       if (values.fs_type === 'ctf' && !values.geographical_coverage) {
         errors.geographical_coverage = [{ code: t('forms.required_field'), id: 'Required' }]
+      }
+
+      if (isUsedAnIncubatorApplicable(values.fs_type) && isBlank(values.used_an_incubator)) {
+        errors.used_an_incubator = [{ code: t('forms.required_field'), id: 'Required' }]
+      }
+
+      if (isLocalEnterpriseApplicable(values.fs_type) && isBlank(values.local_enterprise)) {
+        errors.local_enterprise = [{ code: t('forms.required_field'), id: 'Required' }]
+      }
+
+      if (isGenderSmartApplicable(values.fs_type) && isBlank(values.gender_smart)) {
+        errors.gender_smart = [{ code: t('forms.required_field'), id: 'Required' }]
+      }
+
+      if (
+        values.fs_type === 'financial_mechanism' &&
+        !values.sustainable_finance_mechanisms?.length
+      ) {
+        errors.sustainable_finance_mechanisms = [
+          { code: t('forms.required_field'), id: 'Required' },
+        ]
       }
 
       // An indicator set can't hold two facilities / solutions with the same name and type. The
@@ -402,6 +431,7 @@ const FinanceSolutionModal = ({
                 <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.used_an_incubator_helper" />
               }
               showHelperText={displayHelp}
+              required={true}
             />
           </StyledModalInputRow>
         )}
@@ -429,6 +459,7 @@ const FinanceSolutionModal = ({
                 <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.local_enterprise_helper" />
               }
               showHelperText={displayHelp}
+              required={true}
             />
           </StyledModalInputRow>
         )}
@@ -446,6 +477,7 @@ const FinanceSolutionModal = ({
                 <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.gender_program_criteria_helper" />
               }
               showHelperText={displayHelp}
+              required={true}
             />
           </StyledModalInputRow>
         )}
@@ -467,6 +499,7 @@ const FinanceSolutionModal = ({
               htmlFor="sustainable-finance-mechanisms-select"
             >
               {t('gfcr.forms.finance_solutions.sustainable_finance_mechanisms')}
+              <RequiredIndicator />
               <IconButton type="button" onClick={(event) => handleSFMInfoIconClick(event)}>
                 <IconInfo aria-label="info" />
               </IconButton>
