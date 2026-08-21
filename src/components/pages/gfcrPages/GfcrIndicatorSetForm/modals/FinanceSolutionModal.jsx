@@ -4,7 +4,7 @@ import { Checkbox, OutlinedInput } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import theme from '../../../../../theme'
-import { HelperText, RequiredIndicator, Textarea } from '../../../../generic/form'
+import { HelperText, LabelContainer, RequiredIndicator, Textarea } from '../../../../generic/form'
 import {
   CustomMenuItem,
   CustomMuiSelect,
@@ -510,19 +510,29 @@ const FinanceSolutionModal = ({
         )}
         {showSustainableFinanceMechanisms && (
           <StyledModalInputRow>
-            <label
-              id="sustainable-finance-mechanisms-label"
-              htmlFor="sustainable-finance-mechanisms-select"
-            >
-              {t('gfcr.forms.finance_solutions.sustainable_finance_mechanisms')}
-              <RequiredIndicator />
+            {/* Laid out to match the LabelContainer structure the shared mermaidInputs
+            wrappers use (label, required indicator, info icon as flex siblings) so this
+            field lines up with the rest of the form. The wrappers themselves can't be
+            used here: they render a native select, which can't show chips or per-option
+            checkboxes. */}
+            <LabelContainer>
+              <label
+                id="sustainable-finance-mechanisms-label"
+                htmlFor="sustainable-finance-mechanisms-select"
+              >
+                {t('gfcr.forms.finance_solutions.sustainable_finance_mechanisms')}
+              </label>
+              <span>
+                <RequiredIndicator />
+              </span>
               <IconButton type="button" onClick={(event) => handleSFMInfoIconClick(event)}>
                 <IconInfo aria-label="info" />
               </IconButton>
-            </label>
+            </LabelContainer>
             <CustomMuiSelect
               id="sustainable-finance-mechanisms-select"
               labelId="sustainable-finance-mechanisms-label"
+              aria-describedby="sfm-helper"
               multiple
               {...formik.getFieldProps('sustainable_finance_mechanisms')}
               input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
