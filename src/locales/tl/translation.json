@@ -331,10 +331,16 @@
         "business_finance_solution": "Solusyon sa Negosyo / Pananalapi",
         "business_finance_solution_name": "Pangalan ng solusyon sa Negosyo / Pananalapi",
         "copy": "Pasilidad/solusyon sa pagkopya",
+        "copy_already_added": "Naidagdag na ang pasilidad/solusyong ito sa hanay ng tagapagpahiwatig ng pondo na ito.",
+        "copy_duplicate_of_selection": "Ang isa pang napiling pasilidad/solusyon ay may parehong pangalan at uri",
         "copy_info": "Kokopyahin din ang mga Kaugnay na Pamumuhunan at Kita.",
         "copy_selected": "Kopyahin ang mga napiling pasilidad / solusyon",
+        "copy_skipped_duplicates": "Nilaktawan ang ilang pasilidad/solusyon bilang mga duplikado",
+        "duplicate_error": "Mayroon nang pasilidad/solusyon na may ganitong pangalan at uri sa hanay ng tagapagpahiwatig ng pondo na ito.",
+        "fs_type_helper": "Ang uri ng pasilidad o solusyon.",
         "gender_program_criteria": "Pamantayan ng Kasarian 2X",
         "gender_program_criteria_helper": "Ipahiwatig kung ang solusyon ay kwalipikado sa ilalim ng kahit isang Pamantayan ng Hamon ng 2X. Sumangguni sa <2xLink>Gabay sa Sanggunian ng Pamantayan ng 2X</2xLink> para sa mga detalye. Nalalapat ito sa F10 (Bilang ng mga pamumuhunan na matalino sa kasarian), na sumusukat sa suporta ng GFCR para sa pagkakapantay-pantay ng kasarian sa pamamagitan ng mga pamumuhunang nakakatugon sa mga pamantayan ng 2X Challenge.<br /><gfcrPdfLink>Tingnan ang M&E Toolkit PDF</gfcrPdfLink>",
+        "geographical_coverage_helper": "Ang heograpikal na saklaw ng pasilidad o solusyon na ito.",
         "indicator_set": "Set ng tagapagpahiwatig",
         "local_enterprise": "Lokal na negosyo",
         "local_enterprise_helper": "Tinukoy bilang isang maliit hanggang katamtamang laki ng negosyo na tumatakbo sa loob ng partikular na lokasyon ng Programa ng GFCR. Nalalapat ito sa F9.3 (Halaga (at %) ng kita sa mga lokal na negosyo), na sumusukat sa kita na nananatili sa loob ng isang lokal na heograpiya, na naiiba sa kita na inililipat sa ibang bansa.<br /><gfcrPdfLink>Tingnan ang M&E Toolkit PDF</gfcrPdfLink>",
@@ -342,6 +348,7 @@
         "no_copy_targets": "Walang ibang mga hanay ng tagapagpahiwatig ng pondo sa proyektong ito na may mga pasilidad / solusyon na maaaring kopyahin.",
         "no_finance_solutions": "Wala pang Solusyon sa Pananalapi.",
         "no_incubator": "Wala",
+        "number_of_solutions_supported_by_helper": "Ang bilang ng mga solusyon na sinusuportahan ng pasilidad na ito.",
         "number_of_solutions_supported_table_header": "Kabuuang bilang ng mga solusyong sinusuportahan",
         "pcf_revenues_error": "Alisin ang mga kaugnay na kita bago baguhin ang uri patungo sa programmatic co-financing",
         "save": "I-save ang Negosyo / Solusyon sa Pananalapi",
@@ -350,6 +357,7 @@
         "select_add_finance_solution": "Piliin ang 'Magdagdag ng Solusyon sa Pananalapi' upang magdagdag ng isa sa hanay ng tagapagpahiwatig na ito.",
         "sustainable_finance_mechanisms": "Mga mekanismo ng napapanatiling pananalapi",
         "sustainable_finance_mechanisms_helper": "Pagpopondo na bumubuo ng isang malaki at paulit-ulit na daloy ng kita na nakatuon sa konserbasyon o napapanatiling pamamahala ng ecosystem. Nalalapat ito sa F8.5 (Bilang at uri ng mga mekanismo ng napapanatiling pananalapi). Piliin ang lahat ng naaangkop na opsyon, dahil ang isang solusyon ay maaaring magsama ng maraming mekanismo.<br /><gfcrPdfLink>Tingnan ang M&E Toolkit PDF</gfcrPdfLink>",
+        "taf_name_helper": "Ang pangalan ng TAF (incubator).",
         "update": "I-update ang Solusyon sa Pananalapi",
         "used_an_incubator": "Gumamit ng incubator",
         "used_an_incubator_helper": "Ipahiwatig kung ang solusyon ay gumamit ng incubator para sa maagang yugto ng suporta at pag-access sa mga mapagkukunan. Tukuyin kung ang incubator ay pinondohan ng GFCR.<br /><gfcrPdfLink>Tingnan ang M&E Toolkit PDF</gfcrPdfLink>"
@@ -487,7 +495,8 @@
     "add_macroinvertebrate": "Magmungkahi ng mga bagong uri ng macroinvertebrate",
     "add_notes": "I-click para magdagdag ng mga tala...",
     "attribute_proposal_summary": "Ang iyong iminungkahi {{attribute}} ay susuriin ng pangkat ng MERMAID. Aaprubahan nila ito para maisama sa taxonomy o makikipag-ugnayan sa iyo para sa follow-up.",
-    "click_or_press_space_to_add_notes": "I-click o pindutin ang space para magdagdag ng mga tala..."
+    "click_or_press_space_to_add_notes": "I-click o pindutin ang space para magdagdag ng mga tala...",
+    "edit_notes": "I-edit ang mga tala"
   },
   "management_regime": "Pamamahala ng rehimen",
   "management_regimes": {
