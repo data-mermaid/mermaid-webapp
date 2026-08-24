@@ -346,10 +346,16 @@
         "business_finance_solution": "Solution commerciale/financière",
         "business_finance_solution_name": "Nom de la solution commerciale/financière",
         "copy": "Service de photocopie / solution",
+        "copy_already_added": "Cette fonctionnalité/solution a déjà été ajoutée à cet ensemble d'indicateurs de fonds.",
+        "copy_duplicate_of_selection": "Une autre installation/solution sélectionnée porte le même nom et le même type.",
         "copy_info": "Les investissements et revenus connexes seront également copiés.",
         "copy_selected": "Copier les installations/solutions sélectionnées",
+        "copy_skipped_duplicates": "Certaines installations/solutions ont été ignorées car elles étaient des doublons.",
+        "duplicate_error": "Une installation/solution portant ce nom et de ce type existe déjà dans cet ensemble d'indicateurs de fonds.",
+        "fs_type_helper": "Le type d'installation ou de solution.",
         "gender_program_criteria": "Critères de genre 2X",
         "gender_program_criteria_helper": "Indiquez si la solution répond à au moins un critère du Défi 2X. Consultez le <2xLink>Guide de référence des critères 2X</2xLink> pour plus de détails. Ceci s'applique au critère F10 (Nombre d'investissements sensibles au genre), qui mesure le soutien du GFCR à l'égalité des sexes par le biais d'investissements conformes aux normes du Défi 2X.<br /><gfcrPdfLink>Consulter le PDF du kit d'outils de suivi et d'évaluation</gfcrPdfLink>",
+        "geographical_coverage_helper": "Couverture géographique de cette installation ou solution.",
         "indicator_set": "Ensemble d'indicateurs",
         "local_enterprise": "Entreprise locale",
         "local_enterprise_helper": "Définie comme une petite ou moyenne entreprise exerçant ses activités dans la zone géographique spécifique du programme GFCR. Ceci s'applique à la rubrique F9.3 (Montant (et %) des recettes des entreprises locales), qui mesure les recettes conservées au sein d'une zone géographique donnée, par opposition aux recettes transférées à l'étranger.<br /><gfcrPdfLink>Consulter le PDF du kit d'outils de suivi et d'évaluation</gfcrPdfLink>",
@@ -357,6 +363,7 @@
         "no_copy_targets": "Il n'existe pas d'autres ensembles d'indicateurs de fonds dans ce projet avec des installations/solutions à copier",
         "no_finance_solutions": "Aucune solution financière pour le moment.",
         "no_incubator": "Aucun",
+        "number_of_solutions_supported_by_helper": "Le nombre de solutions prises en charge par cette installation.",
         "number_of_solutions_supported_table_header": "Nombre total de solutions prises en charge",
         "pcf_revenues_error": "Supprimer les revenus associés avant de passer au cofinancement programmatique.",
         "save": "Solution Sauvegarder Entreprise / Finance",
@@ -365,6 +372,7 @@
         "select_add_finance_solution": "Sélectionnez « Ajouter une solution financière » pour en ajouter une à cet ensemble d'indicateurs.",
         "sustainable_finance_mechanisms": "mécanismes de financement durable",
         "sustainable_finance_mechanisms_helper": "Financement générant des revenus importants et récurrents affectés à la conservation ou à la gestion durable des écosystèmes. Ceci s'applique à la section F8.5 (Nombre et type de mécanismes de financement durable). Sélectionnez toutes les options pertinentes, car une solution peut comprendre plusieurs mécanismes.<br /><gfcrPdfLink>Consulter le PDF du kit d'outils de suivi et d'évaluation</gfcrPdfLink>",
+        "taf_name_helper": "Le nom du TAF (incubateur).",
         "update": "Solution financière mise à jour",
         "used_an_incubator": "J'ai utilisé un incubateur",
         "used_an_incubator_helper": "Indiquez si la solution a bénéficié d'un incubateur pour un accompagnement en phase de démarrage et un accès aux ressources. Précisez si cet incubateur était financé par le GFCR.<br /><gfcrPdfLink>Consulter le PDF du kit d'outils de suivi et d'évaluation</gfcrPdfLink>"
@@ -537,7 +545,8 @@
     "add_macroinvertebrate": "Proposer de nouvelles espèces de macroinvertébrés",
     "add_notes": "Cliquez pour ajouter des notes...",
     "attribute_proposal_summary": "Votre proposition {{attribute}} L'équipe MERMAID examinera votre proposition. Elle l'approuvera pour inclusion dans la taxonomie ou vous contactera pour un suivi.",
-    "click_or_press_space_to_add_notes": "Cliquez ou appuyez sur la barre d'espace pour ajouter des notes..."
+    "click_or_press_space_to_add_notes": "Cliquez ou appuyez sur la barre d'espace pour ajouter des notes...",
+    "edit_notes": "Notes de modification"
   },
   "management_regime": "Régime de gestion",
   "management_regimes": {

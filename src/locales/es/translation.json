@@ -331,10 +331,16 @@
         "business_finance_solution": "Solución empresarial/financiera",
         "business_finance_solution_name": "Nombre de la solución empresarial/financiera",
         "copy": "Instalación/solución de copia",
+        "copy_already_added": "Esta función/solución ya se ha añadido a este conjunto de indicadores de fondos.",
+        "copy_duplicate_of_selection": "Otra instalación/solución seleccionada tiene el mismo nombre y tipo.",
         "copy_info": "Las inversiones e ingresos relacionados también se copiarán.",
         "copy_selected": "Copiar las instalaciones/soluciones seleccionadas",
+        "copy_skipped_duplicates": "Algunas instalaciones/soluciones se omitieron por ser duplicadas.",
+        "duplicate_error": "Ya existe una instalación/solución con este nombre y tipo en este conjunto de indicadores de fondos.",
+        "fs_type_helper": "El tipo de instalación o solución.",
         "gender_program_criteria": "Criterios de género 2X",
         "gender_program_criteria_helper": "Indique si la solución cumple con al menos un criterio del Desafío 2X. Consulte la <2xLink>Guía de Referencia de Criterios 2X</2xLink> para obtener más información. Esto aplica al F10 (Número de inversiones con perspectiva de género), que mide el apoyo del GFCR a la igualdad de género mediante inversiones que cumplen con los estándares del Desafío 2X.<br /><gfcrPdfLink>Ver el PDF del kit de herramientas de M&E</gfcrPdfLink>",
+        "geographical_coverage_helper": "La cobertura geográfica de esta instalación o solución.",
         "indicator_set": "Conjunto de indicadores",
         "local_enterprise": "Empresa local",
         "local_enterprise_helper": "Se define como una pequeña o mediana empresa que opera dentro de la ubicación específica del Programa GFCR. Esto aplica al indicador F9.3 (Monto (y %) de ingresos en empresas locales), que mide los ingresos que se retienen dentro de una zona geográfica local, a diferencia de los ingresos que se transfieren al extranjero.<br /><gfcrPdfLink>Ver el PDF del kit de herramientas de M&E</gfcrPdfLink>",
@@ -342,6 +348,7 @@
         "no_copy_targets": "No hay otros conjuntos de indicadores de fondos en este proyecto con facilidades/soluciones para copiar",
         "no_finance_solutions": "Aún no hay soluciones financieras.",
         "no_incubator": "Ninguno",
+        "number_of_solutions_supported_by_helper": "El número de soluciones que admite esta instalación.",
         "number_of_solutions_supported_table_header": "Número total de soluciones admitidas",
         "pcf_revenues_error": "Elimine los ingresos asociados antes de cambiar el tipo a cofinanciamiento programático.",
         "save": "Guardar fila de soluciones empresariales y financieras",
@@ -350,6 +357,7 @@
         "select_add_finance_solution": "Seleccione ‘Agregar solución financiera’ para agregar una a este conjunto de indicadores.",
         "sustainable_finance_mechanisms": "Mecanismos de financiación sostenible",
         "sustainable_finance_mechanisms_helper": "Financiamiento que genera un flujo de ingresos significativo y recurrente destinado a la conservación o la gestión sostenible de ecosistemas. Esto aplica a F8.5 (Número y tipo de mecanismos de financiación sostenible). Seleccione todas las opciones aplicables, ya que una solución puede incluir varios mecanismos.<br /><gfcrPdfLink>Ver el PDF del kit de herramientas de M&E</gfcrPdfLink>",
+        "taf_name_helper": "El nombre de la TAF (incubadora).",
         "update": "Actualizar la solución financiera",
         "used_an_incubator": "Usé una incubadora",
         "used_an_incubator_helper": "Indique si la solución utilizó una incubadora para brindar apoyo inicial y acceso a recursos. Especifique si la incubadora fue financiada por el GFCR.<br /><gfcrPdfLink>Ver el PDF del kit de herramientas de M&E</gfcrPdfLink>"
@@ -490,7 +498,8 @@
     "add_macroinvertebrate": "Proponer nuevas especies de macroinvertebrados",
     "add_notes": "Haz clic para añadir notas...",
     "attribute_proposal_summary": "Su propuesta {{attribute}} Será revisado por el equipo de MERMAID. Ellos aprobarán su inclusión en la taxonomía o se pondrán en contacto con usted para darle seguimiento.",
-    "click_or_press_space_to_add_notes": "Haz clic o pulsa la barra espaciadora para añadir notas..."
+    "click_or_press_space_to_add_notes": "Haz clic o pulsa la barra espaciadora para añadir notas...",
+    "edit_notes": "Notas de edición"
   },
   "management_regime": "Régimen de gestión",
   "management_regimes": {

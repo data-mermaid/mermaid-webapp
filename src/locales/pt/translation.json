@@ -44,13 +44,21 @@
       "finance_solutions": {
         "business_finance_solution": "Instalação/solução",
         "copy": "Recurso de cópia / solução",
+        "copy_already_added": "Esta funcionalidade/solução já foi adicionada a este conjunto de indicadores de fundos.",
+        "copy_duplicate_of_selection": "Outra instalação/solução selecionada tem o mesmo nome e tipo.",
         "copy_info": "Os investimentos e receitas relacionados também serão copiados.",
         "copy_selected": "Copiar instalações/soluções selecionadas",
+        "copy_skipped_duplicates": "Algumas instalações/soluções foram ignoradas por serem duplicadas.",
+        "duplicate_error": "Já existe uma instalação/solução com este nome e tipo neste conjunto de indicadores de fundos.",
+        "fs_type_helper": "O tipo de instalação ou solução.",
+        "geographical_coverage_helper": "Abrangência geográfica desta instalação ou solução.",
         "indicator_set": "Conjunto de indicadores",
         "no_copy_targets": "Não existem outros conjuntos de indicadores de fundos neste projeto com recursos/soluções para copiar.",
         "no_incubator": "Nenhum",
+        "number_of_solutions_supported_by_helper": "O número de soluções que esta instalação suporta.",
         "number_of_solutions_supported_table_header": "Número total de soluções suportadas",
-        "pcf_revenues_error": "Remova as receitas associadas antes de alterar o tipo para cofinanciamento programático."
+        "pcf_revenues_error": "Remova as receitas associadas antes de alterar o tipo para cofinanciamento programático.",
+        "taf_name_helper": "O nome do TAF (incubadora)."
       },
       "revenues": {
         "no_non_pcf_finance_solutions": "Não é possível adicionar receitas para cofinanciamento programático. Acesse a seção de investimentos e adicione o valor do cofinanciamento como investimento. "
@@ -70,7 +78,8 @@
     "add_macroinvertebrate": "Propor novas espécies de macroinvertebrados",
     "add_notes": "Clique para adicionar notas...",
     "attribute_proposal_summary": "Sua proposta {{attribute}} Será analisado pela equipe MERMAID. Eles aprovarão a inclusão na taxonomia ou entrarão em contato para dar seguimento ao assunto.",
-    "click_or_press_space_to_add_notes": "Clique ou pressione a barra de espaço para adicionar notas..."
+    "click_or_press_space_to_add_notes": "Clique ou pressione a barra de espaço para adicionar notas...",
+    "edit_notes": "Editar notas"
   },
   "management_regimes": {
     "export": "Gestão de exportações",
@@ -115,12 +124,29 @@
       "submitted_review": "Veja os dados limpos enviados, prontos para exportação, visualização e análise.",
       "tour_steps": "Etapa {{current}} de {{total}}",
       "users_review": "Adicione membros à equipe e atribua a eles funções de administrador, coletor ou somente leitura."
-    }
+    },
+    "warning_readonly_active_units": "Você não pode enviar essas unidades de amostra porque possui apenas acesso de leitura a este projeto. Entre em contato com o administrador do projeto."
   },
   "protocol_titles": {
     "macroinvertebrate": "Cinturão de macroinvertebrados"
   },
+  "sample_units": {
+    "errors": {
+      "submitted_data_unavailable": "A unidade de amostra enviada está atualmente indisponível.",
+      "submitted_moved_to_collecting": "A unidade de amostra enviada foi movida para a seção de Coleta.",
+      "submitted_not_editable": "A unidade de amostra enviada não foi tornada editável.",
+      "validation_unavailable": "A validação para esta unidade de amostra não está disponível no momento."
+    },
+    "protocol": "Método",
+    "success": {
+      "record_deleted": "Unidade de amostra excluída",
+      "record_saved": "Unidade de amostra salva",
+      "record_submitted": "Unidade de amostra enviada",
+      "record_validated": "Unidade de amostra validada com sucesso"
+    }
+  },
   "users": {
+    "learn_more_roles": "Saiba mais sobre funções de usuário.",
     "messages": {
       "last_admin_tooltip": "Você é o único administrador deste projeto. Atribua outro administrador antes de alterar sua função ou remover seu próprio perfil.",
       "sample_units_transferred_one": "{{count}} unidade de amostra transferida",
