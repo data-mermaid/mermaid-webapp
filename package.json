@@ -72,6 +72,7 @@
     "test:storybook": "TZ=UTC vitest run --config vitest.storybook.config.ts",
     "prettier": "prettier --write ./src",
     "lint": "tsc && eslint './src/**/*'",
+    "check:i18n-source": "node scripts/check-en-source-edits.mjs",
     "prepare": "husky",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
