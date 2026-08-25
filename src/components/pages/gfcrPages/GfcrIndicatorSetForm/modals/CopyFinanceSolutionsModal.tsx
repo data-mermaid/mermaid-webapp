@@ -148,23 +148,23 @@ const CopyFinanceSolutionsModal = ({
           // selectedRowIds rather than selectedFlatRows, which only holds rows passing the
           // current global filter: a ticked row filtered out of view would otherwise stop
           // blocking its duplicates. Resolved against the pre-filter rows for the same reason.
-          // A selected row is never blocked, otherwise it could not be deselected.
-          const isDuplicateOfSelection =
-            !row.isSelected &&
-            Object.keys(selectedRowIds).some(
-              (selectedRowId) =>
-                preGlobalFilteredRowsById[selectedRowId]?.original.duplicateKey === duplicateKey,
-            )
+          const isDuplicateOfSelection = Object.keys(selectedRowIds).some(
+            (selectedRowId) =>
+              preGlobalFilteredRowsById[selectedRowId]?.original.duplicateKey === duplicateKey,
+          )
 
-          const blockedReason =
-            (isAlreadyInIndicatorSet && alreadyAddedText) ||
-            (isDuplicateOfSelection && duplicateOfSelectionText) ||
-            ''
+          // A selected row is never blocked, otherwise it could not be deselected. That covers
+          // rows already in the set as well: a selection made before the set gained a matching
+          // solution would otherwise be stuck ticked and uncopyable.
+          const blockedReason = row.isSelected
+            ? ''
+            : (isAlreadyInIndicatorSet && alreadyAddedText) ||
+              (isDuplicateOfSelection && duplicateOfSelectionText) ||
+              ''
 
           // aria-disabled rather than disabled, because browsers drop a disabled control from
-          // the tab order and suppress its tooltip, leaving no way to say why it is blocked. The
-          // checkbox stays focusable and is announced as unavailable, with the toggle stopped in
-          // onClick, which covers the space key as well as the mouse.
+          // the tab order and suppress its tooltip, leaving no way to say why it is blocked. It
+          // only exposes the state though, so the toggle has to be suppressed by hand.
           // react-table's title is dropped so it can't override the description MuiTooltip sets,
           // and its style carries cursor: pointer, so merge into that rather than replacing it.
           const {
@@ -179,7 +179,11 @@ const CopyFinanceSolutionsModal = ({
               <IndeterminateCheckbox
                 {...toggleProps}
                 aria-disabled={isBlocked}
-                onClick={isBlocked ? (event) => event.preventDefault() : undefined}
+                // react-table toggles selection from onChange, so dropping it here is what
+                // actually blocks the row, for the space key as well as the mouse. Calling
+                // preventDefault on the click instead does not stop React dispatching onChange,
+                // and leaves the box out of step with the checked prop (facebook/react#9023).
+                onChange={isBlocked ? () => {} : toggleProps.onChange}
                 className={isBlocked ? styles.blockedCheckbox : undefined}
                 style={isBlocked ? { ...toggleStyle, cursor: 'not-allowed' } : toggleStyle}
               />
@@ -315,6 +319,14 @@ const CopyFinanceSolutionsModal = ({
     setIsViewSelectedOnly(!isViewSelectedOnly)
   }
 
+  // The modal stays mounted while closed, so its selection would otherwise survive a cancel and
+  // come back on the next open, by which point the indicator set may already hold a match.
+  const handleDismiss = () => {
+    toggleAllRowsSelected(false)
+    setIsViewSelectedOnly(false)
+    onDismiss()
+  }
+
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const _setSortByPrefs = useEffect(() => {
@@ -381,9 +393,8 @@ const CopyFinanceSolutionsModal = ({
         toast.warning(...getToastArguments(copySkippedDuplicatesText))
       }
 
-      toggleAllRowsSelected(false)
       setIsSaving(false)
-      onDismiss()
+      handleDismiss()
     } catch (error) {
       setIsSaving(false)
       toast.error(...getToastArguments(indicatorSetSaveFailedText))
@@ -494,7 +505,7 @@ const CopyFinanceSolutionsModal = ({
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
+      <ButtonSecondary onClick={handleDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary
         disabled={!Object.keys(selectedRowIds).length || isSaving}
         onClick={handleCopySelectedFinanceSolutions}
@@ -508,7 +519,7 @@ const CopyFinanceSolutionsModal = ({
   return (
     <Modal
       isOpen={isOpen}
-      onDismiss={onDismiss}
+      onDismiss={handleDismiss}
       maxHeight="70vh"
       title={t('gfcr.forms.finance_solutions.copy')}
       mainContent={table}
