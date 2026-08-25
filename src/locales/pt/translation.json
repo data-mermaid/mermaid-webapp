@@ -67,6 +67,7 @@
     "indicator_set": "Conjunto de indicadores",
     "indicator_set_type": "Tipo de conjunto de indicadores",
     "no_indicator_sets": "Ainda não existem conjuntos de indicadores.",
+    "programme_area": "Área do programa",
     "remove_gfcr_indicators": "Remover os conjuntos de indicadores GFCR deste projeto não os excluirá, apenas os ocultará.",
     "success": {
       "indicator_set_save": "Conjunto de indicadores salvo com sucesso",
