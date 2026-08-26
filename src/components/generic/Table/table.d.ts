@@ -58,3 +58,4 @@ export const CopyModalToolbarWrapper: React.ComponentType<React.HTMLAttributes<H
 export const ViewSelectedOnly: React.ComponentType<React.LabelHTMLAttributes<HTMLLabelElement>>
 export const CopyModalPaginationWrapper: React.ComponentType<React.HTMLAttributes<HTMLDivElement>>
 export const thStyles: (props: ThProps) => ReturnType<typeof import('styled-components').css>
+export const getSortIndicatorContent: (props?: ThProps) => string

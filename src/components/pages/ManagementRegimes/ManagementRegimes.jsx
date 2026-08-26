@@ -148,7 +148,8 @@ const ManagementRegimes = () => {
       {
         Header: secondaryNameHeaderText,
         accessor: 'secondaryName',
-        sortType: reactTableNaturalSortReactNodes,
+        // plain string, not a React node - see the `name` column above for the node variant
+        sortType: reactTableNaturalSort,
       },
       {
         Header: yearEstHeaderText,
@@ -444,6 +445,7 @@ const ManagementRegimes = () => {
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={column.canSort}
                         data-testid={`management-regime-header-${column.id}`}
                       >
                         <span>{column.render('Header')}</span>

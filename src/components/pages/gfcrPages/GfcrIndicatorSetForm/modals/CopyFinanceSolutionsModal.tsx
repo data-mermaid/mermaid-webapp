@@ -435,6 +435,7 @@ const CopyFinanceSolutionsModal = ({
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={column.canSort}
                       >
                         {column.render('Header')}
                       </Th>
