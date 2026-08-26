@@ -1006,10 +1006,10 @@ function UsersTableSection({
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
-                        $isSortingEnabled={!column.disableSortBy}
+                        $isSortingEnabled={column.canSort}
                         $disabledHover={column.disableSortBy}
                       >
-                        <span id="header-span">{column.render('Header')}</span>
+                        <span>{column.render('Header')}</span>
                       </Th>
                     )
                   })}
