@@ -22,17 +22,24 @@ export const formatDistanceNoQuarters = (date: Date, baseDate: Date): string => 
   return intlFormatDistance(date, baseDate)
 }
 
-// Date-only values (YYYY-MM-DD) parse as UTC midnight, so they must be formatted in UTC too -
-// otherwise anyone west of UTC sees the previous day. e.g. "February 10, 2024"
-export const formatDateOnlyIntl = (dateOnly: string): string => {
+// Date-only values (YYYY-MM-DD) parse as UTC midnight, so anything read off them has to use a
+// UTC getter or a UTC time zone. Returns null for values there is nothing sensible to show for.
+const parseDateOnly = (dateOnly: string): Date | null => {
   // new Date(null) is the epoch rather than an invalid date, so falsy values need their own guard
   if (!dateOnly) {
-    return ''
+    return null
   }
 
   const date = new Date(dateOnly)
 
-  if (Number.isNaN(date.getTime())) {
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
+// Formatted in UTC, otherwise anyone west of UTC sees the previous day. e.g. "February 10, 2024"
+export const formatDateOnlyIntl = (dateOnly: string): string => {
+  const date = parseDateOnly(dateOnly)
+
+  if (!date) {
     return ''
   }
 
@@ -43,21 +50,12 @@ export const formatDateOnlyIntl = (dateOnly: string): string => {
   )
 }
 
-// Date-only values parse as UTC midnight, so the year has to be read with a UTC getter -
-// getFullYear() returns the previous year west of UTC for a 1 January date. e.g. "2024"
+// Read with a UTC getter, otherwise getFullYear() returns the previous year west of UTC for a
+// 1 January date. e.g. "2024"
 export const getDateOnlyYear = (dateOnly: string): string => {
-  // new Date(null) is the epoch rather than an invalid date, so falsy values need their own guard
-  if (!dateOnly) {
-    return ''
-  }
+  const date = parseDateOnly(dateOnly)
 
-  const date = new Date(dateOnly)
-
-  if (Number.isNaN(date.getTime())) {
-    return ''
-  }
-
-  return String(date.getUTCFullYear())
+  return date ? String(date.getUTCFullYear()) : ''
 }
 
 // Today as a date-only value (YYYY-MM-DD) in the browser's timezone, for defaulting date
