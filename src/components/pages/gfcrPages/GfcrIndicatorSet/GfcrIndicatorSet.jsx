@@ -326,7 +326,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
               <IndicatorSetTitle
                 indicatorSetTitle={formik.values.title}
                 type={indicatorSetTypeName}
-                reportingDate={new Date(formik.values.report_date)}
+                reportingDate={formik.values.report_date}
                 isNew={!!newIndicatorSetType}
               />
               <ButtonContainer>

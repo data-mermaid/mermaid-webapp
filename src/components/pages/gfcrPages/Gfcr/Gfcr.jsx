@@ -34,6 +34,7 @@ import { DropdownItemStyle } from '../../../generic/ButtonSecondaryDropdown/Butt
 import { useCurrentProject } from '../../../../App/CurrentProjectContext'
 import GfcrGenericTable from '../GfcrGenericTable'
 import NewIndicatorSetModal from './NewIndicatorSetModal'
+import { formatDateOnlyIntl } from '../../../../library/formatDateTime'
 
 const Gfcr = () => {
   const { t } = useTranslation()
@@ -126,10 +127,6 @@ const Gfcr = () => {
     return gfcrIndicatorSets.map((indicatorSet) => {
       const { id, title, indicator_set_type, report_date } = indicatorSet
 
-      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }
-      const currentLocale = navigator.language
-      const localizedDate = new Date(report_date).toLocaleDateString(currentLocale, dateOptions)
-
       return {
         title: isAdminUser ? (
           <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link>
@@ -139,7 +136,7 @@ const Gfcr = () => {
         indicator_set_type: (
           <span>{indicator_set_type === 'report' ? reportText : targetText}</span>
         ),
-        report_date: <span>{localizedDate}</span>,
+        report_date: <span>{formatDateOnlyIntl(report_date)}</span>,
       }
     })
   }, [gfcrIndicatorSets, isAdminUser, currentProjectPath, untitledText, reportText, targetText])
