@@ -1,6 +1,7 @@
 import {
   differenceInCalendarQuarters,
   differenceInSeconds,
+  format,
   intlFormat,
   intlFormatDistance,
 } from 'date-fns'
@@ -41,6 +42,28 @@ export const formatDateOnlyIntl = (dateOnly: string): string => {
     { locale: navigator.language },
   )
 }
+
+// Date-only values parse as UTC midnight, so the year has to be read with a UTC getter -
+// getFullYear() returns the previous year west of UTC for a 1 January date. e.g. "2024"
+export const getDateOnlyYear = (dateOnly: string): string => {
+  // new Date(null) is the epoch rather than an invalid date, so falsy values need their own guard
+  if (!dateOnly) {
+    return ''
+  }
+
+  const date = new Date(dateOnly)
+
+  if (Number.isNaN(date.getTime())) {
+    return ''
+  }
+
+  return String(date.getUTCFullYear())
+}
+
+// Today as a date-only value (YYYY-MM-DD) in the browser's timezone, for defaulting date
+// inputs. date-fns format reads local getters, unlike toISOString(), which converts to UTC
+// and so rolls back a day anywhere east of UTC.
+export const getTodayDateOnly = (): string => format(new Date(), 'yyyy-MM-dd')
 
 // e.g. "Wednesday, February 4, 2026 at 14:34"
 export const formatDateTimeIntl = (date: Date | string | number): string =>
