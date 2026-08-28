@@ -21,10 +21,7 @@ import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeader
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { IconAccountConvert, IconAccountRemove, IconInfo, IconPlus } from '../../icons'
-import {
-  reactTableNaturalSort,
-  reactTableNaturalSortReactNodesSecondChild,
-} from '../../generic/Table/reactTableNaturalSort'
+import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
   GenericStickyTable,
@@ -684,7 +681,9 @@ function UsersTableSection({
       {
         Header: nameHeaderText,
         accessor: 'name',
-        sortType: reactTableNaturalSortReactNodesSecondChild,
+        // The cell renders an icon alongside the name, so sort on the plain name carried
+        // beside it rather than trying to dig the text back out of the node.
+        sortType: (rowA, rowB) => reactTableNaturalSort(rowA, rowB, 'displayName'),
       },
       {
         Header: emailHeaderText,
@@ -825,6 +824,7 @@ function UsersTableSection({
 
       return {
         projectProfileId,
+        displayName,
         name: (
           <NameCellStyle>
             <UserIcon
