@@ -4,17 +4,7 @@ import PropTypes from 'prop-types'
 import { Select } from '../../generic/form'
 import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import { hasNonEmptyValue } from '../../../library/hasNonEmptyValue'
-
-const sanitizeNumericDecimalInput = (value) => {
-  const digitsAndDotOnly = String(value ?? '').replace(/[^\d.]/g, '')
-  const [integerPart = '', ...decimalParts] = digitsAndDotOnly.split('.')
-  const decimalPart = decimalParts.join('').slice(0, 1)
-  const sanitizedValue = digitsAndDotOnly.includes('.')
-    ? `${integerPart}.${decimalPart}`
-    : integerPart
-
-  return Number(sanitizedValue)
-}
+import { sanitizeToOneDecimalPlace } from '../../../library/numbers/sanitizeToOneDecimalPlace'
 
 const ObservationSizeSelect = ({
   onValueEntered,
@@ -32,20 +22,23 @@ const ObservationSizeSelect = ({
   const optionSelected = isValue50OrMore ? 50 : value
 
   const [show50PlusInput, setShow50PlusInput] = useState(isValue50OrMore)
+  // Kept as the sanitized string (not a Number) so the field can display an
+  // in-progress value like "52." while typing, without React's controlled
+  // value collapsing it back to "52" on every keystroke.
   const [plus50Value, setPlus50Value] = useState(
-    isValue50OrMore ? sanitizeNumericDecimalInput(value) : 50,
+    isValue50OrMore ? sanitizeToOneDecimalPlace(value) : '50',
   )
 
   useEffect(() => {
     if (!hasNonEmptyValue(value)) {
-      setPlus50Value(50)
+      setPlus50Value('50')
       setShow50PlusInput(false)
       return
     }
 
     if (isValue50OrMore) {
       setShow50PlusInput(true)
-      setPlus50Value(sanitizeNumericDecimalInput(value))
+      setPlus50Value(sanitizeToOneDecimalPlace(value))
     } else {
       setShow50PlusInput(false)
     }
@@ -54,25 +47,27 @@ const ObservationSizeSelect = ({
   const handleSelectOnChange = (event) => {
     const selectedValue = event.target.value
     const isSelectedValue50 = selectedValue === '50'
-    const valueToSubmit = isSelectedValue50 ? plus50Value : selectedValue
+    const valueToSubmit = isSelectedValue50 ? Number(plus50Value) : selectedValue
 
     setShow50PlusInput(isSelectedValue50)
     onValueEntered(valueToSubmit)
   }
 
   const handlePlus50OnChange = (event) => {
-    const sanitizedValue = sanitizeNumericDecimalInput(event.target.value)
-    setPlus50Value(sanitizedValue)
+    setPlus50Value(sanitizeToOneDecimalPlace(event.target.value))
   }
 
   const handlePlus50OnBlur = (event) => {
-    const sanitizedValue = sanitizeNumericDecimalInput(event.target.value)
-    const isValidPlus50Value = sanitizedValue >= 50
+    const sanitizedValue = sanitizeToOneDecimalPlace(event.target.value)
+    const numericValue = Number(sanitizedValue)
+    const isValidPlus50Value = numericValue >= 50
 
     if (isValidPlus50Value) {
-      setPlus50Value(sanitizedValue)
+      // Recommit through the parsed number so a trailing/lone "." (e.g. "52.")
+      // doesn't stay stuck in the display once the field is no longer being edited.
+      setPlus50Value(String(numericValue))
     }
-    onValueEntered(isValidPlus50Value ? sanitizedValue : '')
+    onValueEntered(isValidPlus50Value ? numericValue : '')
   }
 
   return (
@@ -97,13 +92,13 @@ const ObservationSizeSelect = ({
       </Select>
       {show50PlusInput && (
         <InputNumberNoScrollWithUnit
-          value={Number.isNaN(plus50Value) ? '' : plus50Value}
+          value={plus50Value}
           onChange={handlePlus50OnChange}
           onBlur={handlePlus50OnBlur}
-          type="number"
-          min="50"
+          type="text"
+          inputMode="decimal"
+          $textAlign="right"
           unit="cm"
-          step="0.1"
           aria-labelledby={labelledBy}
           data-testid={plusInputTestId}
           disabled={disabled}
