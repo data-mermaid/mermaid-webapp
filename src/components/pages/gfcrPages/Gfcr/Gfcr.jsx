@@ -116,8 +116,11 @@ const Gfcr = () => {
       },
       {
         Header: reportingDateHeaderText,
+        // Sorts on the raw YYYY-MM-DD value rather than the localized label, so the order stays
+        // chronological instead of alphabetical by month name.
         accessor: 'report_date',
         sortType: reactTableNaturalSort,
+        Cell: ({ row }) => row.original.report_date_label,
       },
     ],
     [titleHeaderText, typeHeaderText, reportingDateHeaderText],
@@ -133,10 +136,13 @@ const Gfcr = () => {
         ) : (
           <span>{title || untitledText}</span>
         ),
-        indicator_set_type: (
-          <span>{indicator_set_type === 'report' ? reportText : targetText}</span>
-        ),
-        report_date: <span>{formatDateOnlyIntl(report_date)}</span>,
+        // Plain text rather than a React node, because the Type and Reporting date columns sort
+        // with reactTableNaturalSort, which compares the row value itself.
+        indicator_set_type: indicator_set_type === 'report' ? reportText : targetText,
+        report_date,
+        // The label the date column renders, kept alongside the raw value so the filter can match
+        // what the user actually sees ("February 10, 2024") instead of "2024-02-10"
+        report_date_label: formatDateOnlyIntl(report_date),
       }
     })
   }, [gfcrIndicatorSets, isAdminUser, currentProjectPath, untitledText, reportText, targetText])
@@ -159,7 +165,8 @@ const Gfcr = () => {
   })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = ['values.title.props.children', 'values.report_date']
+    // report_date_label has no column of its own, so it is read from the row rather than its values
+    const keys = ['values.title.props.children', 'original.report_date_label']
 
     const queryTerms = splitSearchQueryStrings(query)
 
