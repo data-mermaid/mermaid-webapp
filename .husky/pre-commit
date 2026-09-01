@@ -1,1 +1,10 @@
-yarn prettier . --write
+# Format only the files staged for this commit, then re-stage them.
+# Formatting the whole repo sweeps unrelated files into the working tree.
+#
+# `yarn exec prettier`, not `yarn prettier`: the latter resolves to the "prettier"
+# script in package.json, which prepends `--write ./src` and formats all of src.
+if [ -n "$(git diff --cached --name-only --diff-filter=ACMR)" ]; then
+  git diff --cached --name-only --diff-filter=ACMR -z |
+    xargs -0 yarn exec prettier --ignore-unknown --write
+  git diff --cached --name-only --diff-filter=ACMR -z | xargs -0 git add
+fi
