@@ -117,6 +117,21 @@ describe('Gfcr indicator sets table', () => {
     expect(getBodyRowTitles(table)).toEqual([])
   })
 
+  // The M2075 card lists 2024-02-10 as a format to try, so this pins what it does rather than
+  // leaving it to be rediscovered. splitSearchQueryStrings does not treat "-" as a word character,
+  // so the query splits into the terms 2024, -, 02 and 10, which are matched with OR. "02" is a
+  // substring of "2025" and "2023", so every row matches. Supported input is the format the column
+  // displays; making YYYY-MM-DD narrow properly would mean changing the shared query splitter.
+  test('does not narrow the list for a YYYY-MM-DD query, which is not a supported format', async () => {
+    const { user } = renderGfcrPage()
+
+    const table = await waitForTable()
+
+    await user.type(getFilterInput(), '2024-02-10')
+
+    expect(getBodyRowTitles(table)).toEqual(['Alpha set', 'Bravo set', 'Charlie set'])
+  })
+
   test('sorts the reporting date column chronologically, not alphabetically by month name', async () => {
     const { user } = renderGfcrPage()
 
