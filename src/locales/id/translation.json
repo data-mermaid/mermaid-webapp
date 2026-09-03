@@ -594,7 +594,7 @@
     "merge_failed": "Gagal menemukan dan mengganti rezim manajemen.",
     "missing_mr_name": "(Nama manajemen tidak ditemukan)",
     "name_info": "Nama KKL, OECM, atau kawasan yang dikelola lainnya yang relevan. Dapat berupa nama resmi yang ditetapkan oleh pemerintah atau sumber standar seperti <helperTextLink>protectedseas.net</helperTextLink>; sebagai alternatif, label lokal deskriptif seperti 'Penutupan musiman Titik Timur Laut' dapat digunakan.",
-    "new": "Rezim manajemen baru",
+    "new": "Manajemen baru",
     "new_mr": "Manajemen baru",
     "no_data_info": "Halaman ini menampilkan rezim manajemen unit sampel yang telah dikirim berdasarkan metode dan situs.",
     "no_management_regimes": "Proyek ini tidak memiliki rezim manajemen.",
@@ -1098,7 +1098,7 @@
   "type": "Jenis",
   "use_interval_size_as_start": "Gunakan Ukuran Interval sebagai Awal Interval",
   "users": {
-    "add_user_email": "Masukkan alamat email pengguna yang akan ditambahkan.",
+    "add_user_email": "Masukkan alamat email pengguna yang akan ditambahkan",
     "delete_unsynced_sample_units": "Menghapus unit sampel yang tidak disinkronkan",
     "delete_unsynced_warning": "Jika <strong>{{userName}}</strong> memiliki unit sampel offline yang belum disinkronkan, unit sampel akan <strong>dihapus</strong> ketika kembali online.",
     "introduction": "MERMAID memberikan Anda kemampuan untuk mengontrol siapa yang dapat melihat dan mengakses data Anda.",
