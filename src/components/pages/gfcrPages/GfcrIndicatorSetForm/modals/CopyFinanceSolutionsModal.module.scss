@@ -3,3 +3,9 @@
 .infoLine {
   margin: 0 0 theme.$spacing-medium 0;
 }
+
+// A blocked checkbox is aria-disabled rather than disabled so it stays focusable and can carry a
+// tooltip, which means the browser's native greying no longer applies.
+.blockedCheckbox {
+  opacity: 0.5;
+}

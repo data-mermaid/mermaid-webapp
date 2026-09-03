@@ -61,6 +61,7 @@ const GfcrGenericTable = ({
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={column.canSort}
                         className={ThClassName}
                       >
                         <span>{column.render('Header')}</span>

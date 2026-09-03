@@ -1,0 +1,53 @@
+name: Guard English Translation Source
+
+# Lokalise owns the English wording of tokens that already exist: the weekly
+# pull overwrites src/locales/en/translation.json with its export, and the push
+# never sends existing values back up (`replace_modified: false`). Rewording a
+# token here would therefore be reverted rather than shipped, so catch it in the
+# PR instead of letting it silently disappear a week later.
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+    branches:
+      - develop
+    paths:
+      - 'src/locales/en/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: i18n-source-guard-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  check-en-source-edits:
+    # The Lokalise pull PR is how English rewording is *meant* to arrive, so it
+    # is the one exemption. There is deliberately no bypass: a reworded token
+    # cannot be pushed to Lokalise, so merging one past this check would just
+    # queue up the silent revert the check exists to prevent.
+    if: >-
+      github.event.pull_request.draft == false
+      && github.head_ref != 'chore/lokalise-translations'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          fetch-depth: 0 # need the merge base to diff against
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/setup-node@v6.2.0
+        with:
+          node-version-file: '.nvmrc'
+
+      # No dependencies needed: the script only uses node builtins and git.
+      - name: Check for reworded English tokens
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch --no-tags origin "$BASE_REF"
+          node scripts/check-en-source-edits.mjs "$(git merge-base FETCH_HEAD HEAD)"
