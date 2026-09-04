@@ -14,6 +14,7 @@ import {
   CopyModalPaginationWrapper,
 } from '../../../../generic/Table/table'
 import { ButtonPrimary, ButtonSecondary } from '../../../../generic/buttons'
+import { MuiTooltip } from '../../../../generic/MuiTooltip'
 import { IconCopy } from '../../../../icons'
 import { getTableColumnHeaderProps } from '../../../../../library/getTableColumnHeaderProps'
 import { reactTableNaturalSort } from '../../../../generic/Table/reactTableNaturalSort'
@@ -27,8 +28,12 @@ import { useCurrentUser } from '../../../../../App/CurrentUserContext'
 import { useCurrentProject } from '../../../../../App/CurrentProjectContext'
 import { useDatabaseSwitchboardInstance } from '../../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
-import IconCheckLabel from '../subPages/IconCheckLabel'
+import { formatDateOnlyIntl } from '../../../../../library/formatDateTime'
 import { stripId } from './copyHelpers'
+import {
+  getFinanceSolutionDuplicateKey,
+  getFinanceSolutionDuplicateKeys,
+} from './financeSolutionDuplicates'
 import {
   Choices,
   FinanceSolution,
@@ -50,16 +55,30 @@ const IndeterminateCheckbox = forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & { indeterminate?: boolean }
 >(({ indeterminate, ...rest }, ref) => {
-  const defaultRef = useRef<HTMLInputElement>(null)
-  const resolvedRef = (ref as React.RefObject<HTMLInputElement>) || defaultRef
+  const innerRef = useRef<HTMLInputElement | null>(null)
+
+  // A forwarded ref can be a callback as well as an object, and MUI's Tooltip passes a callback.
+  // Keeping our own ref for the indeterminate property means either kind works.
+  const setRefs = useCallback(
+    (node: HTMLInputElement | null) => {
+      innerRef.current = node
+
+      if (typeof ref === 'function') {
+        ref(node)
+      } else if (ref) {
+        ;(ref as React.MutableRefObject<HTMLInputElement | null>).current = node
+      }
+    },
+    [ref],
+  )
 
   useEffect(() => {
-    if (resolvedRef.current) {
-      resolvedRef.current.indeterminate = !!indeterminate
+    if (innerRef.current) {
+      innerRef.current.indeterminate = !!indeterminate
     }
-  }, [resolvedRef, indeterminate])
+  }, [indeterminate])
 
-  return <input type="checkbox" ref={resolvedRef} {...rest} />
+  return <input type="checkbox" ref={setRefs} {...rest} />
 })
 
 IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
@@ -82,17 +101,23 @@ const CopyFinanceSolutionsModal = ({
 
   const indicatorSetSaveSuccessText = t('gfcr.success.indicator_set_save')
   const indicatorSetSaveFailedText = t('gfcr.errors.indicator_set_save_failed')
+  const copySkippedDuplicatesText = t('gfcr.forms.finance_solutions.copy_skipped_duplicates')
   const indicatorSetHeaderText = t('gfcr.forms.finance_solutions.indicator_set')
+  const indicatorSetTypeHeaderText = t('gfcr.indicator_set_type')
+  const reportingDateHeaderText = t('gfcr.reporting_date')
+  const reportText = t('gfcr.report')
+  const targetText = t('gfcr.target')
   const nameHeaderText = t('gfcr.forms.finance_solutions.business_finance_solution_name')
   const fsTypeHeaderText = t('gfcr.forms.finance_solutions.fs_type')
-  const sectorHeaderText = t('gfcr.forms.finance_solutions.sector')
-  const usedAnIncubatorHeaderText = t('gfcr.forms.finance_solutions.used_an_incubator')
-  const gender2xCriteriaHeaderText = t('gfcr.forms.finance_solutions.gender_program_criteria')
-  const localEnterpriseHeaderText = t('gfcr.forms.finance_solutions.local_enterprise')
-  const sustainableFinanceMechanismsHeaderText = t(
-    'gfcr.forms.finance_solutions.sustainable_finance_mechanisms',
+  const alreadyAddedText = t('gfcr.forms.finance_solutions.copy_already_added')
+  const duplicateOfSelectionText = t('gfcr.forms.finance_solutions.copy_duplicate_of_selection')
+
+  // Keys for what the current indicator set already holds, so rows that would duplicate one of
+  // them can be blocked. See financeSolutionDuplicates for what counts as the same solution.
+  const existingDuplicateKeys = useMemo(
+    () => getFinanceSolutionDuplicateKeys(indicatorSet.finance_solutions),
+    [indicatorSet.finance_solutions],
   )
-  const noIncubatorText = t('gfcr.forms.finance_solutions.no_incubator')
 
   const copyableEntries = useMemo(() => {
     return gfcrIndicatorSets
@@ -100,6 +125,8 @@ const CopyFinanceSolutionsModal = ({
       .flatMap((set) =>
         (set.finance_solutions ?? []).map((financeSolution) => ({
           indicatorSetTitle: set.title,
+          indicatorSetType: set.indicator_set_type,
+          reportDate: set.report_date,
           financeSolution,
         })),
       )
@@ -112,52 +139,87 @@ const CopyFinanceSolutionsModal = ({
         // react-table's row/column objects aren't real component props, so react/prop-types
         // false-positives on every `row.*`/`column.*` access from here to the end of the file.
         /* eslint-disable react/prop-types */
-        Cell: ({ row }) => (
-          <div>
-            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-          </div>
-        ),
+        // react-table v7 spreads the whole table instance into cell renderers, which is where
+        // state and preGlobalFilteredRowsById come from. Reading them here rather than closing
+        // over them keeps the columns memo independent of selection state.
+        Cell: ({ row, state: { selectedRowIds }, preGlobalFilteredRowsById }) => {
+          const { duplicateKey, isAlreadyInIndicatorSet } = row.original
+
+          // selectedRowIds rather than selectedFlatRows, which only holds rows passing the
+          // current global filter: a ticked row filtered out of view would otherwise stop
+          // blocking its duplicates. Resolved against the pre-filter rows for the same reason.
+          const isDuplicateOfSelection = Object.keys(selectedRowIds).some(
+            (selectedRowId) =>
+              preGlobalFilteredRowsById[selectedRowId]?.original.duplicateKey === duplicateKey,
+          )
+
+          // A selected row is never blocked, otherwise it could not be deselected. That covers
+          // rows already in the set as well: a selection made before the set gained a matching
+          // solution would otherwise be stuck ticked and uncopyable.
+          const blockedReason = row.isSelected
+            ? ''
+            : (isAlreadyInIndicatorSet && alreadyAddedText) ||
+              (isDuplicateOfSelection && duplicateOfSelectionText) ||
+              ''
+
+          // aria-disabled rather than disabled, because browsers drop a disabled control from
+          // the tab order and suppress its tooltip, leaving no way to say why it is blocked. It
+          // only exposes the state though, so the toggle has to be suppressed by hand.
+          // react-table's title is dropped so it can't override the description MuiTooltip sets,
+          // and its style carries cursor: pointer, so merge into that rather than replacing it.
+          const {
+            style: toggleStyle,
+            title: _toggleTitle,
+            ...toggleProps
+          } = row.getToggleRowSelectedProps()
+          const isBlocked = !!blockedReason
+
+          return (
+            <MuiTooltip title={blockedReason} describeChild disableInteractive>
+              <IndeterminateCheckbox
+                {...toggleProps}
+                aria-disabled={isBlocked}
+                // react-table toggles selection from onChange, so dropping it here is what
+                // actually blocks the row, for the space key as well as the mouse. Calling
+                // preventDefault on the click instead does not stop React dispatching onChange,
+                // and leaves the box out of step with the checked prop (facebook/react#9023).
+                onChange={isBlocked ? () => {} : toggleProps.onChange}
+                className={isBlocked ? styles.blockedCheckbox : undefined}
+                style={isBlocked ? { ...toggleStyle, cursor: 'not-allowed' } : toggleStyle}
+              />
+            </MuiTooltip>
+          )
+        },
       },
       {
         Header: indicatorSetHeaderText,
         accessor: 'indicatorSetTitle',
         sortType: reactTableNaturalSort,
       },
+      {
+        Header: indicatorSetTypeHeaderText,
+        accessor: 'indicatorSetType',
+        sortType: reactTableNaturalSort,
+      },
+      {
+        Header: reportingDateHeaderText,
+        // Sorts on the raw YYYY-MM-DD value rather than the localized label, so the order
+        // stays chronological instead of alphabetical by month name.
+        accessor: 'reportDate',
+        sortType: reactTableNaturalSort,
+        Cell: ({ row }) => row.original.reportDateLabel,
+      },
       { Header: nameHeaderText, accessor: 'name', sortType: reactTableNaturalSort },
       { Header: fsTypeHeaderText, accessor: 'fs_type', sortType: reactTableNaturalSort },
-      { Header: sectorHeaderText, accessor: 'sector', sortType: reactTableNaturalSort },
-      {
-        Header: usedAnIncubatorHeaderText,
-        accessor: 'used_an_incubator',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: gender2xCriteriaHeaderText,
-        accessor: 'gender_smart',
-        sortType: reactTableNaturalSort,
-        align: 'center',
-      },
-      {
-        Header: localEnterpriseHeaderText,
-        accessor: 'local_enterprise',
-        sortType: reactTableNaturalSort,
-        align: 'center',
-      },
-      {
-        Header: sustainableFinanceMechanismsHeaderText,
-        accessor: 'sustainable_finance_mechanisms',
-        sortType: reactTableNaturalSort,
-      },
     ],
     [
       indicatorSetHeaderText,
+      indicatorSetTypeHeaderText,
+      reportingDateHeaderText,
       nameHeaderText,
       fsTypeHeaderText,
-      sectorHeaderText,
-      usedAnIncubatorHeaderText,
-      gender2xCriteriaHeaderText,
-      localEnterpriseHeaderText,
-      sustainableFinanceMechanismsHeaderText,
+      alreadyAddedText,
+      duplicateOfSelectionText,
     ],
   )
 
@@ -166,50 +228,33 @@ const CopyFinanceSolutionsModal = ({
       return []
     }
 
-    return copyableEntries.map(({ indicatorSetTitle, financeSolution }) => {
-      const {
-        id,
-        name,
-        fs_type,
-        sector,
-        used_an_incubator,
-        gender_smart,
-        local_enterprise,
-        sustainable_finance_mechanisms,
-      } = financeSolution
+    return copyableEntries.map(
+      ({ indicatorSetTitle, indicatorSetType, reportDate, financeSolution }) => {
+        const { id, name, fs_type } = financeSolution
 
-      const fsTypeName = choices.financesolutiontypes?.data?.find(
-        (fsTypeChoice) => fsTypeChoice.id === fs_type,
-      )?.name
-      const sectorName = choices.sectors?.data?.find(
-        (sectorChoice) => sectorChoice.id === sector,
-      )?.name
-      const incubatorName = choices.incubatortypes?.data?.find(
-        (incubatorTypeChoice) => incubatorTypeChoice.id === used_an_incubator,
-      )?.name
-      const sustainableFinanceMechanismNames = sustainable_finance_mechanisms
-        .map(
-          (mechanism) =>
-            choices.sustainablefinancemechanisms?.data?.find(
-              // eslint-disable-next-line max-nested-callbacks
-              (sfmChoice) => sfmChoice.id === mechanism,
-            )?.name,
-        )
-        .join(', ')
+        const fsTypeName = choices.financesolutiontypes?.data?.find(
+          (fsTypeChoice) => fsTypeChoice.id === fs_type,
+        )?.name
 
-      return {
-        id,
-        indicatorSetTitle,
-        name,
-        fs_type: fsTypeName,
-        sector: sectorName,
-        used_an_incubator: incubatorName || noIncubatorText,
-        gender_smart: <IconCheckLabel isCheck={!!gender_smart} />,
-        local_enterprise: <IconCheckLabel isCheck={!!local_enterprise} />,
-        sustainable_finance_mechanisms: sustainableFinanceMechanismNames,
-      }
-    })
-  }, [choices, copyableEntries, noIncubatorText])
+        // Keyed off the source record rather than the row, whose fs_type holds the display name
+        const duplicateKey = getFinanceSolutionDuplicateKey(financeSolution)
+
+        return {
+          id,
+          duplicateKey,
+          isAlreadyInIndicatorSet: existingDuplicateKeys.has(duplicateKey),
+          indicatorSetTitle,
+          indicatorSetType: indicatorSetType === 'report' ? reportText : targetText,
+          reportDate,
+          // The label the date column renders, kept alongside the raw value so the filter can
+          // match what the user actually sees ("February 2024") instead of "2024-02-10"
+          reportDateLabel: formatDateOnlyIntl(reportDate),
+          name,
+          fs_type: fsTypeName,
+        }
+      },
+    )
+  }, [choices, copyableEntries, existingDuplicateKeys, reportText, targetText])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -224,7 +269,8 @@ const CopyFinanceSolutionsModal = ({
   })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = ['values.indicatorSetTitle', 'values.name']
+    // reportDateLabel has no column of its own, so it is read from the row rather than its values
+    const keys = ['values.indicatorSetTitle', 'original.reportDateLabel', 'values.name']
 
     const queryTerms = splitSearchQueryStrings(query)
     const filteredRows =
@@ -246,7 +292,7 @@ const CopyFinanceSolutionsModal = ({
     prepareRow,
     previousPage,
     selectedFlatRows,
-    state: { pageIndex, sortBy, globalFilter },
+    state: { pageIndex, sortBy, globalFilter, selectedRowIds },
     toggleAllRowsSelected,
     setGlobalFilter,
   } = useTable(
@@ -273,6 +319,14 @@ const CopyFinanceSolutionsModal = ({
     setIsViewSelectedOnly(!isViewSelectedOnly)
   }
 
+  // The modal stays mounted while closed, so its selection would otherwise survive a cancel and
+  // come back on the next open, by which point the indicator set may already hold a match.
+  const handleDismiss = () => {
+    toggleAllRowsSelected(false)
+    setIsViewSelectedOnly(false)
+    onDismiss()
+  }
+
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const _setSortByPrefs = useEffect(() => {
@@ -292,16 +346,33 @@ const CopyFinanceSolutionsModal = ({
   const handleCopySelectedFinanceSolutions = async () => {
     setIsSaving(true)
 
-    const selectedFinanceSolutions = selectedFlatRows
+    // selectedRowIds rather than selectedFlatRows, which only holds rows passing the current
+    // global filter and would silently drop selections the user has filtered out of view.
+    const selectedFinanceSolutions = Object.keys(selectedRowIds)
       .map(
-        (row) =>
-          copyableEntries.find((entry) => entry.financeSolution.id === row.original.id)
+        (selectedRowId) =>
+          copyableEntries.find((entry) => entry.financeSolution.id === selectedRowId)
             ?.financeSolution,
       )
       .filter((financeSolution): financeSolution is FinanceSolution => !!financeSolution)
 
     try {
-      const newFinanceSolutions = selectedFinanceSolutions.map(stripId)
+      // The table blocks duplicate rows from being selected, but the guarantee belongs on the
+      // save path too, in case the indicator set changed underneath a stale selection.
+      const claimedDuplicateKeys = new Set(existingDuplicateKeys)
+      const newFinanceSolutions = selectedFinanceSolutions
+        .filter((financeSolution) => {
+          const duplicateKey = getFinanceSolutionDuplicateKey(financeSolution)
+
+          if (claimedDuplicateKeys.has(duplicateKey)) {
+            return false
+          }
+
+          claimedDuplicateKeys.add(duplicateKey)
+
+          return true
+        })
+        .map(stripId)
 
       const updatedIndicatorSet = {
         ...indicatorSet,
@@ -315,9 +386,15 @@ const CopyFinanceSolutionsModal = ({
 
       setIndicatorSet(response)
       toast.success(...getToastArguments(indicatorSetSaveSuccessText))
-      toggleAllRowsSelected(false)
+
+      // Saying nothing here would report a clean copy while quietly discarding part of the
+      // selection. Only reachable if the blocking above lets a duplicate through.
+      if (newFinanceSolutions.length < selectedFinanceSolutions.length) {
+        toast.warning(...getToastArguments(copySkippedDuplicatesText))
+      }
+
       setIsSaving(false)
-      onDismiss()
+      handleDismiss()
     } catch (error) {
       setIsSaving(false)
       toast.error(...getToastArguments(indicatorSetSaveFailedText))
@@ -358,6 +435,7 @@ const CopyFinanceSolutionsModal = ({
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={column.canSort}
                       >
                         {column.render('Header')}
                       </Th>
@@ -409,7 +487,7 @@ const CopyFinanceSolutionsModal = ({
       <CopyModalToolbarWrapper>
         <FilterSearchToolbar
           id="copy-finance-solutions-filter"
-          name={t('filters.by_indicator_set_or_solution_name')}
+          name={t('filters.by_indicator_set_date_or_solution_name')}
           globalSearchText={globalFilter}
           handleGlobalFilterChange={handleGlobalFilterChange}
         />
@@ -428,9 +506,9 @@ const CopyFinanceSolutionsModal = ({
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={onDismiss}>{t('buttons.cancel')}</ButtonSecondary>
+      <ButtonSecondary onClick={handleDismiss}>{t('buttons.cancel')}</ButtonSecondary>
       <ButtonPrimary
-        disabled={!selectedFlatRows.length || isSaving}
+        disabled={!Object.keys(selectedRowIds).length || isSaving}
         onClick={handleCopySelectedFinanceSolutions}
       >
         <IconCopy />
@@ -442,7 +520,7 @@ const CopyFinanceSolutionsModal = ({
   return (
     <Modal
       isOpen={isOpen}
-      onDismiss={onDismiss}
+      onDismiss={handleDismiss}
       maxHeight="70vh"
       title={t('gfcr.forms.finance_solutions.copy')}
       mainContent={table}

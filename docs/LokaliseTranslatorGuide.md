@@ -43,14 +43,25 @@ If the diff looks wrong, fix the translation in Lokalise and re-run the pull (it
 
 When developers add new UI text, those tokens appear in Lokalise as English source, get machine-translated (Google Translate / DeepL), and are marked **unverified**. Review them for accuracy and mark them **Reviewed** to release.
 
-When developers **change** existing English text, the affected tokens' review statuses are cleared - re-review the updated translations and mark them **Reviewed** again.
+Developers no longer change existing English text (see below) - if wording needs to change, they either ask for it to be done in Lokalise or add a **new** token, which arrives like any other new token.
 
 ## English source - hands off (mostly)
 
 - For **new** keys, English in the code is the source of truth - developers add them to `src/locales/en/translation.json` and the push sends them up to Lokalise.
 - For **existing** keys, **Lokalise is the source of truth for the English text** - the pull overwrites `en/translation.json` with Lokalise's export, so English normalization done in Lokalise flows back into the code.
 
-In Lokalise, only **text normalization** (capitalization, punctuation, small wording tidy-ups) is acceptable for English strings. Larger verbiage changes should go through a ticket so they land in the code first - editing English freely in Lokalise could cause merge conflicts.
+**Your English edits in Lokalise are safe.** The push only ever *adds* new tokens; it does not write existing English values back over yours. Edit English punctuation and wording in Lokalise and it stays put until the next pull carries it into the code.
+
+> Until August 2026 this was not true: the push overwrote every English value on each merge to `develop`, so English edits made in Lokalise were silently reset before the weekly pull could collect them. That is fixed (`replace_modified: false`).
+
+Two things still have to come from the code rather than from Lokalise, because they are part of how the app renders the string, not a wording choice:
+
+- **Placeholders** like `{{count}}` or `{{userName}}`.
+- **Inline markup** like `<br />`, `<strong>`, `<helperTextLink>` or `$t(...)`.
+
+Leave those exactly as they are. If one looks wrong, raise it with a developer rather than editing or deleting it - a placeholder that no longer matches the code renders as broken text in the app. Developers handle these by adding a **new** token, which will appear in Lokalise for you to translate.
+
+Everything else (capitalization, punctuation, wording tidy-ups) is yours to change directly in Lokalise.
 
 ## Previewing Indonesian (QA)
 

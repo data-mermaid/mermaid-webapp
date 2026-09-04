@@ -11,7 +11,9 @@ import ResolveDuplicateSiteButtonAndModal from '../../ResolveDuplicateSiteButton
 import ResolveDuplicateMRButtonAndModal from '../../ResolveDuplicateMRButtonAndModal/ResolveDuplicateMRButtonAndModal'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../InputIgnoreValidationWarningCheckboxWithLabel'
 
-const ValidationWrapper = styled('div')`
+const ValidationWrapper = styled('div').attrs({
+  className: 'validationWrapper', // Used to override styles in GFCR forms
+})`
   padding-left: ${theme.spacing.small};
   display: flex;
   align-items: flex-start;
