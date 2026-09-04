@@ -169,7 +169,10 @@ const GfcrNumberInput = ({
       id={id}
       name={name}
       aria-labelledby={ariaLabelledby}
-      aria-describedby={ariaDescribedby}
+      // Mantine's Input spreads its own aria attributes after ...others, so an
+      // aria-describedby passed as a normal prop is overwritten with undefined.
+      // The attributes prop targets the inner input directly and survives.
+      attributes={{ input: { 'aria-describedby': ariaDescribedby } }}
       value={displayValue}
       onChange={handleChange}
       onBlur={handleBlur}

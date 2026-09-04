@@ -172,7 +172,7 @@ const F4Form = ({
             </>
           }
           unit="%"
-          maxNumberOfDecimals={2}
+          maxNumberOfDecimals={1}
           helperText={<GfcrHelperLinks translationKey="gfcr.forms.f4_1_helper" />}
           displayHelp={displayHelp}
           handleInputFocus={handleInputFocus}
@@ -206,7 +206,7 @@ const F4Form = ({
             </>
           }
           unit="kg/ha"
-          maxNumberOfDecimals={2}
+          maxNumberOfDecimals={1}
           helperText={<GfcrHelperLinks translationKey="gfcr.forms.f4_3_helper" />}
           displayHelp={displayHelp}
           handleInputFocus={handleInputFocus}
