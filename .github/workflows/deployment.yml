@@ -9,14 +9,7 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+' # eg: v1.1.1
 
 permissions:
-  actions: write
   contents: read
-  id-token: write
-
-env:
-  CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-  CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
-  GITHUB_TOKEN: ${{ github.token }}
 
 jobs:
   deps-cache:
@@ -37,6 +30,9 @@ jobs:
     concurrency:
       group: app-deployment-${{ github.ref }}
     needs: [call-lint, call-test]
+    permissions:
+      contents: read
+      id-token: write
     uses: ./.github/workflows/_cdk.yml
     secrets: inherit
     with:
