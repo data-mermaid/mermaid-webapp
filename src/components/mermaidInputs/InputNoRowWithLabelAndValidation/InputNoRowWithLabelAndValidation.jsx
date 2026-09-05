@@ -28,6 +28,7 @@ const InputNoRowWithLabelAndValidation = ({
   validationType = undefined,
   renderItemWithinInput = undefined,
   renderItemAboveInput = undefined,
+  renderInput = undefined,
   isInputDisabled = false,
   showHelperText = false,
   testId = undefined,
@@ -51,10 +52,14 @@ const InputNoRowWithLabelAndValidation = ({
 
   const inputTestId = testId ? `${testId}-input` : undefined
 
-  const inputType = unit ? (
+  const ariaProps = {
+    'aria-labelledby': `aria-label${id}`,
+    'aria-describedby': `aria-descp${id}`,
+  }
+
+  const defaultInput = unit ? (
     <InputNumberNoScrollWithUnit
-      aria-labelledby={`aria-label${id}`}
-      aria-describedby={`aria-descp${id}`}
+      {...ariaProps}
       id={id}
       data-testid={inputTestId}
       unit={unit}
@@ -62,15 +67,10 @@ const InputNoRowWithLabelAndValidation = ({
       {...restOfProps}
     />
   ) : (
-    <Input
-      aria-labelledby={`aria-label${id}`}
-      aria-describedby={`aria-descp${id}`}
-      id={id}
-      data-testid={inputTestId}
-      {...restOfProps}
-      ref={textFieldRef}
-    />
+    <Input {...ariaProps} id={id} data-testid={inputTestId} {...restOfProps} ref={textFieldRef} />
   )
+
+  const inputType = renderInput ?? defaultInput
 
   return (
     <>
@@ -121,6 +121,7 @@ InputNoRowWithLabelAndValidation.propTypes = {
   isInputDisabled: PropTypes.bool,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  renderInput: PropTypes.node,
   renderItemAboveInput: PropTypes.node,
   renderItemWithinInput: PropTypes.node,
   resetNonObservationFieldValidations: PropTypes.func,

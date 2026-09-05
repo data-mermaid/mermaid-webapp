@@ -1,4 +1,5 @@
 import { Auth0Context } from '@auth0/auth0-react'
+import { MantineProvider } from '@mantine/core'
 import { RouterProvider, createMemoryRouter } from 'react-router'
 import { render } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components'
@@ -48,30 +49,32 @@ const AuthenticatedProviders = ({
       getAccessTokenSilently: () => Promise.resolve('fake-token'),
     }}
   >
-    <ThemeProvider theme={theme}>
-      <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
-        <CurrentUserProvider
-          value={{
-            currentUser: currentUserOverride ?? fakeCurrentUser,
-            saveUserProfile: saveUserProfileOverride,
-            refreshCurrentUser: refreshCurrentUserOverride,
-          }}
-        >
-          <CurrentProjectProvider>
-            <HttpResponseErrorHandlerProvider value={() => {}}>
-              <BellNotificationProvider
-                value={{
-                  notifications: mockMermaidData.notifications,
-                  deleteNotification: () => {},
-                }}
-              >
-                {children}
-              </BellNotificationProvider>
-            </HttpResponseErrorHandlerProvider>
-          </CurrentProjectProvider>
-        </CurrentUserProvider>
-      </SyncStatusProvider>
-    </ThemeProvider>
+    <MantineProvider>
+      <ThemeProvider theme={theme}>
+        <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
+          <CurrentUserProvider
+            value={{
+              currentUser: currentUserOverride ?? fakeCurrentUser,
+              saveUserProfile: saveUserProfileOverride,
+              refreshCurrentUser: refreshCurrentUserOverride,
+            }}
+          >
+            <CurrentProjectProvider>
+              <HttpResponseErrorHandlerProvider value={() => {}}>
+                <BellNotificationProvider
+                  value={{
+                    notifications: mockMermaidData.notifications,
+                    deleteNotification: () => {},
+                  }}
+                >
+                  {children}
+                </BellNotificationProvider>
+              </HttpResponseErrorHandlerProvider>
+            </CurrentProjectProvider>
+          </CurrentUserProvider>
+        </SyncStatusProvider>
+      </ThemeProvider>
+    </MantineProvider>
   </Auth0Context.Provider>
 )
 
@@ -83,17 +86,19 @@ const UnauthenticatedProviders = ({ children }) => (
       getAccessTokenSilently: getFakeAccessToken,
     }}
   >
-    <ThemeProvider theme={theme}>
-      <SyncStatusProvider>
-        <CurrentUserProvider value={undefined}>
-          <CurrentProjectProvider>
-            <HttpResponseErrorHandlerProvider value={() => {}}>
-              <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
-            </HttpResponseErrorHandlerProvider>
-          </CurrentProjectProvider>
-        </CurrentUserProvider>
-      </SyncStatusProvider>
-    </ThemeProvider>
+    <MantineProvider>
+      <ThemeProvider theme={theme}>
+        <SyncStatusProvider>
+          <CurrentUserProvider value={undefined}>
+            <CurrentProjectProvider>
+              <HttpResponseErrorHandlerProvider value={() => {}}>
+                <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
+              </HttpResponseErrorHandlerProvider>
+            </CurrentProjectProvider>
+          </CurrentUserProvider>
+        </SyncStatusProvider>
+      </ThemeProvider>
+    </MantineProvider>
   </Auth0Context.Provider>
 )
 

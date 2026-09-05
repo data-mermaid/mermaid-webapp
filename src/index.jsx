@@ -1,4 +1,5 @@
 import { Auth0Provider } from '@auth0/auth0-react'
+import { MantineProvider } from '@mantine/core'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
@@ -15,6 +16,7 @@ import { DexiePerUserDataInstanceProvider } from './App/dexiePerUserDataInstance
 import { ClearPersistedFormDataHackProvider } from './App/ClearDirtyFormDataHackContext'
 import '../i18n'
 
+import '@mantine/core/styles.css'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './index.css'
 
@@ -57,17 +59,19 @@ root.render(
       // Recommend researching a different approach to authentication
       cacheLocation="localstorage"
     >
-      <OnlineStatusProvider>
-        <SyncStatusProvider>
-          <DexiePerUserDataInstanceProvider>
-            <ClearPersistedFormDataHackProvider value={router}>
-              <StyledEngineProvider injectFirst>
-                <RouterProvider router={router} />
-              </StyledEngineProvider>
-            </ClearPersistedFormDataHackProvider>
-          </DexiePerUserDataInstanceProvider>
-        </SyncStatusProvider>
-      </OnlineStatusProvider>
+      <MantineProvider>
+        <OnlineStatusProvider>
+          <SyncStatusProvider>
+            <DexiePerUserDataInstanceProvider>
+              <ClearPersistedFormDataHackProvider value={router}>
+                <StyledEngineProvider injectFirst>
+                  <RouterProvider router={router} />
+                </StyledEngineProvider>
+              </ClearPersistedFormDataHackProvider>
+            </DexiePerUserDataInstanceProvider>
+          </SyncStatusProvider>
+        </OnlineStatusProvider>
+      </MantineProvider>
     </Auth0Provider>
   </React.StrictMode>,
 )
