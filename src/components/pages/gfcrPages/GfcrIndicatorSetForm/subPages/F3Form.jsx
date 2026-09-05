@@ -9,6 +9,7 @@ import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabe
 import { useTranslation } from 'react-i18next'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import GfcrDecimalInputField from '../GfcrDecimalInputField'
+import { GFCR_MAX_AREA_SQ_KM } from '../../../../../library/numbers/gfcrFieldMaximums'
 import GfcrIntegerInputField from '../GfcrIntegerInputField'
 import GfcrHelperLinks from './GfcrHelperLinks'
 
@@ -27,6 +28,7 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         }
         unit="km²"
         maxNumberOfDecimals={5}
+        maxValue={GFCR_MAX_AREA_SQ_KM}
         helperText={<GfcrHelperLinks translationKey="gfcr.forms.f3_1_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}

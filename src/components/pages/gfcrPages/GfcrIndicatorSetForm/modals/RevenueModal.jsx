@@ -12,6 +12,7 @@ import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataPropt
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
 import GfcrNumberInput from '../../../../generic/GfcrNumberInput/GfcrNumberInput'
 import { getOptions } from '../../../../../library/getOptions'
+import { GFCR_MAX_REVENUE_AMOUNT } from '../../../../../library/numbers/gfcrFieldMaximums'
 import { getRevenueInitialValues } from './revenueInitialValues'
 import { getToastArguments } from '../../../../../library/getToastArguments'
 import { Textarea } from '../../../../generic/form'
@@ -311,6 +312,7 @@ const RevenueModal = ({
                 onBlur={formik.handleBlur}
                 decimalPlaces={2}
                 min={0}
+                max={GFCR_MAX_REVENUE_AMOUNT}
                 unit="USD $"
                 alignUnitsLeft={true}
               />

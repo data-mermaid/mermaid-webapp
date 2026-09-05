@@ -13,6 +13,10 @@ import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWi
 import theme from '../../../../../theme'
 import { resetEmptyFormikFieldToInitialValue } from '../../../../../library/formik/resetEmptyFormikFieldToInitialValue'
 import GfcrDecimalInputField from '../GfcrDecimalInputField'
+import {
+  GFCR_MAX_BIOMASS_KG_PER_HA,
+  GFCR_MAX_PERCENTAGE,
+} from '../../../../../library/numbers/gfcrFieldMaximums'
 import GfcrHelperLinks from './GfcrHelperLinks'
 
 const StyledButtonPrimary = styled(ButtonPrimary)`
@@ -173,6 +177,7 @@ const F4Form = ({
           }
           unit="%"
           maxNumberOfDecimals={1}
+          maxValue={GFCR_MAX_PERCENTAGE}
           helperText={<GfcrHelperLinks translationKey="gfcr.forms.f4_1_helper" />}
           displayHelp={displayHelp}
           handleInputFocus={handleInputFocus}
@@ -190,6 +195,7 @@ const F4Form = ({
           }
           unit="%"
           maxNumberOfDecimals={1}
+          maxValue={GFCR_MAX_PERCENTAGE}
           helperText={<GfcrHelperLinks translationKey="gfcr.forms.f4_2_helper" />}
           displayHelp={displayHelp}
           handleInputFocus={handleInputFocus}
@@ -207,6 +213,7 @@ const F4Form = ({
           }
           unit="kg/ha"
           maxNumberOfDecimals={1}
+          maxValue={GFCR_MAX_BIOMASS_KG_PER_HA}
           helperText={<GfcrHelperLinks translationKey="gfcr.forms.f4_3_helper" />}
           displayHelp={displayHelp}
           handleInputFocus={handleInputFocus}

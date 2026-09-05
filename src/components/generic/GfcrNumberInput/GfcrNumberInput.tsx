@@ -99,6 +99,18 @@ function roundToDecimalPlaces(value: number, places: number): number {
   return Number(value.toFixed(places))
 }
 
+// The largest value at `places` decimal places that is still within `value`.
+// Rounding a ceiling can push it over: 999999.99999 to 2dp becomes 1000000.
+function floorToDecimalPlaces(value: number, places: number): number {
+  const rounded = Number(value.toFixed(places))
+
+  if (rounded <= value) {
+    return rounded
+  }
+
+  return Number((rounded - 10 ** -places).toFixed(places))
+}
+
 const GfcrNumberInput = ({
   id,
   name,
@@ -118,6 +130,13 @@ const GfcrNumberInput = ({
 }: GfcrNumberInputProps) => {
   const locale = getBrowserLocale()
   const { decimalSeparator, thousandSeparator } = getLocaleFormatParts(locale)
+
+  // Mantine clamps to max on blur and we then round, so a max that is not representable at
+  // this field's precision gets rounded back over the limit. Lower it so both steps agree.
+  const boundedMax =
+    max !== undefined && decimalPlaces !== undefined
+      ? floorToDecimalPlaces(max, decimalPlaces)
+      : max
 
   // Tracks intermediate typing states (e.g. "1.") that are not yet a valid number.
   // Prevents the controlled value prop from overwriting in-progress input.
@@ -152,9 +171,17 @@ const GfcrNumberInput = ({
   }
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    if (decimalPlaces !== undefined && committedValue.current !== null) {
-      const rounded = roundToDecimalPlaces(committedValue.current, decimalPlaces)
-      if (rounded !== committedValue.current) {
+    const committed = committedValue.current
+
+    // A string can reach this ref if a caller passes an unparsed API value, and toFixed
+    // would throw on it. Narrowing here keeps the rounding path safe by construction.
+    if (
+      decimalPlaces !== undefined &&
+      typeof committed === 'number' &&
+      Number.isFinite(committed)
+    ) {
+      const rounded = roundToDecimalPlaces(committed, decimalPlaces)
+      if (rounded !== committed) {
         committedValue.current = rounded
         lastExternalValue.current = rounded
         setDisplayValue(rounded)
@@ -186,7 +213,7 @@ const GfcrNumberInput = ({
       allowNegative={allowNegatives}
       disabled={disabled}
       min={min}
-      max={max}
+      max={boundedMax}
       unstyled
     />
   )

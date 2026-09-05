@@ -2,12 +2,14 @@ import React from 'react'
 import type { FormikProps } from 'formik'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import GfcrNumberInput from '../../../generic/GfcrNumberInput/GfcrNumberInput'
+import { parseGfcrNumber } from '../../../../library/numbers/parseGfcrNumber'
 
 interface GfcrDecimalInputFieldProps {
   id: string
   label: React.ReactNode
   unit?: string
   maxNumberOfDecimals?: number
+  maxValue?: number
   helperText?: React.ReactNode
   displayHelp?: boolean
   handleInputFocus?: React.FocusEventHandler<HTMLInputElement>
@@ -19,17 +21,13 @@ const GfcrDecimalInputField = ({
   label,
   unit,
   maxNumberOfDecimals,
+  maxValue,
   helperText = '',
   displayHelp = false,
   handleInputFocus = () => {},
   formik,
 }: GfcrDecimalInputFieldProps) => {
-  const rawValue = formik.values[id]
-  let numericValue: number | null = null
-  if (rawValue !== null && rawValue !== undefined && rawValue !== '') {
-    const parsed = typeof rawValue === 'number' ? rawValue : parseFloat(String(rawValue))
-    numericValue = Number.isNaN(parsed) ? null : parsed
-  }
+  const numericValue = parseGfcrNumber(formik.values[id])
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     // Every GFCR indicator field is NOT NULL with a database default of 0, so an emptied
@@ -58,6 +56,7 @@ const GfcrDecimalInputField = ({
           onFocus={handleInputFocus}
           decimalPlaces={maxNumberOfDecimals}
           min={0}
+          max={maxValue}
           unit={unit}
         />
       }

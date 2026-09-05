@@ -11,6 +11,7 @@ import { buttonGroupStates } from '../../../../../library/buttonGroupStates'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
 import GfcrNumberInput from '../../../../generic/GfcrNumberInput/GfcrNumberInput'
+import { GFCR_MAX_INVESTMENT_AMOUNT } from '../../../../../library/numbers/gfcrFieldMaximums'
 import { getInvestmentInitialValues } from './investmentInitialValues'
 import { getOptions } from '../../../../../library/getOptions'
 import { getToastArguments } from '../../../../../library/getToastArguments'
@@ -309,6 +310,7 @@ const InvestmentModal = ({
                 onBlur={formik.handleBlur}
                 decimalPlaces={2}
                 min={0}
+                max={GFCR_MAX_INVESTMENT_AMOUNT}
                 unit="USD $"
                 alignUnitsLeft={true}
               />

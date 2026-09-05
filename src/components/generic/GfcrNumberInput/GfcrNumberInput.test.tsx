@@ -124,6 +124,19 @@ describe('GfcrNumberInput', () => {
     expect(onChangeSpy).toHaveBeenLastCalledWith(10)
   })
 
+  it('does not emit a change when an untouched value is focused and blurred', () => {
+    // Regression guard: a value arriving as a string made Mantine coerce it on blur, which
+    // marked the form dirty and rewrote the stored amount without the user typing anything.
+    const onChangeSpy = vi.fn()
+    renderUnauthenticatedOffline(
+      <ControlledInput initialValue={1234.56} onChangeSpy={onChangeSpy} decimalPlaces={2} />,
+    )
+    const input = screen.getByRole('textbox')
+    fireEvent.focus(input)
+    fireEvent.blur(input)
+    expect(onChangeSpy).not.toHaveBeenCalled()
+  })
+
   it('does not render stepper controls', () => {
     renderUnauthenticatedOffline(<ControlledInput />)
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
