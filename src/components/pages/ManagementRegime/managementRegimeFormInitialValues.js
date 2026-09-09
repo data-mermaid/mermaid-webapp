@@ -1,8 +1,8 @@
-// All boolean fields default to false and all string fields default to '' to ensure
-// controlled inputs are always controlled from the first render (avoiding React's
-// "uncontrolled to controlled" warning). The compliance field intentionally defaults
-// to '' rather than a specific value so no compliance option is pre-selected.
-const getManagementRegimeInitialValues = (managementRegimeRecord) => {
+// Booleans default to false and strings to '' so React inputs stay controlled from first render.
+// Compliance is the exception: on edit, null becomes "not reported" so the user's prior blank choice persists.
+const NOT_REPORTED_COMPLIANCE_VALUE = 'not-reported'
+
+const getManagementRegimeInitialValues = (managementRegimeRecord, isNewManagementRegime) => {
   return {
     name: managementRegimeRecord?.name ?? '',
     name_secondary: managementRegimeRecord?.name_secondary ?? '',
@@ -16,9 +16,11 @@ const getManagementRegimeInitialValues = (managementRegimeRecord) => {
     size_limits: managementRegimeRecord?.size_limits ?? false,
     gear_restriction: managementRegimeRecord?.gear_restriction ?? false,
     species_restriction: managementRegimeRecord?.species_restriction ?? false,
-    compliance: managementRegimeRecord?.compliance ?? '',
+    compliance:
+      managementRegimeRecord?.compliance ??
+      (isNewManagementRegime ? '' : NOT_REPORTED_COMPLIANCE_VALUE),
     notes: managementRegimeRecord?.notes ?? '',
   }
 }
 
-export { getManagementRegimeInitialValues }
+export { getManagementRegimeInitialValues, NOT_REPORTED_COMPLIANCE_VALUE }
