@@ -7,6 +7,11 @@ on:
         description: 'GitHub environment to pull secrets from'
         required: true
         type: string
+    secrets:
+      VITE_AUTH0_CLIENT_ID:
+        required: true
+      VITE_MAPBOX_ACCESS_TOKEN:
+        required: true
 
 jobs:
   test-app:
@@ -21,12 +26,19 @@ jobs:
       VITE_MERMAID_REFERENCE_LINK: ${{ vars.VITE_MERMAID_REFERENCE_LINK }}
       VITE_MERMAID_EXPLORE_LINK: ${{ vars.VITE_MERMAID_EXPLORE_LINK }}
     steps:
-      - uses: actions/checkout@v6.0.2
-      - uses: actions/setup-node@v6.2.0
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411  # v2.19.4
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: '.nvmrc'
 
-      - uses: actions/cache@v5.0.3
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: yarn-cache
         with:
           path: node_modules
@@ -51,12 +63,19 @@ jobs:
       VITE_MERMAID_REFERENCE_LINK: ${{ vars.VITE_MERMAID_REFERENCE_LINK }}
       VITE_MERMAID_EXPLORE_LINK: ${{ vars.VITE_MERMAID_EXPLORE_LINK }}
     steps:
-      - uses: actions/checkout@v6.0.2
-      - uses: actions/setup-node@v6.2.0
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411  # v2.19.4
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: '.nvmrc'
 
-      - uses: actions/cache@v5.0.3
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: yarn-cache
         with:
           path: node_modules
@@ -66,7 +85,7 @@ jobs:
         name: Install dependencies
         run: yarn install --immutable
 
-      - uses: actions/cache@v5.0.3
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
