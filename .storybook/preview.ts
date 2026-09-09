@@ -1,8 +1,12 @@
 import React from 'react'
 import type { Preview } from '@storybook/react-vite'
-import { StyledEngineProvider } from '@mui/material'
+import { StyledEngineProvider, ThemeProvider } from '@mui/material'
+import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 import { I18nextProvider } from 'react-i18next'
 import i18n from '../i18n'
+import GlobalStyle from '../src/library/styling/globalStyles'
+import theme from '../src/theme'
+import '../src/index.css'
 
 const preview: Preview = {
   parameters: {
@@ -28,9 +32,14 @@ const preview: Preview = {
         StyledEngineProvider,
         { injectFirst: true }, // Ensures MUI styles have priority
         React.createElement(
-          I18nextProvider,
-          { i18n }, // Provides translation context to all stories
-          React.createElement(Story),
+          StyledThemeProvider,
+          { theme }, // Provides theme to styled-components (needed by GlobalStyle for SVG sizing)
+          React.createElement(
+            I18nextProvider,
+            { i18n }, // Provides translation context to all stories
+            React.createElement(GlobalStyle),
+            React.createElement(Story),
+          ),
         ),
       ),
   ],
