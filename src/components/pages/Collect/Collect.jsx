@@ -377,6 +377,7 @@ const Collect = () => {
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={column.canSort}
                         data-testid={`collecting-header-${column.id}`}
                       >
                         <span>{column.render('Header')}</span>

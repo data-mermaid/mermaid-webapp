@@ -374,6 +374,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={column.canSort}
                       >
                         {column.render('Header')}
                       </Th>

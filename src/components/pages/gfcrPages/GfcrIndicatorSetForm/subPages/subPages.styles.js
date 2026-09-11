@@ -52,6 +52,14 @@ export const StyledTableAnchor = styled('a')`
 
 export const StyledModalInputRow = styled('div')`
   margin: 1rem;
+
+  /* The modal stacks label, input and validation, unlike the InputRow grid where the validation
+     sits in a third column, so the message needs a gap of its own. The wrapper always renders,
+     so this is scoped to when it actually holds a message. */
+  .validationWrapper:not(:empty) {
+    margin-top: ${theme.spacing.small};
+    align-items: center;
+  }
 `
 
 export const StyledModalFooterWrapper = styled('div')`

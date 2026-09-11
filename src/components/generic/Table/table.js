@@ -49,54 +49,34 @@ export const Table = styled('table')`
   */
   height: 1px;
 `
-const getHeaderSortAfter = (
-  isMultiSortColumn = false,
-  sortedIndex = -1,
-  isSortedDescending = false,
-) => {
-  if (sortedIndex < 0) {
-    return null
+export const getSortIndicatorContent = ({
+  $sortedIndex = -1,
+  $isSortedDescending = false,
+  $isMultiSortColumn = false,
+  $isSortingEnabled = false,
+} = {}) => {
+  if ($sortedIndex < 0) {
+    return $isSortingEnabled ? ' \u25b2' : ''
   }
 
-  let content
+  const arrow = $isSortedDescending ? ' \u25bc' : ' \u25b2'
 
-  if (isSortedDescending) {
-    content = ' \u25bc'
-  }
-
-  if (!isSortedDescending) {
-    content = ' \u25b2'
-  }
-
-  if (isMultiSortColumn) {
-    content = `${content} ${sortedIndex + 1}`
-  }
-
-  return `
-    &::after {
-      content: '${content}';
-      color: ${theme.color.black};
-      font-size: small;
-    }
-  `
+  return $isMultiSortColumn ? `${arrow} ${$sortedIndex + 1}` : arrow
 }
+
 export const thStyles = (props) => css`
   text-align: ${props.$align || 'left'};
   padding: ${theme.spacing.medium};
   background: ${theme.color.white};
   vertical-align: top;
+  font-weight: 700;
 
   &::after {
-    content: '${props.$isSortingEnabled ? ' \u25b2' : ''}';
+    content: '${getSortIndicatorContent(props)}';
+    color: ${props.$sortedIndex >= 0 ? theme.color.black : theme.color.secondaryDisabledColor};
     font-size: small;
     white-space: nowrap;
   }
-
-  > span {
-    ${getHeaderSortAfter(props.$isMultiSortColumn, props.$sortedIndex, props.$isSortedDescending)}
-  }
-
-  font-weight: 700;
 `
 
 export const Th = styled.th((props) => thStyles(props))

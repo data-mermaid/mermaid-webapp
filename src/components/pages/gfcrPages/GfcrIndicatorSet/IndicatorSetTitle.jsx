@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { MuiTooltip } from '../../../generic/MuiTooltip'
 import useDocumentTitle from '../../../../library/useDocumentTitle'
 import { H2 } from '../../../generic/text'
+import { getDateOnlyYear } from '../../../../library/formatDateTime'
 
 const TooltipH2 = styled('h2')`
   white-space: nowrap;
@@ -33,7 +34,7 @@ const TitleContainer = styled('div')`
 
 const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingDate, isNew = false }) => {
   const { t } = useTranslation()
-  const reportingYear = reportingDate?.getFullYear()
+  const reportingYear = getDateOnlyYear(reportingDate)
   const indicatorSetTitleText = t('gfcr.indicator_set')
 
   useDocumentTitle(
@@ -64,7 +65,7 @@ const IndicatorSetTitle = ({ indicatorSetTitle, type, reportingDate, isNew = fal
 IndicatorSetTitle.propTypes = {
   indicatorSetTitle: PropTypes.string,
   type: PropTypes.string,
-  reportingDate: PropTypes.instanceOf(Date),
+  reportingDate: PropTypes.string,
   isNew: PropTypes.bool,
 }
 

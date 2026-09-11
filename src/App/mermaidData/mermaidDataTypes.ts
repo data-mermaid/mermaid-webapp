@@ -454,6 +454,8 @@ export interface FinanceSolution {
 export interface IndicatorSet {
   id: string
   title: string
+  indicator_set_type: string
+  report_date: string
   finance_solutions: FinanceSolution[]
 }
 

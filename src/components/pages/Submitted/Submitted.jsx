@@ -325,6 +325,7 @@ const Submitted = () => {
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={column.canSort}
                       >
                         <span>{column.render('Header')}</span>
                       </Th>

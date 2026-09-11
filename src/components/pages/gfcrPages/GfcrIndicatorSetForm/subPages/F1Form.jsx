@@ -7,6 +7,7 @@ import { StyledGfcrInputWrapper } from './subPages.styles'
 import { useTranslation } from 'react-i18next'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import GfcrDecimalInputField from '../GfcrDecimalInputField'
+import { GFCR_MAX_AREA_SQ_KM } from '../../../../../library/numbers/gfcrFieldMaximums'
 import GfcrHelperLinks from './GfcrHelperLinks'
 
 const F1Form = ({ formik, displayHelp, handleInputFocus }) => {
@@ -24,6 +25,7 @@ const F1Form = ({ formik, displayHelp, handleInputFocus }) => {
         }
         unit="km²"
         maxNumberOfDecimals={2}
+        maxValue={GFCR_MAX_AREA_SQ_KM}
         helperText={<GfcrHelperLinks translationKey="gfcr.forms.f1_1_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}

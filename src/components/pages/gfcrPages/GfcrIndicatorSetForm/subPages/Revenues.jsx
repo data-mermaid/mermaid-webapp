@@ -35,6 +35,14 @@ import { useTranslation, Trans } from 'react-i18next'
 
 const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, displayHelp }) => {
   const { t } = useTranslation()
+
+  const businessFinanceSolutionHeaderText = t(
+    'gfcr.forms.finance_solutions.business_finance_solution',
+  )
+  const revenueTypeHeaderText = t('gfcr.forms.revenues.revenue_type')
+  const sustainableRevenueStreamHeaderText = t('gfcr.forms.revenues.sustainable_revenue_stream')
+  const revenueAmountHeaderText = t('gfcr.forms.revenues.revenue_amount')
+
   const { currentUser } = useCurrentUser()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [revenueBeingEdited, setRevenueBeingEdited] = useState()
@@ -53,29 +61,34 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Business / Finance Solution',
+        Header: businessFinanceSolutionHeaderText,
         accessor: 'finance_solution',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Revenue Type',
+        Header: revenueTypeHeaderText,
         accessor: 'revenue_type',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Sustainable Revenue Stream',
+        Header: sustainableRevenueStreamHeaderText,
         accessor: 'sustainable_revenue_stream',
         sortType: reactTableNaturalSort,
         align: 'center',
       },
       {
-        Header: 'Revenue Amount',
+        Header: revenueAmountHeaderText,
         accessor: 'revenue_amount',
         sortType: reactTableNaturalSort,
         align: 'right',
       },
     ],
-    [],
+    [
+      businessFinanceSolutionHeaderText,
+      revenueTypeHeaderText,
+      sustainableRevenueStreamHeaderText,
+      revenueAmountHeaderText,
+    ],
   )
 
   const handleEditRevenue = useCallback(

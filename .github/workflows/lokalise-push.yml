@@ -33,15 +33,24 @@ jobs:
         with:
           api_token: ${{ secrets.LOKALISE_API_TOKEN }}
           project_id: ${{ secrets.LOKALISE_PROJECT_ID }}
-          # Uploads the base language only (source of truth lives in code);
-          # target-language values are authored and reviewed in Lokalise.
+          # Uploads the base language only. Code owns *new* keys; Lokalise owns
+          # the English wording of existing ones, and all target-language values.
           translations_path: src/locales
           file_ext: json
           base_lang: en
           # Track the last-synced commit via a git tag so multi-commit pushes
           # (e.g. squash/merge PRs) reliably detect every changed source file.
           use_tag_tracking: true
-          # Keep i18next {{placeholders}} and custom tags (<helperTextLink>,
-          # $t(...)) literal; do not convert to Lokalise universal placeholders.
+          # convert_placeholders: keep i18next {{placeholders}} and custom tags
+          # (<helperTextLink>, $t(...)) literal; do not convert to Lokalise
+          # universal placeholders.
+          #
+          # replace_modified: the action defaults this to true, which overwrites
+          # the English text of every key that already exists in Lokalise with
+          # this repo's value, silently resetting punctuation and wording edits
+          # made by translators in the Lokalise UI. Keep it false: this push
+          # adds new keys, and nothing else. Reword existing copy in Lokalise,
+          # or add a new key. See docs/TranslationSyncWorkflow.md.
           additional_params: |
             convert_placeholders: false
+            replace_modified: false

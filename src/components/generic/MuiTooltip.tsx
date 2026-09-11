@@ -9,6 +9,13 @@ interface MuiTooltip {
   title: string
   placement?: Placement
   variant?: 'default' | 'dark'
+  /** Title describes the child rather than naming it. Use when it explains a control, e.g. why
+   * it is unavailable. */
+  describeChild?: boolean
+  /** Stops the tooltip taking pointer events. These tooltips overlap their trigger (offset -10),
+   * so an interactive one steals the pointer and the trigger's cursor. Leave off for tooltips
+   * holding links or selectable text. */
+  disableInteractive?: boolean
 }
 
 export const MuiTooltip = ({
@@ -16,11 +23,15 @@ export const MuiTooltip = ({
   title,
   placement = 'bottom',
   variant = 'default',
+  describeChild = false,
+  disableInteractive = false,
 }: MuiTooltip) => {
   return (
     <Tooltip
       title={title}
       placement={placement}
+      describeChild={describeChild}
+      disableInteractive={disableInteractive}
       classes={{
         tooltip:
           variant === 'dark'

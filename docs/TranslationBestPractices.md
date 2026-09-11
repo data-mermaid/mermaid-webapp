@@ -137,6 +137,36 @@ Translations of this highly depends on the context, as 'Add' can be synonymous w
 - ✅add_record: 'Add Record'
 - ✅add_record: 'Add'
 
+# Changing an Existing Token
+
+Adding, renaming and removing tokens in code is normal. **Rewording an existing token in code is not.** Lokalise owns the English text of tokens that already exist, and the weekly pull overwrites `src/locales/en/translation.json` with its export, so an edit made in code is reverted rather than shipped. The `Guard English Translation Source` PR check enforces this.
+
+- **Rewording, typo or punctuation fix** - make it in Lokalise, not in code.
+- **Changing `{{interpolation}}` or inline markup** - add a **new** token and point the code at it. Editing the existing token leaves the app rendering a string whose placeholders no longer match what the code passes, as soon as Lokalise reasserts the old value.
+
+**Instead of** editing the token in place:
+
+```json
+{
+  "benthic_observations": {
+    "attribute_proposal_summary": "Your proposed attribute {{attribute}} will be reviewed"
+  }
+}
+```
+
+**Add a new one** and leave the old token for removal in Lokalise:
+
+```json
+{
+  "benthic_observations": {
+    "attribute_proposal_summary": "Your proposed attribute {{attribute}} will be reviewed",
+    "benthic_attribute_proposal_summary": "Your proposed benthic attribute will be reviewed"
+  }
+}
+```
+
+See [TranslationSyncWorkflow.md](./TranslationSyncWorkflow.md#changing-the-english-text-of-an-existing-token) for the full rules.
+
 # Namespaces
 
 The location of specificity for your translations. Commonly, the file name for your translations.
