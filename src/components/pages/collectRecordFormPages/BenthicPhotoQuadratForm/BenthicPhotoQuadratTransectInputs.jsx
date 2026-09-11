@@ -345,7 +345,10 @@ const BenthicPhotoQuadratTransectInputs = ({
               validationPath: QUADRAT_NUMBER_START_VALIDATION_PATH,
             })
           }}
-          {...quadratNumberStartValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            quadratNumberStartValidationProperties,
+            'quadrat_number_start',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_number_start}
           onChange={handleQuadratNumberStartChange}
@@ -365,7 +368,10 @@ const BenthicPhotoQuadratTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: QUADRAT_SIZE_VALIDATION_PATH })
           }}
-          {...quadratSizeValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            quadratSizeValidationProperties,
+            'quadrat_size',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_size}
           onChange={handleQuadratSizeChange}
@@ -383,7 +389,10 @@ const BenthicPhotoQuadratTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: NUM_QUADRATS_VALIDATION_PATH })
           }}
-          {...numberOfQuadratsValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            numberOfQuadratsValidationProperties,
+            'num_quadrats',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.num_quadrats}
           onChange={handleNumberOfQuadratsChange}
@@ -405,7 +414,10 @@ const BenthicPhotoQuadratTransectInputs = ({
               validationPath: NUM_POINTS_PER_QUADRAT_VALIDATION_PATH,
             })
           }}
-          {...numberOfPointsPerQuadratValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            numberOfPointsPerQuadratValidationProperties,
+            'num_points_per_quadrat',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.num_points_per_quadrat}
           onChange={handleNumberOfPointsPerQuadratChange}

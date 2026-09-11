@@ -4,6 +4,7 @@ import { describe, expect, test, vi } from 'vitest'
 import {
   renderUnauthenticatedOffline,
   screen,
+  within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import RecordLevelValidationInfo from './RecordLevelValidationInfo'
 
@@ -78,5 +79,44 @@ describe('RecordLevelValidationInfo scroll to observations link', () => {
     renderRecordLevelValidationInfo([])
 
     expect(screen.queryByRole('button', { name: SCROLL_TO_OBSERVATIONS })).not.toBeInTheDocument()
+  })
+})
+
+// The form status indicator chips count whatever this panel renders, so these two cases are
+// the panel's half of that contract. getValidationTargets.test.ts holds the counting half.
+describe('RecordLevelValidationInfo dry submit summary', () => {
+  const drySubmitSummary = {
+    status: 'error' as const,
+    validation_id: 'summary',
+    code: 'unsuccessful_dry_submit',
+    // Rendered as "<key> : <value>" pairs, so the values have to be strings.
+    context: { dry_submit_results: { 'One or more invalid fields': 'depth' } },
+  }
+
+  const renderWithSummary = (alongside: { status: 'error' | 'warning'; code: string }) =>
+    renderUnauthenticatedOffline(
+      <RecordLevelValidationInfo
+        areValidationsShowing={true}
+        ignoreRecordLevelValidation={vi.fn()}
+        resetRecordLevelValidation={vi.fn()}
+        validations={[drySubmitSummary, { ...alongside, validation_id: 'other' }]}
+        handleScrollToObservation={vi.fn()}
+      />,
+    )
+
+  test('is hidden while another record level error is unresolved', () => {
+    renderWithSummary({ status: 'error', code: 'duplicate_transect' })
+
+    expect(
+      within(screen.getByTestId('record-level-validations')).getAllByRole('listitem'),
+    ).toHaveLength(1)
+  })
+
+  test('is shown once it is the only record level error', () => {
+    renderWithSummary({ status: 'warning', code: 'all_equal' })
+
+    expect(
+      within(screen.getByTestId('record-level-validations')).getAllByRole('listitem'),
+    ).toHaveLength(2)
   })
 })

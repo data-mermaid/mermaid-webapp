@@ -153,3 +153,111 @@ describe('getValidationTargets', () => {
     expect(targets.error).toEqual([])
   })
 })
+
+describe('getValidationTargets with edited fields', () => {
+  // An input the user has edited hides its validation badge, so it must also drop out of
+  // the counts. The formik property name is the last segment of the validation path.
+  const results = {
+    $record: [{ status: 'error', validation_id: 'r1' }],
+    data: {
+      fishbelt_transect: {
+        depth: { v1: { status: 'error' } },
+        len_surveyed: { v2: { status: 'warning' } },
+      },
+      observers: { v3: { status: 'warning' } },
+      obs_belt_fishes: [[{ status: 'error', context: { observation_id: 'obs1' } }]],
+    },
+  }
+
+  test('drops a field target once its input is edited', () => {
+    const targets = getValidationTargets(results, (property) => property === 'depth')
+
+    // The depth field target is gone; the record and observation errors are untouched.
+    expect(targets.error).toEqual([
+      { kind: 'record', validationId: 'r1' },
+      { kind: 'observation', observationId: 'obs1' },
+    ])
+    expect(targets.warning).toEqual([
+      { kind: 'field', validationPath: 'data.fishbelt_transect.len_surveyed' },
+      { kind: 'field', validationPath: 'data.observers' },
+    ])
+  })
+
+  test('derives the formik property from the last path segment, at any depth', () => {
+    const editedProperties: string[] = []
+
+    getValidationTargets(results, (property) => {
+      editedProperties.push(property)
+
+      return false
+    })
+
+    expect(editedProperties).toEqual(['depth', 'len_surveyed', 'observers'])
+  })
+
+  test('keeps record and observation targets, which have no input to edit', () => {
+    const targets = getValidationTargets(results, () => true)
+
+    expect(targets.error).toEqual([
+      { kind: 'record', validationId: 'r1' },
+      { kind: 'observation', observationId: 'obs1' },
+    ])
+    expect(targets.warning).toEqual([])
+  })
+
+  test('counts every field target when no inputs have been edited', () => {
+    expect(getValidationTargets(results, () => false)).toEqual(getValidationTargets(results))
+  })
+})
+
+describe('getValidationTargets record level statuses', () => {
+  test('counts a record level reset as a warning, since the panel still renders it as one', () => {
+    const targets = getValidationTargets({
+      $record: [{ status: 'reset', validation_id: 'r1' }],
+    })
+
+    expect(targets.warning).toEqual([{ kind: 'record', validationId: 'r1' }])
+    expect(targets.ignored).toEqual([])
+  })
+
+  test('leaves a field reset uncounted, since the input renders nothing for it', () => {
+    const targets = getValidationTargets({
+      data: { fishbelt_transect: { depth: [{ status: 'reset' }] } },
+    })
+
+    expect(targets).toEqual({ error: [], warning: [], ignored: [] })
+  })
+
+  test('leaves an observation reset uncounted', () => {
+    const targets = getValidationTargets({
+      data: {
+        obs_belt_fishes: [[{ status: 'reset', context: { observation_id: 'obs1' } }]],
+      },
+    })
+
+    expect(targets).toEqual({ error: [], warning: [], ignored: [] })
+  })
+
+  test('skips the dry submit summary while other record level errors are unresolved', () => {
+    const targets = getValidationTargets({
+      $record: [
+        { status: 'error', code: 'unsuccessful_dry_submit', validation_id: 'summary' },
+        { status: 'error', code: 'duplicate_transect', validation_id: 'r1' },
+      ],
+    })
+
+    expect(targets.error).toEqual([{ kind: 'record', validationId: 'r1' }])
+  })
+
+  test('counts the dry submit summary once it is the only record level error', () => {
+    const targets = getValidationTargets({
+      $record: [
+        { status: 'error', code: 'unsuccessful_dry_submit', validation_id: 'summary' },
+        { status: 'warning', code: 'all_equal', validation_id: 'r1' },
+      ],
+    })
+
+    expect(targets.error).toEqual([{ kind: 'record', validationId: 'summary' }])
+    expect(targets.warning).toEqual([{ kind: 'record', validationId: 'r1' }])
+  })
+})

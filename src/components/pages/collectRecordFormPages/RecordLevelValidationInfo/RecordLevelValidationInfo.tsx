@@ -12,6 +12,7 @@ import { getValidationMessage } from '../../../../library/validationMessageHelpe
 import theme from '../../../../theme'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
 import DuplicateImageValidationContent, { Image } from './DuplicateImageValidationContent'
+import getRecordLevelValidationsToDisplay from '../getRecordLevelValidationsToDisplay'
 
 interface RecordValidationInfo {
   status: ValidationStatus
@@ -78,18 +79,7 @@ const RecordLevelValidationInfo = ({
     }
   }
 
-  const hasUnresolvedErrors = validations.some(
-    (validation) => validation.code !== 'unsuccessful_dry_submit' && validation.status === 'error',
-  )
-
-  const filteredValidations = validations.filter((validation) => {
-    if (validation.code === 'unsuccessful_dry_submit') {
-      // Show dry submit errors only if there are no unresolved errors
-      return !hasUnresolvedErrors
-    }
-
-    return true
-  })
+  const filteredValidations = getRecordLevelValidationsToDisplay(validations)
 
   return (
     <ValidationList data-testid="record-level-validations">

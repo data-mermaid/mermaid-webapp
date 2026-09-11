@@ -114,12 +114,18 @@ const useCollectRecordValidation = ({
       })
   }
 
+  // Has the user edited this input since the record was last validated? Formik reinitialises
+  // from the record on save and on validate, so initialValues is always the last validated
+  // state. Both the inline badge below and the status indicator chips read this one function,
+  // so a field that stops showing a badge also stops being counted and navigated to.
+  const isFieldValueDirty = (property) =>
+    formikInstance.values[property] !== formikInstance.initialValues[property]
+
   const validationPropertiesWithDirtyResetOnInputChange = (validationProperties, property) => {
     // for UX purpose only, validation is cleared when input is on change after page is validated
-    const validationDirtyCheck =
-      formikInstance.values[property] !== formikInstance.initialValues[property]
-        ? null
-        : validationProperties.validationType
+    const validationDirtyCheck = isFieldValueDirty(property)
+      ? null
+      : validationProperties.validationType
 
     return {
       ...validationProperties,
@@ -321,41 +327,44 @@ const useCollectRecordValidation = ({
   // (see setObjectPropertyOnClone), so reference-based memoization would miss updates.
   // Chip counts derive from the (deduped) navigation targets so the number matches
   // what the user can navigate to and what's visible inline.
-  const validationTargets = getValidationTargets(collectRecordBeingEdited?.validations?.results)
+  const validationTargets = getValidationTargets(
+    collectRecordBeingEdited?.validations?.results,
+    isFieldValueDirty,
+  )
   const validationCounts = {
     errorCount: validationTargets.error.length,
     warningCount: validationTargets.warning.length,
     ignoredCount: validationTargets.ignored.length,
   }
 
-  const goToNextValidation = useCallback(
-    (type) => {
-      const targets = getValidationTargets(collectRecordBeingEdited?.validations?.results)[type]
-      if (!targets || targets.length === 0) {
-        return
-      }
+  // Not memoised: validationTargets is rebuilt every render (see above), so any memo would
+  // be invalidated every render anyway. FormStatusIndicators is not memoised either, so a
+  // fresh function identity costs nothing.
+  const goToNextValidation = (type) => {
+    const targets = validationTargets[type]
+    if (!targets || targets.length === 0) {
+      return
+    }
 
-      // Resolve targets to DOM elements and sort by vertical page position so the
-      // cursor advances top-to-bottom regardless of API key order.
-      const resolved = targets
-        .map((target) => ({ target, element: findTargetElement(target) }))
-        .filter((entry) => entry.element !== null)
+    // Resolve targets to DOM elements and sort by vertical page position so the
+    // cursor advances top-to-bottom regardless of API key order.
+    const resolved = targets
+      .map((target) => ({ target, element: findTargetElement(target) }))
+      .filter((entry) => entry.element !== null)
 
-      if (resolved.length === 0) {
-        return
-      }
+    if (resolved.length === 0) {
+      return
+    }
 
-      resolved.sort(
-        (a, b) => a.element.getBoundingClientRect().top - b.element.getBoundingClientRect().top,
-      )
+    resolved.sort(
+      (a, b) => a.element.getBoundingClientRect().top - b.element.getBoundingClientRect().top,
+    )
 
-      const cursor = nextCursorsRef.current[type] % resolved.length
-      nextCursorsRef.current[type] = cursor + 1
+    const cursor = nextCursorsRef.current[type] % resolved.length
+    nextCursorsRef.current[type] = cursor + 1
 
-      scrollToAndHighlight(resolved[cursor].element, type)
-    },
-    [collectRecordBeingEdited],
-  )
+    scrollToAndHighlight(resolved[cursor].element, type)
+  }
 
   return {
     handleScrollToObservation,
