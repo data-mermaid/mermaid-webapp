@@ -44,16 +44,15 @@ const ScrollToButton = styled(ButtonThatLooksLikeLink)`
   font-size: smaller;
 `
 
-const checkScrollToObservation = (validationInfo: RecordValidationInfo): boolean => {
-  const validationStatusNotOkay = validationInfo.status !== 'ok'
-  const observationTableValidationMessages = [
-    'data.obs_colonies_bleached',
-    'data.obs_benthic_photo_quadrats',
-    'data.obs_belt_fishes',
-  ].some((obs) => validationInfo?.fields?.includes(obs))
+// A record-level validation gets a "scroll to observations" link when it points at an
+// observation table. The API names those tables in `fields` with a `data.obs_` prefix, one
+// per protocol (`data.obs_benthic_lits`, `data.obs_belt_fishes`). Matching the prefix covers
+// every protocol, including any added later, without editing this file. The trailing
+// underscore matters: it stops `data.observers`, a form field, from matching.
+const OBSERVATION_FIELD_PREFIX = 'data.obs_'
 
-  return validationStatusNotOkay && observationTableValidationMessages
-}
+const checkScrollToObservation = ({ status, fields }: RecordValidationInfo): boolean =>
+  status !== 'ok' && (fields ?? []).some((field) => field.startsWith(OBSERVATION_FIELD_PREFIX))
 
 const RecordLevelValidationInfo = ({
   areValidationsShowing,
