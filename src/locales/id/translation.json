@@ -1210,7 +1210,7 @@
     "site_not_found": "Catatan situs tidak tersedia untuk validasi kesamaan",
     "system_validation_error": "Kesalahan validasi sistem:",
     "unconfirmed_annotation": "Jumlah anotasi yang dikonfirmasi salah",
-    "unknown_protocol": "Protokol yang tidak dikenal",
+    "unknown_protocol": "Metode yang tidak dikenal",
     "value_not_set": "Nilai tidak ditetapkan"
   },
   "validations": {

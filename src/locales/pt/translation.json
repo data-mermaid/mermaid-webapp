@@ -158,6 +158,7 @@
   "validation_messages": {
     "invalid_invert_belt_transect": "Um ou mais campos inválidos: local, gestão, data da amostragem, número do transecto, largura, profundidade",
     "invert_count_high": "A contagem de macroinvertebrados é excepcionalmente alta.",
-    "invert_size_exceeds_maximum": "O tamanho dos macroinvertebrados é maior que o valor máximo esperado."
+    "invert_size_exceeds_maximum": "O tamanho dos macroinvertebrados é maior que o valor máximo esperado.",
+    "unknown_protocol": "Método desconhecido"
   }
 }
