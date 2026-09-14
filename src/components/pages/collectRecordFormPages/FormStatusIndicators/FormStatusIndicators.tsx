@@ -5,44 +5,53 @@ import theme from '../../../../theme'
 
 type ChipVariant = 'error' | 'warning' | 'ignored'
 
+// Written out rather than built from the variant, so a key scan still finds them.
+const CHIP_LABEL_KEYS: Record<ChipVariant, string> = {
+  error: 'sample_units.validation_status.chip_label_error',
+  warning: 'sample_units.validation_status.chip_label_warning',
+  ignored: 'sample_units.validation_status.chip_label_ignored',
+}
+
 const IndicatorBar = styled('div')`
   display: flex;
   align-items: center;
   gap: ${theme.spacing.small};
 `
 
-const chipStylesByVariant: Record<ChipVariant, { background: string; border: string }> = {
-  error: { background: theme.color.chipErrorBackground, border: theme.color.chipErrorBorder },
-  warning: { background: theme.color.chipWarningBackground, border: theme.color.chipWarningBorder },
-  ignored: { background: theme.color.chipIgnoreBackground, border: theme.color.chipIgnoreBorder },
+const chipBackgroundByVariant: Record<ChipVariant, string> = {
+  error: theme.color.chipErrorBackground,
+  warning: theme.color.chipWarningBackground,
+  ignored: theme.color.chipIgnoreBackground,
 }
 
 const Chip = styled('span')<{ $variant: ChipVariant }>`
   display: inline-flex;
   align-items: center;
-  gap: ${theme.spacing.small};
+  gap: ${theme.spacing.medium};
   padding: ${theme.spacing.small} ${theme.spacing.medium};
-  border-radius: 4px;
+  border-radius: 5px;
   font-size: ${theme.typography.defaultFontSize};
-  background-color: ${(props) => chipStylesByVariant[props.$variant].background};
-  border: ${theme.spacing.borderSmall} solid
-    ${(props) => chipStylesByVariant[props.$variant].border};
+  line-height: ${theme.typography.lineHeight};
+  color: ${theme.color.textColor};
+  background-color: ${(props) => chipBackgroundByVariant[props.$variant]};
+  border: ${theme.spacing.borderSmall} solid ${theme.color.chipBorder};
 `
 
+// A small white bordered button, so it takes its colours from the secondary button family
+// (see buttonSecondaryCss) rather than the design file's link blue, which falls below the
+// contrast minimum at this size.
 const NextButton = styled('button')`
-  font-size: ${theme.typography.smallFontSize};
+  font-size: ${theme.typography.xSmallFontSize};
   font-weight: 600;
-  letter-spacing: 0.5px;
   text-transform: uppercase;
-  padding: ${theme.spacing.xxsmall} ${theme.spacing.xsmall};
-  border-radius: 3px;
-  border: ${theme.spacing.borderSmall} solid ${theme.color.primaryColor};
-  color: ${theme.color.primaryColor};
+  padding: ${theme.spacing.small};
+  border-radius: 2px;
+  border: ${theme.spacing.borderSmall} solid ${theme.color.chipBorder};
+  color: ${theme.color.secondaryText};
   background-color: ${theme.color.white};
   cursor: pointer;
   &:hover {
-    background-color: ${theme.color.primaryColor};
-    color: ${theme.color.white};
+    background-color: ${theme.color.secondaryHover};
   }
 `
 
@@ -73,32 +82,34 @@ const FormStatusIndicators = ({
 
   const nextLabel = t('sample_units.validation_status.next')
 
+  const chips = [
+    { variant: 'error', count: errorCount, labelKey: CHIP_LABEL_KEYS.error },
+    { variant: 'warning', count: warningCount, labelKey: CHIP_LABEL_KEYS.warning },
+    { variant: 'ignored', count: ignoredCount, labelKey: CHIP_LABEL_KEYS.ignored },
+  ] as const
+
   return (
     <IndicatorBar data-testid="form-status-indicators">
-      {errorCount > 0 && (
-        <Chip $variant="error" data-testid="form-status-chip-error">
-          {t('sample_units.validation_status.chip_label_error', { count: errorCount })}
-          <NextButton type="button" onClick={() => onNext('error')} aria-label={nextLabel}>
-            {nextLabel}
-          </NextButton>
-        </Chip>
-      )}
-      {warningCount > 0 && (
-        <Chip $variant="warning" data-testid="form-status-chip-warning">
-          {t('sample_units.validation_status.chip_label_warning', { count: warningCount })}
-          <NextButton type="button" onClick={() => onNext('warning')} aria-label={nextLabel}>
-            {nextLabel}
-          </NextButton>
-        </Chip>
-      )}
-      {ignoredCount > 0 && (
-        <Chip $variant="ignored" data-testid="form-status-chip-ignored">
-          {t('sample_units.validation_status.chip_label_ignored', { count: ignoredCount })}
-          <NextButton type="button" onClick={() => onNext('ignored')} aria-label={nextLabel}>
-            {nextLabel}
-          </NextButton>
-        </Chip>
-      )}
+      {chips
+        .filter(({ count }) => count > 0)
+        .map(({ variant, count, labelKey }) => {
+          const chipLabel = t(labelKey, { count })
+
+          return (
+            <Chip key={variant} $variant={variant} data-testid={`form-status-chip-${variant}`}>
+              {chipLabel}
+              {/* Every chip has a Next button, so the label alone would name all three the
+                  same thing to a screen reader. */}
+              <NextButton
+                type="button"
+                onClick={() => onNext(variant)}
+                aria-label={`${nextLabel}: ${chipLabel}`}
+              >
+                {nextLabel}
+              </NextButton>
+            </Chip>
+          )
+        })}
     </IndicatorBar>
   )
 }

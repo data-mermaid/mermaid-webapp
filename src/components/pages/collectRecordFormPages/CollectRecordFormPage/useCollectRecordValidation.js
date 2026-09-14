@@ -10,10 +10,12 @@ import theme from '../../../../theme'
 const HIGHLIGHT_CLASS = 'validation-target-highlight'
 const HIGHLIGHT_COLOR_VAR = '--validation-target-highlight-color'
 
+// A pale wash of the validation type's colour. Ignored uses the row's own stripe colour, not
+// the ignored chip fill, which is a solid grey and too heavy across a full-width row.
 const highlightColorByType = {
   error: theme.color.chipErrorBackground,
   warning: theme.color.chipWarningBackground,
-  ignored: theme.color.chipIgnoreBackground,
+  ignored: theme.color.ignore,
 }
 
 const findTargetElement = (target) => {

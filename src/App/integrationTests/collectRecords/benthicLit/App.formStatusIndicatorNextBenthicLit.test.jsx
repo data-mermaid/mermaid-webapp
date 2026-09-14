@@ -8,6 +8,7 @@ import {
   renderAuthenticatedOnline,
   screen,
   waitFor,
+  within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -71,9 +72,7 @@ test('Next on the error chip scrolls to and highlights a Benthic LIT transect fi
   expect(depthRow).toHaveAttribute('data-validation-field', 'depth')
 
   scrollIntoView.mockClear()
-  await user.click(
-    await screen.findByRole('button', { name: 'sample_units.validation_status.next' }),
-  )
+  await user.click(within(await screen.findByTestId('form-status-chip-error')).getByRole('button'))
 
   expect(scrollIntoView).toHaveBeenCalledTimes(1)
   expect(scrollIntoView.mock.instances[0]).toBe(depthRow)

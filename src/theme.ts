@@ -89,12 +89,12 @@ const color = {
   calloutDisabledColor: callout.mix(colorHelper('black'), 0.2).toString(),
   calloutDisabledText: '#969696',
 
-  chipErrorBackground: '#F6DCD9',
-  chipErrorBorder: '#E5C7C4',
+  // Form status indicator chips. Fills are one-off values from the Figma design file; the
+  // border is its Border/default variable, shared by all three chips.
+  chipErrorBackground: '#F5DCD9',
   chipWarningBackground: '#FFFAE0',
-  chipWarningBorder: '#EFE7B7',
-  chipIgnoreBackground: '#F9FAFB',
-  chipIgnoreBorder: '#E5E7EB',
+  chipIgnoreBackground: '#C8C8CC',
+  chipBorder: '#A9A9B3',
 
   disabledColor: '#D5D5DD',
   disabledInputBackground: '#E4E4E4',
