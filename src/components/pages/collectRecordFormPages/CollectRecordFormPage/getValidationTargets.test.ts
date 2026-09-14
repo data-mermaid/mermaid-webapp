@@ -1,6 +1,10 @@
 import { describe, expect, test } from 'vitest'
 import getValidationTargets from './getValidationTargets'
 
+const recordTarget = (value: string) => ({ attribute: 'data-record-validation-id', value })
+const fieldTarget = (value: string) => ({ attribute: 'data-validation-field', value })
+const observationTarget = (value: string) => ({ attribute: 'data-observation-id', value })
+
 describe('getValidationTargets', () => {
   test('returns empty buckets when results is undefined', () => {
     expect(getValidationTargets(undefined)).toEqual({ error: [], warning: [], ignored: [] })
@@ -15,11 +19,8 @@ describe('getValidationTargets', () => {
       ],
     })
 
-    expect(targets.error).toEqual([
-      { kind: 'record', validationId: 'r1' },
-      { kind: 'record', validationId: 'r2' },
-    ])
-    expect(targets.warning).toEqual([{ kind: 'record', validationId: 'r3' }])
+    expect(targets.error).toEqual([recordTarget('r1'), recordTarget('r2')])
+    expect(targets.warning).toEqual([recordTarget('r3')])
     expect(targets.ignored).toEqual([])
   })
 
@@ -33,8 +34,8 @@ describe('getValidationTargets', () => {
       },
     })
 
-    expect(targets.error).toEqual([{ kind: 'field', formikProperty: 'site' }])
-    expect(targets.warning).toEqual([{ kind: 'field', formikProperty: 'management' }])
+    expect(targets.error).toEqual([fieldTarget('site')])
+    expect(targets.warning).toEqual([fieldTarget('management')])
   })
 
   test('emits one observation target per observation_id per status', () => {
@@ -51,9 +52,9 @@ describe('getValidationTargets', () => {
       },
     })
 
-    expect(targets.error).toEqual([{ kind: 'observation', observationId: 'obs1' }])
-    expect(targets.warning).toEqual([{ kind: 'observation', observationId: 'obs2' }])
-    expect(targets.ignored).toEqual([{ kind: 'observation', observationId: 'obs3' }])
+    expect(targets.error).toEqual([observationTarget('obs1')])
+    expect(targets.warning).toEqual([observationTarget('obs2')])
+    expect(targets.ignored).toEqual([observationTarget('obs3')])
   })
 
   test('per-row error preempts warning/ignore (matches getValidationsToDisplay)', () => {
@@ -73,10 +74,7 @@ describe('getValidationTargets', () => {
       },
     })
 
-    expect(targets.error).toEqual([
-      { kind: 'field', formikProperty: 'site' },
-      { kind: 'observation', observationId: 'obs1' },
-    ])
+    expect(targets.error).toEqual([fieldTarget('site'), observationTarget('obs1')])
     expect(targets.warning).toEqual([])
     expect(targets.ignored).toEqual([])
   })
@@ -92,11 +90,8 @@ describe('getValidationTargets', () => {
       },
     })
 
-    expect(targets.error).toEqual([
-      { kind: 'record', validationId: 'r1' },
-      { kind: 'field', formikProperty: 'site' },
-    ])
-    expect(targets.warning).toEqual([{ kind: 'observation', observationId: 'obs1' }])
+    expect(targets.error).toEqual([recordTarget('r1'), fieldTarget('site')])
+    expect(targets.warning).toEqual([observationTarget('obs1')])
   })
 
   test('handles array shape for field validations (post-reset shape from CollectRecordsMixin)', () => {
@@ -112,9 +107,9 @@ describe('getValidationTargets', () => {
       },
     })
 
-    expect(targets.error).toEqual([{ kind: 'field', formikProperty: 'depth' }])
-    expect(targets.warning).toEqual([{ kind: 'field', formikProperty: 'width' }])
-    expect(targets.ignored).toEqual([{ kind: 'field', formikProperty: 'width' }])
+    expect(targets.error).toEqual([fieldTarget('depth')])
+    expect(targets.warning).toEqual([fieldTarget('width')])
+    expect(targets.ignored).toEqual([fieldTarget('width')])
   })
 
   test('handles shallow field shape where data.<section> contains validations directly (e.g. observers)', () => {
@@ -128,7 +123,7 @@ describe('getValidationTargets', () => {
     })
 
     // Error preempts warning on the same row.
-    expect(targets.error).toEqual([{ kind: 'field', formikProperty: 'observers' }])
+    expect(targets.error).toEqual([fieldTarget('observers')])
     expect(targets.warning).toEqual([])
   })
 
@@ -165,14 +160,8 @@ describe('getValidationTargets with edited fields', () => {
     const targets = getValidationTargets(results, (property) => property === 'depth')
 
     // The depth field target is gone; the record and observation errors are untouched.
-    expect(targets.error).toEqual([
-      { kind: 'record', validationId: 'r1' },
-      { kind: 'observation', observationId: 'obs1' },
-    ])
-    expect(targets.warning).toEqual([
-      { kind: 'field', formikProperty: 'len_surveyed' },
-      { kind: 'field', formikProperty: 'observers' },
-    ])
+    expect(targets.error).toEqual([recordTarget('r1'), observationTarget('obs1')])
+    expect(targets.warning).toEqual([fieldTarget('len_surveyed'), fieldTarget('observers')])
   })
 
   test('derives the formik property from the last path segment, at any depth', () => {
@@ -190,10 +179,7 @@ describe('getValidationTargets with edited fields', () => {
   test('keeps record and observation targets, which have no input to edit', () => {
     const targets = getValidationTargets(results, () => true)
 
-    expect(targets.error).toEqual([
-      { kind: 'record', validationId: 'r1' },
-      { kind: 'observation', observationId: 'obs1' },
-    ])
+    expect(targets.error).toEqual([recordTarget('r1'), observationTarget('obs1')])
     expect(targets.warning).toEqual([])
   })
 
@@ -208,7 +194,7 @@ describe('getValidationTargets record level statuses', () => {
       $record: [{ status: 'reset', validation_id: 'r1' }],
     })
 
-    expect(targets.warning).toEqual([{ kind: 'record', validationId: 'r1' }])
+    expect(targets.warning).toEqual([recordTarget('r1')])
     expect(targets.ignored).toEqual([])
   })
 
@@ -238,7 +224,7 @@ describe('getValidationTargets record level statuses', () => {
       ],
     })
 
-    expect(targets.error).toEqual([{ kind: 'record', validationId: 'r1' }])
+    expect(targets.error).toEqual([recordTarget('r1')])
   })
 
   test('counts the dry submit summary once it is the only record level error', () => {
@@ -249,7 +235,7 @@ describe('getValidationTargets record level statuses', () => {
       ],
     })
 
-    expect(targets.error).toEqual([{ kind: 'record', validationId: 'summary' }])
-    expect(targets.warning).toEqual([{ kind: 'record', validationId: 'r1' }])
+    expect(targets.error).toEqual([recordTarget('summary')])
+    expect(targets.warning).toEqual([recordTarget('r1')])
   })
 })

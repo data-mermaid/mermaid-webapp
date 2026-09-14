@@ -1,23 +1,18 @@
 import type { ValidationStatus } from '../../../../types/constants'
 import getRecordLevelValidationsToDisplay from '../getRecordLevelValidationsToDisplay'
+import { getValidationsToDisplay } from '../getValidationPropertiesForInput'
 
 /**
- * Enumerates the DOM rows the FormStatusIndicators bar can navigate to.
- *
- * A "target" is a place on the page the user can jump to for a specific
- * validation type. Three kinds:
- *   - record      → an individual <li> in the record-level info panel
- *   - field       → a row in the sample event / transect / observers section
- *   - observation → a row in one of the observation tables
+ * Enumerates the rows the FormStatusIndicators bar can scroll to, bucketed by validation type.
  *
  * Per-row rules:
- *   - N validations of the same status on one row → 1 target (dedup by kind + id).
- *   - error preempts warning/ignore on the same row (matches getValidationsToDisplay
- *     in the input rendering path — a row that shows an error inline should not
- *     also count as a warning/ignore in the chip totals).
+ *   - N validations of the same status on one row produce one target.
+ *   - error preempts warning and ignore on the same row, matching getValidationsToDisplay in
+ *     the input rendering path: a row showing an error inline should not also be counted as a
+ *     warning by the chips.
  *
- * $record entries are NOT grouped — each renders as its own <li>, so each becomes
- * its own target regardless of status.
+ * $record entries are not grouped. Each renders as its own <li>, so each becomes its own
+ * target regardless of status.
  */
 
 // ---- Types ------------------------------------------------------------------
@@ -27,22 +22,17 @@ interface ValidationsResults {
   data?: unknown
 }
 
-interface RecordTarget {
-  kind: 'record'
-  validationId: string
+/**
+ * A row to scroll to, named by the data attribute it carries:
+ *   - data-record-validation-id, on an <li> in the record-level info panel
+ *   - data-validation-field, on a sample event / transect / observers row. Emitted by the
+ *     shared input components from their own id, so no protocol form has to opt in.
+ *   - data-observation-id, on a row in an observation table
+ */
+interface NavigationTarget {
+  attribute: 'data-record-validation-id' | 'data-validation-field' | 'data-observation-id'
+  value: string
 }
-
-interface FieldTarget {
-  kind: 'field'
-  formikProperty: string
-}
-
-interface ObservationTarget {
-  kind: 'observation'
-  observationId: string
-}
-
-type NavigationTarget = RecordTarget | FieldTarget | ObservationTarget
 
 interface NavigationTargets {
   error: NavigationTarget[]
@@ -111,19 +101,6 @@ const bucketKeyByStatus: Record<CountableStatus, keyof NavigationTargets> = {
   ignore: 'ignored',
 }
 
-const targetsEqual = (a: NavigationTarget, b: NavigationTarget): boolean => {
-  if (a.kind === 'record' && b.kind === 'record') {
-    return a.validationId === b.validationId
-  }
-  if (a.kind === 'field' && b.kind === 'field') {
-    return a.formikProperty === b.formikProperty
-  }
-  if (a.kind === 'observation' && b.kind === 'observation') {
-    return a.observationId === b.observationId
-  }
-  return false
-}
-
 // Push a target into its bucket only if an equivalent one isn't already there.
 const addTarget = (
   targets: NavigationTargets,
@@ -131,27 +108,32 @@ const addTarget = (
   target: NavigationTarget,
 ) => {
   const bucket = targets[bucketKeyByStatus[status]]
-  if (!bucket.some((existing) => targetsEqual(existing, target))) {
+  const isAlreadyPresent = bucket.some(
+    (existing) => existing.attribute === target.attribute && existing.value === target.value,
+  )
+
+  if (!isAlreadyPresent) {
     bucket.push(target)
   }
 }
 
-// Emit one target for a row that carries one-or-more countable statuses.
-// Error preempts warning/ignore on the same row.
+/**
+ * Bucket a row by what the form actually shows for it. getValidationsToDisplay owns the
+ * precedence (an error hides the rest of the row), so the chips cannot disagree with the
+ * badges. A row left showing only resets yields no target, which is right for fields and
+ * observations: neither renders anything for a reset.
+ */
 const emitRowTargets = (
   targets: NavigationTargets,
-  rowStatuses: Set<CountableStatus>,
+  rowValidations: unknown,
   target: NavigationTarget,
 ) => {
-  if (rowStatuses.has('error')) {
-    addTarget(targets, 'error', target)
-    return
-  }
-  if (rowStatuses.has('warning')) {
-    addTarget(targets, 'warning', target)
-  }
-  if (rowStatuses.has('ignore')) {
-    addTarget(targets, 'ignore', target)
+  for (const validation of getValidationsToDisplay(rowValidations)) {
+    const status = getStatus(validation)
+
+    if (status) {
+      addTarget(targets, status, target)
+    }
   }
 }
 
@@ -197,7 +179,10 @@ const walkFieldSubtree = (
     const formikProperty = path.slice(path.lastIndexOf('.') + 1)
 
     if (!isFieldValueDirty(formikProperty)) {
-      emitRowTargets(targets, rowStatuses, { kind: 'field', formikProperty })
+      emitRowTargets(targets, node, {
+        attribute: 'data-validation-field',
+        value: formikProperty,
+      })
     }
     return
   }
@@ -225,28 +210,27 @@ const collectObservationTargets = (obsValue: unknown, targets: NavigationTargets
     return
   }
 
-  const statusesByObsId = new Map<string, Set<CountableStatus>>()
+  const validationsByObsId = new Map<string, unknown[]>()
   for (const group of obsValue) {
     if (!Array.isArray(group)) {
       continue
     }
     for (const validation of group) {
-      const status = getStatus(validation)
       const observationId = getObservationId(validation)
-      if (!status || !observationId) {
+      if (!observationId) {
         continue
       }
-      let rowStatuses = statusesByObsId.get(observationId)
-      if (!rowStatuses) {
-        rowStatuses = new Set()
-        statusesByObsId.set(observationId, rowStatuses)
-      }
-      rowStatuses.add(status)
+      const rowValidations = validationsByObsId.get(observationId) ?? []
+      rowValidations.push(validation)
+      validationsByObsId.set(observationId, rowValidations)
     }
   }
 
-  for (const [observationId, rowStatuses] of statusesByObsId) {
-    emitRowTargets(targets, rowStatuses, { kind: 'observation', observationId })
+  for (const [observationId, rowValidations] of validationsByObsId) {
+    emitRowTargets(targets, rowValidations, {
+      attribute: 'data-observation-id',
+      value: observationId,
+    })
   }
 }
 
@@ -267,7 +251,7 @@ const getValidationTargets = (
       const status = getRecordStatus(validation)
       const validationId = getValidationId(validation)
       if (status && validationId) {
-        addTarget(targets, status, { kind: 'record', validationId })
+        addTarget(targets, status, { attribute: 'data-record-validation-id', value: validationId })
       }
     }
   }
@@ -289,11 +273,3 @@ const getValidationTargets = (
 }
 
 export default getValidationTargets
-export type {
-  NavigationTarget,
-  NavigationTargets,
-  RecordTarget,
-  FieldTarget,
-  ObservationTarget,
-  ValidationsResults,
-}
