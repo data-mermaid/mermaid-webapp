@@ -18,7 +18,6 @@ const InputWithLabelAndValidation = ({
   unit = undefined,
   validationMessages = [],
   validationType = undefined,
-  validationPath = undefined,
   renderItemWithinInput = undefined,
   renderItemAboveInput = undefined,
   isInputDisabled = false,
@@ -34,7 +33,7 @@ const InputWithLabelAndValidation = ({
       required={required}
       $validationType={validationType}
       data-testid={testId}
-      data-validation-path={validationPath}
+      data-validation-field={id}
     >
       <InputNoRowWithLabelAndValidation
         required={required}
@@ -72,7 +71,6 @@ InputWithLabelAndValidation.propTypes = {
   unit: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
-  validationPath: PropTypes.string,
 }
 
 export default InputWithLabelAndValidation

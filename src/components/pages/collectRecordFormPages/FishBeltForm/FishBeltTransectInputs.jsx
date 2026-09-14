@@ -272,7 +272,6 @@ const FishBeltTransectInputs = ({
           required={true}
           id="number"
           testId="transect-number"
-          validationPath={TRANSECT_NUMBER_VALIDATION_PATH}
           type="number"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({
@@ -295,7 +294,6 @@ const FishBeltTransectInputs = ({
           label={t('label')}
           id="label"
           testId="label"
-          validationPath={LABEL_VALIDATION_PATH}
           type="text"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
@@ -313,7 +311,6 @@ const FishBeltTransectInputs = ({
           label={t('sample_units.sample_time')}
           id="sample_time"
           testId="sample-time"
-          validationPath={SAMPLE_TIME_VALIDATION_PATH}
           type="time"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
@@ -343,7 +340,6 @@ const FishBeltTransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
           }}
           testId="depth"
-          validationPath={DEPTH_VALIDATION_PATH}
           type="number"
           {...validationPropertiesWithDirtyResetOnInputChange(depthValidationProperties, 'depth')}
           onBlur={formik.handleBlur}
@@ -356,7 +352,6 @@ const FishBeltTransectInputs = ({
           required={true}
           id="len_surveyed"
           testId="len-surveyed"
-          validationPath={LENGHT_SURVEYED_VALIDATION_PATH}
           type="number"
           unit="m"
           ignoreNonObservationFieldValidations={() => {
@@ -381,7 +376,6 @@ const FishBeltTransectInputs = ({
           required={true}
           id="width"
           testId="width"
-          validationPath={WIDTH_VALIDATION_PATH}
           options={transectWidthOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: WIDTH_VALIDATION_PATH })
@@ -401,7 +395,6 @@ const FishBeltTransectInputs = ({
           required={true}
           id="size_bin"
           testId="size-bin"
-          validationPath={SIZE_BIN_VALIDATION_PATH}
           options={fishSizeBinOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
@@ -424,7 +417,6 @@ const FishBeltTransectInputs = ({
           required={false}
           id="reef_slope"
           testId="reef-slope"
-          validationPath={REEF_SLOPE_VALIDATION_PATH}
           options={reefSlopeOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
@@ -460,7 +452,6 @@ const FishBeltTransectInputs = ({
           required={false}
           id="visibility"
           testId="visibility"
-          validationPath={VISIBILITY_VALIDATION_PATH}
           options={visibilityOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
@@ -483,7 +474,6 @@ const FishBeltTransectInputs = ({
           required={false}
           id="current"
           testId="current"
-          validationPath={CURRENT_VALIDATION_PATH}
           options={currentOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
@@ -506,7 +496,6 @@ const FishBeltTransectInputs = ({
           required={false}
           id="relative_depth"
           testId="relative-depth"
-          validationPath={RELATIVE_DEPTH_VALIDATION_PATH}
           options={relativeDepthOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
@@ -529,7 +518,6 @@ const FishBeltTransectInputs = ({
           required={false}
           id="tide"
           testId="tide"
-          validationPath={TIDE_VALIDATION_PATH}
           options={tideOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
@@ -561,7 +549,6 @@ const FishBeltTransectInputs = ({
           label={t('notes')}
           id="notes"
           testId="notes"
-          validationPath={NOTES_VALIDATION_PATH}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
           }}

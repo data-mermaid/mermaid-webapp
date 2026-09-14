@@ -23,7 +23,6 @@ const InputMuiChipSelectWithLabelAndValidation = ({
   resetNonObservationFieldValidations = () => {},
   validationMessages,
   validationType = undefined,
-  validationPath = undefined,
   value,
   additionalInputContent = undefined,
 }) => {
@@ -44,7 +43,7 @@ const InputMuiChipSelectWithLabelAndValidation = ({
   )
 
   return (
-    <InputRow $validationType={validationType} data-validation-path={validationPath}>
+    <InputRow $validationType={validationType} data-validation-field={id}>
       <label id={`${id}-mui-chip-select-with-label-and-validation`}>
         {label}
         {required ? <RequiredIndicator /> : null}
@@ -101,7 +100,6 @@ InputMuiChipSelectWithLabelAndValidation.propTypes = {
   resetNonObservationFieldValidations: PropTypes.func,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
-  validationPath: PropTypes.string,
   value: PropTypes.arrayOf(
     PropTypes.oneOfType([
       PropTypes.string,

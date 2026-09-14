@@ -34,7 +34,7 @@ interface RecordTarget {
 
 interface FieldTarget {
   kind: 'field'
-  validationPath: string
+  formikProperty: string
 }
 
 interface ObservationTarget {
@@ -116,7 +116,7 @@ const targetsEqual = (a: NavigationTarget, b: NavigationTarget): boolean => {
     return a.validationId === b.validationId
   }
   if (a.kind === 'field' && b.kind === 'field') {
-    return a.validationPath === b.validationPath
+    return a.formikProperty === b.formikProperty
   }
   if (a.kind === 'observation' && b.kind === 'observation') {
     return a.observationId === b.observationId
@@ -190,12 +190,14 @@ const walkFieldSubtree = (
   }
 
   if (rowStatuses.size > 0) {
-    // A validation path's last segment is the formik property name for that input:
-    // `data.fishbelt_transect.depth` is edited as `formik.values.depth`.
+    // A validation path's last segment is the formik property name for that input, which is
+    // also the input's `id`: `data.fishbelt_transect.depth` is edited as `formik.values.depth`
+    // and rendered by an input with `id="depth"`. That one name is how a validation is matched
+    // to both the value the user is editing and the row to scroll to.
     const formikProperty = path.slice(path.lastIndexOf('.') + 1)
 
     if (!isFieldValueDirty(formikProperty)) {
-      emitRowTargets(targets, rowStatuses, { kind: 'field', validationPath: path })
+      emitRowTargets(targets, rowStatuses, { kind: 'field', formikProperty })
     }
     return
   }

@@ -94,7 +94,6 @@ const SampleEventInputs = ({
           required={true}
           id="site"
           testId="site"
-          validationPath={SITE_VALIDATION_PATH}
           options={siteOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
@@ -116,7 +115,6 @@ const SampleEventInputs = ({
           required={true}
           id="management"
           testId="management"
-          validationPath={MANAGEMENT_VALIDATION_PATH}
           options={managementRegimeOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
@@ -140,7 +138,6 @@ const SampleEventInputs = ({
           required={true}
           id="sample_date"
           testId="sample-date"
-          validationPath={SAMPLE_DATE_VALIDATION_PATH}
           type="date"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SAMPLE_DATE_VALIDATION_PATH })

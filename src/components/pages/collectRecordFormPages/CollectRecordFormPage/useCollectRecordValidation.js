@@ -21,7 +21,9 @@ const findTargetElement = (target) => {
     return document.querySelector(`[data-record-validation-id="${target.validationId}"]`)
   }
   if (target.kind === 'field') {
-    return document.querySelector(`[data-validation-path="${target.validationPath}"]`)
+    // Every shared input component tags its row with its own id, so no protocol form has to
+    // opt in for its fields to be navigable.
+    return document.querySelector(`[data-validation-field="${target.formikProperty}"]`)
   }
   return document.querySelector(`[data-observation-id="${target.observationId}"]`)
 }

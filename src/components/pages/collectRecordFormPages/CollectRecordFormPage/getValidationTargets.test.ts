@@ -23,7 +23,7 @@ describe('getValidationTargets', () => {
     expect(targets.ignored).toEqual([])
   })
 
-  test('emits one field target per validationPath regardless of duplicate statuses', () => {
+  test('emits one field target per input regardless of duplicate statuses', () => {
     const targets = getValidationTargets({
       data: {
         sample_event: {
@@ -33,10 +33,8 @@ describe('getValidationTargets', () => {
       },
     })
 
-    expect(targets.error).toEqual([{ kind: 'field', validationPath: 'data.sample_event.site' }])
-    expect(targets.warning).toEqual([
-      { kind: 'field', validationPath: 'data.sample_event.management' },
-    ])
+    expect(targets.error).toEqual([{ kind: 'field', formikProperty: 'site' }])
+    expect(targets.warning).toEqual([{ kind: 'field', formikProperty: 'management' }])
   })
 
   test('emits one observation target per observation_id per status', () => {
@@ -76,7 +74,7 @@ describe('getValidationTargets', () => {
     })
 
     expect(targets.error).toEqual([
-      { kind: 'field', validationPath: 'data.sample_event.site' },
+      { kind: 'field', formikProperty: 'site' },
       { kind: 'observation', observationId: 'obs1' },
     ])
     expect(targets.warning).toEqual([])
@@ -96,7 +94,7 @@ describe('getValidationTargets', () => {
 
     expect(targets.error).toEqual([
       { kind: 'record', validationId: 'r1' },
-      { kind: 'field', validationPath: 'data.sample_event.site' },
+      { kind: 'field', formikProperty: 'site' },
     ])
     expect(targets.warning).toEqual([{ kind: 'observation', observationId: 'obs1' }])
   })
@@ -114,15 +112,9 @@ describe('getValidationTargets', () => {
       },
     })
 
-    expect(targets.error).toEqual([
-      { kind: 'field', validationPath: 'data.fishbelt_transect.depth' },
-    ])
-    expect(targets.warning).toEqual([
-      { kind: 'field', validationPath: 'data.fishbelt_transect.width' },
-    ])
-    expect(targets.ignored).toEqual([
-      { kind: 'field', validationPath: 'data.fishbelt_transect.width' },
-    ])
+    expect(targets.error).toEqual([{ kind: 'field', formikProperty: 'depth' }])
+    expect(targets.warning).toEqual([{ kind: 'field', formikProperty: 'width' }])
+    expect(targets.ignored).toEqual([{ kind: 'field', formikProperty: 'width' }])
   })
 
   test('handles shallow field shape where data.<section> contains validations directly (e.g. observers)', () => {
@@ -136,7 +128,7 @@ describe('getValidationTargets', () => {
     })
 
     // Error preempts warning on the same row.
-    expect(targets.error).toEqual([{ kind: 'field', validationPath: 'data.observers' }])
+    expect(targets.error).toEqual([{ kind: 'field', formikProperty: 'observers' }])
     expect(targets.warning).toEqual([])
   })
 
@@ -178,8 +170,8 @@ describe('getValidationTargets with edited fields', () => {
       { kind: 'observation', observationId: 'obs1' },
     ])
     expect(targets.warning).toEqual([
-      { kind: 'field', validationPath: 'data.fishbelt_transect.len_surveyed' },
-      { kind: 'field', validationPath: 'data.observers' },
+      { kind: 'field', formikProperty: 'len_surveyed' },
+      { kind: 'field', formikProperty: 'observers' },
     ])
   })
 
