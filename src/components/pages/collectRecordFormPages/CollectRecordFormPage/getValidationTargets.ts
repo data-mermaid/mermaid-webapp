@@ -86,11 +86,15 @@ const getStatus = (value: unknown): CountableStatus | undefined => {
 const getRecordStatus = (value: unknown): CountableStatus | undefined =>
   getRawStatus(value) === 'reset' ? 'warning' : getStatus(value)
 
+// The API is inconsistent about which of the two it sends, so the row lookup in
+// getObservationValidationInfo reads both and so must this.
 const getObservationId = (value: unknown): string | undefined => {
   if (!value || typeof value !== 'object') {
     return undefined
   }
-  return (value as { context?: { observation_id?: string } }).context?.observation_id
+  const { context } = value as { context?: { observation_id?: string; id?: string } }
+
+  return context?.observation_id ?? context?.id
 }
 
 const getValidationId = (value: unknown): string | undefined => {

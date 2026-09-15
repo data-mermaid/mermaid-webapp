@@ -127,6 +127,20 @@ describe('getValidationTargets', () => {
     expect(targets.warning).toEqual([])
   })
 
+  test('accepts context.id as well as context.observation_id, as the row lookup does', () => {
+    const targets = getValidationTargets({
+      data: {
+        obs_belt_fishes: [
+          [{ status: 'error', context: { id: 'obs1' } }],
+          [{ status: 'warning', context: { observation_id: 'obs2' } }],
+        ],
+      },
+    })
+
+    expect(targets.error).toEqual([observationTarget('obs1')])
+    expect(targets.warning).toEqual([observationTarget('obs2')])
+  })
+
   test('skips observation validations that lack a status or observation_id', () => {
     const targets = getValidationTargets({
       data: {

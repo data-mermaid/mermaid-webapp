@@ -259,7 +259,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
           }}
-          {...labelValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(labelValidationProperties, 'label')}
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
@@ -567,7 +567,7 @@ const BenthicPhotoQuadratTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
           }}
-          {...notesValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(notesValidationProperties, 'notes')}
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
