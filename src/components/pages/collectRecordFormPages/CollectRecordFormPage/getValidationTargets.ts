@@ -51,6 +51,13 @@ type CountableStatus = 'error' | 'warning' | 'ignore'
  */
 type IsFieldValueDirty = (formikProperty: string) => boolean
 
+/**
+ * The observation rows on the page, or null before the tables have loaded. Deleting a row
+ * leaves its validations on the record, so a target outlives the row it names. Null filters
+ * nothing, because an unloaded table and a deleted row look the same from here.
+ */
+type ObservationIdsOnPage = ReadonlySet<string> | null
+
 // ---- Type-safe accessors (all cast-y unknown reads live here) ---------------
 
 const isCountableStatus = (status: unknown): status is CountableStatus =>
@@ -205,7 +212,11 @@ const walkFieldSubtree = (
  * (outer per observation, inner per validation). Group statuses by observation_id
  * first, then emit one target per row with error-preempts-warning/ignore applied.
  */
-const collectObservationTargets = (obsValue: unknown, targets: NavigationTargets) => {
+const collectObservationTargets = (
+  obsValue: unknown,
+  targets: NavigationTargets,
+  observationIdsOnPage: ObservationIdsOnPage,
+) => {
   if (!Array.isArray(obsValue)) {
     return
   }
@@ -227,6 +238,10 @@ const collectObservationTargets = (obsValue: unknown, targets: NavigationTargets
   }
 
   for (const [observationId, rowValidations] of validationsByObsId) {
+    if (observationIdsOnPage && !observationIdsOnPage.has(observationId)) {
+      continue
+    }
+
     emitRowTargets(targets, rowValidations, {
       attribute: 'data-observation-id',
       value: observationId,
@@ -239,6 +254,7 @@ const collectObservationTargets = (obsValue: unknown, targets: NavigationTargets
 const getValidationTargets = (
   results: ValidationsResults | undefined,
   isFieldValueDirty: IsFieldValueDirty = () => false,
+  observationIdsOnPage: ObservationIdsOnPage = null,
 ): NavigationTargets => {
   const targets: NavigationTargets = { error: [], warning: [], ignored: [] }
   if (!results) {
@@ -263,7 +279,7 @@ const getValidationTargets = (
   // `data.obs_*` = observation tables; everything else = form fields.
   for (const [section, sectionValue] of Object.entries(results.data as Record<string, unknown>)) {
     if (section.startsWith('obs_')) {
-      collectObservationTargets(sectionValue, targets)
+      collectObservationTargets(sectionValue, targets, observationIdsOnPage)
     } else {
       walkFieldSubtree(`data.${section}`, sectionValue, targets, isFieldValueDirty)
     }

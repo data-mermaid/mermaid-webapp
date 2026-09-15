@@ -358,6 +358,19 @@ const CollectRecordFormPage = ({
     ],
   )
 
+  // The tables load in an effect, so there are no rows to compare against until they have.
+  const areObservationTablesLoaded =
+    isObservationsTable1ReducerInitialized && isObservationsTable2ReducerInitialized
+
+  // observationsTable2State is undefined off bleaching: only its dispatch has a default.
+  const observationIdsOnPage = areObservationTablesLoaded
+    ? new Set(
+        [...(observationsTable1State ?? []), ...(observationsTable2State ?? [])].map(
+          ({ id }) => id,
+        ),
+      )
+    : null
+
   const {
     handleScrollToObservation,
     handleValidate,
@@ -376,6 +389,7 @@ const CollectRecordFormPage = ({
     formikInstance: formik,
     handleCollectRecordChange,
     isParentDataLoading,
+    observationIdsOnPage,
     observationTableRef,
     projectId,
     recordId,

@@ -188,6 +188,46 @@ describe('getValidationTargets with edited fields', () => {
   })
 })
 
+describe('getValidationTargets with deleted observation rows', () => {
+  // Third argument is the rows still on the page. Deleting one leaves its validations behind.
+  const results = {
+    data: {
+      obs_belt_fishes: [
+        [{ status: 'error', context: { observation_id: 'obs1' } }],
+        [{ status: 'warning', context: { observation_id: 'obs2' } }],
+      ],
+    },
+  }
+
+  test('drops validations for rows that are no longer on the page', () => {
+    const targets = getValidationTargets(results, () => false, new Set(['obs2']))
+
+    expect(targets.error).toEqual([])
+    expect(targets.warning).toEqual([observationTarget('obs2')])
+  })
+
+  test('keeps validations for rows that are still on the page', () => {
+    const targets = getValidationTargets(results, () => false, new Set(['obs1', 'obs2']))
+
+    expect(targets.error).toEqual([observationTarget('obs1')])
+    expect(targets.warning).toEqual([observationTarget('obs2')])
+  })
+
+  test('drops the last row on the page when it is deleted', () => {
+    const targets = getValidationTargets(results, () => false, new Set())
+
+    expect(targets.error).toEqual([])
+    expect(targets.warning).toEqual([])
+  })
+
+  test('counts everything while the observation tables are still loading', () => {
+    const targets = getValidationTargets(results, () => false, null)
+
+    expect(targets.error).toEqual([observationTarget('obs1')])
+    expect(targets.warning).toEqual([observationTarget('obs2')])
+  })
+})
+
 describe('getValidationTargets record level statuses', () => {
   test('counts a record level reset as a warning, since the panel still renders it as one', () => {
     const targets = getValidationTargets({

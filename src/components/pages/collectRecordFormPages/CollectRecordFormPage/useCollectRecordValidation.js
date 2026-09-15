@@ -40,6 +40,7 @@ const useCollectRecordValidation = ({
   formikInstance,
   handleCollectRecordChange,
   isParentDataLoading,
+  observationIdsOnPage,
   observationTableRef,
   projectId,
   recordId,
@@ -325,6 +326,7 @@ const useCollectRecordValidation = ({
   const validationTargets = getValidationTargets(
     collectRecordBeingEdited?.validations?.results,
     isFieldValueDirty,
+    observationIdsOnPage,
   )
   const validationCounts = {
     errorCount: validationTargets.error.length,
