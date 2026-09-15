@@ -163,10 +163,19 @@ const useCollectRecordValidation = ({
     }
   }
 
-  const handleScrollToObservation = () => {
-    observationTableRef.current.scrollIntoView({
-      behavior: 'smooth',
-    })
+  // A record-level validation names the observation table it is about in `fields`, as
+  // `data.obs_*`. Bleaching is the only protocol with two tables, so without matching on the
+  // name its percent cover warnings scroll to the colonies bleached table above.
+  const handleScrollToObservation = (fields = []) => {
+    const namedTable = fields
+      .map((field) =>
+        document.querySelector(`[data-observation-table="${field.replace('data.', '')}"]`),
+      )
+      .find(Boolean)
+
+    const target = namedTable ?? observationTableRef.current
+
+    target?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
   }
 
   const ignoreObservationValidations = useCallback(

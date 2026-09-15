@@ -28,7 +28,7 @@ interface RecordLevelValidationInfoProps {
   ignoreRecordLevelValidation: (args: { validationId: string }) => void
   resetRecordLevelValidation: (args: { validationId: string }) => void
   validations: RecordValidationInfo[]
-  handleScrollToObservation: () => void
+  handleScrollToObservation: (fields?: string[]) => void
 }
 
 const InlineValidationItem = styled.li`
@@ -84,7 +84,7 @@ const RecordLevelValidationInfo = ({
   return (
     <ValidationList data-testid="record-level-validations">
       {filteredValidations.map((validation) => {
-        const { status, validation_id, code, context } = validation
+        const { status, validation_id, code, context, fields } = validation
         const isWarning = status === 'warning'
         const isError = status === 'error'
         const isIgnored = status === 'ignore'
@@ -108,7 +108,7 @@ const RecordLevelValidationInfo = ({
               {validationMessage}
             </InlineMessage>
             {isScrollToViewAvailable && (
-              <ScrollToButton onClick={handleScrollToObservation}>
+              <ScrollToButton onClick={() => handleScrollToObservation(fields)}>
                 {t('sample_units.scroll_to_observations')}
               </ScrollToButton>
             )}

@@ -589,7 +589,10 @@ const CollectRecordFormPage = ({
             }
           />
         )}
-        <div ref={observationTableRef}>
+        <div
+          ref={observationTableRef}
+          data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[0]}
+        >
           <ObservationTable1
             testId="observations-section"
             areValidationsShowing={areValidationsShowing}
@@ -605,19 +608,23 @@ const CollectRecordFormPage = ({
           />
         </div>
         {ObservationTable2 ? (
-          <ObservationTable2
-            testId="observations2-section"
-            areValidationsShowing={areValidationsShowing}
-            choices={choices}
-            collectRecord={collectRecordBeingEdited}
-            formik={formik}
-            ignoreObservationValidations={ignoreObservationValidations}
-            observationsReducer={observationsTable2Reducer}
-            resetObservationValidations={resetObservationValidations}
-            setAreObservationsInputsDirty={setAreObservationsInputsDirty}
-            setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
-            setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
-          />
+          <div data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[1]}>
+            <ObservationTable2
+              testId="observations2-section"
+              areValidationsShowing={areValidationsShowing}
+              choices={choices}
+              collectRecord={collectRecordBeingEdited}
+              formik={formik}
+              ignoreObservationValidations={ignoreObservationValidations}
+              observationsReducer={observationsTable2Reducer}
+              resetObservationValidations={resetObservationValidations}
+              setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+              setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
+              setObservationIdToAddNewBenthicAttributeTo={
+                setObservationIdToAddNewBenthicAttributeTo
+              }
+            />
+          </div>
         ) : null}
       </form>
       {!isBenthicPQTNewRecordWithImageClassificationEnabled && (
