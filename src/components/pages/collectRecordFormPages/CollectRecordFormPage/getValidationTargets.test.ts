@@ -228,6 +228,83 @@ describe('getValidationTargets with deleted observation rows', () => {
   })
 })
 
+describe('getValidationTargets with duplicate_values', () => {
+  // duplicate_values is a $record validation that getObservationValidationInfo also paints
+  // onto every row named in context.duplicates, so those rows are targets too.
+  const duplicateValues = (status: string) => ({
+    code: 'duplicate_values',
+    status,
+    validation_id: 'dupes',
+    fields: ['data.obs_benthic_photo_quadrats'],
+    context: {
+      duplicates: [
+        [
+          { id: 'obs1', index: 0 },
+          { id: 'obs2', index: 1 },
+        ],
+      ],
+    },
+  })
+
+  test('emits a target for the record message and for every row it names', () => {
+    const targets = getValidationTargets({ $record: [duplicateValues('warning')] })
+
+    expect(targets.warning).toEqual([
+      recordTarget('dupes'),
+      observationTarget('obs1'),
+      observationTarget('obs2'),
+    ])
+  })
+
+  test('a named row showing its own error is not also counted as a duplicate warning', () => {
+    const targets = getValidationTargets({
+      $record: [duplicateValues('warning')],
+      data: {
+        obs_benthic_photo_quadrats: [[{ status: 'error', context: { observation_id: 'obs1' } }]],
+      },
+    })
+
+    expect(targets.error).toEqual([observationTarget('obs1')])
+    expect(targets.warning).toEqual([recordTarget('dupes'), observationTarget('obs2')])
+  })
+
+  test('respects rows that are no longer on the page', () => {
+    const targets = getValidationTargets(
+      { $record: [duplicateValues('warning')] },
+      () => false,
+      new Set(['obs2']),
+    )
+
+    expect(targets.warning).toEqual([recordTarget('dupes'), observationTarget('obs2')])
+  })
+
+  test('follows the validation status, so an ignored duplicate counts as ignored', () => {
+    const targets = getValidationTargets({ $record: [duplicateValues('ignore')] })
+
+    expect(targets.warning).toEqual([])
+    expect(targets.ignored).toEqual([
+      recordTarget('dupes'),
+      observationTarget('obs1'),
+      observationTarget('obs2'),
+    ])
+  })
+
+  test('ignores duplicate_images, which keys context.duplicates by image id instead', () => {
+    const targets = getValidationTargets({
+      $record: [
+        {
+          code: 'duplicate_images',
+          status: 'warning',
+          validation_id: 'images',
+          context: { duplicates: { 'image-1': [{ id: 'obs1' }] } },
+        },
+      ],
+    })
+
+    expect(targets.warning).toEqual([recordTarget('images')])
+  })
+})
+
 describe('getValidationTargets record level statuses', () => {
   test('counts a record level reset as a warning, since the panel still renders it as one', () => {
     const targets = getValidationTargets({

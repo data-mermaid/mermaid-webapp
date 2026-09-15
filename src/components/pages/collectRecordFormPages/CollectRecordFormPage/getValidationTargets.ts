@@ -1,6 +1,7 @@
 import type { ValidationStatus } from '../../../../types/constants'
 import getRecordLevelValidationsToDisplay from '../getRecordLevelValidationsToDisplay'
 import { getValidationsToDisplay } from '../getValidationPropertiesForInput'
+import getDuplicateValuesObservationIds from './getDuplicateValuesObservationIds'
 
 /**
  * Enumerates the rows the FormStatusIndicators bar can scroll to, bucketed by validation type.
@@ -207,45 +208,60 @@ const walkFieldSubtree = (
   }
 }
 
+const addRowValidation = (
+  validationsByObsId: Map<string, unknown[]>,
+  observationId: string,
+  validation: unknown,
+) => {
+  const rowValidations = validationsByObsId.get(observationId) ?? []
+  rowValidations.push(validation)
+  validationsByObsId.set(observationId, rowValidations)
+}
+
 /**
- * Observation-level validations live under `data.obs_*` as nested arrays
- * (outer per observation, inner per validation). Group statuses by observation_id
- * first, then emit one target per row with error-preempts-warning/ignore applied.
+ * Observation-level validations live under `data.obs_*` as nested arrays, outer per
+ * observation and inner per validation.
  */
-const collectObservationTargets = (
+const collectObservationValidations = (
   obsValue: unknown,
-  targets: NavigationTargets,
-  observationIdsOnPage: ObservationIdsOnPage,
+  validationsByObsId: Map<string, unknown[]>,
 ) => {
   if (!Array.isArray(obsValue)) {
     return
   }
 
-  const validationsByObsId = new Map<string, unknown[]>()
   for (const group of obsValue) {
     if (!Array.isArray(group)) {
       continue
     }
     for (const validation of group) {
       const observationId = getObservationId(validation)
-      if (!observationId) {
-        continue
+      if (observationId) {
+        addRowValidation(validationsByObsId, observationId, validation)
       }
-      const rowValidations = validationsByObsId.get(observationId) ?? []
-      rowValidations.push(validation)
-      validationsByObsId.set(observationId, rowValidations)
     }
   }
+}
 
-  for (const [observationId, rowValidations] of validationsByObsId) {
-    if (observationIdsOnPage && !observationIdsOnPage.has(observationId)) {
-      continue
+/**
+ * A `duplicate_values` record validation is also rendered on each observation row it names
+ * (see getObservationValidationInfo), so it has to join those rows before precedence is
+ * applied. A row showing its own error hides the duplicate warning, and must not be counted
+ * as one. This is also the only way a row whose sole problem is being a duplicate gets a
+ * target, since it has no entry of its own under `data.obs_*`.
+ */
+const addDuplicateValuesToRows = (
+  recordValidations: unknown,
+  validationsByObsId: Map<string, unknown[]>,
+) => {
+  if (!Array.isArray(recordValidations)) {
+    return
+  }
+
+  for (const validation of recordValidations) {
+    for (const observationId of getDuplicateValuesObservationIds(validation)) {
+      addRowValidation(validationsByObsId, observationId, validation)
     }
-
-    emitRowTargets(targets, rowValidations, {
-      attribute: 'data-observation-id',
-      value: observationId,
-    })
   }
 }
 
@@ -272,17 +288,31 @@ const getValidationTargets = (
     }
   }
 
-  if (!results.data || typeof results.data !== 'object') {
-    return targets
+  // `data.obs_*` = observation tables; everything else = form fields. A duplicate_values row
+  // has no entry of its own here, so the map is filled even when `data` is missing entirely.
+  const validationsByObsId = new Map<string, unknown[]>()
+
+  if (results.data && typeof results.data === 'object') {
+    for (const [section, sectionValue] of Object.entries(results.data as Record<string, unknown>)) {
+      if (section.startsWith('obs_')) {
+        collectObservationValidations(sectionValue, validationsByObsId)
+      } else {
+        walkFieldSubtree(`data.${section}`, sectionValue, targets, isFieldValueDirty)
+      }
+    }
   }
 
-  // `data.obs_*` = observation tables; everything else = form fields.
-  for (const [section, sectionValue] of Object.entries(results.data as Record<string, unknown>)) {
-    if (section.startsWith('obs_')) {
-      collectObservationTargets(sectionValue, targets, observationIdsOnPage)
-    } else {
-      walkFieldSubtree(`data.${section}`, sectionValue, targets, isFieldValueDirty)
+  addDuplicateValuesToRows(results.$record, validationsByObsId)
+
+  for (const [observationId, rowValidations] of validationsByObsId) {
+    if (observationIdsOnPage && !observationIdsOnPage.has(observationId)) {
+      continue
     }
+
+    emitRowTargets(targets, rowValidations, {
+      attribute: 'data-observation-id',
+      value: observationId,
+    })
   }
 
   return targets

@@ -33,9 +33,9 @@ const validations = {
 // their own id, so this would fail for any protocol that had to opt in by hand.
 test('Next on the error chip scrolls to and highlights a Benthic LIT transect field', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
-  const scrollIntoView = vi.fn()
-
-  window.HTMLElement.prototype.scrollIntoView = scrollIntoView
+  const scrollIntoView = vi
+    .spyOn(window.HTMLElement.prototype, 'scrollIntoView')
+    .mockImplementation(() => {})
 
   mockMermaidApiAllSuccessful.use(
     http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () =>
