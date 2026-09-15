@@ -154,7 +154,11 @@ const HabitatComplexityObservationsTable = ({
       }
 
       return (
-        <ObservationTr key={observationId} $messageType={observationValidationType}>
+        <ObservationTr
+          key={observationId}
+          data-observation-id={observationId}
+          $messageType={observationValidationType}
+        >
           <Td $align="center">{rowNumber}</Td>
           <Td $align="right" aria-labelledby="interval-label" data-testid="interval-cell">
             {interval}

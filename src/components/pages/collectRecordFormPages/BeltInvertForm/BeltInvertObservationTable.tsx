@@ -290,7 +290,7 @@ const BeltInvertObservationRow = ({
   )
 
   return (
-    <ObservationTr key={observationId}>
+    <ObservationTr key={observationId} data-observation-id={observationId}>
       <Td $align="center">{rowNumber}</Td>
       <Td $align="left">
         <InputAutocompleteContainer>

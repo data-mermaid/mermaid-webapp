@@ -35,6 +35,26 @@ const GlobalStyle = createGlobalStyle`
           text-decoration: none;
         `)}
     }
+    @keyframes validation-target-highlight-fade {
+        0% { background-color: var(--validation-target-highlight-color, ${
+          theme.color.chipWarningBackground
+        }); }
+        100% { background-color: transparent; }
+    }
+    .validation-target-highlight {
+        animation: validation-target-highlight-fade ${
+          theme.timing.validationTargetHighlightMs
+        }ms ease-out;
+
+        /* Hold the colour instead of fading it. The class is removed on a timer either way,
+           so the row still clears without anything moving. */
+        @media (prefers-reduced-motion: reduce) {
+            animation: none;
+            background-color: var(--validation-target-highlight-color, ${
+              theme.color.chipWarningBackground
+            });
+        }
+    }
 `
 
 export default GlobalStyle

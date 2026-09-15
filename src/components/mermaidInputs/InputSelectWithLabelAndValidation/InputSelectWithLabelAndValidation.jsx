@@ -23,7 +23,7 @@ const InputSelectWithLabelAndValidation = ({
   ...restOfProps
 }) => {
   return (
-    <InputRow $validationType={validationType} data-testid={testId}>
+    <InputRow $validationType={validationType} data-testid={testId} data-validation-field={id}>
       <InputNoRowSelectWithLabelAndValidation
         label={label}
         id={id}

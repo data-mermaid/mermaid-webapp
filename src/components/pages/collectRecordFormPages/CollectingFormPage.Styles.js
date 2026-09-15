@@ -9,6 +9,11 @@ import {
 } from '../../generic/buttons'
 import { TableOverflowWrapper, Tr, GenericStickyTable } from '../../generic/Table/table'
 import { inputTextareaSelectStyles } from '../../generic/form'
+import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+
+export const CollectFormToolbarWrapper = styled(ContentPageToolbarWrapper)`
+  min-height: ${theme.spacing.toolbarHeight};
+`
 
 export const NewOptionButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`

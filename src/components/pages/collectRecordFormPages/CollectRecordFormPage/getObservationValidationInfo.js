@@ -1,18 +1,18 @@
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
+import getDuplicateValuesObservationIds, {
+  isDuplicateValuesValidation,
+} from './getDuplicateValuesObservationIds'
 
 const getObservationValidations = ({ observationId, collectRecord, observationsPropertyName }) => {
   const allObservationsValidations =
     collectRecord?.validations?.results?.data?.[observationsPropertyName] ?? []
 
   const duplicateRecordValidator = collectRecord?.validations?.results?.$record?.filter(
-    (record) => record?.code === 'duplicate_values',
+    isDuplicateValuesValidation,
   )
 
   const isObservationIdIncludedInDuplicateRecordValidator = duplicateRecordValidator?.some(
-    (validator) =>
-      validator?.context?.duplicates?.some((duplicateArray) =>
-        duplicateArray?.some((obs) => obs.id === observationId),
-      ),
+    (validator) => getDuplicateValuesObservationIds(validator).includes(observationId),
   )
 
   const justThisObservationsValidations = allObservationsValidations.flat().filter((validation) => {
