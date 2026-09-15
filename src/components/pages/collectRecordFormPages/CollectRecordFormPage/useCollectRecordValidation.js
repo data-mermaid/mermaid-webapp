@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
@@ -21,18 +21,13 @@ const highlightColorByType = {
 const findTargetElement = (target) =>
   document.querySelector(`[${target.attribute}="${target.value}"]`)
 
-const scrollToAndHighlight = (element, type) => {
-  element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  element.style.setProperty(HIGHLIGHT_COLOR_VAR, highlightColorByType[type])
-  element.classList.remove(HIGHLIGHT_CLASS)
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  void element.offsetWidth // restart CSS animation
-  element.classList.add(HIGHLIGHT_CLASS)
-  setTimeout(() => {
-    element.classList.remove(HIGHLIGHT_CLASS)
-    element.style.removeProperty(HIGHLIGHT_COLOR_VAR)
-  }, theme.timing.validationTargetHighlightMs)
-}
+// Focus stays on the chip so it can be pressed again, which means this text is the only way
+// a screen reader learns where the page went. The row already reads as its label, severity
+// and message, so repeating it is enough; the cap keeps a wide observation row from reciting
+// every cell.
+const describeTarget = (element) => element.textContent.replace(/\s+/g, ' ').trim().slice(0, 120)
 
 const useCollectRecordValidation = ({
   collectRecordBeingEdited,
@@ -59,6 +54,45 @@ const useCollectRecordValidation = ({
   const nextCursorsRef = useRef({ error: 0, warning: 0, ignored: 0 })
   const resetNextCursors = () => {
     nextCursorsRef.current = { error: 0, warning: 0, ignored: 0 }
+  }
+
+  const [nextAnnouncement, setNextAnnouncement] = useState('')
+
+  // The highlight in flight. Tracked so a second Next restarts the fade instead of letting
+  // the previous timer strip the class part way through, and so nothing fires after unmount.
+  const highlightRef = useRef({ element: null, timeoutId: null })
+
+  const clearHighlight = useCallback(() => {
+    const { element, timeoutId } = highlightRef.current
+
+    clearTimeout(timeoutId)
+
+    if (element) {
+      element.classList.remove(HIGHLIGHT_CLASS)
+      element.style.removeProperty(HIGHLIGHT_COLOR_VAR)
+    }
+
+    highlightRef.current = { element: null, timeoutId: null }
+  }, [])
+
+  useEffect(() => clearHighlight, [clearHighlight])
+
+  const scrollToAndHighlight = (element, type) => {
+    clearHighlight()
+
+    element.scrollIntoView({
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      block: 'center',
+    })
+
+    element.style.setProperty(HIGHLIGHT_COLOR_VAR, highlightColorByType[type])
+    void element.offsetWidth // restart the CSS animation
+    element.classList.add(HIGHLIGHT_CLASS)
+
+    highlightRef.current = {
+      element,
+      timeoutId: setTimeout(clearHighlight, theme.timing.validationTargetHighlightMs),
+    }
   }
   const getValidationButtonStatus = useCallback((collectRecord) => {
     return collectRecord?.validations?.status === 'ok'
@@ -360,7 +394,16 @@ const useCollectRecordValidation = ({
     const cursor = nextCursorsRef.current[type] % resolved.length
     nextCursorsRef.current[type] = cursor + 1
 
-    scrollToAndHighlight(resolved[cursor].element, type)
+    const { element } = resolved[cursor]
+
+    scrollToAndHighlight(element, type)
+    setNextAnnouncement(
+      t('sample_units.validation_status.next_announcement', {
+        position: cursor + 1,
+        total: resolved.length,
+        description: describeTarget(element),
+      }),
+    )
   }
 
   return {
@@ -375,6 +418,7 @@ const useCollectRecordValidation = ({
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,
+    nextAnnouncement,
   }
 }
 

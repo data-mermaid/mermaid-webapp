@@ -55,11 +55,23 @@ const NextButton = styled('button')`
   }
 `
 
+// Next leaves focus on the chip so it can be pressed again, so where the page went is only
+// available to a screen reader through the bar's live region.
+const ScreenReaderOnly = styled('span')`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+`
+
 interface FormStatusIndicatorsProps {
   areValidationsShowing: boolean
   errorCount: number
   warningCount: number
   ignoredCount: number
+  nextAnnouncement: string
   onNext: (type: ChipVariant) => void
 }
 
@@ -68,6 +80,7 @@ const FormStatusIndicators = ({
   errorCount,
   warningCount,
   ignoredCount,
+  nextAnnouncement,
   onNext,
 }: FormStatusIndicatorsProps) => {
   const { t } = useTranslation()
@@ -89,7 +102,7 @@ const FormStatusIndicators = ({
   ] as const
 
   return (
-    <IndicatorBar data-testid="form-status-indicators">
+    <IndicatorBar data-testid="form-status-indicators" aria-live="polite">
       {chips
         .filter(({ count }) => count > 0)
         .map(({ variant, count, labelKey }) => {
@@ -110,6 +123,7 @@ const FormStatusIndicators = ({
             </Chip>
           )
         })}
+      <ScreenReaderOnly>{nextAnnouncement}</ScreenReaderOnly>
     </IndicatorBar>
   )
 }

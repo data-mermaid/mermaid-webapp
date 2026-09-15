@@ -18,6 +18,7 @@ const renderIndicators = (props: Partial<React.ComponentProps<typeof FormStatusI
       errorCount={0}
       warningCount={0}
       ignoredCount={0}
+      nextAnnouncement=""
       onNext={onNext}
       {...props}
     />,

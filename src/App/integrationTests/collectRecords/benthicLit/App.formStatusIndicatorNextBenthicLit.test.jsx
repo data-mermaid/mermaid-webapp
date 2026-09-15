@@ -14,6 +14,7 @@ import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import mockBenthicLitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
+import { mockT } from '../../../../testUtilities/mockT'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
@@ -28,10 +29,10 @@ const validations = {
   },
 }
 
-// Benthic LIT is one of the protocols whose transect inputs never opted into validation
-// navigation. Its rows are reachable because the shared input components tag every row with
-// their own id, so this would fail for any protocol that had to opt in by hand.
-test('Next on the error chip scrolls to and highlights a Benthic LIT transect field', async () => {
+// Validates a Benthic LIT record and clicks Next on the error chip. No protocol form opts in
+// to validation navigation by hand: the shared input components tag every row from their own
+// id, so any protocol would do here.
+const validateThenClickNext = async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
   const scrollIntoView = vi
     .spyOn(window.HTMLElement.prototype, 'scrollIntoView')
@@ -69,12 +70,62 @@ test('Next on the error chip scrolls to and highlights a Benthic LIT transect fi
 
   const depthRow = (await screen.findByTestId('depth')).closest('[data-validation-field]')
 
-  expect(depthRow).toHaveAttribute('data-validation-field', 'depth')
-
   scrollIntoView.mockClear()
-  await user.click(within(await screen.findByTestId('form-status-chip-error')).getByRole('button'))
 
+  const nextButton = within(await screen.findByTestId('form-status-chip-error')).getByRole('button')
+
+  await user.click(nextButton)
+
+  return { depthRow, nextButton, scrollIntoView }
+}
+
+test('Next on the error chip scrolls to and highlights a Benthic LIT transect field', async () => {
+  const { depthRow, scrollIntoView } = await validateThenClickNext()
+
+  expect(depthRow).toHaveAttribute('data-validation-field', 'depth')
   expect(scrollIntoView).toHaveBeenCalledTimes(1)
   expect(scrollIntoView.mock.instances[0]).toBe(depthRow)
+  expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'center' })
+  expect(depthRow).toHaveClass('validation-target-highlight')
+}, 50000)
+
+test('Next keeps focus on the chip and announces where it went', async () => {
+  const { depthRow, nextButton } = await validateThenClickNext()
+
+  // Focus stays put so the chip can be pressed again to cycle.
+  expect(nextButton).toHaveFocus()
+
+  // Which leaves the live region as the only thing telling a screen reader what happened.
+  expect(screen.getByTestId('form-status-indicators')).toHaveAttribute('aria-live', 'polite')
+
+  // The react-i18next mock drops interpolated values, so read them off the call instead.
+  const announcements = mockT.mock.calls.filter(
+    ([key]) => key === 'sample_units.validation_status.next_announcement',
+  )
+
+  expect(announcements.at(-1)?.[1]).toEqual({
+    position: 1,
+    total: 1,
+    description: depthRow.textContent,
+  })
+}, 50000)
+
+test('Next jumps instead of gliding when the user prefers reduced motion', async () => {
+  vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
+    matches: query === '(prefers-reduced-motion: reduce)',
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }))
+
+  const { depthRow, scrollIntoView } = await validateThenClickNext()
+
+  expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'auto', block: 'center' })
+
+  // The row is still marked; only the movement is dropped.
   expect(depthRow).toHaveClass('validation-target-highlight')
 }, 50000)

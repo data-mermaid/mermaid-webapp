@@ -383,6 +383,7 @@ const CollectRecordFormPage = ({
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,
+    nextAnnouncement,
   } = useCollectRecordValidation({
     collectRecordBeingEdited,
     databaseSwitchboardInstance,
@@ -677,6 +678,7 @@ const CollectRecordFormPage = ({
                 errorCount={validationCounts.errorCount}
                 warningCount={validationCounts.warningCount}
                 ignoredCount={validationCounts.ignoredCount}
+                nextAnnouncement={nextAnnouncement}
                 onNext={goToNextValidation}
               />
             </div>

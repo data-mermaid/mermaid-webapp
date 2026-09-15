@@ -45,6 +45,15 @@ const GlobalStyle = createGlobalStyle`
         animation: validation-target-highlight-fade ${
           theme.timing.validationTargetHighlightMs
         }ms ease-out;
+
+        /* Hold the colour instead of fading it. The class is removed on a timer either way,
+           so the row still clears without anything moving. */
+        @media (prefers-reduced-motion: reduce) {
+            animation: none;
+            background-color: var(--validation-target-highlight-color, ${
+              theme.color.chipWarningBackground
+            });
+        }
     }
 `
 
