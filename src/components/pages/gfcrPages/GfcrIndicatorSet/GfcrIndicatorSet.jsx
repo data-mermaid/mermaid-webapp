@@ -187,7 +187,8 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         setSaveButtonState(buttonGroupStates.unsaved)
 
         if (error && isAppOnline) {
-          const questionErrors = Object.entries(error.response.data)
+          // A request that gets no response has no body to read field-level errors from
+          const questionErrors = Object.entries(error?.response?.data ?? {})
 
           const errorMarkup = (
             <>

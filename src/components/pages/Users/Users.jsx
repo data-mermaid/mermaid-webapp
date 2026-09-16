@@ -205,7 +205,7 @@ const Users = () => {
         handleHttpResponseError({
           error,
           callback: () => {
-            if (error.response.status === 400) {
+            if (error?.response?.status === 400) {
               toast.error(...getToastArguments(t('users.messages.duplicate_user_error')))
             } else {
               toast.error(...getToastArguments(t('users.messages.something_went_wrong')))
