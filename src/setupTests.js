@@ -128,8 +128,7 @@ configure({ asyncUtilTimeout: 10000 })
 // triggered by Downshift's InputAutocomplete when the input value changes.
 window.scrollTo = vi.fn()
 
-// jsdom doesn't implement Element.scrollIntoView. Defining it here lets tests vi.spyOn it and
-// have restoreMocks clean up, rather than each one assigning over the prototype permanently.
+// jsdom doesn't implement Element.scrollIntoView; define it so tests can vi.spyOn it.
 window.HTMLElement.prototype.scrollIntoView = vi.fn()
 
 // jsdom doesn't implement window.matchMedia; mock it for components that use media queries

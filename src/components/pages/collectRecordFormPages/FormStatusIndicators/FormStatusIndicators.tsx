@@ -58,8 +58,6 @@ const NextButton = styled('button')`
   }
 `
 
-// Next leaves focus on the chip so it can be pressed again, so where the page went is only
-// available to a screen reader through the bar's live region.
 const ScreenReaderOnly = styled('span')`
   position: absolute;
   width: 1px;

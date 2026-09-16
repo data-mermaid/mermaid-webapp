@@ -54,8 +54,7 @@ type IsFieldValueDirty = (formikProperty: string) => boolean
 
 /**
  * The observation rows on the page, or null before the tables have loaded. Deleting a row
- * leaves its validations on the record, so a target outlives the row it names. Null filters
- * nothing, because an unloaded table and a deleted row look the same from here.
+ * leaves its validations on the record, so a target can outlive the row it names.
  */
 type ObservationIdsOnPage = ReadonlySet<string> | null
 
@@ -106,22 +105,20 @@ const getValidationId = (value: unknown): string | undefined => {
 
 // ---- Dedup + emit helpers ---------------------------------------------------
 
-// Push a target into its bucket only if an equivalent one isn't already there. The seen set
-// keeps the check off the array, which is walked on every keystroke via the dirty check.
+// Push a target into its bucket only if an equivalent one isn't already there.
 const addTarget = (
   targets: NavigationTargets,
-  seen: Set<string>,
   status: CountableStatus,
   target: NavigationTarget,
 ) => {
-  const key = `${status}|${target.attribute}|${target.value}`
+  const bucket = targets[status]
+  const isAlreadyPresent = bucket.some(
+    (existing) => existing.attribute === target.attribute && existing.value === target.value,
+  )
 
-  if (seen.has(key)) {
-    return
+  if (!isAlreadyPresent) {
+    bucket.push(target)
   }
-
-  seen.add(key)
-  targets[status].push(target)
 }
 
 /**
@@ -132,7 +129,6 @@ const addTarget = (
  */
 const emitRowTargets = (
   targets: NavigationTargets,
-  seen: Set<string>,
   rowValidations: unknown,
   target: NavigationTarget,
 ) => {
@@ -140,7 +136,7 @@ const emitRowTargets = (
     const status = getStatus(validation)
 
     if (status) {
-      addTarget(targets, seen, status, target)
+      addTarget(targets, status, target)
     }
   }
 }
@@ -161,7 +157,6 @@ const walkFieldSubtree = (
   path: string,
   node: unknown,
   targets: NavigationTargets,
-  seen: Set<string>,
   isFieldValueDirty: IsFieldValueDirty,
 ) => {
   if (!node || typeof node !== 'object') {
@@ -188,7 +183,7 @@ const walkFieldSubtree = (
     const formikProperty = path.slice(path.lastIndexOf('.') + 1)
 
     if (!isFieldValueDirty(formikProperty)) {
-      emitRowTargets(targets, seen, node, {
+      emitRowTargets(targets, node, {
         attribute: 'data-validation-field',
         value: formikProperty,
       })
@@ -200,12 +195,12 @@ const walkFieldSubtree = (
   // path), so children reuse the parent's path; keyed objects extend the path.
   if (Array.isArray(node)) {
     for (const child of node) {
-      walkFieldSubtree(path, child, targets, seen, isFieldValueDirty)
+      walkFieldSubtree(path, child, targets, isFieldValueDirty)
     }
     return
   }
   for (const [key, child] of Object.entries(node as Record<string, unknown>)) {
-    walkFieldSubtree(`${path}.${key}`, child, targets, seen, isFieldValueDirty)
+    walkFieldSubtree(`${path}.${key}`, child, targets, isFieldValueDirty)
   }
 }
 
@@ -245,11 +240,8 @@ const collectObservationValidations = (
 }
 
 /**
- * A `duplicate_values` record validation is also rendered on each observation row it names
- * (see getObservationValidationInfo), so it has to join those rows before precedence is
- * applied. A row showing its own error hides the duplicate warning, and must not be counted
- * as one. This is also the only way a row whose sole problem is being a duplicate gets a
- * target, since it has no entry of its own under `data.obs_*`.
+ * `duplicate_values` is rendered on each observation row it names (see
+ * getObservationValidationInfo), so it joins those rows before precedence is applied.
  */
 const addDuplicateValuesToRows = (
   recordValidations: unknown,
@@ -274,7 +266,6 @@ const getValidationTargets = (
   observationIdsOnPage: ObservationIdsOnPage = null,
 ): NavigationTargets => {
   const targets: NavigationTargets = { error: [], warning: [], ignore: [] }
-  const seen = new Set<string>()
   if (!results) {
     return targets
   }
@@ -285,16 +276,13 @@ const getValidationTargets = (
       const status = getRecordStatus(validation)
       const validationId = getValidationId(validation)
       if (status && validationId) {
-        addTarget(targets, seen, status, {
-          attribute: 'data-record-validation-id',
-          value: validationId,
-        })
+        addTarget(targets, status, { attribute: 'data-record-validation-id', value: validationId })
       }
     }
   }
 
   // `data.obs_*` = observation tables; everything else = form fields. A duplicate_values row
-  // has no entry of its own here, so the map is filled even when `data` is missing entirely.
+  // has no entry here, so the map is still filled when `data` is missing entirely.
   const validationsByObsId = new Map<string, unknown[]>()
 
   if (results.data && typeof results.data === 'object') {
@@ -302,7 +290,7 @@ const getValidationTargets = (
       if (section.startsWith('obs_')) {
         collectObservationValidations(sectionValue, validationsByObsId)
       } else {
-        walkFieldSubtree(`data.${section}`, sectionValue, targets, seen, isFieldValueDirty)
+        walkFieldSubtree(`data.${section}`, sectionValue, targets, isFieldValueDirty)
       }
     }
   }
@@ -314,7 +302,7 @@ const getValidationTargets = (
       continue
     }
 
-    emitRowTargets(targets, seen, rowValidations, {
+    emitRowTargets(targets, rowValidations, {
       attribute: 'data-observation-id',
       value: observationId,
     })

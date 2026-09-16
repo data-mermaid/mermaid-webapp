@@ -23,10 +23,8 @@ const findTargetElement = (target) =>
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-// Focus stays on the chip so it can be pressed again, which means this text is the only way
-// a screen reader learns where the page went. The row already reads as its label, severity
-// and message, so repeating it is enough; the cap keeps a wide observation row from reciting
-// every cell.
+// Focus stays on the chip, so this text is the only way a screen reader learns where the
+// page went. The cap stops a wide observation row reciting every cell.
 const describeTarget = (element) => element.textContent.replace(/\s+/g, ' ').trim().slice(0, 120)
 
 const useCollectRecordValidation = ({
@@ -163,9 +161,8 @@ const useCollectRecordValidation = ({
     }
   }
 
-  // A record-level validation names the observation table it is about in `fields`, as
-  // `data.obs_*`. Bleaching is the only protocol with two tables, so without matching on the
-  // name its percent cover warnings scroll to the colonies bleached table above.
+  // Bleaching is the only protocol with two observation tables, so the validation's `fields`
+  // decide which one to scroll to.
   const handleScrollToObservation = (fields = []) => {
     const namedTable = fields
       .map((field) =>
@@ -389,8 +386,6 @@ const useCollectRecordValidation = ({
       .filter((entry) => entry.element !== null)
 
     if (resolved.length === 0) {
-      // Every target should resolve, so reaching here means the counts are claiming a row the
-      // page no longer has. The chip would sit there with a button that does nothing.
       if (import.meta.env.DEV) {
         console.warn(`No element found for any ${type} validation target`, targets)
       }

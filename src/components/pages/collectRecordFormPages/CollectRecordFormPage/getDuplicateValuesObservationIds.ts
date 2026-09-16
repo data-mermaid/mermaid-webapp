@@ -1,12 +1,8 @@
 /**
- * A `duplicate_values` record validation names the observation rows it covers in
- * `context.duplicates`, as one array per set of rows that share a value.
- *
- * Not `duplicate_images`, which also has a `context.duplicates` but keys it by image id
- * (see getDuplicateValidationInfo). Always match on the code, never on the property.
+ * `duplicate_values` names the observation rows it covers in `context.duplicates`, one array
+ * per set of rows sharing a value. Match on the code, never the property: `duplicate_images`
+ * uses the same property name for a different shape (see getDuplicateValidationInfo).
  */
-export const DUPLICATE_VALUES_CODE = 'duplicate_values'
-
 interface DuplicateValuesValidation {
   code?: string
   context?: {
@@ -15,7 +11,7 @@ interface DuplicateValuesValidation {
 }
 
 export const isDuplicateValuesValidation = (validation: unknown): boolean =>
-  (validation as DuplicateValuesValidation)?.code === DUPLICATE_VALUES_CODE
+  (validation as DuplicateValuesValidation)?.code === 'duplicate_values'
 
 const getDuplicateValuesObservationIds = (validation: unknown): string[] => {
   if (!isDuplicateValuesValidation(validation)) {
@@ -29,7 +25,7 @@ const getDuplicateValuesObservationIds = (validation: unknown): string[] => {
   }
 
   return duplicates
-    .flatMap((duplicateSet) => (Array.isArray(duplicateSet) ? duplicateSet : []))
+    .flat()
     .map((observation) => observation?.id)
     .filter((id): id is string => typeof id === 'string')
 }
