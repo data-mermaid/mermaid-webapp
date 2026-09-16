@@ -13,9 +13,10 @@ import {
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
-import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import {
+  ButtonGroupWithCallout,
+  CollectFormToolbarWrapper,
   ErrorBox,
   ErrorText,
   ErrorTextButton,
@@ -36,6 +37,7 @@ import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflin
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import DeleteRecordButton from '../../../DeleteRecordButton'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
+import FormStatusIndicators from '../FormStatusIndicators'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
 import ObserversInput from '../ObserversInput'
@@ -357,6 +359,19 @@ const CollectRecordFormPage = ({
     ],
   )
 
+  // The tables load in an effect, so there are no rows to compare against until they have.
+  const areObservationTablesLoaded =
+    isObservationsTable1ReducerInitialized && isObservationsTable2ReducerInitialized
+
+  // observationsTable2State is undefined off bleaching: only its dispatch has a default.
+  const observationIdsOnPage = areObservationTablesLoaded
+    ? new Set(
+        [...(observationsTable1State ?? []), ...(observationsTable2State ?? [])].map(
+          ({ id }) => id,
+        ),
+      )
+    : null
+
   const {
     handleScrollToObservation,
     handleValidate,
@@ -367,12 +382,16 @@ const CollectRecordFormPage = ({
     resetObservationValidations,
     resetRecordLevelValidation,
     validationPropertiesWithDirtyResetOnInputChange,
+    validationCounts,
+    goToNextValidation,
+    nextAnnouncement,
   } = useCollectRecordValidation({
     collectRecordBeingEdited,
     databaseSwitchboardInstance,
     formikInstance: formik,
     handleCollectRecordChange,
     isParentDataLoading,
+    observationIdsOnPage,
     observationTableRef,
     projectId,
     recordId,
@@ -571,7 +590,10 @@ const CollectRecordFormPage = ({
             }
           />
         )}
-        <div ref={observationTableRef}>
+        <div
+          ref={observationTableRef}
+          data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[0]}
+        >
           <ObservationTable1
             testId="observations-section"
             areValidationsShowing={areValidationsShowing}
@@ -587,19 +609,23 @@ const CollectRecordFormPage = ({
           />
         </div>
         {ObservationTable2 ? (
-          <ObservationTable2
-            testId="observations2-section"
-            areValidationsShowing={areValidationsShowing}
-            choices={choices}
-            collectRecord={collectRecordBeingEdited}
-            formik={formik}
-            ignoreObservationValidations={ignoreObservationValidations}
-            observationsReducer={observationsTable2Reducer}
-            resetObservationValidations={resetObservationValidations}
-            setAreObservationsInputsDirty={setAreObservationsInputsDirty}
-            setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
-            setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
-          />
+          <div data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[1]}>
+            <ObservationTable2
+              testId="observations2-section"
+              areValidationsShowing={areValidationsShowing}
+              choices={choices}
+              collectRecord={collectRecordBeingEdited}
+              formik={formik}
+              ignoreObservationValidations={ignoreObservationValidations}
+              observationsReducer={observationsTable2Reducer}
+              resetObservationValidations={resetObservationValidations}
+              setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+              setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
+              setObservationIdToAddNewBenthicAttributeTo={
+                setObservationIdToAddNewBenthicAttributeTo
+              }
+            />
+          </div>
         ) : null}
       </form>
       {!isBenthicPQTNewRecordWithImageClassificationEnabled && (
@@ -619,6 +645,26 @@ const CollectRecordFormPage = ({
     <PageUnavailable mainText={t('page.read_only')} />
   )
 
+  const renderCollectRecordTitle = () => {
+    if (isNewRecord) {
+      return (
+        <H2 data-testid={`${sampleUnitName}-page-title`}>
+          {t(`protocol_titles.${sampleUnitName}`)}
+        </H2>
+      )
+    }
+    if (collectRecordBeingEdited) {
+      return (
+        <RecordFormTitle
+          submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
+          sites={sites}
+          protocol={sampleUnitName}
+        />
+      )
+    }
+    return null
+  }
+
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -631,40 +677,39 @@ const CollectRecordFormPage = ({
         isToolbarSticky={true}
         subNavNode={subNavNode}
         content={contentViewByRole}
+        headerTitle={renderCollectRecordTitle()}
         toolbar={
-          <ContentPageToolbarWrapper>
-            {isNewRecord && (
-              <H2 data-testid={`${sampleUnitName}-page-title`}>
-                {t(`protocol_titles.${sampleUnitName}`)}
-              </H2>
-            )}
-            {collectRecordBeingEdited && !isNewRecord && (
-              <RecordFormTitle
-                submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
-                sites={sites}
-                protocol={sampleUnitName}
-              />
-            )}
-            {!isReadOnlyUser && (
-              <SaveValidateSubmitButtonGroup
-                isNewRecord={isNewRecord}
-                saveButtonState={saveButtonState}
-                validateButtonState={validateButtonState}
-                submitButtonState={submitButtonState}
-                onValidate={handleValidate}
-                onSave={handleSave}
-                onSubmit={handleSubmit}
-              />
-            )}
-            <ErrorBoxSubmit>
-              <ErrorTextSubmit $isErrorShown={isSubmitWarningVisible}>
-                {t('sample_units.errors.submit_disabled')}
-                <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
-                  x
-                </ErrorTextButton>
-              </ErrorTextSubmit>
-            </ErrorBoxSubmit>
-          </ContentPageToolbarWrapper>
+          <CollectFormToolbarWrapper>
+            <FormStatusIndicators
+              areValidationsShowing={areValidationsShowing}
+              errorCount={validationCounts.errorCount}
+              warningCount={validationCounts.warningCount}
+              ignoredCount={validationCounts.ignoredCount}
+              nextAnnouncement={nextAnnouncement}
+              onNext={goToNextValidation}
+            />
+            <ButtonGroupWithCallout>
+              {!isReadOnlyUser && (
+                <SaveValidateSubmitButtonGroup
+                  isNewRecord={isNewRecord}
+                  saveButtonState={saveButtonState}
+                  validateButtonState={validateButtonState}
+                  submitButtonState={submitButtonState}
+                  onValidate={handleValidate}
+                  onSave={handleSave}
+                  onSubmit={handleSubmit}
+                />
+              )}
+              <ErrorBoxSubmit>
+                <ErrorTextSubmit $isErrorShown={isSubmitWarningVisible}>
+                  {t('sample_units.errors.submit_disabled')}
+                  <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
+                    x
+                  </ErrorTextButton>
+                </ErrorTextSubmit>
+              </ErrorBoxSubmit>
+            </ButtonGroupWithCallout>
+          </CollectFormToolbarWrapper>
         }
       />
 

@@ -29,7 +29,12 @@ const InputWithLabelAndValidation = ({
   useStopInputScrollingIncrementNumber(textFieldRef)
 
   return (
-    <InputRow required={required} $validationType={validationType} data-testid={testId}>
+    <InputRow
+      required={required}
+      $validationType={validationType}
+      data-testid={testId}
+      data-validation-field={id}
+    >
       <InputNoRowWithLabelAndValidation
         required={required}
         helperText={helperText}

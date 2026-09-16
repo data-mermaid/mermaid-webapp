@@ -1011,7 +1011,15 @@
     "transfer": "Transfer sample units",
     "transfer_unsubmitted": "Transfer unsubmitted sample units",
     "validation_status": {
+      "chip_label_error_one": "{{count}} Error",
+      "chip_label_error_other": "{{count}} Errors",
+      "chip_label_ignored_one": "{{count}} Ignored",
+      "chip_label_ignored_other": "{{count}} Ignored",
+      "chip_label_warning_one": "{{count}} Warning",
+      "chip_label_warning_other": "{{count}} Warnings",
       "errors": "Errors",
+      "next": "Next",
+      "next_announcement": "{{position}} of {{total}}. {{description}}",
       "ready_to_submit": "Ready to submit",
       "saved": "Saved",
       "warnings": "Warnings"

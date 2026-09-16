@@ -1,4 +1,8 @@
-const getValidationsToDisplay = (inputValidations) => {
+// Which of a row's validations actually reach the screen. An error hides everything else on
+// that row; otherwise warnings and ignores show together; a row left with only resets shows
+// nothing. Also read by getValidationTargets, so the status indicator chips count exactly what
+// this returns.
+export const getValidationsToDisplay = (inputValidations) => {
   const validationObjectKeys = Object.keys(inputValidations)
   const errors = validationObjectKeys
     .filter((key) => inputValidations[key].status === 'error')
