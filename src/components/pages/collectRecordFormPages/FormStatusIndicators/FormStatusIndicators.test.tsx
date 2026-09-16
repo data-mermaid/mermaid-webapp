@@ -48,7 +48,7 @@ describe('FormStatusIndicators', () => {
       within(screen.getByTestId('form-status-indicators'))
         .getAllByTestId(/form-status-chip-/)
         .map((chip) => chip.dataset.testid),
-    ).toEqual(['form-status-chip-error', 'form-status-chip-ignored'])
+    ).toEqual(['form-status-chip-error', 'form-status-chip-ignore'])
   })
 
   test('gives each Next button its own accessible name', () => {
@@ -77,7 +77,7 @@ describe('FormStatusIndicators', () => {
     expect(screen.getByTestId('form-status-chip-warning')).toHaveStyle({
       backgroundColor: theme.color.chipWarningBackground,
     })
-    expect(screen.getByTestId('form-status-chip-ignored')).toHaveStyle({
+    expect(screen.getByTestId('form-status-chip-ignore')).toHaveStyle({
       backgroundColor: theme.color.chipIgnoreBackground,
     })
   })

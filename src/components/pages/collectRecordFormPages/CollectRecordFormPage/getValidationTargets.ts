@@ -38,7 +38,7 @@ interface NavigationTarget {
 interface NavigationTargets {
   error: NavigationTarget[]
   warning: NavigationTarget[]
-  ignored: NavigationTarget[]
+  ignore: NavigationTarget[]
 }
 
 type CountableStatus = 'error' | 'warning' | 'ignore'
@@ -106,27 +106,22 @@ const getValidationId = (value: unknown): string | undefined => {
 
 // ---- Dedup + emit helpers ---------------------------------------------------
 
-// bucket key is 'ignored' but status is 'ignore' — small remap
-const bucketKeyByStatus: Record<CountableStatus, keyof NavigationTargets> = {
-  error: 'error',
-  warning: 'warning',
-  ignore: 'ignored',
-}
-
-// Push a target into its bucket only if an equivalent one isn't already there.
+// Push a target into its bucket only if an equivalent one isn't already there. The seen set
+// keeps the check off the array, which is walked on every keystroke via the dirty check.
 const addTarget = (
   targets: NavigationTargets,
+  seen: Set<string>,
   status: CountableStatus,
   target: NavigationTarget,
 ) => {
-  const bucket = targets[bucketKeyByStatus[status]]
-  const isAlreadyPresent = bucket.some(
-    (existing) => existing.attribute === target.attribute && existing.value === target.value,
-  )
+  const key = `${status}|${target.attribute}|${target.value}`
 
-  if (!isAlreadyPresent) {
-    bucket.push(target)
+  if (seen.has(key)) {
+    return
   }
+
+  seen.add(key)
+  targets[status].push(target)
 }
 
 /**
@@ -137,6 +132,7 @@ const addTarget = (
  */
 const emitRowTargets = (
   targets: NavigationTargets,
+  seen: Set<string>,
   rowValidations: unknown,
   target: NavigationTarget,
 ) => {
@@ -144,7 +140,7 @@ const emitRowTargets = (
     const status = getStatus(validation)
 
     if (status) {
-      addTarget(targets, status, target)
+      addTarget(targets, seen, status, target)
     }
   }
 }
@@ -165,6 +161,7 @@ const walkFieldSubtree = (
   path: string,
   node: unknown,
   targets: NavigationTargets,
+  seen: Set<string>,
   isFieldValueDirty: IsFieldValueDirty,
 ) => {
   if (!node || typeof node !== 'object') {
@@ -191,7 +188,7 @@ const walkFieldSubtree = (
     const formikProperty = path.slice(path.lastIndexOf('.') + 1)
 
     if (!isFieldValueDirty(formikProperty)) {
-      emitRowTargets(targets, node, {
+      emitRowTargets(targets, seen, node, {
         attribute: 'data-validation-field',
         value: formikProperty,
       })
@@ -203,12 +200,12 @@ const walkFieldSubtree = (
   // path), so children reuse the parent's path; keyed objects extend the path.
   if (Array.isArray(node)) {
     for (const child of node) {
-      walkFieldSubtree(path, child, targets, isFieldValueDirty)
+      walkFieldSubtree(path, child, targets, seen, isFieldValueDirty)
     }
     return
   }
   for (const [key, child] of Object.entries(node as Record<string, unknown>)) {
-    walkFieldSubtree(`${path}.${key}`, child, targets, isFieldValueDirty)
+    walkFieldSubtree(`${path}.${key}`, child, targets, seen, isFieldValueDirty)
   }
 }
 
@@ -276,7 +273,8 @@ const getValidationTargets = (
   isFieldValueDirty: IsFieldValueDirty = () => false,
   observationIdsOnPage: ObservationIdsOnPage = null,
 ): NavigationTargets => {
-  const targets: NavigationTargets = { error: [], warning: [], ignored: [] }
+  const targets: NavigationTargets = { error: [], warning: [], ignore: [] }
+  const seen = new Set<string>()
   if (!results) {
     return targets
   }
@@ -287,7 +285,10 @@ const getValidationTargets = (
       const status = getRecordStatus(validation)
       const validationId = getValidationId(validation)
       if (status && validationId) {
-        addTarget(targets, status, { attribute: 'data-record-validation-id', value: validationId })
+        addTarget(targets, seen, status, {
+          attribute: 'data-record-validation-id',
+          value: validationId,
+        })
       }
     }
   }
@@ -301,7 +302,7 @@ const getValidationTargets = (
       if (section.startsWith('obs_')) {
         collectObservationValidations(sectionValue, validationsByObsId)
       } else {
-        walkFieldSubtree(`data.${section}`, sectionValue, targets, isFieldValueDirty)
+        walkFieldSubtree(`data.${section}`, sectionValue, targets, seen, isFieldValueDirty)
       }
     }
   }
@@ -313,7 +314,7 @@ const getValidationTargets = (
       continue
     }
 
-    emitRowTargets(targets, rowValidations, {
+    emitRowTargets(targets, seen, rowValidations, {
       attribute: 'data-observation-id',
       value: observationId,
     })

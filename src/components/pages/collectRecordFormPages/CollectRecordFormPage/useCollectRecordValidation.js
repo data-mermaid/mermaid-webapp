@@ -15,7 +15,7 @@ const HIGHLIGHT_COLOR_VAR = '--validation-target-highlight-color'
 const highlightColorByType = {
   error: theme.color.chipErrorBackground,
   warning: theme.color.chipWarningBackground,
-  ignored: theme.color.ignore,
+  ignore: theme.color.ignore,
 }
 
 const findTargetElement = (target) =>
@@ -51,9 +51,9 @@ const useCollectRecordValidation = ({
 
   // Per-chip cursors — refs so advancing doesn't trigger a render.
   // Reset to 0 whenever validations get refreshed (see handleValidate below).
-  const nextCursorsRef = useRef({ error: 0, warning: 0, ignored: 0 })
+  const nextCursorsRef = useRef({ error: 0, warning: 0, ignore: 0 })
   const resetNextCursors = () => {
-    nextCursorsRef.current = { error: 0, warning: 0, ignored: 0 }
+    nextCursorsRef.current = { error: 0, warning: 0, ignore: 0 }
   }
 
   const [nextAnnouncement, setNextAnnouncement] = useState('')
@@ -362,10 +362,9 @@ const useCollectRecordValidation = ({
     ],
   )
 
-  // Recompute each render — the reset flow mutates the results subtree in place
-  // (see setObjectPropertyOnClone), so reference-based memoization would miss updates.
-  // Chip counts derive from the (deduped) navigation targets so the number matches
-  // what the user can navigate to and what's visible inline.
+  // Rebuilt every render on purpose: isFieldValueDirty reads formik values, so an edited
+  // field has to drop out of the counts on the next keystroke. Counts derive from the deduped
+  // targets, so a chip can only claim something the user can navigate to and see inline.
   const validationTargets = getValidationTargets(
     collectRecordBeingEdited?.validations?.results,
     isFieldValueDirty,
@@ -374,12 +373,9 @@ const useCollectRecordValidation = ({
   const validationCounts = {
     errorCount: validationTargets.error.length,
     warningCount: validationTargets.warning.length,
-    ignoredCount: validationTargets.ignored.length,
+    ignoredCount: validationTargets.ignore.length,
   }
 
-  // Not memoised: validationTargets is rebuilt every render (see above), so any memo would
-  // be invalidated every render anyway. FormStatusIndicators is not memoised either, so a
-  // fresh function identity costs nothing.
   const goToNextValidation = (type) => {
     const targets = validationTargets[type]
     if (!targets || targets.length === 0) {
@@ -393,6 +389,12 @@ const useCollectRecordValidation = ({
       .filter((entry) => entry.element !== null)
 
     if (resolved.length === 0) {
+      // Every target should resolve, so reaching here means the counts are claiming a row the
+      // page no longer has. The chip would sit there with a button that does nothing.
+      if (import.meta.env.DEV) {
+        console.warn(`No element found for any ${type} validation target`, targets)
+      }
+
       return
     }
 

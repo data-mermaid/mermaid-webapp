@@ -3,25 +3,28 @@ import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import theme from '../../../../theme'
 
-type ChipVariant = 'error' | 'warning' | 'ignored'
+// Matches the API's validation statuses. Only the chip label says "Ignored".
+type ChipVariant = 'error' | 'warning' | 'ignore'
 
 // Written out rather than built from the variant, so a key scan still finds them.
 const CHIP_LABEL_KEYS: Record<ChipVariant, string> = {
   error: 'sample_units.validation_status.chip_label_error',
   warning: 'sample_units.validation_status.chip_label_warning',
-  ignored: 'sample_units.validation_status.chip_label_ignored',
+  ignore: 'sample_units.validation_status.chip_label_ignored',
 }
 
 const IndicatorBar = styled('div')`
   display: flex;
   align-items: center;
   gap: ${theme.spacing.small};
+  /* Keeps the toolbar's buttons hard right whether or not this bar is showing. */
+  margin-right: auto;
 `
 
 const chipBackgroundByVariant: Record<ChipVariant, string> = {
   error: theme.color.chipErrorBackground,
   warning: theme.color.chipWarningBackground,
-  ignored: theme.color.chipIgnoreBackground,
+  ignore: theme.color.chipIgnoreBackground,
 }
 
 const Chip = styled('span')<{ $variant: ChipVariant }>`
@@ -98,7 +101,7 @@ const FormStatusIndicators = ({
   const chips = [
     { variant: 'error', count: errorCount, labelKey: CHIP_LABEL_KEYS.error },
     { variant: 'warning', count: warningCount, labelKey: CHIP_LABEL_KEYS.warning },
-    { variant: 'ignored', count: ignoredCount, labelKey: CHIP_LABEL_KEYS.ignored },
+    { variant: 'ignore', count: ignoredCount, labelKey: CHIP_LABEL_KEYS.ignore },
   ] as const
 
   return (

@@ -13,6 +13,9 @@ import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLa
 
 export const CollectFormToolbarWrapper = styled(ContentPageToolbarWrapper)`
   min-height: ${theme.spacing.toolbarHeight};
+  /* The status indicator bar is absent until a record is validated, so the buttons anchor
+     themselves rather than relying on a second flex child being present. */
+  justify-content: flex-end;
 `
 
 export const NewOptionButton = styled(ButtonThatLooksLikeLink)`
@@ -218,10 +221,17 @@ export const ErrorBox = styled.div`
     }
   }
 `
+/* Gives the submit callout something to hang off, so it follows the buttons when the
+   toolbar wraps rather than sitting at a fixed distance down it. */
+export const ButtonGroupWithCallout = styled('div')`
+  position: relative;
+`
+
 export const ErrorBoxSubmit = styled(ErrorBox)`
   position: absolute;
-  top: 3.5em;
+  top: 100%;
   right: 0;
+  bottom: auto; /* ErrorBox is a full-height fixed overlay; here it sizes to its content. */
 `
 export const ErrorTextButton = styled('button')`
   cursor: pointer;

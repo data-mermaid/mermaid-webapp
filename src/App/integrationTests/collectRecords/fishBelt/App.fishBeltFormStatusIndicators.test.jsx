@@ -101,7 +101,7 @@ test('Form status indicator counts match the validations on show, and drop as in
   expect(await screen.findByTestId('form-status-indicators')).toBeInTheDocument()
   expect(getChipCount('error')).toBe(2)
   expect(getChipCount('warning')).toBe(2)
-  expect(screen.queryByTestId('form-status-chip-ignored')).not.toBeInTheDocument()
+  expect(screen.queryByTestId('form-status-chip-ignore')).not.toBeInTheDocument()
 
   // Editing depth hides its inline error, so the error chip must drop to the observation only.
   await user.type(screen.getByTestId('depth-input'), '5')

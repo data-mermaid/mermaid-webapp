@@ -15,6 +15,7 @@ import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import {
+  ButtonGroupWithCallout,
   CollectFormToolbarWrapper,
   ErrorBox,
   ErrorText,
@@ -679,35 +680,35 @@ const CollectRecordFormPage = ({
         headerTitle={renderCollectRecordTitle()}
         toolbar={
           <CollectFormToolbarWrapper>
-            <div>
-              <FormStatusIndicators
-                areValidationsShowing={areValidationsShowing}
-                errorCount={validationCounts.errorCount}
-                warningCount={validationCounts.warningCount}
-                ignoredCount={validationCounts.ignoredCount}
-                nextAnnouncement={nextAnnouncement}
-                onNext={goToNextValidation}
-              />
-            </div>
-            {!isReadOnlyUser && (
-              <SaveValidateSubmitButtonGroup
-                isNewRecord={isNewRecord}
-                saveButtonState={saveButtonState}
-                validateButtonState={validateButtonState}
-                submitButtonState={submitButtonState}
-                onValidate={handleValidate}
-                onSave={handleSave}
-                onSubmit={handleSubmit}
-              />
-            )}
-            <ErrorBoxSubmit>
-              <ErrorTextSubmit $isErrorShown={isSubmitWarningVisible}>
-                {t('sample_units.errors.submit_disabled')}
-                <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
-                  x
-                </ErrorTextButton>
-              </ErrorTextSubmit>
-            </ErrorBoxSubmit>
+            <FormStatusIndicators
+              areValidationsShowing={areValidationsShowing}
+              errorCount={validationCounts.errorCount}
+              warningCount={validationCounts.warningCount}
+              ignoredCount={validationCounts.ignoredCount}
+              nextAnnouncement={nextAnnouncement}
+              onNext={goToNextValidation}
+            />
+            <ButtonGroupWithCallout>
+              {!isReadOnlyUser && (
+                <SaveValidateSubmitButtonGroup
+                  isNewRecord={isNewRecord}
+                  saveButtonState={saveButtonState}
+                  validateButtonState={validateButtonState}
+                  submitButtonState={submitButtonState}
+                  onValidate={handleValidate}
+                  onSave={handleSave}
+                  onSubmit={handleSubmit}
+                />
+              )}
+              <ErrorBoxSubmit>
+                <ErrorTextSubmit $isErrorShown={isSubmitWarningVisible}>
+                  {t('sample_units.errors.submit_disabled')}
+                  <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
+                    x
+                  </ErrorTextButton>
+                </ErrorTextSubmit>
+              </ErrorBoxSubmit>
+            </ButtonGroupWithCallout>
           </CollectFormToolbarWrapper>
         }
       />

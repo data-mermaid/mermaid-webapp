@@ -7,7 +7,7 @@ const observationTarget = (value: string) => ({ attribute: 'data-observation-id'
 
 describe('getValidationTargets', () => {
   test('returns empty buckets when results is undefined', () => {
-    expect(getValidationTargets(undefined)).toEqual({ error: [], warning: [], ignored: [] })
+    expect(getValidationTargets(undefined)).toEqual({ error: [], warning: [], ignore: [] })
   })
 
   test('emits one record target per validation_id so each item can be highlighted individually', () => {
@@ -21,7 +21,7 @@ describe('getValidationTargets', () => {
 
     expect(targets.error).toEqual([recordTarget('r1'), recordTarget('r2')])
     expect(targets.warning).toEqual([recordTarget('r3')])
-    expect(targets.ignored).toEqual([])
+    expect(targets.ignore).toEqual([])
   })
 
   test('emits one field target per input regardless of duplicate statuses', () => {
@@ -54,7 +54,7 @@ describe('getValidationTargets', () => {
 
     expect(targets.error).toEqual([observationTarget('obs1')])
     expect(targets.warning).toEqual([observationTarget('obs2')])
-    expect(targets.ignored).toEqual([observationTarget('obs3')])
+    expect(targets.ignore).toEqual([observationTarget('obs3')])
   })
 
   test('per-row error preempts warning/ignore (matches getValidationsToDisplay)', () => {
@@ -76,7 +76,7 @@ describe('getValidationTargets', () => {
 
     expect(targets.error).toEqual([fieldTarget('site'), observationTarget('obs1')])
     expect(targets.warning).toEqual([])
-    expect(targets.ignored).toEqual([])
+    expect(targets.ignore).toEqual([])
   })
 
   test('combines record, field, and observation targets across buckets', () => {
@@ -109,7 +109,7 @@ describe('getValidationTargets', () => {
 
     expect(targets.error).toEqual([fieldTarget('depth')])
     expect(targets.warning).toEqual([fieldTarget('width')])
-    expect(targets.ignored).toEqual([fieldTarget('width')])
+    expect(targets.ignore).toEqual([fieldTarget('width')])
   })
 
   test('handles shallow field shape where data.<section> contains validations directly (e.g. observers)', () => {
@@ -296,7 +296,7 @@ describe('getValidationTargets with duplicate_values', () => {
     const targets = getValidationTargets({ $record: [duplicateValues('ignore')] })
 
     expect(targets.warning).toEqual([])
-    expect(targets.ignored).toEqual([
+    expect(targets.ignore).toEqual([
       recordTarget('dupes'),
       observationTarget('obs1'),
       observationTarget('obs2'),
@@ -326,7 +326,7 @@ describe('getValidationTargets record level statuses', () => {
     })
 
     expect(targets.warning).toEqual([recordTarget('r1')])
-    expect(targets.ignored).toEqual([])
+    expect(targets.ignore).toEqual([])
   })
 
   test('leaves a field reset uncounted, since the input renders nothing for it', () => {
@@ -334,7 +334,7 @@ describe('getValidationTargets record level statuses', () => {
       data: { fishbelt_transect: { depth: [{ status: 'reset' }] } },
     })
 
-    expect(targets).toEqual({ error: [], warning: [], ignored: [] })
+    expect(targets).toEqual({ error: [], warning: [], ignore: [] })
   })
 
   test('leaves an observation reset uncounted', () => {
@@ -344,7 +344,7 @@ describe('getValidationTargets record level statuses', () => {
       },
     })
 
-    expect(targets).toEqual({ error: [], warning: [], ignored: [] })
+    expect(targets).toEqual({ error: [], warning: [], ignore: [] })
   })
 
   test('skips the dry submit summary while other record level errors are unresolved', () => {
