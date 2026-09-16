@@ -981,7 +981,7 @@
     "not_submitted": "This sample unit is not submitted",
     "observers": "Observers",
     "observers_info": "Select one or more observers to add.",
-    "protocol": "Protocol",
+    "protocol": "Method",
     "record": "Record",
     "sample_date": "Sample date",
     "sample_date_info": "Date when data was collected.",
@@ -1236,7 +1236,7 @@
     "site_not_found": "Site record not available for similarity validation",
     "system_validation_error": "System validation error:",
     "unconfirmed_annotation": "Wrong number of confirmed annotations",
-    "unknown_protocol": "Unknown protocol",
+    "unknown_protocol": "Unknown method",
     "value_not_set": "Value is not set"
   },
   "validations": {
