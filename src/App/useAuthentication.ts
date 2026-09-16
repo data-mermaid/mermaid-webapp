@@ -1,6 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
+import * as Sentry from '@sentry/react'
+import { getToastArguments } from '../library/getToastArguments'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
 
@@ -29,6 +33,8 @@ const useAuthentication = ({
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
   const [emailNotVerified, setEmailNotVerified] = useState(false)
   const navigate = useNavigate()
+  const { t } = useTranslation()
+  const authenticationFailedText = t('api_errors.app_not_authenticated_or_ready')
 
   const setAuthenticatedStates = useCallback(() => {
     localStorage.setItem('hasAuth0Authenticated', 'true')
@@ -39,6 +45,24 @@ const useAuthentication = ({
     localStorage.removeItem('hasAuth0Authenticated')
     setIsMermaidAuthenticated(false)
   }, [])
+
+  const handleAccessTokenError = useCallback(
+    (error: unknown) => {
+      console.error('Unable to get access token from Auth0', error)
+
+      // Offline is a supported state. The app runs from the session already stored, so a
+      // refresh that fails without a connection is expected and needs no message.
+      if (!isAppOnline) {
+        return
+      }
+
+      // Nothing else reports a failed refresh, and whether the Auth0 tenant is issuing
+      // refresh tokens correctly can only be judged from the rate of these events.
+      Sentry.captureException(error)
+      toast.error(...getToastArguments(authenticationFailedText))
+    },
+    [isAppOnline, authenticationFailedText],
+  )
 
   const handlePostLoginRedirect = useCallback(() => {
     const validateReturnPath = (path: string | null): boolean => {
@@ -75,7 +99,7 @@ const useAuthentication = ({
     }
 
     if (isAuth0Authenticated && isAppOnline && !isAuth0Loading) {
-      silentAuth()
+      silentAuth().catch(handleAccessTokenError)
     }
   }, [
     isAuth0Authenticated,
@@ -83,6 +107,7 @@ const useAuthentication = ({
     isAppOnline,
     isAuth0Loading,
     setAuthenticatedStates,
+    handleAccessTokenError,
   ])
 
   const _initializeAuthentication = useEffect(() => {
@@ -139,9 +164,7 @@ const useAuthentication = ({
             handlePostLoginRedirect()
           }
         })
-        .catch((err) => {
-          throw Error('Unable to get access token from Auth0', err)
-        })
+        .catch(handleAccessTokenError)
     }
     if (isUserOfflineAndLoggedIn) {
       setIsMermaidAuthenticated(true)
@@ -159,6 +182,7 @@ const useAuthentication = ({
     isAuth0Loading,
     isAppOnline,
     handlePostLoginRedirect,
+    handleAccessTokenError,
   ])
 
   const loginMermaid = useCallback(() => {
