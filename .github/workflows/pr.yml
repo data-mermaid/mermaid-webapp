@@ -12,7 +12,7 @@ on:
 
 permissions:
   contents: read
-  issues: write
+  issues: write # zizmor: ignore[excessive-permissions]
 
 concurrency:
   group: pr-${{ github.event.pull_request.number }}
