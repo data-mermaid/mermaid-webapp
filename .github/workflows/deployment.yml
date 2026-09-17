@@ -13,15 +13,15 @@ permissions:
 
 jobs:
   deps-cache:
-    uses: $/.github/workflows/_deps-cache.yml
+    uses: ./.github/workflows/_deps-cache.yml
 
   call-lint:
     needs: [deps-cache]
-    uses: $/.github/workflows/_lint.yml
+    uses: ./.github/workflows/_lint.yml
 
   call-test:
     needs: [deps-cache, call-lint]
-    uses: $/.github/workflows/_test.yml
+    uses: ./.github/workflows/_test.yml
     secrets:
       VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
       VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
@@ -32,7 +32,7 @@ jobs:
     concurrency:
       group: app-deployment-${{ github.ref }}
     needs: [call-lint, call-test]
-    uses: $/.github/workflows/_cdk.yml
+    uses: ./.github/workflows/_cdk.yml
     secrets:
       VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
       VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}

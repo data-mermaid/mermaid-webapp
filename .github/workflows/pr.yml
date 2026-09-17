@@ -20,7 +20,7 @@ concurrency:
 jobs:
   deps-cache:
     if: github.event.pull_request.draft == false
-    uses: $/.github/workflows/_deps-cache.yml
+    uses: ./.github/workflows/_deps-cache.yml
 
   cdk-nag:
     if: github.event.pull_request.draft == false
