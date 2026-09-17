@@ -12,7 +12,6 @@ on:
 
 permissions:
   contents: read
-  issues: write # zizmor: ignore[excessive-permissions]
 
 concurrency:
   group: pr-${{ github.event.pull_request.number }}
@@ -21,7 +20,7 @@ concurrency:
 jobs:
   deps-cache:
     if: github.event.pull_request.draft == false
-    uses: ./.github/workflows/_deps-cache.yml
+    uses: $/.github/workflows/_deps-cache.yml
 
   cdk-nag:
     if: github.event.pull_request.draft == false
@@ -32,6 +31,7 @@ jobs:
       contents: read
       id-token: write
       issues: write
+      pull-requests: write
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411  # v2.19.4

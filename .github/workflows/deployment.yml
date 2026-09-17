@@ -13,16 +13,18 @@ permissions:
 
 jobs:
   deps-cache:
-    uses: ./.github/workflows/_deps-cache.yml
+    uses: $/.github/workflows/_deps-cache.yml
 
   call-lint:
     needs: [deps-cache]
-    uses: ./.github/workflows/_lint.yml
+    uses: $/.github/workflows/_lint.yml
 
   call-test:
     needs: [deps-cache, call-lint]
-    uses: ./.github/workflows/_test.yml
-    secrets: inherit
+    uses: $/.github/workflows/_test.yml
+    secrets:
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+      VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
     with:
       environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
 
@@ -30,8 +32,15 @@ jobs:
     concurrency:
       group: app-deployment-${{ github.ref }}
     needs: [call-lint, call-test]
-    uses: ./.github/workflows/_cdk.yml
-    secrets: inherit
+    uses: $/.github/workflows/_cdk.yml
+    secrets:
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+      VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
+      VITE_CORAL_ATLAS_APP_ID: ${{ secrets.VITE_CORAL_ATLAS_APP_ID }}
+      VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+      CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
     with:
       cdk_subcommand: deploy
       environment: ${{ (github.ref == 'refs/heads/develop' || github.base_ref == 'develop') && 'dev' || 'production' }}
