@@ -1,17 +1,20 @@
 import { describe, expect, test } from 'vitest'
-import getValidationTargets from './getValidationTargets'
+import getValidationSummary from './getValidationSummary'
 
 const recordTarget = (value: string) => ({ attribute: 'data-record-validation-id', value })
 const fieldTarget = (value: string) => ({ attribute: 'data-validation-field', value })
 const observationTarget = (value: string) => ({ attribute: 'data-observation-id', value })
 
-describe('getValidationTargets', () => {
-  test('returns empty buckets when results is undefined', () => {
-    expect(getValidationTargets(undefined)).toEqual({ error: [], warning: [], ignore: [] })
+const noCounts = { error: 0, warning: 0, ignore: 0 }
+const noTargets = { error: [], warning: [], ignore: [] }
+
+describe('getValidationSummary targets', () => {
+  test('returns an empty summary when results is undefined', () => {
+    expect(getValidationSummary(undefined)).toEqual({ counts: noCounts, targets: noTargets })
   })
 
   test('emits one record target per validation_id so each item can be highlighted individually', () => {
-    const targets = getValidationTargets({
+    const { targets } = getValidationSummary({
       $record: [
         { status: 'error', validation_id: 'r1' },
         { status: 'error', validation_id: 'r2' },
@@ -25,7 +28,7 @@ describe('getValidationTargets', () => {
   })
 
   test('emits one field target per input regardless of duplicate statuses', () => {
-    const targets = getValidationTargets({
+    const { targets } = getValidationSummary({
       data: {
         sample_event: {
           site: { v1: { status: 'error' }, v2: { status: 'error' } },
@@ -39,7 +42,7 @@ describe('getValidationTargets', () => {
   })
 
   test('emits one observation target per observation_id per status', () => {
-    const targets = getValidationTargets({
+    const { targets } = getValidationSummary({
       data: {
         obs_belt_fishes: [
           [
@@ -58,7 +61,7 @@ describe('getValidationTargets', () => {
   })
 
   test('per-row error preempts warning/ignore (matches getValidationsToDisplay)', () => {
-    const targets = getValidationTargets({
+    const { counts, targets } = getValidationSummary({
       data: {
         // Field row with both an error and a warning: only the error should count.
         sample_event: {
@@ -77,10 +80,11 @@ describe('getValidationTargets', () => {
     expect(targets.error).toEqual([fieldTarget('site'), observationTarget('obs1')])
     expect(targets.warning).toEqual([])
     expect(targets.ignore).toEqual([])
+    expect(counts).toEqual({ error: 2, warning: 0, ignore: 0 })
   })
 
   test('combines record, field, and observation targets across buckets', () => {
-    const targets = getValidationTargets({
+    const { targets } = getValidationSummary({
       $record: [{ status: 'error', validation_id: 'r1' }],
       data: {
         sample_event: {
@@ -95,7 +99,7 @@ describe('getValidationTargets', () => {
   })
 
   test('handles array shape for field validations (post-reset shape from CollectRecordsMixin)', () => {
-    const targets = getValidationTargets({
+    const { targets } = getValidationSummary({
       data: {
         fishbelt_transect: {
           // After user edits a field, the reset flow converts the keyed object
@@ -113,7 +117,7 @@ describe('getValidationTargets', () => {
   })
 
   test('handles shallow field shape where data.<section> contains validations directly (e.g. observers)', () => {
-    const targets = getValidationTargets({
+    const { targets } = getValidationSummary({
       data: {
         observers: {
           v1: { status: 'error' },
@@ -128,7 +132,7 @@ describe('getValidationTargets', () => {
   })
 
   test('accepts context.id as well as context.observation_id, as the row lookup does', () => {
-    const targets = getValidationTargets({
+    const { targets } = getValidationSummary({
       data: {
         obs_belt_fishes: [
           [{ status: 'error', context: { id: 'obs1' } }],
@@ -142,7 +146,7 @@ describe('getValidationTargets', () => {
   })
 
   test('skips observation validations that lack a status or observation_id', () => {
-    const targets = getValidationTargets({
+    const summary = getValidationSummary({
       data: {
         obs_belt_fishes: [
           [{ status: 'error' }], // missing context.observation_id → skip
@@ -151,11 +155,58 @@ describe('getValidationTargets', () => {
       },
     })
 
-    expect(targets.error).toEqual([])
+    expect(summary).toEqual({ counts: noCounts, targets: noTargets })
   })
 })
 
-describe('getValidationTargets with edited fields', () => {
+describe('getValidationSummary counts', () => {
+  test('counts every warning a row shows, while the row stays one place to scroll to', () => {
+    // A row showing three warning messages is three things to deal with, not one.
+    const { counts, targets } = getValidationSummary({
+      data: {
+        obs_belt_fishes: [
+          [
+            { status: 'warning', context: { observation_id: 'obs1' } },
+            { status: 'warning', context: { observation_id: 'obs1' } },
+            { status: 'warning', context: { observation_id: 'obs1' } },
+          ],
+        ],
+      },
+    })
+
+    expect(counts.warning).toBe(3)
+    expect(targets.warning).toEqual([observationTarget('obs1')])
+  })
+
+  test('counts warnings on separate rows separately', () => {
+    const { counts, targets } = getValidationSummary({
+      data: {
+        obs_belt_fishes: [
+          [{ status: 'warning', context: { observation_id: 'obs1' } }],
+          [{ status: 'warning', context: { observation_id: 'obs2' } }],
+        ],
+      },
+    })
+
+    expect(counts.warning).toBe(2)
+    expect(targets.warning).toEqual([observationTarget('obs1'), observationTarget('obs2')])
+  })
+
+  test('counts one error for a row with several, matching the single message it shows', () => {
+    // getValidationsToDisplay renders the first error and hides the rest of the row.
+    const { counts } = getValidationSummary({
+      data: {
+        sample_event: {
+          site: { v1: { status: 'error' }, v2: { status: 'error' } },
+        },
+      },
+    })
+
+    expect(counts.error).toBe(1)
+  })
+})
+
+describe('getValidationSummary with edited fields', () => {
   // An input the user has edited hides its validation badge, so it must also drop out of
   // the counts. The formik property name is the last segment of the validation path.
   const results = {
@@ -171,17 +222,18 @@ describe('getValidationTargets with edited fields', () => {
   }
 
   test('drops a field target once its input is edited', () => {
-    const targets = getValidationTargets(results, (property) => property === 'depth')
+    const { counts, targets } = getValidationSummary(results, (property) => property === 'depth')
 
     // The depth field target is gone; the record and observation errors are untouched.
     expect(targets.error).toEqual([recordTarget('r1'), observationTarget('obs1')])
     expect(targets.warning).toEqual([fieldTarget('len_surveyed'), fieldTarget('observers')])
+    expect(counts).toEqual({ error: 2, warning: 2, ignore: 0 })
   })
 
   test('derives the formik property from the last path segment, at any depth', () => {
     const editedProperties: string[] = []
 
-    getValidationTargets(results, (property) => {
+    getValidationSummary(results, (property) => {
       editedProperties.push(property)
 
       return false
@@ -191,18 +243,19 @@ describe('getValidationTargets with edited fields', () => {
   })
 
   test('keeps record and observation targets, which have no input to edit', () => {
-    const targets = getValidationTargets(results, () => true)
+    const { counts, targets } = getValidationSummary(results, () => true)
 
     expect(targets.error).toEqual([recordTarget('r1'), observationTarget('obs1')])
     expect(targets.warning).toEqual([])
+    expect(counts).toEqual({ error: 2, warning: 0, ignore: 0 })
   })
 
   test('counts every field target when no inputs have been edited', () => {
-    expect(getValidationTargets(results, () => false)).toEqual(getValidationTargets(results))
+    expect(getValidationSummary(results, () => false)).toEqual(getValidationSummary(results))
   })
 })
 
-describe('getValidationTargets with deleted observation rows', () => {
+describe('getValidationSummary with deleted observation rows', () => {
   // Third argument is the rows still on the page. Deleting one leaves its validations behind.
   const results = {
     data: {
@@ -214,35 +267,35 @@ describe('getValidationTargets with deleted observation rows', () => {
   }
 
   test('drops validations for rows that are no longer on the page', () => {
-    const targets = getValidationTargets(results, () => false, new Set(['obs2']))
+    const { counts, targets } = getValidationSummary(results, () => false, new Set(['obs2']))
 
     expect(targets.error).toEqual([])
     expect(targets.warning).toEqual([observationTarget('obs2')])
+    expect(counts).toEqual({ error: 0, warning: 1, ignore: 0 })
   })
 
   test('keeps validations for rows that are still on the page', () => {
-    const targets = getValidationTargets(results, () => false, new Set(['obs1', 'obs2']))
+    const { targets } = getValidationSummary(results, () => false, new Set(['obs1', 'obs2']))
 
     expect(targets.error).toEqual([observationTarget('obs1')])
     expect(targets.warning).toEqual([observationTarget('obs2')])
   })
 
   test('drops the last row on the page when it is deleted', () => {
-    const targets = getValidationTargets(results, () => false, new Set())
+    const summary = getValidationSummary(results, () => false, new Set())
 
-    expect(targets.error).toEqual([])
-    expect(targets.warning).toEqual([])
+    expect(summary).toEqual({ counts: noCounts, targets: noTargets })
   })
 
   test('counts everything while the observation tables are still loading', () => {
-    const targets = getValidationTargets(results, () => false, null)
+    const { targets } = getValidationSummary(results, () => false, null)
 
     expect(targets.error).toEqual([observationTarget('obs1')])
     expect(targets.warning).toEqual([observationTarget('obs2')])
   })
 })
 
-describe('getValidationTargets with duplicate_values', () => {
+describe('getValidationSummary with duplicate_values', () => {
   // duplicate_values is a $record validation that getObservationValidationInfo also paints
   // onto every row named in context.duplicates, so those rows are targets too.
   const duplicateValues = (status: string) => ({
@@ -261,7 +314,7 @@ describe('getValidationTargets with duplicate_values', () => {
   })
 
   test('emits a target for the record message and for every row it names', () => {
-    const targets = getValidationTargets({ $record: [duplicateValues('warning')] })
+    const { targets } = getValidationSummary({ $record: [duplicateValues('warning')] })
 
     expect(targets.warning).toEqual([
       recordTarget('dupes'),
@@ -270,8 +323,32 @@ describe('getValidationTargets with duplicate_values', () => {
     ])
   })
 
+  test('counts one warning, however many rows it marks', () => {
+    // One validation, one message on screen. The marked rows are places to go, not more work.
+    const { counts } = getValidationSummary({ $record: [duplicateValues('warning')] })
+
+    expect(counts).toEqual({ error: 0, warning: 1, ignore: 0 })
+  })
+
+  test('still counts a marked row for validations of its own', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [duplicateValues('warning')],
+      data: {
+        obs_benthic_photo_quadrats: [[{ status: 'warning', context: { observation_id: 'obs1' } }]],
+      },
+    })
+
+    // The record message, plus obs1's own warning. obs2 carries only the duplicate.
+    expect(counts).toEqual({ error: 0, warning: 2, ignore: 0 })
+    expect(targets.warning).toEqual([
+      recordTarget('dupes'),
+      observationTarget('obs1'),
+      observationTarget('obs2'),
+    ])
+  })
+
   test('a named row showing its own error is not also counted as a duplicate warning', () => {
-    const targets = getValidationTargets({
+    const { counts, targets } = getValidationSummary({
       $record: [duplicateValues('warning')],
       data: {
         obs_benthic_photo_quadrats: [[{ status: 'error', context: { observation_id: 'obs1' } }]],
@@ -280,20 +357,22 @@ describe('getValidationTargets with duplicate_values', () => {
 
     expect(targets.error).toEqual([observationTarget('obs1')])
     expect(targets.warning).toEqual([recordTarget('dupes'), observationTarget('obs2')])
+    expect(counts).toEqual({ error: 1, warning: 1, ignore: 0 })
   })
 
   test('respects rows that are no longer on the page', () => {
-    const targets = getValidationTargets(
+    const { counts, targets } = getValidationSummary(
       { $record: [duplicateValues('warning')] },
       () => false,
       new Set(['obs2']),
     )
 
     expect(targets.warning).toEqual([recordTarget('dupes'), observationTarget('obs2')])
+    expect(counts).toEqual({ error: 0, warning: 1, ignore: 0 })
   })
 
   test('follows the validation status, so an ignored duplicate counts as ignored', () => {
-    const targets = getValidationTargets({ $record: [duplicateValues('ignore')] })
+    const { counts, targets } = getValidationSummary({ $record: [duplicateValues('ignore')] })
 
     expect(targets.warning).toEqual([])
     expect(targets.ignore).toEqual([
@@ -301,10 +380,11 @@ describe('getValidationTargets with duplicate_values', () => {
       observationTarget('obs1'),
       observationTarget('obs2'),
     ])
+    expect(counts).toEqual({ error: 0, warning: 0, ignore: 1 })
   })
 
   test('ignores duplicate_images, which keys context.duplicates by image id instead', () => {
-    const targets = getValidationTargets({
+    const { counts, targets } = getValidationSummary({
       $record: [
         {
           code: 'duplicate_images',
@@ -316,39 +396,41 @@ describe('getValidationTargets with duplicate_values', () => {
     })
 
     expect(targets.warning).toEqual([recordTarget('images')])
+    expect(counts).toEqual({ error: 0, warning: 1, ignore: 0 })
   })
 })
 
-describe('getValidationTargets record level statuses', () => {
+describe('getValidationSummary record level statuses', () => {
   test('counts a record level reset as a warning, since the panel still renders it as one', () => {
-    const targets = getValidationTargets({
+    const { counts, targets } = getValidationSummary({
       $record: [{ status: 'reset', validation_id: 'r1' }],
     })
 
     expect(targets.warning).toEqual([recordTarget('r1')])
     expect(targets.ignore).toEqual([])
+    expect(counts).toEqual({ error: 0, warning: 1, ignore: 0 })
   })
 
   test('leaves a field reset uncounted, since the input renders nothing for it', () => {
-    const targets = getValidationTargets({
+    const summary = getValidationSummary({
       data: { fishbelt_transect: { depth: [{ status: 'reset' }] } },
     })
 
-    expect(targets).toEqual({ error: [], warning: [], ignore: [] })
+    expect(summary).toEqual({ counts: noCounts, targets: noTargets })
   })
 
   test('leaves an observation reset uncounted', () => {
-    const targets = getValidationTargets({
+    const summary = getValidationSummary({
       data: {
         obs_belt_fishes: [[{ status: 'reset', context: { observation_id: 'obs1' } }]],
       },
     })
 
-    expect(targets).toEqual({ error: [], warning: [], ignore: [] })
+    expect(summary).toEqual({ counts: noCounts, targets: noTargets })
   })
 
   test('skips the dry submit summary while other record level errors are unresolved', () => {
-    const targets = getValidationTargets({
+    const { counts, targets } = getValidationSummary({
       $record: [
         { status: 'error', code: 'unsuccessful_dry_submit', validation_id: 'summary' },
         { status: 'error', code: 'duplicate_transect', validation_id: 'r1' },
@@ -356,10 +438,11 @@ describe('getValidationTargets record level statuses', () => {
     })
 
     expect(targets.error).toEqual([recordTarget('r1')])
+    expect(counts.error).toBe(1)
   })
 
   test('counts the dry submit summary once it is the only record level error', () => {
-    const targets = getValidationTargets({
+    const { counts, targets } = getValidationSummary({
       $record: [
         { status: 'error', code: 'unsuccessful_dry_submit', validation_id: 'summary' },
         { status: 'warning', code: 'all_equal', validation_id: 'r1' },
@@ -368,5 +451,6 @@ describe('getValidationTargets record level statuses', () => {
 
     expect(targets.error).toEqual([recordTarget('summary')])
     expect(targets.warning).toEqual([recordTarget('r1')])
+    expect(counts).toEqual({ error: 1, warning: 1, ignore: 0 })
   })
 })

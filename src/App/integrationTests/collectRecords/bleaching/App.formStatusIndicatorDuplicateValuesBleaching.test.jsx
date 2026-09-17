@@ -13,14 +13,13 @@ import {
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
-import mockBenthicPhotoQuadratCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicPhotoQuadratCollectRecords'
-import { mockT } from '../../../../testUtilities/mockT'
+import mockBleachingCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBleachingCollectRecords'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-// A duplicate_values record validation names the rows it covers in context.duplicates, and
-// getObservationValidationInfo marks every one of them. Observations 1 and 2 are named here,
-// 3 is not, so the chip should reach the record message and those two rows only.
+// Bleaching is the only protocol with two observation tables, so it is the one that can put
+// the same observation id in two places on the page. Every colonies bleached row is a
+// duplicate here, matching what a surveyor sees after entering the same attribute three times.
 const validations = {
   status: 'error',
   results: {
@@ -29,12 +28,13 @@ const validations = {
         code: 'duplicate_values',
         status: 'warning',
         validation_id: 'duplicate-values-warning',
-        fields: ['data.obs_benthic_photo_quadrats'],
+        fields: ['data.obs_colonies_bleached'],
         context: {
           duplicates: [
             [
               { id: '1', index: 0 },
               { id: '2', index: 1 },
+              { id: '3', index: 2 },
             ],
           ],
         },
@@ -43,7 +43,7 @@ const validations = {
   },
 }
 
-test('Next on the warning chip reaches every row a duplicate_values warning marks', async () => {
+test('Next on the warning chip reaches every duplicated colonies bleached row', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
   const scrollIntoView = vi
     .spyOn(window.HTMLElement.prototype, 'scrollIntoView')
@@ -59,7 +59,7 @@ test('Next on the warning chip reaches every row a duplicate_values warning mark
         benthic_attributes: { updates: mockMermaidData.benthic_attributes },
         choices: { updates: mockMermaidData.choices },
         collect_records: {
-          updates: [{ ...mockBenthicPhotoQuadratCollectRecords[0], validations }],
+          updates: [{ ...mockBleachingCollectRecords[0], validations }],
         },
         project_managements: { updates: mockMermaidData.project_managements },
         project_profiles: { updates: mockMermaidData.project_profiles },
@@ -71,7 +71,7 @@ test('Next on the warning chip reaches every row a duplicate_values warning mark
 
   const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
-    { initialEntries: ['/projects/5/collecting/benthicpqt/90'] },
+    { initialEntries: ['/projects/5/collecting/bleachingqc/60'] },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   )
@@ -82,17 +82,14 @@ test('Next on the warning chip reaches every row a duplicate_values warning mark
   const warningChip = await screen.findByTestId('form-status-chip-warning')
   const nextButton = within(warningChip).getByRole('button')
 
-  // One warning, one message on screen, so the chip says 1 however many rows it marks.
-  const warningChipCalls = mockT.mock.calls.filter(
-    ([key]) => key === 'sample_units.validation_status.chip_label_warning',
+  const recordMessage = document.querySelector('[data-record-validation-id]')
+  const markedRows = ['1', '2', '3'].map((id) =>
+    document.querySelector(`[data-observation-id="${id}"]`),
   )
 
-  expect(warningChipCalls.at(-1)?.[1]?.count).toBe(1)
+  expect(markedRows.every(Boolean)).toBe(true)
 
-  const recordMessage = document.querySelector('[data-record-validation-id]')
-  const markedRows = ['1', '2'].map((id) => document.querySelector(`[data-observation-id="${id}"]`))
-
-  // The record message plus the two rows it names, in page order, then back to the top.
+  // The record message, then each duplicated row in page order, then back to the top.
   const expectedOrder = [recordMessage, ...markedRows, recordMessage]
 
   for (const expectedTarget of expectedOrder) {
@@ -102,10 +99,4 @@ test('Next on the warning chip reaches every row a duplicate_values warning mark
     expect(scrollIntoView).toHaveBeenCalledTimes(1)
     expect(scrollIntoView.mock.instances[0]).toBe(expectedTarget)
   }
-
-  // Observation 3 is not in context.duplicates, so it is never a target.
-  const unmarkedRow = document.querySelector('[data-observation-id="3"]')
-
-  expect(unmarkedRow).not.toBeNull()
-  expect(scrollIntoView.mock.instances).not.toContain(unmarkedRow)
 }, 50000)

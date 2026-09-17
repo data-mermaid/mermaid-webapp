@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import getValidationTargets from './getValidationTargets'
+import getValidationSummary from './getValidationSummary'
 import theme from '../../../../theme'
 
 const HIGHLIGHT_CLASS = 'validation-target-highlight'
@@ -360,21 +360,20 @@ const useCollectRecordValidation = ({
   )
 
   // Rebuilt every render on purpose: isFieldValueDirty reads formik values, so an edited
-  // field has to drop out of the counts on the next keystroke. Counts derive from the deduped
-  // targets, so a chip can only claim something the user can navigate to and see inline.
-  const validationTargets = getValidationTargets(
+  // field has to drop out of the counts on the next keystroke.
+  const validationSummary = getValidationSummary(
     collectRecordBeingEdited?.validations?.results,
     isFieldValueDirty,
     observationIdsOnPage,
   )
   const validationCounts = {
-    errorCount: validationTargets.error.length,
-    warningCount: validationTargets.warning.length,
-    ignoredCount: validationTargets.ignore.length,
+    errorCount: validationSummary.counts.error,
+    warningCount: validationSummary.counts.warning,
+    ignoredCount: validationSummary.counts.ignore,
   }
 
   const goToNextValidation = (type) => {
-    const targets = validationTargets[type]
+    const targets = validationSummary.targets[type]
     if (!targets || targets.length === 0) {
       return
     }

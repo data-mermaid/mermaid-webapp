@@ -83,7 +83,7 @@ describe('RecordLevelValidationInfo scroll to observations link', () => {
 })
 
 // The form status indicator chips count whatever this panel renders, so these two cases are
-// the panel's half of that contract. getValidationTargets.test.ts holds the counting half.
+// the panel's half of that contract. getValidationSummary.test.ts holds the counting half.
 describe('RecordLevelValidationInfo dry submit summary', () => {
   const drySubmitSummary = {
     status: 'error' as const,
