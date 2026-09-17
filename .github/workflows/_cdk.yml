@@ -10,6 +10,21 @@ on:
         description: 'GitHub environment to pull secrets from'
         required: true
         type: string
+    secrets:
+      VITE_AUTH0_CLIENT_ID:
+        required: true
+      VITE_MAPBOX_ACCESS_TOKEN:
+        required: true
+      VITE_CORAL_ATLAS_APP_ID:
+        required: true
+      VITE_SENTRY_DSN:
+        required: false
+      SENTRY_AUTH_TOKEN:
+        required: false
+      CDK_DEFAULT_ACCOUNT:
+        required: true
+      CDK_DEPLOY_ROLE:
+        required: true
 
 permissions:
   actions: write
@@ -37,13 +52,20 @@ jobs:
       SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
 
     steps:
-      - uses: actions/checkout@v6.0.2
-      - uses: actions/setup-node@v6.2.0
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411  # v2.19.4
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: '.nvmrc'
 
       - name: Fetch yarn cache
-        uses: actions/cache@v5.0.3
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: yarn-cache
         with:
           path: node_modules
@@ -56,22 +78,24 @@ jobs:
       - name: Create version file for dev
         if: startsWith(github.ref, 'refs/heads/develop')
         run: |
-          short_sha=$(git rev-parse --short ${{ github.sha }})
+          short_sha=$(git rev-parse --short "${{ github.sha }}")
           echo "export const versionNumber = '$short_sha'" > src/version.js
-          echo "VITE_APP_VERSION=$short_sha" >> $GITHUB_ENV
+          echo "VITE_APP_VERSION=$short_sha" >> "$GITHUB_ENV"
 
       - name: Set variables and version for prod
         if: startsWith(github.ref, 'refs/tags')
+        env:
+          REF_NAME: ${{ github.ref_name }}
         run: |
-          echo "export const versionNumber = '${{ github.ref_name }}'" > src/version.js
-          echo "VITE_APP_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+          echo "export const versionNumber = '$REF_NAME'" > src/version.js
+          echo "VITE_APP_VERSION=$REF_NAME" >> "$GITHUB_ENV"
 
       - name: Yarn Build
         run: yarn build
 
       # IaC deps
       - name: Fetch iac node cache
-        uses: actions/cache@v5.0.3
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: iac-cache
         with:
           path: iac/node_modules
@@ -83,7 +107,7 @@ jobs:
         run: npm ci
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6.0.0
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         env:
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           CDK_DEPLOY_ROLE: ${{ secrets.CDK_DEPLOY_ROLE }}
@@ -95,20 +119,22 @@ jobs:
       - name: CDK ${{ inputs.cdk_subcommand }} DEV
         if: startsWith(github.ref, 'refs/heads/develop') || (github.event_name == 'pull_request' && inputs.cdk_subcommand == 'diff')
         working-directory: iac
-        run: |
-          npm install -g aws-cdk && cdk ${{ inputs.cdk_subcommand }} dev-webapp --require-approval never
         env:
+          CDK_SUBCOMMAND: ${{ inputs.cdk_subcommand }}
           PYTHONPATH: ${{ github.workspace }}
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           CDK_DEFAULT_REGION: us-east-1
+        run: |
+          ./node_modules/.bin/cdk "$CDK_SUBCOMMAND" dev-webapp --require-approval never
 
 
       - name: CDK ${{ inputs.cdk_subcommand }} PROD
         if: startsWith(github.ref, 'refs/tags')
         working-directory: iac
-        run: |
-          npm install -g aws-cdk && cdk ${{ inputs.cdk_subcommand }} prod-webapp -c subdomain=prod --require-approval never
         env:
+          CDK_SUBCOMMAND: ${{ inputs.cdk_subcommand }}
           PYTHONPATH: ${{ github.workspace }}
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           CDK_DEFAULT_REGION: us-east-1
+        run: |
+          ./node_modules/.bin/cdk "$CDK_SUBCOMMAND" prod-webapp -c subdomain=prod --require-approval never
