@@ -132,6 +132,34 @@ export const getObservationsCountMessage = (fields, comparisonKey, comparisonVal
   })
 }
 
+// An observation row has one Validations cell for all its inputs, so "Required" alone does not
+// say which cell is empty. The API names the column only in the validator name, e.g.
+// `size_list_required_validator`. One full sentence per column, not a "{{column}} required"
+// template, so translators can reorder the words.
+const REQUIRED_MESSAGE_KEYS_BY_OBSERVATION_COLUMN = {
+  attribute: 'validation_messages.required_benthic_attribute',
+  count: 'validation_messages.required_count',
+  fish_attribute: 'validation_messages.required_fish_name',
+  interval: 'validation_messages.required_interval',
+  invert_attribute: 'validation_messages.required_macroinvertebrate_name',
+  length: 'validation_messages.required_length',
+  num_points: 'validation_messages.required_number_of_points',
+  quadrat_number: 'validation_messages.required_quadrat',
+  score: 'validation_messages.required_score',
+  size: 'validation_messages.required_size',
+}
+
+const LIST_REQUIRED_VALIDATOR_SUFFIX = '_list_required_validator'
+
+const getRequiredMessage = (validatorName = '') => {
+  const column = validatorName.endsWith(LIST_REQUIRED_VALIDATOR_SUFFIX)
+    ? validatorName.slice(0, -LIST_REQUIRED_VALIDATOR_SUFFIX.length)
+    : undefined
+  const key = REQUIRED_MESSAGE_KEYS_BY_OBSERVATION_COLUMN[column] ?? 'validation_messages.required'
+
+  return i18n.t(key)
+}
+
 export const getValidationMessage = (validation, projectId = '') => {
   const { code, context, fields, name } = validation
 
@@ -255,7 +283,7 @@ export const getValidationMessage = (validation, projectId = '') => {
         totalLength: context?.total_obs_length ?? '',
         transectLength: context?.len_surveyed ?? '',
       }),
-    required: () => i18n.t('validation_messages.required'),
+    required: () => getRequiredMessage(name),
     required_management_rules: () => i18n.t('validation_messages.required_management_rules'),
     sample_time_out_of_range: () =>
       i18n.t('validation_messages.sample_time_out_of_range', {
@@ -263,6 +291,7 @@ export const getValidationMessage = (validation, projectId = '') => {
         end: context?.time_range?.[1] ?? '',
       }),
     similar_name: () => i18n.t('validation_messages.similar_name'),
+    size_bin_required: () => i18n.t('validation_messages.required_size'),
     similar_date_sample_unit: () => i18n.t('validation_messages.similar_date_sample_unit'),
     site_not_found: () => i18n.t('validation_messages.site_not_found'),
     too_many_observations: () =>
