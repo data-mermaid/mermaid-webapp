@@ -146,6 +146,15 @@ export const getObservationsCountMessage = (
   })
 }
 
+// The API sends times as "HH:MM:SS"; the message shows "HH:MM".
+const formatTime = (time = '') => time.slice(0, 5)
+
+const getOutsideOfRangeMessage = (range: readonly (string | number)[] = []) =>
+  i18n.t('validation_messages.outside_of_range', { min: range[0] ?? '', max: range[1] ?? '' })
+
+const getDepthMessage = (context: Context) =>
+  i18n.t('validation_messages.depth_out_of_range', { max: context?.depth_range?.[1] ?? '' })
+
 // An observation row has one Validations cell for all its inputs, so "Required" alone does not
 // say which cell is empty. The API names the column only in the validator name, e.g.
 // `size_list_required_validator`. One full sentence per column, not a "{{column}} required"
@@ -222,7 +231,7 @@ export const getValidationMessage = (
       i18n.t('validation_messages.incorrect_observation_count', {
         expectedCount: context?.expected_count ?? '',
       }),
-    invalid_interval_size: () => i18n.t('validation_messages.invalid_interval_size'),
+    invalid_interval_size: () => i18n.t('validation_messages.greater_than_zero'),
     max_interval_size: () =>
       i18n.t('validation_messages.max_interval_size', {
         max: context?.interval_size_range?.[1] ?? '',
@@ -232,15 +241,12 @@ export const getValidationMessage = (
         max: context?.interval_start_range?.[1] ?? '',
       }),
     invalid_benthic_transect: () => i18n.t('validation_messages.invalid_benthic_transect'),
-    invalid_depth: () =>
-      i18n.t('validation_messages.invalid_depth', {
-        min: context?.depth_range?.[0] ?? '',
-      }),
+    invalid_depth: () => getDepthMessage(context),
     excessive_precision: () =>
       i18n.t('validation_messages.excessive_precision', {
         count: context?.decimal_places,
       }),
-    invalid_fish_count: () => i18n.t('validation_messages.invalid_fish_count'),
+    invalid_fish_count: () => i18n.t('validation_messages.zero_or_greater'),
     invalid_fish_size: () => i18n.t('validation_messages.invalid_fish_size'),
     invalid_fishbelt_transect: () => i18n.t('validation_messages.invalid_fishbelt_transect'),
     invert_count_high: () => i18n.t('validation_messages.invert_count_high'),
@@ -251,7 +257,7 @@ export const getValidationMessage = (
         invalidQuadratNumbers: context?.invalid_quadrat_numbers ?? '',
       }),
     invalid_quadrat_collection: () => i18n.t('validation_messages.invalid_quadrat_collection'),
-    invalid_quadrat_size: () => i18n.t('validation_messages.invalid_quadrat_size'),
+    invalid_quadrat_size: () => i18n.t('validation_messages.greater_than_zero'),
     max_quadrat_size: () =>
       i18n.t('validation_messages.max_quadrat_size', {
         max: context?.quadrat_size_range?.[1] ?? '',
@@ -261,20 +267,13 @@ export const getValidationMessage = (
     invalid_score: () => i18n.t('validation_messages.invalid_score'),
     large_num_quadrats: () => i18n.t('validation_messages.large_num_quadrats'),
     len_surveyed_not_positive: () => i18n.t('validation_messages.len_surveyed_not_positive'),
-    len_surveyed_out_of_range: () =>
-      i18n.t('validation_messages.len_surveyed_out_of_range', {
-        min: context?.len_surveyed_range?.[0] ?? '',
-        max: context?.len_surveyed_range?.[1] ?? '',
-      }),
+    len_surveyed_out_of_range: () => getOutsideOfRangeMessage(context?.len_surveyed_range),
     low_density: () =>
       i18n.t('validation_messages.low_density', {
         min: context?.biomass_range?.[0] ?? '',
       }),
     management_not_found: () => i18n.t('validation_messages.management_not_found'),
-    max_depth: () =>
-      i18n.t('validation_messages.max_depth', {
-        max: context?.depth_range?.[1] ?? '',
-      }),
+    max_depth: () => getDepthMessage(context),
     max_fish_size: () => i18n.t('validation_messages.max_fish_size'),
     minimum_total_fish_count: () =>
       i18n.t('validation_messages.minimum_total_fish_count', {
@@ -291,7 +290,7 @@ export const getValidationMessage = (
     no_region_match: () => i18n.t('validation_messages.no_region_match'),
     not_part_of_fish_family_subset: () =>
       i18n.t('validation_messages.not_part_of_fish_family_subset'),
-    not_positive_integer: () => i18n.t('validation_messages.not_positive_integer'),
+    not_positive_integer: () => i18n.t('validation_messages.zero_or_greater'),
     not_unique_site: () => i18n.t('validation_messages.not_unique_site'),
     not_unique_management: () => goToManagementOverviewPageLink(projectId),
     obs_total_length_toolarge: () =>
@@ -306,11 +305,7 @@ export const getValidationMessage = (
       }),
     required: () => getRequiredMessage(name),
     required_management_rules: () => i18n.t('validation_messages.required_management_rules'),
-    sample_time_out_of_range: () =>
-      i18n.t('validation_messages.sample_time_out_of_range', {
-        start: context?.time_range?.[0] ?? '',
-        end: context?.time_range?.[1] ?? '',
-      }),
+    sample_time_out_of_range: () => getOutsideOfRangeMessage(context?.time_range?.map(formatTime)),
     similar_name: () => i18n.t('validation_messages.similar_name'),
     size_bin_required: () => i18n.t('validation_messages.required_size'),
     similar_date_sample_unit: () => i18n.t('validation_messages.similar_date_sample_unit'),

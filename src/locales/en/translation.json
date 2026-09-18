@@ -1171,6 +1171,7 @@
   "validation_messages": {
     "all_attributes_same_category": "All benthic attributes are {{category}}",
     "all_equal": "All observations are the same",
+    "depth_out_of_range": "Value must be greater than zero and {{max}} m or less",
     "diff_num_images": "Defined number of quadrats does not match count of images uploaded",
     "diff_num_quadrats": "Defined number of quadrats does not match count of quadrats in observations",
     "different_num_points_per_quadrat_se": "Other sample units with the same sample event have a different number of points per quadrat",
@@ -1186,6 +1187,7 @@
     "excessive_precision_one": "Depth precision to right of decimal point greater than {{count}} digit",
     "excessive_precision_other": "Depth precision to right of decimal point greater than {{count}} digits",
     "future_sample_date": "Sample date is in the future",
+    "greater_than_zero": "Value must be greater than zero",
     "high_density": "Fish biomass greater than {{max}} kg/ha",
     "implausibly_old_date": "Sample date is before 1900",
     "incorrect_observation_count": "Incorrect number of observations; expected {{expectedCount}}",
@@ -1227,6 +1229,7 @@
     "obs_total_length_toolarge": "Total length of observations ({{totalLength}} cm) is greater than the transect length ({{transectLength}} m) + 50%",
     "obs_total_length_toosmall": "Total length of observations ({{totalLength}} cm) is less than 50% of the transect length ({{transectLength}} m)",
     "observation_count": "{{comparison}} than {{count}} observations in {{suffixToken}}",
+    "outside_of_range": "Outside of range of {{min}} and {{max}}",
     "required": "Required",
     "required_benthic_attribute": "Benthic attribute required",
     "required_count": "Count required",
@@ -1246,7 +1249,8 @@
     "system_validation_error": "System validation error:",
     "unconfirmed_annotation": "Wrong number of confirmed annotations",
     "unknown_protocol": "Unknown method",
-    "value_not_set": "Value is not set"
+    "value_not_set": "Value is not set",
+    "zero_or_greater": "Value must be zero or greater"
   },
   "validations": {
     "ignored": "Ignored",
