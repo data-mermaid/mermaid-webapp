@@ -1,7 +1,12 @@
-// Which of a row's validations actually reach the screen. An error hides everything else on
-// that row; otherwise warnings and ignores show together; a row left with only resets shows
-// nothing. Also read by getValidationSummary, so the status indicator chips count exactly what
-// this returns.
+// Which of a row's validations actually reach the screen. One error hides everything else on
+// that row: the required error if there is one, otherwise the first. Otherwise warnings and
+// ignores show together, and a row left with only resets shows nothing. Also read by
+// getValidationSummary, so the status indicator chips count exactly what this returns.
+
+// An empty field usually fails more than one check (empty depth is also "not a number"), and
+// "Required" is the only one of those messages the user can act on.
+const REQUIRED_CODE = 'required'
+
 export const getValidationsToDisplay = (inputValidations) => {
   const validationObjectKeys = Object.keys(inputValidations)
   const errors = validationObjectKeys
@@ -22,7 +27,9 @@ export const getValidationsToDisplay = (inputValidations) => {
   const areResets = resets.length
 
   if (areErrors) {
-    return [errors[0]]
+    const requiredError = errors.find((validation) => validation.code === REQUIRED_CODE)
+
+    return [requiredError ?? errors[0]]
   }
   if (!areErrors && areWarnings) {
     return warnings
@@ -48,6 +55,7 @@ const getValidationPropertiesForInput = (inputValidations, areValidationsShowing
     context: validation.context,
     code: validation.code,
     id: validation.validation_id,
+    name: validation.name,
   }))
 
   const statusToDisplayIfNotOk = validationsToDisplay.length
