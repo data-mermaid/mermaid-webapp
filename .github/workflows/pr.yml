@@ -136,7 +136,11 @@ jobs:
           echo "::error::cdk-nag found unsuppressed errors — see PR comment for details"
           exit 1
 
+      # Dependabot PRs cannot read repo secrets, so CDK_DEPLOY_ROLE is empty and
+      # OIDC role assumption fails. cdk-nag above still runs: it synthesizes
+      # against a placeholder account and needs no AWS access.
       - name: Configure AWS credentials
+        if: github.actor != 'dependabot[bot]'
         uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         with:
           role-to-assume: ${{ secrets.CDK_DEPLOY_ROLE }}
@@ -145,6 +149,7 @@ jobs:
 
       - name: CDK Diff
         id: cdk-diff
+        if: github.actor != 'dependabot[bot]'
         env:
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           CDK_DEFAULT_REGION: us-east-1
