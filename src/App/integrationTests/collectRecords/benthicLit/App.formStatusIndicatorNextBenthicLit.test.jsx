@@ -131,8 +131,8 @@ test('Next jumps instead of gliding when the user prefers reduced motion', async
 }, 50000)
 
 test('The highlight waits for the page to stop moving', async () => {
-  // A long jump used to leave the colour to fade while the page was still travelling, so the
-  // row arrived unmarked. jsdom has no layout, so a moving rect stands in for the scroll.
+  // The fade must not start until the target has stopped moving, or a long jump finishes
+  // after the colour has gone. jsdom has no layout, so a moving rect stands in for the scroll.
   let top = 400
   let isTravelling = true
 

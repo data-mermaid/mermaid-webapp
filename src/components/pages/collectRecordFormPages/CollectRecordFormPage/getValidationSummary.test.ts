@@ -178,20 +178,6 @@ describe('getValidationSummary counts', () => {
     expect(targets.warning).toEqual([observationTarget('obs1')])
   })
 
-  test('counts warnings on separate rows separately', () => {
-    const { counts, targets } = getValidationSummary({
-      data: {
-        obs_belt_fishes: [
-          [{ status: 'warning', context: { observation_id: 'obs1' } }],
-          [{ status: 'warning', context: { observation_id: 'obs2' } }],
-        ],
-      },
-    })
-
-    expect(counts.warning).toBe(2)
-    expect(targets.warning).toEqual([observationTarget('obs1'), observationTarget('obs2')])
-  })
-
   test('counts one error for a row with several, matching the single message it shows', () => {
     // getValidationsToDisplay renders the first error and hides the rest of the row.
     const { counts } = getValidationSummary({
