@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { type ReactNode } from 'react'
 import { styled } from 'styled-components'
 import { Trans } from 'react-i18next'
 import i18n from '../../i18n'
 import { HelperTextLink } from '../components/generic/links'
+import type { Validation, ValidationContext } from '../types/validation'
+
+type Context = ValidationContext | null | undefined
 
 const SystemValidationMessageBlock = styled.span`
   display: block;
 `
 
-export const getSystemValidationErrorMessage = (drySubmitContext) => {
+export const getSystemValidationErrorMessage = (drySubmitContext: Record<string, string>) => {
   const errors = Object.entries(drySubmitContext)
 
   const errorMap = errors.map((errorPart) => (
@@ -27,7 +30,7 @@ export const getSystemValidationErrorMessage = (drySubmitContext) => {
   )
 }
 
-export const getDuplicateSampleUnitLink = (context, projectId) => {
+export const getDuplicateSampleUnitLink = (context: Context, projectId: string) => {
   const { duplicate_transect_method: duplicateTransectMethod, protocol } = context ?? {}
   const protocolPath = protocol != null ? `/${protocol}/${duplicateTransectMethod}` : ''
   const linkToSampleUnit = `/projects/${projectId}/submitted${protocolPath}`
@@ -41,7 +44,7 @@ export const getDuplicateSampleUnitLink = (context, projectId) => {
   )
 }
 
-export const goToManagementOverviewPageLink = (projectId) => {
+export const goToManagementOverviewPageLink = (projectId: string) => {
   const linkToMROverviewPage = `/projects/${projectId}/management-regimes-overview`
 
   return (
@@ -54,19 +57,19 @@ export const goToManagementOverviewPageLink = (projectId) => {
   )
 }
 
-const getDuplicateIndexes = (duplicateIndexes) => {
+const getDuplicateIndexes = (duplicateIndexes: ValidationContext['duplicates']) => {
   const indexList = duplicateIndexes.flatMap((array) => array.map((item) => item.index + 1))
 
   return indexList.join(', ')
 }
 
-const getObservationFieldName = (fieldName) => {
+const getObservationFieldName = (fieldName: string): string => {
   // fieldName is a string 'data.obs_colonies_bleached' as an example
   // since the api does not give us the name, 'Colonies Bleached', we have to map this ourselves and also remove 'data.' from the field name
 
   const cleanFieldName = fieldName.slice(5)
 
-  const observationFieldNameMapping = {
+  const observationFieldNameMapping: Record<string, string> = {
     obs_colonies_bleached: i18n.t('colonies_bleached'),
     benthic_photo_quadrats: i18n.t('benthic_photo_quadrats'),
   }
@@ -76,15 +79,21 @@ const getObservationFieldName = (fieldName) => {
     : ''
 }
 
-export const getDuplicateValuesValidationMessage = (field, duplicates) => {
+export const getDuplicateValuesValidationMessage = (
+  field: string,
+  duplicates: ValidationContext['duplicates'],
+) => {
   return i18n.t('validation_messages.duplicate_values', {
     fieldName: getObservationFieldName(field),
     indexes: getDuplicateIndexes(duplicates),
   })
 }
 
-export const getInvalidBleachingObsMessage = (context, obsTypeKey) => {
-  const observationCountPaths = {
+export const getInvalidBleachingObsMessage = (
+  context: Context,
+  obsTypeKey: 'colony_count' | 'percent_cover',
+) => {
+  const observationCountPaths: Record<string, string> = {
     count_normal: 'normal',
     count_pale: 'pale',
     count_20: '0-20%',
@@ -93,7 +102,7 @@ export const getInvalidBleachingObsMessage = (context, obsTypeKey) => {
     count_100: '80-100',
     count_dead: 'dead',
   }
-  const observationPercentPaths = {
+  const observationPercentPaths: Record<string, string> = {
     percent_hard: 'hard coral',
     percent_soft: 'soft coral',
     percent_algae: 'macroalgae',
@@ -109,15 +118,19 @@ export const getInvalidBleachingObsMessage = (context, obsTypeKey) => {
   })
 }
 
-export const getInvalidBleachingObsTotalMessage = (context) => {
+export const getInvalidBleachingObsTotalMessage = (context: Context) => {
   const min = context?.value_range?.[0] ?? ''
   const max = context?.value_range?.[1] ?? ''
 
   return i18n.t('validation_messages.invalid_total', { min, max })
 }
 
-export const getObservationsCountMessage = (fields, comparisonKey, comparisonValue) => {
-  const observationTableSuffixTokens = {
+export const getObservationsCountMessage = (
+  fields: string[] | undefined,
+  comparisonKey: 'greater' | 'fewer',
+  comparisonValue: number | undefined,
+) => {
+  const observationTableSuffixTokens: Record<string, string> = {
     'data.obs_quadrat_benthic_percent': i18n.t('percent_cover'),
     'data.obs_colonies_bleached': i18n.t('colonies_bleached'),
   }
@@ -127,7 +140,7 @@ export const getObservationsCountMessage = (fields, comparisonKey, comparisonVal
 
   return i18n.t('validation_messages.observation_count', {
     comparison: i18n.t(`measurements.${comparisonKey}`),
-    count: comparisonValue ?? '',
+    count: comparisonValue,
     suffixToken,
   })
 }
@@ -136,7 +149,7 @@ export const getObservationsCountMessage = (fields, comparisonKey, comparisonVal
 // say which cell is empty. The API names the column only in the validator name, e.g.
 // `size_list_required_validator`. One full sentence per column, not a "{{column}} required"
 // template, so translators can reorder the words.
-const REQUIRED_MESSAGE_KEYS_BY_OBSERVATION_COLUMN = {
+const REQUIRED_MESSAGE_KEYS_BY_OBSERVATION_COLUMN: Record<string, string> = {
   attribute: 'validation_messages.required_benthic_attribute',
   count: 'validation_messages.required_count',
   fish_attribute: 'validation_messages.required_fish_name',
@@ -160,10 +173,13 @@ const getRequiredMessage = (validatorName = '') => {
   return i18n.t(key)
 }
 
-export const getValidationMessage = (validation, projectId = '') => {
+export const getValidationMessage = (
+  validation: Pick<Validation, 'code' | 'name' | 'context' | 'fields'>,
+  projectId = '',
+): ReactNode => {
   const { code, context, fields, name } = validation
 
-  const validationMessages = {
+  const validationMessages: Record<string, () => ReactNode> = {
     all_attributes_same_category: () =>
       i18n.t('validation_messages.all_attributes_same_category', {
         category: context?.category ?? '',
@@ -217,7 +233,7 @@ export const getValidationMessage = (validation, projectId = '') => {
       }),
     excessive_precision: () =>
       i18n.t('validation_messages.excessive_precision', {
-        count: context?.decimal_places ?? '',
+        count: context?.decimal_places,
       }),
     invalid_fish_count: () => i18n.t('validation_messages.invalid_fish_count'),
     invalid_fish_size: () => i18n.t('validation_messages.invalid_fish_size'),
