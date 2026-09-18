@@ -1,6 +1,6 @@
 import type { ValidationStatus } from '../../../../types/constants'
 import getRecordLevelValidationsToDisplay from '../getRecordLevelValidationsToDisplay'
-import { getValidationsToDisplay } from '../getValidationPropertiesForInput'
+import { getValidationsToDisplay, type RowValidations } from '../getValidationPropertiesForInput'
 import getDuplicateValuesObservationIds, {
   isDuplicateValuesValidation,
 } from './getDuplicateValuesObservationIds'
@@ -107,7 +107,9 @@ const addTarget = (bucket: NavigationTarget[], target: NavigationTarget) => {
  * Add one row of the form: a count for every message it shows, and one target to scroll to.
  */
 const addRow = (summary: ValidationSummary, rowValidations: unknown, target: NavigationTarget) => {
-  const displayedValidations: Validation[] = getValidationsToDisplay(rowValidations)
+  const displayedValidations: Validation[] = getValidationsToDisplay(
+    rowValidations as RowValidations,
+  )
 
   for (const validation of displayedValidations) {
     const status = getStatus(validation)

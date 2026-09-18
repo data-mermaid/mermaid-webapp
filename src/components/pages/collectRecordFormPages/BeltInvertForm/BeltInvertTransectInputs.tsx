@@ -4,7 +4,10 @@ import { useTranslation, Trans } from 'react-i18next'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
-import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
+import getValidationPropertiesForInput, {
+  type InputValidationProperties,
+  type RowValidations,
+} from '../getValidationPropertiesForInput'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
@@ -68,10 +71,10 @@ interface BeltInvertTransectInputsProps {
     validationPath: string
   }) => void
   validationPropertiesWithDirtyResetOnInputChange: (
-    validationProps: Record<string, unknown>,
+    validationProps: InputValidationProperties,
     inputName: string,
   ) => Record<string, unknown>
-  validationsApiData?: { beltinvert_transect?: Record<string, unknown> }
+  validationsApiData?: { beltinvert_transect?: Record<string, RowValidations> }
 }
 
 const formatSizeBinOptionLabel = (label: string) => {

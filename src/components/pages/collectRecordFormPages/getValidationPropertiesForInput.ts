@@ -1,3 +1,22 @@
+import type { ValidationStatus } from '../../../types/constants'
+import type { Validation, ValidationContext } from '../../../types/validation'
+
+// A row's validations are usually an array, but some paths hold a keyed object (see
+// walkFieldSubtree in getValidationSummary), so they are read by key.
+export type RowValidations = Validation[] | Record<string, Validation>
+
+export interface ValidationMessage {
+  code?: string
+  name?: string
+  id?: string
+  context?: ValidationContext | null
+}
+
+export interface InputValidationProperties {
+  validationType?: ValidationStatus
+  validationMessages?: ValidationMessage[]
+}
+
 // Which of a row's validations actually reach the screen. One error hides everything else on
 // that row: the required error if there is one, otherwise the first. Otherwise warnings and
 // ignores show together, and a row left with only resets shows nothing. Also read by
@@ -7,7 +26,7 @@
 // "Required" is the only one of those messages the user can act on.
 const REQUIRED_CODE = 'required'
 
-export const getValidationsToDisplay = (inputValidations) => {
+export const getValidationsToDisplay = (inputValidations: RowValidations): Validation[] => {
   const validationObjectKeys = Object.keys(inputValidations)
   const errors = validationObjectKeys
     .filter((key) => inputValidations[key].status === 'error')
@@ -41,7 +60,10 @@ export const getValidationsToDisplay = (inputValidations) => {
   return []
 }
 
-const getValidationPropertiesForInput = (inputValidations, areValidationsShowing) => {
+const getValidationPropertiesForInput = (
+  inputValidations: RowValidations | undefined,
+  areValidationsShowing: boolean,
+): InputValidationProperties => {
   if (!areValidationsShowing) {
     return {}
   }

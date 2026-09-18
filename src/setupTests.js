@@ -71,7 +71,7 @@ vi.mock('maplibre-gl', function mapLibreMock() {
 })
 
 // Mock the i18n instance using cimode so i18n.t() returns the translation key.
-// Non-component code (e.g. validationMessageHelpers.jsx, handleHttpResponseError.ts) imports
+// Non-component code (e.g. validationMessageHelpers.tsx, handleHttpResponseError.ts) imports
 // i18n directly and calls i18n.t(). We use i18next's built-in 'cimode' language which always
 // returns the key, so tests assert against stable keys rather than English text that may change.
 vi.mock('../i18n', async () => {
