@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 
@@ -8,6 +8,7 @@ import {
   renderAuthenticatedOnline,
   screen,
   waitFor,
+  within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -15,37 +16,6 @@ import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import { mockT } from '../../../../testUtilities/mockT'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
-
-// One validation of each kind, so the expected chip totals are unambiguous:
-// errors = depth field + observation 7, warnings = length surveyed field + record level.
-const validations = {
-  status: 'error',
-  results: {
-    $record: [{ code: 'all_equal', status: 'warning', validation_id: 'record-level-warning' }],
-    data: {
-      fishbelt_transect: {
-        depth: [{ code: 'required', status: 'error', validation_id: 'depth-error' }],
-        len_surveyed: [
-          {
-            code: 'len_surveyed_out_of_range',
-            status: 'warning',
-            validation_id: 'len-surveyed-warning',
-          },
-        ],
-      },
-      obs_belt_fishes: [
-        [
-          {
-            code: 'required',
-            status: 'error',
-            validation_id: 'observation-error',
-            context: { observation_id: '7' },
-          },
-        ],
-      ],
-    },
-  },
-}
 
 // The react-i18next mock returns the key, so the rendered chip never contains its count.
 // Read the count out of the most recent translation call for that chip instead.
@@ -57,12 +27,7 @@ const getChipCount = (variant) => {
   return chipCalls.at(-1)?.[1]?.count
 }
 
-// This pins the end-to-end totals: what the chips say against a known payload, and that
-// editing an input takes its validation out of the count. It does not isolate *why* the
-// count drops, because two mechanisms do it together (the onChange handlers reset the
-// field's validations to 'reset', and the dirty check in useCollectRecordValidation hides
-// it immediately). getValidationTargets.test.ts covers the dirty check on its own.
-test('Form status indicator counts match the validations on show, and drop as inputs are edited', async () => {
+const renderFishBeltAndValidate = async (validations) => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -99,6 +64,66 @@ test('Form status indicator counts match the validations on show, and drop as in
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   expect(await screen.findByTestId('form-status-indicators')).toBeInTheDocument()
+
+  return { user }
+}
+
+// One validation of each kind, so the expected chip totals are unambiguous:
+// errors = depth field + observation 7, warnings = length surveyed field + record level.
+const oneValidationPerRow = {
+  status: 'error',
+  results: {
+    $record: [{ code: 'all_equal', status: 'warning', validation_id: 'record-level-warning' }],
+    data: {
+      fishbelt_transect: {
+        depth: [{ code: 'required', status: 'error', validation_id: 'depth-error' }],
+        len_surveyed: [
+          {
+            code: 'len_surveyed_out_of_range',
+            status: 'warning',
+            validation_id: 'len-surveyed-warning',
+          },
+        ],
+      },
+      obs_belt_fishes: [
+        [
+          {
+            code: 'required',
+            status: 'error',
+            validation_id: 'observation-error',
+            context: { observation_id: '7' },
+          },
+        ],
+      ],
+    },
+  },
+}
+
+// Three separate warnings, all on observation 7, so the row shows three messages.
+const threeWarningsOnOneRow = {
+  status: 'error',
+  results: {
+    data: {
+      obs_belt_fishes: [
+        ['max_fish_size', 'not_part_of_fish_family_subset', 'similar_name'].map((code) => ({
+          code,
+          status: 'warning',
+          validation_id: `${code}-warning`,
+          context: { observation_id: '7' },
+        })),
+      ],
+    },
+  },
+}
+
+// This pins the end-to-end totals: what the chips say against a known payload, and that
+// editing an input takes its validation out of the count. It does not isolate *why* the
+// count drops, because two mechanisms do it together (the onChange handlers reset the
+// field's validations to 'reset', and the dirty check in useCollectRecordValidation hides
+// it immediately). getValidationSummary.test.ts covers the dirty check on its own.
+test('Form status indicator counts match the validations on show, and drop as inputs are edited', async () => {
+  const { user } = await renderFishBeltAndValidate(oneValidationPerRow)
+
   expect(getChipCount('error')).toBe(2)
   expect(getChipCount('warning')).toBe(2)
   expect(screen.queryByTestId('form-status-chip-ignore')).not.toBeInTheDocument()
@@ -114,4 +139,28 @@ test('Form status indicator counts match the validations on show, and drop as in
 
   await waitFor(() => expect(getChipCount('warning')).toBe(1))
   expect(getChipCount('error')).toBe(1)
+}, 50000)
+
+// A surveyor reads the chip as "how much is left to deal with", so a row carrying three
+// warnings has to count as three. Next is the other half of the contract: the three messages
+// share a row, so they share one place to scroll to.
+test('A row showing several warnings counts them all, and is still one place to scroll to', async () => {
+  const scrollIntoView = vi
+    .spyOn(window.HTMLElement.prototype, 'scrollIntoView')
+    .mockImplementation(() => {})
+
+  const { user } = await renderFishBeltAndValidate(threeWarningsOnOneRow)
+
+  const row = document.querySelector('[data-observation-id="7"]')
+
+  expect(row.querySelectorAll('li.warning-indicator')).toHaveLength(3)
+  expect(getChipCount('warning')).toBe(3)
+
+  // Two clicks, because a third would only be a second lap of the same single row.
+  const nextButton = within(screen.getByTestId('form-status-chip-warning')).getByRole('button')
+
+  await user.click(nextButton)
+  await user.click(nextButton)
+
+  expect(scrollIntoView.mock.instances).toEqual([row, row])
 }, 50000)
