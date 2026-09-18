@@ -31,6 +31,7 @@ jobs:
       contents: read
       id-token: write
       issues: write
+      pull-requests: write
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411  # v2.19.4
@@ -88,7 +89,7 @@ jobs:
           fi
 
       - name: Post CDK Nag results to PR
-        if: always() && steps.cdk-nag.conclusion != 'skipped'
+        if: always() && steps.cdk-nag.conclusion != 'skipped' && github.actor != 'dependabot[bot]'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
@@ -151,7 +152,7 @@ jobs:
           cd iac && ./cdk_diff.sh
 
       - name: Post CDK Diff results to PR
-        if: always() && steps.cdk-diff.outcome != 'skipped'
+        if: always() && steps.cdk-diff.outcome != 'skipped' && github.actor != 'dependabot[bot]'
         env:
           WORKFLOW_NAME: ${{ github.workflow }}
           CDK_DIFF_OUTCOME: ${{ steps.cdk-diff.outcome }}
