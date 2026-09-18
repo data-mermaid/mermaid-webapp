@@ -4,6 +4,10 @@ import i18nextLoader from 'vite-plugin-i18next-loader'
 import react from '@vitejs/plugin-react-swc'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 
+// Marks our own bundles so Sentry can tell them from browser-extension scripts.
+// Must stay in sync with filterKeys in src/sentry.ts.
+const SENTRY_APPLICATION_KEY = 'mermaid-webapp'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/',
@@ -37,16 +41,17 @@ export default defineConfig({
       includeAssets: ['**/*'], //cache all the static assets in the public folder
     }),
     i18nextLoader({ paths: ['./src/locales'] }),
-    // Only upload source maps during CI builds where SENTRY_AUTH_TOKEN is set
-    ...(process.env.SENTRY_AUTH_TOKEN
-      ? [
-          sentryVitePlugin({
-            org: process.env.SENTRY_ORG,
-            project: process.env.SENTRY_PROJECT,
-            authToken: process.env.SENTRY_AUTH_TOKEN,
-          }),
-        ]
-      : []),
+    // Runs on every build so thirdPartyErrorFilterIntegration always sees an
+    // application key; without it every frame looks third-party and the filter
+    // would drop all errors. Source map upload stays gated on the CI token.
+    sentryVitePlugin({
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      applicationKey: SENTRY_APPLICATION_KEY,
+      sourcemaps: { disable: !process.env.SENTRY_AUTH_TOKEN },
+      telemetry: false,
+    }),
   ],
   server: {
     port: 3000,
