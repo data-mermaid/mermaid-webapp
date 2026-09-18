@@ -40,7 +40,7 @@
     "i18next-intervalplural-postprocessor": "^3.0.0",
     "i18next-resources-to-backend": "^1.2.1",
     "latest-version": "^6.0.0",
-    "maplibre-gl": "^5.19.0",
+    "maplibre-gl": "^6.4.1",
     "match-sorter": "^6.3.1",
     "postcss": "^8.5.10",
     "prop-types": "^15.7.2",
