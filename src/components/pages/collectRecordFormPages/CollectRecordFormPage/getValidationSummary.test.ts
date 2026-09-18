@@ -179,7 +179,7 @@ describe('getValidationSummary counts', () => {
   })
 
   test('counts one error for a row with several, matching the single message it shows', () => {
-    // getValidationsToDisplay renders the first error and hides the rest of the row.
+    // getValidationsToDisplay renders one error and hides the rest of the row.
     const { counts } = getValidationSummary({
       data: {
         sample_event: {
