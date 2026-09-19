@@ -126,26 +126,6 @@ export const getInvalidBleachingObsTotalMessage = (context: Context) => {
   return i18n.t('validation_messages.invalid_total', { min, max })
 }
 
-export const getObservationsCountMessage = (
-  fields: string[] | undefined,
-  comparisonKey: 'greater' | 'fewer',
-  comparisonValue: number | undefined,
-) => {
-  const observationTableSuffixTokens: Record<string, string> = {
-    'data.obs_quadrat_benthic_percent': i18n.t('percent_cover'),
-    'data.obs_colonies_bleached': i18n.t('colonies_bleached'),
-  }
-
-  const obsField = fields?.[0] ?? ''
-  const suffixToken = observationTableSuffixTokens[obsField]
-
-  return i18n.t('validation_messages.observation_count', {
-    comparison: i18n.t(`measurements.${comparisonKey}`),
-    count: comparisonValue,
-    suffixToken,
-  })
-}
-
 // The API sends times as "HH:MM:SS"; the message shows "HH:MM".
 const formatTime = (time = '') => time.slice(0, 5)
 
@@ -195,7 +175,7 @@ export const getValidationMessage = (
         category: context?.category ?? '',
       }),
     all_equal: () => i18n.t('validation_messages.all_equal'),
-    diff_num_images: () => i18n.t('validation_messages.diff_num_images'),
+    diff_num_images: () => i18n.t('validation_messages.quadrat_count_differs_from_photos'),
     diff_num_quadrats: () => i18n.t('validation_messages.diff_num_quadrats'),
     different_num_points_per_quadrat_se: () =>
       i18n.t('validation_messages.different_num_points_per_quadrat_se'),
@@ -247,7 +227,7 @@ export const getValidationMessage = (
         count: context?.decimal_places,
       }),
     invalid_fish_count: () => i18n.t('validation_messages.zero_or_greater'),
-    invalid_fish_size: () => i18n.t('validation_messages.invalid_fish_size'),
+    invalid_fish_size: () => i18n.t('validation_messages.invalid_size'),
     invalid_fishbelt_transect: () => i18n.t('validation_messages.invalid_fishbelt_transect'),
     invert_count_high: () => i18n.t('validation_messages.invert_count_high'),
     invert_size_exceeds_maximum: () => i18n.t('validation_messages.invert_size_exceeds_maximum'),
@@ -274,7 +254,7 @@ export const getValidationMessage = (
       }),
     management_not_found: () => i18n.t('validation_messages.management_not_found'),
     max_depth: () => getDepthMessage(context),
-    max_fish_size: () => i18n.t('validation_messages.max_fish_size'),
+    max_fish_size: () => i18n.t('validation_messages.size_larger_than_maximum_observed'),
     minimum_total_fish_count: () =>
       i18n.t('validation_messages.minimum_total_fish_count', {
         minimumFishCount: context?.minimum_fish_count ?? '',
@@ -311,14 +291,18 @@ export const getValidationMessage = (
     similar_date_sample_unit: () => i18n.t('validation_messages.similar_date_sample_unit'),
     site_not_found: () => i18n.t('validation_messages.site_not_found'),
     too_many_observations: () =>
-      getObservationsCountMessage(fields, 'greater', context?.observation_count_range?.[1]),
+      i18n.t('validation_messages.too_many_observations', {
+        max: context?.observation_count_range?.[1] ?? '',
+      }),
     too_few_observations: () =>
-      getObservationsCountMessage(fields, 'fewer', context?.observation_count_range?.[0]),
+      i18n.t('validation_messages.too_few_observations', {
+        min: context?.observation_count_range?.[0] ?? '',
+      }),
     unknown_protocol: () => i18n.t('validation_messages.unknown_protocol'),
     unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
     value_not_set: () => i18n.t('validation_messages.value_not_set'),
     default: () => code || name,
-    unconfirmed_annotation: () => i18n.t('validation_messages.unconfirmed_annotation'),
+    unconfirmed_annotation: () => i18n.t('validation_messages.all_points_must_be_confirmed'),
   }
 
   return (validationMessages[code] || validationMessages.default)()

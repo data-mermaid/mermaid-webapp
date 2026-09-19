@@ -80,3 +80,31 @@ describe('getValidationMessage for ranges and thresholds', () => {
     )
   })
 })
+
+describe('getValidationMessage for observation counts and renamed messages', () => {
+  test('observation count messages name the bound that was crossed', () => {
+    const tSpy = vi.spyOn(i18n, 't')
+    const context = { observation_count_range: [5, 200] as [number, number] }
+
+    getValidationMessage({ code: 'too_few_observations', context })
+    getValidationMessage({ code: 'too_many_observations', context })
+
+    expect(tSpy).toHaveBeenCalledWith('validation_messages.too_few_observations', { min: 5 })
+    expect(tSpy).toHaveBeenCalledWith('validation_messages.too_many_observations', { max: 200 })
+  })
+
+  test('renamed messages point at their new keys', () => {
+    expect(getValidationMessage({ code: 'invalid_fish_size' })).toBe(
+      'validation_messages.invalid_size',
+    )
+    expect(getValidationMessage({ code: 'max_fish_size' })).toBe(
+      'validation_messages.size_larger_than_maximum_observed',
+    )
+    expect(getValidationMessage({ code: 'diff_num_images' })).toBe(
+      'validation_messages.quadrat_count_differs_from_photos',
+    )
+    expect(getValidationMessage({ code: 'unconfirmed_annotation' })).toBe(
+      'validation_messages.all_points_must_be_confirmed',
+    )
+  })
+})
