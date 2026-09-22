@@ -27,6 +27,7 @@ import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumeri
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { sanitizeToOneDecimalPlace } from '../../../../library/numbers/sanitizeToOneDecimalPlace'
 import { useBeltInvertDensityMetrics } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
 import { hasNonEmptyValue } from '../../../../library/hasNonEmptyValue'
 import ObservationSizeSelect from '../ObservationSizeSelect'
@@ -101,13 +102,6 @@ const buildSizeOptionsFromBinLabel = (sizeBinLabel: string | number | undefined)
 
   sizeOptions.push({ label: '50+', value: 50 })
   return sizeOptions
-}
-
-const sanitizeOneDecimalInput = (value: string) => {
-  const digitsAndDotOnly = value.replace(/[^\d.]/g, '')
-  const [integerPart = '', ...decimalParts] = digitsAndDotOnly.split('.')
-  const decimalPart = decimalParts.join('').slice(0, 1)
-  return digitsAndDotOnly.includes('.') ? `${integerPart}.${decimalPart}` : integerPart
 }
 
 const getDisplaySizeValue = (value: unknown) => {
@@ -201,7 +195,7 @@ const BeltInvertObservationRow = ({
   }
 
   const handleUpdateSizeFromInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = sanitizeOneDecimalInput(event.target.value)
+    const newValue = sanitizeToOneDecimalPlace(event.target.value)
     setSizeInputDraft(newValue)
     handleUpdateSize(newValue)
   }
