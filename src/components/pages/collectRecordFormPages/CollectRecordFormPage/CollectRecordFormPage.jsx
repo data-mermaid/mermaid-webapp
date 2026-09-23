@@ -128,6 +128,7 @@ const CollectRecordFormPage = ({
   isImageClassificationEnabledForUser = false,
 }) => {
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
+  const [imageClassificationObservationIds, setImageClassificationObservationIds] = useState(null)
   const [choices, setChoices] = useState({})
   const [isCommonProtocolDataLoading, setIsCommonProtocolDataLoading] = useState(true)
   const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
@@ -364,13 +365,18 @@ const CollectRecordFormPage = ({
     isObservationsTable1ReducerInitialized && isObservationsTable2ReducerInitialized
 
   // observationsTable2State is undefined off bleaching: only its dispatch has a default.
-  const observationIdsOnPage = areObservationTablesLoaded
+  // Image classification rows are built from images rather than the table state, so that table
+  // reports its own row ids.
+  const tableStateObservationIds = areObservationTablesLoaded
     ? new Set(
         [...(observationsTable1State ?? []), ...(observationsTable2State ?? [])].map(
           ({ id }) => id,
         ),
       )
     : null
+  const observationIdsOnPage = collectRecordBeingEdited?.data?.image_classification
+    ? imageClassificationObservationIds
+    : tableStateObservationIds
 
   const {
     handleScrollToObservation,
@@ -596,6 +602,7 @@ const CollectRecordFormPage = ({
         >
           <ObservationTable1
             testId="observations-section"
+            onObservationIdsChange={setImageClassificationObservationIds}
             areValidationsShowing={areValidationsShowing}
             choices={choices}
             collectRecord={collectRecordBeingEdited}
