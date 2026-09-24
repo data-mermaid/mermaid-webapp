@@ -1,9 +1,21 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import type { FormikProps } from 'formik'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import InputNoRowWithLabelAndValidation from '../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 import GfcrNumberInput from '../../../generic/GfcrNumberInput/GfcrNumberInput'
 import { parseGfcrNumber } from '../../../../library/numbers/parseGfcrNumber'
+
+interface GfcrIntegerInputFieldProps {
+  id: string
+  label: React.ReactNode
+  maxValue: number
+  helperText?: React.ReactNode
+  displayHelp?: boolean
+  handleInputFocus?: React.FocusEventHandler<HTMLInputElement>
+  formik: FormikProps<Record<string, string | number | null>>
+  required?: boolean
+  noRow?: boolean
+}
 
 const GfcrIntegerInputField = ({
   id,
@@ -15,10 +27,10 @@ const GfcrIntegerInputField = ({
   formik,
   required = false,
   noRow = false,
-}) => {
+}: GfcrIntegerInputFieldProps) => {
   const numericValue = parseGfcrNumber(formik.values[id])
 
-  const handleBlur = (event) => {
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     // Every GFCR integer field is NOT NULL with a database default of 0, so an emptied
     // field has to settle on 0. Sending null gets rejected with "This field may not be null."
     if (numericValue === null) {
@@ -53,18 +65,6 @@ const GfcrIntegerInputField = ({
       }
     />
   )
-}
-
-GfcrIntegerInputField.propTypes = {
-  id: PropTypes.string.isRequired,
-  label: PropTypes.node.isRequired,
-  maxValue: PropTypes.number.isRequired,
-  displayHelp: PropTypes.bool,
-  helperText: PropTypes.node,
-  handleInputFocus: PropTypes.func,
-  formik: PropTypes.object.isRequired,
-  required: PropTypes.bool,
-  noRow: PropTypes.bool,
 }
 
 export default GfcrIntegerInputField
