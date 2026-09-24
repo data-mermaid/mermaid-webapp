@@ -5,6 +5,7 @@ import React from 'react'
 import { http, HttpResponse } from 'msw'
 import {
   mockMermaidApiAllSuccessful,
+  renderAuthenticated,
   renderAuthenticatedOnline,
   screen,
   waitFor,
@@ -67,12 +68,7 @@ const collectRecord = {
   },
 }
 
-test('Image classification rows showing an error are counted and highlighted with Next', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
-  const scrollIntoView = vi
-    .spyOn(window.HTMLElement.prototype, 'scrollIntoView')
-    .mockImplementation(() => {})
-
+const mockImageClassificationApi = () =>
   mockMermaidApiAllSuccessful.use(
     http.get(`${apiBaseUrl}/projects/5/classification/images/`, () =>
       HttpResponse.json({ results: [image] }),
@@ -92,6 +88,14 @@ test('Image classification rows showing an error are counted and highlighted wit
       }),
     ),
   )
+
+test('Image classification rows showing an error are counted and highlighted with Next', async () => {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+  const scrollIntoView = vi
+    .spyOn(window.HTMLElement.prototype, 'scrollIntoView')
+    .mockImplementation(() => {})
+
+  mockImageClassificationApi()
 
   const { user } = renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
@@ -126,4 +130,37 @@ test('Image classification rows showing an error are counted and highlighted wit
   const reachedIds = scrollIntoView.mock.instances.map((row) => row.dataset.observationId)
 
   expect(new Set(reachedIds)).toEqual(new Set(rowIds))
+}, 50000)
+
+test('Image classification rows leave the Error chip while the table is replaced by the offline message', async () => {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  mockImageClassificationApi()
+
+  // renderAuthenticatedOnline pins isAppOnline, so the offline toggle would have no effect.
+  const { user } = renderAuthenticated(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/benthicpqt/90'],
+      dexiePerUserDataInstance,
+    },
+  )
+
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
+
+  expect(
+    await screen.findByTestId('form-status-chip-error', {}, { timeout: 10000 }),
+  ).toBeInTheDocument()
+
+  await user.click(screen.getByTestId('offline-toggle-switch-test'))
+
+  await waitFor(() =>
+    expect(screen.queryByTestId('form-status-chip-error')).not.toBeInTheDocument(),
+  )
+
+  await user.click(screen.getByTestId('offline-toggle-switch-test'))
+
+  expect(
+    await screen.findByTestId('form-status-chip-error', {}, { timeout: 10000 }),
+  ).toBeInTheDocument()
 }, 50000)

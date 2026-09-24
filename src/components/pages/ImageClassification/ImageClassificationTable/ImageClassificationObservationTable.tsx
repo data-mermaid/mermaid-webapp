@@ -368,6 +368,8 @@ const ImageClassificationObservationTable = ({
     )
 
     onObservationIdsChange?.(new Set(observationIds))
+
+    return () => onObservationIdsChange?.(new Set())
   }, [distilledImages, onObservationIdsChange])
 
   const observationsSummaryStats = useMemo((): CategoryGroup => {
