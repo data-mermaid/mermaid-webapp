@@ -9,6 +9,7 @@ import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabe
 import { useTranslation } from 'react-i18next'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import GfcrIntegerInputField from '../GfcrIntegerInputField'
+import { GFCR_MAX_INTEGER } from '../../../../../library/numbers/gfcrFieldMaximums'
 import GfcrHelperLinks from './GfcrHelperLinks'
 
 const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) => {
@@ -24,6 +25,7 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f6_1a"
+            maxValue={GFCR_MAX_INTEGER}
             label={<>{t('gfcr.forms.common.men')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f6_1_men_helper" />}
             displayHelp={displayHelp}
@@ -34,6 +36,7 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f6_1b"
+            maxValue={GFCR_MAX_INTEGER}
             label={<>{t('gfcr.forms.common.women')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f6_1_women_helper" />}
             displayHelp={displayHelp}
@@ -46,7 +49,6 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
             disabled
             label={<strong>{t('gfcr.forms.common.total')}</strong>}
             id="f6_1_total"
-            type="number"
             value={getFieldValueTotal(formik.values.f6_1a, formik.values.f6_1b)}
           />
         </StyledGfcrSubInputWrapper>
@@ -54,6 +56,7 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f6_1c"
+            maxValue={GFCR_MAX_INTEGER}
             label={<>{t('gfcr.forms.common.youth')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f6_1_youth_helper" />}
             displayHelp={displayHelp}
@@ -64,6 +67,7 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f6_1d"
+            maxValue={GFCR_MAX_INTEGER}
             label={<>{t('gfcr.forms.common.indigenous')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f6_1_indigenous_helper" />}
             displayHelp={displayHelp}

@@ -18,3 +18,9 @@ export const GFCR_MAX_INVESTMENT_AMOUNT = 9999999999.99
 
 // max_digits 11, decimal_places 2
 export const GFCR_MAX_REVENUE_AMOUNT = 999999999.99
+
+// PositiveSmallIntegerField
+export const GFCR_MAX_SMALL_INTEGER = 32767
+
+// IntegerField and PositiveIntegerField
+export const GFCR_MAX_INTEGER = 2147483647

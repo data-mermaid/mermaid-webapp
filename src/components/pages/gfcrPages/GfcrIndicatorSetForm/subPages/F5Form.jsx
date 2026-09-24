@@ -9,6 +9,7 @@ import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabe
 import { useTranslation, Trans } from 'react-i18next'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import GfcrIntegerInputField from '../GfcrIntegerInputField'
+import { GFCR_MAX_SMALL_INTEGER } from '../../../../../library/numbers/gfcrFieldMaximums'
 import GfcrHelperLinks from './GfcrHelperLinks'
 
 const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) => {
@@ -19,6 +20,7 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       <H2>{t('gfcr.forms.f5_heading')}</H2>
       <GfcrIntegerInputField
         id="f5_1"
+        maxValue={GFCR_MAX_SMALL_INTEGER}
         label={
           <>
             <strong>F 5.1</strong>{' '}
@@ -32,6 +34,7 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       />
       <GfcrIntegerInputField
         id="f5_2"
+        maxValue={GFCR_MAX_SMALL_INTEGER}
         label={
           <>
             <strong>F 5.2</strong>{' '}
@@ -45,6 +48,7 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       />
       <GfcrIntegerInputField
         id="f5_3"
+        maxValue={GFCR_MAX_SMALL_INTEGER}
         label={
           <>
             <strong>F 5.3</strong> {t('gfcr.forms.f5_3')}
@@ -62,6 +66,7 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f5_4a"
+            maxValue={GFCR_MAX_SMALL_INTEGER}
             label={<>{t('gfcr.forms.common.men')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_4_men_helper" />}
             displayHelp={displayHelp}
@@ -72,6 +77,7 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f5_4b"
+            maxValue={GFCR_MAX_SMALL_INTEGER}
             label={<>{t('gfcr.forms.common.women')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_4_women_helper" />}
             displayHelp={displayHelp}
@@ -84,7 +90,6 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
             disabled
             label={<strong>{t('gfcr.forms.common.total')}</strong>}
             id="f5_4_total"
-            type="number"
             value={getFieldValueTotal(formik.values.f5_4a, formik.values.f5_4b)}
           />
         </StyledGfcrSubInputWrapper>
@@ -92,6 +97,7 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f5_4c"
+            maxValue={GFCR_MAX_SMALL_INTEGER}
             label={<>{t('gfcr.forms.common.youth')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_4_youth_helper" />}
             displayHelp={displayHelp}
@@ -102,6 +108,7 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f5_4d"
+            maxValue={GFCR_MAX_SMALL_INTEGER}
             label={<>{t('gfcr.forms.common.indigenous')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f5_4_indigenous_helper" />}
             displayHelp={displayHelp}
@@ -112,6 +119,7 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       </InputRow>
       <GfcrIntegerInputField
         id="f5_5"
+        maxValue={GFCR_MAX_SMALL_INTEGER}
         label={
           <>
             <strong>F 5.5</strong> {t('gfcr.forms.f5_5')}
@@ -124,6 +132,7 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       />
       <GfcrIntegerInputField
         id="f5_6"
+        maxValue={GFCR_MAX_SMALL_INTEGER}
         label={
           <>
             <strong>F 5.6</strong> {t('gfcr.forms.f5_6')}
