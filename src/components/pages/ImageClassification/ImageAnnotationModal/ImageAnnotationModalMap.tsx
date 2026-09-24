@@ -7,7 +7,8 @@ import { booleanContains } from '@turf/boolean-contains'
 import { buffer } from '@turf/buffer'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
-import maplibregl, {
+import * as maplibregl from 'maplibre-gl'
+import {
   ExpressionSpecification,
   LngLatLike,
   MapGeoJSONFeature,
@@ -42,6 +43,7 @@ import EditPointPopupWrapper from './ImageAnnotationPopup/EditPointPopupWrapper'
 import ImageAnnotationPopup from './ImageAnnotationPopup/ImageAnnotationPopup'
 import { getPatchesCenters } from './getPatchesCenters'
 import { usePointsGeoJson } from './usePointsGeoJson'
+import withMapErrorBoundary from '../../../mermaidMap/withMapErrorBoundary'
 
 interface SelectedPoint {
   id: string | null
@@ -638,7 +640,7 @@ const ImageAnnotationModalMap = ({
       return
     }
 
-    const lineColor = [
+    const lineColor: ExpressionSpecification = [
       'case',
       [
         '==', // checks if point on map is clicked
@@ -763,4 +765,4 @@ const ImageAnnotationModalMap = ({
   )
 }
 
-export default ImageAnnotationModalMap
+export default withMapErrorBoundary(ImageAnnotationModalMap)

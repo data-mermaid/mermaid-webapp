@@ -63,11 +63,9 @@ vi.mock('maplibre-gl', function mapLibreMock() {
       }
     },
     NavigationControl: vi.fn(),
+    GPUInitializationError: class GPUInitializationError extends Error {},
   }
-  return {
-    default: mockMaplibre,
-    ...mockMaplibre,
-  }
+  return mockMaplibre
 })
 
 // Mock the i18n instance using cimode so i18n.t() returns the translation key.
