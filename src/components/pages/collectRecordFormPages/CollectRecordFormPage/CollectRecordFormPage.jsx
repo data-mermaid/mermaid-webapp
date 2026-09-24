@@ -365,8 +365,6 @@ const CollectRecordFormPage = ({
     isObservationsTable1ReducerInitialized && isObservationsTable2ReducerInitialized
 
   // observationsTable2State is undefined off bleaching: only its dispatch has a default.
-  // Image classification rows are built from images rather than the table state, so that table
-  // reports its own row ids.
   const tableStateObservationIds = areObservationTablesLoaded
     ? new Set(
         [...(observationsTable1State ?? []), ...(observationsTable2State ?? [])].map(
@@ -374,6 +372,8 @@ const CollectRecordFormPage = ({
         ),
       )
     : null
+  // Image classification rows are built from images rather than the table state, so that table
+  // reports its own row ids.
   const observationIdsOnPage = collectRecordBeingEdited?.data?.image_classification
     ? imageClassificationObservationIds
     : tableStateObservationIds
