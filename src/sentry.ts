@@ -32,11 +32,7 @@ export function initSentry() {
     // Sentry to start dropping real events. None originate in this codebase:
     // xbrowser comes from an extension autofill routine, and the Object Not
     // Found message from the CefSharp runtime behind Outlook's link scanner.
-    ignoreErrors: [
-      /Object Not Found Matching Id/,
-      /xbrowser is not defined/,
-      /Non-Error promise rejection captured/,
-    ],
+    ignoreErrors: [/Object Not Found Matching Id/, /xbrowser is not defined/],
     // Sample 10% of transactions in production; 100% elsewhere for visibility
     tracesSampleRate: import.meta.env.VITE_ENVIRONMENT === 'production' ? 0.1 : 1.0,
   })
