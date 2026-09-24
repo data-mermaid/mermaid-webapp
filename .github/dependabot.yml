@@ -1,12 +1,43 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+# Configures version updates. Security updates ignore the schedule, cooldown,
+# open-pull-requests-limit and groups below, and arrive as one PR per
+# vulnerable dependency.
+# https://docs.github.com/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 
 version: 2
 updates:
-  - package-ecosystem: 'npm' # npm === yarn # zizmor: ignore[dependabot-cooldown]
-    directory: '/' # Location of package manifests
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
       interval: 'weekly'
-      day: 'monday'
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 10
+    # Majors outside the vitest group arrive one per PR.
+    groups:
+      # @vitest/coverage-v8 and @vitest/browser-playwright peer an exact vitest version.
+      vitest:
+        patterns: ['vitest', '@vitest/*']
+      minor-and-patch:
+        patterns: ['*']
+        update-types: ['minor', 'patch']
+
+  - package-ecosystem: 'npm'
+    directory: '/iac'
+    schedule:
+      interval: 'weekly'
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        patterns: ['*']
+        update-types: ['minor', 'patch']
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    cooldown:
+      default-days: 7
+    groups:
+      github-actions:
+        patterns: ['*']
