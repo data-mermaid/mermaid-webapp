@@ -628,9 +628,9 @@
     "attribution": "Tiles &copy; Esri &mdash; Sumber: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, dan Komunitas Pengguna SIG &copy; <a href=\"http://www.allencoralatlas.org/\"  style=\"font-size:1.25rem;\">2019 Allen Coral Atlas Partnership dan Vulcan, Inc.</a>",
     "legend": {
       "allen_coral_atlas": "Allen Coral Atlas",
-      "benthic_analysis": "Analisis bentik",
-      "geomorphic_analysis": "Analisis geomorfik",
-      "satellite_coral_reef_mosaic": "Satelit mozaik terumbu karang",
+      "benthic_analysis": "Peta bentik",
+      "geomorphic_analysis": "Peta geomorfik",
+      "satellite_coral_reef_mosaic": "Citra satelit terumbu karang",
       "visit_allen_coral_atlas": "Kunjungi Allen Coral Atlas"
     },
     "map": "Peta",
@@ -995,7 +995,12 @@
     "transfer": "Transfer unit sampel",
     "transfer_unsubmitted": "Mentransfer unit sampel yang tidak dikirim",
     "validation_status": {
+      "chip_label_error_other": "{{count}} Kesalahan",
+      "chip_label_ignored_other": "{{count}} Diabaikan",
+      "chip_label_warning_other": "{{count}} Peringatan",
       "errors": "Kesalahan",
+      "next": "Selanjutnya",
+      "next_announcement": "{{position}} dari {{total}}. {{description}}",
       "ready_to_submit": "Siap dikirim",
       "saved": "Tersimpan",
       "warnings": "Peringatan"
