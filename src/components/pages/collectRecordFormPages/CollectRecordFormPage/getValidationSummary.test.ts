@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import getValidationSummary from './getValidationSummary'
+import mockImageClassificationValidations from '../../../../testUtilities/mockBenthicPhotoQuadratImageClassificationValidationsObject'
 
 const recordTarget = (value: string) => ({ attribute: 'data-record-validation-id', value })
 const fieldTarget = (value: string) => ({ attribute: 'data-validation-field', value })
@@ -438,5 +439,27 @@ describe('getValidationSummary record level statuses', () => {
     expect(targets.error).toEqual([recordTarget('summary')])
     expect(targets.warning).toEqual([recordTarget('r1')])
     expect(counts).toEqual({ error: 1, warning: 1, ignore: 0 })
+  })
+})
+
+describe('getValidationSummary with image classification rows', () => {
+  const imageId = 'd67bb9d3-6a16-4180-a7f1-afd7bc7660f8'
+  const annotationRowIds = [
+    '2b55697f-f26e-433e-9070-f1fe9748bf7b::888609b5-b58a-4d57-addc-a6935bba284b',
+    '350e9eb4-5e6b-48f5-aeb8-0bfdf023bf1c::888609b5-b58a-4d57-addc-a6935bba284b',
+    '350e9eb4-5e6b-48f5-aeb8-0bfdf023bf1c::cf2deca6-53b8-4096-916f-32c2c71d14bf',
+    'f4df7abd-3d51-42fb-8cab-5102b95fad8e::',
+    '350e9eb4-5e6b-48f5-aeb8-0bfdf023bf1c::e149db12-9398-4a10-8642-5db70d1a8505',
+    '350e9eb4-5e6b-48f5-aeb8-0bfdf023bf1c::',
+    '5f1f7956-bc21-4bfd-a409-9740e614b2ac::',
+    '09226989-50e7-4c40-bd36-5bcef32ee7a1::',
+  ].map((attributeAndGrowthForm) => `${imageId}::${attributeAndGrowthForm}`)
+  const { results } = mockImageClassificationValidations
+
+  test('counts and targets each annotation row the table reports', () => {
+    const { counts, targets } = getValidationSummary(results, undefined, new Set(annotationRowIds))
+
+    expect(targets.error).toEqual(annotationRowIds.map(observationTarget))
+    expect(counts).toEqual({ error: 8, warning: 0, ignore: 0 })
   })
 })
