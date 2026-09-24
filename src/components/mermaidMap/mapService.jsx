@@ -1,7 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import Popup from './Popup'
-import maplibregl from 'maplibre-gl'
+import * as maplibregl from 'maplibre-gl'
 import mapPin from '../../assets/map-pin.png'
 
 const coralAtlasAppId = import.meta.env.VITE_CORAL_ATLAS_APP_ID

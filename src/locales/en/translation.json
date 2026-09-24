@@ -642,6 +642,7 @@
     },
     "map": "Map",
     "place_marker": "Place site marker",
+    "webgl2_unavailable": "This map can't be shown because your browser doesn't support WebGL2. Try updating your browser or using a different one.",
     "zoom_control_text": "Use ctrl + scroll to zoom the map."
   },
   "map_tooling": {

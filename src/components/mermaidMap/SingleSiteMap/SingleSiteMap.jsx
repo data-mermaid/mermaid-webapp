@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import maplibregl from 'maplibre-gl'
+import * as maplibregl from 'maplibre-gl'
 import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
@@ -24,6 +24,7 @@ import {
 import theme from '../../../theme'
 import { roundToSixDecimalPlaces } from '../../../library/numbers/roundToSixDecimalPlaces'
 import MiniMap from '../MiniMap'
+import withMapErrorBoundary from '../withMapErrorBoundary'
 
 const StyledPlaceMarkerButton = styled(ButtonSecondary)`
   padding: 0 5px;
@@ -249,4 +250,4 @@ SingleSiteMap.propTypes = {
   isReadOnlyUser: PropTypes.bool,
 }
 
-export default SingleSiteMap
+export default withMapErrorBoundary(SingleSiteMap)

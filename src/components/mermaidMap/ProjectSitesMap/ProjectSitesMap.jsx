@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import maplibregl from 'maplibre-gl'
+import * as maplibregl from 'maplibre-gl'
 import { useTranslation } from 'react-i18next'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import { sitePropType, choicesPropType } from '../../../App/mermaidData/mermaidDataProptypes'
@@ -17,6 +17,7 @@ import {
 } from '../mapService'
 import { MapContainer, MiniMapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 import MiniMap from '../MiniMap'
+import withMapErrorBoundary from '../withMapErrorBoundary'
 
 const defaultCenter = [20, 20]
 const defaultZoom = 2
@@ -106,4 +107,4 @@ ProjectSitesMap.propTypes = {
   choices: choicesPropType.isRequired,
 }
 
-export default ProjectSitesMap
+export default withMapErrorBoundary(ProjectSitesMap)
