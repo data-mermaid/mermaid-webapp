@@ -12,6 +12,10 @@ updates:
     cooldown:
       default-days: 7
     open-pull-requests-limit: 10
+    ignore:
+      # Tracks the Node major in .nvmrc.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
     # Majors outside the vitest group arrive one per PR.
     groups:
       # @vitest/coverage-v8 and @vitest/browser-playwright peer an exact vitest version.
@@ -27,6 +31,13 @@ updates:
       interval: 'weekly'
     cooldown:
       default-days: 7
+    ignore:
+      # Tracks the Node major in .nvmrc.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+      # TypeScript 7 drops the compiler API that ts-node needs to run the CDK app.
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
     groups:
       minor-and-patch:
         patterns: ['*']
