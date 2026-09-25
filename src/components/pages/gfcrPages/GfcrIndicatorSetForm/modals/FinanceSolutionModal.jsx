@@ -30,6 +30,7 @@ import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErro
 import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
 import GfcrIntegerInputField from '../GfcrIntegerInputField'
+import { GFCR_MAX_INTEGER } from '../../../../../library/numbers/gfcrFieldMaximums'
 import { getOptions } from '../../../../../library/getOptions'
 import { IconInfo } from '../../../../icons'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
@@ -498,6 +499,7 @@ const FinanceSolutionModal = ({
             <GfcrIntegerInputField
               label={t('gfcr.forms.finance_solutions.number_of_solutions_supported_by')}
               id="number_of_solutions_supported_by"
+              maxValue={GFCR_MAX_INTEGER}
               formik={formik}
               helperText={
                 <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.number_of_solutions_supported_by_helper" />

@@ -9,7 +9,10 @@ import InputWithLabelAndValidation from '../../../../mermaidInputs/InputWithLabe
 import { useTranslation } from 'react-i18next'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import GfcrDecimalInputField from '../GfcrDecimalInputField'
-import { GFCR_MAX_AREA_SQ_KM } from '../../../../../library/numbers/gfcrFieldMaximums'
+import {
+  GFCR_MAX_AREA_SQ_KM,
+  GFCR_MAX_SMALL_INTEGER,
+} from '../../../../../library/numbers/gfcrFieldMaximums'
 import GfcrIntegerInputField from '../GfcrIntegerInputField'
 import GfcrHelperLinks from './GfcrHelperLinks'
 
@@ -36,6 +39,7 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       />
       <GfcrIntegerInputField
         id="f3_2"
+        maxValue={GFCR_MAX_SMALL_INTEGER}
         label={
           <>
             <strong>F 3.2</strong> {t('gfcr.forms.f3_2')}
@@ -48,6 +52,7 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       />
       <GfcrIntegerInputField
         id="f3_3"
+        maxValue={GFCR_MAX_SMALL_INTEGER}
         label={
           <>
             <strong>F 3.3</strong> {t('gfcr.forms.f3_3')}
@@ -60,6 +65,7 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       />
       <GfcrIntegerInputField
         id="f3_4"
+        maxValue={GFCR_MAX_SMALL_INTEGER}
         label={
           <>
             <strong>F 3.4</strong> {t('gfcr.forms.f3_4')}
@@ -77,6 +83,7 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f3_5a"
+            maxValue={GFCR_MAX_SMALL_INTEGER}
             label={<>{t('gfcr.forms.common.men')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f3_5_men_helper" />}
             displayHelp={displayHelp}
@@ -87,6 +94,7 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f3_5b"
+            maxValue={GFCR_MAX_SMALL_INTEGER}
             label={<>{t('gfcr.forms.common.women')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f3_5_women_helper" />}
             displayHelp={displayHelp}
@@ -99,7 +107,6 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
             disabled
             label={<strong>{t('gfcr.forms.common.total')}</strong>}
             id="f3_5total"
-            type="number"
             value={getFieldValueTotal(formik.values.f3_5a, formik.values.f3_5b)}
           />
         </StyledGfcrSubInputWrapper>
@@ -107,6 +114,7 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f3_5c"
+            maxValue={GFCR_MAX_SMALL_INTEGER}
             label={<>{t('gfcr.forms.common.youth')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f3_5_youth_helper" />}
             displayHelp={displayHelp}
@@ -117,6 +125,7 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
         <StyledGfcrSubInputWrapper>
           <GfcrIntegerInputField
             id="f3_5d"
+            maxValue={GFCR_MAX_SMALL_INTEGER}
             label={<>{t('gfcr.forms.common.indigenous')}</>}
             helperText={<GfcrHelperLinks translationKey="gfcr.forms.f3_5_indigenous_helper" />}
             displayHelp={displayHelp}
@@ -127,6 +136,7 @@ const F3Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
       </InputRow>
       <GfcrIntegerInputField
         id="f3_6"
+        maxValue={GFCR_MAX_SMALL_INTEGER}
         label={
           <>
             <strong>F 3.6</strong> {t('gfcr.forms.f3_6')}

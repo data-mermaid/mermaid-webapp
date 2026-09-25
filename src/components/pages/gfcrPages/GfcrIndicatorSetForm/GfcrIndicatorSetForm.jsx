@@ -16,6 +16,7 @@ import FinanceSolutions from './subPages/FinanceSolutions'
 import { choicesPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import Investments from './subPages/Investments'
 import Revenues from './subPages/Revenues'
+import { parseGfcrNumber } from '../../../../library/numbers/parseGfcrNumber'
 
 const StyledForm = styled.form`
   width: 100%;
@@ -29,8 +30,9 @@ const handleInputFocus = (event) => {
   }
 }
 
-const getFieldValueTotal = (fieldValue1, fieldValue2) => {
-  return parseInt(fieldValue1) + parseInt(fieldValue2)
+// An emptied headcount counts as 0 so the Total never renders blank.
+export const getFieldValueTotal = (fieldValue1, fieldValue2) => {
+  return (parseGfcrNumber(fieldValue1) ?? 0) + (parseGfcrNumber(fieldValue2) ?? 0)
 }
 
 const GfcrIndicatorSetForm = ({
