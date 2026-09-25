@@ -11167,7 +11167,7 @@ __metadata:
     react-error-overlay: "npm:^6.1.0"
     react-i18next: "npm:^15.5.2"
     react-is: "npm:^19.3.0"
-    react-router: "npm:^7.13.1"
+    react-router: "npm:^7.18.4"
     react-table: "npm:^7.6.3"
     react-toastify: "npm:^11.1.0"
     sass-embedded: "npm:^1.104.1"
@@ -12800,9 +12800,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:^7.13.1":
-  version: 7.13.1
-  resolution: "react-router@npm:7.13.1"
+"react-router@npm:^7.18.4":
+  version: 7.18.4
+  resolution: "react-router@npm:7.18.4"
   dependencies:
     cookie: "npm:^1.0.1"
     set-cookie-parser: "npm:^2.6.0"
@@ -12812,7 +12812,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/a64c645cede74251f21483fbfad740b36dc5133522d6f53f12317a873a22865fce659d4c2377d5e19c912f85c7b12b88224a2c70d8f70c082496b569cc4abc31
+  checksum: 10c0/352d103f9d738c7bf56cbb135c0d3d44e6325d15e360f58b6e844c1f5f8cbcd4ccb2de347f14e53984683fc237505a045633e9cb92c5457a1162dae054e08a32
   languageName: node
   linkType: hard
 
