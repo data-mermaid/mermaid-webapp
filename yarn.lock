@@ -13036,10 +13036,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-deepmerge@npm:^7.0.3":
-  version: 7.0.3
-  resolution: "ts-deepmerge@npm:7.0.3"
-  checksum: 10c0/f466a8c5fb65c568cd45e537ab42deb032842e34fc175973edf7771a8b8b4094a2ede65af07bc287e58cb241da82f48f10fb38e41c74dc9a3951fc85b2ec1522
+"ts-deepmerge@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "ts-deepmerge@npm:8.0.0"
+  checksum: 10c0/35a055308751c093ff1f7d7ae8f8ec10d6b90b79955127e170dbc967809e3266e3cb62f446079741f82e54a9a9556cb564c55adde90cc6f93021619656a59e6f
   languageName: node
   linkType: hard
 

@@ -63,7 +63,8 @@
   },
   "resolutions": {
     "babel-loader": "8.1.0",
-    "react-error-overlay": "6.1.0"
+    "react-error-overlay": "6.1.0",
+    "vite-plugin-i18next-loader/ts-deepmerge": "^8.0.0"
   },
   "scripts": {
     "start": "vite",
