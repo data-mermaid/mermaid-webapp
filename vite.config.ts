@@ -17,6 +17,10 @@ export default defineConfig({
     VitePWA({
       filename: 'service-worker.js', // match the old CRA service worker name so we avoid stale caches
       registerType: 'autoUpdate',
+      // Registration lives in src/registerServiceWorker.ts so failures are reported and shown to
+      // the user. The plugin's own script swallows rejections, and its virtual:pwa-register helper
+      // reloads the page when a new worker activates, which would discard in-progress form entry.
+      injectRegister: null,
       manifest: {
         short_name: 'MERMAID',
         name: 'MERMAID',
