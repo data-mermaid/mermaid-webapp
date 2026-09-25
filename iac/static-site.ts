@@ -123,14 +123,39 @@ export class StaticSite extends Construct {
     if (props.siteSubDomain === 'preview') {
       s3Asset = s3deploy.Source.asset('../preview')
     }
-    new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
+
+    // Files under assets/ carry a content hash in their name, so browsers and CloudFront can
+    // cache them for a year. They are never pruned: a browser holding an older index.html, or a
+    // service worker part way through precaching, must still be able to fetch the asset set that
+    // shell references. A missing asset would otherwise hit the 403 to index.html rewrite above
+    // and workbox would cache an HTML body in place of a script.
+    const deployAssets = new s3deploy.BucketDeployment(this, 'DeployAssets', {
       sources: [s3Asset],
       destinationBucket: siteBucket,
+      exclude: ['*'],
+      include: ['assets/*'],
+      cacheControl: [s3deploy.CacheControl.fromString('public, max-age=31536000, immutable')],
+      prune: false,
+      memoryLimit: 1024, // Keep equal to DeployWithInvalidation so both share one Lambda
+    })
+
+    // Everything else (index.html, service-worker.js, manifest, public files) sits at a fixed
+    // URL, so browsers must revalidate it on every load the service worker does not control.
+    // Without an explicit policy, browsers apply heuristic freshness from Last-Modified and can
+    // serve a stale shell for days. CloudFront caches no-cache objects for the policy's minimum
+    // TTL (1 s) and the /* invalidation clears the edge on deploy.
+    const deployShell = new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
+      sources: [s3Asset],
+      destinationBucket: siteBucket,
+      exclude: ['assets/*'],
+      cacheControl: [s3deploy.CacheControl.noCache()],
       distribution,
       distributionPaths: ['/*'],
       memoryLimit: 1024, // Increase memory if deployment is stuck due to resource limits
       retainOnDelete: false, // Ensure cleanup on stack deletion
     })
+    // The shell must never reference an asset that is not yet in the bucket.
+    deployShell.node.addDependency(deployAssets)
 
     // export
     this.bucket = siteBucket
