@@ -143,3 +143,22 @@ test('Add User re-enables after a request that gets no server response', async (
 
   await waitFor(() => expect(addUserButton).toBeEnabled())
 })
+
+// Users.jsx clears newUserEmail after a successful add, so the input has to be controlled for the
+// field to clear with it. Uncontrolled, the next click warns "enter an email" at a filled field.
+test('Add User clears the email field after a successful add', async () => {
+  mockMermaidApiAllSuccessful.use(
+    // a non-zero count routes the click to the add-existing-user path rather than the email prompt
+    http.get(`${apiBaseUrl}/profiles/`, () => HttpResponse.json({ count: 1 })),
+    http.post(`${apiBaseUrl}/projects/5/add_profile/`, () => HttpResponse.json({})),
+  )
+
+  const { user } = await renderUsersPage()
+
+  const emailInput = screen.getByLabelText('users.add_user_email')
+
+  await user.type(emailInput, 'existing.user@datamermaid.org')
+  await user.click(screen.getByRole('button', { name: /buttons.add_user/ }))
+
+  await waitFor(() => expect(emailInput).toHaveValue(''))
+})

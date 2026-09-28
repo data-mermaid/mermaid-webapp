@@ -41,6 +41,7 @@ const InputAndButton = ({
           id={inputId}
           type="text"
           onChange={onChange}
+          value={formValue ?? ''}
         />
         <button
           className={buttonStyles['button--input']}
