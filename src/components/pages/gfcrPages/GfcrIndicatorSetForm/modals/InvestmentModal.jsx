@@ -299,12 +299,10 @@ const InvestmentModal = ({
             }
             showHelperText={displayHelp}
             required={true}
-            renderInput={
+            renderInput={(inputProps) => (
               <LocaleNumberInput
-                id="investment-amount-input"
+                {...inputProps}
                 name="investment_amount"
-                aria-labelledby="aria-labelinvestment-amount-input"
-                aria-describedby="aria-descpinvestment-amount-input"
                 value={formik.values.investment_amount}
                 onChange={(val) => formik.setFieldValue('investment_amount', val)}
                 onBlur={formik.handleBlur}
@@ -314,7 +312,7 @@ const InvestmentModal = ({
                 unit="USD $"
                 alignUnitsLeft={true}
               />
-            }
+            )}
           />
         </StyledModalInputRow>
         <hr />

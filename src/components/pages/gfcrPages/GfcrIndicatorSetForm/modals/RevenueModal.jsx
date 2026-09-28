@@ -301,12 +301,10 @@ const RevenueModal = ({
             }
             showHelperText={displayHelp}
             required={true}
-            renderInput={
+            renderInput={(inputProps) => (
               <LocaleNumberInput
-                id="revenue-amount-input"
+                {...inputProps}
                 name="revenue_amount"
-                aria-labelledby="aria-labelrevenue-amount-input"
-                aria-describedby="aria-descprevenue-amount-input"
                 value={formik.values.revenue_amount}
                 onChange={(val) => formik.setFieldValue('revenue_amount', val)}
                 onBlur={formik.handleBlur}
@@ -316,7 +314,7 @@ const RevenueModal = ({
                 unit="USD $"
                 alignUnitsLeft={true}
               />
-            }
+            )}
           />
         </StyledModalInputRow>
         <hr />

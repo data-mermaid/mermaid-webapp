@@ -49,11 +49,9 @@ const GfcrIntegerInputField = ({
       helperText={helperText}
       showHelperText={displayHelp}
       required={required}
-      renderInput={
+      renderInput={(inputProps) => (
         <LocaleNumberInput
-          id={id}
-          aria-labelledby={`aria-label${id}`}
-          aria-describedby={`aria-descp${id}`}
+          {...inputProps}
           value={numericValue}
           onChange={(val) => formik.setFieldValue(id, val)}
           onBlur={handleBlur}
@@ -62,7 +60,7 @@ const GfcrIntegerInputField = ({
           min={0}
           max={maxValue}
         />
-      }
+      )}
     />
   )
 }
