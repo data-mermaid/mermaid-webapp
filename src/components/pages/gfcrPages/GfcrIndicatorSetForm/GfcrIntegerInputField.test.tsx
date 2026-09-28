@@ -92,6 +92,12 @@ describe('GfcrIntegerInputField', () => {
     expect(input).toHaveAttribute('aria-describedby', 'aria-descpf3_5a')
     expect(document.getElementById('aria-descpf3_5a')).toHaveTextContent('help')
   })
+
+  it('asks for the digits-only mobile keypad', () => {
+    renderUnauthenticatedOffline(<Harness initial={1} />)
+
+    expect(screen.getByRole('textbox')).toHaveAttribute('inputmode', 'numeric')
+  })
 })
 
 function F3Harness({ men, women }: { men: string | number; women: string | number }) {
@@ -116,10 +122,22 @@ describe('headcount Total', () => {
 
     const total = document.getElementById('f3_5total')
 
+    // form.js only right-aligns a text input, so the Total has to declare its type to line up
+    // with the GfcrNumberInput fields beside it.
+    expect(total).toHaveAttribute('type', 'text')
     expect(total).toHaveValue('10')
 
     await user.clear(document.getElementById('f3_5b') as HTMLInputElement)
 
     expect(total).toHaveValue('7')
+  })
+
+  it('formats the sum with the same thousands separator as the fields beside it', () => {
+    renderUnauthenticatedOffline(<F3Harness men={1000} women={0} />)
+
+    const men = document.getElementById('f3_5a') as HTMLInputElement
+
+    expect(men.value).not.toBe('1000')
+    expect(document.getElementById('f3_5total')).toHaveValue(men.value)
   })
 })

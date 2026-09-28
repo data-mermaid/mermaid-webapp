@@ -90,6 +90,8 @@ const F5Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
             disabled
             label={<strong>{t('gfcr.forms.common.total')}</strong>}
             id="f5_4_total"
+            type="text"
+            $textAlign="right"
             value={getFieldValueTotal(formik.values.f5_4a, formik.values.f5_4b)}
           />
         </StyledGfcrSubInputWrapper>

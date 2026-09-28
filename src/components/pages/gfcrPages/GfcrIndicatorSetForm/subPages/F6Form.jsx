@@ -49,6 +49,8 @@ const F6Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
             disabled
             label={<strong>{t('gfcr.forms.common.total')}</strong>}
             id="f6_1_total"
+            type="text"
+            $textAlign="right"
             value={getFieldValueTotal(formik.values.f6_1a, formik.values.f6_1b)}
           />
         </StyledGfcrSubInputWrapper>

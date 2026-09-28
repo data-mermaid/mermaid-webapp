@@ -53,6 +53,8 @@ const F7Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
             disabled
             label={<strong>{t('gfcr.forms.common.total')}</strong>}
             id="f7_1_total"
+            type="text"
+            $textAlign="right"
             value={getFieldValueTotal(formik.values.f7_1a, formik.values.f7_1b)}
           />
         </StyledGfcrSubInputWrapper>
@@ -112,6 +114,8 @@ const F7Form = ({ formik, displayHelp, handleInputFocus, getFieldValueTotal }) =
             disabled
             label={<strong>{t('gfcr.forms.common.total')}</strong>}
             id="f7_2_total"
+            type="text"
+            $textAlign="right"
             value={getFieldValueTotal(formik.values.f7_2a, formik.values.f7_2b)}
           />
         </StyledGfcrSubInputWrapper>
