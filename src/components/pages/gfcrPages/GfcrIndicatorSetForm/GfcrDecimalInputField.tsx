@@ -1,7 +1,7 @@
 import React from 'react'
 import type { FormikProps } from 'formik'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
-import GfcrNumberInput from '../../../generic/GfcrNumberInput/GfcrNumberInput'
+import LocaleNumberInput from '../../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
 import { parseGfcrNumber } from '../../../../library/numbers/parseGfcrNumber'
 
 interface GfcrDecimalInputFieldProps {
@@ -46,7 +46,7 @@ const GfcrDecimalInputField = ({
       helperText={helperText}
       showHelperText={displayHelp}
       renderInput={
-        <GfcrNumberInput
+        <LocaleNumberInput
           id={id}
           aria-labelledby={`aria-label${id}`}
           aria-describedby={`aria-descp${id}`}

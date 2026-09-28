@@ -1,11 +1,11 @@
 import { NumberInput } from '@mantine/core'
 import React, { useEffect, useRef, useState } from 'react'
 import { styled, css } from 'styled-components'
-import { inputTextareaSelectStyles } from '../form'
+import { inputTextareaSelectStyles } from '../../generic/form'
 import { getBrowserLocale } from '../../../library/numbers/getBrowserLocale'
 import theme from '../../../theme'
 
-export interface GfcrNumberInputProps {
+export interface LocaleNumberInputProps {
   id: string
   name?: string
   'aria-labelledby'?: string
@@ -111,7 +111,7 @@ function floorToDecimalPlaces(value: number, places: number): number {
   return Number((rounded - 10 ** -places).toFixed(places))
 }
 
-const GfcrNumberInput = ({
+const LocaleNumberInput = ({
   id,
   name,
   'aria-labelledby': ariaLabelledby,
@@ -127,7 +127,7 @@ const GfcrNumberInput = ({
   disabled = false,
   unit,
   alignUnitsLeft = false,
-}: GfcrNumberInputProps) => {
+}: LocaleNumberInputProps) => {
   const locale = getBrowserLocale()
   const { decimalSeparator, thousandSeparator } = getLocaleFormatParts(locale)
 
@@ -238,4 +238,4 @@ const GfcrNumberInput = ({
   return <InputWrapper>{numberInput}</InputWrapper>
 }
 
-export default GfcrNumberInput
+export default LocaleNumberInput

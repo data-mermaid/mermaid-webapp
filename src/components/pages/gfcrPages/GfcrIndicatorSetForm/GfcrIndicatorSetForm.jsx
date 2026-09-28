@@ -32,7 +32,7 @@ const handleInputFocus = (event) => {
 }
 
 // An emptied headcount counts as 0 so the Total never renders blank. The sum is formatted in
-// the browser locale to match the thousands separators GfcrNumberInput shows beside it.
+// the browser locale to match the thousands separators LocaleNumberInput shows beside it.
 export const getFieldValueTotal = (fieldValue1, fieldValue2) => {
   const total = (parseGfcrNumber(fieldValue1) ?? 0) + (parseGfcrNumber(fieldValue2) ?? 0)
 

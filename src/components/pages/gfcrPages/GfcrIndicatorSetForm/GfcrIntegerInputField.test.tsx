@@ -123,7 +123,7 @@ describe('headcount Total', () => {
     const total = document.getElementById('f3_5total')
 
     // form.js only right-aligns a text input, so the Total has to declare its type to line up
-    // with the GfcrNumberInput fields beside it.
+    // with the LocaleNumberInput fields beside it.
     expect(total).toHaveAttribute('type', 'text')
     expect(total).toHaveValue('10')
 

@@ -5,7 +5,7 @@ import {
   fireEvent,
   renderUnauthenticatedOffline,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import GfcrNumberInput from './GfcrNumberInput'
+import LocaleNumberInput from './LocaleNumberInput'
 
 interface ControlledInputProps {
   initialValue?: number | null
@@ -26,12 +26,12 @@ function ControlledInput({ initialValue = null, onChangeSpy, ...rest }: Controll
   }
   return (
     <MantineProvider>
-      <GfcrNumberInput id="test" value={value} onChange={handleChange} {...rest} />
+      <LocaleNumberInput id="test" value={value} onChange={handleChange} {...rest} />
     </MantineProvider>
   )
 }
 
-describe('GfcrNumberInput', () => {
+describe('LocaleNumberInput', () => {
   it('calls onChange with null when input is cleared', async () => {
     const onChangeSpy = vi.fn()
     const { user } = renderUnauthenticatedOffline(
