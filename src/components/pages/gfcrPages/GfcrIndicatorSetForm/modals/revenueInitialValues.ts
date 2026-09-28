@@ -1,6 +1,7 @@
 import { parseApiNumber } from '../../../../../library/numbers/parseApiNumber'
+import type { Revenue } from '../../../../../App/mermaidData/mermaidDataTypes'
 
-const getRevenueInitialValues = (revenue) => {
+const getRevenueInitialValues = (revenue?: Partial<Revenue>) => {
   const {
     finance_solution,
     revenue_type = '',
