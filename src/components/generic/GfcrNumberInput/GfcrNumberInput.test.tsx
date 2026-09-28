@@ -141,4 +141,14 @@ describe('GfcrNumberInput', () => {
     renderUnauthenticatedOffline(<ControlledInput />)
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
+
+  it('asks for the digits-only mobile keypad on a whole-number field', () => {
+    renderUnauthenticatedOffline(<ControlledInput decimalPlaces={0} />)
+    expect(screen.getByRole('textbox')).toHaveAttribute('inputmode', 'numeric')
+  })
+
+  it('asks for the decimal mobile keypad on a fractional field', () => {
+    renderUnauthenticatedOffline(<ControlledInput decimalPlaces={2} />)
+    expect(screen.getByRole('textbox')).toHaveAttribute('inputmode', 'decimal')
+  })
 })
