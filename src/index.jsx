@@ -12,6 +12,7 @@ import { setWorkerUrl } from 'maplibre-gl'
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 
 import { initSentry } from './sentry'
+import { registerServiceWorker } from './registerServiceWorker'
 import reportWebVitals from './reportWebVitals'
 import { App } from './App'
 import { OnlineStatusProvider } from './library/onlineStatusContext'
@@ -26,6 +27,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import './index.css'
 
 initSentry()
+registerServiceWorker()
 setWorkerUrl(maplibreWorkerUrl)
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouterV7(createBrowserRouter)

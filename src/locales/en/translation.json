@@ -764,6 +764,7 @@
   },
   "offline": {
     "page_unavailable_offline": "This page is unavailable offline.",
+    "setup_failed": "Offline mode could not be set up. Reload the page while online before working offline.",
     "unavailable_offline": "Unavailable offline"
   },
   "offline_toggle": "Offline toggle",
