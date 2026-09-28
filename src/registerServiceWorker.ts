@@ -23,7 +23,13 @@ export const registerServiceWorker = () => {
           visibilityState: document.visibilityState,
         },
       })
-      toast.error(...getToastArguments(i18n.t('offline.setup_failed')))
+      // Registration can fail before the translation file has loaded.
+      const showToast = () => toast.error(...getToastArguments(i18n.t('offline.setup_failed')))
+      if (i18n.isInitialized) {
+        showToast()
+      } else {
+        i18n.on('initialized', showToast)
+      }
     })
   })
 }
