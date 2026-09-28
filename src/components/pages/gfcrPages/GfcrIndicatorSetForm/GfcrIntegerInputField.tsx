@@ -3,7 +3,7 @@ import type { FormikProps } from 'formik'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import InputNoRowWithLabelAndValidation from '../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 import LocaleNumberInput from '../../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
-import { parseGfcrNumber } from '../../../../library/numbers/parseGfcrNumber'
+import { parseApiNumber } from '../../../../library/numbers/parseApiNumber'
 
 interface GfcrIntegerInputFieldProps {
   id: string
@@ -28,7 +28,7 @@ const GfcrIntegerInputField = ({
   required = false,
   noRow = false,
 }: GfcrIntegerInputFieldProps) => {
-  const numericValue = parseGfcrNumber(formik.values[id])
+  const numericValue = parseApiNumber(formik.values[id])
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     // Every GFCR integer field is NOT NULL with a database default of 0, so an emptied

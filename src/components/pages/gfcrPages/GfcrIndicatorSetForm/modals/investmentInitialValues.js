@@ -1,4 +1,4 @@
-import { parseGfcrNumber } from '../../../../../library/numbers/parseGfcrNumber'
+import { parseApiNumber } from '../../../../../library/numbers/parseApiNumber'
 
 const getInvestmentInitialValues = (investment) => {
   const {
@@ -15,7 +15,7 @@ const getInvestmentInitialValues = (investment) => {
     investment_type,
     // The API returns this as a string. Parsing here keeps formik numeric throughout, so
     // Mantine never coerces it on blur and the saved payload is a plain number.
-    investment_amount: parseGfcrNumber(investment_amount),
+    investment_amount: parseApiNumber(investment_amount),
     notes,
   }
 }

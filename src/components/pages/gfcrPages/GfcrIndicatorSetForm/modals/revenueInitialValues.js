@@ -1,4 +1,4 @@
-import { parseGfcrNumber } from '../../../../../library/numbers/parseGfcrNumber'
+import { parseApiNumber } from '../../../../../library/numbers/parseApiNumber'
 
 const getRevenueInitialValues = (revenue) => {
   const {
@@ -15,7 +15,7 @@ const getRevenueInitialValues = (revenue) => {
     sustainable_revenue_stream,
     // The API returns this as a string. Parsing here keeps formik numeric throughout, so
     // Mantine never coerces it on blur and the saved payload is a plain number.
-    revenue_amount: parseGfcrNumber(revenue_amount),
+    revenue_amount: parseApiNumber(revenue_amount),
     notes,
   }
 }
