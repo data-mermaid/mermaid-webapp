@@ -635,6 +635,7 @@
     },
     "map": "Peta",
     "place_marker": "Tempatkan penanda situs",
+    "webgl2_unavailable": "Peta ini tidak dapat ditampilkan karena browser Anda tidak mendukung WebGL2. Coba perbarui browser Anda atau gunakan browser lain.",
     "zoom_control_text": "Gunakan ctrl + gulir untuk memperbesar peta."
   },
   "map_tooling": {

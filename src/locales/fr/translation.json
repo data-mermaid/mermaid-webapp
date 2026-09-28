@@ -642,6 +642,7 @@
     },
     "map": "Carte",
     "place_marker": "Placer un marqueur de site",
+    "webgl2_unavailable": "Cette carte ne peut être affichée car votre navigateur ne prend pas en charge WebGL2. Veuillez mettre à jour votre navigateur ou en utiliser un autre.",
     "zoom_control_text": "Utilisez Ctrl + molette pour zoomer sur la carte."
   },
   "map_tooling": {
