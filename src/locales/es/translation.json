@@ -642,6 +642,7 @@
     },
     "map": "Mapa",
     "place_marker": "Colocar marcador de sitio",
+    "webgl2_unavailable": "Este mapa no se puede mostrar porque su navegador no es compatible con WebGL2. Intente actualizar su navegador o usar uno diferente.",
     "zoom_control_text": "Utilice Ctrl + Desplazamiento del ratón para hacer zoom en el mapa"
   },
   "map_tooling": {

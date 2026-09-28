@@ -642,6 +642,7 @@
     },
     "map": "Mapa",
     "place_marker": "Place Marker ng Site",
+    "webgl2_unavailable": "Hindi maipakita ang mapang ito dahil hindi sinusuportahan ng iyong browser ang WebGL2. Subukang i-update ang iyong browser o gumamit ng iba.",
     "zoom_control_text": "Gamitin ang Ctrl + Scroll upang i-zoom ang mapa"
   },
   "map_tooling": {
