@@ -15,6 +15,7 @@ interface ControlledInputProps {
   max?: number
   allowNegatives?: boolean
   disabled?: boolean
+  'data-testid'?: string
 }
 
 // Stateful wrapper so the controlled component responds to onChange like it would in a form.
@@ -150,5 +151,10 @@ describe('LocaleNumberInput', () => {
   it('asks for the decimal mobile keypad on a fractional field', () => {
     renderUnauthenticatedOffline(<ControlledInput decimalPlaces={2} />)
     expect(screen.getByRole('textbox')).toHaveAttribute('inputmode', 'decimal')
+  })
+
+  it('puts the test id on the input element', () => {
+    renderUnauthenticatedOffline(<ControlledInput data-testid="depth-input" />)
+    expect(screen.getByTestId('depth-input')).toBe(screen.getByRole('textbox'))
   })
 })

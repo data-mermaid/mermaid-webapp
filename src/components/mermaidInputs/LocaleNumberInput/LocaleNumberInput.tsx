@@ -10,6 +10,7 @@ export interface LocaleNumberInputProps {
   name?: string
   'aria-labelledby'?: string
   'aria-describedby'?: string
+  'data-testid'?: string
   value: number | null
   onChange: (value: number | null) => void
   onBlur?: React.FocusEventHandler<HTMLInputElement>
@@ -116,6 +117,7 @@ const LocaleNumberInput = ({
   name,
   'aria-labelledby': ariaLabelledby,
   'aria-describedby': ariaDescribedby,
+  'data-testid': testId,
   value,
   onChange,
   onBlur,
@@ -196,6 +198,7 @@ const LocaleNumberInput = ({
       id={id}
       name={name}
       aria-labelledby={ariaLabelledby}
+      data-testid={testId}
       // Mantine's Input spreads its own aria attributes after ...others, so an
       // aria-describedby passed as a normal prop is overwritten with undefined.
       // The attributes prop targets the inner input directly and survives. The same applies to
