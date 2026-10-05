@@ -1,8 +1,8 @@
 import React from 'react'
 import type { FormikProps } from 'formik'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
-import GfcrNumberInput from '../../../generic/GfcrNumberInput/GfcrNumberInput'
-import { parseGfcrNumber } from '../../../../library/numbers/parseGfcrNumber'
+import LocaleNumberInput from '../../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
+import { parseApiNumber } from '../../../../library/numbers/parseApiNumber'
 
 interface GfcrDecimalInputFieldProps {
   id: string
@@ -27,7 +27,7 @@ const GfcrDecimalInputField = ({
   handleInputFocus = () => {},
   formik,
 }: GfcrDecimalInputFieldProps) => {
-  const numericValue = parseGfcrNumber(formik.values[id])
+  const numericValue = parseApiNumber(formik.values[id])
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     // Every GFCR indicator field is NOT NULL with a database default of 0, so an emptied
@@ -45,11 +45,9 @@ const GfcrDecimalInputField = ({
       id={id}
       helperText={helperText}
       showHelperText={displayHelp}
-      renderInput={
-        <GfcrNumberInput
-          id={id}
-          aria-labelledby={`aria-label${id}`}
-          aria-describedby={`aria-descp${id}`}
+      renderInput={(inputProps) => (
+        <LocaleNumberInput
+          {...inputProps}
           value={numericValue}
           onChange={(val) => formik.setFieldValue(id, val)}
           onBlur={handleBlur}
@@ -59,7 +57,7 @@ const GfcrDecimalInputField = ({
           max={maxValue}
           unit={unit}
         />
-      }
+      )}
     />
   )
 }

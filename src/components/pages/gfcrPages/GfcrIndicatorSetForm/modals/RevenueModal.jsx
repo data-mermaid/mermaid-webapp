@@ -10,7 +10,7 @@ import { ButtonCaution, ButtonSecondary } from '../../../../generic/buttons'
 import { buttonGroupStates } from '../../../../../library/buttonGroupStates'
 import { choicesPropType } from '../../../../../App/mermaidData/mermaidDataProptypes'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
-import GfcrNumberInput from '../../../../generic/GfcrNumberInput/GfcrNumberInput'
+import LocaleNumberInput from '../../../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
 import { getOptions } from '../../../../../library/getOptions'
 import { GFCR_MAX_REVENUE_AMOUNT } from '../../../../../library/numbers/gfcrFieldMaximums'
 import { getRevenueInitialValues } from './revenueInitialValues'
@@ -301,12 +301,10 @@ const RevenueModal = ({
             }
             showHelperText={displayHelp}
             required={true}
-            renderInput={
-              <GfcrNumberInput
-                id="revenue-amount-input"
+            renderInput={(inputProps) => (
+              <LocaleNumberInput
+                {...inputProps}
                 name="revenue_amount"
-                aria-labelledby="aria-labelrevenue-amount-input"
-                aria-describedby="aria-descprevenue-amount-input"
                 value={formik.values.revenue_amount}
                 onChange={(val) => formik.setFieldValue('revenue_amount', val)}
                 onBlur={formik.handleBlur}
@@ -316,7 +314,7 @@ const RevenueModal = ({
                 unit="USD $"
                 alignUnitsLeft={true}
               />
-            }
+            )}
           />
         </StyledModalInputRow>
         <hr />
