@@ -764,6 +764,7 @@
   },
   "offline": {
     "page_unavailable_offline": "Esta página não está disponível offline.",
+    "setup_failed": "Não foi possível configurar o modo offline. Recarregue a página enquanto estiver online antes de tentar novamente offline.",
     "unavailable_offline": "Indisponível offline"
   },
   "offline_toggle": "Botão para alternar para o modo offline",

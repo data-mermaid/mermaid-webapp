@@ -764,6 +764,7 @@
   },
   "offline": {
     "page_unavailable_offline": "Esta página no está disponible sin conexión.",
+    "setup_failed": "No se pudo configurar el modo sin conexión. Recargue la página con conexión a internet antes de trabajar sin conexión.",
     "unavailable_offline": "No disponible sin conexión"
   },
   "offline_toggle": "Alternar sin conexión",

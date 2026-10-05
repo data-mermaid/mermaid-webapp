@@ -764,6 +764,7 @@
   },
   "offline": {
     "page_unavailable_offline": "Cette page n'est pas disponible hors ligne.",
+    "setup_failed": "Impossible de configurer le mode hors ligne. Veuillez recharger la page en ligne avant de travailler hors ligne.",
     "unavailable_offline": "Non disponible hors ligne."
   },
   "offline_toggle": "Basculer hors ligne",
