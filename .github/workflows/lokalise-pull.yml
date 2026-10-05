@@ -14,15 +14,20 @@ jobs:
   pull-translations:
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1  # v2.21.1
+        with:
+          egress-policy: audit
+
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # zizmor: ignore[artipacked] # v7.0.1
         with:
           ref: develop
           fetch-depth: 0
 
       - name: Pull translations from Lokalise
         id: lokalise-pull
-        uses: lokalise/lokalise-pull-action@v5.0.1
+        uses: lokalise/lokalise-pull-action@2a9bba5071f83a2b8ac0a8b59c740e73cc1453a7 # v5.4.0
         with:
           api_token: ${{ secrets.LOKALISE_API_TOKEN }}
           project_id: ${{ secrets.LOKALISE_PROJECT_ID }}

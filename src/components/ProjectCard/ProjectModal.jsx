@@ -70,9 +70,9 @@ const ProjectModal = ({
       error,
       callback: () => {
         const isDuplicateError =
-          error.response.status === 400 ||
-          (error.response.status === 500 &&
-            error.response.data?.new_project_name === 'Project name already exists')
+          error?.response?.status === 400 ||
+          (error?.response?.status === 500 &&
+            error?.response?.data?.new_project_name === 'Project name already exists')
 
         if (isDuplicateError) {
           setNameAlreadyExists(true)

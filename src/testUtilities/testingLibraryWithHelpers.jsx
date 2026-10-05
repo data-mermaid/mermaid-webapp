@@ -1,4 +1,5 @@
 import { Auth0Context } from '@auth0/auth0-react'
+import { MantineProvider } from '@mantine/core'
 import { RouterProvider, createMemoryRouter } from 'react-router'
 import { render } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components'
@@ -48,30 +49,32 @@ const AuthenticatedProviders = ({
       getAccessTokenSilently: () => Promise.resolve('fake-token'),
     }}
   >
-    <ThemeProvider theme={theme}>
-      <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
-        <CurrentUserProvider
-          value={{
-            currentUser: currentUserOverride ?? fakeCurrentUser,
-            saveUserProfile: saveUserProfileOverride,
-            refreshCurrentUser: refreshCurrentUserOverride,
-          }}
-        >
-          <CurrentProjectProvider>
-            <HttpResponseErrorHandlerProvider value={() => {}}>
-              <BellNotificationProvider
-                value={{
-                  notifications: mockMermaidData.notifications,
-                  deleteNotification: () => {},
-                }}
-              >
-                {children}
-              </BellNotificationProvider>
-            </HttpResponseErrorHandlerProvider>
-          </CurrentProjectProvider>
-        </CurrentUserProvider>
-      </SyncStatusProvider>
-    </ThemeProvider>
+    <MantineProvider>
+      <ThemeProvider theme={theme}>
+        <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
+          <CurrentUserProvider
+            value={{
+              currentUser: currentUserOverride ?? fakeCurrentUser,
+              saveUserProfile: saveUserProfileOverride,
+              refreshCurrentUser: refreshCurrentUserOverride,
+            }}
+          >
+            <CurrentProjectProvider>
+              <HttpResponseErrorHandlerProvider value={() => {}}>
+                <BellNotificationProvider
+                  value={{
+                    notifications: mockMermaidData.notifications,
+                    deleteNotification: () => {},
+                  }}
+                >
+                  {children}
+                </BellNotificationProvider>
+              </HttpResponseErrorHandlerProvider>
+            </CurrentProjectProvider>
+          </CurrentUserProvider>
+        </SyncStatusProvider>
+      </ThemeProvider>
+    </MantineProvider>
   </Auth0Context.Provider>
 )
 
@@ -83,17 +86,19 @@ const UnauthenticatedProviders = ({ children }) => (
       getAccessTokenSilently: getFakeAccessToken,
     }}
   >
-    <ThemeProvider theme={theme}>
-      <SyncStatusProvider>
-        <CurrentUserProvider value={undefined}>
-          <CurrentProjectProvider>
-            <HttpResponseErrorHandlerProvider value={() => {}}>
-              <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
-            </HttpResponseErrorHandlerProvider>
-          </CurrentProjectProvider>
-        </CurrentUserProvider>
-      </SyncStatusProvider>
-    </ThemeProvider>
+    <MantineProvider>
+      <ThemeProvider theme={theme}>
+        <SyncStatusProvider>
+          <CurrentUserProvider value={undefined}>
+            <CurrentProjectProvider>
+              <HttpResponseErrorHandlerProvider value={() => {}}>
+                <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
+              </HttpResponseErrorHandlerProvider>
+            </CurrentProjectProvider>
+          </CurrentUserProvider>
+        </SyncStatusProvider>
+      </ThemeProvider>
+    </MantineProvider>
   </Auth0Context.Provider>
 )
 
@@ -134,11 +139,11 @@ export const renderAuthenticated = (
               value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
             >
               <ClearPersistedFormDataHackProvider value={router}>
-                {/* unstable_useTransitions={false}: disables React.startTransition wrapping so router
+                {/* useTransitions={false}: disables React.startTransition wrapping so router
                     state updates are synchronous, preventing act() warnings and async test failures
                     in jsdom. Without this, deferred updates cause tests to assert before state settles.
                     See: reactrouter.com/explanation/react-transitions (introduced in v7.10.0) */}
-                <RouterProvider router={router} unstable_useTransitions={false}>
+                <RouterProvider router={router} useTransitions={false}>
                   {children}
                 </RouterProvider>
               </ClearPersistedFormDataHackProvider>
@@ -204,7 +209,7 @@ export const renderAuthenticatedOnline = (
               value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
             >
               <ClearPersistedFormDataHackProvider value={router}>
-                <RouterProvider router={router} unstable_useTransitions={false}>
+                <RouterProvider router={router} useTransitions={false}>
                   {children}
                 </RouterProvider>
               </ClearPersistedFormDataHackProvider>
@@ -244,7 +249,7 @@ export const renderUnauthenticatedOnline = (
             value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
           >
             <ClearPersistedFormDataHackProvider value={router}>
-              <RouterProvider router={router} unstable_useTransitions={false}>
+              <RouterProvider router={router} useTransitions={false}>
                 {children}
               </RouterProvider>
             </ClearPersistedFormDataHackProvider>
@@ -289,7 +294,7 @@ export const renderAuthenticatedOffline = (
               value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
             >
               <ClearPersistedFormDataHackProvider value={router}>
-                <RouterProvider router={router} unstable_useTransitions={false}>
+                <RouterProvider router={router} useTransitions={false}>
                   {children}
                 </RouterProvider>
               </ClearPersistedFormDataHackProvider>
@@ -330,7 +335,7 @@ export const renderUnauthenticatedOffline = (
             value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
           >
             <ClearPersistedFormDataHackProvider value={router}>
-              <RouterProvider router={router} unstable_useTransitions={false}>
+              <RouterProvider router={router} useTransitions={false}>
                 {children}
               </RouterProvider>
             </ClearPersistedFormDataHackProvider>

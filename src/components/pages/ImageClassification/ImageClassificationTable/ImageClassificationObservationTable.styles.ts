@@ -52,6 +52,11 @@ const StyledTd = styled(Td)<StyledTdProps>`
   padding: 0.5em !important;
   text-align: ${(props) => props.$textAlign};
 
+  /* Spans the image's rows, so it must not show the first row's hover or Next highlight. */
+  &[rowspan] {
+    background-color: ${theme.color.white};
+  }
+
   &.hover-highlight {
     background-color: ${theme.color.tableRowHover};
   }

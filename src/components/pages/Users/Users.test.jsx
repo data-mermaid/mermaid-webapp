@@ -1,18 +1,25 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 
 import React from 'react'
 import { Route, Routes } from 'react-router'
+import { http, HttpResponse } from 'msw'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
+  mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
+  waitFor,
   waitForElementToBeRemoved,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
+import { HttpResponseErrorHandlerProvider } from '../../../App/HttpResponseErrorHandlerContext'
+import handleHttpResponseError from '../../../library/handleHttpResponseError'
 
 import Users from './Users'
+
+const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 // Dexie returns records in primary-key order, and the shared mock's ids happen to land the
 // project 5 profiles alphabetically, which would hide the bug this test exists for. Reseed them
@@ -57,9 +64,15 @@ const renderUsersPage = async () => {
   await seedUnsortedProfiles(dexiePerUserDataInstance)
 
   const { user } = renderAuthenticatedOnline(
-    <Routes>
-      <Route path="/projects/:projectId/users" element={<Users />} />
-    </Routes>,
+    // The shared render helpers stub the handler out, so the page's error callbacks never run.
+    // Supplying the real one is what lets a failed request be asserted on.
+    <HttpResponseErrorHandlerProvider
+      value={(config) => handleHttpResponseError({ ...config, logoutMermaid: () => {} })}
+    >
+      <Routes>
+        <Route path="/projects/:projectId/users" element={<Users />} />
+      </Routes>
+    </HttpResponseErrorHandlerProvider>,
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/users'],
@@ -106,4 +119,27 @@ test('Users table sorts by Name rather than falling back to row order', async ()
   await user.click(nameHeader)
 
   expect(getNameColumnOrder(table)).toEqual([...EXPECTED_ASCENDING].reverse())
+})
+
+// handleHttpResponseError invokes the caller's callback when a request gets no response at all,
+// and error.response is undefined on that path. Reading .status off it threw before the callback
+// could clear isTableUpdating, leaving the Add User button disabled until a reload.
+test('Add User re-enables after a request that gets no server response', async () => {
+  // handleHttpResponseError logs the axios error it is handling; keep it out of the test output
+  vi.spyOn(console, 'error').mockImplementation(() => {})
+
+  mockMermaidApiAllSuccessful.use(
+    // a non-zero count routes the click to the add-existing-user path rather than the email prompt
+    http.get(`${apiBaseUrl}/profiles/`, () => HttpResponse.json({ count: 1 })),
+    http.post(`${apiBaseUrl}/projects/5/add_profile/`, () => HttpResponse.error()),
+  )
+
+  const { user } = await renderUsersPage()
+
+  const addUserButton = screen.getByRole('button', { name: /buttons.add_user/ })
+
+  await user.type(screen.getByLabelText('users.add_user_email'), 'existing.user@datamermaid.org')
+  await user.click(addUserButton)
+
+  await waitFor(() => expect(addUserButton).toBeEnabled())
 })

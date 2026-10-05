@@ -89,6 +89,13 @@ const color = {
   calloutDisabledColor: callout.mix(colorHelper('black'), 0.2).toString(),
   calloutDisabledText: '#969696',
 
+  // Form status indicator chips. Fills are one-off values from the Figma design file; the
+  // border is its Border/default variable, shared by all three chips.
+  chipErrorBackground: '#F5DCD9',
+  chipWarningBackground: '#FFFAE0',
+  chipIgnoreBackground: '#C8C8CC',
+  chipBorder: '#A9A9B3',
+
   disabledColor: '#D5D5DD',
   disabledInputBackground: '#E4E4E4',
   disabledText: 'rgba(255,255,255,0.5)',
@@ -184,6 +191,7 @@ const timing = {
   hoverTransition: '0.25s',
   activeTransition: '0.25s',
   TooltipTransition: 'visibility 0.1s linear 0.1s',
+  validationTargetHighlightMs: 1000,
 }
 
 const typography = {

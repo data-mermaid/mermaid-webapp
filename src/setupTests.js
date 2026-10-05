@@ -63,11 +63,9 @@ vi.mock('maplibre-gl', function mapLibreMock() {
       }
     },
     NavigationControl: vi.fn(),
+    GPUInitializationError: class GPUInitializationError extends Error {},
   }
-  return {
-    default: mockMaplibre,
-    ...mockMaplibre,
-  }
+  return mockMaplibre
 })
 
 // Mock the i18n instance using cimode so i18n.t() returns the translation key.
@@ -127,6 +125,25 @@ configure({ asyncUtilTimeout: 10000 })
 // jsdom doesn't implement window.scrollTo; mock it to silence "Not implemented" errors
 // triggered by Downshift's InputAutocomplete when the input value changes.
 window.scrollTo = vi.fn()
+
+// jsdom doesn't implement Element.scrollIntoView; define it so tests can vi.spyOn it.
+window.HTMLElement.prototype.scrollIntoView = vi.fn()
+
+// jsdom doesn't implement window.matchMedia; mock it for components that use media queries
+// (e.g. MantineProvider color scheme detection).
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+})
 
 // Suppress known unhandled rejections from DatabaseSwitchboard async operations during tests
 // These occur when the SyncApiDataIntoOfflineStorage makes network requests that fail after cleanup

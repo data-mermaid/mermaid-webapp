@@ -1,9 +1,10 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import maplibregl from 'maplibre-gl'
+import * as maplibregl from 'maplibre-gl'
 import { useTranslation } from 'react-i18next'
 import { satelliteBaseMap, addZoomController } from '../mapService'
 import { MapInputRow, MapContainer, MapWrapper } from '../Map.styles'
+import withMapErrorBoundary from '../withMapErrorBoundary'
 
 const defaultCenter = [0, 0]
 const defaultZoom = 13
@@ -71,4 +72,4 @@ ResolveDuplicateSiteMap.propTypes = {
   formLongitudeValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 }
 
-export default ResolveDuplicateSiteMap
+export default withMapErrorBoundary(ResolveDuplicateSiteMap)

@@ -296,7 +296,11 @@ const ImageAnnotationModal = ({
               <ButtonSecondary type="button" onClick={handleCloseModal} disabled={isSaving}>
                 {t('buttons.close')}
               </ButtonSecondary>
-              <ButtonPrimary type="button" onClick={handleSaveChanges} disabled={isSaving}>
+              <ButtonPrimary
+                type="button"
+                onClick={handleSaveChanges}
+                disabled={isSaving || !dataToReview}
+              >
                 {t('buttons.save_changes')}
               </ButtonPrimary>
             </div>

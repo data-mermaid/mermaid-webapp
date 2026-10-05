@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useRef } from 'react'
-import maplibregl from 'maplibre-gl'
+import * as maplibregl from 'maplibre-gl'
 import { useTranslation } from 'react-i18next'
 import {
   satelliteBaseMap,
@@ -12,6 +12,7 @@ import {
 import { copySitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { MapContainer, MapZoomHelpMessage, MapWrapper, MiniMapContainer } from '../Map.styles'
 import MiniMap from '../MiniMap'
+import withMapErrorBoundary from '../withMapErrorBoundary'
 import usePrevious from '../../../library/usePrevious'
 
 const defaultCenter = [20, 20]
@@ -101,4 +102,4 @@ CopySitesMap.propTypes = {
   sitesForMapMarkers: PropTypes.arrayOf(copySitePropType).isRequired,
 }
 
-export default CopySitesMap
+export default withMapErrorBoundary(CopySitesMap)
