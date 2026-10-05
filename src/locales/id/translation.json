@@ -757,6 +757,7 @@
   },
   "offline": {
     "page_unavailable_offline": "Halaman ini tidak tersedia secara offline.",
+    "setup_failed": "Mode offline tidak dapat diaktifkan. Silakan muat ulang halaman saat terhubung ke internet sebelum bekerja dalam mode offline.",
     "unavailable_offline": "Tidak tersedia secara offline"
   },
   "offline_toggle": "Sakelar offline",

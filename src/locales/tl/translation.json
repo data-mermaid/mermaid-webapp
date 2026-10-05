@@ -764,6 +764,7 @@
   },
   "offline": {
     "page_unavailable_offline": "Ang page na ito ay hindi available offline.",
+    "setup_failed": "Hindi ma-set up ang offline mode. I-reload ang page habang online bago magtrabaho offline.",
     "unavailable_offline": "Hindi available offline"
   },
   "offline_toggle": "I-toggle nang offline",
