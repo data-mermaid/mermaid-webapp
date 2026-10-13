@@ -26,7 +26,6 @@
 
 ## Dev Notes
 
-- `plop <filename>` scaffolds component files inside the `src/components` directory
 - `src/components/generic` are for reusable components that may be useful for other projects. They should be developed to be completely unaware of their context. If a reusable component is MERMAID-specific, it can go elsewhere.
 - `src/components/pages` are for pages or page-like components
 - Styles use Styled Components for easy scoping, speed, and maintainability.
@@ -113,6 +112,7 @@ If you would like to suppress missing act warnings in your test console, you can
 
 - Available at [app.datamermaid.org](https://app.datamermaid.org)
 - Is updated using semantically versioned (eg: `v2.0` or `v2.0.0`) tag creation
+- To cut a release, run `scripts/release.sh` - see the [Release Workflow](docs/ReleaseWorkflow.md) guide
 
 ### Infrastructure as Code (IaC)
 

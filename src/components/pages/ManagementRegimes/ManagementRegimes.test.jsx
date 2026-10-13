@@ -90,6 +90,45 @@ test('Management Regime Records table sorts properly by Name column', async () =
   expect(within(tableRowsAfterFirstClick[1]).getByText('Management Regimes C'))
 })
 
+test('Management Regime Records table sorts properly by Secondary Name column', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+  const { user } = renderAuthenticatedOnline(
+    <Routes>
+      <Route path="/projects/:projectId/management-regimes" element={<ManagementRegimes />} />
+    </Routes>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexiePerUserDataInstance,
+    },
+  )
+
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
+
+  const table = screen.getByRole('table')
+
+  // Every click is a multi-sort event, so the default sort on Name has to be cleared before
+  // Secondary Name becomes the primary sort. Sorting on it used to throw - see M2076 follow-up.
+  await user.dblClick(within(table).getByTestId('management-regime-header-name'))
+
+  // click once to change to ascending order
+  await user.click(within(table).getByTestId('management-regime-header-secondaryName'))
+
+  const tableRowsAscending = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAscending[1]).getByText('Management Regimes 1')).toBeInTheDocument()
+
+  // click again to change to descending order
+  await user.click(within(table).getByTestId('management-regime-header-secondaryName'))
+
+  const tableRowsDescending = within(table).getAllByRole('row')
+
+  expect(within(tableRowsDescending[1]).getByText('Management Regimes 3')).toBeInTheDocument()
+})
+
 test('Management Regime Records table sorts properly by Year Est. column', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 

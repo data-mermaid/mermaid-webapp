@@ -26,7 +26,7 @@ const SubmittedHabitatComplexityObservationTable = ({ choices, submittedRecord =
 
   return (
     <InputWrapper>
-      <FormSubTitle id="table-label">{t('observations')}</FormSubTitle>
+      <FormSubTitle id="table-label">{t('observations.observations')}</FormSubTitle>
       <StyledOverflowWrapper>
         <SubmittedObservationStickyTable>
           <thead>

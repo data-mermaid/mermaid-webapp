@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { getTodayDateOnly } from './formatDateTime'
 
 export const getFileExportName = (project, tableName) => {
   if (!project) {
@@ -8,7 +8,7 @@ export const getFileExportName = (project, tableName) => {
   const { name } = project
 
   const modifiedName = name.replace(/[ ,.]/g, '_') // Replace space or punctuations with underscores
-  const momentToday = format(new Date(), 'yyyy-MM-dd')
+  const today = getTodayDateOnly()
 
-  return `${modifiedName}_${momentToday}_${tableName}.csv`
+  return `${modifiedName}_${today}_${tableName}.csv`
 }

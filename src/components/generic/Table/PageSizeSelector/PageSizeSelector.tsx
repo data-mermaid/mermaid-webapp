@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { styled } from 'styled-components'
 import { Select } from '../../form'
 import { useTranslation } from 'react-i18next'
+import styles from './PageSizeSelector.module.scss'
 
-const PageSizeSelect = styled(Select)`
-  width: auto;
-  min-width: auto;
-  margin-right: 0.3em;
-`
+type PageType = 'sample_unit' | 'record' | 'site' | 'user' | 'management_regime'
+
+interface PageSizeSelectorProps {
+  pageSize: number
+  pageType: PageType
+  pageSizeOptions: number[]
+  onChange: React.ChangeEventHandler<HTMLSelectElement>
+  unfilteredRowLength: number
+  methodFilteredRowLength?: number | null
+  searchFilteredRowLength?: number | null
+  isMethodFilterEnabled?: boolean
+  isSearchFilterEnabled?: boolean
+}
 
 const PageSizeSelector = ({
   pageSize,
@@ -20,10 +27,10 @@ const PageSizeSelector = ({
   searchFilteredRowLength = null,
   isMethodFilterEnabled = false,
   isSearchFilterEnabled = false,
-}) => {
+}: PageSizeSelectorProps) => {
   const { t } = useTranslation()
-  const [pageOptionsToDisplay, setPageOptionsToDisplay] = useState([])
-  const [filteredAmountToDisplay, setFilteredAmountToDisplay] = useState(null)
+  const [pageOptionsToDisplay, setPageOptionsToDisplay] = useState<number[]>([])
+  const [filteredAmountToDisplay, setFilteredAmountToDisplay] = useState<number | null>(null)
 
   const _findFilteredAmountToDisplay = useEffect(() => {
     // the search results will be method filtered already, which is not the case the opposite way around
@@ -65,10 +72,13 @@ const PageSizeSelector = ({
     setPageOptionsToDisplay(pageOptionsLessThanRowLength)
   }, [pageSizeOptions, filteredAmountToDisplay])
 
+  const isFilterEnabled = isSearchFilterEnabled || isMethodFilterEnabled
+
   return (
     <label htmlFor="page-size-selector">
-      {t('showing')}{' '}
-      <PageSizeSelect
+      {t('page_size_selector.showing')}{' '}
+      <Select
+        className={styles['page-size-select']}
         value={pageSize}
         onChange={onChange}
         id="page-size-selector"
@@ -79,27 +89,18 @@ const PageSizeSelector = ({
             {size}
           </option>
         ))}
-      </PageSizeSelect>
-      of {filteredAmountToDisplay}
-      {isSearchFilterEnabled || isMethodFilterEnabled
-        ? `${' '}(filtered from ${unfilteredRowLength}${' '}${pageType}${
-            unfilteredRowLength > 1 ? 's' : ''
-          })`
+      </Select>
+      {t('page_size_selector.of_total', { total: filteredAmountToDisplay })}
+      {isFilterEnabled
+        ? ` ${t('page_size_selector.filtered_from', {
+            count: unfilteredRowLength,
+            itemType: t(`page_size_selector.item_type.${pageType}`, {
+              count: unfilteredRowLength,
+            }),
+          })}`
         : null}
     </label>
   )
-}
-
-PageSizeSelector.propTypes = {
-  unfilteredRowLength: PropTypes.number.isRequired,
-  methodFilteredRowLength: PropTypes.number,
-  searchFilteredRowLength: PropTypes.number,
-  isMethodFilterEnabled: PropTypes.bool,
-  isSearchFilterEnabled: PropTypes.bool,
-  pageType: PropTypes.string.isRequired,
-  pageSize: PropTypes.number.isRequired,
-  pageSizeOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
-  onChange: PropTypes.func.isRequired,
 }
 
 export default PageSizeSelector

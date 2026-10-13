@@ -4,7 +4,7 @@ import { Checkbox, OutlinedInput } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import theme from '../../../../../theme'
-import { HelperText, Textarea } from '../../../../generic/form'
+import { HelperText, LabelContainer, RequiredIndicator, Textarea } from '../../../../generic/form'
 import {
   CustomMenuItem,
   CustomMuiSelect,
@@ -29,20 +29,34 @@ import { getToastArguments } from '../../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../../App/HttpResponseErrorHandlerContext'
 import InputNoRowWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowWithLabelAndValidation'
 import InputNoRowSelectWithLabelAndValidation from '../../../../mermaidInputs/InputNoRowSelectWithLabelAndValidation'
+import GfcrIntegerInputField from '../GfcrIntegerInputField'
+import { GFCR_MAX_INTEGER } from '../../../../../library/numbers/gfcrFieldMaximums'
 import { getOptions } from '../../../../../library/getOptions'
 import { IconInfo } from '../../../../icons'
 import { displayErrorMessagesGFCR } from '../../../../../library/displayErrorMessagesGFCR'
 import GfcrHelperLinks from '../subPages/GfcrHelperLinks'
-
-// Field visibility per fs_type — see "GFCR change requests - May_2026.csv"
-const BUSINESS_OR_FINANCIAL_MECHANISM_TYPES = ['business', 'financial_mechanism']
-const LOCAL_ENTERPRISE_TYPES = ['financial_facility', 'business', 'financial_mechanism']
-const NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES = ['taf', 'ctf', 'financial_facility']
+import {
+  BUSINESS_OR_FINANCIAL_MECHANISM_TYPES,
+  LOCAL_ENTERPRISE_TYPES,
+  NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES,
+  isGenderSmartApplicable,
+  isLocalEnterpriseApplicable,
+  isUsedAnIncubatorApplicable,
+} from './financeSolutionFieldVisibility'
+import {
+  getFinanceSolutionDuplicateKey,
+  getFinanceSolutionDuplicateKeys,
+} from './financeSolutionDuplicates'
 
 const isTafNameVisible = (fs_type, used_an_incubator) =>
   BUSINESS_OR_FINANCIAL_MECHANISM_TYPES.includes(fs_type) &&
   !!used_an_incubator &&
   used_an_incubator !== 'none'
+
+// A boolean false is a real answer for the yes/no fields, and 'none' is a real answer for
+// used_an_incubator, so an unanswered field can only be recognised by a blank value rather
+// than by falsiness.
+const isBlank = (value) => value === '' || value === null || value === undefined
 
 const FinanceSolutionModal = ({
   isOpen,
@@ -171,10 +185,7 @@ const FinanceSolutionModal = ({
         errors.name = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
-      const isStandardFsType = (choices.financesolutiontypes?.data || []).some(
-        (c) => c.id === values.fs_type,
-      )
-      if (!values.fs_type || !isStandardFsType) {
+      if (!values.fs_type) {
         errors.fs_type = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
@@ -195,13 +206,42 @@ const FinanceSolutionModal = ({
         errors.geographical_coverage = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
+      if (isUsedAnIncubatorApplicable(values.fs_type) && isBlank(values.used_an_incubator)) {
+        errors.used_an_incubator = [{ code: t('forms.required_field'), id: 'Required' }]
+      }
+
+      if (isLocalEnterpriseApplicable(values.fs_type) && isBlank(values.local_enterprise)) {
+        errors.local_enterprise = [{ code: t('forms.required_field'), id: 'Required' }]
+      }
+
+      if (isGenderSmartApplicable(values.fs_type) && isBlank(values.gender_smart)) {
+        errors.gender_smart = [{ code: t('forms.required_field'), id: 'Required' }]
+      }
+
       if (
-        NUMBER_OF_SOLUTIONS_SUPPORTED_BY_TYPES.includes(values.fs_type) &&
-        Number(values.number_of_solutions_supported_by) <= 0
+        values.fs_type === 'financial_mechanism' &&
+        !values.sustainable_finance_mechanisms?.length
       ) {
-        errors.number_of_solutions_supported_by = [
+        errors.sustainable_finance_mechanisms = [
           { code: t('forms.required_field'), id: 'Required' },
         ]
+      }
+
+      // An indicator set can't hold two facilities / solutions with the same name and type. The
+      // row being edited is excluded so it isn't flagged against itself. Only checked once name
+      // and type are both filled in, so it never overwrites their required errors.
+      const otherFinanceSolutions = indicatorSet.finance_solutions.filter(
+        (existingFinanceSolution) => existingFinanceSolution.id !== financeSolution?.id,
+      )
+      const isDuplicate =
+        !!values.name &&
+        !!values.fs_type &&
+        getFinanceSolutionDuplicateKeys(otherFinanceSolutions).has(
+          getFinanceSolutionDuplicateKey(values),
+        )
+
+      if (isDuplicate) {
+        errors.name = [{ code: t('gfcr.forms.finance_solutions.duplicate_error'), id: 'Duplicate' }]
       }
 
       return errors
@@ -259,22 +299,10 @@ const FinanceSolutionModal = ({
 
   const _setIsFormDirty = useEffect(() => setIsFormDirty(!!formik.dirty), [formik.dirty])
 
-  const fsTypeOptions = useMemo(() => {
-    const standardData = choices.financesolutiontypes?.data || []
-    const standard = getOptions(standardData)
-    const storedFsType = financeSolution?.fs_type
-    const isNonStandard = !!storedFsType && !standardData.some((c) => c.id === storedFsType)
-    if (isNonStandard && formik.values.fs_type === storedFsType) {
-      return [
-        {
-          value: storedFsType,
-          label: `${storedFsType} ${t('gfcr.non_standard_title_suffix')}`,
-        },
-        ...standard,
-      ]
-    }
-    return standard
-  }, [choices.financesolutiontypes?.data, financeSolution?.fs_type, formik.values.fs_type, t])
+  const fsTypeOptions = useMemo(
+    () => getOptions(choices.financesolutiontypes?.data || []),
+    [choices.financesolutiontypes?.data],
+  )
 
   const showSector = formik.values.fs_type === 'business'
   const showGeographicalCoverage = formik.values.fs_type === 'ctf'
@@ -340,6 +368,10 @@ const FinanceSolutionModal = ({
             id="fs-type-select"
             {...formik.getFieldProps('fs_type')}
             options={fsTypeOptions}
+            helperText={
+              <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.fs_type_helper" />
+            }
+            showHelperText={displayHelp}
             required={true}
             validationMessages={formik.errors.fs_type?.filter((e) => e.id === 'PCFRevenues') ?? []}
             validationType={
@@ -358,6 +390,10 @@ const FinanceSolutionModal = ({
             }
             showHelperText={displayHelp}
             required={true}
+            validationMessages={formik.errors.name?.filter((e) => e.id === 'Duplicate') ?? []}
+            validationType={
+              formik.errors.name?.some((e) => e.id === 'Duplicate') ? 'error' : undefined
+            }
           />
         </StyledModalInputRow>
         {showSector && (
@@ -382,6 +418,10 @@ const FinanceSolutionModal = ({
               id="geographical-coverage-select"
               {...formik.getFieldProps('geographical_coverage')}
               options={getOptions(choices.geographicalcoverage?.data || [])}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.geographical_coverage_helper" />
+              }
+              showHelperText={displayHelp}
               required={true}
             />
           </StyledModalInputRow>
@@ -400,6 +440,7 @@ const FinanceSolutionModal = ({
                 <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.used_an_incubator_helper" />
               }
               showHelperText={displayHelp}
+              required={true}
             />
           </StyledModalInputRow>
         )}
@@ -410,6 +451,10 @@ const FinanceSolutionModal = ({
               id="taf-name-input"
               type="text"
               {...formik.getFieldProps('taf_name')}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.taf_name_helper" />
+              }
+              showHelperText={displayHelp}
             />
           </StyledModalInputRow>
         )}
@@ -427,6 +472,7 @@ const FinanceSolutionModal = ({
                 <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.local_enterprise_helper" />
               }
               showHelperText={displayHelp}
+              required={true}
             />
           </StyledModalInputRow>
         )}
@@ -444,35 +490,52 @@ const FinanceSolutionModal = ({
                 <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.gender_program_criteria_helper" />
               }
               showHelperText={displayHelp}
+              required={true}
             />
           </StyledModalInputRow>
         )}
         {showNumberOfSolutionsSupportedBy && (
           <StyledModalInputRow>
-            <InputNoRowWithLabelAndValidation
+            <GfcrIntegerInputField
               label={t('gfcr.forms.finance_solutions.number_of_solutions_supported_by')}
-              id="number-of-solutions-input"
-              type="number"
-              min="1"
-              {...formik.getFieldProps('number_of_solutions_supported_by')}
-              required={true}
+              id="number_of_solutions_supported_by"
+              maxValue={GFCR_MAX_INTEGER}
+              formik={formik}
+              helperText={
+                <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.number_of_solutions_supported_by_helper" />
+              }
+              displayHelp={displayHelp}
+              required
+              noRow
             />
           </StyledModalInputRow>
         )}
         {showSustainableFinanceMechanisms && (
           <StyledModalInputRow>
-            <label
-              id="sustainable-finance-mechanisms-label"
-              htmlFor="sustainable-finance-mechanisms-select"
-            >
-              {t('gfcr.forms.finance_solutions.sustainable_finance_mechanisms')}
+            {/* Laid out to match the LabelContainer structure the shared mermaidInputs
+            wrappers use (label, required indicator, info icon as flex siblings) so this
+            field lines up with the rest of the form. The wrappers themselves can't be
+            used here: they render a native select, which can't show chips or per-option
+            checkboxes. */}
+            <LabelContainer>
+              <label
+                id="sustainable-finance-mechanisms-label"
+                htmlFor="sustainable-finance-mechanisms-select"
+              >
+                {t('gfcr.forms.finance_solutions.sustainable_finance_mechanisms')}
+              </label>
+              <span>
+                <RequiredIndicator />
+              </span>
               <IconButton type="button" onClick={(event) => handleSFMInfoIconClick(event)}>
                 <IconInfo aria-label="info" />
               </IconButton>
-            </label>
+            </LabelContainer>
             <CustomMuiSelect
               id="sustainable-finance-mechanisms-select"
               labelId="sustainable-finance-mechanisms-label"
+              aria-describedby="sfm-helper"
+              SelectDisplayProps={{ 'aria-required': 'true' }}
               multiple
               {...formik.getFieldProps('sustainable_finance_mechanisms')}
               input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
@@ -498,7 +561,7 @@ const FinanceSolutionModal = ({
                 </CustomMenuItem>
               ))}
             </CustomMuiSelect>
-            {displayHelp || SFMShowHelperText ? (
+            {SFMShowHelperText ? (
               <HelperText id="sfm-helper">
                 <GfcrHelperLinks translationKey="gfcr.forms.finance_solutions.sustainable_finance_mechanisms_helper" />
               </HelperText>

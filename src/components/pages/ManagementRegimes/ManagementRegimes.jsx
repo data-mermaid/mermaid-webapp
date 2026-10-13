@@ -148,7 +148,8 @@ const ManagementRegimes = () => {
       {
         Header: secondaryNameHeaderText,
         accessor: 'secondaryName',
-        sortType: reactTableNaturalSortReactNodes,
+        // plain string, not a React node - see the `name` column above for the node variant
+        sortType: reactTableNaturalSort,
       },
       {
         Header: yearEstHeaderText,
@@ -444,6 +445,7 @@ const ManagementRegimes = () => {
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
+                        $isSortingEnabled={column.canSort}
                         data-testid={`management-regime-header-${column.id}`}
                       >
                         <span>{column.render('Header')}</span>
@@ -481,7 +483,7 @@ const ManagementRegimes = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="management regime"
+          pageType="management_regime"
           unfilteredRowLength={managementRegimeRecordsForUiDisplay.length}
           searchFilteredRowLength={searchFilteredRowsLength}
           isSearchFilterEnabled={!!globalFilter?.length}

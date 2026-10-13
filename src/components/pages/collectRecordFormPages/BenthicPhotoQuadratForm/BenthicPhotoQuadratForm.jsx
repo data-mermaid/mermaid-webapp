@@ -260,6 +260,22 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       })
   }
 
+  const handlePhotosChanged = useCallback(async () => {
+    if (!recordId || !databaseSwitchboardInstance) {
+      return
+    }
+    try {
+      const updatedRecord = await databaseSwitchboardInstance.markCollectRecordValidationsStale(
+        recordId,
+      )
+      if (updatedRecord) {
+        setCollectRecordBeingEdited(updatedRecord)
+      }
+    } catch (error) {
+      handleHttpResponseError({ error })
+    }
+  }, [databaseSwitchboardInstance, recordId, handleHttpResponseError])
+
   const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
     (props) => {
       const isImageClassificationObservationsOfflineMessageShowing =
@@ -290,6 +306,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
           <ImageClassificationContainer
             {...props}
             isImageClassificationEnabledForUser={isImageClassificationEnabledForUser}
+            onPhotosChanged={handlePhotosChanged}
           />
         )
       }
@@ -301,6 +318,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord = true }) => {
       isNewRecord,
       isImageClassificationEnabledForUser,
       benthicAttributeSelectOptions,
+      handlePhotosChanged,
     ],
   )
 

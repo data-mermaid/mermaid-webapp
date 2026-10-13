@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -21,10 +21,7 @@ import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeader
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { IconAccountConvert, IconAccountRemove, IconInfo, IconPlus } from '../../icons'
-import {
-  reactTableNaturalSort,
-  reactTableNaturalSortReactNodesSecondChild,
-} from '../../generic/Table/reactTableNaturalSort'
+import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
   GenericStickyTable,
@@ -98,9 +95,10 @@ const Users = () => {
     setShowRemoveUserWithActiveSampleUnitsWarning,
   ] = useState(false)
   const [userToBeRemoved, setUserToBeRemoved] = useState({})
-  const { currentUser } = useCurrentUser()
+  const { currentUser, refreshCurrentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
+  const navigate = useNavigate()
   const { projectId } = useParams()
   const { setIsSyncInProgress, isSyncInProgress } = useSyncStatus()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
@@ -207,7 +205,7 @@ const Users = () => {
         handleHttpResponseError({
           error,
           callback: () => {
-            if (error.response.status === 400) {
+            if (error?.response?.status === 400) {
               toast.error(...getToastArguments(t('users.messages.duplicate_user_error')))
             } else {
               toast.error(...getToastArguments(t('users.messages.something_went_wrong')))
@@ -348,25 +346,45 @@ const Users = () => {
   const removeUserProfile = () => {
     setIsTableUpdating(true)
 
-    databaseSwitchboardInstance
+    const isCurrentUserBeingRemoved = userToBeRemoved.profile === currentUser.id
+
+    return databaseSwitchboardInstance
       .removeUser(userToBeRemoved, projectId)
       .then(() => {
-        return fetchProjectProfiles()
-      })
-      .then(() => {
-        setIsTableUpdating(false)
-        toast.success(...getToastArguments(t('users.messages.user_removed')))
+        if (isCurrentUserBeingRemoved) {
+          setIsTableUpdating(false)
+          toast.success(...getToastArguments(t('users.messages.user_removed')))
+
+          // The user no longer has access to this project, so re-fetching its profiles
+          // would just 403. The pull triggered by removeUser() above already redirects
+          // to /noProjectAccess/<project>; replace that history entry with the projects
+          // list so the Back button doesn't lead to a dead-end error page.
+          navigate('/projects', { replace: true })
+
+          return undefined
+        }
+
+        return fetchProjectProfiles().then(() => {
+          setIsTableUpdating(false)
+          toast.success(...getToastArguments(t('users.messages.user_removed')))
+        })
       })
       .catch((error) => {
+        setIsTableUpdating(false)
         handleHttpResponseError({
           error,
           callback: () => {
-            setIsTableUpdating(false)
+            toast.error(
+              ...getToastArguments(
+                t('users.messages.user_remove_error', {
+                  userName: getProfileNameOrEmailForPendingUser(userToBeRemoved),
+                }),
+              ),
+            )
           },
         })
+        throw error
       })
-
-    return Promise.resolve()
   }
 
   const handleRoleChange = useCallback(
@@ -390,6 +408,14 @@ const Users = () => {
           )
 
           setObserverProfiles(updatedObserverProfiles)
+
+          if (editedProfile.profile === currentUser.id) {
+            // Our own project role just changed - refresh currentUser so admin-gated
+            // UI (this table, the Add User button, etc.) reflects it immediately
+            // instead of staying stale until the next navigation or reload.
+            refreshCurrentUser()
+          }
+
           toast.success(
             ...getToastArguments(
               t('users.messages.role_changed_success', {
@@ -419,10 +445,12 @@ const Users = () => {
         })
     },
     [
+      currentUser,
       databaseSwitchboardInstance,
       observerProfiles,
       projectId,
       handleHttpResponseError,
+      refreshCurrentUser,
       t,
       roleLabels,
     ],
@@ -578,6 +606,7 @@ function UsersTableSection({
   const userRoleHeaderText = t('users.role')
   const unsubmittedSampleUnitsHeaderText = t('users.unsubmitted_sample_units')
   const removeFromProjectHeaderText = t('users.remove_from_project')
+  const lastAdminTooltipText = t('users.messages.last_admin_tooltip')
   const adminHeaderText = t('users.roles.admin')
   const collectorHeaderText = t('users.roles.collector')
   const readOnlyHeaderText = t('users.roles.read_only')
@@ -652,7 +681,9 @@ function UsersTableSection({
       {
         Header: nameHeaderText,
         accessor: 'name',
-        sortType: reactTableNaturalSortReactNodesSecondChild,
+        // The cell renders an icon alongside the name, so sort on the plain name carried
+        // beside it rather than trying to dig the text back out of the node.
+        sortType: (rowA, rowB) => reactTableNaturalSort(rowA, rowB, 'displayName'),
       },
       {
         Header: emailHeaderText,
@@ -733,6 +764,11 @@ function UsersTableSection({
     ]
   }, [nameHeaderText, userRoleHeaderText])
 
+  const projectAdminCount = useMemo(
+    () => observerProfiles.filter((profile) => profile.role === userRole.admin).length,
+    [observerProfiles],
+  )
+
   const tableCellDataForAdmin = useMemo(() => {
     return observerProfiles.map((profile) => {
       const {
@@ -748,10 +784,19 @@ function UsersTableSection({
       const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
       const isUserRoleReadOnly = getIsProjectProfileReadOnly(profile)
       const isCurrentUser = userId === currentUser.id
+      // Only the sole remaining admin needs to be blocked from self-editing/self-removal.
+      // Any other row, including the current user's when a co-admin exists, is safe to enable
+      // and mirrors the "last admin" guard enforced server-side.
+      const isOnlyAdmin = isCurrentUser && role === userRole.admin && projectAdminCount < 2
       const isActiveSampleUnitsWarningShowing = userHasActiveSampleUnits && isUserRoleReadOnly
+      const disabledRemoveTooltipText = isDemoProject
+        ? t('projects.demo.delete_users_unavailable')
+        : isOnlyAdmin
+        ? lastAdminTooltipText
+        : null
 
       const getCursorType = () => {
-        if (isCurrentUser) {
+        if (isOnlyAdmin) {
           return 'not-allowed'
         }
         if (isTableUpdating) {
@@ -772,13 +817,14 @@ function UsersTableSection({
             onChange={(event) => {
               handleRoleChange({ event, projectProfileId })
             }}
-            disabled={isCurrentUser || isTableUpdating}
+            disabled={isOnlyAdmin || isTableUpdating}
           />
         </TableRadioLabel>
       )
 
       return {
         projectProfileId,
+        displayName,
         name: (
           <NameCellStyle>
             <UserIcon
@@ -824,11 +870,11 @@ function UsersTableSection({
           <button
             className={buttonStyles['button--caution']}
             type="button"
-            disabled={isCurrentUser || isTableUpdating || isDemoProject}
+            disabled={isOnlyAdmin || isTableUpdating || isDemoProject}
             onClick={() => openRemoveUserModal(profile)}
           >
-            {isDemoProject ? (
-              <MuiTooltip title={t('projects.demo.delete_users_unavailable')}>
+            {disabledRemoveTooltipText ? (
+              <MuiTooltip title={disabledRemoveTooltipText}>
                 {' '}
                 {/*' ' is a hack to make the tooltip populate on disabled state*/}
                 <IconAccountRemove />
@@ -849,6 +895,8 @@ function UsersTableSection({
     isTableUpdating,
     openTransferSampleUnitsModal,
     openRemoveUserModal,
+    projectAdminCount,
+    lastAdminTooltipText,
   ])
 
   const tableCellDataForNonAdmin = useMemo(
@@ -958,10 +1006,10 @@ function UsersTableSection({
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
-                        $isSortingEnabled={!column.disableSortBy}
+                        $isSortingEnabled={column.canSort}
                         $disabledHover={column.disableSortBy}
                       >
-                        <span id="header-span">{column.render('Header')}</span>
+                        <span>{column.render('Header')}</span>
                       </Th>
                     )
                   })}

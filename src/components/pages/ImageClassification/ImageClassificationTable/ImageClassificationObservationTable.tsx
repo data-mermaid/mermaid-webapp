@@ -98,12 +98,33 @@ interface ImageClassificationObservationTableProps {
   resetObservationValidations: () => void
   images: ImageClassificationImage[]
   setImages: React.Dispatch<React.SetStateAction<ImageClassificationImage[]>>
+  onPhotosChanged?: () => void
+  onObservationIdsChange?: (observationIds: Set<string>) => void
 }
 
 const sortByLatest = (a, b) =>
   new Date(a.file.created_on).getTime() - new Date(b.file.created_on).getTime()
 const sortAlphabetically = (a, b) => a.benthicAttributeLabel.localeCompare(b.benthicAttributeLabel)
 const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
+
+// Matches the observation_id the API validates these rows under.
+const buildObservationId = (
+  imageId: string,
+  benthicAttributeId?: string,
+  growthFormId?: string,
+) => {
+  let observationId = imageId
+
+  if (benthicAttributeId) {
+    observationId += `::${benthicAttributeId}::`
+  }
+
+  if (growthFormId) {
+    observationId += `${growthFormId}`
+  }
+
+  return observationId
+}
 
 const TableHeaderRow = ({ areValidationsShowing }: { areValidationsShowing: boolean }) => {
   const { t } = useTranslation()
@@ -159,6 +180,8 @@ const ImageClassificationObservationTable = ({
   resetObservationValidations,
   images: imageSet,
   setImages,
+  onPhotosChanged,
+  onObservationIdsChange,
 }: ImageClassificationObservationTableProps) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
@@ -333,6 +356,22 @@ const ImageClassificationObservationTable = ({
     }
   }, [benthicAttributes, growthForms, imageSet, distillImagesData])
 
+  // Only rows with unconfirmed points render a validation, matching
+  // shouldDisplayObservationValidation below.
+  useEffect(() => {
+    const observationIds = distilledImages.flatMap(({ file, distilledAnnotationData }) =>
+      distilledAnnotationData
+        .filter((annotation) => annotation?.unconfirmedCount > 0)
+        .map((annotation) =>
+          buildObservationId(file.id, annotation.benthicAttributeId, annotation.growthFormId),
+        ),
+    )
+
+    onObservationIdsChange?.(new Set(observationIds))
+
+    return () => onObservationIdsChange?.(new Set())
+  }, [distilledImages, onObservationIdsChange])
+
   const observationsSummaryStats = useMemo((): CategoryGroup => {
     if (!distilledImages?.length || !benthicAttributes) {
       return {}
@@ -394,6 +433,7 @@ const ImageClassificationObservationTable = ({
       await databaseSwitchboardInstance.deleteImage(projectId, photoToBeRemoved.id)
 
       setImages((prev) => prev.filter((img) => img.id !== photoToBeRemoved.id))
+      onPhotosChanged?.()
       toast.warn(t('image_classification.warns.photo_removed'))
     } catch (error: unknown) {
       handleHttpResponseError({
@@ -419,24 +459,6 @@ const ImageClassificationObservationTable = ({
   }
 
   let rowIndex = 1
-
-  const buildObservationId = (
-    imageId: string,
-    benthicAttributeId?: string,
-    growthFormId?: string,
-  ) => {
-    let observationId = imageId
-
-    if (benthicAttributeId) {
-      observationId += `::${benthicAttributeId}::`
-    }
-
-    if (growthFormId) {
-      observationId += `${growthFormId}`
-    }
-
-    return observationId
-  }
 
   const handleRowMouseEnter = (imageIndex: number) => {
     setHoveredImageIndex(imageIndex)
@@ -467,7 +489,7 @@ const ImageClassificationObservationTable = ({
     </>
   )
 
-  const ComponentBreakdown = () => {
+  const renderComponentBreakdown = () => {
     return (
       <>
         {distilledImages?.map((image, imageIndex) => {
@@ -578,6 +600,7 @@ const ImageClassificationObservationTable = ({
                 return (
                   <StyledTr
                     key={`${file.id}-${subIndex}`}
+                    data-observation-id={obsId}
                     $hasUnconfirmedPoint={annotation.unconfirmedCount > 0}
                     $messageType={trMessageType}
                     onMouseEnter={() => handleRowMouseEnter(imageIndex)}
@@ -732,9 +755,7 @@ const ImageClassificationObservationTable = ({
                 </tr>
               </LoadingTableBody>
             ) : (
-              <tbody>
-                <ComponentBreakdown />
-              </tbody>
+              <tbody>{renderComponentBreakdown()}</tbody>
             )}
           </StickyObservationTable>
         </StyledOverflowWrapper>

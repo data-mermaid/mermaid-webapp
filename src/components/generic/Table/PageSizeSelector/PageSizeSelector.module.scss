@@ -1,0 +1,10 @@
+@use '../../../../style/theme.scss' as *;
+
+// Shrinks the shared Select from its full-width base to fit its content.
+// Element-qualified so it beats the styled-components base rule regardless
+// of stylesheet order.
+select.page-size-select {
+  width: auto;
+  min-width: auto;
+  margin-right: 0.3em;
+}

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import maplibregl from 'maplibre-gl'
+import * as maplibregl from 'maplibre-gl'
 import PropTypes from 'prop-types'
 
 // This component allows our popup to work with React State

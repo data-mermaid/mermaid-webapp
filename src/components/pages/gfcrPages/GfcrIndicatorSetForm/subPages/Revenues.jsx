@@ -35,8 +35,15 @@ import { useTranslation, Trans } from 'react-i18next'
 
 const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, displayHelp }) => {
   const { t } = useTranslation()
+
+  const businessFinanceSolutionHeaderText = t(
+    'gfcr.forms.finance_solutions.business_finance_solution',
+  )
+  const revenueTypeHeaderText = t('gfcr.forms.revenues.revenue_type')
+  const sustainableRevenueStreamHeaderText = t('gfcr.forms.revenues.sustainable_revenue_stream')
+  const revenueAmountHeaderText = t('gfcr.forms.revenues.revenue_amount')
+
   const { currentUser } = useCurrentUser()
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [revenueBeingEdited, setRevenueBeingEdited] = useState()
 
@@ -54,29 +61,34 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Business / Finance Solution',
+        Header: businessFinanceSolutionHeaderText,
         accessor: 'finance_solution',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
-        Header: 'Revenue Type',
+        Header: revenueTypeHeaderText,
         accessor: 'revenue_type',
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Sustainable Revenue Stream',
+        Header: sustainableRevenueStreamHeaderText,
         accessor: 'sustainable_revenue_stream',
         sortType: reactTableNaturalSort,
         align: 'center',
       },
       {
-        Header: 'Revenue Amount',
+        Header: revenueAmountHeaderText,
         accessor: 'revenue_amount',
         sortType: reactTableNaturalSort,
         align: 'right',
       },
     ],
-    [],
+    [
+      businessFinanceSolutionHeaderText,
+      revenueTypeHeaderText,
+      sustainableRevenueStreamHeaderText,
+      revenueAmountHeaderText,
+    ],
   )
 
   const handleEditRevenue = useCallback(
@@ -136,30 +148,18 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
     defaultValue: tableDefaultPrefs,
   })
 
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = [
-        'values.finance_solution.props.children',
-        'values.revenue_type',
-        'values.sustainable_revenue_stream',
-        'values.revenue_amount',
-      ]
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = [
+      'values.finance_solution.props.children',
+      'values.revenue_type',
+      'values.sustainable_revenue_stream',
+      'values.revenue_amount',
+    ]
 
-      const queryTerms = splitSearchQueryStrings(query)
-      const filteredRows =
-        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+    const queryTerms = splitSearchQueryStrings(query)
 
-      const filteredRowNames = filteredRows.map((row) => row.original.name)
-      const filteredRevenues = revenues.filter((investment) =>
-        filteredRowNames.includes(investment.finance_solution),
-      )
-
-      setSearchFilteredRowsLength(filteredRevenues.length)
-
-      return filteredRows
-    },
-    [revenues],
-  )
+    return !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+  }, [])
 
   const {
     canNextPage,
@@ -173,6 +173,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
     pageOptions,
     prepareRow,
     previousPage,
+    rows,
     setPageSize,
     state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
@@ -257,7 +258,7 @@ const Revenues = ({ indicatorSet, setIndicatorSet, choices, setSelectedNavItem, 
       onPageSizeChange={handleRowsNumberChange}
       pageSize={pageSize}
       unfilteredRowLength={revenues.length}
-      searchFilteredRowLength={searchFilteredRowsLength}
+      searchFilteredRowsLength={rows.length}
       isSearchFilterEnabled={!!globalFilter?.length}
       onPreviousClick={previousPage}
       previousDisabled={!canPreviousPage}

@@ -374,7 +374,7 @@ const ManagementRegimesOverview = () => {
                         $isSortedDescending={column.isSortedDesc}
                         $sortedIndex={column.sortedIndex}
                         $isMultiSortColumn={isMultiSortColumn}
-                        $isSortingEnabled={!column.disableSortBy}
+                        $isSortingEnabled={column.canSort}
                         $disabledHover={column.disableSortBy}
                         $align={headerAlignment}
                         className={ThClassName}

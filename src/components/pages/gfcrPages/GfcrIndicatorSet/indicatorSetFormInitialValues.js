@@ -1,8 +1,7 @@
-const getIndicatorSetFormInitialValues = (indicatorSet) => {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+import { getTodayDateOnly } from '../../../../library/formatDateTime'
 
-  const todayISODate = today.toISOString().split('T')[0]
+const getIndicatorSetFormInitialValues = (indicatorSet) => {
+  const todayISODate = getTodayDateOnly()
 
   const {
     title = '',

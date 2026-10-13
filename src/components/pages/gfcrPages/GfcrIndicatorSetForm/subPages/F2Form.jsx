@@ -7,6 +7,7 @@ import { StyledGfcrInputWrapper } from './subPages.styles'
 import { useTranslation, Trans } from 'react-i18next'
 import TextareaWithLabelAndValidation from '../../../../mermaidInputs/TextareaWithLabelAndValidation'
 import GfcrDecimalInputField from '../GfcrDecimalInputField'
+import { GFCR_MAX_AREA_SQ_KM } from '../../../../../library/numbers/gfcrFieldMaximums'
 import GfcrHelperLinks from './GfcrHelperLinks'
 
 const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
@@ -25,6 +26,7 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
         }
         unit="km²"
         maxNumberOfDecimals={5}
+        maxValue={GFCR_MAX_AREA_SQ_KM}
         helperText={<GfcrHelperLinks translationKey="gfcr.forms.f2_1a_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
@@ -40,6 +42,7 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
         }
         unit="km²"
         maxNumberOfDecimals={5}
+        maxValue={GFCR_MAX_AREA_SQ_KM}
         helperText={<GfcrHelperLinks translationKey="gfcr.forms.f2_1b_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
@@ -55,6 +58,7 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
         }
         unit="km²"
         maxNumberOfDecimals={5}
+        maxValue={GFCR_MAX_AREA_SQ_KM}
         helperText={<GfcrHelperLinks translationKey="gfcr.forms.f2_2a_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
@@ -70,6 +74,7 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
         }
         unit="km²"
         maxNumberOfDecimals={5}
+        maxValue={GFCR_MAX_AREA_SQ_KM}
         helperText={<GfcrHelperLinks translationKey="gfcr.forms.f2_2b_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
@@ -85,6 +90,7 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
         }
         unit="km²"
         maxNumberOfDecimals={5}
+        maxValue={GFCR_MAX_AREA_SQ_KM}
         helperText={<GfcrHelperLinks translationKey="gfcr.forms.f2_3a_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
@@ -100,6 +106,7 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
         }
         unit="km²"
         maxNumberOfDecimals={5}
+        maxValue={GFCR_MAX_AREA_SQ_KM}
         helperText={<GfcrHelperLinks translationKey="gfcr.forms.f2_3b_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
@@ -114,6 +121,7 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
         }
         unit="km²"
         maxNumberOfDecimals={5}
+        maxValue={GFCR_MAX_AREA_SQ_KM}
         helperText={<GfcrHelperLinks translationKey="gfcr.forms.f2_4_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}
@@ -128,6 +136,7 @@ const F2Form = ({ formik, displayHelp, handleInputFocus }) => {
         }
         unit="km²"
         maxNumberOfDecimals={5}
+        maxValue={GFCR_MAX_AREA_SQ_KM}
         helperText={<GfcrHelperLinks translationKey="gfcr.forms.f2_5_helper" />}
         displayHelp={displayHelp}
         handleInputFocus={handleInputFocus}

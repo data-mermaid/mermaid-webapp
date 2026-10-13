@@ -6,15 +6,16 @@ import { styled, css } from 'styled-components'
 import { ButtonThatLooksLikeLink } from '../../../generic/buttons'
 import { hoverState } from '../../../../library/styling/mediaQueries'
 import { ValidationList } from '../../../generic/form'
-import { MessageType } from '../../../../types/constants'
+import { MessageType, ValidationStatus } from '../../../../types/constants'
 import InlineMessage from '../../../generic/InlineMessage'
 import { getValidationMessage } from '../../../../library/validationMessageHelpers'
 import theme from '../../../../theme'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
 import DuplicateImageValidationContent, { Image } from './DuplicateImageValidationContent'
+import getRecordLevelValidationsToDisplay from '../getRecordLevelValidationsToDisplay'
 
 interface RecordValidationInfo {
-  status: 'ok' | 'warning' | 'error' | 'ignore' | 'reset'
+  status: ValidationStatus
   validation_id: string
   code: string
   fields?: string[]
@@ -27,7 +28,7 @@ interface RecordLevelValidationInfoProps {
   ignoreRecordLevelValidation: (args: { validationId: string }) => void
   resetRecordLevelValidation: (args: { validationId: string }) => void
   validations: RecordValidationInfo[]
-  handleScrollToObservation: () => void
+  handleScrollToObservation: (fields?: string[]) => void
 }
 
 const InlineValidationItem = styled.li`
@@ -44,16 +45,15 @@ const ScrollToButton = styled(ButtonThatLooksLikeLink)`
   font-size: smaller;
 `
 
-const checkScrollToObservation = (validationInfo: RecordValidationInfo): boolean => {
-  const validationStatusNotOkay = validationInfo.status !== 'ok'
-  const observationTableValidationMessages = [
-    'data.obs_colonies_bleached',
-    'data.obs_benthic_photo_quadrats',
-    'data.obs_belt_fishes',
-  ].some((obs) => validationInfo?.fields?.includes(obs))
+// A record-level validation gets a "scroll to observations" link when it points at an
+// observation table. The API names those tables in `fields` with a `data.obs_` prefix, one
+// per protocol (`data.obs_benthic_lits`, `data.obs_belt_fishes`). Matching the prefix covers
+// every protocol, including any added later, without editing this file. The trailing
+// underscore matters: it stops `data.observers`, a form field, from matching.
+const OBSERVATION_FIELD_PREFIX = 'data.obs_'
 
-  return validationStatusNotOkay && observationTableValidationMessages
-}
+const checkScrollToObservation = ({ status, fields }: RecordValidationInfo): boolean =>
+  status !== 'ok' && (fields ?? []).some((field) => field.startsWith(OBSERVATION_FIELD_PREFIX))
 
 const RecordLevelValidationInfo = ({
   areValidationsShowing,
@@ -79,23 +79,12 @@ const RecordLevelValidationInfo = ({
     }
   }
 
-  const hasUnresolvedErrors = validations.some(
-    (validation) => validation.code !== 'unsuccessful_dry_submit' && validation.status === 'error',
-  )
-
-  const filteredValidations = validations.filter((validation) => {
-    if (validation.code === 'unsuccessful_dry_submit') {
-      // Show dry submit errors only if there are no unresolved errors
-      return !hasUnresolvedErrors
-    }
-
-    return true
-  })
+  const filteredValidations = getRecordLevelValidationsToDisplay(validations)
 
   return (
     <ValidationList data-testid="record-level-validations">
       {filteredValidations.map((validation) => {
-        const { status, validation_id, code, context } = validation
+        const { status, validation_id, code, context, fields } = validation
         const isWarning = status === 'warning'
         const isError = status === 'error'
         const isIgnored = status === 'ignore'
@@ -114,12 +103,12 @@ const RecordLevelValidationInfo = ({
         const isScrollToViewAvailable = checkScrollToObservation(validation)
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
-          <InlineValidationItem key={validation_id}>
+          <InlineValidationItem key={validation_id} data-record-validation-id={validation_id}>
             <InlineMessage type={statusForStyling as MessageType}>
               {validationMessage}
             </InlineMessage>
             {isScrollToViewAvailable && (
-              <ScrollToButton onClick={handleScrollToObservation}>
+              <ScrollToButton onClick={() => handleScrollToObservation(fields)}>
                 {t('sample_units.scroll_to_observations')}
               </ScrollToButton>
             )}

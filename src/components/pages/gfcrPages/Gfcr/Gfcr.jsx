@@ -34,6 +34,7 @@ import { DropdownItemStyle } from '../../../generic/ButtonSecondaryDropdown/Butt
 import { useCurrentProject } from '../../../../App/CurrentProjectContext'
 import GfcrGenericTable from '../GfcrGenericTable'
 import NewIndicatorSetModal from './NewIndicatorSetModal'
+import { formatDateOnlyIntl } from '../../../../library/formatDateTime'
 
 const Gfcr = () => {
   const { t } = useTranslation()
@@ -62,8 +63,6 @@ const Gfcr = () => {
   const [isNewIndicatorSetModalOpen, setIsNewIndicatorSetModalOpen] = useState(false)
   const [newIndicatorSetType, setNewIndicatorSetType] = useState()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
-
-  const [searchFilteredRowsLength, setSearchFilteredRowsLength] = useState(null)
 
   useDocumentTitle(`${gfcrTitleText} - ${t('mermaid')}`)
   const [isExporting, setIsExporting] = useState(false)
@@ -117,8 +116,11 @@ const Gfcr = () => {
       },
       {
         Header: reportingDateHeaderText,
+        // Sorts on the raw YYYY-MM-DD value rather than the localized label, so the order stays
+        // chronological instead of alphabetical by month name.
         accessor: 'report_date',
         sortType: reactTableNaturalSort,
+        Cell: ({ row }) => row.original.report_date_label,
       },
     ],
     [titleHeaderText, typeHeaderText, reportingDateHeaderText],
@@ -128,20 +130,19 @@ const Gfcr = () => {
     return gfcrIndicatorSets.map((indicatorSet) => {
       const { id, title, indicator_set_type, report_date } = indicatorSet
 
-      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }
-      const currentLocale = navigator.language
-      const localizedDate = new Date(report_date).toLocaleDateString(currentLocale, dateOptions)
-
       return {
         title: isAdminUser ? (
           <Link to={`${currentProjectPath}/gfcr/${id}`}>{title}</Link>
         ) : (
           <span>{title || untitledText}</span>
         ),
-        indicator_set_type: (
-          <span>{indicator_set_type === 'report' ? reportText : targetText}</span>
-        ),
-        report_date: <span>{localizedDate}</span>,
+        // Plain text rather than a React node, because the Type and Reporting date columns sort
+        // with reactTableNaturalSort, which compares the row value itself.
+        indicator_set_type: indicator_set_type === 'report' ? reportText : targetText,
+        report_date,
+        // The label the date column renders, kept alongside the raw value so the filter can match
+        // what the user actually sees ("February 10, 2024") instead of "2024-02-10"
+        report_date_label: formatDateOnlyIntl(report_date),
       }
     })
   }, [gfcrIndicatorSets, isAdminUser, currentProjectPath, untitledText, reportText, targetText])
@@ -163,25 +164,14 @@ const Gfcr = () => {
     defaultValue: tableDefaultPrefs,
   })
 
-  const tableGlobalFilters = useCallback(
-    (rows, id, query) => {
-      const keys = ['values.title.props.children', 'values.report_date']
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    // report_date_label has no column of its own, so it is read from the row rather than its values
+    const keys = ['values.title.props.children', 'original.report_date_label']
 
-      const queryTerms = splitSearchQueryStrings(query)
-      const filteredRows =
-        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+    const queryTerms = splitSearchQueryStrings(query)
 
-      const filteredRowIds = filteredRows.map((row) => row.original.id)
-      const filteredIndicatorSets = gfcrIndicatorSets.filter((indicatorSet) =>
-        filteredRowIds.includes(indicatorSet.id),
-      )
-
-      setSearchFilteredRowsLength(filteredIndicatorSets.length)
-
-      return filteredRows
-    },
-    [gfcrIndicatorSets],
-  )
+    return !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+  }, [])
 
   const {
     canNextPage,
@@ -195,6 +185,7 @@ const Gfcr = () => {
     pageOptions,
     prepareRow,
     previousPage,
+    rows,
     setPageSize,
     state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
@@ -301,7 +292,7 @@ const Gfcr = () => {
       onPageSizeChange={handleRowsNumberChange}
       pageSize={pageSize}
       unfilteredRowLength={gfcrIndicatorSets.length}
-      searchFilteredRowLength={searchFilteredRowsLength}
+      searchFilteredRowsLength={rows.length}
       isSearchFilterEnabled={!!globalFilter?.length}
       onPreviousClick={previousPage}
       previousDisabled={!canPreviousPage}

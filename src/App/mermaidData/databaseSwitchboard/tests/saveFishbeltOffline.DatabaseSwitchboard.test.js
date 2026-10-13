@@ -3,7 +3,7 @@ import { validate as validateUuid } from 'uuid'
 import {
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess,
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError,
-} from './testHelpers.DatabseSwitchboard'
+} from './testHelpers.DatabaseSwitchboard'
 
 test('saveFishbelt throws error if any parameters are missing', async () => {
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess()

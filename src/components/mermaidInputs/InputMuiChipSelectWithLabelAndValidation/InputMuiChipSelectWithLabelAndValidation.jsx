@@ -43,7 +43,7 @@ const InputMuiChipSelectWithLabelAndValidation = ({
   )
 
   return (
-    <InputRow $validationType={validationType}>
+    <InputRow $validationType={validationType} data-validation-field={id}>
       <label id={`${id}-mui-chip-select-with-label-and-validation`}>
         {label}
         {required ? <RequiredIndicator /> : null}

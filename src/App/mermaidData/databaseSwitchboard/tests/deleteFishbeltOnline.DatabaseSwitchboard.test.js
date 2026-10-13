@@ -4,7 +4,7 @@ import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidAp
 import {
   getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess,
   getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError,
-} from './testHelpers.DatabseSwitchboard'
+} from './testHelpers.DatabaseSwitchboard'
 
 test('deleteSampleUnit online returns error message upon dexie error', async () => {
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError()
