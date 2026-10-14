@@ -198,8 +198,15 @@ const GfcrNumberInput = ({
       aria-labelledby={ariaLabelledby}
       // Mantine's Input spreads its own aria attributes after ...others, so an
       // aria-describedby passed as a normal prop is overwritten with undefined.
-      // The attributes prop targets the inner input directly and survives.
-      attributes={{ input: { 'aria-describedby': ariaDescribedby } }}
+      // The attributes prop targets the inner input directly and survives. The same applies to
+      // inputMode, which NumberInput hardcodes to "decimal" after spreading its other props.
+      // A whole-number field asks for the digits-only mobile keypad instead.
+      attributes={{
+        input: {
+          'aria-describedby': ariaDescribedby,
+          inputMode: decimalPlaces === 0 ? 'numeric' : 'decimal',
+        },
+      }}
       value={displayValue}
       onChange={handleChange}
       onBlur={handleBlur}

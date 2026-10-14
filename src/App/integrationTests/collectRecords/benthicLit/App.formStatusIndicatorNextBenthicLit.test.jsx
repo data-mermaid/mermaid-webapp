@@ -86,7 +86,7 @@ test('Next on the error chip scrolls to and highlights a Benthic LIT transect fi
   expect(scrollIntoView).toHaveBeenCalledTimes(1)
   expect(scrollIntoView.mock.instances[0]).toBe(depthRow)
   expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'center' })
-  expect(depthRow).toHaveClass('validation-target-highlight')
+  await waitFor(() => expect(depthRow).toHaveClass('validation-target-highlight'))
 }, 50000)
 
 test('Next keeps focus on the chip and announces where it went', async () => {
@@ -127,5 +127,28 @@ test('Next jumps instead of gliding when the user prefers reduced motion', async
   expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'auto', block: 'center' })
 
   // The row is still marked; only the movement is dropped.
-  expect(depthRow).toHaveClass('validation-target-highlight')
+  await waitFor(() => expect(depthRow).toHaveClass('validation-target-highlight'))
+}, 50000)
+
+test('The highlight waits for the page to stop moving', async () => {
+  // The fade must not start until the target has stopped moving, or a long jump finishes
+  // after the colour has gone. jsdom has no layout, so a moving rect stands in for the scroll.
+  let top = 400
+  let isTravelling = true
+
+  vi.spyOn(window.HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(() => {
+    if (isTravelling) {
+      top -= 10
+    }
+
+    return { top }
+  })
+
+  const { depthRow } = await validateThenClickNext()
+
+  expect(depthRow).not.toHaveClass('validation-target-highlight')
+
+  isTravelling = false
+
+  await waitFor(() => expect(depthRow).toHaveClass('validation-target-highlight'))
 }, 50000)

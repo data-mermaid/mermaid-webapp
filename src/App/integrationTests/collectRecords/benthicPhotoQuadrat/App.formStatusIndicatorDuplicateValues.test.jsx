@@ -14,6 +14,7 @@ import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import mockBenthicPhotoQuadratCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicPhotoQuadratCollectRecords'
+import { mockT } from '../../../../testUtilities/mockT'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
@@ -80,6 +81,13 @@ test('Next on the warning chip reaches every row a duplicate_values warning mark
 
   const warningChip = await screen.findByTestId('form-status-chip-warning')
   const nextButton = within(warningChip).getByRole('button')
+
+  // One warning, one message on screen, so the chip says 1 however many rows it marks.
+  const warningChipCalls = mockT.mock.calls.filter(
+    ([key]) => key === 'sample_units.validation_status.chip_label_warning',
+  )
+
+  expect(warningChipCalls.at(-1)?.[1]?.count).toBe(1)
 
   const recordMessage = document.querySelector('[data-record-validation-id]')
   const markedRows = ['1', '2'].map((id) => document.querySelector(`[data-observation-id="${id}"]`))

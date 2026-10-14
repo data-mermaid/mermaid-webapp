@@ -35,8 +35,10 @@ const GlobalStyle = createGlobalStyle`
           text-decoration: none;
         `)}
     }
+    /* Holds at full colour before fading, so the mark is catchable on a row that was already
+       on screen and needed no scrolling. */
     @keyframes validation-target-highlight-fade {
-        0% { background-color: var(--validation-target-highlight-color, ${
+        0%, 30% { background-color: var(--validation-target-highlight-color, ${
           theme.color.chipWarningBackground
         }); }
         100% { background-color: transparent; }

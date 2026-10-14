@@ -26,7 +26,6 @@
 
 ## Dev Notes
 
-- `plop <filename>` scaffolds component files inside the `src/components` directory
 - `src/components/generic` are for reusable components that may be useful for other projects. They should be developed to be completely unaware of their context. If a reusable component is MERMAID-specific, it can go elsewhere.
 - `src/components/pages` are for pages or page-like components
 - Styles use Styled Components for easy scoping, speed, and maintainability.
@@ -37,6 +36,7 @@
 - To reset the API and its database, run `make freshinstall`
 - This app was initialized with Create React App, and then migrated to Vite. Tests were originally written for Jest but use Vitest with jsdom now. Test configuration is in `vitest.config.ts`.
 - UI text is tokenized with i18next and translated via Lokalise. See [TranslationSyncWorkflow](docs/TranslationSyncWorkflow.md) for how source strings and translations sync between the code and Lokalise, [LokaliseTranslatorGuide](docs/LokaliseTranslatorGuide.md) for the translator-facing process, and [TranslationBestPractices](docs/TranslationBestPractices.md) for token naming conventions.
+- To add a new survey protocol to Collect, follow [AddingNewProtocol](docs/AddingNewProtocol.md). It lists the frontend steps in dependency order, using the macroinvertebrate protocol as the worked example.
 
 ### General Architecture
 

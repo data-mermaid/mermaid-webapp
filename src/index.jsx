@@ -5,8 +5,14 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { StyledEngineProvider } from '@mui/material'
 import * as Sentry from '@sentry/react'
+import { setWorkerUrl } from 'maplibre-gl'
+// Use ?worker&url, not ?url: only Vite's worker pipeline bundles the chunk the worker imports,
+// and without it production maps load no data. ESLint's resolver cannot resolve query imports.
+// eslint-disable-next-line import/no-unresolved
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 
 import { initSentry } from './sentry'
+import { registerServiceWorker } from './registerServiceWorker'
 import reportWebVitals from './reportWebVitals'
 import { App } from './App'
 import { OnlineStatusProvider } from './library/onlineStatusContext'
@@ -21,6 +27,8 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import './index.css'
 
 initSentry()
+registerServiceWorker()
+setWorkerUrl(maplibreWorkerUrl)
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouterV7(createBrowserRouter)
 
