@@ -54,6 +54,8 @@ const renderModal = ({
   setImageId = () => {},
   setServerNotReachable = () => {},
   onAnnotationSaveSuccess = () => {},
+  previousImageId = undefined,
+  nextImageId = undefined,
 } = {}) =>
   renderAuthenticatedOnline(
     // The shared render helpers stub the handler out. The real one is what decides whether a
@@ -70,6 +72,8 @@ const renderModal = ({
             <ImageAnnotationModal
               imageId="fake-image-id"
               setImageId={setImageId}
+              previousImageId={previousImageId}
+              nextImageId={nextImageId}
               benthicAttributes={[fakeBenthicAttribute]}
               growthForms={[]}
               onAnnotationSaveSuccess={onAnnotationSaveSuccess}
@@ -170,24 +174,97 @@ test('A background save that keeps failing leaves Collect online and turns Save 
   expect(setImageId).not.toHaveBeenCalled()
 })
 
-test('Closing refreshes the photo table only when annotations were saved', async () => {
-  const setImageId = vi.fn()
+test('Each successful save is reported, so the photo table knows to refresh', async () => {
   const onAnnotationSaveSuccess = vi.fn()
 
   mockAnnotationsApi()
 
-  const { user } = renderModal({ setImageId, onAnnotationSaveSuccess })
-
-  await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' })
-  await user.click(getFooterCloseButton())
-
-  await waitFor(() => expect(setImageId).toHaveBeenCalledTimes(1))
-  expect(onAnnotationSaveSuccess).not.toHaveBeenCalled()
+  const { user } = renderModal({ onAnnotationSaveSuccess })
 
   await confirmAllPoints(user)
   await screen.findByRole('button', { name: 'buttons.saved' })
+
+  expect(onAnnotationSaveSuccess).toHaveBeenCalledTimes(1)
+})
+
+const getPreviousButton = () =>
+  screen.getByRole('button', { name: /image_classification.buttons.previous_photo/ })
+const getNextButton = () =>
+  screen.getByRole('button', { name: /image_classification.buttons.next_photo/ })
+
+test('Previous and Next are off when there is no photo to move to', async () => {
+  mockAnnotationsApi()
+
+  renderModal()
+
+  await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' })
+
+  expect(getPreviousButton()).toBeDisabled()
+  expect(getNextButton()).toBeDisabled()
+})
+
+test('Previous and Next show the neighbouring photo', async () => {
+  const setImageId = vi.fn()
+
+  mockAnnotationsApi()
+
+  const { user } = renderModal({
+    setImageId,
+    previousImageId: 'previous-image-id',
+    nextImageId: 'next-image-id',
+  })
+
+  await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' })
+  await user.click(getNextButton())
+  await waitFor(() => expect(setImageId).toHaveBeenLastCalledWith('next-image-id'))
+
+  await user.click(getPreviousButton())
+  await waitFor(() => expect(setImageId).toHaveBeenLastCalledWith('previous-image-id'))
+})
+
+test('Next stays on the photo when its changes fail to save', async () => {
+  // handleHttpResponseError logs the axios error it is handling; keep it out of the test output
+  vi.spyOn(console, 'error').mockImplementation(() => {})
+  const setImageId = vi.fn()
+  let patchRequestCount = 0
+
+  // A 400 isn't retried, so the background save gives up straight away
+  mockAnnotationsApi(() => {
+    patchRequestCount += 1
+
+    return HttpResponse.json({}, { status: 400 })
+  })
+
+  const { user } = renderModal({ setImageId, nextImageId: 'next-image-id' })
+
+  await confirmAllPoints(user)
+  await screen.findByRole('button', { name: 'buttons.save_changes' })
+  await user.click(getNextButton())
+
+  await waitFor(() => expect(patchRequestCount).toBe(2))
+  expect(await screen.findByRole('button', { name: 'buttons.save_changes' })).toBeEnabled()
+  expect(setImageId).not.toHaveBeenCalled()
+})
+
+test('Close asks before discarding changes that failed to save', async () => {
+  // handleHttpResponseError logs the axios error it is handling; keep it out of the test output
+  vi.spyOn(console, 'error').mockImplementation(() => {})
+  const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false)
+  const setImageId = vi.fn()
+
+  mockAnnotationsApi(() => HttpResponse.json({}, { status: 400 }))
+
+  const { user } = renderModal({ setImageId })
+
+  await confirmAllPoints(user)
+  await screen.findByRole('button', { name: 'buttons.save_changes' })
   await user.click(getFooterCloseButton())
 
-  await waitFor(() => expect(setImageId).toHaveBeenCalledTimes(2))
-  expect(onAnnotationSaveSuccess).toHaveBeenCalledTimes(1)
+  await waitFor(() => expect(confirmSpy).toHaveBeenCalledTimes(1))
+  expect(setImageId).not.toHaveBeenCalled()
+
+  confirmSpy.mockReturnValue(true)
+  await user.click(getFooterCloseButton())
+
+  await waitFor(() => expect(setImageId).toHaveBeenCalledTimes(1))
 })

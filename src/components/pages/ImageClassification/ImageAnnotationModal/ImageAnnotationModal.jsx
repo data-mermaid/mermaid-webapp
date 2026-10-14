@@ -21,6 +21,7 @@ import {
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
+import { IconArrowBack, IconArrowRight } from '../../../icons'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import { useImageScale } from '../useImageScale'
 import { useZoomToPointsByAttributeId } from './useZoomToPointsByAttributeId'
@@ -55,6 +56,8 @@ const removeMappedUnclassifiedPointData = (points) => {
 const ImageAnnotationModal = ({
   imageId,
   setImageId,
+  previousImageId = undefined,
+  nextImageId = undefined,
   benthicAttributes,
   growthForms,
   onAnnotationSaveSuccess,
@@ -63,7 +66,6 @@ const ImageAnnotationModal = ({
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const popupRef = useRef(null)
-  const hasSavedAnnotations = useRef(false)
 
   const [dataToReview, setDataToReview] = useState()
   const [selectedAttributeId, setSelectedAttributeId] = useState('')
@@ -87,9 +89,7 @@ const ImageAnnotationModal = ({
     savePoints: (points) =>
       databaseSwitchboardInstance
         .saveAnnotationsForImage(projectId, imageId, removeMappedUnclassifiedPointData(points))
-        .then(() => {
-          hasSavedAnnotations.current = true
-        }),
+        .then(() => onAnnotationSaveSuccess()),
     onSaveFailed: (error) =>
       handleHttpResponseError({
         error,
@@ -213,19 +213,20 @@ const ImageAnnotationModal = ({
     popupRef.current?.remove()
   }
 
-  // Saves anything pending first, so closing only asks to discard changes that failed to save.
-  // The photo table refreshes once on close rather than after every background save.
+  // Saves anything pending first, so closing only asks to discard changes that failed to save
   const handleCloseModal = async () => {
-    const isEverythingSaved = await flush()
-
     if (
-      isEverythingSaved ||
+      (await flush()) ||
       window.confirm(t('image_classification.user_message.confirm_image_changes'))
     ) {
       setImageId()
-      if (hasSavedAnnotations.current) {
-        onAnnotationSaveSuccess()
-      }
+    }
+  }
+
+  // Stays on this photo if its changes can't be saved, so none are left behind
+  const handleShowImage = async (targetImageId) => {
+    if (await flush()) {
+      setImageId(targetImageId)
     }
   }
 
@@ -312,6 +313,22 @@ const ImageAnnotationModal = ({
               </LegendItem>
             </Legend>
             <div>
+              <ButtonSecondary
+                type="button"
+                onClick={() => handleShowImage(previousImageId)}
+                disabled={!previousImageId}
+              >
+                <IconArrowBack />
+                {t('image_classification.buttons.previous_photo')}
+              </ButtonSecondary>
+              <ButtonSecondary
+                type="button"
+                onClick={() => handleShowImage(nextImageId)}
+                disabled={!nextImageId}
+              >
+                {t('image_classification.buttons.next_photo')}
+                <IconArrowRight />
+              </ButtonSecondary>
               <ButtonSecondary type="button" onClick={handleCloseModal}>
                 {t('buttons.close')}
               </ButtonSecondary>
@@ -333,6 +350,8 @@ const ImageAnnotationModal = ({
 ImageAnnotationModal.propTypes = {
   imageId: PropTypes.string.isRequired,
   setImageId: PropTypes.func.isRequired,
+  previousImageId: PropTypes.string,
+  nextImageId: PropTypes.string,
   benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
   growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
   onAnnotationSaveSuccess: PropTypes.func.isRequired,

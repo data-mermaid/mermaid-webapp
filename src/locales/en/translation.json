@@ -477,6 +477,8 @@
     "benthic_attribute": "Benthic attribute",
     "buttons": {
       "confirm_all": "Confirm all",
+      "next_photo": "Next photo",
+      "previous_photo": "Previous photo",
       "upload_photos": "Upload photos",
       "zoom_to_attribute": "Zoom to attribute"
     },
