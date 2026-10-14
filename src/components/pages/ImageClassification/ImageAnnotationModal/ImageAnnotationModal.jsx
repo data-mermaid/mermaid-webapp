@@ -66,6 +66,7 @@ const ImageAnnotationModal = ({
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const popupRef = useRef(null)
+  const hasFetchedAnnotations = useRef(false)
 
   const [dataToReview, setDataToReview] = useState()
   const [selectedAttributeId, setSelectedAttributeId] = useState('')
@@ -148,8 +149,11 @@ const ImageAnnotationModal = ({
     [getBenthicAttributeLabel, getGrowthFormLabel],
   )
 
+  // Fetches once per window. A later run, from a dependency changing identity, would replace
+  // dataToReview and discard changes the save queue hasn't saved yet.
   const _fetchImageAnnotations = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId) {
+    if (databaseSwitchboardInstance && projectId && !hasFetchedAnnotations.current) {
+      hasFetchedAnnotations.current = true
       databaseSwitchboardInstance
         .getAnnotationsForImage(projectId, imageId, EXCLUDE_PARAMS)
         .then((data) => {
@@ -179,6 +183,7 @@ const ImageAnnotationModal = ({
           setDataToReview({ ...data, points: formattedPoints })
         })
         .catch((error) => {
+          hasFetchedAnnotations.current = false
           handleHttpResponseError({
             error,
             callback: () => {

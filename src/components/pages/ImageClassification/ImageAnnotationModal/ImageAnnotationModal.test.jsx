@@ -1,13 +1,14 @@
 import { afterEach, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Route, Routes } from 'react-router'
 import { http, HttpResponse } from 'msw'
 import { toast } from 'react-toastify'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
+  fireEvent,
   screen,
   waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
@@ -50,6 +51,21 @@ const annotationsResponse = {
   ],
 }
 
+// Replacing benthicAttributes with an equal array, as a photo table refresh does, gives the window's
+// label helpers new identities and re-runs any effect that depends on them
+const ModalWithReplaceableAttributes = (props) => {
+  const [benthicAttributes, setBenthicAttributes] = useState([fakeBenthicAttribute])
+
+  return (
+    <>
+      <button type="button" onClick={() => setBenthicAttributes([{ ...fakeBenthicAttribute }])}>
+        replace benthic attributes
+      </button>
+      <ImageAnnotationModal {...props} benthicAttributes={benthicAttributes} />
+    </>
+  )
+}
+
 const renderModal = ({
   setImageId = () => {},
   setServerNotReachable = () => {},
@@ -67,11 +83,10 @@ const renderModal = ({
         <Route
           path="/projects/:projectId/collecting/benthicpqt/:recordId"
           element={
-            <ImageAnnotationModal
+            <ModalWithReplaceableAttributes
               imageId="fake-image-id"
               setImageId={setImageId}
               nextImageId={nextImageId}
-              benthicAttributes={[fakeBenthicAttribute]}
               growthForms={[]}
               onAnnotationSaveSuccess={() => {}}
             />
@@ -219,4 +234,34 @@ test('Close asks before discarding changes that failed to save', async () => {
   await user.click(getFooterCloseButton())
 
   await waitFor(() => expect(setImageId).toHaveBeenCalledTimes(1))
+})
+
+test('An unsaved change survives the window re-rendering with new benthic attributes', async () => {
+  // handleHttpResponseError logs the axios error it is handling; keep it out of the test output
+  vi.spyOn(console, 'error').mockImplementation(() => {})
+  let annotationFetchCount = 0
+
+  mockMermaidApiAllSuccessful.use(
+    http.get(annotationsUrl, () => {
+      annotationFetchCount += 1
+
+      return HttpResponse.json(annotationsResponse)
+    }),
+    // A 400 isn't retried, so the change stays unsaved straight away
+    http.patch(annotationsUrl, () => HttpResponse.json({}, { status: 400 })),
+  )
+
+  const { user } = renderModal()
+
+  await confirmAllPoints(user)
+  await screen.findByRole('button', { name: 'buttons.save_changes' })
+  // The window's overlay covers the page, so click past it
+  fireEvent.click(screen.getByRole('button', { name: 'replace benthic attributes' }))
+  // Long enough for a re-fetch to land, if one were sent
+  await new Promise((resolve) => setTimeout(resolve, 200))
+
+  expect(annotationFetchCount).toBe(1)
+  expect(
+    screen.queryByRole('button', { name: 'image_classification.buttons.confirm_all' }),
+  ).not.toBeInTheDocument()
 })
