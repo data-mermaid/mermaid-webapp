@@ -455,7 +455,7 @@
   "go_to_explore_projects": "View all your projects on MERMAID Explore",
   "go_to_explore_sample_event": "View this sample event on MERMAID Explore",
   "go_to_explore_this_project": "View this project on MERMAID Explore",
-  "go_to_management_overview_page": "Other sample events at this site have a different management regime. Go to <a>Management Regime Overview</a>.",
+  "go_to_management_overview_page": "Other sample events at this site have a different management regime. Go to <a>Sample units & management regimes</a>.",
   "habitat_complexity_score": "Habitat complexity score",
   "habitat_complexity_score_info": "Benthic complexity score (0 - 5) for transect interval, as integer (e.g. 3). The categories are 0 no vertical reef, flat or rubbly areas; 1 low (<30 cm high) and sparse relief; 2 low but widespread relief; 3 widespread moderately complex (30-60 cm high) relief; 4 widespread very complex (60 -100 cm high) relief with numerous fissures and caves; 5 exceptionally complex (>1 m high) relief with numerous caves and overhangs).",
   "help_documents": "Help (PDF)",
@@ -599,7 +599,7 @@
     "management_regime_name": "Management regime name",
     "management_regimes": "Management regimes",
     "merge_failed": "Failed to find and replace management regime",
-    "missing_mr_name": "(Missing MR name)",
+    "missing_mr_name": "(Missing name)",
     "name_info": "Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a governmental or standardized source such as <helperTextLink>protectedseas.net</helperTextLink>; alternatively, a descriptive local label like 'Northeast Point seasonal closure' can be used.",
     "new": "New management",
     "new_mr": "New management",
@@ -1031,8 +1031,8 @@
     "which_are_missing": "Which sample units are missing",
     "who_has_unsubmitted": "Who has unsubmitted sample units"
   },
-  "sample_units_and_management_regimes": "Sample units / management regimes",
-  "sample_units_and_observers": "Sample units / observers",
+  "sample_units_and_management_regimes": "Sample units & management regimes",
+  "sample_units_and_observers": "Sample units & observers",
   "search": {
     "no_results": "No results found"
   },
@@ -1064,7 +1064,7 @@
     "longitude": "Longitude",
     "longitude_info": "Longitude in decimal degrees. Should be a number between -180 and 180, representing the east-west position on the Earth's surface. A positive value indicates a location to the east of the Prime Meridian, while a negative value indicates a location to the west of the Prime Meridian. If you need to convert from degrees-minutes-seconds, an online calculator is <helperTextLink>here.</helperTextLink>",
     "merge_failed": "Failed to find and replace site",
-    "missing_site_name": "(Missing site name)",
+    "missing_site_name": "(Missing name)",
     "new": "New site",
     "no_sites": "This project has no sites.",
     "only_admin_delete": "Only admins can delete a site.",

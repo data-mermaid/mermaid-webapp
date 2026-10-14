@@ -453,7 +453,7 @@
   "go_to_explore_projects": "Lihat semua proyek Anda di MERMAID Explore",
   "go_to_explore_sample_event": "Lihat sampel kejadian ini di MERMAID Explore",
   "go_to_explore_this_project": "Lihat proyek ini di MERMAID Explore",
-  "go_to_management_overview_page": "Sampel kejadian lain di situs ini memiliki rezim manajemen yang berbeda. Buka <a>Ikhtisar Rezim Manajemen</a>.",
+  "go_to_management_overview_page": "Sampel kejadian lain di situs ini memiliki rezim manajemen yang berbeda. Buka <a>Unit sampel & rezim manajemen</a>.",
   "habitat_complexity_score": "Skor Kompleksitas Habitat",
   "habitat_complexity_score_info": "Skor kompleksitas bentik (0 - 5) untuk interval transek, sebagai bilangan bulat (misalnya 3). Kategorinya adalah 0 tidak ada terumbu vertikal, daerah datar atau rubbly; 1 rendah (tinggi <30 cm) dan relief yang jarang; 2 relief rendah tetapi tersebar luas; 3 relief yang cukup kompleks dan tersebar luas (tinggi 30-60 cm); 4 relief yang sangat kompleks dan tersebar luas (tinggi 60-100 cm) dengan banyak celah dan gua; 5 relief yang sangat kompleks (tinggi>1 m) dengan banyak gua dan overhang).",
   "help_documents": "Bantuan (PDF)",
@@ -592,7 +592,7 @@
     "management_regime_name": "Nama rezim manajemen",
     "management_regimes": "Rezim manajemen",
     "merge_failed": "Gagal menemukan dan mengganti rezim manajemen.",
-    "missing_mr_name": "(Nama manajemen tidak ditemukan)",
+    "missing_mr_name": "(Nama tidak ditemukan)",
     "name_info": "Nama KKL, OECM, atau kawasan yang dikelola lainnya yang relevan. Dapat berupa nama resmi yang ditetapkan oleh pemerintah atau sumber standar seperti <helperTextLink>protectedseas.net</helperTextLink>; sebagai alternatif, label lokal deskriptif seperti 'Penutupan musiman Titik Timur Laut' dapat digunakan.",
     "new": "Manajemen baru",
     "new_mr": "Manajemen baru",
@@ -1013,8 +1013,8 @@
     "which_are_missing": "Unit sampel mana yang hilang",
     "who_has_unsubmitted": "Siapa yang memiliki unit sampel yang belum dikirim?"
   },
-  "sample_units_and_management_regimes": "Unit sampel/rezim manajemen",
-  "sample_units_and_observers": "Unit sampel/pengamat",
+  "sample_units_and_management_regimes": "Unit sampel & rezim manajemen",
+  "sample_units_and_observers": "Unit sampel & pengamat",
   "search": {
     "no_results": "Tidak ada hasil yang ditemukan"
   },
@@ -1046,7 +1046,7 @@
     "longitude": "Bujur",
     "longitude_info": "Bujur dalam derajat desimal. Harus berupa angka antara -180 dan 180, yang mewakili posisi timur-barat pada permukaan bumi. Nilai positif menunjukkan lokasi di sebelah timur Meridian Utama, sedangkan nilai negatif menunjukkan lokasi di sebelah barat Meridian Utama. Jika Anda perlu mengkonversi dari derajat-menit-detik, kalkulator online dapat ditemukan di <helperTextLink>di sini.</helperTextLink>",
     "merge_failed": "Gagal menemukan dan mengganti situs",
-    "missing_site_name": "(Nama situs tidak ditemukan)",
+    "missing_site_name": "(Nama tidak ditemukan)",
     "new": "Situs baru",
     "no_sites": "Proyek ini tidak memiliki situs.",
     "only_admin_delete": "Hanya admin yang dapat menghapus situs.",
