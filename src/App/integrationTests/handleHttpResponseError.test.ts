@@ -190,9 +190,11 @@ describe('handleHttpResponseError', () => {
     const callback = vi.fn()
     const setServerNotReachable = vi.fn()
 
-    handleHttpResponseError({ error: fakeError({ request: {} }), callback, setServerNotReachable })
+    const error = fakeError({ request: {} })
 
-    expect(setServerNotReachable).toHaveBeenCalled()
+    handleHttpResponseError({ error, callback, setServerNotReachable })
+
+    expect(setServerNotReachable).toHaveBeenCalledWith(error)
     expect(callback).toHaveBeenCalled()
   })
 

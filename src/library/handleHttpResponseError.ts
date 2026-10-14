@@ -11,7 +11,7 @@ interface HandleHttpResponseErrorProps {
   // Pass false when the caller recovers from the failure itself, so one unanswered
   // request doesn't switch Collect offline and unmount online-only pages.
   shouldSetServerNotReachable?: boolean
-  setServerNotReachable?: () => void
+  setServerNotReachable?: (error: Partial<AxiosError>) => void
 }
 
 const handleHttpResponseError = ({
@@ -33,7 +33,7 @@ const handleHttpResponseError = ({
     }
 
     if (shouldSetServerNotReachable) {
-      setServerNotReachable?.()
+      setServerNotReachable?.(error)
     }
     callback?.()
 

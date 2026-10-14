@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
+import { reportOfflineSwitch } from './reportOfflineSwitch'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 const OnlineStatusContext = createContext()
@@ -27,6 +28,7 @@ const OnlineStatusProvider = ({ children, value = {} }) => {
         setIsServerReachable(true)
       })
       .catch(() => {
+        reportOfflineSwitch('health_check_failed')
         setIsServerReachable(false)
       })
   }
@@ -65,7 +67,13 @@ const OnlineStatusProvider = ({ children, value = {} }) => {
     setHasUserTurnedAppOffline(!hasUserTurnedAppOffline)
   }
 
-  const setServerNotReachable = () => {
+  const setServerNotReachable = (error) => {
+    // The path without its query string is enough to see which requests fail
+    reportOfflineSwitch('request_no_response', {
+      method: error?.config?.method,
+      url: error?.config?.url?.split('?')[0],
+      code: error?.code,
+    })
     setIsServerReachable(false)
   }
 
@@ -74,6 +82,7 @@ const OnlineStatusProvider = ({ children, value = {} }) => {
       setIsNavigatorOnline(true)
     }
     const handleOffline = () => {
+      reportOfflineSwitch('browser_offline')
       setIsNavigatorOnline(false)
     }
     const cleanup = () => {
