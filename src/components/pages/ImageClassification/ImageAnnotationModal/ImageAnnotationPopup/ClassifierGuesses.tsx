@@ -1,28 +1,40 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { Dispatch, SetStateAction } from 'react'
 import {
   PopupWrapperForRadio,
   ClickableRowThatLooksLikeAnEvenTr,
 } from '../ImageAnnotationModal.styles'
-import {
-  imageClassificationPointPropType,
-  imageClassificationResponsePropType,
-} from '../../../../../App/mermaidData/mermaidDataProptypes'
+import type {
+  ImageClassificationPoint,
+  ImageClassificationPointAnnotation,
+  ImageClassificationResponse,
+} from '../../../../../App/mermaidData/mermaidDataTypes'
 import { RowSpaceBetween } from '../../../../generic/positioning'
 
-const moveAnnotationToFront = (array, index) => {
+interface ClassifierGuessesProps {
+  selectedPoint: ImageClassificationPoint
+  dataToReview: ImageClassificationResponse
+  setDataToReview: Dispatch<SetStateAction<ImageClassificationResponse>>
+  onPointsChanged: (pointIds: string[]) => void
+}
+
+const moveAnnotationToFront = (array: ImageClassificationPointAnnotation[], index: number) => {
   const newArray = [...array]
   const [movedAnnotation] = newArray.splice(index, 1)
   return [movedAnnotation, ...newArray]
 }
 
-const ClassifierGuesses = ({ selectedPoint, dataToReview, setDataToReview, onPointsChanged }) => {
+const ClassifierGuesses = ({
+  selectedPoint,
+  dataToReview,
+  setDataToReview,
+  onPointsChanged,
+}: ClassifierGuessesProps) => {
   const classifierGuesses = selectedPoint.annotations.filter(
     (annotation) => annotation.is_machine_created,
   )
   const classifierGuessesSortedByScore = classifierGuesses.toSorted((a, b) => b.score - a.score)
 
-  const selectClassifierGuess = (annotationId) => {
+  const selectClassifierGuess = (annotationId: string) => {
     const classifierGuessIndex = classifierGuessesSortedByScore.findIndex(
       (annotation) => annotation.id === annotationId,
     )
@@ -61,13 +73,6 @@ const ClassifierGuesses = ({ selectedPoint, dataToReview, setDataToReview, onPoi
       </RowSpaceBetween>
     </ClickableRowThatLooksLikeAnEvenTr>
   ))
-}
-
-ClassifierGuesses.propTypes = {
-  selectedPoint: imageClassificationPointPropType.isRequired,
-  dataToReview: imageClassificationResponsePropType.isRequired,
-  setDataToReview: PropTypes.func.isRequired,
-  onPointsChanged: PropTypes.func.isRequired,
 }
 
 export default ClassifierGuesses
