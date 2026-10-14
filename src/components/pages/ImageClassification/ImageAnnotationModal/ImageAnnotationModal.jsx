@@ -219,6 +219,8 @@ const ImageAnnotationModal = ({
             )
           },
           shouldShowServerNonResponseMessage: false,
+          // Going offline unmounts this window and discards the unsaved annotations
+          shouldSetServerNotReachable: false,
         })
       })
       .finally(() => {

@@ -150,4 +150,41 @@ describe('handleHttpResponseError', () => {
 
     expect(toastSpy).not.toHaveBeenCalled()
   })
+
+  test('A request with no response switches Collect offline and runs the callback by default', () => {
+    const callback = vi.fn()
+    const setServerNotReachable = vi.fn()
+
+    handleHttpResponseError({ error: { request: {} }, callback, setServerNotReachable })
+
+    expect(setServerNotReachable).toHaveBeenCalled()
+    expect(callback).toHaveBeenCalled()
+  })
+
+  test('shouldSetServerNotReachable false keeps Collect online and still runs the callback', () => {
+    const callback = vi.fn()
+    const setServerNotReachable = vi.fn()
+
+    handleHttpResponseError({
+      error: { request: {} },
+      callback,
+      setServerNotReachable,
+      shouldSetServerNotReachable: false,
+    })
+
+    expect(setServerNotReachable).not.toHaveBeenCalled()
+    expect(callback).toHaveBeenCalled()
+  })
+
+  test('shouldSetServerNotReachable false still logs out on a 401', () => {
+    const logoutMermaid = vi.fn()
+
+    handleHttpResponseError({
+      error: { response: { status: 401 } },
+      logoutMermaid,
+      shouldSetServerNotReachable: false,
+    })
+
+    expect(logoutMermaid).toHaveBeenCalled()
+  })
 })

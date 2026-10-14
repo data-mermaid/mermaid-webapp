@@ -8,6 +8,9 @@ interface HandleHttpResponseErrorProps {
   callback?: () => unknown
   logoutMermaid?: () => void
   shouldShowServerNonResponseMessage?: boolean
+  // Pass false when the caller recovers from the failure itself, so one unanswered
+  // request doesn't switch Collect offline and unmount online-only pages.
+  shouldSetServerNotReachable?: boolean
   setServerNotReachable?: () => void
 }
 
@@ -16,6 +19,7 @@ const handleHttpResponseError = ({
   callback,
   logoutMermaid,
   shouldShowServerNonResponseMessage = true,
+  shouldSetServerNotReachable = true,
   setServerNotReachable,
 }: HandleHttpResponseErrorProps) => {
   if (error) {
@@ -28,7 +32,9 @@ const handleHttpResponseError = ({
       toast.error(...getToastArguments(i18n.t('api_errors.no_server_response')))
     }
 
-    setServerNotReachable?.()
+    if (shouldSetServerNotReachable) {
+      setServerNotReachable?.()
+    }
     callback?.()
 
     return
@@ -64,15 +70,11 @@ const handleHttpResponseError = ({
     return
   }
 
-  if (callback) {
-    // This allows the logic to be extended in the
-    // scenario where one of the above error conditions isnt met
-    // If a callback is used, the user will want to
-    // consider providing a generic message as well.
-    callback()
-
-    return
-  }
+  // This allows the logic to be extended in the
+  // scenario where one of the above error conditions isnt met
+  // If a callback is used, the user will want to
+  // consider providing a generic message as well.
+  callback?.()
 }
 
 export default handleHttpResponseError
