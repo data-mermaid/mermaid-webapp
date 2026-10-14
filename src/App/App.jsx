@@ -54,14 +54,7 @@ function App({ dexieCurrentUserInstance }) {
     })
 
   const handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied = useCallback(
-    ({ error, callback, shouldShowServerNonResponseMessage }) =>
-      handleHttpResponseError({
-        error,
-        callback,
-        logoutMermaid,
-        shouldShowServerNonResponseMessage,
-        setServerNotReachable,
-      }),
+    (options) => handleHttpResponseError({ ...options, logoutMermaid, setServerNotReachable }),
     [logoutMermaid, setServerNotReachable],
   )
 

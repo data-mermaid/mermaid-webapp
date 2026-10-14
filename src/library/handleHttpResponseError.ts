@@ -8,7 +8,10 @@ interface HandleHttpResponseErrorProps {
   callback?: () => unknown
   logoutMermaid?: () => void
   shouldShowServerNonResponseMessage?: boolean
-  setServerNotReachable?: () => void
+  // Pass false when the caller recovers from the failure itself, so one unanswered
+  // request doesn't switch Collect offline and unmount online-only pages.
+  shouldSetServerNotReachable?: boolean
+  setServerNotReachable?: (error: Partial<AxiosError>) => void
 }
 
 const handleHttpResponseError = ({
@@ -16,6 +19,7 @@ const handleHttpResponseError = ({
   callback,
   logoutMermaid,
   shouldShowServerNonResponseMessage = true,
+  shouldSetServerNotReachable = true,
   setServerNotReachable,
 }: HandleHttpResponseErrorProps) => {
   if (error) {
@@ -28,7 +32,9 @@ const handleHttpResponseError = ({
       toast.error(...getToastArguments(i18n.t('api_errors.no_server_response')))
     }
 
-    setServerNotReachable?.()
+    if (shouldSetServerNotReachable) {
+      setServerNotReachable?.(error)
+    }
     callback?.()
 
     return

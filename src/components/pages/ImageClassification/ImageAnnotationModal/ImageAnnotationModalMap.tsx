@@ -64,7 +64,7 @@ interface ImageAnnotationModalMapProps {
   selectedAttributeId?: string
   setDataToReview: Dispatch<SetStateAction<ImageClassificationResponse>>
   setHasMapLoaded: Dispatch<SetStateAction<boolean>>
-  setIsDataUpdatedSinceLastSave: Dispatch<SetStateAction<boolean>>
+  onPointsChanged: (pointIds: string[]) => void
   setIsTableShowing: Dispatch<SetStateAction<boolean>>
   setPatchesGeoJson: Dispatch<SetStateAction<GeoJSON.FeatureCollection>>
   zoomToPaddedBounds: (bounds: number[], isPointLabelPopupOpen?: boolean) => void
@@ -127,7 +127,7 @@ const ImageAnnotationModalMap = ({
   selectedAttributeId,
   setDataToReview,
   setHasMapLoaded,
-  setIsDataUpdatedSinceLastSave,
+  onPointsChanged,
   setIsTableShowing,
   setPatchesGeoJson,
   zoomToPaddedBounds,
@@ -754,7 +754,7 @@ const ImageAnnotationModalMap = ({
             setDataToReview={setDataToReview}
             pointId={selectedPoint.id}
             databaseSwitchboardInstance={databaseSwitchboardInstance}
-            setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+            onPointsChanged={onPointsChanged}
             resetZoom={resetZoom}
             zoomToSelectedPoint={zoomToSelectedPoint}
             selectNextUnconfirmedPoint={selectNextUnconfirmedPoint}
