@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1  # v2.21.1
+        uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25  # v2.22.1
         with:
           egress-policy: audit
 
@@ -34,7 +34,7 @@ jobs:
 
       - name: Push source translations to Lokalise
         id: lokalise-push
-        uses: lokalise/lokalise-push-action@b4ac74896aee8083798e2095d96b9cee2a4eaf6e # v5.5.0
+        uses: lokalise/lokalise-push-action@eec27af68d869ae40ca76d798a4b9887c0918e59 # v5.6.0
         with:
           api_token: ${{ secrets.LOKALISE_API_TOKEN }}
           project_id: ${{ secrets.LOKALISE_PROJECT_ID }}
