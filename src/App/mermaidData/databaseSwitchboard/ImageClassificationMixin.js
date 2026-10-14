@@ -1,6 +1,10 @@
 import axios from '../../../library/axiosRetry'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
+// Total budget for the request and its retries, so a server that never answers fails the save
+// instead of leaving it pending.
+const ANNOTATION_SAVE_TIMEOUT_MS = 30000
+
 const ImageClassificationMixin = (Base) =>
   class extends Base {
     getAnnotationsForImage = async function getAnnotationsForImage(
@@ -42,7 +46,10 @@ const ImageClassificationMixin = (Base) =>
             .patch(
               `${this._apiBaseUrl}/projects/${projectId}/classification/images/${imageId}/`,
               payload,
-              await getAuthorizationHeaders(this._getAccessToken),
+              {
+                ...(await getAuthorizationHeaders(this._getAccessToken)),
+                timeout: ANNOTATION_SAVE_TIMEOUT_MS,
+              },
             )
             .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)

@@ -115,6 +115,7 @@ const CollectRecordFormPage = ({
   observationsTable1Reducer = [],
   observationsTable2Reducer = [],
   ObservationTable1,
+  observationTable1Props = {},
   ObservationTable2 = undefined,
   isImageClassificationSelected = null,
   sampleUnitFormatSaveFunction,
@@ -601,6 +602,7 @@ const CollectRecordFormPage = ({
           data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[0]}
         >
           <ObservationTable1
+            {...observationTable1Props}
             testId="observations-section"
             onObservationIdsChange={setImageClassificationObservationIds}
             areValidationsShowing={areValidationsShowing}
@@ -737,6 +739,9 @@ CollectRecordFormPage.propTypes = {
   observationsTable1Reducer: observationsReducerPropType,
   observationsTable2Reducer: PropTypes.array,
   ObservationTable1: PropTypes.elementType.isRequired,
+  // Protocol-specific props for ObservationTable1, so the form can pass a stable component
+  // instead of a closure that changes type (and remounts) whenever those values change.
+  observationTable1Props: PropTypes.shape({}),
   ObservationTable2: PropTypes.elementType,
   sampleUnitFormatSaveFunction: PropTypes.func.isRequired,
   sampleUnitName: PropTypes.string.isRequired,

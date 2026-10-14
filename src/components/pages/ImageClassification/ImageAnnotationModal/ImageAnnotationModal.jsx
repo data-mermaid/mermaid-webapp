@@ -21,12 +21,14 @@ import {
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
+import { IconArrowBack, IconArrowRight } from '../../../icons'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import { useImageScale } from '../useImageScale'
 import { useZoomToPointsByAttributeId } from './useZoomToPointsByAttributeId'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { DEFAULT_MAP_ANIMATION_DURATION } from '../imageClassificationConstants'
+import { useAnnotationSaveQueue } from './useAnnotationSaveQueue'
 import { useTranslation } from 'react-i18next'
 
 const EXCLUDE_PARAMS =
@@ -40,9 +42,22 @@ const EXCLUDE_PARAMS =
 
 const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
+// Image annotations that are unclassified have additional values added that need to be stripped before saving
+const removeMappedUnclassifiedPointData = (points) => {
+  return points.map((point) => {
+    if (point.annotations[0].ba_gr === unclassifiedGuid) {
+      return { ...point, annotations: [] }
+    } else {
+      return point
+    }
+  })
+}
+
 const ImageAnnotationModal = ({
   imageId,
   setImageId,
+  previousImageId,
+  nextImageId,
   benthicAttributes,
   growthForms,
   onAnnotationSaveSuccess,
@@ -51,12 +66,11 @@ const ImageAnnotationModal = ({
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const popupRef = useRef(null)
+  const hasFetchedAnnotations = useRef(false)
 
   const [dataToReview, setDataToReview] = useState()
   const [selectedAttributeId, setSelectedAttributeId] = useState('')
   const [hoveredAttributeId, setHoveredAttributeId] = useState('')
-  const [isSaving, setIsSaving] = useState(false)
-  const [isDataUpdatedSinceLastSave, setIsDataUpdatedSinceLastSave] = useState(false)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const [isTableShowing, setIsTableShowing] = useState(true)
   const map = useRef(null)
@@ -70,6 +84,26 @@ const ImageAnnotationModal = ({
 
   const { imageScale } = useImageScale({ hasMapLoaded, dataToReview })
   const handleHttpResponseError = useHttpResponseErrorHandler()
+
+  const { markPointsChanged, flush, hasUnsavedChanges, isSaving } = useAnnotationSaveQueue({
+    points: dataToReview?.points,
+    savePoints: (points) =>
+      databaseSwitchboardInstance
+        .saveAnnotationsForImage(projectId, imageId, removeMappedUnclassifiedPointData(points))
+        .then(() => onAnnotationSaveSuccess()),
+    onSaveFailed: (error) =>
+      handleHttpResponseError({
+        error,
+        callback: () => {
+          toast.error(
+            ...getToastArguments(t('image_classification.errors.save_failed_changes_kept')),
+          )
+        },
+        shouldShowServerNonResponseMessage: false,
+        // Going offline unmounts this window and discards the unsaved annotations
+        shouldSetServerNotReachable: false,
+      }),
+  })
 
   const zoomToPaddedBounds = useCallback(
     (bounds, isPointLabelPopupOpen = false) => {
@@ -115,8 +149,11 @@ const ImageAnnotationModal = ({
     [getBenthicAttributeLabel, getGrowthFormLabel],
   )
 
+  // Fetches once per window. A later run, from a dependency changing identity, would replace
+  // dataToReview and discard changes the save queue hasn't saved yet.
   const _fetchImageAnnotations = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId) {
+    if (databaseSwitchboardInstance && projectId && !hasFetchedAnnotations.current) {
+      hasFetchedAnnotations.current = true
       databaseSwitchboardInstance
         .getAnnotationsForImage(projectId, imageId, EXCLUDE_PARAMS)
         .then((data) => {
@@ -146,6 +183,7 @@ const ImageAnnotationModal = ({
           setDataToReview({ ...data, points: formattedPoints })
         })
         .catch((error) => {
+          hasFetchedAnnotations.current = false
           handleHttpResponseError({
             error,
             callback: () => {
@@ -178,64 +216,49 @@ const ImageAnnotationModal = ({
     popupRef.current?.remove()
   }
 
-  const handleCloseModal = () => {
+  // Saves anything pending first, so closing only asks to discard changes that failed to save
+  const handleCloseModal = async () => {
     if (
-      !isDataUpdatedSinceLastSave ||
+      (await flush()) ||
       window.confirm(t('image_classification.user_message.confirm_image_changes'))
     ) {
       setImageId()
     }
   }
 
-  // Image annotations that are unclassified have additional values added that need to be stripped before saving
-  const removeMappedUnclassifiedPointData = (points) => {
-    return points.map((point) => {
-      if (point.annotations[0].ba_gr === unclassifiedGuid) {
-        return { ...point, annotations: [] }
-      } else {
-        return point
-      }
-    })
+  // Stays on this photo if its changes can't be saved, so none are left behind
+  const handleShowImage = async (targetImageId) => {
+    if (await flush()) {
+      setImageId(targetImageId)
+    }
   }
 
-  const handleSaveChanges = () => {
-    setIsSaving(true)
-    const strippedPoints = removeMappedUnclassifiedPointData(dataToReview.points)
-    databaseSwitchboardInstance
-      .saveAnnotationsForImage(projectId, imageId, strippedPoints)
-      .then(() => {
-        setImageId()
-        onAnnotationSaveSuccess()
-        toast.success(t('image_classification.success.annotations_saved'))
-      })
-      .catch((error) => {
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            toast.error(
-              ...getToastArguments(
-                `${t('image_classification.errors.failed_annotations_save')} ${error.message}`,
-              ),
-            )
-          },
-          shouldShowServerNonResponseMessage: false,
-        })
-      })
-      .finally(() => {
-        setIsSaving(false)
-      })
+  // The save queue reports a failure itself, so only success needs handling here
+  const handleSaveChanges = async () => {
+    if (await flush()) {
+      toast.success(t('image_classification.success.annotations_saved'))
+    }
+  }
+
+  // Changes save as they're made, so Save is only needed once a save has failed
+  const getSaveButtonText = () => {
+    if (isSaving) {
+      return t('buttons.saving')
+    }
+
+    return hasUnsavedChanges ? t('buttons.save_changes') : t('buttons.saved')
   }
 
   return (
     <>
-      <EnhancedPrompt shouldPromptTrigger={isDataUpdatedSinceLastSave} />
+      <EnhancedPrompt shouldPromptTrigger={hasUnsavedChanges} />
       <Modal
         title={dataToReview?.original_image_name ?? ''}
         isOpen
         onDismiss={handleCloseModal}
         maxWidth="fit-content"
         mainContent={
-          dataToReview && !isSaving && imageScale ? (
+          dataToReview && imageScale ? (
             <ImageAnnotationModalContainer>
               <ImageAnnotationModalTable
                 points={dataToReview.points}
@@ -243,7 +266,7 @@ const ImageAnnotationModal = ({
                 selectedAttributeId={selectedAttributeId}
                 setSelectedAttributeId={setSelectedAttributeId}
                 setHoveredAttributeId={setHoveredAttributeId}
-                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+                onPointsChanged={markPointsChanged}
                 zoomToPointsByAttributeId={zoomToPointsByAttributeId}
                 isTableShowing={isTableShowing}
                 closePopup={closePopup}
@@ -260,7 +283,7 @@ const ImageAnnotationModal = ({
                 selectedAttributeId={selectedAttributeId}
                 setDataToReview={setDataToReview}
                 setHasMapLoaded={setHasMapLoaded}
-                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+                onPointsChanged={markPointsChanged}
                 setIsTableShowing={setIsTableShowing}
                 setPatchesGeoJson={setPatchesGeoJson}
                 zoomToPaddedBounds={zoomToPaddedBounds}
@@ -293,15 +316,31 @@ const ImageAnnotationModal = ({
               </LegendItem>
             </Legend>
             <div>
-              <ButtonSecondary type="button" onClick={handleCloseModal} disabled={isSaving}>
+              <ButtonSecondary
+                type="button"
+                onClick={() => handleShowImage(previousImageId)}
+                disabled={!previousImageId}
+              >
+                <IconArrowBack />
+                {t('image_classification.buttons.previous_photo')}
+              </ButtonSecondary>
+              <ButtonSecondary
+                type="button"
+                onClick={() => handleShowImage(nextImageId)}
+                disabled={!nextImageId}
+              >
+                {t('image_classification.buttons.next_photo')}
+                <IconArrowRight />
+              </ButtonSecondary>
+              <ButtonSecondary type="button" onClick={handleCloseModal}>
                 {t('buttons.close')}
               </ButtonSecondary>
               <ButtonPrimary
                 type="button"
                 onClick={handleSaveChanges}
-                disabled={isSaving || !dataToReview}
+                disabled={isSaving || !hasUnsavedChanges}
               >
-                {t('buttons.save_changes')}
+                {getSaveButtonText()}
               </ButtonPrimary>
             </div>
           </Footer>
@@ -314,6 +353,8 @@ const ImageAnnotationModal = ({
 ImageAnnotationModal.propTypes = {
   imageId: PropTypes.string.isRequired,
   setImageId: PropTypes.func.isRequired,
+  previousImageId: PropTypes.string,
+  nextImageId: PropTypes.string,
   benthicAttributes: PropTypes.arrayOf(PropTypes.object).isRequired,
   growthForms: PropTypes.arrayOf(PropTypes.object).isRequired,
   onAnnotationSaveSuccess: PropTypes.func.isRequired,

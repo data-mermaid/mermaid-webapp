@@ -25,7 +25,7 @@ const SelectAttributeFromClassifierGuesses = ({
   selectedPoint,
   dataToReview,
   setDataToReview,
-  setIsDataUpdatedSinceLastSave,
+  onPointsChanged,
   isTitleShowing,
   databaseSwitchboardInstance,
 }) => {
@@ -71,7 +71,7 @@ const SelectAttributeFromClassifierGuesses = ({
     dataToReview,
     setDataToReview,
     databaseSwitchboardInstance,
-    setIsDataUpdatedSinceLastSave,
+    onPointsChanged,
   })
 
   const handleSelectOnChange = (event) => {
@@ -117,7 +117,7 @@ const SelectAttributeFromClassifierGuesses = ({
       point.id === selectedPoint.id ? { ...point, annotations: updatedAnnotations } : point,
     )
     setDataToReview({ ...dataToReview, points: updatedPoints })
-    setIsDataUpdatedSinceLastSave(true)
+    onPointsChanged([selectedPoint.id])
   }
 
   return (
@@ -179,7 +179,7 @@ SelectAttributeFromClassifierGuesses.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
+  onPointsChanged: PropTypes.func.isRequired,
   isTitleShowing: PropTypes.bool,
   databaseSwitchboardInstance: databaseSwitchboardPropTypes,
 }

@@ -477,6 +477,8 @@
     "benthic_attribute": "Benthic attribute",
     "buttons": {
       "confirm_all": "Confirm all",
+      "next_photo": "Next photo",
+      "previous_photo": "Previous photo",
       "upload_photos": "Upload photos",
       "zoom_to_attribute": "Zoom to attribute"
     },
@@ -496,7 +498,8 @@
       "invalid_file_type": "Invalid file type.",
       "no_classification_enabled": "You are currently unable to upload new images for classification. You may access and review previously uploaded images.",
       "no_photo_found": "Failed to delete photo – no photo found.",
-      "photo_too_small": "Photos should be a minimum height and width of {{minImageWidthAndHeight}} pixels. This photo is too small: {{fileName}}."
+      "photo_too_small": "Photos should be a minimum height and width of {{minImageWidthAndHeight}} pixels. This photo is too small: {{fileName}}.",
+      "save_failed_changes_kept": "Failed to save your changes. They are kept in this window. Please try again shortly."
     },
     "feature_introduction": {
       "description": "Through a partnership with <a /> from the University of California San Diego and Scripps Institution of Oceanography, MERMAID now includes AI-based classification using a pyspacer deep learning model. This integration enables fast, scalable analysis of benthic photos so that you can generate insights quickly and consistently with machine learning and AI.",

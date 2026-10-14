@@ -21,7 +21,7 @@ const ImageAnnotationModalTable = ({
   selectedAttributeId,
   setSelectedAttributeId,
   setHoveredAttributeId,
-  setIsDataUpdatedSinceLastSave,
+  onPointsChanged,
   zoomToPointsByAttributeId,
   isTableShowing,
   closePopup,
@@ -74,16 +74,21 @@ const ImageAnnotationModalTable = ({
   const handleRowConfirm = (e, rowData) => {
     e.stopPropagation()
 
+    const rowPointIds = rowData.map(({ id }) => id)
     const updatedPoints = points.map((point) => {
-      const isPointInRow = rowData.some((pointInRow) => pointInRow.id === point.id)
-      if (isPointInRow) {
-        point.annotations[0].is_confirmed = true
+      if (!rowPointIds.includes(point.id)) {
+        return point
       }
 
-      return point
+      const [currentAnnotation, ...otherAnnotations] = point.annotations
+
+      return {
+        ...point,
+        annotations: [{ ...currentAnnotation, is_confirmed: true }, ...otherAnnotations],
+      }
     })
     setDataToReview((prevState) => ({ ...prevState, points: updatedPoints }))
-    setIsDataUpdatedSinceLastSave(true)
+    onPointsChanged(rowPointIds)
   }
 
   const handleZoomClick = ({ event, attributeId }) => {
@@ -188,7 +193,7 @@ ImageAnnotationModalTable.propTypes = {
   setHoveredAttributeId: PropTypes.func.isRequired,
   setDataToReview: PropTypes.func.isRequired,
   points: PropTypes.arrayOf(imageClassificationPointPropType).isRequired,
-  setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
+  onPointsChanged: PropTypes.func.isRequired,
   zoomToPointsByAttributeId: PropTypes.func.isRequired,
   isTableShowing: PropTypes.bool.isRequired,
   closePopup: PropTypes.func.isRequired,

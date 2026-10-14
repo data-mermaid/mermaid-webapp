@@ -190,6 +190,7 @@ const ImageClassificationObservationTable = ({
   const { t } = useTranslation()
 
   const [imageId, setImageId] = useState<string>()
+  const hasUnrefreshedAnnotationSaves = useRef(false)
   const [growthForms, setGrowthForms] = useState<GrowthForm[] | undefined>()
   const [benthicAttributes, setBenthicAttributes] = useState<BenthicAttribute[] | undefined>()
   const [distilledImages, setDistilledImages] = useState<DistilledImage[]>([])
@@ -355,6 +356,21 @@ const ImageClassificationObservationTable = ({
       setDistilledImages(distilled)
     }
   }, [benthicAttributes, growthForms, imageSet, distillImagesData])
+
+  // The review window saves as it goes. Refreshing while it's open would reload the photo under
+  // review, so the table refreshes once the window closes instead.
+  const _refreshImagesAfterReview = useEffect(() => {
+    if (!imageId && hasUnrefreshedAnnotationSaves.current) {
+      hasUnrefreshedAnnotationSaves.current = false
+      fetchImages()
+    }
+  }, [imageId, fetchImages])
+
+  // The review window's Previous and Next move through the photos it can open, in table order
+  const reviewableImageIds = distilledImages
+    .filter(({ file }) => getIsImageProcessed(file.classification_status?.status))
+    .map(({ file }) => file.id)
+  const reviewedImageIndex = reviewableImageIds.indexOf(imageId)
 
   // Only rows with unconfirmed points render a validation, matching
   // shouldDisplayObservationValidation below.
@@ -784,11 +800,17 @@ const ImageClassificationObservationTable = ({
       </RowRight>
       {!!imageId && !!benthicAttributes && !!growthForms && (
         <ImageAnnotationModal
+          // A new photo gets a fresh window, so no map, selection or save state carries over
+          key={imageId}
           imageId={imageId}
           setImageId={setImageId}
+          previousImageId={reviewableImageIds[reviewedImageIndex - 1]}
+          nextImageId={reviewableImageIds[reviewedImageIndex + 1]}
           benthicAttributes={benthicAttributes}
           growthForms={growthForms}
-          onAnnotationSaveSuccess={fetchImages}
+          onAnnotationSaveSuccess={() => {
+            hasUnrefreshedAnnotationSaves.current = true
+          }}
         />
       )}
       {isRemovePhotoModalOpen && RemovePhotoModal}
