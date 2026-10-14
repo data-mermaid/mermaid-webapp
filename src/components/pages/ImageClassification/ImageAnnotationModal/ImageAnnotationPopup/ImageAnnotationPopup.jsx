@@ -22,7 +22,7 @@ const ImageAnnotationPopup = ({
   setDataToReview,
   pointId,
   databaseSwitchboardInstance,
-  setIsDataUpdatedSinceLastSave,
+  onPointsChanged,
   resetZoom,
   zoomToSelectedPoint,
   selectNextUnconfirmedPoint,
@@ -57,9 +57,9 @@ const ImageAnnotationPopup = ({
       })
 
       setDataToReview((previousState) => ({ ...previousState, points: updatedPoints }))
-      setIsDataUpdatedSinceLastSave(true)
+      onPointsChanged([pointId])
     },
-    [dataToReview.points, setDataToReview, setIsDataUpdatedSinceLastSave],
+    [dataToReview.points, setDataToReview, onPointsChanged],
   )
 
   return (
@@ -77,7 +77,7 @@ const ImageAnnotationPopup = ({
             selectedPoint={selectedPoint}
             dataToReview={dataToReview}
             setDataToReview={setDataToReview}
-            setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+            onPointsChanged={onPointsChanged}
           />
         </div>
       )}
@@ -86,7 +86,7 @@ const ImageAnnotationPopup = ({
         isTitleShowing={!areAnyClassifierGuesses}
         dataToReview={dataToReview}
         setDataToReview={setDataToReview}
-        setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+        onPointsChanged={onPointsChanged}
         databaseSwitchboardInstance={databaseSwitchboardInstance}
       />
 
@@ -138,7 +138,7 @@ ImageAnnotationPopup.propTypes = {
   setDataToReview: PropTypes.func.isRequired,
   pointId: PropTypes.string.isRequired,
   databaseSwitchboardInstance: databaseSwitchboardPropTypes,
-  setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
+  onPointsChanged: PropTypes.func.isRequired,
   resetZoom: PropTypes.func.isRequired,
   zoomToSelectedPoint: PropTypes.func.isRequired,
   selectNextUnconfirmedPoint: PropTypes.func.isRequired,

@@ -22,12 +22,31 @@ vi.mock('./ImageAnnotationModalMap', () => ({ default: () => 'annotation map' })
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 const annotationsUrl = `${apiBaseUrl}/projects/5/classification/images/fake-image-id/`
 
+const fakeBenthicAttribute = { id: 'fake-benthic-attribute-id', name: 'Fake coral' }
+
+// One point with an unconfirmed classifier guess, so its table row has a Confirm all button
 const annotationsResponse = {
   original_image_name: 'fake-image.jpg',
   original_image_width: 1000,
   original_image_height: 800,
   patch_size: 100,
-  points: [{ id: 'fake-point-id', row: 400, column: 500, annotations: [] }],
+  points: [
+    {
+      id: 'fake-point-id',
+      row: 400,
+      column: 500,
+      annotations: [
+        {
+          id: 'fake-annotation-id',
+          benthic_attribute: fakeBenthicAttribute.id,
+          growth_form: null,
+          is_confirmed: false,
+          is_machine_created: true,
+          score: 90,
+        },
+      ],
+    },
+  ],
 }
 
 const renderModal = ({ setImageId = () => {}, setServerNotReachable = () => {} } = {}) =>
@@ -46,7 +65,7 @@ const renderModal = ({ setImageId = () => {}, setServerNotReachable = () => {} }
             <ImageAnnotationModal
               imageId="fake-image-id"
               setImageId={setImageId}
-              benthicAttributes={[]}
+              benthicAttributes={[fakeBenthicAttribute]}
               growthForms={[]}
               onAnnotationSaveSuccess={() => {}}
             />
@@ -72,6 +91,34 @@ test('Save is disabled until the image annotations have loaded', async () => {
   await waitFor(() => expect(saveButton).toBeEnabled())
 })
 
+test('Confirming points saves them in the background without closing the window', async () => {
+  const setImageId = vi.fn()
+  let savedPoints
+
+  mockMermaidApiAllSuccessful.use(
+    http.get(annotationsUrl, () => HttpResponse.json(annotationsResponse)),
+    http.patch(annotationsUrl, async ({ request }) => {
+      ;({ points: savedPoints } = await request.json())
+
+      return HttpResponse.json({})
+    }),
+  )
+
+  const { user } = renderModal({ setImageId })
+
+  await user.click(
+    await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' }),
+  )
+
+  await waitFor(() => expect(savedPoints).toBeDefined())
+  expect(savedPoints).toHaveLength(1)
+  expect(savedPoints[0].annotations[0]).toMatchObject({
+    id: 'fake-annotation-id',
+    is_confirmed: true,
+  })
+  expect(setImageId).not.toHaveBeenCalled()
+})
+
 // Going offline unmounts the window, so a save with no server response must leave Collect online
 // for the user to keep their annotations and try again.
 test('A save that gets no server response keeps the window open and Collect online', async () => {
@@ -90,7 +137,9 @@ test('A save that gets no server response keeps the window open and Collect onli
 
   const saveButton = screen.getByRole('button', { name: 'buttons.save_changes' })
 
-  await waitFor(() => expect(saveButton).toBeEnabled())
+  await user.click(
+    await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' }),
+  )
   await user.click(saveButton)
 
   await waitFor(() =>

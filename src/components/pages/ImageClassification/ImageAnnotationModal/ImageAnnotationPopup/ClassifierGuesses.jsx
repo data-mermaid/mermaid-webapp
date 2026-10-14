@@ -16,12 +16,7 @@ const moveAnnotationToFront = (array, index) => {
   return [movedAnnotation, ...newArray]
 }
 
-const ClassifierGuesses = ({
-  selectedPoint,
-  dataToReview,
-  setDataToReview,
-  setIsDataUpdatedSinceLastSave,
-}) => {
+const ClassifierGuesses = ({ selectedPoint, dataToReview, setDataToReview, onPointsChanged }) => {
   const classifierGuesses = selectedPoint.annotations.filter(
     (annotation) => annotation.is_machine_created,
   )
@@ -46,7 +41,7 @@ const ClassifierGuesses = ({
         : point,
     )
     setDataToReview({ ...dataToReview, points: updatedPoints })
-    setIsDataUpdatedSinceLastSave(true)
+    onPointsChanged([selectedPoint.id])
   }
 
   return classifierGuessesSortedByScore.map((annotation) => (
@@ -72,7 +67,7 @@ ClassifierGuesses.propTypes = {
   selectedPoint: imageClassificationPointPropType.isRequired,
   dataToReview: imageClassificationResponsePropType.isRequired,
   setDataToReview: PropTypes.func.isRequired,
-  setIsDataUpdatedSinceLastSave: PropTypes.func.isRequired,
+  onPointsChanged: PropTypes.func.isRequired,
 }
 
 export default ClassifierGuesses

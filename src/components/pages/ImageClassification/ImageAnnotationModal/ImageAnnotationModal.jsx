@@ -27,6 +27,7 @@ import { useZoomToPointsByAttributeId } from './useZoomToPointsByAttributeId'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { DEFAULT_MAP_ANIMATION_DURATION } from '../imageClassificationConstants'
+import { useAnnotationSaveQueue } from './useAnnotationSaveQueue'
 import { useTranslation } from 'react-i18next'
 
 const EXCLUDE_PARAMS =
@@ -39,6 +40,17 @@ const EXCLUDE_PARAMS =
 // When a user selects a new annotation for that point, it is pushed to the first position in the annotations array.
 
 const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
+
+// Image annotations that are unclassified have additional values added that need to be stripped before saving
+const removeMappedUnclassifiedPointData = (points) => {
+  return points.map((point) => {
+    if (point.annotations[0].ba_gr === unclassifiedGuid) {
+      return { ...point, annotations: [] }
+    } else {
+      return point
+    }
+  })
+}
 
 const ImageAnnotationModal = ({
   imageId,
@@ -56,7 +68,6 @@ const ImageAnnotationModal = ({
   const [selectedAttributeId, setSelectedAttributeId] = useState('')
   const [hoveredAttributeId, setHoveredAttributeId] = useState('')
   const [isSaving, setIsSaving] = useState(false)
-  const [isDataUpdatedSinceLastSave, setIsDataUpdatedSinceLastSave] = useState(false)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const [isTableShowing, setIsTableShowing] = useState(true)
   const map = useRef(null)
@@ -70,6 +81,30 @@ const ImageAnnotationModal = ({
 
   const { imageScale } = useImageScale({ hasMapLoaded, dataToReview })
   const handleHttpResponseError = useHttpResponseErrorHandler()
+
+  const { markPointsChanged, flush, hasUnsavedChanges } = useAnnotationSaveQueue({
+    points: dataToReview?.points,
+    savePoints: (points) =>
+      databaseSwitchboardInstance.saveAnnotationsForImage(
+        projectId,
+        imageId,
+        removeMappedUnclassifiedPointData(points),
+      ),
+    onSaveFailed: (error) =>
+      handleHttpResponseError({
+        error,
+        callback: () => {
+          toast.error(
+            ...getToastArguments(
+              `${t('image_classification.errors.failed_annotations_save')} ${error.message}`,
+            ),
+          )
+        },
+        shouldShowServerNonResponseMessage: false,
+        // Going offline unmounts this window and discards the unsaved annotations
+        shouldSetServerNotReachable: false,
+      }),
+  })
 
   const zoomToPaddedBounds = useCallback(
     (bounds, isPointLabelPopupOpen = false) => {
@@ -180,57 +215,29 @@ const ImageAnnotationModal = ({
 
   const handleCloseModal = () => {
     if (
-      !isDataUpdatedSinceLastSave ||
+      !hasUnsavedChanges ||
       window.confirm(t('image_classification.user_message.confirm_image_changes'))
     ) {
       setImageId()
     }
   }
 
-  // Image annotations that are unclassified have additional values added that need to be stripped before saving
-  const removeMappedUnclassifiedPointData = (points) => {
-    return points.map((point) => {
-      if (point.annotations[0].ba_gr === unclassifiedGuid) {
-        return { ...point, annotations: [] }
-      } else {
-        return point
-      }
-    })
-  }
-
-  const handleSaveChanges = () => {
+  // The save queue reports a failure itself, so only success needs handling here
+  const handleSaveChanges = async () => {
     setIsSaving(true)
-    const strippedPoints = removeMappedUnclassifiedPointData(dataToReview.points)
-    databaseSwitchboardInstance
-      .saveAnnotationsForImage(projectId, imageId, strippedPoints)
-      .then(() => {
-        setImageId()
-        onAnnotationSaveSuccess()
-        toast.success(t('image_classification.success.annotations_saved'))
-      })
-      .catch((error) => {
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            toast.error(
-              ...getToastArguments(
-                `${t('image_classification.errors.failed_annotations_save')} ${error.message}`,
-              ),
-            )
-          },
-          shouldShowServerNonResponseMessage: false,
-          // Going offline unmounts this window and discards the unsaved annotations
-          shouldSetServerNotReachable: false,
-        })
-      })
-      .finally(() => {
-        setIsSaving(false)
-      })
+    const isEverythingSaved = await flush()
+    setIsSaving(false)
+
+    if (isEverythingSaved) {
+      setImageId()
+      onAnnotationSaveSuccess()
+      toast.success(t('image_classification.success.annotations_saved'))
+    }
   }
 
   return (
     <>
-      <EnhancedPrompt shouldPromptTrigger={isDataUpdatedSinceLastSave} />
+      <EnhancedPrompt shouldPromptTrigger={hasUnsavedChanges} />
       <Modal
         title={dataToReview?.original_image_name ?? ''}
         isOpen
@@ -245,7 +252,7 @@ const ImageAnnotationModal = ({
                 selectedAttributeId={selectedAttributeId}
                 setSelectedAttributeId={setSelectedAttributeId}
                 setHoveredAttributeId={setHoveredAttributeId}
-                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+                onPointsChanged={markPointsChanged}
                 zoomToPointsByAttributeId={zoomToPointsByAttributeId}
                 isTableShowing={isTableShowing}
                 closePopup={closePopup}
@@ -262,7 +269,7 @@ const ImageAnnotationModal = ({
                 selectedAttributeId={selectedAttributeId}
                 setDataToReview={setDataToReview}
                 setHasMapLoaded={setHasMapLoaded}
-                setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+                onPointsChanged={markPointsChanged}
                 setIsTableShowing={setIsTableShowing}
                 setPatchesGeoJson={setPatchesGeoJson}
                 zoomToPaddedBounds={zoomToPaddedBounds}
