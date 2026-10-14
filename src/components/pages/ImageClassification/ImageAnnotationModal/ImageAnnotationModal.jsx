@@ -63,11 +63,11 @@ const ImageAnnotationModal = ({
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const popupRef = useRef(null)
+  const hasSavedAnnotations = useRef(false)
 
   const [dataToReview, setDataToReview] = useState()
   const [selectedAttributeId, setSelectedAttributeId] = useState('')
   const [hoveredAttributeId, setHoveredAttributeId] = useState('')
-  const [isSaving, setIsSaving] = useState(false)
   const [hasMapLoaded, setHasMapLoaded] = useState(false)
   const [isTableShowing, setIsTableShowing] = useState(true)
   const map = useRef(null)
@@ -82,14 +82,14 @@ const ImageAnnotationModal = ({
   const { imageScale } = useImageScale({ hasMapLoaded, dataToReview })
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
-  const { markPointsChanged, flush, hasUnsavedChanges } = useAnnotationSaveQueue({
+  const { markPointsChanged, flush, hasUnsavedChanges, isSaving } = useAnnotationSaveQueue({
     points: dataToReview?.points,
     savePoints: (points) =>
-      databaseSwitchboardInstance.saveAnnotationsForImage(
-        projectId,
-        imageId,
-        removeMappedUnclassifiedPointData(points),
-      ),
+      databaseSwitchboardInstance
+        .saveAnnotationsForImage(projectId, imageId, removeMappedUnclassifiedPointData(points))
+        .then(() => {
+          hasSavedAnnotations.current = true
+        }),
     onSaveFailed: (error) =>
       handleHttpResponseError({
         error,
@@ -213,26 +213,36 @@ const ImageAnnotationModal = ({
     popupRef.current?.remove()
   }
 
-  const handleCloseModal = () => {
+  // Saves anything pending first, so closing only asks to discard changes that failed to save.
+  // The photo table refreshes once on close rather than after every background save.
+  const handleCloseModal = async () => {
+    const isEverythingSaved = await flush()
+
     if (
-      !hasUnsavedChanges ||
+      isEverythingSaved ||
       window.confirm(t('image_classification.user_message.confirm_image_changes'))
     ) {
       setImageId()
+      if (hasSavedAnnotations.current) {
+        onAnnotationSaveSuccess()
+      }
     }
   }
 
   // The save queue reports a failure itself, so only success needs handling here
   const handleSaveChanges = async () => {
-    setIsSaving(true)
-    const isEverythingSaved = await flush()
-    setIsSaving(false)
-
-    if (isEverythingSaved) {
-      setImageId()
-      onAnnotationSaveSuccess()
+    if (await flush()) {
       toast.success(t('image_classification.success.annotations_saved'))
     }
+  }
+
+  // Changes save as they're made, so Save is only needed once a save has failed
+  const getSaveButtonText = () => {
+    if (isSaving) {
+      return t('buttons.saving')
+    }
+
+    return hasUnsavedChanges ? t('buttons.save_changes') : t('buttons.saved')
   }
 
   return (
@@ -244,7 +254,7 @@ const ImageAnnotationModal = ({
         onDismiss={handleCloseModal}
         maxWidth="fit-content"
         mainContent={
-          dataToReview && !isSaving && imageScale ? (
+          dataToReview && imageScale ? (
             <ImageAnnotationModalContainer>
               <ImageAnnotationModalTable
                 points={dataToReview.points}
@@ -302,15 +312,15 @@ const ImageAnnotationModal = ({
               </LegendItem>
             </Legend>
             <div>
-              <ButtonSecondary type="button" onClick={handleCloseModal} disabled={isSaving}>
+              <ButtonSecondary type="button" onClick={handleCloseModal}>
                 {t('buttons.close')}
               </ButtonSecondary>
               <ButtonPrimary
                 type="button"
                 onClick={handleSaveChanges}
-                disabled={isSaving || !dataToReview}
+                disabled={isSaving || !hasUnsavedChanges}
               >
-                {t('buttons.save_changes')}
+                {getSaveButtonText()}
               </ButtonPrimary>
             </div>
           </Footer>

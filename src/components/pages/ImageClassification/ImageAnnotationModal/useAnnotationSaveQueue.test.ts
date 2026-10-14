@@ -59,6 +59,7 @@ describe('useAnnotationSaveQueue', () => {
 
     act(() => result.current.changePoint('a', 1))
     expect(result.current.hasUnsavedChanges).toBe(true)
+    expect(result.current.isSaving).toBe(true)
     await advance()
 
     expect(savePoints).toHaveBeenCalledTimes(1)

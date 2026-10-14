@@ -118,10 +118,12 @@ export const useAnnotationSaveQueue = <Point extends { id: string }>({
     }
   }, [changeCount, drain])
 
-  // Call in the same event handler as the state update, so the save reads the updated points
+  // Call in the same event handler as the state update, so the save reads the updated points.
+  // isSaving goes true straight away, so nothing reads the gap before the save starts as failed.
   const markPointsChanged = useCallback((pointIds: string[]) => {
     pointIds.forEach((id) => pendingPointIds.current.add(id))
     setHasUnsavedChanges(true)
+    setIsSaving(true)
     setChangeCount((count) => count + 1)
   }, [])
 

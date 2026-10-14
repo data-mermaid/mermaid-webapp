@@ -1,4 +1,4 @@
-import { expect, test, vi } from 'vitest'
+import { afterEach, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 
 import React from 'react'
@@ -12,6 +12,7 @@ import {
   waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import ImageAnnotationModal from './ImageAnnotationModal'
+import { RETRY_DELAYS_MS } from './useAnnotationSaveQueue'
 import { HttpResponseErrorHandlerProvider } from '../../../../App/HttpResponseErrorHandlerContext'
 import handleHttpResponseError from '../../../../library/handleHttpResponseError'
 
@@ -49,7 +50,11 @@ const annotationsResponse = {
   ],
 }
 
-const renderModal = ({ setImageId = () => {}, setServerNotReachable = () => {} } = {}) =>
+const renderModal = ({
+  setImageId = () => {},
+  setServerNotReachable = () => {},
+  onAnnotationSaveSuccess = () => {},
+} = {}) =>
   renderAuthenticatedOnline(
     // The shared render helpers stub the handler out. The real one is what decides whether a
     // failed request switches Collect offline.
@@ -67,7 +72,7 @@ const renderModal = ({ setImageId = () => {}, setServerNotReachable = () => {} }
               setImageId={setImageId}
               benthicAttributes={[fakeBenthicAttribute]}
               growthForms={[]}
-              onAnnotationSaveSuccess={() => {}}
+              onAnnotationSaveSuccess={onAnnotationSaveSuccess}
             />
           }
         />
@@ -76,41 +81,49 @@ const renderModal = ({ setImageId = () => {}, setServerNotReachable = () => {} }
     { initialEntries: ['/projects/5/collecting/benthicpqt/fake-record-id'] },
   )
 
-// Saving reads the fetched annotations, so enabling Save early throws and strands the button.
-test('Save is disabled until the image annotations have loaded', async () => {
+const mockAnnotationsApi = (patchResolver = () => HttpResponse.json({})) =>
   mockMermaidApiAllSuccessful.use(
     http.get(annotationsUrl, () => HttpResponse.json(annotationsResponse)),
+    http.patch(annotationsUrl, patchResolver),
   )
 
-  renderModal()
-
-  // render is synchronous, so this asserts on the first paint, before the fetch can resolve
-  const saveButton = screen.getByRole('button', { name: 'buttons.save_changes' })
-
-  expect(saveButton).toBeDisabled()
-  await waitFor(() => expect(saveButton).toBeEnabled())
-})
-
-test('Confirming points saves them in the background without closing the window', async () => {
-  const setImageId = vi.fn()
-  let savedPoints
-
-  mockMermaidApiAllSuccessful.use(
-    http.get(annotationsUrl, () => HttpResponse.json(annotationsResponse)),
-    http.patch(annotationsUrl, async ({ request }) => {
-      ;({ points: savedPoints } = await request.json())
-
-      return HttpResponse.json({})
-    }),
-  )
-
-  const { user } = renderModal({ setImageId })
-
-  await user.click(
+const confirmAllPoints = async (user) =>
+  user.click(
     await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' }),
   )
 
-  await waitFor(() => expect(savedPoints).toBeDefined())
+// The window's X button shares the accessible name, so find the footer button by its text
+const getFooterCloseButton = () => screen.getByText('buttons.close', { selector: 'button' })
+
+afterEach(() => {
+  vi.useRealTimers()
+})
+
+test('Save stays off and reads Saved while there is nothing to save', async () => {
+  mockAnnotationsApi()
+
+  renderModal()
+
+  await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' })
+
+  expect(screen.getByRole('button', { name: 'buttons.saved' })).toBeDisabled()
+})
+
+test('Confirming points saves them in the background and keeps the window open', async () => {
+  const setImageId = vi.fn()
+  let savedPoints
+
+  mockAnnotationsApi(async ({ request }) => {
+    ;({ points: savedPoints } = await request.json())
+
+    return HttpResponse.json({})
+  })
+
+  const { user } = renderModal({ setImageId })
+
+  await confirmAllPoints(user)
+
+  expect(await screen.findByRole('button', { name: 'buttons.saved' })).toBeDisabled()
   expect(savedPoints).toHaveLength(1)
   expect(savedPoints[0].annotations[0]).toMatchObject({
     id: 'fake-annotation-id',
@@ -121,34 +134,60 @@ test('Confirming points saves them in the background without closing the window'
 
 // Going offline unmounts the window, so a save with no server response must leave Collect online
 // for the user to keep their annotations and try again.
-test('A save that gets no server response keeps the window open and Collect online', async () => {
+test('A background save that keeps failing leaves Collect online and turns Save back on', async () => {
+  // Runs the retry waits instantly while still letting real time pass for user events
+  vi.useFakeTimers({ shouldAdvanceTime: true })
   // handleHttpResponseError logs the axios error it is handling; keep it out of the test output
   vi.spyOn(console, 'error').mockImplementation(() => {})
   const toastErrorSpy = vi.spyOn(toast, 'error')
   const setServerNotReachable = vi.fn()
   const setImageId = vi.fn()
+  let isServerResponding = false
 
-  mockMermaidApiAllSuccessful.use(
-    http.get(annotationsUrl, () => HttpResponse.json(annotationsResponse)),
-    http.patch(annotationsUrl, () => HttpResponse.error()),
-  )
+  mockAnnotationsApi(() => (isServerResponding ? HttpResponse.json({}) : HttpResponse.error()))
 
   const { user } = renderModal({ setImageId, setServerNotReachable })
 
-  const saveButton = screen.getByRole('button', { name: 'buttons.save_changes' })
+  await confirmAllPoints(user)
+  for (const delay of RETRY_DELAYS_MS) {
+    await vi.advanceTimersByTimeAsync(delay)
+  }
 
-  await user.click(
-    await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' }),
-  )
-  await user.click(saveButton)
+  const saveButton = await screen.findByRole('button', { name: 'buttons.save_changes' })
 
-  await waitFor(() =>
-    expect(toastErrorSpy.mock.calls.at(-1)?.[0].props.message).toContain(
-      'image_classification.errors.failed_annotations_save',
-    ),
+  expect(saveButton).toBeEnabled()
+  expect(toastErrorSpy.mock.calls.at(-1)?.[0].props.message).toContain(
+    'image_classification.errors.failed_annotations_save',
   )
-  await waitFor(() => expect(saveButton).toBeEnabled())
   expect(screen.getByText('annotation map')).toBeInTheDocument()
   expect(setServerNotReachable).not.toHaveBeenCalled()
   expect(setImageId).not.toHaveBeenCalled()
+
+  isServerResponding = true
+  await user.click(saveButton)
+
+  expect(await screen.findByRole('button', { name: 'buttons.saved' })).toBeDisabled()
+  expect(setImageId).not.toHaveBeenCalled()
+})
+
+test('Closing refreshes the photo table only when annotations were saved', async () => {
+  const setImageId = vi.fn()
+  const onAnnotationSaveSuccess = vi.fn()
+
+  mockAnnotationsApi()
+
+  const { user } = renderModal({ setImageId, onAnnotationSaveSuccess })
+
+  await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' })
+  await user.click(getFooterCloseButton())
+
+  await waitFor(() => expect(setImageId).toHaveBeenCalledTimes(1))
+  expect(onAnnotationSaveSuccess).not.toHaveBeenCalled()
+
+  await confirmAllPoints(user)
+  await screen.findByRole('button', { name: 'buttons.saved' })
+  await user.click(getFooterCloseButton())
+
+  await waitFor(() => expect(setImageId).toHaveBeenCalledTimes(2))
+  expect(onAnnotationSaveSuccess).toHaveBeenCalledTimes(1)
 })
