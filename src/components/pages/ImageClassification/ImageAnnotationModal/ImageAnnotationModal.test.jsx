@@ -157,8 +157,8 @@ test('A background save that keeps failing leaves Collect online and turns Save 
   const saveButton = await screen.findByRole('button', { name: 'buttons.save_changes' })
 
   expect(saveButton).toBeEnabled()
-  expect(toastErrorSpy.mock.calls.at(-1)?.[0].props.message).toContain(
-    'image_classification.errors.failed_annotations_save',
+  expect(toastErrorSpy.mock.calls.at(-1)?.[0].props.message).toBe(
+    'image_classification.errors.save_failed_changes_kept',
   )
   expect(screen.getByText('annotation map')).toBeInTheDocument()
   expect(setServerNotReachable).not.toHaveBeenCalled()

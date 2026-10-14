@@ -95,9 +95,7 @@ const ImageAnnotationModal = ({
         error,
         callback: () => {
           toast.error(
-            ...getToastArguments(
-              `${t('image_classification.errors.failed_annotations_save')} ${error.message}`,
-            ),
+            ...getToastArguments(t('image_classification.errors.save_failed_changes_kept')),
           )
         },
         shouldShowServerNonResponseMessage: false,
