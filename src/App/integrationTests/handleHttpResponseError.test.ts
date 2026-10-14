@@ -1,7 +1,16 @@
 import { afterEach, describe, expect, test, vi } from 'vitest'
+import type { ReactElement } from 'react'
+import type { AxiosError } from 'axios'
 import { toast, Slide } from 'react-toastify'
 import handleHttpResponseError from '../../library/handleHttpResponseError'
 import i18n from '../../../i18n'
+
+// The tests build only the fields handleHttpResponseError reads, and some pass deliberately
+// malformed errors, so they're cast rather than built as full AxiosErrors.
+const fakeError = (error: unknown) => error as Partial<AxiosError>
+
+type ToastCall = [ReactElement<{ message: string; testId: string }>, unknown]
+
 describe('handleHttpResponseError', () => {
   beforeEach(() => {
     // handleHttpResponseError always logs the error to console.error; suppress the expected noise.
@@ -14,7 +23,11 @@ describe('handleHttpResponseError', () => {
     const callback = vi.fn()
     const logoutMermaid = vi.fn()
 
-    handleHttpResponseError({ error: { response: { status: 401 } }, callback, logoutMermaid })
+    handleHttpResponseError({
+      error: fakeError({ response: { status: 401 } }),
+      callback,
+      logoutMermaid,
+    })
 
     expect(logoutMermaid).toHaveBeenCalled()
     expect(callback).not.toHaveBeenCalled()
@@ -26,11 +39,15 @@ describe('handleHttpResponseError', () => {
     const callback = vi.fn()
     const logoutMermaid = vi.fn()
 
-    handleHttpResponseError({ error: { response: { status: 403 } }, callback, logoutMermaid })
+    handleHttpResponseError({
+      error: fakeError({ response: { status: 403 } }),
+      callback,
+      logoutMermaid,
+    })
 
     expect(tSpy).toHaveBeenCalledWith('api_errors.unauthorized_user')
 
-    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0] as ToastCall
 
     expect(toastContent.props).toEqual({
       message: 'api_errors.unauthorized_user',
@@ -50,11 +67,15 @@ describe('handleHttpResponseError', () => {
     const callback = vi.fn()
     const logoutMermaid = vi.fn()
 
-    handleHttpResponseError({ error: { response: { status: 500 } }, callback, logoutMermaid })
+    handleHttpResponseError({
+      error: fakeError({ response: { status: 500 } }),
+      callback,
+      logoutMermaid,
+    })
 
     expect(tSpy).toHaveBeenCalledWith('api_errors.unspecified_error')
 
-    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0] as ToastCall
 
     expect(toastContent.props).toEqual({
       message: 'api_errors.unspecified_error',
@@ -74,11 +95,15 @@ describe('handleHttpResponseError', () => {
     const callback = vi.fn()
     const logoutMermaid = vi.fn()
 
-    handleHttpResponseError({ error: { response: { status: 502 } }, callback, logoutMermaid })
+    handleHttpResponseError({
+      error: fakeError({ response: { status: 502 } }),
+      callback,
+      logoutMermaid,
+    })
 
     expect(tSpy).toHaveBeenCalledWith('api_errors.unspecified_error')
 
-    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0] as ToastCall
 
     expect(toastContent.props).toEqual({
       message: 'api_errors.unspecified_error',
@@ -98,11 +123,15 @@ describe('handleHttpResponseError', () => {
     const callback = vi.fn()
     const logoutMermaid = vi.fn()
 
-    handleHttpResponseError({ error: { response: { status: 503 } }, callback, logoutMermaid })
+    handleHttpResponseError({
+      error: fakeError({ response: { status: 503 } }),
+      callback,
+      logoutMermaid,
+    })
 
     expect(tSpy).toHaveBeenCalledWith('api_errors.unspecified_error')
 
-    const [toastContent, toastOptions] = toastSpy.mock.calls[0]
+    const [toastContent, toastOptions] = toastSpy.mock.calls[0] as ToastCall
 
     expect(toastContent.props).toEqual({
       message: 'api_errors.unspecified_error',
@@ -120,7 +149,9 @@ describe('handleHttpResponseError', () => {
     const logoutMermaid = vi.fn()
 
     handleHttpResponseError({
-      error: { response: { status: 'something that wont be handled in util function logic' } },
+      error: fakeError({
+        response: { status: 'something that wont be handled in util function logic' },
+      }),
       callback,
       logoutMermaid,
     })
@@ -133,7 +164,7 @@ describe('handleHttpResponseError', () => {
     const logoutMermaid = vi.fn()
 
     handleHttpResponseError({
-      error: 'the provided error',
+      error: fakeError('the provided error'),
       logoutMermaid,
     })
 
@@ -146,7 +177,11 @@ describe('handleHttpResponseError', () => {
     const callback = vi.fn()
     const logoutMermaid = vi.fn()
 
-    handleHttpResponseError({ error: { response: { status: 400 } }, callback, logoutMermaid })
+    handleHttpResponseError({
+      error: fakeError({ response: { status: 400 } }),
+      callback,
+      logoutMermaid,
+    })
 
     expect(toastSpy).not.toHaveBeenCalled()
   })
@@ -155,7 +190,7 @@ describe('handleHttpResponseError', () => {
     const callback = vi.fn()
     const setServerNotReachable = vi.fn()
 
-    handleHttpResponseError({ error: { request: {} }, callback, setServerNotReachable })
+    handleHttpResponseError({ error: fakeError({ request: {} }), callback, setServerNotReachable })
 
     expect(setServerNotReachable).toHaveBeenCalled()
     expect(callback).toHaveBeenCalled()
@@ -166,7 +201,7 @@ describe('handleHttpResponseError', () => {
     const setServerNotReachable = vi.fn()
 
     handleHttpResponseError({
-      error: { request: {} },
+      error: fakeError({ request: {} }),
       callback,
       setServerNotReachable,
       shouldSetServerNotReachable: false,
@@ -180,7 +215,7 @@ describe('handleHttpResponseError', () => {
     const logoutMermaid = vi.fn()
 
     handleHttpResponseError({
-      error: { response: { status: 401 } },
+      error: fakeError({ response: { status: 401 } }),
       logoutMermaid,
       shouldSetServerNotReachable: false,
     })
