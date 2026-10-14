@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/react'
 
-export type OfflineSwitchReason = 'request_no_response' | 'health_check_failed' | 'browser_offline'
+type OfflineSwitchReason = 'request_no_response' | 'health_check_failed' | 'browser_offline'
 
 // Once per reason per page load: enough to count affected sessions and see why, without a
 // struggling server filling the Sentry quota with repeats.

@@ -371,7 +371,6 @@ const ImageClassificationObservationTable = ({
     .filter(({ file }) => getIsImageProcessed(file.classification_status?.status))
     .map(({ file }) => file.id)
   const reviewedImageIndex = reviewableImageIds.indexOf(imageId)
-  const isReviewedImageListed = reviewedImageIndex !== -1
 
   // Only rows with unconfirmed points render a validation, matching
   // shouldDisplayObservationValidation below.
@@ -805,12 +804,8 @@ const ImageClassificationObservationTable = ({
           key={imageId}
           imageId={imageId}
           setImageId={setImageId}
-          previousImageId={
-            isReviewedImageListed ? reviewableImageIds[reviewedImageIndex - 1] : undefined
-          }
-          nextImageId={
-            isReviewedImageListed ? reviewableImageIds[reviewedImageIndex + 1] : undefined
-          }
+          previousImageId={reviewableImageIds[reviewedImageIndex - 1]}
+          nextImageId={reviewableImageIds[reviewedImageIndex + 1]}
           benthicAttributes={benthicAttributes}
           growthForms={growthForms}
           onAnnotationSaveSuccess={() => {

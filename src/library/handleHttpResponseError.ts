@@ -70,11 +70,15 @@ const handleHttpResponseError = ({
     return
   }
 
-  // This allows the logic to be extended in the
-  // scenario where one of the above error conditions isnt met
-  // If a callback is used, the user will want to
-  // consider providing a generic message as well.
-  callback?.()
+  if (callback) {
+    // This allows the logic to be extended in the
+    // scenario where one of the above error conditions isnt met
+    // If a callback is used, the user will want to
+    // consider providing a generic message as well.
+    callback()
+
+    return
+  }
 }
 
 export default handleHttpResponseError

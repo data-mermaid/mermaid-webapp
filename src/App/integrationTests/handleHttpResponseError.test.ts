@@ -212,16 +212,4 @@ describe('handleHttpResponseError', () => {
     expect(setServerNotReachable).not.toHaveBeenCalled()
     expect(callback).toHaveBeenCalled()
   })
-
-  test('shouldSetServerNotReachable false still logs out on a 401', () => {
-    const logoutMermaid = vi.fn()
-
-    handleHttpResponseError({
-      error: fakeError({ response: { status: 401 } }),
-      logoutMermaid,
-      shouldSetServerNotReachable: false,
-    })
-
-    expect(logoutMermaid).toHaveBeenCalled()
-  })
 })

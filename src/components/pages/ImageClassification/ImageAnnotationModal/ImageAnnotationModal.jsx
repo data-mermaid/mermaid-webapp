@@ -56,8 +56,8 @@ const removeMappedUnclassifiedPointData = (points) => {
 const ImageAnnotationModal = ({
   imageId,
   setImageId,
-  previousImageId = undefined,
-  nextImageId = undefined,
+  previousImageId,
+  nextImageId,
   benthicAttributes,
   growthForms,
   onAnnotationSaveSuccess,
