@@ -9,6 +9,7 @@ import accountGroup from '@iconify-icons/mdi/account-group'
 import accountRemove from '@iconify-icons/mdi/account-remove'
 import alert from '@iconify-icons/mdi/alert'
 import arrowBack from '@iconify-icons/mdi/arrow-back'
+import arrowLeft from '@iconify-icons/mdi/arrow-left-bold'
 import arrowRight from '@iconify-icons/mdi/arrow-right-bold'
 import arrowRightCircle from '@iconify-icons/mdi/arrow-right-bold-circle'
 import asterisk from '@iconify-icons/mdi/asterisk'
@@ -85,6 +86,7 @@ export const IconAccountRemove = (props: IconProps) => (
 export const IconAdmin = (props: IconProps) => <InlineIcon {...props} icon={fileAccountOutline} />
 export const IconAlert = (props: IconProps) => <WarningIcon {...props} icon={alert} />
 export const IconArrowBack = (props: IconProps) => <InlineIcon {...props} icon={arrowBack} />
+export const IconArrowLeft = (props: IconProps) => <InlineIcon {...props} icon={arrowLeft} />
 export const IconArrowRight = (props: IconProps) => <InlineIcon {...props} icon={arrowRight} />
 export const IconArrowRightCircle = (props: IconProps) => (
   <InlineIcon {...props} icon={arrowRightCircle} />

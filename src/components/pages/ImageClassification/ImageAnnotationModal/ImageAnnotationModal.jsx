@@ -11,6 +11,7 @@ import {
 import ImageAnnotationModalTable from './ImageAnnotationModalTable'
 import ImageAnnotationModalMap from './ImageAnnotationModalMap'
 import {
+  ButtonWithTrailingIcon,
   Footer,
   ImageAnnotationModalContainer,
   Legend,
@@ -21,7 +22,7 @@ import {
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { ButtonPrimary, ButtonSecondary } from '../../../generic/buttons'
-import { IconArrowBack, IconArrowRight } from '../../../icons'
+import { IconArrowLeft, IconArrowRight } from '../../../icons'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import { useImageScale } from '../useImageScale'
 import { useZoomToPointsByAttributeId } from './useZoomToPointsByAttributeId'
@@ -321,17 +322,17 @@ const ImageAnnotationModal = ({
                 onClick={() => handleShowImage(previousImageId)}
                 disabled={!previousImageId}
               >
-                <IconArrowBack />
+                <IconArrowLeft />
                 {t('image_classification.buttons.previous_photo')}
               </ButtonSecondary>
-              <ButtonSecondary
+              <ButtonWithTrailingIcon
                 type="button"
                 onClick={() => handleShowImage(nextImageId)}
                 disabled={!nextImageId}
               >
                 {t('image_classification.buttons.next_photo')}
                 <IconArrowRight />
-              </ButtonSecondary>
+              </ButtonWithTrailingIcon>
               <ButtonSecondary type="button" onClick={handleCloseModal}>
                 {t('buttons.close')}
               </ButtonSecondary>

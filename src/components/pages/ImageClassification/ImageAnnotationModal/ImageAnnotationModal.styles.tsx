@@ -3,7 +3,12 @@ import { IMAGE_CLASSIFICATION_COLORS as COLORS } from '../../../../library/const
 import theme from '../../../../theme'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import { Table, Td, Tr, thStyles } from '../../../generic/Table/table'
-import { ButtonPrimary, IconButton, buttonSecondaryCss } from '../../../generic/buttons'
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  IconButton,
+  buttonSecondaryCss,
+} from '../../../generic/buttons'
 import { RowSpaceBetween } from '../../../generic/positioning'
 
 interface IsSelectedProps {
@@ -32,6 +37,15 @@ export const LabelThatLooksLikeATh = styled.div(
 export const Footer = styled.div`
   display: flex;
   justify-content: space-between;
+`
+
+// The modal footer spaces every button icon on its right, which suits a leading icon.
+// A trailing icon needs that gap on its left, between it and the text.
+export const ButtonWithTrailingIcon = styled(ButtonSecondary)`
+  && svg {
+    margin-left: ${theme.spacing.small};
+    margin-right: 0;
+  }
 `
 
 export const Legend = styled.div`
