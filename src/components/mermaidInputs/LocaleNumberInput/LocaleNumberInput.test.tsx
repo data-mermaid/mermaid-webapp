@@ -5,7 +5,7 @@ import {
   fireEvent,
   renderUnauthenticatedOffline,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import GfcrNumberInput from './GfcrNumberInput'
+import LocaleNumberInput from './LocaleNumberInput'
 
 interface ControlledInputProps {
   initialValue?: number | null
@@ -15,6 +15,7 @@ interface ControlledInputProps {
   max?: number
   allowNegatives?: boolean
   disabled?: boolean
+  'data-testid'?: string
 }
 
 // Stateful wrapper so the controlled component responds to onChange like it would in a form.
@@ -26,12 +27,12 @@ function ControlledInput({ initialValue = null, onChangeSpy, ...rest }: Controll
   }
   return (
     <MantineProvider>
-      <GfcrNumberInput id="test" value={value} onChange={handleChange} {...rest} />
+      <LocaleNumberInput id="test" value={value} onChange={handleChange} {...rest} />
     </MantineProvider>
   )
 }
 
-describe('GfcrNumberInput', () => {
+describe('LocaleNumberInput', () => {
   it('calls onChange with null when input is cleared', async () => {
     const onChangeSpy = vi.fn()
     const { user } = renderUnauthenticatedOffline(
@@ -150,5 +151,10 @@ describe('GfcrNumberInput', () => {
   it('asks for the decimal mobile keypad on a fractional field', () => {
     renderUnauthenticatedOffline(<ControlledInput decimalPlaces={2} />)
     expect(screen.getByRole('textbox')).toHaveAttribute('inputmode', 'decimal')
+  })
+
+  it('puts the test id on the input element', () => {
+    renderUnauthenticatedOffline(<ControlledInput data-testid="depth-input" />)
+    expect(screen.getByTestId('depth-input')).toBe(screen.getByRole('textbox'))
   })
 })
