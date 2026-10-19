@@ -477,6 +477,8 @@
     "benthic_attribute": "Atributo bentónico",
     "buttons": {
       "confirm_all": "Confirmar todo",
+      "next_photo": "Siguiente foto",
+      "previous_photo": "Foto anterior",
       "upload_photos": "Subir fotos",
       "zoom_to_attribute": "Ampliar para ver los atributos"
     },
@@ -496,7 +498,8 @@
       "invalid_file_type": "Tipo de archivo no válido.",
       "no_classification_enabled": "Actualmente no puedes subir fotos nuevas para clasificar. Puedes acceder a las fotos que has subido anteriormente y revisarlas.",
       "no_photo_found": "No se pudo eliminar la foto: no se encontró ninguna foto.",
-      "photo_too_small": "Las fotos deben tener una altura y una anchura mínimas de {{minImageWidthAndHeight}} píxeles. Esta foto es demasiado pequeña: {{fileName}}."
+      "photo_too_small": "Las fotos deben tener una altura y una anchura mínimas de {{minImageWidthAndHeight}} píxeles. Esta foto es demasiado pequeña: {{fileName}}.",
+      "save_failed_changes_kept": "No se pudieron guardar los cambios. Se conservan en esta ventana. Inténtelo de nuevo en breve."
     },
     "feature_introduction": {
       "description": "Gracias a una colaboración con <a /> de la Universidad de California en San Diego y el Instituto Scripps de Oceanografía, MERMAID ahora incluye clasificación basada en IA mediante un modelo de aprendizaje profundo de PySpace. Esta integración permite un análisis rápido y escalable de fotos bentónicas para generar información de forma rápida y consistente con aprendizaje automático e IA.",

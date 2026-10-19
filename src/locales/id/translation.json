@@ -474,6 +474,8 @@
     "benthic_attribute": "Atribut bentik",
     "buttons": {
       "confirm_all": "Konfirmasi semua",
+      "next_photo": "Foto berikutnya",
+      "previous_photo": "Foto sebelumnya",
       "upload_photos": "Unggah foto",
       "zoom_to_attribute": "Perbesar ke atribut"
     },
@@ -492,7 +494,8 @@
       "invalid_file_type": "Jenis file tidak valid.",
       "no_classification_enabled": "Saat ini Anda tidak dapat mengunggah gambar baru untuk klasifikasi. Anda dapat mengakses dan meninjau gambar yang telah diunggah sebelumnya.",
       "no_photo_found": "Gagal menghapus foto – foto tidak ditemukan.",
-      "photo_too_small": "Foto harus memiliki tinggi dan lebar minimum {{minImageWidthAndHeight}} piksel. Foto ini terlalu kecil: {{fileName}}."
+      "photo_too_small": "Foto harus memiliki tinggi dan lebar minimum {{minImageWidthAndHeight}} piksel. Foto ini terlalu kecil: {{fileName}}.",
+      "save_failed_changes_kept": "Perubahan Anda tidak berhasil disimpan. Perubahan tersebut tetap tersimpan di jendela ini. Silakan coba lagi sebentar lagi."
     },
     "feature_introduction": {
       "description": "Melalui kemitraan dengan <a /> dari University of California San Diego dan Scripps Institution of Oceanography, MERMAID kini menyertakan klasifikasi berbasis AI dengan menggunakan model pembelajaran mendalam pyspacer. Integrasi ini memungkinkan analisis foto bentik yang cepat dan terukur sehingga Anda dapat menghasilkan wawasan dengan cepat dan konsisten dengan menggunakan pembelajaran mesin dan AI.",

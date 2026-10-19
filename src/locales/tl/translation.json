@@ -477,6 +477,8 @@
     "benthic_attribute": "Katangiang bentiko",
     "buttons": {
       "confirm_all": "Kumpirmahin lahat",
+      "next_photo": "Susunod na larawan",
+      "previous_photo": "Nakaraang larawan",
       "upload_photos": "Mag-upload ng mga larawan",
       "zoom_to_attribute": "Mag-zoom para i-attribute"
     },
@@ -496,7 +498,8 @@
       "invalid_file_type": "Hindi wastong uri ng file.",
       "no_classification_enabled": "Kasalukuyan kang hindi makakapag-upload ng mga bagong larawan para sa pag-uuri. Maaari mong i-access at suriin ang mga naunang na-upload na larawan.",
       "no_photo_found": "Nabigong tanggalin ang larawan – walang nakitang larawan",
-      "photo_too_small": "Ang mga larawan ay dapat may minimum na taas at lapad na {{minImageWidthAndHeight}} mga pixel. Masyadong maliit ang larawang ito: {{fileName}}."
+      "photo_too_small": "Ang mga larawan ay dapat may minimum na taas at lapad na {{minImageWidthAndHeight}} mga pixel. Masyadong maliit ang larawang ito: {{fileName}}.",
+      "save_failed_changes_kept": "Nabigong i-save ang iyong mga pagbabago. Nakatago ang mga ito sa window na ito. Pakisubukang muli maya-maya."
     },
     "feature_introduction": {
       "description": "Sa pamamagitan ng pakikipagtulungan sa <a /> mula sa University of California San Diego at Scripps Institution of Oceanography, isinama na ngayon ng MERMAID ang klasipikasyon batay sa AI gamit ang isang pyspacer deep learning model. Ang integrasyong ito ay nagbibigay-daan sa mabilis at nasusukat na pagsusuri ng mga benthic na larawan upang mabilis at palagian kang makabuo ng mga insight gamit ang machine learning at AI.",
