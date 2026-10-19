@@ -107,6 +107,13 @@ const sortByLatest = (a, b) =>
 const sortAlphabetically = (a, b) => a.benthicAttributeLabel.localeCompare(b.benthicAttributeLabel)
 const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
+// The table counts each point by its first annotation, so a confirmed one has to come first
+const sortPointAnnotations = (points: ImageClassificationImage['points']) =>
+  points.map((point) => ({
+    ...point,
+    annotations: point.annotations.toSorted(prioritizeConfirmedAnnotations),
+  }))
+
 // Matches the observation_id the API validates these rows under.
 const buildObservationId = (
   imageId: string,
@@ -190,7 +197,6 @@ const ImageClassificationObservationTable = ({
   const { t } = useTranslation()
 
   const [imageId, setImageId] = useState<string>()
-  const hasUnrefreshedAnnotationSaves = useRef(false)
   const [growthForms, setGrowthForms] = useState<GrowthForm[] | undefined>()
   const [benthicAttributes, setBenthicAttributes] = useState<BenthicAttribute[] | undefined>()
   const [distilledImages, setDistilledImages] = useState<DistilledImage[]>([])
@@ -219,15 +225,12 @@ const ImageClassificationObservationTable = ({
         EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD,
       )
 
-      const sortedImages = imagesResponse.results.map((image: ImageClassificationImage) => {
-        const sortedPoints = image.points.map((point) => {
-          const sortedAnnotations = point.annotations.sort(prioritizeConfirmedAnnotations)
-          return { ...point, annotations: sortedAnnotations }
-        })
-        return { ...image, points: sortedPoints }
-      })
-
-      setImages(sortedImages)
+      setImages(
+        imagesResponse.results.map((image: ImageClassificationImage) => ({
+          ...image,
+          points: sortPointAnnotations(image.points),
+        })),
+      )
     } catch (error) {
       handleHttpResponseError({
         error,
@@ -357,14 +360,16 @@ const ImageClassificationObservationTable = ({
     }
   }, [benthicAttributes, growthForms, imageSet, distillImagesData])
 
-  // The review window saves as it goes. Refreshing while it's open would reload the photo under
-  // review, so the table refreshes once the window closes instead.
-  const _refreshImagesAfterReview = useEffect(() => {
-    if (!imageId && hasUnrefreshedAnnotationSaves.current) {
-      hasUnrefreshedAnnotationSaves.current = false
-      fetchImages()
-    }
-  }, [imageId, fetchImages])
+  // Each save in the review window returns the updated photo, so only that photo's points are replaced
+  const handleAnnotationSaveSuccess = (savedImage: ImageClassificationImage) => {
+    setImages((previousImages) =>
+      previousImages.map((image) =>
+        image.id === savedImage.id
+          ? { ...image, points: sortPointAnnotations(savedImage.points) }
+          : image,
+      ),
+    )
+  }
 
   // The review window's Previous and Next move through the photos it can open, in table order
   const reviewableImageIds = distilledImages
@@ -808,9 +813,7 @@ const ImageClassificationObservationTable = ({
           nextImageId={reviewableImageIds[reviewedImageIndex + 1]}
           benthicAttributes={benthicAttributes}
           growthForms={growthForms}
-          onAnnotationSaveSuccess={() => {
-            hasUnrefreshedAnnotationSaves.current = true
-          }}
+          onAnnotationSaveSuccess={handleAnnotationSaveSuccess}
         />
       )}
       {isRemovePhotoModalOpen && RemovePhotoModal}
