@@ -91,7 +91,7 @@ const ImageAnnotationModal = ({
     savePoints: (points) =>
       databaseSwitchboardInstance
         .saveAnnotationsForImage(projectId, imageId, removeMappedUnclassifiedPointData(points))
-        .then(() => onAnnotationSaveSuccess()),
+        .then(onAnnotationSaveSuccess),
     onSaveFailed: (error) =>
       handleHttpResponseError({
         error,
