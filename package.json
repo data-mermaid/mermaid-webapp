@@ -50,12 +50,9 @@
     "react-toastify": "^11.1.0",
     "styled-components": "^6.5.3",
     "uuid": "^14.0.2",
-    "vite-plugin-i18next-loader": "^3.1.2",
+    "vite-plugin-i18next-loader": "^4.1.0",
     "web-vitals": "^0.2.4",
     "yup": "^1.7.1"
-  },
-  "resolutions": {
-    "vite-plugin-i18next-loader/ts-deepmerge": "^8.0.0"
   },
   "scripts": {
     "start": "vite",
@@ -99,7 +96,7 @@
     "@testing-library/user-event": "^14.6.7",
     "@types/color": "^4.2.0",
     "@types/lodash": "^4",
-    "@types/node": "^22.20.5",
+    "@types/node": "^24.19.2",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react-swc": "^4.3.3",
     "@vitest/browser-playwright": "5.0.5",

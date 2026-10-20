@@ -4664,12 +4664,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.20.5":
-  version: 22.20.5
-  resolution: "@types/node@npm:22.20.5"
+"@types/node@npm:^24.19.2":
+  version: 24.19.2
+  resolution: "@types/node@npm:24.19.2"
   dependencies:
-    undici-types: "npm:~6.21.0"
-  checksum: 10c0/0cf61a89c6a69917ab49f976a6bb11a29e3b348a6ae19f5827ceb91d3ade781faab58dcf3b8fa625f975f5d7536b9166ff94e8250c29272c667164f77c28fa88
+    undici-types: "npm:>=7.24.0 <7.24.7"
+  checksum: 10c0/b51a7f8854007ad579dffdd0633d8addbfeb2c97cceb380f2eba0ed163638ec52e17565385a6cc04d54ac4ff99c70c64aee68a4ca45b6128c035e828794e29c5
   languageName: node
   linkType: hard
 
@@ -6507,12 +6507,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dot-prop@npm:^10.0.0":
-  version: 10.1.0
-  resolution: "dot-prop@npm:10.1.0"
+"dot-prop@npm:^10.1.0":
+  version: 10.2.0
+  resolution: "dot-prop@npm:10.2.0"
   dependencies:
     type-fest: "npm:^5.0.0"
-  checksum: 10c0/b034a06f017909ed55c6c164ddea962ccdce3d88b9b092f7106a9b738116a4cd003db5d47a0c6e140e93adbf1922b5e3a147e3d4a124c8556862940446ba5f75
+  checksum: 10c0/171de909a3a06b524dcfc67b29d4e218784f7ceb79fe6d4dbef2c0cddee0eb1ac857faad4535ff3a55c947feb01dc99e695b68ea23079d2088955006e5f503cf
   languageName: node
   linkType: hard
 
@@ -7614,7 +7614,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^11.0.1, glob@npm:^11.0.3":
+"glob@npm:^11.0.1":
   version: 11.1.0
   resolution: "glob@npm:11.1.0"
   dependencies:
@@ -8393,7 +8393,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.1.0":
+"js-yaml@npm:^4.1.0, js-yaml@npm:^4.2.0":
   version: 4.3.2
   resolution: "js-yaml@npm:4.3.2"
   dependencies:
@@ -8926,12 +8926,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:^15.0.12":
-  version: 15.0.12
-  resolution: "marked@npm:15.0.12"
+"marked@npm:^18.0.4":
+  version: 18.1.1
+  resolution: "marked@npm:18.1.1"
   bin:
     marked: bin/marked.js
-  checksum: 10c0/e09da211544b787ecfb25fed07af206060bf7cd6d9de6cb123f15c496a57f83b7aabea93340aaa94dae9c94e097ae129377cad6310abc16009590972e85f4212
+  checksum: 10c0/650d37ef22d39cc28e9afb194517dc7a23baa7c93971ccd518583907ac9b61ce90affb654e0f37b1505f7809988b6c35e45fbb8023bc03a33104bcdfe26324b1
   languageName: node
   linkType: hard
 
@@ -8989,7 +8989,7 @@ __metadata:
     "@turf/centroid": "npm:^7.4.0"
     "@types/color": "npm:^4.2.0"
     "@types/lodash": "npm:^4"
-    "@types/node": "npm:^22.20.5"
+    "@types/node": "npm:^24.19.2"
     "@types/react": "npm:^19.3.0"
     "@types/react-dom": "npm:^19.3.0"
     "@vitejs/plugin-react-swc": "npm:^4.3.3"
@@ -9041,7 +9041,7 @@ __metadata:
     typescript-eslint: "npm:^8.71.1"
     uuid: "npm:^14.0.2"
     vite: "npm:^8.3.4"
-    vite-plugin-i18next-loader: "npm:^3.1.2"
+    vite-plugin-i18next-loader: "npm:^4.1.0"
     vite-plugin-pwa: "npm:^1.3.0"
     vite-plugin-svgr: "npm:^4.3.0"
     vitest: "npm:^5.0.5"
@@ -12045,10 +12045,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~6.21.0":
-  version: 6.21.0
-  resolution: "undici-types@npm:6.21.0"
-  checksum: 10c0/c01ed51829b10aa72fc3ce64b747f8e74ae9b60eafa19a7b46ef624403508a54c526ffab06a14a26b3120d055e1104d7abe7c9017e83ced038ea5cf52f8d5e04
+"undici-types@npm:>=7.24.0 <7.24.7":
+  version: 7.24.6
+  resolution: "undici-types@npm:7.24.6"
+  checksum: 10c0/d9cd8befb643ac904615c280a095ba4240531f6bb4a5e75a22a7483630ca8d3f1016d2ab6ace6ceda1f63b3a2db2fe037fafe121d6917a0187573aa548ff78ca
   languageName: node
   linkType: hard
 
@@ -12236,19 +12236,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-i18next-loader@npm:^3.1.2":
-  version: 3.1.3
-  resolution: "vite-plugin-i18next-loader@npm:3.1.3"
+"vite-plugin-i18next-loader@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "vite-plugin-i18next-loader@npm:4.1.0"
   dependencies:
-    dot-prop: "npm:^10.0.0"
-    glob: "npm:^11.0.3"
-    js-yaml: "npm:^4.1.0"
-    marked: "npm:^15.0.12"
+    dot-prop: "npm:^10.1.0"
+    glob: "npm:^13.0.6"
+    js-yaml: "npm:^4.2.0"
+    marked: "npm:^18.0.4"
     marked-terminal: "npm:^7.3.0"
-    ts-deepmerge: "npm:^7.0.3"
+    ts-deepmerge: "npm:^8.0.0"
   peerDependencies:
     vite: ">=3.1.6"
-  checksum: 10c0/45d57783857abe32206615cde4d028edf58e0202393070c386fc8a2ed90c76b88bae976cee800934f9095ce496fd439f10749c26eb6a0458ad92f80774bac599
+  checksum: 10c0/95184ff1d9f4f9b577a5cc5342ee27c38a9788d546ade38a34c21fbaac1cbdcb4058a179cc50f1599be9bc5edb34a2280655140f48b567345f11c1df708af5a6
   languageName: node
   linkType: hard
 
