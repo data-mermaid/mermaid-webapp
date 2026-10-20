@@ -168,9 +168,18 @@ const CollectRecordsMixin = (Base) =>
         protocol,
       })
 
+      // The API marks validations stale on every save. The IDB copy is marked stale too, so a
+      // record whose save hasn't reached the API yet doesn't read its last result as current.
+      const recordForOfflineStorage = recordToSubmit.validations
+        ? {
+            ...recordToSubmit,
+            validations: { ...recordToSubmit.validations, status: VALIDATION_STATUS.stale },
+          }
+        : recordToSubmit
+
       if (this._isOnlineAuthenticatedAndReady) {
         // Add to IDB in case the there are network issues before the API responds
-        await this._dexiePerUserDataInstance.collect_records.put(recordToSubmit)
+        await this._dexiePerUserDataInstance.collect_records.put(recordForOfflineStorage)
 
         return axios
           .post(
@@ -209,18 +218,9 @@ const CollectRecordsMixin = (Base) =>
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
-        // The API marks validations stale on every save. A record saved offline won't reach the
-        // API until it syncs, so it's marked stale here to stop its last result reading as current.
-        const recordSavedOffline = recordToSubmit.validations
-          ? {
-              ...recordToSubmit,
-              validations: { ...recordToSubmit.validations, status: VALIDATION_STATUS.stale },
-            }
-          : recordToSubmit
-
         return this._dexiePerUserDataInstance.collect_records
-          .put(recordSavedOffline)
-          .then(() => recordSavedOffline)
+          .put(recordForOfflineStorage)
+          .then(() => recordForOfflineStorage)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
