@@ -49,11 +49,9 @@ const linkStyles = css`
   display: inline-block;
   padding: 0;
   line-height: ${theme.spacing.headerHeight};
-  ${hoverState(
-    css`
-      border-bottom: solid 3px ${theme.color.callout};
-    `,
-  )}
+  ${hoverState(css`
+    border-bottom: solid 3px ${theme.color.callout};
+  `)}
 `
 
 export const HeaderButtonThatLooksLikeLink = styled(ButtonThatLooksLikeLink)`

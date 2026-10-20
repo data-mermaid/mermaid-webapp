@@ -9,9 +9,8 @@ test('getManagementRegimes only returns profiles for a given project', async () 
     { id: 'bar', project: '5' },
     { id: 'baz', project: 'shouldGetFilteredOut' },
   ])
-  const managementRegimes = await dbSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(
-    '5',
-  )
+  const managementRegimes =
+    await dbSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted('5')
 
   expect(managementRegimes.length).toEqual(2)
   expect(

@@ -85,7 +85,16 @@ const mockImageClassificationApi = (images) => {
     http.get(`${imagesUrl}:imageId/`, ({ params }) =>
       HttpResponse.json(images.find(({ id }) => id === params.imageId)),
     ),
-    http.patch(`${imagesUrl}:imageId/`, () => HttpResponse.json({})),
+    // Like the API, a save replies with the whole updated photo
+    http.patch(`${imagesUrl}:imageId/`, async ({ params, request }) => {
+      const { points: savedPoints } = await request.json()
+      const image = images.find(({ id }) => id === params.imageId)
+
+      return HttpResponse.json({
+        ...image,
+        points: image.points.map((point) => savedPoints.find(({ id }) => id === point.id) ?? point),
+      })
+    }),
     http.post(`${apiBaseUrl}/pull/`, () =>
       HttpResponse.json({
         benthic_attributes: { updates: mockMermaidData.benthic_attributes },
@@ -159,7 +168,22 @@ test('Previous and Next move through processed photos in table order, skipping o
   expect(await screen.findByRole('heading', { name: 'first.jpg' })).toBeInTheDocument()
 })
 
-test('The photo table refreshes once the review window closes, not after each save', async () => {
+// The confirmed and unconfirmed counts follow the attribute label in the photo table's row
+const getPhotoTableCounts = (attributeLabel) => {
+  const dialog = screen.queryByRole('dialog')
+  const row = screen
+    .getAllByRole('row')
+    .find((tableRow) => !dialog?.contains(tableRow) && within(tableRow).queryByText(attributeLabel))
+  const cells = within(row).getAllByRole('cell')
+  const labelIndex = cells.findIndex((cell) => cell.textContent === attributeLabel)
+
+  return {
+    confirmed: cells[labelIndex + 2].textContent.trim(),
+    unconfirmed: cells[labelIndex + 3].textContent.trim(),
+  }
+}
+
+test('The photo table shows confirmations as each save completes, without reloading the photo list', async () => {
   const listRequests = mockImageClassificationApi([
     makeImage({
       id: 'first',
@@ -172,16 +196,26 @@ test('The photo table refreshes once the review window closes, not after each sa
   const { user } = renderRecord()
 
   await user.click(await screen.findByTestId('review-photo-first', {}, { timeout: 10000 }))
-  await user.click(
-    await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' }),
-  )
+  await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' })
+
+  expect(getPhotoTableCounts('Dead Coral with Algae')).toEqual({ confirmed: '0', unconfirmed: '1' })
+
+  const listRequestsBeforeSave = listRequests.count
+
+  await user.click(screen.getByRole('button', { name: 'image_classification.buttons.confirm_all' }))
   // The record form has its own Saved button, so look inside the review window
   await within(screen.getByRole('dialog')).findByRole('button', { name: 'buttons.saved' })
 
-  const listRequestsBeforeClose = listRequests.count
+  await waitFor(() =>
+    expect(getPhotoTableCounts('Dead Coral with Algae')).toEqual({
+      confirmed: '1',
+      unconfirmed: '0',
+    }),
+  )
 
   // The window's X button shares the accessible name, so find the footer button by its text
   await user.click(screen.getByText('buttons.close', { selector: 'button' }))
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
 
-  await waitFor(() => expect(listRequests.count).toBe(listRequestsBeforeClose + 1))
+  expect(listRequests.count).toBe(listRequestsBeforeSave)
 })

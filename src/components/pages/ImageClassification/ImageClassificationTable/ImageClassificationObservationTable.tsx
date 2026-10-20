@@ -107,6 +107,13 @@ const sortByLatest = (a, b) =>
 const sortAlphabetically = (a, b) => a.benthicAttributeLabel.localeCompare(b.benthicAttributeLabel)
 const prioritizeConfirmedAnnotations = (a, b) => b.is_confirmed - a.is_confirmed
 
+// The table counts each point by its first annotation, so a confirmed one has to come first
+const sortPointAnnotations = (points: ImageClassificationImage['points']) =>
+  points.map((point) => ({
+    ...point,
+    annotations: point.annotations.toSorted(prioritizeConfirmedAnnotations),
+  }))
+
 // Matches the observation_id the API validates these rows under.
 const buildObservationId = (
   imageId: string,
@@ -125,6 +132,9 @@ const buildObservationId = (
 
   return observationId
 }
+
+// The API keys a photo's unclassified points under empty attribute and growth form segments.
+const buildUnclassifiedObservationId = (imageId: string) => `${imageId}::::`
 
 const TableHeaderRow = ({ areValidationsShowing }: { areValidationsShowing: boolean }) => {
   const { t } = useTranslation()
@@ -190,7 +200,6 @@ const ImageClassificationObservationTable = ({
   const { t } = useTranslation()
 
   const [imageId, setImageId] = useState<string>()
-  const hasUnrefreshedAnnotationSaves = useRef(false)
   const [growthForms, setGrowthForms] = useState<GrowthForm[] | undefined>()
   const [benthicAttributes, setBenthicAttributes] = useState<BenthicAttribute[] | undefined>()
   const [distilledImages, setDistilledImages] = useState<DistilledImage[]>([])
@@ -219,15 +228,12 @@ const ImageClassificationObservationTable = ({
         EXCLUDE_PARAMS_FOR_GET_ALL_IMAGES_IN_COLLECT_RECORD,
       )
 
-      const sortedImages = imagesResponse.results.map((image: ImageClassificationImage) => {
-        const sortedPoints = image.points.map((point) => {
-          const sortedAnnotations = point.annotations.sort(prioritizeConfirmedAnnotations)
-          return { ...point, annotations: sortedAnnotations }
-        })
-        return { ...image, points: sortedPoints }
-      })
-
-      setImages(sortedImages)
+      setImages(
+        imagesResponse.results.map((image: ImageClassificationImage) => ({
+          ...image,
+          points: sortPointAnnotations(image.points),
+        })),
+      )
     } catch (error) {
       handleHttpResponseError({
         error,
@@ -305,7 +311,6 @@ const ImageClassificationObservationTable = ({
         const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
         let totalConfirmed = 0
         let totalUnconfirmed = 0
-        let totalUnknown = 0
 
         const imageAnnotationData = Object.groupBy(
           classifiedPoints,
@@ -324,7 +329,7 @@ const ImageClassificationObservationTable = ({
           totalUnconfirmed += item.unconfirmedCount
         })
 
-        totalUnknown = numPointsPerQuadrat - totalConfirmed - totalUnconfirmed
+        const totalUnknown = numPointsPerQuadrat - totalConfirmed - totalUnconfirmed
 
         return {
           file,
@@ -357,14 +362,19 @@ const ImageClassificationObservationTable = ({
     }
   }, [benthicAttributes, growthForms, imageSet, distillImagesData])
 
-  // The review window saves as it goes. Refreshing while it's open would reload the photo under
-  // review, so the table refreshes once the window closes instead.
-  const _refreshImagesAfterReview = useEffect(() => {
-    if (!imageId && hasUnrefreshedAnnotationSaves.current) {
-      hasUnrefreshedAnnotationSaves.current = false
-      fetchImages()
-    }
-  }, [imageId, fetchImages])
+  // Each save in the review window returns the updated photo, so only that photo's points are replaced
+  const handleAnnotationSaveSuccess = (savedImage: ImageClassificationImage) => {
+    setImages((previousImages) =>
+      previousImages.map((image) =>
+        image.id === savedImage.id
+          ? { ...image, points: sortPointAnnotations(savedImage.points) }
+          : image,
+      ),
+    )
+    // A changed annotation can make a validated record invalid again, so the record's
+    // validations go stale the same way they do when a photo is uploaded or removed.
+    onPhotosChanged?.()
+  }
 
   // The review window's Previous and Next move through the photos it can open, in table order
   const reviewableImageIds = distilledImages
@@ -372,15 +382,18 @@ const ImageClassificationObservationTable = ({
     .map(({ file }) => file.id)
   const reviewedImageIndex = reviewableImageIds.indexOf(imageId)
 
-  // Only rows with unconfirmed points render a validation, matching
+  // Only rows with unconfirmed or unclassified points render a validation, matching
   // shouldDisplayObservationValidation below.
   useEffect(() => {
-    const observationIds = distilledImages.flatMap(({ file, distilledAnnotationData }) =>
-      distilledAnnotationData
-        .filter((annotation) => annotation?.unconfirmedCount > 0)
-        .map((annotation) =>
-          buildObservationId(file.id, annotation.benthicAttributeId, annotation.growthFormId),
-        ),
+    const observationIds = distilledImages.flatMap(
+      ({ file, distilledAnnotationData, totalUnknown }) => [
+        ...distilledAnnotationData
+          .filter((annotation) => annotation?.unconfirmedCount > 0)
+          .map((annotation) =>
+            buildObservationId(file.id, annotation.benthicAttributeId, annotation.growthFormId),
+          ),
+        ...(totalUnknown > 0 ? [buildUnclassifiedObservationId(file.id)] : []),
+      ],
     )
 
     onObservationIdsChange?.(new Set(observationIds))
@@ -578,6 +591,22 @@ const ImageClassificationObservationTable = ({
               </Tr>
             )
           }
+          const unclassifiedObsId = buildUnclassifiedObservationId(imgId)
+          const unclassifiedValidation = getObservationValidationInfo({
+            observationId: unclassifiedObsId,
+            collectRecord,
+            areValidationsShowing,
+            observationsPropertyName: 'obs_benthic_photo_quadrats',
+          })
+
+          let unclassifiedTrMessageType: MessageType
+
+          if (unclassifiedValidation.hasObservationErrorValidation) {
+            unclassifiedTrMessageType = 'error'
+          } else if (unclassifiedValidation.hasObservationWarningValidation) {
+            unclassifiedTrMessageType = 'warning'
+          }
+
           // If there are subrows (processed image), render annotation data
           return (
             <React.Fragment key={imgId}>
@@ -729,20 +758,46 @@ const ImageClassificationObservationTable = ({
               {totalUnknown > 0 && (
                 <StyledTr
                   key={`${file.id}-unknown`}
+                  data-observation-id={unclassifiedObsId}
+                  $messageType={unclassifiedTrMessageType}
                   onMouseEnter={() => handleRowMouseEnter(imageIndex)}
                   onMouseLeave={handleRowMouseLeave}
                   $isUnclassified={true}
                 >
                   <StyledTd style={{ textAlign: 'right' }}>{rowIndex++}</StyledTd>
                   <StyledTd style={{ textAlign: 'right' }}>{imageIndex + 1}</StyledTd>
-                  <StyledTd
-                    colSpan={areValidationsShowing ? 5 : 4}
-                    style={{ fontWeight: '700', textAlign: 'center' }}
-                  >
+                  <StyledTd colSpan={4} style={{ fontWeight: '700', textAlign: 'center' }}>
                     {t('image_classification.annotation.unclassified_points', {
                       count: totalUnknown,
                     })}
                   </StyledTd>
+                  {areValidationsShowing && (
+                    <StyledTd>
+                      {unclassifiedValidation.hasObservationErrorValidation && (
+                        <ObservationValidationInfo
+                          hasObservationErrorValidation={
+                            unclassifiedValidation.hasObservationErrorValidation
+                          }
+                          hasObservationIgnoredValidation={
+                            unclassifiedValidation.hasObservationIgnoredValidation
+                          }
+                          hasObservationWarningValidation={
+                            unclassifiedValidation.hasObservationWarningValidation
+                          }
+                          ignoreObservationValidations={ignoreObservationValidations}
+                          isObservationValid={unclassifiedValidation.isObservationValid}
+                          observationId={unclassifiedObsId}
+                          observationValidationMessages={
+                            unclassifiedValidation.observationValidationMessages
+                          }
+                          observationValidationType={
+                            unclassifiedValidation.observationValidationType
+                          }
+                          resetObservationValidations={resetObservationValidations}
+                        />
+                      )}
+                    </StyledTd>
+                  )}
                 </StyledTr>
               )}
             </React.Fragment>
@@ -808,9 +863,7 @@ const ImageClassificationObservationTable = ({
           nextImageId={reviewableImageIds[reviewedImageIndex + 1]}
           benthicAttributes={benthicAttributes}
           growthForms={growthForms}
-          onAnnotationSaveSuccess={() => {
-            hasUnrefreshedAnnotationSaves.current = true
-          }}
+          onAnnotationSaveSuccess={handleAnnotationSaveSuccess}
         />
       )}
       {isRemovePhotoModalOpen && RemovePhotoModal}
