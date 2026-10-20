@@ -966,6 +966,8 @@
       "data_unavailable": "Sample unit data is currently unavailable.",
       "observations_unavailable_offline": "Sample unit observations unavailable offline.",
       "submit_disabled": "Errors or warnings are preventing you from submitting.",
+      "submit_failed": "Submitting is currently unavailable for this record.",
+      "submit_rejected": "This record could not be submitted. Fix the validation errors and validate it again.",
       "submitted_data_unavailable": "Submitted record data is currently unavailable.",
       "submitted_moved_to_collecting": "The submitted record has been moved to Collecting.",
       "submitted_not_editable": "The submitted record has not been made editable.",
@@ -1239,6 +1241,7 @@
     "similar_name": "Another management regime is similar to this one",
     "site_not_found": "Site record not available for similarity validation",
     "system_validation_error": "System validation error:",
+    "unclassified_annotation": "All points must be classified",
     "unconfirmed_annotation": "Wrong number of confirmed annotations",
     "unknown_protocol": "Unknown method",
     "value_not_set": "Value is not set"

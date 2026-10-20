@@ -158,20 +158,26 @@ const useCollectRecordValidation = ({
     ],
   )
 
+  // Shows a record the API has just validated, whether from Validate or from a Submit the API
+  // refused after re-validating.
+  const showValidationResult = (validatedRecord) => {
+    const isErrorOrWarning =
+      validatedRecord.validations.status === 'error' ||
+      validatedRecord.validations.status === 'warning'
+    setAreValidationsShowing(true)
+    resetNextCursors()
+    handleCollectRecordChange(validatedRecord)
+    setValidateButtonState(getValidationButtonStatus(validatedRecord))
+    setIsSubmitWarningVisible(isErrorOrWarning)
+  }
+
   const handleValidate = () => {
     setValidateButtonState(buttonGroupStates.validating)
 
     databaseSwitchboardInstance
       .validateSampleUnit({ recordId, projectId })
       .then((validatedRecordResponse) => {
-        const isErrorOrWarning =
-          validatedRecordResponse.validations.status === 'error' ||
-          validatedRecordResponse.validations.status === 'warning'
-        setAreValidationsShowing(true)
-        resetNextCursors()
-        handleCollectRecordChange(validatedRecordResponse)
-        setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
-        setIsSubmitWarningVisible(isErrorOrWarning)
+        showValidationResult(validatedRecordResponse)
 
         if (validatedRecordResponse.validations.status === 'ok') {
           toast.success(...getToastArguments(t('sample_units.success.record_validated')))
@@ -466,6 +472,7 @@ const useCollectRecordValidation = ({
     resetNonObservationFieldValidations,
     resetObservationValidations,
     resetRecordLevelValidation,
+    showValidationResult,
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,

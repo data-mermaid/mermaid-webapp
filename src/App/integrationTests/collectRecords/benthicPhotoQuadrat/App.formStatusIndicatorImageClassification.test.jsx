@@ -68,7 +68,41 @@ const collectRecord = {
   },
 }
 
-const mockImageClassificationApi = () =>
+const unclassifiedRowId = `${imageId}::::`
+
+// The same image with three points per quadrat, so one point is unclassified.
+const collectRecordWithUnclassifiedPoint = {
+  ...collectRecord,
+  data: {
+    ...collectRecord.data,
+    quadrat_transect: { ...collectRecord.data.quadrat_transect, num_points_per_quadrat: 3 },
+  },
+  validations: {
+    status: 'error',
+    results: {
+      data: {
+        obs_benthic_photo_quadrats: [
+          ...collectRecord.validations.results.data.obs_benthic_photo_quadrats,
+          [
+            {
+              code: 'unclassified_annotation',
+              status: 'error',
+              validation_id: 'unclassified',
+              context: { group_id: imageId, observation_id: unclassifiedRowId },
+            },
+          ],
+        ],
+      },
+    },
+  },
+}
+
+const errorChipCounts = () =>
+  mockT.mock.calls
+    .filter(([key]) => key === 'sample_units.validation_status.chip_label_error')
+    .map(([, options]) => options?.count)
+
+const mockImageClassificationApi = (record = collectRecord) =>
   mockMermaidApiAllSuccessful.use(
     http.get(`${apiBaseUrl}/projects/5/classification/images/`, () =>
       HttpResponse.json({ results: [image] }),
@@ -80,7 +114,7 @@ const mockImageClassificationApi = () =>
       HttpResponse.json({
         benthic_attributes: { updates: mockMermaidData.benthic_attributes },
         choices: { updates: mockMermaidData.choices },
-        collect_records: { updates: [collectRecord] },
+        collect_records: { updates: [record] },
         project_managements: { updates: mockMermaidData.project_managements },
         project_profiles: { updates: mockMermaidData.project_profiles },
         project_sites: { updates: mockMermaidData.project_sites },
@@ -108,11 +142,6 @@ test('Image classification rows showing an error are counted and highlighted wit
 
   const rowIds = [deadCoral, otherAttribute].map((attribute) => `${imageId}::${attribute}::`)
 
-  const errorChipCounts = () =>
-    mockT.mock.calls
-      .filter(([key]) => key === 'sample_units.validation_status.chip_label_error')
-      .map(([, options]) => options?.count)
-
   await waitFor(() => expect(errorChipCounts().at(-1)).toBe(2))
 
   const nextButton = within(screen.getByTestId('form-status-chip-error')).getByRole('button')
@@ -130,6 +159,42 @@ test('Image classification rows showing an error are counted and highlighted wit
   const reachedIds = scrollIntoView.mock.instances.map((row) => row.dataset.observationId)
 
   expect(new Set(reachedIds)).toEqual(new Set(rowIds))
+}, 50000)
+
+test('The unclassified points row shows its error, is counted, and is reached with Next', async () => {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+  const scrollIntoView = vi
+    .spyOn(window.HTMLElement.prototype, 'scrollIntoView')
+    .mockImplementation(() => {})
+
+  mockImageClassificationApi(collectRecordWithUnclassifiedPoint)
+
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    { initialEntries: ['/projects/5/collecting/benthicpqt/90'] },
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  )
+
+  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
+
+  await waitFor(() => expect(errorChipCounts().at(-1)).toBe(3))
+
+  const unclassifiedRow = document.querySelector(`[data-observation-id="${unclassifiedRowId}"]`)
+
+  expect(
+    within(unclassifiedRow).getByText('validation_messages.unclassified_annotation'),
+  ).toBeInTheDocument()
+
+  const nextButton = within(screen.getByTestId('form-status-chip-error')).getByRole('button')
+
+  await user.click(nextButton)
+  await user.click(nextButton)
+  await user.click(nextButton)
+
+  const reachedIds = scrollIntoView.mock.instances.map((row) => row.dataset.observationId)
+
+  expect(reachedIds).toContain(unclassifiedRowId)
 }, 50000)
 
 test('Image classification rows leave the Error chip while the table is replaced by the offline message', async () => {
