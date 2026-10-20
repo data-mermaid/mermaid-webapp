@@ -1242,7 +1242,7 @@
     "site_not_found": "Site record not available for similarity validation",
     "system_validation_error": "System validation error:",
     "unclassified_annotation": "All points must be classified",
-    "unconfirmed_annotation": "Wrong number of confirmed annotations",
+    "unconfirmed_annotation": "Wrong number of confirmed points",
     "unknown_protocol": "Unknown method",
     "value_not_set": "Value is not set"
   },
