@@ -1,6 +1,7 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import storybook from 'eslint-plugin-storybook'
 
+import { fixupConfigRules } from '@eslint/compat'
 import globals from 'globals'
 import eslint from '@eslint/js'
 
@@ -12,17 +13,20 @@ import testingLibraryPlugin from 'eslint-plugin-testing-library'
 import jestDomPlugin from 'eslint-plugin-jest-dom'
 import importPlugin from 'eslint-plugin-import'
 
+// eslint-plugin-react, eslint-plugin-import and eslint-plugin-jsx-a11y call context methods that
+// ESLint 10 removed (such as context.getFilename). fixupConfigRules adds them back. Drop the
+// wrapper from each plugin once it releases ESLint 10 support.
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   ...tseslint.configs.stylistic,
-  reactPlugin.configs.flat.recommended,
-  reactHooksPlugin.configs['recommended-latest'],
+  ...fixupConfigRules(reactPlugin.configs.flat.recommended),
+  reactHooksPlugin.configs.flat['recommended-latest'],
   testingLibraryPlugin.configs['flat/react'],
   jestDomPlugin.configs['flat/recommended'],
-  importPlugin.flatConfigs.recommended,
-  jsxA11yPlugin.flatConfigs.recommended,
+  ...fixupConfigRules(importPlugin.flatConfigs.recommended),
+  ...fixupConfigRules(jsxA11yPlugin.flatConfigs.recommended),
   {
     settings: {
       react: {
@@ -57,6 +61,13 @@ export default [
 
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error', // please never override this rule, even locally
+      // React Compiler rules that existing code breaks in about 50 files. Warn until that code
+      // is fixed, then remove these lines so the preset's 'error' applies.
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/refs': 'warn',
+      'react-hooks/immutability': 'warn',
+      'react-hooks/preserve-manual-memoization': 'warn',
+      'react-hooks/static-components': 'warn',
 
       'no-console': ['error', { allow: ['warn', 'error'] }],
       'no-undef-init': 'error',

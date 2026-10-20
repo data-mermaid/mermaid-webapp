@@ -104,7 +104,7 @@ const ImageClassificationMixin = (Base) =>
 
         return response.data
       } catch (error) {
-        throw new Error(`Error fetching images: ${error.message}`)
+        throw new Error(`Error fetching images: ${error.message}`, { cause: error })
       }
     }
 

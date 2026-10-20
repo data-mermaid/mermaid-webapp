@@ -311,7 +311,6 @@ const ImageClassificationObservationTable = ({
         const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
         let totalConfirmed = 0
         let totalUnconfirmed = 0
-        let totalUnknown = 0
 
         const imageAnnotationData = Object.groupBy(
           classifiedPoints,
@@ -330,7 +329,7 @@ const ImageClassificationObservationTable = ({
           totalUnconfirmed += item.unconfirmedCount
         })
 
-        totalUnknown = numPointsPerQuadrat - totalConfirmed - totalUnconfirmed
+        const totalUnknown = numPointsPerQuadrat - totalConfirmed - totalUnconfirmed
 
         return {
           file,
