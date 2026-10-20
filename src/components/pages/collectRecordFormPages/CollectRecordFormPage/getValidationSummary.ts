@@ -83,9 +83,10 @@ const getStatus = (validation?: Validation): CountableStatus | undefined => {
 }
 
 /**
- * `reset` means the user un-ticked "Ignore warning". RecordLevelValidationInfo renders such an
- * item as a warning again, so it counts as one. An input renders nothing at all for a reset:
- * no message, no pill, no checkbox, normal row stripe. Hence the two functions.
+ * On a record-level item, `reset` means the user un-ticked "Ignore warning".
+ * RecordLevelValidationInfo renders such an item as a warning again, so it counts as one. On an
+ * input, `reset` means the user has edited it since the last Validate, and the input renders
+ * nothing at all: no message, no pill, no checkbox, normal row stripe. Hence the two functions.
  */
 const getRecordStatus = (validation: Validation): CountableStatus | undefined =>
   validation.status === 'reset' ? 'warning' : getStatus(validation)

@@ -11,7 +11,7 @@ const TextareaWithLabelAndValidation = ({
   id,
   ignoreNonObservationFieldValidations = () => {},
   label,
-  resetNonObservationFieldValidations = () => {},
+  unignoreNonObservationFieldValidations = () => {},
   testId = undefined,
   validationMessages = undefined,
   validationType = undefined,
@@ -38,7 +38,7 @@ const TextareaWithLabelAndValidation = ({
         validationType={validationType}
         validationMessages={validationMessages}
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+        unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
       />
     </InputRow>
   )
@@ -50,7 +50,7 @@ TextareaWithLabelAndValidation.propTypes = {
   required: PropTypes.bool,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func,
+  unignoreNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
