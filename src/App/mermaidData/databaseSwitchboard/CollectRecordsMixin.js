@@ -379,6 +379,10 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    // The API re-validates each record before writing it and skips any that fail, but it replies
+    // HTTP 200 either way, keyed by record id: { [recordId]: { status: 'ok' | 'error', record } }.
+    // The record on an error result carries the fresh validations. Resolves with
+    // { isSubmitted, record }; rejects only when the request itself fails.
     submitSampleUnit = async function submitSampleUnit({ recordId, projectId }) {
       if (!recordId || !projectId) {
         throw new Error('submitSampleUnit expects record, profileId, and projectId parameters')
@@ -397,11 +401,19 @@ const CollectRecordsMixin = (Base) =>
           .then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
-            if (isApiResponseStatusSuccessful) {
-              return this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId)
+            if (!isApiResponseStatusSuccessful) {
+              return Promise.reject(new Error('The API status is unsuccessful'))
             }
 
-            return Promise.reject(new Error('The API status is unsuccessful'))
+            const submitResult = response.data?.[recordId]
+
+            // Pull after a rejection too: the API has already saved the record's new validations.
+            return this._apiSyncInstance
+              .pushThenPullAllProjectDataExceptChoices(projectId)
+              .then(() => ({
+                isSubmitted: submitResult?.status === 'ok',
+                record: submitResult?.record,
+              }))
           })
       }
 

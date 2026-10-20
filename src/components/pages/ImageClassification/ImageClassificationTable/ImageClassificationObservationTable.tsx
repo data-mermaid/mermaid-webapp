@@ -372,6 +372,9 @@ const ImageClassificationObservationTable = ({
           : image,
       ),
     )
+    // A changed annotation can make a validated record invalid again, so the record's
+    // validations go stale the same way they do when a photo is uploaded or removed.
+    onPhotosChanged?.()
   }
 
   // The review window's Previous and Next move through the photos it can open, in table order
