@@ -35,6 +35,7 @@ const BenthicLitTransectInputs = ({
   formik,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
+  unignoreNonObservationFieldValidations,
   validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
@@ -197,8 +198,10 @@ const BenthicLitTransectInputs = ({
               validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
             })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: TRANSECT_NUMBER_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({
+              validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
+            })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(
             transectNumberValidationProperties,
@@ -217,8 +220,8 @@ const BenthicLitTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(labelValidationProperties, 'label')}
           onBlur={formik.handleBlur}
@@ -234,8 +237,8 @@ const BenthicLitTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(
             sampleTimeValidationProperties,
@@ -253,8 +256,8 @@ const BenthicLitTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
           }}
           testId="depth"
           type="number"
@@ -276,8 +279,10 @@ const BenthicLitTransectInputs = ({
               validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
             })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: LENGHT_SURVEYED_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({
+              validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
+            })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(
             lengthSurveyedValidationProperties,
@@ -298,8 +303,8 @@ const BenthicLitTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
           }}
           {...reefSlopeValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(
@@ -333,8 +338,8 @@ const BenthicLitTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
           }}
           {...visibilityValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(
@@ -355,8 +360,8 @@ const BenthicLitTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
           }}
           {...currentValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(
@@ -377,8 +382,10 @@ const BenthicLitTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({
+              validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
+            })
           }}
           {...relativeDepthValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(
@@ -399,8 +406,8 @@ const BenthicLitTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
           }}
           {...tideValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(tideValidationProperties, 'tide')}
@@ -429,8 +436,8 @@ const BenthicLitTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(notesValidationProperties, 'notes')}
           onBlur={formik.handleBlur}
@@ -448,6 +455,7 @@ BenthicLitTransectInputs.propTypes = {
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }

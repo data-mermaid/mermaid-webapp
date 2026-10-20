@@ -38,6 +38,7 @@ const HabitatComplexityTransectInputs = ({
   formik,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
+  unignoreNonObservationFieldValidations,
   validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
@@ -242,8 +243,10 @@ const HabitatComplexityTransectInputs = ({
               validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
             })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: TRANSECT_NUMBER_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({
+              validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
+            })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(
             transectNumberValidationProperties,
@@ -262,8 +265,8 @@ const HabitatComplexityTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(labelValidationProperties, 'label')}
           onBlur={formik.handleBlur}
@@ -279,8 +282,8 @@ const HabitatComplexityTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(
             sampleTimeValidationProperties,
@@ -298,8 +301,8 @@ const HabitatComplexityTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
           }}
           testId="depth"
           type="number"
@@ -321,8 +324,10 @@ const HabitatComplexityTransectInputs = ({
               validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
             })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: LENGHT_SURVEYED_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({
+              validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
+            })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(
             lengthSurveyedValidationProperties,
@@ -341,8 +346,10 @@ const HabitatComplexityTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: INTERVAL_SIZE_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: INTERVAL_SIZE_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({
+              validationPath: INTERVAL_SIZE_VALIDATION_PATH,
+            })
           }}
           testId="interval-size"
           type="number"
@@ -365,8 +372,10 @@ const HabitatComplexityTransectInputs = ({
               validationPath: INTERVAL_START_VALIDATION_PATH,
             })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: INTERVAL_START_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({
+              validationPath: INTERVAL_START_VALIDATION_PATH,
+            })
           }}
           testId="interval-start"
           type="number"
@@ -396,8 +405,8 @@ const HabitatComplexityTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
           }}
           {...reefSlopeValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(
@@ -431,8 +440,8 @@ const HabitatComplexityTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
           }}
           {...visibilityValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(
@@ -453,8 +462,8 @@ const HabitatComplexityTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
           }}
           {...currentValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(
@@ -475,8 +484,10 @@ const HabitatComplexityTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({
+              validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
+            })
           }}
           {...relativeDepthValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(
@@ -497,8 +508,8 @@ const HabitatComplexityTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
           }}
           {...tideValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(tideValidationProperties, 'tide')}
@@ -527,8 +538,8 @@ const HabitatComplexityTransectInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(notesValidationProperties, 'notes')}
           onBlur={formik.handleBlur}
@@ -546,6 +557,7 @@ HabitatComplexityTransectInputs.propTypes = {
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: habitatComplexityValidationPropType.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }

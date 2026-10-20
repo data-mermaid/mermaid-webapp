@@ -381,6 +381,38 @@ const useCollectRecordValidation = ({
     ],
   )
 
+  const unignoreNonObservationFieldValidations = useCallback(
+    ({ validationPath }) => {
+      if (collectRecordBeingEdited && validationPath) {
+        databaseSwitchboardInstance
+          .unignoreNonObservationFieldValidations({
+            record: collectRecordBeingEdited,
+            validationPath,
+          })
+          .then((recordWithUnignoredValidations) => {
+            handleCollectRecordChange(recordWithUnignoredValidations)
+            setIsFormDirty(true)
+          })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(validationResetText))
+              },
+            })
+          })
+      }
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      handleCollectRecordChange,
+      handleHttpResponseError,
+      setIsFormDirty,
+      validationResetText,
+    ],
+  )
+
   const ignoreRecordLevelValidation = useCallback(
     ({ validationId }) => {
       databaseSwitchboardInstance
@@ -473,6 +505,7 @@ const useCollectRecordValidation = ({
     resetObservationValidations,
     resetRecordLevelValidation,
     showValidationResult,
+    unignoreNonObservationFieldValidations,
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,

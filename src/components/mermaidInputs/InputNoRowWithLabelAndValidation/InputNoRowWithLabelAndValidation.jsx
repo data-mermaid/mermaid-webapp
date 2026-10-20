@@ -22,7 +22,7 @@ const InputNoRowWithLabelAndValidation = ({
   id,
   ignoreNonObservationFieldValidations = () => {},
   label,
-  resetNonObservationFieldValidations = () => {},
+  unignoreNonObservationFieldValidations = () => {},
   unit = undefined,
   validationMessages = [],
   validationType = undefined,
@@ -106,7 +106,7 @@ const InputNoRowWithLabelAndValidation = ({
         validationType={validationType}
         validationMessages={validationMessages}
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+        unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
         testId={testId ? `${testId}-validation` : undefined}
       />
     </>
@@ -124,7 +124,7 @@ InputNoRowWithLabelAndValidation.propTypes = {
   renderInput: PropTypes.node,
   renderItemAboveInput: PropTypes.node,
   renderItemWithinInput: PropTypes.node,
-  resetNonObservationFieldValidations: PropTypes.func,
+  unignoreNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
   unit: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,

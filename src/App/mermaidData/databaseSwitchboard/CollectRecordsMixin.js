@@ -486,6 +486,40 @@ const CollectRecordsMixin = (Base) =>
         .then(() => recordWithIgnoredValidations)
     }
 
+    // Only a warning can be ignored, so un-ignoring turns it back into one. Other results keep
+    // their status: ignoring also converts `reset`, so resetting the field's `ok` results here
+    // would make the next ignore show them as ignored warnings.
+    unignoreNonObservationFieldValidations = function unignoreNonObservationFieldValidations({
+      record,
+      validationPath,
+    }) {
+      if (!record || !validationPath) {
+        throw new Error(
+          'unignoreNonObservationFieldValidations requires record and validationPath parameters',
+        )
+      }
+      const path = `validations.results.${validationPath}`
+      const currentValidations = getObjectProperty({
+        object: record,
+        path,
+      })
+
+      const unignoredValidations = Object.values(currentValidations).map((validation) => ({
+        ...validation,
+        status: validation.status === 'ignore' ? 'warning' : validation.status,
+      }))
+
+      const recordWithUnignoredValidations = setObjectPropertyOnClone({
+        object: record,
+        path,
+        value: unignoredValidations,
+      })
+
+      return this._dexiePerUserDataInstance.collect_records
+        .put(recordWithUnignoredValidations)
+        .then(() => recordWithUnignoredValidations)
+    }
+
     ignoreObservationValidations = async function ignoreObservationValidations({
       recordId,
       observationId,

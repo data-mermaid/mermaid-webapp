@@ -389,6 +389,7 @@ const CollectRecordFormPage = ({
     resetObservationValidations,
     resetRecordLevelValidation,
     showValidationResult,
+    unignoreNonObservationFieldValidations,
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,
@@ -577,6 +578,7 @@ const CollectRecordFormPage = ({
             handleSitesChange={handleSitesChange}
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
             resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationPropertiesWithDirtyResetOnInputChange={
               validationPropertiesWithDirtyResetOnInputChange
             }
@@ -589,6 +591,7 @@ const CollectRecordFormPage = ({
             formik={formik}
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
             resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationsApiData={validationsApiData}
             validationPropertiesWithDirtyResetOnInputChange={
               validationPropertiesWithDirtyResetOnInputChange
@@ -604,6 +607,7 @@ const CollectRecordFormPage = ({
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
             usersBelongingToProject={observerProfiles}
             resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationsApiData={validationsApiData}
             validationPropertiesWithDirtyResetOnInputChange={
               validationPropertiesWithDirtyResetOnInputChange
