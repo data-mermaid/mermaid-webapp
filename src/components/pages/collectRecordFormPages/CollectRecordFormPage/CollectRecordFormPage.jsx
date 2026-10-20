@@ -388,6 +388,7 @@ const CollectRecordFormPage = ({
     resetNonObservationFieldValidations,
     resetObservationValidations,
     resetRecordLevelValidation,
+    showValidationResult,
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,
@@ -469,9 +470,21 @@ const CollectRecordFormPage = ({
 
     databaseSwitchboardInstance
       .submitSampleUnit({ recordId, projectId })
-      .then(() => {
-        toast.success(...getToastArguments(t('sample_units.success.record_submitted')))
-        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+      .then(({ isSubmitted, record }) => {
+        if (isSubmitted) {
+          toast.success(...getToastArguments(t('sample_units.success.record_submitted')))
+          navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+
+          return
+        }
+
+        // The API re-validated the record and refused it. Its reply carries the new validations.
+        setSubmitButtonState(buttonGroupStates.submittable)
+        toast.error(...getToastArguments(t('sample_units.errors.submit_rejected')))
+
+        if (record) {
+          showValidationResult(record)
+        }
       })
       .catch((error) => {
         setSubmitButtonState(buttonGroupStates.submittable)
