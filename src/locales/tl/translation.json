@@ -966,6 +966,8 @@
       "data_unavailable": "Kasalukuyang hindi available ang sample na data ng unit.",
       "observations_unavailable_offline": "Hindi available offline ang mga sample na unit observation",
       "submit_disabled": "May mga error o babala na pumipigil sa iyo sa pagsusumite",
+      "submit_failed": "Hindi available ang pagsusumite para sa rekord na ito sa kasalukuyan.",
+      "submit_rejected": "Hindi maisumite ang talaang ito. Ayusin ang mga error sa pagpapatunay at patunayan itong muli.",
       "submitted_data_unavailable": "Kasalukuyang hindi available ang isinumiteng record data.",
       "submitted_moved_to_collecting": "Ang isinumiteng rekord ay inilipat na sa pangongolekta.",
       "submitted_not_editable": "Hindi pa nae-edit ang isinumiteng rekord",
@@ -1239,6 +1241,7 @@
     "similar_name": "May isa pang Rehimen sa Pamamahala na katulad nito.",
     "site_not_found": "Hindi magagamit ang talaan ng site para sa pagpapatunay ng pagkakatulad",
     "system_validation_error": "Error sa pagpapatunay ng sistema:",
+    "unclassified_annotation": "Dapat uriin ang lahat ng mga punto",
     "unconfirmed_annotation": "Maling bilang ng mga nakumpirmang anotasyon",
     "unknown_protocol": "Hindi kilalang protokol",
     "value_not_set": "Hindi nakatakda ang halaga"

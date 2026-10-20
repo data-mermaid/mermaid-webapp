@@ -966,6 +966,8 @@
       "data_unavailable": "Os dados de amostra da unidade não estão disponíveis neste momento.",
       "observations_unavailable_offline": "As observações da unidade de amostra não estão disponíveis offline.",
       "submit_disabled": "Existem erros ou avisos que o estão a impedir de submeter.",
+      "submit_failed": "O envio de dados para este registro está atualmente indisponível.",
+      "submit_rejected": "Este registro não pôde ser enviado. Corrija os erros de validação e tente novamente.",
       "submitted_data_unavailable": "A unidade amostral submetida está atualmente indisponível.",
       "submitted_moved_to_collecting": "A unidade amostral submetida foi movida para a seção Coleta.",
       "submitted_not_editable": "A unidade amostral submetida não foi tornada editável.",
@@ -1239,6 +1241,7 @@
     "similar_name": "Existe outro regime de gestão semelhante a este",
     "site_not_found": "Não existe um registo do site para a validação da semelhança",
     "system_validation_error": "Erro de validação do sistema:",
+    "unclassified_annotation": "Todos os pontos devem ser classificados.",
     "unconfirmed_annotation": "Número incorreto de anotações confirmadas",
     "unknown_protocol": "Método desconhecido",
     "value_not_set": "O valor não está definido"

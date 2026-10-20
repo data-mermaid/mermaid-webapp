@@ -966,6 +966,8 @@
       "data_unavailable": "Los datos de la unidad de muestra no están disponibles actualmente.",
       "observations_unavailable_offline": "Observaciones de la unidad de muestra no disponibles sin conexión",
       "submit_disabled": "Errores o advertencias le impiden enviar",
+      "submit_failed": "Actualmente no es posible enviar información para este registro.",
+      "submit_rejected": "No se pudo enviar este registro. Corrija los errores de validación y vuelva a validarlo.",
       "submitted_data_unavailable": "Los datos de registro enviados no están disponibles actualmente.",
       "submitted_moved_to_collecting": "El registro enviado ha sido movido a la sección Recopilación.",
       "submitted_not_editable": "El registro enviado no se ha hecho editable",
@@ -1239,6 +1241,7 @@
     "similar_name": "Existe otro régimen de gestión similar a este.",
     "site_not_found": "El registro del sitio no está disponible para la validación de similitud",
     "system_validation_error": "Error de validación del sistema:",
+    "unclassified_annotation": "Todos los puntos deben ser clasificados",
     "unconfirmed_annotation": "Número incorrecto de anotaciones confirmadas",
     "unknown_protocol": "Protocolo desconocido",
     "value_not_set": "El valor no está establecido"

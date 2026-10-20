@@ -966,6 +966,8 @@
       "data_unavailable": "Les données d'unité d'échantillonnage ne sont actuellement pas disponibles.",
       "observations_unavailable_offline": "Observations d'unités d'échantillonnage indisponibles hors ligne",
       "submit_disabled": "Des erreurs ou des avertissements vous empêchent de soumettre",
+      "submit_failed": "La soumission de cet enregistrement est actuellement indisponible.",
+      "submit_rejected": "Cet enregistrement n'a pas pu être soumis. Veuillez corriger les erreurs de validation et le soumettre à nouveau.",
       "submitted_data_unavailable": "Les données soumises ne sont actuellement pas disponibles.",
       "submitted_moved_to_collecting": "Le dossier soumis a été transféré à la zone Collecte.",
       "submitted_not_editable": "Le document soumis n'a pas pu être modifié.",
@@ -1239,6 +1241,7 @@
     "similar_name": "Un autre régime de gestion est similaire à celui-ci.",
     "site_not_found": "Enregistrement du site non disponible pour la validation de similarité",
     "system_validation_error": "Erreur de validation du système :",
+    "unclassified_annotation": "Tous les points doivent être classés",
     "unconfirmed_annotation": "Nombre incorrect d'annotations confirmées",
     "unknown_protocol": "Protocole inconnu",
     "value_not_set": "La valeur n'est pas définie."

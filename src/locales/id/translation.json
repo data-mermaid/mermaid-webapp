@@ -951,6 +951,8 @@
       "data_unavailable": "Data unit sampel saat ini tidak tersedia.",
       "observations_unavailable_offline": "Pengamatan unit sampel tidak tersedia secara offline.",
       "submit_disabled": "Kesalahan atau peringatan mencegah Anda untuk mengirimkan.",
+      "submit_failed": "Fitur pengiriman saat ini tidak tersedia untuk catatan ini.",
+      "submit_rejected": "Catatan ini tidak dapat dikirimkan. Perbaiki kesalahan validasi tersebut, lalu lakukan validasi kembali.",
       "submitted_data_unavailable": "Unit sampel yang telah dikirim saat ini tidak tersedia.",
       "submitted_moved_to_collecting": "Unit sampel yang telah dikirim telah dipindahkan ke Mengumpulkan.",
       "submitted_not_editable": "Unit sampel yang telah dikirim belum dapat diedit.",
@@ -1218,6 +1220,7 @@
     "similar_name": "Rezim manajemen lainnya mirip dengan yang satu ini",
     "site_not_found": "Catatan situs tidak tersedia untuk validasi kesamaan",
     "system_validation_error": "Kesalahan validasi sistem:",
+    "unclassified_annotation": "Semua poin harus diklasifikasikan",
     "unconfirmed_annotation": "Jumlah anotasi yang dikonfirmasi salah",
     "unknown_protocol": "Metode yang tidak dikenal",
     "value_not_set": "Nilai tidak ditetapkan"
