@@ -133,6 +133,9 @@ const buildObservationId = (
   return observationId
 }
 
+// The API keys a photo's unclassified points under empty attribute and growth form segments.
+const buildUnclassifiedObservationId = (imageId: string) => `${imageId}::::`
+
 const TableHeaderRow = ({ areValidationsShowing }: { areValidationsShowing: boolean }) => {
   const { t } = useTranslation()
 
@@ -377,15 +380,18 @@ const ImageClassificationObservationTable = ({
     .map(({ file }) => file.id)
   const reviewedImageIndex = reviewableImageIds.indexOf(imageId)
 
-  // Only rows with unconfirmed points render a validation, matching
+  // Only rows with unconfirmed or unclassified points render a validation, matching
   // shouldDisplayObservationValidation below.
   useEffect(() => {
-    const observationIds = distilledImages.flatMap(({ file, distilledAnnotationData }) =>
-      distilledAnnotationData
-        .filter((annotation) => annotation?.unconfirmedCount > 0)
-        .map((annotation) =>
-          buildObservationId(file.id, annotation.benthicAttributeId, annotation.growthFormId),
-        ),
+    const observationIds = distilledImages.flatMap(
+      ({ file, distilledAnnotationData, totalUnknown }) => [
+        ...distilledAnnotationData
+          .filter((annotation) => annotation?.unconfirmedCount > 0)
+          .map((annotation) =>
+            buildObservationId(file.id, annotation.benthicAttributeId, annotation.growthFormId),
+          ),
+        ...(totalUnknown > 0 ? [buildUnclassifiedObservationId(file.id)] : []),
+      ],
     )
 
     onObservationIdsChange?.(new Set(observationIds))
@@ -583,6 +589,22 @@ const ImageClassificationObservationTable = ({
               </Tr>
             )
           }
+          const unclassifiedObsId = buildUnclassifiedObservationId(imgId)
+          const unclassifiedValidation = getObservationValidationInfo({
+            observationId: unclassifiedObsId,
+            collectRecord,
+            areValidationsShowing,
+            observationsPropertyName: 'obs_benthic_photo_quadrats',
+          })
+
+          let unclassifiedTrMessageType: MessageType
+
+          if (unclassifiedValidation.hasObservationErrorValidation) {
+            unclassifiedTrMessageType = 'error'
+          } else if (unclassifiedValidation.hasObservationWarningValidation) {
+            unclassifiedTrMessageType = 'warning'
+          }
+
           // If there are subrows (processed image), render annotation data
           return (
             <React.Fragment key={imgId}>
@@ -734,20 +756,46 @@ const ImageClassificationObservationTable = ({
               {totalUnknown > 0 && (
                 <StyledTr
                   key={`${file.id}-unknown`}
+                  data-observation-id={unclassifiedObsId}
+                  $messageType={unclassifiedTrMessageType}
                   onMouseEnter={() => handleRowMouseEnter(imageIndex)}
                   onMouseLeave={handleRowMouseLeave}
                   $isUnclassified={true}
                 >
                   <StyledTd style={{ textAlign: 'right' }}>{rowIndex++}</StyledTd>
                   <StyledTd style={{ textAlign: 'right' }}>{imageIndex + 1}</StyledTd>
-                  <StyledTd
-                    colSpan={areValidationsShowing ? 5 : 4}
-                    style={{ fontWeight: '700', textAlign: 'center' }}
-                  >
+                  <StyledTd colSpan={4} style={{ fontWeight: '700', textAlign: 'center' }}>
                     {t('image_classification.annotation.unclassified_points', {
                       count: totalUnknown,
                     })}
                   </StyledTd>
+                  {areValidationsShowing && (
+                    <StyledTd>
+                      {unclassifiedValidation.hasObservationErrorValidation && (
+                        <ObservationValidationInfo
+                          hasObservationErrorValidation={
+                            unclassifiedValidation.hasObservationErrorValidation
+                          }
+                          hasObservationIgnoredValidation={
+                            unclassifiedValidation.hasObservationIgnoredValidation
+                          }
+                          hasObservationWarningValidation={
+                            unclassifiedValidation.hasObservationWarningValidation
+                          }
+                          ignoreObservationValidations={ignoreObservationValidations}
+                          isObservationValid={unclassifiedValidation.isObservationValid}
+                          observationId={unclassifiedObsId}
+                          observationValidationMessages={
+                            unclassifiedValidation.observationValidationMessages
+                          }
+                          observationValidationType={
+                            unclassifiedValidation.observationValidationType
+                          }
+                          resetObservationValidations={resetObservationValidations}
+                        />
+                      )}
+                    </StyledTd>
+                  )}
                 </StyledTr>
               )}
             </React.Fragment>
