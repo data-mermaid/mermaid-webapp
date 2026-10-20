@@ -209,9 +209,18 @@ const CollectRecordsMixin = (Base) =>
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
+        // The API marks validations stale on every save. A record saved offline won't reach the
+        // API until it syncs, so it's marked stale here to stop its last result reading as current.
+        const recordSavedOffline = recordToSubmit.validations
+          ? {
+              ...recordToSubmit,
+              validations: { ...recordToSubmit.validations, status: VALIDATION_STATUS.stale },
+            }
+          : recordToSubmit
+
         return this._dexiePerUserDataInstance.collect_records
-          .put(recordToSubmit)
-          .then(() => recordToSubmit)
+          .put(recordSavedOffline)
+          .then(() => recordSavedOffline)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
