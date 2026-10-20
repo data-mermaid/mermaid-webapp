@@ -138,11 +138,10 @@ test('Image classification rows showing an error are counted and highlighted wit
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
-
   const rowIds = [deadCoral, otherAttribute].map((attribute) => `${imageId}::${attribute}::`)
 
-  await waitFor(() => expect(errorChipCounts().at(-1)).toBe(2))
+  // The stored validations show on open, without a Validate click
+  await waitFor(() => expect(errorChipCounts().at(-1)).toBe(2), { timeout: 10000 })
 
   const nextButton = within(screen.getByTestId('form-status-chip-error')).getByRole('button')
 
@@ -176,9 +175,8 @@ test('The unclassified points row shows its error, is counted, and is reached wi
     dexieCurrentUserInstance,
   )
 
-  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
-
-  await waitFor(() => expect(errorChipCounts().at(-1)).toBe(3))
+  // The stored validations show on open, without a Validate click
+  await waitFor(() => expect(errorChipCounts().at(-1)).toBe(3), { timeout: 10000 })
 
   const unclassifiedRow = document.querySelector(`[data-observation-id="${unclassifiedRowId}"]`)
 
@@ -210,8 +208,6 @@ test('Image classification rows leave the Error chip while the table is replaced
       dexiePerUserDataInstance,
     },
   )
-
-  await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
 
   expect(
     await screen.findByTestId('form-status-chip-error', {}, { timeout: 10000 }),
