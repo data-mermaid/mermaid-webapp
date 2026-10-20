@@ -131,8 +131,8 @@ const SaveValidateSubmitButtonGroup = ({
         saveButtonState === buttonGroupStates.saving
           ? 'saving-button'
           : saveButtonState === buttonGroupStates.saved
-          ? 'saved-button'
-          : 'save-button'
+            ? 'saved-button'
+            : 'save-button'
       }
       disabled={isSaveDisabled}
       onClick={onSave}
@@ -149,8 +149,8 @@ const SaveValidateSubmitButtonGroup = ({
         validateButtonState === buttonGroupStates.validating
           ? 'validating-button'
           : validateButtonState === buttonGroupStates.validated
-          ? 'validated-button'
-          : 'validate-button'
+            ? 'validated-button'
+            : 'validate-button'
       }
       onClick={onValidate}
       disabled={isValidateDisabled}

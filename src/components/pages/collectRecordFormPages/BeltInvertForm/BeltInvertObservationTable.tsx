@@ -424,7 +424,7 @@ const BeltInvertObservationTable = ({
   const [notesModalObservationId, setNotesModalObservationId] = useState<string | null>(null)
 
   const notesModalObservation = notesModalObservationId
-    ? observationsState.find((o) => o.id === notesModalObservationId) ?? null
+    ? (observationsState.find((o) => o.id === notesModalObservationId) ?? null)
     : null
   const notesModalRowIndex = notesModalObservationId
     ? observationsState.findIndex((o) => o.id === notesModalObservationId)

@@ -279,14 +279,17 @@ const buildDensityByGoi = (
   goiChoices: GoiChoice[],
   areaM2: number,
 ): Record<string, number> =>
-  goiChoices.reduce((result, goi) => {
-    const density = areaM2 > 0 ? ((goiCountTotals.get(goi.id) ?? 0) / areaM2) * 10000 : 0
-    const rounded = roundToTwoDecimals(density)
-    if (rounded > 0) {
-      result[goi.name] = rounded
-    }
-    return result
-  }, {} as Record<string, number>)
+  goiChoices.reduce(
+    (result, goi) => {
+      const density = areaM2 > 0 ? ((goiCountTotals.get(goi.id) ?? 0) / areaM2) * 10000 : 0
+      const rounded = roundToTwoDecimals(density)
+      if (rounded > 0) {
+        result[goi.name] = rounded
+      }
+      return result
+    },
+    {} as Record<string, number>,
+  )
 
 export const calculateDensityByGroupOfInterest = (
   observations: Observation[],

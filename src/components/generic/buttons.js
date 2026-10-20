@@ -49,11 +49,9 @@ export const Button = styled.button.attrs((props) => ({
 export const ButtonPrimary = styled(Button)`
   background-color: ${theme.color.primaryColor};
   color: ${theme.color.primaryText};
-  ${hoverState(
-    css`
-      background-color: ${theme.color.primaryHover};
-    `,
-  )}
+  ${hoverState(css`
+    background-color: ${theme.color.primaryHover};
+  `)}
   &:disabled {
     background-color: ${theme.color.primaryDisabledColor};
     color: ${theme.color.primaryDisabledText};
@@ -67,11 +65,9 @@ export const buttonSecondaryCss = css`
   background-color: ${theme.color.white};
   color: ${theme.color.secondaryText};
   border: solid 1px ${theme.color.secondaryBorder};
-  ${hoverState(
-    css`
-      background-color: ${theme.color.secondaryHover};
-    `,
-  )}
+  ${hoverState(css`
+    background-color: ${theme.color.secondaryHover};
+  `)}
   &:disabled {
     background-color: ${theme.color.secondaryDisabledColor};
     color: ${theme.color.secondaryDisabledText};
@@ -98,11 +94,9 @@ export const ButtonCallout = styled(Button)`
   background-color: ${theme.color.calloutColor};
   color: ${theme.color.calloutText};
   border: solid 1px ${theme.color.calloutBorder};
-  ${hoverState(
-    css`
-      background-color: ${theme.color.calloutHover};
-    `,
-  )}
+  ${hoverState(css`
+    background-color: ${theme.color.calloutHover};
+  `)}
   &:disabled {
     color: ${theme.color.calloutDisabledText};
     border-color: ${theme.color.disabledBorder};
@@ -115,12 +109,10 @@ export const ButtonCaution = styled(Button)`
   background-color: ${theme.color.cautionColor};
   color: ${theme.color.white};
   border: solid 1px ${theme.color.cautionColor};
-  ${hoverState(
-    css`
-      background-color: ${theme.color.cautionColor};
-      color: ${theme.color.white};
-    `,
-  )}
+  ${hoverState(css`
+    background-color: ${theme.color.cautionColor};
+    color: ${theme.color.white};
+  `)}
   &:disabled {
     background-color: ${theme.color.cautionDisabledColor};
     color: ${theme.color.cautionDisabledText};

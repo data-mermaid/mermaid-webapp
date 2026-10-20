@@ -52,9 +52,8 @@ const FishNameMixin = (Base) =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        const _protectAgainstNetworkStutter = await this._dexiePerUserDataInstance.fish_species.put(
-          newFishObject,
-        )
+        const _protectAgainstNetworkStutter =
+          await this._dexiePerUserDataInstance.fish_species.put(newFishObject)
 
         return this._apiSyncInstance.pushThenPullAttributes('fish_species').then((response) => {
           const newFishSpeciesFromApi = response.data.fish_species.updates[0]
