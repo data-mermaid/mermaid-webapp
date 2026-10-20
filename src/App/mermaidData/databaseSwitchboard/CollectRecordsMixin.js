@@ -496,9 +496,8 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      const unmodifiedCollectRecord = await this._dexiePerUserDataInstance.collect_records.get(
-        recordId,
-      )
+      const unmodifiedCollectRecord =
+        await this._dexiePerUserDataInstance.collect_records.get(recordId)
 
       const observationTableNames = getObservationsPropertyNames(unmodifiedCollectRecord)
 
@@ -623,9 +622,8 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      const unmodifiedCollectRecord = await this._dexiePerUserDataInstance.collect_records.get(
-        recordId,
-      )
+      const unmodifiedCollectRecord =
+        await this._dexiePerUserDataInstance.collect_records.get(recordId)
 
       const areThereValidationsToReset = !!unmodifiedCollectRecord?.validations?.results?.data
 

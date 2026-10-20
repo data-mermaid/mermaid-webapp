@@ -29,7 +29,7 @@ export const getSystemValidationErrorMessage = (drySubmitContext) => {
 
 export const getDuplicateSampleUnitLink = (context, projectId) => {
   const { duplicate_transect_method: duplicateTransectMethod, protocol } = context ?? {}
-  const protocolPath = protocol != null ? `/${protocol}/${duplicateTransectMethod}` : '' 
+  const protocolPath = protocol != null ? `/${protocol}/${duplicateTransectMethod}` : ''
   const linkToSampleUnit = `/projects/${projectId}/submitted${protocolPath}`
 
   return (

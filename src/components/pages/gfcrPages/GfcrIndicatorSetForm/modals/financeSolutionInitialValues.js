@@ -43,8 +43,8 @@ const getFinanceSolutionInitialValues = (financeSolution) => {
     used_an_incubator: isUsedAnIncubatorApplicable(fs_type)
       ? getUsedAnIncubatorFormValue(used_an_incubator)
       : '',
-    gender_smart: isGenderSmartApplicable(fs_type) ? gender_smart ?? '' : '',
-    local_enterprise: isLocalEnterpriseApplicable(fs_type) ? local_enterprise ?? '' : '',
+    gender_smart: isGenderSmartApplicable(fs_type) ? (gender_smart ?? '') : '',
+    local_enterprise: isLocalEnterpriseApplicable(fs_type) ? (local_enterprise ?? '') : '',
     sustainable_finance_mechanisms: sustainable_finance_mechanisms ?? [],
     notes,
   }

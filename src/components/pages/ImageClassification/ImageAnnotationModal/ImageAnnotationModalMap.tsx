@@ -469,10 +469,7 @@ const ImageAnnotationModalMap = ({
       const xAnchor = properties?.isPointInLeftHalfOfImage ? 'left' : 'right'
       const yAnchor = properties?.isPointInTopHalfOfImage ? 'top' : 'bottom'
       const popupAnchorPosition = `${yAnchor}-${xAnchor}` as
-        | 'top-left'
-        | 'top-right'
-        | 'bottom-left'
-        | 'bottom-right'
+        'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 
       const bounds = new maplibregl.LngLatBounds(
         getBounds(feature) as unknown as [LngLatLike, LngLatLike],
