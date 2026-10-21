@@ -13,7 +13,7 @@ const InputRadioWithLabelAndValidation = ({
   options,
   validationMessages = [],
   ignoreNonObservationFieldValidations = () => {},
-  resetNonObservationFieldValidations = () => {},
+  unignoreNonObservationFieldValidations = () => {},
   validationType = undefined,
   testId = undefined,
   additionalText = null,
@@ -41,7 +41,7 @@ const InputRadioWithLabelAndValidation = ({
       <div aria-labelledby={`${id}-input-radio-with-label-and-validation`}>{optionsList}</div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+        unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
         validationMessages={validationMessages}
         validationType={validationType}
         additionalText={additionalText}
@@ -57,7 +57,7 @@ InputRadioWithLabelAndValidation.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func,
+  unignoreNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,

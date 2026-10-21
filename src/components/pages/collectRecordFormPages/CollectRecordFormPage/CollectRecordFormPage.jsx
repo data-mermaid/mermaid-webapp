@@ -115,6 +115,7 @@ const CollectRecordFormPage = ({
   observationsTable1Reducer = [],
   observationsTable2Reducer = [],
   ObservationTable1,
+  observationTable1Props = {},
   ObservationTable2 = undefined,
   isImageClassificationSelected = null,
   sampleUnitFormatSaveFunction,
@@ -383,10 +384,13 @@ const CollectRecordFormPage = ({
     handleValidate,
     ignoreNonObservationFieldValidations,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     ignoreRecordLevelValidation,
     resetNonObservationFieldValidations,
     resetObservationValidations,
     resetRecordLevelValidation,
+    showValidationResult,
+    unignoreNonObservationFieldValidations,
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,
@@ -468,9 +472,21 @@ const CollectRecordFormPage = ({
 
     databaseSwitchboardInstance
       .submitSampleUnit({ recordId, projectId })
-      .then(() => {
-        toast.success(...getToastArguments(t('sample_units.success.record_submitted')))
-        navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+      .then(({ isSubmitted, record }) => {
+        if (isSubmitted) {
+          toast.success(...getToastArguments(t('sample_units.success.record_submitted')))
+          navigate(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+
+          return
+        }
+
+        // The API re-validated the record and refused it. Its reply carries the new validations.
+        setSubmitButtonState(buttonGroupStates.submittable)
+        toast.error(...getToastArguments(t('sample_units.errors.submit_rejected')))
+
+        if (record) {
+          showValidationResult(record)
+        }
       })
       .catch((error) => {
         setSubmitButtonState(buttonGroupStates.submittable)
@@ -563,6 +579,7 @@ const CollectRecordFormPage = ({
             handleSitesChange={handleSitesChange}
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
             resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationPropertiesWithDirtyResetOnInputChange={
               validationPropertiesWithDirtyResetOnInputChange
             }
@@ -575,6 +592,7 @@ const CollectRecordFormPage = ({
             formik={formik}
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
             resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationsApiData={validationsApiData}
             validationPropertiesWithDirtyResetOnInputChange={
               validationPropertiesWithDirtyResetOnInputChange
@@ -590,6 +608,7 @@ const CollectRecordFormPage = ({
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
             usersBelongingToProject={observerProfiles}
             resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationsApiData={validationsApiData}
             validationPropertiesWithDirtyResetOnInputChange={
               validationPropertiesWithDirtyResetOnInputChange
@@ -601,6 +620,7 @@ const CollectRecordFormPage = ({
           data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[0]}
         >
           <ObservationTable1
+            {...observationTable1Props}
             testId="observations-section"
             onObservationIdsChange={setImageClassificationObservationIds}
             areValidationsShowing={areValidationsShowing}
@@ -608,6 +628,7 @@ const CollectRecordFormPage = ({
             collectRecord={collectRecordBeingEdited}
             formik={formik}
             ignoreObservationValidations={ignoreObservationValidations}
+            unignoreObservationValidations={unignoreObservationValidations}
             observationsReducer={observationsTable1Reducer}
             resetObservationValidations={resetObservationValidations}
             setAreObservationsInputsDirty={setAreObservationsInputsDirty}
@@ -624,6 +645,7 @@ const CollectRecordFormPage = ({
               collectRecord={collectRecordBeingEdited}
               formik={formik}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               observationsReducer={observationsTable2Reducer}
               resetObservationValidations={resetObservationValidations}
               setAreObservationsInputsDirty={setAreObservationsInputsDirty}
@@ -737,6 +759,9 @@ CollectRecordFormPage.propTypes = {
   observationsTable1Reducer: observationsReducerPropType,
   observationsTable2Reducer: PropTypes.array,
   ObservationTable1: PropTypes.elementType.isRequired,
+  // Protocol-specific props for ObservationTable1, so the form can pass a stable component
+  // instead of a closure that changes type (and remounts) whenever those values change.
+  observationTable1Props: PropTypes.shape({}),
   ObservationTable2: PropTypes.elementType,
   sampleUnitFormatSaveFunction: PropTypes.func.isRequired,
   sampleUnitName: PropTypes.string.isRequired,

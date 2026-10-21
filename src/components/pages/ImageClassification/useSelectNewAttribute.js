@@ -13,7 +13,7 @@ export const useSelectNewAttribute = ({
   dataToReview,
   setDataToReview,
   databaseSwitchboardInstance,
-  setIsDataUpdatedSinceLastSave,
+  onPointsChanged,
 }) => {
   const [shouldDisplayModal, setShouldDisplayModal] = useState(false)
   const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
@@ -87,7 +87,7 @@ export const useSelectNewAttribute = ({
     )
 
     setDataToReview({ ...dataToReview, points: updatedPoints })
-    setIsDataUpdatedSinceLastSave(true)
+    onPointsChanged([selectedPoint.id])
     handleCloseModal()
   }
 
@@ -123,7 +123,7 @@ export const useSelectNewAttribute = ({
     )
 
     setDataToReview({ ...dataToReview, points: updatedPoints })
-    setIsDataUpdatedSinceLastSave(true)
+    onPointsChanged([selectedPoint.id])
     handleCloseModal()
   }
 

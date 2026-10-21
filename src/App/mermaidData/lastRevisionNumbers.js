@@ -26,7 +26,7 @@ const persistLastRevisionNumbersPulled = ({ dexiePerUserDataInstance, apiData, p
           const isDataTypeProjectAssociated = getIsDataTypeProjectAssociated(dataType)
 
           const projectIdToUse = isDataTypeProjectAssociated
-            ? projectId ?? 'n/a' // this hedges against the api sending more dataTypes than were asked for, eg in tests
+            ? (projectId ?? 'n/a') // this hedges against the api sending more dataTypes than were asked for, eg in tests
             : 'n/a'
 
           dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled.put({

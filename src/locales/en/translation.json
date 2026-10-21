@@ -222,6 +222,8 @@
   "fish_size_bin_info": "Name of bin scheme used to estimate fish size for the transect. Choose 1 cm if the fish size recorded does not use bins.",
   "fish_size_observed": "Size of fish observed, in cm (e.g. 4.5 or 5-10).",
   "forms": {
+    "number_maximum": "Up to {{max}}",
+    "number_whole_only": "Whole numbers only",
     "required_field": "This field is required",
     "submit_for_review": "Send for review"
   },
@@ -455,7 +457,7 @@
   "go_to_explore_projects": "View all your projects on MERMAID Explore",
   "go_to_explore_sample_event": "View this sample event on MERMAID Explore",
   "go_to_explore_this_project": "View this project on MERMAID Explore",
-  "go_to_management_overview_page": "Other sample events at this site have a different management regime. Go to <a>Management Regime Overview</a>.",
+  "go_to_management_overview_page": "Other sample events at this site have a different management regime. Go to <a>Sample units & management regimes</a>.",
   "habitat_complexity_score": "Habitat complexity score",
   "habitat_complexity_score_info": "Benthic complexity score (0 - 5) for transect interval, as integer (e.g. 3). The categories are 0 no vertical reef, flat or rubbly areas; 1 low (<30 cm high) and sparse relief; 2 low but widespread relief; 3 widespread moderately complex (30-60 cm high) relief; 4 widespread very complex (60 -100 cm high) relief with numerous fissures and caves; 5 exceptionally complex (>1 m high) relief with numerous caves and overhangs).",
   "help_documents": "Help (PDF)",
@@ -477,6 +479,8 @@
     "benthic_attribute": "Benthic attribute",
     "buttons": {
       "confirm_all": "Confirm all",
+      "next_photo": "Next photo",
+      "previous_photo": "Previous photo",
       "upload_photos": "Upload photos",
       "zoom_to_attribute": "Zoom to attribute"
     },
@@ -496,7 +500,8 @@
       "invalid_file_type": "Invalid file type.",
       "no_classification_enabled": "You are currently unable to upload new images for classification. You may access and review previously uploaded images.",
       "no_photo_found": "Failed to delete photo – no photo found.",
-      "photo_too_small": "Photos should be a minimum height and width of {{minImageWidthAndHeight}} pixels. This photo is too small: {{fileName}}."
+      "photo_too_small": "Photos should be a minimum height and width of {{minImageWidthAndHeight}} pixels. This photo is too small: {{fileName}}.",
+      "save_failed_changes_kept": "Failed to save your changes. They are kept in this window. Please try again shortly."
     },
     "feature_introduction": {
       "description": "Through a partnership with <a /> from the University of California San Diego and Scripps Institution of Oceanography, MERMAID now includes AI-based classification using a pyspacer deep learning model. This integration enables fast, scalable analysis of benthic photos so that you can generate insights quickly and consistently with machine learning and AI.",
@@ -599,7 +604,7 @@
     "management_regime_name": "Management regime name",
     "management_regimes": "Management regimes",
     "merge_failed": "Failed to find and replace management regime",
-    "missing_mr_name": "(Missing MR name)",
+    "missing_mr_name": "(Missing name)",
     "name_info": "Name of the MPA, OECM, or other relevant managed area. Can be an official name defined by a governmental or standardized source such as <helperTextLink>protectedseas.net</helperTextLink>; alternatively, a descriptive local label like 'Northeast Point seasonal closure' can be used.",
     "new": "New management",
     "new_mr": "New management",
@@ -764,7 +769,7 @@
   },
   "offline": {
     "page_unavailable_offline": "This page is unavailable offline.",
-    "setup_failed": "Offline mode could not be set up. Reload the page while online before working offline.",
+    "setup_failed": "Offline mode could not be enabled. Reload the page while online before working offline.",
     "unavailable_offline": "Unavailable offline"
   },
   "offline_toggle": "Offline toggle",
@@ -963,6 +968,8 @@
       "data_unavailable": "Sample unit data is currently unavailable.",
       "observations_unavailable_offline": "Sample unit observations unavailable offline.",
       "submit_disabled": "Errors or warnings are preventing you from submitting.",
+      "submit_failed": "Submitting is currently unavailable for this record.",
+      "submit_rejected": "This record could not be submitted. Fix the validation errors and warnings, and validate it again.",
       "submitted_data_unavailable": "Submitted record data is currently unavailable.",
       "submitted_moved_to_collecting": "The submitted record has been moved to Collecting.",
       "submitted_not_editable": "The submitted record has not been made editable.",
@@ -1031,8 +1038,8 @@
     "which_are_missing": "Which sample units are missing",
     "who_has_unsubmitted": "Who has unsubmitted sample units"
   },
-  "sample_units_and_management_regimes": "Sample units / management regimes",
-  "sample_units_and_observers": "Sample units / observers",
+  "sample_units_and_management_regimes": "Sample units & management regimes",
+  "sample_units_and_observers": "Sample units & observers",
   "search": {
     "no_results": "No results found"
   },
@@ -1064,7 +1071,7 @@
     "longitude": "Longitude",
     "longitude_info": "Longitude in decimal degrees. Should be a number between -180 and 180, representing the east-west position on the Earth's surface. A positive value indicates a location to the east of the Prime Meridian, while a negative value indicates a location to the west of the Prime Meridian. If you need to convert from degrees-minutes-seconds, an online calculator is <helperTextLink>here.</helperTextLink>",
     "merge_failed": "Failed to find and replace site",
-    "missing_site_name": "(Missing site name)",
+    "missing_site_name": "(Missing name)",
     "new": "New site",
     "no_sites": "This project has no sites.",
     "only_admin_delete": "Only admins can delete a site.",
@@ -1236,7 +1243,8 @@
     "similar_name": "Another management regime is similar to this one",
     "site_not_found": "Site record not available for similarity validation",
     "system_validation_error": "System validation error:",
-    "unconfirmed_annotation": "Wrong number of confirmed annotations",
+    "unclassified_annotation": "All points must be classified and confirmed",
+    "unconfirmed_annotation": "All points must be confirmed",
     "unknown_protocol": "Unknown method",
     "value_not_set": "Value is not set"
   },

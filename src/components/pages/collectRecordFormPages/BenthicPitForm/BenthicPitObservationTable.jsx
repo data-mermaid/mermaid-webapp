@@ -67,6 +67,7 @@ const BenthicPitObservationsTable = ({
   collectRecord = undefined,
   formik,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
@@ -260,11 +261,11 @@ const BenthicPitObservationsTable = ({
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
               observationValidationType={observationValidationType}
-              resetObservationValidations={resetObservationValidations}
             />
           ) : null}
           <Td $align="center">
@@ -289,6 +290,7 @@ const BenthicPitObservationsTable = ({
     collectRecord,
     deleteObservationLabelText,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     intervalSize,
     intervalStart,
     proposeNewBenthicAttributeText,
@@ -389,6 +391,7 @@ BenthicPitObservationsTable.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: benthicPitRecordPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  unignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
   resetObservationValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,

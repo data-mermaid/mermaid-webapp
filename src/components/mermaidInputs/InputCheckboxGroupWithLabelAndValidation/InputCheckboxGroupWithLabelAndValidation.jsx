@@ -12,7 +12,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
   label,
   onChange,
   options,
-  resetNonObservationFieldValidations = () => {},
+  unignoreNonObservationFieldValidations = () => {},
   validationMessages = [],
   validationType = undefined,
   value,
@@ -68,7 +68,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
       <div aria-labelledby={`${id}-checkbox-group-with-label-and-validation`}>{checkboxGroup}</div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+        unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
         validationMessages={validationMessages}
         validationType={validationType}
       />
@@ -88,7 +88,7 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
   ).isRequired,
-  resetNonObservationFieldValidations: PropTypes.func,
+  unignoreNonObservationFieldValidations: PropTypes.func,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
   value: PropTypes.arrayOf(

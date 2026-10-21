@@ -64,7 +64,7 @@ interface ImageAnnotationModalMapProps {
   selectedAttributeId?: string
   setDataToReview: Dispatch<SetStateAction<ImageClassificationResponse>>
   setHasMapLoaded: Dispatch<SetStateAction<boolean>>
-  setIsDataUpdatedSinceLastSave: Dispatch<SetStateAction<boolean>>
+  onPointsChanged: (pointIds: string[]) => void
   setIsTableShowing: Dispatch<SetStateAction<boolean>>
   setPatchesGeoJson: Dispatch<SetStateAction<GeoJSON.FeatureCollection>>
   zoomToPaddedBounds: (bounds: number[], isPointLabelPopupOpen?: boolean) => void
@@ -127,7 +127,7 @@ const ImageAnnotationModalMap = ({
   selectedAttributeId,
   setDataToReview,
   setHasMapLoaded,
-  setIsDataUpdatedSinceLastSave,
+  onPointsChanged,
   setIsTableShowing,
   setPatchesGeoJson,
   zoomToPaddedBounds,
@@ -469,10 +469,7 @@ const ImageAnnotationModalMap = ({
       const xAnchor = properties?.isPointInLeftHalfOfImage ? 'left' : 'right'
       const yAnchor = properties?.isPointInTopHalfOfImage ? 'top' : 'bottom'
       const popupAnchorPosition = `${yAnchor}-${xAnchor}` as
-        | 'top-left'
-        | 'top-right'
-        | 'bottom-left'
-        | 'bottom-right'
+        'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 
       const bounds = new maplibregl.LngLatBounds(
         getBounds(feature) as unknown as [LngLatLike, LngLatLike],
@@ -754,7 +751,7 @@ const ImageAnnotationModalMap = ({
             setDataToReview={setDataToReview}
             pointId={selectedPoint.id}
             databaseSwitchboardInstance={databaseSwitchboardInstance}
-            setIsDataUpdatedSinceLastSave={setIsDataUpdatedSinceLastSave}
+            onPointsChanged={onPointsChanged}
             resetZoom={resetZoom}
             zoomToSelectedPoint={zoomToSelectedPoint}
             selectNextUnconfirmedPoint={selectNextUnconfirmedPoint}

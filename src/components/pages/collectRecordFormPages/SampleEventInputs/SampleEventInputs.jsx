@@ -29,6 +29,7 @@ const SampleEventInputs = ({
   handleSitesChange,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
+  unignoreNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
   const { t } = useTranslation()
@@ -98,8 +99,8 @@ const SampleEventInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
           }}
           {...siteValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(siteValidationProperties, 'site')}
@@ -119,8 +120,8 @@ const SampleEventInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(
             managementValidationProperties,
@@ -142,8 +143,8 @@ const SampleEventInputs = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SAMPLE_DATE_VALIDATION_PATH })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: SAMPLE_DATE_VALIDATION_PATH })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath: SAMPLE_DATE_VALIDATION_PATH })
           }}
           {...sampleDateValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(
@@ -170,6 +171,7 @@ SampleEventInputs.propTypes = {
   handleSitesChange: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 

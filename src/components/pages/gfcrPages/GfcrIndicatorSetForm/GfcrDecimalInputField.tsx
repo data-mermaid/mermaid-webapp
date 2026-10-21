@@ -53,7 +53,6 @@ const GfcrDecimalInputField = ({
           onBlur={handleBlur}
           onFocus={handleInputFocus}
           decimalPlaces={maxNumberOfDecimals}
-          min={0}
           max={maxValue}
           unit={unit}
         />

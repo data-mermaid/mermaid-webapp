@@ -95,7 +95,9 @@ test('Macroinvertebrate observations add new species - filling out new species f
 
   await user.click(submitButton)
 
-  await waitFor(() => expect(screen.queryByTestId('attribute-proposal-modal')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(screen.queryByTestId('attribute-proposal-modal')).not.toBeInTheDocument(),
+  )
   const beltInvertFormAfterSubmit = screen.getByRole('form')
 
   expect(await within(beltInvertFormAfterSubmit).findByDisplayValue('Nebrius ridens'))
@@ -171,7 +173,9 @@ test('Macroinvertebrate observations add new species - proposing new species tha
 
   await user.click(submitButton)
 
-  await waitFor(() => expect(screen.queryByTestId('attribute-proposal-modal')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(screen.queryByTestId('attribute-proposal-modal')).not.toBeInTheDocument(),
+  )
   const beltInvertFormAfterSubmit = screen.getByRole('form')
 
   // input display value is updated with *existing* species selected

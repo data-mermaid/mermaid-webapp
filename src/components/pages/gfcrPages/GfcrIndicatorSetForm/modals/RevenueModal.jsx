@@ -309,7 +309,6 @@ const RevenueModal = ({
                 onChange={(val) => formik.setFieldValue('revenue_amount', val)}
                 onBlur={formik.handleBlur}
                 decimalPlaces={2}
-                min={0}
                 max={GFCR_MAX_REVENUE_AMOUNT}
                 unit="USD $"
                 alignUnitsLeft={true}

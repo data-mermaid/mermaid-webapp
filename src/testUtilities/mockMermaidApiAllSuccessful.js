@@ -83,8 +83,13 @@ const mockMermaidApiAllSuccessful = setupServer(
   http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
     return new HttpResponse(null, { status: 200 })
   }),
-  http.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, () => {
-    return new HttpResponse(null, { status: 200 })
+  // Like the API, replies per record id. Every record submits successfully here.
+  http.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, async ({ request }) => {
+    const { ids } = await request.json()
+
+    return HttpResponse.json(
+      Object.fromEntries(ids.map((id) => [id, { status: 'ok', message: 'Success' }])),
+    )
   }),
   http.get(`${apiBaseUrl}/projects/5/summary/`, () => {
     return new HttpResponse(null, { status: 200 })

@@ -41,6 +41,7 @@ const ObserversInput = ({
   ignoreNonObservationFieldValidations,
   usersBelongingToProject,
   resetNonObservationFieldValidations,
+  unignoreNonObservationFieldValidations,
   validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
   ...restOfProps
@@ -126,8 +127,8 @@ const ObserversInput = ({
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath })
           }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath })
+          unignoreNonObservationFieldValidations={() => {
+            unignoreNonObservationFieldValidations({ validationPath })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(validationProperties, 'observers')}
           onChange={({ selectedItems }) => handleObserversChange(selectedItems)}
@@ -173,6 +174,7 @@ ObserversInput.propTypes = {
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   usersBelongingToProject: observersPropType.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: PropTypes.shape({ observers: observersValidationPropType }).isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }

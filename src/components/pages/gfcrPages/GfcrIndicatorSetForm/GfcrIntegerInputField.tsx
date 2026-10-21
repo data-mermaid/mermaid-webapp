@@ -57,7 +57,6 @@ const GfcrIntegerInputField = ({
           onBlur={handleBlur}
           onFocus={handleInputFocus}
           decimalPlaces={0}
-          min={0}
           max={maxValue}
         />
       )}

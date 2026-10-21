@@ -1063,8 +1063,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(siteRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(siteRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(siteRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(siteRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(siteRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(siteRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(managementRow).getByTestId('ignore-warning-checkbox'))
@@ -1073,8 +1073,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
     expect(within(managementRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
 
-  expect(within(managementRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(managementRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(managementRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(managementRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(managementRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(depthRow).getByTestId('ignore-warning-checkbox'))
@@ -1082,8 +1082,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(depthRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(depthRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(depthRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(depthRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(depthRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(depthRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(sampleDateRow).getByTestId('ignore-warning-checkbox'))
@@ -1091,8 +1091,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(sampleDateRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(sampleDateRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(sampleDateRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(sampleDateRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(sampleDateRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(sampleDateRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(sampleTimeRow).getByTestId('ignore-warning-checkbox'))
@@ -1100,8 +1100,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(sampleTimeRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(sampleTimeRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(sampleTimeRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(sampleTimeRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(sampleTimeRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(sampleTimeRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(transectNumberRow).getByTestId('ignore-warning-checkbox'))
@@ -1109,8 +1109,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(transectNumberRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(transectNumberRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(transectNumberRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(transectNumberRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(transectNumberRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(
     within(transectNumberRow).queryByTestId('passed-validation-indicator'),
   ).not.toBeInTheDocument()
@@ -1120,8 +1120,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(labelRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(labelRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(labelRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(labelRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(labelRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(labelRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(lengthSurveyedRow).getByTestId('ignore-warning-checkbox'))
@@ -1129,8 +1129,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(lengthSurveyedRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(lengthSurveyedRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(lengthSurveyedRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(lengthSurveyedRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(lengthSurveyedRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(
     within(lengthSurveyedRow).queryByTestId('passed-validation-indicator'),
   ).not.toBeInTheDocument()
@@ -1140,8 +1140,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(relativeDepthRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(relativeDepthRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(relativeDepthRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(relativeDepthRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(relativeDepthRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(
     within(relativeDepthRow).queryByTestId('passed-validation-indicator'),
   ).not.toBeInTheDocument()
@@ -1150,8 +1150,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(reefSlopeRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(reefSlopeRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(reefSlopeRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(reefSlopeRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(reefSlopeRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(visibilityRow).getByTestId('ignore-warning-checkbox'))
@@ -1159,8 +1159,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(visibilityRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(visibilityRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(visibilityRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(visibilityRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(visibilityRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(visibilityRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(currentRow).getByTestId('ignore-warning-checkbox'))
@@ -1168,8 +1168,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(currentRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(currentRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(currentRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(currentRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(currentRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(currentRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(tideRow).getByTestId('ignore-warning-checkbox'))
@@ -1177,8 +1177,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(tideRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(tideRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(tideRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(tideRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(tideRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(tideRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(notesRow).getByTestId('ignore-warning-checkbox'))
@@ -1186,8 +1186,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(notesRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(notesRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(notesRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(notesRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(notesRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(notesRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(observersRow).getByTestId('ignore-warning-checkbox'))
@@ -1195,8 +1195,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(observersRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(observersRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(observersRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(observersRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(observersRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(quadratNumberStartRow).getByTestId('ignore-warning-checkbox'))
@@ -1206,8 +1206,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
       within(quadratNumberStartRow).queryByTestId('message-pill-ignore'),
     ).not.toBeInTheDocument(),
   )
-  expect(within(quadratNumberStartRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(quadratNumberStartRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(quadratNumberStartRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(quadratNumberStartRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(
     within(quadratNumberStartRow).queryByTestId('passed-validation-indicator'),
   ).not.toBeInTheDocument()
@@ -1217,8 +1217,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   await waitFor(() =>
     expect(within(quadratSizeRow).queryByTestId('message-pill-ignore')).not.toBeInTheDocument(),
   )
-  expect(within(quadratSizeRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(quadratSizeRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(quadratSizeRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(quadratSizeRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(
     within(quadratSizeRow).queryByTestId('passed-validation-indicator'),
   ).not.toBeInTheDocument()
@@ -1230,8 +1230,8 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
       within(numberOfQuadratsRow).queryByTestId('message-pill-ignore'),
     ).not.toBeInTheDocument(),
   )
-  expect(within(numberOfQuadratsRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(numberOfQuadratsRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(numberOfQuadratsRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(numberOfQuadratsRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(
     within(numberOfQuadratsRow).queryByTestId('passed-validation-indicator'),
   ).not.toBeInTheDocument()
@@ -1243,8 +1243,10 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
       within(numberOfPointsPerQuadratRow).queryByTestId('message-pill-ignore'),
     ).not.toBeInTheDocument(),
   )
-  expect(within(numberOfPointsPerQuadratRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(numberOfPointsPerQuadratRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(numberOfPointsPerQuadratRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(
+    within(numberOfPointsPerQuadratRow).getByTestId('ignore-warning-checkbox'),
+  ).not.toBeChecked()
   expect(
     within(numberOfPointsPerQuadratRow).queryByTestId('passed-validation-indicator'),
   ).not.toBeInTheDocument()

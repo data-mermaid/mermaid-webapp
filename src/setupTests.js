@@ -3,7 +3,7 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest'
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 import { configure } from '@testing-library/react'
 import axiosInstance from './library/axiosRetry'
 

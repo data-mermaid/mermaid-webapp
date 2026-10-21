@@ -168,9 +168,18 @@ const CollectRecordsMixin = (Base) =>
         protocol,
       })
 
+      // The API marks validations stale on every save. The IDB copy is marked stale too, so a
+      // record whose save hasn't reached the API yet doesn't read its last result as current.
+      const recordForOfflineStorage = recordToSubmit.validations
+        ? {
+            ...recordToSubmit,
+            validations: { ...recordToSubmit.validations, status: VALIDATION_STATUS.stale },
+          }
+        : recordToSubmit
+
       if (this._isOnlineAuthenticatedAndReady) {
         // Add to IDB in case the there are network issues before the API responds
-        await this._dexiePerUserDataInstance.collect_records.put(recordToSubmit)
+        await this._dexiePerUserDataInstance.collect_records.put(recordForOfflineStorage)
 
         return axios
           .post(
@@ -210,8 +219,8 @@ const CollectRecordsMixin = (Base) =>
       }
       if (this._isOfflineAuthenticatedAndReady) {
         return this._dexiePerUserDataInstance.collect_records
-          .put(recordToSubmit)
-          .then(() => recordToSubmit)
+          .put(recordForOfflineStorage)
+          .then(() => recordForOfflineStorage)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -379,6 +388,10 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    // The API re-validates each record before writing it and skips any that fail, but it replies
+    // HTTP 200 either way, keyed by record id: { [recordId]: { status: 'ok' | 'error', record } }.
+    // The record on an error result carries the fresh validations. Resolves with
+    // { isSubmitted, record }; rejects only when the request itself fails.
     submitSampleUnit = async function submitSampleUnit({ recordId, projectId }) {
       if (!recordId || !projectId) {
         throw new Error('submitSampleUnit expects record, profileId, and projectId parameters')
@@ -397,11 +410,19 @@ const CollectRecordsMixin = (Base) =>
           .then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
-            if (isApiResponseStatusSuccessful) {
-              return this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId)
+            if (!isApiResponseStatusSuccessful) {
+              return Promise.reject(new Error('The API status is unsuccessful'))
             }
 
-            return Promise.reject(new Error('The API status is unsuccessful'))
+            const submitResult = response.data?.[recordId]
+
+            // Pull after a rejection too: the API has already saved the record's new validations.
+            return this._apiSyncInstance
+              .pushThenPullAllProjectDataExceptChoices(projectId)
+              .then(() => ({
+                isSubmitted: submitResult?.status === 'ok',
+                record: submitResult?.record,
+              }))
           })
       }
 
@@ -474,6 +495,40 @@ const CollectRecordsMixin = (Base) =>
         .then(() => recordWithIgnoredValidations)
     }
 
+    // Only a warning can be ignored, so un-ignoring turns it back into one. Other results keep
+    // their status: ignoring also converts `reset`, so resetting the field's `ok` results here
+    // would make the next ignore show them as ignored warnings.
+    unignoreNonObservationFieldValidations = function unignoreNonObservationFieldValidations({
+      record,
+      validationPath,
+    }) {
+      if (!record || !validationPath) {
+        throw new Error(
+          'unignoreNonObservationFieldValidations requires record and validationPath parameters',
+        )
+      }
+      const path = `validations.results.${validationPath}`
+      const currentValidations = getObjectProperty({
+        object: record,
+        path,
+      })
+
+      const unignoredValidations = Object.values(currentValidations).map((validation) => ({
+        ...validation,
+        status: validation.status === 'ignore' ? 'warning' : validation.status,
+      }))
+
+      const recordWithUnignoredValidations = setObjectPropertyOnClone({
+        object: record,
+        path,
+        value: unignoredValidations,
+      })
+
+      return this._dexiePerUserDataInstance.collect_records
+        .put(recordWithUnignoredValidations)
+        .then(() => recordWithUnignoredValidations)
+    }
+
     ignoreObservationValidations = async function ignoreObservationValidations({
       recordId,
       observationId,
@@ -484,9 +539,8 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      const unmodifiedCollectRecord = await this._dexiePerUserDataInstance.collect_records.get(
-        recordId,
-      )
+      const unmodifiedCollectRecord =
+        await this._dexiePerUserDataInstance.collect_records.get(recordId)
 
       const observationTableNames = getObservationsPropertyNames(unmodifiedCollectRecord)
 
@@ -611,9 +665,8 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      const unmodifiedCollectRecord = await this._dexiePerUserDataInstance.collect_records.get(
-        recordId,
-      )
+      const unmodifiedCollectRecord =
+        await this._dexiePerUserDataInstance.collect_records.get(recordId)
 
       const areThereValidationsToReset = !!unmodifiedCollectRecord?.validations?.results?.data
 
@@ -657,6 +710,53 @@ const CollectRecordsMixin = (Base) =>
       return this._dexiePerUserDataInstance.collect_records
         .put(modifiedCollectRecordWithResetObservationValidations)
         .then(() => modifiedCollectRecordWithResetObservationValidations)
+    }
+
+    // Only a warning can be ignored, so un-ignoring turns it back into one. This differs from
+    // resetObservationValidations, which hides the row's results until the next validation.
+    unignoreObservationValidations = async function unignoreObservationValidations({
+      recordId,
+      observationId,
+    }) {
+      if (!recordId || !observationId) {
+        throw new Error(
+          'unignoreObservationValidations requires recordId and observationId parameters',
+        )
+      }
+
+      const unmodifiedCollectRecord =
+        await this._dexiePerUserDataInstance.collect_records.get(recordId)
+
+      // some records have multiple observation tables, eg: bleaching records
+      const recordWithUnignoredValidations = getObservationsPropertyNames(
+        unmodifiedCollectRecord,
+      ).reduce((record, observationTableName) => {
+        const validationPath = `validations.results.data.${observationTableName}`
+        const observationTable = getObjectProperty({ object: record, path: validationPath })
+
+        if (!observationTable) {
+          return record
+        }
+
+        return setObjectPropertyOnClone({
+          object: record,
+          path: validationPath,
+          value: observationTable.map((singleObservationValidations) =>
+            singleObservationValidations.map((validation) => ({
+              ...validation,
+              status:
+                validation.context?.observation_id === observationId &&
+                validation.status === 'ignore'
+                  ? 'warning'
+                  : validation.status,
+            })),
+          ),
+        })
+      }, unmodifiedCollectRecord)
+
+      return this._dexiePerUserDataInstance.collect_records
+        .put(recordWithUnignoredValidations)
+        .then(() => recordWithUnignoredValidations)
     }
 
     markCollectRecordValidationsStale = async function markCollectRecordValidationsStale(recordId) {

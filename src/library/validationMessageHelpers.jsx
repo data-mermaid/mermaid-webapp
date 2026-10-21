@@ -27,13 +27,15 @@ export const getSystemValidationErrorMessage = (drySubmitContext) => {
   )
 }
 
-export const getDuplicateSampleUnitLink = (duplicateTransectMethodContext, projectId) => {
-  const linkToSampleUnit = `/projects/${projectId}/submitted/fishbelt/${duplicateTransectMethodContext}`
+export const getDuplicateSampleUnitLink = (context, projectId) => {
+  const { duplicate_transect_method: duplicateTransectMethod, protocol } = context ?? {}
+  const protocolPath = protocol != null ? `/${protocol}/${duplicateTransectMethod}` : ''
+  const linkToSampleUnit = `/projects/${projectId}/submitted${protocolPath}`
 
   return (
     <Trans
       i18nKey="validation_messages.duplicate_sample_unit"
-      values={{ method: duplicateTransectMethodContext }}
+      values={{ method: duplicateTransectMethod }}
       components={{ a: <HelperTextLink href={linkToSampleUnit} /> }}
     />
   )
@@ -147,14 +149,10 @@ export const getValidationMessage = (validation, projectId = '') => {
     different_transect_length_se: () => i18n.t('validation_messages.different_transect_length_se'),
     different_transect_width_se: () => i18n.t('validation_messages.different_transect_width_se'),
     different_quadrat_size_se: () => i18n.t('validation_messages.different_quadrat_size_se'),
-    duplicate_benthic_transect: () =>
-      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
-    duplicate_fishbelt_transect: () =>
-      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
-    duplicate_quadrat_collection: () =>
-      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
-    duplicate_quadrat_transect: () =>
-      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
+    duplicate_benthic_transect: () => getDuplicateSampleUnitLink(context, projectId),
+    duplicate_fishbelt_transect: () => getDuplicateSampleUnitLink(context, projectId),
+    duplicate_quadrat_collection: () => getDuplicateSampleUnitLink(context, projectId),
+    duplicate_quadrat_transect: () => getDuplicateSampleUnitLink(context, projectId),
     duplicate_transect: () => i18n.t('validation_messages.duplicate_transect'),
     duplicate_values: () =>
       fields?.length
@@ -197,10 +195,8 @@ export const getValidationMessage = (validation, projectId = '') => {
     invalid_fish_size: () => i18n.t('validation_messages.invalid_fish_size'),
     invalid_fishbelt_transect: () => i18n.t('validation_messages.invalid_fishbelt_transect'),
     invert_count_high: () => i18n.t('validation_messages.invert_count_high'),
-    invert_size_exceeds_maximum: () =>
-      i18n.t('validation_messages.invert_size_exceeds_maximum'),
-    invalid_invert_belt_transect: () =>
-      i18n.t('validation_messages.invalid_invert_belt_transect'),
+    invert_size_exceeds_maximum: () => i18n.t('validation_messages.invert_size_exceeds_maximum'),
+    invalid_invert_belt_transect: () => i18n.t('validation_messages.invalid_invert_belt_transect'),
     invalid_number_of_points: () =>
       i18n.t('validation_messages.invalid_number_of_points', {
         invalidQuadratNumbers: context?.invalid_quadrat_numbers ?? '',
@@ -277,6 +273,7 @@ export const getValidationMessage = (validation, projectId = '') => {
     unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
     value_not_set: () => i18n.t('validation_messages.value_not_set'),
     default: () => code || name,
+    unclassified_annotation: () => i18n.t('validation_messages.unclassified_annotation'),
     unconfirmed_annotation: () => i18n.t('validation_messages.unconfirmed_annotation'),
   }
 

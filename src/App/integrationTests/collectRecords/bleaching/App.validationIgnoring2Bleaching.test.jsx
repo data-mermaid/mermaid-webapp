@@ -138,11 +138,9 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
     ).not.toBeInTheDocument(),
   )
   expect(
-    within(coloniesBleachedObservationTable).queryByText('firstWarning'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(coloniesBleachedObservationTable).queryByText('secondWarning'),
-  ).not.toBeInTheDocument()
+    within(coloniesBleachedObservationTable).getByTestId('ignore-warning-checkbox'),
+  ).not.toBeChecked()
+  expect(coloniesBleachedObservationTable.querySelectorAll('li.warning-indicator')).toHaveLength(2)
   expect(
     within(coloniesBleachedObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)

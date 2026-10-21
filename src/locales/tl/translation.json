@@ -455,7 +455,7 @@
   "go_to_explore_projects": "Tingnan ang lahat ng iyong mga proyekto sa MERMAID Explore",
   "go_to_explore_sample_event": "Tingnan ang halimbawang kaganapang ito sa MERMAID Explore",
   "go_to_explore_this_project": "Tingnan ang proyektong ito sa MERMAID Explore",
-  "go_to_management_overview_page": "Ang iba pang mga halimbawang kaganapan sa site na ito ay may ibang sistema ng pamamahala. Pumunta sa <a>Pangkalahatang-ideya ng Rehimen sa Pamamahala</a>.",
+  "go_to_management_overview_page": "Ang iba pang mga halimbawang kaganapan sa site na ito ay may ibang sistema ng pamamahala. Pumunta sa <a>Mga halimbawang yunit & rehimen sa pamamahala</a>.",
   "habitat_complexity_score": "Iskor ng Komplikasyon ng Tirahan",
   "habitat_complexity_score_info": "Iskor ng benthic complexity (0 - 5) para sa transect interval, bilang integer (hal. 3). Ang mga kategorya ay 0 walang patayong bahura, patag o mabatong lugar; 1 mababa (<30 cm ang taas) at kalat-kalat na relief; 2 mababa ngunit laganap na relief; 3 laganap na katamtamang kumplikado (30-60 cm ang taas) na relief; 4 laganap na napakakumplikado (60 -100 cm ang taas) na relief na may maraming bitak at kuweba; 5 pambihirang kumplikado (>1 m ang taas) na relief na may maraming kuweba at overhang).",
   "help_documents": "Tulong (PDF)",
@@ -477,6 +477,8 @@
     "benthic_attribute": "Katangiang bentiko",
     "buttons": {
       "confirm_all": "Kumpirmahin lahat",
+      "next_photo": "Susunod na larawan",
+      "previous_photo": "Nakaraang larawan",
       "upload_photos": "Mag-upload ng mga larawan",
       "zoom_to_attribute": "Mag-zoom para i-attribute"
     },
@@ -496,7 +498,8 @@
       "invalid_file_type": "Hindi wastong uri ng file.",
       "no_classification_enabled": "Kasalukuyan kang hindi makakapag-upload ng mga bagong larawan para sa pag-uuri. Maaari mong i-access at suriin ang mga naunang na-upload na larawan.",
       "no_photo_found": "Nabigong tanggalin ang larawan – walang nakitang larawan",
-      "photo_too_small": "Ang mga larawan ay dapat may minimum na taas at lapad na {{minImageWidthAndHeight}} mga pixel. Masyadong maliit ang larawang ito: {{fileName}}."
+      "photo_too_small": "Ang mga larawan ay dapat may minimum na taas at lapad na {{minImageWidthAndHeight}} mga pixel. Masyadong maliit ang larawang ito: {{fileName}}.",
+      "save_failed_changes_kept": "Nabigong i-save ang iyong mga pagbabago. Nakatago ang mga ito sa window na ito. Pakisubukang muli maya-maya."
     },
     "feature_introduction": {
       "description": "Sa pamamagitan ng pakikipagtulungan sa <a /> mula sa University of California San Diego at Scripps Institution of Oceanography, isinama na ngayon ng MERMAID ang klasipikasyon batay sa AI gamit ang isang pyspacer deep learning model. Ang integrasyong ito ay nagbibigay-daan sa mabilis at nasusukat na pagsusuri ng mga benthic na larawan upang mabilis at palagian kang makabuo ng mga insight gamit ang machine learning at AI.",
@@ -599,7 +602,7 @@
     "management_regime_name": "Pangalan ng rehimen ng pamamahala",
     "management_regimes": "Mga Rehimeng Pamamahala",
     "merge_failed": "Nabigong mahanap at mapalitan ang sistema ng pamamahala",
-    "missing_mr_name": "(Walang pangalan ang pamamahala)",
+    "missing_mr_name": "(Nawawalang pangalan)",
     "name_info": "Pangalan ng MPA, OECM, o iba pang kaugnay na pinamamahalaang lugar. Maaaring isang opisyal na pangalan na tinukoy ng isang pamahalaan o pamantayang mapagkukunan tulad ng <helperTextLink>protectedseas.net</helperTextLink>; bilang alternatibo, maaaring gumamit ng naglalarawang lokal na etiketa tulad ng 'Northeast Point seasonal closure'.",
     "new": "Bagong pamamahala",
     "new_mr": "Bagong pamamahala",
@@ -764,6 +767,7 @@
   },
   "offline": {
     "page_unavailable_offline": "Ang page na ito ay hindi available offline.",
+    "setup_failed": "Hindi ma-set up ang offline mode. I-reload ang page habang online bago magtrabaho offline.",
     "unavailable_offline": "Hindi available offline"
   },
   "offline_toggle": "I-toggle nang offline",
@@ -962,6 +966,8 @@
       "data_unavailable": "Kasalukuyang hindi available ang sample na data ng unit.",
       "observations_unavailable_offline": "Hindi available offline ang mga sample na unit observation",
       "submit_disabled": "May mga error o babala na pumipigil sa iyo sa pagsusumite",
+      "submit_failed": "Hindi available ang pagsusumite para sa rekord na ito sa kasalukuyan.",
+      "submit_rejected": "Hindi maisumite ang talaang ito. Ayusin ang mga error sa pagpapatunay at patunayan itong muli.",
       "submitted_data_unavailable": "Kasalukuyang hindi available ang isinumiteng record data.",
       "submitted_moved_to_collecting": "Ang isinumiteng rekord ay inilipat na sa pangongolekta.",
       "submitted_not_editable": "Hindi pa nae-edit ang isinumiteng rekord",
@@ -972,7 +978,7 @@
     },
     "last_edited_by": "Huling na-edit ni",
     "method": "Pamamaraan",
-    "missing_label_number": "nawawalang numero",
+    "missing_label_number": "Nawawalang numero",
     "move_to_collecting": "I-edit ang Sample Unit — lumipat sa Pagkolekta",
     "no_active_access": "Wala kang anumang aktibong sample na unit",
     "no_match": "Walang tugmang Sample na Unit:",
@@ -1027,11 +1033,11 @@
     "view_submitted": "Tingnan ang isinumiteng Sample Unit",
     "warning_or_error": "babala o pagkakamali",
     "warning_readonly_active_units": "Hindi maisumite ang ilang Sample Unit dahil nasa read-only mode ang user.",
-    "which_are_missing": "Aling mga sample na unit ang nawawala",
+    "which_are_missing": "Aling mga sample na unit ang nawawala?",
     "who_has_unsubmitted": "Sino ang may hindi naisumiteng mga sample na unit"
   },
-  "sample_units_and_management_regimes": "Mga Halimbawang Yunit / Rehimen sa Pamamahala",
-  "sample_units_and_observers": "Mga Sample na Yunit / Tagamasid",
+  "sample_units_and_management_regimes": "Mga halimbawang yunit & rehimen sa pamamahala",
+  "sample_units_and_observers": "Mga sample na yunit & tagamasid",
   "search": {
     "no_results": "Walang nakitang resulta"
   },
@@ -1063,7 +1069,7 @@
     "longitude": "Longhitud",
     "longitude_info": "Longitude sa decimal degrees. Dapat ay isang numero sa pagitan ng -180 at 180, na kumakatawan sa posisyon sa silangan-kanluran sa ibabaw ng Daigdig. Ang positibong halaga ay nagpapahiwatig ng lokasyon sa silangan ng Prime Meridian, habang ang negatibong halaga ay nagpapahiwatig ng lokasyon sa kanluran ng Prime Meridian. Kung kailangan mong i-convert mula degrees-minuto-segundo, mayroong online calculator. <helperTextLink>dito.</helperTextLink>",
     "merge_failed": "Nabigong mahanap at mapalitan ang site",
-    "missing_site_name": "(Nawawalang Pangalan ng Site)",
+    "missing_site_name": "(Nawawalang pangalan)",
     "new": "Bagong site",
     "no_sites": "Ang proyektong ito ay walang mga site.",
     "only_admin_delete": "Mga admin lang ang maaaring magbura ng site.",
@@ -1235,13 +1241,14 @@
     "similar_name": "May isa pang Rehimen sa Pamamahala na katulad nito.",
     "site_not_found": "Hindi magagamit ang talaan ng site para sa pagpapatunay ng pagkakatulad",
     "system_validation_error": "Error sa pagpapatunay ng sistema:",
-    "unconfirmed_annotation": "Maling bilang ng mga nakumpirmang anotasyon",
-    "unknown_protocol": "Hindi kilalang protokol",
+    "unclassified_annotation": "Ang lahat ng mga puntos ay dapat na uriin at kumpirmahin",
+    "unconfirmed_annotation": "Ang lahat ng mga puntos ay dapat kumpirmahin",
+    "unknown_protocol": "Hindi kilalang pamamaraan",
     "value_not_set": "Hindi nakatakda ang halaga"
   },
   "validations": {
     "ignored": "Hindi pinansin",
-    "passed": "Nakapasa sa Pagpapatunay",
+    "passed": "Nakapasa sa pagpapatunay",
     "validations": "Mga Pagpapatunay"
   },
   "view_fish_info": "Tingnan ang impormasyon ng pangalan ng isda",

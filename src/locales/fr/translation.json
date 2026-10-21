@@ -455,7 +455,7 @@
   "go_to_explore_projects": "Voir tous vos projets sur MERMAID Explore",
   "go_to_explore_sample_event": "Voir cet événement d'échantillonnage sur MERMAID Explore",
   "go_to_explore_this_project": "Voir ce projet sur MERMAID Explore",
-  "go_to_management_overview_page": "D'autres événements organisés sur ce site sont soumis à un régime de gestion différent. Consultez <a>Aperçu du régime de gestion</a>.",
+  "go_to_management_overview_page": "D'autres événements organisés sur ce site sont soumis à un régime de gestion différent. Consultez <a>Unités d'échantillonnage & régimes de gestion</a>.",
   "habitat_complexity_score": "Score de complexité de l'habitat",
   "habitat_complexity_score_info": "Score de complexité benthique (0 à 5) pour chaque intervalle de transect, exprimé en nombre entier (ex. : 3). Les catégories sont les suivantes : 0 : absence de récif vertical, zones plates ou rocailleuses ; 1 : relief faible (< 30 cm de hauteur) et peu dense ; 2 : relief faible mais généralisé ; 3 : relief généralisé modérément complexe (30 à 60 cm de hauteur) ; 4 : relief généralisé très complexe (60 à 100 cm de hauteur) avec de nombreuses fissures et grottes ; 5 : relief exceptionnellement complexe (> 1 m de hauteur) avec de nombreuses grottes et surplombs.",
   "help_documents": "Aide (PDF)",
@@ -477,6 +477,8 @@
     "benthic_attribute": "Attribut benthique",
     "buttons": {
       "confirm_all": "Tout confirmer",
+      "next_photo": "Photo suivante",
+      "previous_photo": "Photo précédente",
       "upload_photos": "Télécharger des photos",
       "zoom_to_attribute": "Zoomer sur l'attribut"
     },
@@ -496,7 +498,8 @@
       "invalid_file_type": "Type de fichier non valide",
       "no_classification_enabled": "Vous ne pouvez actuellement pas télécharger de nouvelles images pour classification. Vous pouvez accéder et examiner les images précédemment téléchargées.",
       "no_photo_found": "Échec de la suppression de la photo ! Aucune photo trouvée.",
-      "photo_too_small": "Les photos doivent avoir une hauteur et une largeur minimales de {{minImageWidthAndHeight}} pixels. Cette photo est trop petite : {{fileName}}"
+      "photo_too_small": "Les photos doivent avoir une hauteur et une largeur minimales de {{minImageWidthAndHeight}} pixels. Cette photo est trop petite : {{fileName}}",
+      "save_failed_changes_kept": "Impossible d'enregistrer vos modifications. Elles sont conservées dans cette fenêtre. Veuillez réessayer dans un instant."
     },
     "feature_introduction": {
       "description": "Grâce à un partenariat avec <a /> de l'Université de Californie San Diego et de la Scripps Institution of Oceanography, MERMAID inclut désormais une classification basée sur l'IA utilisant un modèle d'apprentissage profond pyspacer. Cette intégration permet une analyse rapide et évolutive des photos benthiques afin que vous puissiez générer des informations rapidement et de manière cohérente grâce à l'apprentissage automatique et à l'IA.",
@@ -599,7 +602,7 @@
     "management_regime_name": "Nom du régime de gestion",
     "management_regimes": "Régimes de gestion",
     "merge_failed": "Impossible de trouver et de remplacer le régime de gestion",
-    "missing_mr_name": "(Nom de la gestion manquant)",
+    "missing_mr_name": "(Nom manquant)",
     "name_info": "Nom de l'AMP, de l'OECM ou de toute autre zone gérée pertinente. Il peut s'agir d'un nom officiel défini par une source gouvernementale ou normalisée, telle que : <helperTextLink>protectedseas.net</helperTextLink>; on peut également utiliser une étiquette descriptive locale comme « fermeture saisonnière de Northeast Point ».",
     "new": "Nouvelle gestion",
     "new_mr": "Nouvelle gestion",
@@ -764,6 +767,7 @@
   },
   "offline": {
     "page_unavailable_offline": "Cette page n'est pas disponible hors ligne.",
+    "setup_failed": "Impossible d'activer le mode hors ligne. Veuillez recharger la page en ligne avant de travailler hors ligne.",
     "unavailable_offline": "Non disponible hors ligne."
   },
   "offline_toggle": "Basculer hors ligne",
@@ -962,6 +966,8 @@
       "data_unavailable": "Les données d'unité d'échantillonnage ne sont actuellement pas disponibles.",
       "observations_unavailable_offline": "Observations d'unités d'échantillonnage indisponibles hors ligne",
       "submit_disabled": "Des erreurs ou des avertissements vous empêchent de soumettre",
+      "submit_failed": "La soumission de cet enregistrement est actuellement indisponible.",
+      "submit_rejected": "Cet enregistrement n'a pas pu être soumis. Veuillez corriger les erreurs et avertissements de la validation et le soumettre à nouveau.",
       "submitted_data_unavailable": "Les données soumises ne sont actuellement pas disponibles.",
       "submitted_moved_to_collecting": "Le dossier soumis a été transféré à la zone Collecte.",
       "submitted_not_editable": "Le document soumis n'a pas pu être modifié.",
@@ -972,7 +978,7 @@
     },
     "last_edited_by": "Dernière modification par",
     "method": "Méthode",
-    "missing_label_number": "nombre manquant",
+    "missing_label_number": "Nombre manquant",
     "move_to_collecting": "Modifier l'unité d'exemple — passer à la Collecte",
     "no_active_access": "Vous ne disposez d'aucune unité d'échantillonnage active.",
     "no_match": "Aucun échantillon ne correspond :",
@@ -1027,11 +1033,11 @@
     "view_submitted": "Voir l'unité d'échantillon soumise",
     "warning_or_error": "avertissement ou erreur",
     "warning_readonly_active_units": "Certaines unités d'échantillon ne peuvent pas être soumises car l'utilisateur est en mode lecture seule.",
-    "which_are_missing": "Quelles unités d'échantillon sont manquantes ?",
+    "which_are_missing": "Quelles unités d'échantillon sont manquantes?",
     "who_has_unsubmitted": "Qui a des échantillons non soumis ?"
   },
-  "sample_units_and_management_regimes": "Exemples d'unités / Régimes de gestion",
-  "sample_units_and_observers": "Unités d'échantillonnage / observateurs",
+  "sample_units_and_management_regimes": "Unités d'échantillonnage & régimes de gestion",
+  "sample_units_and_observers": "Unités d'échantillonnage & observateurs",
   "search": {
     "no_results": "Aucun résultat trouvé"
   },
@@ -1063,7 +1069,7 @@
     "longitude": "Longitude",
     "longitude_info": "Longitude en degrés décimaux. Il doit s'agir d'un nombre compris entre -180 et 180, représentant la position est-ouest à la surface de la Terre. Une valeur positive indique un emplacement à l'est du méridien de Greenwich, tandis qu'une valeur négative indique un emplacement à l'ouest du méridien de Greenwich. Si vous devez convertir des degrés, des minutes et des secondes, un convertisseur en ligne est disponible. <helperTextLink>ici.</helperTextLink>",
     "merge_failed": "Impossible de trouver et de remplacer le site",
-    "missing_site_name": "(Nom du site manquant)",
+    "missing_site_name": "(Nom manquant)",
     "new": "Nouveau site",
     "no_sites": "Ce projet ne comporte aucun site.",
     "only_admin_delete": "Seuls les administrateurs peuvent supprimer un site.",
@@ -1235,9 +1241,10 @@
     "similar_name": "Un autre régime de gestion est similaire à celui-ci.",
     "site_not_found": "Enregistrement du site non disponible pour la validation de similarité",
     "system_validation_error": "Erreur de validation du système :",
-    "unconfirmed_annotation": "Nombre incorrect d'annotations confirmées",
-    "unknown_protocol": "Protocole inconnu",
-    "value_not_set": "La valeur n'est pas définie."
+    "unclassified_annotation": "Tous les points doivent être classifiés et confirmés",
+    "unconfirmed_annotation": "Tous les points doivent être confirmés",
+    "unknown_protocol": "Métode inconnue",
+    "value_not_set": "La valeur n'est pas définie"
   },
   "validations": {
     "ignored": "Ignoré",
