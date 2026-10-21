@@ -1241,14 +1241,14 @@
     "similar_name": "May isa pang Rehimen sa Pamamahala na katulad nito.",
     "site_not_found": "Hindi magagamit ang talaan ng site para sa pagpapatunay ng pagkakatulad",
     "system_validation_error": "Error sa pagpapatunay ng sistema:",
-    "unclassified_annotation": "Dapat uriin ang lahat ng mga punto",
-    "unconfirmed_annotation": "Maling bilang ng mga nakumpirmang anotasyon",
-    "unknown_protocol": "Hindi kilalang protokol",
+    "unclassified_annotation": "Ang lahat ng mga puntos ay dapat na uriin at kumpirmahin",
+    "unconfirmed_annotation": "Ang lahat ng mga puntos ay dapat kumpirmahin",
+    "unknown_protocol": "Hindi kilalang pamamaraan",
     "value_not_set": "Hindi nakatakda ang halaga"
   },
   "validations": {
     "ignored": "Hindi pinansin",
-    "passed": "Nakapasa sa Pagpapatunay",
+    "passed": "Nakapasa sa pagpapatunay",
     "validations": "Mga Pagpapatunay"
   },
   "view_fish_info": "Tingnan ang impormasyon ng pangalan ng isda",
