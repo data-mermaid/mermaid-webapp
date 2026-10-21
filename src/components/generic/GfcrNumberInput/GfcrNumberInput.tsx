@@ -255,6 +255,9 @@ const GfcrNumberInput = ({
       // value the user never entered.
       clampBehavior="none"
       isAllowed={isAllowed}
+      // Arrow-key stepping bypasses isAllowed and, with no max passed, has no ceiling at all.
+      // The step controls are already hidden, so switch the keys off too.
+      withKeyboardEvents={false}
       allowNegative={allowNegatives}
       disabled={disabled}
       unstyled

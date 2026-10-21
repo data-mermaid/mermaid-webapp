@@ -126,6 +126,18 @@ describe('GfcrNumberInput', () => {
     expect(screen.getByRole('status')).toHaveTextContent('forms.number_maximum')
   })
 
+  it('does not step over max with the arrow keys', async () => {
+    const onChangeSpy = vi.fn()
+    const { user } = renderUnauthenticatedOffline(
+      <ControlledInput onChangeSpy={onChangeSpy} max={100} />,
+    )
+    const input = screen.getByRole('textbox')
+    await user.type(input, '100')
+    await user.keyboard('{ArrowUp}')
+    expect(input).toHaveValue('100')
+    expect(onChangeSpy).toHaveBeenLastCalledWith(100)
+  })
+
   it('clears the refusal message on the next accepted keystroke', async () => {
     const { user } = renderUnauthenticatedOffline(<ControlledInput max={100} />)
     const input = screen.getByRole('textbox')
