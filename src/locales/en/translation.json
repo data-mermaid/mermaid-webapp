@@ -767,7 +767,7 @@
   },
   "offline": {
     "page_unavailable_offline": "This page is unavailable offline.",
-    "setup_failed": "Offline mode could not be set up. Reload the page while online before working offline.",
+    "setup_failed": "Offline mode could not be enabled. Reload the page while online before working offline.",
     "unavailable_offline": "Unavailable offline"
   },
   "offline_toggle": "Offline toggle",
@@ -967,7 +967,7 @@
       "observations_unavailable_offline": "Sample unit observations unavailable offline.",
       "submit_disabled": "Errors or warnings are preventing you from submitting.",
       "submit_failed": "Submitting is currently unavailable for this record.",
-      "submit_rejected": "This record could not be submitted. Fix the validation errors and validate it again.",
+      "submit_rejected": "This record could not be submitted. Fix the validation errors and warnings, and validate it again.",
       "submitted_data_unavailable": "Submitted record data is currently unavailable.",
       "submitted_moved_to_collecting": "The submitted record has been moved to Collecting.",
       "submitted_not_editable": "The submitted record has not been made editable.",
@@ -1241,8 +1241,8 @@
     "similar_name": "Another management regime is similar to this one",
     "site_not_found": "Site record not available for similarity validation",
     "system_validation_error": "System validation error:",
-    "unclassified_annotation": "All points must be classified",
-    "unconfirmed_annotation": "Wrong number of confirmed points",
+    "unclassified_annotation": "All points must be classified and confirmed",
+    "unconfirmed_annotation": "All points must be confirmed",
     "unknown_protocol": "Unknown method",
     "value_not_set": "Value is not set"
   },

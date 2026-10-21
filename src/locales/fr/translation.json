@@ -499,7 +499,7 @@
       "no_classification_enabled": "Vous ne pouvez actuellement pas télécharger de nouvelles images pour classification. Vous pouvez accéder et examiner les images précédemment téléchargées.",
       "no_photo_found": "Échec de la suppression de la photo ! Aucune photo trouvée.",
       "photo_too_small": "Les photos doivent avoir une hauteur et une largeur minimales de {{minImageWidthAndHeight}} pixels. Cette photo est trop petite : {{fileName}}",
-      "save_failed_changes_kept": "Impossible d'enregistrer vos modifications. Elles sont conservées dans cette fenêtre. Veuillez réessayer ultérieurement."
+      "save_failed_changes_kept": "Impossible d'enregistrer vos modifications. Elles sont conservées dans cette fenêtre. Veuillez réessayer dans un instant."
     },
     "feature_introduction": {
       "description": "Grâce à un partenariat avec <a /> de l'Université de Californie San Diego et de la Scripps Institution of Oceanography, MERMAID inclut désormais une classification basée sur l'IA utilisant un modèle d'apprentissage profond pyspacer. Cette intégration permet une analyse rapide et évolutive des photos benthiques afin que vous puissiez générer des informations rapidement et de manière cohérente grâce à l'apprentissage automatique et à l'IA.",
@@ -767,7 +767,7 @@
   },
   "offline": {
     "page_unavailable_offline": "Cette page n'est pas disponible hors ligne.",
-    "setup_failed": "Impossible de configurer le mode hors ligne. Veuillez recharger la page en ligne avant de travailler hors ligne.",
+    "setup_failed": "Impossible d'activer le mode hors ligne. Veuillez recharger la page en ligne avant de travailler hors ligne.",
     "unavailable_offline": "Non disponible hors ligne."
   },
   "offline_toggle": "Basculer hors ligne",
@@ -967,7 +967,7 @@
       "observations_unavailable_offline": "Observations d'unités d'échantillonnage indisponibles hors ligne",
       "submit_disabled": "Des erreurs ou des avertissements vous empêchent de soumettre",
       "submit_failed": "La soumission de cet enregistrement est actuellement indisponible.",
-      "submit_rejected": "Cet enregistrement n'a pas pu être soumis. Veuillez corriger les erreurs de validation et le soumettre à nouveau.",
+      "submit_rejected": "Cet enregistrement n'a pas pu être soumis. Veuillez corriger les erreurs et avertissements de la validation et le soumettre à nouveau.",
       "submitted_data_unavailable": "Les données soumises ne sont actuellement pas disponibles.",
       "submitted_moved_to_collecting": "Le dossier soumis a été transféré à la zone Collecte.",
       "submitted_not_editable": "Le document soumis n'a pas pu être modifié.",
@@ -1241,10 +1241,10 @@
     "similar_name": "Un autre régime de gestion est similaire à celui-ci.",
     "site_not_found": "Enregistrement du site non disponible pour la validation de similarité",
     "system_validation_error": "Erreur de validation du système :",
-    "unclassified_annotation": "Tous les points doivent être classés",
-    "unconfirmed_annotation": "Nombre incorrect d'annotations confirmées",
-    "unknown_protocol": "Protocole inconnu",
-    "value_not_set": "La valeur n'est pas définie."
+    "unclassified_annotation": "Tous les points doivent être classifiés et confirmés",
+    "unconfirmed_annotation": "Tous les points doivent être confirmés",
+    "unknown_protocol": "Métode inconnue",
+    "value_not_set": "La valeur n'est pas définie"
   },
   "validations": {
     "ignored": "Ignoré",
