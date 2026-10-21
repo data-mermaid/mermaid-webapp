@@ -712,6 +712,53 @@ const CollectRecordsMixin = (Base) =>
         .then(() => modifiedCollectRecordWithResetObservationValidations)
     }
 
+    // Only a warning can be ignored, so un-ignoring turns it back into one. This differs from
+    // resetObservationValidations, which hides the row's results until the next validation.
+    unignoreObservationValidations = async function unignoreObservationValidations({
+      recordId,
+      observationId,
+    }) {
+      if (!recordId || !observationId) {
+        throw new Error(
+          'unignoreObservationValidations requires recordId and observationId parameters',
+        )
+      }
+
+      const unmodifiedCollectRecord =
+        await this._dexiePerUserDataInstance.collect_records.get(recordId)
+
+      // some records have multiple observation tables, eg: bleaching records
+      const recordWithUnignoredValidations = getObservationsPropertyNames(
+        unmodifiedCollectRecord,
+      ).reduce((record, observationTableName) => {
+        const validationPath = `validations.results.data.${observationTableName}`
+        const observationTable = getObjectProperty({ object: record, path: validationPath })
+
+        if (!observationTable) {
+          return record
+        }
+
+        return setObjectPropertyOnClone({
+          object: record,
+          path: validationPath,
+          value: observationTable.map((singleObservationValidations) =>
+            singleObservationValidations.map((validation) => ({
+              ...validation,
+              status:
+                validation.context?.observation_id === observationId &&
+                validation.status === 'ignore'
+                  ? 'warning'
+                  : validation.status,
+            })),
+          ),
+        })
+      }, unmodifiedCollectRecord)
+
+      return this._dexiePerUserDataInstance.collect_records
+        .put(recordWithUnignoredValidations)
+        .then(() => recordWithUnignoredValidations)
+    }
+
     markCollectRecordValidationsStale = async function markCollectRecordValidationsStale(recordId) {
       if (!recordId) {
         throw new Error('markCollectRecordValidationsStale requires a recordId parameter')

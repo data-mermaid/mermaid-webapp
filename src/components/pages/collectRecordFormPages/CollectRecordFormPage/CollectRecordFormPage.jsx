@@ -384,6 +384,7 @@ const CollectRecordFormPage = ({
     handleValidate,
     ignoreNonObservationFieldValidations,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     ignoreRecordLevelValidation,
     resetNonObservationFieldValidations,
     resetObservationValidations,
@@ -627,6 +628,7 @@ const CollectRecordFormPage = ({
             collectRecord={collectRecordBeingEdited}
             formik={formik}
             ignoreObservationValidations={ignoreObservationValidations}
+            unignoreObservationValidations={unignoreObservationValidations}
             observationsReducer={observationsTable1Reducer}
             resetObservationValidations={resetObservationValidations}
             setAreObservationsInputsDirty={setAreObservationsInputsDirty}
@@ -643,6 +645,7 @@ const CollectRecordFormPage = ({
               collectRecord={collectRecordBeingEdited}
               formik={formik}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               observationsReducer={observationsTable2Reducer}
               resetObservationValidations={resetObservationValidations}
               setAreObservationsInputsDirty={setAreObservationsInputsDirty}

@@ -10,7 +10,7 @@ import { Td } from '../../generic/Table/table'
 const ObservationValidationInfo = ({
   ignoreObservationValidations,
   observationId,
-  resetObservationValidations,
+  unignoreObservationValidations,
   isObservationValid,
   hasObservationWarningValidation,
   hasObservationErrorValidation,
@@ -29,7 +29,7 @@ const ObservationValidationInfo = ({
       })
     }
     if (!isIgnoreChecked) {
-      resetObservationValidations({
+      unignoreObservationValidations({
         observationId,
       })
     }
@@ -67,7 +67,7 @@ const ObservationValidationInfo = ({
 ObservationValidationInfo.propTypes = {
   ignoreObservationValidations: PropTypes.func.isRequired,
   observationId: PropTypes.string.isRequired,
-  resetObservationValidations: PropTypes.func.isRequired,
+  unignoreObservationValidations: PropTypes.func.isRequired,
   isObservationValid: PropTypes.bool.isRequired,
   hasObservationWarningValidation: PropTypes.bool.isRequired,
   hasObservationErrorValidation: PropTypes.bool.isRequired,

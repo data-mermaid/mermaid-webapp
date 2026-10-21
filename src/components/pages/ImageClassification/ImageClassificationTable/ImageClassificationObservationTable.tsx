@@ -95,7 +95,7 @@ interface ImageClassificationObservationTableProps {
   }
   areValidationsShowing: boolean
   ignoreObservationValidations: () => void
-  resetObservationValidations: () => void
+  unignoreObservationValidations: () => void
   images: ImageClassificationImage[]
   setImages: React.Dispatch<React.SetStateAction<ImageClassificationImage[]>>
   onPhotosChanged?: () => void
@@ -187,7 +187,7 @@ const ImageClassificationObservationTable = ({
   collectRecord = undefined,
   areValidationsShowing,
   ignoreObservationValidations,
-  resetObservationValidations,
+  unignoreObservationValidations,
   images: imageSet,
   setImages,
   onPhotosChanged,
@@ -651,11 +651,11 @@ const ImageClassificationObservationTable = ({
                       hasObservationIgnoredValidation={hasObservationIgnoredValidation}
                       hasObservationWarningValidation={hasObservationWarningValidation}
                       ignoreObservationValidations={ignoreObservationValidations}
+                      unignoreObservationValidations={unignoreObservationValidations}
                       isObservationValid={isObservationValid}
                       observationId={obsId}
                       observationValidationMessages={observationValidationMessages}
                       observationValidationType={observationValidationType}
-                      resetObservationValidations={resetObservationValidations}
                     />
                   ) : (
                     <StyledTd />
@@ -771,13 +771,13 @@ const ImageClassificationObservationTable = ({
                           unclassifiedValidation.hasObservationWarningValidation
                         }
                         ignoreObservationValidations={ignoreObservationValidations}
+                        unignoreObservationValidations={unignoreObservationValidations}
                         isObservationValid={unclassifiedValidation.isObservationValid}
                         observationId={unclassifiedObsId}
                         observationValidationMessages={
                           unclassifiedValidation.observationValidationMessages
                         }
                         observationValidationType={unclassifiedValidation.observationValidationType}
-                        resetObservationValidations={resetObservationValidations}
                       />
                     ) : (
                       <StyledTd />
