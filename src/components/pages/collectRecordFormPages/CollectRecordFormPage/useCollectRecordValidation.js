@@ -89,6 +89,7 @@ const useCollectRecordValidation = ({
   const { t } = useTranslation()
   const validationIgnoreText = t('sample_units.errors.validation_ignore')
   const validationResetText = t('sample_units.errors.validation_reset')
+  const validationUnignoreText = t('sample_units.errors.validation_unignore')
 
   // Per-chip cursors — refs so advancing doesn't trigger a render.
   // Reset to 0 whenever validations get refreshed (see handleValidate below).
@@ -368,7 +369,7 @@ const useCollectRecordValidation = ({
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(validationResetText))
+                toast.error(...getToastArguments(validationUnignoreText))
               },
             })
           })
@@ -380,7 +381,7 @@ const useCollectRecordValidation = ({
       handleCollectRecordChange,
       handleHttpResponseError,
       setIsFormDirty,
-      validationResetText,
+      validationUnignoreText,
     ],
   )
 
@@ -462,7 +463,7 @@ const useCollectRecordValidation = ({
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(validationResetText))
+                toast.error(...getToastArguments(validationUnignoreText))
               },
             })
           })
@@ -474,7 +475,7 @@ const useCollectRecordValidation = ({
       handleCollectRecordChange,
       handleHttpResponseError,
       setIsFormDirty,
-      validationResetText,
+      validationUnignoreText,
     ],
   )
 
