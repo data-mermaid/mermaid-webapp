@@ -1,7 +1,8 @@
-import { NumberInput } from '@mantine/core'
+import { NumberInput, type NumberInputProps } from '@mantine/core'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { styled, css } from 'styled-components'
-import { inputTextareaSelectStyles } from '../form'
+import { HelperText, inputTextareaSelectStyles } from '../form'
 import { getBrowserLocale } from '../../../library/numbers/getBrowserLocale'
 import theme from '../../../theme'
 
@@ -15,7 +16,6 @@ export interface GfcrNumberInputProps {
   onBlur?: React.FocusEventHandler<HTMLInputElement>
   onFocus?: React.FocusEventHandler<HTMLInputElement>
   decimalPlaces?: number
-  min?: number
   max?: number
   allowNegatives?: boolean
   disabled?: boolean
@@ -76,6 +76,11 @@ const UnitInputWrapper = styled.div`
   }
 `
 
+// UnitInputWrapper is width: 100%, which only fills the row if its parent does too.
+const FieldWrapper = styled.div<{ $hasUnit: boolean }>`
+  ${({ $hasUnit }) => $hasUnit && 'width: 100%;'}
+`
+
 const UnitLabel = styled.span`
   white-space: nowrap;
   background: ${theme.color.unitBackground};
@@ -121,18 +126,18 @@ const GfcrNumberInput = ({
   onBlur,
   onFocus,
   decimalPlaces,
-  min,
   max,
   allowNegatives = false,
   disabled = false,
   unit,
   alignUnitsLeft = false,
 }: GfcrNumberInputProps) => {
+  const { t } = useTranslation()
   const locale = getBrowserLocale()
   const { decimalSeparator, thousandSeparator } = getLocaleFormatParts(locale)
 
-  // Mantine clamps to max on blur and we then round, so a max that is not representable at
-  // this field's precision gets rounded back over the limit. Lower it so both steps agree.
+  // Blur rounds to decimalPlaces, so a max that is not representable at this field's precision
+  // would let an accepted value round over the limit. Lower it so typing and rounding agree.
   const boundedMax =
     max !== undefined && decimalPlaces !== undefined
       ? floorToDecimalPlaces(max, decimalPlaces)
@@ -153,10 +158,34 @@ const GfcrNumberInput = ({
   }, [value])
 
   // Ref to hold the latest committed numeric value so handleBlur can read it synchronously
-  // after Mantine's own blur/clamp logic has already called onChange.
+  // after Mantine's own blur logic has already called onChange.
   const committedValue = useRef<number | null>(value)
 
+  // Why the last keystroke or paste was refused, shown under the input until the next accepted
+  // change or blur.
+  const [refusalMessage, setRefusalMessage] = useState<string | null>(null)
+
+  const isAllowed: NumberInputProps['isAllowed'] = ({ value: rawValue, floatValue }) => {
+    // rawValue always uses "." as the separator, whatever the locale displays. The separator
+    // itself is let through so that "1.5" stops at "1." rather than running together as "15".
+    if (decimalPlaces === 0 && /\.\d/.test(rawValue)) {
+      setRefusalMessage(t('forms.number_whole_only'))
+      return false
+    }
+
+    if (boundedMax !== undefined && floatValue !== undefined && floatValue > boundedMax) {
+      const formattedMax = new Intl.NumberFormat(locale, {
+        maximumFractionDigits: decimalPlaces ?? 20,
+      }).format(boundedMax)
+      setRefusalMessage(t('forms.number_maximum', { max: formattedMax }))
+      return false
+    }
+
+    return true
+  }
+
   const handleChange = (val: number | string) => {
+    setRefusalMessage(null)
     setDisplayValue(val)
     if (val === '') {
       committedValue.current = null
@@ -172,6 +201,12 @@ const GfcrNumberInput = ({
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const committed = committedValue.current
+    setRefusalMessage(null)
+
+    // Leaving an intermediate string such as "1." on screen would not match the stored number.
+    if (typeof displayValue === 'string') {
+      setDisplayValue(committed ?? '')
+    }
 
     // A string can reach this ref if a caller passes an unparsed API value, and toFixed
     // would throw on it. Narrowing here keeps the rounding path safe by construction.
@@ -216,26 +251,31 @@ const GfcrNumberInput = ({
       // @ts-ignore — thousandSeparator is a react-number-format prop forwarded via ...others
       thousandSeparator={thousandSeparator}
       hideControls
-      clampBehavior="blur"
+      // Over-maximum entries are refused as they are typed. Clamping on blur would swap in a
+      // value the user never entered.
+      clampBehavior="none"
+      isAllowed={isAllowed}
       allowNegative={allowNegatives}
       disabled={disabled}
-      min={min}
-      max={boundedMax}
       unstyled
     />
   )
 
-  if (unit) {
-    return (
-      <UnitInputWrapper>
-        {alignUnitsLeft && <UnitLabel>{unit}</UnitLabel>}
-        {numberInput}
-        {!alignUnitsLeft && <UnitLabel>{unit}</UnitLabel>}
-      </UnitInputWrapper>
-    )
-  }
-
-  return <InputWrapper>{numberInput}</InputWrapper>
+  return (
+    <FieldWrapper $hasUnit={Boolean(unit)}>
+      {unit ? (
+        <UnitInputWrapper>
+          {alignUnitsLeft && <UnitLabel>{unit}</UnitLabel>}
+          {numberInput}
+          {!alignUnitsLeft && <UnitLabel>{unit}</UnitLabel>}
+        </UnitInputWrapper>
+      ) : (
+        <InputWrapper>{numberInput}</InputWrapper>
+      )}
+      {/* Always rendered, so screen readers announce the message when it appears. */}
+      <HelperText role="status">{refusalMessage}</HelperText>
+    </FieldWrapper>
+  )
 }
 
 export default GfcrNumberInput

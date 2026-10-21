@@ -1,7 +1,7 @@
 /**
  * Maximums implied by max_digits and decimal_places on the GFCR models in mermaid-api
  * (src/api/models/gfcr.py). Going over returns a 400 with no field-level feedback in the
- * UI, so the inputs clamp on blur instead.
+ * UI, so the inputs refuse any keystroke that would exceed them.
  */
 
 // max_digits 11, decimal_places 5

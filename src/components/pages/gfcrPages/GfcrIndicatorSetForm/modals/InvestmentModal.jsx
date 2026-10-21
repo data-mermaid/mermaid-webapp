@@ -309,7 +309,6 @@ const InvestmentModal = ({
                 onChange={(val) => formik.setFieldValue('investment_amount', val)}
                 onBlur={formik.handleBlur}
                 decimalPlaces={2}
-                min={0}
                 max={GFCR_MAX_INVESTMENT_AMOUNT}
                 unit="USD $"
                 alignUnitsLeft={true}

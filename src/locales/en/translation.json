@@ -222,6 +222,8 @@
   "fish_size_bin_info": "Name of bin scheme used to estimate fish size for the transect. Choose 1 cm if the fish size recorded does not use bins.",
   "fish_size_observed": "Size of fish observed, in cm (e.g. 4.5 or 5-10).",
   "forms": {
+    "number_maximum": "Up to {{max}}",
+    "number_whole_only": "Whole numbers only",
     "required_field": "This field is required",
     "submit_for_review": "Send for review"
   },

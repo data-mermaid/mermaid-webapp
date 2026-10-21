@@ -57,22 +57,30 @@ describe('GfcrIntegerInputField', () => {
     expect(captured.values?.f3_5a).toBe(0)
   })
 
-  it('rounds a decimal entry to a whole number on blur', async () => {
+  it('refuses digits after a decimal separator', async () => {
     const { user } = renderUnauthenticatedOffline(<Harness initial={null} />)
 
     await user.type(screen.getByRole('textbox'), '4.5')
+
+    expect(screen.getByRole('status')).toHaveTextContent('forms.number_whole_only')
+
     await user.tab()
 
-    expect(captured.values?.f3_5a).toBe(5)
+    expect(captured.values?.f3_5a).toBe(4)
+    expect(screen.getByRole('textbox')).toHaveValue('4')
   })
 
-  it('clamps to maxValue on blur', async () => {
+  it('refuses a keystroke that would go over maxValue', async () => {
     const { user } = renderUnauthenticatedOffline(<Harness initial={null} />)
 
     await user.type(screen.getByRole('textbox'), '99999')
+
+    expect(screen.getByRole('textbox')).toHaveValue('9,999')
+    expect(screen.getByRole('status')).toHaveTextContent('forms.number_maximum')
+
     await user.tab()
 
-    expect(captured.values?.f3_5a).toBe(GFCR_MAX_SMALL_INTEGER)
+    expect(captured.values?.f3_5a).toBe(9999)
   })
 
   it('leaves an untouched value alone across focus and blur', async () => {
