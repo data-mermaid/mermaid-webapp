@@ -46,6 +46,7 @@ const HabitatComplexityObservationsTable = ({
   collectRecord = undefined,
   formik,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
@@ -192,11 +193,11 @@ const HabitatComplexityObservationsTable = ({
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
               observationValidationType={observationValidationType}
-              resetObservationValidations={resetObservationValidations}
             />
           ) : null}
           <Td $align="center">
@@ -219,6 +220,7 @@ const HabitatComplexityObservationsTable = ({
     choices,
     collectRecord,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     intervalSize,
     intervalStart,
     observationsDispatch,
@@ -289,6 +291,7 @@ HabitatComplexityObservationsTable.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: habitatComplexityPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  unignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
   resetObservationValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,

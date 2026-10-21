@@ -47,6 +47,7 @@ const PercentCoverObservationTable = ({
   areValidationsShowing,
   collectRecord = undefined,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
@@ -208,11 +209,11 @@ const PercentCoverObservationTable = ({
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
               observationValidationType={observationValidationType}
-              resetObservationValidations={resetObservationValidations}
             />
           ) : null}
           <Td $align="center">
@@ -234,6 +235,7 @@ const PercentCoverObservationTable = ({
     collectRecord,
     deleteObservationText,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     observationsDispatch,
     observationsState,
     resetObservationValidations,
@@ -335,6 +337,7 @@ PercentCoverObservationTable.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   collectRecord: bleachingRecordPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  unignoreObservationValidations: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({
       interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

@@ -120,6 +120,7 @@ interface BeltInvertObservationTableProps {
   collectRecord?: unknown
   formik: FormikLike
   ignoreObservationValidations: (...args: unknown[]) => void
+  unignoreObservationValidations: (args: { observationId: string }) => void
   observationsReducer: [ObservationRecord[], (action: unknown) => void]
   resetObservationValidations: (args: { observationId: string }) => void
   setAreObservationsInputsDirty: (isDirty: boolean) => void
@@ -135,6 +136,7 @@ interface ObservationRowProps {
   autoFocusAllowed: boolean
   collectRecord?: unknown
   ignoreObservationValidations: (...args: unknown[]) => void
+  unignoreObservationValidations: (args: { observationId: string }) => void
   isLastRow: boolean
   index: number
   invertAttributeOptions: SelectOption[]
@@ -161,6 +163,7 @@ const BeltInvertObservationRow = ({
   autoFocusAllowed,
   collectRecord,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   isLastRow,
   index,
   invertAttributeOptions,
@@ -373,11 +376,11 @@ const BeltInvertObservationRow = ({
           hasObservationIgnoredValidation={hasObservationIgnoredValidation}
           hasObservationWarningValidation={hasObservationWarningValidation}
           ignoreObservationValidations={ignoreObservationValidations}
+          unignoreObservationValidations={unignoreObservationValidations}
           isObservationValid={isObservationValid}
           observationId={observationId}
           observationValidationMessages={observationValidationMessages}
           observationValidationType={observationValidationType}
-          resetObservationValidations={resetObservationValidations}
         />
       ) : null}
       <Td $align="right" className={tableStyles.tdCellText}>
@@ -404,6 +407,7 @@ const BeltInvertObservationTable = ({
   collectRecord = undefined,
   formik,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [[], () => undefined],
   resetObservationValidations,
   setAreObservationsInputsDirty,
@@ -601,6 +605,7 @@ const BeltInvertObservationTable = ({
                 autoFocusAllowed={autoFocusAllowed}
                 collectRecord={collectRecord}
                 ignoreObservationValidations={ignoreObservationValidations}
+                unignoreObservationValidations={unignoreObservationValidations}
                 isLastRow={index === observationsState.length - 1}
                 index={index}
                 invertAttributeOptions={invertAttributeOptions}

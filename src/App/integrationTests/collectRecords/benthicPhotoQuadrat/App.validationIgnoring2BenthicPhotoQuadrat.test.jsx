@@ -127,8 +127,8 @@ test('Benthic photo quadrat validation: user can reset ignored observation warni
   await waitFor(() =>
     expect(within(observationsTable).queryByText('Ignored')).not.toBeInTheDocument(),
   )
-  expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(observationsTable).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
+  expect(observationsTable.querySelectorAll('li.warning-indicator')).toHaveLength(2)
   expect(within(observationsTable).queryAllByTestId('passed-validation-indicator').length).toEqual(
     2,
   )

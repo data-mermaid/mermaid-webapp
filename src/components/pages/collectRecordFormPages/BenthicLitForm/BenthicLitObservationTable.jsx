@@ -53,6 +53,7 @@ const BenthicLitObservationsTable = ({
   choices,
   collectRecord = undefined,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
@@ -260,11 +261,11 @@ const BenthicLitObservationsTable = ({
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
               observationValidationType={observationValidationType}
-              resetObservationValidations={resetObservationValidations}
             />
           ) : null}
           <Td $align="center">
@@ -288,6 +289,7 @@ const BenthicLitObservationsTable = ({
     deleteObservationAriaLabel,
     collectRecord,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     noResultsText,
     observationsDispatch,
     observationsState,
@@ -388,6 +390,7 @@ BenthicLitObservationsTable.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: benthicPitRecordPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  unignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
   resetObservationValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,

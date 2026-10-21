@@ -355,6 +355,35 @@ const useCollectRecordValidation = ({
     ],
   )
 
+  const unignoreObservationValidations = useCallback(
+    ({ observationId }) => {
+      if (collectRecordBeingEdited && observationId) {
+        databaseSwitchboardInstance
+          .unignoreObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
+          .then((recordWithUnignoredValidations) => {
+            handleCollectRecordChange(recordWithUnignoredValidations)
+            setIsFormDirty(true)
+          })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(validationResetText))
+              },
+            })
+          })
+      }
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      handleCollectRecordChange,
+      handleHttpResponseError,
+      setIsFormDirty,
+      validationResetText,
+    ],
+  )
+
   const resetRecordLevelValidation = useCallback(
     ({ validationId }) => {
       databaseSwitchboardInstance
@@ -542,6 +571,7 @@ const useCollectRecordValidation = ({
     resetRecordLevelValidation,
     showValidationResult,
     unignoreNonObservationFieldValidations,
+    unignoreObservationValidations,
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,

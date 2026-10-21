@@ -58,6 +58,7 @@ const ColoniesBleachedObservationTable = ({
   choices,
   collectRecord = undefined,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [],
   resetObservationValidations,
   setAreObservationsInputsDirty,
@@ -357,11 +358,11 @@ const ColoniesBleachedObservationTable = ({
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
               observationValidationType={observationValidationType}
-              resetObservationValidations={resetObservationValidations}
             />
           ) : null}
           <Td $align="center">
@@ -384,6 +385,7 @@ const ColoniesBleachedObservationTable = ({
     choices,
     collectRecord,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     deleteObservationText,
     proposeNewBenthicAttributeText,
     noResultsText,
@@ -515,6 +517,7 @@ ColoniesBleachedObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: bleachingRecordPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  unignoreObservationValidations: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({
       interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
