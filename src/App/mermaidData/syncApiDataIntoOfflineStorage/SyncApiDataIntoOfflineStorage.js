@@ -1,5 +1,6 @@
 import axios from '../../../library/axiosRetry'
 import { pullApiData } from '../pullApiData'
+import { skipApiDuplicateCheck } from '../skipApiDuplicateCheck'
 
 const SyncApiDataIntoOfflineStorage = class {
   #apiBaseUrl
@@ -185,9 +186,13 @@ const SyncApiDataIntoOfflineStorage = class {
               invert_species: this.#getOnlyModifiedAndDeletedItems(invert_attributes),
               collect_records: this.#getOnlyModifiedAndDeletedItems(collect_records),
               fish_species: this.#getOnlyModifiedAndDeletedItems(fish_species),
-              project_managements: this.#getOnlyModifiedAndDeletedItems(project_managements),
+              project_managements:
+                this.#getOnlyModifiedAndDeletedItems(project_managements).map(
+                  skipApiDuplicateCheck,
+                ),
               project_profiles: this.#getOnlyModifiedAndDeletedItems(project_profiles),
-              project_sites: this.#getOnlyModifiedAndDeletedItems(project_sites),
+              project_sites:
+                this.#getOnlyModifiedAndDeletedItems(project_sites).map(skipApiDuplicateCheck),
               projects: this.#getOnlyModifiedAndDeletedItems(projects),
             },
             {
