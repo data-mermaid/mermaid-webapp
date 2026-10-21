@@ -15,6 +15,7 @@ describe('InputNoRowWithLabelAndValidation', () => {
         label="Depth"
         testId="depth"
         unit="m"
+        isInputDisabled
         renderInput={renderInput}
       />,
     )
@@ -25,7 +26,9 @@ describe('InputNoRowWithLabelAndValidation', () => {
       'aria-describedby': 'aria-descpdepth',
       'data-testid': 'depth-input',
       unit: 'm',
+      disabled: true,
     })
+    expect(screen.getByTestId('depth-input')).toBeDisabled()
     expect(screen.getByLabelText('Depth')).toBe(screen.getByTestId('depth-input'))
   })
 })

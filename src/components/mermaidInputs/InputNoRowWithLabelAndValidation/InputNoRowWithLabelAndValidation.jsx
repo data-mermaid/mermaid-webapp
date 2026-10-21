@@ -68,7 +68,9 @@ const InputNoRowWithLabelAndValidation = ({
     <Input {...inputProps} {...restOfProps} ref={textFieldRef} />
   )
 
-  const inputType = renderInput ? renderInput({ ...inputProps, unit }) : defaultInput
+  const inputType = renderInput
+    ? renderInput({ ...inputProps, unit, disabled: isInputDisabled })
+    : defaultInput
 
   return (
     <>
