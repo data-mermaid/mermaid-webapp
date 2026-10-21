@@ -828,6 +828,54 @@ test('pushChanges includes the expected modified data', async () => {
   expect(response).not.toBeUndefined()
 })
 
+test('pushChanges asks the API to skip its duplicate check for sites and management regimes only', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+  // Stored without ignore_duplicate_warning, like a site the API has already rejected as a duplicate
+  await dexiePerUserDataInstance.project_sites.put({
+    ...(await dexiePerUserDataInstance.project_sites.toArray())[0],
+    uiState_pushToApi: true,
+  })
+  await dexiePerUserDataInstance.project_managements.put({
+    ...(await dexiePerUserDataInstance.project_managements.toArray())[0],
+    uiState_pushToApi: true,
+  })
+  await dexiePerUserDataInstance.collect_records.put({
+    ...(await dexiePerUserDataInstance.collect_records.toArray())[0],
+    uiState_pushToApi: true,
+  })
+
+  const apiSync = new SyncApiDataIntoOfflineStorage({
+    apiBaseUrl: import.meta.env.VITE_MERMAID_API,
+    getAccessToken: getFakeAccessToken,
+    dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
+    handleUserDeniedSyncPush: () => {},
+    handleNested500SyncError: () => {},
+  })
+
+  let pushedData
+
+  mockMermaidApiAllSuccessful.use(
+    http.post(`${import.meta.env.VITE_MERMAID_API}/push/`, async ({ request }) => {
+      pushedData = await request.json()
+
+      return HttpResponse.json({})
+    }),
+  )
+
+  await apiSync.pushChanges()
+
+  expect(pushedData.project_sites).toHaveLength(1)
+  expect(pushedData.project_sites[0].ignore_duplicate_warning).toBe(true)
+  expect(pushedData.project_managements).toHaveLength(1)
+  expect(pushedData.project_managements[0].ignore_duplicate_warning).toBe(true)
+  expect(pushedData.collect_records).toHaveLength(1)
+  expect(pushedData.collect_records[0]).not.toHaveProperty('ignore_duplicate_warning')
+})
+
 test('All of the push functions handle sync errors with the handleUserDeniedSyncPush callback function', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
   const pushSyncErrorCallback = vi.fn()
