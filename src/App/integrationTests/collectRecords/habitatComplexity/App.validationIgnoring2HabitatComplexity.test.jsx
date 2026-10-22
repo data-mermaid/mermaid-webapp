@@ -17,7 +17,7 @@ import mockHabitatComplexityCollectRecords from '../../../../testUtilities/mockC
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test('Habitat Complexity validation: user can reset ignored observation warnings ', async () => {
+test('Habitat Complexity validation: user can un-ignore observation warnings', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(

@@ -17,7 +17,7 @@ import mockBleachingCollectRecords from '../../../../testUtilities/mockCollectRe
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test('Bleaching validation: user can reset ignored observation warnings (colonies bleached) ', async () => {
+test('Bleaching validation: user can un-ignore observation warnings (colonies bleached)', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
   const observationsValidations = [
     [
@@ -146,7 +146,7 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
   ).toEqual(2)
 })
 
-test('Bleaching validation: user can reset ignored observation warnings (percent cover) ', async () => {
+test('Bleaching validation: user can un-ignore observation warnings (percent cover)', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
   const observationsValidations = [
     [

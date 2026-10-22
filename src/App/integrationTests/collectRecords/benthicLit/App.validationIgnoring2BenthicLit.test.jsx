@@ -17,7 +17,7 @@ import mockBenthicLitCollectRecords from '../../../../testUtilities/mockCollectR
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test('Benthic LIT validation: user can reset ignored observation warnings ', async () => {
+test('Benthic LIT validation: user can un-ignore observation warnings', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(

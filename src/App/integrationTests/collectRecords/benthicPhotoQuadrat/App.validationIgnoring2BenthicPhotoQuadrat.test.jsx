@@ -17,7 +17,7 @@ import mockBenthicPhotoQuadratCollectRecords from '../../../../testUtilities/moc
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test('Benthic photo quadrat validation: user can reset ignored observation warnings ', async () => {
+test('Benthic photo quadrat validation: user can un-ignore observation warnings', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(

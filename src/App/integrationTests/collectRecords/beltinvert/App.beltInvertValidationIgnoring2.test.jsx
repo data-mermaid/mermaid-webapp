@@ -17,7 +17,7 @@ import mockBeltInvertCollectRecords from '../../../../testUtilities/mockCollectR
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test('Validation: user can reset ignored observation warnings ', async () => {
+test('Validation: user can un-ignore observation warnings', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(

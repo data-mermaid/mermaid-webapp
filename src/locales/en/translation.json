@@ -976,7 +976,8 @@
       "supporting_data_unavailable": "Supporting data for creating a sample unit is currently unavailable.",
       "validation_ignore": "This validation cannot be ignored.",
       "validation_reset": "This validation cannot be reset.",
-      "validation_unavailable": "Validation is currently unavailable for this record."
+      "validation_unavailable": "Validation is currently unavailable for this record.",
+      "validation_unignore": "This validation cannot be un-ignored."
     },
     "last_edited_by": "Last edited by",
     "method": "Method",
