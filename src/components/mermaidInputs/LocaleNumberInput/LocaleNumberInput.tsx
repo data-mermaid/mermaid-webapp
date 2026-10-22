@@ -2,15 +2,16 @@ import { NumberInput, type NumberInputProps } from '@mantine/core'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { styled, css } from 'styled-components'
-import { HelperText, inputTextareaSelectStyles } from '../form'
+import { HelperText, inputTextareaSelectStyles } from '../../generic/form'
 import { getBrowserLocale } from '../../../library/numbers/getBrowserLocale'
 import theme from '../../../theme'
 
-export interface GfcrNumberInputProps {
+export interface LocaleNumberInputProps {
   id: string
   name?: string
   'aria-labelledby'?: string
   'aria-describedby'?: string
+  'data-testid'?: string
   value: number | null
   onChange: (value: number | null) => void
   onBlur?: React.FocusEventHandler<HTMLInputElement>
@@ -116,11 +117,12 @@ function floorToDecimalPlaces(value: number, places: number): number {
   return Number((rounded - 10 ** -places).toFixed(places))
 }
 
-const GfcrNumberInput = ({
+const LocaleNumberInput = ({
   id,
   name,
   'aria-labelledby': ariaLabelledby,
   'aria-describedby': ariaDescribedby,
+  'data-testid': testId,
   value,
   onChange,
   onBlur,
@@ -131,7 +133,7 @@ const GfcrNumberInput = ({
   disabled = false,
   unit,
   alignUnitsLeft = false,
-}: GfcrNumberInputProps) => {
+}: LocaleNumberInputProps) => {
   const { t } = useTranslation()
   const locale = getBrowserLocale()
   const { decimalSeparator, thousandSeparator } = getLocaleFormatParts(locale)
@@ -231,6 +233,7 @@ const GfcrNumberInput = ({
       id={id}
       name={name}
       aria-labelledby={ariaLabelledby}
+      data-testid={testId}
       // Mantine's Input spreads its own aria attributes after ...others, so an
       // aria-describedby passed as a normal prop is overwritten with undefined.
       // The attributes prop targets the inner input directly and survives. The same applies to
@@ -281,4 +284,4 @@ const GfcrNumberInput = ({
   )
 }
 
-export default GfcrNumberInput
+export default LocaleNumberInput
