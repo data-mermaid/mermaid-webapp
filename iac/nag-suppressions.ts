@@ -1,18 +1,37 @@
 /**
- * Centralized cdk-nag suppressions for all stacks.
+ * Centralized cdk-nag acknowledgments (suppressions) for all stacks.
  *
- * Each suppression documents the reason and whether the finding is:
+ * Each acknowledgment documents the reason and whether the finding is:
  *   - ACCEPTED: The current configuration is intentional and appropriate.
  *   - TODO: Should be addressed in a future ticket.
  */
 import * as cdk from 'aws-cdk-lib'
-import { NagSuppressions } from 'cdk-nag'
+import { Validations } from 'aws-cdk-lib'
+import { IConstruct } from 'constructs'
 
 const ACCEPTED = 'ACCEPTED'
 const TODO = 'TODO'
 
+interface NagAcknowledgment {
+  id: string
+  reason: string
+  // Granular findings, e.g. 'Action::s3:List*'. Each becomes its own `id[finding]` acknowledgment.
+  appliesTo?: string[]
+}
+
+// cdk-nag v3 acknowledges one rule per call and matches granular findings by the exact
+// `RuleId[finding]` string (no regex), so expand appliesTo into one call per finding.
+function acknowledge(scope: IConstruct, acknowledgments: NagAcknowledgment[]): void {
+  for (const { id, reason, appliesTo } of acknowledgments) {
+    const ruleIds = appliesTo ? appliesTo.map((finding) => `${id}[${finding}]`) : [id]
+    for (const ruleId of ruleIds) {
+      Validations.of(scope).acknowledge({ id: ruleId, reason })
+    }
+  }
+}
+
 export function applyNagSuppressions(stack: cdk.Stack): void {
-  NagSuppressions.addStackSuppressions(stack, [
+  acknowledge(stack, [
     // --- S3 ---
     {
       id: 'AwsSolutions-S1',
@@ -54,9 +73,8 @@ export function applyNagSuppressions(stack: cdk.Stack): void {
         'Action::s3:Abort*',
         'Action::s3:DeleteObject*',
         'Resource::<StaticSiteBucket9C756C46.Arn>/*',
-        {
-          regex: '/Resource::arn:aws:s3:::cdk-hnb659fds-assets-.*\\/\\*/',
-        },
+        // v2 matched this with a regex; v3 needs the exact ARN, so build it from the stack env.
+        `Resource::arn:aws:s3:::cdk-${cdk.DefaultStackSynthesizer.DEFAULT_QUALIFIER}-assets-${stack.account}-${stack.region}/*`,
       ],
     },
 
@@ -79,7 +97,7 @@ export function applyNagSuppressions(stack: cdk.Stack): void {
         ?.node.tryFindChild('DefaultPolicy')
         ?.node.tryFindChild('Resource')
       if (policyResource) {
-        NagSuppressions.addResourceSuppressions(policyResource, [
+        acknowledge(policyResource, [
           {
             id: 'AwsSolutions-IAM5',
             reason: `${ACCEPTED}: Resource::* is required for CloudFront invalidation APIs which do not support resource-level permissions.`,

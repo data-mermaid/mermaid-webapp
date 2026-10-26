@@ -3,13 +3,13 @@
 /* eslint-disable import/extensions */
 /* eslint-disable no-new */
 import * as cdk from 'aws-cdk-lib'
-import { Aspects } from 'aws-cdk-lib'
+import { Validations } from 'aws-cdk-lib'
 import { AwsSolutionsChecks } from 'cdk-nag'
 import { StaticSiteStack } from './stacks/static-site-stack'
 import { applyNagSuppressions } from './nag-suppressions'
 
 const app = new cdk.App()
-Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }))
+Validations.of(app).addPlugins(new AwsSolutionsChecks(app, { verbose: true }))
 
 const tags = {
   Owner: 'sysadmin@datamermaid.org',
