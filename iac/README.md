@@ -37,7 +37,11 @@ When cdk-nag flags a new resource:
 ### Running locally
 
 ```bash
-cd iac && npx cdk synth --quiet; jq '[.pluginReports[].violations[].ruleName]' cdk.out/validation-report.json
+cd iac
+rm -f cdk.out/validation-report.json  # so a synth that fails early can't leave a stale report
+npx cdk synth --quiet; synth_exit=$?
+jq '[.pluginReports[] | select(.conclusion == "failure") | .violations[].ruleName]' cdk.out/validation-report.json
+(exit "$synth_exit")
 ```
 
-`cdk synth` exits non-zero and prints the findings if any are unacknowledged. The `jq` command lists their rule IDs; `[]` means none.
+The block exits with `cdk synth`'s status: non-zero if any finding is unacknowledged or synth failed (then `jq` reports a missing file). `jq` lists the unacknowledged rule IDs; `[]` means none. CDK's built-in "CloudFormation Validate" plugin may also report advisory warnings under a `success` conclusion; those don't fail the check.
