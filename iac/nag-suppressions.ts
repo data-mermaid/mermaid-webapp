@@ -31,6 +31,11 @@ function acknowledge(scope: IConstruct, acknowledgments: NagAcknowledgment[]): v
 }
 
 export function applyNagSuppressions(stack: cdk.Stack): void {
+  // cdk-nag flattens an unresolved account/region (e.g. synth without CDK_DEFAULT_ACCOUNT)
+  // to these markers; a raw token here would also break synth, as acknowledgment IDs must be strings.
+  const account = cdk.Token.isUnresolved(stack.account) ? '<AWS::AccountId>' : stack.account
+  const region = cdk.Token.isUnresolved(stack.region) ? '<AWS::Region>' : stack.region
+
   acknowledge(stack, [
     // --- S3 ---
     {
@@ -74,7 +79,7 @@ export function applyNagSuppressions(stack: cdk.Stack): void {
         'Action::s3:DeleteObject*',
         'Resource::<StaticSiteBucket9C756C46.Arn>/*',
         // v2 matched this with a regex; v3 needs the exact ARN, so build it from the stack env.
-        `Resource::arn:aws:s3:::cdk-${cdk.DefaultStackSynthesizer.DEFAULT_QUALIFIER}-assets-${stack.account}-${stack.region}/*`,
+        `Resource::arn:aws:s3:::cdk-${cdk.DefaultStackSynthesizer.DEFAULT_QUALIFIER}-assets-${account}-${region}/*`,
       ],
     },
 
